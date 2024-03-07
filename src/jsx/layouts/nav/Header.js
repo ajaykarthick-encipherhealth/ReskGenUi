@@ -59,8 +59,8 @@ import ImageUploader from "../../../components/imageUploading/ImageUploader";
 import logout from "../../../images/svg/logout.svg";
 import editImg from "../../../images/svg/edit.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell } from "@fortawesome/free-regular-svg-icons";
-import { faMessage } from "@fortawesome/free-regular-svg-icons";
+// import { faBell } from "@fortawesome/free-regular-svg-icons";
+// import { faMessage } from "@fortawesome/free-regular-svg-icons";
 const btnItems = [
   {
     id: 1,
@@ -99,7 +99,7 @@ const Header = () => {
 
   const msgReply = useSelector((state) => state.workFlow.chatReply);
   const accuracy = useSelector((state) => state.auth.accuracy);
-  const currentUserInfo = useSelector((state) => state.auth.userInfo);
+  const currentUserInfo = useSelector((state) => state.auth.currentUserInfo);
   const codDetails = useSelector((state) => state.auth.codeDetails);
   const stateActive = router.pathname;
   const [headerFix, setheaderFix] = useState(false);
@@ -457,7 +457,7 @@ const Header = () => {
                           <div style={{ color: "#04306f" }}>
                             {/* <i class="far fa-message"></i> */}
                             <div style={{ color: "#04306f" }}>
-                              <FontAwesomeIcon
+                              {/* <FontAwesomeIcon
                                 icon={faMessage}
                                 className={styles.bellIcon}
                                 style={{
@@ -467,7 +467,7 @@ const Header = () => {
                                   fontWeight: "700",
                                   marginRight: "10px",
                                 }}
-                              />
+                              /> */}
                             </div>
                           </div>
                         </div>
@@ -481,10 +481,10 @@ const Header = () => {
                             color="#04306f"
                           >
                             <div style={{ color: "#04306f" }}>
-                              <FontAwesomeIcon
+                              {/* <FontAwesomeIcon
                                 icon={faBell}
                                 className={`fa-regular ${styles.bellIcon}`}
-                              />
+                              /> */}
                             </div>
                           </Badge>
                         </div>

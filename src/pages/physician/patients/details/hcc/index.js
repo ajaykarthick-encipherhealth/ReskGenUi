@@ -240,16 +240,9 @@ const Hcc = ({ patientHccResult }) => {
   const [labFileDateofServieList, setFileLabDateofServiceList] = useState([]);
   const [labFileDateDefaulteSelect, setLabFileDateDefaulteSelect] =
     useState("");
-  const [labResult, setLabResult] = useState("");
-  const [labFileDosList, setLabFileDosList] = useState([]);
-  const [labFileDosListDefaultSelect, setLabFileDosListDefaultSelect] =
-    useState([]);
   const [saveBtnTitle, setSaveBtnTitle] = useState("Save");
   const [completedBtnTitle, setCompleteBtnTitle] = useState("Complete");
-  const [declineBtnTitle, setDeclineBtnTitle] = useState("Decline");
-
-  const [suggestRadiology, setSuggestRadiology] = useState([]);
-  const [suggestLab, setSuggestLab] = useState([]);
+  const [declineBtnTitle, setDeclineBtnTitle] = useState("Decline")
 
   const [buttonClicked, setButtonClicked] = useState(false);
   const [isAddButtonClicked, setIsAddButtonClicked] = useState(false);
@@ -257,49 +250,17 @@ const Hcc = ({ patientHccResult }) => {
   const [deletedHccList, setDeletedHccList] = useState([]);
   const [isModalComments, setIsModalComments] = useState(false);
   const [flagContainerActive, setFlagContainerActive] = useState("");
-  const [flagContainerActiveTitle, setFlagContainerActiveTitle] = useState("");
-  const [showIcons, setShowIcons] = useState(false);
-  const [filter, setFilter] = useState("");
-  const [showCard, setShowCard] = useState(false);
-  const [patientList, setPatientList] = useState([]);
-  const [sideNavLabelActiveKey, setSideNavLabelActiveKey] = useState("HCC");
-  const [isSideNavShow, setIsSideNavShow] = useState(false);
-  const [timelineData, setTimeLineData] = useState([]);
   const [flagTagActive, setFlagTagActive] = useState(false);
   const [addValidCodeCheck, setAddValidCodeCheck] = useState(null);
-  const [patienIdDetails, setPatienIdDetails] = useState("");
-  const [commentList, setCommentList] = useState([]);
-  const [notesList, setNotesList] = useState([]);
-  const [flagResultList, setFlagResultList] = useState([]);
-  const [openPicker, setOpenPicker] = useState(false);
-  const [selectedDates, setSelectedDates] = useState([]);
-  const [actionItems, setActionItems] = useState([]);
-  const [actionItems2, setActionItems2] = useState([]);
-  const [actionItems3, setActionItems3] = useState([]);
   const [confirmCompleteModal, setConfirmCompleteModal] = useState(false);
   const [userDetails, setUserDetails] = useState("");
-  const [currentTime, setCurrentTime] = useState("");
-  const [commentsTrigger, setCommentsTrigger] = useState(false);
   const [captureSectionMatching, setCaptureSectionMatching] = useState([]);
   const [encounterDateMatching, setEncounterDateMatching] = useState([]);
-  const [flagFirstData, setFlagFirstData] = useState([]);
   const [fileModalHeader, setFileModalHeader] = useState("");
-  const [filterDataLoading, setFilterDataLoading] = useState(true);
-
-  const [pageNo, setPageNo] = useState(0);
-  const [pageSize, setPageSize] = useState(15);
-  const [paginationFirst, setPaginationFirst] = useState(0);
-  const [totalElements, setTotalElements] = useState(10);
-
-  const [labFileFilterList, setLabFileFilterList] = useState(10);
-  const [radiologyFileDetailCheck, setRadiologyFileDetailCheck] =
-    useState(false);
   const [dragFileDate, setdragFileDate] = useState(false);
   const [inputValueFileDate, setInputValueFileDate] = useState("");
   const [patientFileDTO, setPatientFileDTO] = useState("");
   const [fileInitialPage, setFileInitialPage] = useState(null);
-  const [sectionAllColor, setSectionAllColor] = useState([]);
-
   const [findFileKeyword, setFindFileKeyword] = useState("");
   const [fileModalTitle, setFileModalTitle] = useState("");
   const [isMeatQueryModal, setIsMeatQueryModal] = useState(false);
@@ -328,6 +289,57 @@ const Hcc = ({ patientHccResult }) => {
     queryReason: "",
     description: "",
   });
+
+  const getMeatFound = (code, data, value) => {
+    const result = data?.filter(
+      (res2) => res2.diagnosisCode.replace(".", "") == code.replace(".", "")
+    );
+    var backColor = "#f93d3d";
+    if (result.length != 0) {
+      switch (value) {
+        case "M":
+          if (result[0]?.monitor) {
+            backColor = "#15b315";
+          }
+          break;
+        case "E":
+          if (result[0]?.evaluate) {
+            backColor = "#15b315";
+          }
+          break;
+        case "A":
+          if (result[0]?.assessment) {
+            backColor = "#15b315";
+          }
+          break;
+        case "T":
+          if (result[0]?.treatment) {
+            backColor = "#15b315";
+          }
+          break;
+        default:
+          null;
+      }
+    }
+    // var badgeMap = (
+    //   <span
+    //     style={{ backgroundColor: backColor, color: "white" }}
+    //     className={`mt-2 ${styles.badgeMeat}`}
+    //   >
+    //     {value}
+    //   </span>
+    // );
+    return (
+      <span
+        style={{ backgroundColor: backColor, color: "white" }}
+        className={`mt-2 ${styles.badgeMeat}`}
+      >
+        {value}
+      </span>
+    );
+  };
+  
+
   const handleAddButtonClick = () => {
     setIsAddButtonClicked(true);
   };
