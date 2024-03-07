@@ -327,6 +327,9 @@ const Hcc = ({ patientHccResult }) => {
 
   const handleChange = async (e) => {
     const key = e.target.name;
+    if (key == "diagnosisCodeQuery") {
+      getFindValidDiagnosisCode(e.target.value);
+    }
     if (key == "diagnosisCode") {
       getFindValidDiagnosisCode(e.target.value);
     }
@@ -3030,9 +3033,10 @@ const Hcc = ({ patientHccResult }) => {
 
   const getEncounterDateBackgroundHcc = (value, code) => {
     return value?.map((res) => {
+     
       const result = encounterDateMatching.filter((res2) => res2.name == res);
       var backColor = result[0]?.colors;
-      var sectionMapArr = (
+      var sectionMapArr = res?(
         <span
           onClick={() => getEncounterDetailsHcc(res, code)}
           className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
@@ -3040,9 +3044,9 @@ const Hcc = ({ patientHccResult }) => {
           <i>
             <CalendarOutlined className={visitStyles.calenderIcon} />
           </i>
-          {moment(res).format("MMM DD")}
+         { moment(res, "MM/DD/YYYY").format("MMM DD")}
         </span>
-      );
+      ):"";
       return sectionMapArr;
     });
   };
@@ -7788,6 +7792,15 @@ const Hcc = ({ patientHccResult }) => {
                     value={inputValue?.diagnosisCodeQuery}
                     onChange={handleChange}
                   />
+                  {addValidCodeCheck == false ? (
+                    <span className={visitStyles.invalidHccCodeError}>
+                      Invalid Hcc Code
+                    </span>
+                  ) : addValidCodeCheck == true ? (
+                    <span className={visitStyles.validHccCodeError}>
+                      Valid Hcc Code
+                    </span>
+                  ) : null}
                 </div>
                 <div className="col-xl-12 mb-3">
                   <Form.Label>Provider name</Form.Label>
