@@ -187,7 +187,7 @@ export default function Patient() {
   ) => {
     // setIsLoading(true);
     var uId = localStorage.getItem("userId");
-    var resoureUrl = `dbservice/patient/filter?patientAllocated=${uId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}&searchString=${searchTextValue}&sortfield=${
+    var resoureUrl = `dbservice/patient/filter?patientAllocated=${uId}&page=${pageNo?pageNo:0}&size=${pageSize?pageSize:15}&processedStatus=${statusValue?statusValue:""}&dueDateStart=${dStart?dStart:""}&dueDateEnd=${dEnd?dEnd:""}&processedStart=${pStart?pStart:""}&processedEnd=${pEnd?pEnd:""}&searchString=${searchTextValue?searchTextValue:""}&sortfield=${
       sort?.sortField ? sort?.sortField : ""
     }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&priority=${
       selectedPriority ? selectedPriority : ""
@@ -224,7 +224,7 @@ export default function Patient() {
       });
     }
   };
-  console.log(patinetListAll?.patientName, "data");
+
   const actionBodyTemplate = (rowData) => {
     return (
       <div className="d-flex justify-content-center">
@@ -620,6 +620,7 @@ export default function Patient() {
                               patientDetails={patientDetails}
                               sort={sort}
                               setSort={setSort}
+                              getFilteApi={getFilteApi}
                             />
                             <div>
                               <div className="pagination-container">
