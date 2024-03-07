@@ -225,53 +225,118 @@ export const priorityStatus = (value) => {
   }
 };
 
-export const processstatusBodyTemplate = (rowData) => {
-  switch (rowData.processedStatus) {
-    case "COMPLETED":
-      return (
-        <div className="patient-status">
-          <span className={`badge processed-text`}>Completed</span>
-        </div>
-      );
+// export const processstatusBodyTemplate = (rowData) => {
+//   const latestKey =
+//     rowData?.declineNotes?.length > 0 &&
+//     Math.max(
+//       ...rowData?.declineNotes?.map((obj) => parseInt(Object.keys(obj)[0]))
+//     );
+//   let declinedData;
 
-    case "PENDING":
-      return (
-        <div className="patient-status">
-          <span className={`badge processing-text`}>Pending</span>
-        </div>
-      );
+//   if (rowData?.declineNotes && rowData?.declineNotes?.length > 0) {
+//     rowData?.declineNotes?.forEach((obj) => {
+//       if (obj[latestKey]) {
+//         declinedData = obj[latestKey];
+//       }
+//     });
+//   }
+//     switch (rowData.auditedStatus) {
+//       case "AUDIT_PENDING":
+//         return (
+//           <Popover placement="bottom" title="Status: AUDIT PENDING">
+//             <div className="patient-status">
+//               <Image
+//                 src={AuditPending}
+//                 className={styles.ImgTrck}
+//                 style={{ height: "35px", width: "35px" }}
+//               />
+//             </div>
+//           </Popover>
+//         );
 
-    case "DECLINED":
-      return (
-        <div className="patient-status">
-          <span className={`badge failed-text`} style={{ color: "red" }}>
-            Declined
-          </span>
-        </div>
-      );
+//       case "DECLINED":
+//         return (
+//           <div className="patient-status">
+//             <span className={`badge failed-text`} style={{ color: "red" }}>
+//               Declined
+//             </span>
+//           </div>
+//         );
 
-    case "NOTCOMPUTED":
-      return (
-        <div className="patient-status">
-          <span className={`badge notComputed-text`}>Not Computed</span>
-        </div>
-      );
-    case "COMPUTED":
-      return (
-        <div className="patient-status">
-          <span className={`badge computed-text`}>Computed</span>
-        </div>
-      );
-    case "HOLD":
-      return (
-        <div className="patient-status">
-          <span className={`badge hold-text`}>Hold</span>
-        </div>
-      );
-    case null:
-      return <div className="patient-status">---</div>;
-  }
-};
+//       case "AUDITHOLD":
+//         return (
+//           <Popover placement="bottom" title=" Status: AUDIT HOLD">
+//             <div className="patient-status">
+//               <Image
+//                 src={AuditHold}
+//                 className={styles.ImgTrck}
+//                 style={{ height: "35px", width: "35px" }}
+//               />
+//             </div>
+//           </Popover>
+//         );
+//       case "REAUDIT":
+//         return (
+//           <Popover placement="bottom" title=" Status: REAUDIT">
+//             <div className="patient-status">
+//               <Image
+//                 src={ReAudit}
+//                 className={styles.ImgTrck}
+//                 style={{ height: "35px", width: "35px" }}
+//               />
+//             </div>
+//           </Popover>
+//         );
+//       case "AUDITED":
+//         return (
+//           <Popover placement="bottom" title=" Status: AUDITED">
+//             <div className="patient-status">
+//               <Image
+//                 src={AuditedTrack}
+//                 className={styles.ImgTrck}
+//                 style={{ height: "35px", width: "35px" }}
+//               />
+//             </div>
+//           </Popover>
+//         );
+//       case "AUDITED":
+//         return (
+//           <div className="patient-status">
+//             <Image
+//               src={AuditedTrack}
+//               //  style={{ height: "25%", width: "39%" }}
+//             />
+//           </div>
+//         );
+
+//       case "NOT_AUDIT":
+//         return (
+//           <Popover placement="bottom" title=" Status: NOT AUDIT">
+//             <div className="patient-status">
+//               <Image
+//                 src={NotAudited}
+//                 className={styles.ImgTrck}
+//                 style={{ height: "35px", width: "35px" }}
+//               />
+//             </div>
+//           </Popover>
+//         );
+//       case "AUDIT_DECLINED":
+//         return (
+//           <Popover placement="bottom" title=" Status: AUDIT DECLINED">
+
+//           <div className="patient-status">
+//             <Image
+//               src={AuditedDeclineTrack}
+//               style={{ height: "35px", width: "35px" }}
+//             />
+//           </div>
+//           </Popover>
+//         );
+//       case null:
+//         return <div className="patient-status">---</div>;
+//     }
+// };
 
 export const generateOptionsList = (items) => {
   if (items?.loading || items === null || items?.data === null) {

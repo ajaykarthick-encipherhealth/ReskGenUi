@@ -24,6 +24,8 @@ import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
 import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
 import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
 import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
+import AuditeDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
+
 import Image from "next/image";
 const bullets = [
   {
@@ -55,6 +57,7 @@ const statusOptions = [
   { label: "RE AUDIT", value: "REAUDIT" },
   { label: "DECLINED", value: "DECLINED" },
   { label: "AUDIT HOLD", value: "AUDITHOLD" },
+  { label: "AUDIT DECLINED", value: "AUDIT_DECLINED" },
 ];
 
 export default function Patient() {
@@ -329,6 +332,17 @@ export default function Patient() {
             <div className="patient-status" style={{ textAlign: "center" }}>
               <Image
                 src={AuditedTrack}
+                style={{ height: "25%", width: "25%" }}
+              />
+            </div>
+          </Tooltip>
+        );
+      case "AUDIT_DECLINED":
+        return (
+          <Tooltip placement="bottom" title="AUDIT DECLINED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image
+                src={AuditeDeclineTrack}
                 style={{ height: "25%", width: "25%" }}
               />
             </div>
