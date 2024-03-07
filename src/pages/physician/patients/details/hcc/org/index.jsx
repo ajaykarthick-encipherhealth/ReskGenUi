@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { OrganizationChart } from "primereact/organizationchart";
 import Style from "./style.module.css";
-import { Tag, Tooltip } from "antd";
+import { Popover, Tag, Tooltip } from "antd";
 import Tree from "./data.json";
 import Header from "../../../../../../jsx/layouts/nav/Header";
 import { Card } from "react-bootstrap";
@@ -67,23 +67,33 @@ const CamboTree = ({ tree }) => {
         return sectionMapArr;
       } else if (dublicateCaptureDelete.length - 1 == index) {
         var sectionMapArr = (
-          <span
-            className={`mt-2 text-start ${visitStyles.provider_name}`}
-            style={{ backgroundColor: backColor, color: textColor }}
+            <Popover
+            content={
+              <>
+                {dublicateCaptureDelete?.map((item, i) =>
+                  i > 1 ? (
+                    <span
+                      style={{ backgroundColor: backColor, color: textColor }}
+                      className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+                    >
+                      {item}
+                    </span>
+                  ) : null
+                )}
+              </>
+            }
+            trigger={["click"]}
+            placement="bottom"
           >
-            <i>
-              {" "}
-              <FontAwesomeIcon
-                icon={faCircleUser}
-                style={{
-                  size: 10,
-                  color: textColor,
-                }}
-              />
-            </i>
-            {dublicateCaptureDelete.length - 2}+
-          </span>
+            <span
+              style={{ backgroundColor: backColor, color: textColor }}
+              className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+            >
+              {dublicateCaptureDelete.length - 2}+
+            </span>
+          </Popover>
         );
+
         return sectionMapArr;
       }
     });
@@ -108,16 +118,41 @@ const CamboTree = ({ tree }) => {
       } else if (value?.split(",").length - 1 === index) {
         var backColor = "encounterDateTag1";
         var sectionMapArr = (
-          <span
-            // onClick={() => getEncounterDetails(res)}
-            className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+          <Popover
+            content={
+              <>
+                {value?.split(",")?.map((item, i) =>
+                  i > 1 ? (
+                    <span
+                      // onClick={() => getEncounterDetails(res)}
+                      className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+                    >
+                      <i>
+                        <CalendarOutlined
+                          className={visitStyles.calenderIcon}
+                        />
+                      </i>
+                      {moment(res).format("MMM DD")}
+                    </span>
+                  ) : null
+                )}
+              </>
+            }
+            trigger={["click"]}
+            placement="bottom"
           >
-            <i>
-              <CalendarOutlined className={visitStyles.calenderIcon} />
-            </i>
-            {value?.split(",").length - 2}+
-          </span>
+            <span
+              // onClick={() => getEncounterDetails(res)}
+              className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+            >
+              <i>
+                <CalendarOutlined className={visitStyles.calenderIcon} />
+              </i>
+              {value?.split(",").length - 2}+
+            </span>
+          </Popover>
         );
+
         return sectionMapArr;
       }
       // const result = encounterDateMatching.filter((res2) => res2.name == res);
@@ -143,12 +178,31 @@ const CamboTree = ({ tree }) => {
         return sectionMapArr;
       } else if (dublicateCaptureDelete.length - 1 == index) {
         var sectionMapArr = (
-          <span
-            style={{ backgroundColor: backColor, color: textColor }}
-            className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+          <Popover
+            content={
+              <>
+                {dublicateCaptureDelete?.map((item, i) =>
+                  i > 1 ? (
+                    <span
+                      style={{ backgroundColor: backColor, color: textColor }}
+                      className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+                    >
+                      {item}
+                    </span>
+                  ) : null
+                )}
+              </>
+            }
+            trigger={["click"]}
+            placement="bottom"
           >
-            {dublicateCaptureDelete.length - 2}+
-          </span>
+            <span
+              style={{ backgroundColor: backColor, color: textColor }}
+              className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+            >
+              {dublicateCaptureDelete.length - 2}+
+            </span>
+          </Popover>
         );
         return sectionMapArr;
       }
