@@ -18,6 +18,7 @@ function PatientTable({
   statusBodyTemplate,
   patientDetails,
   setSort,
+  
 }) {
   const dispatch = useDispatch();
   const navigate = useRouter();

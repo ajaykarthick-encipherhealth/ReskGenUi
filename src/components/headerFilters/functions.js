@@ -2,6 +2,8 @@ import { Avatar } from "antd";
 import { SVGICON } from "../../jsx/constant/theme";
 import TableStyle from "../table/table.module.css";
 import moment from "moment";
+import { Popover } from "antd";
+
 import dayjs from "dayjs";
 // for search
 export const searchFunction = (
@@ -225,53 +227,7 @@ export const priorityStatus = (value) => {
   }
 };
 
-export const processstatusBodyTemplate = (rowData) => {
-  switch (rowData.processedStatus) {
-    case "COMPLETED":
-      return (
-        <div className="patient-status">
-          <span className={`badge processed-text`}>Completed</span>
-        </div>
-      );
 
-    case "PENDING":
-      return (
-        <div className="patient-status">
-          <span className={`badge processing-text`}>Pending</span>
-        </div>
-      );
-
-    case "DECLINED":
-      return (
-        <div className="patient-status">
-          <span className={`badge failed-text`} style={{ color: "red" }}>
-            Declined
-          </span>
-        </div>
-      );
-
-    case "NOTCOMPUTED":
-      return (
-        <div className="patient-status">
-          <span className={`badge notComputed-text`}>Not Computed</span>
-        </div>
-      );
-    case "COMPUTED":
-      return (
-        <div className="patient-status">
-          <span className={`badge computed-text`}>Computed</span>
-        </div>
-      );
-    case "HOLD":
-      return (
-        <div className="patient-status">
-          <span className={`badge hold-text`}>Hold</span>
-        </div>
-      );
-    case null:
-      return <div className="patient-status">---</div>;
-  }
-};
 
 export const generateOptionsList = (items) => {
   if (items?.loading || items === null || items?.data === null) {
