@@ -154,10 +154,6 @@ const Header = () => {
       if (result.isConfirmed) {
         await logoutAllDevice();
         localStorage.clear();
-        localStorage.removeItem("loginCheck");
-        localStorage.removeItem("userRole");
-        localStorage.removeItem("token");
-        localStorage.removeItem("roles");
         window.location = "/login";
       }
     });
