@@ -8,7 +8,7 @@ import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { patientDetails } from "../../../store/actions/AuthActions";
-import { Spin, Tooltip, notification } from "antd";
+import { Popover, Tooltip, notification } from "antd";
 import { Paginator } from "primereact/paginator";
 import Footer from "../../../jsx/layouts/Footer";
 import visitStyles from "../../../styles/visitdata.module.css";
@@ -28,6 +28,8 @@ import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
 import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
 import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
 import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
+import AuditedDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
+import Abort from "../../../../src/images/trackingImages/Abort.png";
 
 import Image from "next/image";
 const bullets = [
@@ -82,6 +84,8 @@ const statusOptions = [
   { label: "PENDING", value: "PENDING", status: 0 },
   { label: "DECLINED", value: "DECLINED", status: 0 },
   { label: "HOLD", value: "HOLD", status: 0 },
+  { label: "HOLD", value: "HOLD", status: 0 },
+  { label: "ABORTED BY CRON", value: "ABORTED_BY_CRON" },
 ];
 
 const auditStatusOptions = [
@@ -91,6 +95,7 @@ const auditStatusOptions = [
   { label: "AUDIT_PENDING", value: "AUDIT_PENDING", status: 0 },
   { label: "NOT_AUDIT", value: "NOT_AUDIT", status: 0 },
   { label: "AUDITED", value: "AUDITED", status: 0 },
+  { label: "AUDIT DECLINED", value: "AUDIT_DECLINED", status: 0 },
 ];
 
 export default function Patient() {
@@ -273,6 +278,8 @@ export default function Patient() {
           allocatedByProfileImage: res.allocatedByProfileImage,
           auditAllocatedByProfileImage: res.auditAllocatedByProfileImage,
           auditDueDate: res.auditDueDate,
+          declinedNotes: res.declinedNotes,
+          auditDeclinedNotes: res.auditDeclinedNotes,
         });
       });
       setTrackChart(info?.processStatusCount);
@@ -311,75 +318,96 @@ export default function Patient() {
   };
 
   const processstatusBodyTemplate = (rowData) => {
+    const latestKey =
+      rowData?.declinedNotes?.length > 0 &&
+      Math.max(
+        ...rowData?.declinedNotes?.map((obj) => parseInt(Object.keys(obj)[0]))
+      );
+    let declinedData;
+
+    if (rowData?.declinedNotes && rowData?.declinedNotes?.length > 0) {
+      rowData?.declinedNotes?.forEach((obj) => {
+        if (obj[latestKey]) {
+          declinedData = obj[latestKey];
+        }
+      });
+    }
+
     switch (rowData.processedStatus) {
       case "COMPLETED":
         return (
-          <Tooltip placement="bottom" title="COMPLETED">
-            <div className="patient-status">
-              <Image
-                src={Completed}
-                style={{ height: "35px", width: "35px" }}
-              />
+          <Popover placement="bottom" title="Status: COMPLETED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Completed} style={{ height: "30%", width: "30%" }} />
             </div>
-          </Tooltip>
+          </Popover>
         );
 
       case "PENDING":
         return (
-          <Tooltip placement="bottom" title="PENDING">
-            <div className="patient-status">
-              <Image src={Pending} style={{ height: "35px", width: "35px" }} />
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30%", width: "30%" }} />
             </div>
-          </Tooltip>
+          </Popover>
         );
 
       case "DECLINED":
         return (
-          <Tooltip placement="bottom" title="DECLINED">
-            <div className="patient-status">
-              <Image src={Declined} style={{ height: "35px", width: "35px" }} />
+          <Popover
+            placement="bottom"
+            title="Status: DECLINED"
+            content={`Reason: ${rowData.declinedNotes ? declinedData : "---"}`}
+          >
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Declined} style={{ height: "30%", width: "30%" }} />
             </div>
-          </Tooltip>
+          </Popover>
         );
 
       case "NOTCOMPUTED":
         return (
-          <Tooltip placement="bottom" title="PENDING">
-            <div className="patient-status">
-              <Image src={Pending} style={{ height: "35px", width: "35px" }} />
+          <Popover placement="bottom" title="Status: NOT COMPUTED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30%", width: "30%" }} />
             </div>
-          </Tooltip>
+          </Popover>
         );
       case "COMPUTED":
         return (
-          <Tooltip placement="bottom" title="PENDING">
-            <div className="patient-status">
-              <Image src={Pending} style={{ height: "35px", width: "35px" }} />
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30%", width: "30%" }} />
             </div>
-          </Tooltip>
+          </Popover>
         );
       case "HOLD":
         return (
-          <Tooltip placement="bottom" title="HOLD">
-            <div className="patient-status">
-              <Image
-                src={Hold}
-                className={styles.ImgTrck}
-                style={{ height: "35px", width: "35px" }}
-              />
+          <Popover placement="bottom" title="Status: HOLD">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Hold} style={{ height: "30%", width: "30%" }} />
             </div>
-          </Tooltip>
+          </Popover>
+        );
+      case "ABORTED_BY_CRON":
+        return (
+          <Popover placement="bottom" title="Status: ABORTED BY CRON">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Abort} style={{ height: "30%", width: "30%" }} />
+            </div>
+          </Popover>
         );
       case null:
         return (
-          <Tooltip placement="bottom" title="PENDING">
-            <div className="patient-status">
-              <Image src={Pending} style={{ height: "35px", width: "35px" }} />
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30%", width: "30%" }} />
             </div>
-          </Tooltip>
+          </Popover>
         );
     }
   };
+
   const auditstatusBodyTemplateIcon = (rowData) => {
     switch (rowData.auditedStatus) {
       case "AUDIT_PENDING":
@@ -453,11 +481,28 @@ export default function Patient() {
         return <div className="patient-status">---</div>;
     }
   };
+
   const auditstatusBodyTemplate = (rowData) => {
+    const latestKey =
+      rowData?.auditDeclinedNotes?.length > 0 &&
+      Math.max(
+        ...rowData?.auditDeclinedNotes?.map((obj) =>
+          parseInt(Object.keys(obj)[0])
+        )
+      );
+    let declinedData;
+
+    if (rowData?.declinedNotes && rowData?.auditDeclinedNotes?.length > 0) {
+      rowData?.auditDeclinedNotes?.forEach((obj) => {
+        if (obj[latestKey]) {
+          declinedData = obj[latestKey];
+        }
+      });
+    }
     switch (rowData.auditedStatus) {
       case "AUDIT_PENDING":
         return (
-          <Tooltip placement="bottom" title="AUDIT_PENDING">
+          <Popover placement="bottom" title="Status: AUDIT PENDING">
             <div className="patient-status">
               <Image
                 src={AuditPending}
@@ -465,7 +510,7 @@ export default function Patient() {
                 style={{ height: "35px", width: "35px" }}
               />
             </div>
-          </Tooltip>
+          </Popover>
         );
 
       case "DECLINED":
@@ -479,7 +524,7 @@ export default function Patient() {
 
       case "AUDITHOLD":
         return (
-          <Tooltip placement="bottom" title="AUDITHOLD">
+          <Popover placement="bottom" title=" Status: AUDIT HOLD">
             <div className="patient-status">
               <Image
                 src={AuditHold}
@@ -487,11 +532,11 @@ export default function Patient() {
                 style={{ height: "35px", width: "35px" }}
               />
             </div>
-          </Tooltip>
+          </Popover>
         );
       case "REAUDIT":
         return (
-          <Tooltip placement="bottom" title="REAUDIT">
+          <Popover placement="bottom" title=" Status: REAUDIT">
             <div className="patient-status">
               <Image
                 src={ReAudit}
@@ -499,11 +544,11 @@ export default function Patient() {
                 style={{ height: "35px", width: "35px" }}
               />
             </div>
-          </Tooltip>
+          </Popover>
         );
       case "AUDITED":
         return (
-          <Tooltip placement="bottom" title="AUDITED">
+          <Popover placement="bottom" title=" Status: AUDITED">
             <div className="patient-status">
               <Image
                 src={AuditedTrack}
@@ -511,7 +556,7 @@ export default function Patient() {
                 style={{ height: "35px", width: "35px" }}
               />
             </div>
-          </Tooltip>
+          </Popover>
         );
       case "AUDITED":
         return (
@@ -522,9 +567,10 @@ export default function Patient() {
             />
           </div>
         );
+
       case "NOT_AUDIT":
         return (
-          <Tooltip placement="bottom" title="NOT_AUDIT">
+          <Popover placement="bottom" title=" Status: NOT AUDIT">
             <div className="patient-status">
               <Image
                 src={NotAudited}
@@ -532,7 +578,24 @@ export default function Patient() {
                 style={{ height: "35px", width: "35px" }}
               />
             </div>
-          </Tooltip>
+          </Popover>
+        );
+      case "AUDIT_DECLINED":
+        return (
+          <Popover
+            placement="bottom"
+            title=" Status: AUDIT DECLINED"
+            content={`Reason: ${
+              rowData.auditDeclinedNotes ? declinedData : "---"
+            }`}
+          >
+            <div className="patient-status">
+              <Image
+                src={AuditedDeclineTrack}
+                style={{ height: "35px", width: "35px" }}
+              />
+            </div>
+          </Popover>
         );
       case null:
         return <div className="patient-status">---</div>;

@@ -23,6 +23,8 @@ import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
 import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
 import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
 import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
+import Abort from "../../../../src/images/trackingImages/Abort.png";
+
 import {
   disableFutureDate,
   priorityOptions,
@@ -138,6 +140,8 @@ export default function Patient() {
       setTotalElements(
         patientsListFilter?.response?.patientDTOList?.totalElements
       );
+      console.log(result, "test");
+
       result?.map((res) => {
         resultMap.push({
           patientId: res.patientId,
@@ -158,6 +162,7 @@ export default function Patient() {
           allocatedByProfileImage: res.allocatedByProfileImage,
           validDiseaseCount: res.validDiseaseCount,
           deletedDiseaseCount: res.deletedDiseaseCount,
+          declinedNotes: res.declinedNotes,
         });
       });
       setTrackChart(patientsListFilter?.response?.processStatusCount);
@@ -219,7 +224,7 @@ export default function Patient() {
       });
     }
   };
-
+  console.log(patinetListAll?.patientName, "data");
   const actionBodyTemplate = (rowData) => {
     return (
       <div className="d-flex justify-content-center">
@@ -257,6 +262,7 @@ export default function Patient() {
     { label: "COMPUTED", value: "COMPUTED" },
     { label: "DECLINED", value: "DECLINED" },
     { label: "HOLD", value: "HOLD" },
+    { label: "ABORTED BY CRON", value: "ABORTED_BY_CRON" },
   ];
   const bullets = [
     {
@@ -365,65 +371,92 @@ export default function Patient() {
     }
   };
   const processstatusBodyTemplate = (rowData) => {
+    const latestKey =
+      rowData?.declinedNotes?.length > 0 &&
+      Math.max(
+        ...rowData?.declinedNotes?.map((obj) => parseInt(Object.keys(obj)[0]))
+      );
+    let declinedData;
+
+    if (rowData?.declinedNotes && rowData?.declinedNotes?.length > 0) {
+      rowData?.declinedNotes?.forEach((obj) => {
+        if (obj[latestKey]) {
+          declinedData = obj[latestKey];
+        }
+      });
+    }
+
     switch (rowData.processedStatus) {
       case "COMPLETED":
         return (
-          <Tooltip placement="bottom" title="COMPLETED">
+          <Popover placement="bottom" title="Status: COMPLETED">
             <div className="patient-status" style={{ textAlign: "center" }}>
               <Image src={Completed} style={{ height: "18%", width: "18%" }} />
             </div>
-          </Tooltip>
+          </Popover>
         );
 
       case "PENDING":
         return (
-          <Tooltip placement="bottom" title="PENDING">
+          <Popover placement="bottom" title="Status: PENDING">
             <div className="patient-status" style={{ textAlign: "center" }}>
               <Image src={Pending} style={{ height: "18%", width: "18%" }} />
             </div>
-          </Tooltip>
+          </Popover>
         );
 
       case "DECLINED":
         return (
-          <Tooltip placement="bottom" title="DECLINED">
+          <Popover
+            placement="bottom"
+            title="Status: DECLINED"
+            content={`Reason: ${rowData.declinedNotes ? declinedData : "---"}`}
+          >
             <div className="patient-status" style={{ textAlign: "center" }}>
               <Image src={Declined} style={{ height: "18%", width: "18%" }} />
             </div>
-          </Tooltip>
+          </Popover>
         );
 
       case "NOTCOMPUTED":
         return (
-          <Tooltip placement="bottom" title="PENDING">
+          <Popover placement="bottom" title="Status: NOT COMPUTED">
             <div className="patient-status" style={{ textAlign: "center" }}>
               <Image src={Pending} style={{ height: "18%", width: "18%" }} />
             </div>
-          </Tooltip>
+          </Popover>
         );
       case "COMPUTED":
         return (
-          <Tooltip placement="bottom" title="PENDING">
+          <Popover placement="bottom" title="Status: PENDING">
             <div className="patient-status" style={{ textAlign: "center" }}>
               <Image src={Pending} style={{ height: "18%", width: "18%" }} />
             </div>
-          </Tooltip>
+          </Popover>
         );
       case "HOLD":
         return (
-          <Tooltip placement="bottom" title="HOLD">
+          <Popover placement="bottom" title="Status: HOLD">
             <div className="patient-status" style={{ textAlign: "center" }}>
               <Image src={Hold} style={{ height: "18%", width: "18%" }} />
             </div>
-          </Tooltip>
+          </Popover>
+        );
+      case "ABORTED_BY_CRON":
+        return (
+          <Popover placement="bottom" title="Status: ABORTED BY CRON">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Abort} style={{ height: "18%", width: "18%" }} />
+            </div>
+          </Popover>
         );
       case null:
         return (
-          <Tooltip placement="bottom" title="PENDING">
+          <Popover placement="bottom" title="Status: PENDING">
             <div className="patient-status" style={{ textAlign: "center" }}>
               <Image src={Pending} style={{ height: "18%", width: "18%" }} />
             </div>
-          </Tooltip>
+          </Popover>
         );
     }
   };

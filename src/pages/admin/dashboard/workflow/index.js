@@ -90,7 +90,10 @@ const WorkFlow = () => {
       icon: allocated,
       title: "Allocated",
       charts: worlFlowData?.data?.response?.processedStatus
-        ? worlFlowData?.data?.response?.processedStatus.ALLOCATED
+        ?  worlFlowData?.data?.response?.processedStatus.COMPLETED +
+        worlFlowData?.data?.response?.auditedStatus.PENDING +
+        worlFlowData?.data?.response?.auditedStatus.HOLD +
+        worlFlowData?.data?.response?.auditedStatus.DECLINED
         : "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
