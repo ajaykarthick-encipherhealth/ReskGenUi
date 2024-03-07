@@ -7468,6 +7468,7 @@ const Hcc = ({ patientHccResult }) => {
           onOk={handleCloseModal}
           onCancel={handleCloseModal}
           width="70%"
+          footer={false}
           // height={400}
         >
           <div className="section-container">
