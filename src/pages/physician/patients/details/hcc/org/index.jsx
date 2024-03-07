@@ -11,6 +11,8 @@ import axios from "../../../../../../utility/axiosConfig";
 import { CalendarOutlined } from "@ant-design/icons";
 import moment from "moment";
 import visitStyles from "../../../../../../styles/visitdata.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 
 const CamboTree = ({ tree }) => {
   const [selection, setSelection] = useState([]);
@@ -38,42 +40,121 @@ const CamboTree = ({ tree }) => {
     return output;
   }
 
+  const getProviderNameList = (data) => {
+    var dublicateCaptureDelete = removeDuplicates(data);
+    return dublicateCaptureDelete.map((res, index) => {
+      const result = background.filter((res2) => res2.sectionName == res);
+      var backColor = result[0]?.backgroundColor;
+      var textColor = result[0]?.sectionColor;
+      if (index < 2) {
+        var sectionMapArr = (
+          <span
+            className={`mt-2 text-start ${visitStyles.provider_name}`}
+            style={{ backgroundColor: backColor, color: textColor }}
+          >
+            <i>
+              {" "}
+              <FontAwesomeIcon
+                icon={faCircleUser}
+                style={{
+                  size: 10,
+                  color: textColor,
+                }}
+              />
+            </i>
+            {res}
+          </span>
+        );
+        return sectionMapArr;
+      } else if (dublicateCaptureDelete.length - 1 == index) {
+        var sectionMapArr = (
+          <span
+            className={`mt-2 text-start ${visitStyles.provider_name}`}
+            style={{ backgroundColor: backColor, color: textColor }}
+          >
+            <i>
+              {" "}
+              <FontAwesomeIcon
+                icon={faCircleUser}
+                style={{
+                  size: 10,
+                  color: textColor,
+                }}
+              />
+            </i>
+            {dublicateCaptureDelete.length - 2}+
+          </span>
+        );
+        return sectionMapArr;
+      }
+    });
+  };
+
   const getEncounterDateBackground = (value) => {
-    return value?.split(",")?.map((res) => {
+    console.log(value, "test");
+    return value?.split(",")?.map((res, index) => {
+      if (index < 2) {
+        var backColor = "encounterDateTag1";
+        var sectionMapArr = (
+          <span
+            // onClick={() => getEncounterDetails(res)}
+            className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+          >
+            <i>
+              <CalendarOutlined className={visitStyles.calenderIcon} />
+            </i>
+            {moment(res).format("MMM DD")}
+          </span>
+        );
+        return sectionMapArr;
+      } else if (value?.split(",").length - 1 === index) {
+        var backColor = "encounterDateTag1";
+        var sectionMapArr = (
+          <span
+            // onClick={() => getEncounterDetails(res)}
+            className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+          >
+            <i>
+              <CalendarOutlined className={visitStyles.calenderIcon} />
+            </i>
+            {value?.split(",").length - 2}+
+          </span>
+        );
+        return sectionMapArr;
+      }
       // const result = encounterDateMatching.filter((res2) => res2.name == res);
       // var backColor = result[0]?.colors;
-      var backColor = "encounterDateTag1";
-      var sectionMapArr = (
-        <span
-          // onClick={() => getEncounterDetails(res)}
-          className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
-        >
-          <i>
-            <CalendarOutlined className={visitStyles.calenderIcon} />
-          </i>
-          {moment(res).format("MMM DD")}
-        </span>
-      );
-      return sectionMapArr;
     });
   };
 
   const getCaptureSectionBackground = (value) => {
     var dublicateCaptureDelete = removeDuplicates(value);
-    return dublicateCaptureDelete.map((res) => {
+    console.log(dublicateCaptureDelete, "test");
+    return dublicateCaptureDelete.map((res, index) => {
       const result = background.filter((res2) => res2.sectionName == res);
       var backColor = result[0]?.backgroundColor;
       var textColor = result[0]?.sectionColor;
-
-      var sectionMapArr = (
-        <span
-          style={{ backgroundColor: backColor, color: textColor }}
-          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
-        >
-          {res}
-        </span>
-      );
-      return sectionMapArr;
+      if (index < 2) {
+        var sectionMapArr = (
+          <span
+            style={{ backgroundColor: backColor, color: textColor }}
+            className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+          >
+            {res}
+          </span>
+        );
+        return sectionMapArr;
+      } else if (dublicateCaptureDelete.length - 1 == index) {
+        var sectionMapArr = (
+          <span
+            style={{ backgroundColor: backColor, color: textColor }}
+            className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+          >
+            {dublicateCaptureDelete.length - 2}+
+          </span>
+        );
+        return sectionMapArr;
+      }
     });
   };
 
@@ -82,8 +163,8 @@ const CamboTree = ({ tree }) => {
   }, []);
 
   useEffect(() => {
-    setTrees(tree)
-  }, [tree])
+    setTrees(tree);
+  }, [tree]);
 
   const nodeTemplate = (node) => {
     return (
@@ -109,7 +190,9 @@ const CamboTree = ({ tree }) => {
             <Tag color="blue">{item}</Tag>
           ))}
         </div>
-        <div className="text-start">{node?.ruleType?.replaceAll("_", " ")}</div>
+        <div className="text-start">
+          {getProviderNameList(node?.providerName)}
+        </div>
         <div className="text-start">
           {getEncounterDateBackground(node?.encounterDate)}
         </div>
@@ -122,9 +205,7 @@ const CamboTree = ({ tree }) => {
 
   return (
     <div style={{ backgroundColor: "#fbfdff" }}>
-      <div
-        className={`overflow-x-auto ${Style.chart}`}
-      >
+      <div className={`overflow-x-auto ${Style.chart}`}>
         <OrganizationChart
           value={trees}
           // selectionMode="multiple"
