@@ -65,7 +65,7 @@ import {
 } from "../../../../../services/PatientsListSevice";
 import RafScore from "../components/rafScore";
 import CamboTree from "./org";
-import getMeatFound from "../functions";
+// import getMeatFound from "../functions";
 
 const { Option } = Select;
 
@@ -108,6 +108,8 @@ const Hcc = ({ patientHccResult }) => {
   const [dosYearDefalutSelect, setDosYearDefalutSelect] = useState("");
   const [dosYearDefalutSelectRadiology, setDosYearDefalutSelectRadiology] =
     useState("");
+  const [radiologyFileDetailCheck, setRadiologyFileDetailCheck] =
+    useState(false);
   const [localOrgId, setLocalOrgId] = useState("");
   const [localTenantId, setLocalTenantId] = useState("");
   const [selectMeatFileId, setSelectMeatFileId] = useState("");
@@ -242,7 +244,7 @@ const Hcc = ({ patientHccResult }) => {
     useState("");
   const [saveBtnTitle, setSaveBtnTitle] = useState("Save");
   const [completedBtnTitle, setCompleteBtnTitle] = useState("Complete");
-  const [declineBtnTitle, setDeclineBtnTitle] = useState("Decline")
+  const [declineBtnTitle, setDeclineBtnTitle] = useState("Decline");
 
   const [buttonClicked, setButtonClicked] = useState(false);
   const [isAddButtonClicked, setIsAddButtonClicked] = useState(false);
@@ -295,27 +297,32 @@ const Hcc = ({ patientHccResult }) => {
       (res2) => res2.diagnosisCode.replace(".", "") == code.replace(".", "")
     );
     var backColor = "#f93d3d";
+    var meatTitle = "MEAT";
     if (result.length != 0) {
       switch (value) {
         case "M":
           if (result[0]?.monitor) {
             backColor = "#15b315";
           }
+          meatTitle = "Monitor";
           break;
         case "E":
           if (result[0]?.evaluate) {
             backColor = "#15b315";
           }
+          meatTitle = "Evaluate";
           break;
         case "A":
           if (result[0]?.assessment) {
             backColor = "#15b315";
           }
+          meatTitle = "Assessment";
           break;
         case "T":
           if (result[0]?.treatment) {
             backColor = "#15b315";
           }
+          meatTitle = "Treatment";
           break;
         default:
           null;
@@ -330,15 +337,16 @@ const Hcc = ({ patientHccResult }) => {
     //   </span>
     // );
     return (
-      <span
-        style={{ backgroundColor: backColor, color: "white" }}
-        className={`mt-2 ${styles.badgeMeat}`}
-      >
-        {value}
-      </span>
+      <Tooltip title={meatTitle} placement="bottom">
+        <span
+          style={{ backgroundColor: backColor, color: "white" }}
+          className={`mt-2 ${styles.badgeMeat}`}
+        >
+          {value}
+        </span>
+      </Tooltip>
     );
   };
-  
 
   const handleAddButtonClick = () => {
     setIsAddButtonClicked(true);
@@ -3298,44 +3306,50 @@ const Hcc = ({ patientHccResult }) => {
       inputValue?.reason
     ) {
       let errors = {
-        providername: inputValue?.providerName === "" ? "Please enter provider name" : "",
-        quickQuery: inputValue?.headerName === "" ? "Please select quick query" : "",
-        imagingQuery: inputValue?.imagingTestHeader === "" ? "Please select imaging query" : "",
-        queryReason: inputValue?.queryReason === "" ? "Please select quick reason" : "",
-        description: inputValue?.description === "" ? "Please enter description" : "",
-    };
-
-    setFormErr(errors);
-      
-    } else {
-    if (form.checkValidity() === true) {
-      var dataformat = {
-        patientId: localPatientId,
-        diagnosisCode: inputValue.diagnosisCodeQuery,
-        queryReason: inputValue.queryReason,
-        Reason: inputValue.reason,
-        providerName: inputValue.providerName,
-        imagingTestHeader: inputValue.imagingTestHeader,
-        headerName: inputValue.headerName,
-        dosYear: selectedDosValue,
-        description: inputValue.description,
+        providername:
+          inputValue?.providerName === "" ? "Please enter provider name" : "",
+        quickQuery:
+          inputValue?.headerName === "" ? "Please select quick query" : "",
+        imagingQuery:
+          inputValue?.imagingTestHeader === ""
+            ? "Please select imaging query"
+            : "",
+        queryReason:
+          inputValue?.queryReason === "" ? "Please select quick reason" : "",
+        description:
+          inputValue?.description === "" ? "Please enter description" : "",
       };
-      var result = await submitMeatQuery(dataformat);
-      // if (result.status == "SUCCESS") {
-      //   setMeatQueryResult(result.response);
-      //   inputValue.queryComment = result.response.queryComment;
-      //   setIsMeatQueryModal(false);
-      //   notification.success({
-      //     message: result.message,
-      //     placement: "top",
-      //     duration: 1,
-      //   });
-      //   setMeatQueriedDetailsModal(true);
-      //   setMeatQueriedDetailsShow(true);
-      //   var result = await getMeatQueryList(selectedDosValue, localPatientId);
-      //   setMeatQueryList(result.response);
-      // } 
-    }
+
+      setFormErr(errors);
+    } else {
+      if (form.checkValidity() === true) {
+        var dataformat = {
+          patientId: localPatientId,
+          diagnosisCode: inputValue.diagnosisCodeQuery,
+          queryReason: inputValue.queryReason,
+          Reason: inputValue.reason,
+          providerName: inputValue.providerName,
+          imagingTestHeader: inputValue.imagingTestHeader,
+          headerName: inputValue.headerName,
+          dosYear: selectedDosValue,
+          description: inputValue.description,
+        };
+        var result = await submitMeatQuery(dataformat);
+        // if (result.status == "SUCCESS") {
+        //   setMeatQueryResult(result.response);
+        //   inputValue.queryComment = result.response.queryComment;
+        //   setIsMeatQueryModal(false);
+        //   notification.success({
+        //     message: result.message,
+        //     placement: "top",
+        //     duration: 1,
+        //   });
+        //   setMeatQueriedDetailsModal(true);
+        //   setMeatQueriedDetailsShow(true);
+        //   var result = await getMeatQueryList(selectedDosValue, localPatientId);
+        //   setMeatQueryList(result.response);
+        // }
+      }
     }
   };
   const updateMeatQueryComments = async () => {
@@ -3519,33 +3533,33 @@ const Hcc = ({ patientHccResult }) => {
 
   const handleSubmitComboCode = async (event) => {
     var dos = dosYearDefalutSelect.label;
-   
-      const form = event.currentTarget;
-      event.preventDefault();
-      if (form.checkValidity() === true) {
-        var updateDataformat = {
-          patientId: localPatientId,
-          dosYear: selectedDosValue,
-          comboCode: inputValue.comboCode,
-          additionalCode: inputValue.additionalCode,
-          description: inputValue.description,
-        };
-        var result = await manuallyAddComboCode(updateDataformat);
-        if (result.status == "SUCCESS") {
-          setIsAddComboCode(false);
-          notification.success({
-            message: result.message,
-            placement: "top",
-            duration: 1,
-          });
-          getPatientDetailsReload(
-            localPatientId,
-            localOrgId,
-            localTenantId,
-            "fileNotLoad"
-          );
-        }
-      
+
+    const form = event.currentTarget;
+    event.preventDefault();
+    if (form.checkValidity() === true) {
+      var updateDataformat = {
+        patientId: localPatientId,
+        dosYear: selectedDosValue,
+        comboCode: inputValue.comboCode,
+        additionalCode: inputValue.additionalCode,
+        description: inputValue.description,
+      };
+      var result = await manuallyAddComboCode(updateDataformat);
+      if (result.status == "SUCCESS") {
+        setIsAddComboCode(false);
+        notification.success({
+          message: result.message,
+          placement: "top",
+          duration: 1,
+        });
+        getPatientDetailsReload(
+          localPatientId,
+          localOrgId,
+          localTenantId,
+          "fileNotLoad"
+        );
+      }
+
       setValidated(true);
     }
   };
@@ -3822,21 +3836,6 @@ const Hcc = ({ patientHccResult }) => {
 
                                           <div
                                             className={`${visitStyles.encounterAndSectionHeader}`}
-                                          ></div>
-
-                                          <div
-                                            className={`${visitStyles.encounterAndSectionHeader}`}
-                                          >
-                                            {data.isManuallyAdded == true ? (
-                                              <Badge
-                                                className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
-                                              >
-                                                Manually Added
-                                              </Badge>
-                                            ) : null}
-                                          </div>
-                                          <div
-                                            className={`${visitStyles.encounterAndSectionHeader}`}
                                           >
                                             {getCaptureSectionBackground(
                                               data.capturedSections,
@@ -3896,6 +3895,17 @@ const Hcc = ({ patientHccResult }) => {
                                                 "T"
                                               )}
                                             </div>
+                                          </div>
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                            {data.isManuallyAdded == true ? (
+                                              <Badge
+                                                className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                              >
+                                                Manually Added
+                                              </Badge>
+                                            ) : null}
                                           </div>
                                           {data.getPlace == "Insulin" ? (
                                             <span
@@ -5131,44 +5141,35 @@ const Hcc = ({ patientHccResult }) => {
                                         </Popconfirm>
                                       </div>
                                     </div>
-                                    <div
-                                      className={`${visitStyles.hoverActiveHcc}`}
-                                    >
+                                    <div className="d-flex justify-content-between">
                                       <div
-                                        className={`${visitStyles.encounterAndSectionHeader}`}
+                                        className={`${visitStyles.hoverActiveHcc}`}
                                       >
-                                        {getProviderNameList(
-                                          data?.providerName
-                                        )}
-                                      </div>
-                                      <div
-                                        className={`${visitStyles.encounterAndSectionHeader}`}
-                                      >
-                                        {getEncounterDateBackground(
-                                          data.encounterDateSplit
-                                        )}
-                                      </div>
-                                      <div
-                                        className={`${visitStyles.encounterAndSectionHeader}`}
-                                      >
-                                        {data.isManuallyAdded == true ? (
-                                          <Badge
-                                            className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
-                                          >
-                                            Manually Added
-                                          </Badge>
-                                        ) : null}
-                                      </div>
-                                      <div
-                                        className={`${visitStyles.encounterAndSectionHeader}`}
-                                      >
-                                        {getCaptureSectionBackgroundFile(
-                                          data?.capturedSections,
-                                          data?.encounterDate,
-                                          data?.actualDescription
-                                        )}
-                                      </div>
-                                      {/* {data?.isMostSpecific == true ? (
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
+                                          {getProviderNameList(
+                                            data?.providerName
+                                          )}
+                                        </div>
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
+                                          {getEncounterDateBackground(
+                                            data.encounterDateSplit
+                                          )}
+                                        </div>
+
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
+                                          {getCaptureSectionBackgroundFile(
+                                            data?.capturedSections,
+                                            data?.encounterDate,
+                                            data?.actualDescription
+                                          )}
+                                        </div>
+                                        {/* {data?.isMostSpecific == true ? (
                                         <div
                                           className={`${visitStyles.encounterAndSectionHeader}`}
                                         >
@@ -5179,6 +5180,62 @@ const Hcc = ({ patientHccResult }) => {
                                           </span>
                                         </div>
                                       ) : null} */}
+                                      </div>
+                                      <div
+                                        className={`${visitStyles.encounterAndSectionHeader}`}
+                                      >
+                                        <div
+                                          className={styles.meatFoundContainer}
+                                        >
+                                          <div>
+                                            {getMeatFound(
+                                              data?.diagnosisCode,
+                                              meatCriteriaList,
+                                              "M"
+                                            )}
+                                          </div>
+                                          <div>
+                                            {getMeatFound(
+                                              data?.diagnosisCode,
+                                              meatCriteriaList,
+                                              "E"
+                                            )}
+                                          </div>
+                                          <div>
+                                            {getMeatFound(
+                                              data?.diagnosisCode,
+                                              meatCriteriaList,
+                                              "A"
+                                            )}
+                                          </div>
+                                          <div>
+                                            {getMeatFound(
+                                              data?.diagnosisCode,
+                                              meatCriteriaList,
+                                              "T"
+                                            )}
+                                          </div>
+                                        </div>
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
+                                          {data.isManuallyAdded == true ? (
+                                            <Badge
+                                              className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                            >
+                                              Manually Added
+                                            </Badge>
+                                          ) : null}
+                                        </div>
+                                        {data.getPlace == "Insulin" ? (
+                                          <span
+                                            className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                            bg={`  mt-2 bg-bg-eight `}
+                                          >
+                                            Insulin
+                                          </span>
+                                        ) : null}
+                                      </div>
                                     </div>
                                   </div>
                                 </li>
@@ -6168,9 +6225,9 @@ const Hcc = ({ patientHccResult }) => {
                                       <span className="meat-name-details">
                                         {item.createdBy}
                                       </span>
-                                      <span className={styles.l1auditorBadge}>
+                                      {/* <span className={styles.l1auditorBadge}>
                                         L1 Auditor
-                                      </span>
+                                      </span> */}
                                     </div>
                                     <div className="col-xl-2 d-grid">
                                       <span className="meat-name-details">
@@ -7916,10 +7973,10 @@ const Hcc = ({ patientHccResult }) => {
                     onChange={handleChange}
                   />
                   {formErr?.providername && (
-                      <div className="text-danger fs-12">
-                        {formErr?.providername }
-                      </div>
-                    )}
+                    <div className="text-danger fs-12">
+                      {formErr?.providername}
+                    </div>
+                  )}
                 </div>
                 <div className="col-xl-12 mb-4">
                   <Form.Label>
@@ -7937,10 +7994,10 @@ const Hcc = ({ patientHccResult }) => {
                     ))}
                   </Select>
                   {formErr?.quickQuery && (
-                      <div className="text-danger fs-12">
-                        {formErr?.quickQuery }
-                      </div>
-                    )}
+                    <div className="text-danger fs-12">
+                      {formErr?.quickQuery}
+                    </div>
+                  )}
                 </div>
                 <div className="col-xl-12 mb-4">
                   <Form.Label>
@@ -7960,10 +8017,10 @@ const Hcc = ({ patientHccResult }) => {
                     ))}
                   </Select>
                   {formErr?.imagingQuery && (
-                      <div className="text-danger fs-12">
-                        {formErr?.imagingQuery }
-                      </div>
-                    )}
+                    <div className="text-danger fs-12">
+                      {formErr?.imagingQuery}
+                    </div>
+                  )}
                 </div>
                 {/* <div className="col-xl-12 mb-4">
                   <Form.Label>
@@ -7994,10 +8051,10 @@ const Hcc = ({ patientHccResult }) => {
                     ))}
                   </Select>
                   {formErr?.queryReason && (
-                      <div className="text-danger fs-12">
-                        {formErr?.queryReason }
-                      </div>
-                    )}
+                    <div className="text-danger fs-12">
+                      {formErr?.queryReason}
+                    </div>
+                  )}
                 </div>
                 <div className="col-xl-12 mb-4">
                   <Form.Label>
@@ -8028,10 +8085,10 @@ const Hcc = ({ patientHccResult }) => {
                   </div>
                 ) : null}
                 {formErr?.description && (
-                      <div className="text-danger fs-12">
-                        {formErr?.description }
-                      </div>
-                    )}
+                  <div className="text-danger fs-12">
+                    {formErr?.description}
+                  </div>
+                )}
               </div>
 
               <div>

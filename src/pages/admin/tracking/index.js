@@ -29,6 +29,7 @@ import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
 import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
 import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
 import AuditedDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
+import Abort from "../../../../src/images/trackingImages/Abort.png";
 
 import Image from "next/image";
 const bullets = [
@@ -83,6 +84,8 @@ const statusOptions = [
   { label: "PENDING", value: "PENDING", status: 0 },
   { label: "DECLINED", value: "DECLINED", status: 0 },
   { label: "HOLD", value: "HOLD", status: 0 },
+  { label: "HOLD", value: "HOLD", status: 0 },
+  { label: "ABORTED BY CRON", value: "ABORTED_BY_CRON" },
 ];
 
 const auditStatusOptions = [
@@ -276,7 +279,7 @@ export default function Patient() {
           auditAllocatedByProfileImage: res.auditAllocatedByProfileImage,
           auditDueDate: res.auditDueDate,
           declinedNotes: res.declinedNotes,
-          auditDeclinedNotes:res.auditDeclinedNotes
+          auditDeclinedNotes: res.auditDeclinedNotes,
         });
       });
       setTrackChart(info?.processStatusCount);
@@ -386,6 +389,14 @@ export default function Patient() {
             </div>
           </Popover>
         );
+      case "ABORTED_BY_CRON":
+        return (
+          <Popover placement="bottom" title="Status: ABORTED BY CRON">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Abort} style={{ height: "30%", width: "30%" }} />
+            </div>
+          </Popover>
+        );
       case null:
         return (
           <Popover placement="bottom" title="Status: PENDING">
@@ -473,19 +484,21 @@ export default function Patient() {
 
   const auditstatusBodyTemplate = (rowData) => {
     const latestKey =
-    rowData?.auditDeclinedNotes?.length > 0 &&
-    Math.max(
-      ...rowData?.auditDeclinedNotes?.map((obj) => parseInt(Object.keys(obj)[0]))
-    );
-  let declinedData;
+      rowData?.auditDeclinedNotes?.length > 0 &&
+      Math.max(
+        ...rowData?.auditDeclinedNotes?.map((obj) =>
+          parseInt(Object.keys(obj)[0])
+        )
+      );
+    let declinedData;
 
-  if (rowData?.declinedNotes && rowData?.auditDeclinedNotes?.length > 0) {
-    rowData?.auditDeclinedNotes?.forEach((obj) => {
-      if (obj[latestKey]) {
-        declinedData = obj[latestKey];
-      }
-    });
-  }
+    if (rowData?.declinedNotes && rowData?.auditDeclinedNotes?.length > 0) {
+      rowData?.auditDeclinedNotes?.forEach((obj) => {
+        if (obj[latestKey]) {
+          declinedData = obj[latestKey];
+        }
+      });
+    }
     switch (rowData.auditedStatus) {
       case "AUDIT_PENDING":
         return (
@@ -569,14 +582,19 @@ export default function Patient() {
         );
       case "AUDIT_DECLINED":
         return (
-          <Popover placement="bottom" title=" Status: AUDIT DECLINED"           content={`Reason: ${rowData.auditDeclinedNotes ? declinedData : "---"}`}>
-
-          <div className="patient-status">
-            <Image
-              src={AuditedDeclineTrack}
-              style={{ height: "35px", width: "35px" }}
-            />
-          </div>
+          <Popover
+            placement="bottom"
+            title=" Status: AUDIT DECLINED"
+            content={`Reason: ${
+              rowData.auditDeclinedNotes ? declinedData : "---"
+            }`}
+          >
+            <div className="patient-status">
+              <Image
+                src={AuditedDeclineTrack}
+                style={{ height: "35px", width: "35px" }}
+              />
+            </div>
           </Popover>
         );
       case null:
