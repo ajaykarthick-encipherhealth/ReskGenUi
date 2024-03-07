@@ -23,6 +23,8 @@ import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
 import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
 import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
 import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
+import Abort from "../../../../src/images/trackingImages/Abort.png";
+
 import {
   disableFutureDate,
   priorityOptions,
@@ -260,6 +262,7 @@ export default function Patient() {
     { label: "COMPUTED", value: "COMPUTED" },
     { label: "DECLINED", value: "DECLINED" },
     { label: "HOLD", value: "HOLD" },
+    { label: "ABORTED BY CRON", value: "ABORTED_BY_CRON" },
   ];
   const bullets = [
     {
@@ -436,6 +439,14 @@ export default function Patient() {
           <Popover placement="bottom" title="Status: HOLD">
             <div className="patient-status" style={{ textAlign: "center" }}>
               <Image src={Hold} style={{ height: "18%", width: "18%" }} />
+            </div>
+          </Popover>
+        );
+      case "ABORTED_BY_CRON":
+        return (
+          <Popover placement="bottom" title="Status: ABORTED BY CRON">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Abort} style={{ height: "18%", width: "18%" }} />
             </div>
           </Popover>
         );
