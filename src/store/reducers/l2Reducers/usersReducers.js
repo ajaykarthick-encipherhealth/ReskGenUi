@@ -1,4 +1,4 @@
-import { USERS ,INDIVIAULUSER,CLICK_USER_DETAILS} from "../../actions/l2Action/userActions";
+import { USERS ,INDIVIAULUSER,CLICK_USER_DETAILS,GET_USERINFO} from "../../actions/l2Action/userActions";
 
 
 
@@ -27,6 +27,12 @@ import { USERS ,INDIVIAULUSER,CLICK_USER_DETAILS} from "../../actions/l2Action/u
         ...state,
         userDetails: action.payload,
       };
+    }
+    if(action.type===GET_USERINFO){
+      return{
+        ...state,
+        currentUserDetails:action.payload
+      }
     }
     return state;
   };

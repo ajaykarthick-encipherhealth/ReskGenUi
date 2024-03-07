@@ -32,7 +32,7 @@ export const VERIFYCODE = "VERIFYCODE";
 export const ACCURACYSCRORE = "ACCURACYSCRORE";
 export const FILTER = "FILTER";
 export const PROFILE_URL = "PROFILE_URL";
-export const CURRENTUSER = "CURRENTUSER";
+export const CURRENTUSER_INFO = "CURRENTUSER_INFO";
 
 export const selectedUserRole = (data) => ({
   type: SELECTEDROLE,
@@ -285,7 +285,7 @@ export const getCurrentUser = (userId, router) => {
     try {
       CurrentUser(userId, router).then((response) => {
         dispatch({
-          type: CURRENTUSER,
+          type: CURRENTUSER_INFO,
           payload: response,
         });
       });
