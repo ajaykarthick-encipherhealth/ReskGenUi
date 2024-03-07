@@ -1893,7 +1893,7 @@ const Radiology = ({}) => {
                       )}
                     </div>
                     <div className="row">
-                      <div className="col-xl-2">
+                      <div className="col-xl-3">
                         <ul className="timeline">
                           <div
                             className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
@@ -1980,7 +1980,7 @@ const Radiology = ({}) => {
                           ))}
                         </ul>
                       </div>
-                      <div className="col-xl-8">
+                      <div className="col-xl-6">
                         <div className="card-body p-0 z-index-low">
                           <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                             <div
@@ -2008,7 +2008,7 @@ const Radiology = ({}) => {
                           </Worker>
                         </div>
                       </div>
-                      <div className="col-xl-2">
+                      <div className="col-xl-3">
                         <div className="">
                           <ul className="timeline">
                             <div
