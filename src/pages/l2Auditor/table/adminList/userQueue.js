@@ -58,7 +58,8 @@ const UserQueue = ({ userList, setSort }) => {
           style={{ fontSize: "10px" }}
         ></Badge.Ribbon>
       );
-    } else return null;
+    }
+   else return null;
   };
 
   const handleTableRowClick = (e, id) => {

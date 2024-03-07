@@ -258,6 +258,24 @@ export const auditHold = async (data) => {
   }
 };
 
+export const auditDecline = async (data) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.post(
+      `${ENDPOINTS?.apiEndoint}dbservice/patient/status/auditDecline`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err; 
+  }
+};
 export const manuallyAddComboCode = async (data) => {
   const token = localStorage.getItem("token");
   try {
