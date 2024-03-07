@@ -321,7 +321,7 @@ const Hcc = ({ patientHccResult }) => {
   const [meatModalTitle, setMeatModalTitle] = useState("");
   const [fileLoading, setFileLoading] = useState(false);
   const [selectMeatResult, setSelectMeatResult] = useState(null);
-  const [formErr, setFormErr] = usestate({
+  const [formErr, setFormErr] = useState({
     providername: "",
     quickQuery: "",
     imagingQuery: "",
@@ -3277,6 +3277,23 @@ const Hcc = ({ patientHccResult }) => {
   const handleSubmitMeatQuery = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
+    if (
+      inputValue?.providerName === "" ||
+      inputValue?.headerName === "" ||
+      inputValue?.imagingTestHeader === "" ||
+      inputValue?.queryReason === "" ||
+      inputValue?.description === "" ||
+      inputValue?.reason
+    ) {
+      setFormErr({
+        providername: "Please enter provider name",
+        quickQuery: "Please select quick query",
+        imagingQuery: "Please select imaging query",
+        queryReason: "Please select quick reason",
+        description: "Please enter description",
+      });
+      setFileLoading(false);
+    } else {
     if (form.checkValidity() === true) {
       var dataformat = {
         patientId: localPatientId,
@@ -3305,6 +3322,7 @@ const Hcc = ({ patientHccResult }) => {
         setMeatQueryList(result.response);
       } else {
       }
+    }
     }
   };
   const updateMeatQueryComments = async () => {
@@ -3488,23 +3506,7 @@ const Hcc = ({ patientHccResult }) => {
 
   const handleSubmitComboCode = async (event) => {
     var dos = dosYearDefalutSelect.label;
-    if (
-      inputValue?.providerName === "" ||
-      inputValue?.headerName === "" ||
-      inputValue?.imagingTestHeader === "" ||
-      inputValue?.queryReason === "" ||
-      inputValue?.description === "" ||
-      inputValue?.reason
-    ) {
-      setFormErr({
-        providername: "Please enter provider name",
-        quickQuery: "Please select quick query",
-        imagingQuery: "Please select imaging query",
-        queryReason: "Please select quick reason",
-        description: "Please enter description",
-      });
-      setFileLoading(false);
-    } else {
+   
       const form = event.currentTarget;
       event.preventDefault();
       if (form.checkValidity() === true) {
@@ -3530,7 +3532,7 @@ const Hcc = ({ patientHccResult }) => {
             "fileNotLoad"
           );
         }
-      }
+      
       setValidated(true);
     }
   };
@@ -7900,9 +7902,9 @@ const Hcc = ({ patientHccResult }) => {
                     value={inputValue?.providerName}
                     onChange={handleChange}
                   />
-                  {formErr?.providerName && (
+                  {formErr?.providername && (
                       <div className="text-danger fs-12">
-                        {formErr?.providerName }
+                        {formErr?.providername }
                       </div>
                     )}
                 </div>
