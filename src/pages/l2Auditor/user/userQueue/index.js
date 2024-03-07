@@ -18,7 +18,7 @@ import audited from "../../../../images/svg/audited.svg";
 import reAudit from "../../../../images/svg/reAudit.svg";
 import auditHold from "../../../../images/svg/auditHold.svg";
 import auditPending from "../../../../images/svg/auditPending.svg";
-import { getL2IndividualUser } from "../../../../store/actions/l2Action/userActions";
+import { getCurrentUserDetails, getL2IndividualUser } from "../../../../store/actions/l2Action/userActions";
 import leftArrow from "../../../../images/svg/leftArrow.svg";
 import AuditHeaderFilters from "../../../../components/headerFilters/auditHeaderFilters";
 import userStyles from "./styles.module.css";
@@ -78,7 +78,7 @@ const index = () => {
   const usersData = useSelector((state) => state.l2User?.userData);
   const sideMenu = useSelector((state) => state.sideMenu);
   const filteredList = useSelector((state) => state.auth.filterList);
-  const currentUser = useSelector((state) => state.auth.currentUserInfo);
+  const currentUser = useSelector((state) => state.l2User.currentUserDetails);
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [userListAll, setUserListAll] = useState([]);
@@ -148,7 +148,7 @@ const index = () => {
         sort,
       };
       dispatch(getL2IndividualUser(datas));
-      dispatch(getCurrentUser(uId));
+      dispatch(getCurrentUserDetails(uId));
     }
   }, [
     pageNo,

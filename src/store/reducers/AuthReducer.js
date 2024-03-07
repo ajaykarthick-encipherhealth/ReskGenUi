@@ -12,7 +12,7 @@ import {
   ACCURACYSCRORE,
   FILTER,
   PROFILE_URL,
-  CURRENTUSER,
+  CURRENTUSER_INFO,
 } from "../actions/AuthActions";
 
 const initialState = {
@@ -33,7 +33,7 @@ const initialState = {
   accuracy: "",
   filterList: null,
   url: null,
-  currentUserInfo: null,
+  userInfo: null,
 };
 
 const initialStatePatient = {
@@ -128,10 +128,10 @@ export function AuthReducer(state = initialState, action) {
       url: action.payload,
     };
   }
-  if (action.type === CURRENTUSER) {
+  if (action.type === CURRENTUSER_INFO) {
     return {
       ...state,
-      currentUserInfo: action.payload,
+      userInfo: action.payload,
     };
   }
   return state;

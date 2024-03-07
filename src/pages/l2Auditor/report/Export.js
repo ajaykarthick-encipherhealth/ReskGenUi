@@ -3,9 +3,10 @@ import React, { useEffect, useState } from "react";
 import styles from "./report.module.css";
 import {
   getExportDetails,
-  getUsersList,
+
 } from "../../../store/actions/ReportActions";
 import { useDispatch, useSelector } from "react-redux";
+import { getUsersList } from "../../../store/actions/adminAction/ReportActions";
 const { Option } = Select;
 
 export const debounce = (func, delay) => {

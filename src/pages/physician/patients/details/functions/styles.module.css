@@ -1,0 +1,13 @@
+.badgeMeat {
+  font-size: 11px !important;
+  font-weight: 500;
+  border-radius: 30px !important;
+  margin-right: 3px;
+  text-align: center !important;
+  height: 23px;
+  width: 23px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border: 0.0625rem solid transparent;
+}

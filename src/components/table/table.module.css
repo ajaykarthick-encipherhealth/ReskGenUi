@@ -260,3 +260,30 @@
   font-size: 18px;
   margin-top: -2px;
 }
+.customChecked3[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid #d4c9c9;
+  outline: none;
+  transition: background-color 0.3s;
+  background-color: #fff;
+}
+
+.customChecked3[type="checkbox"]:checked {
+  background-color: #fff;
+}
+.customChecked3[type="checkbox"]::before {
+  content: "\2713";
+  display: flex;
+  justify-content: center;
+  color: #04306f;
+  font-weight: 800;
+  font-size: 18px;
+  margin-top: -12px;
+}
