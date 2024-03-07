@@ -538,10 +538,7 @@ export default function Patient() {
                             </div>
                             <HeaderFilters bullets={bullets} />
 
-                            <div
-                              className="col-xl-2"
-                              // style={{ marginRight: "40px" }}
-                            >
+                            <div className="col-xl-2">
                               <DailyTask trackChart={trackChart} />
                             </div>
                           </div>
@@ -549,14 +546,11 @@ export default function Patient() {
                             <div
                               style={{
                                 display: "flex",
-                                marginTop:"-30px",
+                                marginTop: "-30px",
                                 flexDirection: "row",
                               }}
                             >
-                              <div
-                                className="col-xl-2 "
-                                // style={{ marginLeft: "10px" }}
-                              >
+                              <div className="col-xl-2 ">
                                 <label>Completed Date</label>
                                 <div>
                                   <RangePicker
