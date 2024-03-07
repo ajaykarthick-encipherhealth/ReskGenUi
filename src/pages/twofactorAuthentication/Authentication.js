@@ -9,6 +9,7 @@ import {
   getValidateCode,
   loginAction,
 } from "../../store/actions/AuthActions";
+import { encyptingPass } from "../../components/headerFilters/functions";
 
 export const codeLength = 6;
 export const generateCodeArray = () =>
@@ -115,7 +116,7 @@ const index = () => {
                   dispatch(
                     getValidateCode(
                       username,
-                      codeString,
+                      encyptingPass(codeString),
                       router,
                       "validate",
                       password

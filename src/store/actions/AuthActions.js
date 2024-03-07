@@ -112,8 +112,8 @@ export const getValidateCode = (
   return (dispatch) => {
     verifyCode(username, code, userpassword).then((response) => {
       if (response?.data?.response) {
-        if (validate && password) {
-          dispatch(loginAction(username, route, code, password));
+        if (validate && userpassword) {
+          dispatch(loginAction(username, route, code, userpassword));
         } else {
           notification.success({
             message: "Code verified successfully",

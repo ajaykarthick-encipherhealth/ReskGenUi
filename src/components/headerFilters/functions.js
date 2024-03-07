@@ -656,7 +656,7 @@ function generateRandomString() {
 }
 
 export const encyptingPass = (password) => {
-  var plaintextData ="you password key";
+  var plaintextData =password;
   var encryptionKey = "B27AA05B9A2490D1AE59B33B45CFD4B0"; // Should be 16, 24, or 32 bytes
   var initializationVector = generateRandomString(); // Should be 16 bytes
   var encryptedData = encryptData(
@@ -664,5 +664,6 @@ export const encyptingPass = (password) => {
     encryptionKey,
     initializationVector
   );
-  return encryptedData;
+  const values={"pass":encryptedData,"iv":initializationVector}
+  return values;
 };
