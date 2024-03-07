@@ -65,6 +65,7 @@ import {
 } from "../../../../../services/PatientsListSevice";
 import RafScore from "../components/rafScore";
 import CamboTree from "./org";
+import { getMeatFound } from "../functions/index";
 
 const { Option } = Select;
 
@@ -3734,60 +3735,55 @@ const Hcc = ({ patientHccResult }) => {
                                           </div>
                                         </Popconfirm>
                                       </div>
-                                      <div
-                                        className={`${visitStyles.hoverActiveHcc}`}
-                                      >
+                                      <div className="d-flex justify-content-between">
                                         <div
-                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                          className={`${visitStyles.hoverActiveHcc}`}
                                         >
-                                          {getProviderNameList(
-                                            data?.providerName
-                                          )}
-                                        </div>
-                                        <div
-                                          className={`${visitStyles.encounterAndSectionHeader}`}
-                                        >
-                                          {getEncounterDateBackgroundHcc(
-                                            data.encounterDateSplit,
-                                            data.diagnosisCode
-                                          )}
-                                        </div>
-                                        {data.getPlace == "Insulin" ? (
-                                          <span
-                                            className={` mt-2 ${visitStyles.radiologyStatus}`}
-                                            bg={`  mt-2 bg-bg-eight `}
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
                                           >
-                                            Insulin
-                                          </span>
-                                        ) : null}
-                                        <div
-                                          className={`${visitStyles.encounterAndSectionHeader}`}
-                                        ></div>
+                                            {getProviderNameList(
+                                              data?.providerName
+                                            )}
+                                          </div>
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                            {getEncounterDateBackgroundHcc(
+                                              data.encounterDateSplit,
+                                              data.diagnosisCode
+                                            )}
+                                          </div>
 
-                                        <div
-                                          className={`${visitStyles.encounterAndSectionHeader}`}
-                                        >
-                                          {data.isManuallyAdded == true ? (
-                                            <Badge
-                                              className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
-                                            >
-                                              Manually Added
-                                            </Badge>
-                                          ) : null}
-                                        </div>
-                                        <div
-                                          className={`${visitStyles.encounterAndSectionHeader}`}
-                                        >
-                                          {getCaptureSectionBackground(
-                                            data.capturedSections,
-                                            null,
-                                            data.encounterDate,
-                                            data.actualDescription,
-                                            null,
-                                            data.diagnosisCode
-                                          )}
-                                        </div>
-                                        {data.isMostSpecific == true ? (
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          ></div>
+
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                            {data.isManuallyAdded == true ? (
+                                              <Badge
+                                                className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                              >
+                                                Manually Added
+                                              </Badge>
+                                            ) : null}
+                                          </div>
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                            {getCaptureSectionBackground(
+                                              data.capturedSections,
+                                              null,
+                                              data.encounterDate,
+                                              data.actualDescription,
+                                              null,
+                                              data.diagnosisCode
+                                            )}
+                                          </div>
+
+                                          {/* {data.isMostSpecific == true ? (
                                           <div
                                             className={`${visitStyles.encounterAndSectionHeader}`}
                                           >
@@ -3797,7 +3793,54 @@ const Hcc = ({ patientHccResult }) => {
                                               IsMostSpecific
                                             </span>
                                           </div>
-                                        ) : null}
+                                        ) : null} */}
+                                        </div>
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
+                                          <div
+                                            className={
+                                              styles.meatFoundContainer
+                                            }
+                                          >
+                                            <div>
+                                              {getMeatFound(
+                                                data?.diagnosisCode,
+                                                meatCriteriaList,
+                                                "M"
+                                              )}
+                                            </div>
+                                            <div>
+                                              {getMeatFound(
+                                                data?.diagnosisCode,
+                                                meatCriteriaList,
+                                                "E"
+                                              )}
+                                            </div>
+                                            <div>
+                                              {getMeatFound(
+                                                data?.diagnosisCode,
+                                                meatCriteriaList,
+                                                "A"
+                                              )}
+                                            </div>
+                                            <div>
+                                              {getMeatFound(
+                                                data?.diagnosisCode,
+                                                meatCriteriaList,
+                                                "T"
+                                              )}
+                                            </div>
+                                          </div>
+                                          {data.getPlace == "Insulin" ? (
+                                            <span
+                                              className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                              bg={`  mt-2 bg-bg-eight `}
+                                            >
+                                              Insulin
+                                            </span>
+                                          ) : null}
+                                        </div>
                                       </div>
                                     </div>
                                   </li>
@@ -5061,7 +5104,7 @@ const Hcc = ({ patientHccResult }) => {
                                           data?.actualDescription
                                         )}
                                       </div>
-                                      {data?.isMostSpecific == true ? (
+                                      {/* {data?.isMostSpecific == true ? (
                                         <div
                                           className={`${visitStyles.encounterAndSectionHeader}`}
                                         >
@@ -5071,7 +5114,7 @@ const Hcc = ({ patientHccResult }) => {
                                             IsMostSpecific
                                           </span>
                                         </div>
-                                      ) : null}
+                                      ) : null} */}
                                     </div>
                                   </div>
                                 </li>
@@ -6578,7 +6621,7 @@ const Hcc = ({ patientHccResult }) => {
                                     data?.actualDescription
                                   )}
                                 </div>
-                                {data?.isMostSpecific == true ? (
+                                {/* {data?.isMostSpecific == true ? (
                                   <div
                                     className={`${visitStyles.encounterAndSectionHeader}`}
                                   >
@@ -6588,7 +6631,7 @@ const Hcc = ({ patientHccResult }) => {
                                       IsMostSpecific
                                     </span>
                                   </div>
-                                ) : null}
+                                ) : null} */}
                               </div>
                             </div>
                           </li>

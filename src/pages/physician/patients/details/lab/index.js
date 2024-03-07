@@ -762,29 +762,31 @@ const Lab = ({}) => {
   };
 
   const getEncounterDateBackground = (value) => {
-    return value.map((res) => {
-      const result = encounterDateMatching.filter((res2) => res2.name == res);
-      var backColor = result[0]?.colors;
-      var sectionMapArr = (
-        <Popover
-          onClick={() => getEncounterDetails(res)}
-          content={providerDetails}
-          title=""
-          placement="bottom"
-          trigger="click"
-        >
-          <span
-            className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+    if (data) {
+      return value.map((res) => {
+        const result = encounterDateMatching.filter((res2) => res2.name == res);
+        var backColor = result[0]?.colors;
+        var sectionMapArr = (
+          <Popover
+            onClick={() => getEncounterDetails(res)}
+            content={providerDetails}
+            title=""
+            placement="bottom"
+            trigger="click"
           >
-            <i>
-              <CalendarOutlined className={visitStyles.calenderIcon} />
-            </i>
-            {moment(res).format("MMM DD")}
-          </span>
-        </Popover>
-      );
-      return sectionMapArr;
-    });
+            <span
+              className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+            >
+              <i>
+                <CalendarOutlined className={visitStyles.calenderIcon} />
+              </i>
+              {moment(res).format("MMM DD")}
+            </span>
+          </Popover>
+        );
+        return sectionMapArr;
+      });
+    }
   };
 
   const getCaptureSectionBackgroundMeat = (
@@ -1371,7 +1373,7 @@ const Lab = ({}) => {
                       ) : null}
                     </div>
                     <div className="row">
-                      <div className="col-xl-2">
+                      <div className="col-xl-3">
                         <ul className="timeline">
                           <div
                             className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
@@ -1441,7 +1443,7 @@ const Lab = ({}) => {
                           ))}
                         </ul>
                       </div>
-                      <div className="col-xl-8">
+                      <div className="col-xl-6">
                         <div className="card-body p-0 z-index-low">
                           <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                             <div
@@ -1469,7 +1471,7 @@ const Lab = ({}) => {
                           </Worker>
                         </div>
                       </div>
-                      <div className="col-xl-2">
+                      <div className="col-xl-3">
                         <div className="">
                           <ul className="timeline">
                             <div
