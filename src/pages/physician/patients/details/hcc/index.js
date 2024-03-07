@@ -107,6 +107,8 @@ const Hcc = ({ patientHccResult }) => {
   const [dosYearDefalutSelect, setDosYearDefalutSelect] = useState("");
   const [dosYearDefalutSelectRadiology, setDosYearDefalutSelectRadiology] =
     useState("");
+  const [radiologyFileDetailCheck, setRadiologyFileDetailCheck] =
+    useState(false);
   const [localOrgId, setLocalOrgId] = useState("");
   const [localTenantId, setLocalTenantId] = useState("");
   const [selectMeatFileId, setSelectMeatFileId] = useState("");
@@ -241,7 +243,7 @@ const Hcc = ({ patientHccResult }) => {
     useState("");
   const [saveBtnTitle, setSaveBtnTitle] = useState("Save");
   const [completedBtnTitle, setCompleteBtnTitle] = useState("Complete");
-  const [declineBtnTitle, setDeclineBtnTitle] = useState("Decline")
+  const [declineBtnTitle, setDeclineBtnTitle] = useState("Decline");
 
   const [buttonClicked, setButtonClicked] = useState(false);
   const [isAddButtonClicked, setIsAddButtonClicked] = useState(false);
@@ -330,7 +332,6 @@ const Hcc = ({ patientHccResult }) => {
       </span>
     );
   };
-  
 
   const handleAddButtonClick = () => {
     setIsAddButtonClicked(true);
@@ -3045,10 +3046,9 @@ const Hcc = ({ patientHccResult }) => {
 
   const getEncounterDateBackgroundHcc = (value, code) => {
     return value?.map((res) => {
-     
       const result = encounterDateMatching.filter((res2) => res2.name == res);
       var backColor = result[0]?.colors;
-      var sectionMapArr = res?(
+      var sectionMapArr = res ? (
         <span
           onClick={() => getEncounterDetailsHcc(res, code)}
           className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
@@ -3056,9 +3056,11 @@ const Hcc = ({ patientHccResult }) => {
           <i>
             <CalendarOutlined className={visitStyles.calenderIcon} />
           </i>
-         { moment(res, "MM/DD/YYYY").format("MMM DD")}
+          {moment(res, "MM/DD/YYYY").format("MMM DD")}
         </span>
-      ):"";
+      ) : (
+        ""
+      );
       return sectionMapArr;
     });
   };
@@ -6138,9 +6140,9 @@ const Hcc = ({ patientHccResult }) => {
                                       <span className="meat-name-details">
                                         {item.createdBy}
                                       </span>
-                                      <span className={styles.l1auditorBadge}>
+                                      {/* <span className={styles.l1auditorBadge}>
                                         L1 Auditor
-                                      </span>
+                                      </span> */}
                                     </div>
                                     <div className="col-xl-2 d-grid">
                                       <span className="meat-name-details">
