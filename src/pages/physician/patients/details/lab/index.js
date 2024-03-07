@@ -762,31 +762,29 @@ const Lab = ({}) => {
   };
 
   const getEncounterDateBackground = (value) => {
-    if (data) {
-      return value.map((res) => {
-        const result = encounterDateMatching.filter((res2) => res2.name == res);
-        var backColor = result[0]?.colors;
-        var sectionMapArr = (
-          <Popover
-            onClick={() => getEncounterDetails(res)}
-            content={providerDetails}
-            title=""
-            placement="bottom"
-            trigger="click"
+    return value.map((res) => {
+      const result = encounterDateMatching.filter((res2) => res2.name == res);
+      var backColor = result[0]?.colors;
+      var sectionMapArr = (
+        <Popover
+          onClick={() => getEncounterDetails(res)}
+          content={providerDetails}
+          title=""
+          placement="bottom"
+          trigger="click"
+        >
+          <span
+            className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
           >
-            <span
-              className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
-            >
-              <i>
-                <CalendarOutlined className={visitStyles.calenderIcon} />
-              </i>
-              {moment(res).format("MMM DD")}
-            </span>
-          </Popover>
-        );
-        return sectionMapArr;
-      });
-    }
+            <i>
+              <CalendarOutlined className={visitStyles.calenderIcon} />
+            </i>
+            {moment(res).format("MMM DD")}
+          </span>
+        </Popover>
+      );
+      return sectionMapArr;
+    });
   };
 
   const getCaptureSectionBackgroundMeat = (
