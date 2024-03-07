@@ -175,11 +175,11 @@ export const verifyCode = async (username, code, userpassword) => {
   }
 };
 
-export const mfaValidation = async (username) => {
+export const mfaValidation = async (username, route, password) => {
   try {
     const response = await axios.post(
       `${ENDPOINTS?.apiEndoint}securityservice/auth/mfaValidation`,
-      { userName: username }
+      { userName: username, password: password }
     );
     return response;
   } catch (err) {

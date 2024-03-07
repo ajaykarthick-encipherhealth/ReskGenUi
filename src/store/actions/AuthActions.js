@@ -69,7 +69,7 @@ export function Logout(navigate) {
 
 export const getMFAValidation = (username, route, password) => {
   return () => {
-    mfaValidation(username, route).then((response) => {
+    mfaValidation(username, route,password).then((response) => {
       const skip = response?.data?.response?.skipEntryAvailable;
       const mfa = response?.data?.response?.mfaIsEnabled;
       if (response?.data?.response) {
