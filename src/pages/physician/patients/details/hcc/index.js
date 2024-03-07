@@ -65,7 +65,7 @@ import {
 } from "../../../../../services/PatientsListSevice";
 import RafScore from "../components/rafScore";
 import CamboTree from "./org";
-import getMeatFound from "../functions"
+import getMeatFound from "../functions";
 
 const { Option } = Select;
 
@@ -321,7 +321,13 @@ const Hcc = ({ patientHccResult }) => {
   const [meatModalTitle, setMeatModalTitle] = useState("");
   const [fileLoading, setFileLoading] = useState(false);
   const [selectMeatResult, setSelectMeatResult] = useState(null);
-
+  const [formErr, setFormErr] = usestate({
+    providername: "",
+    quickQuery: "",
+    imagingQuery: "",
+    queryReason: "",
+    description: "",
+  });
   const handleAddButtonClick = () => {
     setIsAddButtonClicked(true);
   };
@@ -3035,10 +3041,9 @@ const Hcc = ({ patientHccResult }) => {
 
   const getEncounterDateBackgroundHcc = (value, code) => {
     return value?.map((res) => {
-     
       const result = encounterDateMatching.filter((res2) => res2.name == res);
       var backColor = result[0]?.colors;
-      var sectionMapArr = res?(
+      var sectionMapArr = res ? (
         <span
           onClick={() => getEncounterDetailsHcc(res, code)}
           className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
@@ -3046,9 +3051,11 @@ const Hcc = ({ patientHccResult }) => {
           <i>
             <CalendarOutlined className={visitStyles.calenderIcon} />
           </i>
-         { moment(res, "MM/DD/YYYY").format("MMM DD")}
+          {moment(res, "MM/DD/YYYY").format("MMM DD")}
         </span>
-      ):"";
+      ) : (
+        ""
+      );
       return sectionMapArr;
     });
   };
@@ -3481,33 +3488,51 @@ const Hcc = ({ patientHccResult }) => {
 
   const handleSubmitComboCode = async (event) => {
     var dos = dosYearDefalutSelect.label;
-    const form = event.currentTarget;
-    event.preventDefault();
-    if (form.checkValidity() === true) {
-      var updateDataformat = {
-        patientId: localPatientId,
-        dosYear: selectedDosValue,
-        comboCode: inputValue.comboCode,
-        additionalCode: inputValue.additionalCode,
-        description: inputValue.description,
-      };
-      var result = await manuallyAddComboCode(updateDataformat);
-      if (result.status == "SUCCESS") {
-        setIsAddComboCode(false);
-        notification.success({
-          message: result.message,
-          placement: "top",
-          duration: 1,
-        });
-        getPatientDetailsReload(
-          localPatientId,
-          localOrgId,
-          localTenantId,
-          "fileNotLoad"
-        );
+    if (
+      inputValue?.providerName === "" ||
+      inputValue?.headerName === "" ||
+      inputValue?.imagingTestHeader === "" ||
+      inputValue?.queryReason === "" ||
+      inputValue?.description === "" ||
+      inputValue?.reason
+    ) {
+      setFormErr({
+        providername: "Please enter provider name",
+        quickQuery: "Please select quick query",
+        imagingQuery: "Please select imaging query",
+        queryReason: "Please select quick reason",
+        description: "Please enter description",
+      });
+      setFileLoading(false);
+    } else {
+      const form = event.currentTarget;
+      event.preventDefault();
+      if (form.checkValidity() === true) {
+        var updateDataformat = {
+          patientId: localPatientId,
+          dosYear: selectedDosValue,
+          comboCode: inputValue.comboCode,
+          additionalCode: inputValue.additionalCode,
+          description: inputValue.description,
+        };
+        var result = await manuallyAddComboCode(updateDataformat);
+        if (result.status == "SUCCESS") {
+          setIsAddComboCode(false);
+          notification.success({
+            message: result.message,
+            placement: "top",
+            duration: 1,
+          });
+          getPatientDetailsReload(
+            localPatientId,
+            localOrgId,
+            localTenantId,
+            "fileNotLoad"
+          );
+        }
       }
+      setValidated(true);
     }
-    setValidated(true);
   };
 
   const underScoreRemove = (value) => {
@@ -7875,6 +7900,11 @@ const Hcc = ({ patientHccResult }) => {
                     value={inputValue?.providerName}
                     onChange={handleChange}
                   />
+                  {formErr?.providerName && (
+                      <div className="text-danger fs-12">
+                        {formErr?.providerName }
+                      </div>
+                    )}
                 </div>
                 <div className="col-xl-12 mb-4">
                   <Form.Label>
@@ -7891,6 +7921,11 @@ const Hcc = ({ patientHccResult }) => {
                       </Option>
                     ))}
                   </Select>
+                  {formErr?.quickQuery && (
+                      <div className="text-danger fs-12">
+                        {formErr?.quickQuery }
+                      </div>
+                    )}
                 </div>
                 <div className="col-xl-12 mb-4">
                   <Form.Label>
@@ -7909,6 +7944,11 @@ const Hcc = ({ patientHccResult }) => {
                       </Option>
                     ))}
                   </Select>
+                  {formErr?.imagingQuery && (
+                      <div className="text-danger fs-12">
+                        {formErr?.imagingQuery }
+                      </div>
+                    )}
                 </div>
                 {/* <div className="col-xl-12 mb-4">
                   <Form.Label>
@@ -7938,6 +7978,11 @@ const Hcc = ({ patientHccResult }) => {
                       </Option>
                     ))}
                   </Select>
+                  {formErr?.queryReason && (
+                      <div className="text-danger fs-12">
+                        {formErr?.queryReason }
+                      </div>
+                    )}
                 </div>
                 <div className="col-xl-12 mb-4">
                   <Form.Label>
@@ -7967,6 +8012,11 @@ const Hcc = ({ patientHccResult }) => {
                     ></textarea>
                   </div>
                 ) : null}
+                {formErr?.description && (
+                      <div className="text-danger fs-12">
+                        {formErr?.description }
+                      </div>
+                    )}
               </div>
 
               <div>
