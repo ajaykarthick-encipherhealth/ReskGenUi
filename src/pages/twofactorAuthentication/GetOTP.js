@@ -10,6 +10,7 @@ import settings from "../../images/svg/settings.svg";
 import { codeLength, generateCodeArray } from "./Authentication";
 import { getQrCode, getValidateCode } from "../../store/actions/AuthActions";
 import { useSelector } from "react-redux";
+import { encyptingPass } from "../../components/headerFilters/functions";
 
 const GetOTP = () => {
   const dispatch = useDispatch();
@@ -114,7 +115,7 @@ const GetOTP = () => {
               const codeString = code?.join("");
               if (codeString?.length > 0) {
                 dispatch(
-                  getValidateCode(username, codeString, router, "", password)
+                  getValidateCode(username, encyptingPass(codeString), router, "", password)
                 );
               }
             }}
