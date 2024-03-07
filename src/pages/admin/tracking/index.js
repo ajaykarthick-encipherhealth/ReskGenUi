@@ -275,7 +275,8 @@ export default function Patient() {
           allocatedByProfileImage: res.allocatedByProfileImage,
           auditAllocatedByProfileImage: res.auditAllocatedByProfileImage,
           auditDueDate: res.auditDueDate,
-          declineNotes: res.declineNotes,
+          declinedNotes: res.declinedNotes,
+          auditDeclinedNotes:res.auditDeclinedNotes
         });
       });
       setTrackChart(info?.processStatusCount);
@@ -315,14 +316,14 @@ export default function Patient() {
 
   const processstatusBodyTemplate = (rowData) => {
     const latestKey =
-      rowData?.declineNotes?.length > 0 &&
+      rowData?.declinedNotes?.length > 0 &&
       Math.max(
-        ...rowData?.declineNotes?.map((obj) => parseInt(Object.keys(obj)[0]))
+        ...rowData?.declinedNotes?.map((obj) => parseInt(Object.keys(obj)[0]))
       );
     let declinedData;
 
-    if (rowData?.declineNotes && rowData?.declineNotes?.length > 0) {
-      rowData?.declineNotes?.forEach((obj) => {
+    if (rowData?.declinedNotes && rowData?.declinedNotes?.length > 0) {
+      rowData?.declinedNotes?.forEach((obj) => {
         if (obj[latestKey]) {
           declinedData = obj[latestKey];
         }
@@ -353,7 +354,7 @@ export default function Patient() {
           <Popover
             placement="bottom"
             title="Status: DECLINED"
-            content={`Reason: ${rowData.declineNotes ? declinedData : "---"}`}
+            content={`Reason: ${rowData.declinedNotes ? declinedData : "---"}`}
           >
             <div className="patient-status" style={{ textAlign: "center" }}>
               <Image src={Declined} style={{ height: "30%", width: "30%" }} />
@@ -472,14 +473,14 @@ export default function Patient() {
 
   const auditstatusBodyTemplate = (rowData) => {
     const latestKey =
-    rowData?.declineNotes?.length > 0 &&
+    rowData?.auditDeclinedNotes?.length > 0 &&
     Math.max(
-      ...rowData?.declineNotes?.map((obj) => parseInt(Object.keys(obj)[0]))
+      ...rowData?.auditDeclinedNotes?.map((obj) => parseInt(Object.keys(obj)[0]))
     );
   let declinedData;
 
-  if (rowData?.declineNotes && rowData?.declineNotes?.length > 0) {
-    rowData?.declineNotes?.forEach((obj) => {
+  if (rowData?.declinedNotes && rowData?.auditDeclinedNotes?.length > 0) {
+    rowData?.auditDeclinedNotes?.forEach((obj) => {
       if (obj[latestKey]) {
         declinedData = obj[latestKey];
       }
@@ -568,7 +569,7 @@ export default function Patient() {
         );
       case "AUDIT_DECLINED":
         return (
-          <Popover placement="bottom" title=" Status: AUDIT DECLINED">
+          <Popover placement="bottom" title=" Status: AUDIT DECLINED"           content={`Reason: ${rowData.auditDeclinedNotes ? declinedData : "---"}`}>
 
           <div className="patient-status">
             <Image

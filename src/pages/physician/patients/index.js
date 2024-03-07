@@ -160,7 +160,7 @@ export default function Patient() {
           allocatedByProfileImage: res.allocatedByProfileImage,
           validDiseaseCount: res.validDiseaseCount,
           deletedDiseaseCount: res.deletedDiseaseCount,
-          declineNotes: res.declineNotes,
+          declinedNotes: res.declinedNotes,
         });
       });
       setTrackChart(patientsListFilter?.response?.processStatusCount);
@@ -369,14 +369,14 @@ export default function Patient() {
   };
   const processstatusBodyTemplate = (rowData) => {
     const latestKey =
-      rowData?.declineNotes?.length > 0 &&
+      rowData?.declinedNotes?.length > 0 &&
       Math.max(
-        ...rowData?.declineNotes?.map((obj) => parseInt(Object.keys(obj)[0]))
+        ...rowData?.declinedNotes?.map((obj) => parseInt(Object.keys(obj)[0]))
       );
     let declinedData;
 
-    if (rowData?.declineNotes && rowData?.declineNotes?.length > 0) {
-      rowData?.declineNotes?.forEach((obj) => {
+    if (rowData?.declinedNotes && rowData?.declinedNotes?.length > 0) {
+      rowData?.declinedNotes?.forEach((obj) => {
         if (obj[latestKey]) {
           declinedData = obj[latestKey];
         }
@@ -407,7 +407,7 @@ export default function Patient() {
           <Popover
             placement="bottom"
             title="Status: DECLINED"
-            content={`Reason: ${rowData.declineNotes ? declinedData : "---"}`}
+            content={`Reason: ${rowData.declinedNotes ? declinedData : "---"}`}
           >
             <div className="patient-status" style={{ textAlign: "center" }}>
               <Image src={Declined} style={{ height: "18%", width: "18%" }} />
