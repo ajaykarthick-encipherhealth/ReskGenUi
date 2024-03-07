@@ -505,6 +505,7 @@ const index = () => {
                                       setSortOrder={setCoderSortOrder}
                                       sortOrder={coderSortOrder}
                                       setSort={setSort}
+                                      l2Auditor={true}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane id="my-posts" eventKey="team">

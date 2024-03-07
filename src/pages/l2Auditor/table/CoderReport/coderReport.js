@@ -30,6 +30,7 @@ function CoderReport({
   sortOrder,
   setSortOrder,
   setSort,
+  l2Auditor
 }) {
   const dispatch = useDispatch();
 
@@ -267,7 +268,7 @@ function CoderReport({
                         borderRadius: "4px",
                       }}
                       checked={selectAll}
-                      className={selectAll ? TableStyle.customChecked2 : ""}
+                      className={(selectAll&&l2Auditor) ?TableStyle.customChecked3 :selectAll? TableStyle.customChecked2 : ""}
                     />
                   </div>
                 </th>
