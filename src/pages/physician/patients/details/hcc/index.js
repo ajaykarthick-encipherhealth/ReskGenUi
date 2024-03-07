@@ -297,27 +297,32 @@ const Hcc = ({ patientHccResult }) => {
       (res2) => res2.diagnosisCode.replace(".", "") == code.replace(".", "")
     );
     var backColor = "#f93d3d";
+    var meatTitle = "MEAT";
     if (result.length != 0) {
       switch (value) {
         case "M":
           if (result[0]?.monitor) {
             backColor = "#15b315";
           }
+          meatTitle = "Monitor";
           break;
         case "E":
           if (result[0]?.evaluate) {
             backColor = "#15b315";
           }
+          meatTitle = "Evaluate";
           break;
         case "A":
           if (result[0]?.assessment) {
             backColor = "#15b315";
           }
+          meatTitle = "Assessment";
           break;
         case "T":
           if (result[0]?.treatment) {
             backColor = "#15b315";
           }
+          meatTitle = "Treatment";
           break;
         default:
           null;
@@ -332,12 +337,14 @@ const Hcc = ({ patientHccResult }) => {
     //   </span>
     // );
     return (
-      <span
-        style={{ backgroundColor: backColor, color: "white" }}
-        className={`mt-2 ${styles.badgeMeat}`}
-      >
-        {value}
-      </span>
+      <Tooltip title={meatTitle} placement="bottom">
+        <span
+          style={{ backgroundColor: backColor, color: "white" }}
+          className={`mt-2 ${styles.badgeMeat}`}
+        >
+          {value}
+        </span>
+      </Tooltip>
     );
   };
 
@@ -3829,21 +3836,6 @@ const Hcc = ({ patientHccResult }) => {
 
                                           <div
                                             className={`${visitStyles.encounterAndSectionHeader}`}
-                                          ></div>
-
-                                          <div
-                                            className={`${visitStyles.encounterAndSectionHeader}`}
-                                          >
-                                            {data.isManuallyAdded == true ? (
-                                              <Badge
-                                                className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
-                                              >
-                                                Manually Added
-                                              </Badge>
-                                            ) : null}
-                                          </div>
-                                          <div
-                                            className={`${visitStyles.encounterAndSectionHeader}`}
                                           >
                                             {getCaptureSectionBackground(
                                               data.capturedSections,
@@ -3903,6 +3895,17 @@ const Hcc = ({ patientHccResult }) => {
                                                 "T"
                                               )}
                                             </div>
+                                          </div>
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                            {data.isManuallyAdded == true ? (
+                                              <Badge
+                                                className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                              >
+                                                Manually Added
+                                              </Badge>
+                                            ) : null}
                                           </div>
                                           {data.getPlace == "Insulin" ? (
                                             <span
@@ -5138,44 +5141,35 @@ const Hcc = ({ patientHccResult }) => {
                                         </Popconfirm>
                                       </div>
                                     </div>
-                                    <div
-                                      className={`${visitStyles.hoverActiveHcc}`}
-                                    >
+                                    <div className="d-flex justify-content-between">
                                       <div
-                                        className={`${visitStyles.encounterAndSectionHeader}`}
+                                        className={`${visitStyles.hoverActiveHcc}`}
                                       >
-                                        {getProviderNameList(
-                                          data?.providerName
-                                        )}
-                                      </div>
-                                      <div
-                                        className={`${visitStyles.encounterAndSectionHeader}`}
-                                      >
-                                        {getEncounterDateBackground(
-                                          data.encounterDateSplit
-                                        )}
-                                      </div>
-                                      <div
-                                        className={`${visitStyles.encounterAndSectionHeader}`}
-                                      >
-                                        {data.isManuallyAdded == true ? (
-                                          <Badge
-                                            className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
-                                          >
-                                            Manually Added
-                                          </Badge>
-                                        ) : null}
-                                      </div>
-                                      <div
-                                        className={`${visitStyles.encounterAndSectionHeader}`}
-                                      >
-                                        {getCaptureSectionBackgroundFile(
-                                          data?.capturedSections,
-                                          data?.encounterDate,
-                                          data?.actualDescription
-                                        )}
-                                      </div>
-                                      {/* {data?.isMostSpecific == true ? (
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
+                                          {getProviderNameList(
+                                            data?.providerName
+                                          )}
+                                        </div>
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
+                                          {getEncounterDateBackground(
+                                            data.encounterDateSplit
+                                          )}
+                                        </div>
+
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
+                                          {getCaptureSectionBackgroundFile(
+                                            data?.capturedSections,
+                                            data?.encounterDate,
+                                            data?.actualDescription
+                                          )}
+                                        </div>
+                                        {/* {data?.isMostSpecific == true ? (
                                         <div
                                           className={`${visitStyles.encounterAndSectionHeader}`}
                                         >
@@ -5186,6 +5180,62 @@ const Hcc = ({ patientHccResult }) => {
                                           </span>
                                         </div>
                                       ) : null} */}
+                                      </div>
+                                      <div
+                                        className={`${visitStyles.encounterAndSectionHeader}`}
+                                      >
+                                        <div
+                                          className={styles.meatFoundContainer}
+                                        >
+                                          <div>
+                                            {getMeatFound(
+                                              data?.diagnosisCode,
+                                              meatCriteriaList,
+                                              "M"
+                                            )}
+                                          </div>
+                                          <div>
+                                            {getMeatFound(
+                                              data?.diagnosisCode,
+                                              meatCriteriaList,
+                                              "E"
+                                            )}
+                                          </div>
+                                          <div>
+                                            {getMeatFound(
+                                              data?.diagnosisCode,
+                                              meatCriteriaList,
+                                              "A"
+                                            )}
+                                          </div>
+                                          <div>
+                                            {getMeatFound(
+                                              data?.diagnosisCode,
+                                              meatCriteriaList,
+                                              "T"
+                                            )}
+                                          </div>
+                                        </div>
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
+                                          {data.isManuallyAdded == true ? (
+                                            <Badge
+                                              className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                            >
+                                              Manually Added
+                                            </Badge>
+                                          ) : null}
+                                        </div>
+                                        {data.getPlace == "Insulin" ? (
+                                          <span
+                                            className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                            bg={`  mt-2 bg-bg-eight `}
+                                          >
+                                            Insulin
+                                          </span>
+                                        ) : null}
+                                      </div>
                                     </div>
                                   </div>
                                 </li>
