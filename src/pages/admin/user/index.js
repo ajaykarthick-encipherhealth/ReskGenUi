@@ -250,7 +250,6 @@ const UserList = () => {
         <div class="content-body">
           <div className="container-fluid">
             <div className="row">
-              object
               <div className="col-xl-12">
                 <div className="card-body p-0">
                   <div className="table-responsive active-projects task-table">
