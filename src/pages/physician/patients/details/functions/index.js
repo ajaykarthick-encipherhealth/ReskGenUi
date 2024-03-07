@@ -1,4 +1,5 @@
 import styles from "./styles.module.css";
+
 const getMeatFound = (code, data, value) => {
   const result = data?.filter(
     (res2) => res2.diagnosisCode.replace(".", "") == code.replace(".", "")

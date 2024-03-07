@@ -65,7 +65,7 @@ import {
 } from "../../../../../services/PatientsListSevice";
 import RafScore from "../components/rafScore";
 import CamboTree from "./org";
-import { getMeatFound } from "../functions/index";
+import getMeatFound from "../functions"
 
 const { Option } = Select;
 
