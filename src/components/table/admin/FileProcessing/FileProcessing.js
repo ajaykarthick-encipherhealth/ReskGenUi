@@ -128,7 +128,7 @@ const stageChartMap = {
   QUERY_CONDITIONS_FOUND_FAILED: 8,
   FINISHED: 9,
 };
-function FileProcessingTable({ patinetListAll,loading }) {
+function FileProcessingTable({ patinetListAll, loading }) {
   const dispatch = useDispatch();
   const [stepperVisible, setStepperVisible] = useState(
     Array(patinetListAll?.length).fill(false)
@@ -136,7 +136,7 @@ function FileProcessingTable({ patinetListAll,loading }) {
   const [count, setCount] = useState(0);
   const [parsedData, setParsedData] = useState([]);
   const [activeId, setActiveId] = useState();
-  // const [loading, setLoading] = useState(false);
+  const [fileloading, setFileLoading] = useState(true);
   const [toggle, setToggle] = useState(patinetListAll);
   const [failedList, setFiledList] = useState();
   const [finished, setIsFInished] = useState(false);
@@ -169,11 +169,11 @@ function FileProcessingTable({ patinetListAll,loading }) {
     );
 
     const fileStatusEventListener = (event) => {
-      // setLoading(true);
+      setFileLoading(true);
       const data = JSON.parse(event.data);
       if (data) {
         setParsedData(data);
-        // setLoading(false);
+        setFileLoading(false);
       }
       const patient = data?.find((item) => item?.patientId === activeId);
       if (
@@ -558,7 +558,7 @@ function FileProcessingTable({ patinetListAll,loading }) {
 
   return (
     <div className={TableStyle.classContaineer}>
-      {/* {loading || parsedData.length===0 ? (
+      {fileloading ? (
         <div
           style={{
             display: "flex",
@@ -568,7 +568,7 @@ function FileProcessingTable({ patinetListAll,loading }) {
         >
           <SpinnerDots />
         </div>
-      ) : ( */}
+      ) : (
         <table className={TableStyle.classTable}>
           <thead className={TableStyle.classThead}>
             <tr>
@@ -590,7 +590,7 @@ function FileProcessingTable({ patinetListAll,loading }) {
             )}
           </tbody>
         </table>
-      {/* )} */}
+      )}
     </div>
   );
 }

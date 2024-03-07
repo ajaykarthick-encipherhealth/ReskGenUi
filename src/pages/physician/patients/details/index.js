@@ -46,6 +46,7 @@ import {
   reAuditupdate,
   auditPending,
   auditHold,
+  auditDecline,
 } from "../../../../services/PatientsListSevice";
 import LoadingSpinner from "../../../../components/loadingSpinner";
 import { validateYear } from "../../../../components/headerFilters/functions";
@@ -663,6 +664,9 @@ const Details = ({}) => {
           break;
         case "auditHoldFunction":
           handleSubmitAuditHold();
+          break;
+        case "auditDeclineFunction":
+          handleSubmitAuditDecline();
           break;
         default:
           null;
@@ -1425,7 +1429,8 @@ const Details = ({}) => {
             </div>
             <div className={visitStyles.usertimeDetails}>
               <FontAwesomeIcon icon={faClock} />
-              <span>{currentTime}</span>
+              {/* <span>{currentTime}</span> */}
+              <span>{result.actionCreatedDate}</span>
             </div>
           </div>
         );
@@ -1510,6 +1515,10 @@ const Details = ({}) => {
         break;
       case 4:
         setIsValidAction("auditHoldFunction");
+        setConfirmNotesModalHold(true);
+        break;
+      case 5:
+        setIsValidAction("auditDeclineFunction");
         setConfirmNotesModalHold(true);
         break;
       default:
@@ -1605,6 +1614,25 @@ const Details = ({}) => {
       });
     }
   };
+  const handleSubmitAuditDecline = async () => {
+    var postData = {
+      orgId: localOrgId,
+      patientId: localPatientId,
+      notes: inputValue.notes,
+      dos: selectedDosValue,
+    };
+    var result = await auditDecline(postData);
+    console.log(result, "result");
+    if (result.status == "SUCCESS") {
+      getPatientIdDetails(localPatientId);
+      setConfirmNotesModalHold(false);
+      notification.success({
+        message: result.message,
+        placement: "top",
+        duration: 1,
+      });
+    }
+  };
 
   const renderAuditMenu = (value) => {
     var value = (
@@ -1633,6 +1661,13 @@ const Details = ({}) => {
             <div className="patient-status">
               <span className={`badge ${visitStyles.audithold_text}`}>
                 AUDIT HOLD
+              </span>
+            </div>
+          </Menu.Item>
+          <Menu.Item key="4" onClick={() => auditPatient(5)}>
+            <div className="patient-status">
+              <span className={`badge ${visitStyles.audithold_text}`}>
+                AUDIT DECLINE
               </span>
             </div>
           </Menu.Item>

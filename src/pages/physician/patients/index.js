@@ -23,11 +23,16 @@ import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
 import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
 import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
 import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
-import { disableFutureDate } from "../../../components/headerFilters/functions";
+import {
+  disableFutureDate,
+  priorityOptions,
+} from "../../../components/headerFilters/functions";
 import DailyTask from "./dailytask";
 import Legends from "../../../components/legends";
 import HeaderFilters from "../../../components/headerFilters";
 import Image from "next/image";
+import styles from "../report/report.module.css";
+import filter from "../../../images/svg/filter.svg";
 
 const { RangePicker } = DatePicker;
 export default function Patient() {
@@ -60,7 +65,8 @@ export default function Patient() {
     DECLINED: 0,
     HOLD: 0,
   });
-
+  const [selectedPriority, setSelectedPriority] = useState();
+  const [showFilters, setShowFilters] = useState(false);
   const dueStartDate = filteratedDashboardData?.dayDate
     ? moment(filteratedDashboardData?.dayDate)?.format("YYYY-MM-DD") +
       "T00:00:00.000Z"
@@ -120,9 +126,10 @@ export default function Patient() {
       dueDateEnd,
       processedStart,
       processedEnd,
-      sort
+      sort,
+      selectedPriority
     );
-  }, [filteratedDashboardData, sort]);
+  }, [filteratedDashboardData, sort, selectedPriority]);
 
   useEffect(() => {
     if (patientsListFilter) {
@@ -169,11 +176,17 @@ export default function Patient() {
     dStart,
     dEnd,
     pStart,
-    pEnd
+    pEnd,
+    sort,
+    selectedPriority
   ) => {
     // setIsLoading(true);
     var uId = localStorage.getItem("userId");
-    var resoureUrl = `dbservice/patient/filter?patientAllocated=${uId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}&searchString=${searchTextValue}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}`;
+    var resoureUrl = `dbservice/patient/filter?patientAllocated=${uId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}&searchString=${searchTextValue}&sortfield=${
+      sort?.sortField ? sort?.sortField : ""
+    }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&priority=${
+      selectedPriority ? selectedPriority : ""
+    }`;
     dispatch(getpatientsListFilter(resoureUrl));
   };
 
@@ -280,6 +293,13 @@ export default function Patient() {
       processedStart,
       processedEnd
     );
+  };
+  const onChangePriority = (selectedOption) => {
+    var value = selectedOption?.value;
+    if (value == "All") {
+      value = "";
+    }
+    setSelectedPriority(value);
   };
   const handleDatePickerChange = (dateString) => {
     if (dateString[0] != "") {
@@ -408,6 +428,7 @@ export default function Patient() {
     }
   };
 
+  const options = [{ label: "All", value: "" }, ...priorityOptions];
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -465,6 +486,25 @@ export default function Patient() {
                               </div>
                             </div>
                             <div className="col-xl-2">
+                              <label>Select Priority</label>
+                              <div class="form-group has-search">
+                                <Select
+                                  onChange={(selectedOption) =>
+                                    onChangePriority(selectedOption)
+                                  }
+                                  options={options}
+                                  className="custom-react-select"
+                                  isSearchable={false}
+                                  placeholder={
+                                    filteratedDashboardData
+                                      ? filteratedDashboardData?.status?.toUpperCase()
+                                      : "Select Status"
+                                  }
+                                />
+                              </div>
+                            </div>
+
+                            <div className="col-xl-2">
                               <label>Due Date</label>
                               <div>
                                 <RangePicker
@@ -483,29 +523,51 @@ export default function Patient() {
                                 />
                               </div>
                             </div>
-
-                            <div className="col-xl-2">
-                              <label>Completed Date</label>
-                              <div>
-                                <RangePicker
-                                  format="MM-DD-YYYY"
-                                  onChange={(dates, dateStrings) => {
-                                    handleDatePickerChangeProcesseDate(
-                                      dateStrings
-                                    );
-                                  }}
-                                  disabledDate={(current) =>
-                                    disableFutureDate(current)
-                                  }
-                                />
-                              </div>
+                            <div
+                              className={"col-xl-1"}
+                              style={{
+                                margin: "30px 0 0 10px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => setShowFilters(!showFilters)}
+                            >
+                              <button className={styles.filterBtn}>
+                                <Image src={filter} />{" "}
+                                {showFilters ? "Hide" : "Filter"}
+                              </button>
                             </div>
-
                             <HeaderFilters bullets={bullets} />
+
                             <div className="col-xl-2">
                               <DailyTask trackChart={trackChart} />
                             </div>
                           </div>
+                          {showFilters && (
+                            <div
+                              style={{
+                                display: "flex",
+                                marginTop: "-30px",
+                                flexDirection: "row",
+                              }}
+                            >
+                              <div className="col-xl-2 ">
+                                <label>Completed Date</label>
+                                <div>
+                                  <RangePicker
+                                    format="MM-DD-YYYY"
+                                    onChange={(dates, dateStrings) => {
+                                      handleDatePickerChangeProcesseDate(
+                                        dateStrings
+                                      );
+                                    }}
+                                    disabledDate={(current) =>
+                                      disableFutureDate(current)
+                                    }
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
 
