@@ -1633,7 +1633,7 @@ const Details = ({}) => {
       });
     }
   };
-  console.log(patienIdDetails?.auditedStatus, "ts");
+
   const renderAuditMenu = (value) => {
     var value = (
       <Menu>
