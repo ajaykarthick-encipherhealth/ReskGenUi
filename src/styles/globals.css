@@ -8598,7 +8598,6 @@ button:focus {
   background-image: url("../images/login/back_3.jpg");
   background-repeat: no-repeat;
   background-size: cover;
- 
 }
 
 @media only screen and (max-width: 35.9375rem) {
@@ -12053,14 +12052,14 @@ tbody > tr {
 }
 
 .processing-text {
-  color: #452b90;
+  color: #5da9e4;
   font-family: "Manrope", sans-serif !important;
   font-size: 13px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   letter-spacing: 0.78px;
-  background: #dfd8f3 !important;
+  background: #c2e1f9 !important;
   border-radius: 6px !important;
 }
 
@@ -12101,7 +12100,7 @@ tbody > tr {
 }
 
 .hold-text {
-  background-color: rgb(253, 227, 207);
+  background-color: red !important;
   color: rgb(245, 106, 0);
   font-family: "Manrope", sans-serif !important;
   font-size: 13px;
@@ -12174,7 +12173,7 @@ tbody > tr {
 }
 
 .hold-text {
-  color: #d8c11b;
+  color: #ad94fa;
 
   font-family: "Manrope", sans-serif !important;
   font-size: 13px;
@@ -12182,7 +12181,7 @@ tbody > tr {
   font-weight: 400;
   line-height: normal;
   letter-spacing: 0.78px;
-  background: #faead1 !important;
+  background: #ddd5f8 !important;
   border-radius: 6px !important;
 }
 
@@ -12788,8 +12787,8 @@ tbody > tr {
 
 .pendingBtn
   button.ant-btn.ant-btn-primary.ant-btn-compact-item.ant-btn-compact-first-item {
-  color: #746897;
-  background: #dfd8f3 !important;
+  color: #5da9e4;
+  background: #c2e1f9 !important;
   border: none !important;
   box-shadow: none !important;
   border-radius: 10px;
@@ -12798,8 +12797,8 @@ tbody > tr {
 
 .pendingBtn
   > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger {
-  color: #746897;
-  background: #dfd8f3 !important;
+  color: #5da9e4;
+  background: #c2e1f9 !important;
   border-radius: 6px;
   box-shadow: none;
 }
@@ -12824,11 +12823,12 @@ tbody > tr {
 }
 
 .holdBtnHcc button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
-  color: #d8c11b !important;
+  color: #ad94fa !important;
 }
 
 .pendingBtn button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
-  color: #746897 !important;
+  color: #5da9e4 !important;
+
   z-index: 0 !important;
 }
 
@@ -12881,8 +12881,8 @@ tbody > tr {
 }
 
 .holdBtnHcc button.ant-btn.ant-btn-compact-first-item {
-  color: #d8c11b;
-  background: #faead1 !important;
+  color: #ad94fa;
+  background: #ddd5f8 !important;
   border: none !important;
   box-shadow: none !important;
   border-radius: 10px;
@@ -12891,8 +12891,8 @@ tbody > tr {
 
 .holdBtnHcc
   > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger {
-  color: #d8c11b;
-  background: #faead1 !important;
+  color: #ad94fa;
+  background: #ddd5f8 !important;
   border: none !important;
   border-radius: 6px;
   box-shadow: none;
@@ -12901,8 +12901,8 @@ tbody > tr {
 .holdBtnHcc
   > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger::before {
   height: calc(100% + 1px) !important;
-  background: #faead1 !important;
-  background: #f1dbb9 !important;
+  background: #ddd5f8 !important;
+  background: #ddd5f8 !important;
   border: none !important;
   box-shadow: none !important;
 }
@@ -13708,6 +13708,36 @@ overflow: scroll;
   box-shadow: none !important;
 }
 
+.declineBtnHcc button.ant-btn.ant-btn-compact-first-item {
+  color: #ff5e5e !important;
+  background: #ffdede !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 140px !important;
+}
+
+.declineBtnHcc
+  button.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+  color: #ff5e5e !important;
+  background: #ffdede !important;
+}
+
+.declineBtnHcc
+  > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger {
+  color: #ff5e5e !important;
+  background: #ffdede !important;
+  border: none !important;
+  box-shadow: none;
+}
+
+.declineBtnHcc
+  > .ant-btn.ant-btn-primary.ant-btn-icon-only.ant-btn-compact-item.ant-btn-compact-last-item.ant-dropdown-trigger::before {
+  height: calc(100% + 1px) !important;
+  color: #ff5e5e !important;
+  background: #ffdede !important;
+  border: none !important;
+  box-shadow: none !important;
+}
 .reauditBtnHcc button.ant-btn.ant-btn-compact-first-item {
   color: #964b00 !important;
   background: #ffd1a3 !important;
@@ -14138,6 +14168,6 @@ span.meat-name-details2 {
 .p-organizationchart-node-content .p-organizationchart-selectable-node {
   margin: 0 20px;
 }
-.ant-progress-text{
+.ant-progress-text {
   display: none !important;
 }

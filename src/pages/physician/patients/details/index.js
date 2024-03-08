@@ -1633,7 +1633,7 @@ const Details = ({}) => {
       });
     }
   };
-
+  console.log(patienIdDetails?.auditedStatus, "ts");
   const renderAuditMenu = (value) => {
     var value = (
       <Menu>
@@ -1666,7 +1666,7 @@ const Details = ({}) => {
           </Menu.Item>
           <Menu.Item key="4" onClick={() => auditPatient(5)}>
             <div className="patient-status">
-              <span className={`badge ${visitStyles.audithold_text}`}>
+              <span className={`badge ${visitStyles.auditdecline_text}`}>
                 AUDIT DECLINE
               </span>
             </div>
@@ -2006,6 +2006,9 @@ const Details = ({}) => {
                                   ? `auditBtnHcc`
                                   : patienIdDetails?.auditedStatus == "REAUDIT"
                                   ? `reauditBtnHcc`
+                                  : patienIdDetails?.auditedStatus ==
+                                    "AUDIT_DECLINED"
+                                  ? `declineBtnHcc`
                                   : `auditBtnHcc`
                               }
                               icon={<DownOutlined />}
