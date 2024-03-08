@@ -14,6 +14,18 @@ import visitStyles from "../../../../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 
+const addOnCodeColor = [
+  "magenta",
+  "red",
+  "volcano",
+  "orange",
+  "gold",
+  "cyan",
+  "blue",
+  "geekblue",
+  "purple",
+];
+
 const CamboTree = ({ tree }) => {
   const [background, setBackground] = useState([]);
   const [trees, setTrees] = useState(Tree);
@@ -67,7 +79,7 @@ const CamboTree = ({ tree }) => {
         return sectionMapArr;
       } else if (dublicateCaptureDelete.length - 1 == index) {
         var sectionMapArr = (
-            <Popover
+          <Popover
             content={
               <>
                 {dublicateCaptureDelete?.map((item, i) =>
@@ -232,14 +244,15 @@ const CamboTree = ({ tree }) => {
             {node.diseaseName ? node.diseaseName : node.actualDescription}
           </div>
         </Tooltip>
-        {node?.formedCodes?.length > 0 && (
-          <div className={Style.code}>Add On Codes</div>
-        )}
-
-        <div className={`d-flex ${Style.code}`}>
-          {node?.formedCodes?.map((item) => (
-            <Tag color="blue">{item}</Tag>
-          ))}
+        <div className="text-start">
+          {[node.addOnCode, node.addOnCodeTwo, node.addOnCodeThree]?.map(
+            (addCombo, index) =>
+              addCombo && (
+                <span className="font-bold">
+                  <Tag color={addOnCodeColor[index]}>{addCombo}</Tag>
+                </span>
+              )
+          )}
         </div>
         <div className="text-start">
           {getProviderNameList(node?.providerName)}

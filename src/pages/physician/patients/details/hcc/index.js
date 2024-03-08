@@ -43,6 +43,7 @@ import {
   Menu,
   DatePicker,
   Dropdown,
+  Tag,
   message,
 } from "antd";
 import { IMAGES, SVGICON } from "../../../../../jsx/constant/theme";
@@ -68,7 +69,17 @@ import CamboTree from "./org";
 // import getMeatFound from "../functions";
 
 const { Option } = Select;
-
+const addOnCodeColor = [
+  "magenta",
+  "red",
+  "volcano",
+  "orange",
+  "gold",
+  "cyan",
+  "blue",
+  "geekblue",
+  "purple",
+];
 const Hcc = ({ patientHccResult }) => {
   const navigate = useRouter();
   let searchKeywords = [];
@@ -749,6 +760,7 @@ const Hcc = ({ patientHccResult }) => {
             const encounterDatearray = res?.encounterDate?.split(",");
             combiDisArray.push({
               addOnCode: res.addOnCode,
+              addOnCodes: [res.addOnCode,  res.addOnCodeTwo, res.addOnCodeThree],
               diagnosisCodeCombo: res.diagnosisCodeCombo,
               diseaseName: res.diseaseName,
               diagnosisCode: res.diagnosisCode,
@@ -2498,6 +2510,7 @@ const Hcc = ({ patientHccResult }) => {
             const encounterDatearray = res?.encounterDate?.split(",");
             combiDisArray.push({
               addOnCode: res.addOnCode,
+              addOnCodes: [res.addOnCode,  res.addOnCodeTwo, res.addOnCodeThree],
               diagnosisCodeCombo: res.diagnosisCodeCombo,
               diseaseName: res.diseaseName,
               diagnosisCode: res.diagnosisCode,
@@ -4402,9 +4415,18 @@ const Hcc = ({ patientHccResult }) => {
                                           </span>
                                         </div>
                                         <div className="col-xl-3">
-                                          <span className="font-bold">
-                                            {item.addOnCode}
-                                          </span>
+                                          {item.addOnCodes?.map(
+                                            (addCombo, index) => (addCombo &&
+                                              <span className="font-bold">
+                                                
+                                                <Tag
+                                                  color={addOnCodeColor[index]}
+                                                >
+                                                  {addCombo}
+                                                </Tag>
+                                              </span>
+                                            )
+                                          )}
                                         </div>
                                         <div
                                           className="col-xl-5 cr-pointer"
@@ -4483,7 +4505,7 @@ const Hcc = ({ patientHccResult }) => {
                                           {/* </Popconfirm> */}
                                         </div>
                                         <div
-                                          className={styles.comboDetailsHeader}
+                                          className={styles.comboDetailsHeaders}
                                         >
                                           <div>
                                             <div
@@ -4514,13 +4536,13 @@ const Hcc = ({ patientHccResult }) => {
                                               )}
                                             </div>
                                           </div>
-                                          <div>
+                                          {/* <div>
                                             <span
                                               className={styles.ruleTypeCol}
                                             >
                                               {underScoreRemove(item.ruleType)}
                                             </span>
-                                          </div>
+                                          </div> */}
                                         </div>
                                       </div>
                                     </div>

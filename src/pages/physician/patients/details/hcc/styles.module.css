@@ -233,6 +233,16 @@
   width: 97%;
   justify-content: space-between;
 }
+.comboDetailsHeaders {
+  margin-top: 10px;
+  display: flex;
+  border-radius: 12px;
+  /* padding: 15px 15px 15px 15px;
+   box-shadow: rgb(162 162 191 / 20%) 0px 7px 29px 0px; 
+  margin-left: 12px; */
+  width: 97%;
+  justify-content: space-between;
+}
 .meatFoundContainer {
   display: flex;
   margin-right: 5px;
