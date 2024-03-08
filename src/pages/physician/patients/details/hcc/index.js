@@ -647,8 +647,8 @@ const Hcc = ({ patientHccResult }) => {
           suggestRadiologyList.map((res, index) => {
             const encounterDatearray = res?.encounterDate?.split(",");
             var providerList = [];
-            res.provider?.map((res, index) => {
-              providerList.push(res.providerName);
+            res?.provider?.map((res2, index) => {
+              providerList.push(res2.providerName);
             });
             suggestListAll.push({
               actualDescription: res.actualDescription,
@@ -665,6 +665,10 @@ const Hcc = ({ patientHccResult }) => {
 
           if (result.suggestRadiologyCombo != null) {
             result.suggestRadiologyCombo.map((res, index) => {
+              var providerList = [];
+              res.provider?.map((res2, index) => {
+                providerList.push(res2.providerName);
+              });
               const encounterDatearray = res?.encounterDate?.split(",");
               suggestListAll.push({
                 actualDescription: res.diseaseName,
@@ -674,6 +678,7 @@ const Hcc = ({ patientHccResult }) => {
                 encounterDateSplit: encounterDatearray,
                 getPlace: "Radio-combo",
                 isHccValid: true,
+                providerName: providerList,
                 // defaultPosition:res.defaultPosition
               });
             });
@@ -684,6 +689,10 @@ const Hcc = ({ patientHccResult }) => {
           // getLabReportDetails(orgId,tenId)
           suggestLabList = result.suggestLab;
           suggestLabList.map((res, index) => {
+            var providerList = [];
+            res?.provider?.map((res2, index) => {
+              providerList.push(res2.providerName);
+            });
             const encounterDatearray = res?.encounterDate?.split(",");
             suggestListAll.push({
               actualDescription: res.actualDescription,
@@ -694,6 +703,7 @@ const Hcc = ({ patientHccResult }) => {
               getPlace: "Lab",
               isHccValid: true,
               defaultPosition: res.defaultPosition,
+              providerName: providerList,
             });
           });
         }
@@ -704,7 +714,7 @@ const Hcc = ({ patientHccResult }) => {
             if (res.isShow != false) {
               const encounterDatearray = res?.encounterDate?.split(",");
               var providerList = [];
-              res.provider?.map((res, index) => {
+              res?.provider?.map((res, index) => {
                 providerList.push(res.providerName);
               });
               if (res.isHccValid == true) {
@@ -760,7 +770,7 @@ const Hcc = ({ patientHccResult }) => {
             const encounterDatearray = res?.encounterDate?.split(",");
             combiDisArray.push({
               addOnCode: res.addOnCode,
-              addOnCodes: [res.addOnCode,  res.addOnCodeTwo, res.addOnCodeThree],
+              addOnCodes: [res.addOnCode, res.addOnCodeTwo, res.addOnCodeThree],
               diagnosisCodeCombo: res.diagnosisCodeCombo,
               diseaseName: res.diseaseName,
               diagnosisCode: res.diagnosisCode,
@@ -1097,6 +1107,12 @@ const Hcc = ({ patientHccResult }) => {
               encounterDate: res.encounterDate,
             });
           } else {
+            var providerList = [];
+            res?.visitDetailsDTO?.providerSet?.map((res, index) => {
+              providerList.push(res.providerName);
+            });
+            const encounterDatearray = res?.encounterDate?.split(",");
+
             meatListArr.push({
               diagnosisCode: res.diagnosisCode,
               diseaseName: res.diseaseName,
@@ -1104,6 +1120,7 @@ const Hcc = ({ patientHccResult }) => {
               assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
               evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
               treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+              providerName: providerList,
               monitorCapturedFromHeaderColor: colorCodeMatch(
                 dublicateRemoveSecondArr,
                 res.monitorCapturedFromHeader
@@ -1129,6 +1146,7 @@ const Hcc = ({ patientHccResult }) => {
               isMeatCriteriaPresent: res.isMeatCriteriaPresent,
               category: res.category,
               encounterDate: res.encounterDate,
+              encounterDateSplit: encounterDatearray,
             });
           }
         });
@@ -1509,6 +1527,7 @@ const Hcc = ({ patientHccResult }) => {
     setIsAddComboCode(false);
     setFindFileKeyword(null);
     setFileLoading(false);
+    setActiveTabNumber(activeTabNumber == null ? 0 : null);
   };
 
   const handleOpenModal = async (
@@ -1543,10 +1562,12 @@ const Hcc = ({ patientHccResult }) => {
     }
     setMeatModalTitle(dotLoading);
     setIsLoadingSection(true);
-    if (findFileKeyword == splitPoint) {
+    if (findFileKeyword == value) {
       setFileLoading(false);
+      var dataset = value + " / (" + disDescription + ")";
+      setMeatModalTitle(dataset);
     }
-    setFindFileKeyword(splitPoint);
+    setFindFileKeyword(value);
 
     setIsModalOpen(true);
     var dataset = value + " / (" + disDescription + ")";
@@ -1581,6 +1602,7 @@ const Hcc = ({ patientHccResult }) => {
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
+    var splitPoint = actualDescription.substring(" ", 10);
 
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
@@ -1600,13 +1622,13 @@ const Hcc = ({ patientHccResult }) => {
       setFileInitialPage(pageNumber);
       setFileDosPageNumber(pageNumber);
     } else {
+      splitPoint = headerNames;
       setFileInitialPage(null);
       setFileDosPageNumber(null);
     }
 
     // getSectionPageNumber(headerNames, encounterDate);
 
-    var splitPoint = actualDescription.substring(" ", 10);
     setTargetPages(
       (targetPage) =>
         targetPage.pageIndex === pageNumber ||
@@ -1614,6 +1636,9 @@ const Hcc = ({ patientHccResult }) => {
         targetPage.pageIndex === pageNumber + 2
     );
     setFindFileKeyword(splitPoint);
+    if (findFileKeyword == splitPoint) {
+      setFileLoading(false);
+    }
     // highlight({
     //   keyword: actualDescription,
     //   // matchCase: true,
@@ -1640,16 +1665,17 @@ const Hcc = ({ patientHccResult }) => {
     ) {
       handleOpenModalRadiology(value, disDescription, true);
     } else if (documentPlace == "Lab" || whereCome == "Lab") {
+      console.log(value);
       setFileInitialPage(null);
       setFileDosPageNumber(null);
       var splitPoint = disDescription.substring(" ", 40);
       setFindFileKeyword(splitPoint);
       setTimeout(() => {
-        var dataset = value + " - (" + disDescription + ")";
+        var dataset = "Lab" + " - (" + disDescription + ")";
         setSelectMeatName(dataset);
       }, 2000);
       setDocumentLoaded(true);
-      var dataset = value + " - (" + disDescription + ")";
+      var dataset = "Lab" + " - (" + disDescription + ")";
       setSelectMeatName(dataset + " -  " + "Loading...");
       setIsLoadingSection(true);
       setIsModalOpenLab(true);
@@ -1670,16 +1696,21 @@ const Hcc = ({ patientHccResult }) => {
         setIsLoadingSection(true);
         var headerName = dotLoading;
         setFileModalHeader(headerName);
-        if (testModal == "Suggested") {
-          setIsModalOpenValidCodes(true);
-          // setIsModalOpenCaptureSection(true);
+        if (documentPlace == "COMBO") {
+          setIsModalOpenCaptureSection(true);
         } else {
-          setIsModalOpenValidCodes(true);
+          if (testModal == "Suggested") {
+            setIsModalOpenValidCodes(true);
+          } else {
+            setIsModalOpenValidCodes(true);
+          }
         }
 
         var fileId = patientFileDTO.fileId;
         const encounterDatesValue = encounterDate.split(",");
         const encounterDatesHeader = encounterDatesValue[0];
+        var splitPoint = "";
+        splitPoint = actualDescription.substring(" ", 10);
         const response = await axios.get(
           ENDPOINTS.apiEndoint +
             `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}`
@@ -1688,10 +1719,11 @@ const Hcc = ({ patientHccResult }) => {
         if (result?.length) {
           var pageNumber = result[0] - 1;
           setFileInitialPage(pageNumber);
+        } else {
+          splitPoint = headerNames;
         }
         setSelectActiveCode(value);
-        var splitPoint = "";
-        splitPoint = actualDescription.substring(" ", 10);
+
         setFindFileKeyword(splitPoint);
         var dataset =
           value +
@@ -1775,11 +1807,11 @@ const Hcc = ({ patientHccResult }) => {
       var splitPoint = disDescription.substring(" ", 40);
       setFindFileKeyword(splitPoint);
       setTimeout(() => {
-        var dataset = value + " - (" + disDescription + ")";
+        var dataset = "Radiology" + " - (" + disDescription + ")";
         setSelectMeatName(dataset);
       }, 2000);
       setDocumentLoaded(true);
-      var dataset = value + " - (" + disDescription + ")";
+      var dataset = "Radiology" + " - (" + disDescription + ")";
       setSelectMeatName(dataset + " -  " + "Loading...");
       setIsLoadingSection(true);
       setIsModalOpenRadiology(true);
@@ -2510,7 +2542,7 @@ const Hcc = ({ patientHccResult }) => {
             const encounterDatearray = res?.encounterDate?.split(",");
             combiDisArray.push({
               addOnCode: res.addOnCode,
-              addOnCodes: [res.addOnCode,  res.addOnCodeTwo, res.addOnCodeThree],
+              addOnCodes: [res.addOnCode, res.addOnCodeTwo, res.addOnCodeThree],
               diagnosisCodeCombo: res.diagnosisCodeCombo,
               diseaseName: res.diseaseName,
               diagnosisCode: res.diagnosisCode,
@@ -3072,13 +3104,13 @@ const Hcc = ({ patientHccResult }) => {
     });
   };
 
-  const getEncounterDateBackgroundHcc = (value, code) => {
+  const getEncounterDateBackgroundHcc = (value, code, place, meatResult) => {
     return value?.map((res) => {
       const result = encounterDateMatching.filter((res2) => res2.name == res);
       var backColor = result[0]?.colors;
       var sectionMapArr = res ? (
         <span
-          onClick={() => getEncounterDetailsHcc(res, code)}
+          onClick={() => getEncounterDetailsHcc(res, code, place, meatResult)}
           className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
         >
           <i>
@@ -3093,7 +3125,7 @@ const Hcc = ({ patientHccResult }) => {
     });
   };
 
-  const getEncounterDetailsHcc = async (date, code) => {
+  const getEncounterDetailsHcc = async (date, code, place, meatResult) => {
     const findPageNumber = listPageNumber.filter((i) => i.date === date);
     if (findPageNumber.length != 0) {
       var dataset = code + " - (" + date + ")";
@@ -3104,8 +3136,17 @@ const Hcc = ({ patientHccResult }) => {
         " / " +
         dataset;
       setFileModalTitle(headerName);
+
       setFileLoading(true);
-      setIsModalOpenValidCodes(true);
+      if (place == "MEAT") {
+        setSelectMeatName(headerName);
+        setSelectMeatResult(meatResult);
+        setIsModalOpen(true);
+      } else if (place == "COMBO") {
+        setIsModalOpenCaptureSection(true);
+      } else {
+        setIsModalOpenValidCodes(true);
+      }
       var date = findPageNumber[0].date;
       if (findPageNumber[0].startPage.length != 0) {
         var pageNumber = findPageNumber[0].startPage[0].pageNumber - 1;
@@ -4416,16 +4457,18 @@ const Hcc = ({ patientHccResult }) => {
                                         </div>
                                         <div className="col-xl-3">
                                           {item.addOnCodes?.map(
-                                            (addCombo, index) => (addCombo &&
-                                              <span className="font-bold">
-                                                
-                                                <Tag
-                                                  color={addOnCodeColor[index]}
-                                                >
-                                                  {addCombo}
-                                                </Tag>
-                                              </span>
-                                            )
+                                            (addCombo, index) =>
+                                              addCombo && (
+                                                <span className="font-bold">
+                                                  <Tag
+                                                    color={
+                                                      addOnCodeColor[index]
+                                                    }
+                                                  >
+                                                    {addCombo}
+                                                  </Tag>
+                                                </span>
+                                              )
                                           )}
                                         </div>
                                         <div
@@ -4520,7 +4563,8 @@ const Hcc = ({ patientHccResult }) => {
                                             >
                                               {getEncounterDateBackgroundHcc(
                                                 item.encounterDateSplit,
-                                                item.diagnosisCode
+                                                item.diagnosisCode,
+                                                "COMBO"
                                               )}
                                             </div>
                                             <div
@@ -4528,7 +4572,7 @@ const Hcc = ({ patientHccResult }) => {
                                             >
                                               {getCaptureSectionBackground(
                                                 item.capturedSections,
-                                                null,
+                                                "COMBO",
                                                 item.encounterDate,
                                                 item.diseaseName,
                                                 null,
@@ -4692,40 +4736,57 @@ const Hcc = ({ patientHccResult }) => {
                                 }
                               >
                                 <div className="row">
-                                  {/* <div className="col-xl-1">
-                                                  <span className="font-bold">{item.diagnosisCode}</span>
-                                                </div> */}
-                                  <div className="col-xl-1 d-grid">
-                                    <span className="font-bold meat-name-details">
-                                      {item.diagnosisCode}
-                                    </span>
-                                    {item.category == "Valid" ? (
-                                      <Badge
-                                        className="valid-meat badge-circle mt-2"
-                                        bg={` badge-circle mt-2 bg-validmeat`}
-                                      >
-                                        {item.category}
-                                      </Badge>
-                                    ) : (
-                                      <Badge
-                                        className="valid-meat badge-circle mt-2"
-                                        bg={` badge-circle mt-2 bg-validUnmatch`}
-                                      >
-                                        {item.category}
-                                      </Badge>
-                                    )}
-                                  </div>
-                                  <div className="col-xl-2">
-                                    <Popover
-                                      placement="topLeft"
-                                      title="Description"
-                                      content={item.diseaseName}
+                                  <div className="col-xl-3">
+                                    <div className="row">
+                                      <div className="col-xl-4 d-grid">
+                                        <span className="font-bold meat-name-details">
+                                          {item.diagnosisCode}
+                                        </span>
+                                        {item.category == "Valid" ? (
+                                          <Badge
+                                            className="valid-meat badge-circle mt-2"
+                                            bg={` badge-circle mt-2 bg-validmeat`}
+                                          >
+                                            {item.category}
+                                          </Badge>
+                                        ) : (
+                                          <Badge
+                                            className="valid-meat badge-circle mt-2"
+                                            bg={` badge-circle mt-2 bg-validUnmatch`}
+                                          >
+                                            {item.category}
+                                          </Badge>
+                                        )}
+                                      </div>
+                                      <div className="col-xl-8">
+                                        <Popover
+                                          placement="topLeft"
+                                          title="Description"
+                                          content={item.diseaseName}
+                                        >
+                                          <span className="meat-name-details">
+                                            {item.diseaseName}
+                                          </span>
+                                        </Popover>
+                                      </div>
+                                    </div>
+                                    <div
+                                      className={`${visitStyles.encounterAndSectionHeader}`}
                                     >
-                                      <span className="meat-name-details">
-                                        {item.diseaseName}
-                                      </span>
-                                    </Popover>
+                                      {getProviderNameList(item?.providerName)}
+                                    </div>
+                                    <div
+                                      className={`${visitStyles.encounterAndSectionHeader}`}
+                                    >
+                                      {getEncounterDateBackgroundHcc(
+                                        item?.encounterDateSplit,
+                                        item?.diagnosisCode,
+                                        "MEAT",
+                                        item
+                                      )}
+                                    </div>
                                   </div>
+
                                   <div className="col-xl-2 d-grid">
                                     {item.monitor != "" ? (
                                       <Popover
@@ -6423,6 +6484,17 @@ const Hcc = ({ patientHccResult }) => {
                         </span>
                       </Popover>
                     </div>
+                    <div className={`${visitStyles.encounterAndSectionHeader}`}>
+                      {getProviderNameList(selectMeatResult?.providerName)}
+                    </div>
+                    <div className={`${visitStyles.encounterAndSectionHeader}`}>
+                      {getEncounterDateBackgroundHcc(
+                        selectMeatResult?.encounterDateSplit,
+                        selectMeatResult?.diagnosisCode,
+                        "MEAT",
+                        selectMeatResult
+                      )}
+                    </div>
                   </div>
                 </div>
                 <div className={visitStyles.meat_title_card2}>
@@ -7640,11 +7712,162 @@ const Hcc = ({ patientHccResult }) => {
           onOk={handleCloseModal}
           onCancel={handleCloseModal}
           width="95%"
+          footer={false}
           // height={500}
         >
           <div className="section-container">
             <div className="row">
-              <div className="col-xl-12">
+              <div className="col-xl-5">
+                <div
+                  className={`my-post-content  ${visitStyles.comboContainer3}`}
+                >
+                  <div className={visitStyles.combo_head_card}>
+                    <div className="row">
+                      <div className="col-xl-3">
+                        <label>Combo Codes</label>
+                      </div>
+                      <div className="col-xl-3">
+                        <label>Additional Codes</label>
+                      </div>
+                      <div className="col-xl-5">
+                        <label>Description</label>
+                      </div>
+                      <div className="col-xl-1"></div>
+                    </div>
+                  </div>
+                  {comboDiseaseCodesList?.length != 0 ? (
+                    <div className={visitStyles.container}>
+                      <div className={visitStyles.hccStickey_head}>
+                        {comboDiseaseCodesList?.map((item) => {
+                          return (
+                            <div className={visitStyles.combo_details_card}>
+                              <div className="row">
+                                <div className="col-xl-3 d-grid">
+                                  <span className="font-bold">
+                                    {item.diagnosisCodeCombo}
+                                  </span>
+                                </div>
+                                <div className="col-xl-3">
+                                  {item.addOnCodes?.map(
+                                    (addCombo, index) =>
+                                      addCombo && (
+                                        <span className="font-bold">
+                                          <Tag color={addOnCodeColor[index]}>
+                                            {addCombo}
+                                          </Tag>
+                                        </span>
+                                      )
+                                  )}
+                                </div>
+                                <div
+                                  className="col-xl-5 cr-pointer"
+                                  onClick={() =>
+                                    handleOpenModalCombinationCode(
+                                      item.diagnosisCodeCombo,
+                                      item.diseaseName
+                                    )
+                                  }
+                                >
+                                  <span>{item.diseaseName}</span>
+                                </div>
+                                <div className="col-xl-1">
+                                  <div>
+                                    <Popconfirm
+                                      title="You want move to Invalid?"
+                                      description={item.diseaseName}
+                                      onConfirm={confirmComboInvalid}
+                                      placement="leftTop"
+                                      okText="Yes"
+                                      cancelText="No"
+                                      onOpenChange={() =>
+                                        onchangeCombo(
+                                          item.diseaseName,
+                                          item.addOnCode
+                                        )
+                                      }
+                                    >
+                                      <div className={visitStyles.close_icon}>
+                                        <FontAwesomeIcon
+                                          icon={faArrowsAlt}
+                                          style={{
+                                            size: 8,
+                                            color: "#a80404",
+                                          }}
+                                        />
+                                      </div>
+                                    </Popconfirm>
+                                  </div>
+                                  {/* <Popconfirm
+                                            title="You want to see the tree view?"
+                                            description={item.diseaseName}
+                                            onConfirm={() => {
+                                              setOpens(true);
+                                              
+                                            }}
+                                            placement="leftTop"
+                                            okText="Yes"
+                                            cancelText="No"
+                                            onOpenChange={() => {
+                                              setCombiTree(item);
+                                            }}
+                                          > */}
+                                  <div
+                                    className={visitStyles.close_icon}
+                                    style={{ background: "#c7f3c6" }}
+                                    onClick={() => {
+                                      setOpens(true);
+                                      setCombiTree([
+                                        { ...item, expanded: true },
+                                      ]);
+                                    }}
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={faSitemap}
+                                      style={{
+                                        size: 8,
+                                        color: "#088f39",
+                                      }}
+                                    />
+                                  </div>
+                                  {/* </Popconfirm> */}
+                                </div>
+                                <div className={styles.comboDetailsHeaders}>
+                                  <div>
+                                    <div
+                                      className={`${visitStyles.encounterAndSectionHeader}`}
+                                    >
+                                      {getProviderNameList(item?.providerName)}
+                                    </div>
+                                    <div
+                                      className={`${visitStyles.encounterAndSectionHeader}`}
+                                    >
+                                      {getEncounterDateBackgroundHcc(
+                                        item.encounterDateSplit,
+                                        item.diagnosisCode,
+                                        "COMBO"
+                                      )}
+                                    </div>
+                                    <div
+                                      className={`${visitStyles.encounterAndSectionHeader}`}
+                                    >
+                                      {getCaptureSectionBackgroundFile(
+                                        item?.capturedSections,
+                                        item?.encounterDate,
+                                        item?.diseaseName
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+              <div className="col-xl-7">
                 <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                   <div
                     style={{
