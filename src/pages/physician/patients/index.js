@@ -281,6 +281,10 @@ export default function Patient() {
           name: "Completed",
         },
         { color: "#AD94FA", name: "Hold" },
+        {
+          color: "#3B3486",
+          name: "ABORTED BY CRON",
+        },
       ],
     },
   ];
