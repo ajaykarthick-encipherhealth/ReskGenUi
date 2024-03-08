@@ -1175,7 +1175,6 @@ const NonHcc = ({ patientNonHccResult }) => {
       setFileLoading(false);
       splitPoint = disDescription;
       setFileInitialPage(null);
-      setFileDosPageNumber(null);
       if (findFileKeyword == splitPoint) {
         setFileLoading(false);
       }
