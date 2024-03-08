@@ -139,6 +139,49 @@ const Accuracy = () => {
   if (currentBtn && accuracyDatas?.data?.response) {
     data = Object.values(accuracyDatas?.data?.response);
   }
+
+  const chartBlockedDates = (year, month, param, val) => {
+    year = Number(year);
+    month = Number(month);
+    if (year < currentDate.getFullYear()) {
+      return param?.data?.response.map((item) => item[val]);
+    } else if (
+      year == currentDate.getFullYear() &&
+      month < currentDate.getMonth() + 1
+    ) {
+      return param?.data?.response.map((item) => item[val]);
+    } else if (
+      year == currentDate.getFullYear() &&
+      month == currentDate.getMonth() + 1
+    ) {
+      return param?.data?.response.map(
+        (item, index) => index < new Date().getDate() && item[val]
+      );
+    } else {
+      return false;
+    }
+  };
+
+  const chartBlocked = (year, month, param) => {
+    year = Number(year);
+    month = Number(month);
+    if (year < currentDate.getFullYear()) {
+      return param.map((item) => item);
+    } else if (
+      year == currentDate.getFullYear() &&
+      month < currentDate.getMonth() + 1
+    ) {
+      return param.map((item) => item);
+    } else if (
+      year == currentDate.getFullYear() &&
+      month == currentDate.getMonth() + 1
+    ) {
+      return param.map((item, index) => index < new Date().getDate() && item);
+    } else {
+      return false;
+    }
+  };
+
   const option = {
     xAxis: {
       type: "category",
@@ -171,7 +214,8 @@ const Accuracy = () => {
     },
     series: [
       {
-        data: data,
+        data: chartBlocked(selectedYear,
+          selectedMonth,data),
         type: "bar",
         itemStyle: {
           barBorderRadius: [10, 10, 0, 0],
@@ -332,8 +376,14 @@ const Accuracy = () => {
       {
         name: "Temperature",
         type: "spline",
-        data: QualityAccuracyDatas?.data?.response.map(
-          (item) => item?.averageScore
+        // data: QualityAccuracyDatas?.data?.response.map(
+        //   (item) => item?.averageScore
+        // ),
+        data: chartBlockedDates(
+          selectedYear,
+          selectedMonth,
+          QualityAccuracyDatas,
+          "averageScore"
         ),
         tooltip: {
           valueSuffix: "",
@@ -460,7 +510,11 @@ const Accuracy = () => {
             <div className={styles.accuracy}>
               <div className={styles.header}>
                 <Image src={accuracy} className={styles.Img} />
-                <div className={styles.heading}>{currentTabBtn === "CogentAI Accuracy"?"Accuracy":"Average Score"}</div>
+                <div className={styles.heading}>
+                  {currentTabBtn === "CogentAI Accuracy"
+                    ? "Accuracy"
+                    : "Average Score"}
+                </div>
               </div>
               <div className={styles.month}>
                 {currentBtn === "Daily"
@@ -469,7 +523,7 @@ const Accuracy = () => {
                   ? `Month ${monthNames[currentDate.getMonth()]}`
                   : `Week ${getDateWeek(currentDate)}`}
               </div>
-              
+
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
                   {currentTabBtn === "CogentAI Accuracy"
