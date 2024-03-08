@@ -146,6 +146,7 @@ const Notification = ({}) => {
         usersIds: inputValue.usersIds,
         notificationType: "INFO",
         content: inputValue.content,
+        all:selectCheckBox === "ALL" ? true : false,
       };
       var result = await postNotification(data);
       if (result.status == "SUCCESS") {
