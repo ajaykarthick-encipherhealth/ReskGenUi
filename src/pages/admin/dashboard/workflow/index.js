@@ -90,10 +90,10 @@ const WorkFlow = () => {
       icon: allocated,
       title: "Allocated",
       charts: worlFlowData?.data?.response?.processedStatus
-        ?  worlFlowData?.data?.response?.processedStatus.COMPLETED +
-        worlFlowData?.data?.response?.auditedStatus.PENDING +
-        worlFlowData?.data?.response?.auditedStatus.HOLD +
-        worlFlowData?.data?.response?.auditedStatus.DECLINED
+        ? worlFlowData?.data?.response?.processedStatus.COMPLETED +
+          worlFlowData?.data?.response?.auditedStatus.PENDING +
+          worlFlowData?.data?.response?.auditedStatus.HOLD +
+          worlFlowData?.data?.response?.auditedStatus.DECLINED
         : "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
@@ -164,8 +164,8 @@ const WorkFlow = () => {
       id: 8,
       icon: declineIcon,
       title: "Declined",
-      charts: worlFlowData?.data?.response?.auditedStatus
-        ? worlFlowData?.data?.response?.auditedStatus.DECLINED
+      charts: worlFlowData?.data?.response?.processedStatus
+        ? worlFlowData?.data?.response?.processedStatus.DECLINED
         : "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30

@@ -190,7 +190,7 @@ const Query = ({ patientHccResult }) => {
                                         {item.createdBy}
                                       </span>
                                       <span className={styles.l1auditorBadge}>
-                                        L1 Auditor
+                                        Reviewer
                                       </span>
                                     </div>
                                     <div className="col-xl-2 d-grid">
@@ -253,7 +253,7 @@ const Query = ({ patientHccResult }) => {
                                                   styles.l1auditorBadge
                                                 }
                                               >
-                                                L1 Auditor
+                                                Reviewer
                                               </span>
                                             </div>
                                             <div className="col-xl-2 d-grid">

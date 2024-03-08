@@ -394,7 +394,7 @@ export default function Patient() {
                             defaultAllocateTo={"All"}
                             // created by
                             isCreatedBySelector={true}
-                            createdTolabel="L1 Auditor"
+                            createdTolabel="Reviewer"
                             optionKey="patientAllocated"
                             createdByOptoons={generateOptionsList(filteredList)}
                             setSelCreatedBy={setSelCreatedBy}
