@@ -17,14 +17,8 @@ import warning from "../../images/svg/warning.svg";
 import { getFilters } from "../../store/actions/AuthActions";
 import { useDispatch, useSelector } from "react-redux";
 
-import { getSelectUserListReport } from "../../store/actions/adminAction/ReportActions";
-import { getSelectUserList } from "../../store/actions/adminAction/DashboardAction";
-
 const { RangePicker } = DatePicker;
-const options = [
-  { value: "REVIEWER", label: "REVIEWER" },
-  { value: "SUPERVISOR", label: "SUPERVISOR" },
-];
+
 
 const HeaderFilters = ({
   // for search
@@ -154,16 +148,17 @@ const HeaderFilters = ({
   setSelect,
   defaultSize = "col-xl-2",
   adminReport,
-  addBtn
+  addBtn,
+  atCorner
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
   return (
     <>
-      <div style={{ display: "flex" }}>
-        <div className="row filter-contain" style={{ width: "100%" }}>
+      <div style={{height:atCorner &&"45px"}}>
+        <div className="row filter-contain" style={{ width: atCorner?"110%":"100%" }}>
           {isSearch && (
-            <div className={defaultSize}>
+            <div className={defaultSize} style={{margin:atCorner && "0 0 0 -20px"}}>
               {" "}
               <Search
                 searchlabel={searchlabel}

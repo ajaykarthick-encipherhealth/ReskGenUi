@@ -132,6 +132,7 @@ const HeaderFilters = ({
   setSelectedDates3,
   setSelectedDates4,
   setSelectedDates5,
+  auditallocatedToOptoons
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
@@ -181,7 +182,7 @@ const HeaderFilters = ({
                     setAuditSelAllocatedTo(selectedOption);
                     setClear(false);
                   }}
-                  options={auditAllocatedToOptoons}
+                  options={auditallocatedToOptoons}
                   className="custom-react-select"
                   isSearchable={false}
                   placeholder={defaultAllocateTo}
