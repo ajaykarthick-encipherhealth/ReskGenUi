@@ -290,7 +290,7 @@ export const generateOptionsList = (items) => {
     if (
       items?.data !== null &&
       !items?.loading &&
-      items?.data?.data.response?.length > 0
+      items?.data?.data?.response?.length > 0
     ) {
       const options = [
         { label: "All", value: "" },
