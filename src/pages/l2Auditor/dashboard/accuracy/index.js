@@ -201,7 +201,7 @@ const Accuracy = () => {
       {
         // Secondary yAxis (right)
         title: {
-          text: "TotalCorrected Count",
+          text: "Total Corrected Count",
           style: {
             color: "#0b59f1",
           },
