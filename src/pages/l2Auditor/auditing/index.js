@@ -26,6 +26,25 @@ import Completed from "../../../../src/images/trackingImages/CompletedTrack.png"
 import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
 import AuditeDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
 
+export function extractLatestData(notes) {
+  let declinedData;
+
+  if (notes && typeof notes === "object") {
+    const entries = Object.entries(notes);
+
+    const latestKey = Math.max(
+      ...entries.map(([key, value]) => parseInt(key))
+    );
+
+    entries.forEach(([key, value]) => {
+      if (parseInt(key) === latestKey) {
+        declinedData = value;
+      }
+    });
+  }
+
+  return declinedData;
+}
 import Image from "next/image";
 const bullets = [
   {
@@ -57,9 +76,9 @@ const bullets = [
 const statusOptions = [
   { label: "ALL", value: "" },
   { label: "AUDITED", value: "AUDITED" },
-  { label: "PENDING", value: "AUDIT_PENDING" },
+  { label: "AUDIT_PENDING", value: "AUDIT_PENDING" },
   { label: "RE AUDIT", value: "REAUDIT" },
-  { label: "DECLINED", value: "DECLINED" },
+  // { label: "DECLINED", value: "DECLINED" },
   { label: "AUDIT HOLD", value: "AUDITHOLD" },
   { label: "AUDIT DECLINED", value: "AUDIT_DECLINED" },
 ];
@@ -190,6 +209,7 @@ export default function Patient() {
           auditAllocatedByLastName: res.auditAllocatedByLastName,
           auditAllocatedByProfileImage: res.auditAllocatedByProfileImage,
           declinedNotes: res.declinedNotes,
+          auditDeclinedNotes: res.auditDeclinedNotes,
         });
       });
       var newArray = [];
@@ -230,21 +250,16 @@ export default function Patient() {
     }
   };
 
-  const processstatusBodyTemplate = (rowData) => {
-    const latestKey =
-      rowData?.declinedNotes?.length > 0 &&
-      Math.max(
-        ...rowData?.declinedNotes?.map((obj) => parseInt(Object.keys(obj)[0]))
-      );
-    let declinedData;
 
-    if (rowData?.declinedNotes && rowData?.declinedNotes?.length > 0) {
-      rowData?.declinedNotes?.forEach((obj) => {
-        if (obj[latestKey]) {
-          declinedData = obj[latestKey];
-        }
-      });
-    }
+  const processstatusBodyTemplate = (rowData) => {
+    const declinedDataFromAudit = extractLatestData(
+      rowData?.auditDeclinedNotes
+    );
+
+    const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
+
+    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
+
     switch (rowData.auditedStatus) {
       case "AUDIT_PENDING":
         return (
@@ -299,7 +314,7 @@ export default function Patient() {
           <Popover
             placement="bottom"
             title="Status: AUDIT DECLINED"
-            content={`Reason: ${rowData.declinedNotes ? declinedData : "---"}`}
+            content={`Reason: ${declinedData ? declinedData : "---"}`}
           >
             <div className="patient-status" style={{ textAlign: "center" }}>
               <Image

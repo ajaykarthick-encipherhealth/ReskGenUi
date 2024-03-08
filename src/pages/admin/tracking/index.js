@@ -32,6 +32,7 @@ import AuditedDeclineTrack from "../../../../src/images/trackingImages/AuditDecl
 import Abort from "../../../../src/images/trackingImages/Abort.png";
 
 import Image from "next/image";
+import { extractLatestData } from "../../l2Auditor/auditing";
 const bullets = [
   {
     title: "Processed Status",
@@ -329,20 +330,13 @@ export default function Patient() {
   };
 
   const processstatusBodyTemplate = (rowData) => {
-    const latestKey =
-      rowData?.declinedNotes?.length > 0 &&
-      Math.max(
-        ...rowData?.declinedNotes?.map((obj) => parseInt(Object.keys(obj)[0]))
-      );
-    let declinedData;
+    const declinedDataFromAudit = extractLatestData(
+      rowData?.auditDeclinedNotes
+    );
 
-    if (rowData?.declinedNotes && rowData?.declinedNotes?.length > 0) {
-      rowData?.declinedNotes?.forEach((obj) => {
-        if (obj[latestKey]) {
-          declinedData = obj[latestKey];
-        }
-      });
-    }
+    const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
+
+    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
 
     switch (rowData.processedStatus) {
       case "COMPLETED":
@@ -368,7 +362,7 @@ export default function Patient() {
           <Popover
             placement="bottom"
             title="Status: DECLINED"
-            content={`Reason: ${rowData.declinedNotes ? declinedData : "---"}`}
+            content={`Reason: ${declinedData ? declinedData : "---"}`}
           >
             <div className="patient-status" style={{ textAlign: "center" }}>
               <Image src={Declined} style={{ height: "30%", width: "30%" }} />
