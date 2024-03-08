@@ -634,7 +634,6 @@ export default function Patient() {
     setTableLoading(true);
     getAllList(response?.response);
   };
-
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>

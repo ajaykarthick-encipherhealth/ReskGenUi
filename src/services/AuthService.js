@@ -217,7 +217,7 @@ export const filters = async (field, username, pageQueue) => {
   const userRole = role.toUpperCase();
   const url = username
     ? `dbservice/patient/filter/field/list?username=${username}&field=${field}&role=${userRole}`
-    : `dbservice/patient/filter/field/list?field=${field}&role=${userRole}&page=${pageQueue}`;
+    : `dbservice/patient/filter/field/list?field=${field}&role=${userRole}&page=${pageQueue?pageQueue:0}`;
   try {
     const response = await axios.get(`${ENDPOINTS?.apiEndoint}${url}`, {
       headers: {
