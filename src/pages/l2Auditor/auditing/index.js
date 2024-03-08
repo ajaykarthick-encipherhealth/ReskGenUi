@@ -26,6 +26,25 @@ import Completed from "../../../../src/images/trackingImages/CompletedTrack.png"
 import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
 import AuditeDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
 
+export function extractLatestData(notes) {
+  let declinedData;
+
+  if (notes && typeof notes === "object") {
+    const entries = Object.entries(notes);
+
+    const latestKey = Math.max(
+      ...entries.map(([key, value]) => parseInt(key))
+    );
+
+    entries.forEach(([key, value]) => {
+      if (parseInt(key) === latestKey) {
+        declinedData = value;
+      }
+    });
+  }
+
+  return declinedData;
+}
 import Image from "next/image";
 const bullets = [
   {
@@ -231,25 +250,7 @@ export default function Patient() {
     }
   };
 
-  function extractLatestData(notes) {
-    let declinedData;
 
-    if (notes && typeof notes === "object") {
-      const entries = Object.entries(notes);
-
-      const latestKey = Math.max(
-        ...entries.map(([key, value]) => parseInt(key))
-      );
-
-      entries.forEach(([key, value]) => {
-        if (parseInt(key) === latestKey) {
-          declinedData = value;
-        }
-      });
-    }
-
-    return declinedData;
-  }
   const processstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
       rowData?.auditDeclinedNotes

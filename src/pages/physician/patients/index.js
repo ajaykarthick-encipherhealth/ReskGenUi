@@ -35,6 +35,7 @@ import HeaderFilters from "../../../components/headerFilters";
 import Image from "next/image";
 import styles from "../report/report.module.css";
 import filter from "../../../images/svg/filter.svg";
+import { extractLatestData } from "../../l2Auditor/auditing";
 
 const { RangePicker } = DatePicker;
 export default function Patient() {
@@ -375,20 +376,7 @@ export default function Patient() {
     }
   };
   const processstatusBodyTemplate = (rowData) => {
-    const latestKey =
-      rowData?.declinedNotes?.length > 0 &&
-      Math.max(
-        ...rowData?.declinedNotes?.map((obj) => parseInt(Object.keys(obj)[0]))
-      );
-    let declinedData;
-
-    if (rowData?.declinedNotes && rowData?.declinedNotes?.length > 0) {
-      rowData?.declinedNotes?.forEach((obj) => {
-        if (obj[latestKey]) {
-          declinedData = obj[latestKey];
-        }
-      });
-    }
+    const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
 
     switch (rowData.processedStatus) {
       case "COMPLETED":
@@ -414,14 +402,13 @@ export default function Patient() {
           <Popover
             placement="bottom"
             title="Status: DECLINED"
-            content={`Reason: ${rowData.declinedNotes ? declinedData : "---"}`}
+            content={`Reason: ${declinedDataFromDeclined ? declinedDataFromDeclined : "---"}`}
           >
             <div className="patient-status" style={{ textAlign: "center" }}>
               <Image src={Declined} style={{ height: "18%", width: "18%" }} />
             </div>
           </Popover>
         );
-
       case "NOTCOMPUTED":
         return (
           <Popover placement="bottom" title="Status: NOT COMPUTED">
