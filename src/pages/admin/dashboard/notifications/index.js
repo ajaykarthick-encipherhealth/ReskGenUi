@@ -45,8 +45,8 @@ const Notifications = () => {
             <div className={styles.time}>
               {moment(info.createdAt).format("MM-DD-YYYY")}&nbsp;{" "}
               {moment(info.createdAt).format("hh:mm:A")} &nbsp;{" "}
-              {`${emailSplitFunction(info.userFrom.userName)} (${
-                info.userFrom?.role
+              {`${info?.fromUserDetails?.firstName?info?.fromUserDetails?.firstName:""} (${
+                info?.fromUserDetails?.role?info?.fromUserDetails?.role:""
               })`}
             </div>
           </div>
