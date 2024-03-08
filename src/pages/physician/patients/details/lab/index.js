@@ -817,34 +817,38 @@ const Lab = ({}) => {
   };
 
   const getEncounterDetails = async (date) => {
-    var dotLoading = (
-      <div className={visitStyles.loadingFileHeader}>
-        <Spinner />
-      </div>
-    );
-    setProviderDetails(dotLoading);
-    var encounterDate = moment(date).format("MM/DD/YYYY");
-    var result = await getProviderDetails(localPatientId, encounterDate);
-    var data = "";
-    if (result?.status == "SUCCESS") {
-      var datas = result.response;
-      data = (
-        <div className="validhcc-details">
-          <div>Provider Name : {datas.providerName}</div>
-          <div>Authorized Provider : {datas.authorizedProvider}</div>
-          <div>UnAuthorize Provider : {datas.unAuthorizeProvider}</div>
-          <div>No Credential : {datas.noCredential}</div>
-          <div>UnSigned : {datas.unSigned}</div>
-        </div>
-      );
-    } else {
-      data = (
-        <div className="validhcc-details">
-          <div>Provider Not Found</div>
-        </div>
-      );
-    }
-    setProviderDetails(data);
+    var date = moment(date).format("DD");
+    highlight({
+      keyword: date,
+    });
+    // var dotLoading = (
+    //   <div className={visitStyles.loadingFileHeader}>
+    //     <Spinner />
+    //   </div>
+    // );
+    // setProviderDetails(dotLoading);
+    // var encounterDate = moment(date).format("MM/DD/YYYY");
+    // var result = await getProviderDetails(localPatientId, encounterDate);
+    // var data = "";
+    // if (result?.status == "SUCCESS") {
+    //   var datas = result.response;
+    //   data = (
+    //     <div className="validhcc-details">
+    //       <div>Provider Name : {datas.providerName}</div>
+    //       <div>Authorized Provider : {datas.authorizedProvider}</div>
+    //       <div>UnAuthorize Provider : {datas.unAuthorizeProvider}</div>
+    //       <div>No Credential : {datas.noCredential}</div>
+    //       <div>UnSigned : {datas.unSigned}</div>
+    //     </div>
+    //   );
+    // } else {
+    //   data = (
+    //     <div className="validhcc-details">
+    //       <div>Provider Not Found</div>
+    //     </div>
+    //   );
+    // }
+    // setProviderDetails(data);
   };
 
   const confirmInvalidMeat = () =>
