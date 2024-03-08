@@ -162,7 +162,7 @@ const IndividualReceiverReport = () => {
                   className={reportStyles.filterBtn}
                   onClick={() => {
                     router?.push(
-                      isSentReport ? "/admin/report" : "/l2Auditor/report"
+                     "/admin/report"
                     );
                     dispatch(
                       getActiveTab(

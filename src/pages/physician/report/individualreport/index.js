@@ -10,7 +10,7 @@ import {
   getReceivedDetails,
   getSelectedReportDetails,
   selectedReport,
-  getSentDetails
+  getSentDetails,
 } from "../../../../store/actions/ReportActions";
 import ExcelDisplay, {
   exportToExcel,
@@ -161,9 +161,7 @@ const IndividualReceiverReport = () => {
                   style={{ width: "40px", height: "30px" }}
                   className={reportStyles.filterBtn}
                   onClick={() => {
-                    router?.push(
-                      isSentReport ? "/admin/report" : "/l2Auditor/report"
-                    );
+                    router?.push("/physician/report");
                     dispatch(
                       getActiveTab(
                         isSentReport ? "SentReport" : "ReceivedReport"
@@ -216,9 +214,7 @@ const IndividualReceiverReport = () => {
                               setReportInfo(item);
                               dispatch(
                                 getSelectedReportDetails(
-                                  isSentReport
-                                    ? item?._id
-                                    : item?.reportId,
+                                  isSentReport ? item?._id : item?.reportId,
                                   item
                                 )
                               );
