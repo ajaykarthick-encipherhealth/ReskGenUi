@@ -1622,7 +1622,6 @@ const Details = ({}) => {
       dos: selectedDosValue,
     };
     var result = await auditDecline(postData);
-    console.log(result, "result");
     if (result.status == "SUCCESS") {
       getPatientIdDetails(localPatientId);
       setConfirmNotesModalHold(false);
