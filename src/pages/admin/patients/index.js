@@ -577,6 +577,7 @@ export default function Patient() {
                             bullets={bullets}
                             isNextRow={true}
                             btnTitle="Add Patient"
+                            atCorner={true}
                           />
                         </div>
                       </div>
