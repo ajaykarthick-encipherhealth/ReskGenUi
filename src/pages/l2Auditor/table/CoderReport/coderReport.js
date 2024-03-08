@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Badge, Empty, Tooltip } from "antd";
+import { Badge, Empty, Tooltip, Popover } from "antd";
 import TableStyle from "../../../../components/table/table.module.css";
 import { SVGICON } from "../../../../jsx/constant/theme";
 import { Paginator } from "primereact/paginator";
@@ -12,7 +12,15 @@ import {
   sortFunction,
 } from "../../../../components/headerFilters/functions";
 import visitStyles from "../../../../styles/visitdata.module.css";
+import Pending from "../../../../../src/images/trackingImages/PendingTrack.png";
+
+import Hold from "../../../../../src/images/trackingImages/HoldTrack.png";
+import Completed from "../../../../../src/images/trackingImages/CompletedTrack.png";
+import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
+import Abort from "../../../../../src/images/trackingImages/Abort.png";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import { extractLatestData } from "../../../l2Auditor/auditing";
+import Image from "next/image";
 
 function CoderReport({
   setModal,
@@ -58,53 +66,85 @@ function CoderReport({
   };
 
   const processstatusBodyTemplate = (rowData) => {
+    const declinedDataFromAudit = extractLatestData(
+      rowData?.auditDeclinedNotes
+    );
+
+    const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
+
+    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
+
     switch (rowData.processedStatus) {
       case "COMPLETED":
         return (
-          <div className="patient-status">
-            <span className={`badge processed-text`}>Completed</span>
-          </div>
+          <Popover placement="bottom" title="Status: COMPLETED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Completed} style={{ height: "30%", width: "30%" }} />
+            </div>
+          </Popover>
         );
 
       case "PENDING":
         return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30%", width: "30%" }} />
+            </div>
+          </Popover>
         );
 
       case "DECLINED":
         return (
-          <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>
-              Declined
-            </span>
-          </div>
+          <Popover
+            placement="bottom"
+            title="Status: DECLINED"
+            content={`Reason: ${declinedData ? declinedData : "---"}`}
+          >
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Declined} style={{ height: "30%", width: "30%" }} />
+            </div>
+          </Popover>
         );
 
       case "NOTCOMPUTED":
         return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
+          <Popover placement="bottom" title="Status: NOT COMPUTED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30%", width: "30%" }} />
+            </div>
+          </Popover>
         );
       case "COMPUTED":
         return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30%", width: "30%" }} />
+            </div>
+          </Popover>
         );
       case "HOLD":
         return (
-          <div className="patient-status">
-            <span className={`badge hold-text`}>Hold</span>
-          </div>
+          <Popover placement="bottom" title="Status: HOLD">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Hold} style={{ height: "30%", width: "30%" }} />
+            </div>
+          </Popover>
+        );
+      case "ABORTED_BY_CRON":
+        return (
+          <Popover placement="bottom" title="Status: ABORTED BY CRON">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Abort} style={{ height: "30%", width: "30%" }} />
+            </div>
+          </Popover>
         );
       case null:
         return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30%", width: "30%" }} />
+            </div>
+          </Popover>
         );
     }
   };

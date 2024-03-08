@@ -146,7 +146,7 @@ const Notification = ({}) => {
         usersIds: inputValue.usersIds,
         notificationType: "INFO",
         content: inputValue.content,
-        all:selectCheckBox === "ALL" ? true : false,
+        all: selectCheckBox === "ALL" ? true : false,
       };
       var result = await postNotification(data);
       if (result.status == "SUCCESS") {
@@ -234,7 +234,7 @@ const Notification = ({}) => {
                     onDropdownVisibleChange={(visible) =>
                       setOpenDropdown(visible)
                     }
-                    style={{height:"42px"}}
+                    style={{ height: "42px" }}
                   >
                     {filteredOptions?.map((data) => (
                       <Option key={data?.value} value={data?.value}>
@@ -253,6 +253,7 @@ const Notification = ({}) => {
                     onDropdownVisibleChange={(visible) =>
                       setOpenDropdown(visible)
                     }
+                    style={{ height: "42px" }}
                   >
                     {selectedListTeam?.map((data) => (
                       <Option key={data?.value} value={data?.value}>
