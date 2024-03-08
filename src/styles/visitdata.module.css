@@ -406,7 +406,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 90px;
+  width: max-content;
   display: block;
 }
 
@@ -536,6 +536,15 @@
   /* background-color: #ffffff; */
   z-index: 1;
 }
+.meat_title_card2 {
+  border-radius: 12px;
+  background: #e1edfe;
+  padding: 5px 10px 2px 10px;
+  margin-bottom: 10px;
+  position: sticky;
+  top: 0;
+  margin-top: 10px;
+}
 .hccStickey_head {
   /* min-height: 10vh;
     max-height: 64vh;
@@ -629,6 +638,12 @@
   border: 1px solid #e1e1e1;
   padding: 15px 15px 15px 15px;
   margin-bottom: 15px;
+}
+.meat_details_card2 {
+  border-radius: 12px;
+  border: 1px solid #e1e1e1;
+  padding: 10px 15px 10px 15px;
+  margin-bottom: 5px;
 }
 
 .meat_head_card label {

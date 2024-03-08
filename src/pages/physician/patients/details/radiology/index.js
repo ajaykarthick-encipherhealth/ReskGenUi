@@ -2545,7 +2545,7 @@ const Radiology = ({}) => {
           <div className="my-post-content pt-3">
             <div className="row">
               <div className="col-xl-4">
-                <div className={visitStyles.meat_head_card}>
+                <div className={visitStyles.meat_title_card2}>
                   <div className="row">
                     <div className="col-xl-6">
                       <label>Codes</label>
@@ -2559,7 +2559,7 @@ const Radiology = ({}) => {
                 <div
                   className={
                     selectMeatResult?.isMeatCriteriaPresent === true
-                      ? `${visitStyles.meat_details_card}`
+                      ? `${visitStyles.meat_details_card2}`
                       : `${visitStyles.meat_details_card_false}`
                   }
                 >
@@ -2597,25 +2597,22 @@ const Radiology = ({}) => {
                     </div>
                   </div>
                 </div>
-                <div className={visitStyles.meat_head_card}>
+                <div className={visitStyles.meat_title_card2}>
                   <div className="row">
-                    <div className="col-xl-6">
+                    <div className="col-xl-12">
                       <label>Monitor</label>
-                    </div>
-                    <div className="col-xl-6">
-                      <label>Evaluation</label>
                     </div>
                   </div>
                 </div>
                 <div
                   className={
                     selectMeatResult?.isMeatCriteriaPresent === true
-                      ? `${visitStyles.meat_details_card}`
+                      ? `${visitStyles.meat_details_card2}`
                       : `${visitStyles.meat_details_card_false}`
                   }
                 >
                   <div className="row">
-                    <div className="col-xl-6 d-grid">
+                    <div className="col-xl-12 d-grid">
                       {selectMeatResult?.monitor != "" ? (
                         <Popover
                           placement="topLeft"
@@ -2640,7 +2637,24 @@ const Radiology = ({}) => {
                         )}
                       </div>
                     </div>
-                    <div className="col-xl-6 d-grid">
+                  </div>
+                </div>
+                <div className={visitStyles.meat_title_card2}>
+                  <div className="row">
+                    <div className="col-xl-12">
+                      <label>Evaluation</label>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className={
+                    selectMeatResult?.isMeatCriteriaPresent === true
+                      ? `${visitStyles.meat_details_card2}`
+                      : `${visitStyles.meat_details_card_false}`
+                  }
+                >
+                  <div className="row">
+                    <div className="col-xl-12 d-grid">
                       {selectMeatResult?.evaluate != "" ? (
                         <Popover
                           placement="topLeft"
@@ -2668,33 +2682,30 @@ const Radiology = ({}) => {
                   </div>
                 </div>
 
-                <div className={visitStyles.meat_head_card}>
+                <div className={visitStyles.meat_title_card2}>
                   <div className="row">
-                    <div className="col-xl-6">
+                    <div className="col-xl-12">
                       <label>Assessment</label>
-                    </div>
-                    <div className="col-xl-6">
-                      <label>Treatment</label>
                     </div>
                   </div>
                 </div>
                 <div
                   className={
                     selectMeatResult?.isMeatCriteriaPresent === true
-                      ? `${visitStyles.meat_details_card}`
+                      ? `${visitStyles.meat_details_card2}`
                       : `${visitStyles.meat_details_card_false}`
                   }
                 >
                   <div className="row">
-                    <div className="col-xl-6 d-grid">
-                      {selectMeatResult?.assessment != "" ? (
+                    <div className="col-xl-12 d-grid">
+                      {selectMeatResult?.treatment != "" ? (
                         <Popover
                           placement="topLeft"
-                          title="Assessment"
-                          content={selectMeatResult?.assessment}
+                          title="Treatment"
+                          content={selectMeatResult?.treatment}
                         >
                           <span className="meat-name-details2">
-                            {selectMeatResult?.assessment}
+                            {selectMeatResult?.treatment}
                           </span>
                         </Popover>
                       ) : (
@@ -2702,17 +2713,33 @@ const Radiology = ({}) => {
                           -
                         </span>
                       )}
-
                       <div>
                         {getCaptureSectionBackgroundMeat(
-                          selectMeatResult?.assessmentCapturedFromHeader,
-                          selectMeatResult?.assessment,
+                          selectMeatResult?.treatmentCapturedFromHeader,
+                          selectMeatResult?.treatment,
                           selectMeatResult?.radiology,
                           selectMeatResult
                         )}
                       </div>
                     </div>
-                    <div className="col-xl-6 d-grid">
+                  </div>
+                </div>
+                <div className={visitStyles.meat_title_card2}>
+                  <div className="row">
+                    <div className="col-xl-12">
+                      <label>Treatment</label>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className={
+                    selectMeatResult?.isMeatCriteriaPresent === true
+                      ? `${visitStyles.meat_details_card2}`
+                      : `${visitStyles.meat_details_card_false}`
+                  }
+                >
+                  <div className="row">
+                    <div className="col-xl-12 d-grid">
                       {selectMeatResult?.treatment != "" ? (
                         <Popover
                           placement="topLeft"
