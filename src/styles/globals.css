@@ -8598,7 +8598,6 @@ button:focus {
   background-image: url("../images/login/back_3.jpg");
   background-repeat: no-repeat;
   background-size: cover;
- 
 }
 
 @media only screen and (max-width: 35.9375rem) {
@@ -14086,7 +14085,8 @@ span.meat-name-details2 {
   text-overflow: ellipsis;
   overflow: hidden;
   height: 20px;
-  width: 230px;
+  min-width: 230px;
+  max-width: 525px;
 }
 .table-responsive {
   overflow-x: hidden !important;
@@ -14138,6 +14138,6 @@ span.meat-name-details2 {
 .p-organizationchart-node-content .p-organizationchart-selectable-node {
   margin: 0 20px;
 }
-.ant-progress-text{
+.ant-progress-text {
   display: none !important;
 }

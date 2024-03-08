@@ -1740,7 +1740,7 @@ const Lab = ({}) => {
           <div className="my-post-content pt-3">
             <div className="row">
               <div className="col-xl-4">
-                <div className={visitStyles.meat_head_card}>
+                <div className={visitStyles.meat_title_card2}>
                   <div className="row">
                     <div className="col-xl-6">
                       <label>Codes</label>
@@ -1754,7 +1754,7 @@ const Lab = ({}) => {
                 <div
                   className={
                     selectMeatResult?.isMeatCriteriaPresent === true
-                      ? `${visitStyles.meat_details_card}`
+                      ? `${visitStyles.meat_details_card2}`
                       : `${visitStyles.meat_details_card_false}`
                   }
                 >
@@ -1792,25 +1792,22 @@ const Lab = ({}) => {
                     </div>
                   </div>
                 </div>
-                <div className={visitStyles.meat_head_card}>
+                <div className={visitStyles.meat_title_card2}>
                   <div className="row">
-                    <div className="col-xl-6">
+                    <div className="col-xl-12">
                       <label>Monitor</label>
-                    </div>
-                    <div className="col-xl-6">
-                      <label>Evaluation</label>
                     </div>
                   </div>
                 </div>
                 <div
                   className={
                     selectMeatResult?.isMeatCriteriaPresent === true
-                      ? `${visitStyles.meat_details_card}`
+                      ? `${visitStyles.meat_details_card2}`
                       : `${visitStyles.meat_details_card_false}`
                   }
                 >
                   <div className="row">
-                    <div className="col-xl-6 d-grid">
+                    <div className="col-xl-12 d-grid">
                       {selectMeatResult?.monitor != "" ? (
                         <Popover
                           placement="topLeft"
@@ -1835,7 +1832,25 @@ const Lab = ({}) => {
                         )}
                       </div>
                     </div>
-                    <div className="col-xl-6 d-grid">
+                  </div>
+                </div>
+
+                <div className={visitStyles.meat_title_card2}>
+                  <div className="row">
+                    <div className="col-xl-12">
+                      <label>Evaluation</label>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className={
+                    selectMeatResult?.isMeatCriteriaPresent === true
+                      ? `${visitStyles.meat_details_card2}`
+                      : `${visitStyles.meat_details_card_false}`
+                  }
+                >
+                  <div className="row">
+                    <div className="col-xl-12 d-grid">
                       {selectMeatResult?.evaluate != "" ? (
                         <Popover
                           placement="topLeft"
@@ -1863,25 +1878,22 @@ const Lab = ({}) => {
                   </div>
                 </div>
 
-                <div className={visitStyles.meat_head_card}>
+                <div className={visitStyles.meat_title_card2}>
                   <div className="row">
-                    <div className="col-xl-6">
+                    <div className="col-xl-12">
                       <label>Assessment</label>
-                    </div>
-                    <div className="col-xl-6">
-                      <label>Treatment</label>
                     </div>
                   </div>
                 </div>
                 <div
                   className={
                     selectMeatResult?.isMeatCriteriaPresent === true
-                      ? `${visitStyles.meat_details_card}`
+                      ? `${visitStyles.meat_details_card2}`
                       : `${visitStyles.meat_details_card_false}`
                   }
                 >
                   <div className="row">
-                    <div className="col-xl-6 d-grid">
+                    <div className="col-xl-12 d-grid">
                       {selectMeatResult?.assessment != "" ? (
                         <Popover
                           placement="topLeft"
@@ -1907,7 +1919,24 @@ const Lab = ({}) => {
                         )}
                       </div>
                     </div>
-                    <div className="col-xl-6 d-grid">
+                  </div>
+                </div>
+                <div className={visitStyles.meat_title_card2}>
+                  <div className="row">
+                    <div className="col-xl-12">
+                      <label>Treatment</label>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className={
+                    selectMeatResult?.isMeatCriteriaPresent === true
+                      ? `${visitStyles.meat_details_card2}`
+                      : `${visitStyles.meat_details_card_false}`
+                  }
+                >
+                  <div className="row">
+                    <div className="col-xl-12 d-grid">
                       {selectMeatResult?.treatment != "" ? (
                         <Popover
                           placement="topLeft"
