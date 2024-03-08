@@ -99,7 +99,7 @@ const Header = () => {
 
   const msgReply = useSelector((state) => state.workFlow.chatReply);
   const accuracy = useSelector((state) => state.auth.accuracy);
-  const currentUserInfo = useSelector((state) => state.auth.currentUserInfo);
+  const currentUserInfo = useSelector((state) => state.auth.userInfo);
   const codDetails = useSelector((state) => state.auth.codeDetails);
   const stateActive = router.pathname;
   const [headerFix, setheaderFix] = useState(false);
@@ -154,10 +154,6 @@ const Header = () => {
       if (result.isConfirmed) {
         await logoutAllDevice();
         localStorage.clear();
-        localStorage.removeItem("loginCheck");
-        localStorage.removeItem("userRole");
-        localStorage.removeItem("token");
-        localStorage.removeItem("roles");
         window.location = "/login";
       }
     });
@@ -526,10 +522,10 @@ const Header = () => {
                                       </div>
                                     </div>
                                     <div style={{ margin: "10px 0 0 5px" }}>
-                                      <span className="text-dark-50 ms-2 header-name font-weight-bold font-size-36px d-flex mr-3">
+                                      <span className="ms-2 header-name d-flex mr-3"style={{fontWeight:"700",fontSize:"16px"}}>
                                         {userName}
                                       </span>
-                                      <span className="text-[#4F4F4F] ms-2 subHeader-name font-weight-bolder font-size-base d-flex mr-3">
+                                      <span className="text-[#4F4F4F] ms-2 subHeader-name d-flex mr-3 " style={{fontWeight:"500",fontSize:"6px"}}>
                                         {currentRole == "reviewer"
                                           ? "Reviewer"
                                           : currentRole == "supervisor"
@@ -573,9 +569,9 @@ const Header = () => {
                           </Popover>
                         </div>
                         <div className="mx-15">
-                          <span className="text-dark-50 ms-2 header-name font-weight-bolder font-size-base d-flex mr-3">
+                          <div className="text-dark-50 ms-2 header-name d-flex mr-3" style={{fontWeight:"700",fontSize:"16px"}}>
                             {userName}
-                          </span>
+                          </div>
 
                           {items?.length > 0 && userIdDetails != "" ? (
                             <span className="ms-2 d-flex mt-1">
@@ -598,7 +594,7 @@ const Header = () => {
                               </Dropdown>
                             </span>
                           ) : (
-                            <span className="text-dark-50 ms-2 header-name font-weight-bolder font-size-base d-flex mr-3">
+                            <span className="text-[#4F4F4F] ms-2 subHeader-name d-flex mr-3" style={{fontWeight:"500",fontSize:"6px"}}>
                               {currentRole == "reviewer"
                                 ? "Reviewer"
                                 : currentRole == "supervisor"

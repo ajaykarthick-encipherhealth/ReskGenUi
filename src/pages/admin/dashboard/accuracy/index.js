@@ -186,6 +186,7 @@ const Accuracy = () => {
       },
     ],
   };
+
   const config = {
     chart: {
       type: "column",
@@ -459,7 +460,7 @@ const Accuracy = () => {
             <div className={styles.accuracy}>
               <div className={styles.header}>
                 <Image src={accuracy} className={styles.Img} />
-                <div className={styles.heading}>Accuracy</div>
+                <div className={styles.heading}>{currentTabBtn === "CogentAI Accuracy"?"Accuracy":"Average Score"}</div>
               </div>
               <div className={styles.month}>
                 {currentBtn === "Daily"
@@ -468,6 +469,7 @@ const Accuracy = () => {
                   ? `Month ${monthNames[currentDate.getMonth()]}`
                   : `Week ${getDateWeek(currentDate)}`}
               </div>
+              
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
                   {currentTabBtn === "CogentAI Accuracy"
@@ -480,7 +482,7 @@ const Accuracy = () => {
                     : QualityAccuracyDatas?.data?.response &&
                       QualityAccuracyDatas?.data?.response[highlightIndex]
                     ? `${Math.round(
-                        QualityAccuracyDatas?.data?.response[highlightIndex - 1]
+                        QualityAccuracyDatas?.data?.response[highlightIndex]
                           ?.averageScore
                       )}%`
                     : "0%"}

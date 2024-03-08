@@ -10,6 +10,14 @@ import HeaderFilters from "../../../../components/headerFilters";
 import SpinnerDots from "../../../../components/spinner";
 import Footer from "../../../../jsx/layouts/Footer";
 import UserQueue from "../../table/adminList/userQueue";
+import AuditeDeclineTrack from "../../../../../src/images/trackingImages/AuditDeclined.png";
+import AuditedTrack from "../../../../../src/images/trackingImages/AuditedTrack.png";
+import NotAudited from "../../../../../src/images/trackingImages/NotAuditedTrack.png";
+import AuditHold from "../../../../../src/images/trackingImages/AuditHoldTrack.png";
+import ReAudit from "../../../../../src/images/trackingImages/reAuditTrack.png";
+import AuditPending from "../../../../../src/images/trackingImages/AuditPending.png";
+import { Popover } from "antd";
+
 import {
   generateOptionsList,
   getFilteredOption,
@@ -18,7 +26,10 @@ import audited from "../../../../images/svg/audited.svg";
 import reAudit from "../../../../images/svg/reAudit.svg";
 import auditHold from "../../../../images/svg/auditHold.svg";
 import auditPending from "../../../../images/svg/auditPending.svg";
-import { getL2IndividualUser } from "../../../../store/actions/l2Action/userActions";
+import {
+  getCurrentUserDetails,
+  getL2IndividualUser,
+} from "../../../../store/actions/l2Action/userActions";
 import leftArrow from "../../../../images/svg/leftArrow.svg";
 import AuditHeaderFilters from "../../../../components/headerFilters/auditHeaderFilters";
 import userStyles from "./styles.module.css";
@@ -29,12 +40,28 @@ import {
 
 const bullets = [
   {
-    color: "rgba(209, 56, 56, 1)",
-    name: "Decline",
+    color: "#377880",
+    name: "AUDITED",
   },
   {
-    color: "rgba(58, 155, 148, 1)",
-    name: "Completed",
+    color: "#E28213",
+    name: "AUDIT PENDING",
+  },
+  {
+    color: "#964B00",
+    name: "RE AUDIT",
+  },
+  {
+    color: "red",
+    name: "DECLINED",
+  },
+  {
+    color: "#CE9900",
+    name: "AUDIT HOLD",
+  },
+  {
+    color: "#C21807",
+    name: "AUDIT DECLINED",
   },
 ];
 const badges = [
@@ -71,6 +98,7 @@ const AuditOptions = [
   { label: "AUDITHOLD", value: "AUDITHOLD" },
   { label: "REAUDIT", value: "REAUDIT" },
   { label: "AUDIT PENDING", value: "AUDIT_PENDING" },
+  { label: "AUDIT DECLINED", value: "AUDIT_DECLINED" },
 ];
 const index = () => {
   const dispatch = useDispatch();
@@ -78,7 +106,7 @@ const index = () => {
   const usersData = useSelector((state) => state.l2User?.userData);
   const sideMenu = useSelector((state) => state.sideMenu);
   const filteredList = useSelector((state) => state.auth.filterList);
-  const currentUser = useSelector((state) => state.auth.currentUserInfo);
+  const currentUser = useSelector((state) => state.l2User.currentUserDetails);
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [userListAll, setUserListAll] = useState([]);
@@ -148,7 +176,7 @@ const index = () => {
         sort,
       };
       dispatch(getL2IndividualUser(datas));
-      dispatch(getCurrentUser(uId));
+      dispatch(getCurrentUserDetails(uId));
     }
   }, [
     pageNo,
@@ -171,7 +199,128 @@ const index = () => {
     aduitDueEndDate,
     sort,
   ]);
+  const auditstatusBodyTemplate = (rowData) => {
+    const latestKey =
+      rowData?.auditDeclinedNotes?.length > 0 &&
+      Math.max(
+        ...rowData?.auditDeclinedNotes?.map((obj) =>
+          parseInt(Object.keys(obj)[0])
+        )
+      );
+    let declinedData;
 
+    if (
+      rowData?.auditDeclinedNotes &&
+      rowData?.auditDeclinedNotes?.length > 0
+    ) {
+      rowData?.auditDeclinedNotes?.forEach((obj) => {
+        if (obj[latestKey]) {
+          declinedData = obj[latestKey];
+        }
+      });
+    }
+    switch (rowData.auditedStatus) {
+      case "AUDIT_PENDING":
+        return (
+          <Popover placement="bottom" title="Status: AUDIT PENDING">
+            <div className="patient-status">
+              <Image
+                src={AuditPending}
+                className={styles.ImgTrck}
+                style={{ height: "35px", width: "35px" }}
+              />
+            </div>
+          </Popover>
+        );
+
+      case "DECLINED":
+        return (
+          <div className="patient-status">
+            <span className={`badge failed-text`} style={{ color: "red" }}>
+              Declined
+            </span>
+          </div>
+        );
+
+      case "AUDITHOLD":
+        return (
+          <Popover placement="bottom" title=" Status: AUDIT HOLD">
+            <div className="patient-status">
+              <Image
+                src={AuditHold}
+                className={styles.ImgTrck}
+                style={{ height: "35px", width: "35px" }}
+              />
+            </div>
+          </Popover>
+        );
+      case "REAUDIT":
+        return (
+          <Popover placement="bottom" title=" Status: REAUDIT">
+            <div className="patient-status">
+              <Image
+                src={ReAudit}
+                className={styles.ImgTrck}
+                style={{ height: "35px", width: "35px" }}
+              />
+            </div>
+          </Popover>
+        );
+      case "AUDITED":
+        return (
+          <Popover placement="bottom" title=" Status: AUDITED">
+            <div className="patient-status">
+              <Image
+                src={AuditedTrack}
+                className={styles.ImgTrck}
+                style={{ height: "35px", width: "35px" }}
+              />
+            </div>
+          </Popover>
+        );
+      case "AUDITED":
+        return (
+          <div className="patient-status">
+            <Image
+              src={AuditedTrack}
+              //  style={{ height: "25%", width: "39%" }}
+            />
+          </div>
+        );
+
+      case "NOT_AUDIT":
+        return (
+          <Popover placement="bottom" title=" Status: NOT AUDIT">
+            <div className="patient-status">
+              <Image
+                src={NotAudited}
+                className={styles.ImgTrck}
+                style={{ height: "35px", width: "35px" }}
+              />
+            </div>
+          </Popover>
+        );
+      case "AUDIT_DECLINED":
+        return (
+          <Popover
+            placement="bottom"
+            title=" Status: AUDIT DECLINED"
+            content={`Reason: ${
+              rowData.auditDeclinedNotes ? declinedData : "---"
+            }`}
+          >
+            <div className="patient-status">
+              <Image
+                src={AuditeDeclineTrack}
+                style={{ height: "35px", width: "35px" }}
+              />
+            </div>
+          </Popover>
+        );
+      case null:
+        return <div className="patient-status">---</div>;
+    }
+  };
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -306,6 +455,7 @@ const index = () => {
                           userList={userListAll?.content}
                           sort={sort}
                           setSort={setSort}
+                          auditBodyTemplate={auditstatusBodyTemplate}
                         />
                       )}
                       <div>

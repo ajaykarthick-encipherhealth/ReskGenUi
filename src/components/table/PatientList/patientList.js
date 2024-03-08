@@ -42,6 +42,7 @@ function PatientTable({
   totalElements,
   onPageChange,
   setSort,
+  getFilteApi
 }) {
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
@@ -187,14 +188,13 @@ function PatientTable({
               <div style={{ textAlign: "center" }}>---</div>
             )}
           </td>
-
           <td className={TableStyle.childBorder}>
             <AntSelect
               options={priorityOptions}
               placeholder="Set priority"
               className={`custom-ant-select ${TableStyle.customAntSelect}`}
               showSearch={false}
-              defaultValue={data?.priority ? data.priority : "Set Priority"}
+              value={data?.priority ? data.priority : "Set Priority"}
               disabled={!data?.priority ? true : false}
               onChange={(value) => {
                 handlePriorityChange(data?.patientId, value);
@@ -202,9 +202,11 @@ function PatientTable({
                   getPriorityChange(
                     data?.patientId,
                     dayjs(data?.lastModifiedDate)?.format("YYYY"),
-                    value
+                    value,
+                    getFilteApi
                   )
                 );
+                
               }}
               style={{ width: "80%" }}
             />

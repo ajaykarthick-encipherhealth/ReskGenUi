@@ -140,11 +140,32 @@ export const getHoldStatusData = (router) => {
 
 export const getChatReply = (msg) => {
   return (dispatch) => {
-    ChatBot(msg).then((response) => {
-      dispatch({
-        type: CHATBOT,
-        payload: response,
-      });
+    dispatch({
+      type: CHATBOT,
+      payload: {
+        loading: true,
+      },
     });
+    try {
+      ChatBot(msg).then((response) => {
+        dispatch({
+          type: CHATBOT,
+          payload: {
+            data: response,
+            loading: false,
+          },
+        });
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
+  // return (dispatch) => {
+  //   ChatBot(msg).then((response) => {
+  //     dispatch({
+  //       type: CHATBOT,
+  //       payload: response,
+  //     });
+  //   });
+  // };
 };

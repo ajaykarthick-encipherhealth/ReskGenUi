@@ -32,7 +32,7 @@ export const VERIFYCODE = "VERIFYCODE";
 export const ACCURACYSCRORE = "ACCURACYSCRORE";
 export const FILTER = "FILTER";
 export const PROFILE_URL = "PROFILE_URL";
-export const CURRENTUSER = "CURRENTUSER";
+export const CURRENTUSER_INFO = "CURRENTUSER_INFO";
 
 export const selectedUserRole = (data) => ({
   type: SELECTEDROLE,
@@ -69,7 +69,7 @@ export function Logout(navigate) {
 
 export const getMFAValidation = (username, route, password) => {
   return () => {
-    mfaValidation(username, route).then((response) => {
+    mfaValidation(username, route,password).then((response) => {
       const skip = response?.data?.response?.skipEntryAvailable;
       const mfa = response?.data?.response?.mfaIsEnabled;
       if (response?.data?.response) {
@@ -112,8 +112,8 @@ export const getValidateCode = (
   return (dispatch) => {
     verifyCode(username, code, userpassword).then((response) => {
       if (response?.data?.response) {
-        if (validate && password) {
-          dispatch(loginAction(username, route, code, password));
+        if (validate && userpassword) {
+          dispatch(loginAction(username, route, code, userpassword));
         } else {
           notification.success({
             message: "Code verified successfully",
@@ -285,7 +285,7 @@ export const getCurrentUser = (userId, router) => {
     try {
       CurrentUser(userId, router).then((response) => {
         dispatch({
-          type: CURRENTUSER,
+          type: CURRENTUSER_INFO,
           payload: response,
         });
       });

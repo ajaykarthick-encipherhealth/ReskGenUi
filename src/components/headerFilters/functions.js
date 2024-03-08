@@ -2,7 +2,12 @@ import { Avatar } from "antd";
 import { SVGICON } from "../../jsx/constant/theme";
 import TableStyle from "../table/table.module.css";
 import moment from "moment";
+import { Popover } from "antd";
+
 import dayjs from "dayjs";
+import CryptoJS from 'crypto-js';
+import bcrypt from 'bcryptjs'
+
 // for search
 export const searchFunction = (
   e,
@@ -225,53 +230,7 @@ export const priorityStatus = (value) => {
   }
 };
 
-export const processstatusBodyTemplate = (rowData) => {
-  switch (rowData.processedStatus) {
-    case "COMPLETED":
-      return (
-        <div className="patient-status">
-          <span className={`badge processed-text`}>Completed</span>
-        </div>
-      );
 
-    case "PENDING":
-      return (
-        <div className="patient-status">
-          <span className={`badge processing-text`}>Pending</span>
-        </div>
-      );
-
-    case "DECLINED":
-      return (
-        <div className="patient-status">
-          <span className={`badge failed-text`} style={{ color: "red" }}>
-            Declined
-          </span>
-        </div>
-      );
-
-    case "NOTCOMPUTED":
-      return (
-        <div className="patient-status">
-          <span className={`badge notComputed-text`}>Not Computed</span>
-        </div>
-      );
-    case "COMPUTED":
-      return (
-        <div className="patient-status">
-          <span className={`badge computed-text`}>Computed</span>
-        </div>
-      );
-    case "HOLD":
-      return (
-        <div className="patient-status">
-          <span className={`badge hold-text`}>Hold</span>
-        </div>
-      );
-    case null:
-      return <div className="patient-status">---</div>;
-  }
-};
 
 export const generateOptionsList = (items) => {
   if (items?.loading || items === null || items?.data === null) {
@@ -626,4 +585,41 @@ export const validateYear = (year, setErrors) => {
   }
 
   return true;
+};
+const encryptData=(data, key, iv)=> {
+  var keyUtf8 = CryptoJS.enc.Utf8.parse(key);
+  var ivUtf8 = CryptoJS.enc.Utf8.parse(iv);
+
+  var encrypted = CryptoJS.AES.encrypt(data, keyUtf8, {
+    iv: ivUtf8,
+    mode: CryptoJS.mode.CBC,
+    padding: CryptoJS.pad.Pkcs7,
+  });
+
+  return encrypted.toString();
+}
+function generateRandomString() {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let randomString = "";
+
+  for (let i = 0; i < 16; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    randomString += characters.charAt(randomIndex);
+  }
+
+  return randomString;
+}
+
+export const encyptingPass = (password) => {
+  var plaintextData =password;
+  var encryptionKey = "B27AA05B9A2490D1AE59B33B45CFD4B0"; // Should be 16, 24, or 32 bytes
+  var initializationVector = generateRandomString(); // Should be 16 bytes
+  var encryptedData = encryptData(
+    plaintextData,
+    encryptionKey,
+    initializationVector
+  );
+  const values={"pass":encryptedData,"iv":initializationVector}
+  return values;
 };

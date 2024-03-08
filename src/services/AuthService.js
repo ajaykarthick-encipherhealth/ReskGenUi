@@ -41,15 +41,20 @@ export function signUp(email, password) {
 export function login(email, password, code) {
   const postData = {
     username: email,
-    password: password,
-    code: code,
+    password: password?.pass,
+    passwordIv: password?.iv,
+    code: code?.pass,
+    codeIv: code?.iv,
   };
   const datas =
     code?.length > 0
       ? postData
       : {
           username: email,
-          password: password,
+          password: password?.pass,
+          passwordIv: password?.iv,
+          code: code?.pass,
+          codeIv: code?.iv,
         };
   return axiosApi.post(
     ENDPOINTS.apiEndoint + `securityservice/auth/login`,
@@ -160,9 +165,11 @@ export const enableMFA = async (username) => {
 export const verifyCode = async (username, code, userpassword) => {
   const datas = {
     username: username,
-    code: code,
+    code: code?.pass,
+    codeIv: code?.iv,
     newMfa: true,
-    password: userpassword,
+    password: userpassword?.pass,
+    passwordIv: userpassword?.iv,
   };
   try {
     const response = await axios.post(
@@ -175,11 +182,11 @@ export const verifyCode = async (username, code, userpassword) => {
   }
 };
 
-export const mfaValidation = async (username) => {
+export const mfaValidation = async (username, route, password) => {
   try {
     const response = await axios.post(
       `${ENDPOINTS?.apiEndoint}securityservice/auth/mfaValidation`,
-      { userName: username }
+      { userName: username, password: password?.pass, passwordIv: password?.iv }
     );
     return response;
   } catch (err) {

@@ -33,6 +33,7 @@ const statusOptions = [
   { label: "Pending", value: "PENDING" },
   { label: "Declined", value: "DECLINED" },
   { label: "Hold", value: "HOLD" },
+
 ];
 const index = () => {
   const dispatch = useDispatch();
@@ -505,6 +506,7 @@ const index = () => {
                                       setSortOrder={setCoderSortOrder}
                                       sortOrder={coderSortOrder}
                                       setSort={setSort}
+                                      l2Auditor={true}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane id="my-posts" eventKey="team">
