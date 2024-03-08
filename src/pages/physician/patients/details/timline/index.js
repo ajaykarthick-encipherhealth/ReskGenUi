@@ -16,7 +16,7 @@ const Timeline = ({
         <>
           <div className="widget-timeline">
             <ul className="timeline">
-              {timelineData.map((item, index) => (
+              {timelineData?.map((item, index) => (
                 <li>
                   {item.action == "MOVED_INVALID_TO_VALID" ? (
                     <Tooltip title={item.userName} placement="bottom">
@@ -407,7 +407,7 @@ const Timeline = ({
                   </a>
                 </li>
               ))}
-              {timelineData.length == 0 ? (
+              {timelineData?.length == 0 ? (
                 <h6 className="text-center">NO DATA</h6>
               ) : null}
             </ul>
