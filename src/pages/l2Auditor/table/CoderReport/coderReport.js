@@ -30,7 +30,7 @@ function CoderReport({
   sortOrder,
   setSortOrder,
   setSort,
-  l2Auditor
+  l2Auditor,
 }) {
   const dispatch = useDispatch();
 
@@ -268,7 +268,13 @@ function CoderReport({
                         borderRadius: "4px",
                       }}
                       checked={selectAll}
-                      className={(selectAll&&l2Auditor) ?TableStyle.customChecked3 :selectAll? TableStyle.customChecked2 : ""}
+                      className={
+                        selectAll && l2Auditor
+                          ? TableStyle.customChecked3
+                          : selectAll
+                          ? TableStyle.customChecked2
+                          : ""
+                      }
                     />
                   </div>
                 </th>
@@ -337,7 +343,9 @@ function CoderReport({
                         {row?.rafSum ? row?.rafSum : "000"}
                       </td>
                       <td className={TableStyle.childBorder}>
-                        {row?.validDisease ? row?.validDisease : "000"}
+                        {row?.validDiseaseCount
+                          ? row?.validDiseaseCount
+                          : "000"}
                       </td>
                       <td className={TableStyle.childBorder}>
                         {row?.flag ? (
