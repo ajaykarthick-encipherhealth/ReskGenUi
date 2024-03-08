@@ -5,8 +5,8 @@ import moment from "moment";
 import { Popover } from "antd";
 
 import dayjs from "dayjs";
-import CryptoJS from 'crypto-js';
-import bcrypt from 'bcryptjs'
+import CryptoJS from "crypto-js";
+import bcrypt from "bcryptjs";
 
 // for search
 export const searchFunction = (
@@ -31,6 +31,59 @@ export const searchFunction = (
 // for select
 export const handleSelector = (option, setSelectedOption) => {
   setSelectedOption(option?.value);
+};
+
+export const processstatusBodyTemplate = (rowData) => {
+  console.log(rowData, "test");
+  switch (rowData.processedStatus) {
+    case "COMPLETED":
+      return (
+        <div className="patient-status">
+          <span className={`badge processed-text`}>Completed</span>
+        </div>
+      );
+
+    case "PENDING":
+      return (
+        <div className="patient-status">
+          <span className={`badge processing-text`}>Pending</span>
+        </div>
+      );
+
+    case "DECLINED":
+      return (
+        <div className="patient-status">
+          <span className={`badge failed-text`} style={{ color: "red" }}>
+            Declined
+          </span>
+        </div>
+      );
+
+    case "NOTCOMPUTED":
+      return (
+        <div className="patient-status">
+          <span className={`badge processing-text`}>Pending</span>
+        </div>
+      );
+    case "COMPUTED":
+      return (
+        <div className="patient-status">
+          <span className={`badge processing-text`}>Pending</span>
+        </div>
+      );
+    case "HOLD":
+      return (
+        <div className="patient-status">
+          <span className={`badge hold-text`}>Hold</span>
+        </div>
+      );
+    case null:
+      return (
+        <div className="patient-status">
+          <span className={`badge processing-text`}>Pending</span>
+        </div>
+      );
+  }
 };
 
 // for rangepicker
@@ -229,8 +282,6 @@ export const priorityStatus = (value) => {
       break;
   }
 };
-
-
 
 export const generateOptionsList = (items) => {
   if (items?.loading || items === null || items?.data === null) {
@@ -586,7 +637,7 @@ export const validateYear = (year, setErrors) => {
 
   return true;
 };
-const encryptData=(data, key, iv)=> {
+const encryptData = (data, key, iv) => {
   var keyUtf8 = CryptoJS.enc.Utf8.parse(key);
   var ivUtf8 = CryptoJS.enc.Utf8.parse(iv);
 
@@ -597,7 +648,7 @@ const encryptData=(data, key, iv)=> {
   });
 
   return encrypted.toString();
-}
+};
 function generateRandomString() {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -612,7 +663,7 @@ function generateRandomString() {
 }
 
 export const encyptingPass = (password) => {
-  var plaintextData =password;
+  var plaintextData = password;
   var encryptionKey = "B27AA05B9A2490D1AE59B33B45CFD4B0"; // Should be 16, 24, or 32 bytes
   var initializationVector = generateRandomString(); // Should be 16 bytes
   var encryptedData = encryptData(
@@ -620,6 +671,6 @@ export const encyptingPass = (password) => {
     encryptionKey,
     initializationVector
   );
-  const values={"pass":encryptedData,"iv":initializationVector}
+  const values = { pass: encryptedData, iv: initializationVector };
   return values;
 };
