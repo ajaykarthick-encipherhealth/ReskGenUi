@@ -45,8 +45,18 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const { addResponseMessage } = require("react-chat-widget");
-      addResponseMessage(msgReply ? msgReply : "Welcome to CogentAI!");
+      const {
+        addResponseMessage,
+        deleteMessages,
+      } = require("react-chat-widget");
+      if (msgReply?.loading) {
+        addResponseMessage("...");
+      } else {
+        deleteMessages(1);
+        addResponseMessage(
+          msgReply?.data ? msgReply?.data : "Welcome to CogentAI!"
+        );
+      }
     }
   }, [msgReply]);
 
