@@ -627,6 +627,7 @@ export default function Patient() {
     setTableLoading(true);
     getAllList(response?.response);
   };
+  console.log(filteredList)
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>

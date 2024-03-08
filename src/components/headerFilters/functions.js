@@ -284,7 +284,7 @@ export const priorityStatus = (value) => {
 };
 
 export const generateOptionsList = (items) => {
-  if (items?.loading || items === null || items?.data === null) {
+  if (items?.loading && items?.data === null) {
     return [{ label: "Loading...", value: "Loading..." }];
   } else {
     if (
