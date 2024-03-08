@@ -1557,48 +1557,36 @@ const Hcc = ({ patientHccResult }) => {
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/pageNumber?header=${value}&fileId=${fileId}&dos=${encounterDatesHeader}`
-    );
-    var result = response.data.response;
-    if (result?.length != 0) {
-      var pageNumber = result[0] - 1;
-      setFileInitialPage(pageNumber);
-      setFileDosPageNumber(pageNumber);
-    } else {
-      setFileInitialPage(null);
-      setFileDosPageNumber(null);
-    }
-    setMeatModalTitle(dotLoading);
-    setIsLoadingSection(true);
-    if (findFileKeyword == value) {
-      setFileLoading(false);
+    try {
+      const response = await axios.get(
+        ENDPOINTS.apiEndoint +
+          `dbservice/pageNumber?header=${value}&fileId=${fileId}&dos=${encounterDatesHeader}&stringFileWord=${splitPoint}`
+      );
+      var result = response.data.response;
+      if (response?.data?.status == "SUCCESS") {
+        if (result?.first == false) {
+          splitPoint = value;
+        }
+        var pageNumber = result?.second[0] - 1;
+        setFileInitialPage(pageNumber);
+        setFileDosPageNumber(pageNumber);
+      } else {
+        setFileInitialPage(null);
+        setFileDosPageNumber(null);
+      }
+      setMeatModalTitle(dotLoading);
+      setIsLoadingSection(true);
+      if (findFileKeyword == splitPoint) {
+        setFileLoading(false);
+        var dataset = value + " / (" + disDescription + ")";
+        setMeatModalTitle(dataset);
+      }
+      setFindFileKeyword(splitPoint);
+
+      setIsModalOpen(true);
       var dataset = value + " / (" + disDescription + ")";
-      setMeatModalTitle(dataset);
-    }
-    setFindFileKeyword(value);
-
-    setIsModalOpen(true);
-    var dataset = value + " / (" + disDescription + ")";
-    setSelectMeatName(dataset);
-  };
-
-  const getSectionPageNumber = async (header, encounterDate) => {
-    var fileId = patientFileDTO.fileId;
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/pageNumber?header=${header}&fileId=${fileId}&dos=${encounterDate}`
-    );
-
-    var result = response.data;
-    if (result?.length) {
-      var pageNumber = result[0] - 1;
-      setFileInitialPage(pageNumber);
-    } else {
-      setFileInitialPage(null);
-      setFileDosPageNumber(null);
-    }
+      setSelectMeatName(dataset);
+    } catch (error) {}
   };
 
   const findValueDocument = async (
@@ -1612,48 +1600,44 @@ const Hcc = ({ patientHccResult }) => {
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
-    var splitPoint = actualDescription.substring(" ", 10);
-
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}`
-    );
-    var result = response.data.response;
-    if (result?.length) {
-      var pageNumber = result[0] - 1;
-      if (pageNumber == fileInitialPage) {
-        setFileLoading(false);
-        notification.warning({
-          message: "This detail also same page",
-          placement: "top",
-          duration: 1,
-        });
+    var splitPoint = actualDescription.substring(" ", 20);
+    try {
+      const response = await axios.get(
+        ENDPOINTS.apiEndoint +
+          `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}&stringFileWord=${splitPoint}`
+      );
+      var result = response.data.response;
+      if (response?.data?.status == "SUCCESS") {
+        var pageNumber = result?.second[0] - 1;
+        if (result?.first == false) {
+          splitPoint = headerNames;
+        }
+        if (pageNumber == fileInitialPage) {
+          setFileLoading(false);
+          notification.warning({
+            message: "This detail also same page",
+            placement: "top",
+            duration: 1,
+          });
+        }
+        setFileInitialPage(pageNumber);
+        setFileDosPageNumber(pageNumber);
+      } else {
+        splitPoint = headerNames;
+        setFileInitialPage(null);
+        setFileDosPageNumber(null);
       }
-      setFileInitialPage(pageNumber);
-      setFileDosPageNumber(pageNumber);
-    } else {
-      splitPoint = headerNames;
-      setFileInitialPage(null);
-      setFileDosPageNumber(null);
-    }
-
-    // getSectionPageNumber(headerNames, encounterDate);
-
-    setTargetPages(
-      (targetPage) =>
-        targetPage.pageIndex === pageNumber ||
-        targetPage.pageIndex === pageNumber + 1 ||
-        targetPage.pageIndex === pageNumber + 2
-    );
-    setFindFileKeyword(splitPoint);
-    if (findFileKeyword == splitPoint) {
-      setFileLoading(false);
-    }
-    // highlight({
-    //   keyword: actualDescription,
-    //   // matchCase: true,
-    //   // wholeWords:true
-    // });
+      setTargetPages(
+        (targetPage) =>
+          targetPage.pageIndex === pageNumber ||
+          targetPage.pageIndex === pageNumber + 1 ||
+          targetPage.pageIndex === pageNumber + 2
+      );
+      setFindFileKeyword(splitPoint);
+      if (findFileKeyword == splitPoint) {
+        setFileLoading(false);
+      }
+    } catch (error) {}
   };
   const handleOpenModalCombinationCode = async (
     value,
@@ -1719,38 +1703,43 @@ const Hcc = ({ patientHccResult }) => {
         const encounterDatesValue = encounterDate.split(",");
         const encounterDatesHeader = encounterDatesValue[0];
         var splitPoint = "";
-        splitPoint = actualDescription.substring(" ", 10);
-        const response = await axios.get(
-          ENDPOINTS.apiEndoint +
-            `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}`
-        );
-        var result = response.data.response;
-        if (result?.length) {
-          var pageNumber = result[0] - 1;
-          setFileInitialPage(pageNumber);
-        } else {
-          splitPoint = headerNames;
-        }
-        setSelectActiveCode(value);
+        splitPoint = actualDescription.substring(" ", 20);
+        try {
+          const response = await axios.get(
+            ENDPOINTS.apiEndoint +
+              `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}&stringFileWord=${splitPoint}`
+          );
+          var result = response.data.response;
+          if (response?.data?.status == "SUCCESS") {
+            if (result?.first == false) {
+              splitPoint = headerNames;
+            }
+            var pageNumber = result?.second[0] - 1;
+            setFileInitialPage(pageNumber);
+          } else {
+            splitPoint = headerNames;
+          }
+          setSelectActiveCode(value);
 
-        setFindFileKeyword(splitPoint);
-        var dataset =
-          value +
-          " - (" +
-          disDescription +
-          ")" +
-          " / (" +
-          actualDescription +
-          ")";
-        setSelectMeatName(dataset);
-        var headerName =
-          patientDocumentResult.patientId +
-          " / " +
-          patientDocumentResult.patientName +
-          " / " +
-          dataset;
-        setFileModalTitle(headerName);
-        setDocumentLoaded(true);
+          setFindFileKeyword(splitPoint);
+          var dataset =
+            value +
+            " - (" +
+            disDescription +
+            ")" +
+            " / (" +
+            actualDescription +
+            ")";
+          setSelectMeatName(dataset);
+          var headerName =
+            patientDocumentResult.patientId +
+            " / " +
+            patientDocumentResult.patientName +
+            " / " +
+            dataset;
+          setFileModalTitle(headerName);
+          setDocumentLoaded(true);
+        } catch (error) {}
       } else if (check == "valid2") {
         setSelectActiveCode(value);
         var splitPoint = "";
