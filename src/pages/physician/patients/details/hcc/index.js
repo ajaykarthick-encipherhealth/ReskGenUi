@@ -6311,7 +6311,7 @@ const Hcc = ({ patientHccResult }) => {
                                                   styles.l1auditorBadge
                                                 }
                                               >
-                                                L1 Auditor
+                                                Reviewer
                                               </span>
                                             </div>
                                             <div className="col-xl-2 d-grid">
