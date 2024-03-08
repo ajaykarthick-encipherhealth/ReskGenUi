@@ -37,7 +37,6 @@ const CompletedStatus = () => {
   const [selectUser, setSelectUser] = useState([]);
   const [isindividual, setIsindividual] = useState(false);
   const [selectMemberType, setSelectMemberType] = useState("");
-
   let completedWeeks = new Set();
   let allocatedWeeks = new Set();
 
@@ -193,10 +192,12 @@ const CompletedStatus = () => {
   );
 
   useEffect(() => {
+    console.log(selectMemberType, "1");
     dispatch(getSelectUserList(selectMemberType));
   }, [selectMemberType]);
 
   useEffect(() => {
+    console.log(selectMemberType, "2");
     dispatch(
       getCompletedStatus(
         currentBtn.toUpperCase(),
@@ -204,7 +205,8 @@ const CompletedStatus = () => {
         selectedMonth,
         selectedYear,
         router,
-        selectUser
+        selectUser,
+        selectMemberType
       )
     );
   }, [currentBtn, selectedMonth, selectedYear, selectUser]);

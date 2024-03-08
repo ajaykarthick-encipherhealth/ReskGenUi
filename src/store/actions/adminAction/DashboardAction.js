@@ -251,7 +251,8 @@ export const getCompletedStatus = (
   month,
   year,
   router,
-  selectUser
+  selectUser, 
+  role
 ) => {
   return (dispatch) => {
     dispatch({
@@ -261,7 +262,7 @@ export const getCompletedStatus = (
       },
     });
     try {
-      CompletedStatus(btn, date, month, year, router, selectUser).then(
+      CompletedStatus(btn, date, month, year, router, selectUser, role).then(
         (response) => {
           dispatch({
             type: COMPLETED_STATUS,
