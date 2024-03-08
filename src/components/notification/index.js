@@ -26,7 +26,6 @@ const Notification = ({ notificationResponse }) => {
       return name[0]?.toUpperCase();
     }
   };
-
   return (
     <div
       className={`card-body chatbox contacts_body p-0`}
@@ -56,7 +55,7 @@ const Notification = ({ notificationResponse }) => {
                   <div className="d-flex">
                     <span>{data?.content}</span>
                   </div>
-                  <p> {moment(data?.createdAt).fromNow()}</p>
+                  <p>{moment(data?.createdDate).fromNow()}</p>
                 </div>
               </div>
             </li>
