@@ -96,7 +96,6 @@ const statusOptions = [
   { label: "PENDING", value: "PENDING", status: 0 },
   { label: "DECLINED", value: "DECLINED", status: 0 },
   { label: "HOLD", value: "HOLD", status: 0 },
-  { label: "HOLD", value: "HOLD", status: 0 },
   { label: "ABORTED BY CRON", value: "ABORTED_BY_CRON" },
 ];
 

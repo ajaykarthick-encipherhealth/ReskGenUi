@@ -173,21 +173,21 @@ const BarChart = () => {
       data: datas?.response?.map((item) =>
         item?.totalFilePending ? item.totalFilePending : 0
       ),
-      color: "#eab077",
+      color: "#5da9e4",
     },
     {
-      name: "Total File Allocated",
+      name: "Total File Hold",
       data: datas?.response?.map((item) =>
-        item?.totalFileAllocated ? item.totalFileAllocated : 0
+        item?.totalFileHold ? item.totalFileHold : 0
       ),
-      color: "#00BC13",
+      color: "#4474c5",
     },
     {
-      name: "Total File Processed",
+      name: "Total File Completed",
       data: datas?.response?.map((item) =>
         item?.totalFileProcessed ? item.totalFileProcessed : 0
       ),
-      color: "#ED9331",
+      color: "#06c213",
     },
   ];
 
@@ -250,8 +250,8 @@ const BarChart = () => {
       },
     },
     yaxis: {
-      lables:{
-        show:true
+      lables: {
+        show: true,
       },
       categories: teams,
       // axisBorder: {
