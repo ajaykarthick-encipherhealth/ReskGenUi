@@ -154,6 +154,7 @@ const Details = ({}) => {
   const [confirmAuditModal, setConfirmAuditModal] = useState(false);
   const [allocateClicked, setAllocateClicked] = useState(false);
   const [error, setError] = useState({ year: "" });
+  const [hccValidCount, setHccValidCount] = useState(0);
 
   const flagPostList = [
     {
@@ -564,17 +565,20 @@ const Details = ({}) => {
         var validDisArray = [];
         result?.validDisease?.map((res, index) => {
           const encounterDatearray = res?.encounterDate?.split(",");
-          validDisArray.push({
-            actualDescription: res.actualDescription,
-            capturedSections: res.capturedSections,
-            diagnosisCode: res.diagnosisCode,
-            encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
-            isManuallyAdded: res.isManuallyAdded,
-            isHccValid: res.isHccValid,
-            defaultPosition: res.defaultPosition,
-          });
+          if (res?.isShow != false) {
+            validDisArray.push({
+              actualDescription: res.actualDescription,
+              capturedSections: res.capturedSections,
+              diagnosisCode: res.diagnosisCode,
+              encounterDate: res.encounterDate,
+              encounterDateSplit: encounterDatearray,
+              isManuallyAdded: res.isManuallyAdded,
+              isHccValid: res.isHccValid,
+              defaultPosition: res.defaultPosition,
+            });
+          }
         });
+        setHccValidCount(validDisArray.length + result?.comboDisease?.length);
 
         setNewValidDiseaseList(validDisArray);
         setDosYearDefalutSelect(highestDosValue[0]);
@@ -1819,9 +1823,7 @@ const Details = ({}) => {
                           <div className={`${visitStyles.hccCountHeader} `}>
                             <label>HCC</label>
 
-                            <h6 className="ageDtails">
-                              {newValidDiseaseList.length}
-                            </h6>
+                            <h6 className="ageDtails">{hccValidCount}</h6>
                           </div>
                         </div>
                       </div>
@@ -1900,7 +1902,7 @@ const Details = ({}) => {
                               placement="bottom"
                             >
                               <i className={visitStyles.sign_status}>
-                                {SVGICON.emptemptyFlagSmallLargeyFlag}
+                                {SVGICON.emptyFlagSmallLarge}
                               </i>
                             </Tooltip>
                           ) : flagFirstData?.flag == "NO_HCC_FOUND" ? (
