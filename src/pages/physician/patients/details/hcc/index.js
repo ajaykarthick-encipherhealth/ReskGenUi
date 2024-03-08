@@ -864,6 +864,7 @@ const Hcc = ({ patientHccResult }) => {
             });
           });
         });
+
         invalidDiseaseNewRes.map((res) => {
           res.capturedSections.map((res2, index) => {
             capturedSectionsArr.push({
@@ -879,6 +880,15 @@ const Hcc = ({ patientHccResult }) => {
               name: res2,
               diagnosisCode: res?.diagnosisCode,
             });
+          });
+
+          res.providerName?.map((res2, index) => {
+            if (res2) {
+              capturedSectionsArr?.push({
+                name: res2,
+                diagnosisCode: res?.diagnosisCode,
+              });
+            }
           });
         });
 
@@ -1665,7 +1675,6 @@ const Hcc = ({ patientHccResult }) => {
     ) {
       handleOpenModalRadiology(value, disDescription, true);
     } else if (documentPlace == "Lab" || whereCome == "Lab") {
-      console.log(value);
       setFileInitialPage(null);
       setFileDosPageNumber(null);
       var splitPoint = disDescription.substring(" ", 40);
@@ -8506,7 +8515,7 @@ const Hcc = ({ patientHccResult }) => {
                 <div>
                   <span className={styles.meatQueried_head}>Subject</span>
                   <p className={styles.meatQueried_details}>
-                    We've pinpointed the following details that may pertain to
+                    We've identified the following details that may pertain to
                     records associated with{" "}
                     <b>{patientHccResult?.patientName}</b>.
                   </p>

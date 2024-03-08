@@ -838,7 +838,7 @@ const Radiology = ({}) => {
     // setSelectMeatName(dataset);
     setSelectMeatName(dataset + " -  " + "Loading...");
     setIsLoadingSection(true);
-    setIsModalOpen(true);
+    setIsModalOpenRadiology(true);
     // setIsModalOpenValid(true)
     // getSectionResult(value.toLowerCase());
   };
@@ -861,6 +861,31 @@ const Radiology = ({}) => {
     handleOpenModalRadiology(value, disDescription, true);
   };
   const handleOpenModalRadiology = (
+    value,
+    disDescription,
+    radiologyCheck,
+    meatresult
+  ) => {
+    setSelectMeatResult(meatresult);
+    var splitPoint = disDescription.substring(" ", 40);
+    setTimeout(() => {
+      highlight({
+        keyword: splitPoint,
+        // matchCase: true,
+        // wholeWords:true
+      });
+      var dataset = value + " - (" + disDescription + ")";
+      setSelectMeatName(dataset);
+    }, 2000);
+    setDocumentLoaded(true);
+    var dataset = value + " - (" + disDescription + ")";
+    // setSelectMeatName(dataset);
+    setSelectMeatName(dataset + " -  " + "Loading...");
+    setIsLoadingSection(true);
+
+    handleOpenModal(value, disDescription);
+  };
+  const handleOpenModalRadiologyMeat = (
     value,
     disDescription,
     radiologyCheck,
@@ -985,7 +1010,7 @@ const Radiology = ({}) => {
         <span
           onClick={() =>
             handleOpenModalCombinationCode(
-              disCode,
+              value,
               res,
               "valid",
               "null",
@@ -1007,13 +1032,7 @@ const Radiology = ({}) => {
       const result = encounterDateMatching.filter((res2) => res2.name == res);
       var backColor = result[0]?.colors;
       var sectionMapArr = (
-        <Popover
-          onClick={() => getEncounterDetails(res)}
-          content={providerDetails}
-          title=""
-          placement="bottom"
-          trigger="click"
-        >
+        <span onClick={() => getEncounterDetails(res)}>
           <span
             className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
           >
@@ -1022,41 +1041,45 @@ const Radiology = ({}) => {
             </i>
             {moment(res).format("MMM DD")}
           </span>
-        </Popover>
+        </span>
       );
       return sectionMapArr;
     });
   };
 
   const getEncounterDetails = async (date) => {
-    var dotLoading = (
-      <div className={visitStyles.loadingFileHeader}>
-        <Spinner />
-      </div>
-    );
-    setProviderDetails(dotLoading);
-    var encounterDate = moment(date).format("MM/DD/YYYY");
-    var result = await getProviderDetails(localPatientId, encounterDate);
-    var data = "";
-    if (result?.status == "SUCCESS") {
-      var datas = result.response;
-      data = (
-        <div className="validhcc-details">
-          <div>Provider Name : {datas.providerName}</div>
-          <div>Authorized Provider : {datas.authorizedProvider}</div>
-          <div>UnAuthorize Provider : {datas.unAuthorizeProvider}</div>
-          <div>No Credential : {datas.noCredential}</div>
-          <div>UnSigned : {datas.unSigned}</div>
-        </div>
-      );
-    } else {
-      data = (
-        <div className="validhcc-details">
-          <div>Provider Not Found</div>
-        </div>
-      );
-    }
-    setProviderDetails(data);
+    var date = moment(date).format("DD");
+    highlight({
+      keyword: date,
+    });
+    // var dotLoading = (
+    //   <div className={visitStyles.loadingFileHeader}>
+    //     <Spinner />
+    //   </div>
+    // );
+    // setProviderDetails(dotLoading);
+    // var encounterDate = moment(date).format("MM/DD/YYYY");
+    // var result = await getProviderDetails(localPatientId, encounterDate);
+    // var data = "";
+    // if (result?.status == "SUCCESS") {
+    //   var datas = result.response;
+    //   data = (
+    //     <div className="validhcc-details">
+    //       <div>Provider Name : {datas.providerName}</div>
+    //       <div>Authorized Provider : {datas.authorizedProvider}</div>
+    //       <div>UnAuthorize Provider : {datas.unAuthorizeProvider}</div>
+    //       <div>No Credential : {datas.noCredential}</div>
+    //       <div>UnSigned : {datas.unSigned}</div>
+    //     </div>
+    //   );
+    // } else {
+    //   data = (
+    //     <div className="validhcc-details">
+    //       <div>Provider Not Found</div>
+    //     </div>
+    //   );
+    // }
+    // setProviderDetails(data);
   };
 
   const getCaptureSectionBackgroundMeat = (
@@ -1079,7 +1102,7 @@ const Radiology = ({}) => {
       var sectionMapArr = (
         <span
           onClick={() =>
-            handleOpenModalRadiology(value, dis, radiology, meatresult)
+            handleOpenModalRadiologyMeat(value, dis, radiology, meatresult)
           }
           style={{ backgroundColor: backColor, color: textColor }}
           className={`mt-2 text-start cr-pointer ${visitStyles.captureheaderMeat}`}
