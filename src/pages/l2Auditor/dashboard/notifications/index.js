@@ -42,8 +42,8 @@ const Notifications = () => {
           <div className={styles.msgCOntainer}>
             <span className={styles.description}>{info.content}</span>
             <div className={styles.time}>
-              {moment(info.createdAt).format("MM-DD-YYYY")}&nbsp;{" "}
-              {moment(info.createdAt).format("hh:mm:A")} &nbsp;{" "}
+              {moment(info?.createdDate).format("MM-DD-YYYY")}&nbsp;{" "}
+              {moment(info?.createdDate).format("hh:mm:A")} &nbsp;{" "}
               {`${info?.fromUserDetails?.firstName?info?.fromUserDetails?.firstName:""} (${
                 info?.fromUserDetails?.role?info?.fromUserDetails?.role:""
               })`}
