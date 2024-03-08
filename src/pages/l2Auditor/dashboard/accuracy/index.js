@@ -159,7 +159,6 @@ const Accuracy = () => {
     highlightIndex = currentWeek - 1;
   }
 
-
   const option = {
     chart: {
       type: "column",
@@ -183,10 +182,10 @@ const Accuracy = () => {
       {
         // primary yAxis (right)
         title: {
-          text: "Reviewers Accuracy",
-          style:{
-            color:'#2dafff'
-          }
+          text: "Reviewers Quality",
+          style: {
+            color: "#2dafff",
+          },
         },
         labels: {
           format: "{value}%",
@@ -202,10 +201,10 @@ const Accuracy = () => {
       {
         // Secondary yAxis (right)
         title: {
-          text: "TotalCorrected Count",
-          style:{
-            color:"#0b59f1"
-          }
+          text: "Total Corrected Count",
+          style: {
+            color: "#0b59f1",
+          },
         },
         labels: {
           format: "{value}",
@@ -218,7 +217,6 @@ const Accuracy = () => {
         min: 0, // Set the minimum value
         max: 10, // Set the maximum value
         tickInterval: 4, // Set the tick interval to 1
-  
       },
     ],
     legend: {
@@ -292,9 +290,11 @@ const Accuracy = () => {
       // },
       {
         name: "totalCorrectCount",
-        data: accuracyDatas?.data?.response?.mapAccuracy?.map((item) => item?.totalCorrectCount),
+        data: accuracyDatas?.data?.response?.mapAccuracy?.map(
+          (item) => item?.totalCorrectCount
+        ),
         color: "#0b59f1",
-        yAxis:1
+        yAxis: 1,
       },
       // {
       //   name: "totalWrongCount",
@@ -304,11 +304,13 @@ const Accuracy = () => {
       {
         name: "Temperature",
         type: "spline",
-        data: accuracyDatas?.data?.response?.mapAccuracy?.map((item) => item?.averageScore),
+        data: accuracyDatas?.data?.response?.mapAccuracy?.map(
+          (item) => item?.averageScore
+        ),
         tooltip: {
           valueSuffix: "",
         },
-        yAxis:0
+        yAxis: 0,
       },
     ],
   };
@@ -380,7 +382,7 @@ const Accuracy = () => {
                   <Spin loading={accuracyDatas?.loading} />
                 </div>
               ) : accuracyDatas?.loading === false &&
-                accuracyDatas?.data?.response?.mapAccuracy.length>0 ? (
+                accuracyDatas?.data?.response?.mapAccuracy.length > 0 ? (
                 option && (
                   <div className={styles.highchartStyle}>
                     <HighchartsReact
@@ -399,7 +401,7 @@ const Accuracy = () => {
             <div className={styles.accuracy}>
               <div className={styles.header}>
                 <Image src={accuracy} className={styles.Img} />
-                <div className={styles.heading}>Accuracy</div>
+                <div className={styles.heading}>Quality</div>
               </div>
               <div className={styles.month}>
                 {currentBtn === "Daily"
@@ -411,12 +413,12 @@ const Accuracy = () => {
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
                   {accuracyDatas?.data?.response?.mapAccuracy &&
-                  accuracyDatas?.data?.response?.mapAccuracy[highlightIndex-1]
-                    ? `${
-                        Math.round(accuracyDatas?.data?.response?.mapAccuracy[
-                          highlightIndex-1
-                        ]?.averageScore)
-                      }%`
+                  accuracyDatas?.data?.response?.mapAccuracy[highlightIndex - 1]
+                    ? `${Math.round(
+                        accuracyDatas?.data?.response?.mapAccuracy[
+                          highlightIndex - 1
+                        ]?.averageScore
+                      )}%`
                     : "0%"}
                 </span>
               </div>
