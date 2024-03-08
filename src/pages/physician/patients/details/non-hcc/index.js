@@ -652,7 +652,6 @@ const NonHcc = ({ patientNonHccResult }) => {
         );
 
         var sectionColorResult = response.data.response;
-        console.log(sectionColorResult);
 
         let sectionColorResultMatch = sectionColorResult.filter((o1) =>
           dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
@@ -683,8 +682,6 @@ const NonHcc = ({ patientNonHccResult }) => {
           ...notMatchColorArray,
           ...sectionColorResult,
         ];
-
-        console.log(sectionColorResultMatch, notMatchColorArray);
 
         setCaptureSectionMatching(newArrayColorMatchs);
 
@@ -1141,35 +1138,49 @@ const NonHcc = ({ patientNonHccResult }) => {
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
-
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/pageNumber?header=${disDescription}&fileId=${fileId}&dos=${encounterDatesHeader}`
-    );
-    var result = response.data.response;
-    if (result?.length) {
-      var pageNumber = result[0] - 1;
-      if (pageNumber == fileInitialPage) {
-        setFileLoading(false);
-        notification.warning({
-          message: "This detail also same page",
-          placement: "top",
-          duration: 1,
-        });
+    var splitPoint = actualDescription.substring(" ", 20);
+    try {
+      const response = await axios.get(
+        ENDPOINTS.apiEndoint +
+          `dbservice/pageNumber?header=${disDescription}&fileId=${fileId}&dos=${encounterDatesHeader}&stringFileWord=${splitPoint}`
+      );
+      var result = response.data.response;
+      if (response?.data?.status == "SUCCESS") {
+        setFileInitialPage(pageNumber);
+        if (result?.first == false) {
+          splitPoint = disDescription;
+        }
+        var pageNumber = result?.second[0] - 1;
+        if (pageNumber == fileInitialPage) {
+          setFileLoading(false);
+          notification.warning({
+            message: "This detail also same page",
+            placement: "top",
+            duration: 1,
+          });
+        }
+        setFileInitialPage(pageNumber);
+      } else {
+        setFileInitialPage(null);
       }
-      setFileInitialPage(pageNumber);
-    } else {
-      setFileInitialPage(null);
-    }
 
-    var splitPoint = actualDescription.substring(" ", 10);
-    setTargetPages(
-      (targetPage) =>
-        targetPage.pageIndex === pageNumber ||
-        targetPage.pageIndex === pageNumber + 1 ||
-        targetPage.pageIndex === pageNumber + 2
-    );
-    setFindFileKeyword(splitPoint);
+      setTargetPages(
+        (targetPage) =>
+          targetPage.pageIndex === pageNumber ||
+          targetPage.pageIndex === pageNumber + 1 ||
+          targetPage.pageIndex === pageNumber + 2
+      );
+      setFindFileKeyword(splitPoint);
+    } catch (error) {
+      setFileLoading(false);
+      splitPoint = disDescription;
+      setFileInitialPage(null);
+      setFileDosPageNumber(null);
+      if (findFileKeyword == splitPoint) {
+        setFileLoading(false);
+      }
+      setFindFileKeyword(splitPoint);
+    }
   };
   const handleOpenModalCombinationCode = async (
     value,
@@ -1498,7 +1509,6 @@ const NonHcc = ({ patientNonHccResult }) => {
   };
 
   const getProviderNameList = (data) => {
-    console.log(captureSectionMatching);
     var dublicateCaptureDelete = removeDuplicates(data);
     return dublicateCaptureDelete.map((res) => {
       const result = captureSectionMatching.filter(
