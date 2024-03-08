@@ -21,11 +21,14 @@ function AllocatedL2AdminList({
   selectedChart,
   setSort,
   loading,
+  sort,
+  setSortDueOrder,
+  sortDueOrder,
+  setSortCompleteOrder,
+  sortCompleteOrder,
 }) {
   const dispatch = useDispatch();
   const [selectedRows, setSelectedRows] = useState([]);
-  const [sortDueOrder, setSortDueOrder] = useState("DESC");
-  const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
 
   const handleRowCheckboxChange = (row) => {
     const isSelected = selectedRows.some(
@@ -44,7 +47,6 @@ function AllocatedL2AdminList({
 
     setSelectedRows(updatedRows);
   };
-
   const renderRows = () => {
     return patinetListAll?.map((data, index) => (
       <tr
@@ -141,6 +143,7 @@ function AllocatedL2AdminList({
             <th
               onClick={() => {
                 sortFunction(sortDueOrder, setSortDueOrder, setSort, "dueDate");
+                setSortCompleteOrder("DESC");
               }}
             >
               DUE DATE
@@ -161,6 +164,7 @@ function AllocatedL2AdminList({
                   setSort,
                   "processedDate"
                 );
+                setSortDueOrder("DESC");
               }}
             >
               COMPLETED DATE

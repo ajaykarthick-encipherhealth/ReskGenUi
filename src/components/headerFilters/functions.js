@@ -34,7 +34,6 @@ export const handleSelector = (option, setSelectedOption) => {
 };
 
 export const processstatusBodyTemplate = (rowData) => {
-  console.log(rowData, "test");
   switch (rowData.processedStatus) {
     case "COMPLETED":
       return (
@@ -204,6 +203,7 @@ export const dateFormate = (dayjs, date) => {
 
 //sorting
 export const sortFunction = (sortDir, setSortDir, setSort, field) => {
+  console.log(sortDir, field, "test");
   setSortDir(sortDir === "ASC" ? "DESC" : "ASC");
   setSort({ sortDir: sortDir === "ASC" ? "DESC" : "ASC", sortField: field });
 };
