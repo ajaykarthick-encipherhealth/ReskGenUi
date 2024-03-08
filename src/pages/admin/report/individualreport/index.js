@@ -330,7 +330,8 @@ const IndividualReceiverReport = () => {
                 overflowX: "scroll",
               }}
             >
-              {!url?.extention ? (
+             
+              {(!url?.extention && (tableData?.length ===0 ||csvTableData?.length===0 )) || loading  ? (
                 <div
                   style={{
                     display: "flex",
