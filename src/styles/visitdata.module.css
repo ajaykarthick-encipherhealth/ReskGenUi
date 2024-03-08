@@ -1245,8 +1245,8 @@
 }
 .pendingBtn {
   font-size: 13px;
-  color: #452b90;
-  background: #dfd8f3 !important;
+  color: #5da9e4;
+  background: #c2e1f9 !important;
   border: none !important;
   box-shadow: none !important;
   border-radius: 6px;
@@ -1527,6 +1527,15 @@
   letter-spacing: 0.78px;
   color: #ce9900 !important;
   background: #ffebad !important;
+  border-radius: 6px !important;
+}
+.auditdecline_text {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.78px;
+  color: #ff5e5e !important;
+  background: #ffdede !important;
   border-radius: 6px !important;
 }
 .auditpending_text {

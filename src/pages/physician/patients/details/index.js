@@ -1622,7 +1622,6 @@ const Details = ({}) => {
       dos: selectedDosValue,
     };
     var result = await auditDecline(postData);
-    console.log(result, "result");
     if (result.status == "SUCCESS") {
       getPatientIdDetails(localPatientId);
       setConfirmNotesModalHold(false);
@@ -1666,7 +1665,7 @@ const Details = ({}) => {
           </Menu.Item>
           <Menu.Item key="4" onClick={() => auditPatient(5)}>
             <div className="patient-status">
-              <span className={`badge ${visitStyles.audithold_text}`}>
+              <span className={`badge ${visitStyles.auditdecline_text}`}>
                 AUDIT DECLINE
               </span>
             </div>
@@ -2006,6 +2005,9 @@ const Details = ({}) => {
                                   ? `auditBtnHcc`
                                   : patienIdDetails?.auditedStatus == "REAUDIT"
                                   ? `reauditBtnHcc`
+                                  : patienIdDetails?.auditedStatus ==
+                                    "AUDIT_DECLINED"
+                                  ? `declineBtnHcc`
                                   : `auditBtnHcc`
                               }
                               icon={<DownOutlined />}
