@@ -2,9 +2,9 @@
     /* display: flex; */
     position: relative;
     top: 50px;
-    height: 135vh;
+    height: auto;
     /* background-color: #F0F6FE;; */
-    padding-bottom: 10px;
+    padding-bottom: 50px;
   }
   .rowCOntainer {
     width:95%;
