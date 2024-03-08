@@ -48,7 +48,14 @@ const bullets = [
         color: "#3a9b94",
         name: "Completed",
       },
-      { color: "#AD94FA", name: "Hold" },
+      {
+        color: "#AD94FA",
+        name: "Hold",
+      },
+      {
+        color: "#3B3486",
+        name: "ABORTED BY CRON",
+      },
     ],
   },
   {
