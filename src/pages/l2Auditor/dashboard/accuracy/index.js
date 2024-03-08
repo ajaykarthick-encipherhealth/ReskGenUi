@@ -67,8 +67,8 @@ const Accuracy = () => {
     (state) => state?.l2Dashboard?.individualUser
   );
   const numberOfWeeks =
-    accuracyDatas?.data?.response &&
-    Object.keys(accuracyDatas?.data?.response.mapAccuracy)?.length;
+    accuracyDatas?.data?.response?.mapAccuracy &&
+    Object?.keys(accuracyDatas?.data?.response.mapAccuracy)?.length;
 
   const weekNames = Array.from(
     { length: numberOfWeeks },
@@ -88,7 +88,27 @@ const Accuracy = () => {
       label: res.firstName + " " + res.lastName,
     })
   );
-
+  const chartBlockedDates = (year, month, param, val) => {
+    year = Number(year);
+    month = Number(month);
+    if (year < currentDate.getFullYear()) {
+      return param?.data?.response?.mapAccuracy?.map((item) => item[val]);
+    } else if (
+      year == currentDate.getFullYear() &&
+      month < currentDate.getMonth() + 1
+    ) {
+      return param?.data?.response?.mapAccuracy?.map((item) => item[val]);
+    } else if (
+      year == currentDate.getFullYear() &&
+      month == currentDate.getMonth() + 1
+    ) {
+      return param?.data?.response?.mapAccuracy?.map(
+        (item, index) => index < new Date().getDate() && item[val]
+      );
+    } else {
+      return false;
+    }
+  };
   const memberTypeChanges = (e) => {
     setSelectMemberType(e);
     setIsindividual(false);
@@ -141,7 +161,7 @@ const Accuracy = () => {
     xAxisData = monthNames;
   } else if (currentBtn === "Daily") {
     xAxisData = getDays(
-      accuracyDatas?.data?.response &&
+      accuracyDatas?.data?.response?.mapAccuracy &&
         Object.keys(accuracyDatas?.data?.response?.mapAccuracy)?.length
     );
   } else if (currentBtn === "Weekly") {
@@ -304,8 +324,11 @@ const Accuracy = () => {
       {
         name: "Temperature",
         type: "spline",
-        data: accuracyDatas?.data?.response?.mapAccuracy?.map(
-          (item) => item?.averageScore
+        data: chartBlockedDates(
+          selectedYear,
+          selectedMonth,
+          accuracyDatas,
+          "averageScore"
         ),
         tooltip: {
           valueSuffix: "",
@@ -382,7 +405,7 @@ const Accuracy = () => {
                   <Spin loading={accuracyDatas?.loading} />
                 </div>
               ) : accuracyDatas?.loading === false &&
-                accuracyDatas?.data?.response?.mapAccuracy.length > 0 ? (
+                accuracyDatas?.data?.response?.mapAccuracy?.length > 0 ? (
                 option && (
                   <div className={styles.highchartStyle}>
                     <HighchartsReact

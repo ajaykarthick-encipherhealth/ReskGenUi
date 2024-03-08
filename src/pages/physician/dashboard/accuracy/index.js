@@ -90,6 +90,28 @@ const Accuracy = () => {
     setCurrentBtn(btn);
   };
 
+  const chartBlockedDates = (year, month, param, val) => {
+    year = Number(year);
+    month = Number(month);
+    if (year < currentDate.getFullYear()) {
+      return param?.data?.response.map((item) => item[val]);
+    } else if (
+      year == currentDate.getFullYear() &&
+      month < currentDate.getMonth() + 1
+    ) {
+      return param?.data?.response.map((item) => item[val]);
+    } else if (
+      year == currentDate.getFullYear() &&
+      month == currentDate.getMonth() + 1
+    ) {
+      return param?.data?.response.map(
+        (item, index) => index < new Date().getDate() && item[val]
+      );
+    } else {
+      return false;
+    }
+  };
+
   const handleYearChange = (date, dateString) => {
     setSelectedYear(dateString);
   };
@@ -152,8 +174,8 @@ const Accuracy = () => {
         title: {
           text: "Quality",
           style: {
-            color: "#2dafff" 
-        }
+            color: "#2dafff",
+          },
         },
         labels: {
           format: "{value}%",
@@ -163,15 +185,16 @@ const Accuracy = () => {
           },
         },
         opposite: false,
-        max:100
+        min: 0,
+        max: 100,
       },
       {
         // Secondary yAxis (right)
         title: {
           text: "Manual Corrections Count",
           style: {
-            color: "#0b59f1" 
-        }
+            color: "#0b59f1",
+          },
         },
         labels: {
           format: "{value}",
@@ -271,7 +294,12 @@ const Accuracy = () => {
       {
         name: "Temperature",
         type: "spline",
-        data: accuracyDatas?.data?.response.map((item) => item?.averageScore),
+        data: chartBlockedDates(
+          selectedYear,
+          selectedMonth,
+          accuracyDatas,
+          "averageScore"
+        ),
         tooltip: {
           valueSuffix: "",
         },
@@ -279,7 +307,7 @@ const Accuracy = () => {
       },
     ],
   };
-
+  
   return (
     <>
       <HeadTitle header="Reviewer Quality Score" />
@@ -354,10 +382,10 @@ const Accuracy = () => {
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
                   {accuracyDatas?.data?.response
-                    ? `${
-                       Math.round( accuracyDatas?.data?.response[highlightIndex-1]
-                        ?.averageScore)
-                      }%`
+                    ? `${Math.round(
+                        accuracyDatas?.data?.response[highlightIndex - 1]
+                          ?.averageScore
+                      )}%`
                     : "0%"}
                 </span>
               </div>
