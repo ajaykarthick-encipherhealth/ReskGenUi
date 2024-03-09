@@ -271,7 +271,7 @@ const Timeline = ({
                             paddingLeft: "5px",
                           }}
                         >
-                          COMPLETD
+                          COMPLETED
                         </span>
                         {/* Changed from
                         {item.previousProcessedState} to COMPLETD */}
