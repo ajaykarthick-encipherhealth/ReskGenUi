@@ -323,7 +323,7 @@ function TeamReport({
               <>
                 <th className={TableStyle.rowStyle3}>PATIENT ID</th>
                 <th>PATIENT NAME</th>
-                <th className={TableStyle.rowStyle2}>L1 AUDITOR </th>
+                <th className={TableStyle.rowStyle2}>REVIEWER</th>
                 <th
                   style={{ cursor: "pointer" }}
                   onClick={() => {
@@ -465,7 +465,7 @@ function TeamReport({
                       {row?.flag ? (
                         getFlag(row?.flag)
                       ) : (
-                        <div style={{ marginLeft: "-10px" }}>---</div>
+                        <div>{SVGICON.emptyFlag}</div>
                       )}
                     </td>
                     <td

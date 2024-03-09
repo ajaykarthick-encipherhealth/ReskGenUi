@@ -9,6 +9,7 @@ import Footer from "../../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
 import {
   dateFormate,
+  renderUserPrfoileAvatar,
   sortFunction,
 } from "../../../../components/headerFilters/functions";
 import visitStyles from "../../../../styles/visitdata.module.css";
@@ -79,7 +80,10 @@ function CoderReport({
         return (
           <Popover placement="bottom" title="Status: COMPLETED">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Completed} style={{ height: "30px", width: "30px" }} />
+              <Image
+                src={Completed}
+                style={{ height: "30px", width: "30px" }}
+              />
             </div>
           </Popover>
         );
@@ -280,7 +284,7 @@ function CoderReport({
                     );
                   }}
                 >
-                  COMPLETE DATE{" "}
+                  COMPLETED DATE{" "}
                   {sortOrder === "ASC" ? (
                     <ArrowUpOutlined />
                   ) : (
@@ -376,7 +380,26 @@ function CoderReport({
                       </td>
                       <td className={TableStyle.childBorder}>
                         <div className={TableStyle.rowAlignment}>
-                          {row?.auditedBy ? row?.auditedBy : "---"}
+                          {row.auditedByFirstName ||
+                          row.auditedByLastName ||
+                          row?.auditedByProfileImage ? (
+                            <>
+                              <span style={{ marginRight: "10px" }}>
+                                {" "}
+                                {renderUserPrfoileAvatar(
+                                  row.auditedByFirstName,
+                                  row.auditedByLastName,
+                                  row?.auditedByProfileImage,
+                                  "header"
+                                )}
+                              </span>
+                              <span>
+                                {row.auditedByFirstName} {row.auditedByLastName}
+                              </span>
+                            </>
+                          ) : (
+                            <div style={{ textAlign: "center" }}>---</div>
+                          )}
                         </div>
                       </td>
                       <td className={TableStyle.childBorder}>
