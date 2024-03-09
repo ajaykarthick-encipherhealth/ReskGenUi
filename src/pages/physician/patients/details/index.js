@@ -2047,7 +2047,7 @@ const Details = ({}) => {
                                   : patienIdDetails?.auditedStatus ==
                                     "AUDIT_PENDING"
                                   ? `auditPendingBtnHcc`
-                                  : patienIdDetails?.audAUDITPENDINGitedStatus == "AUDITED"
+                                  : patienIdDetails?.auditedStatus == "AUDITED"
                                   ? `auditBtnHcc`
                                   : patienIdDetails?.auditedStatus == "REAUDIT"
                                   ? `reauditBtnHcc`
