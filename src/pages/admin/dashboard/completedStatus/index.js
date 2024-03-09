@@ -227,7 +227,7 @@ const CompletedStatus = () => {
                   onChange={(e) => memberTypeChanges(e)}
                   className={`custom_select_type ${styles.custom_select_type}`}
                   options={options}
-                  style={{ backgroundColor: "#F3F3FF" }}
+                  style={{ backgroundColor: "#F3F3FF", width: "140px" }}
                 />
               </div>
               {isindividual ? (
