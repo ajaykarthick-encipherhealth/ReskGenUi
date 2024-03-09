@@ -58,6 +58,16 @@ const UserQueue = ({ userList, setSort, auditBodyTemplate }) => {
           style={{ fontSize: "10px" }}
         ></Badge.Ribbon>
       );
+    }
+    else if (data.auditedStatus === "AUDIT_DECLINED") {
+      return (
+        <Badge.Ribbon
+          text="Audit Declined"
+          color="#D40B0B"
+          placement="start"
+          style={{ fontSize: "10px" }}
+        ></Badge.Ribbon>
+      );
     } else return null;
   };
 

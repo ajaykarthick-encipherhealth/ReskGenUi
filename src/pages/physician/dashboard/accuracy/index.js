@@ -191,7 +191,7 @@ const Accuracy = () => {
       {
         // Secondary yAxis (right)
         title: {
-          text: "Manual Corrections Count",
+          text: "Reviewer Changes Count",
           style: {
             color: "#0b59f1",
           },
@@ -250,10 +250,10 @@ const Accuracy = () => {
             finalData.averageScore +
             "<br/>" +
             "Total Correct: " +
-            finalData.totalCorrectCount
-            // "<br/>" +
-            // "Total Wrong: " +
-            // finalData.totalWrongCount
+            finalData.totalCorrectCount+
+            "<br/>" +
+            "Total Wrong: " +
+            finalData.totalWrongCount
           );
         } else {
           return "No data available";
@@ -280,17 +280,18 @@ const Accuracy = () => {
       // },
       {
         name: "totalCorrectCount",
-        data: accuracyDatas?.data?.response.map(
+        data: accuracyDatas?.data?.response?.map(
           (item) => item?.totalCorrectCount
         ),
         color: "#0b59f1",
         yAxis: 1,
       },
-      // {
-      //   name: "totalWrongCount",
-      //   data: accuracyDatas?.data?.response.map((item) => item.totalWrongCount),
-      //   color: "#0000cc",
-      // },
+      {
+        name: "totalWrongCount",
+        data: accuracyDatas?.data?.response?.map((item) => item.totalWrongCount),
+        color: "red",
+        yAxis: 1,
+      },
       {
         name: "Temperature",
         type: "spline",
