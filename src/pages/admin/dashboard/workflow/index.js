@@ -40,6 +40,7 @@ const WorkFlow = () => {
   );
 
   const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
+
   const [dateRange, setDateRange] = useState({
     processedStatus: {
       PENDING: 0,
@@ -75,10 +76,10 @@ const WorkFlow = () => {
       id: 1,
       icon: tci,
       title: "Total charts",
-      charts: worlFlowData?.data?.response?.processedStatus
-        ? worlFlowData?.data?.response?.processedStatus.PENDING +
-          worlFlowData?.data?.response?.processedStatus.COMPLETED +
-          worlFlowData?.data?.response?.processedStatus.HOLD
+      charts: dateRange.processedStatus
+        ? dateRange.processedStatus.PENDING +
+          dateRange.processedStatus.COMPLETED +
+          dateRange.processedStatus.HOLD
         : "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
@@ -89,11 +90,11 @@ const WorkFlow = () => {
       id: 2,
       icon: allocated,
       title: "Allocated",
-      charts: worlFlowData?.data?.response?.processedStatus
-        ? worlFlowData?.data?.response?.processedStatus.COMPLETED +
-          worlFlowData?.data?.response?.auditedStatus.PENDING +
-          worlFlowData?.data?.response?.auditedStatus.HOLD +
-          worlFlowData?.data?.response?.auditedStatus.DECLINED
+      charts: dateRange.processedStatus
+        ? dateRange.processedStatus.COMPLETED +
+          dateRange.processedStatus.PENDING +
+          dateRange.processedStatus.HOLD +
+          dateRange.processedStatus.DECLINED
         : "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
@@ -104,8 +105,8 @@ const WorkFlow = () => {
       id: 3,
       icon: pendingIcon,
       title: "Pending",
-      charts: worlFlowData?.data?.response?.processedStatus
-        ? worlFlowData?.data?.response?.processedStatus.PENDING
+      charts: dateRange.processedStatus
+        ? dateRange.processedStatus.PENDING
         : "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
@@ -116,8 +117,8 @@ const WorkFlow = () => {
       id: 4,
       icon: completed,
       title: "Completed",
-      charts: worlFlowData?.data?.response?.processedStatus
-        ? worlFlowData?.data?.response?.processedStatus.COMPLETED
+      charts: dateRange.processedStatus
+        ? dateRange.processedStatus.COMPLETED
         : "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
@@ -128,9 +129,7 @@ const WorkFlow = () => {
       id: 5,
       icon: auditedIcon,
       title: "Audited",
-      charts: worlFlowData?.data?.response?.auditedStatus
-        ? worlFlowData?.data?.response?.auditedStatus.AUDITED
-        : "0",
+      charts: dateRange.auditedStatus ? dateRange.auditedStatus.AUDITED : "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -140,8 +139,8 @@ const WorkFlow = () => {
       id: 6,
       icon: reAuditIcon,
       title: "Audit Pending",
-      charts: worlFlowData?.data?.response?.auditedStatus
-        ? worlFlowData?.data?.response?.auditedStatus.AUDIT_PENDING
+      charts: dateRange.auditedStatus
+        ? dateRange.auditedStatus.AUDIT_PENDING
         : "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
@@ -152,9 +151,7 @@ const WorkFlow = () => {
       id: 7,
       icon: auditHoldIcon,
       title: "Audit Hold",
-      charts: worlFlowData?.data?.response?.auditedStatus
-        ? worlFlowData?.data?.response?.auditedStatus.AUDITHOLD
-        : "0",
+      charts: dateRange.auditedStatus ? dateRange.auditedStatus.AUDITHOLD : "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -164,8 +161,8 @@ const WorkFlow = () => {
       id: 8,
       icon: declineIcon,
       title: "Declined",
-      charts: worlFlowData?.data?.response?.processedStatus
-        ? worlFlowData?.data?.response?.processedStatus.DECLINED
+      charts: dateRange.processedStatus
+        ? dateRange.processedStatus.DECLINED
         : "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
