@@ -33,7 +33,6 @@ const statusOptions = [
   { label: "Pending", value: "PENDING" },
   { label: "Declined", value: "DECLINED" },
   { label: "Hold", value: "HOLD" },
-
 ];
 const index = () => {
   const dispatch = useDispatch();
@@ -270,7 +269,7 @@ const index = () => {
     receivedEndDate,
     receivedSearch,
     reportActiveTab,
-    sort
+    sort,
   ]);
 
   useEffect(() => {
@@ -333,7 +332,16 @@ const index = () => {
                             ) : null}
 
                             <div className="col-xl-2">
-                              <label>Select Range</label>
+                              <label>
+                                {" "}
+                                {activeTab === "ReceivedReport"
+                                  ? "Received Date"
+                                  : activeTab === "SentReport"
+                                  ? "Sent Date"
+                                  : activeTab === "AuditReport"
+                                  ? "Audit Date"
+                                  : "Select Date"}
+                              </label>
                               <div>
                                 <RangePicker
                                   value={selectedDates}
@@ -344,9 +352,9 @@ const index = () => {
                                       ? handleReceivedDatePicker
                                       : handleCoderPicker
                                   }
-                                  disabledDate={(current) => 
+                                  disabledDate={(current) =>
                                     disableFutureDate(current)
-                                  } 
+                                  }
                                 />
                               </div>
                             </div>
