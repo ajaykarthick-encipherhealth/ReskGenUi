@@ -370,7 +370,7 @@ const Accuracy = () => {
             <div className={styles.accuracy}>
               <div className={styles.header}>
                 <Image src={accuracy} className={styles.Img} />
-                <div className={styles.heading}>Accuracy</div>
+                <div className={styles.heading}>Average Quality</div>
               </div>
               <div className={styles.month}>
                 {currentBtn === "Daily"
