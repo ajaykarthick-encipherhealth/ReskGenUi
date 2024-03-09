@@ -254,7 +254,7 @@
 .codeBtn:active,
 .codeBtn:focus {
   color: #fff;
-  background-color: #3468C0 !important;
+  background-color: #04306f !important;
   border: none;
 }
 
@@ -286,6 +286,7 @@
 }
 
 .displayDiv {
+  width: 96%;
   height: 200px !important;
   overflow-y: scroll;
 }
@@ -310,7 +311,7 @@
   background-color: rgba(209, 218, 250, 1);
   color: rgba(22, 64, 214, 1);
   padding: 2px 0px;
-  width: 45px;
+  width: 100% !important;
   height: 20px;
   text-align: center;
   font-size: 12px;

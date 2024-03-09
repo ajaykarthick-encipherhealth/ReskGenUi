@@ -167,9 +167,11 @@ const Header = () => {
     setLastName(currentUserInfo?.data?.response?.lastName);
     setDropdownContent(currentUserInfo?.data?.response?.role);
     var userId = currentUserInfo?.data?.response?.id;
+    const userName=currentUserInfo?.data?.response?.userName
+
     dispatch(getNotificationList(userId));
     const sse = new EventSource(
-      `${ENDPOINTS?.apiEndoint}communication/push-notifications/${userId}?token=${token}`
+      `${ENDPOINTS?.apiEndoint}communication/push-notifications/${userName}?token=${token}`
     );
     sse.addEventListener("user-list-event", (event) => {
       const data = JSON.parse(event.data);
