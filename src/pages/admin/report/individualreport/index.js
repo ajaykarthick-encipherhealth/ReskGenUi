@@ -32,6 +32,7 @@ import SpinnerDots from "../../../../components/spinner";
 import leftArrow from "../../../../images/svg/leftArrow.svg";
 import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
 import { useRouter } from "next/router";
+import { getReportActiveTab } from "../../../../store/actions/adminAction/ReportActions";
 
 const IndividualReceiverReport = () => {
   const dispatch = useDispatch();
@@ -161,11 +162,14 @@ const IndividualReceiverReport = () => {
                   style={{ width: "40px", height: "30px" }}
                   className={reportStyles.filterBtn}
                   onClick={() => {
-                    router?.push(
-                     "/admin/report"
-                    );
+                    router?.push("/admin/report");
                     dispatch(
                       getActiveTab(
+                        isSentReport ? "SentReport" : "ReceivedReport"
+                      )
+                    );
+                    dispatch(
+                      getReportActiveTab(
                         isSentReport ? "SentReport" : "ReceivedReport"
                       )
                     );
@@ -216,9 +220,7 @@ const IndividualReceiverReport = () => {
                               setReportInfo(item);
                               dispatch(
                                 getSelectedReportDetails(
-                                  isSentReport
-                                    ? item?._id
-                                    : item?.reportId,
+                                  isSentReport ? item?._id : item?.reportId,
                                   item
                                 )
                               );
@@ -330,8 +332,9 @@ const IndividualReceiverReport = () => {
                 overflowX: "scroll",
               }}
             >
-             
-              {(!url?.extention && (tableData?.length ===0 ||csvTableData?.length===0 )) || loading  ? (
+              {(!url?.extention &&
+                (tableData?.length === 0 || csvTableData?.length === 0)) ||
+              loading ? (
                 <div
                   style={{
                     display: "flex",

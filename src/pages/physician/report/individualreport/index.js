@@ -32,6 +32,7 @@ import SpinnerDots from "../../../../components/spinner";
 import leftArrow from "../../../../images/svg/leftArrow.svg";
 import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
 import { useRouter } from "next/router";
+import { getReportActiveTab } from "../../../../store/actions/adminAction/ReportActions";
 
 const IndividualReceiverReport = () => {
   const dispatch = useDispatch();
@@ -56,6 +57,7 @@ const IndividualReceiverReport = () => {
 
   const [loading, setLoading] = useState(false);
   const [isSentReport, setIsSentReport] = useState(false);
+  const [isAdminPage, setIsAdminPage] = useState(false)
   const fetchData = async (url) => {
     setLoading(true);
     try {
@@ -104,6 +106,10 @@ const IndividualReceiverReport = () => {
     const reportConfirm = new URLSearchParams(window.location.search).get(
       "sentreport"
     );
+    const isAdminPage = new URLSearchParams(window.location.search).get(
+      "isAdminPage"
+    );
+    setIsAdminPage(isAdminPage)
     if (reportConfirm) {
       setIsSentReport(true);
       dispatch(getSentDetails(0, "", "", searchValue, sort));
@@ -161,9 +167,19 @@ const IndividualReceiverReport = () => {
                   style={{ width: "40px", height: "30px" }}
                   className={reportStyles.filterBtn}
                   onClick={() => {
-                    router?.push("/physician/report");
+                    if (isAdminPage) {
+                      router?.push("/admin/report");
+                    } else {
+                      router?.push("/physician/report");
+                    }
+
                     dispatch(
                       getActiveTab(
+                        isSentReport ? "SentReport" : "ReceivedReport"
+                      )
+                    );
+                    dispatch(
+                      getReportActiveTab(
                         isSentReport ? "SentReport" : "ReceivedReport"
                       )
                     );
@@ -326,8 +342,9 @@ const IndividualReceiverReport = () => {
                 overflowX: "scroll",
               }}
             >
-             
-              {(!url?.extention && (tableData?.length ===0 ||csvTableData?.length===0 )) || loading  ? (
+              {(!url?.extention &&
+                (tableData?.length === 0 || csvTableData?.length === 0)) ||
+              loading ? (
                 <div
                   style={{
                     display: "flex",

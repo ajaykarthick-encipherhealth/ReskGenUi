@@ -40,7 +40,7 @@ function ReceivedReport({
     };
     dispatch(selectedReport(info));
     router?.push(
-      `/physician/report/individualreport?reportId=${info?.reportUser?.reportId}`
+      `/physician/report/individualreport?reportId=${info?.reportUser?.reportId}&isAdminPage=${true}`
     );
   };
 
