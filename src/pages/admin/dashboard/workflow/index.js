@@ -54,18 +54,28 @@ const WorkFlow = () => {
       AUDITHOLD: 0,
     },
   });
+  const [chartValue, setChartValue] = useState({
+    totalAuditedAssigned: 0,
+    totalPatients: 0,
+    totalPatientsAllocated: 0,
+  });
 
   const [openPicker, setOpenPicker] = useState(false);
 
   const last30thDate = currentDate?.subtract(31, "day");
   const lastDateWithTime = currentDate?.endOf("day");
 
+  // const startDate = DateRanges
+  //   ? new Date(DateRanges?.startDate).toISOString()
+  //   : last30thDate.toISOString().split("T")[0] + "T00:00:00Z";
+  // const endDate = DateRanges
+  //   ? new Date(DateRanges?.endDate).toISOString()
+  //   : lastDateWithTime.toISOString().split("T")[0] + "T23:59:59.999Z";
+
   const startDate = DateRanges
     ? new Date(DateRanges?.startDate).toISOString()
-    : last30thDate.toISOString().split("T")[0] + "T00:00:00Z";
-  const endDate = DateRanges
-    ? new Date(DateRanges?.endDate).toISOString()
-    : lastDateWithTime.toISOString().split("T")[0] + "T23:59:59.999Z";
+    : "";
+  const endDate = DateRanges ? new Date(DateRanges?.endDate).toISOString() : "";
 
   const handleOpen = () => {
     setOpenPicker(!openPicker);
@@ -76,11 +86,7 @@ const WorkFlow = () => {
       id: 1,
       icon: tci,
       title: "Total charts",
-      charts: dateRange.processedStatus
-        ? dateRange.processedStatus.PENDING +
-          dateRange.processedStatus.COMPLETED +
-          dateRange.processedStatus.HOLD
-        : "0",
+      charts: chartValue.totalPatients ? chartValue.totalPatients : "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -90,11 +96,8 @@ const WorkFlow = () => {
       id: 2,
       icon: allocated,
       title: "Allocated",
-      charts: dateRange.processedStatus
-        ? dateRange.processedStatus.COMPLETED +
-          dateRange.processedStatus.PENDING +
-          dateRange.processedStatus.HOLD +
-          dateRange.processedStatus.DECLINED
+      charts: chartValue.totalPatientsAllocated
+        ? chartValue.totalPatientsAllocated
         : "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
@@ -171,18 +174,11 @@ const WorkFlow = () => {
     },
   ];
 
-  const getWorkFlowDatas = async () => {
-    try {
-      const data = await workStatusApiAdmin();
-      setDateRange(data.response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const getWorkFlow = async () => {
     try {
       const data = await workStatusApiAdmin(startDate, endDate, router);
-      setDateRange(data.response);
+      setDateRange(data.response?.processedStatusCount);
+      setChartValue(data.response);
     } catch (error) {
       console.log(error);
     }

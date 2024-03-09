@@ -372,7 +372,7 @@ const Details = ({}) => {
     setUserDetails(userSpinner);
   }, []);
 
-  const getPatientIdDetails = async (patientId) => {
+  const getPatientIdDetails = async (patientId, flagFirstData) => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint + `dbservice/patient/get?patientId=${patientId}`
     );
@@ -403,12 +403,23 @@ const Details = ({}) => {
           </Menu.Item>
         ) : null}
         {result?.processedStatus != "DECLINE" ? (
-          <Menu.Item key="3" onClick={() => handleActionClick("DECLINE")}>
-            <div className="patient-status">
-              <span className={`badge failed-text`} style={{ color: "red" }}>
-                DECLINE
-              </span>
-            </div>
+          <Menu.Item
+            key="3"
+            disabled={flagFirstData?.flag !== undefined ? false : true}
+            onClick={() => handleActionClick("DECLINE")}
+          >
+            <Tooltip
+              title={
+                flagFirstData?.flag === undefined &&
+                "Add flag to disable Decline"
+              }
+            >
+              <div className="patient-status">
+                <span className={`badge failed-text`} style={{ color: "red" }}>
+                  DECLINE
+                </span>
+              </div>
+            </Tooltip>
           </Menu.Item>
         ) : null}
 
@@ -439,12 +450,23 @@ const Details = ({}) => {
           </Menu.Item>
         ) : null}
         {result?.processedStatus != "DECLINE" ? (
-          <Menu.Item key="3" onClick={() => handleActionClick("DECLINE")}>
-            <div className="patient-status">
-              <span className={`badge failed-text`} style={{ color: "red" }}>
-                DECLINE
-              </span>
-            </div>
+          <Menu.Item
+            key="3"
+            onClick={() => handleActionClick("DECLINE")}
+            disabled={flagFirstData?.flag !== undefined ? false : true}
+          >
+            <Tooltip
+              title={
+                flagFirstData?.flag === undefined &&
+                "Add flag to disable Decline"
+              }
+            >
+              <div className="patient-status">
+                <span className={`badge failed-text`} style={{ color: "red" }}>
+                  DECLINE
+                </span>
+              </div>
+            </Tooltip>
           </Menu.Item>
         ) : null}
 
@@ -481,12 +503,23 @@ const Details = ({}) => {
           </Menu.Item>
         ) : null}
         {result?.processedStatus != "DECLINE" ? (
-          <Menu.Item key="3" onClick={() => handleActionClick("DECLINE")}>
-            <div className="patient-status">
-              <span className={`badge failed-text`} style={{ color: "red" }}>
-                DECLINE
-              </span>
-            </div>
+          <Menu.Item
+            key="3"
+            onClick={() => handleActionClick("DECLINE")}
+            disabled={flagFirstData?.flag !== undefined ? false : true}
+          >
+            <Tooltip
+              title={
+                flagFirstData?.flag === undefined &&
+                "Add flag to disable Decline"
+              }
+            >
+              <div className="patient-status">
+                <span className={`badge failed-text`} style={{ color: "red" }}>
+                  DECLINE
+                </span>
+              </div>
+            </Tooltip>
           </Menu.Item>
         ) : null}
 
@@ -1312,10 +1345,12 @@ const Details = ({}) => {
   const getFlagListLastDetails = async (patientId, dos) => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `dbservice/flagdetails?patientId=${patientId}&year=${dos}`
+        `dbservice/flagdetails?patientId=${patientId ? patientId : ""}&year=${
+          dos ? dos : ""
+        }`
     );
     if (response.data.response.length != 0) {
-      setFlagFirstData(response.data.response[0]);
+      setFlagFirstData(response?.data?.response[0]);
     }
     // setFilterDataLoading(false);
   };
@@ -1323,11 +1358,13 @@ const Details = ({}) => {
   const getFlagList = async () => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `dbservice/flagdetails?patientId=${localPatientId}&year=${selectedDosValue}`
+        `dbservice/flagdetails?patientId=${
+          localPatientId ? localPatientId : ""
+        }&year=${selectedDosValue ? selectedDosValue : ""}`
     );
     setFlagResultList(response.data.response);
     if (response.data.response.length != 0) {
-      setFlagFirstData(response.data.response[0]);
+      setFlagFirstData(response?.data?.response[0]);
     }
     setFilterDataLoading(false);
   };
@@ -1681,6 +1718,11 @@ const Details = ({}) => {
 
     return value;
   };
+  useEffect(() => {
+    if (flagFirstData?.flag) {
+      getPatientIdDetails(localPatientId, flagFirstData);
+    }
+  }, [flagFirstData?.flag]);
 
   return (
     <>
@@ -1943,6 +1985,7 @@ const Details = ({}) => {
                           ) : null}
                         </span>
                       </div>
+
                       <div className="col-xl-1 col-sm-12">
                         <div className="card-body">
                           <div className="row">
