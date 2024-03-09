@@ -70,7 +70,7 @@ function CoderReport({
       rowData?.auditDeclinedNotes
     );
 
-    const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
+    const declinedDataFromDeclined = extractLatestData(rowData?.declineNotes);
 
     const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
 
@@ -79,7 +79,7 @@ function CoderReport({
         return (
           <Popover placement="bottom" title="Status: COMPLETED">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Completed} style={{ height: "30%", width: "30%" }} />
+              <Image src={Completed} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -88,7 +88,7 @@ function CoderReport({
         return (
           <Popover placement="bottom" title="Status: PENDING">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "30%", width: "30%" }} />
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -101,7 +101,7 @@ function CoderReport({
             content={`Reason: ${declinedData ? declinedData : "---"}`}
           >
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Declined} style={{ height: "30%", width: "30%" }} />
+              <Image src={Declined} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -110,7 +110,7 @@ function CoderReport({
         return (
           <Popover placement="bottom" title="Status: NOT COMPUTED">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "30%", width: "30%" }} />
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -118,7 +118,7 @@ function CoderReport({
         return (
           <Popover placement="bottom" title="Status: PENDING">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "30%", width: "30%" }} />
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -126,7 +126,7 @@ function CoderReport({
         return (
           <Popover placement="bottom" title="Status: HOLD">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Hold} style={{ height: "30%", width: "30%" }} />
+              <Image src={Hold} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -134,7 +134,7 @@ function CoderReport({
         return (
           <Popover placement="bottom" title="Status: ABORTED BY CRON">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Abort} style={{ height: "30%", width: "30%" }} />
+              <Image src={Abort} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -142,7 +142,7 @@ function CoderReport({
         return (
           <Popover placement="bottom" title="Status: PENDING">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "30%", width: "30%" }} />
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
