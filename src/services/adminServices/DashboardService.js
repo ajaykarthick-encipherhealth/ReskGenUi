@@ -443,10 +443,10 @@ export const CompletedStatus = async (
   const token = localStorage.getItem("token");
   const url =
     btn === "DAILY"
-      ? `daily?month=${month}&year=${year}&userName=${userName}&isManage=${isManage}`
+      ? `daily?month=${month}&year=${year}&userName=${userName}&isManager=${isManage}`
       : btn === "WEEKLY"
-      ? `weekly?month=${month}&year=${year}&userName=${userName}&isManage=${isManage}`
-      : `monthyly?year=${year}&userName=${userName}&isManage=${isManage}`;
+      ? `weekly?month=${month}&year=${year}&userName=${userName}&isManager=${isManage}`
+      : `monthyly?year=${year}&userName=${userName}&isManager=${isManage}`;
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/admindashboard/chartdeliverystatus/${url}`,
