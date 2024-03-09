@@ -138,6 +138,16 @@ const Notification = ({}) => {
     if (validDateForm()) {
       setIsBtnLoading(true);
       setErrmessage("");
+      setInputValue({
+        notificationType: "INFO",
+        content: "",
+        usersIds: [],
+        isReviewer: false,
+        isSupervisor: false,
+        isAdmin: false,
+        managerId: "",
+      });
+      setSelectCheckBox("");
       var data = {
         managerId: null,
         isReviewer: selectCheckBox == "ADMIN" ? true : false,
@@ -157,7 +167,6 @@ const Notification = ({}) => {
           placement: "top",
           duration: 1,
         });
-      } else {
       }
     }
   };
@@ -225,7 +234,11 @@ const Notification = ({}) => {
             >
               <div>
                 {/* <Checkbox.Group options={options} onChange={onChange} /> */}
-                <Radio.Group options={radioOptions} onChange={onChange} />
+                <Radio.Group
+                  options={radioOptions}
+                  onChange={onChange}
+                  value={selectCheckBox}
+                />
                 <p className={styles.errorMessage}>{errMessageRadio}</p>
               </div>
 
@@ -302,6 +315,7 @@ const Notification = ({}) => {
             <div className={styles.textareaContainer}>
               <textarea
                 className={styles.commentsFormControl}
+                value={inputValue?.content}
                 rows="5"
                 required
                 id="content"
