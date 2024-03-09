@@ -71,7 +71,7 @@ function CoderReport({
       rowData?.auditDeclinedNotes
     );
 
-    const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
+    const declinedDataFromDeclined = extractLatestData(rowData?.declineNotes);
 
     const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
 

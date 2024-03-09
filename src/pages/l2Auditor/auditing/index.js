@@ -37,7 +37,7 @@ export function extractLatestData(notes) {
     );
 
     entries.forEach(([key, value]) => {
-      if (parseInt(key) === latestKey) {
+    if (parseInt(key) === latestKey) {
         declinedData = value;
       }
     });
