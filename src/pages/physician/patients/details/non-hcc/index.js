@@ -1197,6 +1197,7 @@ const NonHcc = ({ patientNonHccResult }) => {
       var fileId = patientFileDTO.fileId;
       const encounterDatesValue = encounterDate.split(",");
       const encounterDatesHeader = encounterDatesValue[0];
+      var pageNumber = null;
       setIsModalOpenCaptureSection(true);
 
       const response = await axios.get(
@@ -1205,7 +1206,7 @@ const NonHcc = ({ patientNonHccResult }) => {
       );
       var result = response.data.response;
       if (result?.length) {
-        var pageNumber = result[0] - 1;
+        pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
         if (pageNumber == fileInitialPage) {
           setFileLoading(false);
           notification.warning({

@@ -1557,6 +1557,7 @@ const Hcc = ({ patientHccResult }) => {
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
+    var pageNumber = null;
     try {
       const response = await axios.get(
         ENDPOINTS.apiEndoint +
@@ -1567,7 +1568,7 @@ const Hcc = ({ patientHccResult }) => {
         if (result?.first == false) {
           splitPoint = value;
         }
-        var pageNumber = result?.second[0] - 1;
+        pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
         setFileInitialPage(pageNumber);
         setFileDosPageNumber(pageNumber);
       } else {
@@ -1586,7 +1587,15 @@ const Hcc = ({ patientHccResult }) => {
       setIsModalOpen(true);
       var dataset = value + " / (" + disDescription + ")";
       setSelectMeatName(dataset);
-    } catch (error) {}
+    } catch (error) {
+      splitPoint = value;
+      if (findFileKeyword == value) {
+        setFileLoading(false);
+      }
+      setFindFileKeyword(splitPoint);
+      setFileInitialPage(null);
+      setFileDosPageNumber(null);
+    }
   };
 
   const findValueDocument = async (
@@ -1601,6 +1610,7 @@ const Hcc = ({ patientHccResult }) => {
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
     var splitPoint = actualDescription.substring(" ", 20);
+    var pageNumber = null;
     try {
       const response = await axios.get(
         ENDPOINTS.apiEndoint +
@@ -1608,7 +1618,7 @@ const Hcc = ({ patientHccResult }) => {
       );
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
-        var pageNumber = result?.second[0] - 1;
+        pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
         if (result?.first == false) {
           splitPoint = headerNames;
         }
@@ -1637,7 +1647,15 @@ const Hcc = ({ patientHccResult }) => {
       if (findFileKeyword == splitPoint) {
         setFileLoading(false);
       }
-    } catch (error) {}
+    } catch (error) {
+      splitPoint = headerNames;
+      if (findFileKeyword == headerNames) {
+        setFileLoading(false);
+      }
+      setFindFileKeyword(splitPoint);
+      setFileInitialPage(null);
+      setFileDosPageNumber(null);
+    }
   };
   const handleOpenModalCombinationCode = async (
     value,
@@ -1703,6 +1721,7 @@ const Hcc = ({ patientHccResult }) => {
         const encounterDatesValue = encounterDate.split(",");
         const encounterDatesHeader = encounterDatesValue[0];
         var splitPoint = "";
+        var pageNumber = null;
         splitPoint = actualDescription.substring(" ", 20);
         try {
           const response = await axios.get(
@@ -1714,7 +1733,7 @@ const Hcc = ({ patientHccResult }) => {
             if (result?.first == false) {
               splitPoint = headerNames;
             }
-            var pageNumber = result?.second[0] - 1;
+            pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
             setFileInitialPage(pageNumber);
           } else {
             splitPoint = headerNames;
@@ -1739,7 +1758,15 @@ const Hcc = ({ patientHccResult }) => {
             dataset;
           setFileModalTitle(headerName);
           setDocumentLoaded(true);
-        } catch (error) {}
+        } catch (error) {
+          splitPoint = headerNames;
+          if (findFileKeyword == headerNames) {
+            setFileLoading(false);
+          }
+          setFindFileKeyword(splitPoint);
+          setFileInitialPage(null);
+          setFileDosPageNumber(null);
+        }
       } else if (check == "valid2") {
         setSelectActiveCode(value);
         var splitPoint = "";
@@ -3642,69 +3669,105 @@ const Hcc = ({ patientHccResult }) => {
         <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
           <div className="custom-tab-1 ">
             <Tab.Container defaultActiveKey={activeTabHead}>
-              <Nav as="ul" className="nav nav-tabs">
-                <Nav.Item as="li" className="nav-item">
-                  <Nav.Link
-                    to="#my-posts"
-                    eventKey="file"
-                    className={visitStyles.navColor}
-                    onClick={() => selectTab(5)}
-                  >
-                    File
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item as="li" className="nav-item">
-                  <Nav.Link
-                    to="#my-posts"
-                    eventKey="validDiseases"
-                    className={visitStyles.navColor}
-                    activeClassName={visitStyles.activeLink}
-                    onClick={() => selectTab(1)}
-                  >
-                    Visit Data
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item as="li" className="nav-item">
-                  <Nav.Link
-                    to="#my-posts"
-                    eventKey="comboDiseases"
-                    className={visitStyles.navColor}
-                    onClick={() => selectTab(2)}
-                  >
-                    Combination Codes
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item as="li" className="nav-item">
-                  <Nav.Link
-                    to="#my-posts"
-                    eventKey="meatCriteria"
-                    className={visitStyles.navColor}
-                    onClick={() => selectTab(3)}
-                  >
-                    MEAT Criteria
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item as="li" className="nav-item">
-                  <Nav.Link
-                    to="#my-posts"
-                    eventKey="RafScore"
-                    className={visitStyles.navColor}
-                    onClick={() => selectTab(4)}
-                  >
-                    RAF Score
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item as="li" className="nav-item">
-                  <Nav.Link
-                    to="#my-posts"
-                    eventKey="query"
-                    className={visitStyles.navColor}
-                    onClick={() => selectTab(6)}
-                  >
-                    Query
-                  </Nav.Link>
-                </Nav.Item>
-              </Nav>
+              <div className="row">
+                <div className="col-xl-8">
+                  <Nav as="ul" className="nav nav-tabs">
+                    <Nav.Item as="li" className="nav-item">
+                      <Nav.Link
+                        to="#my-posts"
+                        eventKey="file"
+                        className={visitStyles.navColor}
+                        onClick={() => selectTab(5)}
+                      >
+                        File
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item as="li" className="nav-item">
+                      <Nav.Link
+                        to="#my-posts"
+                        eventKey="validDiseases"
+                        className={visitStyles.navColor}
+                        activeClassName={visitStyles.activeLink}
+                        onClick={() => selectTab(1)}
+                      >
+                        Visit Data
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item as="li" className="nav-item">
+                      <Nav.Link
+                        to="#my-posts"
+                        eventKey="comboDiseases"
+                        className={visitStyles.navColor}
+                        onClick={() => selectTab(2)}
+                      >
+                        Combination Codes
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item as="li" className="nav-item">
+                      <Nav.Link
+                        to="#my-posts"
+                        eventKey="meatCriteria"
+                        className={visitStyles.navColor}
+                        onClick={() => selectTab(3)}
+                      >
+                        MEAT Criteria
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item as="li" className="nav-item">
+                      <Nav.Link
+                        to="#my-posts"
+                        eventKey="RafScore"
+                        className={visitStyles.navColor}
+                        onClick={() => selectTab(4)}
+                      >
+                        RAF Score
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item as="li" className="nav-item">
+                      <Nav.Link
+                        to="#my-posts"
+                        eventKey="query"
+                        className={visitStyles.navColor}
+                        onClick={() => selectTab(6)}
+                      >
+                        Query
+                      </Nav.Link>
+                    </Nav.Item>
+                  </Nav>
+                </div>
+                {flagTagActive == true ? (
+                  <div className="col-xl-4">
+                    <div className={visitStyles.flags}>
+                      <div className={visitStyles.flags}>
+                        <span className={visitStyles.hccFlag}></span>
+                        <span className={visitStyles.flagCodes}>HCC</span>
+                      </div>
+                      <div className={visitStyles.flags}>
+                        <span className={visitStyles.suggestedFlag}></span>
+                        <span className={visitStyles.flagCodes}>SUGGESTED</span>
+                      </div>
+                      <div className={visitStyles.flags}>
+                        <span className={visitStyles.deleteFlag}></span>
+                        <span className={visitStyles.flagCodes}>DELETED</span>
+                      </div>
+                      <div className={visitStyles.flags}>
+                        <span className={visitStyles.nonhccFlag}></span>
+                        <span className={visitStyles.flagCodes}>NON HCC</span>
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+                {isDosSelect == true ? (
+                  <div className="col-xl-3">
+                    <Select
+                      className={`ant_select_form`}
+                      onChange={handleChangePageNumber}
+                      options={pageNumberOptions}
+                      placeholder="Dos Page Number"
+                    />
+                  </div>
+                ) : null}
+              </div>
 
               <Tab.Content>
                 <Tab.Pane id="my-posts" eventKey="validDiseases">
