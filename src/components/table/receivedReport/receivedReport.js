@@ -22,6 +22,7 @@ function ReceivedReport({
   sortOrder,
   setSortOrder,
   setSort,
+  isPhysician
 }) {
   const [detailsContent, setDetailsContent] = useState(details?.content);
 
@@ -39,9 +40,14 @@ function ReceivedReport({
       receivedEndDate: receivedEndDate,
     };
     dispatch(selectedReport(info));
+    if(isPhysician){
+      router?.push(
+        `/physician/report/individualreport?reportId=${info?.reportUser?.reportId}`
+      )
+    }else{
     router?.push(
       `/physician/report/individualreport?reportId=${info?.reportUser?.reportId}&isAdminPage=${true}`
-    );
+    )};
   };
 
   return (

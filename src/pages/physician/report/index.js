@@ -362,6 +362,7 @@ const index = () => {
                                         setSortOrder={setReceivedSortOrder}
                                         sortOrder={receivedSortOrder}
                                         setSort={setSort}
+                                        isPhysician={true}
                                       />
                                     )}
                                   </Tab.Pane>
