@@ -18,6 +18,7 @@ import ReAudit from "../../../../../src/images/trackingImages/reAuditTrack.png";
 import Completed from "../../../../../src/images/trackingImages/CompletedTrack.png";
 import AuditPending from "../../../../../src/images/trackingImages/AuditPending.png";
 import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
+import { extractLatestData } from "../../../l2Auditor/auditing";
 
 import { Popover } from "antd";
 
@@ -203,131 +204,92 @@ const index = () => {
     sort,
   ]);
   const auditstatusBodyTemplate = (rowData) => {
-    const latestKey =
-      rowData?.auditDeclinedNotes?.length > 0 &&
-      Math.max(
-        ...rowData?.auditDeclinedNotes?.map((obj) =>
-          parseInt(Object.keys(obj)[0])
-        )
-      );
-    let declinedData;
+    const declinedDataFromAudit = extractLatestData(
+      rowData?.auditDeclinedNotes
+    );
 
-    if (
-      rowData?.auditDeclinedNotes &&
-      rowData?.auditDeclinedNotes?.length > 0
-    ) {
-      rowData?.auditDeclinedNotes?.forEach((obj) => {
-        if (obj[latestKey]) {
-          declinedData = obj[latestKey];
-        }
-      });
-    }
-    switch (rowData?.processedStatus) {
+    const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
+
+    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
+
+    switch (rowData.processedStatus) {
+      case "COMPLETED":
+        return (
+          <Popover placement="bottom" title="Status: COMPLETED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image
+                src={Completed}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
+        );
+
       case "PENDING":
         return (
-          <Popover placement="bottom" title="Status: AUDIT PENDING">
-            <div className="patient-status">
-              <Image
-                src={AuditPending}
-                className={styles.ImgTrck}
-                style={{ height: "35px", width: "35px" }}
-              />
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
 
       case "DECLINED":
         return (
-          <Popover placement="bottom" title=" Status: DECLINED">
-            <div className="patient-status">
-              <Image
-                src={Declined}
-                className={styles.ImgTrck}
-                style={{ height: "35px", width: "35px" }}
-              />
-            </div>
-          </Popover>
-        );
-
-      case "HOLD":
-        return (
-          <Popover placement="bottom" title=" Status: AUDIT HOLD">
-            <div className="patient-status">
-              <Image
-                src={AuditHold}
-                className={styles.ImgTrck}
-                style={{ height: "35px", width: "35px" }}
-              />
-            </div>
-          </Popover>
-        );
-      case "COMPLETED":
-        return (
-          <Popover placement="bottom" title=" Status: COMPLETED">
-            <div className="patient-status">
-              <Image
-                src={Completed}
-                className={styles.ImgTrck}
-                style={{ height: "35px", width: "35px" }}
-              />
-            </div>
-          </Popover>
-        );
-      case "AUDITED":
-        return (
-          <Popover placement="bottom" title=" Status: AUDITED">
-            <div className="patient-status">
-              <Image
-                src={AuditedTrack}
-                className={styles.ImgTrck}
-                style={{ height: "35px", width: "35px" }}
-              />
-            </div>
-          </Popover>
-        );
-      case "AUDITED":
-        return (
-          <div className="patient-status">
-            <Image
-              src={AuditedTrack}
-              //  style={{ height: "25%", width: "39%" }}
-            />
-          </div>
-        );
-
-      case "NOT_AUDIT":
-        return (
-          <Popover placement="bottom" title=" Status: NOT AUDIT">
-            <div className="patient-status">
-              <Image
-                src={NotAudited}
-                className={styles.ImgTrck}
-                style={{ height: "35px", width: "35px" }}
-              />
-            </div>
-          </Popover>
-        );
-      case "AUDIT_DECLINED":
-        return (
           <Popover
             placement="bottom"
-            title=" Status: AUDIT DECLINED"
-            content={`Reason: ${
-              rowData.auditDeclinedNotes ? declinedData : "---"
-            }`}
+            title="Status: DECLINED"
+            content={`Reason: ${declinedData ? declinedData : "---"}`}
           >
-            <div className="patient-status">
-              <Image
-                src={AuditeDeclineTrack}
-                style={{ height: "35px", width: "35px" }}
-              />
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Declined} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
+        );
+
+      case "NOTCOMPUTED":
+        return (
+          <Popover placement="bottom" title="Status: NOT COMPUTED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
+        );
+      case "COMPUTED":
+        return (
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
+        );
+      case "HOLD":
+        return (
+          <Popover placement="bottom" title="Status: HOLD">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Hold} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
+        );
+      case "ABORTED_BY_CRON":
+        return (
+          <Popover placement="bottom" title="Status: ABORTED BY CRON">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Abort} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
       case null:
-        return <div className="patient-status">---</div>;
+        return (
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
+        );
     }
   };
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -403,7 +365,7 @@ const index = () => {
                         audisetSelAllocatedBy={setSelAuditAllocatedBy}
                         // audidefaultAllocatedBy={""}
                         // select status
-                        selectlabel="processed Status"
+                        selectlabel="Processed Status"
                         isSelector={true}
                         setSelectedOption={setSelectedOption}
                         selectOptions={statusOptions}
