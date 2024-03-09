@@ -30,9 +30,9 @@ const SendList = ({ result }) => {
                 <span className={styles.timeStatus}>
                   {moment(data.createdDate).format("MM/DD/YYYY HH:MM:A")}
                 </span>
-                <span className={styles.typeStatus}>
+                {/* <span className={styles.typeStatus}>
                   {data.notificationType}
-                </span>
+                </span> */}
               </div>
             </div>
           </div>

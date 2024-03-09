@@ -342,7 +342,10 @@ export default function Patient() {
         return (
           <Popover placement="bottom" title="Status: COMPLETED">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Completed} style={{ height: "30%", width: "30%" }} />
+              <Image
+                src={Completed}
+                style={{ height: "30px", width: "30px" }}
+              />
             </div>
           </Popover>
         );
@@ -351,7 +354,7 @@ export default function Patient() {
         return (
           <Popover placement="bottom" title="Status: PENDING">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "30%", width: "30%" }} />
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -364,7 +367,7 @@ export default function Patient() {
             content={`Reason: ${declinedData ? declinedData : "---"}`}
           >
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Declined} style={{ height: "30%", width: "30%" }} />
+              <Image src={Declined} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -373,7 +376,7 @@ export default function Patient() {
         return (
           <Popover placement="bottom" title="Status: NOT COMPUTED">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "30%", width: "30%" }} />
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -381,7 +384,7 @@ export default function Patient() {
         return (
           <Popover placement="bottom" title="Status: PENDING">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "30%", width: "30%" }} />
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -389,7 +392,7 @@ export default function Patient() {
         return (
           <Popover placement="bottom" title="Status: HOLD">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Hold} style={{ height: "30%", width: "30%" }} />
+              <Image src={Hold} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -397,7 +400,7 @@ export default function Patient() {
         return (
           <Popover placement="bottom" title="Status: ABORTED BY CRON">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Abort} style={{ height: "30%", width: "30%" }} />
+              <Image src={Abort} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -405,7 +408,7 @@ export default function Patient() {
         return (
           <Popover placement="bottom" title="Status: PENDING">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "30%", width: "30%" }} />
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -487,22 +490,15 @@ export default function Patient() {
   };
 
   const auditstatusBodyTemplate = (rowData) => {
-    const latestKey =
-      rowData?.auditDeclinedNotes?.length > 0 &&
-      Math.max(
-        ...rowData?.auditDeclinedNotes?.map((obj) =>
-          parseInt(Object.keys(obj)[0])
-        )
-      );
-    let declinedData;
+    const declinedDataFromAudit = extractLatestData(
+      rowData?.auditDeclinedNotes
+    );
 
-    if (rowData?.declinedNotes && rowData?.auditDeclinedNotes?.length > 0) {
-      rowData?.auditDeclinedNotes?.forEach((obj) => {
-        if (obj[latestKey]) {
-          declinedData = obj[latestKey];
-        }
-      });
-    }
+    const declinedDataFromDeclined = extractLatestData(
+      rowData?.auditDeclinedNotes
+    );
+
+    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
     switch (rowData.auditedStatus) {
       case "AUDIT_PENDING":
         return (
@@ -510,8 +506,7 @@ export default function Patient() {
             <div className="patient-status">
               <Image
                 src={AuditPending}
-                className={styles.ImgTrck}
-                style={{ height: "35px", width: "35px" }}
+                style={{ height: "30px", width: "30px" }}
               />
             </div>
           </Popover>
@@ -532,8 +527,8 @@ export default function Patient() {
             <div className="patient-status">
               <Image
                 src={AuditHold}
-                className={styles.ImgTrck}
-                style={{ height: "35px", width: "35px" }}
+                // className={styles.ImgTrck}
+                style={{ height: "30px", width: "30px" }}
               />
             </div>
           </Popover>
@@ -542,11 +537,7 @@ export default function Patient() {
         return (
           <Popover placement="bottom" title=" Status: REAUDIT">
             <div className="patient-status">
-              <Image
-                src={ReAudit}
-                className={styles.ImgTrck}
-                style={{ height: "35px", width: "35px" }}
-              />
+              <Image src={ReAudit} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -556,8 +547,7 @@ export default function Patient() {
             <div className="patient-status">
               <Image
                 src={AuditedTrack}
-                className={styles.ImgTrck}
-                style={{ height: "35px", width: "35px" }}
+                style={{ height: "30px", width: "30px" }}
               />
             </div>
           </Popover>
@@ -567,7 +557,7 @@ export default function Patient() {
           <div className="patient-status">
             <Image
               src={AuditedTrack}
-              //  style={{ height: "25%", width: "39%" }}
+              style={{ height: "30px", width: "30px" }}
             />
           </div>
         );
@@ -578,8 +568,7 @@ export default function Patient() {
             <div className="patient-status">
               <Image
                 src={NotAudited}
-                className={styles.ImgTrck}
-                style={{ height: "35px", width: "35px" }}
+                style={{ height: "30px", width: "30px" }}
               />
             </div>
           </Popover>
@@ -589,14 +578,12 @@ export default function Patient() {
           <Popover
             placement="bottom"
             title=" Status: AUDIT DECLINED"
-            content={`Reason: ${
-              rowData.auditDeclinedNotes ? declinedData : "---"
-            }`}
+            content={`Reason: ${declinedData ? declinedData : "---"}`}
           >
             <div className="patient-status">
               <Image
                 src={AuditedDeclineTrack}
-                style={{ height: "35px", width: "35px" }}
+                style={{ height: "30px", width: "30px" }}
               />
             </div>
           </Popover>
@@ -627,7 +614,7 @@ export default function Patient() {
     setTableLoading(true);
     getAllList(response?.response);
   };
-  console.log(filteredList)
+  console.log(filteredList);
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>

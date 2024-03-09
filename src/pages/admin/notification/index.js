@@ -215,55 +215,68 @@ const Notification = ({}) => {
                 Receive
               </Button>
             </div> */}
-            <div className={`row notification ${styles.checkBoxConatiner}`}>
-              <div className="col-xl-6">
+            <div
+              // className={`row notification ${styles.checkBoxConatiner}`}
+              style={{
+                display: "flex",
+
+                justifyContent: "space-between",
+              }}
+            >
+              <div>
                 {/* <Checkbox.Group options={options} onChange={onChange} /> */}
                 <Radio.Group options={radioOptions} onChange={onChange} />
                 <p className={styles.errorMessage}>{errMessageRadio}</p>
               </div>
-              {selectCheckBox == "CUSTOM" ? (
-                <div className="col-xl-3">
-                  <Select
-                    className={`ant_select_form ${styles.ant_select_form}`}
-                    mode="multiple"
-                    placeholder="Please select"
-                    onChange={handleSelectedOption}
-                    onSearch={handleSearch}
-                    value={selectedList}
-                    open={openDropdown}
-                    onDropdownVisibleChange={(visible) =>
-                      setOpenDropdown(visible)
-                    }
-                    style={{ height: "42px" }}
-                  >
-                    {filteredOptions?.map((data) => (
-                      <Option key={data?.value} value={data?.value}>
-                        {data?.label}
-                      </Option>
-                    ))}
-                  </Select>
+
+              <div>
+                <div>
+                  {selectCheckBox == "CUSTOM" ? (
+                    <div style={{ width: "515px" }}>
+                      <Select
+                        className={`ant_select_form ${styles.ant_select_form}`}
+                        mode="multiple"
+                        placeholder="Please select"
+                        onChange={handleSelectedOption}
+                        onSearch={handleSearch}
+                        value={selectedList}
+                        open={openDropdown}
+                        onDropdownVisibleChange={(visible) =>
+                          setOpenDropdown(visible)
+                        }
+                        style={{ height: "42px", width: "515px" }}
+                      >
+                        {filteredOptions?.map((data) => (
+                          <Option key={data?.value} value={data?.value}>
+                            {data?.label}
+                          </Option>
+                        ))}
+                      </Select>
+                    </div>
+                  ) : null}
+                  {selectCheckBox == "TEAM" ? (
+                    <div style={{ width: "515px" }}>
+                      <Select
+                        className={`ant_select_form ${styles.ant_select_form}`}
+                        placeholder="Please select"
+                        onChange={handleSelectedOptionTeam}
+                        onDropdownVisibleChange={(visible) =>
+                          setOpenDropdown(visible)
+                        }
+                        style={{ height: "42px", width: "515px" }}
+                      >
+                        {selectedListTeam?.map((data) => (
+                          <Option key={data?.value} value={data?.value}>
+                            {data?.label}
+                          </Option>
+                        ))}
+                      </Select>
+                    </div>
+                  ) : null}
                 </div>
-              ) : null}
-              {selectCheckBox == "TEAM" ? (
-                <div className="col-xl-3">
-                  <Select
-                    className={`ant_select_form ${styles.ant_select_form}`}
-                    placeholder="Please select"
-                    onChange={handleSelectedOptionTeam}
-                    onDropdownVisibleChange={(visible) =>
-                      setOpenDropdown(visible)
-                    }
-                    style={{ height: "42px" }}
-                  >
-                    {selectedListTeam?.map((data) => (
-                      <Option key={data?.value} value={data?.value}>
-                        {data?.label}
-                      </Option>
-                    ))}
-                  </Select>
-                </div>
-              ) : null}
-              <div className="col-xl-3">
+              </div>
+
+              <div>
                 <Button
                   className={styles.notificationSentBtn}
                   onClick={() => handleSubmit()}
@@ -285,6 +298,7 @@ const Notification = ({}) => {
                 </Button> */}
               </div>
             </div>
+
             <div className={styles.textareaContainer}>
               <textarea
                 className={styles.commentsFormControl}

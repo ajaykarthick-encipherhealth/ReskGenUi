@@ -353,7 +353,7 @@ const HeaderFilters = ({
           {addUser && (
             <div
               className={`${addUser ? `col-xl-${addBtn?"4":"1"}` : "col-xl-4"}`}
-              style={{ marginTop: "20px" }}
+              style={{ marginTop: "29px" }}
             >
               <Button
                 onClick={addUserForm}

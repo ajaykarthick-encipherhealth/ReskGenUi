@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import moment from "moment";
-import TableStyle from "../../table.module.css";
+import TableStyle from "../../traclingTable.module.css";
 
 import {
   Avatar,
@@ -81,7 +81,7 @@ function TrackingTable({
         <td className={TableStyle.firstTdBorder} onClick={handleTableRowClick}>
           <div> {data.patientId} </div> <div> {data.patientName} </div>
         </td>
-        <td className={TableStyle.childBorder} style={{ textAlign: "left" }}>
+        <td className={TableStyle.childBorder} style={{ textAlign: "left"}}>
           {data.allocatedByFirstName ||
           data.allocatedByLastName ||
           data.allocatedByProfileImage ? (
