@@ -770,6 +770,8 @@ const Hcc = ({ patientHccResult }) => {
             const encounterDatearray = res?.encounterDate?.split(",");
             combiDisArray.push({
               addOnCode: res.addOnCode,
+              addOnCodeTwo: res.addOnCodeTwo,
+              addOnCodeThree: res.addOnCodeThree,
               addOnCodes: [res.addOnCode, res.addOnCodeTwo, res.addOnCodeThree],
               diagnosisCodeCombo: res.diagnosisCodeCombo,
               diseaseName: res.diseaseName,
@@ -777,7 +779,7 @@ const Hcc = ({ patientHccResult }) => {
               encounterDate: res.encounterDate,
               encounterDateSplit: encounterDatearray,
               providerName: providerList,
-              providers: res.provider?res.providers : res.provider,
+              providers: res.provider ? res.providers : res.provider,
               ruleType: res.ruleType,
               capturedSections: res.capturedSections,
               children: res.children ? res.children : [],
