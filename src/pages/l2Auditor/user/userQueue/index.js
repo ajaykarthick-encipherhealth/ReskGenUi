@@ -15,7 +15,10 @@ import AuditedTrack from "../../../../../src/images/trackingImages/AuditedTrack.
 import NotAudited from "../../../../../src/images/trackingImages/NotAuditedTrack.png";
 import AuditHold from "../../../../../src/images/trackingImages/AuditHoldTrack.png";
 import ReAudit from "../../../../../src/images/trackingImages/reAuditTrack.png";
+import Completed from "../../../../../src/images/trackingImages/CompletedTrack.png";
 import AuditPending from "../../../../../src/images/trackingImages/AuditPending.png";
+import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
+
 import { Popover } from "antd";
 
 import {
@@ -219,8 +222,8 @@ const index = () => {
         }
       });
     }
-    switch (rowData.auditedStatus) {
-      case "AUDIT_PENDING":
+    switch (rowData?.processedStatus) {
+      case "PENDING":
         return (
           <Popover placement="bottom" title="Status: AUDIT PENDING">
             <div className="patient-status">
@@ -235,14 +238,18 @@ const index = () => {
 
       case "DECLINED":
         return (
-          <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>
-              Declined
-            </span>
-          </div>
+          <Popover placement="bottom" title=" Status: DECLINED">
+            <div className="patient-status">
+              <Image
+                src={Declined}
+                className={styles.ImgTrck}
+                style={{ height: "35px", width: "35px" }}
+              />
+            </div>
+          </Popover>
         );
 
-      case "AUDITHOLD":
+      case "HOLD":
         return (
           <Popover placement="bottom" title=" Status: AUDIT HOLD">
             <div className="patient-status">
@@ -254,12 +261,12 @@ const index = () => {
             </div>
           </Popover>
         );
-      case "REAUDIT":
+      case "COMPLETED":
         return (
-          <Popover placement="bottom" title=" Status: REAUDIT">
+          <Popover placement="bottom" title=" Status: COMPLETED">
             <div className="patient-status">
               <Image
-                src={ReAudit}
+                src={Completed}
                 className={styles.ImgTrck}
                 style={{ height: "35px", width: "35px" }}
               />
