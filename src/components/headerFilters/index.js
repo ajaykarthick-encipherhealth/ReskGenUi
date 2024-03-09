@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const { RangePicker } = DatePicker;
 
+
 const HeaderFilters = ({
   // for search
   setSearch,
@@ -149,21 +150,16 @@ const HeaderFilters = ({
   adminReport,
   addBtn,
   atCorner,
+  isNextCreatedBySelector
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
   return (
     <>
-      <div style={{ height: atCorner && "45px" }}>
-        <div
-          className="row filter-contain"
-          style={{ width: atCorner ? "110%" : "100%" }}
-        >
+      <div style={{height:atCorner &&"45px"}}>
+        <div className="row filter-contain" style={{ width: atCorner?"110%":"100%" }}>
           {isSearch && (
-            <div
-              className={defaultSize}
-              style={{ margin: atCorner && "0 0 0 -20px" }}
-            >
+            <div className={defaultSize} style={{margin:atCorner && "0 0 0 -20px"}}>
               {" "}
               <Search
                 searchlabel={searchlabel}
@@ -187,6 +183,33 @@ const HeaderFilters = ({
               />
             </div>
           )}
+          {isNextCreatedBySelector && (
+              <div
+                className={defaultSize}
+                onClick={() => {
+                  dispatch(
+                    getFilters(
+                      optionKey ? optionKey : "createdBy",
+                      null,
+                      "audited queue"
+                    )
+                  );
+                }}
+              >
+                <label className={styles.label}>{createdTolabel}</label>
+                <div class="form-group has-search">
+                  <Select
+                    onChange={(selectedOption) => {
+                      setSelCreatedBy(selectedOption?.value);
+                    }}
+                    options={createdByOptoons}
+                    className="custom-react-select"
+                    isSearchable={false}
+                    placeholder={defaultCreatedBy}
+                  />
+                </div>
+              </div>
+            )}
           {selectOptions2 && (
             <div className={defaultSize}>
               <label className={styles.label}>{selectlabel2}</label>
@@ -249,6 +272,7 @@ const HeaderFilters = ({
                 setCoderStartDate={setCoderStartDate}
                 setCoderEndDate={setCoderEndDate}
                 disabled={disable != "Yes" && true}
+               
               />
             </div>
           )}
@@ -328,23 +352,21 @@ const HeaderFilters = ({
           )}
           {addUser && (
             <div
-              className={`${
-                addUser ? `col-xl-${addBtn ? "4" : "1"}` : "col-xl-4"
-              }`}
-              style={{ marginTop: "30px" }}
+              className={`${addUser ? `col-xl-${addBtn?"4":"1"}` : "col-xl-4"}`}
+              style={{ marginTop: "29px" }}
             >
               <Button
                 onClick={addUserForm}
-                style={{ background: "#04306f" }}
+                style={{background:"#04306f"}}
                 className="btn btn-sm ms-2 flr width-max-content"
               >
                 + {btnTitle}
               </Button>
             </div>
           )}
-
-          <div className="col-xl-2 mt-4">
-            {isAllocate && (
+         
+              {isAllocate &&
+            <div className="col-xl-2 mt-4">
               <button
                 onClick={handleOpneModal}
                 className={`btn btn-primary btn-sm mx-4 ms-2 flr ${allocateStyle.modalBtn}`}
@@ -352,14 +374,11 @@ const HeaderFilters = ({
               >
                 Allocate
               </button>
-            )}
-          </div>
+            </div>
+          }
+          {activeTab === "CoderReport" && !isSelector3 && <div className={defaultSize}></div>}
           {activeTab === "CoderReport" && (
-            <div
-              className={`col-xl-${
-                !adminReport ? "4" : "2"
-              } d-flex justify-content-end`}
-            >
+            <div className={`col-xl-${!adminReport?"4":"2"} d-flex justify-content-end`}>
               <div className="row flr">
                 <button
                   onClick={() => {
@@ -373,7 +392,7 @@ const HeaderFilters = ({
                       ? false
                       : true
                   }
-                  style={{ color: "#04306f" }}
+                  style={{color:"#04306f"}}
                 >
                   <Export />
                   Export
