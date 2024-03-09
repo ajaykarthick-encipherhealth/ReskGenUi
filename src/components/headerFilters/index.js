@@ -149,7 +149,8 @@ const HeaderFilters = ({
   defaultSize = "col-xl-2",
   adminReport,
   addBtn,
-  atCorner
+  atCorner,
+  isNextCreatedBySelector
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
@@ -182,6 +183,33 @@ const HeaderFilters = ({
               />
             </div>
           )}
+          {isNextCreatedBySelector && (
+              <div
+                className={defaultSize}
+                onClick={() => {
+                  dispatch(
+                    getFilters(
+                      optionKey ? optionKey : "createdBy",
+                      null,
+                      "audited queue"
+                    )
+                  );
+                }}
+              >
+                <label className={styles.label}>{createdTolabel}</label>
+                <div class="form-group has-search">
+                  <Select
+                    onChange={(selectedOption) => {
+                      setSelCreatedBy(selectedOption?.value);
+                    }}
+                    options={createdByOptoons}
+                    className="custom-react-select"
+                    isSearchable={false}
+                    placeholder={defaultCreatedBy}
+                  />
+                </div>
+              </div>
+            )}
           {selectOptions2 && (
             <div className={defaultSize}>
               <label className={styles.label}>{selectlabel2}</label>
@@ -337,8 +365,8 @@ const HeaderFilters = ({
             </div>
           )}
          
-            <div className="col-xl-2 mt-4">
               {isAllocate &&
+            <div className="col-xl-2 mt-4">
               <button
                 onClick={handleOpneModal}
                 className={`btn btn-primary btn-sm mx-4 ms-2 flr ${allocateStyle.modalBtn}`}
@@ -346,8 +374,9 @@ const HeaderFilters = ({
               >
                 Allocate
               </button>
-          }
             </div>
+          }
+          {activeTab === "CoderReport" && !isSelector3 && <div className={defaultSize}></div>}
           {activeTab === "CoderReport" && (
             <div className={`col-xl-${!adminReport?"4":"2"} d-flex justify-content-end`}>
               <div className="row flr">

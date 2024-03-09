@@ -408,7 +408,7 @@ export default function Patient() {
                             isAnotherPicker={true}
                             defaultAllocateTo={"All"}
                             // created by
-                            isCreatedBySelector={true}
+                            isNextCreatedBySelector={true}
                             createdTolabel="Reviewer"
                             optionKey="patientAllocated"
                             createdByOptoons={generateOptionsList(filteredList)}
@@ -416,7 +416,7 @@ export default function Patient() {
                             addUser={false}
                             addUserForm={addPatientFormId}
                             bullets={bullets}
-                            isNextRow={true}
+                            // isNextRow={true}
                           />
                         </div>
                       </div>
