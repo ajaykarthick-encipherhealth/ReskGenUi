@@ -1557,6 +1557,7 @@ const Hcc = ({ patientHccResult }) => {
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
+    var pageNumber = null;
     try {
       const response = await axios.get(
         ENDPOINTS.apiEndoint +
@@ -1567,7 +1568,7 @@ const Hcc = ({ patientHccResult }) => {
         if (result?.first == false) {
           splitPoint = value;
         }
-        var pageNumber = result?.second[0] - 1;
+        pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
         setFileInitialPage(pageNumber);
         setFileDosPageNumber(pageNumber);
       } else {
@@ -1609,8 +1610,7 @@ const Hcc = ({ patientHccResult }) => {
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
     var splitPoint = actualDescription.substring(" ", 20);
-    console.log(splitPoint);
-    console.log(headerNames);
+    var pageNumber = null;
     try {
       const response = await axios.get(
         ENDPOINTS.apiEndoint +
@@ -1618,7 +1618,7 @@ const Hcc = ({ patientHccResult }) => {
       );
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
-        var pageNumber = result?.second[0] - 1;
+        pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
         if (result?.first == false) {
           splitPoint = headerNames;
         }
@@ -1721,6 +1721,7 @@ const Hcc = ({ patientHccResult }) => {
         const encounterDatesValue = encounterDate.split(",");
         const encounterDatesHeader = encounterDatesValue[0];
         var splitPoint = "";
+        var pageNumber = null;
         splitPoint = actualDescription.substring(" ", 20);
         try {
           const response = await axios.get(
@@ -1732,7 +1733,7 @@ const Hcc = ({ patientHccResult }) => {
             if (result?.first == false) {
               splitPoint = headerNames;
             }
-            var pageNumber = result?.second[0] - 1;
+            pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
             setFileInitialPage(pageNumber);
           } else {
             splitPoint = headerNames;
