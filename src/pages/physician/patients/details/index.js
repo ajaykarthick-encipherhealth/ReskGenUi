@@ -539,16 +539,18 @@ const Details = ({}) => {
     );
     const menu4 = (
       <Menu>
-        <Menu.Item
-          key="4"
-          onClick={() => {
-            allocatePatient();
-          }}
-        >
-          <div className="patient-status">
-            <span className={`badge processed-text`}>ALLOCATE</span>
-          </div>
-        </Menu.Item>
+        {!patienIdDetails?.auditedStatus && (
+          <Menu.Item
+            key="4"
+            onClick={() => {
+              allocatePatient();
+            }}
+          >
+            <div className="patient-status">
+              <span className={`badge processed-text`}>ALLOCATE</span>
+            </div>
+          </Menu.Item>
+        )}
         <Menu.Item key="5" onClick={() => handleActionClick("ADD RADIOLOGY")}>
           <div className="patient-status">
             <span className={`badge  ${visitStyles.add_text}`}>
@@ -1679,39 +1681,49 @@ const Details = ({}) => {
     var value = (
       <Menu>
         <>
-          <Menu.Item key="1" onClick={() => auditPatient(1)}>
-            <div className="patient-status">
-              <span className={`badge ${visitStyles.audit_text}`}>AUDIT</span>
-            </div>
-          </Menu.Item>
-          <Menu.Item key="2" onClick={() => auditPatient(2)}>
-            <div className="patient-status">
-              <span className={`badge ${visitStyles.reaudit_text}`}>
-                RE AUDIT
-              </span>
-            </div>
-          </Menu.Item>
-          <Menu.Item key="3" onClick={() => auditPatient(3)}>
-            <div className="patient-status">
-              <span className={`badge ${visitStyles.auditpending_text}`}>
-                AUDIT PENDING
-              </span>
-            </div>
-          </Menu.Item>
-          <Menu.Item key="4" onClick={() => auditPatient(4)}>
-            <div className="patient-status">
-              <span className={`badge ${visitStyles.audithold_text}`}>
-                AUDIT HOLD
-              </span>
-            </div>
-          </Menu.Item>
-          <Menu.Item key="4" onClick={() => auditPatient(5)}>
-            <div className="patient-status">
-              <span className={`badge ${visitStyles.auditdecline_text}`}>
-                AUDIT DECLINE
-              </span>
-            </div>
-          </Menu.Item>
+          {patienIdDetails?.auditedStatus != "AUDITED" && (
+            <Menu.Item key="1" onClick={() => auditPatient(1)}>
+              <div className="patient-status">
+                <span className={`badge ${visitStyles.audit_text}`}>AUDIT</span>
+              </div>
+            </Menu.Item>
+          )}
+          {patienIdDetails?.auditedStatus != "REAUDIT" && (
+            <Menu.Item key="2" onClick={() => auditPatient(2)}>
+              <div className="patient-status">
+                <span className={`badge ${visitStyles.reaudit_text}`}>
+                  RE AUDIT
+                </span>
+              </div>
+            </Menu.Item>
+          )}
+          {patienIdDetails?.auditedStatus != "AUDIT_PENDING" && (
+            <Menu.Item key="3" onClick={() => auditPatient(3)}>
+              <div className="patient-status">
+                <span className={`badge ${visitStyles.auditpending_text}`}>
+                  AUDIT PENDING
+                </span>
+              </div>
+            </Menu.Item>
+          )}
+          {patienIdDetails?.auditedStatus != "AUDITHOLD" && (
+            <Menu.Item key="4" onClick={() => auditPatient(4)}>
+              <div className="patient-status">
+                <span className={`badge ${visitStyles.audithold_text}`}>
+                  AUDIT HOLD
+                </span>
+              </div>
+            </Menu.Item>
+          )}
+          {patienIdDetails?.auditedStatus != "AUDIT_DECLINED" && (
+            <Menu.Item key="5" onClick={() => auditPatient(5)}>
+              <div className="patient-status">
+                <span className={`badge ${visitStyles.auditdecline_text}`}>
+                  AUDIT DECLINE
+                </span>
+              </div>
+            </Menu.Item>
+          )}
         </>
       </Menu>
     );
@@ -2034,7 +2046,9 @@ const Details = ({}) => {
                               icon={<DownOutlined />}
                               overlay={adminActionItems}
                             >
-                              ALLOCATE
+                              {patienIdDetails?.allocatedOn
+                                ? "ALLOCATED"
+                                : "ALLOCATE"}
                             </Dropdown.Button>
                           </div>
                         ) : userRole == "supervisor" ? (
