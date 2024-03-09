@@ -206,7 +206,13 @@ const index = () => {
                             defaultSelectValue1={""}
                             // rangepicker
                             isRangePicker={true}
-                            pickerlabel="Select Range"
+                            pickerlabel={
+                              activeTab === "ReceivedReport"
+                                ? "Received Date"
+                                : activeTab === "SentReport"
+                                ? "Sent Date"
+                                : "Select Date"
+                            }
                             setStartDate={setStartDate}
                             setEndDate={setEndDate}
                             setReceivedStartDate={setReceivedStartDate}
