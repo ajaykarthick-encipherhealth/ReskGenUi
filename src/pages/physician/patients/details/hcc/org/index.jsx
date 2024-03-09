@@ -239,10 +239,9 @@ const CamboTree = ({ tree }) => {
   }, [tree]);
 
   const nodeTemplate = (node) => {
-    var providerList = [];
-    node?.providers?.map((res, index) => {
-      providerList.push(res.providerName);
-    });
+    const provider = () => {
+      return node?.providers?.map((res) => res.providerName);
+    };
     return (
       <div className={Style.cards}>
         <div className={Style.code}>
@@ -267,7 +266,11 @@ const CamboTree = ({ tree }) => {
               )
           )}
         </div>
-        <div className="text-start">{getProviderNameList(providerList)}</div>
+        <div className="text-start">
+          {getProviderNameList(
+            node.providerName ? node.providerName : provider()
+          )}
+        </div>
         <div className="text-start">
           {getEncounterDateBackground(node?.encounterDate)}
         </div>
