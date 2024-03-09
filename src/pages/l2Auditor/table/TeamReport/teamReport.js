@@ -335,7 +335,7 @@ function TeamReport({
                     );
                   }}
                 >
-                  COMPLETE DATE{" "}
+                  COMPLETED DATE{" "}
                   {sortOrder === "ASC" ? (
                     <ArrowUpOutlined />
                   ) : (
@@ -435,10 +435,8 @@ function TeamReport({
                       {row.auditedByFirstName ||
                       row.auditedByLastName ||
                       row?.auditedByProfileImage ? (
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                          {" "}
+                        <>
                           <span style={{ marginRight: "10px" }}>
-                            {" "}
                             {renderUserPrfoileAvatar(
                               row.auditedByFirstName,
                               row.auditedByLastName,
@@ -449,7 +447,7 @@ function TeamReport({
                           <span>
                             {row.auditedByFirstName} {row.auditedByLastName}
                           </span>
-                        </div>
+                        </>
                       ) : (
                         <div style={{ textAlign: "center" }}>---</div>
                       )}
