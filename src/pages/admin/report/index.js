@@ -101,6 +101,8 @@ const index = () => {
     (state) => state?.AdminDashboardReducers?.selectedUsers
   );
 
+  const activeTabs = useSelector((state) => state?.adminReport?.activetab);
+
   SentReportDetails?.data?.response?.data?.forEach((data) => {
     data?.receivedUsers?.forEach((item) => {
       const role = item.role;
@@ -228,6 +230,11 @@ const index = () => {
     label: res.firstName + " " + res.lastName,
   }));
 
+  useEffect(() => {
+    if (activeTabs) {
+      setActiveTab(activeTabs);
+    }
+  }, [activeTabs]);
   return (
     <>
       <Header />

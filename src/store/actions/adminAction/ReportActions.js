@@ -21,7 +21,13 @@ export const SEARCH = "SEARCH";
 export const FILEPATH = "FILEPATH";
 export const FILEDETAILS = "FILEDETAILS";
 export const REPORT = "REPORT";
-export const  SELECTED_USER_REPORT = "SELECTED_USER_REPORT"
+export const  SELECTED_USER_REPORT = "SELECTED_USER_REPORT";
+export const ACTIVETAB='ACTIVETAB'
+  
+export const getReportActiveTab=(val)=>({
+  type:ACTIVETAB,
+  payload:val
+});
 
 export const selectedRow = (val) => ({
   type: SELECTEDROW,
