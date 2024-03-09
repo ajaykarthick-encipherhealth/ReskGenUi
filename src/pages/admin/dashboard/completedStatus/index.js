@@ -165,8 +165,10 @@ const CompletedStatus = () => {
   ];
 
   const options = [
+    { value: "", label: "ALL" },
     { value: "REVIEWER", label: "REVIEWER" },
     { value: "SUPERVISOR", label: "SUPERVISOR" },
+    
   ];
 
   const memberTypeChanges = (e) => {
