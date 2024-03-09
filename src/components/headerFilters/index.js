@@ -19,7 +19,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 const { RangePicker } = DatePicker;
 
-
 const HeaderFilters = ({
   // for search
   setSearch,
@@ -149,16 +148,22 @@ const HeaderFilters = ({
   defaultSize = "col-xl-2",
   adminReport,
   addBtn,
-  atCorner
+  atCorner,
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
   return (
     <>
-      <div style={{height:atCorner &&"45px"}}>
-        <div className="row filter-contain" style={{ width: atCorner?"110%":"100%" }}>
+      <div style={{ height: atCorner && "45px" }}>
+        <div
+          className="row filter-contain"
+          style={{ width: atCorner ? "110%" : "100%" }}
+        >
           {isSearch && (
-            <div className={defaultSize} style={{margin:atCorner && "0 0 0 -20px"}}>
+            <div
+              className={defaultSize}
+              style={{ margin: atCorner && "0 0 0 -20px" }}
+            >
               {" "}
               <Search
                 searchlabel={searchlabel}
@@ -244,7 +249,6 @@ const HeaderFilters = ({
                 setCoderStartDate={setCoderStartDate}
                 setCoderEndDate={setCoderEndDate}
                 disabled={disable != "Yes" && true}
-               
               />
             </div>
           )}
@@ -324,21 +328,23 @@ const HeaderFilters = ({
           )}
           {addUser && (
             <div
-              className={`${addUser ? `col-xl-${addBtn?"4":"1"}` : "col-xl-4"}`}
-              style={{ marginTop: "20px" }}
+              className={`${
+                addUser ? `col-xl-${addBtn ? "4" : "1"}` : "col-xl-4"
+              }`}
+              style={{ marginTop: "30px" }}
             >
               <Button
                 onClick={addUserForm}
-                style={{background:"#04306f"}}
+                style={{ background: "#04306f" }}
                 className="btn btn-sm ms-2 flr width-max-content"
               >
                 + {btnTitle}
               </Button>
             </div>
           )}
-         
-            <div className="col-xl-2 mt-4">
-              {isAllocate &&
+
+          <div className="col-xl-2 mt-4">
+            {isAllocate && (
               <button
                 onClick={handleOpneModal}
                 className={`btn btn-primary btn-sm mx-4 ms-2 flr ${allocateStyle.modalBtn}`}
@@ -346,10 +352,14 @@ const HeaderFilters = ({
               >
                 Allocate
               </button>
-          }
-            </div>
+            )}
+          </div>
           {activeTab === "CoderReport" && (
-            <div className={`col-xl-${!adminReport?"4":"2"} d-flex justify-content-end`}>
+            <div
+              className={`col-xl-${
+                !adminReport ? "4" : "2"
+              } d-flex justify-content-end`}
+            >
               <div className="row flr">
                 <button
                   onClick={() => {
@@ -363,7 +373,7 @@ const HeaderFilters = ({
                       ? false
                       : true
                   }
-                  style={{color:"#04306f"}}
+                  style={{ color: "#04306f" }}
                 >
                   <Export />
                   Export
