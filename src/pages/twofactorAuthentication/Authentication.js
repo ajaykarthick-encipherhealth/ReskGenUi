@@ -36,6 +36,7 @@ const index = () => {
   };
 
   useEffect(() => {
+    inputRefs[1]?.current?.focus();
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const encodedParams = urlParams.get("params");
@@ -57,7 +58,11 @@ const index = () => {
 
     return () => clearInterval(intervalId);
   }, []);
-
+  useEffect(() => {
+    if (seconds === 0) {
+      setInputValues(Array.from({ length: generateCodeArray().length }, () => ''));
+    }
+  }, [seconds]);
   return (
     <div className={styles.maindiv}>
       <section className={styles.innerdiv}>
@@ -87,7 +92,7 @@ const index = () => {
                 ))}
             </div>
             <div className={styles.timer}>
-              00:{String(seconds).padStart(2, "0")} s
+              00:{String(seconds)?.padStart(2, "0")} s
             </div>
           </>
         ) : (

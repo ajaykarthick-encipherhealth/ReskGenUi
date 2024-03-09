@@ -28,7 +28,9 @@ const GetOTP = () => {
       inputRefs[index + 1].current.focus();
     }
   };
+
   useEffect(() => {
+    inputRefs[1]?.current?.focus();
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const encodedParams = urlParams.get("params");
@@ -39,6 +41,8 @@ const GetOTP = () => {
       setPassword(decodedParams?.password);
       dispatch(getQrCode(decodedParams?.username, router));
     }
+
+   
   }, []);
 
   return (
@@ -115,7 +119,13 @@ const GetOTP = () => {
               const codeString = code?.join("");
               if (codeString?.length > 0) {
                 dispatch(
-                  getValidateCode(username, encyptingPass(codeString), router, "", password)
+                  getValidateCode(
+                    username,
+                    encyptingPass(codeString),
+                    router,
+                    "",
+                    password
+                  )
                 );
               }
             }}
