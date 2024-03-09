@@ -254,7 +254,7 @@ const Accuracy = () => {
       {
         // primary yAxis (right)
         title: {
-          text: "CogentAI Accuracy",
+          text: "Organization Quality",
           style: {
             color: "#2dafff",
           },
@@ -273,7 +273,7 @@ const Accuracy = () => {
       {
         // Secondary yAxis (right)
         title: {
-          text: "Reviewer Changes Count",
+          text: "Organization Changes Count",
           style: {
             color: "#0b59f1",
           },

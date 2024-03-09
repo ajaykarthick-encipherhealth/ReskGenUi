@@ -202,7 +202,7 @@ const Accuracy = () => {
       {
         // primary yAxis (right)
         title: {
-          text: "Reviewers Quality",
+          text: "Team Quality",
           style: {
             color: "#2dafff",
           },
@@ -221,7 +221,7 @@ const Accuracy = () => {
       {
         // Secondary yAxis (right)
         title: {
-          text: "Reviewer Chnages Count",
+          text: "Team Changes Count",
           style: {
             color: "#0b59f1",
           },
@@ -280,10 +280,10 @@ const Accuracy = () => {
             finalData.averageScore +
             "<br/>" +
             "Total Correct: " +
-            finalData.totalCorrectCount+
-            "<br/>" +
-            "Total Wrong: " +
-            finalData.totalWrongCount
+            finalData.totalCorrectCount
+            // "<br/>" +
+            // "Total Wrong: " +
+            // finalData.totalWrongCount
           );
         } else {
           return "No data available";
@@ -316,12 +316,11 @@ const Accuracy = () => {
         color: "#0b59f1",
         yAxis: 1,
       },
-      {
-        name: "totalWrongCount",
-        data: accuracyDatas?.data?.response?.mapAccuracy?.map((item) => item.totalWrongCount),
-        color: "red",
-        yAxis: 1,
-      },
+      // {
+      //   name: "totalWrongCount",
+      //   data: accuracyDatas?.data?.response.map((item) => item.totalWrongCount),
+      //   color: "#0000cc",
+      // },
       {
         name: "Temperature",
         type: "spline",
