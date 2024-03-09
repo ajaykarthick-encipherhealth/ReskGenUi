@@ -411,7 +411,7 @@ const Details = ({}) => {
             <Tooltip
               title={
                 flagFirstData?.flag === undefined &&
-                "Select flag to disable Decline"
+                "Add flag to disable Decline"
               }
             >
               <div className="patient-status">
@@ -458,7 +458,7 @@ const Details = ({}) => {
             <Tooltip
               title={
                 flagFirstData?.flag === undefined &&
-                "Select flag to disable Decline"
+                "Add flag to disable Decline"
               }
             >
               <div className="patient-status">
@@ -511,7 +511,7 @@ const Details = ({}) => {
             <Tooltip
               title={
                 flagFirstData?.flag === undefined &&
-                "Select flag to disable Decline"
+                "Add flag to disable Decline"
               }
             >
               <div className="patient-status">
