@@ -777,6 +777,7 @@ const Hcc = ({ patientHccResult }) => {
               encounterDate: res.encounterDate,
               encounterDateSplit: encounterDatearray,
               providerName: providerList,
+              providers: res.provider?res.providers : res.provider,
               ruleType: res.ruleType,
               capturedSections: res.capturedSections,
               children: res.children ? res.children : [],
