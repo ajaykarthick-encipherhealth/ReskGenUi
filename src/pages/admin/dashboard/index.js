@@ -27,10 +27,10 @@ const index = () => {
   const last30thDate = currentDate?.subtract(31, "day");
   const lastDateWithTime = currentDate?.endOf("day");
 
-  const startDate = DateRanges
+  const startDate = DateRanges?.startDate
     ? new Date(DateRanges?.startDate).toISOString()
     : "";
-  const endDate = DateRanges
+  const endDate = DateRanges?.endDate
     ? new Date(DateRanges?.endDate).toISOString()
     : ""
 

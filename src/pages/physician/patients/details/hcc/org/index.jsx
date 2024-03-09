@@ -240,7 +240,11 @@ const CamboTree = ({ tree }) => {
 
   const nodeTemplate = (node) => {
     const provider = () => {
-      return node?.providers?.map((res) => res.providerName);
+      if (node?.providers) {
+        return node?.providers?.map((res) => res.providerName);
+      } else {
+        return node?.provider?.map((res) => res.providerName);
+      }
     };
     return (
       <div className={Style.cards}>
@@ -284,26 +288,7 @@ const CamboTree = ({ tree }) => {
   return (
     <div style={{ backgroundColor: "#fbfdff" }}>
       <div className={`overflow-x-auto ${Style.chart}`}>
-        <OrganizationChart
-          value={trees}
-          // selectionMode="multiple"
-          // selection={selection}
-          // onSelectionChange={(e) => setSelection(e.data)}
-          nodeTemplate={nodeTemplate}
-        />
-        {/* <div className="d-flex mx-5">
-          <div className={`p-2 ${Style.subCard}`}>
-            <div className={Style.code}>
-              Add On Codesfasdfasdfasdfasdfads fadfa
-            </div>
-            <div className={`d-flex ${Style.code}`}>
-              {["tete", "test"].map((item) => (
-                <Tag color="blue">{item}</Tag>
-              ))}
-            </div>
-            <div className="text-start">{"testing"}</div>
-          </div>
-        </div> */}
+        <OrganizationChart value={trees} nodeTemplate={nodeTemplate} />
       </div>
     </div>
   );

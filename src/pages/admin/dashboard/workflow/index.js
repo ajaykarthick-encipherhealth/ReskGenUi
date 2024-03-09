@@ -62,9 +62,6 @@ const WorkFlow = () => {
 
   const [openPicker, setOpenPicker] = useState(false);
 
-  const last30thDate = currentDate?.subtract(31, "day");
-  const lastDateWithTime = currentDate?.endOf("day");
-
   // const startDate = DateRanges
   //   ? new Date(DateRanges?.startDate).toISOString()
   //   : last30thDate.toISOString().split("T")[0] + "T00:00:00Z";
@@ -72,10 +69,12 @@ const WorkFlow = () => {
   //   ? new Date(DateRanges?.endDate).toISOString()
   //   : lastDateWithTime.toISOString().split("T")[0] + "T23:59:59.999Z";
 
-  const startDate = DateRanges
+  const startDate = DateRanges?.startDate
     ? new Date(DateRanges?.startDate).toISOString()
     : "";
-  const endDate = DateRanges ? new Date(DateRanges?.endDate).toISOString() : "";
+  const endDate = DateRanges?.endDate
+    ? new Date(DateRanges?.endDate).toISOString()
+    : "";
 
   const handleOpen = () => {
     setOpenPicker(!openPicker);
@@ -201,6 +200,7 @@ const WorkFlow = () => {
         handleOpen={handleOpen}
         openPicker={openPicker}
         setOpenPicker={setOpenPicker}
+        isAdmin={true}
       />
       <Card borderRadius="28px" style={{ height: "75%" }}>
         {worlFlowData?.loading ? (
