@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Badge, Empty, Tooltip } from "antd";
+import { Badge, Empty, Tooltip, Popover } from "antd";
 import TableStyle from "../../../../components/table/table.module.css";
 import { SVGICON } from "../../../../jsx/constant/theme";
 import { Paginator } from "primereact/paginator";
@@ -14,7 +14,15 @@ import {
 } from "../../../../components/headerFilters/functions";
 import visitStyles from "../../../../styles/visitdata.module.css";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import AuditedTrack from "../../../../../src/images/trackingImages/AuditedTrack.png";
+import NotAudited from "../../../../../src/images/trackingImages/NotAuditedTrack.png";
+import AuditHold from "../../../../../src/images/trackingImages/AuditHoldTrack.png";
+import ReAudit from "../../../../../src/images/trackingImages/reAuditTrack.png";
+import AuditPending from "../../../../../src/images/trackingImages/AuditPending.png";
+import AuditedDeclineTrack from "../../../../../src/images/trackingImages/AuditDeclined.png";
+import { extractLatestData } from "../../../l2Auditor/auditing";
 
+import Image from "next/image";
 function TeamReport({
   setModal,
   modal,
@@ -61,57 +69,110 @@ function TeamReport({
     setSelectedRows(updatedRows);
   };
 
-  const processstatusBodyTemplate = (rowData) => {
-    switch (rowData.processedStatus) {
-      case "COMPLETED":
-        return (
-          <div className="patient-status">
-            <span className={`badge processed-text`}>Completed</span>
-          </div>
-        );
+  const auditstatusBodyTemplate = (rowData) => {
+    const declinedDataFromAudit = extractLatestData(
+      rowData?.auditDeclinedNotes
+    );
 
-      case "PENDING":
+    const declinedDataFromDeclined = extractLatestData(
+      rowData?.auditDeclinedNotes
+    );
+
+    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
+    switch (rowData.auditedStatus) {
+      case "AUDIT_PENDING":
         return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
+          <Popover placement="bottom" title="Status: AUDIT PENDING">
+            <div className="patient-status">
+              <Image
+                src={AuditPending}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
         );
 
       case "DECLINED":
         return (
           <div className="patient-status">
             <span className={`badge failed-text`} style={{ color: "red" }}>
-              Declined
+              DeclinedPopover
             </span>
           </div>
         );
 
-      case "NOTCOMPUTED":
+      case "AUDITHOLD":
+        return (
+          <Popover placement="bottom" title=" Status: AUDIT HOLD">
+            <div className="patient-status">
+              <Image
+                src={AuditHold}
+                // className={styles.ImgTrck}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
+        );
+      case "REAUDIT":
+        return (
+          <Popover placement="bottom" title=" Status: REAUDIT">
+            <div className="patient-status">
+              <Image src={ReAudit} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
+        );
+      case "AUDITED":
+        return (
+          <Popover placement="bottom" title=" Status: AUDITED">
+            <div className="patient-status">
+              <Image
+                src={AuditedTrack}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
+        );
+      case "AUDITED":
         return (
           <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
+            <Image
+              src={AuditedTrack}
+              style={{ height: "30px", width: "30px" }}
+            />
           </div>
         );
-      case "COMPUTED":
+
+      case "NOT_AUDIT":
         return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
+          <Popover placement="bottom" title=" Status: NOT AUDIT">
+            <div className="patient-status">
+              <Image
+                src={NotAudited}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
         );
-      case "HOLD":
+      case "AUDIT_DECLINED":
         return (
-          <div className="patient-status">
-            <span className={`badge hold-text`}>Hold</span>
-          </div>
+          <Popover
+            placement="bottom"
+            title=" Status: AUDIT DECLINED"
+            content={`Reason: ${declinedData ? declinedData : "---"}`}
+          >
+            <div className="patient-status">
+              <Image
+                src={AuditedDeclineTrack}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
         );
       case null:
-        return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
-        );
+        return <div className="patient-status">---</div>;
     }
   };
+
   const badgeDisplay = (row) => {
     if (row?.auditedStatus === "AUDITED") {
       return (
@@ -407,8 +468,11 @@ function TeamReport({
                         <div style={{ marginLeft: "-10px" }}>---</div>
                       )}
                     </td>
-                    <td className={TableStyle.lastBorder}>
-                      {processstatusBodyTemplate(row)}{" "}
+                    <td
+                      className={TableStyle.lastBorder}
+                      style={{ textAlign: "center" }}
+                    >
+                      {auditstatusBodyTemplate(row)}{" "}
                     </td>
                     {/* <td className={TableStyle.lastBorder}>
                         <input
