@@ -57,7 +57,7 @@ const CamboTree = ({ tree }) => {
       const result = background.filter((res2) => res2.sectionName == res);
       var backColor = result[0]?.backgroundColor;
       var textColor = result[0]?.sectionColor;
-      if (index < 2) {
+      if (index < 1) {
         var sectionMapArr = (
           <span
             className={`mt-2 text-start ${visitStyles.provider_name}`}
@@ -83,11 +83,20 @@ const CamboTree = ({ tree }) => {
             content={
               <>
                 {dublicateCaptureDelete?.map((item, i) =>
-                  i > 1 ? (
+                  i > 0 ? (
                     <span
                       style={{ backgroundColor: backColor, color: textColor }}
                       className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
                     >
+                      <i style={{ padding: "0 5px" }}>
+                        <FontAwesomeIcon
+                          icon={faCircleUser}
+                          style={{
+                            size: 10,
+                            color: textColor,
+                          }}
+                        />
+                      </i>
                       {item}
                     </span>
                   ) : null
@@ -101,7 +110,7 @@ const CamboTree = ({ tree }) => {
               style={{ backgroundColor: backColor, color: textColor }}
               className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
             >
-              {dublicateCaptureDelete.length - 2}+
+              {dublicateCaptureDelete.length - 1}+
             </span>
           </Popover>
         );
@@ -230,6 +239,10 @@ const CamboTree = ({ tree }) => {
   }, [tree]);
 
   const nodeTemplate = (node) => {
+    var providerList = [];
+    node?.providers?.map((res, index) => {
+      providerList.push(res.providerName);
+    });
     return (
       <div className={Style.cards}>
         <div className={Style.code}>
@@ -254,9 +267,7 @@ const CamboTree = ({ tree }) => {
               )
           )}
         </div>
-        <div className="text-start">
-          {getProviderNameList(node?.providerName)}
-        </div>
+        <div className="text-start">{getProviderNameList(providerList)}</div>
         <div className="text-start">
           {getEncounterDateBackground(node?.encounterDate)}
         </div>
