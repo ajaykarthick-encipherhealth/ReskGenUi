@@ -18,7 +18,6 @@ function PatientTable({
   statusBodyTemplate,
   patientDetails,
   setSort,
-  
 }) {
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -240,14 +239,14 @@ function PatientTable({
             <th>PATIENTS</th>
             <th className={TableStyle.rowStyle2}>REVIEWER</th>
             <th className={TableStyle.rowStyle2} style={{ cursor: "pointer" }}>
-              <Tooltip placement="bottom" title="NEW DISEASE ADDITION ">
-                NDA
+              <Tooltip placement="bottom" title="REVIEWER CHANGES">
+                RC
               </Tooltip>
             </th>
             <th className={TableStyle.rowStyle2} style={{ cursor: "pointer" }}>
               {" "}
-              <Tooltip placement="bottom" title="NEW DISEASE REJECTION">
-                NDR
+              <Tooltip placement="bottom" title="REVIEWER CHANGES REJECTION">
+                RCR
               </Tooltip>
             </th>
 
