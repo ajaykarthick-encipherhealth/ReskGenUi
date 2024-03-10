@@ -1,0 +1,64 @@
+/* styles.module.css */
+
+.videoflex {
+  display: flex;
+  width: 100%;
+  height: 104px;
+  margin: auto;
+  display: grid;
+  place-items: center;
+  background-color: #f0f2f4;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  color: #4d4d4d;
+}
+
+.videoflex input[type="file"] {
+  display: none;
+}
+
+.VideoInput_video {
+  border-radius: 20px;
+  border: 1px solid #d9d9d9;
+  margin: 20px 5px 0 0;
+}
+
+.videoAction {
+  position: absolute;
+  background: transparent;
+  top: 50%;
+  left: 38%;
+}
+
+.VideoCover:hover,
+.videoflex:focus,
+.videoflex:active {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.VideoCover {
+  position: relative;
+}
+
+.delete-upload {
+  border: 1px solid #ccc;
+  background: #f4f4f5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  margin: 20px 20px 0 20px;
+  color: black;
+  font-weight: 500;
+  font-size: 14px;
+}
+.fileHeader {
+  cursor: pointer;
+}

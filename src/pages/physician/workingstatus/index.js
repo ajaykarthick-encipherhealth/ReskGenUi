@@ -134,7 +134,6 @@ const index = () => {
             </div>
           </div>
         </div>
-        <Footer />
       </div>
     </div>
   );
@@ -179,6 +178,20 @@ export const Buttons = [
   {
     id: 3,
     title: "Monthly",
+  },
+];
+export const ButtonsGroup2 = [
+  {
+    id: 1,
+    title: "Daily",
+  },
+  {
+    id: 2,
+    title: "Week",
+  },
+  {
+    id: 3,
+    title: "Month",
   },
 ];
 export default index;

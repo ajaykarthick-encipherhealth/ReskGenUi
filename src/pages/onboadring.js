@@ -100,8 +100,6 @@ export default function OnBoarding() {
 
         }
         setValidatedAdmin(true);
-
-        console.log(formData);
         // var data = {
         //     "email":"techie12@gmail.com",
         //     "name":"techie12",
@@ -140,7 +138,6 @@ export default function OnBoarding() {
 		setIsLoading(true);
 		const response = await axios.post(ENDPOINTS.apiEndoint + `securityservice/auth/organization/create`, data);
         var result =response.data; 
-        console.log(result)
 		if (result.status === "SUCCESS") {
             setSuccess(true);
             notification.success({

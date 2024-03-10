@@ -1,115 +1,185 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TableStyle from "../table.module.css";
 import dayjs from "dayjs";
 import { Paginator } from "primereact/paginator";
-import { ArrowUpOutlined,ArrowDownOutlined } from '@ant-design/icons';
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import Footer from "../../../jsx/layouts/Footer";
+import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { selectedReport } from "../../../store/actions/ReportActions";
+import SpinnerDots from "../../spinner";
+import { Empty } from "antd";
+import { dateFormate, sortFunction } from "../../headerFilters/functions";
 
-function ReceivedReport(details, onReceivedPageChange) {
-  const [sortOrder, setSortOrder] = useState("asc");
-  const [detailsContent, setDetailsContent] = useState(
-    details?.details?.content
-  );
+function ReceivedReport({
+  details,
+  onPageChange,
+  receivedPageNo,
+  receivedStartDate,
+  receivedEndDate,
+  paginationFirst,
+  loading,
+  sortOrder,
+  setSortOrder,
+  setSort,
+  isPhysician
+}) {
+  const [detailsContent, setDetailsContent] = useState(details?.content);
 
-  const sortTableByDate = () => {
-    const sortedContent = [...detailsContent];
-    if (sortOrder === "asc") {
-      sortedContent.sort((a, b) => dayjs(a.sendDate).diff(dayjs(b.sendDate)));
-      setSortOrder("desc");
-    } else {
-      sortedContent.sort((a, b) => dayjs(b.sendDate).diff(dayjs(a.sendDate)));
-      setSortOrder("asc");
-    }
-    setDetailsContent(sortedContent);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    setDetailsContent(details?.content);
+  }, [details]);
+
+  const router = useRouter();
+  const handleReceiverReport = (row) => {
+    const info = {
+      reportUser: row,
+      receivedPageNo: receivedPageNo,
+      receivedStartDate: receivedStartDate,
+      receivedEndDate: receivedEndDate,
+    };
+    dispatch(selectedReport(info));
+    if(isPhysician){
+      router?.push(
+        `/physician/report/individualreport?reportId=${info?.reportUser?.reportId}`
+      )
+    }else{
+    router?.push(
+      `/physician/report/individualreport?reportId=${info?.reportUser?.reportId}&isAdminPage=${true}`
+    )};
   };
 
-  console.log(details)
   return (
     <div className={TableStyle.classContaineer}>
-      <table className={TableStyle.classTable}>
-        <thead className={TableStyle.classThead}>
-          <tr>
-            <th>REPORT ID</th>
-            <th>REPORT NAME</th>
-            <th>ACCESS TYPE</th>
-            <th>SENDER</th>
-            <th style={{ cursor: "pointer" }} onClick={sortTableByDate}>
-              DATE{" "}
-              {/* {sortOrder === "asc" ? <ArrowUpOutlined /> : <ArrowDownOutlined />} */}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          { details?.details?.content?.map((row, index) => {
-            const formattedDate = row.receiveDate
-              ? dayjs(row.sendDate).format("DD/MM/YY")
-              : "Invalid Date";
+      {!detailsContent ? (
+        <SpinnerDots />
+      ) : (
+        <table className={TableStyle.classTable}>
+          <thead className={TableStyle.classTTotalhead}>
+            <tr>
+              <th>REPORT ID</th>
+              <th>REPORT NAME</th>
+              <th>ACCESS TYPE</th>
+              <th style={{ textAlign: "center" }}>SENDER</th>
+              <th
+                className={TableStyle.rowStyle}
+                style={{ cursor: "pointer", paddingLeft: "15px" }}
+                onClick={() => {
+                  sortFunction(sortOrder, setSortOrder, setSort, "receiveDate");
+                }}
+              >
+                DATE{" "}
+                {sortOrder === "ASC" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {detailsContent?.length > 0 ? (
+              detailsContent?.map((row, index) => {
+                const formattedDate = dateFormate(dayjs, row?.sendDate);
 
-            return (
-              <tr key={index}>
-                <td
-                  style={{
-                    borderTop: "0.2px solid #e1e1e1",
-                    borderLeft: "0.2px solid #e1e1e1",
-                    borderBottom: "  0.2px solid #e1e1e1",
-                  }}
-                >
-                  {row.reportId}
-                </td>
-                <td
-                  style={{
-                    borderTop: "  0.2px solid #e1e1e1",
+                return (
+                  <tr
+                    key={index}
+                    style={{ height: "40px" }}
+                    onClick={() => handleReceiverReport(row)}
+                  >
+                    <td
+                      style={{
+                        borderTop: "0.2px solid #e1e1e1",
+                        borderLeft: "0.2px solid #e1e1e1",
+                        borderBottom: "  0.2px solid #e1e1e1",
+                      }}
+                      className={TableStyle.childBorder}
+                    >
+                      {row.reportId}
+                    </td>
+                    <td
+                      style={{
+                        borderTop: "  0.2px solid #e1e1e1",
 
-                    borderBottom: "  0.2px solid #e1e1e1",
-                  }}
-                >
-                  {row.reportName}
-                </td>
-                <td
-                  style={{
-                    borderTop: "  0.2px solid #e1e1e1",
+                        borderBottom: "  0.2px solid #e1e1e1",
+                      }}
+                      className={TableStyle.childBorder}
+                    >
+                      {row.reportName}
+                    </td>
+                    <td
+                      style={{
+                        borderTop: "  0.2px solid #e1e1e1",
 
-                    borderBottom: "  0.2px solid #e1e1e1",
-                  }}
-                >
-                  {row.role}
-                </td>
-                <td
-                  style={{
-                    borderTop: "  0.2px solid #e1e1e1",
+                        borderBottom: "  0.2px solid #e1e1e1",
+                      }}
+                      className={TableStyle.childBorder}
+                    >
+                      {row.role}
+                    </td>
+                    <td
+                      style={{
+                        borderTop: "  0.2px solid #e1e1e1",
 
-                    borderBottom: "  0.2px solid #e1e1e1",
-                  }}
-                >
-                  {row.sender}
-                </td>
-                <td
-                  style={{
-                    borderTop: "  0.2px solid #e1e1e1",
+                        borderBottom: "  0.2px solid #e1e1e1",
+                        textAlign: "center",
+                      }}
+                      className={TableStyle.childBorder}
+                    >
+                      {row.sender}
+                    </td>
+                    <td
+                      style={{
+                        borderTop: "  0.2px solid #e1e1e1",
 
-                    borderBottom: "  0.2px solid #e1e1e1",
-                    borderRight: "  0.2px solid #e1e1e1",
-                  }}
-                >
-                  {formattedDate}
+                        borderBottom: "  0.2px solid #e1e1e1",
+                        borderRight: "  0.2px solid #e1e1e1",
+                      }}
+                      className={TableStyle.childBorder}
+                    >
+                      {formattedDate}
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td colSpan={5}>
+                  <Empty />
                 </td>
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
+      )}
       <div className="pagination-container">
         <Paginator
-          // first={paginationFirst}
+          first={paginationFirst}
           rows={15}
-          totalRecords={details?.details?.totalElements}
-          onPageChange={onReceivedPageChange}
+          totalRecords={details?.totalElements}
+          onPageChange={onPageChange}
         />
         <div className="total-pages">
-          Total count: {details?.details?.totalElements}
+          Total count: {details?.totalElements > 0 ? details?.totalElements : 0}
         </div>
       </div>
-      <Footer/>
+      {/* <Modal
+        open={openModal}
+        footer={false}
+        className={styles.classModal}
+        onCancel={() => setOpenModal(false)}
+      >
+        <IndividualReceiverReport
+          reportUser={reportUser}
+          // ReceivedDetails={details}
+          setReportUser={setReportUser}
+          receivedPageNo={receivedPageNo}
+          receivedStartDate={receivedStartDate}
+          receivedEndDate={receivedEndDate}
+        />
+      </Modal> */}
     </div>
   );
 }

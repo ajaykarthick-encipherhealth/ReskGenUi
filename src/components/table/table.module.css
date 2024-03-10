@@ -1,16 +1,13 @@
 .classTable > thead {
-  /* background-color: #222b40 !important; */
-  /* background-color: #133DD4 !important; */
-  background-color: #04306f !important;
+  background: #04306f !important;
   border-radius: 10px !important;
 }
 
 .classThead > tr > th {
   color: #fff !important;
 }
-.classTTotalhead{
+.classTTotalhead {
   color: #fff !important;
-
 }
 
 .classTable {
@@ -33,7 +30,7 @@
   padding-top: 12px !important;
   padding-bottom: 12px !important;
   /* border-radius: 8px!important;
-    border: 0.2px solid #241571!important;
+    border: 0.2px solid #04306f!important;
     
     background: #FAFCFF!important; */
 }
@@ -70,9 +67,8 @@
 }
 
 .classTable &::-webkit-scrollbar-thumb {
-  background-color: #241571;
+  background-color: #04306f;
 }
-
 .classTable &::-webkit-scrollbar-track {
   background-color: #fafcff;
 }
@@ -94,44 +90,37 @@
 .lastBorder {
   border-top: 0.2px solid #e1e1e1;
   border-bottom: 0.2px solid #e1e1e1;
-  border-right: 0.2px solid #e1e1e1;
+  /* border-right: 0.2px solid #e1e1e1; */
 }
 .classTable tbody tr td {
-    font-size: 13px;
-    font-weight: 400;
-    padding: 3px 15px;
-    color: #000 !important;
-    
-
+  font-size: 13px;
+  font-weight: 400;
+  padding: 2px 15px;
+  color: #000 !important;
 }
-.classTable tbody tr  {
+.classTable tbody tr {
   text-align: left;
   margin-left: 20px;
-  
-
 }
-.classTable thead tr  {
+.classTable thead tr {
   text-align: left;
   margin-left: 20px;
-  
-
 }
-.classTable tbody tr:hover  {
-
-    cursor: pointer;
-    /* box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 
+.classTable tbody tr:hover {
+  cursor: pointer;
+  /* box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 
     0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15); */
-    border-radius: 10px 10px 10px 10px !important;
-    /* box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 0 20px 7px -19px #8298b7, 0 1px 3px 1px rgba(60,64,67,.15); */
+  border-radius: 10px 10px 10px 10px !important;
+  /* box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 0 20px 7px -19px #8298b7, 0 1px 3px 1px rgba(60,64,67,.15); */
   background-color: #ffff !important;
 }
-.highFlag path{
+.highFlag path {
   fill: #cf940a;
 }
-.lowFlag path{
+.lowFlag path {
   fill: #87909e;
 }
-.normalFlag path{
+.normalFlag path {
   fill: #4466ff;
 }
 .custom-ant-select {
@@ -140,14 +129,161 @@
 
 /* Style for the dropdown selector */
 
-
-.customAntSelect > div{
+.customAntSelect > div {
   border: none !important;
   background-color: transparent !important;
 }
 
-.customAntSelect > span{
+.customAntSelect > span {
   display: none !important;
 }
+.subTitle {
+  font-weight: 700;
+  font-size: 16px;
+}
 
+.innerAlignments {
+  width: 100px;
+  text-align: center;
+}
 
+.rowStyle {
+  padding-left: 20px !important;
+}
+.fileprocessing {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.innerProcessingDiv {
+  width: 90px;
+  text-align: center;
+}
+.innerProcessingDiv:nth-child(1) {
+  position: relative;
+  left: -15px;
+}
+.innerProcessingDiv:nth-child(2) {
+  position: relative;
+  left: -20px;
+}
+.innerProcessingDiv:nth-child(3),
+.innerProcessingDiv:nth-child(4) {
+  position: relative;
+  left: -20px;
+}
+.innerProcessingDiv:nth-child(5),
+.innerProcessingDiv:nth-child(6) {
+  position: relative;
+  left: -15px;
+}
+.innerProcessingDiv:nth-child(7),
+.innerProcessingDiv:nth-child(8),
+.innerProcessingDiv:nth-child(9) {
+  position: relative;
+  left: -15px;
+}
+.innerProcessingDiv:nth-last-child(1) {
+  position: relative;
+  left: -13px;
+}
+.rowStyle2 {
+  padding-left: 50px !important;
+}
+.rowStyle3 {
+  padding-left: 80px !important;
+}
+.rowEmailStyle {
+  width: 300px !important;
+  padding-left: 50px !important;
+}
+.rowAudited {
+  width: 350px;
+  text-align: center;
+}
+.rowAlignment {
+  text-align: center;
+}
+
+.customChecked[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid #d4c9c9;
+  outline: none;
+  transition: background-color 0.3s;
+}
+
+.customChecked[type="checkbox"]:checked {
+  width: 22px;
+  height: 22px;
+  background-color: #04306f;
+}
+.customChecked[type="checkbox"]::before {
+  content: "\2713";
+  display: flex;
+  justify-content: center;
+  color: #fff;
+  font-weight: 800;
+  font-size: 18px;
+  margin-top: -2px;
+}
+.customChecked2[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid #d4c9c9;
+  outline: none;
+  transition: background-color 0.3s;
+  background-color: #fff;
+}
+
+.customChecked2[type="checkbox"]:checked {
+  background-color: #fff;
+}
+.customChecked2[type="checkbox"]::before {
+  content: "\2713";
+  display: flex;
+  justify-content: center;
+  color: #04306f;
+  font-weight: 800;
+  font-size: 18px;
+  margin-top: -2px;
+}
+.customChecked3[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid #d4c9c9;
+  outline: none;
+  transition: background-color 0.3s;
+  background-color: #fff;
+}
+
+.customChecked3[type="checkbox"]:checked {
+  background-color: #fff;
+}
+.customChecked3[type="checkbox"]::before {
+  content: "\2713";
+  display: flex;
+  justify-content: center;
+  color: #04306f;
+  font-weight: 800;
+  font-size: 18px;
+  margin-top: -12px;
+}

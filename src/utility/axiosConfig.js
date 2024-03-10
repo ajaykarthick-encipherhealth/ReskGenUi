@@ -92,7 +92,7 @@ import { notification } from 'antd';
         closeOnConfirm: false
       }).then((result) => { 
         if (result.isConfirmed) {
-           window.location = "/userlogin"
+           window.location = "/login"
           } 
       })
    

@@ -16,24 +16,27 @@ import Footer from "../../../jsx/layouts/Footer";
 
 const index = () => {
   const currentDate = dayjs();
-  const last30thDate = currentDate.subtract(31, "day");
-
-  const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
+  const router = useRouter();
   const dispatch = useDispatch();
+  const last30thDate = currentDate.subtract(31, "day");
+  const lastDateWithTime = currentDate.endOf("day");
+  const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
 
   const startDate = DateRanges
-    ? DateRanges?.startDate
-    : last30thDate.toISOString();
-  const lastDate = DateRanges ? DateRanges?.endDate : currentDate.toISOString();
-const router=useRouter()
+    ? new Date(DateRanges?.startDate).toISOString()
+    : last30thDate.toISOString().split("T")[0] + "T00:00:00Z";
+  const endDate = DateRanges
+    ? new Date(DateRanges?.endDate).toISOString()
+    : lastDateWithTime.toISOString().split("T")[0] + "T23:59:59.999Z";
+
   useEffect(() => {
-    dispatch(getWorkFlow(startDate, lastDate,router));
-  }, [startDate, lastDate]);
+    dispatch(getWorkFlow(startDate, endDate, router));
+  }, [startDate, endDate]);
 
   return (
-    <div style={{backgroundColor: "#F0F6FE"}}>
+    <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
-     
+
       <div className={styles.maincontainer}>
         <div className={styles.rowCOntainer}>
           <Row className={styles.RowCon} gutter={8}>
@@ -44,7 +47,7 @@ const router=useRouter()
               <DailyTask />
             </Col>
           </Row>
-          <Row className={styles.RowCon}  >
+          <Row className={styles.RowCon}>
             <Col span={14} className={styles.column2}>
               <Accuracy />
             </Col>
@@ -53,7 +56,7 @@ const router=useRouter()
             </Col>
           </Row>
           <Row className={styles.RowCon}>
-            <Col span={14}  className={styles.column2}>
+            <Col span={14} className={styles.column2}>
               <CompletedStatus />
             </Col>
             <Col span={9} offset={1} className={styles.columns}>
@@ -61,9 +64,7 @@ const router=useRouter()
             </Col>
           </Row>
         </div>
-   
       </div>
-      <Footer/>
     </div>
   );
 };

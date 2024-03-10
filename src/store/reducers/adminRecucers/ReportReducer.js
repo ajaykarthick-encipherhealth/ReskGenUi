@@ -1,0 +1,98 @@
+import {
+  REPORT_PATIENTS_DETAILS,
+  SELECTEDROW,
+  SEARCH,
+  EXPORT,
+  SENT_REPORT,
+  RECEIVED_REPORT,
+  REPORT_DETAILS,
+  FILEDETAILS,
+  REPORT,
+  SELECTED_USER_REPORT,
+  ACTIVETAB
+} from "../../actions/adminAction/ReportActions";
+
+const initialState = {
+  details: null,
+  row: null,
+  usersList: null,
+  exportRes: null,
+  sentDetails: null,
+  receivedDetails: null,
+  getReport: null,
+  uploadFile: null,
+  reportInfo: null,
+  selectedUsers:null,
+  activetab: null
+};
+
+export const AdminReportReducer = (state = initialState, action) => {
+  if (action.type === REPORT_PATIENTS_DETAILS) {
+    return {
+      ...state,
+      details: action.payload,
+    };
+  }
+  if (action.type === SELECTEDROW) {
+    return {
+      ...state,
+      row: action.payload,
+    };
+  }
+  if(action.type===ACTIVETAB){
+    return {
+      ...state,
+      activetab: action.payload,
+    };
+  }
+  if (action.type === SEARCH) {
+    return {
+      ...state,
+      usersList: action.payload,
+    };
+  }
+  if (action.type === EXPORT) {
+    return {
+      ...state,
+      exportRes: action.payload,
+    };
+  }
+
+  if (action.type === SENT_REPORT) {
+    return {
+      ...state,
+      sentDetails: action.payload,
+    };
+  }
+  if (action.type === RECEIVED_REPORT) {
+    return {
+      ...state,
+      receivedDetails: action.payload,
+    };
+  }
+  if (action.type === REPORT_DETAILS) {
+    return {
+      ...state,
+      getReport: action.payload,
+    };
+  }
+  if (action.type === FILEDETAILS) {
+    return {
+      ...state,
+      uploadFile: action.payload,
+    };
+  }
+  if (action.type === REPORT) {
+    return {
+      ...state,
+      reportInfo: action.payload,
+    };
+  } 
+  if (action.type === SELECTED_USER_REPORT) {
+    return {
+      ...state,
+      selectedUsers: action.payload,
+    };
+  }
+  return state;
+};

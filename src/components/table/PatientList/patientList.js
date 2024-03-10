@@ -7,12 +7,29 @@ import {
   faSortDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Avatar, Tooltip, notification, Select as AntSelect } from "antd";
+import {
+  Avatar,
+  Tooltip,
+  notification,
+  Select as AntSelect,
+  Empty,
+} from "antd";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import AllocatedUserCard from "../../allocatedUserDetails/AllocatedUserCard";
 import visitStyles from "../../../styles/visitdata.module.css";
 import { SVGICON } from "../../../jsx/constant/theme";
+import { getPriorityChange } from "../../../store/actions/PatientsActions";
+import dayjs from "dayjs";
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import { Paginator } from "primereact/paginator";
+import SpinnerDots from "../../spinner";
+import {
+  priorityOptions,
+  sortFunction,
+  renderUserPrfoile,
+  renderUserPrfoileAvatar,
+} from "../../headerFilters/functions";
 
 const { Option } = AntSelect;
 
@@ -21,78 +38,19 @@ function PatientTable({
   actionBodyTemplate,
   statusBodyTemplate,
   patientDetails,
+  paginationFirst,
+  totalElements,
+  onPageChange,
+  setSort,
+  getFilteApi
 }) {
+  const [sortDueOrder, setSortDueOrder] = useState("DESC");
+  const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
+  const [detailsContent, setDetailsContent] = useState(patinetListAll);
+  const [sortAllocateOrder, setSortAllocateOrder] = useState("DESC");
+
   const dispatch = useDispatch();
   const navigate = useRouter();
-
-  const priorityOptions = [
-    {
-      value: "URGENT",
-      label: (
-        <>
-          <i>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px" }}>Urgent</span>{" "}
-        </>
-      ),
-    },
-    {
-      value: "HIGH",
-      label: (
-        <>
-          <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px" }}>High</span>{" "}
-        </>
-      ),
-    },
-    {
-      value: "NORMAL",
-      label: (
-        <>
-          <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px" }}>Normal</span>{" "}
-        </>
-      ),
-    },
-    {
-      value: "LOW",
-      label: (
-        <>
-          <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px" }}>Low</span>{" "}
-        </>
-      ),
-    },
-  ];
-  const getPriorityLabel = (priority) => {
-    const priorityMap = {
-      HIGH: (
-        <>
-          <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px" }}>High</span>{" "}
-        </>
-      ),
-      URGENT: (
-        <>
-          <i>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px" }}>Urgent</span>{" "}
-        </>
-      ),
-      LOW: (
-        <>
-          <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px" }}>Low</span>{" "}
-        </>
-      ),
-      NORMAL: (
-        <>
-          <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px" }}>Normal</span>{" "}
-        </>
-      ),
-    };
-
-    return priorityMap[priority] || priorityMap.NORMAL;
-  };
 
   const [sortConfig, setSortConfig] = useState({
     key: null,
@@ -121,6 +79,7 @@ function PatientTable({
   };
 
   const requestSort = (key) => {
+    console.log(key);
     let direction = "asc";
     if (sortConfig.key === key && sortConfig.direction === "asc") {
       direction = "desc";
@@ -163,77 +122,103 @@ function PatientTable({
     <div style={{ marginLeft: "5pc", textAlign: "end" }}>✓</div>
   );
 
-  console.log(selectedPriority);
+  const dummyProfileImageUrl =
+    "https://avatars.githubusercontent.com/u/68529028?s=64&v=4";
+  const nullImg =
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA78Na63ws7B7EAWYgTr9BxhX_Z8oLa1nvOA&usqp=CAU";
   const renderRows = () => {
-    return patinetListAll?.map((data, index) => (
-      <tr key={index}>
-        <td className={TableStyle.firstTdBorder} onClick={handleTableRowClick}>
-          {data.patientId}
-        </td>
-        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {data.patientName}
-        </td>
-        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {data.dueDate
-            ? moment(data.dueDate).format("MM-DD-YYYY")
-            : "MM-DD-YYYY"}
-        </td>
-        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {data.processedStatus === "COMPLETED"
-            ? moment(data.processedDate).format("MM-DD-YYYY")
-            : "MM-DD-YYYY"}
-        </td>
-        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {data.allocatedOn
-            ? moment(data.allocatedOn).format("MM-DD-YYYY")
-            : "MM-DD-YYYY"}
-        </td>
-        <td className={TableStyle.childBorder}>
-          <Tooltip title={data.allocatedBy ? data.allocatedBy : "null"}>
-            <Avatar
-              style={{
-                backgroundColor: "#fde3cf",
-                color: "#f56a00",
-                cursor: "pointer",
+    return patinetListAll?.length === 0 ? (
+      <Empty />
+    ) : (
+      patinetListAll?.map((data, index) => (
+        <tr key={index}>
+          <td
+            className={TableStyle.firstTdBorder}
+            onClick={handleTableRowClick}
+          >
+            {data.patientId}
+          </td>
+          <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+            {data.patientName}
+          </td>
+          <td
+            className={TableStyle.childBorder}
+            onClick={handleTableRowClick}
+            style={{ paddingLeft: "30px" }}
+          >
+            {data.validDiseaseCount ? data.validDiseaseCount : "---"}
+          </td>
+          <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+            {data.allocatedOn
+              ? moment(data.allocatedOn).format("MM-DD-YYYY")
+              : "---"}
+          </td>
+          <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+            {data.dueDate ? moment(data.dueDate).format("MM-DD-YYYY") : "---"}
+          </td>
+          <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+            {data.processedDate
+              ? moment(data.processedDate).format("MM-DD-YYYY")
+              : "---"}
+          </td>
+
+          <td
+            className={TableStyle.childBorder}
+            style={{ textAlign: "center" }}
+          >
+            {data.allocatedByFirstName ||
+            data.allocatedBylastName ||
+            data?.allocatedByProfileImage ? (
+              <div style={{ display: "flex", alignItems: "center" }}>
+                {" "}
+                <span style={{ marginRight: "10px" }}>
+                  {" "}
+                  {renderUserPrfoileAvatar(
+                    data.allocatedByFirstName,
+                    data.allocatedBylastName,
+                    data?.allocatedByProfileImage,
+                    "header"
+                  )}
+                </span>
+                <span>
+                  {data.allocatedByFirstName} {data.allocatedBylastName}
+                </span>
+              </div>
+            ) : (
+              <div style={{ textAlign: "center" }}>---</div>
+            )}
+          </td>
+          <td className={TableStyle.childBorder}>
+            <AntSelect
+              options={priorityOptions}
+              placeholder="Set priority"
+              className={`custom-ant-select ${TableStyle.customAntSelect}`}
+              showSearch={false}
+              value={data?.priority ? data.priority : "Set Priority"}
+              disabled={!data?.priority ? true : false}
+              onChange={(value) => {
+                handlePriorityChange(data?.patientId, value);
+                dispatch(
+                  getPriorityChange(
+                    data?.patientId,
+                    dayjs(data?.lastModifiedDate)?.format("YYYY"),
+                    value,
+                    getFilteApi
+                  )
+                );
+                
               }}
-            >
-              {data.allocatedBy
-                ? data.allocatedBy.slice(0, 2).toUpperCase()
-                : "N"}
-            </Avatar>
-          </Tooltip>
-        </td>
-        <td className={TableStyle.childBorder}>
-          <AntSelect
-            options={priorityOptions}
-            placeholder="Set priority"
-            className={`custom-ant-select ${TableStyle.customAntSelect}`}
-            showSearch={false}
-            defaultValue={
-              data?.priority
-                ? data.priority
-                : {
-                    label: (
-                      <>
-                        <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
-                        <span style={{ fontSize: "13px" }}>Low</span>{" "}
-                      </>
-                    ),
-                    value: "low", // Set the actual value based on your priorityOptions
-                  }
-            }
-          />
-        </td>
+              style={{ width: "80%" }}
+            />
+          </td>
 
-        <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
-          {statusBodyTemplate(data)}
-        </td>
-        <td className={TableStyle.lastBorder} onClick={handleTableRowClick}>{actionBodyTemplate(data)}</td>
-      </tr>
-    ));
+          <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
+            {statusBodyTemplate(data)}
+          </td>
+        </tr>
+      ))
+    );
   };
-  console.log(selectedPriority, "priority");
-
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
@@ -241,39 +226,79 @@ function PatientTable({
           <tr>
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
-            <th onClick={() => requestSort("dueDate")}>
+            <th>HCC COUNT</th>
+            <th
+              onClick={() => {
+                sortFunction(
+                  sortAllocateOrder,
+                  setSortAllocateOrder,
+                  setSort,
+                  "allocatedOn"
+                );
+              }}
+            >
+              ALLOCATED DATE
+              <span style={{ padding: "10px", cursor: "pointer" }}>
+                {sortAllocateOrder === "ASC" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
+              </span>
+            </th>
+            <th
+              onClick={() => {
+                sortFunction(sortDueOrder, setSortDueOrder, setSort, "dueDate");
+              }}
+            >
               DUE DATE
-              <span style={{ padding: "10px" }}>
-                <FontAwesomeIcon
-                  icon={
-                    getClassNamesFor("dueDate") === "asc"
-                      ? faSortUp
-                      : faSortDown
-                  }
-                />
+              <span style={{ padding: "10px", cursor: "pointer" }}>
+                {sortDueOrder === "ASC" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
               </span>
             </th>
-            <th onClick={() => requestSort("lastModifiedDate")}>
+            <th
+              onClick={() => {
+                sortFunction(
+                  sortCompleteOrder,
+                  setSortCompleteOrder,
+                  setSort,
+                  "processedDate"
+                );
+              }}
+            >
               COMPLETED DATE
-              <span style={{ padding: "10px" }}>
-                <FontAwesomeIcon
-                  icon={
-                    getClassNamesFor("lastModifiedDate") === "asc"
-                      ? faSortUp
-                      : faSortDown
-                  }
-                />
+              <span style={{ padding: "10px", cursor: "pointer" }}>
+                {sortCompleteOrder === "ASC" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
               </span>
             </th>
-            <th>ALLOCATED DATE</th>
-            <th>ALLOCATED BY</th>
-            <th>PRIORITY</th>
-            <th>STATUS</th>
-            <th>Action</th>
+
+            <th className={TableStyle.rowStyle}> ALLOCATED BY</th>
+            <th style={{ paddingLeft: "35px" }}>PRIORITY</th>
+            <th style={{ paddingLeft: "65px" }}>STATUS</th>
           </tr>
         </thead>
-        <tbody >{renderRows()}</tbody>
+
+        <tbody>
+          {patinetListAll?.length <= 0 ? (
+            <tr>
+              <td colSpan="9">
+                <Empty />
+              </td>
+            </tr>
+          ) : (
+            renderRows()
+          )}
+        </tbody>
       </table>
+      <div></div>
     </div>
   );
 }

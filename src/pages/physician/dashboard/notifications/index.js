@@ -2,76 +2,64 @@ import React, { useState } from "react";
 import styles from "./styles.module.css";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
-import { Modal } from "antd";
+import { Modal, Spin } from "antd";
 import { SVGICON } from "../../../../jsx/constant/theme";
+import { useSelector, useDispatch } from "react-redux";
+import moment from "moment";
+import Image from "next/image";
+import NoNotification from "../../../../images/dashboard/no-notification.png";
+import spinSTYles from "../../../../styles/auth.module.css";
 
 const Notifications = () => {
   const [openNotifications, setOpenNotification] = useState(false);
-  const notificationdata = [
-    {
-      key: "1",
-      message:
-        "Needs to validate surgical history for any amputation status and PE for laterality of diagnosis (ulcer, paralysis, atherosclerosis of LE, etc.). ",
-      date: "18/10/2023",
-      time: "10:00 am",
-      person: "Rahul(manager)",
-    },
-    {
-      key: "2",
-      message:
-        " We need minimal support (stable, continue X medication with dosage, is acceptable) for the diagnosis found in the assessment plan to confirm the diagnosis; if support is not sufficient, query the diagnosis.",
-      date: "18/10/2023",
-      time: "10:00 am",
-      person: "Rahul(manager)",
-    },
-    {
-      key: "3",
-      message: "We should give priority to the more specific diagnosis ",
-      date: "18/10/2023",
-      time: "10:00 am",
-      person: "Rahul(manager)",
-    },
-    {
-      key: "4",
-      message:
-        " Needs to validate surgical history for any amputation status and PE for laterality of diagnosis (ulcer, paralysis, atherosclerosis of LE, etc.). ",
-      date: "18/10/2023",
-      time: "10:00 am",
-      person: "Rahul(manager)",
-    },
-    {
-      key: "5",
-      message:
-        " We need minimal support (stable, continue X medication with dosage, is acceptable) for the diagnosis found in the assessment plan to confirm the diagnosis; if support is not sufficient, query the diagnosis.",
-      date: "18/10/2023",
-      time: "10:00 am",
-      person: "Rahul(manager)",
-    },
-    {
-      key: "6",
-      message: " We should give priority to the more specific diagnosis",
-      date: "18/10/2023",
-      time: "10:00 am",
-      person: "Rahul(manager)",
-    },
-  ];
+  const notificationResponse = useSelector(
+    (state) => state?.notificationDatas?.notificationList
+  );
   const handleOpen = () => {
     setOpenNotification(!openNotifications);
   };
   const handleOk = () => {
     setOpenNotification(false);
   };
-  const notificationData = notificationdata.map((info) => (
-    <div className={styles.msgDiv}>
-      <div style={{ marginTop: "10px" }}> {SVGICON.dashboardNotification}</div>
-      <div className={styles.msgCOntainer}>
-        <span className={styles.description}>{info.message}</span>
-        <div>
-          {info.date}&nbsp;.{info.time} &nbsp;.{info.person}
+
+  const emailSplitFunction = (email) => {
+    if (email) {
+      let emailSplit = email.split("@");
+      return capitalizeFirstLetter(emailSplit[0]);
+    }
+  };
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  const notificationData =
+    notificationResponse?.data?.content?.length > 0 ? (
+      notificationResponse?.data?.content?.map((info) => (
+        <div className={styles.msgDiv}>
+          <div style={{ marginTop: "10px" }}>
+            {" "}
+            {SVGICON.dashboardNotification}
+          </div>
+          <div className={styles.msgCOntainer}>
+            <span className={styles.description}>{info.content}</span>
+            <div className={styles.time}>
+              {moment(info?.createdDate).format("MM-DD-YYYY")}&nbsp;{" "}
+              {moment(info?.createdDate).format("hh:mm:A")} &nbsp;{" "}
+              {`${info?.fromUserDetails?.firstName?info?.fromUserDetails?.firstName:""} (${
+                info?.fromUserDetails?.role?info?.fromUserDetails?.role:""
+              })`}
+            </div>
+          </div>
         </div>
+      ))
+    ) : (
+      <div className={styles.no_notificarion_container}>
+
+         {!notificationResponse?.loading && notificationResponse?.data?.content?.length===0 &&<Image src={NoNotification} alt="" />}
+
       </div>
-    </div>
-  ));
+    );
+
   return (
     <>
       <HeadTitle
@@ -82,7 +70,21 @@ const Notifications = () => {
 
       <div className={styles.card4}>
         <Card borderRadius="28px" padding="20px">
-          <div className={styles.container}>{notificationData}</div>
+          {notificationResponse?.loading ? (
+            <div
+              style={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Spin loading={notificationResponse?.loading} />
+            </div>
+          ) : (
+            <div className={styles.container}>{notificationData}</div>
+          )}
         </Card>
       </div>
       <Modal
@@ -90,11 +92,19 @@ const Notifications = () => {
         open={openNotifications}
         footer={null}
         width="50%"
-        height="400px"
+        style={{ height: "400px !important" }}
         closable={true}
         onCancel={handleOk}
       >
-        {notificationData}
+        {notificationResponse?.loading ? (
+          <div className={spinSTYles.spinStyle}>
+            <Spin loading={notificationResponse?.loading} />
+          </div>
+        ) : (
+          <div className={styles.container} style={{ height: "500px" }}>
+            {notificationData}
+          </div>
+        )}
       </Modal>
     </>
   );

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./styles.module.css";
-import { DatePicker, Modal } from "antd";
+import { Button, DatePicker, Modal } from "antd";
 import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
 import { getDateRange } from "../../store/actions/DashboardActions";
+import moment from "moment";
+import { disableFutureDate } from "../headerFilters/functions";
+
 const { RangePicker } = DatePicker;
 
 const HeadTitle = ({
@@ -14,37 +17,34 @@ const HeadTitle = ({
   handleOpen,
   openPicker,
   setOpenPicker,
+  isAdmin = false,
 }) => {
   const dispatch = useDispatch();
   const [selectedDates, setSelectedDates] = useState([]);
-
+  const [dateValues, setDates] = useState();
+  const [isDisabled, setIsDisabled] = useState(true);
   const currentDate = dayjs();
   const startOfMonth = currentDate.startOf("month");
   useEffect(() => {
     setSelectedDates([
-      dayjs(currentDate).format("YYYY/MM/DD"),
-      dayjs(startOfMonth).format("YYYY/MM/DD"),
+      dayjs(currentDate).format("MM/DD/YYYY"),
+      dayjs(startOfMonth).format("MM/DD/YYYY"),
     ]);
   }, []);
 
-  const handleDatePickerChange = (dateString) => {
-    const convertedDates = dateString?.map((date) => {
-      const formattedDate = dayjs(date)
-        .startOf("day")
-        .add(6, "hour")
-        .add(39, "minute")
-        .add(22, "second")
-        .add(786, "millisecond")
-        .toISOString();
-      return formattedDate;
-    });
-
-    const dates = {
-      startDate: convertedDates[0],
-      endDate: convertedDates[1],
-    };
-    dispatch(getDateRange(dates));
+  const handleDatePickerChange = (date) => {
+    if (date) {
+      const dates = {
+        startDate: moment(date[0])?.format("YYYY-MM-DD") + "T00:00:00.000Z",
+        endDate: moment(date[1])?.format("YYYY-MM-DD") + "T23:59:59.000Z",
+      };
+      setDates(dates);
+    }
   };
+
+  const last30thDate = currentDate.subtract(30, "day");
+  const lastDateWithTime = currentDate.endOf("day").toISOString();
+
   return (
     <div className={styles.header} style={{ display: anchorTag && "flex" }}>
       <div
@@ -74,7 +74,7 @@ const HeadTitle = ({
       </div>
       {anchorTag && (
         <span className={styles.anchor} onClick={handleOpen}>
-          view all
+          View All
         </span>
       )}
       <Modal
@@ -84,12 +84,13 @@ const HeadTitle = ({
         closable={false}
         style={{ left: "-20%", top: "18%" }}
         onOk={() => {
+          dispatch(getDateRange(dateValues));
           setOpenPicker(false);
-          setSelectedDates([]);
+          setIsDisabled(false);
         }}
         onCancel={() => {
           setOpenPicker(false);
-          setSelectedDates([]);
+          setIsDisabled(false);
         }}
       >
         <div className={styles.modalDetails}>
@@ -100,18 +101,50 @@ const HeadTitle = ({
               marginLeft: "-78px",
             }}
             placeholder={[
-              dayjs(currentDate).format("YYYY/MM/DD"),
-              dayjs(startOfMonth).format("YYYY/MM/DD"),
+              dayjs(currentDate).format("MM/DD/YYYY"),
+              dayjs(startOfMonth).format("MM/DD/YYYY"),
             ]}
             open={openPicker}
             value={selectedDates}
             onChange={(dates, dateStrings) => {
+              setIsDisabled(false);
               setSelectedDates(dates);
               handleDatePickerChange(dateStrings);
             }}
             suffixIcon={false}
             className={styles.datepicker}
+            disabledDate={(current) => disableFutureDate(current)}
           />
+          <div
+            style={{
+              cursor: "pointer",
+              position: "relative",
+              left: "280px",
+              top: "-40px",
+            }}
+            onClick={() => {
+              let dates;
+              if (isAdmin) {
+                dates = {
+                  startDate: "",
+                  endDate: "",
+                  clear: true,
+                };
+              } else {
+                dates = {
+                  startDate: last30thDate.toISOString(),
+                  endDate: lastDateWithTime,
+                  clear: true,
+                };
+              }
+
+              dispatch(getDateRange(dates));
+              setOpenPicker(false);
+              setSelectedDates([]);
+            }}
+          >
+            <Button>Refresh</Button>
+          </div>
         </div>
         <div id="date-popup" style={{ position: "relative" }} />
       </Modal>

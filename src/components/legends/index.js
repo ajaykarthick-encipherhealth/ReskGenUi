@@ -1,20 +1,36 @@
 import React from "react";
-import styles from './styles.module.css'
+import styles from "./styles.module.css";
 
-const Legends = ({ bullets }) => {
+const Legends = ({ bullets, display, padding }) => {
   return (
-    <div className={styles.container}>
+    <div className={styles.container} style={{ display: display && "block" }}>
       {bullets?.map((item) => (
-        <div className={styles.bulletsData}>
-          <div
-            className={styles.bgColor}
-            style={{
-              backgroundColor: item.color,
-            }}
-          >
-          </div>
-            {item.name}
-        </div>
+        <>
+          {item.title && <span className={styles.header}>{item?.title}</span>}
+          {item?.option ? (
+            item?.option?.map((info) => (
+              <div className={styles.bulletsData} style={{ padding: padding }}>
+                <div
+                  className={styles.bgColor}
+                  style={{
+                    backgroundColor: info.color,
+                  }}
+                ></div>
+                {info.name}
+              </div>
+            ))
+          ) : (
+            <div className={styles.bulletsData} style={{ padding: padding }}>
+              <div
+                className={styles.bgColor}
+                style={{
+                  backgroundColor: item.color,
+                }}
+              ></div>
+              {item.name}
+            </div>
+          )}
+        </>
       ))}
     </div>
   );

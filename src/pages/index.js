@@ -3,11 +3,11 @@ import Router from "next/router";
 
 export default class Index extends Component {
   componentDidMount = () => {
-    var userLogin = localStorage.getItem("loginCheck");
-    if(userLogin == "true"){
+    var login = localStorage.getItem("loginCheck");
+    if (login == "true") {
       Router.push("/physician/dashboard");
-    }else{
-      Router.push("/userlogin");
+    } else {
+      Router.push("/login");
     }
   };
 

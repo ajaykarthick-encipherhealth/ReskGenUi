@@ -45,14 +45,62 @@ export const PhysicanMenuList = [
     title: "Report",
     iconStyle: SVGICON.ReportIcon,
     to: "/physician/report",
+    childRoute: "/physician/report/individualreport",
+  },
+  // {
+  //   title: "Working Status",
+  //   iconStyle: SVGICON.workingStatus,
+  //   to: "/physician/workingstatus",
+  // },
+];
+export const AdminMenuList = [
+  {
+    title: "Dashboard",
+    iconStyle: SVGICON.dashboardIcon,
+    to: "/admin/dashboard",
   },
   {
-    title: "Working Status",
-    iconStyle: SVGICON.workingStatus,
-    to: "/physician/workingstatus",
+    title: "Users",
+    iconStyle: SVGICON.adminUser,
+    to: "/admin/user",
   },
-];
 
+  {
+    title: "Patients",
+    iconStyle: SVGICON.patientListIcon,
+    to: "/admin/patients",
+  },
+  {
+    title: "File Processing",
+    iconStyle: SVGICON.Usermanagement,
+    to: "/admin/file-processing",
+  },
+  {
+    title: "Patient Allocate",
+    iconStyle: SVGICON.Allocation,
+    to: "/admin/allocatedUser",
+  },
+  {
+    title: "Tracking",
+    iconStyle: SVGICON.Tracking,
+    to: "/admin/tracking",
+  },
+  {
+    title: "Report",
+    iconStyle: SVGICON.ReportIcon,
+    to: "/admin/report",
+  },
+  {
+    title: "Notification",
+    iconStyle: SVGICON.Notification,
+    to: "/admin/notification",
+  },
+  // {
+  //   title: "Auditing Window",
+  //   iconStyle: SVGICON.Usermanagement,
+  //   to: "/coder/auditing",
+  // },
+];
 export const L2AuditMenuList = [
   {
     title: "Dashboard",
@@ -69,5 +117,53 @@ export const L2AuditMenuList = [
     title: "Auditing Window",
     iconStyle: SVGICON.Usermanagement,
     to: "/coder/auditing",
+  },
+];
+export const L2AuditorMenuList = [
+  {
+    title: "Dashboard",
+    iconStyle: SVGICON.dashboardIcon,
+    to: "/l2Auditor/dashboard",
+  },
+  {
+    title: "User Queue",
+    iconStyle: SVGICON.adminUser,
+    to: "/l2Auditor/user",
+    childRoute: "/l2Auditor/user/userQueue",
+    childRoute2: "/l2Auditor/user/details",
+  },
+  {
+    title: "Audited Queue",
+    iconStyle: SVGICON.patientListIcon,
+    to: "/l2Auditor/auditing",
+  },
+  // {
+  //   title: "Org",
+  //   iconStyle: SVGICON.ReportIcon,
+  //   to: "/l2Auditor/org",
+  // },
+  {
+    title: "Report",
+    iconStyle: SVGICON.ReportIcon,
+    to: "/l2Auditor/report",
+    childRoute: "/l2Auditor/report/individualreport",
+  },
+];
+
+export const ProviderMenuList = [
+  {
+    title: "Dashboard",
+    iconStyle: SVGICON.dashboardIcon,
+    to: "/provider/dashboard",
+  },
+  {
+    title: "Comparison",
+    iconStyle: SVGICON.adminUser,
+    to: "/provider/comparison",
+  },
+  {
+    title: "Query",
+    iconStyle: SVGICON.patientListIcon,
+    to: "/l2Auditor/auditing",
   },
 ];

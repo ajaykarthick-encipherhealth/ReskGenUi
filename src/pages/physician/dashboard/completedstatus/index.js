@@ -12,6 +12,8 @@ import { useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
 import { getCOmpletedScore } from "../../../../store/actions/DashboardActions";
 import { useRouter } from "next/router";
+import spinSTYles from "../../../../styles/auth.module.css";
+import { Empty, Spin } from "antd";
 
 const CompletedStatus = () => {
   const [activeButton, setActiveButton] = useState(0);
@@ -36,21 +38,23 @@ const CompletedStatus = () => {
   }, [currentBtn, selectedMonth, selectedYear]);
 
   const completedDatas = useSelector((state) => state?.workFlow?.completed);
-  const CompletedSortedData = completedDatas?.response?.completedData?.sort(
-    (a, b) => a._id.month - b._id.month
-  );
-  const ALlocatedSortedData = completedDatas?.response?.allocatedData?.sort(
-    (a, b) => a._id.month - b._id.month
-  );
+  const CompletedSortedData =
+    completedDatas?.data?.response?.completedData?.sort(
+      (a, b) => a._id.month - b._id.month
+    );
+  const ALlocatedSortedData =
+    completedDatas?.data?.response?.allocatedData?.sort(
+      (a, b) => a._id.month - b._id.month
+    );
 
   const allocatedData = CompletedSortedData?.map((item) => item?.count);
   const completedData = ALlocatedSortedData?.map((item) => item?.count);
 
   const completedWeeks = new Set(
-    completedDatas?.response?.completedData?.map((item) => item._id.week)
+    completedDatas?.data?.response?.completedData?.map((item) => item._id.week)
   );
   const allocatedWeeks = new Set(
-    completedDatas?.response?.allocatedData?.map((item) => item._id.week)
+    completedDatas?.data?.response?.allocatedData?.map((item) => item._id.week)
   );
   const uniqueWeeks = new Set([...completedWeeks, ...allocatedWeeks]);
 
@@ -78,7 +82,7 @@ const CompletedStatus = () => {
   if (currentBtn === "Monthly") {
     xAxisData = monthNames;
   } else if (currentBtn === "Daily") {
-    xAxisData = getDays(currentDate);
+    xAxisData = getDays(completedDatas?.data?.response?.completedData && Object.keys(completedDatas?.data?.response?.completedData)?.length);
   } else if (currentBtn === "Weekly") {
     xAxisData = weekNames;
   }
@@ -92,8 +96,15 @@ const CompletedStatus = () => {
       type: "value",
       show: true,
     },
-    legend: {
+    tooltip: {
       show: true,
+      trigger: "axis",
+      formatter: function (params) {
+        const dataIndex = params[0]?.dataIndex;
+        const allocatedValue = allocatedData[dataIndex];
+        const completedValue = completedData[dataIndex];
+        return `Completed: ${allocatedValue}<br/>Allocated: ${completedValue}`;
+      },
     },
     series: [
       {
@@ -110,6 +121,7 @@ const CompletedStatus = () => {
           ]),
         },
       },
+
       {
         data: completedData,
         type: "line",
@@ -129,17 +141,17 @@ const CompletedStatus = () => {
   const bullets = [
     {
       color: "#4A3AFF",
-      name: "Allocated",
+      name: "Completed",
     },
     {
       color: "#FF718B",
-      name: "Completed",
+      name: "Allocated",
     },
   ];
 
   return (
     <>
-      <HeadTitle header="Completed Status" />
+      <HeadTitle header="Productivity Status" />
       <div className={styles.card5}>
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
@@ -171,13 +183,26 @@ const CompletedStatus = () => {
             </div>
           </div>
 
-          <ReactECharts
-            option={option}
-            style={{ width: "100%", height: "300px", marginTop: "-15px" }}
-          />
-          <div className={styles.bulletContainer}>
-            <Legends bullets={bullets} />
-          </div>
+          {completedDatas?.loading ? (
+            <div className={spinSTYles.spinStyle}>
+              <Spin loading={completedDatas?.loading} />
+            </div>
+          ) : completedDatas?.loading === false &&
+            completedDatas?.data?.response ? (
+            <>
+              <ReactECharts
+                option={option}
+                style={{ width: "100%", height: "300px", marginTop: "-15px" }}
+              />
+              <div className={styles.bulletContainer}>
+                <Legends bullets={bullets} />
+              </div>
+            </>
+          ) : (
+            <div className={spinSTYles.spinStyle}>
+              <Empty />
+            </div>
+          )}
         </Card>
       </div>
     </>

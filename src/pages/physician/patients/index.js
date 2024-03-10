@@ -1,177 +1,118 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
-import { Button } from "react-bootstrap";
-import { Badge } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
+import React, { useState, useEffect } from "react";
 import Select from "react-select";
-import { SVGICON } from "../../../jsx/constant/theme";
-import LoadingSpinner from "../../../jsx/components/spinner/spinner";
-import NavBar from "../../../jsx/layouts/nav";
-import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
-import { Offcanvas } from "react-bootstrap";
-import styles from "../report/report.module.css";
-import axios from "../../../utility/axiosConfig";
-import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import FacebookLoading from 'react-facebook-loading';
-import 'react-facebook-loading/dist/react-facebook-loading.css';
-import {
-  faAngleLeft,
-  faAngleRight,
-  faClose,
-  faUpload,
-  faCheck,
-  faBan,
-  faAdd,
-  faSearch,
-} from "@fortawesome/free-solid-svg-icons";
-import { Space, Spin, DatePicker, Popover, Input, Modal } from "antd";
-import { NativeEventSource, EventSourcePolyfill } from "event-source-polyfill";
-import { connect, useDispatch } from "react-redux";
-import { patientDetails } from "../../../store/actions/AuthActions";
+import "react-facebook-loading/dist/react-facebook-loading.css";
+import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { DatePicker, Popover, Tooltip } from "antd";
+import { useDispatch } from "react-redux";
 import { notification } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
-import { DataTable } from "primereact/datatable";
-import { FilterMatchMode, FilterOperator } from "primereact/api";
-import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
-import { Tag } from "primereact/tag";
-import { EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { fetchEventSource } from "@microsoft/fetch-event-source";
-import { Paginator } from "primereact/paginator";
-import { Calendar } from "primereact/calendar";
-import PatientTable from "../../../components/table/PatientList/patientList";
 import dayjs from "dayjs";
-import Image from "next/image";
-import calender from "../../../images/dashboard/calender.png";
-import Spinner from "../../../components/spinner/spinner";
-import Footer from "../../../jsx/layouts/Footer";
-import { getSearchPatients } from "../../../store/actions/PatientsActions";
+import { Paginator } from "primereact/paginator";
 import visitStyles from "../../../styles/visitdata.module.css";
+import Header from "../../../jsx/layouts/nav/Header";
+import { patientDetails } from "../../../store/actions/AuthActions";
+import PatientTable from "../../../components/table/PatientList/patientList";
+import LoadingSpinner from "../../../components/spinner";
+import Footer from "../../../jsx/layouts/Footer";
+import { getpatientsListFilter } from "../../../store/actions/PatientsActions";
+import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
+import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
+import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
+import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
+import Abort from "../../../../src/images/trackingImages/Abort.png";
 
+import {
+  disableFutureDate,
+  priorityOptions,
+} from "../../../components/headerFilters/functions";
+import DailyTask from "./dailytask";
+import Legends from "../../../components/legends";
+import HeaderFilters from "../../../components/headerFilters";
+import Image from "next/image";
+import styles from "../report/report.module.css";
+import filter from "../../../images/svg/filter.svg";
+import { extractLatestData } from "../../l2Auditor/auditing";
 
+const { RangePicker } = DatePicker;
 export default function Patient() {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
-  const patientStoreDetails = useSelector((state) => state);
-  const controller = new AbortController();
-  const signal = controller.signal;
-
   const navigate = useRouter();
   const [validated, setValidated] = useState(false);
-  const [dataValidationList, setDataValidationList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingBtn, setIsLoadingBtn] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [addUser, setAddUser] = useState(false);
-
-  const recordsPage = 10;
-  const lastIndex = currentPage * recordsPage;
-  const firstIndex = lastIndex - recordsPage;
-
-  const [npage, setNPage] = useState("");
-  const [number, setNumber] = useState([]);
-  const [records, setRecords] = useState([]);
-  const [addPatient, setAddPatient] = useState(false);
-  const [addPatientId, setAddPatientId] = useState(false);
-  const [selectFile, setSelectFile] = useState(null);
-  const [selectFileRadiology, setSelectFileRadiology] = useState(null);
-  const [dates, setDates] = useState(null);
-  const [compledtedDate, setCompletedDate] = useState(null);
-  const { RangePicker } = DatePicker;
   const [inputValue, setInputValue] = useState({
     year: "",
     name: "",
     patientId: "",
   });
-  const [inputValuePatientId, setInputValuePatientId] = useState({
-    patientId: "",
-    patientName: "",
-  });
-
-  const [pageCount, setPageCount] = useState(0);
-  const [pageIndex, setPageIndex] = useState(0);
-  const [pageOptions, setPageOptions] = useState(0);
-  const [canPreviousPage, setCanPreviousPage] = useState(false);
-  const [canNextPage, setCanNextPage] = useState(true);
-  const [canMaxPage, setCanMaxPage] = useState(10);
-
-  const [process, setProcess] = useState({});
-  const [message, setMessage] = useState({});
-  const [listening, setListening] = useState(false);
-
-  const [patinetList, setPatinetList] = useState([]);
+  const filteratedDashboardData = useSelector(
+    (state) => state.patients.filteredList
+  );
   const [patinetListAll, setPatinetListAll] = useState([]);
   const [tenantId, setTenantId] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
   const [localUserId, setLocalUserId] = useState("");
 
   const [pageNo, setPageNo] = useState(0);
-  const [pageSize, setPageSize] = useState(13);
+  const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
-
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
-  const [modalVisible, setModalVisible] = useState(false);
-  const currentDate = dayjs();
-  const [dueDateStart, setDueDateStart] = useState(null);
-  const [dueDateEnd, setDueDateEnd] = useState(null);
-  const [processedStart, setProcessedStart] = useState(null);
-  const [processedEnd, setProcessedEnd] = useState(null);
-  const [isDueDateCalender, setIsDueDateCalender] = useState(true);
-  const [statusSelectedValue, setStausSelectedValue] = useState(null);
-
-
-  const handleOpenModal = () => {
-    setModalVisible(true);
-  };
-
-  const handleCloseModal = () => {
-    setModalVisible(false);
-  };
-  const [filters, setFilters] = useState({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    patientId: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    patientName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  const [trackChart, setTrackChart] = useState({
+    COMPLETED: 0,
+    PENDING: 0,
+    DECLINED: 0,
+    HOLD: 0,
   });
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
+  const [selectedPriority, setSelectedPriority] = useState();
+  const [showFilters, setShowFilters] = useState(false);
+  const dueStartDate = filteratedDashboardData?.dayDate
+    ? moment(filteratedDashboardData?.dayDate)?.format("YYYY-MM-DD") +
+      "T00:00:00.000Z"
+    : "";
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-  const statusMessage = {
-    subscribed: "Subscribed",
-    unsubscribed: "Unsubscribed",
-  };
-  const content = (
-    <div style={{ display: "flex" }}>
-      <div style={{ marginBottom: "8px" }}>
-        <Button>Button 1</Button>
-        <Button>Button 2</Button>
-      </div>
-      <hr></hr>
-      <div>
-        <RangePicker />
-      </div>
-    </div>
+  const dueEndDate = filteratedDashboardData?.dayDate
+    ? moment(filteratedDashboardData?.dayDate)?.format("YYYY-MM-DD") +
+      "T23:59:59.000Z"
+    : "";
+
+  const [dueDateStart, setDueDateStart] = useState(dueStartDate);
+  const [dueDateEnd, setDueDateEnd] = useState(dueEndDate);
+  const [processedStart, setProcessedStart] = useState("");
+  const [processedEnd, setProcessedEnd] = useState("");
+  const [statusSelectedValue, setStausSelectedValue] = useState(
+    filteratedDashboardData?.status
+      ? filteratedDashboardData?.status.toUpperCase()
+      : ""
   );
-  const filterChangePatientId = (event) => {
-    const value = event.target.value;
-    let _filters = { ...filters };
-    _filters["patientId"].value = value;
-    setFilters(_filters);
-  };
-  const filterChangePatientName = (event) => {
-    const value = event.target.value;
-    let _filters = { ...filters };
-    _filters["patientName"].value = value;
-    setFilters(_filters);
-  };
+  const [searchTextValue, setSearchTextValue] = useState("");
+
+  const patientsListFilter = useSelector(
+    (state) => state.patients.patientsListFilter
+  );
+
+  const dayDateFormated = filteratedDashboardData?.date
+    ? dayjs(filteratedDashboardData?.date).format("MM-DD-YYYY")
+    : dayjs(filteratedDashboardData?.dayDate).format("MM-DD-YYYY");
+  const [defaultStartDate, setDefaultStartDate] = useState(
+    dayjs(dayDateFormated).format("MM-DD-YYYY") + "T00:00:00.000Z"
+  );
+  const [defaultEndDate, setDefaultEndDate] = useState(
+    dayjs(dayDateFormated).format("MM-DD-YYYY") + "T23:59:59.000Z"
+  );
+  const [sort, setSort] = useState({ sortDir: "", sortField: "" });
+
+  useEffect(() => {
+    setDefaultStartDate(
+      dayjs(dayDateFormated).format("MM-DD-YYYY") + "T00:00:00.000Z"
+    );
+    setDefaultEndDate(dayjs(dayDateFormated).format("MM-DD-YYYY")) +
+      "T23:59:59.000Z";
+  }, [dayDateFormated]);
 
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
@@ -180,20 +121,29 @@ export default function Patient() {
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-    // setIsLoading(false);
-    getAllList(uId, pageNo, pageSize);
-    // fetchData();
-  }, []);
+    getFilteApi(
+      pageNo,
+      pageSize,
+      statusSelectedValue,
+      dueDateStart,
+      dueDateEnd,
+      processedStart,
+      processedEnd,
+      sort,
+      selectedPriority
+    );
+  }, [filteratedDashboardData, sort, selectedPriority]);
 
-  const getAllList = async (uId, pageNo, pageSize) => {
-    var resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
-    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    if (response.data) {
+  useEffect(() => {
+    if (patientsListFilter) {
       var resultMap = [];
-      var result = response.data.content;
-      setTotalElements(response.data.totalElements);
+      var result = patientsListFilter?.response?.patientDTOList?.content;
+      setTotalElements(
+        patientsListFilter?.response?.patientDTOList?.totalElements
+      );
+      console.log(result, "test");
 
-      result.map((res) => {
+      result?.map((res) => {
         resultMap.push({
           patientId: res.patientId,
           patientName: res.patientName,
@@ -206,125 +156,51 @@ export default function Patient() {
           allocatedOn: res.allocatedOn,
           priority: res.priority,
           processedStatus: res.processedStatus,
+          processedDate: res.processedDate,
           createdAt: res.createdAt,
+          allocatedByFirstName: res.allocatedByFirstName,
+          allocatedByLastName: res.allocatedByLastName,
+          allocatedByProfileImage: res.allocatedByProfileImage,
+          validDiseaseCount: res.validDiseaseCount,
+          deletedDiseaseCount: res.deletedDiseaseCount,
+          declinedNotes: res.declinedNotes,
         });
       });
+      setTrackChart(patientsListFilter?.response?.processStatusCount);
       var newArray = [];
       newArray = [...patinetListAll, ...resultMap];
       setPatinetListAll(resultMap);
-
-      // console.log(newArray)
       setIsLoading(false);
       setTableLoading(false);
-      //     setTimeout(() => {
-      //     subscribe(resultMap);
-      // }, 3000);
     }
-  };
+  }, [patientsListFilter]);
 
-
-  const getFilteApi = async (pageNo, pageSize,statusValue,pStart,pEnd,dStart,dEnd) => {
-    console.log(pStart,pEnd,dStart,dEnd)
-    var resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}`;
-    if (statusValue != null) {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}`
-    }
-    if (pStart != null && statusValue == null) {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStart=${pStart}&processedEnd=${pEnd}`
-    }
-
-    if (pStart != null && statusValue != null) {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&processedStart=${pStart}&processedEnd=${pEnd}`
-    }
-
-    if (dStart != null && statusValue == null && pStart ==  null) {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&dueDateStart=${dStart}&dueDateEnd=${dEnd}`
-    }
-
-    if (dStart != null && statusValue != null && pStart !=  null) {
-      resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${statusValue}&dueDateStart=${dStart}&dueDateEnd=${dEnd}&processedStart=${pStart}&processedEnd=${pEnd}`
-    }
-
-    console.log(resoureUrl)
-
-
-
-    // resoureUrl = `dbservice/patient/filter?userId=${localUserId}&page=${pageNo}&size=${pageSize}&processedStatus=${processedStatus}&processedStart=${startDate}&processedEnd=${endDate}`;
-
-
-    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    if (response.data) {
-      var resultMap = [];
-      var result = response.data.content;
-      setTotalElements(response.data.totalElements);
-
-      result.map((res) => {
-        resultMap.push({
-          patientId: res.patientId,
-          patientName: res.patientName,
-          fileName: res.fileName,
-          computing: res.computing,
-          createdAt: res.createdAt,
-          lastModifiedDate: res.lastModifiedDate,
-          dueDate: res.dueDate,
-          processedStatus: res.processedStatus,
-          createdAt: res.createdAt,
-        });
-      });
-      var newArray = [];
-      newArray = [...patinetListAll, ...resultMap];
-      setPatinetListAll(resultMap);
-
-      // console.log(newArray)
-      setIsLoading(false);
-      setTableLoading(false);
-      //     setTimeout(() => {
-      //     subscribe(resultMap);
-      // }, 3000);
-    }
+  const getFilteApi = async (
+    pageNo,
+    pageSize,
+    statusValue,
+    dStart,
+    dEnd,
+    pStart,
+    pEnd,
+    sort,
+    selectedPriority
+  ) => {
+    // setIsLoading(true);
+    var uId = localStorage.getItem("userId");
+    var resoureUrl = `dbservice/patient/filter?patientAllocated=${uId}&page=${pageNo?pageNo:0}&size=${pageSize?pageSize:15}&processedStatus=${statusValue?statusValue:""}&dueDateStart=${dStart?dStart:""}&dueDateEnd=${dEnd?dEnd:""}&processedStart=${pStart?pStart:""}&processedEnd=${pEnd?pEnd:""}&searchString=${searchTextValue?searchTextValue:""}&sortfield=${
+      sort?.sortField ? sort?.sortField : ""
+    }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&priority=${
+      selectedPriority ? selectedPriority : ""
+    }`;
+    dispatch(getpatientsListFilter(resoureUrl));
   };
 
   const getNameSearch = async (searchtext) => {
-    console.log(searchtext)
-    // dispatch(getSearchPatients(0,searchtext));
-
-    var resoureUrl = `dbservice/patient/compute/search?searchtext=${searchtext}&pageno=${0}&pagesize=${12}`;
-     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-     if (response.data) {
-       var resultMap = [];
-       var result = response.data.content;
-       setTotalElements(response.data.totalElements);
- 
-       result.map((res) => {
-         resultMap.push({
-           patientId: res.patientId,
-           patientName: res.patientName,
-           fileName: res.fileName,
-           computing: res.computing,
-           createdAt: res.createdAt,
-           lastModifiedDate: res.lastModifiedDate,
-           dueDate: res.dueDate,
-           processedStatus: res.processedStatus,
-           createdAt: res.createdAt,
-         });
-       });
-       var newArray = [];
-       newArray = [...patinetListAll, ...resultMap];
-       setPatinetListAll(resultMap);
- 
-       // console.log(newArray)
-       setIsLoading(false);
-       setTableLoading(false);
-       //     setTimeout(() => {
-       //     subscribe(resultMap);
-       // }, 3000);
-    }
-  }
-
-
-  const addPatientFormId = () => {
-    setValidated(false);
-    setAddPatientId(true);
+    setIsLoading(true);
+    setSearchTextValue(searchtext);
+    var resoureUrl = `dbservice/patient/filter?patientAllocated=${localUserId}&page=0&size=${pageSize}&processedStatus=${statusSelectedValue}&dueDateStart=${dueDateStart}&dueDateEnd=${dueDateEnd}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchtext}`;
+    dispatch(getpatientsListFilter(resoureUrl));
   };
 
   const addPatientFile = (data) => {
@@ -335,105 +211,7 @@ export default function Patient() {
     setIsLoadingBtn(false);
   };
 
-  const onChangeFile = (e) => {
-    setSelectFile(e[0]);
-  };
-  const onChangeFileRadiology = (e) => {
-    setSelectFileRadiology(e[0]);
-  };
-
-  const handleChange = async (e) => {
-    const key = e.target.name;
-    const value = e.target.value;
-    setInputValue({ ...inputValue, [key]: value });
-  };
-
-  const handleChangePatientId = async (e) => {
-    const key = e.target.name;
-    const value = e.target.value;
-    setInputValuePatientId({ ...inputValuePatientId, [key]: value });
-  };
-
-  const handleSubmit = async (event) => {
-    const form = event.currentTarget;
-    event.preventDefault();
-    if (form.checkValidity() === true) {
-      setIsLoadingBtn(true);
-      event.preventDefault();
-      event.stopPropagation();
-      if (selectFile != null) {
-        submitPatientFile();
-      }
-      if (selectFileRadiology != null) {
-        submitRadiology();
-      }
-      // const formData = new FormData();
-      // formData.append("file", selectFile);
-      // formData.append("dos", inputValue.year);
-      // formData.append("orgid", localOrgId);
-      // formData.append("tenantid", tenantId);
-      // formData.append("userid", localUserId);
-      // formData.append("patientid", inputValue.patientId);
-      // formData.append("patientname", inputValue.name);
-      // const headers = {
-      //   headers: {
-      //     "Content-Type": "multipart/form-data",
-      //   },
-      // };
-      // setSelectFile(formData);
-      // const response = await axios.post(
-      //   ENDPOINTS.apiEndointFileUploadHcc + `aiservice/ai/upload
-      //   `,
-      //   formData,
-      //   headers
-      // );
-      // if (response?.status == 200) {
-      //   notification.success({
-      //     message: "Patient File Upload Successfully!",
-      //   });
-      //   setAddPatient(false);
-      //   setIsLoadingBtn(false);
-      // } else {
-      //   setIsLoadingBtn(false);
-      // }
-      // setAddPatient(false);
-      // getAllList(localUserId);
-    }
-
-    setValidated(true);
-  };
-  const handleSubmitPatientId = async (event) => {
-    const form = event.currentTarget;
-    event.preventDefault();
-    inputValuePatientId.patientAllocated = localUserId;
-    inputValuePatientId.computing = 0;
-    inputValuePatientId.allocatedUserId = localUserId;
-
-    if (form.checkValidity() === true) {
-      setIsLoadingBtn(true);
-      const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient`,
-        inputValuePatientId
-      );
-      if (response?.status == 200) {
-        notification.success({
-          message: "Patient Id Created Successfully!",
-        });
-        setAddPatientId(false);
-        setIsLoadingBtn(false);
-      } else {
-        setIsLoadingBtn(false);
-      }
-      setAddPatientId(false);
-      getAllList(localUserId, pageNo, pageSize);
-    }
-
-    setValidated(true);
-  };
-
   const gotoPatientDetails = (data) => {
-    console.log("Clicked on patient details:", data);
-
     dispatch(patientDetails(data));
     if (data.computing == 2) {
       const controller = new AbortController();
@@ -448,267 +226,9 @@ export default function Patient() {
     }
   };
 
-  function gotoPage(number) {
-    if (canMaxPage > number) {
-      setCanNextPage(true);
-      setPageIndex(number);
-      if (number > 0) {
-        setCanPreviousPage(true);
-      } else {
-        setCanPreviousPage(false);
-      }
-      setPageCount(number);
-    } else {
-      setCanNextPage(false);
-    }
-    var start = number * 10;
-    var end = start + 10;
-    const records = patinetListAll.slice(start, end);
-    setPatinetList(records);
-  }
-  function nextPage(number) {
-    if (canMaxPage > number) {
-      setPageCount(number);
-      setPageIndex(number);
-      setCanPreviousPage(true);
-    } else {
-      setCanNextPage(false);
-    }
-    var start = number * 10;
-    var end = start + 10;
-    const records = patinetListAll.slice(start, end);
-    setPatinetList(records);
-  }
-
-  function previousPage(number) {
-    setCanNextPage(true);
-    setPageIndex(number);
-    if (number > 0) {
-      setCanPreviousPage(true);
-    } else {
-      setCanPreviousPage(false);
-    }
-    setPageCount(number);
-    var start = number * 10;
-    var end = start + 10;
-    const records = patinetListAll.slice(start, end);
-    setPatinetList(records);
-  }
-
-  const subscribe = async (patientResult) => {
-    const accessToken = localStorage.getItem("token");
-    var uId = localStorage.getItem("userId");
-    var tenId = localStorage.getItem("tenantId");
-    var processedList = [];
-
-    var resoureUrl = `https://hcc.encipherhealth.com/secure/aiservice/ai/events?userId=${uId}&tenantId=${tenId}`;
-    const fetchData = async () => {
-      let eventSource = await fetchEventSource(resoureUrl, {
-        method: "get",
-        mode: "cors",
-        signal: signal,
-        headers: {
-          // Accept: "text/event-stream",
-          Authorization: `Bearer ` + accessToken,
-          // 'Cache-Control': 'no-cache',
-          // 'Connection': 'keep-alive',
-          // 'Accept': "text/event-stream",
-          "Access-Control-Allow-Origin": "*",
-        },
-        withCredentials: true,
-        onopen(res) {
-          console.log("Client side error ", res);
-        },
-        onmessage(event) {
-          console.log("Client Events Trigger ");
-          const parsedData = JSON.parse(event.data);
-          processedList = parsedData;
-          var checkProcessedValue = [];
-          processedList.map((res) => {
-            checkProcessedValue.push({
-              patientId: res,
-            });
-          });
-
-          const array1 = patientResult;
-          const array2 = checkProcessedValue;
-          console.log(array2);
-          console.log(patientResult);
-
-          const hashMap2 = array2.reduce((carry, item) => {
-            const { patientId } = item;
-            if (!carry[patientId]) {
-              carry[patientId] = item;
-            }
-            return carry;
-          }, {});
-
-          const output = array1.map((item) => {
-            const newName = hashMap2[item.patientId];
-            if (newName) {
-              item.computing = 2;
-            }
-            return item;
-          });
-
-          setPatinetListAll(output);
-        },
-        onclose() {
-          controller.abort();
-          console.log("Connection closed by the server");
-        },
-        onerror(err) {
-          controller.abort();
-          console.log("There was an error from server", err);
-        },
-      });
-    };
-
-    fetchData();
-  };
-
-  function abortFetching() {
-    console.log("Now aborting");
-    // Abort.
-    controller.abort();
-  }
-
-  // const fetchData = async () => {
-  //   const data = await (await fetchDataApi()).data;
-  //   console.log(data);
-  //   // setNotifications(data);
-  // };
-
-  // const fetchDataApi = async () => {
-  //   return await axios.get(ENDPOINTS.apiEndoint + "aiservice/ai/events?userId=12345&tenantId=b4d34e42-79a6-478e-b3af-12ce7311fa09");
-
-  // };
-
-  const statusBodyTemplate = (rowData) => {
-    //   console.log(rowData.computing)
-    //   return <span className={`badge badge-success`}>
-    //   Processed
-    //   <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
-    // </span>;
-
-    switch (rowData.computing) {
-      case 2:
-        return (
-          <div className="patient-status">
-            <span className={`badge processed-text`}>Processed</span>
-          </div>
-        );
-
-      case 1:
-        return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Processing</span>
-          </div>
-        );
-
-      case 3:
-        return (
-          <div className="patient-status">
-            <span className={`badge failed-text`}>Failed</span>
-          </div>
-        );
-
-      case 0:
-        return (
-          <div className="patient-status">
-            <span className={`badge not-started-text`}>Not Started</span>
-          </div>
-        );
-    }
-  };
-  const dateFormateChange = (rowData) => {
-    console.log(rowData);
-  };
-
-  const processstatusBodyTemplate = (rowData) => {
-    //   console.log(rowData.computing)
-    //   return <span className={`badge badge-success`}>
-    //   Processed
-    //   <FontAwesomeIcon className='ml-2 ms-1 ' icon={faCheck} />
-    // </span>;
-
-    switch (rowData.processedStatus) {
-      case "COMPLETED":
-        return (
-          <div className="patient-status">
-            <span className={`badge processed-text`}>Completed</span>
-
-
-          </div>
-        );
-
-      case "PENDING":
-        return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-
-          </div>
-        );
-
-      case "DECLINED":
-        return (
-          <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>Declined</span>
-
-          </div>
-        );
-
-      case "NOTCOMPUTED":
-        return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-
-          </div>
-        );
-      case "COMPUTED":
-        return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-
-          </div>
-        );
-      case "HOLD":
-        return (
-          <div className="patient-status">
-            <span className={`badge hold-text`} >Hold</span>
-
-          </div>
-        );
-      case null:
-        return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-
-          </div>
-        );
-
-    }
-
-  };
-
   const actionBodyTemplate = (rowData) => {
     return (
       <div className="d-flex justify-content-center">
-        {/* {rowData.computing == 2 ? (
-          <button
-            onClick={() => gotoPatientDetails(rowData)}
-            className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn"
-          >
-            <EyeOutlined className="text-white" />
-          </button>
-        ) : (
-          <button
-            disabled
-            className="btn hegiht10 btn-notstarted shadow  sharp me-1 action-btn"
-          >
-            <EyeInvisibleOutlined className="text-white" />
-          </button>
-        )} */}
         <button
           onClick={() => addPatientFile(rowData)}
           className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
@@ -719,139 +239,243 @@ export default function Patient() {
     );
   };
 
-  const submitPatientFile = async () => {
-    // setIsLoadingBtn(false);
-    const formData = new FormData();
-    formData.append("file", selectFile);
-    formData.append("dos", inputValue.year);
-    formData.append("orgid", localOrgId);
-    formData.append("tenantid", tenantId);
-    formData.append("userid", localUserId);
-    formData.append("patientid", inputValue.patientId);
-    formData.append("patientname", inputValue.name);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
-    setSelectFile(formData);
-    const response = await axios.post(
-      ENDPOINTS.apiEndointFileUploadHcc +
-      `aiservice/ai/upload
-      `,
-      formData,
-      headers
-    );
-    if (response?.status == 202) {
-      getAllList(localUserId, pageNo, pageSize);
-
-      notification.success({
-        message: "Patient File Upload Successfully!",
-      });
-      setAddPatient(false);
-      setIsLoadingBtn(false);
-    } else {
-      setIsLoadingBtn(false);
-    }
-    setAddPatient(false);
-    setIsLoadingBtn(false);
-
-    // getAllList(localUserId);
-
-    // console.log("1");
-  };
-  const submitRadiology = async () => {
-    const formData = new FormData();
-    formData.append("file", selectFileRadiology);
-    formData.append("orgid", localOrgId);
-    formData.append("tenantid", tenantId);
-    formData.append("userid", localUserId);
-    formData.append("patientid", inputValue.patientId);
-    formData.append("patientname", inputValue.name);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
-    setSelectFile(formData);
-    const response = await axios.post(
-      ENDPOINTS.apiEndointFileUploadHcc +
-      `aiservice/ai/upload/radiology
-    `,
-      formData,
-      headers
-    );
-    if (response?.status == 202) {
-      getAllList(localUserId, pageNo, pageSize);
-      setAddPatient(false);
-      setIsLoadingBtn(false);
-    } else {
-      setIsLoadingBtn(false);
-    }
-    setAddPatient(false);
-    // setIsLoadingBtn(false);
-    setSelectFileRadiology(null);
-  };
-
   const onPageChange = (e) => {
-    console.log(dates);
-    console.log(compledtedDate);
-    console.log(e);
+    setIsLoading(true);
     setPaginationFirst(e.first);
     setPageNo(e.page);
     setPageSize(e.rows);
     setTableLoading(true);
-    getAllList(localUserId, e.page, e.rows);
-    console.log("test");
+    getFilteApi(
+      e.page,
+      15,
+      statusSelectedValue,
+      dueDateStart,
+      dueDateEnd,
+      processedStart,
+      processedEnd
+    );
   };
+
   const statusOptions = [
+    { label: "ALL", value: "ALL" },
     { label: "COMPLETED", value: "COMPLETED" },
     { label: "PENDING", value: "PENDING" },
+    { label: "COMPUTED", value: "COMPUTED" },
     { label: "DECLINED", value: "DECLINED" },
     { label: "HOLD", value: "HOLD" },
+    { label: "ABORTED BY CRON", value: "ABORTED_BY_CRON" },
   ];
-  const dosOnChange = (selectedOption) => {
-    const value = selectedOption.value;
+  const bullets = [
+    {
+      title: "Processed Status",
+      option: [
+        {
+          color: "#5da9e4",
+          name: "Pending",
+        },
+        {
+          color: "red",
+          name: "Declined",
+        },
+        {
+          color: "#3a9b94",
+          name: "Completed",
+        },
+        { color: "#AD94FA", name: "Hold" },
+        {
+          color: "#3B3486",
+          name: "ABORTED BY CRON",
+        },
+      ],
+    },
+  ];
+  const onChangeStatus = (selectedOption) => {
+    var value = selectedOption.value;
+    if (value == "ALL") {
+      value = "";
+    }
     setStausSelectedValue(value);
-    getFilteApi(0, 10,value,processedStart,processedEnd,dueDateStart,dueDateEnd)
+    getFilteApi(
+      0,
+      pageSize,
+      value,
+      dueDateStart,
+      dueDateEnd,
+      processedStart,
+      processedEnd
+    );
   };
-  const handleOk = () => {
-    setModalVisible(false);
+  const onChangePriority = (selectedOption) => {
+    var value = selectedOption?.value;
+    if (value == "All") {
+      value = "";
+    }
+    setSelectedPriority(value);
   };
   const handleDatePickerChange = (dateString) => {
-    let convertStartDate = moment(dateString[0]).format('YYYY-MM-DD') + "T00:00:00.000Z";
-    let convertEndDate = moment.utc(dateString[1]).format('YYYY-MM-DD') + "T23:59:59.000Z";
-    setDueDateStart(convertStartDate )
-    setDueDateEnd(convertEndDate )
-    getFilteApi(0, 10,statusSelectedValue,processedStart,processedEnd,convertStartDate,convertEndDate)
-
+    if (dateString[0] != "") {
+      let convertStartDate =
+        moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
+      let convertEndDate =
+        moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
+      setDueDateStart(convertStartDate);
+      setDueDateEnd(convertEndDate);
+      getFilteApi(
+        0,
+        pageSize,
+        statusSelectedValue,
+        convertStartDate,
+        convertEndDate,
+        processedStart,
+        processedEnd
+      );
+    } else {
+      setDueDateStart("");
+      setDueDateEnd("");
+      getFilteApi(
+        0,
+        pageSize,
+        statusSelectedValue,
+        "",
+        "",
+        processedStart,
+        processedEnd
+      );
+    }
   };
 
   const handleDatePickerChangeProcesseDate = (dateString) => {
-    let convertStartDate = moment(dateString[0]).format('YYYY-MM-DD') + "T00:00:00.000Z";
-    let convertEndDate = moment.utc(dateString[1]).format('YYYY-MM-DD') + "T23:59:59.000Z"
-    setProcessedStart(convertStartDate )
-    setProcessedEnd(convertEndDate )
-    getFilteApi(0, 10,statusSelectedValue,convertStartDate,convertEndDate,dueDateStart,dueDateEnd)
-
+    if (dateString[0] != "") {
+      let convertStartDate =
+        moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
+      let convertEndDate =
+        moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
+      setProcessedStart(convertStartDate);
+      setProcessedEnd(convertEndDate);
+      getFilteApi(
+        0,
+        pageSize,
+        statusSelectedValue,
+        dueDateStart,
+        dueDateEnd,
+        convertStartDate,
+        convertEndDate
+      );
+    } else {
+      setProcessedStart("");
+      setProcessedEnd("");
+      getFilteApi(
+        0,
+        pageSize,
+        statusSelectedValue,
+        dueDateStart,
+        dueDateEnd,
+        "",
+        ""
+      );
+    }
   };
+  const processstatusBodyTemplate = (rowData) => {
+    const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
+
+    switch (rowData.processedStatus) {
+      case "COMPLETED":
+        return (
+          <Popover placement="bottom" title="Status: COMPLETED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Completed} style={{ height: "18%", width: "18%" }} />
+            </div>
+          </Popover>
+        );
+
+      case "PENDING":
+        return (
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "18%", width: "18%" }} />
+            </div>
+          </Popover>
+        );
+
+      case "DECLINED":
+        return (
+          <Popover
+            placement="bottom"
+            title="Status: DECLINED"
+            content={`Reason: ${declinedDataFromDeclined ? declinedDataFromDeclined : "---"}`}
+          >
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Declined} style={{ height: "18%", width: "18%" }} />
+            </div>
+          </Popover>
+        );
+      case "NOTCOMPUTED":
+        return (
+          <Popover placement="bottom" title="Status: NOT COMPUTED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "18%", width: "18%" }} />
+            </div>
+          </Popover>
+        );
+      case "COMPUTED":
+        return (
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "18%", width: "18%" }} />
+            </div>
+          </Popover>
+        );
+      case "HOLD":
+        return (
+          <Popover placement="bottom" title="Status: HOLD">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Hold} style={{ height: "18%", width: "18%" }} />
+            </div>
+          </Popover>
+        );
+      case "ABORTED_BY_CRON":
+        return (
+          <Popover placement="bottom" title="Status: ABORTED BY CRON">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Abort} style={{ height: "18%", width: "18%" }} />
+            </div>
+          </Popover>
+        );
+      case null:
+        return (
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "18%", width: "18%" }} />
+            </div>
+          </Popover>
+        );
+    }
+  };
+
+  const options = [{ label: "All", value: "" }, ...priorityOptions];
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
         <Header />
         <div class="content-body">
-          {isLoading ? (
-            <Spinner />
-          ) : (
-            <div className="container-fluid">
-              <div className="row">
-                <div className="col-xl-12">
-                  <div className="">
-                    <div className="card-body p-0">
-                      <div className="table-responsive active-projects task-table">
-                        <div className="tbl-caption  align-items-center">
-                          <div className="row filter-contain">
+          <div className="container-fluid">
+            <div className="row">
+              <div className="col-xl-12">
+                <div className="">
+                  <div className="card-body p-0">
+                    <div className="table-responsive active-projects task-table">
+                      <div className="tbl-caption  align-items-center">
+                        <div className="row filter-contain">
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              flexDirection: "row",
+                            }}
+                          >
                             <div className="col-xl-2">
+                              <label>Search by Name or ID</label>
                               <div class="form-group has-search">
                                 <FontAwesomeIcon
                                   className="fa fa-search form-control-feedback"
@@ -859,472 +483,159 @@ export default function Patient() {
                                 />
                                 <InputText
                                   type="text"
-                                  onChange={(e) => getNameSearch(e.target.value)}
+                                  onChange={(e) =>
+                                    getNameSearch(e.target.value)
+                                  }
                                   className="form-control new-form-control"
                                   placeholder="Search"
                                 />
                               </div>
                             </div>
-                            <div className="col-xl-2" style={{ zIndex: "999" }}>
+                            <div className="col-xl-2">
+                              <label>Select Status</label>
                               <div class="form-group has-search">
-                                {/* <InputText
-                                  type="text"
-                                  onChange={(e) => filterChangePatientName(e)}
-                                  className="form-control new-form-control"
-                                  placeholder="Status"
-                                /> */}
                                 <Select
                                   onChange={(selectedOption) =>
-                                    dosOnChange(selectedOption)
+                                    onChangeStatus(selectedOption)
                                   }
                                   options={statusOptions}
                                   className="custom-react-select"
                                   isSearchable={false}
+                                  placeholder={
+                                    filteratedDashboardData
+                                      ? filteratedDashboardData?.status?.toUpperCase()
+                                      : "Select Status"
+                                  }
                                 />
                               </div>
                             </div>
-                            {/* <div className="col-xl-2">
+                            <div className="col-xl-2">
+                              <label>Select Priority</label>
                               <div class="form-group has-search">
-
-                                <Calendar
-                                  className="form-control new-form-control calender-pri-input"
-                                  value={dates}
-                                  onChange={(e) => setDates(e.value)}
-                                  selectionMode="range"
-                                  readOnlyInput
-                                  placeholder="Due Date"
-
+                                <Select
+                                  onChange={(selectedOption) =>
+                                    onChangePriority(selectedOption)
+                                  }
+                                  options={options}
+                                  className="custom-react-select"
+                                  isSearchable={false}
+                                  placeholder={
+                                    filteratedDashboardData
+                                      ? filteratedDashboardData?.status?.toUpperCase()
+                                      : "Select Status"
+                                  }
                                 />
-
-
                               </div>
-                            </div> */}
-                            <div className="col-xl-3">
-                              <div
-                                onClick={handleOpenModal}
-                                className={styles.dateDisplay}
-                              >
-                                {dueDateStart != null ?
-                                <div>
-                                {moment(dueDateStart).format("MM-DD-YYYY")}&nbsp;- &nbsp;{moment(dueDateEnd).format("MM-DD-YYYY")}
-                                </div> :<div></div>}
-                                <Image src={calender} />
-                              </div>
-                              <Modal
-                                title=""
-                                visible={modalVisible}
-                                onOk={handleOk}
-                                mask={false}
-                                // onCancel={false}
-                                closable={false}
-                                width="45%"
-                                height="800px"
-                                style={{ marginTop: "30px" }}
-                              >
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    height: "400px",
+                            </div>
+
+                            <div className="col-xl-2">
+                              <label>Due Date</label>
+                              <div>
+                                <RangePicker
+                                  format="MM-DD-YYYY"
+                                  onChange={(dates, dateStrings) => {
+                                    handleDatePickerChange(dateStrings);
                                   }}
-                                >
-                                  <div style={{ display: "block" }}>
-                                    <div style={{ margin: "20px 0" }}>
-                                      <Button onClick={() => setIsDueDateCalender(true)} type="ghost">Due Date</Button>
-
-                                    </div>
-                                    <div>
-                                      <Button onClick={() => setIsDueDateCalender(false)}>Completed Date</Button>
-                                    </div>
-                                  </div>
-                                  {isDueDateCalender ?
-                                  <div>
-                                    <RangePicker
-
-                                      getPopupContainer={() =>
-                                        document.getElementById("date-popup")
-                                      }
-                                      popupStyle={{
-                                        marginTop: "-259px",
-                                        marginLeft: "-78px"
-                                      }}
-                                      onChange={(dates, dateStrings) => {
-                                        handleDatePickerChange(dateStrings);
-                                      }}
-                                      open={true}
-                                      showNow={false}
-                                      style={{ visibility: "hidden", boxShadow: "none" }}
-                                    />
-                                  </div> :
-                                  <div>
-                                    <RangePicker
-
-                                      getPopupContainer={() =>
-                                        document.getElementById("date-popup")
-                                      }
-                                      popupStyle={{
-                                        marginTop: "-259px",
-                                        marginLeft: "-78px"
-                                      }}
-                                      onChange={(dates, dateStrings) => {
-                                        handleDatePickerChangeProcesseDate(dateStrings);
-                                      }}
-                                      open={true}
-                                      showNow={false}
-                                      style={{ visibility: "hidden", boxShadow: "none" }}
-                                    />
-                                  </div>}
-                                </div>
-                                <div
-                                  id="date-popup"
-                                  style={{ position: "relative" }}
+                                  defaultValue={
+                                    filteratedDashboardData
+                                      ? [
+                                          dayjs(defaultStartDate, "MM-DD-YYYY"),
+                                          dayjs(defaultEndDate, "MM-DD-YYYY"),
+                                        ]
+                                      : []
+                                  }
                                 />
-                              </Modal>
+                              </div>
                             </div>
-                            <div className="col-xl-2" >
-                              <div className={visitStyles.flags}>
-                                <div className={visitStyles.flags}>
-                                  <span
-                                    className={visitStyles.completed}
-                                    style={{ background: "#3a9b94 !important" }}
-                                  ></span>
-                                  <span className={visitStyles.flagCodes}>
-                                    Completed
-                                  </span>
-                                </div>
-                                <div className={visitStyles.flags}>
-                                  <span className={visitStyles.pending}></span>
-                                  <span className={visitStyles.flagCodes}>
-                                    Pending
-                                  </span>
-                                </div>
-                                <div className={visitStyles.flags}>
-                                  <span className={visitStyles.hold}></span>
-                                  <span className={visitStyles.flagCodes}>
-                                    Hold
-                                  </span>
-                                </div>
-                                <div className={visitStyles.flags}>
-                                  <span className={visitStyles.declined}></span>
-                                  <span className={visitStyles.flagCodes}>
-                                    Declined
-                                  </span>
+                            <div
+                              className={"col-xl-1"}
+                              style={{
+                                margin: "30px 0 0 10px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() => setShowFilters(!showFilters)}
+                            >
+                              <button className={styles.filterBtn}>
+                                <Image src={filter} />{" "}
+                                {showFilters ? "Hide" : "Filter"}
+                              </button>
+                            </div>
+                            <HeaderFilters bullets={bullets} />
+
+                            <div className="col-xl-2">
+                              <DailyTask trackChart={trackChart} />
+                            </div>
+                          </div>
+                          {showFilters && (
+                            <div
+                              style={{
+                                display: "flex",
+                                marginTop: "-30px",
+                                flexDirection: "row",
+                              }}
+                            >
+                              <div className="col-xl-2 ">
+                                <label>Completed Date</label>
+                                <div>
+                                  <RangePicker
+                                    format="MM-DD-YYYY"
+                                    onChange={(dates, dateStrings) => {
+                                      handleDatePickerChangeProcesseDate(
+                                        dateStrings
+                                      );
+                                    }}
+                                    disabledDate={(current) =>
+                                      disableFutureDate(current)
+                                    }
+                                  />
                                 </div>
                               </div>
                             </div>
-
-
-                            {/* <div className="col-xl-2">
-                              <div class="form-group has-search"> */}
-                            {/* <Calendar
-                                  className="form-control new-form-control calender-pri-input"
-                                  value={compledtedDate}
-                                  onChange={(e) => setCompletedDate(e.value)}
-                                  selectionMode="range"
-                                  readOnlyInput
-                                  placeholder="Completed Date"
-                                /> */}
-                            {/* <Button type="primary" onClick={showModal}>
-        Open Modal
-      </Button> */}
-                            {/* <div>
-                                  <RangePicker />
-                                </div> */}
-                            {/* </div>
-                            </div> */}
-
-                            <div className="col-xl-3" >
-                              <Button
-                                onClick={addPatientFormId}
-                                className="btn btn-primary btn-sm ms-2 flr"
-                              >
-                                + Add Patient Id
-                              </Button>
-                            </div>
-                          </div>
+                          )}
                         </div>
+                      </div>
 
-                        <div
-                          id="task-tbl_wrapper"
-                          className="dataTables_wrapper no-footer"
-                        >
-                          {/* <DataTable
-                            value={patinetListAll}
-                            paginator={false}
-                            rows={10}
-                            rowsPerPageOptions={[10, 25, 50, 100]}
-                            dataKey="id"
-                            filters={filters}
-                            filterDisplay="menu"
-                            className="custom-table"
-                            rowClassName="custom-row"
-                          >
-                           
-
-                            <Column
-                              field="patientId"
-                              header="Patient Id"
-                              bodyStyle={{
-                                borderLeft: " 0.2px solid #e1e1e1",
-                                borderTop: " 0.2px solid #e1e1e1",
-                                borderBottom: " 0.2px solid #e1e1e1",
-                              }}
+                      <div
+                        id="task-tbl_wrapper"
+                        className="dataTables_wrapper no-footer"
+                      >
+                        {isLoading ? (
+                          <LoadingSpinner />
+                        ) : (
+                          <>
+                            <PatientTable
+                              patinetListAll={patinetListAll}
+                              actionBodyTemplate={actionBodyTemplate}
+                              statusBodyTemplate={processstatusBodyTemplate}
+                              gotoPatientDetails={gotoPatientDetails}
+                              patientDetails={patientDetails}
+                              sort={sort}
+                              setSort={setSort}
+                              getFilteApi={getFilteApi}
                             />
-                            <Column
-                              field="patientName"
-                              header="Patient Name"
-                              bodyStyle={{
-                                borderTop: " 0.2px solid #e1e1e1",
-                                borderBottom: " 0.2px solid #e1e1e1",
-                              }}
-                            />
-                           
-                            <Column
-                              field="status"
-                              body={statusBodyTemplate}
-                              header="Status"
-                              bodyStyle={{
-                                borderTop: " 0.2px solid #e1e1e1",
-                                borderBottom: " 0.2px solid #e1e1e1",
-                              }}
-                            />
-                           
-                            <Column
-                              field="dueDate"
-                              body={(data) =>
-                                moment(data.dueDate).format("MM-DD-YYYY")
-                              }
-                              sortable
-                              header="Due Date"
-                              bodyStyle={{
-                                borderTop: " 0.2px solid #e1e1e1",
-                                borderBottom: " 0.2px solid #e1e1e1",
-                              }}
-                            />
-                            <Column
-                              field="lastModifiedDate"
-                              body={(data) =>
-                                moment(data.dueDate).format("MM-DD-YYYY")
-                              }
-                              sortable
-                              header="Completed Date"
-                              bodyStyle={{
-                                borderTop: " 0.2px solid #e1e1e1",
-                                borderBottom: " 0.2px solid #e1e1e1",
-                              }}
-                            />
-                            <Column
-                              field="action"
-                              body={actionBodyTemplate}
-                              header="Action"
-                              bodyStyle={{
-                                borderTop: " 0.2px solid #e1e1e1",
-                                borderBottom: " 0.2px solid #e1e1e1",
-                                borderRight: " 0.2px solid #e1e1e1",
-                              }}
-                            />
-                          </DataTable> */}
-                          <PatientTable
-                            patinetListAll={patinetListAll}
-                            actionBodyTemplate={actionBodyTemplate}
-                            statusBodyTemplate={processstatusBodyTemplate}
-                            gotoPatientDetails={gotoPatientDetails}
-                            patientDetails={patientDetails}
-
-                          />
-                          <div >
-                            <div className="pagination-container">
-                              <Paginator
-                                first={paginationFirst}
-                                rows={13}
-                                totalRecords={totalElements}
-                                onPageChange={onPageChange}
-                              />
-                              <div className="total-pages">
-                                Total count: {totalElements}
+                            <div>
+                              <div className="pagination-container">
+                                <Paginator
+                                  first={paginationFirst}
+                                  rows={15}
+                                  totalRecords={totalElements}
+                                  onPageChange={onPageChange}
+                                />
+                                <div className="total-pages">
+                                  Total count: {totalElements}
+                                </div>
                               </div>
                             </div>
-
-                          </div>
-
-                          <Footer/>
-
-
-
-
-                        </div>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          )}
+          </div>
         </div>
-        <Offcanvas
-          onHide={setAddPatient}
-          show={addPatient}
-          className="offcanvas-end"
-          placement="end"
-        >
-          <div className="offcanvas-header">
-            <h5 className="modal-title" id="#gridSystemModal">
-              Add Patient Details
-            </h5>
-            <button
-              type="button"
-              className="btn-close"
-              onClick={() => setAddPatient(false)}
-            >
-              <i className="fa-solid fa-xmark"></i>
-            </button>
-          </div>
-          <div className="offcanvas-body">
-            <div className="container-fluid">
-              <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                <div className="row">
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Patient Id <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="patientId"
-                      required
-                      type="text"
-                      value={inputValue.patientId}
-                      onChange={handleChange}
-                    />
-                  </div>
-
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Patient Name <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="name"
-                      required
-                      type="text"
-                      value={inputValue.name}
-                      onChange={handleChange}
-                    />
-                  </div>
-
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      File <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      required
-                      type="file"
-                      accept="application/pdf,text/plain"
-                      onChange={(e) => onChangeFile(e.target.files)}
-                      disabled={isLoadingBtn ? true : false}
-                    />
-                  </div>
-                  {/* <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Radiology
-                    </Form.Label>
-                    <Form.Control
-                      type="file"
-                      accept="application/pdf,text/plain"
-                      onChange={(e) => onChangeFileRadiology(e.target.files)}
-                      disabled={isLoadingBtn ? true : false}
-                    />
-                  </div> */}
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Year of Service <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="year"
-                      required
-                      type="number"
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <Button type="submit" className="btn btn-primary btn-sm me-1">
-                    {isLoadingBtn ? "Loading..." : "Submit"}
-                  </Button>
-                  <Button
-                    onClick={() => setAddPatient(false)}
-                    className="btn btn-danger btn-sm light ms-1"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </Form>
-            </div>
-          </div>
-        </Offcanvas>
-        <Offcanvas
-          onHide={setAddPatientId}
-          show={addPatientId}
-          className="offcanvas-end"
-          placement="end"
-        >
-          <div className="offcanvas-header">
-            <h5 className="modal-title" id="#gridSystemModal">
-              Add Patient Details
-            </h5>
-            <button
-              type="button"
-              className="btn-close"
-              onClick={() => setAddPatientId(false)}
-            >
-              <i className="fa-solid fa-xmark"></i>
-            </button>
-          </div>
-          <div className="offcanvas-body">
-            <div className="container-fluid">
-              <Form
-                noValidate
-                validated={validated}
-                onSubmit={handleSubmitPatientId}
-              >
-                <div className="row">
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Patient Id <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="patientId"
-                      required
-                      type="text"
-                      onChange={handleChangePatientId}
-                    />
-                  </div>
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Patient Name <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
-                      name="patientName"
-                      required
-                      type="text"
-                      onChange={handleChangePatientId}
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <Button type="submit" className="btn btn-primary btn-sm me-1">
-                    {isLoadingBtn ? "Loading..." : "Submit"}
-                  </Button>
-                  <Button
-                    onClick={() => setAddPatientId(false)}
-                    className="btn btn-danger btn-sm light ms-1"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </Form>
-            </div>
-          </div>
-        </Offcanvas>
       </div>
     </>
   );

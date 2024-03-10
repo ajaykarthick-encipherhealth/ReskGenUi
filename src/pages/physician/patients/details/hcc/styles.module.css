@@ -1,0 +1,263 @@
+.meatCommentCard {
+  width: 584px;
+  border-radius: 16px;
+  background: #1b627e;
+}
+
+.meatCommentCard2 {
+  width: 610px;
+  border-radius: 16px;
+  border: 0.5px solid #1b627e;
+  margin-left: 10px;
+  background: #fff;
+  padding: 10px 0px 0px 10px;
+  min-height: 100px;
+  max-height: 220px;
+}
+
+.meatCommentDetails {
+  padding: 10px;
+}
+
+.publishedByDetails {
+  border-radius: 16px;
+  border: 0.5px solid #c4c4c4;
+  margin: 10px 0px 10px 0px;
+  padding: 10px 0px 0px 10px;
+  height: 105px;
+}
+
+.meatQueried_head {
+  color: #000;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: 0.48px;
+}
+
+.meatQueried_details {
+  color: #000;
+  font-size: 12px !important;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.4px;
+}
+
+.publisheddetails {
+  color: #000;
+  font-size: 12px !important;
+  margin-bottom: 0px;
+}
+
+.l1auditorBadge {
+  border-radius: 6px;
+  background: #fed0bb;
+  width: 102px;
+  height: 20px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  color: #000;
+  font-size: 12px;
+  text-align: center;
+}
+
+.l2auditorBadge {
+  border-radius: 6px;
+  background: #e9c46a;
+  width: 102px;
+  height: 20px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  color: #000;
+  font-size: 12px;
+  text-align: center;
+}
+
+.moreBtn {
+  color: #133dd4;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration-line: underline;
+  cursor: pointer;
+}
+
+.currentBadge {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.48px;
+  border-radius: 6px;
+  background: #457b9d;
+  width: 66px;
+  height: 20px;
+  display: block;
+  text-align: center;
+}
+
+.previousBadge {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.48px;
+  border-radius: 6px;
+  background: #9c6644;
+  width: 66px;
+  height: 20px;
+  display: block;
+  text-align: center;
+}
+
+.edit_meat_query {
+  border-radius: 6px;
+  background: #04306f;
+  width: 26px;
+  height: 26px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.meat_querySaveBtn {
+  color: #133dd4;
+  font-size: 12px;
+  border-radius: 8px;
+  border: 1px solid #133dd4;
+  background: rgba(19, 61, 212, 0.15);
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+  width: 74px;
+  height: 32px;
+}
+
+.meat_queryfooterBtn {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.queryTextarea {
+  height: 100px !important;
+  width: 98% !important;
+  color: #000;
+  font-size: 12px !important;
+  padding: 10px;
+  border: 1px solid #e6e6e6;
+  border-radius: 17.75rem;
+  border-radius: 8px !important;
+}
+
+.ruleTypeCol {
+  color: #151414;
+  font-size: 11px !important;
+  font-weight: 600;
+  letter-spacing: 0.48px;
+  border-radius: 6px;
+  background: #ffa50054;
+  display: block;
+  text-align: center;
+  padding: 0px 5px;
+  margin-top: 5px;
+  height: 17px;
+  width: max-content;
+}
+
+.mostSpecificTag {
+  background: #0000ff52;
+  color: #1616f6 !important;
+  font-size: 11px !important;
+  font-weight: 500;
+  border-radius: 30px !important;
+  margin: 4px 3px 0px 5px;
+  text-align: center !important;
+  height: 20px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: capitalize;
+  padding: 5px 12px;
+  border: 0.0625rem solid transparent;
+}
+
+.overlay_style {
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background: #0000004f;
+  z-index: 99999;
+}
+
+.overlay__inner_style {
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+.overlay__content_style {
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.spinner_style {
+  width: 75px;
+  height: 75px;
+  display: inline-block;
+  border-width: 2px;
+  border-color: rgba(255, 255, 255, 0.05);
+  border-top-color: #fff;
+  animation: spin 1s infinite linear;
+  border-radius: 100%;
+  border-style: solid;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.hccFormContainer {
+  margin-top: 10px;
+  height: 70vh;
+  overflow: scroll;
+}
+.comboDetailsHeader {
+  margin-top: 10px;
+  display: flex;
+  border-radius: 12px;
+  padding: 15px 15px 15px 15px;
+  /* box-shadow: rgb(162 162 191 / 20%) 0px 7px 29px 0px; */
+  margin-left: 12px;
+  width: 97%;
+  justify-content: space-between;
+}
+.comboDetailsHeaders {
+  margin-top: 10px;
+  display: flex;
+  border-radius: 12px;
+  /* padding: 15px 15px 15px 15px;
+   box-shadow: rgb(162 162 191 / 20%) 0px 7px 29px 0px; 
+  margin-left: 12px; */
+  width: 97%;
+  justify-content: space-between;
+}
+.meatFoundContainer {
+  display: flex;
+  margin-right: 5px;
+}
+
+.badgeMeat {
+  font-size: 11px !important;
+  font-weight: 500;
+  border-radius: 30px !important;
+  margin-right: 3px;
+  text-align: center !important;
+  height: 23px;
+  width: 23px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border: 0.0625rem solid transparent;
+}

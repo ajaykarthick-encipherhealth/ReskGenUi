@@ -5,7 +5,9 @@ import {
   GetSelectedReport,
   exportData,
   usersList,
+  getFile,
 } from "../../services/ReportService";
+import { notification } from "antd";
 
 export const REPORT_PATIENTS_DETAILS = "REPORT_PATIENTS_DETAILS";
 export const SENT_REPORT = "SENT_REPORT";
@@ -14,23 +16,40 @@ export const REPORT_DETAILS = "REPORT_DETAILS";
 export const SELECTEDROW = "SELECTEDROW";
 export const EXPORT = "EXPORT";
 export const SEARCH = "SEARCH";
+export const FILEPATH = "FILEPATH";
+export const FILEDETAILS = "FILEDETAILS";
+export const REPORT = "REPORT";
 
 export const selectedRow = (val) => ({
   type: SELECTEDROW,
   payload: val,
 });
 
-export const getReportDetails = (pagenum,startDate,endDate,search) => {
+export const selectedReport = (val) => ({
+  type: REPORT,
+  payload: val,
+});
+
+export const getReportDetails = (
+  pagenum,
+  startDate,
+  endDate,
+  search,
+  filter,
+  sort
+) => {
   return (dispatch) => {
     try {
-      patientDetails(pagenum,startDate,endDate,search).then((response) => {
-        if (response) {
-          dispatch({
-            type: REPORT_PATIENTS_DETAILS,
-            payload: response.data,
-          });
+      patientDetails(pagenum, startDate, endDate, search, filter,sort).then(
+        (response) => {
+          if (response) {
+            dispatch({
+              type: REPORT_PATIENTS_DETAILS,
+              payload: response.data,
+            });
+          }
         }
-      });
+      );
     } catch (err) {
       console.log(err);
     }
@@ -44,6 +63,9 @@ export const getExportDetails = (data) => {
         dispatch({
           type: EXPORT,
           payload: response.data,
+        });
+        notification.success({
+          message: "Details Exported Successfully",
         });
       });
     } catch (err) {
@@ -67,14 +89,17 @@ export const getUsersList = (id, search) => {
   };
 };
 
-export const getSentDetails = (pagenum,startDate,endDate,search) => {
+export const getSentDetails = (pagenum, startDate, endDate, search,sort) => {
   return (dispatch) => {
     try {
-      SentReport(pagenum,startDate,endDate,search).then((response) => {
+      SentReport(pagenum, startDate, endDate, search,sort).then((response) => {
         if (response) {
           dispatch({
             type: SENT_REPORT,
-            payload: response,
+            payload: {
+              data: response,
+              loading: false,
+            },
           });
         }
       });
@@ -83,14 +108,17 @@ export const getSentDetails = (pagenum,startDate,endDate,search) => {
     }
   };
 };
-export const getReceivedDetails = (pagenum,startDate,endDate,search) => {
+export const getReceivedDetails = (pagenum, startDate, endDate, search,sort) => {
   return (dispatch) => {
     try {
-      ReceivedReport(pagenum,startDate,endDate,search).then((response) => {
+      ReceivedReport(pagenum, startDate, endDate, search,sort).then((response) => {
         if (response) {
           dispatch({
             type: RECEIVED_REPORT,
-            payload: response,
+            payload: {
+              data:response,
+              loading: false,
+            },
           });
         }
       });
@@ -99,17 +127,39 @@ export const getReceivedDetails = (pagenum,startDate,endDate,search) => {
     }
   };
 };
-export const getSelectedReportDetails = (reportId) => {
+export const getSelectedReportDetails = (reportId,reportInfo) => {
   return (dispatch) => {
     try {
-      GetSelectedReport(reportId).then((response) => {
+      GetSelectedReport(reportId,reportInfo).then((response) => {
         if (response) {
           dispatch({
             type: REPORT_DETAILS,
-            payload: response.data,
+            payload: response?.response,
           });
+          dispatch(getFileDetails(response?.response?.reportPath,reportInfo))
         }
       });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+export const getFileDetails = (pathname,reportInfo) => {
+  return async (dispatch) => {
+    try {
+      if (pathname) {
+        const response = await getFile(pathname);
+        if (response) {
+          const splitPath = pathname?.split(".").pop();
+          dispatch({
+            type: FILEDETAILS,
+            payload: {
+              path:response.data?.response,
+              extention:splitPath
+            },
+          });
+        }
+      }
     } catch (err) {
       console.log(err);
     }

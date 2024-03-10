@@ -1,0 +1,162 @@
+.mainCard {
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  margin-bottom: 25px;
+}
+.mainContainer {
+  padding-top: 20px;
+}
+.headerTitle {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.headerName {
+  color: #3070f5 !important;
+  font-size: 20px !important;
+}
+.headerName2 {
+  color: #3c9a92 !important;
+  font-size: 20px !important;
+}
+.compareBtn {
+  border: none !important;
+  height: 30px !important;
+  width: 130px !important;
+  border-radius: 10px !important;
+  background: #6ba6fa;
+  color: #fff;
+  font-size: 15px !important;
+}
+
+.provider_name {
+  color: #008000bf !important;
+  background: #c4ffc4 !important;
+  font-weight: 600;
+  font-size: 11px !important;
+  border-radius: 30px !important;
+  margin: 0px 0px 0px 5px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 5px;
+}
+.encounterDate {
+  font-weight: 600;
+  font-size: 11px !important;
+  border-radius: 30px !important;
+  margin: 0px 0px 0px 5px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 12px;
+  border: 1px solid #a1bea0 !important;
+}
+
+.addFileBtn {
+  margin-left: 10px;
+}
+
+.headerTitle2 {
+  margin-top: 20px;
+  text-align: center;
+  justify-content: center;
+  background: #cee1fd;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.headerName3 {
+  color: #000000 !important;
+  font-size: 18px !important;
+  line-height: 1.5;
+}
+.accuracyCard {
+  border: 1px solid #d9d9d9;
+  padding: 10px;
+  border-radius: 8px;
+  height: 300px;
+}
+.rafCard {
+  border: 1px solid #d9d9d9;
+  padding: 10px;
+  border-radius: 8px;
+  height: 250px;
+}
+.card2 {
+  margin-left: 50px;
+}
+.accuracyCard2 {
+  display: flex;
+  justify-content: center;
+}
+.rafTitle {
+  text-align: center;
+}
+.mainCard > .ant-progress-text {
+  display: block !important;
+}
+.rafHeading1 {
+  color: #3070f5 !important;
+  font-size: 20px !important;
+}
+.rafHeading2 {
+  color: #3c9a92 !important;
+  font-size: 20px !important;
+}
+.rafPercentage {
+  margin-top: 50px;
+}
+.accuracyConatiner {
+  padding: 10px;
+}
+.fileContainer {
+  margin: 20px 0 30px 0px;
+}
+.container,
+.suggestedcontainer {
+  min-height: 10vh;
+  max-height: 40vh;
+  overflow: hidden;
+}
+
+.container::-webkit-scrollbar,
+.suggestedcontainer::-webkit-scrollbar {
+  width: 4px;
+  background: transparent;
+}
+
+.container::-webkit-scrollbar-thumb,
+.suggestedcontainer::-webkit-scrollbar {
+  border-radius: 10px;
+  background: rgb(173, 162, 162);
+}
+.container:hover,
+.suggestedcontainer:hover,
+.suggestedcontainer2:hover,
+.deletedContainer:hover {
+  overflow-y: scroll;
+  position: inherit;
+}
+.container_fluid_patient {
+  /* height: 100vh !important; */
+  padding-top: 55px !important;
+  background-color: #fff !important;
+  margin-bottom: 20px;
+}
+.patientName {
+  padding-top: 10px;
+  padding-left: 10px;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+}
+.patientListContainer {
+  margin-bottom: 20px;
+}
