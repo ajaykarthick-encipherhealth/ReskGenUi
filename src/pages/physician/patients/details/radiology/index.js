@@ -2721,14 +2721,14 @@ const Radiology = ({}) => {
                 >
                   <div className="row">
                     <div className="col-xl-12 d-grid">
-                      {selectMeatResult?.treatment != "" ? (
+                      {selectMeatResult?.assessment != "" ? (
                         <Popover
                           placement="topLeft"
-                          title="Treatment"
-                          content={selectMeatResult?.treatment}
+                          title="Assessment"
+                          content={selectMeatResult?.assessment}
                         >
                           <span className="meat-name-details2">
-                            {selectMeatResult?.treatment}
+                            {selectMeatResult?.assessment}
                           </span>
                         </Popover>
                       ) : (
@@ -2738,8 +2738,8 @@ const Radiology = ({}) => {
                       )}
                       <div>
                         {getCaptureSectionBackgroundMeat(
-                          selectMeatResult?.treatmentCapturedFromHeader,
-                          selectMeatResult?.treatment,
+                          selectMeatResult?.assessmentCapturedFromHeader,
+                          selectMeatResult?.assessment,
                           selectMeatResult?.radiology,
                           selectMeatResult
                         )}

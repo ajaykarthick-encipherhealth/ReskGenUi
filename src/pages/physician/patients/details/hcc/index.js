@@ -33,9 +33,14 @@ import {
   faCircleUp,
   faSitemap,
   faCircleUser,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { CalendarOutlined } from "@ant-design/icons";
-import { QuestionCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
+import {
+  QuestionCircleOutlined,
+  CheckCircleOutlined,
+  InfoCircleOutlined,
+} from "@ant-design/icons";
 import {
   Popconfirm,
   Select,
@@ -63,6 +68,8 @@ import {
   updateMeatQuery,
   getProviderDetails,
   manuallyAddComboCode,
+  deleteMeatQuery,
+  getProviderEncounterDetails,
 } from "../../../../../services/PatientsListSevice";
 import RafScore from "../components/rafScore";
 import CamboTree from "./org";
@@ -302,6 +309,9 @@ const Hcc = ({ patientHccResult }) => {
     queryReason: "",
     description: "",
   });
+  const [providerNameEcnounterList, setProviderNameEcnounterList] = useState(
+    []
+  );
 
   const getMeatFound = (code, data, value) => {
     const result = data?.filter(
@@ -3366,10 +3376,26 @@ const Hcc = ({ patientHccResult }) => {
     { value: "OTHERS", label: "OTHERS" },
   ];
   const imagingtest = [
-    { value: "CT Chest", label: "CT Chest" },
-    { value: "CT abdomen", label: "CT abdomen" },
-    { value: "Chest Xray", label: "Chest Xray" },
-    { value: "CT Cervix", label: "CT Cervix" },
+    { value: "X-ray", label: "X-ray" },
+    { value: "CT Scan", label: "CT Scan" },
+    { value: "MRI", label: "MRI" },
+    { value: "Ultrasound", label: "Ultrasound" },
+    { value: "PET Scan", label: "PT Scan " },
+    { value: "Mammography", label: "Mammography" },
+    { value: "Fluoroscopy", label: "Fluoroscopy" },
+    { value: "Bone Densitometry", label: "Bone Densitometry" },
+    { value: "Nuclear Medicine Imaging", label: "Nuclear Medicine Imaging" },
+    { value: "Angiography", label: "Angiography" },
+    { value: "Myelography", label: "Myelography" },
+    { value: "Arthrogram", label: "Arthrogram" },
+    { value: "Barium Swallow/Test", label: "Barium Swallow/Test" },
+    { value: "Hysterosalpingography", label: "Hysterosalpingography" },
+    { value: "Fistulogram", label: "Fistulogram" },
+    { value: "Cholangiography", label: "Cholangiography" },
+    { value: "Sialography", label: "Sialography" },
+    { value: "Discography", label: "Discography" },
+    { value: "Lymphangiography", label: "Lymphangiography" },
+    { value: "Intravenous Pyelogram", label: "Intravenous Pyelogram" },
   ];
   const dosListMeat = [
     { value: "08/01/2023", label: "08/01/2023" },
@@ -3561,7 +3587,33 @@ const Hcc = ({ patientHccResult }) => {
       );
       var backColor = result[0]?.backgroundColor;
       var textColor = result[0]?.sectionColor;
+      var value = ["09/19/2023"];
+      console.log(value);
+      console.log(encounterDateMatching);
       var sectionMapArr = (
+        // <Popover
+        //   content={
+        //     <>
+        //       {value?.map((res3) => {
+        //         const result = encounterDateMatching.filter(
+        //           (res2) => res2.name == res3
+        //         );
+        //         var backColor = result[0]?.colors;
+        //         <span
+        //           className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+        //         >
+        //           <i>
+        //             <CalendarOutlined className={visitStyles.calenderIcon} />
+        //           </i>
+        //           {moment(res3).format("MMM DD")}
+        //         </span>;
+        //       })}
+        //     </>
+        //   }
+        //   trigger={["click"]}
+        //   placement="bottom"
+        //   onClick={() => getEncounterProviderDetails(res)}
+        // >
         <span
           className={`mt-2 text-start ${visitStyles.provider_name}`}
           style={{ backgroundColor: backColor, color: textColor }}
@@ -3578,6 +3630,7 @@ const Hcc = ({ patientHccResult }) => {
           </i>
           {res}
         </span>
+        // </Popover>
       );
       return sectionMapArr;
     });
@@ -3655,6 +3708,42 @@ const Hcc = ({ patientHccResult }) => {
   const showErrorMessage = () => {
     setOpens(false);
     notification.info({ message: "Tree Not Available" });
+  };
+
+  const confirmMeatQuery = async (code) => {
+    var result = await deleteMeatQuery(localPatientId, code);
+    if (result.status == "SUCCESS") {
+      var result = await getMeatQueryList(selectedDosValue, localPatientId);
+      setMeatQueryList(result.response);
+      notification.success({
+        message: result.message,
+        placement: "top",
+        duration: 1,
+      });
+    } else {
+    }
+  };
+
+  const getEncounterProviderDetails = async (name) => {
+    // var result = await getProviderEncounterDetails(localPatientId, name);
+
+    var value = ["09/19/2023"];
+
+    return value?.map((res) => {
+      const result = encounterDateMatching.filter((res2) => res2.name == res);
+      var backColor = result[0]?.colors;
+      var sectionMapArr = (
+        <span
+          className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+        >
+          <i>
+            <CalendarOutlined className={visitStyles.calenderIcon} />
+          </i>
+          {moment(res).format("MMM DD")}
+        </span>
+      );
+      return sectionMapArr;
+    });
   };
 
   return (
@@ -6399,13 +6488,35 @@ const Hcc = ({ patientHccResult }) => {
                                       </span>
                                     </div>
                                     <div className="col-xl-1">
-                                      <div
-                                        onClick={() =>
-                                          addMeatQuery(item, "Update")
-                                        }
-                                        className={styles.edit_meat_query}
-                                      >
-                                        {SVGICON.meatQueryEdit}
+                                      <div className="d-flex">
+                                        <div
+                                          onClick={() =>
+                                            addMeatQuery(item, "Update")
+                                          }
+                                          className={styles.edit_meat_query}
+                                        >
+                                          {SVGICON.meatQueryEdit}
+                                        </div>
+                                        {/* <Popconfirm
+                                          title="Are you sure to delete this query?"
+                                          okText="Yes"
+                                          cancelText="No"
+                                          onConfirm={() =>
+                                            confirmMeatQuery(item.diagnosisCode)
+                                          }
+                                        >
+                                          <div
+                                            className={styles.delete_meat_query}
+                                          >
+                                            <FontAwesomeIcon
+                                              icon={faTrash}
+                                              style={{
+                                                size: 8,
+                                                color: "#fff",
+                                              }}
+                                            />
+                                          </div>
+                                        </Popconfirm> */}
                                       </div>
                                     </div>
                                   </div>

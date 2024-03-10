@@ -261,3 +261,18 @@
   align-items: center;
   border: 0.0625rem solid transparent;
 }
+.edit_meat_query svg {
+  margin-bottom: 3px;
+}
+.delete_meat_query {
+  border-radius: 6px;
+  background: rgb(246, 67, 67);
+  width: 26px;
+  height: 26px;
+  text-align: center;
+  cursor: pointer;
+  margin-left: 3px;
+}
+.delete_meat_query svg {
+  font-size: 12px;
+}

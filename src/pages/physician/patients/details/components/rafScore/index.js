@@ -50,9 +50,15 @@ const RafScore = ({ rafScoreList }) => {
                         <div className="col-xl-9">DX Description</div>
                       </div>
                     </div>
-                    {rafScoreData?.map((item) => (
+                    {rafScoreData?.map((item, i) => (
                       <div className={style.detailsHead}>
-                        <div className={`row ${style.detailsraf}`}>
+                        <div
+                          className={
+                            rafScoreData?.length != i + 1
+                              ? `row ${style.rafchildBorder}`
+                              : `row`
+                          }
+                        >
                           <div className="col-xl-3"> {item.dx_name}</div>
                           <div className="col-xl-9">{item.dx_desc}</div>
                         </div>
@@ -69,9 +75,15 @@ const RafScore = ({ rafScoreList }) => {
                         <div className="col-xl-6">Monthly Premium(V24)</div>
                       </div>
                     </div>
-                    {rafScoreData?.map((item) => (
+                    {rafScoreData?.map((item, i) => (
                       <div className={style.detailsHead}>
-                        <div className={`row ${style.detailsraf}`}>
+                        <div
+                          className={
+                            rafScoreData?.length != i + 1
+                              ? `row ${style.rafchildBorder}`
+                              : `row`
+                          }
+                        >
                           <div className="col-xl-3">
                             {getRafDetails(item.dx_name, "v24_2022")?.map(
                               (item) => (
@@ -107,9 +119,15 @@ const RafScore = ({ rafScoreList }) => {
                         <div className="col-xl-6">Monthly Premium(V28)</div>
                       </div>
                     </div>
-                    {rafScoreData?.map((item) => (
+                    {rafScoreData?.map((item, i) => (
                       <div className={style.detailsHead}>
-                        <div className={`row ${style.detailsraf}`}>
+                        <div
+                          className={
+                            rafScoreData?.length != i + 1
+                              ? `row ${style.rafchildBorder}`
+                              : `row`
+                          }
+                        >
                           <div className="col-xl-3">
                             {getRafDetails(item.dx_name, "v28_2023")?.map(
                               (item) => (
