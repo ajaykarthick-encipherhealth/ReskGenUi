@@ -241,6 +241,8 @@ const Lab = ({}) => {
   const [isDocumentLoaded, setDocumentLoaded] = React.useState(false);
   const [providerDetails, setProviderDetails] = useState("");
   const [selectMeatResult, setSelectMeatResult] = useState(null);
+  const [patientLabDetails, setPatientLabDetails] = useState(null);
+  const [activeTabNumber, setActiveTabNumber] = useState(0);
 
   const handleDocumentLoad = () => {
     setDocumentLoaded(true);
@@ -283,6 +285,7 @@ const Lab = ({}) => {
     );
 
     var resultTest = response.data.response;
+    setPatientLabDetails(resultTest);
 
     var dosYearArrFile = [];
     var fileDatesArr = [];
@@ -628,6 +631,7 @@ const Lab = ({}) => {
     setIsModalOpenLab(false);
     setIsFileFormShow(false);
     setIsModalOpenLabMeat(false);
+    setActiveTabNumber(activeTabNumber == null ? 0 : null);
   };
 
   const handleOpenModal = (value, disDescription) => {
@@ -949,6 +953,14 @@ const Lab = ({}) => {
       return sectionMapArr;
     });
   };
+
+  useEffect(() => {
+    var tenId = localStorage.getItem("tenantId");
+    if (patientLabDetails?.labFileDetail) {
+      var fileDetails = patientLabDetails.labFileDetail;
+      getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
+    }
+  }, [activeTabNumber]);
 
   return (
     <>

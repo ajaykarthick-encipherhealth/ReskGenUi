@@ -254,6 +254,7 @@ const Radiology = ({}) => {
   const [selectMeatResult, setSelectMeatResult] = useState(null);
   const [isModalOpenRadiologyMeat, setIsModalOpenRadiologyMeat] =
     useState(false);
+  const [activeTabNumber, setActiveTabNumber] = useState(0);
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -820,6 +821,7 @@ const Radiology = ({}) => {
     setIsModalOpenLab(false);
     setIsFileFormShow(false);
     setIsModalOpenRadiologyMeat(false);
+    setActiveTabNumber(activeTabNumber == null ? 0 : null);
   };
 
   const handleOpenModal = (value, disDescription) => {
@@ -1143,6 +1145,16 @@ const Radiology = ({}) => {
       return sectionMapArr;
     });
   };
+
+  useEffect(() => {
+    var tenId = localStorage.getItem("tenantId");
+    if (patientDetailsRadiology?.radiologyFileDetail) {
+      getPatientPdfFileRadiology(
+        patientDetailsRadiology?.radiologyFileDetail[0]?.azureBlobPath,
+        tenId
+      );
+    }
+  }, [activeTabNumber]);
 
   return (
     <>
