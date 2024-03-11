@@ -35,6 +35,15 @@
   border-radius: 8px !important;
   height: 42px !important;
 }
+.selectClearBtn {
+  border: 1px solid #063f93 !important;
+  background: transparent !important;
+  color: #000 !important;
+  width: 100px;
+  border-radius: 8px !important;
+  height: 42px !important;
+  margin-left: 10px;
+}
 .form_control {
   display: block;
   width: 100%;
