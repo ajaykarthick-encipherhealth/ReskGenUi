@@ -138,21 +138,11 @@ const Notification = ({}) => {
     if (validDateForm()) {
       setIsBtnLoading(true);
       setErrmessage("");
-      setInputValue({
-        notificationType: "INFO",
-        content: "",
-        usersIds: [],
-        isReviewer: false,
-        isSupervisor: false,
-        isAdmin: false,
-        managerId: "",
-      });
-      setSelectCheckBox("");
       var data = {
         managerId: null,
-        isReviewer: selectCheckBox == "ADMIN" ? true : false,
+        isAdmin: selectCheckBox == "ADMIN" ? true : false,
         isSupervisor: selectCheckBox == "SUPERVISOR" ? true : false,
-        isAdmin: selectCheckBox == "REVIEWER" ? true : false,
+        isReviewer: selectCheckBox == "REVIEWER" ? true : false,
         usersIds: inputValue.usersIds,
         notificationType: "INFO",
         content: inputValue.content,
@@ -160,6 +150,16 @@ const Notification = ({}) => {
       };
       var result = await postNotification(data);
       if (result.status == "SUCCESS") {
+        setInputValue({
+          notificationType: "INFO",
+          content: "",
+          usersIds: [],
+          isReviewer: false,
+          isSupervisor: false,
+          isAdmin: false,
+          managerId: "",
+        });
+        setSelectCheckBox("");
         setIsBtnLoading(false);
         getNotificationResult();
         notification.success({
