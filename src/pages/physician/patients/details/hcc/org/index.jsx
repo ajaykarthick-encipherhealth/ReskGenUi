@@ -13,6 +13,7 @@ import moment from "moment";
 import visitStyles from "../../../../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
+import SpinnerDots from "../../../../../../components/spinner";
 
 const addOnCodeColor = [
   "magenta",
@@ -29,6 +30,7 @@ const addOnCodeColor = [
 const CamboTree = ({ tree }) => {
   const [background, setBackground] = useState([]);
   const [trees, setTrees] = useState(Tree);
+  const [isLoading, setLoading] = useState(tree);
   const getBackgroundColor = async () => {
     try {
       const response = await axios.get(
@@ -285,10 +287,20 @@ const CamboTree = ({ tree }) => {
     );
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  }, []);
+
   return (
     <div style={{ backgroundColor: "#fbfdff" }}>
       <div className={`overflow-x-auto ${Style.chart}`}>
-        <OrganizationChart value={trees} nodeTemplate={nodeTemplate} />
+        {isLoading ? (
+          <SpinnerDots />
+        ) : (
+          <OrganizationChart value={trees} nodeTemplate={nodeTemplate} />
+        )}
       </div>
     </div>
   );
