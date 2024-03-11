@@ -239,7 +239,7 @@ function CoderReport({
                     );
                   }}
                 >
-                  COMPLETE DATE{" "}
+                  COMPLETED DATE{" "}
                   {sortOrder === "ASC" ? (
                     <ArrowUpOutlined />
                   ) : (
