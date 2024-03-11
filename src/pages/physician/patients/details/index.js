@@ -385,6 +385,7 @@ const Details = ({}) => {
       },
     ];
     setSelectedRowsId(data);
+    console.log(result?.processedStatus)
     const menu = (
       <Menu>
         {result?.processedStatus != "HOLD" ? (
@@ -402,7 +403,7 @@ const Details = ({}) => {
             </div>
           </Menu.Item>
         ) : null}
-        {result?.processedStatus != "DECLINE" ? (
+        {result?.processedStatus != "DECLINED" ? (
           <Menu.Item
             key="3"
             disabled={flagFirstData?.flag !== undefined ? false : true}
@@ -463,7 +464,7 @@ const Details = ({}) => {
             >
               <div className="patient-status">
                 <span className={`badge failed-text`} style={{ color: "red" }}>
-                  DECLINE
+                  DECLINED
                 </span>
               </div>
             </Tooltip>
