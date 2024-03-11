@@ -151,6 +151,7 @@ const HeaderFilters = ({
   atCorner,
   isNextCreatedBySelector,
   selectReportOptions,
+  value
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
@@ -264,15 +265,16 @@ const HeaderFilters = ({
               <div class="form-group has-search">
                 <Select
                   showSearch
+                  value={value}
                   onChange={(selectedOption) => {
                     if (selectedCoderOptReport?.value === "SUPERVISOR") {
-                      setSelectedOption3(selectedOption?.value);
+                      setSelectedOption3(selectedOption);
                       setSelectedOption2(null);
                       setSelect(null);
                     }
                     if (selectedCoderOptReport?.value === "REVIEWER") {
                       setSelect(selectedOption?.value);
-                      setSelectedOption3(selectedOption?.value);
+                      setSelectedOption3(selectedOption);
                       setSelectedOption2(null);
                     }
                   }}

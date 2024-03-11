@@ -180,9 +180,9 @@ const index = () => {
           coderEndDate,
           coderSearch,
           selectedCoderOpt,
-          selectedCoderOptReport ? selectedCoderOptReport?.value : "",
+          selectedCoderOptReport?.value ? selectedCoderOptReport?.value : "",
           sort,
-          (selectManager && selectedCoderOptReport?.value !== "All") ? selectManager: ""
+          (selectManager?.value && selectedCoderOptReport?.value !== "All") ? selectManager?.value: ""
         )
       );
     }
@@ -297,6 +297,7 @@ const index = () => {
                             selectOptions3={optionsUser}
                             setSelectedOption3={setSelectedManger}
                             defaultSelectValue3="All"
+                            value={selectManager}
                             // rangepicker
                             isRangePicker={true}
                             pickerlabel={
