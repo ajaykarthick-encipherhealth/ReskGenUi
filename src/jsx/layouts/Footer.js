@@ -17,17 +17,22 @@ const Footer = () => {
           style={{ margin: "0 auto" }}
         >
           <div className="d-flex align-items-center mb-3">
-            <Image
-              src={Hcc_LOGO}
-              style={{ height: "84px", width: "95px"}}
-            />
+            <Image src={Hcc_LOGO} style={{ height: "84px", width: "95px" }} />
             <p
               className="mb-0 hovered-text"
-             
               onClick={handleEncipherhealthClick}
-              style={{ fontSize: "14px", cursor: "pointer",position: "relative", bottom: 0, left: -40, fontSize: "14px", cursor: "pointer", padding: "5px" }}
+              style={{
+                fontSize: "14px",
+                cursor: "pointer",
+                position: "relative",
+                bottom: 0,
+                left: -40,
+                fontSize: "14px",
+                cursor: "pointer",
+                padding: "5px",
+              }}
             >
-              &copy; {currentYear} Encipher Health Private Limited
+              &copy; {currentYear} Encipher Health Inc.
             </p>
             &nbsp; &nbsp;
           </div>

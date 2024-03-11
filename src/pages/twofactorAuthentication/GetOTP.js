@@ -104,6 +104,7 @@ const GetOTP = () => {
                 key={index}
                 type="text"
                 maxLength="1"
+                pattern="[0-9]"
                 className={styles.codeInput}
                 onInput={(e) => handleInput(index, e)}
                 ref={inputRefs[index]}
