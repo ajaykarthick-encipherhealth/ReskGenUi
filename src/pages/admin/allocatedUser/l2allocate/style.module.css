@@ -1,78 +1,78 @@
 .modalBtn {
-    border-color: '#0d6efd'; 
-    color: #0d6efd;
+  border-color: "#0d6efd";
+  color: #0d6efd;
 }
 
 .modalBtn:disabled {
-    border-color: '#0d6efd'; 
-    color: #62666b;
-    cursor: no-drop;
+  border-color: "#0d6efd";
+  color: #62666b;
+  cursor: no-drop;
 }
 .modalBtn:hover {
-    border-color: '#93bcfb'; 
-    color: #93bcfb;
+  border-color: "#93bcfb";
+  color: #93bcfb;
 }
 .listContent {
-    height: 65px !important;
-    cursor: pointer;
+  height: 65px !important;
+  cursor: pointer;
 }
 
 .listContentLarge {
-    height: 400px !important;
-    cursor: pointer;
+  height: 425px !important;
+  cursor: pointer;
 }
 .listContentLargeL2 {
-    height: 475px !important;
-    cursor: pointer;
+  height: 475px !important;
+  cursor: pointer;
 }
 
 .listName {
-    color: #000;
-    font-family: Manrope;
-    font-size: 16px !important;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    letter-spacing: 0.64px;
-    text-transform: capitalize;
+  color: #000;
+  font-family: Manrope;
+  font-size: 16px !important;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.64px;
+  text-transform: capitalize;
 }
-.listRole{
-    color: #7E7E7E;
-    font-family: Manrope;
-    font-size: 12px !important;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    letter-spacing: 0.48px;
+.listRole {
+  color: #7e7e7e;
+  font-family: Manrope;
+  font-size: 12px !important;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.48px;
 }
 .activeRow1 {
-    color: #000;
-    font-family: Manrope;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    letter-spacing: 0.56px;
+  color: #000;
+  font-family: Manrope;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.56px;
 }
 .listing {
-    border-radius: 4px;
-    background: #F0F8FF;
-    height: 45px;
-    margin: 0 5px 5px 0;
-    padding-left: 10px;
-    display: inline-block;
+  border-radius: 4px;
+  background: #f0f8ff;
+  height: 45px;
+  margin: 0 5px 5px 0;
+  padding-left: 10px;
+  display: inline-block;
 }
 .listings {
-    font-size: 12px;
-    border-radius: 4px;
-    background: #F0F8FF;
-    height: 45px;
-    margin: 0 5px 5px 0;
-    padding-left: 10px;
-    display: inline-block;
+  font-size: 12px;
+  border-radius: 4px;
+  background: #f0f8ff;
+  height: 45px;
+  margin: 0 5px 5px 0;
+  padding-left: 10px;
+  display: inline-block;
 }
 .selectChart {
-    width: 350px;
-    height: 200px;
-    overflow: scroll;
+  width: 350px;
+  height: 200px;
+  overflow: scroll;
 }
