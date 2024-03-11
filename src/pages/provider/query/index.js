@@ -89,7 +89,7 @@ const Query = ({ patientHccResult }) => {
                         className="fa fa-search form-control-feedback"
                         icon={faSearch}
                       />
-                      <inpu
+                      <input
                         type="text"
                         className="form-control new-form-control"
                         placeholder="Search"
@@ -103,7 +103,7 @@ const Query = ({ patientHccResult }) => {
                         className="fa fa-search form-control-feedback"
                         icon={faSearch}
                       />
-                      <inpu
+                      <input
                         type="text"
                         className="form-control new-form-control"
                         placeholder="Search"
@@ -189,9 +189,6 @@ const Query = ({ patientHccResult }) => {
                                       <span className="meat-name-details">
                                         {item.createdBy}
                                       </span>
-                                      <span className={styles.l1auditorBadge}>
-                                        Reviewer
-                                      </span>
                                     </div>
                                     <div className="col-xl-2 d-grid">
                                       <span className="meat-name-details">
@@ -247,13 +244,6 @@ const Query = ({ patientHccResult }) => {
                                             <div className="col-xl-2 d-grid">
                                               <span className="meat-name-details">
                                                 {item.createdBy}
-                                              </span>
-                                              <span
-                                                className={
-                                                  styles.l1auditorBadge
-                                                }
-                                              >
-                                                Reviewer
                                               </span>
                                             </div>
                                             <div className="col-xl-2 d-grid">

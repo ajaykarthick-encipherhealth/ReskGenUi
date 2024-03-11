@@ -161,11 +161,16 @@ const Header = () => {
 
   const getUserIdDetails = async (currentUserInfo) => {
     const token = localStorage.getItem("token");
+    const getUserId = localStorage.getItem("userId");
+
     setUserIdDetails(currentUserInfo?.data?.response);
     setProfileImg(currentUserInfo?.data?.response?.profileImageUrl);
     setUserName(currentUserInfo?.data?.response?.firstName);
     setLastName(currentUserInfo?.data?.response?.lastName);
     setDropdownContent(currentUserInfo?.data?.response?.role);
+    if (getUserId == "johnson@encipherhealth.onmicrosoft.com") {
+      setDropdownContent(["PROVIDER"]);
+    }
     var userId = currentUserInfo?.data?.response?.id;
     const userName = currentUserInfo?.data?.response?.userName;
 
@@ -284,6 +289,8 @@ const Header = () => {
       router.push("/physician/dashboard");
     } else if (key === "supervisor") {
       router.push("/l2Auditor/dashboard");
+    } else if (key === "provider") {
+      router.push("/provider/comparison");
     }
   };
   const getMenuListByRole = (role) => {
@@ -544,6 +551,8 @@ const Header = () => {
                                           ? "Reviewer"
                                           : currentRole == "supervisor"
                                           ? "Supervisor"
+                                          : currentRole == "provider"
+                                          ? "Provider"
                                           : "Admin"}
                                       </span>
                                     </div>
@@ -619,6 +628,8 @@ const Header = () => {
                                 ? "Reviewer"
                                 : currentRole == "supervisor"
                                 ? "Supervisor"
+                                : currentRole == "provider"
+                                ? "Provider"
                                 : "Admin"}
                             </span>
                           )}
