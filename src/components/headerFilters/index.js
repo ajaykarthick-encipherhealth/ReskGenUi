@@ -216,7 +216,7 @@ const HeaderFilters = ({
               </div>
             </div>
           )}
-          {console.log(defaultSelectValue2)}
+          
           {selectReportOptions && (
             <div className={defaultSize}>
               <label className={styles.label}>{selectlabel2}</label>
@@ -251,7 +251,7 @@ const HeaderFilters = ({
                     setSelectedOption2(selectedOption?.value);
                   }}
                   options={selectOptions2}
-                  placeholder={defaultSelectValue2}
+                  // placeholder={defaultSelectValue2}
                   className="custom-react-select"
                   isSearchable={false}
                 />
