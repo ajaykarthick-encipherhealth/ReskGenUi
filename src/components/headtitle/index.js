@@ -17,6 +17,7 @@ const HeadTitle = ({
   handleOpen,
   openPicker,
   setOpenPicker,
+  isAdmin = false,
 }) => {
   const dispatch = useDispatch();
   const [selectedDates, setSelectedDates] = useState([]);
@@ -73,7 +74,6 @@ const HeadTitle = ({
       </div>
       {anchorTag && (
         <span className={styles.anchor} onClick={handleOpen}>
-
           View All
         </span>
       )}
@@ -123,17 +123,27 @@ const HeadTitle = ({
               top: "-40px",
             }}
             onClick={() => {
-              const dates = {
-                startDate: last30thDate.toISOString(),
-                endDate: lastDateWithTime,
-                clear: true,
-              };
+              let dates;
+              if (isAdmin) {
+                dates = {
+                  startDate: "",
+                  endDate: "",
+                  clear: true,
+                };
+              } else {
+                dates = {
+                  startDate: last30thDate.toISOString(),
+                  endDate: lastDateWithTime,
+                  clear: true,
+                };
+              }
+
               dispatch(getDateRange(dates));
               setOpenPicker(false);
               setSelectedDates([]);
             }}
           >
-            <Button disabled={isDisabled ? true : false}>Clear</Button>
+            <Button>Refresh</Button>
           </div>
         </div>
         <div id="date-popup" style={{ position: "relative" }} />

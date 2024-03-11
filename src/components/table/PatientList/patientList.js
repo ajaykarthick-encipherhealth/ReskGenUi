@@ -42,6 +42,7 @@ function PatientTable({
   totalElements,
   onPageChange,
   setSort,
+  getFilteApi,
 }) {
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
@@ -140,6 +141,13 @@ function PatientTable({
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
             {data.patientName}
           </td>
+          <td
+            className={TableStyle.childBorder}
+            onClick={handleTableRowClick}
+            style={{ paddingLeft: "30px" }}
+          >
+            {data.validDiseaseCount ? data.validDiseaseCount : "---"}
+          </td>
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
             {data.allocatedOn
               ? moment(data.allocatedOn).format("MM-DD-YYYY")
@@ -153,39 +161,41 @@ function PatientTable({
               ? moment(data.processedDate).format("MM-DD-YYYY")
               : "---"}
           </td>
-         
+
           <td
-                  className={TableStyle.childBorder}
-                  style={{ textAlign: "center" }}
-                >
-                  {data.allocatedByFirstName || data.allocatedBylastName || data?.allocatedByProfileImage ? (
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      {" "}
-                      <span style={{ marginRight: "10px" }}>
-                        {" "}
-                        {renderUserPrfoileAvatar(
-                          data.allocatedByFirstName,
-                          data.allocatedBylastName,
-                          data?.allocatedByProfileImage,
-                          "header"
-                        )}
-                      </span>
-                      <span>
-                        {data.allocatedByFirstName} {data.allocatedBylastName}
-                      </span>
-                    </div>
-                  ) : (
-                    <div style={{ textAlign: "center" }}>---</div>
+            className={TableStyle.childBorder}
+            style={{ textAlign: "center" }}
+            onClick={handleTableRowClick}
+          >
+            {data.allocatedByFirstName ||
+            data.allocatedBylastName ||
+            data?.allocatedByProfileImage ? (
+              <div style={{ display: "flex", alignItems: "center" }}>
+                {" "}
+                <span style={{ marginRight: "10px" }}>
+                  {" "}
+                  {renderUserPrfoileAvatar(
+                    data.allocatedByFirstName,
+                    data.allocatedBylastName,
+                    data?.allocatedByProfileImage,
+                    "header"
                   )}
-                </td>
-      
+                </span>
+                <span>
+                  {data.allocatedByFirstName} {data.allocatedBylastName}
+                </span>
+              </div>
+            ) : (
+              <div style={{ textAlign: "center" }}>---</div>
+            )}
+          </td>
           <td className={TableStyle.childBorder}>
             <AntSelect
               options={priorityOptions}
               placeholder="Set priority"
               className={`custom-ant-select ${TableStyle.customAntSelect}`}
               showSearch={false}
-              defaultValue={data?.priority ? data.priority : "Set Priority"}
+              value={data?.priority ? data.priority : "Set Priority"}
               disabled={!data?.priority ? true : false}
               onChange={(value) => {
                 handlePriorityChange(data?.patientId, value);
@@ -193,7 +203,8 @@ function PatientTable({
                   getPriorityChange(
                     data?.patientId,
                     dayjs(data?.lastModifiedDate)?.format("YYYY"),
-                    value
+                    value,
+                    getFilteApi
                   )
                 );
               }}
@@ -215,6 +226,7 @@ function PatientTable({
           <tr>
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
+            <th>HCC COUNT</th>
             <th
               onClick={() => {
                 sortFunction(
@@ -269,8 +281,8 @@ function PatientTable({
             </th>
 
             <th className={TableStyle.rowStyle}> ALLOCATED BY</th>
-            <th style={{paddingLeft:"35px"}}>PRIORITY</th>
-            <th style={{paddingLeft:"65px"}}>STATUS</th>
+            <th style={{ paddingLeft: "35px" }}>PRIORITY</th>
+            <th style={{ paddingLeft: "65px" }}>STATUS</th>
           </tr>
         </thead>
 

@@ -13,6 +13,7 @@ import axios from "../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../utility/enpoints";
 import Router from "next/router";
 import { disableFutureDate, disablePastDate } from "../../../../components/headerFilters/functions";
+import moment from "moment";
 
 const L2AllocateModal = ({
   open,
@@ -168,7 +169,7 @@ const L2AllocateModal = ({
                     disabledDate={(current) => 
                       disablePastDate(current)
                     }
-                    // value={moment(allocateDate, 'YYYY-MM-DD')}
+                    value={allocateDate ? moment(allocateDate, 'YYYY-MM-DD') : ""}
                   />
                 </div>
                 <div className="d-flex my-3">

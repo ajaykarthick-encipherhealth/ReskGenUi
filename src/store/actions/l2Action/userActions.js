@@ -1,12 +1,13 @@
 import {
   l2Users,
   L2IndividualUser,
+  CurrentUserInfo
 } from "../../../services/l2Service/userService";
 
 export const USERS = "USERS";
 export const INDIVIAULUSER = "INDIVIAULUSER";
 export const CLICK_USER_DETAILS = "CLICK_USER_DETAILS";
-
+export const GET_USERINFO='GET_USERINFO'
 
 export const getL2Users = (page, search) => {
   return (dispatch) => {
@@ -67,6 +68,20 @@ export const storeUserValues = (data) => {
           type: CLICK_USER_DETAILS,
           payload: data,
         });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+export const getCurrentUserDetails = (userId, router) => {
+  return (dispatch) => {
+    try {
+      CurrentUserInfo(userId, router).then((response) => {
+        dispatch({
+          type: GET_USERINFO,
+          payload: response,
+        });
+      });
     } catch (err) {
       console.log(err);
     }

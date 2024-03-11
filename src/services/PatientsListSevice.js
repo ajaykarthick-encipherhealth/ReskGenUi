@@ -52,22 +52,18 @@ export const ChangePriority = async (patientId, year, priority) => {
     return response.data;
   } catch (err) {
     console.log(err);
-    throw err; 
+    throw err;
   }
 };
-
 
 export const PatientsListFilter = async (url) => {
   const token = localStorage.getItem("token");
   try {
-    const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}${url}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await axios.get(`${ENDPOINTS?.apiEndoint}${url}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (err) {
     console.log(err);
@@ -88,11 +84,11 @@ export const getFilePageNumber = async (fileId) => {
     return response.data;
   } catch (err) {
     console.log(err);
-    throw err; 
+    throw err;
   }
 };
 
-export const getMeatQueryList = async (dos,patientId) => {
+export const getMeatQueryList = async (dos, patientId) => {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get(
@@ -106,7 +102,7 @@ export const getMeatQueryList = async (dos,patientId) => {
     return response.data;
   } catch (err) {
     console.log(err);
-    throw err; 
+    throw err;
   }
 };
 
@@ -125,7 +121,7 @@ export const submitMeatQuery = async (data) => {
     return response.data;
   } catch (err) {
     console.log(err);
-    throw err; 
+    throw err;
   }
 };
 
@@ -144,15 +140,26 @@ export const updateMeatQuery = async (data) => {
     return response.data;
   } catch (err) {
     console.log(err);
-    throw err; 
+    throw err;
   }
 };
 
-export const patientListFilter = async (userId,status,searchText,startDate,endDate,processedStart,processedEnd,pageNo) => {
+export const patientListFilter = async (
+  userId,
+  status,
+  searchText,
+  startDate,
+  endDate,
+  processedStart,
+  processedEnd,
+  pageNo
+) => {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/patient/filter?patientAllocated=${userId}&page=${pageNo}&size=${15}&processedStatus=${status}&dueDateStart=${startDate}&dueDateEnd=${endDate}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchText}`,
+      `${
+        ENDPOINTS?.apiEndoint
+      }dbservice/patient/filter?patientAllocated=${userId}&page=${pageNo}&size=${15}&processedStatus=${status}&dueDateStart=${startDate}&dueDateEnd=${endDate}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchText}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -165,7 +172,7 @@ export const patientListFilter = async (userId,status,searchText,startDate,endDa
   }
 };
 
-export const getProviderDetails = async (patiendId,encounterDate) => {
+export const getProviderDetails = async (patiendId, encounterDate) => {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get(
@@ -197,7 +204,7 @@ export const auditPatientupdate = async (data) => {
     return response.data;
   } catch (err) {
     console.log(err);
-    throw err; 
+    throw err;
   }
 };
 
@@ -216,7 +223,7 @@ export const reAuditupdate = async (data) => {
     return response.data;
   } catch (err) {
     console.log(err);
-    throw err; 
+    throw err;
   }
 };
 
@@ -235,7 +242,7 @@ export const auditPending = async (data) => {
     return response.data;
   } catch (err) {
     console.log(err);
-    throw err; 
+    throw err;
   }
 };
 
@@ -254,10 +261,28 @@ export const auditHold = async (data) => {
     return response.data;
   } catch (err) {
     console.log(err);
-    throw err; 
+    throw err;
   }
 };
 
+export const auditDecline = async (data) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.post(
+      `${ENDPOINTS?.apiEndoint}dbservice/patient/status/auditDecline`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
 export const manuallyAddComboCode = async (data) => {
   const token = localStorage.getItem("token");
   try {
@@ -273,7 +298,42 @@ export const manuallyAddComboCode = async (data) => {
     return response.data;
   } catch (err) {
     console.log(err);
-    throw err; 
+    throw err;
   }
 };
 
+export const deleteMeatQuery = async (patientId, code) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.delete(
+      `${ENDPOINTS?.apiEndoint}dbservice/meatquery/delete?patientId=${patientId}&diagnosisCode=${code}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+export const getProviderEncounterDetails = async (patientId, name) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.delete(
+      `${ENDPOINTS?.apiEndoint}dbservice/patient/compute/provider/encounters?patientId=${patientId}&name=${name}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};

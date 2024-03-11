@@ -1,0 +1,26 @@
+.container_fluid {
+  background: #fff !important;
+}
+.profileContainer {
+  border-radius: 6px;
+}
+.profile_details {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid #e5dddd;
+  padding: 20px;
+  border-radius: 6px;
+}
+.detailsContainer {
+  border: 1px solid #e5dddd;
+  padding: 20px;
+  border-radius: 6px;
+  margin-top: 20px;
+}
+.tableHead {
+  background: #f7f5f5;
+  border-radius: 6px;
+}
+.tableHead > table > thead > tr > th {
+  font-size: 14px;
+}

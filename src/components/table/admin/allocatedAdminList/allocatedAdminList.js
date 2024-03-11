@@ -55,8 +55,12 @@ function AllocatedAdminList({
             );
           }}
         >
-          <td className={TableStyle.firstTdBorder}>{data.patientId}</td>
-          <td className={TableStyle.childBorder}>{data.patientName}</td>
+          <td className={TableStyle.firstTdBorder}>
+            {data.patientId ? data.patientId : "---"}
+          </td>
+          <td className={TableStyle.childBorder}>
+            {data.patientName ? data.patientName : "---"}
+          </td>
 
           <td className={TableStyle.childBorder}>
             {data.computedDate
@@ -64,7 +68,7 @@ function AllocatedAdminList({
               : "---"}
           </td>
           <td className={TableStyle.lastBorder}>
-            {data?.priority ? priorityStatus(data?.priority) : '---'}
+            {data?.priority ? priorityStatus(data?.priority) : "---"}
           </td>
           <td className={TableStyle.lastBorder} style={{ textAlign: "center" }}>
             {loading ? (
@@ -93,13 +97,7 @@ function AllocatedAdminList({
                 checked={selectedRowsId?.some(
                   (item) => item.id === data.patientId
                 )}
-                style={{
-                  width: "20px",
-                  height: "20px",
-                  flexhrink: "0",
-                  borderRadius: "4px",
-                  backgroundColor: "pink",
-                }}
+                className={TableStyle.customChecked}
               />
             )}
           </td>
@@ -107,7 +105,7 @@ function AllocatedAdminList({
       ))
     ) : (
       <tr>
-        <td colSpan={4}>
+        <td colSpan={5}>
           <Empty />
         </td>
       </tr>
@@ -141,23 +139,29 @@ function AllocatedAdminList({
                 )}
               </span>
             </th>
-            <th >PRIORITY</th>
+            <th>PRIORITY</th>
             <th>
               <div style={{ display: "flex", justifyContent: "space-around" }}>
                 <input
                   type="checkbox"
                   onClick={() => setSelectAllChecked(!selectAllChecked)}
                   style={{
-                    paddingTop: "10px",
+                    // paddingTop: "10px",
                     width: "20px",
                     height: "20px",
                     flexhrink: "0",
                     borderRadius: "4px",
-                    backgroundColor: "pink",
+                    cursor: "pointer",
                   }}
                   checked={
                     selectAllChecked &&
                     selectedRowsId.length == selectedChart.length
+                  }
+                  className={
+                    selectAllChecked &&
+                    selectedRowsId.length == selectedChart.length
+                      ? TableStyle.customChecked2
+                      : ""
                   }
                 />
               </div>

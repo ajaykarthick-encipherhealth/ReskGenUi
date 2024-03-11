@@ -43,3 +43,23 @@ export const L2IndividualUser = async (datas) => {
     console.log(err);
   }
 };
+export const CurrentUserInfo = async (userId, router) => {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/user/get?userName=${userId}`,
+
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response;
+  } catch (err) {
+    if (err?.response?.status === 401) {
+      router.push("/login");
+    }
+    console.log(err);
+  }
+};

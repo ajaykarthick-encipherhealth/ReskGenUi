@@ -15,7 +15,7 @@ import {
 } from "../../../../components/headerFilters/functions";
 import { getPriorityChange } from "../../../../store/actions/l2Action/AuditorAction";
 
-const UserQueue = ({ userList, setSort }) => {
+const UserQueue = ({ userList, setSort, auditBodyTemplate }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [processSort, setProcessSort] = useState("DESC");
@@ -54,6 +54,15 @@ const UserQueue = ({ userList, setSort }) => {
         <Badge.Ribbon
           text="Audit Pending"
           color="#F28585"
+          placement="start"
+          style={{ fontSize: "10px" }}
+        ></Badge.Ribbon>
+      );
+    } else if (data.auditedStatus === "AUDIT_DECLINED") {
+      return (
+        <Badge.Ribbon
+          text="Audit Declined"
+          color="#D40B0B"
           placement="start"
           style={{ fontSize: "10px" }}
         ></Badge.Ribbon>
@@ -180,11 +189,15 @@ const UserQueue = ({ userList, setSort }) => {
           <td
             className={TableStyle.childBorder}
             style={{ textAlign: "center" }}
+            onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
             {data.auditAllocatedByFirstName ||
             data.auditAllocatedByLastName ||
             data?.auditAllocatedByProfileImage ? (
-              <div style={{ display: "flex", alignItems: "center" }}>
+              <div
+                style={{ display: "flex", alignItems: "center" }}
+                onClick={(e) => handleTableRowClick(e, data?.patientId)}
+              >
                 {" "}
                 <span style={{ marginRight: "10px" }}>
                   {" "}
@@ -263,10 +276,10 @@ const UserQueue = ({ userList, setSort }) => {
 
           <td
             className={TableStyle.childBorder}
-            style={{textAlign:"center"}}
+            style={{ textAlign: "center" }}
             onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
-            {processstatusBodyTemplate(data)}
+            {auditBodyTemplate(data)}
           </td>
         </tr>
       ))
@@ -291,7 +304,7 @@ const UserQueue = ({ userList, setSort }) => {
               }}
             >
               COMPLETED DATE
-              <span style={{ cursor: "pointer",padding: "5px" }}>
+              <span style={{ cursor: "pointer", padding: "5px" }}>
                 {processSort === "DESC" ? (
                   <ArrowDownOutlined />
                 ) : (
@@ -359,7 +372,7 @@ const UserQueue = ({ userList, setSort }) => {
             </th>
             {/* <th>ALLOCATED BY</th> */}
             <th style={{ paddingLeft: "30px" }}>PRIORITY</th>
-            <th style={{textAlign:"center"}}>PROCESSED STATUS</th>
+            <th style={{ textAlign: "center" }}>REVIEWED STATUS</th>
           </tr>
         </thead>
 

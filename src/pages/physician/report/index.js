@@ -22,6 +22,7 @@ import {
 } from "../../../store/actions/ReportActions";
 import SpinnerDots from "../../../components/spinner";
 import HeaderFilters from "../../../components/headerFilters";
+import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
 
 const { RangePicker } = DatePicker;
 const statusOptions = [
@@ -43,7 +44,7 @@ const index = () => {
   const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("CoderReport");
+  const [activeTab, setActiveTab] = useState(reportActiveTab?reportActiveTab:"CoderReport");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
   const [comments, setComments] = useState();
@@ -113,16 +114,21 @@ const index = () => {
 
   const handleTabs = (name) => {
     setSelectedDates(null);
-    setActiveTab(name);
+    // setActiveTab(name);
+    dispatch(
+      getActiveTab(
+        name
+      )
+    );
   };
   useEffect(() => {
     setIsLoading(false);
-    if (activeTab === "SentReport") {
+    if (reportActiveTab === "SentReport") {
       dispatch(
         getSentDetails(sentPageNo, startDate, endDate, sentSearch, sort)
       );
     }
-    if (activeTab === "ReceivedReport") {
+    if (reportActiveTab === "ReceivedReport") {
       dispatch(
         getReceivedDetails(
           receivedPageNo,
@@ -134,7 +140,7 @@ const index = () => {
       );
     }
 
-    if (activeTab === "CoderReport") {
+    if (!reportActiveTab || reportActiveTab === "CoderReport") {
       dispatch(
         getReportDetails(
           pageNo,
@@ -153,7 +159,8 @@ const index = () => {
     pageNo,
     sentPageNo,
     receivedPageNo,
-    activeTab,
+    reportActiveTab,
+    // activeTab,
     ExportResponse,
     selectedCoderOpt,
     coderSearch,
@@ -199,21 +206,27 @@ const index = () => {
                             // selector
                             selectlabel="Select Status"
                             isSelector={
-                              activeTab === "CoderReport" ? true : false
+                              !reportActiveTab || reportActiveTab === "CoderReport"? true : false
                             }
                             setSelectedOption={setSelectedCoderOpt}
                             selectOptions={statusOptions}
                             defaultSelectValue1={""}
                             // rangepicker
                             isRangePicker={true}
-                            pickerlabel="Select Range"
+                            pickerlabel={
+                              reportActiveTab === "ReceivedReport"
+                                ? "Received Date"
+                                : reportActiveTab === "SentReport"
+                                ? "Sent Date"
+                                : "Select Date"
+                            }
                             setStartDate={setStartDate}
                             setEndDate={setEndDate}
                             setReceivedStartDate={setReceivedStartDate}
                             setReceivedEndDate={setReceivedEndDate}
                             setCoderStartDate={setCoderStartDate}
                             setCoderEndDate={setCoderEndDate}
-                            activeTab={activeTab}
+                            activeTab={reportActiveTab}
                             rowsLength={rowsLength}
                             setIsModalVisible={setIsModalVisible}
                             selectedDates={selectedDates}
@@ -240,9 +253,11 @@ const index = () => {
                           >
                             <div className="custom-tab-1">
                               <Tab.Container
-                                defaultActiveKey={
-                                  reportActiveTab
+                                 defaultActiveKey={
+                                  reportActiveTab === "ReceivedReport"
                                     ? "meatCriteria"
+                                    : reportActiveTab === "SentReport"
+                                    ? "comboDiseases"
                                     : "validDiseases"
                                 }
                               >
@@ -333,6 +348,10 @@ const index = () => {
                                       setSortOrder={setSentSortOrder}
                                       sortOrder={sentSortOrder}
                                       setSort={setSort}
+                                      receivedPageNo={sentPageNo}
+                                      receivedStartDate={startDate}
+                                      receivedEndDate={endDate}
+                                      isPhysician={true}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane
@@ -356,6 +375,7 @@ const index = () => {
                                         setSortOrder={setReceivedSortOrder}
                                         sortOrder={receivedSortOrder}
                                         setSort={setSort}
+                                        isPhysician={true}
                                       />
                                     )}
                                   </Tab.Pane>

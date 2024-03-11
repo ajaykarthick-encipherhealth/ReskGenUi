@@ -37,7 +37,6 @@ const CompletedStatus = () => {
   const [selectUser, setSelectUser] = useState([]);
   const [isindividual, setIsindividual] = useState(false);
   const [selectMemberType, setSelectMemberType] = useState("");
-
   let completedWeeks = new Set();
   let allocatedWeeks = new Set();
 
@@ -166,8 +165,10 @@ const CompletedStatus = () => {
   ];
 
   const options = [
+    { value: "", label: "ALL" },
     { value: "REVIEWER", label: "REVIEWER" },
     { value: "SUPERVISOR", label: "SUPERVISOR" },
+    
   ];
 
   const memberTypeChanges = (e) => {
@@ -193,10 +194,12 @@ const CompletedStatus = () => {
   );
 
   useEffect(() => {
+    console.log(selectMemberType, "1");
     dispatch(getSelectUserList(selectMemberType));
   }, [selectMemberType]);
 
   useEffect(() => {
+    console.log(selectMemberType, "2");
     dispatch(
       getCompletedStatus(
         currentBtn.toUpperCase(),
@@ -204,7 +207,8 @@ const CompletedStatus = () => {
         selectedMonth,
         selectedYear,
         router,
-        selectUser
+        selectUser,
+        selectMemberType
       )
     );
   }, [currentBtn, selectedMonth, selectedYear, selectUser]);
@@ -225,7 +229,7 @@ const CompletedStatus = () => {
                   onChange={(e) => memberTypeChanges(e)}
                   className={`custom_select_type ${styles.custom_select_type}`}
                   options={options}
-                  style={{ backgroundColor: "#F3F3FF" }}
+                  style={{ backgroundColor: "#F3F3FF", width: "140px" }}
                 />
               </div>
               {isindividual ? (

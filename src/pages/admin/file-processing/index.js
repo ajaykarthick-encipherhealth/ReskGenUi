@@ -64,6 +64,7 @@ export default function Patient() {
   }, []);
 
   const getAllList = async (uId, pageNo, pageSize) => {
+    setTableLoading(true);
     var resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
@@ -96,48 +97,48 @@ export default function Patient() {
     }
   };
 
-  const getNameSearch = async (searchtext) => {
-    setIsLoading(true);
-    if (searchtext) {
-      var resoureUrl = `dbservice/patient/compute/search?searchtext=${searchtext}&pageno=${0}&pagesize=${12}`;
-      const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-      if (response.data) {
-        var resultMap = [];
-        var result = response.data?.response?.content;
-        setTotalElements(response.data?.response?.totalElements);
+  // const getNameSearch = async (searchtext) => {
+  //   setIsLoading(true);
+  //   if (searchtext) {
+  //     var resoureUrl = `dbservice/patient/compute/search?searchtext=${searchtext}&pageno=${0}&pagesize=${12}`;
+  //     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+  //     if (response.data) {
+  //       var resultMap = [];
+  //       var result = response.data?.response?.content;
+  //       setTotalElements(response.data?.response?.totalElements);
 
-        result?.map((res) => {
-          resultMap.push({
-            patientId: res.patientId,
-            patientName: res.patientName,
-            fileName: res.fileName,
-            computing: res.computing,
-            createdAt: res.createdAt,
-            lastModifiedDate: res.lastModifiedDate,
-            dueDate: res.dueDate,
-            allocatedBy: res.allocatedBy,
-            allocatedOn: res.allocatedOn,
-            priority: res.priority,
-            processedStatus: res.processedStatus,
-            createdAt: res.createdAt,
-            processedDate: res.processedDate,
-          });
-        });
-        var newArray = [];
-        newArray = [...patinetListAll, ...resultMap];
-        setPatinetListAll(resultMap);
-        setIsLoading(false);
-        setTableLoading(false);
-      }
-    } else {
-      getAllList(localUserId, pageNo, pageSize);
-    }
-  };
+  //       result?.map((res) => {
+  //         resultMap.push({
+  //           patientId: res.patientId,
+  //           patientName: res.patientName,
+  //           fileName: res.fileName,
+  //           computing: res.computing,
+  //           createdAt: res.createdAt,
+  //           lastModifiedDate: res.lastModifiedDate,
+  //           dueDate: res.dueDate,
+  //           allocatedBy: res.allocatedBy,
+  //           allocatedOn: res.allocatedOn,
+  //           priority: res.priority,
+  //           processedStatus: res.processedStatus,
+  //           createdAt: res.createdAt,
+  //           processedDate: res.processedDate,
+  //         });
+  //       });
+  //       var newArray = [];
+  //       newArray = [...patinetListAll, ...resultMap];
+  //       setPatinetListAll(resultMap);
+  //       setIsLoading(false);
+  //       setTableLoading(false);
+  //     }
+  //   } else {
+  //     getAllList(localUserId, pageNo, pageSize);
+  //   }
+  // };
 
-  const addPatientFormId = () => {
-    setValidated(false);
-    setAddPatientId(true);
-  };
+  // const addPatientFormId = () => {
+  //   setValidated(false);
+  //   setAddPatientId(true);
+  // };
 
   const addPatientFile = (data) => {
     inputValue.patientId = data.patientId;
@@ -379,8 +380,6 @@ export default function Patient() {
     getAllList(localUserId, e.page, e.rows);
   };
 
-  const rowData = useSelector((state) => state.adminPatient.rowDetails);
-
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -425,13 +424,17 @@ export default function Patient() {
                         id="task-tbl_wrapper"
                         className="dataTables_wrapper no-footer"
                       >
+                        {patinetListAll?.length===0 && tableLoading?
+                        "":
                         <FileProcessingTable
                           patinetListAll={patinetListAll}
                           actionBodyTemplate={actionBodyTemplate}
                           statusBodyTemplate={processstatusBodyTemplate}
                           gotoPatientDetails={gotoPatientDetails}
                           patientDetails={patientDetails}
+                          loading={tableLoading}
                         />
+}
                         {/* <div>
                               <div className="pagination-container">
                                 <Paginator

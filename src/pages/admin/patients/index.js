@@ -50,6 +50,7 @@ const statusOptions = [
   { label: "ALL", value: "" },
   { label: "PROCESSING", value: "1", status: 1 },
   { label: "COMPUTED", value: "2", status: 2 },
+  { label: "FAILED", value: "3", status: 3},
   { label: "NOT COMPUTED", value: "0", status: 0 },
 ];
 
@@ -63,7 +64,7 @@ export default function Patient() {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(true);
   const [addPatient, setAddPatient] = useState(false);
-  const [addPatientId, setAddPatientId] = useState(false);
+  const [addPatientId, setAddPatientId] = useState(false);                                            
   const [selectFile, setSelectFile] = useState(null);
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
   const [completedStartDate, setCompletedStartDate] = useState("");
@@ -97,6 +98,7 @@ export default function Patient() {
   const [selAllocatedBy, setSelAllocatedBy] = useState("");
   const [selCreatedBy, setSelCreatedBy] = useState("");
   const [computedSortOrder, setComputedSortOrder] = useState("DESC");
+
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [errors, setErrors] = useState({ year: "" });
 
@@ -345,6 +347,8 @@ export default function Patient() {
         ? "Processing"
         : isFinished || rowData?.computing == 2
         ? "Computed"
+        : rowData?.computing == 3
+        ? "Failed"
         : "Not Computed";
     return (
       <div className="patient-status">
@@ -356,12 +360,16 @@ export default function Patient() {
                 ? "#cceeff "
                 : rowStatus === "Processing"
                 ? "#dfd8f3"
+                : rowStatus === "Failed"
+                ? "#e88d8d"
                 : "#F1DEDA",
             color:
               rowStatus === "Computed"
                 ? " #285563"
                 : rowStatus === "Processing"
                 ? "#452b90"
+                : rowStatus === "Failed"
+                ? "red"
                 : "#BA704F",
           }}
         >
@@ -389,9 +397,10 @@ export default function Patient() {
       <div className="d-flex ">
         <button
           onClick={() => addPatientFile(rowData)}
-          className="btn hegiht10 btn-primary shadow  sharp me-1 action-btn"
+          className="btn hegiht10 shadow  sharp me-1 action-btn"
+          style={{background:"#04306f"}}
         >
-          <FontAwesomeIcon icon={faUpload} fontSize={11} />
+          <FontAwesomeIcon icon={faUpload} fontSize={11} style={{color:"#ffff"}}/>
         </button>
       </div>
     );
@@ -568,6 +577,7 @@ export default function Patient() {
                             bullets={bullets}
                             isNextRow={true}
                             btnTitle="Add Patient"
+                            atCorner={true}
                           />
                         </div>
                       </div>

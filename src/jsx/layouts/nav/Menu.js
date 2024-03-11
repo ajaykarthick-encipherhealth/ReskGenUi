@@ -69,6 +69,7 @@ export const AdminMenuList = [
     title: "Patients",
     iconStyle: SVGICON.patientListIcon,
     to: "/admin/patients",
+    childRoute: "/physician/patients/details",
   },
   {
     title: "File Processing",
@@ -77,25 +78,25 @@ export const AdminMenuList = [
   },
   {
     title: "Patient Allocate",
-    iconStyle: SVGICON.ReportIcon,
+    iconStyle: SVGICON.Allocation,
     to: "/admin/allocatedUser",
   },
   {
     title: "Tracking",
-    iconStyle: SVGICON.ReportIcon,
+    iconStyle: SVGICON.Tracking,
     to: "/admin/tracking",
   },
-  // {
-  //   title: "Report",
-  //   iconStyle: SVGICON.ReportIcon,
-  //   to: "/admin/report",
-  // },
-  
-  // {
-  //   title: "Notification",
-  //   iconStyle: SVGICON.ReportIcon,
-  //   to: "/admin/notification",
-  // },
+  {
+    title: "Report",
+    iconStyle: SVGICON.ReportIcon,
+    to: "/admin/report",
+    childRoute: "/admin/report/individualreport",
+  },
+  {
+    title: "Notification",
+    iconStyle: SVGICON.Notification,
+    to: "/admin/notification",
+  },
   // {
   //   title: "Auditing Window",
   //   iconStyle: SVGICON.Usermanagement,
@@ -138,10 +139,33 @@ export const L2AuditorMenuList = [
     iconStyle: SVGICON.patientListIcon,
     to: "/l2Auditor/auditing",
   },
+  // {
+  //   title: "Org",
+  //   iconStyle: SVGICON.ReportIcon,
+  //   to: "/l2Auditor/org",
+  // },
   {
     title: "Report",
     iconStyle: SVGICON.ReportIcon,
     to: "/l2Auditor/report",
     childRoute: "/l2Auditor/report/individualreport",
+  },
+];
+
+export const ProviderMenuList = [
+  // {
+  //   title: "Dashboard",
+  //   iconStyle: SVGICON.dashboardIcon,
+  //   to: "/provider/dashboard",
+  // },
+  {
+    title: "Comparison",
+    iconStyle: SVGICON.adminUser,
+    to: "/provider/comparison",
+  },
+  {
+    title: "Query",
+    iconStyle: SVGICON.patientListIcon,
+    to: "/provider/query",
   },
 ];

@@ -21,11 +21,14 @@ function AllocatedL2AdminList({
   selectedChart,
   setSort,
   loading,
+  sort,
+  setSortDueOrder,
+  sortDueOrder,
+  setSortCompleteOrder,
+  sortCompleteOrder,
 }) {
   const dispatch = useDispatch();
   const [selectedRows, setSelectedRows] = useState([]);
-  const [sortDueOrder, setSortDueOrder] = useState("DESC");
-  const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
 
   const handleRowCheckboxChange = (row) => {
     const isSelected = selectedRows.some(
@@ -44,7 +47,6 @@ function AllocatedL2AdminList({
 
     setSelectedRows(updatedRows);
   };
-
   const renderRows = () => {
     return patinetListAll?.map((data, index) => (
       <tr
@@ -92,7 +94,7 @@ function AllocatedL2AdminList({
             ? moment.utc(data.processedDate).format("MM-DD-YYYY")
             : "---"}
         </td>
-        <td className={TableStyle.childBorder} style={{textAlign:"center"}}>
+        <td className={TableStyle.childBorder} style={{ textAlign: "center" }}>
           {processstatusBodyTemplate(data)}
         </td>
         <td className={TableStyle.lastBorder} style={{ textAlign: "center" }}>
@@ -122,13 +124,7 @@ function AllocatedL2AdminList({
               checked={selectedRowsId.some(
                 (item) => item.id === data.patientId
               )}
-              style={{
-                width: "20px",
-                height: "20px",
-                flexhrink: "0",
-                borderRadius: "4px",
-                backgroundColor: "pink",
-              }}
+              className={TableStyle.customChecked}
             />
           )}
         </td>
@@ -147,6 +143,7 @@ function AllocatedL2AdminList({
             <th
               onClick={() => {
                 sortFunction(sortDueOrder, setSortDueOrder, setSort, "dueDate");
+                setSortCompleteOrder("DESC");
               }}
             >
               DUE DATE
@@ -167,6 +164,7 @@ function AllocatedL2AdminList({
                   setSort,
                   "processedDate"
                 );
+                setSortDueOrder("DESC");
               }}
             >
               COMPLETED DATE
@@ -179,7 +177,7 @@ function AllocatedL2AdminList({
               </span>
             </th>
 
-            <th style={{textAlign:"center"}}>STATUS</th>
+            <th style={{ textAlign: "center" }}>STATUS</th>
             {/* <th>Upload</th> */}
             <th>
               <div style={{ display: "flex", justifyContent: "space-around" }}>
@@ -187,16 +185,20 @@ function AllocatedL2AdminList({
                   type="checkbox"
                   onClick={() => setSelectAllChecked(!selectAllChecked)}
                   style={{
-                    paddingTop: "10px",
                     width: "20px",
                     height: "20px",
                     flexhrink: "0",
                     borderRadius: "4px",
-                    backgroundColor: "pink",
                   }}
                   checked={
                     selectAllChecked &&
                     selectedRowsId.length == selectedChart.length
+                  }
+                  className={
+                    selectAllChecked &&
+                    selectedRowsId.length == selectedChart.length
+                      ? TableStyle.customChecked2
+                      : ""
                   }
                 />
               </div>

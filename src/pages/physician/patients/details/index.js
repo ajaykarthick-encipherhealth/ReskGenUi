@@ -46,12 +46,17 @@ import {
   reAuditupdate,
   auditPending,
   auditHold,
+  auditDecline,
 } from "../../../../services/PatientsListSevice";
 import LoadingSpinner from "../../../../components/loadingSpinner";
 import { validateYear } from "../../../../components/headerFilters/functions";
+import { getPatientID } from "../../../../store/actions/PatientsActions";
+import { useDispatch } from "react-redux";
+import Timeline from "./timline";
 
 const Details = ({}) => {
   const navigate = useRouter();
+  const dispatch = useDispatch();
   const { RangePicker } = DatePicker;
   const sideMenu = useSelector((state) => state.sideMenu);
   const [confirmNotesModalDecline, setConfirmNotesModalDecline] =
@@ -150,6 +155,7 @@ const Details = ({}) => {
   const [confirmAuditModal, setConfirmAuditModal] = useState(false);
   const [allocateClicked, setAllocateClicked] = useState(false);
   const [error, setError] = useState({ year: "" });
+  const [hccValidCount, setHccValidCount] = useState(0);
 
   const flagPostList = [
     {
@@ -273,8 +279,8 @@ const Details = ({}) => {
     );
     setOpenPicker(false);
     setOpenPicker2(false);
-    setPatientList(result?.response?.content);
-    setTotalElements(result?.response?.totalElements);
+    setPatientList(result?.response?.patientDTOList?.content);
+    setTotalElements(result?.response?.patientDTOList?.totalElements);
   };
   const onPageChange = async (e) => {
     setPaginationFirst(e.first);
@@ -289,8 +295,8 @@ const Details = ({}) => {
       processedEnd,
       e.page
     );
-    setPatientList(result?.response?.content);
-    setTotalElements(result?.response?.totalElements);
+    setPatientList(result?.response?.patientDTOList?.content);
+    setTotalElements(result?.response?.patientDTOList?.totalElements);
   };
 
   const handleFilterClick = () => {
@@ -310,8 +316,8 @@ const Details = ({}) => {
       "",
       0
     );
-    setPatientList(result?.response?.content);
-    setTotalElements(result?.response?.totalElements);
+    setPatientList(result?.response?.patientDTOList?.content);
+    setTotalElements(result?.response?.patientDTOList?.totalElements);
   };
   const handleShowCard = () => {
     setShowCard(!showCard);
@@ -366,7 +372,7 @@ const Details = ({}) => {
     setUserDetails(userSpinner);
   }, []);
 
-  const getPatientIdDetails = async (patientId) => {
+  const getPatientIdDetails = async (patientId, flagFirstData) => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint + `dbservice/patient/get?patientId=${patientId}`
     );
@@ -396,20 +402,31 @@ const Details = ({}) => {
             </div>
           </Menu.Item>
         ) : null}
-        {result?.processedStatus != "DECLINE" ? (
-          <Menu.Item key="3" onClick={() => handleActionClick("DECLINE")}>
-            <div className="patient-status">
-              <span className={`badge failed-text`} style={{ color: "red" }}>
-                DECLINE
-              </span>
-            </div>
+        {result?.processedStatus != "DECLINED" ? (
+          <Menu.Item
+            key="3"
+            disabled={flagFirstData?.flag !== undefined ? false : true}
+            onClick={() => handleActionClick("DECLINE")}
+          >
+            <Tooltip
+              title={
+                flagFirstData?.flag === undefined &&
+                "Add flag to disable Decline"
+              }
+            >
+              <div className="patient-status">
+                <span className={`badge failed-text`} style={{ color: "red" }}>
+                  DECLINE
+                </span>
+              </div>
+            </Tooltip>
           </Menu.Item>
         ) : null}
 
         {result?.processedStatus != "COMPLETE" ? (
           <Menu.Item key="4" onClick={() => handleActionClick("COMPLETE")}>
             <div className="patient-status">
-              <span className={`badge processed-text`}>COMPLETE</span>
+              <span className={`badge processed-text`}>COMPLETED</span>
             </div>
           </Menu.Item>
         ) : null}
@@ -433,19 +450,30 @@ const Details = ({}) => {
           </Menu.Item>
         ) : null}
         {result?.processedStatus != "DECLINE" ? (
-          <Menu.Item key="3" onClick={() => handleActionClick("DECLINE")}>
-            <div className="patient-status">
-              <span className={`badge failed-text`} style={{ color: "red" }}>
-                DECLINE
-              </span>
-            </div>
+          <Menu.Item
+            key="3"
+            onClick={() => handleActionClick("DECLINE")}
+            disabled={flagFirstData?.flag !== undefined ? false : true}
+          >
+            <Tooltip
+              title={
+                flagFirstData?.flag === undefined &&
+                "Add flag to disable Decline"
+              }
+            >
+              <div className="patient-status">
+                <span className={`badge failed-text`} style={{ color: "red" }}>
+                  DECLINED
+                </span>
+              </div>
+            </Tooltip>
           </Menu.Item>
         ) : null}
 
         {result?.processedStatus != "COMPLETE" ? (
           <Menu.Item key="4" onClick={() => handleActionClick("COMPLETE")}>
             <div className="patient-status">
-              <span className={`badge processed-text`}>COMPLETE</span>
+              <span className={`badge processed-text`}>COMPLETED</span>
             </div>
           </Menu.Item>
         ) : null}
@@ -475,19 +503,30 @@ const Details = ({}) => {
           </Menu.Item>
         ) : null}
         {result?.processedStatus != "DECLINE" ? (
-          <Menu.Item key="3" onClick={() => handleActionClick("DECLINE")}>
-            <div className="patient-status">
-              <span className={`badge failed-text`} style={{ color: "red" }}>
-                DECLINE
-              </span>
-            </div>
+          <Menu.Item
+            key="3"
+            onClick={() => handleActionClick("DECLINE")}
+            disabled={flagFirstData?.flag !== undefined ? false : true}
+          >
+            <Tooltip
+              title={
+                flagFirstData?.flag === undefined &&
+                "Add flag to disable Decline"
+              }
+            >
+              <div className="patient-status">
+                <span className={`badge failed-text`} style={{ color: "red" }}>
+                  DECLINE
+                </span>
+              </div>
+            </Tooltip>
           </Menu.Item>
         ) : null}
 
         {result?.processedStatus != "COMPLETE" ? (
           <Menu.Item key="4" onClick={() => handleActionClick("COMPLETE")}>
             <div className="patient-status">
-              <span className={`badge processed-text`}>COMPLETE</span>
+              <span className={`badge processed-text`}>COMPLETED</span>
             </div>
           </Menu.Item>
         ) : null}
@@ -500,16 +539,18 @@ const Details = ({}) => {
     );
     const menu4 = (
       <Menu>
-        <Menu.Item
-          key="4"
-          onClick={() => {
-            allocatePatient();
-          }}
-        >
-          <div className="patient-status">
-            <span className={`badge processed-text`}>ALLOCATE</span>
-          </div>
-        </Menu.Item>
+        {result?.allocatedOn == null && (
+          <Menu.Item
+            key="4"
+            onClick={() => {
+              allocatePatient();
+            }}
+          >
+            <div className="patient-status">
+              <span className={`badge processed-text`}>ALLOCATE</span>
+            </div>
+          </Menu.Item>
+        )}
         <Menu.Item key="5" onClick={() => handleActionClick("ADD RADIOLOGY")}>
           <div className="patient-status">
             <span className={`badge  ${visitStyles.add_text}`}>
@@ -560,17 +601,20 @@ const Details = ({}) => {
         var validDisArray = [];
         result?.validDisease?.map((res, index) => {
           const encounterDatearray = res?.encounterDate?.split(",");
-          validDisArray.push({
-            actualDescription: res.actualDescription,
-            capturedSections: res.capturedSections,
-            diagnosisCode: res.diagnosisCode,
-            encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
-            isManuallyAdded: res.isManuallyAdded,
-            isHccValid: res.isHccValid,
-            defaultPosition: res.defaultPosition,
-          });
+          if (res?.isShow != false) {
+            validDisArray.push({
+              actualDescription: res.actualDescription,
+              capturedSections: res.capturedSections,
+              diagnosisCode: res.diagnosisCode,
+              encounterDate: res.encounterDate,
+              encounterDateSplit: encounterDatearray,
+              isManuallyAdded: res.isManuallyAdded,
+              isHccValid: res.isHccValid,
+              defaultPosition: res.defaultPosition,
+            });
+          }
         });
+        setHccValidCount(validDisArray.length + result?.comboDisease?.length);
 
         setNewValidDiseaseList(validDisArray);
         setDosYearDefalutSelect(highestDosValue[0]);
@@ -660,6 +704,9 @@ const Details = ({}) => {
           break;
         case "auditHoldFunction":
           handleSubmitAuditHold();
+          break;
+        case "auditDeclineFunction":
+          handleSubmitAuditDecline();
           break;
         default:
           null;
@@ -1033,8 +1080,8 @@ const Details = ({}) => {
         "",
         0
       );
-      setPatientList(result?.response?.content);
-      setTotalElements(result?.response?.totalElements);
+      setPatientList(result?.response?.patientDTOList?.content);
+      setTotalElements(result?.response?.patientDTOList?.totalElements);
       setFilterDataLoading(false);
     }
 
@@ -1106,8 +1153,8 @@ const Details = ({}) => {
     );
     setOpenPicker(false);
     setOpenPicker2(false);
-    setPatientList(result?.response?.content);
-    setTotalElements(result?.response?.totalElements);
+    setPatientList(result?.response?.patientDTOList?.content);
+    setTotalElements(result?.response?.patientDTOList?.totalElements);
   };
 
   const handleSubmitFlag = async (event) => {
@@ -1270,6 +1317,7 @@ const Details = ({}) => {
   };
 
   const backToPatientData = () => {
+    dispatch(getPatientID(null));
     navigate.back();
     // navigate.push("/physician/patients");
   };
@@ -1299,10 +1347,12 @@ const Details = ({}) => {
   const getFlagListLastDetails = async (patientId, dos) => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `dbservice/flagdetails?patientId=${patientId}&year=${dos}`
+        `dbservice/flagdetails?patientId=${patientId ? patientId : ""}&year=${
+          dos ? dos : ""
+        }`
     );
     if (response.data.response.length != 0) {
-      setFlagFirstData(response.data.response[0]);
+      setFlagFirstData(response?.data?.response[0]);
     }
     // setFilterDataLoading(false);
   };
@@ -1310,11 +1360,13 @@ const Details = ({}) => {
   const getFlagList = async () => {
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `dbservice/flagdetails?patientId=${localPatientId}&year=${selectedDosValue}`
+        `dbservice/flagdetails?patientId=${
+          localPatientId ? localPatientId : ""
+        }&year=${selectedDosValue ? selectedDosValue : ""}`
     );
     setFlagResultList(response.data.response);
     if (response.data.response.length != 0) {
-      setFlagFirstData(response.data.response[0]);
+      setFlagFirstData(response?.data?.response[0]);
     }
     setFilterDataLoading(false);
   };
@@ -1337,8 +1389,8 @@ const Details = ({}) => {
       processedEnd,
       pageNo
     );
-    setPatientList(result?.response?.content);
-    setTotalElements(result?.response?.totalElements);
+    setPatientList(result?.response?.patientDTOList?.content);
+    setTotalElements(result?.response?.patientDTOList?.totalElements);
   };
 
   const handleChangeprocessedDate = async (dateString) => {
@@ -1359,8 +1411,8 @@ const Details = ({}) => {
       convertEndDate,
       pageNo
     );
-    setPatientList(result?.response?.content);
-    setTotalElements(result?.response?.totalElements);
+    setPatientList(result?.response?.patientDTOList?.content);
+    setTotalElements(result?.response?.patientDTOList?.totalElements);
   };
 
   const handleActionClick = (value) => {
@@ -1421,7 +1473,8 @@ const Details = ({}) => {
             </div>
             <div className={visitStyles.usertimeDetails}>
               <FontAwesomeIcon icon={faClock} />
-              <span>{currentTime}</span>
+              {/* <span>{currentTime}</span> */}
+              <span>{result.actionCreatedDate}</span>
             </div>
           </div>
         );
@@ -1506,6 +1559,10 @@ const Details = ({}) => {
         break;
       case 4:
         setIsValidAction("auditHoldFunction");
+        setConfirmNotesModalHold(true);
+        break;
+      case 5:
+        setIsValidAction("auditDeclineFunction");
         setConfirmNotesModalHold(true);
         break;
       default:
@@ -1601,43 +1658,83 @@ const Details = ({}) => {
       });
     }
   };
+  const handleSubmitAuditDecline = async () => {
+    var postData = {
+      orgId: localOrgId,
+      patientId: localPatientId,
+      notes: inputValue.notes,
+      dos: selectedDosValue,
+    };
+    var result = await auditDecline(postData);
+    if (result.status == "SUCCESS") {
+      getPatientIdDetails(localPatientId);
+      setConfirmNotesModalHold(false);
+      notification.success({
+        message: result.message,
+        placement: "top",
+        duration: 1,
+      });
+    }
+  };
 
   const renderAuditMenu = (value) => {
     var value = (
       <Menu>
         <>
-          <Menu.Item key="1" onClick={() => auditPatient(1)}>
-            <div className="patient-status">
-              <span className={`badge ${visitStyles.audit_text}`}>AUDIT</span>
-            </div>
-          </Menu.Item>
-          <Menu.Item key="2" onClick={() => auditPatient(2)}>
-            <div className="patient-status">
-              <span className={`badge ${visitStyles.reaudit_text}`}>
-                RE AUDIT
-              </span>
-            </div>
-          </Menu.Item>
-          <Menu.Item key="3" onClick={() => auditPatient(3)}>
-            <div className="patient-status">
-              <span className={`badge ${visitStyles.auditpending_text}`}>
-                AUDIT PENDING
-              </span>
-            </div>
-          </Menu.Item>
-          <Menu.Item key="4" onClick={() => auditPatient(4)}>
-            <div className="patient-status">
-              <span className={`badge ${visitStyles.audithold_text}`}>
-                AUDIT HOLD
-              </span>
-            </div>
-          </Menu.Item>
+          {patienIdDetails?.auditedStatus != "AUDITED" && (
+            <Menu.Item key="1" onClick={() => auditPatient(1)}>
+              <div className="patient-status">
+                <span className={`badge ${visitStyles.audit_text}`}>AUDIT</span>
+              </div>
+            </Menu.Item>
+          )}
+          {patienIdDetails?.auditedStatus != "REAUDIT" && (
+            <Menu.Item key="2" onClick={() => auditPatient(2)}>
+              <div className="patient-status">
+                <span className={`badge ${visitStyles.reaudit_text}`}>
+                  RE AUDIT
+                </span>
+              </div>
+            </Menu.Item>
+          )}
+          {patienIdDetails?.auditedStatus != "AUDIT_PENDING" && (
+            <Menu.Item key="3" onClick={() => auditPatient(3)}>
+              <div className="patient-status">
+                <span className={`badge ${visitStyles.auditpending_text}`}>
+                  AUDIT PENDING
+                </span>
+              </div>
+            </Menu.Item>
+          )}
+          {patienIdDetails?.auditedStatus != "AUDITHOLD" && (
+            <Menu.Item key="4" onClick={() => auditPatient(4)}>
+              <div className="patient-status">
+                <span className={`badge ${visitStyles.audithold_text}`}>
+                  AUDIT HOLD
+                </span>
+              </div>
+            </Menu.Item>
+          )}
+          {patienIdDetails?.auditedStatus != "AUDIT_DECLINED" && (
+            <Menu.Item key="5" onClick={() => auditPatient(5)}>
+              <div className="patient-status">
+                <span className={`badge ${visitStyles.auditdecline_text}`}>
+                  AUDIT DECLINE
+                </span>
+              </div>
+            </Menu.Item>
+          )}
         </>
       </Menu>
     );
 
     return value;
   };
+  useEffect(() => {
+    if (flagFirstData?.flag) {
+      getPatientIdDetails(localPatientId, flagFirstData);
+    }
+  }, [flagFirstData?.flag]);
 
   return (
     <>
@@ -1656,7 +1753,7 @@ const Details = ({}) => {
                     <div className="row">
                       <div
                         className="col-xl-1 col-sm-12"
-                        style={{ zIndex: "999" }}
+                        style={{ zIndex: "1" }}
                       >
                         <Button
                           onClick={backToPatientData}
@@ -1781,9 +1878,7 @@ const Details = ({}) => {
                           <div className={`${visitStyles.hccCountHeader} `}>
                             <label>HCC</label>
 
-                            <h6 className="ageDtails">
-                              {newValidDiseaseList.length}
-                            </h6>
+                            <h6 className="ageDtails">{hccValidCount}</h6>
                           </div>
                         </div>
                       </div>
@@ -1862,7 +1957,7 @@ const Details = ({}) => {
                               placement="bottom"
                             >
                               <i className={visitStyles.sign_status}>
-                                {SVGICON.emptemptyFlagSmallLargeyFlag}
+                                {SVGICON.emptyFlagSmallLarge}
                               </i>
                             </Tooltip>
                           ) : flagFirstData?.flag == "NO_HCC_FOUND" ? (
@@ -1902,6 +1997,7 @@ const Details = ({}) => {
                           ) : null}
                         </span>
                       </div>
+
                       <div className="col-xl-1 col-sm-12">
                         <div className="card-body">
                           <div className="row">
@@ -1950,10 +2046,12 @@ const Details = ({}) => {
                               icon={<DownOutlined />}
                               overlay={adminActionItems}
                             >
-                              ALLOCATE
+                              {patienIdDetails?.allocatedOn
+                                ? "ALLOCATED"
+                                : "ALLOCATE"}
                             </Dropdown.Button>
                           </div>
-                        ) : userRole == "SUPERVISOR" ? (
+                        ) : userRole == "supervisor" ? (
                           <div className={`${visitStyles.actionbtnContainer}`}>
                             <Dropdown.Button
                               type="primary"
@@ -1961,12 +2059,15 @@ const Details = ({}) => {
                                 patienIdDetails?.auditedStatus == "AUDITHOLD"
                                   ? `auditHoldBtnHcc`
                                   : patienIdDetails?.auditedStatus ==
-                                    "AUDITPENDING"
+                                    "AUDIT_PENDING"
                                   ? `auditPendingBtnHcc`
                                   : patienIdDetails?.auditedStatus == "AUDITED"
                                   ? `auditBtnHcc`
                                   : patienIdDetails?.auditedStatus == "REAUDIT"
                                   ? `reauditBtnHcc`
+                                  : patienIdDetails?.auditedStatus ==
+                                    "AUDIT_DECLINED"
+                                  ? `declineBtnHcc`
                                   : `auditBtnHcc`
                               }
                               icon={<DownOutlined />}
@@ -2009,7 +2110,9 @@ const Details = ({}) => {
                                       : actionItems
                                   }
                                 >
+                                  {/* <Popover placement="bottom" content="tst"> */}
                                   DECLINED
+                                  {/* </Popover> */}
                                 </Dropdown.Button>
                               </div>
                             ) : patienIdDetails?.processedStatus == "HOLD" ? (
@@ -2626,491 +2729,13 @@ const Details = ({}) => {
                       </button>
                     </div>
                     {flagContainerActive == "Timeline" ? (
-                      <div className={visitStyles.timeLine}>
-                        {!filterDataLoading ? (
-                          <>
-                            <div className="widget-timeline">
-                              <ul className="timeline">
-                                {timelineData.map((item, index) => (
-                                  <li>
-                                    {item.action == "MOVED_INVALID_TO_VALID" ? (
-                                      <Tooltip
-                                        title={item.userName}
-                                        placement="bottom"
-                                      >
-                                        <Popover
-                                          placement="bottom"
-                                          content={userDetails}
-                                        >
-                                          <div className="timeline-badge MOVED_INVALID_TO_VALID">
-                                            {splitUserName(item.userName)}
-                                          </div>
-                                        </Popover>
-                                      </Tooltip>
-                                    ) : item.action ==
-                                      "MOVED_SUGGESTED_TO_VALID" ? (
-                                      <Tooltip
-                                        title={item.userName}
-                                        placement="bottom"
-                                      >
-                                        <Popover
-                                          placement="bottom"
-                                          content={userDetails}
-                                          onOpenChange={() =>
-                                            renderUserDetails(item.userName)
-                                          }
-                                        >
-                                          <div className="timeline-badge MOVED_SUGGESTED_TO_VALID">
-                                            {splitUserName(item.userName)}
-                                          </div>
-                                        </Popover>
-                                      </Tooltip>
-                                    ) : item.action ==
-                                      "MOVED_VALID_TO_SUGGESTED" ? (
-                                      <Tooltip
-                                        title={item.userName}
-                                        placement="bottom"
-                                      >
-                                        <Popover
-                                          placement="bottom"
-                                          content={userDetails}
-                                          onOpenChange={() =>
-                                            renderUserDetails(item.userName)
-                                          }
-                                        >
-                                          <div className="timeline-badge MOVED_VALID_TO_SUGGESTED">
-                                            {splitUserName(item.userName)}
-                                          </div>
-                                        </Popover>
-                                      </Tooltip>
-                                    ) : item.action == "VALID_DISEASE_ADDED" ? (
-                                      <Tooltip
-                                        title={item.userName}
-                                        placement="bottom"
-                                      >
-                                        <Popover
-                                          placement="bottom"
-                                          content={userDetails}
-                                          onOpenChange={() =>
-                                            renderUserDetails(item.userName)
-                                          }
-                                        >
-                                          <div className="timeline-badge VALID_DISEASE_ADDED">
-                                            {splitUserName(item.userName)}
-                                          </div>
-                                        </Popover>
-                                      </Tooltip>
-                                    ) : item.action ==
-                                      "MOVED_VALID_TO_DELETED" ? (
-                                      <Tooltip
-                                        title={item.userName}
-                                        placement="bottom"
-                                      >
-                                        <Popover
-                                          placement="bottom"
-                                          content={userDetails}
-                                          onOpenChange={() =>
-                                            renderUserDetails(item.userName)
-                                          }
-                                        >
-                                          <div className="timeline-badge MOVED_VALID_TO_DELETED">
-                                            {splitUserName(item.userName)}
-                                          </div>
-                                        </Popover>
-                                      </Tooltip>
-                                    ) : item.action == "COMPLETED" ? (
-                                      <Tooltip
-                                        title={item.userName}
-                                        placement="bottom"
-                                      >
-                                        <Popover
-                                          placement="bottom"
-                                          content={userDetails}
-                                          onOpenChange={() =>
-                                            renderUserDetails(item.userName)
-                                          }
-                                        >
-                                          <div className="timeline-badge COMPLETED">
-                                            {splitUserName(item.userName)}
-                                          </div>
-                                        </Popover>
-                                      </Tooltip>
-                                    ) : item.action ==
-                                      "MOVED_DELETED_TO_VALID" ? (
-                                      <Tooltip
-                                        title={item.userName}
-                                        placement="bottom"
-                                      >
-                                        <Popover
-                                          placement="bottom"
-                                          content={userDetails}
-                                          onOpenChange={() =>
-                                            renderUserDetails(item.userName)
-                                          }
-                                        >
-                                          <div className="timeline-badge MOVED_DELETED_TO_VALID">
-                                            {splitUserName(item.userName)}
-                                          </div>
-                                        </Popover>
-                                      </Tooltip>
-                                    ) : item.action ==
-                                      "MOVED_DELETED_TO_SUGGESTED" ? (
-                                      <Tooltip
-                                        title={item.userName}
-                                        placement="bottom"
-                                      >
-                                        <Popover
-                                          placement="bottom"
-                                          content={userDetails}
-                                          onOpenChange={() =>
-                                            renderUserDetails(item.userName)
-                                          }
-                                        >
-                                          <div className="timeline-badge MOVED_DELETED_TO_SUGGESTED">
-                                            {splitUserName(item.userName)}
-                                          </div>
-                                        </Popover>
-                                      </Tooltip>
-                                    ) : item.action ==
-                                      "MOVED_SUGGESTED_TO_DELETED" ? (
-                                      <Tooltip
-                                        title={item.userName}
-                                        placement="bottom"
-                                      >
-                                        <Popover
-                                          placement="bottom"
-                                          content={userDetails}
-                                          onOpenChange={() =>
-                                            renderUserDetails(item.userName)
-                                          }
-                                        >
-                                          <div className="timeline-badge MOVED_SUGGESTED_TO_DELETED">
-                                            {splitUserName(item.userName)}
-                                          </div>
-                                        </Popover>
-                                      </Tooltip>
-                                    ) : item.action ==
-                                      "ENCOUNTER_FILE_UPDATED" ? (
-                                      <Tooltip
-                                        title={item.userName}
-                                        placement="bottom"
-                                      >
-                                        <Popover
-                                          placement="bottom"
-                                          content={userDetails}
-                                          onOpenChange={() =>
-                                            renderUserDetails(item.userName)
-                                          }
-                                        >
-                                          <div className="timeline-badge ENCOUNTER_FILE_UPDATED">
-                                            {splitUserName(item.userName)}
-                                          </div>
-                                        </Popover>
-                                      </Tooltip>
-                                    ) : item.action ==
-                                      "ENCOUNTER_FILE_ADDED" ? (
-                                      <Tooltip
-                                        title={item.userName}
-                                        placement="bottom"
-                                      >
-                                        <Popover
-                                          placement="bottom"
-                                          content={userDetails}
-                                          onOpenChange={() =>
-                                            renderUserDetails(item.userName)
-                                          }
-                                        >
-                                          <div className="timeline-badge ENCOUNTER_FILE_ADDED">
-                                            {splitUserName(item.userName)}
-                                          </div>
-                                        </Popover>
-                                      </Tooltip>
-                                    ) : item.action == "HOLD" ? (
-                                      <Tooltip
-                                        title={item.userName}
-                                        placement="bottom"
-                                      >
-                                        <Popover
-                                          placement="bottom"
-                                          content={userDetails}
-                                          onOpenChange={() =>
-                                            renderUserDetails(item.userName)
-                                          }
-                                        >
-                                          <div className="timeline-badge HOLD">
-                                            {splitUserName(item.userName)}
-                                          </div>
-                                        </Popover>
-                                      </Tooltip>
-                                    ) : item.action == "DECLINED" ? (
-                                      <Tooltip
-                                        title={item.userName}
-                                        placement="bottom"
-                                      >
-                                        <Popover
-                                          placement="bottom"
-                                          content={userDetails}
-                                          onOpenChange={() =>
-                                            renderUserDetails(item.userName)
-                                          }
-                                        >
-                                          <div className="timeline-badge DECLINED">
-                                            {splitUserName(item.userName)}
-                                          </div>
-                                        </Popover>
-                                      </Tooltip>
-                                    ) : item.action == "PENDING" ? (
-                                      <Tooltip
-                                        title={item.userName}
-                                        placement="bottom"
-                                      >
-                                        <Popover
-                                          placement="bottom"
-                                          content={userDetails}
-                                          onOpenChange={() =>
-                                            renderUserDetails(item.userName)
-                                          }
-                                        >
-                                          <div className="timeline-badge DECLINED">
-                                            {splitUserName(item.userName)}
-                                          </div>
-                                        </Popover>
-                                      </Tooltip>
-                                    ) : (
-                                      <Tooltip
-                                        title={item.userName}
-                                        placement="bottom"
-                                      >
-                                        <Popover
-                                          placement="bottom"
-                                          content={userDetails}
-                                          onOpenChange={() =>
-                                            renderUserDetails(item.userName)
-                                          }
-                                        >
-                                          <div className="timeline-badge DECLINED">
-                                            {splitUserName(item.userName)}
-                                          </div>
-                                        </Popover>
-                                      </Tooltip>
-                                    )}
-                                    <a className="timeline-panel text-muted">
-                                      {item.action ==
-                                      "MOVED_INVALID_TO_VALID" ? (
-                                        <span
-                                          className={
-                                            visitStyles.timelineheading
-                                          }
-                                        >
-                                          {item.diagnosisCode} - Moved from
-                                          invalid to valid
-                                        </span>
-                                      ) : item.action ==
-                                        "MOVED_SUGGESTED_TO_VALID" ? (
-                                        <span
-                                          className={
-                                            visitStyles.timelineheading
-                                          }
-                                        >
-                                          {item.diagnosisCode} - Moved from
-                                          Suggested to valid
-                                        </span>
-                                      ) : item.action ==
-                                        "MOVED_VALID_TO_SUGGESTED" ? (
-                                        <span
-                                          className={
-                                            visitStyles.timelineheading
-                                          }
-                                        >
-                                          {item.diagnosisCode} - Moved from
-                                          valid to suggested
-                                        </span>
-                                      ) : item.action ==
-                                        "VALID_DISEASE_ADDED" ? (
-                                        <span
-                                          className={
-                                            visitStyles.timelineheading
-                                          }
-                                        >
-                                          {item.diagnosisCode} - Valid from
-                                          disease added
-                                        </span>
-                                      ) : item.action ==
-                                        "MOVED_VALID_TO_DELETED" ? (
-                                        <span
-                                          className={
-                                            visitStyles.timelineheading
-                                          }
-                                        >
-                                          {item.diagnosisCode} - Moved from
-                                          valid to deleted
-                                        </span>
-                                      ) : item.action == "AUDITED" ? (
-                                        <span
-                                          className={
-                                            visitStyles.timelineheading
-                                          }
-                                        >
-                                          Changed from {""}
-                                          {item.previousProcessedState} to
-                                          AUDITED
-                                        </span>
-                                      ) : item.action == "REAUDIT" ? (
-                                        <span
-                                          className={
-                                            visitStyles.timelineheading
-                                          }
-                                        >
-                                          Changed from {""}
-                                          {item.previousProcessedState} to
-                                          REAUDIT
-                                        </span>
-                                      ) : item.action == "AUDITHOLD" ? (
-                                        <span
-                                          className={
-                                            visitStyles.timelineheading
-                                          }
-                                        >
-                                          Changed from {""}
-                                          {item.previousProcessedState} to
-                                          AUDITHOLD
-                                        </span>
-                                      ) : item.action == "AUDITPENDING" ? (
-                                        <span
-                                          className={
-                                            visitStyles.timelineheading
-                                          }
-                                        >
-                                          Changed from {""}
-                                          {item.previousProcessedState} to
-                                          AUDITPENDING
-                                        </span>
-                                      ) : item.action == "MEAT_QUERY_STORED" ? (
-                                        <span
-                                          className={
-                                            visitStyles.timelineheading
-                                          }
-                                        >
-                                          Changed from {""}
-                                          {item.previousProcessedState} to Meat
-                                          Query Stored
-                                        </span>
-                                      ) : item.action == "COMPLETED" ? (
-                                        <span
-                                          className={
-                                            visitStyles.timelineheading
-                                          }
-                                        >
-                                          Changed from
-                                          {item.previousProcessedState} to
-                                          COMPLETD
-                                        </span>
-                                      ) : item.action ==
-                                        "MOVED_DELETED_TO_VALID" ? (
-                                        <span
-                                          className={
-                                            visitStyles.timelineheading
-                                          }
-                                        >
-                                          {item.diagnosisCode} - Moved from
-                                          deleted to valid
-                                        </span>
-                                      ) : item.action ==
-                                        "MOVED_DELETED_TO_SUGGESTED" ? (
-                                        <span
-                                          className={
-                                            visitStyles.timelineheading
-                                          }
-                                        >
-                                          {item.diagnosisCode} - Moved from
-                                          deleted to suggested
-                                        </span>
-                                      ) : item.action ==
-                                        "MOVED_SUGGESTED_TO_DELETED" ? (
-                                        <span
-                                          className={
-                                            visitStyles.timelineheading
-                                          }
-                                        >
-                                          {item.diagnosisCode} - Moved from
-                                          suggested to deleted
-                                        </span>
-                                      ) : item.action ==
-                                        "ENCOUNTER_FILE_UPDATED" ? (
-                                        <span
-                                          className={
-                                            visitStyles.timelineheading
-                                          }
-                                        >
-                                          {item.diagnosisCode} - Encounter file
-                                          updated
-                                        </span>
-                                      ) : item.action ==
-                                        "ENCOUNTER_FILE_ADDED" ? (
-                                        <span
-                                          className={
-                                            visitStyles.timelineheading
-                                          }
-                                        >
-                                          {item.diagnosisCode} - Encounter file
-                                          added
-                                        </span>
-                                      ) : item.action == "HOLD" ? (
-                                        <span
-                                          className={
-                                            visitStyles.timelineheading
-                                          }
-                                        >
-                                          Changed from
-                                          {item.previousProcessedState} to HOLD
-                                        </span>
-                                      ) : item.action == "DECLINED" ? (
-                                        <span
-                                          className={
-                                            visitStyles.timelineheading
-                                          }
-                                        >
-                                          Changed from
-                                          {item.previousProcessedState} to
-                                          DECLINED
-                                        </span>
-                                      ) : item.action == "PENDING" ? (
-                                        <span
-                                          className={
-                                            visitStyles.timelineheading
-                                          }
-                                        >
-                                          Changed from
-                                          {item.previousProcessedState} to
-                                          DECLINED
-                                        </span>
-                                      ) : null}
-                                      <span
-                                        className={visitStyles.timelineDate}
-                                      >
-                                        {moment(item.createdDate).format(
-                                          "MM-DD-YYYY hh:mm:A"
-                                        )}
-                                      </span>
-                                    </a>
-                                  </li>
-                                ))}
-                                {timelineData.length == 0 ? (
-                                  <h6 className="text-center">NO DATA</h6>
-                                ) : null}
-                              </ul>
-                            </div>
-                          </>
-                        ) : (
-                          <div className={visitStyles.userDetailsCard}>
-                            <div className="bouncing-loader">
-                              <div></div>
-                              <div></div>
-                              <div></div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
+                      <Timeline
+                        timelineData={timelineData}
+                        filterDataLoading={filterDataLoading}
+                        splitUserName={splitUserName}
+                        userDetails={userDetails}
+                        renderUserDetails={renderUserDetails}
+                      />
                     ) : flagContainerActive == "Filter" ? (
                       <>
                         {" "}
@@ -3267,7 +2892,7 @@ const Details = ({}) => {
                                 <ul
                                   className={`${visitStyles.patientDetailsHead}`}
                                 >
-                                  {patientList.map((data, index) => (
+                                  {patientList?.map((data, index) => (
                                     <li
                                       className={`${visitStyles.nameList} ${visitStyles.patientList}`}
                                       key={index}
@@ -3303,7 +2928,7 @@ const Details = ({}) => {
                                       ) : null}
                                     </li>
                                   ))}
-                                  {patientList.length == 0 ? (
+                                  {patientList?.length == 0 ? (
                                     <h5 className="text-center">NO DATA</h5>
                                   ) : null}
                                 </ul>

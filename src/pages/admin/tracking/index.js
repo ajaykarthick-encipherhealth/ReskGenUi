@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
+import styles from "../../../pages/l2Auditor/dashboard/styles.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { patientDetails } from "../../../store/actions/AuthActions";
-import { Spin, notification } from "antd";
+import { Popover, Tooltip, notification } from "antd";
 import { Paginator } from "primereact/paginator";
 import Footer from "../../../jsx/layouts/Footer";
 import visitStyles from "../../../styles/visitdata.module.css";
@@ -18,13 +19,26 @@ import TrackingTable from "../../../components/table/admin/trackingList";
 import { getTrackingList } from "../../../store/actions/adminAction/patientsActions";
 import { generateOptionsList } from "../../../components/headerFilters/functions";
 import DailyTask from "./dailytask";
+import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
+import NotAudited from "../../../../src/images/trackingImages/NotAuditedTrack.png";
+import AuditHold from "../../../../src/images/trackingImages/AuditHoldTrack.png";
+import ReAudit from "../../../../src/images/trackingImages/reAuditTrack.png";
+import AuditPending from "../../../../src/images/trackingImages/AuditPending.png";
+import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
+import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
+import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
+import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
+import AuditedDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
+import Abort from "../../../../src/images/trackingImages/Abort.png";
 
+import Image from "next/image";
+import { extractLatestData } from "../../l2Auditor/auditing";
 const bullets = [
   {
     title: "Processed Status",
     option: [
       {
-        color: "#452b90",
+        color: "#5da9e4",
         name: "Pending",
       },
       {
@@ -35,31 +49,42 @@ const bullets = [
         color: "#3a9b94",
         name: "Completed",
       },
-      { color: "#d8c11b", name: "Hold" },
+      {
+        color: "#AD94FA",
+        name: "Hold",
+      },
+      {
+        color: "#3B3486",
+        name: "ABORTED BY CRON",
+      },
     ],
   },
   {
     title: "Audited Status",
     option: [
       {
-        color: "rgb(55, 120, 128)",
-        name: "Audited",
+        color: "#377880",
+        name: "AUDITED",
+      },
+      {
+        color: "#E28213",
+        name: "AUDIT PENDING",
+      },
+      {
+        color: "#964B00",
+        name: "RE AUDIT",
       },
       {
         color: "red",
-        name: "Not Audited",
+        name: "DECLINED",
       },
       {
-        color: "rgb(226, 130, 19)",
-        name: "Pending",
+        color: "#CE9900",
+        name: "AUDIT HOLD",
       },
       {
-        color: "rgb(206, 153, 0)",
-        name: "Audit Hold",
-      },
-      {
-        color: "rgb(150, 75, 0)",
-        name: "Re Audit",
+        color: "#C21807",
+        name: "AUDIT DECLINED",
       },
     ],
   },
@@ -71,6 +96,7 @@ const statusOptions = [
   { label: "PENDING", value: "PENDING", status: 0 },
   { label: "DECLINED", value: "DECLINED", status: 0 },
   { label: "HOLD", value: "HOLD", status: 0 },
+  { label: "ABORTED BY CRON", value: "ABORTED_BY_CRON" },
 ];
 
 const auditStatusOptions = [
@@ -80,6 +106,7 @@ const auditStatusOptions = [
   { label: "AUDIT_PENDING", value: "AUDIT_PENDING", status: 0 },
   { label: "NOT_AUDIT", value: "NOT_AUDIT", status: 0 },
   { label: "AUDITED", value: "AUDITED", status: 0 },
+  { label: "AUDIT DECLINED", value: "AUDIT_DECLINED", status: 0 },
 ];
 
 export default function Patient() {
@@ -131,12 +158,18 @@ export default function Patient() {
   const [selAllocatedTo, setSelAllocatedTo] = useState("");
   const [auditSelectedOption, setAuditSelectedOption] = useState("");
   const [selAuditAllocatedBy, setSelAuditAllocatedBy] = useState("");
-console.log(auditedDueStartDate, auditedDueEndDate);
-console.log(auditSelectedOption);
-// new changes
+  const [allocatedSortOrder, setAllocatedSortOrder] = useState("DESC");
+  const [sort, setSort] = useState({ sortDir: "", sortField: "" });
+  const [clear, setClear] = useState(false);
+  const [selectedDates, setSelectedDates] = useState();
+  const [selectedDates2, setSelectedDates2] = useState();
+  const [selectedDates3, setSelectedDates3] = useState();
+  const [selectedDates4, setSelectedDates4] = useState();
+  const [selectedDates5, setSelectedDates5] = useState();
 
-const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
+  // new changes
 
+  const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
 
   const allocatedToOptions = [
     { label: "All", value: "All" },
@@ -158,24 +191,38 @@ const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
     setLocalUserId(uId);
     const datas = {
       pageNo,
-      dueDateStart,
-      dueDateEnd,
-      searchTextValue,
-      selectedOption,
-      processedStart,
-      processedEnd,
-      selAllocatedTo,
-      auditedStartDate,
-      auditedEndDate,
-      allocatedStartDate,
-      allocatedEndDate,
-      selAllocatedBy,
-      auditedDueStartDate,
-      auditedDueEndDate,
-      auditSelectedOption,
-      selAuditAllocatedBy,
-      auditSelAllocatedTo
+      dueDateStart: clear ? "" : dueDateStart,
+      dueDateEnd: clear ? "" : dueDateEnd,
+      searchTextValue: clear ? "" : searchTextValue,
+      selectedOption: clear ? "" : selectedOption ? selectedOption?.value : "",
+      processedStart: clear ? "" : processedStart,
+      processedEnd: clear ? "" : processedEnd,
+      selAllocatedTo: clear ? "" : selAllocatedTo ? selAllocatedTo?.value : "",
+      auditedStartDate: clear ? "" : auditedStartDate,
+      auditedEndDate: clear ? "" : auditedEndDate,
+      allocatedStartDate: clear ? "" : allocatedStartDate,
+      allocatedEndDate: clear ? "" : allocatedEndDate,
+      selAllocatedBy: clear ? "" : selAllocatedBy ? selAllocatedBy?.value : "",
+      auditedDueStartDate: clear ? "" : auditedDueStartDate,
+      auditedDueEndDate: clear ? "" : auditedDueEndDate,
+      auditSelectedOption: clear
+        ? ""
+        : auditSelectedOption
+        ? auditSelectedOption?.value
+        : "",
+      selAuditAllocatedBy: clear
+        ? ""
+        : selAuditAllocatedBy
+        ? selAuditAllocatedBy?.value
+        : "",
+      auditSelAllocatedTo: clear
+        ? ""
+        : auditSelAllocatedTo
+        ? auditSelAllocatedTo?.value
+        : "",
+      sort,
     };
+
     dispatch(getTrackingList(datas));
   }, [
     pageNo,
@@ -191,11 +238,13 @@ const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
     allocatedStartDate,
     allocatedEndDate,
     selAllocatedBy,
-    auditedDueStartDate, 
+    auditedDueStartDate,
     auditedDueEndDate,
     auditSelectedOption,
     selAuditAllocatedBy,
-    auditSelAllocatedTo 
+    auditSelAllocatedTo,
+    sort,
+    clear,
   ]);
 
   useEffect(() => {
@@ -239,7 +288,9 @@ const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
           auditedAssignedProfileImage: res.auditedAssignedProfileImage,
           allocatedByProfileImage: res.allocatedByProfileImage,
           auditAllocatedByProfileImage: res.auditAllocatedByProfileImage,
-          auditDueDate: res.auditDueDate
+          auditDueDate: res.auditDueDate,
+          declinedNotes: res.declinedNotes,
+          auditDeclinedNotes: res.auditDeclinedNotes,
         });
       });
       setTrackChart(info?.processStatusCount);
@@ -278,57 +329,93 @@ const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
   };
 
   const processstatusBodyTemplate = (rowData) => {
+    const declinedDataFromAudit = extractLatestData(
+      rowData?.auditDeclinedNotes
+    );
+
+    const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
+
+    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
+
     switch (rowData.processedStatus) {
       case "COMPLETED":
         return (
-          <div className="patient-status">
-            <span className={`badge processed-text`}>Completed</span>
-          </div>
+          <Popover placement="bottom" title="Status: COMPLETED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image
+                src={Completed}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
         );
 
       case "PENDING":
         return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
         );
 
       case "DECLINED":
         return (
-          <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>
-              Declined
-            </span>
-          </div>
+          <Popover
+            placement="bottom"
+            title="Status: DECLINED"
+            content={`Reason: ${declinedData ? declinedData : "---"}`}
+          >
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Declined} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
         );
 
       case "NOTCOMPUTED":
         return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
+          <Popover placement="bottom" title="Status: NOT COMPUTED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
         );
       case "COMPUTED":
         return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
         );
       case "HOLD":
         return (
-          <div className="patient-status">
-            <span className={`badge hold-text`}>Hold</span>
-          </div>
+          <Popover placement="bottom" title="Status: HOLD">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Hold} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
+        );
+      case "ABORTED_BY_CRON":
+        return (
+          <Popover placement="bottom" title="Status: ABORTED BY CRON">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Abort} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
         );
       case null:
         return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
         );
     }
   };
-  const auditstatusBodyTemplate = (rowData) => {
+
+  const auditstatusBodyTemplateIcon = (rowData) => {
     switch (rowData.auditedStatus) {
       case "AUDIT_PENDING":
         return (
@@ -402,6 +489,110 @@ const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
     }
   };
 
+  const auditstatusBodyTemplate = (rowData) => {
+    const declinedDataFromAudit = extractLatestData(
+      rowData?.auditDeclinedNotes
+    );
+
+    const declinedDataFromDeclined = extractLatestData(
+      rowData?.auditDeclinedNotes
+    );
+
+    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
+    switch (rowData.auditedStatus) {
+      case "AUDIT_PENDING":
+        return (
+          <Popover placement="bottom" title="Status: AUDIT PENDING">
+            <div className="patient-status">
+              <Image
+                src={AuditPending}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
+        );
+
+      case "DECLINED":
+        return (
+          <div className="patient-status">
+            <span className={`badge failed-text`} style={{ color: "red" }}>
+              Declined
+            </span>
+          </div>
+        );
+
+      case "AUDITHOLD":
+        return (
+          <Popover placement="bottom" title=" Status: AUDIT HOLD">
+            <div className="patient-status">
+              <Image
+                src={AuditHold}
+                // className={styles.ImgTrck}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
+        );
+      case "REAUDIT":
+        return (
+          <Popover placement="bottom" title=" Status: REAUDIT">
+            <div className="patient-status">
+              <Image src={ReAudit} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
+        );
+      case "AUDITED":
+        return (
+          <Popover placement="bottom" title=" Status: AUDITED">
+            <div className="patient-status">
+              <Image
+                src={AuditedTrack}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
+        );
+      case "AUDITED":
+        return (
+          <div className="patient-status">
+            <Image
+              src={AuditedTrack}
+              style={{ height: "30px", width: "30px" }}
+            />
+          </div>
+        );
+
+      case "NOT_AUDIT":
+        return (
+          <Popover placement="bottom" title=" Status: NOT AUDIT">
+            <div className="patient-status">
+              <Image
+                src={NotAudited}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
+        );
+      case "AUDIT_DECLINED":
+        return (
+          <Popover
+            placement="bottom"
+            title=" Status: AUDIT DECLINED"
+            content={`Reason: ${declinedData ? declinedData : "---"}`}
+          >
+            <div className="patient-status">
+              <Image
+                src={AuditedDeclineTrack}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
+        );
+      case null:
+        return <div className="patient-status">---</div>;
+    }
+  };
+
   const actionBodyTemplate = (rowData) => {
     return (
       <div className="d-flex ">
@@ -423,7 +614,7 @@ const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
     setTableLoading(true);
     getAllList(response?.response);
   };
-
+  console.log(filteredList);
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -438,15 +629,13 @@ const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
                       <div className="tbl-caption row d-flex align-items-center">
                         <div className="tbl-caption col-xl-10 align-items-center">
                           <HeaderFilters
-                          // audioAllocatedTo
-                          isAuditAllocatedToSelector={true}
+                            // audioAllocatedTo
+                            isAuditAllocatedToSelector={true}
                             auditAllocatedTolabel="Audit Allocated to"
                             auditallocatedToOptoons={generateOptionsList(
                               filteredList
                             )}
                             setAuditSelAllocatedTo={setAuditSelAllocatedTo}
-
-
                             setSearch={setSearchTextValue}
                             isSearch={true}
                             searchlabel="Search By Patient Name / Id"
@@ -506,16 +695,32 @@ const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
                             isNextRow={true}
                             defaultShow={true}
                             defaultSize={"col-xl-2"}
-
                             auditStatusOptions={auditStatusOptions}
                             setAuditSelectedOption={setAuditSelectedOption}
-                           
-                              setStartDate6={setAuditedDueStartDate}
-                              setEndDate6={setAuditedDueEndDate}
-                              setSelAuditAllocatedBy={setSelAuditAllocatedBy}
-                              auditAllocatedByOptoons={generateOptionsList(
-                                filteredList
-                              )}
+                            setStartDate6={setAuditedDueStartDate}
+                            setEndDate6={setAuditedDueEndDate}
+                            setSelAuditAllocatedBy={setSelAuditAllocatedBy}
+                            auditAllocatedByOptoons={generateOptionsList(
+                              filteredList
+                            )}
+                            setClear={setClear}
+                            clear={clear}
+                            selectedDates={selectedDates}
+                            selectedDates2={selectedDates2}
+                            selectedDates3={selectedDates3}
+                            selectedDates4={selectedDates4}
+                            selectedDates5={selectedDates5}
+                            setSelectedDates={setSelectedDates}
+                            setSelectedDates2={setSelectedDates2}
+                            setSelectedDates3={setSelectedDates3}
+                            setSelectedDates4={setSelectedDates4}
+                            setSelectedDates5={setSelectedDates5}
+                            selector7value={selAuditAllocatedBy}
+                            selector6value={selAllocatedBy}
+                            selector5value={auditSelectedOption}
+                            selector4value={selectedOption}
+                            selector2value={auditSelAllocatedTo}
+                            selectorValue={selAllocatedTo}
                           />
                         </div>
                         <div className="col-xl-2">
@@ -538,6 +743,9 @@ const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
                               auditBodyTemplate={auditstatusBodyTemplate}
                               gotoPatientDetails={gotoPatientDetails}
                               patientDetails={patientDetails}
+                              setSortOrder={setAllocatedSortOrder}
+                              sortOrder={allocatedSortOrder}
+                              setSort={setSort}
                             />
                             <div>
                               <div className="pagination-container">

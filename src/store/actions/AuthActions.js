@@ -32,7 +32,7 @@ export const VERIFYCODE = "VERIFYCODE";
 export const ACCURACYSCRORE = "ACCURACYSCRORE";
 export const FILTER = "FILTER";
 export const PROFILE_URL = "PROFILE_URL";
-export const CURRENTUSER = "CURRENTUSER";
+export const CURRENTUSER_INFO = "CURRENTUSER_INFO";
 
 export const selectedUserRole = (data) => ({
   type: SELECTEDROLE,
@@ -69,7 +69,7 @@ export function Logout(navigate) {
 
 export const getMFAValidation = (username, route, password) => {
   return () => {
-    mfaValidation(username, route).then((response) => {
+    mfaValidation(username, route,password).then((response) => {
       const skip = response?.data?.response?.skipEntryAvailable;
       const mfa = response?.data?.response?.mfaIsEnabled;
       if (response?.data?.response) {
@@ -102,12 +102,18 @@ export const getQrCode = (username, route) => {
     });
   };
 };
-export const getValidateCode = (username, code, route, validate, password) => {
+export const getValidateCode = (
+  username,
+  code,
+  route,
+  validate,
+  userpassword
+) => {
   return (dispatch) => {
-    verifyCode(username, code, route).then((response) => {
+    verifyCode(username, code, userpassword).then((response) => {
       if (response?.data?.response) {
-        if (validate && password) {
-          dispatch(loginAction(username, route, code, password));
+        if (validate && userpassword) {
+          dispatch(loginAction(username, route, code, userpassword));
         } else {
           notification.success({
             message: "Code verified successfully",
@@ -155,6 +161,7 @@ export function loginAction(email, router, code, password, mfa, skip) {
         if (response?.data?.status === "SUCCESS") {
           localStorage.setItem("roles", JSON.stringify(result?.roles));
           localStorage.setItem("token", result.access_token);
+          localStorage.setItem("refreshToken", result?.refresh_token);
           localStorage.setItem("tenantId", result.tenantId);
           localStorage.setItem("userId", result.userEmail);
           localStorage.setItem("orgId", result.organizationId);
@@ -172,7 +179,6 @@ export function loginAction(email, router, code, password, mfa, skip) {
             pathname: `/twofactorAuthentication/SelectRole`,
             search: `params=${encodedParams}`,
           });
-          // router?.push(`/twofactorAuthentication/SelectRole?username=${email}&params=${decodedParams}`);
         }
         if (response.data?.response === null) {
           notification.error({
@@ -279,7 +285,7 @@ export const getCurrentUser = (userId, router) => {
     try {
       CurrentUser(userId, router).then((response) => {
         dispatch({
-          type: CURRENTUSER,
+          type: CURRENTUSER_INFO,
           payload: response,
         });
       });

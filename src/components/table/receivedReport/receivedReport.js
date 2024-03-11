@@ -9,7 +9,11 @@ import { useDispatch } from "react-redux";
 import { selectedReport } from "../../../store/actions/ReportActions";
 import SpinnerDots from "../../spinner";
 import { Empty } from "antd";
-import { dateFormate, sortFunction } from "../../headerFilters/functions";
+import {
+  dateFormate,
+  renderUserPrfoileAvatar,
+  sortFunction,
+} from "../../headerFilters/functions";
 
 function ReceivedReport({
   details,
@@ -22,6 +26,7 @@ function ReceivedReport({
   sortOrder,
   setSortOrder,
   setSort,
+  isPhysician,
 }) {
   const [detailsContent, setDetailsContent] = useState(details?.content);
 
@@ -39,9 +44,17 @@ function ReceivedReport({
       receivedEndDate: receivedEndDate,
     };
     dispatch(selectedReport(info));
-    router?.push(
-      `/physician/report/individualreport?reportId=${info?.reportUser?.reportId}`
-    );
+    if (isPhysician) {
+      router?.push(
+        `/physician/report/individualreport?reportId=${info?.reportUser?.reportId}`
+      );
+    } else {
+      router?.push(
+        `/physician/report/individualreport?reportId=${
+          info?.reportUser?.reportId
+        }&isAdminPage=${true}`
+      );
+    }
   };
 
   return (
@@ -55,7 +68,7 @@ function ReceivedReport({
               <th>REPORT ID</th>
               <th>REPORT NAME</th>
               <th>ACCESS TYPE</th>
-              <th style={{ textAlign: "center" }}>SENDER</th>
+              <th style={{ paddingLeft: "311px" }}>SENDER</th>
               <th
                 className={TableStyle.rowStyle}
                 style={{ cursor: "pointer", paddingLeft: "15px" }}
@@ -113,7 +126,7 @@ function ReceivedReport({
                     >
                       {row.role}
                     </td>
-                    <td
+                    {/* <td
                       style={{
                         borderTop: "  0.2px solid #e1e1e1",
 
@@ -123,7 +136,41 @@ function ReceivedReport({
                       className={TableStyle.childBorder}
                     >
                       {row.sender}
+                    </td> */}
+                    <td
+                      className={TableStyle.childBorder}
+                      style={{
+                        borderTop: "  0.2px solid #e1e1e1",
+
+                        borderBottom: "  0.2px solid #e1e1e1",
+                        paddingLeft: "280px",
+                      }}
+                      onClick={() => handleReceiverReport(row)}
+                    >
+                      {row.senderDetails?.firstName ||
+                      row.senderDetails?.lastName ||
+                      row?.senderDetails?.profileImageUrl ? (
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          {" "}
+                          <span style={{ marginRight: "10px" }}>
+                            {" "}
+                            {renderUserPrfoileAvatar(
+                              row.senderDetails?.firstName,
+                              row.senderDetails?.lastName,
+                              row?.senderDetails?.profileImageUrl,
+                              "header"
+                            )}
+                          </span>
+                          <span>
+                            {row.senderDetails?.firstName}{" "}
+                            {row.senderDetails?.lastName}
+                          </span>
+                        </div>
+                      ) : (
+                        <div style={{ textAlign: "center" }}>---</div>
+                      )}
                     </td>
+
                     <td
                       style={{
                         borderTop: "  0.2px solid #e1e1e1",

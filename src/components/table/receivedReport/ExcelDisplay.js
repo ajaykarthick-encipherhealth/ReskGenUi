@@ -20,19 +20,31 @@ const ExcelDisplay = ({ tableData, loading }) => {
         const values = Object.values(row);
         return values?.map((value) => ({ value }));
       });
+      const reactFormatData = tableData[0]?.map((key) => {
+        return {
+          value: key || "",
+        };
+      });
 
-      setData(formattedData);
+      setData([reactFormatData, ...formattedData]);
     } else {
       setData([]);
     }
   }, [tableData]);
   const allEmpty = data?.every((row) =>
-    row.every((cell) => cell?.value === "")
+    row?.every((cell) => cell?.value === "")
   );
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      {loading ? (
+      {Array.isArray(data) &&
+      data?.length > 0 &&
+      !allEmpty &&
+      !loading &&
+      tableData?.length !== 0 ? (
+        data?.length > 0 &&
+        !allEmpty && <Spreadsheet data={data} onChange={setData} />
+      ) : (
         <div
           style={{
             display: "flex",
@@ -40,26 +52,9 @@ const ExcelDisplay = ({ tableData, loading }) => {
             alignItems: "center",
           }}
         >
-          Loading...
+          {" "}
+          <Empty />
         </div>
-      ) : (
-        <>
-          {Array.isArray(data) && data?.length > 0 && !allEmpty ? (
-            data?.length > 0 &&
-            !allEmpty && <Spreadsheet data={data} onChange={setData} />
-          ) : (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              {" "}
-              <Empty />
-            </div>
-          )}
-        </>
       )}
     </div>
   );

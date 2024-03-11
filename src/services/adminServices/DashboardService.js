@@ -435,15 +435,18 @@ export const CompletedStatus = async (
   month,
   year,
   router,
-  userName
+  userName,
+  selectMemberType
 ) => {
+  console.log(selectMemberType, userName);
+  const isManage = selectMemberType == "SUPERVISOR";
   const token = localStorage.getItem("token");
   const url =
     btn === "DAILY"
-      ? `daily?month=${month}&year=${year}&userName=${userName}`
+      ? `daily?month=${month}&year=${year}&userName=${userName}&isManager=${isManage}`
       : btn === "WEEKLY"
-      ? `weekly?month=${month}&year=${year}&userName=${userName}`
-      : `monthyly?year=${year}&userName=${userName}`;
+      ? `weekly?month=${month}&year=${year}&userName=${userName}&isManager=${isManage}`
+      : `monthyly?year=${year}&userName=${userName}&isManager=${isManage}`;
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/admindashboard/chartdeliverystatus/${url}`,

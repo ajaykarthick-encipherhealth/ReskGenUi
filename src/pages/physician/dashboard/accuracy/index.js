@@ -13,6 +13,8 @@ import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
 import { Empty, Spin } from "antd";
 import spinSTYles from "../../../../styles/auth.module.css";
+import HighchartsReact from "highcharts-react-official";
+import Highcharts from "highcharts";
 
 export const getISOWeekNumber = (date) => {
   const currentDate = new Date(date);
@@ -88,6 +90,38 @@ const Accuracy = () => {
     setCurrentBtn(btn);
   };
 
+  const chartBlockedDates = (year, month, param, val, currentBtn) => {
+    year = Number(year);
+    month = Number(month);
+    if (year < currentDate.getFullYear()) {
+      return param?.data?.response.map((item) => item[val]);
+    } else if (
+      year == currentDate.getFullYear() &&
+      month < currentDate.getMonth() + 1
+    ) {
+      return param?.data?.response.map((item) => item[val]);
+    } else if (
+      year == currentDate.getFullYear() &&
+      month == currentDate.getMonth() + 1
+    ) {
+      if (currentBtn == "Daily") {
+        return param?.data?.response?.map(
+          (item, index) => index < new Date().getDate() && item[val]
+        );
+      } else if (currentBtn == "Weekly") {
+        return param?.data?.response?.map(
+          (item, index) => index < getDateWeek(currentDate) && item[val]
+        );
+      } else if (currentBtn == "Monthly") {
+        return param?.data?.response?.map(
+          (item, index) => index < new Date().getMonth() + 1 && item[val]
+        );
+      }
+    } else {
+      return false;
+    }
+  };
+
   const handleYearChange = (date, dateString) => {
     setSelectedYear(dateString);
   };
@@ -125,54 +159,172 @@ const Accuracy = () => {
   if (currentBtn && accuracyDatas?.data?.response) {
     data = Object.values(accuracyDatas?.data?.response);
   }
-  const option = {
-    xAxis: {
-      type: "category",
-      data: xAxisData,
+  const options = {
+    chart: {
+      type: "column",
     },
-    yAxis: {
-      type: "value",
+    title: {
+      text: "",
+    },
+
+    xAxis: {
+      categories: xAxisData,
+      crosshair: true,
+      labels: {
+        style: {
+          color: "gray",
+          fontWeight: "500",
+        },
+      },
+      lineColor: "#d9d9d9",
+    },
+    yAxis: [
+      {
+        // primary yAxis (right)
+        title: {
+          text: "Quality",
+          style: {
+            color: "#2dafff",
+          },
+        },
+        labels: {
+          format: "{value}%",
+          style: {
+            color: "gray",
+            fontWeight: "500",
+          },
+        },
+        opposite: false,
+        min: 0,
+        max: 100,
+      },
+      {
+        // Secondary yAxis (right)
+        title: {
+          text: "Reviewer Changes Count",
+          style: {
+            color: "#0b59f1",
+          },
+        },
+        labels: {
+          format: "{value}",
+          style: {
+            color: "gray",
+            fontWeight: "500",
+          },
+        },
+        opposite: true,
+        min: 0, // Set the minimum value
+        max: 10, // Set the maximum value
+        tickInterval: 4, // Set the tick interval to 1
+      },
+    ],
+    legend: {
+      enabled: false,
+    },
+    credits: {
+      enabled: false,
     },
     tooltip: {
-      show: true,
+      formatter: function () {
+        let finalData;
+        if (
+          typeof this.point.category === "string" &&
+          this.point.category.startsWith("Week")
+        ) {
+          const weekIndex = parseInt(this.point.category.substring(4));
 
-      formatter: function (params) {
-        let tooltipContent = "";
+          finalData = accuracyDatas?.data?.response?.find(
+            (item) => item?.weekOfMonth === weekIndex
+          );
+        } else if (
+          typeof this.point.category === "string" &&
+          monthNames.includes(this.point.category.toUpperCase())
+        ) {
+          const hoveredMonthIndex = monthNames?.findIndex(
+            (month) => month === this.point.category
+          );
 
-        if (Array.isArray(params)) {
-          params.forEach((item) => {
-            const allocatedValue = Number(item.data).toFixed(2);
-            tooltipContent += `accuracy: ${allocatedValue}%<br>`;
-          });
-        } else if (params.data) {
-          const allocatedValue = Number(params.data).toFixed(2);
-          tooltipContent += `accuracy: ${allocatedValue}%<br>`;
+          finalData = accuracyDatas?.data?.response?.find(
+            (item) => item?.monthOfYear === hoveredMonthIndex + 1
+          );
+        } else {
+          finalData = accuracyDatas?.data?.response?.find(
+            (item) => item?.dayOfMonth === this.x
+          );
         }
 
-        return tooltipContent;
+        if (finalData) {
+          return (
+            "Average Score: " +
+            finalData.averageScore +
+            "<br/>" +
+            "Total Correct: " +
+            finalData.totalCorrectCount +
+            "<br/>" +
+            "Total Wrong: " +
+            finalData.totalWrongCount
+          );
+        } else {
+          return "No data available";
+        }
+      },
+    },
+
+    plotOptions: {
+      column: {
+        stacking: "normal",
+        dataLabels: {
+          enabled: false,
+          format: "{point.y}",
+        },
+        pointWidth: 20,
+        borderRadius: 10,
       },
     },
     series: [
+      // {
+      //   name: "averageScore",
+      //   data: accuracyDatas?.data?.response.map((item) => item.averageScore),
+      //   color: "#cc0000",
+      // },
       {
-        data: data,
-        type: "bar",
-        itemStyle: {
-          barBorderRadius: [10, 10, 0, 0],
-          color: function (params) {
-            return params.dataIndex === highlightIndex ? "#3479FE" : "#C2D5FF";
-          },
+        name: "totalCorrectCount",
+        data: accuracyDatas?.data?.response?.map(
+          (item) => item?.totalCorrectCount
+        ),
+        color: "#0b59f1",
+        yAxis: 1,
+      },
+      {
+        name: "totalWrongCount",
+        data: accuracyDatas?.data?.response?.map(
+          (item) => item.totalWrongCount
+        ),
+        color: "red",
+        yAxis: 1,
+      },
+      {
+        name: "Temperature",
+        type: "spline",
+        data: chartBlockedDates(
+          selectedYear,
+          selectedMonth,
+          accuracyDatas,
+          "averageScore",
+          currentBtn
+        ),
+        tooltip: {
+          valueSuffix: "",
         },
-        lineStyle: {
-          color: "#BD83B8",
-        },
-        showSymbol: false,
+        yAxis: 0,
       },
     ],
   };
 
   return (
     <>
-      <HeadTitle header="Accuracy Score" />
+      <HeadTitle header="Reviewer Quality Score" />
       <div className={styles.card3}>
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
@@ -198,7 +350,7 @@ const Accuracy = () => {
                 activeColor="#fff"
                 inActiveColor="
                 #000000"
-                activeBg="#3479FE"
+                activeBg="#04306f"
                 inActiveBg="
                 #E6EEFF"
                 containerBg="
@@ -214,16 +366,14 @@ const Accuracy = () => {
                 </div>
               ) : accuracyDatas?.loading === false &&
                 accuracyDatas?.data?.response ? (
-                option && (
-                  <ReactECharts
-                    option={option}
-                    style={{
-                      width: "100%",
-                      height: "340px",
-                      marginTop: "-30px",
-                      overflowX: "hidden",
-                    }}
-                  />
+                options && (
+                  <div className={styles.highchartStyle}>
+                    <HighchartsReact
+                      highcharts={Highcharts}
+                      options={options}
+                      className={styles.hightchartStyles}
+                    />
+                  </div>
                 )
               ) : (
                 <div className={spinSTYles.spinStyle}>
@@ -234,7 +384,7 @@ const Accuracy = () => {
             <div className={styles.accuracy}>
               <div className={styles.header}>
                 <Image src={accuracy} className={styles.Img} />
-                <div className={styles.heading}>Accuracy</div>
+                <div className={styles.heading}>Average Quality</div>
               </div>
               <div className={styles.month}>
                 {currentBtn === "Daily"
@@ -246,7 +396,10 @@ const Accuracy = () => {
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
                   {accuracyDatas?.data?.response
-                    ? `${accuracyDatas?.data?.response[highlightIndex + 1]}%`
+                    ? `${Math.round(
+                        accuracyDatas?.data?.response[highlightIndex - 1]
+                          ?.averageScore
+                      )}%`
                     : "0%"}
                 </span>
               </div>

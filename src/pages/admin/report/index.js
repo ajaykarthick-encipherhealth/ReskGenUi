@@ -20,10 +20,11 @@ import {
   getReportDetails,
   getSentDetails,
 } from "../../../store/actions/adminAction/ReportActions";
+import { getSelectUserList } from "../../../store/actions/adminAction/DashboardAction";
 import SpinnerDots from "../../../components/spinner";
 import HeaderFilters from "../../../components/headerFilters";
+import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
 
-const { RangePicker } = DatePicker;
 const statusOptions = [
   { label: "All", value: "ALL" },
   { label: "Completed", value: "COMPLETED" },
@@ -74,6 +75,7 @@ const index = () => {
   const [coderEndDate, setCoderEndDate] = useState();
   const [selectedDates, setSelectedDates] = useState(null);
   const [selectedCoderOpt, setSelectedCoderOpt] = useState("");
+  const [selectedCoderOptReport, setSelectedCoderOptReport] = useState("");
   const [coderSearch, setCoderSearch] = useState("");
   const [sentSearch, setSentSearch] = useState("");
   const [receivedSearch, setReceivedSearch] = useState("");
@@ -81,13 +83,26 @@ const index = () => {
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
-
+  const [isindividual, setIsindividual] = useState(false);
+  const [selectMemberType, setSelectMemberType] = useState("");
+  const [selectUser, setSelectUser] = useState([]);
+  const [selectManager, setSelectedManger] = useState("");
+  const [select, setSelect] = useState(null);
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
     return ReceivedOptions?.push({ label: item.sender, value: item.sender });
   });
   const SentOptions = [];
   const uniqueRoles = new Set();
+
+  const completedDatas = useSelector(
+    (state) => state?.AdminDashboardReducers?.completedStatus
+  );
+  const selectUserList = useSelector(
+    (state) => state?.AdminDashboardReducers?.selectedUsers
+  );
+
+  const activeTabs = useSelector((state) => state?.adminReport?.activetab);
 
   SentReportDetails?.data?.response?.data?.forEach((data) => {
     data?.receivedUsers?.forEach((item) => {
@@ -98,6 +113,14 @@ const index = () => {
       }
     });
   });
+  const memberTypeChanges = (e) => {
+    setSelectMemberType(e);
+    setIsindividual(false);
+    setSelectUser([]);
+    if (e != "All") {
+      setIsindividual(true);
+    }
+  };
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -120,16 +143,24 @@ const index = () => {
 
   const handleTabs = (name) => {
     setSelectedDates(null);
-    setActiveTab(name);
+    // setActiveTab(name);
+    dispatch(
+      getActiveTab(
+        name
+      )
+    );
   };
   useEffect(() => {
+    dispatch(getSelectUserList(selectMemberType));
+  }, [selectMemberType]);
+  useEffect(() => {
     setIsLoading(false);
-    if (activeTab === "SentReport") {
+    if (reportActiveTab === "SentReport") {
       dispatch(
         getSentDetails(sentPageNo, startDate, endDate, sentSearch, sort)
       );
     }
-    if (activeTab === "ReceivedReport") {
+    if (reportActiveTab === "ReceivedReport") {
       dispatch(
         getReceivedDetails(
           receivedPageNo,
@@ -141,7 +172,7 @@ const index = () => {
       );
     }
 
-    if (activeTab === "CoderReport") {
+    if (!reportActiveTab || reportActiveTab === "CoderReport") {
       dispatch(
         getReportDetails(
           pageNo,
@@ -149,7 +180,9 @@ const index = () => {
           coderEndDate,
           coderSearch,
           selectedCoderOpt,
-          sort
+          selectedCoderOptReport?.value ? selectedCoderOptReport?.value : "",
+          sort,
+          (selectManager?.value && selectedCoderOptReport?.value !== "All") ? selectManager?.value: ""
         )
       );
     }
@@ -160,9 +193,10 @@ const index = () => {
     pageNo,
     sentPageNo,
     receivedPageNo,
-    activeTab,
+    reportActiveTab,
     ExportResponse,
     selectedCoderOpt,
+    selectedCoderOptReport,
     coderSearch,
     coderStartDate,
     coderEndDate,
@@ -175,11 +209,43 @@ const index = () => {
     receivedSearch,
     receivedSortOrder,
     sort,
+    selectManager,
+    select,
   ]);
 
   useEffect(() => {
     setFilteredCoder(ReportPatientDetails?.response);
   }, [ReportPatientDetails]);
+  useEffect(() => {
+    if (selectedCoderOptReport && !select) {
+      dispatch(
+        getSelectUserList(
+          selectedCoderOptReport === null &&selectedCoderOptReport?.value==='All'  ? " " : selectedCoderOptReport?.value
+        )
+      );
+      
+    }
+  }, [selectedCoderOptReport]);
+  const options = [
+    { value: " ", label: "All" },
+    { value: "REVIEWER", label: "REVIEWER" },
+    { value: "SUPERVISOR", label: "SUPERVISOR" },
+  ];
+
+  const optionsUser = selectUserList?.data?.response?.map((res) => ({
+    value: res.userName,
+    label: res.firstName + " " + res.lastName,
+  }));
+
+  useEffect(() => {
+    if (reportActiveTab) {
+      dispatch(
+        getActiveTab(
+          reportActiveTab
+        )
+      );
+    }
+  }, [reportActiveTab]);
 
   return (
     <>
@@ -206,26 +272,55 @@ const index = () => {
                             // selector
                             selectlabel="Select Status"
                             isSelector={
-                              activeTab === "CoderReport" ? true : false
+                              !reportActiveTab || reportActiveTab === "CoderReport" ? true : false
                             }
                             setSelectedOption={setSelectedCoderOpt}
                             selectOptions={statusOptions}
                             defaultSelectValue1={""}
+                            // selector
+
+                            selectlabel2="Select User Role"
+                            selectReportOptions={
+                              !reportActiveTab || reportActiveTab === "CoderReport" ? options : null
+                            }
+                            setSelectedOption2={setSelectedCoderOptReport}
+                            defaultSelectValue2={selectedCoderOptReport}
+
+                            // selector3
+                            isSelector3={
+                              selectUserList?.data?.response?.length
+                                ? true
+                                : false
+                            }
+                            selectedCoderOptReport={selectedCoderOptReport}
+                            selectlabel3="Select User"
+                            selectOptions3={optionsUser}
+                            setSelectedOption3={setSelectedManger}
+                            defaultSelectValue3="All"
+                            value={selectManager}
                             // rangepicker
                             isRangePicker={true}
-                            pickerlabel="Select Range"
+                            pickerlabel={
+                              reportActiveTab === "ReceivedReport"
+                                ? "Received Date"
+                                : reportActiveTab === "SentReport"
+                                ? "Sent Date"
+                                : "Select Date"
+                            }
                             setStartDate={setStartDate}
                             setEndDate={setEndDate}
                             setReceivedStartDate={setReceivedStartDate}
                             setReceivedEndDate={setReceivedEndDate}
                             setCoderStartDate={setCoderStartDate}
                             setCoderEndDate={setCoderEndDate}
-                            activeTab={activeTab}
+                            activeTab={reportActiveTab}
                             rowsLength={rowsLength}
                             setIsModalVisible={setIsModalVisible}
                             selectedDates={selectedDates}
                             setSelectedDates={setSelectedDates}
                             disable="Yes"
+                            setSelect={setSelect}
+                            adminReport={true}
                           />
                         </div>
                         <Export
@@ -248,8 +343,10 @@ const index = () => {
                             <div className="custom-tab-1">
                               <Tab.Container
                                 defaultActiveKey={
-                                  reportActiveTab
+                                  reportActiveTab === "ReceivedReport"
                                     ? "meatCriteria"
+                                    : reportActiveTab === "SentReport"
+                                    ? "comboDiseases"
                                     : "validDiseases"
                                 }
                               >
@@ -265,7 +362,7 @@ const index = () => {
                                       to="#my-posts"
                                       eventKey="validDiseases"
                                     >
-                                      Coder Report
+                                      Admin Report
                                     </Nav.Link>
                                   </Nav.Item>
                                   <Nav.Item
@@ -340,6 +437,9 @@ const index = () => {
                                       setSortOrder={setSentSortOrder}
                                       sortOrder={sentSortOrder}
                                       setSort={setSort}
+                                      receivedPageNo={sentPageNo}
+                                      receivedStartDate={startDate}
+                                      receivedEndDate={endDate}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane

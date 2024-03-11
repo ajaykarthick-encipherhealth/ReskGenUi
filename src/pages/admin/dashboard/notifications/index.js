@@ -23,8 +23,10 @@ const Notifications = () => {
   };
 
   const emailSplitFunction = (email) => {
-    let emailSplit = email.split("@");
+   if(email){
+    let emailSplit = email?.split("@");
     return capitalizeFirstLetter(emailSplit[0]);
+   }
   };
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -41,17 +43,18 @@ const Notifications = () => {
           <div className={styles.msgCOntainer}>
             <span className={styles.description}>{info.content}</span>
             <div className={styles.time}>
-              {moment(info.createdAt).format("MM-DD-YYYY")}&nbsp;{" "}
-              {moment(info.createdAt).format("hh:mm:A")} &nbsp;{" "}
-              {emailSplitFunction(info.userFrom.userName)} (
-              {info.userFrom?.role})
+              {moment(info?.createdDate).format("MM-DD-YYYY")}&nbsp;{" "}
+              {moment(info?.createdDate).format("hh:mm:A")} &nbsp;{" "}
+              {`${info?.fromUserDetails?.firstName?info?.fromUserDetails?.firstName:""} (${
+                info?.fromUserDetails?.role?info?.fromUserDetails?.role:""
+              })`}
             </div>
           </div>
         </div>
       ))
     ) : (
       <div className={styles.no_notificarion_container}>
-         {notificationResponse?.loading ===false &&<Image src={NoNotification} alt="" />}
+         {!notificationResponse?.loading && notificationResponse?.data?.content?.length===0 && <Image src={NoNotification} alt="" />}
       </div>
     );
 

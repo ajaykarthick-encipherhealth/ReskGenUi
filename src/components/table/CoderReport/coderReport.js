@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Badge, Empty, Tooltip } from "antd";
+import { Badge, Empty, Popover, Tooltip } from "antd";
 import TableStyle from "../table.module.css";
 import { SVGICON } from "../../../jsx/constant/theme";
 import { Paginator } from "primereact/paginator";
@@ -7,9 +7,26 @@ import { selectedRow } from "../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
 import Footer from "../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
-import { dateFormate, sortFunction } from "../../headerFilters/functions";
+import {
+  dateFormate,
+  renderUserPrfoileAvatar,
+  sortFunction,
+} from "../../headerFilters/functions";
 import visitStyles from "../../../styles/visitdata.module.css";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
+import NotAudited from "../../../../src/images/trackingImages/NotAuditedTrack.png";
+import AuditHold from "../../../../src/images/trackingImages/AuditHoldTrack.png";
+import ReAudit from "../../../../src/images/trackingImages/reAuditTrack.png";
+import AuditPending from "../../../../src/images/trackingImages/AuditPending.png";
+import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
+import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
+import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
+import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
+import AuditedDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
+import Abort from "../../../../src/images/trackingImages/Abort.png";
+import { extractLatestData } from "../../../pages/l2Auditor/auditing";
+import Image from "next/image";
 
 function CoderReport({
   setModal,
@@ -54,59 +71,94 @@ function CoderReport({
   };
 
   const processstatusBodyTemplate = (rowData) => {
+    const declinedDataFromAudit = extractLatestData(
+      rowData?.auditDeclinedNotes
+    );
+
+    const declinedDataFromDeclined = extractLatestData(rowData?.declineNotes);
+
+    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
+
     switch (rowData.processedStatus) {
       case "COMPLETED":
         return (
-          <div className="patient-status">
-            <span className={`badge processed-text`}>Completed</span>
-          </div>
+          <Popover placement="bottom" title="Status: COMPLETED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image
+                src={Completed}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
         );
 
       case "PENDING":
         return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
         );
 
       case "DECLINED":
         return (
-          <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>
-              Declined
-            </span>
-          </div>
+          <Popover
+            placement="bottom"
+            title="Status: DECLINED"
+            content={`Reason: ${declinedData ? declinedData : "---"}`}
+          >
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Declined} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
         );
 
       case "NOTCOMPUTED":
         return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
+          <Popover placement="bottom" title="Status: NOT COMPUTED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
         );
       case "COMPUTED":
         return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
         );
       case "HOLD":
         return (
-          <div className="patient-status">
-            <span className={`badge hold-text`}>Hold</span>
-          </div>
+          <Popover placement="bottom" title="Status: HOLD">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Hold} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
+        );
+      case "ABORTED_BY_CRON":
+        return (
+          <Popover placement="bottom" title="Status: ABORTED BY CRON">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Abort} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
         );
       case null:
         return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
         );
     }
   };
 
   const getFlag = (data) => {
-    switch (data["2023"][0]?.flag) {
+    switch (data["2023"][data["2023"]?.length - 1]?.flag) {
       case "PATIENT_NAME_MISSED":
         return (
           <Tooltip title="PATIENT_NAME_MISSED" placement="bottom">
@@ -236,7 +288,7 @@ function CoderReport({
                     );
                   }}
                 >
-                  COMPLETE DATE{" "}
+                  COMPLETED DATE{" "}
                   {sortOrder === "ASC" ? (
                     <ArrowUpOutlined />
                   ) : (
@@ -249,20 +301,20 @@ function CoderReport({
                 <th>HCC </th>
                 <th>FLAG </th>
                 <th className={TableStyle.rowStyle2}>STATUS</th>
-                <th >
+                <th>
                   <div
                     style={{ display: "flex", justifyContent: "space-around" }}
                   >
                     <input
                       type="checkbox"
                       onChange={handleHeaderCheckboxChange}
+                      className={selectAll ? TableStyle.customChecked2 : ""}
                       style={{
-                        paddingTop: "10px",
-                        width: "20px",
-                        height: "20px",
+                        width: "22px",
+                        height: "22px",
                         flexhrink: "0",
                         borderRadius: "4px",
-                        backgroundColor: "pink",
+                        cursor: "pointer",
                       }}
                       checked={selectAll}
                     />
@@ -324,29 +376,57 @@ function CoderReport({
                             : SVGICON.emptyComments}
                         </div>
                       </td>
-                      <td className={TableStyle.childBorder}>
-                        <div className={TableStyle.rowAlignment}>
-                          {row?.auditedBy ? row?.auditedBy : "---"}
-                        </div>
+                      <td
+                        className={TableStyle.childBorder}
+                        style={{ textAlign: "left", paddingLeft: "110px" }}
+                      >
+                        {row.auditedByFirstName ||
+                        row.auditedByLastName ||
+                        row.auditedByProfileImage ? (
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            {" "}
+                            <span style={{ marginRight: "10px" }}>
+                              {" "}
+                              {renderUserPrfoileAvatar(
+                                row.auditedByFirstName,
+                                row.auditedByLastName,
+                                row.auditedByProfileImage,
+                                "header"
+                              )}
+                            </span>
+                            <span>
+                              {row.auditedByFirstName} {row.auditedByLastName}
+                            </span>
+                          </div>
+                        ) : (
+                          <div style={{ textAlign: "center" }}>---</div>
+                        )}
                       </td>
                       <td className={TableStyle.childBorder}>
                         {row?.rafSum ? row?.rafSum : "000"}
                       </td>
                       <td className={TableStyle.childBorder}>
-                        {row?.validDisease ? row?.validDisease : "000"}
+                        {row?.validDiseaseCount
+                          ? row?.validDiseaseCount
+                          : "000"}
                       </td>
                       <td className={TableStyle.childBorder}>
                         {row?.flag ? (
                           getFlag(row?.flag)
                         ) : (
-                          <div style={{ marginLeft: "-10px" }}>---</div>
+                          <div>{SVGICON?.emptyFlag}</div>
                         )}
                       </td>
                       <td className={TableStyle.childBorder}>
                         {processstatusBodyTemplate(row)}
                       </td>
 
-                      <td className={TableStyle.lastBorder}>
+                      <td
+                        className={TableStyle.lastBorder}
+                        style={{ textAlign: "center" }}
+                      >
                         <input
                           type="checkbox"
                           onChange={() => {
@@ -356,12 +436,7 @@ function CoderReport({
                             (selectedRow) =>
                               selectedRow.patientId === row.patientId
                           )}
-                          style={{
-                            width: "20px",
-                            height: "20px",
-                            flexhrink: "0",
-                            borderRadius: "4px",
-                          }}
+                          className={TableStyle.customChecked}
                         />
                       </td>
                     </>
@@ -400,10 +475,33 @@ function CoderReport({
                             : SVGICON.emptyComments}
                         </div>
                       </td>
-                      <td className={TableStyle.childBorder}>
-                        <div className={TableStyle.rowAlignment}>
-                          {row?.auditedBy ? row?.auditedBy : "---"}
-                        </div>
+                      <td
+                        className={TableStyle.childBorder}
+                        style={{ textAlign: "left", paddingLeft: "110px" }}
+                      >
+                        {row.auditedByFirstName ||
+                        row.auditedByLastName ||
+                        row.auditedByProfileImage ? (
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            {" "}
+                            <span style={{ marginRight: "10px" }}>
+                              {" "}
+                              {renderUserPrfoileAvatar(
+                                row.auditedByFirstName,
+                                row.auditedByLastName,
+                                row.auditedByProfileImage,
+                                "header"
+                              )}
+                            </span>
+                            <span>
+                              {row.auditedByFirstName} {row.auditedByLastName}
+                            </span>
+                          </div>
+                        ) : (
+                          <div style={{ paddingLeft: "70px" }}>---</div>
+                        )}
                       </td>
                       <td className={TableStyle.childBorder}>
                         {row?.rafSum ? row?.rafSum : "000"}{" "}
@@ -417,30 +515,26 @@ function CoderReport({
                         {row?.flag ? (
                           getFlag(row?.flag)
                         ) : (
-                          <div style={{ marginLeft: "-10px" }}>---</div>
+                          <div>{SVGICON?.emptyFlag}</div>
                         )}
                       </td>
                       <td className={TableStyle.childBorder}>
                         {processstatusBodyTemplate(row)}{" "}
                       </td>
-                      <td className={TableStyle.lastBorder} style={{ textAlign: "center" }}>
+                      <td
+                        className={TableStyle.lastBorder}
+                        style={{ textAlign: "center" }}
+                      >
                         <input
                           type="checkbox"
                           onChange={() => {
                             handleRowCheckboxChange(row);
                           }}
+                          className={TableStyle.customChecked}
                           checked={selectedRows?.some(
                             (selectedRow) =>
                               selectedRow.patientId === row.patientId
                           )}
-                          style={{
-                            width: "20px",
-                            height: "20px",
-                            flexhrink: "0",
-                            borderRadius: "4px",
-                            backgroundColor: "pink",
-                            cursor: "pointer",
-                          }}
                         />
                       </td>
                     </>

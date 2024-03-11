@@ -51,6 +51,9 @@
   font-weight: 500 !important;
   font-size: 13px !important;
 }
+.dob_icon {
+  margin-right: 10px;
+}
 .dob_icon svg {
   width: 18px;
   padding: 0 !important;
@@ -296,10 +299,10 @@
 }
 
 .provider_name {
-  color: #008000bf !important;
-  background: #c4ffc4 !important;
+  /* color: #008000bf !important; */
+  /* background: #c4ffc4 !important; */
   font-weight: 600;
-  font-size: 11px;
+  font-size: 11px !important;
   border-radius: 30px !important;
   margin: 0px 0px 0px 5px;
   height: 20px;
@@ -332,7 +335,7 @@
   /* background: rgba(194, 54, 83, 0.2);
   color: #2d383aaa !important; */
   font-weight: 600;
-  font-size: 11px;
+  font-size: 11px !important;
   border-radius: 30px !important;
   margin: 0px 0px 0px 5px;
   height: 20px;
@@ -387,6 +390,26 @@
   display: block;
 }
 
+.captureheaderMeatView {
+  background: rgba(194, 54, 83, 0.2);
+  font-size: 11px !important;
+  font-weight: 500;
+  border-radius: 30px !important;
+  margin: 4px 3px 0px 0px;
+  text-align: center !important;
+  height: 20px;
+  justify-content: center;
+  align-items: center;
+  text-transform: capitalize;
+  padding: 1px 10px;
+  border: 0.0625rem solid transparent;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: max-content;
+  display: block;
+}
+
 .manuallyAdded {
   background: #dad7f4 !important;
   color: #2d383aaa !important;
@@ -401,20 +424,24 @@
 }
 
 .close_icon {
-  width: 16px;
-  height: 15px;
+  width: 18px;
+  height: 16px;
   border-radius: 4px;
   background: #fee1e1;
   text-align: center;
-  margin-left: -8px;
-  margin-top: 7px;
+  margin-left: 3px;
+  margin-top: 6px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .close_icon svg {
   text-align: center;
   display: flex;
   font-size: 10px;
-  margin: 2px 0px 0px 3px;
+  /* padding-top: 2px;
+  margin: 2px 0px 0px 3px; */
 }
 .hcc_title_name svg {
   color: #fff;
@@ -509,6 +536,15 @@
   /* background-color: #ffffff; */
   z-index: 1;
 }
+.meat_title_card2 {
+  border-radius: 12px;
+  background: #e1edfe;
+  padding: 5px 10px 2px 10px;
+  margin-bottom: 10px;
+  position: sticky;
+  top: 0;
+  margin-top: 10px;
+}
 .hccStickey_head {
   /* min-height: 10vh;
     max-height: 64vh;
@@ -602,6 +638,12 @@
   border: 1px solid #e1e1e1;
   padding: 15px 15px 15px 15px;
   margin-bottom: 15px;
+}
+.meat_details_card2 {
+  border-radius: 12px;
+  border: 1px solid #e1e1e1;
+  padding: 10px 15px 10px 15px;
+  margin-bottom: 5px;
 }
 
 .meat_head_card label {
@@ -995,7 +1037,7 @@
 .pending {
   height: 10px;
   width: 10px;
-  background: #452b90;
+  background: #0378d4;
 
   margin-right: 5px;
   margin-top: 2px;
@@ -1013,7 +1055,7 @@
 .hold {
   height: 10px;
   width: 10px;
-  background: #d8c11b;
+  background: #ad94fa;
 
   margin-right: 5px;
   margin-top: 2px;
@@ -1177,7 +1219,7 @@
 }
 
 .flagDetailsChange {
-  margin-top: 8px !important;
+  margin-top: 7px !important;
   /* height: 17px !important;
     width: 17px !important; */
   display: block;
@@ -1203,12 +1245,12 @@
 }
 .pendingBtn {
   font-size: 13px;
-  color: #452b90;
-  background: #dfd8f3 !important;
+  color: #5da9e4;
+  background: #c2e1f9 !important;
   border: none !important;
   box-shadow: none !important;
   border-radius: 6px;
-  width: 150px !important;
+  width: 170px !important;
 }
 .holdBtnHcc {
   font-size: 13px;
@@ -1217,7 +1259,7 @@
   border-radius: 6px !important;
   border: none !important;
   box-shadow: none !important;
-  width: 150px !important;
+  width: 170px !important;
 }
 .completedBtnHcc {
   font-size: 13px;
@@ -1226,7 +1268,7 @@
   border-radius: 6px !important;
   border: none !important;
   box-shadow: none !important;
-  width: 150px !important;
+  width: 170px !important;
 }
 
 .declinedBtnHcc {
@@ -1236,7 +1278,7 @@
   border-radius: 6px !important;
   border: none !important;
   box-shadow: none !important;
-  width: 150px !important;
+  width: 170px !important;
 }
 
 .name_missed path {
@@ -1487,6 +1529,15 @@
   background: #ffebad !important;
   border-radius: 6px !important;
 }
+.auditdecline_text {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.78px;
+  color: #ff5e5e !important;
+  background: #ffdede !important;
+  border-radius: 6px !important;
+}
 .auditpending_text {
   font-size: 13px;
   font-weight: 400;
@@ -1495,4 +1546,14 @@
   color: #e28213 !important;
   background: #fbe7d0 !important;
   border-radius: 6px !important;
+}
+
+.meat_head_card2 {
+  border-radius: 12px;
+  border: 1px solid #e1e1e1;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+.meat_lable {
+  font-weight: 600;
 }

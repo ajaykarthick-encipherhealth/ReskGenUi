@@ -8,6 +8,8 @@ import {
   REPORT_DETAILS,
   FILEDETAILS,
   REPORT,
+  SELECTED_USER_REPORT,
+  ACTIVETAB
 } from "../../actions/adminAction/ReportActions";
 
 const initialState = {
@@ -20,6 +22,8 @@ const initialState = {
   getReport: null,
   uploadFile: null,
   reportInfo: null,
+  selectedUsers:null,
+  activetab: null
 };
 
 export const AdminReportReducer = (state = initialState, action) => {
@@ -33,6 +37,12 @@ export const AdminReportReducer = (state = initialState, action) => {
     return {
       ...state,
       row: action.payload,
+    };
+  }
+  if(action.type===ACTIVETAB){
+    return {
+      ...state,
+      activetab: action.payload,
     };
   }
   if (action.type === SEARCH) {
@@ -76,6 +86,12 @@ export const AdminReportReducer = (state = initialState, action) => {
     return {
       ...state,
       reportInfo: action.payload,
+    };
+  } 
+  if (action.type === SELECTED_USER_REPORT) {
+    return {
+      ...state,
+      selectedUsers: action.payload,
     };
   }
   return state;

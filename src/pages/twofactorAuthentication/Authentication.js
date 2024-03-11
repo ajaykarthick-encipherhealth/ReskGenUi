@@ -9,6 +9,7 @@ import {
   getValidateCode,
   loginAction,
 } from "../../store/actions/AuthActions";
+import { encyptingPass } from "../../components/headerFilters/functions";
 
 export const codeLength = 6;
 export const generateCodeArray = () =>
@@ -23,7 +24,6 @@ const index = () => {
   const [skip, setSkip] = useState();
   const [code, setCode] = useState([]);
   const [password, setPassword] = useState();
-  const [decodedParams, setDecodedParams] = useState();
 
   const inputRefs = Array.from({ length: codeLength + 1 }, () => useRef(null));
 
@@ -36,6 +36,7 @@ const index = () => {
   };
 
   useEffect(() => {
+    inputRefs[1]?.current?.focus();
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const encodedParams = urlParams.get("params");
@@ -46,17 +47,38 @@ const index = () => {
     setPassword(decodedParams?.password);
     const skipParam = decodedParams?.skipEntry;
     setSkip(skipParam);
-    const intervalId = setInterval(() => {
-      setSeconds((prevSeconds) => {
-        if (prevSeconds === 0) {
-          clearInterval(intervalId);
-        }
-        return Math.max(0, prevSeconds - 1);
-      });
-    }, 1000);
+    // const intervalId = setInterval(() => {
+    //   setSeconds((prevSeconds) => {
+    //     if (prevSeconds === 0) {
+    //       clearInterval(intervalId);
+    //     }
+    //     return Math.max(0, prevSeconds - 1);
+    //   });
+    // }, 1000);
 
-    return () => clearInterval(intervalId);
+    // return () => clearInterval(intervalId);
   }, []);
+  useEffect(() => {
+    if (seconds === 0) {
+      setCode([]);
+      inputRefs[1].current.focus();
+      setSeconds(30);
+    }
+  }, [seconds]);
+
+  useEffect(() => {
+    if (code?.length > 0) {
+      const intervalId = setInterval(() => {
+        setSeconds((prevSeconds) => {
+          if (prevSeconds === 0) {
+            clearInterval(intervalId);
+          }
+          return Math.max(0, prevSeconds - 1);
+        });
+      }, 1000);
+      return () => clearInterval(intervalId);
+    }
+  }, [code]);
 
   return (
     <div className={styles.maindiv}>
@@ -80,6 +102,7 @@ const index = () => {
                     type="text"
                     maxLength="1"
                     pattern="[0-9]"
+                    value={code?.length > 0 ? code[index] : ""}
                     className={styles.codeInput}
                     onInput={(e) => handleInput(index, e)}
                     ref={inputRefs[index]}
@@ -87,7 +110,7 @@ const index = () => {
                 ))}
             </div>
             <div className={styles.timer}>
-              00:{String(seconds).padStart(2, "0")} s
+              00:{String(seconds)?.padStart(2, "0")} s
             </div>
           </>
         ) : (
@@ -116,7 +139,7 @@ const index = () => {
                   dispatch(
                     getValidateCode(
                       username,
-                      codeString,
+                      encyptingPass(codeString),
                       router,
                       "validate",
                       password
@@ -144,9 +167,17 @@ const index = () => {
               <button
                 className={styles.sendBtn}
                 onClick={() => {
-                  router?.push(
-                    `/twofactorAuthentication/GetOTP?username=${username}`
+                  const encodedParams = btoa(
+                    JSON.stringify({
+                      username: username,
+                      password: password,
+                    })
                   );
+
+                  router?.push({
+                    pathname: `/twofactorAuthentication/GetOTP`,
+                    search: `params=${encodedParams}`,
+                  });
                 }}
               >
                 ENABLE MFA

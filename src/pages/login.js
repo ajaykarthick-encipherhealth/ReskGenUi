@@ -9,6 +9,7 @@ import LoginBack from "../images/logo/login-back.jpg";
 import { IMAGES } from "../jsx/constant/theme";
 import { getMFAValidation } from "../store/actions/AuthActions";
 import {
+  encyptingPass,
   getValidatePassword,
   handleTogglePasswordVisibility,
 } from "../components/headerFilters/functions";
@@ -58,7 +59,7 @@ export default function Login() {
         email: "",
         password: "",
       });
-      dispatch(getMFAValidation(enteredEmail, router, password));
+      dispatch(getMFAValidation(enteredEmail, router, encyptingPass(password)));
     } else {
       return;
     }
@@ -134,8 +135,8 @@ export default function Login() {
                   )}
                 </div>
                 <div className="text-center mb-4">
-                  <button type="submit" className="btn btn-primary btn-block">
-                    {isLoading ? "Loading..." : "LOGIN"}
+                  <button type="submit" className={`btn btn-block ${styles.btnColor} `}>
+                    LOGIN
                   </button>
                 </div>
               </form>

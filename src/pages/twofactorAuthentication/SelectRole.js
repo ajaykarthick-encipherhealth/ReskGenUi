@@ -19,17 +19,14 @@ const SelectRole = () => {
   const [decodedParams, setDecodedParams] = useState();
   const [confirmModal, setConfirmModal] = useState(false);
   const [logoutMessgae, setLogoutMessage] = useState("");
+  const [selectItems, setSelectItems] = useState([]);
 
+  const rolesList = role?.slice().reverse();
   const items =
-    role?.length > 0
-      ? role?.map((info) => ({
+    rolesList?.length > 0
+      ? rolesList?.map((info) => ({
           value: info,
-          label:
-            info == "REVIEWER"
-              ? "REVIEWER"
-              : info == "SUPERVISOR"
-              ? "SUPERVISOR"
-              : "ADMIN",
+          label: info,
         }))
       : [];
 
@@ -67,6 +64,7 @@ const SelectRole = () => {
       admin: { userRole: "admin", route: "/admin/dashboard" },
       reviewer: { userRole: "reviewer", route: "/physician/dashboard" },
       supervisor: { userRole: "supervisor", route: "/l2Auditor/dashboard" },
+      provider: { userRole: "provider", route: "/provider/comparison" },
     };
     const selectedRoleInfo = rolesMapping[selectedRole];
     if (selectedRoleInfo && !roleError) {
@@ -94,7 +92,11 @@ const SelectRole = () => {
     );
     setDecodedParams(encodeParams);
 
-    const rolesArray = JSON.parse(localStorage.getItem("roles"));
+    var rolesArray = JSON.parse(localStorage.getItem("roles"));
+    var getUserId = localStorage.getItem("userId");
+    if (getUserId == "johnson@encipherhealth.onmicrosoft.com") {
+      rolesArray = ["PROVIDER"];
+    }
     setRole(rolesArray);
   }, []);
 

@@ -33,6 +33,7 @@ import Selector from "../../../components/selector";
 const { RangePicker } = DatePicker;
 
 const statusOption = [
+  { value: "", label: "ALL" },
   { value: "URGENT", label: "URGENT" },
   { value: "HIGH", label: "HIGH" },
   { value: "NORMAL", label: "NORMAL" },
@@ -74,7 +75,8 @@ export default function Patient() {
   const [selectedOption, setSelectedOption] = useState("");
   const [batchCount, setBatchCount] = useState("");
   const [filterBatchCount, setFilterBatchCount] = useState(false);
-
+  const [sortDueOrder, setSortDueOrder] = useState("DESC");
+  const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab === 1) {
       getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
@@ -123,7 +125,13 @@ export default function Patient() {
   const getAllCheckList = async (sort) => {
     setIsLoading(true);
     const uId = localStorage.getItem("userId");
-    var resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${batchCount ? batchCount :pageSize}&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}&priority=${selectedOption ? selectedOption : ""}&batchCount=${batchCount}`;
+    var resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${
+      batchCount ? batchCount : pageSize
+    }&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
+      sort?.sortDir
+    }&sortfield=${sort?.sortField}&priority=${
+      selectedOption ? selectedOption : ""
+    }&batchCount=${batchCount}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var result = response?.data?.response?.content;
@@ -412,6 +420,7 @@ export default function Patient() {
     if (!isPatientList) {
       getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
     } else {
+      console.log(sort, "test");
       getL2PatientList(l2selectUser, pageNoL2Patient, sort, "");
       setIsLoading(false);
     }
@@ -502,7 +511,7 @@ export default function Patient() {
                                     setSelectedOption={setSelectedOption}
                                     selectOptions={statusOption}
                                     defaultSelectValue1={""}
-                                    isClose={true}
+                                    // isClose={true}
                                   />
                                 </div>
                               </div>
@@ -566,7 +575,8 @@ export default function Patient() {
                                   className="nav-item"
                                   onClick={() => {
                                     setSort({ sortDir: "", sortField: "" });
-
+                                    setSortCompleteOrder("DESC");
+                                    setSortDueOrder("DESC");
                                     selectTabClick(1);
                                   }}
                                 >
@@ -582,7 +592,8 @@ export default function Patient() {
                                   className="nav-item"
                                   onClick={() => {
                                     setSort({ sortDir: "", sortField: "" });
-
+                                    setSortCompleteOrder("DESC");
+                                    setSortDueOrder("DESC");
                                     selectTabClick(2);
                                   }}
                                 >
@@ -591,6 +602,7 @@ export default function Patient() {
                                     eventKey="team"
                                     onClick={() => {
                                       setTableLoading(true);
+                                      
                                     }}
                                   >
                                     Supervisor Allocation
@@ -702,7 +714,16 @@ export default function Patient() {
                                                 headerCheckValidation
                                               }
                                               setSort={setSort}
+                                              sort={sort}
                                               loading={checkedLoading}
+                                              sortDueOrder={sortDueOrder}
+                                              setSortDueOrder={setSortDueOrder}
+                                              sortCompleteOrder={
+                                                sortCompleteOrder
+                                              }
+                                              setSortCompleteOrder={
+                                                setSortCompleteOrder
+                                              }
                                             />
                                             <div>
                                               <div>

@@ -12,7 +12,7 @@ import {
 import { useDispatch } from "react-redux";
 import { Select, Spin } from "antd";
 import spinSTYles from "../../../../styles/auth.module.css";
-import completStyle from '../completedStatus/styles.module.css'
+import completStyle from "../completedStatus/styles.module.css";
 
 const { Option } = Select;
 const SpeedoMeter = () => {
@@ -24,10 +24,17 @@ const SpeedoMeter = () => {
     (state) => state.AdminDashboardReducers.speedometer
   );
   const [selectOption, setSelectedOption] = useState();
-  const selectorOptions = managerOptions?.data?.response?.map((item) => ({
-    label: `${item?.firstName}${item?.lastName}`,
-    value: item?.userName,
-  }));
+  const [search, setSearch] = useState();
+  const selectorOptions = managerOptions?.data?.response
+    ? [
+        { label: "Clear", value: "clear" },
+        ...managerOptions?.data?.response?.map((item) => ({
+          label: `${item?.firstName}${item?.lastName}`,
+          value: item?.userName,
+        })),
+      ]
+    : [];
+
   const option = {
     series: [
       {
@@ -116,9 +123,10 @@ const SpeedoMeter = () => {
         },
         data: [
           {
-            value: meterDatas?.data?.response
-              ? meterDatas.data.response.accuracy
-              : 0,
+            value:
+              selectOption && meterDatas?.data?.response
+                ? meterDatas.data.response.accuracy
+                : 0,
           },
         ],
       },
@@ -130,13 +138,10 @@ const SpeedoMeter = () => {
       dispatch(getSppedoMeterDatas(selectOption));
     }
   }, [selectOption]);
-  const handleClearSelection = () => {
-    setSelectedOption(null);
-  };
 
   return (
     <>
-      <HeadTitle header="Accuracy" />
+      <HeadTitle header="Quality" />
       <div className={styles.card3}>
         <Card borderRadius="28px">
           <div className={styles.header}>
@@ -145,40 +150,58 @@ const SpeedoMeter = () => {
                 <Select
                   showSearch
                   style={{ width: 150 }}
-                  placeholder= "Select manager"
+                  placeholder="Select User"
                   optionFilterProp="children"
-                  filterOption={(input, option) =>
-                    (option?.label ?? "").includes(input)
+                  filterOption={(input, option) => {
+                    if (option && input) {
+                      const searchText = input.toLowerCase();
+                      const label = option.label
+                        ? option.label.toLowerCase()
+                        : "";
+                      return label.includes(searchText);
+                    }
+                    return false;
+                  }}
+                  filterSort={(optionA, optionB) => {
+                    optionA?.label !== "Clear" &&
+                      (optionA?.label ?? "")
+                        .toLowerCase()
+                        .localeCompare((optionB?.label ?? "").toLowerCase());
+                  }}
+                  value={
+                    selectOption === "clear" ? (
+                      <span style={{ color: "#d9d9d9" }}>
+                        {"Select User"}
+                      </span>
+                    ) : (
+                      selectOption
+                    )
                   }
-                  filterSort={(optionA, optionB) =>
-                    (optionA?.label ?? "")
-                      .toLowerCase()
-                      .localeCompare((optionB?.label ?? "").toLowerCase())
-                  }
-                  value={selectOption ==='clear' ?<span style={{color:"#d9d9d9"}}>{"Select manager"}</span>:selectOption}
+                  options={selectorOptions.map((option, index) => {
+                    return {
+                      ...option,
+                      className:
+                        option.label === "Clear" ? styles.clearOpion : "",
+                      disabled:
+                        index === 0
+                          ? selectOption?.length > 0
+                            ? false
+                            : true
+                          : false,
+                    };
+                  })}
                   onChange={(value) => {
                     setSelectedOption(value);
                   }}
                   className={`custom_select_user ${completStyle.custom_select_user}`}
-                >
-                  <Option key={"clear"} onClick={handleClearSelection} 
-                  disabled={selectOption?.length>0?false:true}>
-                    Clear
-               
-                  </Option>
-                  {selectorOptions?.map((option) => (
-                    <Option key={option.value} value={option.value}>
-                      {option.label}
-                    </Option>
-                  ))}
-                </Select>
+                />
               </div>
               {meterDatas?.loading || managerOptions?.loading ? (
                 <div
                   className={spinSTYles.spinStyle}
                   style={{
-                    height: "100%",
-                    paddingTop: "150px",
+                    height: "300px",
+                    // paddingTop: "100px",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",

@@ -3,9 +3,10 @@ import React, { useEffect, useState } from "react";
 import styles from "./report.module.css";
 import {
   getExportDetails,
-  getUsersList,
+
 } from "../../../store/actions/ReportActions";
 import { useDispatch, useSelector } from "react-redux";
+import { getUsersList } from "../../../store/actions/adminAction/ReportActions";
 const { Option } = Select;
 
 export const debounce = (func, delay) => {
@@ -25,6 +26,7 @@ const Export = ({
   setSelectAll,
 }) => {
   const usersList = useSelector((state) => state.report?.usersList);
+  const list=useSelector(state=>state.report.row)
   const [selectedUser, setSelectedUser] = useState();
   const [search, setSearch] = useState("");
   const [display, setDisplay] = useState(false);
@@ -33,6 +35,8 @@ const Export = ({
   const [open, setOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState("");
   const [form] = Form.useForm();
+  const idList=list?.map(data=>(data?.patientId))
+
   const checkBoxData = [
     {
       id: 1,
@@ -188,6 +192,7 @@ const Export = ({
       fileType: values.ReportTYpe,
       reportName: values.ReportName,
       userAndAccess: userAndAccess,
+      patientIds:idList
     };
     dispatch(getExportDetails(data));
     form.resetFields();
@@ -316,7 +321,7 @@ const Export = ({
         <div style={{ display: "flex", marginBottom: "20px" }}>
           <div style={{ width: "100%" }}>
             <Form.Item
-              label="Sender"
+              label="Send To"
               name="User"
               rules={[
                 {

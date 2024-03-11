@@ -29,6 +29,7 @@ import {
   PhysicanMenuList,
   L2AuditMenuList,
   L2AuditorMenuList,
+  ProviderMenuList,
 } from "./Menu";
 import ENDPOINTS from "../../../utility/enpoints";
 import axios from "../../../utility/axiosConfig";
@@ -39,7 +40,10 @@ import {
   getNotificationAlertClear,
 } from "../../../store/actions/NotificationAction";
 import Notification from "../../../components/notification/index";
-import { getFilteredList } from "../../../store/actions/PatientsActions";
+import {
+  getFilteredList,
+  getPatientID,
+} from "../../../store/actions/PatientsActions";
 import CodeIcon from "../../../images/svg/CodeIcon";
 import Search from "../../../components/search";
 import {
@@ -54,7 +58,9 @@ import { logoutAllDevice } from "../../../services/AuthService";
 import ImageUploader from "../../../components/imageUploading/ImageUploader";
 import logout from "../../../images/svg/logout.svg";
 import editImg from "../../../images/svg/edit.svg";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBell } from "@fortawesome/free-regular-svg-icons";
+import { faMessage } from "@fortawesome/free-regular-svg-icons";
 const btnItems = [
   {
     id: 1,
@@ -93,7 +99,7 @@ const Header = () => {
 
   const msgReply = useSelector((state) => state.workFlow.chatReply);
   const accuracy = useSelector((state) => state.auth.accuracy);
-  const currentUserInfo = useSelector((state) => state.auth.currentUserInfo);
+  const currentUserInfo = useSelector((state) => state.auth.userInfo);
   const codDetails = useSelector((state) => state.auth.codeDetails);
   const stateActive = router.pathname;
   const [headerFix, setheaderFix] = useState(false);
@@ -148,10 +154,6 @@ const Header = () => {
       if (result.isConfirmed) {
         await logoutAllDevice();
         localStorage.clear();
-        localStorage.removeItem("loginCheck");
-        localStorage.removeItem("userRole");
-        localStorage.removeItem("token");
-        localStorage.removeItem("roles");
         window.location = "/login";
       }
     });
@@ -159,15 +161,22 @@ const Header = () => {
 
   const getUserIdDetails = async (currentUserInfo) => {
     const token = localStorage.getItem("token");
+    const getUserId = localStorage.getItem("userId");
+
     setUserIdDetails(currentUserInfo?.data?.response);
     setProfileImg(currentUserInfo?.data?.response?.profileImageUrl);
     setUserName(currentUserInfo?.data?.response?.firstName);
     setLastName(currentUserInfo?.data?.response?.lastName);
     setDropdownContent(currentUserInfo?.data?.response?.role);
+    if (getUserId == "johnson@encipherhealth.onmicrosoft.com") {
+      setDropdownContent(["PROVIDER"]);
+    }
     var userId = currentUserInfo?.data?.response?.id;
+    const userName = currentUserInfo?.data?.response?.userName;
+
     dispatch(getNotificationList(userId));
     const sse = new EventSource(
-      `${ENDPOINTS?.apiEndoint}communication/push-notifications/${userId}?token=${token}`
+      `${ENDPOINTS?.apiEndoint}communication/push-notifications/${userName}?token=${token}`
     );
     sse.addEventListener("user-list-event", (event) => {
       const data = JSON.parse(event.data);
@@ -280,6 +289,8 @@ const Header = () => {
       router.push("/physician/dashboard");
     } else if (key === "supervisor") {
       router.push("/l2Auditor/dashboard");
+    } else if (key === "provider") {
+      router.push("/provider/comparison");
     }
   };
   const getMenuListByRole = (role) => {
@@ -290,6 +301,8 @@ const Header = () => {
         return PhysicanMenuList;
       case "supervisor":
         return L2AuditorMenuList;
+      case "provider":
+        return ProviderMenuList;
       default:
         return [];
     }
@@ -355,7 +368,7 @@ const Header = () => {
         <nav className="navbar navbar-expand">
           <div className="collapse navbar-collapse justify-content-between">
             <div className="header-logo">
-              <Image src={IMAGES.loginPageLogo} />
+              <Image src={IMAGES.headerLogo} />
             </div>
             {stateActive != "/physician/home" ? (
               <div>
@@ -373,10 +386,17 @@ const Header = () => {
                         key={index}
                         onClick={() => {
                           dispatch(getFilteredList(null));
+                          dispatch(getPatientID(null));
+                          localStorage.removeItem("patientId");
                         }}
                       >
                         <Link href={data.to} className="d-flex">
-                          <div className="menu-icon">{data.iconStyle}</div>{" "}
+                          <div
+                            className="menu-icon"
+                            style={{ paddingRight: "5px" }}
+                          >
+                            {data.iconStyle}
+                          </div>{" "}
                           <span className={`nav-text header-nav-text`}>
                             {data.title}
                           </span>
@@ -410,38 +430,55 @@ const Header = () => {
                             </Button>
                           </Popover>
                         )}
-                        {(userRole !== "admin") && 
-                        <Tooltip
-                          title={` Quality : ${
-                            accuracy?.data?.response
-                              ? Math.round(accuracy?.data?.response)
-                              : 100
-                          }%`}
-                        >
-                          <div className="header-progress">
-                            <div style={{ width: 40, height: 40 }}>
-                              <CircularProgressbar
-                                value={
-                                  accuracy?.data?.response
-                                    ? Math.round(accuracy?.data?.response)
-                                    : Math.round(100)
-                                }
-                                text={`${
-                                  accuracy?.data?.response
-                                    ? Math.round(accuracy?.data?.response)
-                                    : Math.round(100)
-                                }%`}
-                              />
 
-                              {/* <div style={{fontSize:"10px", textAlign:"center", fontWeight:"bold"}}>Quality</div> */}
+                        {userRole === "reviewer" && (
+                          <Tooltip
+                            title={` Quality : ${
+                              accuracy?.data?.response
+                                ? Math.round(accuracy?.data?.response)
+                                : 100
+                            }%`}
+                          >
+                            <div className="header-progress">
+                              <div style={{ width: 40, height: 40 }}>
+                                <CircularProgressbar
+                                  value={
+                                    accuracy?.data?.response
+                                      ? Math.round(accuracy?.data?.response)
+                                      : Math.round(100)
+                                  }
+                                  text={`${
+                                    accuracy?.data?.response
+                                      ? Math.round(accuracy?.data?.response)
+                                      : Math.round(100)
+                                  }%`}
+                                />
+
+                                {/* <div style={{fontSize:"10px", textAlign:"center", fontWeight:"bold"}}>Quality</div> */}
+                              </div>
                             </div>
-                          </div>
-                        </Tooltip> }
+                          </Tooltip>
+                        )}
                         <div
                           className="chatheaderIcon"
                           onClick={() => gotoChat()}
                         >
-                          <Image src={IMAGES.chatIcons} alt="" />
+                          <div style={{ color: "#04306f" }}>
+                            {/* <i class="far fa-message"></i> */}
+                            <div style={{ color: "#04306f" }}>
+                              <FontAwesomeIcon
+                                icon={faMessage}
+                                className={styles.bellIcon}
+                                style={{
+                                  width: "20px",
+                                  height: "20px",
+                                  marginTop: "8px",
+                                  fontWeight: "700",
+                                  marginRight: "10px",
+                                }}
+                              />
+                            </div>
+                          </div>
                         </div>
 
                         <div
@@ -450,9 +487,14 @@ const Header = () => {
                         >
                           <Badge
                             count={notificationAlertData?.length}
-                            color="#3479fe"
+                            color="#04306f"
                           >
-                            {SVGICON.dashboardNotification}
+                            <div style={{ color: "#04306f" }}>
+                              <FontAwesomeIcon
+                                icon={faBell}
+                                className={`fa-regular ${styles.bellIcon}`}
+                              />
+                            </div>
                           </Badge>
                         </div>
                         <div className="header-media d-flex">
@@ -489,14 +531,28 @@ const Header = () => {
                                       </div>
                                     </div>
                                     <div style={{ margin: "10px 0 0 5px" }}>
-                                      <span className="text-dark-50 ms-2 header-name font-weight-bold font-size-36px d-flex mr-3">
+                                      <span
+                                        className="ms-2 header-name d-flex mr-3"
+                                        style={{
+                                          fontWeight: "700",
+                                          fontSize: "16px",
+                                        }}
+                                      >
                                         {userName}
                                       </span>
-                                      <span className="text-[#4F4F4F] ms-2 subHeader-name font-weight-bolder font-size-base d-flex mr-3">
+                                      <span
+                                        className="text-[#4F4F4F] ms-2 subHeader-name d-flex mr-3 "
+                                        style={{
+                                          fontWeight: "500",
+                                          fontSize: "6px",
+                                        }}
+                                      >
                                         {currentRole == "reviewer"
                                           ? "Reviewer"
                                           : currentRole == "supervisor"
                                           ? "Supervisor"
+                                          : currentRole == "provider"
+                                          ? "Provider"
                                           : "Admin"}
                                       </span>
                                     </div>
@@ -536,9 +592,12 @@ const Header = () => {
                           </Popover>
                         </div>
                         <div className="mx-15">
-                          <span className="text-dark-50 ms-2 header-name font-weight-bolder font-size-base d-flex mr-3">
+                          <div
+                            className="text-dark-50 ms-2 header-name d-flex mr-3"
+                            style={{ fontWeight: "700", fontSize: "16px" }}
+                          >
                             {userName}
-                          </span>
+                          </div>
 
                           {items?.length > 0 && userIdDetails != "" ? (
                             <span className="ms-2 d-flex mt-1">
@@ -561,11 +620,16 @@ const Header = () => {
                               </Dropdown>
                             </span>
                           ) : (
-                            <span className="text-dark-50 ms-2 header-name font-weight-bolder font-size-base d-flex mr-3">
+                            <span
+                              className="text-[#4F4F4F] ms-2 subHeader-name d-flex mr-3"
+                              style={{ fontWeight: "500", fontSize: "6px" }}
+                            >
                               {currentRole == "reviewer"
                                 ? "Reviewer"
                                 : currentRole == "supervisor"
                                 ? "Supervisor"
+                                : currentRole == "provider"
+                                ? "Provider"
                                 : "Admin"}
                             </span>
                           )}

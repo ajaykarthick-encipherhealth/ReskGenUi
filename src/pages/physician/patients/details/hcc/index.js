@@ -31,11 +31,26 @@ import {
   faCalendar,
   faCircle,
   faCircleUp,
+  faSitemap,
   faCircleUser,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { CalendarOutlined } from "@ant-design/icons";
-import { QuestionCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
-import { Popconfirm, Select, Popover, Menu, DatePicker, Dropdown } from "antd";
+import {
+  QuestionCircleOutlined,
+  CheckCircleOutlined,
+  InfoCircleOutlined,
+} from "@ant-design/icons";
+import {
+  Popconfirm,
+  Select,
+  Popover,
+  Menu,
+  DatePicker,
+  Dropdown,
+  Tag,
+  message,
+} from "antd";
 import { IMAGES, SVGICON } from "../../../../../jsx/constant/theme";
 import { Modal } from "antd";
 import { Button } from "react-bootstrap";
@@ -53,11 +68,25 @@ import {
   updateMeatQuery,
   getProviderDetails,
   manuallyAddComboCode,
+  deleteMeatQuery,
+  getProviderEncounterDetails,
 } from "../../../../../services/PatientsListSevice";
 import RafScore from "../components/rafScore";
+import CamboTree from "./org";
+// import getMeatFound from "../functions";
 
 const { Option } = Select;
-
+const addOnCodeColor = [
+  "magenta",
+  "red",
+  "volcano",
+  "orange",
+  "gold",
+  "cyan",
+  "blue",
+  "geekblue",
+  "purple",
+];
 const Hcc = ({ patientHccResult }) => {
   const navigate = useRouter();
   let searchKeywords = [];
@@ -97,6 +126,8 @@ const Hcc = ({ patientHccResult }) => {
   const [dosYearDefalutSelect, setDosYearDefalutSelect] = useState("");
   const [dosYearDefalutSelectRadiology, setDosYearDefalutSelectRadiology] =
     useState("");
+  const [radiologyFileDetailCheck, setRadiologyFileDetailCheck] =
+    useState(false);
   const [localOrgId, setLocalOrgId] = useState("");
   const [localTenantId, setLocalTenantId] = useState("");
   const [selectMeatFileId, setSelectMeatFileId] = useState("");
@@ -109,7 +140,7 @@ const Hcc = ({ patientHccResult }) => {
   const [rafScore, setRAFScore] = useState([]);
   const [patientDetails, setPatientDetails] = useState([]);
   const [patientDetailsRadiology, setPatientDetailsRadiology] = useState([]);
-
+  const [opens, setOpens] = useState(false);
   const [rafHccList, setRafScoreHccList] = useState([]);
   const [isMatchBtn, setIsMatchBtn] = useState(false);
   const [matchHccList, setMatchHccList] = useState([]);
@@ -117,7 +148,7 @@ const Hcc = ({ patientHccResult }) => {
   const [newInValidDiseaseList, setInNewValidDiseaseList] = useState([]);
   const [unMatchResList, setNewUnMatchHccList] = useState([]);
   const [meatColorCodeList, setMeatColorCodeList] = useState([]);
-
+  const [combiTree, setCombiTree] = useState({});
   const [dbDescriptionRes, setDbDescriptionRes] = useState([]);
 
   const [openPopover, setOpenPopover] = useState(false);
@@ -169,6 +200,26 @@ const Hcc = ({ patientHccResult }) => {
     comboCode: "",
     additionalCode: "",
   });
+  const [inputValueMeat, setInputValueMeat] = useState({
+    year: "",
+    diseaseName: "",
+    diagnosisCode: "",
+    isMeatCriteriaPresent: true,
+    monitorCapturedFromHeader: "",
+    monitor: "",
+    evaluateCapturedFromHeader: "",
+    evaluate: "",
+    assessmentCapturedFromHeader: "",
+    assessment: "",
+    treatment: "",
+    treatmentCapturedFromHeader: "",
+    encounterDate: "",
+    radiology: false,
+    lab: false,
+    isManuallyAdded: true,
+    reason: "",
+    actualDescription: "",
+  });
 
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
   const [selectLabReportFile, setSelectLabReportFile] = useState(null);
@@ -209,16 +260,9 @@ const Hcc = ({ patientHccResult }) => {
   const [labFileDateofServieList, setFileLabDateofServiceList] = useState([]);
   const [labFileDateDefaulteSelect, setLabFileDateDefaulteSelect] =
     useState("");
-  const [labResult, setLabResult] = useState("");
-  const [labFileDosList, setLabFileDosList] = useState([]);
-  const [labFileDosListDefaultSelect, setLabFileDosListDefaultSelect] =
-    useState([]);
   const [saveBtnTitle, setSaveBtnTitle] = useState("Save");
   const [completedBtnTitle, setCompleteBtnTitle] = useState("Complete");
   const [declineBtnTitle, setDeclineBtnTitle] = useState("Decline");
-
-  const [suggestRadiology, setSuggestRadiology] = useState([]);
-  const [suggestLab, setSuggestLab] = useState([]);
 
   const [buttonClicked, setButtonClicked] = useState(false);
   const [isAddButtonClicked, setIsAddButtonClicked] = useState(false);
@@ -226,49 +270,17 @@ const Hcc = ({ patientHccResult }) => {
   const [deletedHccList, setDeletedHccList] = useState([]);
   const [isModalComments, setIsModalComments] = useState(false);
   const [flagContainerActive, setFlagContainerActive] = useState("");
-  const [flagContainerActiveTitle, setFlagContainerActiveTitle] = useState("");
-  const [showIcons, setShowIcons] = useState(false);
-  const [filter, setFilter] = useState("");
-  const [showCard, setShowCard] = useState(false);
-  const [patientList, setPatientList] = useState([]);
-  const [sideNavLabelActiveKey, setSideNavLabelActiveKey] = useState("HCC");
-  const [isSideNavShow, setIsSideNavShow] = useState(false);
-  const [timelineData, setTimeLineData] = useState([]);
   const [flagTagActive, setFlagTagActive] = useState(false);
   const [addValidCodeCheck, setAddValidCodeCheck] = useState(null);
-  const [patienIdDetails, setPatienIdDetails] = useState("");
-  const [commentList, setCommentList] = useState([]);
-  const [notesList, setNotesList] = useState([]);
-  const [flagResultList, setFlagResultList] = useState([]);
-  const [openPicker, setOpenPicker] = useState(false);
-  const [selectedDates, setSelectedDates] = useState([]);
-  const [actionItems, setActionItems] = useState([]);
-  const [actionItems2, setActionItems2] = useState([]);
-  const [actionItems3, setActionItems3] = useState([]);
   const [confirmCompleteModal, setConfirmCompleteModal] = useState(false);
   const [userDetails, setUserDetails] = useState("");
-  const [currentTime, setCurrentTime] = useState("");
-  const [commentsTrigger, setCommentsTrigger] = useState(false);
   const [captureSectionMatching, setCaptureSectionMatching] = useState([]);
   const [encounterDateMatching, setEncounterDateMatching] = useState([]);
-  const [flagFirstData, setFlagFirstData] = useState([]);
   const [fileModalHeader, setFileModalHeader] = useState("");
-  const [filterDataLoading, setFilterDataLoading] = useState(true);
-
-  const [pageNo, setPageNo] = useState(0);
-  const [pageSize, setPageSize] = useState(15);
-  const [paginationFirst, setPaginationFirst] = useState(0);
-  const [totalElements, setTotalElements] = useState(10);
-
-  const [labFileFilterList, setLabFileFilterList] = useState(10);
-  const [radiologyFileDetailCheck, setRadiologyFileDetailCheck] =
-    useState(false);
   const [dragFileDate, setdragFileDate] = useState(false);
   const [inputValueFileDate, setInputValueFileDate] = useState("");
   const [patientFileDTO, setPatientFileDTO] = useState("");
   const [fileInitialPage, setFileInitialPage] = useState(null);
-  const [sectionAllColor, setSectionAllColor] = useState([]);
-
   const [findFileKeyword, setFindFileKeyword] = useState("");
   const [fileModalTitle, setFileModalTitle] = useState("");
   const [isMeatQueryModal, setIsMeatQueryModal] = useState(false);
@@ -289,6 +301,73 @@ const Hcc = ({ patientHccResult }) => {
   const [activeTabNumber, setActiveTabNumber] = useState(0);
   const [meatModalTitle, setMeatModalTitle] = useState("");
   const [fileLoading, setFileLoading] = useState(false);
+  const [selectMeatResult, setSelectMeatResult] = useState(null);
+  const [formErr, setFormErr] = useState({
+    providername: "",
+    quickQuery: "",
+    imagingQuery: "",
+    queryReason: "",
+    description: "",
+  });
+  const [providerNameEcnounterList, setProviderNameEcnounterList] = useState(
+    []
+  );
+
+  const getMeatFound = (code, data, value) => {
+    const result = data?.filter(
+      (res2) => res2.diagnosisCode.replace(".", "") == code.replace(".", "")
+    );
+    var backColor = "#f93d3d";
+    var meatTitle = "MEAT";
+    if (result.length != 0) {
+      switch (value) {
+        case "M":
+          if (result[0]?.monitor) {
+            backColor = "#15b315";
+          }
+          meatTitle = "Monitor";
+          break;
+        case "E":
+          if (result[0]?.evaluate) {
+            backColor = "#15b315";
+          }
+          meatTitle = "Evaluate";
+          break;
+        case "A":
+          if (result[0]?.assessment) {
+            backColor = "#15b315";
+          }
+          meatTitle = "Assessment";
+          break;
+        case "T":
+          if (result[0]?.treatment) {
+            backColor = "#15b315";
+          }
+          meatTitle = "Treatment";
+          break;
+        default:
+          null;
+      }
+    }
+    // var badgeMap = (
+    //   <span
+    //     style={{ backgroundColor: backColor, color: "white" }}
+    //     className={`mt-2 ${styles.badgeMeat}`}
+    //   >
+    //     {value}
+    //   </span>
+    // );
+    return (
+      <Tooltip title={meatTitle} placement="bottom">
+        <span
+          style={{ backgroundColor: backColor, color: "white" }}
+          className={`mt-2 ${styles.badgeMeat}`}
+        >
+          {value}
+        </span>
+      </Tooltip>
+    );
+  };
 
   const handleAddButtonClick = () => {
     setIsAddButtonClicked(true);
@@ -296,6 +375,9 @@ const Hcc = ({ patientHccResult }) => {
 
   const handleChange = async (e) => {
     const key = e.target.name;
+    if (key == "diagnosisCodeQuery") {
+      getFindValidDiagnosisCode(e.target.value);
+    }
     if (key == "diagnosisCode") {
       getFindValidDiagnosisCode(e.target.value);
     }
@@ -304,6 +386,18 @@ const Hcc = ({ patientHccResult }) => {
     }
     const value = e.target.value;
     setInputValue({ ...inputValue, [key]: value });
+  };
+
+  const handleChangeMeat = async (e) => {
+    const key = e.target.name;
+    if (key == "diagnosisCode") {
+      getFindValidDiagnosisCode(e.target.value);
+    }
+    if (key == "encodedDate") {
+      setInputValueFileDate(e.target.value);
+    }
+    const value = e.target.value;
+    setInputValueMeat({ ...inputValueMeat, [key]: value });
   };
 
   const handleDatePickerChangeFile = (dates, dateString) => {
@@ -324,7 +418,10 @@ const Hcc = ({ patientHccResult }) => {
         setFileModalHeader(fileModalTitle);
         if (fileInitialPage) {
           setTargetPages(
-            (targetPage) => targetPage.pageIndex === fileInitialPage
+            (targetPage) =>
+              targetPage.pageIndex === fileInitialPage ||
+              targetPage.pageIndex === fileInitialPage + 1 ||
+              targetPage.pageIndex === fileInitialPage + 2
           );
         }
         highlight({
@@ -355,6 +452,14 @@ const Hcc = ({ patientHccResult }) => {
     );
     setUserDetails(dotLoading);
     setvalidHccDetails(dotLoading);
+  }, []);
+
+  useEffect(() => {
+    // loadFilterPatientList();
+    var orgId = localStorage.getItem("orgId");
+    var tenId = localStorage.getItem("tenantId");
+    var patientId = localStorage.getItem("patientId");
+    getPatientDetailsFileLoad(patientId, orgId, tenId);
   }, [activeTabNumber]);
 
   useEffect(() => {
@@ -365,7 +470,10 @@ const Hcc = ({ patientHccResult }) => {
         setMeatModalTitle(selectMeatName);
         if (fileInitialPage != null) {
           setTargetPages(
-            (targetPage) => targetPage.pageIndex === fileInitialPage
+            (targetPage) =>
+              targetPage.pageIndex === fileInitialPage ||
+              targetPage.pageIndex === fileInitialPage + 1 ||
+              targetPage.pageIndex === fileInitialPage + 2
           );
         } else {
           setTargetPages(null);
@@ -467,24 +575,27 @@ const Hcc = ({ patientHccResult }) => {
         validDiseaseNewRes?.map((res, index) => {
           const encounterDatearray = res?.encounterDate?.split(",");
           var providerList = [];
-          providerList.push({
-            providerName: res.providerName,
-            authorizedProvider: true,
+          res.provider?.map((res, index) => {
+            providerList.push(res.providerName);
           });
-          validDisArray.push({
-            actualDescription: res.actualDescription,
-            capturedSections: res.capturedSections,
-            diagnosisCode: res.diagnosisCode,
-            encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
-            isManuallyAdded: res.isManuallyAdded,
-            isHccValid: res.isHccValid,
-            defaultPosition: res.defaultPosition,
-            providerName: providerList,
-            dbDescription: res.dbDescription,
-            isMostSpecific: res.isMostSpecific,
-            getPlace: "Hcc",
-          });
+
+          if (res.isShow != false) {
+            validDisArray.push({
+              actualDescription: res.actualDescription,
+              capturedSections: res.capturedSections,
+              diagnosisCode: res.diagnosisCode,
+              encounterDate: res.encounterDate,
+              encounterDateSplit: encounterDatearray,
+              isManuallyAdded: res.isManuallyAdded,
+              isHccValid: res.isHccValid,
+              defaultPosition: res.defaultPosition,
+              providerName: providerList,
+              dbDescription: res.dbDescription,
+              isMostSpecific: res.isMostSpecific,
+              children: res.children,
+              getPlace: "Hcc",
+            });
+          }
         });
 
         if (result?.insulinDisease) {
@@ -492,7 +603,7 @@ const Hcc = ({ patientHccResult }) => {
             actualDescription: result?.insulinDisease?.description,
             capturedSections: [result?.insulinDisease?.section],
             diagnosisCode: result?.insulinDisease?.code,
-            encounterDate: null,
+            encounterDate: result?.insulinDisease?.dos,
             encounterDateSplit: [result?.insulinDisease?.dos],
             getPlace: "Insulin",
             isHccValid: true,
@@ -516,23 +627,24 @@ const Hcc = ({ patientHccResult }) => {
 
         if (result.deletedDiseases != null) {
           result.deletedDiseases.map((res, index) => {
-            const encounterDatearray = res?.encounterDate?.split(",");
-            var providerList = [];
-            providerList.push({
-              providerName: res.providerName,
-              authorizedProvider: true,
-            });
-            deleteHccList.push({
-              actualDescription: res.actualDescription,
-              capturedSections: res.capturedSections,
-              diagnosisCode: res.diagnosisCode,
-              encounterDate: res.encounterDate,
-              encounterDateSplit: encounterDatearray,
-              isManuallyAdded: res.isManuallyAdded,
-              isHccValid: res.isHccValid,
-              defaultPosition: res.defaultPosition,
-              providerName: providerList,
-            });
+            if (res.isShow != false) {
+              const encounterDatearray = res?.encounterDate?.split(",");
+              var providerList = [];
+              res.provider?.map((res, index) => {
+                providerList.push(res.providerName);
+              });
+              deleteHccList.push({
+                actualDescription: res.actualDescription,
+                capturedSections: res.capturedSections,
+                diagnosisCode: res.diagnosisCode,
+                encounterDate: res.encounterDate,
+                encounterDateSplit: encounterDatearray,
+                isManuallyAdded: res.isManuallyAdded,
+                isHccValid: res.isHccValid,
+                defaultPosition: res.defaultPosition,
+                providerName: providerList,
+              });
+            }
           });
         }
         if (result.suggestRadiology != null) {
@@ -545,9 +657,8 @@ const Hcc = ({ patientHccResult }) => {
           suggestRadiologyList.map((res, index) => {
             const encounterDatearray = res?.encounterDate?.split(",");
             var providerList = [];
-            providerList.push({
-              providerName: res.providerName,
-              authorizedProvider: true,
+            res?.provider?.map((res2, index) => {
+              providerList.push(res2.providerName);
             });
             suggestListAll.push({
               actualDescription: res.actualDescription,
@@ -564,6 +675,10 @@ const Hcc = ({ patientHccResult }) => {
 
           if (result.suggestRadiologyCombo != null) {
             result.suggestRadiologyCombo.map((res, index) => {
+              var providerList = [];
+              res.provider?.map((res2, index) => {
+                providerList.push(res2.providerName);
+              });
               const encounterDatearray = res?.encounterDate?.split(",");
               suggestListAll.push({
                 actualDescription: res.diseaseName,
@@ -573,6 +688,7 @@ const Hcc = ({ patientHccResult }) => {
                 encounterDateSplit: encounterDatearray,
                 getPlace: "Radio-combo",
                 isHccValid: true,
+                providerName: providerList,
                 // defaultPosition:res.defaultPosition
               });
             });
@@ -583,6 +699,10 @@ const Hcc = ({ patientHccResult }) => {
           // getLabReportDetails(orgId,tenId)
           suggestLabList = result.suggestLab;
           suggestLabList.map((res, index) => {
+            var providerList = [];
+            res?.provider?.map((res2, index) => {
+              providerList.push(res2.providerName);
+            });
             const encounterDatearray = res?.encounterDate?.split(",");
             suggestListAll.push({
               actualDescription: res.actualDescription,
@@ -593,6 +713,7 @@ const Hcc = ({ patientHccResult }) => {
               getPlace: "Lab",
               isHccValid: true,
               defaultPosition: res.defaultPosition,
+              providerName: providerList,
             });
           });
         }
@@ -600,46 +721,47 @@ const Hcc = ({ patientHccResult }) => {
         if (result.unMatchedDisease != null) {
           unMatchRes = result.unMatchedDisease;
           unMatchRes.map((res, index) => {
-            const encounterDatearray = res?.encounterDate?.split(",");
-            var providerList = [];
-            providerList.push({
-              providerName: res.providerName,
-              authorizedProvider: true,
-            });
-            if (res.isHccValid == true) {
-              suggestListAll.push({
-                actualDescription: res.actualDescription,
-                diagnosisCodeFinding: res.diagnosisCode,
-                isHccValid: res.isHccValid,
-                capturedSections: res.capturedSections,
-                diagnosisCode: res.diagnosisCode,
-                encounterDate: res.encounterDate,
-                encounterDateSplit: encounterDatearray,
-                getPlace: "Hcc",
-                defaultPosition: res.defaultPosition,
-                providerName: providerList,
+            if (res.isShow != false) {
+              const encounterDatearray = res?.encounterDate?.split(",");
+              var providerList = [];
+              res?.provider?.map((res, index) => {
+                providerList.push(res.providerName);
               });
-            } else {
-              // suggestListAll.push({
-              //   actualDescription: res.actualDescription,
-              //   diagnosisCodeFinding: res.diagnosisCodeFinding,
-              //   isHccValid: res.isHccValid,
-              //   capturedSections: res.capturedSections,
-              //   diagnosisCode: res.diagnosisCodeFinding,
-              //   encounterDate: res.encounterDate,
-              //   getPlace: "Hcc",
-              // });
-              suggestListAllNonHcc.push({
-                actualDescription: res.actualDescription,
-                diagnosisCodeFinding: res.diagnosisCode,
-                isHccValid: res.isHccValid,
-                capturedSections: res.capturedSections,
-                diagnosisCode: res.diagnosisCode,
-                encounterDate: res.encounterDate,
-                encounterDateSplit: encounterDatearray,
-                getPlace: "Hcc",
-                providerName: providerList,
-              });
+              if (res.isHccValid == true) {
+                suggestListAll.push({
+                  actualDescription: res.actualDescription,
+                  diagnosisCodeFinding: res.diagnosisCode,
+                  isHccValid: res.isHccValid,
+                  capturedSections: res.capturedSections,
+                  diagnosisCode: res.diagnosisCode,
+                  encounterDate: res.encounterDate,
+                  encounterDateSplit: encounterDatearray,
+                  getPlace: "Hcc",
+                  defaultPosition: res.defaultPosition,
+                  providerName: providerList,
+                });
+              } else {
+                // suggestListAll.push({
+                //   actualDescription: res.actualDescription,
+                //   diagnosisCodeFinding: res.diagnosisCodeFinding,
+                //   isHccValid: res.isHccValid,
+                //   capturedSections: res.capturedSections,
+                //   diagnosisCode: res.diagnosisCodeFinding,
+                //   encounterDate: res.encounterDate,
+                //   getPlace: "Hcc",
+                // });
+                suggestListAllNonHcc.push({
+                  actualDescription: res.actualDescription,
+                  diagnosisCodeFinding: res.diagnosisCode,
+                  isHccValid: res.isHccValid,
+                  capturedSections: res.capturedSections,
+                  diagnosisCode: res.diagnosisCode,
+                  encounterDate: res.encounterDate,
+                  encounterDateSplit: encounterDatearray,
+                  getPlace: "Hcc",
+                  providerName: providerList,
+                });
+              }
             }
           });
         }
@@ -647,6 +769,34 @@ const Hcc = ({ patientHccResult }) => {
         invalidDis = result.invalidDisease;
         comboDis = result.comboDisease;
         meatCri = result.meatCriteria;
+
+        var combiDisArray = [];
+        if (result.comboDisease) {
+          comboDis.map((res, index) => {
+            var providerList = [];
+            res.providers?.map((res, index) => {
+              providerList.push(res.providerName);
+            });
+            const encounterDatearray = res?.encounterDate?.split(",");
+            combiDisArray.push({
+              addOnCode: res.addOnCode,
+              addOnCodeTwo: res.addOnCodeTwo,
+              addOnCodeThree: res.addOnCodeThree,
+              addOnCodes: [res.addOnCode, res.addOnCodeTwo, res.addOnCodeThree],
+              diagnosisCodeCombo: res.diagnosisCodeCombo,
+              diseaseName: res.diseaseName,
+              diagnosisCode: res.diagnosisCode,
+              encounterDate: res.encounterDate,
+              encounterDateSplit: encounterDatearray,
+              providerName: providerList,
+              providers: res.provider ? res.providers : res.provider,
+              ruleType: res.ruleType,
+              capturedSections: res.capturedSections,
+              children: res.children ? res.children : [],
+              expanded: true,
+            });
+          });
+        }
 
         // validDiseaseNewRes = validDiseaseNew[2019]
 
@@ -664,7 +814,7 @@ const Hcc = ({ patientHccResult }) => {
         setNewUnMatchHccList(suggestListAll);
         setValidDiseasesList(validDiseasesArray);
         setInvalidDiseasesList(invalidDiseasesArray);
-        setComboDiseaseCodesList(comboDis);
+        setComboDiseaseCodesList(combiDisArray);
         setDosYear(dosYearArr);
         setRAFScore(rafScore);
         setSuggestedNonHccList(suggestListAllNonHcc);
@@ -706,6 +856,8 @@ const Hcc = ({ patientHccResult }) => {
           "encounterDateTag6",
           "encounterDateTag7",
           "encounterDateTag8",
+          "encounterDateTag9",
+          "encounterDateTag10",
         ];
 
         validDiseaseNewRes?.map((res) => {
@@ -716,6 +868,16 @@ const Hcc = ({ patientHccResult }) => {
             });
           });
         });
+
+        validDiseaseNewRes?.map((res) => {
+          res.provider?.map((res2, index) => {
+            capturedSectionsArr?.push({
+              name: res2.providerName,
+              diagnosisCode: res?.diagnosisCode,
+            });
+          });
+        });
+
         invalidDiseaseNewRes.map((res) => {
           res.capturedSections.map((res2, index) => {
             capturedSectionsArr.push({
@@ -731,6 +893,15 @@ const Hcc = ({ patientHccResult }) => {
               name: res2,
               diagnosisCode: res?.diagnosisCode,
             });
+          });
+
+          res.providerName?.map((res2, index) => {
+            if (res2) {
+              capturedSectionsArr?.push({
+                name: res2,
+                diagnosisCode: res?.diagnosisCode,
+              });
+            }
           });
         });
 
@@ -802,6 +973,12 @@ const Hcc = ({ patientHccResult }) => {
           });
         });
 
+        // if (result?.insulinDisease) {
+        //   encounterDateArr.push({
+        //     name: result?.insulinDisease?.dos,
+        //   });
+        // }
+
         result?.unMatchedDisease?.map((res) => {
           const array = res?.encounterDate?.split(",");
           array?.map((res2) => {
@@ -827,6 +1004,12 @@ const Hcc = ({ patientHccResult }) => {
             });
           });
         });
+
+        if (result?.insulinDisease) {
+          encounterDateArr.push({
+            name: result?.insulinDisease?.dos,
+          });
+        }
 
         var encounterDateArrDublicatesRemove = getUniqueListBy(
           encounterDateArr,
@@ -947,6 +1130,12 @@ const Hcc = ({ patientHccResult }) => {
               encounterDate: res.encounterDate,
             });
           } else {
+            var providerList = [];
+            res?.visitDetailsDTO?.providerSet?.map((res, index) => {
+              providerList.push(res.providerName);
+            });
+            const encounterDatearray = res?.encounterDate?.split(",");
+
             meatListArr.push({
               diagnosisCode: res.diagnosisCode,
               diseaseName: res.diseaseName,
@@ -954,6 +1143,7 @@ const Hcc = ({ patientHccResult }) => {
               assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
               evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
               treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+              providerName: providerList,
               monitorCapturedFromHeaderColor: colorCodeMatch(
                 dublicateRemoveSecondArr,
                 res.monitorCapturedFromHeader
@@ -979,6 +1169,7 @@ const Hcc = ({ patientHccResult }) => {
               isMeatCriteriaPresent: res.isMeatCriteriaPresent,
               category: res.category,
               encounterDate: res.encounterDate,
+              encounterDateSplit: encounterDatearray,
             });
           }
         });
@@ -1008,6 +1199,7 @@ const Hcc = ({ patientHccResult }) => {
 
         var newArrayColorMatchs = [];
         newArrayColorMatchs = [
+          ...sectionColorResult,
           ...sectionColorResultMatch,
           ...notMatchColorArray,
           ...sectionColorResultMatchMeat,
@@ -1036,6 +1228,25 @@ const Hcc = ({ patientHccResult }) => {
             );
           }
         }
+      } else {
+        setIsLoading(false);
+      }
+    }
+  };
+  const getPatientDetailsFileLoad = async (
+    patientId,
+    orgId,
+    tenId,
+    fileloadCondition
+  ) => {
+    getFileDosPageNumber();
+    if (patientHccResult) {
+      var result = patientHccResult;
+      setPatientDocumentResult(result);
+      setPatientDetails(result);
+      if (result.validDisease != null) {
+        getPatientPdfFile(result?.fileDetailDTO?.azureBlobPath, tenId);
+        setPatientFileDTO(result?.fileDetailDTO);
       } else {
         setIsLoading(false);
       }
@@ -1339,9 +1550,16 @@ const Hcc = ({ patientHccResult }) => {
     setIsAddComboCode(false);
     setFindFileKeyword(null);
     setFileLoading(false);
+    setActiveTabNumber(activeTabNumber == null ? 0 : null);
   };
 
-  const handleOpenModal = async (value, disDescription, encounterDate) => {
+  const handleOpenModal = async (
+    value,
+    disDescription,
+    encounterDate,
+    meatresult
+  ) => {
+    setSelectMeatResult(meatresult);
     setFileLoading(true);
     var splitPoint = disDescription.substring(" ", 20);
     var dotLoading = (
@@ -1352,39 +1570,42 @@ const Hcc = ({ patientHccResult }) => {
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/pageNumber?header=${value}&fileId=${fileId}&dos=${encounterDatesHeader}`
-    );
-    var result = response.data.response;
-    if (result?.length != 0) {
-      var pageNumber = result[0] - 1;
-      setFileInitialPage(pageNumber);
-      setFileDosPageNumber(pageNumber);
-    } else {
-      setFileInitialPage(null);
-      setFileDosPageNumber(null);
-    }
-    setMeatModalTitle(dotLoading);
-    setIsLoadingSection(true);
-    setFindFileKeyword(splitPoint);
-    setIsModalOpen(true);
-    var dataset = value + " / (" + disDescription + ")";
-    setSelectMeatName(dataset);
-  };
+    var pageNumber = null;
+    try {
+      const response = await axios.get(
+        ENDPOINTS.apiEndoint +
+          `dbservice/pageNumber?header=${value}&fileId=${fileId}&dos=${encounterDatesHeader}&stringFileWord=${splitPoint}`
+      );
+      var result = response.data.response;
+      if (response?.data?.status == "SUCCESS") {
+        if (result?.first == false) {
+          splitPoint = value;
+        }
+        pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
+        setFileInitialPage(pageNumber);
+        setFileDosPageNumber(pageNumber);
+      } else {
+        setFileInitialPage(null);
+        setFileDosPageNumber(null);
+      }
+      setMeatModalTitle(dotLoading);
+      setIsLoadingSection(true);
+      if (findFileKeyword == splitPoint) {
+        setFileLoading(false);
+        var dataset = value + " / (" + disDescription + ")";
+        setMeatModalTitle(dataset);
+      }
+      setFindFileKeyword(splitPoint);
 
-  const getSectionPageNumber = async (header, encounterDate) => {
-    var fileId = patientFileDTO.fileId;
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/pageNumber?header=${header}&fileId=${fileId}&dos=${encounterDate}`
-    );
-
-    var result = response.data;
-    if (result?.length) {
-      var pageNumber = result[0] - 1;
-      setFileInitialPage(pageNumber);
-    } else {
+      setIsModalOpen(true);
+      var dataset = value + " / (" + disDescription + ")";
+      setSelectMeatName(dataset);
+    } catch (error) {
+      splitPoint = value;
+      if (findFileKeyword == value) {
+        setFileLoading(false);
+      }
+      setFindFileKeyword(splitPoint);
       setFileInitialPage(null);
       setFileDosPageNumber(null);
     }
@@ -1401,39 +1622,53 @@ const Hcc = ({ patientHccResult }) => {
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
-
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}`
-    );
-    var result = response.data.response;
-    if (result?.length) {
-      var pageNumber = result[0] - 1;
-      if (pageNumber == fileInitialPage) {
-        setFileLoading(false);
-        notification.warning({
-          message: "This detail also same page",
-          placement: "top",
-          duration: 1,
-        });
+    var splitPoint = actualDescription.substring(" ", 20);
+    var pageNumber = null;
+    try {
+      const response = await axios.get(
+        ENDPOINTS.apiEndoint +
+          `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}&stringFileWord=${splitPoint}`
+      );
+      var result = response.data.response;
+      if (response?.data?.status == "SUCCESS") {
+        pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
+        if (result?.first == false) {
+          splitPoint = headerNames;
+        }
+        if (pageNumber == fileInitialPage) {
+          setFileLoading(false);
+          notification.warning({
+            message: "This detail also same page",
+            placement: "top",
+            duration: 1,
+          });
+        }
+        setFileInitialPage(pageNumber);
+        setFileDosPageNumber(pageNumber);
+      } else {
+        splitPoint = headerNames;
+        setFileInitialPage(null);
+        setFileDosPageNumber(null);
       }
-      setFileInitialPage(pageNumber);
-      setFileDosPageNumber(pageNumber);
-    } else {
+      setTargetPages(
+        (targetPage) =>
+          targetPage.pageIndex === pageNumber ||
+          targetPage.pageIndex === pageNumber + 1 ||
+          targetPage.pageIndex === pageNumber + 2
+      );
+      setFindFileKeyword(splitPoint);
+      if (findFileKeyword == splitPoint) {
+        setFileLoading(false);
+      }
+    } catch (error) {
+      splitPoint = headerNames;
+      if (findFileKeyword == headerNames) {
+        setFileLoading(false);
+      }
+      setFindFileKeyword(splitPoint);
       setFileInitialPage(null);
       setFileDosPageNumber(null);
     }
-
-    // getSectionPageNumber(headerNames, encounterDate);
-
-    var splitPoint = actualDescription.substring(" ", 10);
-    setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
-    setFindFileKeyword(splitPoint);
-    // highlight({
-    //   keyword: actualDescription,
-    //   // matchCase: true,
-    //   // wholeWords:true
-    // });
   };
   const handleOpenModalCombinationCode = async (
     value,
@@ -1460,11 +1695,11 @@ const Hcc = ({ patientHccResult }) => {
       var splitPoint = disDescription.substring(" ", 40);
       setFindFileKeyword(splitPoint);
       setTimeout(() => {
-        var dataset = value + " - (" + disDescription + ")";
+        var dataset = "Lab" + " - (" + disDescription + ")";
         setSelectMeatName(dataset);
       }, 2000);
       setDocumentLoaded(true);
-      var dataset = value + " - (" + disDescription + ")";
+      var dataset = "Lab" + " - (" + disDescription + ")";
       setSelectMeatName(dataset + " -  " + "Loading...");
       setIsLoadingSection(true);
       setIsModalOpenLab(true);
@@ -1485,45 +1720,66 @@ const Hcc = ({ patientHccResult }) => {
         setIsLoadingSection(true);
         var headerName = dotLoading;
         setFileModalHeader(headerName);
-        if (testModal == "Suggested") {
+        if (documentPlace == "COMBO") {
           setIsModalOpenCaptureSection(true);
         } else {
-          setIsModalOpenValidCodes(true);
+          if (testModal == "Suggested") {
+            setIsModalOpenValidCodes(true);
+          } else {
+            setIsModalOpenValidCodes(true);
+          }
         }
 
         var fileId = patientFileDTO.fileId;
         const encounterDatesValue = encounterDate.split(",");
         const encounterDatesHeader = encounterDatesValue[0];
-        const response = await axios.get(
-          ENDPOINTS.apiEndoint +
-            `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}`
-        );
-        var result = response.data.response;
-        if (result?.length) {
-          var pageNumber = result[0] - 1;
-          setFileInitialPage(pageNumber);
-        }
-        setSelectActiveCode(value);
         var splitPoint = "";
-        splitPoint = actualDescription.substring(" ", 10);
-        setFindFileKeyword(splitPoint);
-        var dataset =
-          value +
-          " - (" +
-          disDescription +
-          ")" +
-          " / (" +
-          actualDescription +
-          ")";
-        setSelectMeatName(dataset);
-        var headerName =
-          patientDocumentResult.patientId +
-          " / " +
-          patientDocumentResult.patientName +
-          " / " +
-          dataset;
-        setFileModalTitle(headerName);
-        setDocumentLoaded(true);
+        var pageNumber = null;
+        splitPoint = actualDescription.substring(" ", 20);
+        try {
+          const response = await axios.get(
+            ENDPOINTS.apiEndoint +
+              `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}&stringFileWord=${splitPoint}`
+          );
+          var result = response.data.response;
+          if (response?.data?.status == "SUCCESS") {
+            if (result?.first == false) {
+              splitPoint = headerNames;
+            }
+            pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
+            setFileInitialPage(pageNumber);
+          } else {
+            splitPoint = headerNames;
+          }
+          setSelectActiveCode(value);
+
+          setFindFileKeyword(splitPoint);
+          var dataset =
+            value +
+            " - (" +
+            disDescription +
+            ")" +
+            " / (" +
+            actualDescription +
+            ")";
+          setSelectMeatName(dataset);
+          var headerName =
+            patientDocumentResult.patientId +
+            " / " +
+            patientDocumentResult.patientName +
+            " / " +
+            dataset;
+          setFileModalTitle(headerName);
+          setDocumentLoaded(true);
+        } catch (error) {
+          splitPoint = headerNames;
+          if (findFileKeyword == headerNames) {
+            setFileLoading(false);
+          }
+          setFindFileKeyword(splitPoint);
+          setFileInitialPage(null);
+          setFileDosPageNumber(null);
+        }
       } else if (check == "valid2") {
         setSelectActiveCode(value);
         var splitPoint = "";
@@ -1589,11 +1845,11 @@ const Hcc = ({ patientHccResult }) => {
       var splitPoint = disDescription.substring(" ", 40);
       setFindFileKeyword(splitPoint);
       setTimeout(() => {
-        var dataset = value + " - (" + disDescription + ")";
+        var dataset = "Radiology" + " - (" + disDescription + ")";
         setSelectMeatName(dataset);
       }, 2000);
       setDocumentLoaded(true);
-      var dataset = value + " - (" + disDescription + ")";
+      var dataset = "Radiology" + " - (" + disDescription + ")";
       setSelectMeatName(dataset + " -  " + "Loading...");
       setIsLoadingSection(true);
       setIsModalOpenRadiology(true);
@@ -1977,6 +2233,79 @@ const Hcc = ({ patientHccResult }) => {
 
     setValidated(true);
   };
+  const handleFormSubmitMeat = async (event) => {
+    var dos = dosYearDefalutSelect.label;
+    const form = event.currentTarget;
+    event.preventDefault();
+    if (addValidCodeCheck == true) {
+      setAddValidCodeCheck(null);
+      if (form.checkValidity() === true) {
+        let convertDate = moment(inputValue.encodedDate).format("MM-DD-YYYY");
+
+        var dataFormatSuggested = {
+          patientComputeDetailId: localPatientId,
+          year: dos,
+          meatDetail: {
+            diseaseName: inputValueMeat.diseaseName,
+            diagnosisCode: inputValueMeat.diseaseName,
+            isMeatCriteriaPresent: inputValueMeat.isMeatCriteriaPresent,
+            monitorCapturedFromHeader: inputValueMeat.monitorCapturedFromHeader,
+            monitor: inputValueMeat.monitor,
+            evaluateCapturedFromHeader:
+              inputValueMeat.evaluateCapturedFromHeader,
+            evaluate: inputValueMeat.evaluate,
+            assessmentCapturedFromHeader:
+              inputValueMeat.assessmentCapturedFromHeader,
+            assessment: inputValueMeat.assessment,
+            treatmentCapturedFromHeader:
+              inputValueMeat.treatmentCapturedFromHeader,
+            treatment: inputValueMeat.treatment,
+            radiology: false,
+            lab: false,
+            isManuallyAdded: true,
+            encounterDate: convertDate,
+          },
+          // diseaseFormat: {
+          //   diagnosisCode: inputValue.diagnosisCode,
+          //   actualDescription: inputValue.actualDescription,
+          //   encounterDate: convertDate,
+          //   capturedSections: [inputValue.capturedSections],
+          // },
+        };
+
+        try {
+          const response = await axios.post(
+            ENDPOINTS.apiEndointFileUploadHcc +
+              `dbservice/patient/compute/addvaliddisease`,
+            dataFormatSuggested
+          );
+          if (response?.status == 200) {
+            notification.success({
+              message: "Saved Successfully!",
+              placement: "top",
+              duration: 1,
+            });
+            form.reset();
+            setIsModalOpenValidCodes(false);
+            setIsFileFormShow(false);
+            setInputValueFileDate("");
+
+            getPatientDetailsReload(
+              localPatientId,
+              localOrgId,
+              localTenantId,
+              "fileNotLoad"
+            );
+            handleCloseForm();
+            setIsModalOpenValid(false);
+          } else {
+          }
+        } catch (e) {}
+      }
+    }
+
+    setValidated(true);
+  };
 
   const getPatientDetailsReload = async (
     patientId,
@@ -2031,12 +2360,6 @@ const Hcc = ({ patientHccResult }) => {
         var suggestListAllNonHcc = [];
         var deleteHccList = [];
 
-        if (fileloadCondition != "fileNotLoad") {
-          getPatientPdfFile(result.fileDetailDTO.azureBlobPath, tenId);
-          setSelectMeatFileId(patientHccResult.fileId);
-        }
-        // setPatientDocumentResult(result);
-
         result.encounterYears.map((res) => {
           dosYearArr.push({ value: res, label: res });
         });
@@ -2056,26 +2379,50 @@ const Hcc = ({ patientHccResult }) => {
         var unMacthResList = [];
 
         validDis = result.validDisease;
-        validDiseaseNewRes = result.validDisease;
+        validDiseaseNewRes = result?.validDisease;
         // invalidDiseaseNewRes =validDisArray;
         var validDisArray = [];
         var validEncounterDateArray = [];
-        validDiseaseNewRes.map((res, index) => {
-          const encounterDatearray = res.encounterDate.split(",");
-          validDisArray.push({
-            actualDescription: res.actualDescription,
-            capturedSections: res.capturedSections,
-            diagnosisCode: res.diagnosisCode,
-            encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
-            isManuallyAdded: res.isManuallyAdded,
-            isHccValid: res.isHccValid,
-            defaultPosition: res.defaultPosition,
+        validDiseaseNewRes?.map((res, index) => {
+          const encounterDatearray = res?.encounterDate?.split(",");
+          var providerList = [];
+          res.provider?.map((res, index) => {
+            providerList.push(res.providerName);
           });
+
+          if (res.isShow != false) {
+            validDisArray.push({
+              actualDescription: res.actualDescription,
+              capturedSections: res.capturedSections,
+              diagnosisCode: res.diagnosisCode,
+              encounterDate: res.encounterDate,
+              encounterDateSplit: encounterDatearray,
+              isManuallyAdded: res.isManuallyAdded,
+              isHccValid: res.isHccValid,
+              defaultPosition: res.defaultPosition,
+              providerName: providerList,
+              dbDescription: res.dbDescription,
+              isMostSpecific: res.isMostSpecific,
+              getPlace: "Hcc",
+            });
+          }
         });
 
-        result.invalidDisease.map((res, index) => {
-          const encounterDatearray = res.encounterDate.split(",");
+        if (result?.insulinDisease) {
+          validDisArray.push({
+            actualDescription: result?.insulinDisease?.description,
+            capturedSections: [result?.insulinDisease?.section],
+            diagnosisCode: result?.insulinDisease?.code,
+            encounterDate: result?.insulinDisease?.dos,
+            encounterDateSplit: [result?.insulinDisease?.dos],
+            getPlace: "Insulin",
+            isHccValid: true,
+            defaultPosition: null,
+          });
+        }
+
+        result?.invalidDisease?.map((res, index) => {
+          const encounterDatearray = res?.encounterDate?.split(",");
           invalidDiseaseNewRes.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
@@ -2090,17 +2437,24 @@ const Hcc = ({ patientHccResult }) => {
 
         if (result.deletedDiseases != null) {
           result.deletedDiseases.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(",");
-            deleteHccList.push({
-              actualDescription: res.actualDescription,
-              capturedSections: res.capturedSections,
-              diagnosisCode: res.diagnosisCode,
-              encounterDate: res.encounterDate,
-              encounterDateSplit: encounterDatearray,
-              isManuallyAdded: res.isManuallyAdded,
-              isHccValid: res.isHccValid,
-              defaultPosition: res.defaultPosition,
-            });
+            if (res.isShow != false) {
+              const encounterDatearray = res?.encounterDate?.split(",");
+              var providerList = [];
+              res.provider?.map((res, index) => {
+                providerList.push(res.providerName);
+              });
+              deleteHccList.push({
+                actualDescription: res.actualDescription,
+                capturedSections: res.capturedSections,
+                diagnosisCode: res.diagnosisCode,
+                encounterDate: res.encounterDate,
+                encounterDateSplit: encounterDatearray,
+                isManuallyAdded: res.isManuallyAdded,
+                isHccValid: res.isHccValid,
+                defaultPosition: res.defaultPosition,
+                providerName: providerList,
+              });
+            }
           });
         }
         if (result.suggestRadiology != null) {
@@ -2111,7 +2465,11 @@ const Hcc = ({ patientHccResult }) => {
           // getPatientDetailsRadiologyYear(orgId,tenId)
           suggestRadiologyList = result.suggestRadiology;
           suggestRadiologyList.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(",");
+            const encounterDatearray = res?.encounterDate?.split(",");
+            var providerList = [];
+            res.provider?.map((res, index) => {
+              providerList.push(res.providerName);
+            });
             suggestListAll.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
@@ -2121,12 +2479,13 @@ const Hcc = ({ patientHccResult }) => {
               getPlace: "Radio",
               isHccValid: true,
               defaultPosition: res.defaultPosition,
+              providerName: providerList,
             });
           });
 
           if (result.suggestRadiologyCombo != null) {
             result.suggestRadiologyCombo.map((res, index) => {
-              const encounterDatearray = res.encounterDate.split(",");
+              const encounterDatearray = res?.encounterDate?.split(",");
               suggestListAll.push({
                 actualDescription: res.diseaseName,
                 capturedSections: [],
@@ -2145,7 +2504,7 @@ const Hcc = ({ patientHccResult }) => {
           // getLabReportDetails(orgId,tenId)
           suggestLabList = result.suggestLab;
           suggestLabList.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(",");
+            const encounterDatearray = res?.encounterDate?.split(",");
             suggestListAll.push({
               actualDescription: res.actualDescription,
               capturedSections: res.capturedSections,
@@ -2162,30 +2521,47 @@ const Hcc = ({ patientHccResult }) => {
         if (result.unMatchedDisease != null) {
           unMatchRes = result.unMatchedDisease;
           unMatchRes.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(",");
-            if (res.isHccValid == true) {
-              suggestListAll.push({
-                actualDescription: res.actualDescription,
-                diagnosisCodeFinding: res.diagnosisCode,
-                isHccValid: res.isHccValid,
-                capturedSections: res.capturedSections,
-                diagnosisCode: res.diagnosisCode,
-                encounterDate: res.encounterDate,
-                encounterDateSplit: encounterDatearray,
-                getPlace: "Hcc",
-                defaultPosition: res.defaultPosition,
+            if (res.isShow != false) {
+              const encounterDatearray = res?.encounterDate?.split(",");
+              var providerList = [];
+              res.provider?.map((res, index) => {
+                providerList.push(res.providerName);
               });
-            } else {
-              suggestListAllNonHcc.push({
-                actualDescription: res.actualDescription,
-                diagnosisCodeFinding: res.diagnosisCode,
-                isHccValid: res.isHccValid,
-                capturedSections: res.capturedSections,
-                diagnosisCode: res.diagnosisCode,
-                encounterDate: res.encounterDate,
-                encounterDateSplit: encounterDatearray,
-                getPlace: "Hcc",
-              });
+              if (res.isHccValid == true) {
+                suggestListAll.push({
+                  actualDescription: res.actualDescription,
+                  diagnosisCodeFinding: res.diagnosisCode,
+                  isHccValid: res.isHccValid,
+                  capturedSections: res.capturedSections,
+                  diagnosisCode: res.diagnosisCode,
+                  encounterDate: res.encounterDate,
+                  encounterDateSplit: encounterDatearray,
+                  getPlace: "Hcc",
+                  defaultPosition: res.defaultPosition,
+                  providerName: providerList,
+                });
+              } else {
+                // suggestListAll.push({
+                //   actualDescription: res.actualDescription,
+                //   diagnosisCodeFinding: res.diagnosisCodeFinding,
+                //   isHccValid: res.isHccValid,
+                //   capturedSections: res.capturedSections,
+                //   diagnosisCode: res.diagnosisCodeFinding,
+                //   encounterDate: res.encounterDate,
+                //   getPlace: "Hcc",
+                // });
+                suggestListAllNonHcc.push({
+                  actualDescription: res.actualDescription,
+                  diagnosisCodeFinding: res.diagnosisCode,
+                  isHccValid: res.isHccValid,
+                  capturedSections: res.capturedSections,
+                  diagnosisCode: res.diagnosisCode,
+                  encounterDate: res.encounterDate,
+                  encounterDateSplit: encounterDatearray,
+                  getPlace: "Hcc",
+                  providerName: providerList,
+                });
+              }
             }
           });
         }
@@ -2193,6 +2569,31 @@ const Hcc = ({ patientHccResult }) => {
         invalidDis = result.invalidDisease;
         comboDis = result.comboDisease;
         meatCri = result.meatCriteria;
+
+        var combiDisArray = [];
+        if (result.comboDisease) {
+          comboDis.map((res, index) => {
+            var providerList = [];
+            res.providers?.map((res, index) => {
+              providerList.push(res.providerName);
+            });
+            const encounterDatearray = res?.encounterDate?.split(",");
+            combiDisArray.push({
+              addOnCode: res.addOnCode,
+              addOnCodes: [res.addOnCode, res.addOnCodeTwo, res.addOnCodeThree],
+              diagnosisCodeCombo: res.diagnosisCodeCombo,
+              diseaseName: res.diseaseName,
+              diagnosisCode: res.diagnosisCode,
+              encounterDate: res.encounterDate,
+              encounterDateSplit: encounterDatearray,
+              providerName: providerList,
+              ruleType: res.ruleType,
+              capturedSections: res.capturedSections,
+            });
+          });
+        }
+
+        // validDiseaseNewRes = validDiseaseNew[2019]
 
         var invalidDiseasesArray = [];
         var validDiseasesArray = [];
@@ -2203,13 +2604,12 @@ const Hcc = ({ patientHccResult }) => {
         for (var key in validDis) {
           validDiseasesArray.push({ name: validDis[key] });
         }
-
         setNewValidDiseaseList(validDisArray);
         setInNewValidDiseaseList(invalidDiseaseNewRes);
         setNewUnMatchHccList(suggestListAll);
         setValidDiseasesList(validDiseasesArray);
         setInvalidDiseasesList(invalidDiseasesArray);
-        setComboDiseaseCodesList(comboDis);
+        setComboDiseaseCodesList(combiDisArray);
         setDosYear(dosYearArr);
         setRAFScore(rafScore);
         setSuggestedNonHccList(suggestListAllNonHcc);
@@ -2251,13 +2651,24 @@ const Hcc = ({ patientHccResult }) => {
           "encounterDateTag6",
           "encounterDateTag7",
           "encounterDateTag8",
+          "encounterDateTag9",
+          "encounterDateTag10",
         ];
 
-        validDiseaseNewRes.map((res) => {
-          res.capturedSections.map((res2, index) => {
-            capturedSectionsArr.push({
+        validDiseaseNewRes?.map((res) => {
+          res.capturedSections?.map((res2, index) => {
+            capturedSectionsArr?.push({
               name: res2,
-              diagnosisCode: res.diagnosisCode,
+              diagnosisCode: res?.diagnosisCode,
+            });
+          });
+        });
+
+        validDiseaseNewRes?.map((res) => {
+          res.provider?.map((res2, index) => {
+            capturedSectionsArr?.push({
+              name: res2.providerName,
+              diagnosisCode: res?.diagnosisCode,
             });
           });
         });
@@ -2270,11 +2681,11 @@ const Hcc = ({ patientHccResult }) => {
           });
         });
 
-        suggestListAll.map((res) => {
-          res.capturedSections.map((res2, index) => {
-            capturedSectionsArr.push({
+        suggestListAll?.map((res) => {
+          res?.capturedSections?.map((res2, index) => {
+            capturedSectionsArr?.push({
               name: res2,
-              diagnosisCode: res.diagnosisCode,
+              diagnosisCode: res?.diagnosisCode,
             });
           });
         });
@@ -2288,54 +2699,102 @@ const Hcc = ({ patientHccResult }) => {
             colors: COLORS2[index],
           });
         });
-        // setCaptureSectionMatching(capturedSectionsColorsMatching);
+
+        const response = await axios.get(
+          ENDPOINTS.apiEndoint + `dbservice/section/color/getallsections`
+        );
+
+        var sectionColorResult = response.data.response;
+
+        let sectionColorResultMatch = sectionColorResult.filter((o1) =>
+          dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
+        );
+        let sectionColorResultNotMatch = dublicateSectionArr.filter(
+          (o1) => !sectionColorResult.some((o2) => o1.name === o2.sectionName)
+        );
+
+        var notMatchColorArray = [];
+        sectionColorResultNotMatch?.map((res, index) => {
+          var radomColorcode = stringToColour(res.name);
+          var randomColorChangeShadow = radomColorcode + 33;
+          notMatchColorArray.push({
+            sectionName: res.name,
+            backgroundColor: randomColorChangeShadow,
+            sectionColor: radomColorcode,
+          });
+          submitSectionColors(
+            res.name,
+            radomColorcode,
+            randomColorChangeShadow
+          );
+        });
+
+        //   var newArrayColorMatchs = [];
+        //   newArrayColorMatchs = [
+        //     ...sectionColorResultMatch,
+        //     ...notMatchColorArray,
+        //   ];
+
+        //  setCaptureSectionMatching(newArrayColorMatchs);
 
         var encounterDateColorsMatching = [];
         var encounterDateArr = [];
 
         validDiseaseNewRes.map((res) => {
-          const array = res.encounterDate.split(",");
-          array.map((res2) => {
+          const array = res?.encounterDate?.split(",");
+          array?.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
           });
         });
 
-        result.invalidDisease.map((res) => {
-          const array = res.encounterDate.split(",");
-          array.map((res2) => {
+        result?.invalidDisease.map((res) => {
+          const array = res?.encounterDate?.split(",");
+          array?.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
           });
         });
 
-        result.unMatchedDisease?.map((res) => {
-          const array = res.encounterDate.split(",");
-          array.map((res2) => {
+        // if (result?.insulinDisease) {
+        //   encounterDateArr.push({
+        //     name: result?.insulinDisease?.dos,
+        //   });
+        // }
+
+        result?.unMatchedDisease?.map((res) => {
+          const array = res?.encounterDate?.split(",");
+          array?.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
           });
         });
-        result.suggestRadiology?.map((res) => {
-          const array = res.encounterDate.split(",");
-          array.map((res2) => {
+        result?.suggestRadiology?.map((res) => {
+          const array = res?.encounterDate?.split(",");
+          array?.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
           });
         });
 
-        result.suggestLab?.map((res) => {
-          const array = res.encounterDate.split(",");
+        result?.suggestLab?.map((res) => {
+          const array = res?.encounterDate.split(",");
           array.map((res2) => {
-            encounterDateArr.push({
+            encounterDateArr?.push({
               name: res2,
             });
           });
         });
+
+        if (result?.insulinDisease) {
+          encounterDateArr.push({
+            name: result?.insulinDisease?.dos,
+          });
+        }
 
         var encounterDateArrDublicatesRemove = getUniqueListBy(
           encounterDateArr,
@@ -2350,7 +2809,6 @@ const Hcc = ({ patientHccResult }) => {
         });
 
         setEncounterDateMatching(encounterDateColorsMatching);
-
         var meatListArr = [];
         var meatMoniterHead = [];
         var meatEvaluteHead = [];
@@ -2361,6 +2819,8 @@ const Hcc = ({ patientHccResult }) => {
         var allMeatHeadColor = [];
         var dublicateRemoveSecondArr = [];
         var nonHccMeatListArr = [];
+
+        var meatHeaderList = [];
 
         meatCri?.map((res, index) => {
           if (
@@ -2411,7 +2871,7 @@ const Hcc = ({ patientHccResult }) => {
             });
           });
           allMeatHeadColorArr = allMeatHeadColor;
-
+          meatHeaderList = dublicateRemoveArr;
           dublicateRemoveSecondArr = getUniqueListBy(
             allMeatHeadColor,
             "header"
@@ -2490,6 +2950,41 @@ const Hcc = ({ patientHccResult }) => {
             });
           }
         });
+
+        let sectionColorResultMatchMeat = sectionColorResult.filter((o1) =>
+          meatHeaderList.some((o2) => o1.sectionName === o2.header)
+        );
+        let sectionColorResultNotMatchMeat = meatHeaderList.filter(
+          (o1) => !sectionColorResult.some((o2) => o1.header === o2.sectionName)
+        );
+
+        var notMatchColorArrayMeat = [];
+        sectionColorResultNotMatchMeat?.map((res, index) => {
+          var radomColorcode = stringToColour(res.header);
+          var randomColorChangeShadow = radomColorcode + 33;
+          notMatchColorArrayMeat.push({
+            sectionName: res.header,
+            backgroundColor: randomColorChangeShadow,
+            sectionColor: radomColorcode,
+          });
+          submitSectionColors(
+            res.header,
+            radomColorcode,
+            randomColorChangeShadow
+          );
+        });
+
+        var newArrayColorMatchs = [];
+        newArrayColorMatchs = [
+          ...sectionColorResult,
+          ...sectionColorResultMatch,
+          ...notMatchColorArray,
+          ...sectionColorResultMatchMeat,
+          ...notMatchColorArrayMeat,
+        ];
+
+        setCaptureSectionMatching(newArrayColorMatchs);
+
         setMeatCriteriaList(meatListArr);
         setMeatCriteriaListNonHcc(nonHccMeatListArr);
         setIsLoadingDos(false);
@@ -2647,26 +3142,28 @@ const Hcc = ({ patientHccResult }) => {
     });
   };
 
-  const getEncounterDateBackgroundHcc = (value, code) => {
+  const getEncounterDateBackgroundHcc = (value, code, place, meatResult) => {
     return value?.map((res) => {
       const result = encounterDateMatching.filter((res2) => res2.name == res);
       var backColor = result[0]?.colors;
-      var sectionMapArr = (
+      var sectionMapArr = res ? (
         <span
-          onClick={() => getEncounterDetailsHcc(res, code)}
+          onClick={() => getEncounterDetailsHcc(res, code, place, meatResult)}
           className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
         >
           <i>
             <CalendarOutlined className={visitStyles.calenderIcon} />
           </i>
-          {moment(res).format("MMM DD")}
+          {moment(res, "MM/DD/YYYY").format("MMM DD")}
         </span>
+      ) : (
+        ""
       );
       return sectionMapArr;
     });
   };
 
-  const getEncounterDetailsHcc = async (date, code) => {
+  const getEncounterDetailsHcc = async (date, code, place, meatResult) => {
     const findPageNumber = listPageNumber.filter((i) => i.date === date);
     if (findPageNumber.length != 0) {
       var dataset = code + " - (" + date + ")";
@@ -2677,8 +3174,17 @@ const Hcc = ({ patientHccResult }) => {
         " / " +
         dataset;
       setFileModalTitle(headerName);
+
       setFileLoading(true);
-      setIsModalOpenValidCodes(true);
+      if (place == "MEAT") {
+        setSelectMeatName(headerName);
+        setSelectMeatResult(meatResult);
+        setIsModalOpen(true);
+      } else if (place == "COMBO") {
+        setIsModalOpenCaptureSection(true);
+      } else {
+        setIsModalOpenValidCodes(true);
+      }
       var date = findPageNumber[0].date;
       if (findPageNumber[0].startPage.length != 0) {
         var pageNumber = findPageNumber[0].startPage[0].pageNumber - 1;
@@ -2764,7 +3270,12 @@ const Hcc = ({ patientHccResult }) => {
     // setProviderDetails(data);
   };
 
-  const getCaptureSectionBackgroundMeat = (value, dis, encounterDate) => {
+  const getCaptureSectionBackgroundMeat = (
+    value,
+    dis,
+    encounterDate,
+    meatresult
+  ) => {
     if (value) {
       var igonreCase = value.toLowerCase();
       const result = captureSectionMatching.filter(
@@ -2778,9 +3289,39 @@ const Hcc = ({ patientHccResult }) => {
 
       var sectionMapArr = (
         <span
-          onClick={() => handleOpenModal(value, dis, encounterDate)}
+          onClick={() => handleOpenModal(value, dis, encounterDate, meatresult)}
           style={{ backgroundColor: backColor, color: textColor }}
           className={`mt-2 text-start cr-pointer ${visitStyles.captureheaderMeat}`}
+        >
+          {value}
+        </span>
+      );
+      return sectionMapArr;
+    }
+  };
+
+  const getCaptureSectionBackgroundMeatFile = (
+    value,
+    dis,
+    encounterDate,
+    meatresult
+  ) => {
+    if (value) {
+      var igonreCase = value.toLowerCase();
+      const result = captureSectionMatching.filter(
+        (res2) => res2.sectionName == igonreCase
+      );
+
+      var backColor = result[0]?.backgroundColor;
+      var textColor = result[0]?.sectionColor;
+      var disCode = result[0]?.diagnosisCode;
+      var headerNames = result[0]?.sectionName;
+
+      var sectionMapArr = (
+        <span
+          onClick={() => handleOpenModal(value, dis, encounterDate, meatresult)}
+          style={{ backgroundColor: backColor, color: textColor }}
+          className={`mt-2 text-start cr-pointer ${visitStyles.captureheaderMeatView}`}
         >
           {value}
         </span>
@@ -2835,10 +3376,27 @@ const Hcc = ({ patientHccResult }) => {
     { value: "OTHERS", label: "OTHERS" },
   ];
   const imagingtest = [
-    { value: "CT Chest", label: "CT Chest" },
-    { value: "CT abdomen", label: "CT abdomen" },
-    { value: "Chest Xray", label: "Chest Xray" },
-    { value: "CT Cervix", label: "CT Cervix" },
+    { value: "X-ray", label: "X-ray" },
+    { value: "CT Scan", label: "CT Scan" },
+    { value: "MRI", label: "MRI" },
+    { value: "Ultrasound", label: "Ultrasound" },
+    { value: "PET Scan", label: "PT Scan " },
+    { value: "Mammography", label: "Mammography" },
+    { value: "Fluoroscopy", label: "Fluoroscopy" },
+    { value: "Bone Densitometry", label: "Bone Densitometry" },
+    { value: "Nuclear Medicine Imaging", label: "Nuclear Medicine Imaging" },
+    { value: "Angiography", label: "Angiography" },
+    { value: "Myelography", label: "Myelography" },
+    { value: "Arthrogram", label: "Arthrogram" },
+    { value: "Barium Swallow/Test", label: "Barium Swallow/Test" },
+    { value: "Hysterosalpingography", label: "Hysterosalpingography" },
+    { value: "Fistulogram", label: "Fistulogram" },
+    { value: "Cholangiography", label: "Cholangiography" },
+    { value: "Sialography", label: "Sialography" },
+    { value: "Discography", label: "Discography" },
+    { value: "Lymphangiography", label: "Lymphangiography" },
+    { value: "Intravenous Pyelogram", label: "Intravenous Pyelogram" },
+    { value: "OTHERS", label: "OTHERS" },
   ];
   const dosListMeat = [
     { value: "08/01/2023", label: "08/01/2023" },
@@ -2848,33 +3406,58 @@ const Hcc = ({ patientHccResult }) => {
   const handleSubmitMeatQuery = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
-    if (form.checkValidity() === true) {
-      var dataformat = {
-        patientId: localPatientId,
-        diagnosisCode: inputValue.diagnosisCodeQuery,
-        queryReason: inputValue.queryReason,
-        Reason: inputValue.reason,
-        providerName: inputValue.providerName,
-        imagingTestHeader: inputValue.imagingTestHeader,
-        headerName: inputValue.headerName,
-        dosYear: selectedDosValue,
-        description: inputValue.description,
+    if (
+      inputValue?.providerName === "" ||
+      inputValue?.headerName === "" ||
+      inputValue?.imagingTestHeader === "" ||
+      inputValue?.queryReason === "" ||
+      inputValue?.description === "" ||
+      inputValue?.reason
+    ) {
+      let errors = {
+        providername:
+          inputValue?.providerName === "" ? "Please enter provider name" : "",
+        quickQuery:
+          inputValue?.headerName === "" ? "Please select quick query" : "",
+        imagingQuery:
+          inputValue?.imagingTestHeader === ""
+            ? "Please select imaging query"
+            : "",
+        queryReason:
+          inputValue?.queryReason === "" ? "Please select quick reason" : "",
+        description:
+          inputValue?.description === "" ? "Please enter description" : "",
       };
-      var result = await submitMeatQuery(dataformat);
-      if (result.status == "SUCCESS") {
-        setMeatQueryResult(result.response);
-        inputValue.queryComment = result.response.queryComment;
-        setIsMeatQueryModal(false);
-        notification.success({
-          message: result.message,
-          placement: "top",
-          duration: 1,
-        });
-        setMeatQueriedDetailsModal(true);
-        setMeatQueriedDetailsShow(true);
-        var result = await getMeatQueryList(selectedDosValue, localPatientId);
-        setMeatQueryList(result.response);
-      } else {
+
+      setFormErr(errors);
+    } else {
+      if (form.checkValidity() === true) {
+        var dataformat = {
+          patientId: localPatientId,
+          diagnosisCode: inputValue.diagnosisCodeQuery,
+          queryReason: inputValue.queryReason,
+          Reason: inputValue.reason,
+          providerName: inputValue.providerName,
+          imagingTestHeader: inputValue.imagingTestHeader,
+          headerName: inputValue.headerName,
+          dosYear: selectedDosValue,
+          description: inputValue.description,
+        };
+        var result = await submitMeatQuery(dataformat);
+        if (result.status == "SUCCESS") {
+          setMeatQueryResult(result.response);
+          inputValue.queryComment = result.response.queryComment;
+          setIsMeatQueryModal(false);
+          notification.success({
+            message: result.message,
+            placement: "top",
+            duration: 1,
+          });
+          setMeatQueriedDetailsModal(true);
+          setMeatQueriedDetailsShow(true);
+          var result = await getMeatQueryList(selectedDosValue, localPatientId);
+          setMeatQueryList(result.response);
+        }
       }
     }
   };
@@ -2965,7 +3548,12 @@ const Hcc = ({ patientHccResult }) => {
     var pageIndex = pageNumber - 1;
     setFileInitialPage(pageIndex);
     setFileDosPageNumber(pageIndex);
-    setTargetPages((targetPage) => targetPage.pageIndex === pageIndex);
+    setTargetPages(
+      (targetPage) =>
+        targetPage.pageIndex === pageNumber ||
+        targetPage.pageIndex === pageNumber + 1 ||
+        targetPage.pageIndex === pageNumber + 2
+    );
     setFindFileKeyword(findData);
   };
 
@@ -2993,14 +3581,41 @@ const Hcc = ({ patientHccResult }) => {
   };
 
   const getProviderNameList = (data) => {
-    var value = data?.map((res) =>
-      res.providerName ? (
-        <Badge
-          className={
-            res.authorizedProvider === true
-              ? `mt-2 text-start ${visitStyles.provider_name}`
-              : `mt-2 text-start ${visitStyles.un_provider_name}`
-          }
+    var dublicateCaptureDelete = removeDuplicates(data);
+    return dublicateCaptureDelete.map((res) => {
+      const result = captureSectionMatching.filter(
+        (res2) => res2.sectionName == res
+      );
+      var backColor = result[0]?.backgroundColor;
+      var textColor = result[0]?.sectionColor;
+      var value = ["09/19/2023"];
+      var sectionMapArr = (
+        // <Popover
+        //   content={
+        //     <>
+        //       {value?.map((res3) => {
+        //         const result = encounterDateMatching.filter(
+        //           (res2) => res2.name == res3
+        //         );
+        //         var backColor = result[0]?.colors;
+        //         <span
+        //           className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+        //         >
+        //           <i>
+        //             <CalendarOutlined className={visitStyles.calenderIcon} />
+        //           </i>
+        //           {moment(res3).format("MMM DD")}
+        //         </span>;
+        //       })}
+        //     </>
+        //   }
+        //   trigger={["click"]}
+        //   placement="bottom"
+        //   onClick={() => getEncounterProviderDetails(res)}
+        // >
+        <span
+          className={`mt-2 text-start ${visitStyles.provider_name}`}
+          style={{ backgroundColor: backColor, color: textColor }}
         >
           <i>
             {" "}
@@ -3008,16 +3623,42 @@ const Hcc = ({ patientHccResult }) => {
               icon={faCircleUser}
               style={{
                 size: 10,
-                color:
-                  res.authorizedProvider === true ? "#008000bf" : "#ff0000cc",
+                color: textColor,
               }}
             />
           </i>
-          {res.providerName}
-        </Badge>
-      ) : null
-    );
-    return value;
+          {res}
+        </span>
+        // </Popover>
+      );
+      return sectionMapArr;
+    });
+
+    // var value = data?.map((res) =>
+    //   res.providerName ? (
+    //     <Badge
+    //       className={
+    //         res.authorizedProvider === true
+    //           ? `mt-2 text-start ${visitStyles.provider_name}`
+    //           : `mt-2 text-start ${visitStyles.un_provider_name}`
+    //       }
+    //     >
+    //       <i>
+    //         {" "}
+    //         <FontAwesomeIcon
+    //           icon={faCircleUser}
+    //           style={{
+    //             size: 10,
+    //             color:
+    //               res.authorizedProvider === true ? "#008000bf" : "#ff0000cc",
+    //           }}
+    //         />
+    //       </i>
+    //       {res.providerName}
+    //     </Badge>
+    //   ) : null
+    // );
+    // return value;
   };
 
   const addComboCode = () => {
@@ -3026,6 +3667,7 @@ const Hcc = ({ patientHccResult }) => {
 
   const handleSubmitComboCode = async (event) => {
     var dos = dosYearDefalutSelect.label;
+
     const form = event.currentTarget;
     event.preventDefault();
     if (form.checkValidity() === true) {
@@ -3051,8 +3693,56 @@ const Hcc = ({ patientHccResult }) => {
           "fileNotLoad"
         );
       }
+
+      setValidated(true);
     }
-    setValidated(true);
+  };
+
+  const underScoreRemove = (value) => {
+    var str = value;
+    var newStr = str.replace(/_/g, " ");
+    return newStr;
+  };
+
+  const showErrorMessage = () => {
+    setOpens(false);
+    notification.info({ message: "Tree Not Available" });
+  };
+
+  const confirmMeatQuery = async (code) => {
+    var result = await deleteMeatQuery(localPatientId, code);
+    if (result.status == "SUCCESS") {
+      var result = await getMeatQueryList(selectedDosValue, localPatientId);
+      setMeatQueryList(result.response);
+      notification.success({
+        message: result.message,
+        placement: "top",
+        duration: 1,
+      });
+    } else {
+    }
+  };
+
+  const getEncounterProviderDetails = async (name) => {
+    // var result = await getProviderEncounterDetails(localPatientId, name);
+
+    var value = ["09/19/2023"];
+
+    return value?.map((res) => {
+      const result = encounterDateMatching.filter((res2) => res2.name == res);
+      var backColor = result[0]?.colors;
+      var sectionMapArr = (
+        <span
+          className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+        >
+          <i>
+            <CalendarOutlined className={visitStyles.calenderIcon} />
+          </i>
+          {moment(res).format("MMM DD")}
+        </span>
+      );
+      return sectionMapArr;
+    });
   };
 
   return (
@@ -3309,57 +3999,61 @@ const Hcc = ({ patientHccResult }) => {
                                             }
                                           </div>
                                         </Popconfirm>
-                                      </div>
-                                      <div
-                                        className={`${visitStyles.hoverActiveHcc}`}
-                                      >
-                                        <div
-                                          className={`${visitStyles.encounterAndSectionHeader}`}
-                                        >
-                                          {getProviderNameList(
-                                            data?.providerName
-                                          )}
-                                          {getEncounterDateBackgroundHcc(
-                                            data.encounterDateSplit,
-                                            data.diagnosisCode
-                                          )}
-                                        </div>
-                                        {data.getPlace == "Insulin" ? (
-                                          <span
-                                            className={` mt-2 ${visitStyles.radiologyStatus}`}
-                                            bg={`  mt-2 bg-bg-eight `}
+                                        {data.isMostSpecific == true && (
+                                          <div
+                                            className={visitStyles.close_icon}
+                                            style={{ background: "#c7f3c6" }}
+                                            onClick={() => {
+                                              setOpens(true);
+                                              setCombiTree([
+                                                { ...data, expanded: true },
+                                              ]);
+                                            }}
                                           >
-                                            Insulin
-                                          </span>
-                                        ) : null}
+                                            <FontAwesomeIcon
+                                              icon={faSitemap}
+                                              style={{
+                                                size: 8,
+                                                color: "#088f39",
+                                              }}
+                                            />
+                                          </div>
+                                        )}
+                                      </div>
+                                      <div className="d-flex justify-content-between">
                                         <div
-                                          className={`${visitStyles.encounterAndSectionHeader}`}
-                                        ></div>
+                                          className={`${visitStyles.hoverActiveHcc}`}
+                                        >
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                            {getProviderNameList(
+                                              data?.providerName
+                                            )}
+                                          </div>
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                            {getEncounterDateBackgroundHcc(
+                                              data.encounterDateSplit,
+                                              data.diagnosisCode
+                                            )}
+                                          </div>
 
-                                        <div
-                                          className={`${visitStyles.encounterAndSectionHeader}`}
-                                        >
-                                          {data.isManuallyAdded == true ? (
-                                            <Badge
-                                              className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
-                                            >
-                                              Manually Added
-                                            </Badge>
-                                          ) : null}
-                                        </div>
-                                        <div
-                                          className={`${visitStyles.encounterAndSectionHeader}`}
-                                        >
-                                          {getCaptureSectionBackground(
-                                            data.capturedSections,
-                                            null,
-                                            data.encounterDate,
-                                            data.actualDescription,
-                                            null,
-                                            data.diagnosisCode
-                                          )}
-                                        </div>
-                                        {data.isMostSpecific == true ? (
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                            {getCaptureSectionBackground(
+                                              data.capturedSections,
+                                              null,
+                                              data.encounterDate,
+                                              data.actualDescription,
+                                              null,
+                                              data.diagnosisCode
+                                            )}
+                                          </div>
+
+                                          {/* {data.isMostSpecific == true ? (
                                           <div
                                             className={`${visitStyles.encounterAndSectionHeader}`}
                                           >
@@ -3369,7 +4063,65 @@ const Hcc = ({ patientHccResult }) => {
                                               IsMostSpecific
                                             </span>
                                           </div>
-                                        ) : null}
+                                        ) : null} */}
+                                        </div>
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
+                                          <div
+                                            className={
+                                              styles.meatFoundContainer
+                                            }
+                                          >
+                                            <div>
+                                              {getMeatFound(
+                                                data?.diagnosisCode,
+                                                meatCriteriaList,
+                                                "M"
+                                              )}
+                                            </div>
+                                            <div>
+                                              {getMeatFound(
+                                                data?.diagnosisCode,
+                                                meatCriteriaList,
+                                                "E"
+                                              )}
+                                            </div>
+                                            <div>
+                                              {getMeatFound(
+                                                data?.diagnosisCode,
+                                                meatCriteriaList,
+                                                "A"
+                                              )}
+                                            </div>
+                                            <div>
+                                              {getMeatFound(
+                                                data?.diagnosisCode,
+                                                meatCriteriaList,
+                                                "T"
+                                              )}
+                                            </div>
+                                          </div>
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                            {data.isManuallyAdded == true ? (
+                                              <Badge
+                                                className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                              >
+                                                Manually Added
+                                              </Badge>
+                                            ) : null}
+                                          </div>
+                                          {data.getPlace == "Insulin" ? (
+                                            <span
+                                              className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                              bg={`  mt-2 bg-bg-eight `}
+                                            >
+                                              Insulin
+                                            </span>
+                                          ) : null}
+                                        </div>
                                       </div>
                                     </div>
                                   </li>
@@ -3460,6 +4212,16 @@ const Hcc = ({ patientHccResult }) => {
                                               >
                                                 <i>{SVGICON.infoIcon}</i>
                                               </Popover>
+                                              <div
+                                                onClick={() =>
+                                                  addMeatQuery(data, "Add")
+                                                }
+                                                className={
+                                                  visitStyles.add_meat_query
+                                                }
+                                              >
+                                                {SVGICON.meatQueryIcon}
+                                              </div>
                                               {data.getPlace == "Radio" ||
                                               data.getPlace == "Lab" ? (
                                                 <Popconfirm
@@ -3564,6 +4326,10 @@ const Hcc = ({ patientHccResult }) => {
                                                   {getProviderNameList(
                                                     data?.providerName
                                                   )}
+                                                </div>
+                                                <div
+                                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                                >
                                                   {getEncounterDateBackgroundHcc(
                                                     data.encounterDateSplit,
                                                     data.diagnosisCode
@@ -3753,6 +4519,10 @@ const Hcc = ({ patientHccResult }) => {
                                             {getProviderNameList(
                                               data?.providerName
                                             )}
+                                          </div>
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
                                             {getEncounterDateBackgroundHcc(
                                               data.encounterDateSplit,
                                               data.diagnosisCode
@@ -3836,53 +4606,131 @@ const Hcc = ({ patientHccResult }) => {
                                           <span className="font-bold">
                                             {item.diagnosisCodeCombo}
                                           </span>
-                                          <span className={styles.ruleTypeCol}>
-                                            {item.ruleType}
-                                          </span>
                                         </div>
                                         <div className="col-xl-3">
-                                          <span className="font-bold">
-                                            {item.addOnCode}
-                                          </span>
+                                          {item.addOnCodes?.map(
+                                            (addCombo, index) =>
+                                              addCombo && (
+                                                <span className="font-bold">
+                                                  <Tag
+                                                    color={
+                                                      addOnCodeColor[index]
+                                                    }
+                                                  >
+                                                    {addCombo}
+                                                  </Tag>
+                                                </span>
+                                              )
+                                          )}
                                         </div>
-                                        <div
-                                          className="col-xl-5 cr-pointer"
-                                          onClick={() =>
-                                            handleOpenModalCombinationCode(
-                                              item.diagnosisCodeCombo,
-                                              item.diseaseName
-                                            )
-                                          }
-                                        >
+                                        <div className="col-xl-5">
                                           <span>{item.diseaseName}</span>
                                         </div>
-                                        <div className="col-xl-1 comboclose">
-                                          <Popconfirm
-                                            title="You want move to Invalid?"
+                                        <div className="col-xl-1">
+                                          <div>
+                                            <Popconfirm
+                                              title="You want move to Invalid?"
+                                              description={item.diseaseName}
+                                              onConfirm={confirmComboInvalid}
+                                              placement="leftTop"
+                                              okText="Yes"
+                                              cancelText="No"
+                                              onOpenChange={() =>
+                                                onchangeCombo(
+                                                  item.diseaseName,
+                                                  item.addOnCode
+                                                )
+                                              }
+                                            >
+                                              <div
+                                                className={
+                                                  visitStyles.close_icon
+                                                }
+                                              >
+                                                <FontAwesomeIcon
+                                                  icon={faArrowsAlt}
+                                                  style={{
+                                                    size: 8,
+                                                    color: "#a80404",
+                                                  }}
+                                                />
+                                              </div>
+                                            </Popconfirm>
+                                          </div>
+                                          {/* <Popconfirm
+                                            title="You want to see the tree view?"
                                             description={item.diseaseName}
-                                            onConfirm={confirmComboInvalid}
+                                            onConfirm={() => {
+                                              setOpens(true);
+                                              
+                                            }}
                                             placement="leftTop"
                                             okText="Yes"
                                             cancelText="No"
-                                            onOpenChange={() =>
-                                              onchangeCombo(
-                                                item.diseaseName,
-                                                item.addOnCode
-                                              )
-                                            }
+                                            onOpenChange={() => {
+                                              setCombiTree(item);
+                                            }}
+                                          > */}
+                                          <div
+                                            className={visitStyles.close_icon}
+                                            style={{ background: "#c7f3c6" }}
+                                            onClick={() => {
+                                              setOpens(true);
+                                              setCombiTree([
+                                                { ...item, expanded: true },
+                                              ]);
+                                            }}
                                           >
+                                            <FontAwesomeIcon
+                                              icon={faSitemap}
+                                              style={{
+                                                size: 8,
+                                                color: "#088f39",
+                                              }}
+                                            />
+                                          </div>
+                                          {/* </Popconfirm> */}
+                                        </div>
+                                        <div
+                                          className={styles.comboDetailsHeaders}
+                                        >
+                                          <div>
                                             <div
-                                              className={visitStyles.close_icon}
+                                              className={`${visitStyles.encounterAndSectionHeader}`}
                                             >
-                                              <FontAwesomeIcon
-                                                icon={faArrowsAlt}
-                                                style={{
-                                                  size: 8,
-                                                  color: "#a80404",
-                                                }}
-                                              />
+                                              {getProviderNameList(
+                                                item?.providerName
+                                              )}
                                             </div>
-                                          </Popconfirm>
+                                            <div
+                                              className={`${visitStyles.encounterAndSectionHeader}`}
+                                            >
+                                              {getEncounterDateBackgroundHcc(
+                                                item.encounterDateSplit,
+                                                item.diagnosisCode,
+                                                "COMBO"
+                                              )}
+                                            </div>
+                                            <div
+                                              className={`${visitStyles.encounterAndSectionHeader}`}
+                                            >
+                                              {getCaptureSectionBackground(
+                                                item.capturedSections,
+                                                "COMBO",
+                                                item.encounterDate,
+                                                item.diseaseName,
+                                                null,
+                                                item.diagnosisCode
+                                              )}
+                                            </div>
+                                          </div>
+                                          {/* <div>
+                                            <span
+                                              className={styles.ruleTypeCol}
+                                            >
+                                              {underScoreRemove(item.ruleType)}
+                                            </span>
+                                          </div> */}
                                         </div>
                                       </div>
                                     </div>
@@ -3944,15 +4792,7 @@ const Hcc = ({ patientHccResult }) => {
                                               {item.addOnCode}
                                             </span>
                                           </div>
-                                          <div
-                                            className="col-xl-5 cr-pointer"
-                                            onClick={() =>
-                                              handleOpenModalCombinationCode(
-                                                item.diagnosisCodeCombo,
-                                                item.diseaseName
-                                              )
-                                            }
-                                          >
+                                          <div className="col-xl-5">
                                             <span>{item.diseaseName}</span>
                                           </div>
                                           <div className="col-xl-1 comboclose">
@@ -4032,40 +4872,57 @@ const Hcc = ({ patientHccResult }) => {
                                 }
                               >
                                 <div className="row">
-                                  {/* <div className="col-xl-1">
-                                                  <span className="font-bold">{item.diagnosisCode}</span>
-                                                </div> */}
-                                  <div className="col-xl-1 d-grid">
-                                    <span className="font-bold meat-name-details">
-                                      {item.diagnosisCode}
-                                    </span>
-                                    {item.category == "Valid" ? (
-                                      <Badge
-                                        className="valid-meat badge-circle mt-2"
-                                        bg={` badge-circle mt-2 bg-validmeat`}
-                                      >
-                                        {item.category}
-                                      </Badge>
-                                    ) : (
-                                      <Badge
-                                        className="valid-meat badge-circle mt-2"
-                                        bg={` badge-circle mt-2 bg-validUnmatch`}
-                                      >
-                                        {item.category}
-                                      </Badge>
-                                    )}
-                                  </div>
-                                  <div className="col-xl-2">
-                                    <Popover
-                                      placement="topLeft"
-                                      title="Description"
-                                      content={item.diseaseName}
+                                  <div className="col-xl-3">
+                                    <div className="row">
+                                      <div className="col-xl-4 d-grid">
+                                        <span className="font-bold meat-name-details">
+                                          {item.diagnosisCode}
+                                        </span>
+                                        {item.category == "Valid" ? (
+                                          <Badge
+                                            className="valid-meat badge-circle mt-2"
+                                            bg={` badge-circle mt-2 bg-validmeat`}
+                                          >
+                                            {item.category}
+                                          </Badge>
+                                        ) : (
+                                          <Badge
+                                            className="valid-meat badge-circle mt-2"
+                                            bg={` badge-circle mt-2 bg-validUnmatch`}
+                                          >
+                                            {item.category}
+                                          </Badge>
+                                        )}
+                                      </div>
+                                      <div className="col-xl-8">
+                                        <Popover
+                                          placement="topLeft"
+                                          title="Description"
+                                          content={item.diseaseName}
+                                        >
+                                          <span className="meat-name-details">
+                                            {item.diseaseName}
+                                          </span>
+                                        </Popover>
+                                      </div>
+                                    </div>
+                                    <div
+                                      className={`${visitStyles.encounterAndSectionHeader}`}
                                     >
-                                      <span className="meat-name-details">
-                                        {item.diseaseName}
-                                      </span>
-                                    </Popover>
+                                      {getProviderNameList(item?.providerName)}
+                                    </div>
+                                    <div
+                                      className={`${visitStyles.encounterAndSectionHeader}`}
+                                    >
+                                      {getEncounterDateBackgroundHcc(
+                                        item?.encounterDateSplit,
+                                        item?.diagnosisCode,
+                                        "MEAT",
+                                        item
+                                      )}
+                                    </div>
                                   </div>
+
                                   <div className="col-xl-2 d-grid">
                                     {item.monitor != "" ? (
                                       <Popover
@@ -4086,7 +4943,8 @@ const Hcc = ({ patientHccResult }) => {
                                       {getCaptureSectionBackgroundMeat(
                                         item.monitorCapturedFromHeader,
                                         item.monitor,
-                                        item.encounterDate
+                                        item.encounterDate,
+                                        item
                                       )}
                                     </div>
                                   </div>
@@ -4110,7 +4968,8 @@ const Hcc = ({ patientHccResult }) => {
                                       {getCaptureSectionBackgroundMeat(
                                         item.evaluateCapturedFromHeader,
                                         item.evaluate,
-                                        item.encounterDate
+                                        item.encounterDate,
+                                        item
                                       )}
                                     </div>
                                   </div>
@@ -4135,7 +4994,8 @@ const Hcc = ({ patientHccResult }) => {
                                       {getCaptureSectionBackgroundMeat(
                                         item.assessmentCapturedFromHeader,
                                         item.assessment,
-                                        item.encounterDate
+                                        item.encounterDate,
+                                        item
                                       )}
                                     </div>
                                   </div>
@@ -4159,7 +5019,8 @@ const Hcc = ({ patientHccResult }) => {
                                       {getCaptureSectionBackgroundMeat(
                                         item.treatmentCapturedFromHeader,
                                         item.treatment,
-                                        item.encounterDate
+                                        item.encounterDate,
+                                        item
                                       )}
                                     </div>
                                   </div>
@@ -4254,7 +5115,8 @@ const Hcc = ({ patientHccResult }) => {
                                           {getCaptureSectionBackgroundMeat(
                                             item.monitorCapturedFromHeader,
                                             item.monitor,
-                                            item.encounterDate
+                                            item.encounterDate,
+                                            item
                                           )}
                                         </div>
                                       </div>
@@ -4272,7 +5134,8 @@ const Hcc = ({ patientHccResult }) => {
                                           {getCaptureSectionBackgroundMeat(
                                             item.evaluateCapturedFromHeader,
                                             item.evaluate,
-                                            item.encounterDate
+                                            item.encounterDate,
+                                            item
                                           )}
                                         </div>
                                       </div>
@@ -4290,7 +5153,8 @@ const Hcc = ({ patientHccResult }) => {
                                           {getCaptureSectionBackgroundMeat(
                                             item.assessmentCapturedFromHeader,
                                             item.assessment,
-                                            item.encounterDate
+                                            item.encounterDate,
+                                            item
                                           )}
                                         </div>
                                       </div>
@@ -4309,7 +5173,8 @@ const Hcc = ({ patientHccResult }) => {
                                           {getCaptureSectionBackgroundMeat(
                                             item.treatmentCapturedFromHeader,
                                             item.treatment,
-                                            item.encounterDate
+                                            item.encounterDate,
+                                            item
                                           )}
                                         </div>
                                       </div>
@@ -4358,7 +5223,7 @@ const Hcc = ({ patientHccResult }) => {
                 <Tab.Pane id="my-posts" eventKey="file">
                   <div className="my-post-content pt-3 row">
                     {!isFileFormShow ? (
-                      <div className="col-xl-2">
+                      <div className="col-xl-3">
                         <ul className="timeline">
                           <div
                             className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
@@ -4386,7 +5251,7 @@ const Hcc = ({ patientHccResult }) => {
                                     className={`hccActiveCard ${visitStyles.hcc_card}`}
                                   >
                                     <div
-                                      className={`${visitStyles.hcc_card_nameHead}`}
+                                      className={` justify-content-between ${visitStyles.hcc_card_nameHead}`}
                                     >
                                       <div>
                                         <span className="mb-1 disease-name d-flex">
@@ -4407,123 +5272,123 @@ const Hcc = ({ patientHccResult }) => {
                                         </span>
                                       </div>
 
-                                      {data.defaultPosition ==
-                                      "VALID" ? null : data.defaultPosition ==
-                                        "INVALID" ? (
-                                        <span
-                                          className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
-                                        ></span>
-                                      ) : data.defaultPosition ==
-                                        "SUGGESTED" ? (
-                                        <span
-                                          className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
-                                        ></span>
-                                      ) : data.defaultPosition == "DELETED" ? (
-                                        <span
-                                          className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
-                                        ></span>
-                                      ) : null}
-                                      <Popover
-                                        onClick={() =>
-                                          getValidHccDetails(
-                                            data.actualDescription,
-                                            data.diagnosisCode
-                                          )
-                                        }
-                                        content={validHccDetails}
-                                        title={data.diagnosisCode}
-                                        placement="bottom"
-                                        trigger="click"
-                                      >
-                                        <Tooltip
-                                          title="HCC Veriosn Details"
+                                      <div className="d-flex">
+                                        {data.defaultPosition ==
+                                        "VALID" ? null : data.defaultPosition ==
+                                          "INVALID" ? (
+                                          <span
+                                            className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
+                                          ></span>
+                                        ) : data.defaultPosition ==
+                                          "SUGGESTED" ? (
+                                          <span
+                                            className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
+                                          ></span>
+                                        ) : data.defaultPosition ==
+                                          "DELETED" ? (
+                                          <span
+                                            className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
+                                          ></span>
+                                        ) : null}
+                                        <Popover
+                                          onClick={() =>
+                                            getValidHccDetails(
+                                              data.actualDescription,
+                                              data.diagnosisCode
+                                            )
+                                          }
+                                          content={validHccDetails}
+                                          title={data.diagnosisCode}
                                           placement="bottom"
+                                          trigger="click"
                                         >
-                                          <i className="cr-pointer">
-                                            {SVGICON.infoIcon}
-                                          </i>
-                                        </Tooltip>
-                                      </Popover>
+                                          <Tooltip
+                                            title="HCC Veriosn Details"
+                                            placement="bottom"
+                                          >
+                                            <i className="cr-pointer">
+                                              {SVGICON.infoIcon}
+                                            </i>
+                                          </Tooltip>
+                                        </Popover>
 
-                                      <Popconfirm
-                                        title="Choose an action"
-                                        icon={
-                                          <QuestionCircleOutlined
-                                            style={{
-                                              color: "blue",
-                                            }}
-                                          />
-                                        }
-                                        okText="Move to Deleted"
-                                        cancelText="Move to Suggested"
-                                        onCancel={validToSuggested}
-                                        okButtonProps={{
-                                          type: buttonClicked
-                                            ? "primary"
-                                            : "default",
-                                        }}
-                                        cancelButtonProps={{
-                                          type: buttonClicked
-                                            ? "danger"
-                                            : "default",
-                                        }}
-                                        description={data.diagnosisCode}
-                                        onConfirm={confirmvalid}
-                                        placement="leftTop"
-                                        onOpenChange={() =>
-                                          onchangeValid(
-                                            data.diagnosisCode,
-                                            data
-                                          )
-                                        }
-                                      >
-                                        <div className={visitStyles.close_icon}>
-                                          {
-                                            <FontAwesomeIcon
-                                              icon={faArrowsAlt}
+                                        <Popconfirm
+                                          title="Choose an action"
+                                          icon={
+                                            <QuestionCircleOutlined
                                               style={{
-                                                size: 8,
-                                                color: "#a80404",
+                                                color: "blue",
                                               }}
                                             />
                                           }
-                                        </div>
-                                      </Popconfirm>
-                                    </div>
-                                    <div
-                                      className={`${visitStyles.hoverActiveHcc}`}
-                                    >
-                                      <div
-                                        className={`${visitStyles.encounterAndSectionHeader}`}
-                                      >
-                                        {getProviderNameList(
-                                          data?.providerName
-                                        )}
-                                        {getEncounterDateBackground(
-                                          data.encounterDateSplit
-                                        )}
-                                      </div>
-                                      <div
-                                        className={`${visitStyles.encounterAndSectionHeader}`}
-                                      >
-                                        {data.isManuallyAdded == true ? (
-                                          <Badge
-                                            className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                          okText="Move to Deleted"
+                                          cancelText="Move to Suggested"
+                                          onCancel={validToSuggested}
+                                          okButtonProps={{
+                                            type: buttonClicked
+                                              ? "primary"
+                                              : "default",
+                                          }}
+                                          cancelButtonProps={{
+                                            type: buttonClicked
+                                              ? "danger"
+                                              : "default",
+                                          }}
+                                          description={data.diagnosisCode}
+                                          onConfirm={confirmvalid}
+                                          placement="leftTop"
+                                          onOpenChange={() =>
+                                            onchangeValid(
+                                              data.diagnosisCode,
+                                              data
+                                            )
+                                          }
+                                        >
+                                          <div
+                                            className={visitStyles.close_icon}
                                           >
-                                            Manually Added
-                                          </Badge>
-                                        ) : null}
+                                            {
+                                              <FontAwesomeIcon
+                                                icon={faArrowsAlt}
+                                                style={{
+                                                  size: 8,
+                                                  color: "#a80404",
+                                                }}
+                                              />
+                                            }
+                                          </div>
+                                        </Popconfirm>
                                       </div>
+                                    </div>
+                                    <div className="d-flex justify-content-between">
                                       <div
-                                        className={`${visitStyles.encounterAndSectionHeader}`}
+                                        className={`${visitStyles.hoverActiveHcc}`}
                                       >
-                                        {getCaptureSectionBackgroundFile(
-                                          data?.capturedSections,
-                                          data?.encounterDate,
-                                          data?.actualDescription
-                                        )}
-                                      </div>
-                                      {data?.isMostSpecific == true ? (
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
+                                          {getProviderNameList(
+                                            data?.providerName
+                                          )}
+                                        </div>
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
+                                          {getEncounterDateBackground(
+                                            data.encounterDateSplit
+                                          )}
+                                        </div>
+
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
+                                          {getCaptureSectionBackgroundFile(
+                                            data?.capturedSections,
+                                            data?.encounterDate,
+                                            data?.actualDescription
+                                          )}
+                                        </div>
+                                        {/* {data?.isMostSpecific == true ? (
                                         <div
                                           className={`${visitStyles.encounterAndSectionHeader}`}
                                         >
@@ -4533,7 +5398,63 @@ const Hcc = ({ patientHccResult }) => {
                                             IsMostSpecific
                                           </span>
                                         </div>
-                                      ) : null}
+                                      ) : null} */}
+                                      </div>
+                                      <div
+                                        className={`${visitStyles.encounterAndSectionHeader}`}
+                                      >
+                                        <div
+                                          className={styles.meatFoundContainer}
+                                        >
+                                          <div>
+                                            {getMeatFound(
+                                              data?.diagnosisCode,
+                                              meatCriteriaList,
+                                              "M"
+                                            )}
+                                          </div>
+                                          <div>
+                                            {getMeatFound(
+                                              data?.diagnosisCode,
+                                              meatCriteriaList,
+                                              "E"
+                                            )}
+                                          </div>
+                                          <div>
+                                            {getMeatFound(
+                                              data?.diagnosisCode,
+                                              meatCriteriaList,
+                                              "A"
+                                            )}
+                                          </div>
+                                          <div>
+                                            {getMeatFound(
+                                              data?.diagnosisCode,
+                                              meatCriteriaList,
+                                              "T"
+                                            )}
+                                          </div>
+                                        </div>
+                                        <div
+                                          className={`${visitStyles.encounterAndSectionHeader}`}
+                                        >
+                                          {data.isManuallyAdded == true ? (
+                                            <Badge
+                                              className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                            >
+                                              Manually Added
+                                            </Badge>
+                                          ) : null}
+                                        </div>
+                                        {data.getPlace == "Insulin" ? (
+                                          <span
+                                            className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                            bg={`  mt-2 bg-bg-eight `}
+                                          >
+                                            Insulin
+                                          </span>
+                                        ) : null}
+                                      </div>
                                     </div>
                                   </div>
                                 </li>
@@ -4543,7 +5464,7 @@ const Hcc = ({ patientHccResult }) => {
                         </ul>
                       </div>
                     ) : null}
-                    <div className="col-xl-8">
+                    <div className={isFileFormShow ? "col-xl-8" : "col-xl-6"}>
                       <div className="card-body p-0">
                         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                           <div
@@ -4574,171 +5495,455 @@ const Hcc = ({ patientHccResult }) => {
                     </div>
                     {isFileFormShow ? (
                       <div className="col-xl-4">
-                        <div className="offcanvas-body">
-                          <div className={visitStyles.fileFormContianer}>
-                            <Form
-                              noValidate
-                              validated={validated}
-                              onSubmit={handleFormSubmit}
-                            >
+                        <div
+                          className={`profile-tab ${visitStyles.visitdata_header_card2}`}
+                        >
+                          <div className="custom-tab-1 ">
+                            <Tab.Container defaultActiveKey="hccForm">
                               <div className="row">
                                 <div className="col-xl-12">
-                                  <Form.Label>
-                                    Code <span className="text-danger">*</span>{" "}
-                                  </Form.Label>
-                                  <Form.Control
-                                    required
-                                    type="text"
-                                    id="diagnosisCode"
-                                    name="diagnosisCode"
-                                    onChange={handleChange}
-                                  />
-                                  {addValidCodeCheck == false ? (
-                                    <span
-                                      className={
-                                        visitStyles.invalidHccCodeError
-                                      }
-                                    >
-                                      Invalid Hcc Code
-                                    </span>
-                                  ) : addValidCodeCheck == true ? (
-                                    <span
-                                      className={visitStyles.validHccCodeError}
-                                    >
-                                      Valid Hcc Code
-                                    </span>
-                                  ) : null}
-                                </div>
-                                <div className="col-xl-12">
-                                  <Form.Label>Provider name</Form.Label>
-                                  <Form.Control
-                                    type="text"
-                                    id="providerName"
-                                    name="providerName"
-                                    onChange={handleChange}
-                                  />
-                                </div>
-                                <div className="col-xl-12">
-                                  <Form.Label>
-                                    Section{" "}
-                                    <span className="text-danger">*</span>{" "}
-                                  </Form.Label>
-                                  <Form.Control
-                                    required
-                                    type="text"
-                                    id="capturedSections"
-                                    name="capturedSections"
-                                    onChange={handleChange}
-                                  />
-                                </div>
-                                <div className={`col-xl-12`}>
-                                  <Form.Label>
-                                    Encoded date{" "}
-                                    <span className="text-danger">*</span>{" "}
-                                  </Form.Label>
-
-                                  {/* <Form.Control
-                                                        required
-                                                        type="date"
-                                                        id="encodedDate"
-                                                        name="encodedDate"
-                                                        onChange={handleChange}                                                      
-                                                      /> */}
-                                  <div className={visitStyles.fileFormDate}>
-                                    <Form.Control
-                                      required
-                                      type="text"
-                                      id="encodedDate"
-                                      name="encodedDate"
-                                      onChange={handleChange}
-                                      value={inputValueFileDate}
-                                    />
-                                    {!dragFileDate ? (
-                                      <span
-                                        onClick={() => setdragFileDate(true)}
+                                  <Nav as="ul" className="nav nav-tabs">
+                                    <Nav.Item as="li" className="nav-item">
+                                      <Nav.Link
+                                        to="#my-posts"
+                                        eventKey="hccForm"
+                                        className={visitStyles.navColor}
                                       >
-                                        {" "}
-                                        <FontAwesomeIcon
-                                          icon={faCalendar}
-                                          style={{
-                                            color: "#918585",
-                                          }}
-                                        />
-                                      </span>
-                                    ) : (
-                                      <span
-                                        onClick={() => setdragFileDate(false)}
+                                        HCC
+                                      </Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item as="li" className="nav-item">
+                                      <Nav.Link
+                                        to="#my-posts"
+                                        eventKey="meatForm"
+                                        className={visitStyles.navColor}
+                                        activeClassName={visitStyles.activeLink}
                                       >
-                                        {" "}
-                                        <FontAwesomeIcon
-                                          icon={faClose}
-                                          style={{
-                                            color: "#918585",
-                                          }}
-                                        />
-                                      </span>
-                                    )}
-                                  </div>
-                                </div>
-                                <DatePicker
-                                  format="MM-DD-YYYY"
-                                  onChange={(dates, dateStrings) => {
-                                    handleDatePickerChangeFile(
-                                      dates,
-                                      dateStrings
-                                    );
-                                  }}
-                                  open={dragFileDate}
-                                  showNow={false}
-                                  style={{
-                                    visibility: "hidden",
-                                    boxShadow: "none",
-                                    marginBottom: "-45px",
-                                  }}
-                                  placeholder="MM-DD-YYYY"
-                                  className="form-control"
-                                />
-                                {/* <DatePicker/> */}
+                                        MEAT
+                                      </Nav.Link>
+                                    </Nav.Item>
+                                  </Nav>
 
-                                <div className="col-xl-12 mb-3">
-                                  <Form.Label>
-                                    Description{" "}
-                                    <span className="text-danger">*</span>{" "}
-                                  </Form.Label>
-                                  <textarea
-                                    className="form-control"
-                                    id="actualDescription"
-                                    name="actualDescription"
-                                    onChange={handleChangeSuggested}
-                                    // value={inputValue.actualDescription}
-                                    rows="5"
-                                    required
-                                  ></textarea>
+                                  <Tab.Content>
+                                    <Tab.Pane id="my-posts" eventKey="hccForm">
+                                      <div
+                                        className={`className="col-xl-12 ${styles.hccFormContainer}`}
+                                      >
+                                        <div className="offcanvas-body">
+                                          <div
+                                            className={
+                                              visitStyles.fileFormContianer
+                                            }
+                                          >
+                                            <Form
+                                              noValidate
+                                              validated={validated}
+                                              onSubmit={handleFormSubmit}
+                                            >
+                                              <div className="row">
+                                                <div className="col-xl-12">
+                                                  <Form.Label>
+                                                    Code{" "}
+                                                    <span className="text-danger">
+                                                      *
+                                                    </span>{" "}
+                                                  </Form.Label>
+                                                  <Form.Control
+                                                    required
+                                                    type="text"
+                                                    id="diagnosisCode"
+                                                    name="diagnosisCode"
+                                                    onChange={handleChange}
+                                                  />
+                                                  {addValidCodeCheck ==
+                                                  false ? (
+                                                    <span
+                                                      className={
+                                                        visitStyles.invalidHccCodeError
+                                                      }
+                                                    >
+                                                      Invalid Hcc Code
+                                                    </span>
+                                                  ) : addValidCodeCheck ==
+                                                    true ? (
+                                                    <span
+                                                      className={
+                                                        visitStyles.validHccCodeError
+                                                      }
+                                                    >
+                                                      Valid Hcc Code
+                                                    </span>
+                                                  ) : null}
+                                                </div>
+                                                <div className="col-xl-12">
+                                                  <Form.Label>
+                                                    Provider name
+                                                  </Form.Label>
+                                                  <Form.Control
+                                                    type="text"
+                                                    id="providerName"
+                                                    name="providerName"
+                                                    onChange={handleChange}
+                                                  />
+                                                </div>
+                                                <div className="col-xl-12">
+                                                  <Form.Label>
+                                                    Section{" "}
+                                                    <span className="text-danger">
+                                                      *
+                                                    </span>{" "}
+                                                  </Form.Label>
+                                                  <Form.Control
+                                                    required
+                                                    type="text"
+                                                    id="capturedSections"
+                                                    name="capturedSections"
+                                                    onChange={handleChange}
+                                                  />
+                                                </div>
+                                                <div className={`col-xl-12`}>
+                                                  <Form.Label>
+                                                    Encoded date{" "}
+                                                    <span className="text-danger">
+                                                      *
+                                                    </span>{" "}
+                                                  </Form.Label>
+
+                                                  {/* <Form.Control
+                                                      required
+                                                      type="date"
+                                                      id="encodedDate"
+                                                      name="encodedDate"
+                                                      onChange={handleChange}
+                                                    /> */}
+                                                  <div
+                                                    className={
+                                                      visitStyles.fileFormDate
+                                                    }
+                                                  >
+                                                    <Form.Control
+                                                      required
+                                                      type="text"
+                                                      id="encodedDate"
+                                                      name="encodedDate"
+                                                      onChange={handleChange}
+                                                      value={inputValueFileDate}
+                                                    />
+                                                    {!dragFileDate ? (
+                                                      <span
+                                                        onClick={() =>
+                                                          setdragFileDate(true)
+                                                        }
+                                                      >
+                                                        {" "}
+                                                        <FontAwesomeIcon
+                                                          icon={faCalendar}
+                                                          style={{
+                                                            color: "#918585",
+                                                          }}
+                                                        />
+                                                      </span>
+                                                    ) : (
+                                                      <span
+                                                        onClick={() =>
+                                                          setdragFileDate(false)
+                                                        }
+                                                      >
+                                                        {" "}
+                                                        <FontAwesomeIcon
+                                                          icon={faClose}
+                                                          style={{
+                                                            color: "#918585",
+                                                          }}
+                                                        />
+                                                      </span>
+                                                    )}
+                                                  </div>
+                                                </div>
+                                                <DatePicker
+                                                  format="MM-DD-YYYY"
+                                                  onChange={(
+                                                    dates,
+                                                    dateStrings
+                                                  ) => {
+                                                    handleDatePickerChangeFile(
+                                                      dates,
+                                                      dateStrings
+                                                    );
+                                                  }}
+                                                  open={dragFileDate}
+                                                  showNow={false}
+                                                  style={{
+                                                    visibility: "hidden",
+                                                    boxShadow: "none",
+                                                    marginBottom: "-45px",
+                                                  }}
+                                                  placeholder="MM-DD-YYYY"
+                                                  className="form-control"
+                                                />
+                                                {/* <DatePicker/> */}
+
+                                                <div className="col-xl-12 mb-3">
+                                                  <Form.Label>
+                                                    Description{" "}
+                                                    <span className="text-danger">
+                                                      *
+                                                    </span>{" "}
+                                                  </Form.Label>
+                                                  <textarea
+                                                    className="form-control"
+                                                    id="actualDescription"
+                                                    name="actualDescription"
+                                                    onChange={
+                                                      handleChangeSuggested
+                                                    }
+                                                    // value={inputValue.actualDescription}
+                                                    rows="5"
+                                                    required
+                                                  ></textarea>
+                                                </div>
+                                              </div>
+
+                                              <div>
+                                                <Button
+                                                  type="submit"
+                                                  className="btn btn-primary btn-sm me-1"
+                                                >
+                                                  Submit
+                                                </Button>
+                                                <Button
+                                                  // type="reset"
+                                                  onClick={() =>
+                                                    handleCloseModal()
+                                                  }
+                                                  className="btn btn-danger btn-sm light ms-1"
+                                                >
+                                                  Cancel
+                                                </Button>
+                                              </div>
+                                            </Form>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </Tab.Pane>
+                                    <Tab.Pane id="my-posts" eventKey="meatForm">
+                                      <div
+                                        className={`className="col-xl-12 ${styles.hccFormContainer}`}
+                                      >
+                                        <div className="offcanvas-body">
+                                          <div
+                                            className={
+                                              visitStyles.fileFormContianer
+                                            }
+                                          >
+                                            <Form
+                                              noValidate
+                                              validated={validated}
+                                              onSubmit={handleFormSubmitMeat}
+                                            >
+                                              <div className="row">
+                                                <div className="col-xl-6">
+                                                  <Form.Label>
+                                                    Code{" "}
+                                                    <span className="text-danger">
+                                                      *
+                                                    </span>{" "}
+                                                  </Form.Label>
+                                                  <Form.Control
+                                                    required
+                                                    type="text"
+                                                    id="diagnosisCode"
+                                                    name="diagnosisCode"
+                                                    onChange={handleChangeMeat}
+                                                  />
+                                                  {addValidCodeCheck ==
+                                                  false ? (
+                                                    <span
+                                                      className={
+                                                        visitStyles.invalidHccCodeError
+                                                      }
+                                                    >
+                                                      Invalid Hcc Code
+                                                    </span>
+                                                  ) : addValidCodeCheck ==
+                                                    true ? (
+                                                    <span
+                                                      className={
+                                                        visitStyles.validHccCodeError
+                                                      }
+                                                    >
+                                                      Valid Hcc Code
+                                                    </span>
+                                                  ) : null}
+                                                </div>
+                                                <div className="col-xl-6">
+                                                  <Form.Label>
+                                                    Disease Name
+                                                  </Form.Label>
+                                                  <Form.Control
+                                                    type="text"
+                                                    id="diseaseName"
+                                                    name="diseaseName"
+                                                    onChange={handleChangeMeat}
+                                                  />
+                                                </div>
+                                                <div className="col-xl-6">
+                                                  <Form.Label>
+                                                    Monitor Header
+                                                  </Form.Label>
+                                                  <Form.Control
+                                                    type="text"
+                                                    id="monitorCapturedFromHeader"
+                                                    name="monitorCapturedFromHeader"
+                                                    onChange={handleChangeMeat}
+                                                  />
+                                                </div>
+                                                <div className="col-xl-6">
+                                                  <Form.Label>
+                                                    Monitor
+                                                  </Form.Label>
+                                                  <Form.Control
+                                                    type="text"
+                                                    id="monitor"
+                                                    name="monitor"
+                                                    onChange={handleChangeMeat}
+                                                  />
+                                                </div>
+                                                <div className="col-xl-6">
+                                                  <Form.Label>
+                                                    Evaluate Header
+                                                  </Form.Label>
+                                                  <Form.Control
+                                                    type="text"
+                                                    id="evaluateCapturedFromHeader"
+                                                    name="evaluateCapturedFromHeader"
+                                                    onChange={handleChangeMeat}
+                                                  />
+                                                </div>
+                                                <div className="col-xl-6">
+                                                  <Form.Label>
+                                                    Evaluate
+                                                  </Form.Label>
+                                                  <Form.Control
+                                                    type="text"
+                                                    id="evaluate"
+                                                    name="evaluate"
+                                                    onChange={handleChangeMeat}
+                                                  />
+                                                </div>
+                                                <div className="col-xl-6">
+                                                  <Form.Label>
+                                                    Assessment Header
+                                                  </Form.Label>
+                                                  <Form.Control
+                                                    type="text"
+                                                    id="assessmentCapturedFromHeader"
+                                                    name="assessmentCapturedFromHeader"
+                                                    onChange={handleChangeMeat}
+                                                  />
+                                                </div>
+                                                <div className="col-xl-6">
+                                                  <Form.Label>
+                                                    Assessment
+                                                  </Form.Label>
+                                                  <Form.Control
+                                                    type="text"
+                                                    id="assessment"
+                                                    name="assessment"
+                                                    onChange={handleChangeMeat}
+                                                  />
+                                                </div>
+                                                <div className="col-xl-6">
+                                                  <Form.Label>
+                                                    Treatment Header
+                                                  </Form.Label>
+                                                  <Form.Control
+                                                    type="text"
+                                                    id="treatmentCapturedFromHeader"
+                                                    name="treatmentCapturedFromHeader"
+                                                    onChange={handleChangeMeat}
+                                                  />
+                                                </div>
+                                                <div className="col-xl-6">
+                                                  <Form.Label>
+                                                    Treatment
+                                                  </Form.Label>
+                                                  <Form.Control
+                                                    type="text"
+                                                    id="treatment"
+                                                    name="treatment"
+                                                    onChange={handleChangeMeat}
+                                                  />
+                                                </div>
+                                                <div className={`col-xl-6`}>
+                                                  <Form.Label>
+                                                    Encoded date
+                                                  </Form.Label>
+                                                  <div
+                                                    className={
+                                                      visitStyles.fileFormDate
+                                                    }
+                                                  >
+                                                    <Form.Control
+                                                      required
+                                                      type="text"
+                                                      id="encodedDate"
+                                                      name="encodedDate"
+                                                      onChange={
+                                                        handleChangeMeat
+                                                      }
+                                                      value={inputValueFileDate}
+                                                    />
+                                                  </div>
+                                                </div>
+
+                                                <div className="col-xl-6 mb-3">
+                                                  <Form.Label>
+                                                    Description
+                                                  </Form.Label>
+                                                  <textarea
+                                                    className="form-control"
+                                                    id="actualDescription"
+                                                    name="actualDescription"
+                                                    onChange={handleChangeMeat}
+                                                    rows="5"
+                                                    required
+                                                  ></textarea>
+                                                </div>
+                                              </div>
+
+                                              <div>
+                                                <Button
+                                                  type="submit"
+                                                  className="btn btn-primary btn-sm me-1"
+                                                >
+                                                  Submit
+                                                </Button>
+                                                <Button
+                                                  // type="reset"
+                                                  onClick={() =>
+                                                    handleCloseModal()
+                                                  }
+                                                  className="btn btn-danger btn-sm light ms-1"
+                                                >
+                                                  Cancel
+                                                </Button>
+                                              </div>
+                                            </Form>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </Tab.Pane>
+                                  </Tab.Content>
                                 </div>
                               </div>
-
-                              <div>
-                                <Button
-                                  type="submit"
-                                  className="btn btn-primary btn-sm me-1"
-                                >
-                                  Submit
-                                </Button>
-                                <Button
-                                  // type="reset"
-                                  onClick={() => handleCloseModal()}
-                                  className="btn btn-danger btn-sm light ms-1"
-                                >
-                                  Cancel
-                                </Button>
-                              </div>
-                            </Form>
+                            </Tab.Container>
                           </div>
                         </div>
                       </div>
                     ) : null}
                     {!isFileFormShow ? (
-                      <div className="col-xl-2">
+                      <div className="col-xl-3">
                         <div className="">
                           <ul className="timeline">
                             <div
@@ -4925,6 +6130,10 @@ const Hcc = ({ patientHccResult }) => {
                                                   {getProviderNameList(
                                                     data?.providerName
                                                   )}
+                                                </div>
+                                                <div
+                                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                                >
                                                   {getEncounterDateBackground(
                                                     data.encounterDateSplit
                                                   )}
@@ -5125,6 +6334,10 @@ const Hcc = ({ patientHccResult }) => {
                                             {getProviderNameList(
                                               data?.providerName
                                             )}
+                                          </div>
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
                                             {getEncounterDateBackground(
                                               data.encounterDateSplit
                                             )}
@@ -5231,9 +6444,9 @@ const Hcc = ({ patientHccResult }) => {
                                       <span className="meat-name-details">
                                         {item.createdBy}
                                       </span>
-                                      <span className={styles.l1auditorBadge}>
+                                      {/* <span className={styles.l1auditorBadge}>
                                         L1 Auditor
-                                      </span>
+                                      </span> */}
                                     </div>
                                     <div className="col-xl-2 d-grid">
                                       <span className="meat-name-details">
@@ -5258,13 +6471,35 @@ const Hcc = ({ patientHccResult }) => {
                                       </span>
                                     </div>
                                     <div className="col-xl-1">
-                                      <div
-                                        onClick={() =>
-                                          addMeatQuery(item, "Update")
-                                        }
-                                        className={styles.edit_meat_query}
-                                      >
-                                        {SVGICON.meatQueryEdit}
+                                      <div className="d-flex">
+                                        <div
+                                          onClick={() =>
+                                            addMeatQuery(item, "Update")
+                                          }
+                                          className={styles.edit_meat_query}
+                                        >
+                                          {SVGICON.meatQueryEdit}
+                                        </div>
+                                        {/* <Popconfirm
+                                          title="Are you sure to delete this query?"
+                                          okText="Yes"
+                                          cancelText="No"
+                                          onConfirm={() =>
+                                            confirmMeatQuery(item.diagnosisCode)
+                                          }
+                                        >
+                                          <div
+                                            className={styles.delete_meat_query}
+                                          >
+                                            <FontAwesomeIcon
+                                              icon={faTrash}
+                                              style={{
+                                                size: 8,
+                                                color: "#fff",
+                                              }}
+                                            />
+                                          </div>
+                                        </Popconfirm> */}
                                       </div>
                                     </div>
                                   </div>
@@ -5289,13 +6524,6 @@ const Hcc = ({ patientHccResult }) => {
                                             <div className="col-xl-2 d-grid">
                                               <span className="meat-name-details">
                                                 {item.createdBy}
-                                              </span>
-                                              <span
-                                                className={
-                                                  styles.l1auditorBadge
-                                                }
-                                              >
-                                                L1 Auditor
                                               </span>
                                             </div>
                                             <div className="col-xl-2 d-grid">
@@ -5350,17 +6578,254 @@ const Hcc = ({ patientHccResult }) => {
           // style={{ top: 5 }}
           onOk={handleCloseModal}
           onCancel={handleCloseModal}
-          width="90%"
+          width="97%"
+          footer={false}
           // height={400}
         >
           <div className="section-container">
             <div className="row">
-              <div className="col-xl-12">
+              <div className="col-xl-4">
+                <div className={visitStyles.meat_title_card2}>
+                  <div className="row">
+                    <div className="col-xl-6">
+                      <label>Codes</label>
+                    </div>
+                    <div className="col-xl-6">
+                      <label>Description</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  className={
+                    selectMeatResult?.isMeatCriteriaPresent === true
+                      ? `${visitStyles.meat_details_card2}`
+                      : `${visitStyles.meat_details_card_false}`
+                  }
+                >
+                  <div className="row">
+                    <div className="col-xl-6 d-grid">
+                      <span className="font-bold">
+                        {selectMeatResult?.diagnosisCode}
+                      </span>
+                      {selectMeatResult?.category == "Valid" ? (
+                        <Badge
+                          className="valid-meat badge-circle mt-2"
+                          bg={` badge-circle mt-2 bg-validmeat`}
+                        >
+                          {selectMeatResult?.category}
+                        </Badge>
+                      ) : (
+                        <Badge
+                          className="valid-meat badge-circle mt-2"
+                          bg={` badge-circle mt-2 bg-validUnmatch`}
+                        >
+                          {selectMeatResult?.category}
+                        </Badge>
+                      )}
+                    </div>
+                    <div className="col-xl-6 d-grid">
+                      <Popover
+                        placement="topLeft"
+                        title="Description"
+                        content={selectMeatResult?.diseaseName}
+                      >
+                        <span className="meat-name-details2">
+                          {selectMeatResult?.diseaseName}
+                        </span>
+                      </Popover>
+                    </div>
+                    <div className={`${visitStyles.encounterAndSectionHeader}`}>
+                      {getProviderNameList(selectMeatResult?.providerName)}
+                    </div>
+                    <div className={`${visitStyles.encounterAndSectionHeader}`}>
+                      {getEncounterDateBackgroundHcc(
+                        selectMeatResult?.encounterDateSplit,
+                        selectMeatResult?.diagnosisCode,
+                        "MEAT",
+                        selectMeatResult
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className={visitStyles.meat_title_card2}>
+                  <div className="row">
+                    <div className="col-xl-12">
+                      <label>Monitor</label>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className={
+                    selectMeatResult?.isMeatCriteriaPresent === true
+                      ? `${visitStyles.meat_details_card2}`
+                      : `${visitStyles.meat_details_card_false}`
+                  }
+                >
+                  <div className="row">
+                    <div className="col-xl-12 d-grid">
+                      {selectMeatResult?.monitor != "" ? (
+                        <Popover
+                          placement="topLeft"
+                          title="Monitor"
+                          content={selectMeatResult?.monitor}
+                        >
+                          <span className="meat-name-details2">
+                            {selectMeatResult?.monitor}
+                          </span>
+                        </Popover>
+                      ) : (
+                        <span className="meat-name-details2 text-center font-bold">
+                          -
+                        </span>
+                      )}
+                      <div>
+                        {getCaptureSectionBackgroundMeatFile(
+                          selectMeatResult?.monitorCapturedFromHeader,
+                          selectMeatResult?.monitor,
+                          selectMeatResult?.encounterDate,
+                          selectMeatResult
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={visitStyles.meat_title_card2}>
+                  <div className="row">
+                    <div className="col-xl-12">
+                      <label>Evaluation</label>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className={
+                    selectMeatResult?.isMeatCriteriaPresent === true
+                      ? `${visitStyles.meat_details_card2}`
+                      : `${visitStyles.meat_details_card_false}`
+                  }
+                >
+                  <div className="row">
+                    <div className="col-xl-12 d-grid">
+                      {selectMeatResult?.evaluate != "" ? (
+                        <Popover
+                          placement="topLeft"
+                          title="Evaluation"
+                          content={selectMeatResult?.evaluate}
+                        >
+                          <span className="meat-name-details2">
+                            {selectMeatResult?.evaluate}
+                          </span>
+                        </Popover>
+                      ) : (
+                        <span className="meat-name-details2 text-center font-bold">
+                          -
+                        </span>
+                      )}
+                      <div>
+                        {getCaptureSectionBackgroundMeatFile(
+                          selectMeatResult?.evaluateCapturedFromHeader,
+                          selectMeatResult?.evaluate,
+                          selectMeatResult?.encounterDate,
+                          selectMeatResult
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={visitStyles.meat_title_card2}>
+                  <div className="row">
+                    <div className="col-xl-12">
+                      <label>Assessment</label>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className={
+                    selectMeatResult?.isMeatCriteriaPresent === true
+                      ? `${visitStyles.meat_details_card2}`
+                      : `${visitStyles.meat_details_card_false}`
+                  }
+                >
+                  <div className="row">
+                    <div className="col-xl-12 d-grid">
+                      {selectMeatResult?.assessment != "" ? (
+                        <Popover
+                          placement="topLeft"
+                          title="Assessment"
+                          content={selectMeatResult?.assessment}
+                        >
+                          <span className="meat-name-details2">
+                            {selectMeatResult?.assessment}
+                          </span>
+                        </Popover>
+                      ) : (
+                        <span className="meat-name-details2 text-center font-bold">
+                          -
+                        </span>
+                      )}
+
+                      <div>
+                        {getCaptureSectionBackgroundMeatFile(
+                          selectMeatResult?.assessmentCapturedFromHeader,
+                          selectMeatResult?.assessment,
+                          selectMeatResult?.encounterDate,
+                          selectMeatResult
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className={visitStyles.meat_title_card2}>
+                  <div className="row">
+                    <div className="col-xl-12">
+                      <label>Treatment</label>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className={
+                    selectMeatResult?.isMeatCriteriaPresent === true
+                      ? `${visitStyles.meat_details_card2}`
+                      : `${visitStyles.meat_details_card_false}`
+                  }
+                >
+                  <div className="row">
+                    <div className="col-xl-12 d-grid">
+                      {selectMeatResult?.treatment != "" ? (
+                        <Popover
+                          placement="topLeft"
+                          title="Treatment"
+                          content={selectMeatResult?.treatment}
+                        >
+                          <span className="meat-name-details2">
+                            {selectMeatResult?.treatment}
+                          </span>
+                        </Popover>
+                      ) : (
+                        <span className="meat-name-details2 text-center font-bold">
+                          -
+                        </span>
+                      )}
+                      <div>
+                        {getCaptureSectionBackgroundMeatFile(
+                          selectMeatResult?.treatmentCapturedFromHeader,
+                          selectMeatResult?.treatment,
+                          selectMeatResult?.encounterDate,
+                          selectMeatResult
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-8">
                 <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                   <div
                     style={{
                       height: "80vh",
-                      width: "900px",
+                      // width: "900px",
                       marginLeft: "auto",
                       marginRight: "auto",
                     }}
@@ -5386,17 +6851,764 @@ const Hcc = ({ patientHccResult }) => {
       {isModalOpenValidCodes && (
         <Modal
           title={fileModalHeader}
-          // title="Pdf Test"
           centered
           open={isModalOpenValidCodes}
-          // style={{ top: 5 }}
           onOk={handleCloseModal}
           onCancel={handleCloseModal}
           width="90%"
-          // height={400}
+          footer={false}
         >
           <div className="section-container">
-            <div class="d-flex justify-content-end m-4">
+            <div className="my-post-content pt-3 row">
+              {!isFileFormShow ? (
+                <div className="col-xl-2">
+                  <ul className="timeline">
+                    <div
+                      className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
+                    >
+                      <span className={`${visitStyles.hcc_title_name}`}>
+                        HCC
+                        <FontAwesomeIcon
+                          onClick={() => addValidCodeFile()}
+                          icon={faPlus}
+                        />
+                      </span>
+                      <div className="d-flex justify-content-center">
+                        <span className={`${visitStyles.hcc_title_badge}`}>
+                          {newValidDiseaseList.length}
+                        </span>
+                      </div>
+                    </div>
+                    <div className={visitStyles.container}>
+                      <div className={visitStyles.hccStickey_head}>
+                        {newValidDiseaseList.map((data, i) => (
+                          <li>
+                            <div
+                              className={`hccActiveCard ${visitStyles.hcc_card}`}
+                            >
+                              <div
+                                className={`${visitStyles.hcc_card_nameHead}`}
+                              >
+                                <div>
+                                  <span className="mb-1 disease-name d-flex">
+                                    <span className="valid-dis-name">
+                                      {data.diagnosisCode}
+                                    </span>{" "}
+                                    <Popover
+                                      content={data.actualDescription}
+                                      title=""
+                                      trigger="hover"
+                                    >
+                                      {data?.isMostSpecific != true ? (
+                                        <>- {data.actualDescription} </>
+                                      ) : (
+                                        <> - {data.dbDescription}</>
+                                      )}
+                                    </Popover>
+                                  </span>
+                                </div>
+
+                                {data.defaultPosition ==
+                                "VALID" ? null : data.defaultPosition ==
+                                  "INVALID" ? (
+                                  <span
+                                    className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
+                                  ></span>
+                                ) : data.defaultPosition == "SUGGESTED" ? (
+                                  <span
+                                    className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
+                                  ></span>
+                                ) : data.defaultPosition == "DELETED" ? (
+                                  <span
+                                    className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
+                                  ></span>
+                                ) : null}
+                                <Popover
+                                  onClick={() =>
+                                    getValidHccDetails(
+                                      data.actualDescription,
+                                      data.diagnosisCode
+                                    )
+                                  }
+                                  content={validHccDetails}
+                                  title={data.diagnosisCode}
+                                  placement="bottom"
+                                  trigger="click"
+                                >
+                                  <Tooltip
+                                    title="HCC Veriosn Details"
+                                    placement="bottom"
+                                  >
+                                    <i className="cr-pointer">
+                                      {SVGICON.infoIcon}
+                                    </i>
+                                  </Tooltip>
+                                </Popover>
+
+                                <Popconfirm
+                                  title="Choose an action"
+                                  icon={
+                                    <QuestionCircleOutlined
+                                      style={{
+                                        color: "blue",
+                                      }}
+                                    />
+                                  }
+                                  okText="Move to Deleted"
+                                  cancelText="Move to Suggested"
+                                  onCancel={validToSuggested}
+                                  okButtonProps={{
+                                    type: buttonClicked ? "primary" : "default",
+                                  }}
+                                  cancelButtonProps={{
+                                    type: buttonClicked ? "danger" : "default",
+                                  }}
+                                  description={data.diagnosisCode}
+                                  onConfirm={confirmvalid}
+                                  placement="leftTop"
+                                  onOpenChange={() =>
+                                    onchangeValid(data.diagnosisCode, data)
+                                  }
+                                >
+                                  <div className={visitStyles.close_icon}>
+                                    {
+                                      <FontAwesomeIcon
+                                        icon={faArrowsAlt}
+                                        style={{
+                                          size: 8,
+                                          color: "#a80404",
+                                        }}
+                                      />
+                                    }
+                                  </div>
+                                </Popconfirm>
+                              </div>
+                              <div className={`${visitStyles.hoverActiveHcc}`}>
+                                <div
+                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                >
+                                  {getProviderNameList(data?.providerName)}
+                                </div>
+                                <div
+                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                >
+                                  {getEncounterDateBackground(
+                                    data.encounterDateSplit
+                                  )}
+                                </div>
+                                <div
+                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                >
+                                  {data.isManuallyAdded == true ? (
+                                    <Badge
+                                      className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                    >
+                                      Manually Added
+                                    </Badge>
+                                  ) : null}
+                                </div>
+                                <div
+                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                >
+                                  {getCaptureSectionBackgroundFile(
+                                    data?.capturedSections,
+                                    data?.encounterDate,
+                                    data?.actualDescription
+                                  )}
+                                </div>
+                                {/* {data?.isMostSpecific == true ? (
+                                  <div
+                                    className={`${visitStyles.encounterAndSectionHeader}`}
+                                  >
+                                    <span
+                                      className={`mt-2 text-start cr-pointer ${styles.mostSpecificTag}`}
+                                    >
+                                      IsMostSpecific
+                                    </span>
+                                  </div>
+                                ) : null} */}
+                              </div>
+                            </div>
+                          </li>
+                        ))}
+                      </div>
+                    </div>
+                  </ul>
+                </div>
+              ) : null}
+              <div className="col-xl-8">
+                <div className="card-body p-0">
+                  <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                    <div
+                      style={{
+                        height: "80vh",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                      }}
+                    >
+                      {" "}
+                      <Viewer
+                        fileUrl={selectFileURL}
+                        initialPage={fileInitialPage}
+                        plugins={[defaultLayoutPluginInstance]}
+                        onDocumentLoad={handleDocumentLoadFile}
+                        renderLoader={(percentages) => (
+                          <div style={{ width: "240px" }}>
+                            <ProgressBar progress={Math.round(percentages)} />
+                          </div>
+                        )}
+                      />
+                    </div>
+                  </Worker>
+                </div>
+              </div>
+              {isFileFormShow ? (
+                <div className="col-xl-4">
+                  <div className="offcanvas-body">
+                    <div className={visitStyles.fileFormContianer}>
+                      <Form
+                        noValidate
+                        validated={validated}
+                        onSubmit={handleFormSubmit}
+                      >
+                        <div className="row">
+                          <div className="col-xl-12">
+                            <Form.Label>
+                              Code <span className="text-danger">*</span>{" "}
+                            </Form.Label>
+                            <Form.Control
+                              required
+                              type="text"
+                              id="diagnosisCode"
+                              name="diagnosisCode"
+                              onChange={handleChange}
+                            />
+                            {addValidCodeCheck == false ? (
+                              <span className={visitStyles.invalidHccCodeError}>
+                                Invalid Hcc Code
+                              </span>
+                            ) : addValidCodeCheck == true ? (
+                              <span className={visitStyles.validHccCodeError}>
+                                Valid Hcc Code
+                              </span>
+                            ) : null}
+                          </div>
+                          <div className="col-xl-12">
+                            <Form.Label>Provider name</Form.Label>
+                            <Form.Control
+                              type="text"
+                              id="providerName"
+                              name="providerName"
+                              onChange={handleChange}
+                            />
+                          </div>
+                          <div className="col-xl-12">
+                            <Form.Label>
+                              Section <span className="text-danger">*</span>{" "}
+                            </Form.Label>
+                            <Form.Control
+                              required
+                              type="text"
+                              id="capturedSections"
+                              name="capturedSections"
+                              onChange={handleChange}
+                            />
+                          </div>
+                          <div className={`col-xl-12`}>
+                            <Form.Label>
+                              Encoded date{" "}
+                              <span className="text-danger">*</span>{" "}
+                            </Form.Label>
+
+                            {/* <Form.Control
+                                                        required
+                                                        type="date"
+                                                        id="encodedDate"
+                                                        name="encodedDate"
+                                                        onChange={handleChange}                                                      
+                                                      /> */}
+                            <div className={visitStyles.fileFormDate}>
+                              <Form.Control
+                                required
+                                type="text"
+                                id="encodedDate"
+                                name="encodedDate"
+                                onChange={handleChange}
+                                value={inputValueFileDate}
+                              />
+                              {!dragFileDate ? (
+                                <span onClick={() => setdragFileDate(true)}>
+                                  {" "}
+                                  <FontAwesomeIcon
+                                    icon={faCalendar}
+                                    style={{
+                                      color: "#918585",
+                                    }}
+                                  />
+                                </span>
+                              ) : (
+                                <span onClick={() => setdragFileDate(false)}>
+                                  {" "}
+                                  <FontAwesomeIcon
+                                    icon={faClose}
+                                    style={{
+                                      color: "#918585",
+                                    }}
+                                  />
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <DatePicker
+                            format="MM-DD-YYYY"
+                            onChange={(dates, dateStrings) => {
+                              handleDatePickerChangeFile(dates, dateStrings);
+                            }}
+                            open={dragFileDate}
+                            showNow={false}
+                            style={{
+                              visibility: "hidden",
+                              boxShadow: "none",
+                              marginBottom: "-45px",
+                            }}
+                            placeholder="MM-DD-YYYY"
+                            className="form-control"
+                          />
+                          {/* <DatePicker/> */}
+
+                          <div className="col-xl-12 mb-3">
+                            <Form.Label>
+                              Description <span className="text-danger">*</span>{" "}
+                            </Form.Label>
+                            <textarea
+                              className="form-control"
+                              id="actualDescription"
+                              name="actualDescription"
+                              onChange={handleChangeSuggested}
+                              // value={inputValue.actualDescription}
+                              rows="5"
+                              required
+                            ></textarea>
+                          </div>
+                        </div>
+
+                        <div>
+                          <Button
+                            type="submit"
+                            className="btn btn-primary btn-sm me-1"
+                          >
+                            Submit
+                          </Button>
+                          <Button
+                            type="reset"
+                            onClick={() => setIsFileFormShow(false)}
+                            className="btn btn-danger btn-sm light ms-1"
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      </Form>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+              {!isFileFormShow ? (
+                <div className="col-xl-2">
+                  <div className="">
+                    <ul className="timeline">
+                      <div
+                        className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
+                      >
+                        <span className={`${visitStyles.suggested_title_name}`}>
+                          SUGGESTED CODES
+                        </span>
+                        <div className="d-flex justify-content-center">
+                          <span
+                            className={`${visitStyles.suggested_title_badge}`}
+                          >
+                            {suggestedHccList.length}
+                          </span>
+                        </div>
+                      </div>
+                      <div className={visitStyles.suggestedcontainer2}>
+                        <div className={visitStyles.hccStickey_head}>
+                          {suggestedHccList?.map((data) => {
+                            return (
+                              <>
+                                {data.isHccValid == true ? (
+                                  <li>
+                                    <div
+                                      className={`hccActiveCard ${visitStyles.hcc_card}`}
+                                    >
+                                      <div
+                                        className={`${visitStyles.hcc_card_nameHead}`}
+                                      >
+                                        <div className="media-body">
+                                          <span className="mb-1 disease-name d-flex">
+                                            <span className="valid-dis-name">
+                                              {data.diagnosisCode}
+                                            </span>{" "}
+                                            <Popover
+                                              content={data.actualDescription}
+                                              title=""
+                                              trigger="hover"
+                                            >
+                                              - {data.actualDescription}
+                                            </Popover>
+                                          </span>
+                                        </div>
+                                        {data.defaultPosition == "VALID" ? (
+                                          <span
+                                            className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}
+                                          ></span>
+                                        ) : data.defaultPosition ==
+                                          "INVALID" ? (
+                                          <span
+                                            className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
+                                          ></span>
+                                        ) : data.defaultPosition ==
+                                          "SUGGESTED" ? (
+                                          <span
+                                            className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
+                                          ></span>
+                                        ) : data.defaultPosition ==
+                                          "DELETED" ? (
+                                          <span
+                                            className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
+                                          ></span>
+                                        ) : null}
+                                        <Popover
+                                          onClick={() =>
+                                            getValidHccDetails(
+                                              data.actualDescription,
+                                              data.diagnosisCode
+                                            )
+                                          }
+                                          content={validHccDetails}
+                                          title={data.diagnosisCode}
+                                          placement="bottom"
+                                          trigger="click"
+                                        >
+                                          <i>{SVGICON.infoIcon}</i>
+                                        </Popover>
+                                        {data.getPlace == "Radio" ||
+                                        data.getPlace == "Lab" ? (
+                                          <Popconfirm
+                                            title="Choose an action"
+                                            icon={
+                                              <QuestionCircleOutlined
+                                                style={{
+                                                  color: "blue",
+                                                }}
+                                              />
+                                            }
+                                            okText="Move to Deleted"
+                                            okButtonProps={{
+                                              type: buttonClicked
+                                                ? "primary"
+                                                : "default",
+                                            }}
+                                            description={data.diagnosisCode}
+                                            onConfirm={suggestedToDeleted}
+                                            placement="leftTop"
+                                            onOpenChange={() =>
+                                              onchangeValid(
+                                                data.diagnosisCode,
+                                                data
+                                              )
+                                            }
+                                          >
+                                            <div
+                                              className={visitStyles.close_icon}
+                                            >
+                                              <FontAwesomeIcon
+                                                icon={faArrowsAlt}
+                                                style={{
+                                                  size: 8,
+                                                  color: "#a80404",
+                                                }}
+                                              />
+                                            </div>
+                                          </Popconfirm>
+                                        ) : (
+                                          <Popconfirm
+                                            title="Choose an action"
+                                            icon={
+                                              <QuestionCircleOutlined
+                                                style={{
+                                                  color: "blue",
+                                                }}
+                                              />
+                                            }
+                                            okText="Move to Deleted"
+                                            cancelText="Move to HCC"
+                                            onCancel={suggestedToValid}
+                                            okButtonProps={{
+                                              type: buttonClicked
+                                                ? "primary"
+                                                : "default",
+                                            }}
+                                            cancelButtonProps={{
+                                              type: buttonClicked
+                                                ? "danger"
+                                                : "default",
+                                            }}
+                                            description={data.diagnosisCode}
+                                            onConfirm={suggestedToDeleted}
+                                            placement="leftTop"
+                                            onOpenChange={() =>
+                                              onchangeValid(
+                                                data.diagnosisCode,
+                                                data
+                                              )
+                                            }
+                                          >
+                                            <div
+                                              className={visitStyles.close_icon}
+                                            >
+                                              <FontAwesomeIcon
+                                                icon={faArrowsAlt}
+                                                style={{
+                                                  size: 8,
+                                                  color: "#a80404",
+                                                }}
+                                              />
+                                            </div>
+                                          </Popconfirm>
+                                        )}
+                                      </div>
+                                      <div
+                                        className={`${visitStyles.hoverActiveHcc}`}
+                                      >
+                                        <div className="">
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                            {getProviderNameList(
+                                              data?.providerName
+                                            )}
+                                          </div>
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                            {getEncounterDateBackground(
+                                              data.encounterDateSplit
+                                            )}
+                                          </div>
+                                          {data.getPlace == "Lab" ? (
+                                            <Tooltip title="LAB">
+                                              <span
+                                                className={` mt-2 ${visitStyles.labStatus}`}
+                                                bg={`  mt-2 bg-bg-seven `}
+                                              >
+                                                Lab
+                                              </span>
+                                            </Tooltip>
+                                          ) : data.getPlace == "Radio" ? (
+                                            <Tooltip title="RADIOLOGY">
+                                              <span
+                                                className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                                bg={`  mt-2 bg-bg-eight `}
+                                              >
+                                                Radiology
+                                              </span>
+                                            </Tooltip>
+                                          ) : null}
+                                        </div>
+
+                                        {data.getPlace == "Lab" ? (
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                            {getCaptureSectionBackground(
+                                              data.capturedSections,
+                                              "Lab",
+                                              data.encounterDate,
+                                              data.actualDescription
+                                            )}
+                                          </div>
+                                        ) : data.getPlace == "Radio" ? (
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                            {getCaptureSectionBackground(
+                                              data.capturedSections,
+                                              "Radio",
+                                              data.encounterDate,
+                                              data.actualDescription
+                                            )}
+                                          </div>
+                                        ) : (
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                            {getCaptureSectionBackgroundFile(
+                                              data?.capturedSections,
+                                              data?.encounterDate,
+                                              data?.actualDescription
+                                            )}
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </li>
+                                ) : null}
+                              </>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </ul>
+                  </div>
+
+                  <div className={visitStyles.deleteFileContainer}>
+                    <ul className="timeline">
+                      <div
+                        className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
+                      >
+                        <span className={`${visitStyles.deleted_title_name}`}>
+                          DELETED CODES
+                        </span>
+                        <div className="d-flex justify-content-center">
+                          <span
+                            className={`${visitStyles.deleted_title_badge}`}
+                          >
+                            {deletedHccList.length}
+                          </span>
+                        </div>
+                      </div>
+                      <div className={visitStyles.deletedContainer}>
+                        <div className={visitStyles.hccStickey_head}>
+                          {deletedHccList.map((data, i) => (
+                            <li>
+                              <div
+                                className={`hccActiveCard ${visitStyles.hcc_card}`}
+                              >
+                                <div
+                                  className={`${visitStyles.hcc_card_nameHead}`}
+                                >
+                                  <div className="media-body">
+                                    <span className="mb-1 disease-name d-flex">
+                                      <span className="valid-dis-name">
+                                        {data.diagnosisCode}
+                                      </span>{" "}
+                                      <Popover
+                                        content={data.actualDescription}
+                                        title=""
+                                        trigger="hover"
+                                      >
+                                        - {data.actualDescription}
+                                      </Popover>
+                                    </span>
+                                  </div>
+                                  {data.defaultPosition == "VALID" ? (
+                                    <span
+                                      className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}
+                                    ></span>
+                                  ) : data.defaultPosition == "INVALID" ? (
+                                    <span
+                                      className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
+                                    ></span>
+                                  ) : data.defaultPosition == "SUGGESTED" ? (
+                                    <span
+                                      className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
+                                    ></span>
+                                  ) : data.defaultPosition == "DELETED" ? (
+                                    <span
+                                      className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
+                                    ></span>
+                                  ) : null}
+                                  <Popover
+                                    content={data.dbDescription}
+                                    title={data.diagnosisCode}
+                                    placement="bottom"
+                                    trigger="click"
+                                  >
+                                    <Tooltip
+                                      title="HCC Veriosn Details"
+                                      placement="bottom"
+                                    >
+                                      <i>{SVGICON.infoIcon}</i>
+                                    </Tooltip>
+                                  </Popover>
+                                  <Popconfirm
+                                    title="Choose an action"
+                                    icon={
+                                      <QuestionCircleOutlined
+                                        style={{
+                                          color: "blue",
+                                        }}
+                                      />
+                                    }
+                                    okText="Move to Suggested"
+                                    cancelText="Move to HCC"
+                                    onCancel={deletedToValid}
+                                    okButtonProps={{
+                                      type: buttonClicked
+                                        ? "primary"
+                                        : "default",
+                                    }}
+                                    cancelButtonProps={{
+                                      type: buttonClicked
+                                        ? "danger"
+                                        : "default",
+                                    }}
+                                    description={data.diagnosisCode}
+                                    onConfirm={deletedToSuggested}
+                                    placement="leftTop"
+                                    onOpenChange={() =>
+                                      onchangeValid(data.diagnosisCode, data)
+                                    }
+                                  >
+                                    <div className={visitStyles.close_icon}>
+                                      <FontAwesomeIcon
+                                        icon={faArrowsAlt}
+                                        style={{
+                                          size: 8,
+                                          color: "#a80404",
+                                        }}
+                                      />
+                                    </div>
+                                  </Popconfirm>
+                                </div>
+                                <div
+                                  className={`${visitStyles.hoverActiveHcc}`}
+                                >
+                                  <div className="">
+                                    <div
+                                      className={`${visitStyles.encounterAndSectionHeader}`}
+                                    >
+                                      {getProviderNameList(data?.providerName)}
+                                    </div>
+                                    <div
+                                      className={`${visitStyles.encounterAndSectionHeader}`}
+                                    >
+                                      {getEncounterDateBackground(
+                                        data.encounterDateSplit
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div
+                                    className={`${visitStyles.encounterAndSectionHeader}`}
+                                  >
+                                    {getCaptureSectionBackgroundFile(
+                                      data?.capturedSections,
+                                      data?.encounterDate,
+                                      data?.actualDescription
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </li>
+                          ))}
+                        </div>
+                      </div>
+                    </ul>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+            {/* <div class="d-flex justify-content-end m-4">
               <Button
                 onClick={handleAddButtonClick}
                 className={`btn btn-primary btn-sm me-1 ${visitStyles.hccCodeAddBtn}`}
@@ -5411,7 +7623,6 @@ const Hcc = ({ patientHccResult }) => {
                   <div
                     style={{
                       height: "80vh",
-                      // width: "1000px",
                       marginLeft: "auto",
                       marginRight: "auto",
                     }}
@@ -5435,7 +7646,6 @@ const Hcc = ({ patientHccResult }) => {
                 <div
                   className={`col-xl-4 ${visitStyles.hccCodeAddRightContainer}`}
                 >
-                  {/* Input fields */}
                   <form onSubmit={handleFormSubmit}>
                     <div className="form-group">
                       <Form.Label>
@@ -5639,7 +7849,7 @@ const Hcc = ({ patientHccResult }) => {
                   </div>
                 </div>
               ) : null}
-            </div>
+            </div> */}
           </div>
         </Modal>
       )}
@@ -5653,11 +7863,154 @@ const Hcc = ({ patientHccResult }) => {
           onOk={handleCloseModal}
           onCancel={handleCloseModal}
           width="95%"
+          footer={false}
           // height={500}
         >
           <div className="section-container">
             <div className="row">
-              <div className="col-xl-12">
+              <div className="col-xl-5">
+                <div
+                  className={`my-post-content  ${visitStyles.comboContainer3}`}
+                >
+                  <div className={visitStyles.combo_head_card}>
+                    <div className="row">
+                      <div className="col-xl-3">
+                        <label>Combo Codes</label>
+                      </div>
+                      <div className="col-xl-3">
+                        <label>Additional Codes</label>
+                      </div>
+                      <div className="col-xl-5">
+                        <label>Description</label>
+                      </div>
+                      <div className="col-xl-1"></div>
+                    </div>
+                  </div>
+                  {comboDiseaseCodesList?.length != 0 ? (
+                    <div className={visitStyles.container}>
+                      <div className={visitStyles.hccStickey_head}>
+                        {comboDiseaseCodesList?.map((item) => {
+                          return (
+                            <div className={visitStyles.combo_details_card}>
+                              <div className="row">
+                                <div className="col-xl-3 d-grid">
+                                  <span className="font-bold">
+                                    {item.diagnosisCodeCombo}
+                                  </span>
+                                </div>
+                                <div className="col-xl-3">
+                                  {item.addOnCodes?.map(
+                                    (addCombo, index) =>
+                                      addCombo && (
+                                        <span className="font-bold">
+                                          <Tag color={addOnCodeColor[index]}>
+                                            {addCombo}
+                                          </Tag>
+                                        </span>
+                                      )
+                                  )}
+                                </div>
+                                <div className="col-xl-5">
+                                  <span>{item.diseaseName}</span>
+                                </div>
+                                <div className="col-xl-1">
+                                  <div>
+                                    <Popconfirm
+                                      title="You want move to Invalid?"
+                                      description={item.diseaseName}
+                                      onConfirm={confirmComboInvalid}
+                                      placement="leftTop"
+                                      okText="Yes"
+                                      cancelText="No"
+                                      onOpenChange={() =>
+                                        onchangeCombo(
+                                          item.diseaseName,
+                                          item.addOnCode
+                                        )
+                                      }
+                                    >
+                                      <div className={visitStyles.close_icon}>
+                                        <FontAwesomeIcon
+                                          icon={faArrowsAlt}
+                                          style={{
+                                            size: 8,
+                                            color: "#a80404",
+                                          }}
+                                        />
+                                      </div>
+                                    </Popconfirm>
+                                  </div>
+                                  {/* <Popconfirm
+                                            title="You want to see the tree view?"
+                                            description={item.diseaseName}
+                                            onConfirm={() => {
+                                              setOpens(true);
+                                              
+                                            }}
+                                            placement="leftTop"
+                                            okText="Yes"
+                                            cancelText="No"
+                                            onOpenChange={() => {
+                                              setCombiTree(item);
+                                            }}
+                                          > */}
+                                  <div
+                                    className={visitStyles.close_icon}
+                                    style={{ background: "#c7f3c6" }}
+                                    onClick={() => {
+                                      setOpens(true);
+                                      setCombiTree([
+                                        { ...item, expanded: true },
+                                      ]);
+                                    }}
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={faSitemap}
+                                      style={{
+                                        size: 8,
+                                        color: "#088f39",
+                                      }}
+                                    />
+                                  </div>
+                                  {/* </Popconfirm> */}
+                                </div>
+                                <div className={styles.comboDetailsHeaders}>
+                                  <div>
+                                    <div
+                                      className={`${visitStyles.encounterAndSectionHeader}`}
+                                    >
+                                      {getProviderNameList(item?.providerName)}
+                                    </div>
+                                    <div
+                                      className={`${visitStyles.encounterAndSectionHeader}`}
+                                    >
+                                      {getEncounterDateBackgroundHcc(
+                                        item.encounterDateSplit,
+                                        item.diagnosisCode,
+                                        "COMBO"
+                                      )}
+                                    </div>
+                                    <div
+                                      className={`${visitStyles.encounterAndSectionHeader}`}
+                                    >
+                                      {getCaptureSectionBackgroundFile(
+                                        item?.capturedSections,
+                                        item?.encounterDate,
+                                        item?.diseaseName
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+              <div className="col-xl-7">
                 <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                   <div
                     style={{
@@ -5696,6 +8049,7 @@ const Hcc = ({ patientHccResult }) => {
           onOk={handleCloseModal}
           onCancel={handleCloseModal}
           width="70%"
+          footer={false}
           // height={400}
         >
           <div className="section-container">
@@ -5857,6 +8211,21 @@ const Hcc = ({ patientHccResult }) => {
           </div>
         </Modal>
       )}
+      {opens && combiTree[0]?.children?.length > 0 ? (
+        <Modal
+          title={fileModalHeader}
+          width="90%"
+          centered
+          open={opens}
+          onOk={() => setOpens(false)}
+          onCancel={() => setOpens(false)}
+          footer={null}
+        >
+          <CamboTree tree={combiTree} />
+        </Modal>
+      ) : (
+        opens && showErrorMessage()
+      )}
 
       <Offcanvas
         onHide={handleCloseModal}
@@ -6001,6 +8370,15 @@ const Hcc = ({ patientHccResult }) => {
                     value={inputValue?.diagnosisCodeQuery}
                     onChange={handleChange}
                   />
+                  {addValidCodeCheck == false ? (
+                    <span className={visitStyles.invalidHccCodeError}>
+                      Invalid Hcc Code
+                    </span>
+                  ) : addValidCodeCheck == true ? (
+                    <span className={visitStyles.validHccCodeError}>
+                      Valid Hcc Code
+                    </span>
+                  ) : null}
                 </div>
                 <div className="col-xl-12 mb-3">
                   <Form.Label>Provider name</Form.Label>
@@ -6011,6 +8389,11 @@ const Hcc = ({ patientHccResult }) => {
                     value={inputValue?.providerName}
                     onChange={handleChange}
                   />
+                  {formErr?.providername && (
+                    <div className="text-danger fs-12">
+                      {formErr?.providername}
+                    </div>
+                  )}
                 </div>
                 <div className="col-xl-12 mb-4">
                   <Form.Label>
@@ -6027,6 +8410,11 @@ const Hcc = ({ patientHccResult }) => {
                       </Option>
                     ))}
                   </Select>
+                  {formErr?.quickQuery && (
+                    <div className="text-danger fs-12">
+                      {formErr?.quickQuery}
+                    </div>
+                  )}
                 </div>
                 <div className="col-xl-12 mb-4">
                   <Form.Label>
@@ -6045,6 +8433,11 @@ const Hcc = ({ patientHccResult }) => {
                       </Option>
                     ))}
                   </Select>
+                  {formErr?.imagingQuery && (
+                    <div className="text-danger fs-12">
+                      {formErr?.imagingQuery}
+                    </div>
+                  )}
                 </div>
                 {/* <div className="col-xl-12 mb-4">
                   <Form.Label>
@@ -6074,6 +8467,11 @@ const Hcc = ({ patientHccResult }) => {
                       </Option>
                     ))}
                   </Select>
+                  {formErr?.queryReason && (
+                    <div className="text-danger fs-12">
+                      {formErr?.queryReason}
+                    </div>
+                  )}
                 </div>
                 <div className="col-xl-12 mb-4">
                   <Form.Label>
@@ -6103,6 +8501,11 @@ const Hcc = ({ patientHccResult }) => {
                     ></textarea>
                   </div>
                 ) : null}
+                {formErr?.description && (
+                  <div className="text-danger fs-12">
+                    {formErr?.description}
+                  </div>
+                )}
               </div>
 
               <div>
@@ -6246,7 +8649,7 @@ const Hcc = ({ patientHccResult }) => {
                 <div>
                   <span className={styles.meatQueried_head}>Subject</span>
                   <p className={styles.meatQueried_details}>
-                    We've pinpointed the following details that may pertain to
+                    We've identified the following details that may pertain to
                     records associated with{" "}
                     <b>{patientHccResult?.patientName}</b>.
                   </p>

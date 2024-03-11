@@ -4,6 +4,7 @@ import { loginConfirmedAction, Logout } from "../store/actions/AuthActions";
 import axiosApi from "../utility/axiosConfig";
 import ENDPOINTS from "../utility/enpoints";
 
+export const REFRESH_TOKEN = "REFRESH_TOKEN";
 export const CurrentUser = async (userId, router) => {
   const token = localStorage.getItem("token");
   try {
@@ -40,15 +41,20 @@ export function signUp(email, password) {
 export function login(email, password, code) {
   const postData = {
     username: email,
-    password: password,
-    code: code,
+    password: password?.pass,
+    passwordIv: password?.iv,
+    code: code?.pass,
+    codeIv: code?.iv,
   };
   const datas =
     code?.length > 0
       ? postData
       : {
           username: email,
-          password: password,
+          password: password?.pass,
+          passwordIv: password?.iv,
+          code: code?.pass,
+          codeIv: code?.iv,
         };
   return axiosApi.post(
     ENDPOINTS.apiEndoint + `securityservice/auth/login`,
@@ -156,11 +162,14 @@ export const enableMFA = async (username) => {
     console.log(Err);
   }
 };
-export const verifyCode = async (username, code) => {
+export const verifyCode = async (username, code, userpassword) => {
   const datas = {
     username: username,
-    code: code,
+    code: code?.pass,
+    codeIv: code?.iv,
     newMfa: true,
+    password: userpassword?.pass,
+    passwordIv: userpassword?.iv,
   };
   try {
     const response = await axios.post(
@@ -173,11 +182,11 @@ export const verifyCode = async (username, code) => {
   }
 };
 
-export const mfaValidation = async (username) => {
+export const mfaValidation = async (username, route, password) => {
   try {
     const response = await axios.post(
       `${ENDPOINTS?.apiEndoint}securityservice/auth/mfaValidation`,
-      { userName: username }
+      { userName: username, password: password?.pass, passwordIv: password?.iv }
     );
     return response;
   } catch (err) {
@@ -208,7 +217,7 @@ export const filters = async (field, username, pageQueue) => {
   const userRole = role.toUpperCase();
   const url = username
     ? `dbservice/patient/filter/field/list?username=${username}&field=${field}&role=${userRole}`
-    : `dbservice/patient/filter/field/list?field=${field}&role=${userRole}&page=${pageQueue}`;
+    : `dbservice/patient/filter/field/list?field=${field}&role=${userRole}&page=${pageQueue?pageQueue:0}`;
   try {
     const response = await axios.get(`${ENDPOINTS?.apiEndoint}${url}`, {
       headers: {
@@ -269,6 +278,34 @@ export const logoutAllDevice = async (email) => {
       }
     );
     return response;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const refreshToken = () => async (dispatch) => {
+  const refreshToken = localStorage.getItem("refreshToken");
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.post(
+      `${ENDPOINTS.apiEndoint}securityservice/token/refreshtoken`,
+      { refreshToken: refreshToken },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response) {
+      dispatch({
+        type: REFRESH_TOKEN,
+        payload: {
+          loading: false,
+          data: response.data,
+        },
+      });
+      localStorage.setItem("token", response?.data?.response);
+    }
   } catch (err) {
     console.log(err);
   }

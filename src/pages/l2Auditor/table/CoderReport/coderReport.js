@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Badge, Empty, Tooltip } from "antd";
+import { Badge, Empty, Tooltip, Popover } from "antd";
 import TableStyle from "../../../../components/table/table.module.css";
 import { SVGICON } from "../../../../jsx/constant/theme";
 import { Paginator } from "primereact/paginator";
@@ -9,10 +9,19 @@ import Footer from "../../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
 import {
   dateFormate,
+  renderUserPrfoileAvatar,
   sortFunction,
 } from "../../../../components/headerFilters/functions";
 import visitStyles from "../../../../styles/visitdata.module.css";
+import Pending from "../../../../../src/images/trackingImages/PendingTrack.png";
+
+import Hold from "../../../../../src/images/trackingImages/HoldTrack.png";
+import Completed from "../../../../../src/images/trackingImages/CompletedTrack.png";
+import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
+import Abort from "../../../../../src/images/trackingImages/Abort.png";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import { extractLatestData } from "../../../l2Auditor/auditing";
+import Image from "next/image";
 
 function CoderReport({
   setModal,
@@ -30,6 +39,7 @@ function CoderReport({
   sortOrder,
   setSortOrder,
   setSort,
+  l2Auditor,
 }) {
   const dispatch = useDispatch();
 
@@ -57,59 +67,94 @@ function CoderReport({
   };
 
   const processstatusBodyTemplate = (rowData) => {
+    const declinedDataFromAudit = extractLatestData(
+      rowData?.auditDeclinedNotes
+    );
+
+    const declinedDataFromDeclined = extractLatestData(rowData?.declineNotes);
+
+    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
+
     switch (rowData.processedStatus) {
       case "COMPLETED":
         return (
-          <div className="patient-status">
-            <span className={`badge processed-text`}>Completed</span>
-          </div>
+          <Popover placement="bottom" title="Status: COMPLETED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image
+                src={Completed}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
         );
 
       case "PENDING":
         return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
         );
 
       case "DECLINED":
         return (
-          <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>
-              Declined
-            </span>
-          </div>
+          <Popover
+            placement="bottom"
+            title="Status: DECLINED"
+            content={`Reason: ${declinedData ? declinedData : "---"}`}
+          >
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Declined} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
         );
 
       case "NOTCOMPUTED":
         return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
+          <Popover placement="bottom" title="Status: NOT COMPUTED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
         );
       case "COMPUTED":
         return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
         );
       case "HOLD":
         return (
-          <div className="patient-status">
-            <span className={`badge hold-text`}>Hold</span>
-          </div>
+          <Popover placement="bottom" title="Status: HOLD">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Hold} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
+        );
+      case "ABORTED_BY_CRON":
+        return (
+          <Popover placement="bottom" title="Status: ABORTED BY CRON">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Abort} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
         );
       case null:
         return (
-          <div className="patient-status">
-            <span className={`badge processing-text`}>Pending</span>
-          </div>
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
         );
     }
   };
 
   const getFlag = (data) => {
-    switch (data["2023"][0]?.flag) {
+    switch (data["2023"][data["2023"].length - 1]?.flag) {
       case "PATIENT_NAME_MISSED":
         return (
           <Tooltip title="PATIENT_NAME_MISSED" placement="bottom">
@@ -239,7 +284,7 @@ function CoderReport({
                     );
                   }}
                 >
-                  COMPLETE DATE{" "}
+                  COMPLETED DATE{" "}
                   {sortOrder === "ASC" ? (
                     <ArrowUpOutlined />
                   ) : (
@@ -247,7 +292,7 @@ function CoderReport({
                   )}
                 </th>
                 <th>COMMENTS </th>
-                <th className={TableStyle.rowAudited}>AUDITOR NAME </th>
+                <th className={TableStyle.rowAudited}>SUPERVISOR NAME </th>
                 <th>RAF SCORE </th>
                 <th>HCC </th>
                 <th>FLAG </th>
@@ -265,9 +310,15 @@ function CoderReport({
                         height: "20px",
                         flexhrink: "0",
                         borderRadius: "4px",
-                        backgroundColor: "pink",
                       }}
                       checked={selectAll}
+                      className={
+                        selectAll && l2Auditor
+                          ? TableStyle.customChecked3
+                          : selectAll
+                          ? TableStyle.customChecked2
+                          : ""
+                      }
                     />
                   </div>
                 </th>
@@ -328,21 +379,45 @@ function CoderReport({
                         </div>
                       </td>
                       <td className={TableStyle.childBorder}>
-                        <div className={TableStyle.rowAlignment}>
-                          {row?.auditedBy ? row?.auditedBy : "---"}
+                        <div
+                          className={TableStyle.rowAlignment}
+                          style={{ textAlign: "center" }}
+                        >
+                          {row.auditedByFirstName ||
+                          row.auditedByLastName ||
+                          row?.auditedByProfileImage ? (
+                            <>
+                              <span style={{ marginRight: "10px" }}>
+                                {" "}
+                                {renderUserPrfoileAvatar(
+                                  row.auditedByFirstName,
+                                  row.auditedByLastName,
+                                  row?.auditedByProfileImage,
+                                  "header"
+                                )}
+                              </span>
+                              <span>
+                                {row.auditedByFirstName} {row.auditedByLastName}
+                              </span>
+                            </>
+                          ) : (
+                            <div style={{ textAlign: "center" }}>---</div>
+                          )}
                         </div>
                       </td>
                       <td className={TableStyle.childBorder}>
                         {row?.rafSum ? row?.rafSum : "000"}
                       </td>
                       <td className={TableStyle.childBorder}>
-                        {row?.validDisease ? row?.validDisease : "000"}
+                        {row?.validDiseaseCount
+                          ? row?.validDiseaseCount
+                          : "000"}
                       </td>
                       <td className={TableStyle.childBorder}>
                         {row?.flag ? (
                           getFlag(row?.flag)
                         ) : (
-                          <div style={{ marginLeft: "-10px" }}>---</div>
+                          <div>{SVGICON?.emptyFlag}</div>
                         )}
                       </td>
                       <td className={TableStyle.childBorder}>
@@ -362,12 +437,7 @@ function CoderReport({
                             (selectedRow) =>
                               selectedRow.patientId === row.patientId
                           )}
-                          style={{
-                            width: "20px",
-                            height: "20px",
-                            flexhrink: "0",
-                            borderRadius: "4px",
-                          }}
+                          className={TableStyle.customChecked}
                         />
                       </td>
                     </>
@@ -423,7 +493,7 @@ function CoderReport({
                         {row?.flag ? (
                           getFlag(row?.flag)
                         ) : (
-                          <div style={{ marginLeft: "-10px" }}>---</div>
+                          <div>{SVGICON.emptyFlag}</div>
                         )}
                       </td>
                       <td className={TableStyle.childBorder}>
@@ -442,14 +512,7 @@ function CoderReport({
                             (selectedRow) =>
                               selectedRow.patientId === row.patientId
                           )}
-                          style={{
-                            width: "20px",
-                            height: "20px",
-                            flexhrink: "0",
-                            borderRadius: "4px",
-                            backgroundColor: "pink",
-                            cursor: "pointer",
-                          }}
+                          className={TableStyle.customChecked}
                         />
                       </td>
                     </>

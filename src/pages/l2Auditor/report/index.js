@@ -28,11 +28,11 @@ import TeamReport from "../table/TeamReport/teamReport";
 import { disableFutureDate } from "../../../components/headerFilters/functions";
 
 const statusOptions = [
+  { label: "All", value: "ALL" },
   { label: "Completed", value: "COMPLETED" },
   { label: "Pending", value: "PENDING" },
   { label: "Declined", value: "DECLINED" },
   { label: "Hold", value: "HOLD" },
-  { label: "All", value: "ALL" },
 ];
 const index = () => {
   const dispatch = useDispatch();
@@ -53,7 +53,7 @@ const index = () => {
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
   const rowsLength = useSelector((state) => state?.report?.row);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("AuditReport");
+  // const [activeTab, setActiveTab] = useState("AuditReport");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
   const [filteredTeam, setFilteredTeam] = useState([]);
@@ -97,9 +97,9 @@ const index = () => {
   });
 
   const performanceSearch = (value) => {
-    if (activeTab === "SentReport") {
+    if (reportActiveTab === "SentReport") {
       setSentSearch(value);
-    } else if (activeTab === "ReceivedReport") {
+    } else if (reportActiveTab === "ReceivedReport") {
       setReceivedSearch(value);
     } else {
       setCoderSearch(value);
@@ -200,17 +200,21 @@ const index = () => {
 
   const handleTabs = (name) => {
     setSelectedDates(null);
-    setActiveTab(name);
+    dispatch(
+      getActiveTab(
+        name
+      )
+    );
   };
   useEffect(() => {
     setIsLoading(false);
 
-    if (activeTab === "SentReport") {
+    if (reportActiveTab === "SentReport") {
       dispatch(
         getSentDetails(sentPageNo, startDate, endDate, sentSearch, sort)
       );
     }
-    if (activeTab === "ReceivedReport") {
+    if (reportActiveTab === "ReceivedReport") {
       dispatch(
         getReceivedDetails(
           receivedPageNo,
@@ -222,7 +226,7 @@ const index = () => {
       );
     }
 
-    if (activeTab === "AuditReport") {
+    if (!reportActiveTab || reportActiveTab === "AuditReport") {
       dispatch(
         getReportDetails(
           pageNo,
@@ -235,7 +239,7 @@ const index = () => {
       );
     }
 
-    if (activeTab === "TeamReport") {
+    if (reportActiveTab === "TeamReport") {
       dispatch(
         getTeamReportDetails(
           pageNo,
@@ -255,7 +259,7 @@ const index = () => {
     pageNo,
     sentPageNo,
     receivedPageNo,
-    activeTab,
+    reportActiveTab,
     ExportResponse,
     selectedCoderOpt,
     coderSearch,
@@ -269,7 +273,7 @@ const index = () => {
     receivedEndDate,
     receivedSearch,
     reportActiveTab,
-    sort
+    sort,
   ]);
 
   useEffect(() => {
@@ -307,7 +311,7 @@ const index = () => {
                                 />
                               </div>
                             </div>
-                            {activeTab === "AuditReport" ? (
+                            {!reportActiveTab || reportActiveTab  === "AuditReport" ? (
                               <div className="col-xl-2">
                                 <label>Select Status</label>
                                 <div class="form-group has-search">
@@ -317,7 +321,7 @@ const index = () => {
                                   className="form-control new-form-control"
                                   placeholder="Status"
                                 /> */}
-                                  {activeTab === "AuditReport" && (
+                                  {/* {reportActiveTab  === "AuditReport" && ( */}
                                     <Select
                                       onChange={(selectedOption) => {
                                         dosOnChange(selectedOption);
@@ -326,30 +330,39 @@ const index = () => {
                                       className="custom-react-select"
                                       isSearchable={false}
                                     />
-                                  )}
+                                  {/* )} */}
                                 </div>
                               </div>
                             ) : null}
 
                             <div className="col-xl-2">
-                              <label>Select Range</label>
+                              <label>
+                                {" "}
+                                {reportActiveTab === "ReceivedReport"
+                                  ? "Received Date"
+                                  : reportActiveTab === "SentReport"
+                                  ? "Sent Date"
+                                  : !reportActiveTab || reportActiveTab  === "AuditReport"
+                                  ? "Audit Date"
+                                  : "Select Date"}
+                              </label>
                               <div>
                                 <RangePicker
                                   value={selectedDates}
                                   onChange={
-                                    activeTab === "SentReport"
+                                    reportActiveTab === "SentReport"
                                       ? handleDatePickerChange
-                                      : activeTab === "ReceivedReport"
+                                      : reportActiveTab === "ReceivedReport"
                                       ? handleReceivedDatePicker
                                       : handleCoderPicker
                                   }
-                                  disabledDate={(current) => 
+                                  disabledDate={(current) =>
                                     disableFutureDate(current)
-                                  } 
+                                  }
                                 />
                               </div>
                             </div>
-                            {activeTab === "AuditReport" && (
+                            {reportActiveTab === "AuditReport" && (
                               <div className="col-xl-6">
                                 <div className="row flr">
                                   <button
@@ -420,8 +433,10 @@ const index = () => {
                             <div className="custom-tab-1">
                               <Tab.Container
                                 defaultActiveKey={
-                                  reportActiveTab
+                                  reportActiveTab === "ReceivedReport"
                                     ? "meatCriteria"
+                                    : reportActiveTab === "SentReport"
+                                    ? "comboDiseases"
                                     : "validDiseases"
                                 }
                               >
@@ -503,6 +518,7 @@ const index = () => {
                                       setSortOrder={setCoderSortOrder}
                                       sortOrder={coderSortOrder}
                                       setSort={setSort}
+                                      l2Auditor={true}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane id="my-posts" eventKey="team">
@@ -545,6 +561,9 @@ const index = () => {
                                       setSortOrder={setSentSortOrder}
                                       sortOrder={sentSortOrder}
                                       setSort={setSort}
+                                      receivedPageNo={sentPageNo}
+                                      receivedStartDate={startDate}
+                                      receivedEndDate={endDate}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane

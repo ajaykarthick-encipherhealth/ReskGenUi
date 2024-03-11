@@ -7,7 +7,7 @@ import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
 import { patientDetails } from "../../../store/actions/AuthActions";
-import { DatePicker, Spin, notification } from "antd";
+import { DatePicker, Spin, Popover, notification } from "antd";
 import { Paginator } from "primereact/paginator";
 import Footer from "../../../jsx/layouts/Footer";
 import PatientTable from "../table/PatientList/patientList";
@@ -15,7 +15,35 @@ import SpinnerDots from "../../../components/spinner";
 import HeaderFilters from "../../../components/headerFilters";
 import { getWorkListFilter } from "../../../store/actions/l2Action/AuditorAction";
 import { generateOptionsList } from "../../../components/headerFilters/functions";
+import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
+import NotAudited from "../../../../src/images/trackingImages/NotAuditedTrack.png";
+import AuditHold from "../../../../src/images/trackingImages/AuditHoldTrack.png";
+import ReAudit from "../../../../src/images/trackingImages/reAuditTrack.png";
+import AuditPending from "../../../../src/images/trackingImages/AuditPending.png";
+import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
+import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
+import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
+import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
+import AuditeDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
 
+export function extractLatestData(notes) {
+  let declinedData;
+
+  if (notes && typeof notes === "object") {
+    const entries = Object.entries(notes);
+
+    const latestKey = Math.max(...entries.map(([key, value]) => parseInt(key)));
+
+    entries.forEach(([key, value]) => {
+      if (parseInt(key) === latestKey) {
+        declinedData = value;
+      }
+    });
+  }
+
+  return declinedData;
+}
+import Image from "next/image";
 const bullets = [
   {
     color: "#377880",
@@ -37,15 +65,20 @@ const bullets = [
     color: "#CE9900",
     name: "AUDIT HOLD",
   },
+  {
+    color: "#C21807",
+    name: "AUDIT DECLINED",
+  },
 ];
 
 const statusOptions = [
   { label: "ALL", value: "" },
   { label: "AUDITED", value: "AUDITED" },
-  { label: "PENDING", value: "AUDIT_PENDING" },
+  { label: "AUDIT_PENDING", value: "AUDIT_PENDING" },
   { label: "RE AUDIT", value: "REAUDIT" },
-  { label: "DECLINED", value: "DECLINED" },
+  // { label: "DECLINED", value: "DECLINED" },
   { label: "AUDIT HOLD", value: "AUDITHOLD" },
+  { label: "AUDIT DECLINED", value: "AUDIT_DECLINED" },
 ];
 
 export default function Patient() {
@@ -118,7 +151,7 @@ export default function Patient() {
       patientSortOrder,
       selAllocatedBy,
       sort,
-      selCreatedBy
+      selCreatedBy,
     };
 
     dispatch(getWorkListFilter(datas));
@@ -133,7 +166,7 @@ export default function Patient() {
     completedEndDate,
     patientSortOrder,
     sort,
-    selCreatedBy
+    selCreatedBy,
   ]);
 
   useEffect(() => {
@@ -168,12 +201,14 @@ export default function Patient() {
           auditDueDate: res.auditDueDate,
           auditedDate: res.auditedDate,
           patientAllocatedFirstName: res.patientAllocatedFirstName,
-          patientAllocatedLastName:res.patientAllocatedLastName,
-          patientAllocatedProfileImage:res.patientAllocatedProfileImage,
-          auditAllocatedByFirstName:res.auditAllocatedByFirstName,
-          auditAllocatedByLastName:res.auditAllocatedByLastName,
-          auditAllocatedByProfileImage:res.auditAllocatedByProfileImage
-
+          patientAllocatedLastName: res.patientAllocatedLastName,
+          patientAllocatedProfileImage: res.patientAllocatedProfileImage,
+          auditAllocatedByFirstName: res.auditAllocatedByFirstName,
+          auditAllocatedByLastName: res.auditAllocatedByLastName,
+          auditAllocatedByProfileImage: res.auditAllocatedByProfileImage,
+          declinedNotes: res.declinedNotes,
+          auditDeclinedNotes: res.auditDeclinedNotes,
+          accuracyScore: res.accuracyScore,
         });
       });
       var newArray = [];
@@ -215,22 +250,30 @@ export default function Patient() {
   };
 
   const processstatusBodyTemplate = (rowData) => {
+    const declinedDataFromAudit = extractLatestData(
+      rowData?.auditDeclinedNotes
+    );
+
+    const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
+
+    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
+
     switch (rowData.auditedStatus) {
       case "AUDIT_PENDING":
         return (
-          <div className="patient-status">
-            <span
-              className={`badge Auditprocessing-text`}
-              style={{ color: "#E28213", background: "#FBE7D0 !important", fontSize:"9px !important" }}
-            >
-              Audit Pending
-            </span>
-          </div>
+          <Popover placement="bottom" title="Status: AUDIT PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image
+                src={AuditPending}
+                style={{ height: "25%", width: "25%" }}
+              />
+            </div>
+          </Popover>
         );
 
       case "DECLINED":
         return (
-          <div className="patient-status">
+          <div className="patient-status" style={{ textAlign: "center" }}>
             <span className={`badge failed-text`} style={{ color: "red" }}>
               Declined
             </span>
@@ -239,33 +282,66 @@ export default function Patient() {
 
       case "AUDITHOLD":
         return (
-          <div className="patient-status">
-            <span
-              className={`badge Audithold-text`}
-              style={{ color: "#CE9900" }}
-            >
-              Audit Hold
-            </span>
-          </div>
+          <Popover placement="bottom" title="Status: AUDIT HOLD">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={AuditHold} style={{ height: "25%", width: "25%" }} />
+            </div>
+          </Popover>
         );
       case "REAUDIT":
         return (
-          <div className="patient-status">
-            <span className={`badge reAudit-text`} style={{ color: "#964B00" }}>
-              Re Audit
-            </span>
-          </div>
+          <Popover placement="bottom" title="Status: REAUDIT">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={ReAudit} style={{ height: "25%", width: "25%" }} />
+            </div>
+          </Popover>
         );
       case "AUDITED":
         return (
-          <div className="patient-status">
-            <span className={`badge audited-text`} style={{ color: "#377880" }}>
-              Audited
-            </span>
+          <Popover placement="bottom" title="Status: AUDITED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image
+                src={AuditedTrack}
+                style={{ height: "25%", width: "25%" }}
+              />
+            </div>
+          </Popover>
+        );
+      case "AUDIT_DECLINED":
+        return (
+          <Popover
+            placement="bottom"
+            title="Status: AUDIT DECLINED"
+            content={`Reason: ${declinedData ? declinedData : "---"}`}
+          >
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image
+                src={AuditeDeclineTrack}
+                style={{ height: "25%", width: "25%" }}
+              />
+            </div>
+          </Popover>
+        );
+      case "AUDITED":
+        return (
+          <div className="patient-status" style={{ textAlign: "center" }}>
+            <Image src={AuditedTrack} style={{ height: "25%", width: "25%" }} />
           </div>
         );
+      case "NOT_AUDIT":
+        return (
+          <Popover placement="bottom" title=" Status: NOT AUDIT">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={NotAudited} style={{ height: "25%", width: "25%" }} />
+            </div>
+          </Popover>
+        );
       case null:
-        return <div className="patient-status">---</div>;
+        return (
+          <div className="patient-status" style={{ textAlign: "center" }}>
+            ---
+          </div>
+        );
     }
   };
 
@@ -330,17 +406,15 @@ export default function Patient() {
                             isAnotherPicker={true}
                             defaultAllocateTo={"All"}
                             // created by
-                            isCreatedBySelector={true}
-                            createdTolabel="L1 Auditor"
+                            isNextCreatedBySelector={true}
+                            createdTolabel="Reviewer"
                             optionKey="patientAllocated"
-                            createdByOptoons={
-                              generateOptionsList(filteredList)
-                            }
+                            createdByOptoons={generateOptionsList(filteredList)}
                             setSelCreatedBy={setSelCreatedBy}
                             addUser={false}
                             addUserForm={addPatientFormId}
                             bullets={bullets}
-                            isNextRow={true}
+                            // isNextRow={true}
                           />
                         </div>
                       </div>
@@ -375,7 +449,6 @@ export default function Patient() {
                                 </div>
                               </div>
                             </div>
-                          
                           </>
                         )}
                       </div>

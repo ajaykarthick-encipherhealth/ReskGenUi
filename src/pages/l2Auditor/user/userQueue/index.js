@@ -10,6 +10,18 @@ import HeaderFilters from "../../../../components/headerFilters";
 import SpinnerDots from "../../../../components/spinner";
 import Footer from "../../../../jsx/layouts/Footer";
 import UserQueue from "../../table/adminList/userQueue";
+import AuditeDeclineTrack from "../../../../../src/images/trackingImages/AuditDeclined.png";
+import AuditedTrack from "../../../../../src/images/trackingImages/AuditedTrack.png";
+import NotAudited from "../../../../../src/images/trackingImages/NotAuditedTrack.png";
+import AuditHold from "../../../../../src/images/trackingImages/AuditHoldTrack.png";
+import ReAudit from "../../../../../src/images/trackingImages/reAuditTrack.png";
+import Completed from "../../../../../src/images/trackingImages/CompletedTrack.png";
+import AuditPending from "../../../../../src/images/trackingImages/AuditPending.png";
+import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
+import { extractLatestData } from "../../../l2Auditor/auditing";
+
+import { Popover } from "antd";
+
 import {
   generateOptionsList,
   getFilteredOption,
@@ -18,7 +30,10 @@ import audited from "../../../../images/svg/audited.svg";
 import reAudit from "../../../../images/svg/reAudit.svg";
 import auditHold from "../../../../images/svg/auditHold.svg";
 import auditPending from "../../../../images/svg/auditPending.svg";
-import { getL2IndividualUser } from "../../../../store/actions/l2Action/userActions";
+import {
+  getCurrentUserDetails,
+  getL2IndividualUser,
+} from "../../../../store/actions/l2Action/userActions";
 import leftArrow from "../../../../images/svg/leftArrow.svg";
 import AuditHeaderFilters from "../../../../components/headerFilters/auditHeaderFilters";
 import userStyles from "./styles.module.css";
@@ -29,12 +44,28 @@ import {
 
 const bullets = [
   {
-    color: "rgba(209, 56, 56, 1)",
-    name: "Decline",
+    color: "#377880",
+    name: "AUDITED",
   },
   {
-    color: "rgba(58, 155, 148, 1)",
-    name: "Completed",
+    color: "#E28213",
+    name: "AUDIT PENDING",
+  },
+  {
+    color: "#964B00",
+    name: "RE AUDIT",
+  },
+  {
+    color: "red",
+    name: "DECLINED",
+  },
+  {
+    color: "#CE9900",
+    name: "AUDIT HOLD",
+  },
+  {
+    color: "#C21807",
+    name: "AUDIT DECLINED",
   },
 ];
 const badges = [
@@ -71,6 +102,7 @@ const AuditOptions = [
   { label: "AUDITHOLD", value: "AUDITHOLD" },
   { label: "REAUDIT", value: "REAUDIT" },
   { label: "AUDIT PENDING", value: "AUDIT_PENDING" },
+  { label: "AUDIT DECLINED", value: "AUDIT_DECLINED" },
 ];
 const index = () => {
   const dispatch = useDispatch();
@@ -78,7 +110,7 @@ const index = () => {
   const usersData = useSelector((state) => state.l2User?.userData);
   const sideMenu = useSelector((state) => state.sideMenu);
   const filteredList = useSelector((state) => state.auth.filterList);
-  const currentUser = useSelector((state) => state.auth.currentUserInfo);
+  const currentUser = useSelector((state) => state.l2User.currentUserDetails);
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [userListAll, setUserListAll] = useState([]);
@@ -148,7 +180,7 @@ const index = () => {
         sort,
       };
       dispatch(getL2IndividualUser(datas));
-      dispatch(getCurrentUser(uId));
+      dispatch(getCurrentUserDetails(uId));
     }
   }, [
     pageNo,
@@ -171,6 +203,92 @@ const index = () => {
     aduitDueEndDate,
     sort,
   ]);
+  const auditstatusBodyTemplate = (rowData) => {
+    const declinedDataFromAudit = extractLatestData(
+      rowData?.auditDeclinedNotes
+    );
+
+    const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
+
+    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
+
+    switch (rowData.processedStatus) {
+      case "COMPLETED":
+        return (
+          <Popover placement="bottom" title="Status: COMPLETED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image
+                src={Completed}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
+        );
+
+      case "PENDING":
+        return (
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
+        );
+
+      case "DECLINED":
+        return (
+          <Popover
+            placement="bottom"
+            title="Status: DECLINED"
+            content={`Reason: ${declinedData ? declinedData : "---"}`}
+          >
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Declined} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
+        );
+
+      case "NOTCOMPUTED":
+        return (
+          <Popover placement="bottom" title="Status: NOT COMPUTED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
+        );
+      case "COMPUTED":
+        return (
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
+        );
+      case "HOLD":
+        return (
+          <Popover placement="bottom" title="Status: HOLD">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Hold} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
+        );
+      case "ABORTED_BY_CRON":
+        return (
+          <Popover placement="bottom" title="Status: ABORTED BY CRON">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Abort} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
+        );
+      case null:
+        return (
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
+        );
+    }
+  };
 
   return (
     <>
@@ -182,10 +300,10 @@ const index = () => {
             <div className="row">
               <div
                 className={"col-xl-12 d-flex"}
-                style={{ margin: "0px 0 8px 0px", cursor: "pointer" }}
+                style={{ position:"relative",left:"40px",bottom:"10px", cursor: "pointer" }}
               >
                 <button
-                  style={{ width: "40px" }}
+                  style={{ width: "40px",height:"40px" }}
                   className={styles.filterBtn}
                   onClick={() => {
                     router.push("/l2Auditor/user");
@@ -201,7 +319,7 @@ const index = () => {
                     height={35}
                     style={{
                       borderRadius: "50%",
-                      marginRight: "10px",
+                      marginRight: "5px",
                     }}
                   />
                   <span>
@@ -247,7 +365,7 @@ const index = () => {
                         audisetSelAllocatedBy={setSelAuditAllocatedBy}
                         // audidefaultAllocatedBy={""}
                         // select status
-                        selectlabel="processed Status"
+                        selectlabel="Reviewed Status"
                         isSelector={true}
                         setSelectedOption={setSelectedOption}
                         selectOptions={statusOptions}
@@ -306,6 +424,7 @@ const index = () => {
                           userList={userListAll?.content}
                           sort={sort}
                           setSort={setSort}
+                          auditBodyTemplate={auditstatusBodyTemplate}
                         />
                       )}
                       <div>

@@ -7,6 +7,9 @@ import dayjs from "dayjs";
 import SpinnerDots from "../../spinner";
 import { dateFormate, sortFunction } from "../../headerFilters/functions";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
 
 function SentReportTable({
   details,
@@ -16,7 +19,13 @@ function SentReportTable({
   sortOrder,
   setSortOrder,
   setSort,
+  receivedPageNo,
+  receivedStartDate,
+  receivedEndDate,
+  isPhysician
 }) {
+  const dispatch=useDispatch()
+  const router=useRouter()
   const [selectedUsers, setSelectedUsers] = useState([]);
 
   const displayReceivedUsers = (list) => {
@@ -60,6 +69,21 @@ function SentReportTable({
       </table>
     </div>
   );
+
+  const handleReceiverReport = (row) => {
+    const info = {
+      reportUser: row,
+      receivedPageNo: receivedPageNo,
+      receivedStartDate: receivedStartDate,
+      receivedEndDate: receivedEndDate,
+    };
+    dispatch(selectedReport(info));
+    isPhysician?router?.push(
+      `/physician/report/individualreport?reportId=${row?._id}&sentreport=${true}`
+    ):router?.push(
+      `/admin/report/individualreport?reportId=${row?._id}&sentreport=${true}`
+    );
+  };
   return (
     <div className={TableStyle.classContaineer}>
       {!details?.data ? (
@@ -95,7 +119,9 @@ function SentReportTable({
                   const formattedDate = dateFormate(dayjs, row?.sendDate);
 
                   return (
-                    <tr key={index} style={{ height: "40px" }}>
+                    <tr key={index} style={{ height: "40px" }} 
+                    onClick={() => handleReceiverReport(row)}
+                    >
                       <td
                         style={{
                           borderTop: "  0.2px solid #e1e1e1",

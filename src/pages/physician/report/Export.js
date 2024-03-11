@@ -25,6 +25,7 @@ const Export = ({
   setSelectAll,
 }) => {
   const usersList = useSelector((state) => state.report?.usersList);
+  const list = useSelector((state) => state.report.row);
   const [selectedUser, setSelectedUser] = useState();
   const [search, setSearch] = useState("");
   const [display, setDisplay] = useState(false);
@@ -33,6 +34,8 @@ const Export = ({
   const [open, setOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState("");
   const [form] = Form.useForm();
+  const idList = list?.map((data) => data?.patientId);
+
   const checkBoxData = [
     {
       id: 1,
@@ -117,7 +120,6 @@ const Export = ({
 
   useEffect(() => {
     setCurrentUser(localStorage.getItem("userId"));
-
     var orgId = localStorage.getItem("orgId");
     dispatch(getUsersList(orgId, search));
   }, [search]);
@@ -141,7 +143,9 @@ const Export = ({
       (data) => data?.userName === value[0]
     );
     setSelectedList(filteredData?.map((item) => item?.userName));
-    setSelectedUser((prevUsers) => [{ ...prevUsers, user: filteredData,role:null }]);
+    setSelectedUser((prevUsers) => [
+      { ...prevUsers, user: filteredData, role: null },
+    ]);
     setOpen(false);
   };
 
@@ -155,14 +159,6 @@ const Export = ({
       })
     );
   };
-
-  const filteredOptions =
-    userList &&
-    options?.filter((option) => {
-      return !userList?.some((data) =>
-        data?.user?.some((info) => info?.userName?.includes(option?.value))
-      );
-    });
 
   const debouncedSearch = debounce((value) => {
     setSearch(value);
@@ -188,6 +184,7 @@ const Export = ({
       fileType: values.ReportTYpe,
       reportName: values.ReportName,
       userAndAccess: userAndAccess,
+      patientIds: idList,
     };
     dispatch(getExportDetails(data));
     form.resetFields();
@@ -211,6 +208,14 @@ const Export = ({
       )
     );
   };
+
+  const filteredOptions =
+    userList &&
+    options?.filter((option) => {
+      return !userList?.some((data) =>
+        data?.user?.some((info) => info?.userName?.includes(option?.value))
+      );
+    });
 
   return (
     <Modal
@@ -316,7 +321,7 @@ const Export = ({
         <div style={{ display: "flex", marginBottom: "20px" }}>
           <div style={{ width: "100%" }}>
             <Form.Item
-              label="Sender"
+              label="Send To"
               name="User"
               rules={[
                 {
@@ -341,13 +346,14 @@ const Export = ({
                   value={selectedList}
                   open={open}
                   onDropdownVisibleChange={(visible) => setOpen(visible)}
-                >
-                  {filteredOptions?.map((data) => (
+                  options={filteredOptions}
+                />
+                {/* {filteredOptions?.map((data) => (
                     <Option key={data?.value} value={data?.value}>
                       {data?.label}
                     </Option>
                   ))}
-                </Select>
+                </Select> */}
                 <Select
                   // mode="multiple"
                   placeholder="Please select"
