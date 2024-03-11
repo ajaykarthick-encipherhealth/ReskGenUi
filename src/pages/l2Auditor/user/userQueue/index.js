@@ -300,10 +300,10 @@ const index = () => {
             <div className="row">
               <div
                 className={"col-xl-12 d-flex"}
-                style={{ margin: "0px 0 8px 0px", cursor: "pointer" }}
+                style={{ position:"relative",left:"40px",bottom:"10px", cursor: "pointer" }}
               >
                 <button
-                  style={{ width: "40px" }}
+                  style={{ width: "40px",height:"40px" }}
                   className={styles.filterBtn}
                   onClick={() => {
                     router.push("/l2Auditor/user");
@@ -319,7 +319,7 @@ const index = () => {
                     height={35}
                     style={{
                       borderRadius: "50%",
-                      marginRight: "10px",
+                      marginRight: "5px",
                     }}
                   />
                   <span>

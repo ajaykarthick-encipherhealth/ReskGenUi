@@ -1250,7 +1250,7 @@
   border: none !important;
   box-shadow: none !important;
   border-radius: 6px;
-  width: 150px !important;
+  width: 170px !important;
 }
 .holdBtnHcc {
   font-size: 13px;
@@ -1259,7 +1259,7 @@
   border-radius: 6px !important;
   border: none !important;
   box-shadow: none !important;
-  width: 150px !important;
+  width: 170px !important;
 }
 .completedBtnHcc {
   font-size: 13px;
@@ -1268,7 +1268,7 @@
   border-radius: 6px !important;
   border: none !important;
   box-shadow: none !important;
-  width: 150px !important;
+  width: 170px !important;
 }
 
 .declinedBtnHcc {
@@ -1278,7 +1278,7 @@
   border-radius: 6px !important;
   border: none !important;
   box-shadow: none !important;
-  width: 150px !important;
+  width: 170px !important;
 }
 
 .name_missed path {
