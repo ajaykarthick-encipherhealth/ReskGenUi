@@ -89,6 +89,7 @@ export const AdminMenuList = [
     title: "Report",
     iconStyle: SVGICON.ReportIcon,
     to: "/admin/report",
+    childRoute: "/admin/report/individualreport",
   },
   {
     title: "Notification",
