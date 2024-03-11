@@ -47,22 +47,39 @@ const index = () => {
     setPassword(decodedParams?.password);
     const skipParam = decodedParams?.skipEntry;
     setSkip(skipParam);
-    const intervalId = setInterval(() => {
-      setSeconds((prevSeconds) => {
-        if (prevSeconds === 0) {
-          clearInterval(intervalId);
-        }
-        return Math.max(0, prevSeconds - 1);
-      });
-    }, 1000);
+    // const intervalId = setInterval(() => {
+    //   setSeconds((prevSeconds) => {
+    //     if (prevSeconds === 0) {
+    //       clearInterval(intervalId);
+    //     }
+    //     return Math.max(0, prevSeconds - 1);
+    //   });
+    // }, 1000);
 
-    return () => clearInterval(intervalId);
+    // return () => clearInterval(intervalId);
   }, []);
   useEffect(() => {
     if (seconds === 0) {
-      setInputValues(Array.from({ length: generateCodeArray().length }, () => ''));
+      setCode([]);
+      inputRefs[1].current.focus();
+      setSeconds(30);
     }
   }, [seconds]);
+
+  useEffect(() => {
+    if (code?.length > 0) {
+      const intervalId = setInterval(() => {
+        setSeconds((prevSeconds) => {
+          if (prevSeconds === 0) {
+            clearInterval(intervalId);
+          }
+          return Math.max(0, prevSeconds - 1);
+        });
+      }, 1000);
+      return () => clearInterval(intervalId);
+    }
+  }, [code]);
+
   return (
     <div className={styles.maindiv}>
       <section className={styles.innerdiv}>
@@ -85,6 +102,7 @@ const index = () => {
                     type="text"
                     maxLength="1"
                     pattern="[0-9]"
+                    value={code?.length > 0 ? code[index] : ""}
                     className={styles.codeInput}
                     onInput={(e) => handleInput(index, e)}
                     ref={inputRefs[index]}
