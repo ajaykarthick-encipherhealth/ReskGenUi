@@ -3588,8 +3588,6 @@ const Hcc = ({ patientHccResult }) => {
       var backColor = result[0]?.backgroundColor;
       var textColor = result[0]?.sectionColor;
       var value = ["09/19/2023"];
-      console.log(value);
-      console.log(encounterDateMatching);
       var sectionMapArr = (
         // <Popover
         //   content={
@@ -4625,13 +4623,13 @@ const Hcc = ({ patientHccResult }) => {
                                           )}
                                         </div>
                                         <div
-                                          className="col-xl-5 cr-pointer"
-                                          onClick={() =>
-                                            handleOpenModalCombinationCode(
-                                              item.diagnosisCodeCombo,
-                                              item.diseaseName
-                                            )
-                                          }
+                                          className="col-xl-5"
+                                          // onClick={() =>
+                                          //   handleOpenModalCombinationCode(
+                                          //     item.diagnosisCodeCombo,
+                                          //     item.diseaseName
+                                          //   )
+                                          // }
                                         >
                                           <span>{item.diseaseName}</span>
                                         </div>

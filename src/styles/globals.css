@@ -9021,18 +9021,16 @@ button:focus {
 }
 
 .header-logo {
-  padding-left: 55px;
+  padding-left: 30px;
   text-align: center;
-  width: 230px;
-
-  /* padding-top: 8px ; */
+  width: 170px;
 }
 
 .header-logo img {
   position: relative;
   width: 100%;
   height: 100%;
-  left: -20px;
+  right: 0px;
 }
 
 .deznav {

@@ -15,6 +15,7 @@ export const IMAGES = {
   loginPageLogo1: require("../../images/logo/CogentAIlogo22.png"),
   loginPageLogo2: require("../../images/logo/new_logo_2.png"),
   chatIcons: require("../../images/chat/chatIcon.png"),
+  headerLogo: require("../../images/logo/header_logo.png"),
 };
 export const SVGICON = {
   MainLogo: (
