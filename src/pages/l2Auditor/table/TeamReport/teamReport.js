@@ -430,7 +430,7 @@ function TeamReport({
                     </td>
                     <td
                       className={TableStyle.childBorder}
-                      style={{ textAlign: "center" }}
+                      style={{ textAlign: "left", paddingLeft: "50px" }}
                     >
                       {row.auditedByFirstName ||
                       row.auditedByLastName ||
@@ -449,7 +449,7 @@ function TeamReport({
                           </span>
                         </>
                       ) : (
-                        <div style={{ textAlign: "center" }}>---</div>
+                        <div style={{ paddingLeft: "50px" }}>---</div>
                       )}
                     </td>
 

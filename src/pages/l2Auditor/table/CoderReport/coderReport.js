@@ -379,7 +379,10 @@ function CoderReport({
                         </div>
                       </td>
                       <td className={TableStyle.childBorder}>
-                        <div className={TableStyle.rowAlignment}>
+                        <div
+                          className={TableStyle.rowAlignment}
+                          style={{ textAlign: "center" }}
+                        >
                           {row.auditedByFirstName ||
                           row.auditedByLastName ||
                           row?.auditedByProfileImage ? (
