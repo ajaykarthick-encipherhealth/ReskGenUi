@@ -69,6 +69,7 @@ export const AdminMenuList = [
     title: "Patients",
     iconStyle: SVGICON.patientListIcon,
     to: "/admin/patients",
+    childRoute: "/physician/patients/details",
   },
   {
     title: "File Processing",
