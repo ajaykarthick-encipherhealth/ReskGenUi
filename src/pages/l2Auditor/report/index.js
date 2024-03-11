@@ -53,7 +53,7 @@ const index = () => {
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
   const rowsLength = useSelector((state) => state?.report?.row);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("AuditReport");
+  // const [activeTab, setActiveTab] = useState("AuditReport");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
   const [filteredTeam, setFilteredTeam] = useState([]);
@@ -97,9 +97,9 @@ const index = () => {
   });
 
   const performanceSearch = (value) => {
-    if (activeTab === "SentReport") {
+    if (reportActiveTab === "SentReport") {
       setSentSearch(value);
-    } else if (activeTab === "ReceivedReport") {
+    } else if (reportActiveTab === "ReceivedReport") {
       setReceivedSearch(value);
     } else {
       setCoderSearch(value);
@@ -200,17 +200,21 @@ const index = () => {
 
   const handleTabs = (name) => {
     setSelectedDates(null);
-    setActiveTab(name);
+    dispatch(
+      getActiveTab(
+        name
+      )
+    );
   };
   useEffect(() => {
     setIsLoading(false);
 
-    if (activeTab === "SentReport") {
+    if (reportActiveTab === "SentReport") {
       dispatch(
         getSentDetails(sentPageNo, startDate, endDate, sentSearch, sort)
       );
     }
-    if (activeTab === "ReceivedReport") {
+    if (reportActiveTab === "ReceivedReport") {
       dispatch(
         getReceivedDetails(
           receivedPageNo,
@@ -222,7 +226,7 @@ const index = () => {
       );
     }
 
-    if (activeTab === "AuditReport") {
+    if (!reportActiveTab || reportActiveTab === "AuditReport") {
       dispatch(
         getReportDetails(
           pageNo,
@@ -235,7 +239,7 @@ const index = () => {
       );
     }
 
-    if (activeTab === "TeamReport") {
+    if (reportActiveTab === "TeamReport") {
       dispatch(
         getTeamReportDetails(
           pageNo,
@@ -255,7 +259,7 @@ const index = () => {
     pageNo,
     sentPageNo,
     receivedPageNo,
-    activeTab,
+    reportActiveTab,
     ExportResponse,
     selectedCoderOpt,
     coderSearch,
@@ -307,7 +311,7 @@ const index = () => {
                                 />
                               </div>
                             </div>
-                            {activeTab === "AuditReport" ? (
+                            {!reportActiveTab || reportActiveTab  === "AuditReport" ? (
                               <div className="col-xl-2">
                                 <label>Select Status</label>
                                 <div class="form-group has-search">
@@ -317,7 +321,7 @@ const index = () => {
                                   className="form-control new-form-control"
                                   placeholder="Status"
                                 /> */}
-                                  {activeTab === "AuditReport" && (
+                                  {/* {reportActiveTab  === "AuditReport" && ( */}
                                     <Select
                                       onChange={(selectedOption) => {
                                         dosOnChange(selectedOption);
@@ -326,7 +330,7 @@ const index = () => {
                                       className="custom-react-select"
                                       isSearchable={false}
                                     />
-                                  )}
+                                  {/* )} */}
                                 </div>
                               </div>
                             ) : null}
@@ -334,11 +338,11 @@ const index = () => {
                             <div className="col-xl-2">
                               <label>
                                 {" "}
-                                {activeTab === "ReceivedReport"
+                                {reportActiveTab === "ReceivedReport"
                                   ? "Received Date"
-                                  : activeTab === "SentReport"
+                                  : reportActiveTab === "SentReport"
                                   ? "Sent Date"
-                                  : activeTab === "AuditReport"
+                                  : !reportActiveTab || reportActiveTab  === "AuditReport"
                                   ? "Audit Date"
                                   : "Select Date"}
                               </label>
@@ -346,9 +350,9 @@ const index = () => {
                                 <RangePicker
                                   value={selectedDates}
                                   onChange={
-                                    activeTab === "SentReport"
+                                    reportActiveTab === "SentReport"
                                       ? handleDatePickerChange
-                                      : activeTab === "ReceivedReport"
+                                      : reportActiveTab === "ReceivedReport"
                                       ? handleReceivedDatePicker
                                       : handleCoderPicker
                                   }
@@ -358,7 +362,7 @@ const index = () => {
                                 />
                               </div>
                             </div>
-                            {activeTab === "AuditReport" && (
+                            {reportActiveTab === "AuditReport" && (
                               <div className="col-xl-6">
                                 <div className="row flr">
                                   <button
