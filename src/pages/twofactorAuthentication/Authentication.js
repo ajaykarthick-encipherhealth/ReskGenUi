@@ -18,7 +18,7 @@ export const generateCodeArray = () =>
 const index = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [seconds, setSeconds] = useState(10);
+  const [seconds, setSeconds] = useState(30);
   const [enableMFA, setEnableMFA] = useState(false);
   const [username, setUsername] = useState();
   const [skip, setSkip] = useState();
