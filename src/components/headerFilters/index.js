@@ -408,6 +408,7 @@ const HeaderFilters = ({
             {isAllocatedBySelector && (
               <div
                 className={defaultSize}
+                style={{position:"relative",left:atCorner && "-20px"}}
                 onClick={() => {
                   dispatch(
                     getFilters(selectorField ? selectorField : "allocatedBy")
@@ -453,6 +454,7 @@ const HeaderFilters = ({
             {isCreatedBySelector && (
               <div
                 className={defaultSize}
+                
                 onClick={() => {
                   dispatch(
                     getFilters(
