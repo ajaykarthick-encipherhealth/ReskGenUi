@@ -397,7 +397,7 @@ const Accuracy = () => {
                 <span className={styles.insideTitle}>
                   {accuracyDatas?.data?.response
                     ? `${Math.round(
-                        accuracyDatas?.data?.response[highlightIndex - 1]
+                        accuracyDatas?.data?.response[highlightIndex]
                           ?.averageScore
                       )}%`
                     : "0%"}
