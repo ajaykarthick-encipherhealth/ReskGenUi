@@ -58,8 +58,7 @@ const UserQueue = ({ userList, setSort, auditBodyTemplate }) => {
           style={{ fontSize: "10px" }}
         ></Badge.Ribbon>
       );
-    }
-    else if (data.auditedStatus === "AUDIT_DECLINED") {
+    } else if (data.auditedStatus === "AUDIT_DECLINED") {
       return (
         <Badge.Ribbon
           text="Audit Declined"
@@ -190,11 +189,15 @@ const UserQueue = ({ userList, setSort, auditBodyTemplate }) => {
           <td
             className={TableStyle.childBorder}
             style={{ textAlign: "center" }}
+            onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
             {data.auditAllocatedByFirstName ||
             data.auditAllocatedByLastName ||
             data?.auditAllocatedByProfileImage ? (
-              <div style={{ display: "flex", alignItems: "center" }}>
+              <div
+                style={{ display: "flex", alignItems: "center" }}
+                onClick={(e) => handleTableRowClick(e, data?.patientId)}
+              >
                 {" "}
                 <span style={{ marginRight: "10px" }}>
                   {" "}

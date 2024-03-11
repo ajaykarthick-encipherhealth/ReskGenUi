@@ -42,7 +42,7 @@ function PatientTable({
   totalElements,
   onPageChange,
   setSort,
-  getFilteApi
+  getFilteApi,
 }) {
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
@@ -165,6 +165,7 @@ function PatientTable({
           <td
             className={TableStyle.childBorder}
             style={{ textAlign: "center" }}
+            onClick={handleTableRowClick}
           >
             {data.allocatedByFirstName ||
             data.allocatedBylastName ||
@@ -206,7 +207,6 @@ function PatientTable({
                     getFilteApi
                   )
                 );
-                
               }}
               style={{ width: "80%" }}
             />

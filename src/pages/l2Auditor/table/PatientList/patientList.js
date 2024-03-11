@@ -115,6 +115,7 @@ function PatientTable({
           <td
             className={TableStyle.childBorder}
             style={{ textAlign: "center" }}
+            onClick={handleTableRowClick}
           >
             {data.patientAllocatedFirstName ||
             data.patientAllocatedLastName ||
@@ -177,6 +178,7 @@ function PatientTable({
           <td
             className={TableStyle.childBorder}
             style={{ textAlign: "center" }}
+            onClick={handleTableRowClick}
           >
             {data.auditAllocatedByFirstName ||
             data.auditAllocatedByLastName ||

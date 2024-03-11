@@ -84,12 +84,11 @@ function AddPatientListTable({
 
   const renderRows = () => {
     return patinetListAll?.length === 0 ? (
-      <tr >
-      <td colSpan="9">
-        <Empty />
-      </td>
-    </tr>
-
+      <tr>
+        <td colSpan="9">
+          <Empty />
+        </td>
+      </tr>
     ) : (
       <>
         {patinetListAll?.map((data, index) => (
@@ -120,6 +119,7 @@ function AddPatientListTable({
             <td
               className={TableStyle.childBorder}
               style={{ textAlign: "left" }}
+              onClick={handleTableRowClick}
             >
               {data.createdByFirstName ||
               data.createdByLastName ||
@@ -240,7 +240,7 @@ function AddPatientListTable({
 
         <tbody>
           {detailsContent.length <= 0 ? (
-            <tr >
+            <tr>
               <td colSpan="9">
                 <Empty />
               </td>
