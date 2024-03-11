@@ -167,7 +167,7 @@ const Header = () => {
     setLastName(currentUserInfo?.data?.response?.lastName);
     setDropdownContent(currentUserInfo?.data?.response?.role);
     var userId = currentUserInfo?.data?.response?.id;
-    const userName=currentUserInfo?.data?.response?.userName
+    const userName = currentUserInfo?.data?.response?.userName;
 
     dispatch(getNotificationList(userId));
     const sse = new EventSource(
@@ -361,7 +361,7 @@ const Header = () => {
         <nav className="navbar navbar-expand">
           <div className="collapse navbar-collapse justify-content-between">
             <div className="header-logo">
-              <Image src={IMAGES.loginPageLogo} />
+              <Image src={IMAGES.loginPageLogo1} />
             </div>
             {stateActive != "/physician/home" ? (
               <div>
@@ -524,10 +524,22 @@ const Header = () => {
                                       </div>
                                     </div>
                                     <div style={{ margin: "10px 0 0 5px" }}>
-                                      <span className="ms-2 header-name d-flex mr-3"style={{fontWeight:"700",fontSize:"16px"}}>
+                                      <span
+                                        className="ms-2 header-name d-flex mr-3"
+                                        style={{
+                                          fontWeight: "700",
+                                          fontSize: "16px",
+                                        }}
+                                      >
                                         {userName}
                                       </span>
-                                      <span className="text-[#4F4F4F] ms-2 subHeader-name d-flex mr-3 " style={{fontWeight:"500",fontSize:"6px"}}>
+                                      <span
+                                        className="text-[#4F4F4F] ms-2 subHeader-name d-flex mr-3 "
+                                        style={{
+                                          fontWeight: "500",
+                                          fontSize: "6px",
+                                        }}
+                                      >
                                         {currentRole == "reviewer"
                                           ? "Reviewer"
                                           : currentRole == "supervisor"
@@ -571,7 +583,10 @@ const Header = () => {
                           </Popover>
                         </div>
                         <div className="mx-15">
-                          <div className="text-dark-50 ms-2 header-name d-flex mr-3" style={{fontWeight:"700",fontSize:"16px"}}>
+                          <div
+                            className="text-dark-50 ms-2 header-name d-flex mr-3"
+                            style={{ fontWeight: "700", fontSize: "16px" }}
+                          >
                             {userName}
                           </div>
 
@@ -596,7 +611,10 @@ const Header = () => {
                               </Dropdown>
                             </span>
                           ) : (
-                            <span className="text-[#4F4F4F] ms-2 subHeader-name d-flex mr-3" style={{fontWeight:"500",fontSize:"6px"}}>
+                            <span
+                              className="text-[#4F4F4F] ms-2 subHeader-name d-flex mr-3"
+                              style={{ fontWeight: "500", fontSize: "6px" }}
+                            >
                               {currentRole == "reviewer"
                                 ? "Reviewer"
                                 : currentRole == "supervisor"
