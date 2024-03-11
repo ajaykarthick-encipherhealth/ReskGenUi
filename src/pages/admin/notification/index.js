@@ -236,7 +236,7 @@ const Notification = ({}) => {
                 justifyContent: "space-between",
               }}
             >
-              <div>
+              <div style={{ paddingTop: "8px" }}>
                 {/* <Checkbox.Group options={options} onChange={onChange} /> */}
                 <Radio.Group
                   options={radioOptions}
@@ -283,7 +283,7 @@ const Notification = ({}) => {
                     </div>
                   ) : null}
                   {selectCheckBox == "TEAM" ? (
-                    <div style={{ width: "515px" }}>
+                    <div style={{ width: "600px" }}>
                       <Select
                         className={`ant_select_form ${styles.ant_select_form}`}
                         placeholder="Please select"
