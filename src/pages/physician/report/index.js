@@ -226,7 +226,7 @@ const index = () => {
                             setReceivedEndDate={setReceivedEndDate}
                             setCoderStartDate={setCoderStartDate}
                             setCoderEndDate={setCoderEndDate}
-                            activeTab={reportActiveTab}
+                            activeTab={!reportActiveTab?"CoderReport":reportActiveTab}
                             rowsLength={rowsLength}
                             setIsModalVisible={setIsModalVisible}
                             selectedDates={selectedDates}
