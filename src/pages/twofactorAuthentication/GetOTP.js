@@ -41,9 +41,23 @@ const GetOTP = () => {
       setPassword(decodedParams?.password);
       dispatch(getQrCode(decodedParams?.username, router));
     }
-
-   
   }, []);
+
+  const handleBackspace = (index, e) => {
+    if (e.keyCode === 8 && index > 0) {
+      e.preventDefault();
+      setCode((prev) => {
+        const newCode = [...prev];
+        newCode[index - 1] = "";
+        if (newCode[0] == "") {
+          return [];
+        } else {
+          return newCode;
+        }
+      });
+      inputRefs[index - 1]?.current?.focus();
+    }
+  };
 
   return (
     <div className={styles.contentMainDIv}>
@@ -102,11 +116,13 @@ const GetOTP = () => {
             .map((index) => (
               <input
                 key={index}
-                type="text"
+                type="number"
                 maxLength="1"
                 pattern="[0-9]"
+                value={code?.length > 0 ? code[index - 1] : ""}
                 className={styles.codeInput}
                 onInput={(e) => handleInput(index, e)}
+                onKeyDown={(e) => handleBackspace(index, e)}
                 ref={inputRefs[index]}
               />
             ))}

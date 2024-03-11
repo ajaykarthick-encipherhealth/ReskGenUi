@@ -46,17 +46,7 @@ const index = () => {
     setUsername(decodedParams?.username);
     setPassword(decodedParams?.password);
     const skipParam = decodedParams?.skipEntry;
-    setSkip(skipParam);
-    // const intervalId = setInterval(() => {
-    //   setSeconds((prevSeconds) => {
-    //     if (prevSeconds === 0) {
-    //       clearInterval(intervalId);
-    //     }
-    //     return Math.max(0, prevSeconds - 1);
-    //   });
-    // }, 1000);
-
-    // return () => clearInterval(intervalId);
+    setSkip(skipParam);;
   }, []);
   useEffect(() => {
     if (seconds === 0) {
@@ -64,6 +54,7 @@ const index = () => {
       inputRefs[1].current.focus();
       setSeconds(30);
     }
+
   }, [seconds]);
 
   useEffect(() => {
@@ -78,8 +69,25 @@ const index = () => {
       }, 1000);
       return () => clearInterval(intervalId);
     }
+    if (code?.length === 0) {
+      setSeconds(30);
+    }
   }, [code]);
-
+  const handleBackspace = (index, e) => {
+    if (e.keyCode === 8 && index > 0) {
+      e.preventDefault();
+      setCode((prev) => {
+        const newCode = [...prev];
+        newCode[index - 1] = "";
+        if (newCode[0] == "") {
+          return [];
+        } else {
+          return newCode;
+        }
+      });
+      inputRefs[index - 1]?.current?.focus();
+    }
+  };
   return (
     <div className={styles.maindiv}>
       <section className={styles.innerdiv}>
@@ -99,12 +107,13 @@ const index = () => {
                 .map((index) => (
                   <input
                     key={index}
-                    type="text"
+                    type="number"
                     maxLength="1"
                     pattern="[0-9]"
-                    value={code?.length > 0 ? code[index] : ""}
+                    value={code?.length > 0 ? code[index - 1] : ""}
                     className={styles.codeInput}
                     onInput={(e) => handleInput(index, e)}
+                    onKeyDown={(e) => handleBackspace(index, e)}
                     ref={inputRefs[index]}
                   />
                 ))}

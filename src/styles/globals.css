@@ -14169,6 +14169,20 @@ span.meat-name-details2 {
 .p-organizationchart-node-content .p-organizationchart-selectable-node {
   margin: 0 20px;
 }
-/* .ant-progress-text {
+
+.antTextHide > .ant-progress-text {
   display: none !important;
-} */
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
