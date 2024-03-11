@@ -426,7 +426,7 @@ const Details = ({}) => {
         {result?.processedStatus != "COMPLETE" ? (
           <Menu.Item key="4" onClick={() => handleActionClick("COMPLETE")}>
             <div className="patient-status">
-              <span className={`badge processed-text`}>COMPLETE</span>
+              <span className={`badge processed-text`}>COMPLETED</span>
             </div>
           </Menu.Item>
         ) : null}
@@ -473,7 +473,7 @@ const Details = ({}) => {
         {result?.processedStatus != "COMPLETE" ? (
           <Menu.Item key="4" onClick={() => handleActionClick("COMPLETE")}>
             <div className="patient-status">
-              <span className={`badge processed-text`}>COMPLETE</span>
+              <span className={`badge processed-text`}>COMPLETED</span>
             </div>
           </Menu.Item>
         ) : null}
@@ -526,7 +526,7 @@ const Details = ({}) => {
         {result?.processedStatus != "COMPLETE" ? (
           <Menu.Item key="4" onClick={() => handleActionClick("COMPLETE")}>
             <div className="patient-status">
-              <span className={`badge processed-text`}>COMPLETE</span>
+              <span className={`badge processed-text`}>COMPLETED</span>
             </div>
           </Menu.Item>
         ) : null}
