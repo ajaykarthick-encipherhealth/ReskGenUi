@@ -201,6 +201,7 @@ const Hcc = ({ patientHccResult }) => {
               icon={faCircleUser}
               style={{
                 size: 10,
+                marginRight: "5px",
                 color:
                   res.authorizedProvider === true ? "#008000bf" : "#ff0000cc",
               }}
@@ -219,7 +220,7 @@ const Hcc = ({ patientHccResult }) => {
       var backColor = result[0]?.colors;
       var sectionMapArr = (
         <span className={`mt-2 text-start cr-pointer ${styles.encounterDate}`}>
-          <i>
+          <i style={{ marginRight: "5px" }}>
             <CalendarOutlined className={visitStyles.calenderIcon} />
           </i>
           {moment(res).format("MMM DD")}

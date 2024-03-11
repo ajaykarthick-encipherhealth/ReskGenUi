@@ -292,18 +292,18 @@ export const generateOptionsList = (items) => {
     //   !items?.loading &&
     //   items?.data?.data?.response?.length > 0
     // ) {
-      const options = [
-        { label: "All", value: "" },
-        ...items?.data?.data?.response?.map((item) => ({
-          label: (
-            <span>
-              {item?.firstName}&nbsp;&nbsp;{item?.lastName}
-            </span>
-          ),
-          value: item?.userName,
-        })),
-      ].filter(Boolean);
-      return options;
+    const options = [
+      { label: "All", value: "" },
+      ...items?.data?.data?.response?.map((item) => ({
+        label: (
+          <span>
+            {item?.firstName}&nbsp;&nbsp;{item?.lastName}
+          </span>
+        ),
+        value: item?.userName,
+      })),
+    ].filter(Boolean);
+    return options;
     // }
   }
 };

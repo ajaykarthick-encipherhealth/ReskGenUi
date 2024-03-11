@@ -14169,6 +14169,7 @@ span.meat-name-details2 {
 .p-organizationchart-node-content .p-organizationchart-selectable-node {
   margin: 0 20px;
 }
+
 .antTextHide > .ant-progress-text {
   display: none !important;
 }
@@ -14183,3 +14184,5 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+

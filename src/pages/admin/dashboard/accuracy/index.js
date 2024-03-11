@@ -187,6 +187,14 @@ const Accuracy = () => {
       year == currentDate.getFullYear() &&
       month == currentDate.getMonth() + 1
     ) {
+      if (currentBtn == "Daily") {
+         return param.map((item, index) => index < new Date().getDate() && item)
+      } else if (currentBtn == "Weekly") {
+        return param.map((item, index) => index < getDateWeek(currentDate) && item);
+      } else if(currentBtn == "Monthly"){
+        return param.map((item, index) => index < new Date().getMonth()+1 && item);
+      }
+
       return param.map((item, index) => index < new Date().getDate() && item);
     } else {
       return false;
