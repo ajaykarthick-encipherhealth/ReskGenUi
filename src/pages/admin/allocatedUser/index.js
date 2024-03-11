@@ -33,6 +33,7 @@ import Selector from "../../../components/selector";
 const { RangePicker } = DatePicker;
 
 const statusOption = [
+  { value: "", label: "ALL" },
   { value: "URGENT", label: "URGENT" },
   { value: "HIGH", label: "HIGH" },
   { value: "NORMAL", label: "NORMAL" },
@@ -510,7 +511,7 @@ export default function Patient() {
                                     setSelectedOption={setSelectedOption}
                                     selectOptions={statusOption}
                                     defaultSelectValue1={""}
-                                    isClose={true}
+                                    // isClose={true}
                                   />
                                 </div>
                               </div>
