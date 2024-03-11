@@ -217,7 +217,9 @@ export const filters = async (field, username, pageQueue) => {
   const userRole = role.toUpperCase();
   const url = username
     ? `dbservice/patient/filter/field/list?username=${username}&field=${field}&role=${userRole}`
-    : `dbservice/patient/filter/field/list?field=${field}&role=${userRole}&page=${pageQueue?pageQueue:0}`;
+    : `dbservice/patient/filter/field/list?field=${field}&role=${userRole}&page=${
+        pageQueue ? pageQueue : 0
+      }`;
   try {
     const response = await axios.get(`${ENDPOINTS?.apiEndoint}${url}`, {
       headers: {
@@ -306,6 +308,25 @@ export const refreshToken = () => async (dispatch) => {
       });
       localStorage.setItem("token", response?.data?.response);
     }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const submitLogin = async (email, password) => {
+  const datas = {
+    username: email,
+    // newMfa: true,
+    password: password?.pass,
+    passwordIv: password?.iv,
+  };
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.post(
+      `${ENDPOINTS?.apiEndoint}securityservice/auth/login`,
+      datas
+    );
+    return response;
   } catch (err) {
     console.log(err);
   }
