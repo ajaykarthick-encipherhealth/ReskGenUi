@@ -185,6 +185,10 @@ const Notification = ({}) => {
     setSelectedListTeam(options);
   };
 
+  const clearSelectAll = () => {
+    setSelectedList([]);
+  };
+
   useEffect(() => {
     getTeamUser();
   }, []);
@@ -245,7 +249,7 @@ const Notification = ({}) => {
               <div>
                 <div>
                   {selectCheckBox == "CUSTOM" ? (
-                    <div style={{ width: "515px" }}>
+                    <div className="d-flex" style={{ width: "600px" }}>
                       <Select
                         className={`ant_select_form ${styles.ant_select_form}`}
                         mode="multiple"
@@ -266,6 +270,16 @@ const Notification = ({}) => {
                           </Option>
                         ))}
                       </Select>
+                      {selectedList?.length > 1 && (
+                        <div>
+                          <Button
+                            className={styles.selectClearBtn}
+                            onClick={() => clearSelectAll()}
+                          >
+                            Clear
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   ) : null}
                   {selectCheckBox == "TEAM" ? (
