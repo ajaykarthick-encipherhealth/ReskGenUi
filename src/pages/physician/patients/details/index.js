@@ -385,7 +385,6 @@ const Details = ({}) => {
       },
     ];
     setSelectedRowsId(data);
-    console.log(result?.processedStatus)
     const menu = (
       <Menu>
         {result?.processedStatus != "HOLD" ? (
