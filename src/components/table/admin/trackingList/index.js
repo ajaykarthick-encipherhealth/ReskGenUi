@@ -81,7 +81,7 @@ function TrackingTable({
         <td className={TableStyle.firstTdBorder} onClick={handleTableRowClick}>
           <div> {data.patientId} </div> <div> {data.patientName} </div>
         </td>
-        <td className={TableStyle.childBorder} style={{ textAlign: "left"}}>
+        <td className={TableStyle.childBorder} style={{ textAlign: "left"}} onClick={handleTableRowClick}>
           {data.allocatedByFirstName ||
           data.allocatedByLastName ||
           data.allocatedByProfileImage ? (
@@ -104,7 +104,7 @@ function TrackingTable({
             <div style={{ textAlign: "center" }}>---</div>
           )}
         </td>
-        <td className={TableStyle.childBorder} style={{ textAlign: "left" }}>
+        <td className={TableStyle.childBorder} style={{ textAlign: "left" }} onClick={handleTableRowClick}>
           {data.auditAllocatedByFirstName ||
           data.auditAllocatedByLastName ||
           data.auditAllocatedByProfileImage ? (
@@ -128,7 +128,7 @@ function TrackingTable({
           )}
         </td>
 
-        <td className={TableStyle.childBorder} style={{ textAlign: "left" }}>
+        <td className={TableStyle.childBorder} style={{ textAlign: "left" }} onClick={handleTableRowClick}>
           {data.auditedAssignedFirstName ||
           data.auditedAssignedLastName ||
           data.auditedAssignedProfileImage ? (
@@ -152,7 +152,7 @@ function TrackingTable({
           )}
         </td>
 
-        <td className={TableStyle.childBorder} style={{ textAlign: "left" }}>
+        <td className={TableStyle.childBorder} style={{ textAlign: "left" }} onClick={handleTableRowClick}>
           {data.patientAllocatedFirstName ||
           data.patientAllocatedLastName ||
           data.patientAllocatedProfileImage ? (

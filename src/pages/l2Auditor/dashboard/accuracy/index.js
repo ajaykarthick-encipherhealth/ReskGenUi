@@ -213,7 +213,7 @@ const Accuracy = () => {
       {
         // primary yAxis (right)
         title: {
-          text: "Team Quality",
+          text: "Quality",
           style: {
             color: "#2dafff",
           },
@@ -232,7 +232,7 @@ const Accuracy = () => {
       {
         // Secondary yAxis (right)
         title: {
-          text: "Team Changes Count",
+          text: "Changes Count",
           style: {
             color: "#0b59f1",
           },
