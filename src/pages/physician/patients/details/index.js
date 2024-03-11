@@ -539,7 +539,7 @@ const Details = ({}) => {
     );
     const menu4 = (
       <Menu>
-        {!patienIdDetails?.auditedStatus && (
+        {result?.allocatedOn == null && (
           <Menu.Item
             key="4"
             onClick={() => {
