@@ -7,7 +7,11 @@ import { selectedRow } from "../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
 import Footer from "../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
-import { dateFormate, sortFunction } from "../../headerFilters/functions";
+import {
+  dateFormate,
+  renderUserPrfoileAvatar,
+  sortFunction,
+} from "../../headerFilters/functions";
 import visitStyles from "../../../styles/visitdata.module.css";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
@@ -80,7 +84,10 @@ function CoderReport({
         return (
           <Popover placement="bottom" title="Status: COMPLETED">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Completed} style={{ height: "30px", width: "30px" }} />
+              <Image
+                src={Completed}
+                style={{ height: "30px", width: "30px" }}
+              />
             </div>
           </Popover>
         );
@@ -369,10 +376,33 @@ function CoderReport({
                             : SVGICON.emptyComments}
                         </div>
                       </td>
-                      <td className={TableStyle.childBorder}>
-                        <div className={TableStyle.rowAlignment}>
-                          {row?.auditedBy ? row?.auditedBy : "---"}
-                        </div>
+                      <td
+                        className={TableStyle.childBorder}
+                        style={{ textAlign: "left", paddingLeft: "110px" }}
+                      >
+                        {row.auditedByFirstName ||
+                        row.auditedByLastName ||
+                        row.auditedByProfileImage ? (
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            {" "}
+                            <span style={{ marginRight: "10px" }}>
+                              {" "}
+                              {renderUserPrfoileAvatar(
+                                row.auditedByFirstName,
+                                row.auditedByLastName,
+                                row.auditedByProfileImage,
+                                "header"
+                              )}
+                            </span>
+                            <span>
+                              {row.auditedByFirstName} {row.auditedByLastName}
+                            </span>
+                          </div>
+                        ) : (
+                          <div style={{ textAlign: "center" }}>---</div>
+                        )}
                       </td>
                       <td className={TableStyle.childBorder}>
                         {row?.rafSum ? row?.rafSum : "000"}
@@ -443,10 +473,33 @@ function CoderReport({
                             : SVGICON.emptyComments}
                         </div>
                       </td>
-                      <td className={TableStyle.childBorder}>
-                        <div className={TableStyle.rowAlignment}>
-                          {row?.auditedBy ? row?.auditedBy : "---"}
-                        </div>
+                      <td
+                        className={TableStyle.childBorder}
+                        style={{ textAlign: "left", paddingLeft: "110px" }}
+                      >
+                        {row.auditedByFirstName ||
+                        row.auditedByLastName ||
+                        row.auditedByProfileImage ? (
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            {" "}
+                            <span style={{ marginRight: "10px" }}>
+                              {" "}
+                              {renderUserPrfoileAvatar(
+                                row.auditedByFirstName,
+                                row.auditedByLastName,
+                                row.auditedByProfileImage,
+                                "header"
+                              )}
+                            </span>
+                            <span>
+                              {row.auditedByFirstName} {row.auditedByLastName}
+                            </span>
+                          </div>
+                        ) : (
+                          <div style={{ paddingLeft: "70px" }}>---</div>
+                        )}
                       </td>
                       <td className={TableStyle.childBorder}>
                         {row?.rafSum ? row?.rafSum : "000"}{" "}
