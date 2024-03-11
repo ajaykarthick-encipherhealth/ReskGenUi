@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Empty } from "antd";
+import { Empty, Popover } from "antd";
 import visitStyles from "../../../../../../styles/visitdata.module.css";
 import style from "./styles.module.css";
 import TableStyle from "../../../../../../components/table/table.module.css";
@@ -60,7 +60,11 @@ const RafScore = ({ rafScoreList }) => {
                           }
                         >
                           <div className="col-xl-3"> {item.dx_name}</div>
-                          <div className="col-xl-9">{item.dx_desc}</div>
+                          <div className={`col-xl-9 ${style.rafDescription}`}>
+                            <Popover title={item.dx_desc}>
+                              {item.dx_desc}{" "}
+                            </Popover>
+                          </div>
                         </div>
                       </div>
                     ))}

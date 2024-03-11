@@ -151,11 +151,11 @@ export const L2AuditorMenuList = [
 ];
 
 export const ProviderMenuList = [
-  {
-    title: "Dashboard",
-    iconStyle: SVGICON.dashboardIcon,
-    to: "/provider/dashboard",
-  },
+  // {
+  //   title: "Dashboard",
+  //   iconStyle: SVGICON.dashboardIcon,
+  //   to: "/provider/dashboard",
+  // },
   {
     title: "Comparison",
     iconStyle: SVGICON.adminUser,
@@ -164,6 +164,6 @@ export const ProviderMenuList = [
   {
     title: "Query",
     iconStyle: SVGICON.patientListIcon,
-    to: "/l2Auditor/auditing",
+    to: "/provider/query",
   },
 ];
