@@ -361,7 +361,7 @@ const Header = () => {
         <nav className="navbar navbar-expand">
           <div className="collapse navbar-collapse justify-content-between">
             <div className="header-logo">
-              <Image src={IMAGES.loginPageLogo1} />
+              <Image src={IMAGES.headerLogo} />
             </div>
             {stateActive != "/physician/home" ? (
               <div>
