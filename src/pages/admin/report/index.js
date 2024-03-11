@@ -23,6 +23,7 @@ import {
 import { getSelectUserList } from "../../../store/actions/adminAction/DashboardAction";
 import SpinnerDots from "../../../components/spinner";
 import HeaderFilters from "../../../components/headerFilters";
+import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -142,19 +143,24 @@ const index = () => {
 
   const handleTabs = (name) => {
     setSelectedDates(null);
-    setActiveTab(name);
+    // setActiveTab(name);
+    dispatch(
+      getActiveTab(
+        name
+      )
+    );
   };
   useEffect(() => {
     dispatch(getSelectUserList(selectMemberType));
   }, [selectMemberType]);
   useEffect(() => {
     setIsLoading(false);
-    if (activeTab === "SentReport") {
+    if (reportActiveTab === "SentReport") {
       dispatch(
         getSentDetails(sentPageNo, startDate, endDate, sentSearch, sort)
       );
     }
-    if (activeTab === "ReceivedReport") {
+    if (reportActiveTab === "ReceivedReport") {
       dispatch(
         getReceivedDetails(
           receivedPageNo,
@@ -166,7 +172,7 @@ const index = () => {
       );
     }
 
-    if (activeTab === "CoderReport") {
+    if (!reportActiveTab || reportActiveTab === "CoderReport") {
       dispatch(
         getReportDetails(
           pageNo,
@@ -174,9 +180,9 @@ const index = () => {
           coderEndDate,
           coderSearch,
           selectedCoderOpt,
-          selectedCoderOptReport ? selectedCoderOptReport : "",
+          selectedCoderOptReport ? selectedCoderOptReport?.value : "",
           sort,
-          selectManager ? selectManager : ""
+          (selectManager && selectedCoderOptReport?.value !== "All") ? selectManager: ""
         )
       );
     }
@@ -187,7 +193,7 @@ const index = () => {
     pageNo,
     sentPageNo,
     receivedPageNo,
-    activeTab,
+    reportActiveTab,
     ExportResponse,
     selectedCoderOpt,
     selectedCoderOptReport,
@@ -214,9 +220,10 @@ const index = () => {
     if (selectedCoderOptReport && !select) {
       dispatch(
         getSelectUserList(
-          selectedCoderOptReport === null ? " " : selectedCoderOptReport
+          selectedCoderOptReport === null &&selectedCoderOptReport?.value==='All'  ? " " : selectedCoderOptReport?.value
         )
       );
+      
     }
   }, [selectedCoderOptReport]);
   const options = [
@@ -231,10 +238,15 @@ const index = () => {
   }));
 
   useEffect(() => {
-    if (activeTabs) {
-      setActiveTab(activeTabs);
+    if (reportActiveTab) {
+      dispatch(
+        getActiveTab(
+          reportActiveTab
+        )
+      );
     }
-  }, [activeTabs]);
+  }, [reportActiveTab]);
+
   return (
     <>
       <Header />
@@ -260,7 +272,7 @@ const index = () => {
                             // selector
                             selectlabel="Select Status"
                             isSelector={
-                              activeTab === "CoderReport" ? true : false
+                              !reportActiveTab || reportActiveTab === "CoderReport" ? true : false
                             }
                             setSelectedOption={setSelectedCoderOpt}
                             selectOptions={statusOptions}
@@ -268,11 +280,12 @@ const index = () => {
                             // selector
 
                             selectlabel2="Select User Role"
-                            selectOptions2={
-                              activeTab === "CoderReport" ? options : null
+                            selectReportOptions={
+                              !reportActiveTab || reportActiveTab === "CoderReport" ? options : null
                             }
                             setSelectedOption2={setSelectedCoderOptReport}
-                            defaultSelectValue2="All"
+                            defaultSelectValue2={selectedCoderOptReport}
+
                             // selector3
                             isSelector3={
                               selectUserList?.data?.response?.length
@@ -287,9 +300,9 @@ const index = () => {
                             // rangepicker
                             isRangePicker={true}
                             pickerlabel={
-                              activeTab === "ReceivedReport"
+                              reportActiveTab === "ReceivedReport"
                                 ? "Received Date"
-                                : activeTab === "SentReport"
+                                : reportActiveTab === "SentReport"
                                 ? "Sent Date"
                                 : "Select Date"
                             }
@@ -299,7 +312,7 @@ const index = () => {
                             setReceivedEndDate={setReceivedEndDate}
                             setCoderStartDate={setCoderStartDate}
                             setCoderEndDate={setCoderEndDate}
-                            activeTab={activeTab}
+                            activeTab={reportActiveTab}
                             rowsLength={rowsLength}
                             setIsModalVisible={setIsModalVisible}
                             selectedDates={selectedDates}
