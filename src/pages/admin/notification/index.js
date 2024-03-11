@@ -257,6 +257,7 @@ const Notification = ({}) => {
                         onDropdownVisibleChange={(visible) =>
                           setOpenDropdown(visible)
                         }
+                        maxTagCount={3}
                         style={{ height: "42px", width: "515px" }}
                       >
                         {filteredOptions?.map((data) => (
