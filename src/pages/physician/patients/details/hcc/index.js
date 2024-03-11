@@ -4622,15 +4622,7 @@ const Hcc = ({ patientHccResult }) => {
                                               )
                                           )}
                                         </div>
-                                        <div
-                                          className="col-xl-5"
-                                          // onClick={() =>
-                                          //   handleOpenModalCombinationCode(
-                                          //     item.diagnosisCodeCombo,
-                                          //     item.diseaseName
-                                          //   )
-                                          // }
-                                        >
+                                        <div className="col-xl-5">
                                           <span>{item.diseaseName}</span>
                                         </div>
                                         <div className="col-xl-1">
@@ -4799,15 +4791,7 @@ const Hcc = ({ patientHccResult }) => {
                                               {item.addOnCode}
                                             </span>
                                           </div>
-                                          <div
-                                            className="col-xl-5 cr-pointer"
-                                            onClick={() =>
-                                              handleOpenModalCombinationCode(
-                                                item.diagnosisCodeCombo,
-                                                item.diseaseName
-                                              )
-                                            }
-                                          >
+                                          <div className="col-xl-5">
                                             <span>{item.diseaseName}</span>
                                           </div>
                                           <div className="col-xl-1 comboclose">
@@ -7932,15 +7916,7 @@ const Hcc = ({ patientHccResult }) => {
                                       )
                                   )}
                                 </div>
-                                <div
-                                  className="col-xl-5 cr-pointer"
-                                  onClick={() =>
-                                    handleOpenModalCombinationCode(
-                                      item.diagnosisCodeCombo,
-                                      item.diseaseName
-                                    )
-                                  }
-                                >
+                                <div className="col-xl-5">
                                   <span>{item.diseaseName}</span>
                                 </div>
                                 <div className="col-xl-1">
