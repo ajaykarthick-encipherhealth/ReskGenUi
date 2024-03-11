@@ -3396,6 +3396,7 @@ const Hcc = ({ patientHccResult }) => {
     { value: "Discography", label: "Discography" },
     { value: "Lymphangiography", label: "Lymphangiography" },
     { value: "Intravenous Pyelogram", label: "Intravenous Pyelogram" },
+    { value: "OTHERS", label: "OTHERS" },
   ];
   const dosListMeat = [
     { value: "08/01/2023", label: "08/01/2023" },
@@ -3443,20 +3444,20 @@ const Hcc = ({ patientHccResult }) => {
           description: inputValue.description,
         };
         var result = await submitMeatQuery(dataformat);
-        // if (result.status == "SUCCESS") {
-        //   setMeatQueryResult(result.response);
-        //   inputValue.queryComment = result.response.queryComment;
-        //   setIsMeatQueryModal(false);
-        //   notification.success({
-        //     message: result.message,
-        //     placement: "top",
-        //     duration: 1,
-        //   });
-        //   setMeatQueriedDetailsModal(true);
-        //   setMeatQueriedDetailsShow(true);
-        //   var result = await getMeatQueryList(selectedDosValue, localPatientId);
-        //   setMeatQueryList(result.response);
-        // }
+        if (result.status == "SUCCESS") {
+          setMeatQueryResult(result.response);
+          inputValue.queryComment = result.response.queryComment;
+          setIsMeatQueryModal(false);
+          notification.success({
+            message: result.message,
+            placement: "top",
+            duration: 1,
+          });
+          setMeatQueriedDetailsModal(true);
+          setMeatQueriedDetailsShow(true);
+          var result = await getMeatQueryList(selectedDosValue, localPatientId);
+          setMeatQueryList(result.response);
+        }
       }
     }
   };
@@ -6523,13 +6524,6 @@ const Hcc = ({ patientHccResult }) => {
                                             <div className="col-xl-2 d-grid">
                                               <span className="meat-name-details">
                                                 {item.createdBy}
-                                              </span>
-                                              <span
-                                                className={
-                                                  styles.l1auditorBadge
-                                                }
-                                              >
-                                                Reviewer
                                               </span>
                                             </div>
                                             <div className="col-xl-2 d-grid">
