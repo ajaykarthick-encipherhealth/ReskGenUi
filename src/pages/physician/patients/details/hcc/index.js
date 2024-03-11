@@ -599,12 +599,13 @@ const Hcc = ({ patientHccResult }) => {
         });
 
         if (result?.insulinDisease) {
+          const encounterDatearray = result?.insulinDisease?.dos?.split(",");
           validDisArray.push({
             actualDescription: result?.insulinDisease?.description,
             capturedSections: [result?.insulinDisease?.section],
             diagnosisCode: result?.insulinDisease?.code,
             encounterDate: result?.insulinDisease?.dos,
-            encounterDateSplit: [result?.insulinDisease?.dos],
+            encounterDateSplit: encounterDatearray,
             getPlace: "Insulin",
             isHccValid: true,
             defaultPosition: null,
@@ -809,6 +810,7 @@ const Hcc = ({ patientHccResult }) => {
         for (var key in validDis) {
           validDiseasesArray.push({ name: validDis[key] });
         }
+
         setNewValidDiseaseList(validDisArray);
         setInNewValidDiseaseList(invalidDiseaseNewRes);
         setNewUnMatchHccList(suggestListAll);
