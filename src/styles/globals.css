@@ -9023,13 +9023,15 @@ button:focus {
 .header-logo {
   padding-left: 55px;
   text-align: center;
+  width: 230px;
+
   /* padding-top: 8px ; */
 }
 
 .header-logo img {
   position: relative;
   width: 100%;
-  height: 54px;
+  height: 100%;
   left: -20px;
 }
 

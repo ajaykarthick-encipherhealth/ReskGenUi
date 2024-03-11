@@ -369,7 +369,7 @@ const UserQueue = ({ userList, setSort, auditBodyTemplate }) => {
             </th>
             {/* <th>ALLOCATED BY</th> */}
             <th style={{ paddingLeft: "30px" }}>PRIORITY</th>
-            <th style={{ textAlign: "center" }}>PROCESSED STATUS</th>
+            <th style={{ textAlign: "center" }}>REVIEWED STATUS</th>
           </tr>
         </thead>
 
