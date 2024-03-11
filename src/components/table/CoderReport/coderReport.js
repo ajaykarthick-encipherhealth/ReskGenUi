@@ -408,7 +408,9 @@ function CoderReport({
                         {row?.rafSum ? row?.rafSum : "000"}
                       </td>
                       <td className={TableStyle.childBorder}>
-                        {row?.validDisease ? row?.validDisease : "000"}
+                        {row?.validDiseaseCount
+                          ? row?.validDiseaseCount
+                          : "000"}
                       </td>
                       <td className={TableStyle.childBorder}>
                         {row?.flag ? (
