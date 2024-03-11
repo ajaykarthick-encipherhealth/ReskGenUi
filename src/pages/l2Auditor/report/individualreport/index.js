@@ -275,7 +275,7 @@ const IndividualReceiverReport = () => {
             <div>
               {" "}
               <Image src={send} alt="noimg" />
-              &nbsp;Sender:&nbsp;
+              &nbsp;{isSentReport?"Reciever":"Sender"}:&nbsp;
               {reportInfo?.sender}
             </div>
             <div>
