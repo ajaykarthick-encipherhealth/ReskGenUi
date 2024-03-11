@@ -450,7 +450,7 @@ const Accuracy = () => {
                   accuracyDatas?.data?.response?.mapAccuracy[highlightIndex - 1]
                     ? `${Math.round(
                         accuracyDatas?.data?.response?.mapAccuracy[
-                          highlightIndex - 1
+                          highlightIndex
                         ]?.averageScore
                       )}%`
                     : "0%"}
