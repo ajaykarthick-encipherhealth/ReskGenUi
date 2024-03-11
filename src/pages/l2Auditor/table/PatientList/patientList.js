@@ -154,8 +154,8 @@ function PatientTable({
             style={{ textAlign: "center", paddingLeft: "40px" }}
             onClick={handleTableRowClick}
           >
-            {data?.machineScoreMap?.wrongCount
-              ? data?.machineScoreMap?.wrongCount
+            {data?.accuracyScore?.wrongCount
+              ? data?.accuracyScore?.wrongCount
               : "---"}{" "}
           </td>
 

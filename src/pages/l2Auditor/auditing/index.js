@@ -32,12 +32,10 @@ export function extractLatestData(notes) {
   if (notes && typeof notes === "object") {
     const entries = Object.entries(notes);
 
-    const latestKey = Math.max(
-      ...entries.map(([key, value]) => parseInt(key))
-    );
+    const latestKey = Math.max(...entries.map(([key, value]) => parseInt(key)));
 
     entries.forEach(([key, value]) => {
-    if (parseInt(key) === latestKey) {
+      if (parseInt(key) === latestKey) {
         declinedData = value;
       }
     });
@@ -210,6 +208,7 @@ export default function Patient() {
           auditAllocatedByProfileImage: res.auditAllocatedByProfileImage,
           declinedNotes: res.declinedNotes,
           auditDeclinedNotes: res.auditDeclinedNotes,
+          accuracyScore: res.accuracyScore,
         });
       });
       var newArray = [];
@@ -249,7 +248,6 @@ export default function Patient() {
       });
     }
   };
-
 
   const processstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
