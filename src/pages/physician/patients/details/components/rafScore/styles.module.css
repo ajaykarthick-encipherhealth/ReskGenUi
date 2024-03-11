@@ -267,3 +267,12 @@
   padding: 10px;
   padding-left: 20px;
 }
+.rafDescription {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  height: 20px;
+  width: 70%;
+}
