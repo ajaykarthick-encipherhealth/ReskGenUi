@@ -102,9 +102,20 @@ const Accuracy = () => {
       year == currentDate.getFullYear() &&
       month == currentDate.getMonth() + 1
     ) {
-      return param?.data?.response?.mapAccuracy?.map(
-        (item, index) => index < new Date().getDate() && item[val]
-      );
+      if (currentBtn == "Daily") {
+        return param?.data?.response?.mapAccuracy?.map(
+          (item, index) => index < new Date().getDate() && item[val]
+        );
+      } else if (currentBtn == "Weekly") {
+        return param?.data?.response?.mapAccuracy?.map(
+          (item, index) => index < getDateWeek(currentDate) && item[val]
+        );
+      } else if (currentBtn == "Monthly") {
+        return param?.data?.response?.mapAccuracy?.map(
+          (item, index) => index < new Date().getMonth() + 1 && item[val]
+        );
+      }
+     
     } else {
       return false;
     }

@@ -90,7 +90,7 @@ const Accuracy = () => {
     setCurrentBtn(btn);
   };
 
-  const chartBlockedDates = (year, month, param, val) => {
+  const chartBlockedDates = (year, month, param, val, currentBtn) => {
     year = Number(year);
     month = Number(month);
     if (year < currentDate.getFullYear()) {
@@ -104,9 +104,19 @@ const Accuracy = () => {
       year == currentDate.getFullYear() &&
       month == currentDate.getMonth() + 1
     ) {
-      return param?.data?.response.map(
-        (item, index) => index < new Date().getDate() && item[val]
-      );
+      if (currentBtn == "Daily") {
+        return param?.data?.response?.map(
+          (item, index) => index < new Date().getDate() && item[val]
+        );
+      } else if (currentBtn == "Weekly") {
+        return param?.data?.response?.map(
+          (item, index) => index < getDateWeek(currentDate) && item[val]
+        );
+      } else if (currentBtn == "Monthly") {
+        return param?.data?.response?.map(
+          (item, index) => index < new Date().getMonth() + 1 && item[val]
+        );
+      }
     } else {
       return false;
     }
@@ -250,7 +260,7 @@ const Accuracy = () => {
             finalData.averageScore +
             "<br/>" +
             "Total Correct: " +
-            finalData.totalCorrectCount+
+            finalData.totalCorrectCount +
             "<br/>" +
             "Total Wrong: " +
             finalData.totalWrongCount
@@ -288,7 +298,9 @@ const Accuracy = () => {
       },
       {
         name: "totalWrongCount",
-        data: accuracyDatas?.data?.response?.map((item) => item.totalWrongCount),
+        data: accuracyDatas?.data?.response?.map(
+          (item) => item.totalWrongCount
+        ),
         color: "red",
         yAxis: 1,
       },
@@ -299,7 +311,8 @@ const Accuracy = () => {
           selectedYear,
           selectedMonth,
           accuracyDatas,
-          "averageScore"
+          "averageScore",
+          currentBtn
         ),
         tooltip: {
           valueSuffix: "",
@@ -308,7 +321,7 @@ const Accuracy = () => {
       },
     ],
   };
-  
+
   return (
     <>
       <HeadTitle header="Reviewer Quality Score" />
