@@ -365,7 +365,7 @@ const index = () => {
                         audisetSelAllocatedBy={setSelAuditAllocatedBy}
                         // audidefaultAllocatedBy={""}
                         // select status
-                        selectlabel="Processed Status"
+                        selectlabel="Reviewed Status"
                         isSelector={true}
                         setSelectedOption={setSelectedOption}
                         selectOptions={statusOptions}
