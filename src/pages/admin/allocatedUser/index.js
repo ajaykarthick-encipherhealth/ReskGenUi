@@ -318,14 +318,15 @@ export default function Patient() {
               <div style={{ textAlign: "center" }}>---</div>
             )}
           </td>
-          <td className={TableStyle.childBorder}>
-            {data.totalFileAudited ? data.totalFileAudited : "---"}
-          </td>
-          <td className={TableStyle.childBorder}>
+          <td className={TableStyle.childBorder} >
             {data.totalFileAuditAllocated
               ? data.totalFileAuditAllocated
               : "---"}
           </td>
+          <td className={TableStyle.childBorder}>
+            {data.totalFileAudited ? data.totalFileAudited : "---"}
+          </td>
+         
           <td className={TableStyle.childBorder}>
             {data.totalFileAuditPending ? data.totalFileAuditPending : "---"}
           </td>
@@ -602,7 +603,6 @@ export default function Patient() {
                                     eventKey="team"
                                     onClick={() => {
                                       setTableLoading(true);
-                                      
                                     }}
                                   >
                                     Supervisor Allocation
@@ -669,8 +669,9 @@ export default function Patient() {
                                               >
                                                 <tr>
                                                   <th>NAME</th>
-                                                  <th>AUDIT PROCESSED</th>
                                                   <th>AUDIT ALLOCATED</th>
+                                                  <th>AUDIT PROCESSED</th>
+
                                                   <th>AUDIT PENDING</th>
                                                   <th>AUDIT HOLD</th>
                                                   <th>AUDIT INVALID</th>

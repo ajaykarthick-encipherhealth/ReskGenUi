@@ -343,7 +343,7 @@ function TeamReport({
                   )}
                 </th>
                 <th>COMMENTS </th>
-                <th className={TableStyle.rowStyle2}>AUDITOR NAME </th>
+                <th className={TableStyle.rowStyle2}>SUPERVISOR NAME </th>
                 <th>RAF SCORE </th>
                 <th>HCC </th>
                 <th>FLAG </th>
