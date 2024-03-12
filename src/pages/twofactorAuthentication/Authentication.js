@@ -29,9 +29,19 @@ const index = () => {
 
   const handleInput = (index, e) => {
     const value = e.target.value;
-    setCode((prev) => [...prev, ...value]);
-    if (value.length === 1 && index < inputRefs?.length - 1) {
-      inputRefs[index + 1].current.focus();
+    const numbers = code.slice(0, 6);
+    if (!isNaN(value) && value?.length === 1) {
+      numbers.push(value);
+    }
+    setCode(numbers);
+    if (code[index - 1] && value) {
+      const addOndigit = value[1];
+      const splittedVal = [...code, ...addOndigit];
+      setCode(splittedVal);
+      inputRefs[index + 1]?.current?.focus();
+    }
+    if (value?.length === 1 && index < inputRefs?.length - 1) {
+      inputRefs[index + 1]?.current?.focus();
     }
   };
 
@@ -46,7 +56,7 @@ const index = () => {
     setUsername(decodedParams?.username);
     setPassword(decodedParams?.password);
     const skipParam = decodedParams?.skipEntry;
-    setSkip(skipParam);;
+    setSkip(skipParam);
   }, []);
   useEffect(() => {
     if (seconds === 0) {
@@ -54,7 +64,6 @@ const index = () => {
       inputRefs[1].current.focus();
       setSeconds(30);
     }
-
   }, [seconds]);
 
   useEffect(() => {
@@ -76,15 +85,9 @@ const index = () => {
   const handleBackspace = (index, e) => {
     if (e.keyCode === 8 && index > 0) {
       e.preventDefault();
-      setCode((prev) => {
-        const newCode = [...prev];
-        newCode[index - 1] = "";
-        if (newCode[0] == "") {
-          return [];
-        } else {
-          return newCode;
-        }
-      });
+      const updatedCode = [...code?.slice(0, 6)];
+      updatedCode.splice(index - 1, 1);
+      setCode(updatedCode);
       inputRefs[index - 1]?.current?.focus();
     }
   };
