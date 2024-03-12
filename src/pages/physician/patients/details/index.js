@@ -2935,7 +2935,9 @@ const Details = ({}) => {
                               </div>
                             </>
                           ) : (
-                            <div className={visitStyles.userDetailsCard}>
+                            <div
+                              className={`${visitStyles.userDetailsCard} ${visitStyles.loadingContainer}`}
+                            >
                               <LoadingSpinner />
                             </div>
                           )}

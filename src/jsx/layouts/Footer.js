@@ -3,15 +3,24 @@ import { IMAGES, SVGICON } from "../constant/theme";
 import Hcc_LOGO from "../../images/dashboard/EncipherLogo1.png";
 
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const router = useRouter();
   const handleEncipherhealthClick = () => {
     window.open("https://encipherhealth.com/", "_blank");
   };
+  const currentPath = router?.pathname;
   return (
     <footer className="text-center">
-      <div className="d-flex">
+      <div
+        className={
+          currentPath === "/physician/patients/details"
+            ? `d-flex background-white`
+            : `d-flex`
+        }
+      >
         <div
           className=" d-flex flex-column align-items-center justify-content-center"
           style={{ margin: "0 auto" }}
