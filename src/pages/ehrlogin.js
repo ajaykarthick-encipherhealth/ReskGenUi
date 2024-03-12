@@ -7,15 +7,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "../styles/auth.module.css";
 import LoginBack from "../images/logo/login-back.jpg";
 import { IMAGES } from "../jsx/constant/theme";
-import { getMFAValidation } from "../store/actions/AuthActions";
+import { submitLogin } from "../services/AuthService";
 import {
   getValidatePassword,
   handleTogglePasswordVisibility,
+  encyptingPass,
 } from "../components/headerFilters/functions";
 import AthenaLogo from "../images/ehr/athena.png";
 import EpicLogo from "../images/ehr/epic_1.png";
 import worksLogo from "../images/ehr/eclinicalworks.png";
 import cernerLogo from "../images/ehr/cerner.png";
+import { notification } from "antd";
 
 export default function Login() {
   const router = useRouter();
@@ -59,13 +61,38 @@ export default function Login() {
     );
     if (emailValidation && passValidation) {
       setIsLoading(true);
-      localStorage.setItem("userRole", "EHR");
-      router.push("ehr/patients");
       setErrors({
         email: "",
         password: "",
       });
-      dispatch(getMFAValidation(enteredEmail, router, password));
+      localStorage.setItem("userRole", "ehr");
+      var response = await submitLogin(enteredEmail, encyptingPass(password));
+      console.log(response);
+      var result = response?.data?.response;
+      if (response?.data?.status === "SUCCESS") {
+        let emailSplit = enteredEmail?.split("@");
+        notification.success({
+          message: "Login Successfully",
+          duration: 1,
+        });
+        var rolesArray = ["EHR"];
+        localStorage.setItem("role", "ehr");
+        localStorage.setItem("roles", rolesArray);
+        localStorage.setItem("token", result.access_token);
+        localStorage.setItem("refreshToken", result?.refresh_token);
+        localStorage.setItem("tenantId", result.tenantId);
+        localStorage.setItem("userId", result.userEmail);
+        localStorage.setItem("orgId", result.organizationId);
+        localStorage.setItem("userName", emailSplit[0]);
+        localStorage.setItem("loginCheck", true);
+        router.push("ehr/patients");
+      } else {
+        notification.error({
+          description: response?.data?.message,
+        });
+      }
+
+      // dispatch(getMFAValidation(enteredEmail, router, password));
     } else {
       return;
     }

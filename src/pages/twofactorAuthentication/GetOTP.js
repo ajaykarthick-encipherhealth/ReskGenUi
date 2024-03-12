@@ -21,14 +21,6 @@ const GetOTP = () => {
   const [password, setPassword] = useState();
   const [code, setCode] = useState([]);
 
-  const handleInput = (index, e) => {
-    const value = e.target.value;
-    setCode((prev) => [...prev, ...value]);
-    if (value?.length === 1 && index < inputRefs?.length - 1) {
-      inputRefs[index + 1].current.focus();
-    }
-  };
-
   useEffect(() => {
     inputRefs[1]?.current?.focus();
     const queryString = window.location.search;
@@ -41,9 +33,35 @@ const GetOTP = () => {
       setPassword(decodedParams?.password);
       dispatch(getQrCode(decodedParams?.username, router));
     }
-
-   
   }, []);
+
+  const handleInput = (index, e) => {
+    const value = e.target.value;
+    const numbers = code.slice(0, 6);
+    if (!isNaN(value) && value?.length === 1) {
+      numbers.push(value);
+    }
+    setCode(numbers);
+    if (code[index - 1] && value) {
+      const addOndigit = value[1];
+      const splittedVal = [...code, ...addOndigit];
+      setCode(splittedVal);
+      inputRefs[index + 1]?.current?.focus();
+    }
+    if (value?.length === 1 && index < inputRefs?.length - 1) {
+      inputRefs[index + 1]?.current?.focus();
+    }
+  };
+
+  const handleBackspace = (index, e) => {
+    if (e.keyCode === 8 && index > 0) {
+      e.preventDefault();
+      const updatedCode = [...code?.slice(0, 6)];
+      updatedCode.splice(index - 1, 1);
+      setCode(updatedCode);
+      inputRefs[index - 1]?.current?.focus();
+    }
+  };
 
   return (
     <div className={styles.contentMainDIv}>
@@ -100,15 +118,25 @@ const GetOTP = () => {
           {generateCodeArray()
             .slice(0, generateCodeArray().length - 1)
             .map((index) => (
-              <input
-                key={index}
-                type="text"
-                maxLength="1"
-                pattern="[0-9]"
-                className={styles.codeInput}
-                onInput={(e) => handleInput(index, e)}
-                ref={inputRefs[index]}
-              />
+              <>
+                <input
+                  key={index}
+                  type="number"
+                  maxLength="1"
+                  pattern="[0-9]"
+                  value={
+                    code?.length > 0
+                      ? code[index - 1]
+                        ? code[index - 1]
+                        : ""
+                      : ""
+                  }
+                  className={styles.codeInput}
+                  onInput={(e) => handleInput(index, e)}
+                  onKeyDown={(e) => handleBackspace(index, e)}
+                  ref={inputRefs[index]}
+                />
+              </>
             ))}
         </div>
 

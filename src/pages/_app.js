@@ -62,23 +62,36 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     const currentPath = window.location.pathname;
-    if (
-      currentPath === "/" ||
-      currentPath === "/login" ||
-      currentPath === "/ehrlogin" ||
-      currentPath?.includes("/twofactorAuthentication/")
-    ) {
-      setShowTerminal(false);
-      setValidatePath(true);
-    } else {
-      setShowTerminal(true);
-      const timer = setTimeout(() => {
-        dispatch(refreshToken());
-      }, 30 * 60 * 1000);
-      return () => {
-        clearTimeout(timer);
-      };
-    }
+    fetch(currentPath)
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 404) {
+            setShowTerminal(false);
+          }
+        }else{
+          if (
+            currentPath === "/" ||
+            currentPath?.includes("/login") ||
+            currentPath?.includes("/ehrlogin") ||
+            currentPath?.includes("/twofactorAuthentication/")
+          ) {
+            setShowTerminal(false);
+            setValidatePath(true);
+          } else {
+            setShowTerminal(true);
+            const timer = setTimeout(() => {
+              dispatch(refreshToken());
+            }, 30 * 60 * 1000);
+            return () => {
+              clearTimeout(timer);
+            };
+          }
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+   
   }, [router]);
 
   return (

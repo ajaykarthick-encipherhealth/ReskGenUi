@@ -30,6 +30,7 @@ import {
   L2AuditMenuList,
   L2AuditorMenuList,
   ProviderMenuList,
+  EHRMenuList,
 } from "./Menu";
 import ENDPOINTS from "../../../utility/enpoints";
 import axios from "../../../utility/axiosConfig";
@@ -152,9 +153,14 @@ const Header = () => {
       closeOnConfirm: false,
     }).then(async (result) => {
       if (result.isConfirmed) {
+        const userRole = localStorage.getItem("role");
         await logoutAllDevice();
         localStorage.clear();
-        window.location = "/login";
+        if (userRole != "ehr") {
+          window.location = "/login";
+        } else {
+          window.location = "/ehrlogin";
+        }
       }
     });
   };
@@ -162,6 +168,7 @@ const Header = () => {
   const getUserIdDetails = async (currentUserInfo) => {
     const token = localStorage.getItem("token");
     const getUserId = localStorage.getItem("userId");
+    const userRole = localStorage.getItem("role");
 
     setUserIdDetails(currentUserInfo?.data?.response);
     setProfileImg(currentUserInfo?.data?.response?.profileImageUrl);
@@ -170,6 +177,9 @@ const Header = () => {
     setDropdownContent(currentUserInfo?.data?.response?.role);
     if (getUserId == "johnson@encipherhealth.onmicrosoft.com") {
       setDropdownContent(["PROVIDER"]);
+    }
+    if (userRole === "ehr") {
+      setDropdownContent(["EHR"]);
     }
     var userId = currentUserInfo?.data?.response?.id;
     const userName = currentUserInfo?.data?.response?.userName;
@@ -291,6 +301,8 @@ const Header = () => {
       router.push("/l2Auditor/dashboard");
     } else if (key === "provider") {
       router.push("/provider/comparison");
+    } else if (key === "ehr") {
+      router.push("/ehr/patients");
     }
   };
   const getMenuListByRole = (role) => {
@@ -303,6 +315,8 @@ const Header = () => {
         return L2AuditorMenuList;
       case "provider":
         return ProviderMenuList;
+      case "ehr":
+        return EHRMenuList;
       default:
         return [];
     }
@@ -328,7 +342,11 @@ const Header = () => {
         closeOnConfirm: false,
       }).then((result) => {
         if (result.isConfirmed) {
-          window.location = "/login";
+          if (userRole != "ehr") {
+            window.location = "/login";
+          } else {
+            window.location = "/ehrlogin";
+          }
         }
       });
     }
@@ -553,6 +571,8 @@ const Header = () => {
                                           ? "Supervisor"
                                           : currentRole == "provider"
                                           ? "Provider"
+                                          : currentRole == "ehr"
+                                          ? "EHR"
                                           : "Admin"}
                                       </span>
                                     </div>
@@ -630,6 +650,8 @@ const Header = () => {
                                 ? "Supervisor"
                                 : currentRole == "provider"
                                 ? "Provider"
+                                : currentRole == "ehr"
+                                ? "EHR"
                                 : "Admin"}
                             </span>
                           )}

@@ -169,3 +169,12 @@ export const ProviderMenuList = [
     to: "/provider/query",
   },
 ];
+
+export const EHRMenuList = [
+  {
+    title: "Patients",
+    iconStyle: SVGICON.adminUser,
+    to: "/ehr/patients",
+    childRoute: "/ehr/patients/details",
+  },
+];

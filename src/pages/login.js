@@ -135,7 +135,10 @@ export default function Login() {
                   )}
                 </div>
                 <div className="text-center mb-4">
-                  <button type="submit" className={`btn btn-block ${styles.btnColor} `}>
+                  <button
+                    type="submit"
+                    className={`btn btn-block ${styles.btnColor} `}
+                  >
                     LOGIN
                   </button>
                 </div>

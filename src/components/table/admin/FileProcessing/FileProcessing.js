@@ -457,6 +457,7 @@ function FileProcessingTable({ patinetListAll, loading }) {
                 style={{
                   height: "20px",
                 }}
+               className="antTextHide"
                 strokeColor={
                   stageChartMap2[data?.processStageChart] === "Finished"
                     ? "green"

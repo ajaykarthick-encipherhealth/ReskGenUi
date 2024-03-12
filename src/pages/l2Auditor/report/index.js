@@ -200,11 +200,7 @@ const index = () => {
 
   const handleTabs = (name) => {
     setSelectedDates(null);
-    dispatch(
-      getActiveTab(
-        name
-      )
-    );
+    dispatch(getActiveTab(name));
   };
   useEffect(() => {
     setIsLoading(false);
@@ -311,7 +307,8 @@ const index = () => {
                                 />
                               </div>
                             </div>
-                            {!reportActiveTab || reportActiveTab  === "AuditReport" ? (
+                            {!reportActiveTab ||
+                            reportActiveTab === "AuditReport" ? (
                               <div className="col-xl-2">
                                 <label>Select Status</label>
                                 <div class="form-group has-search">
@@ -322,14 +319,14 @@ const index = () => {
                                   placeholder="Status"
                                 /> */}
                                   {/* {reportActiveTab  === "AuditReport" && ( */}
-                                    <Select
-                                      onChange={(selectedOption) => {
-                                        dosOnChange(selectedOption);
-                                      }}
-                                      options={statusOptions}
-                                      className="custom-react-select"
-                                      isSearchable={false}
-                                    />
+                                  <Select
+                                    onChange={(selectedOption) => {
+                                      dosOnChange(selectedOption);
+                                    }}
+                                    options={statusOptions}
+                                    className="custom-react-select"
+                                    isSearchable={false}
+                                  />
                                   {/* )} */}
                                 </div>
                               </div>
@@ -342,7 +339,8 @@ const index = () => {
                                   ? "Received Date"
                                   : reportActiveTab === "SentReport"
                                   ? "Sent Date"
-                                  : !reportActiveTab || reportActiveTab  === "AuditReport"
+                                  : !reportActiveTab ||
+                                    reportActiveTab === "AuditReport"
                                   ? "Audit Date"
                                   : "Select Date"}
                               </label>
@@ -362,7 +360,9 @@ const index = () => {
                                 />
                               </div>
                             </div>
-                            {reportActiveTab === "AuditReport" && (
+
+                            {(!reportActiveTab ||
+                              reportActiveTab === "AuditReport") && (
                               <div className="col-xl-6">
                                 <div className="row flr">
                                   <button
