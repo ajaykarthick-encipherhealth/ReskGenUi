@@ -1557,3 +1557,7 @@
 .meat_lable {
   font-weight: 600;
 }
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+}
