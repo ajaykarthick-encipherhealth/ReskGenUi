@@ -12,7 +12,6 @@ const Footer = () => {
     window.open("https://encipherhealth.com/", "_blank");
   };
   const currentPath = router?.pathname;
-  console.log(currentPath);
   return (
     <footer className="text-center">
       <div
