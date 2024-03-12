@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 
 const YearPicker = ({ onChange, type, bgColor }) => {
   const currentDate = dayjs().format("YYYY-MM-DD");
+  console.log(type)
   return (
     <div className={styles.pickerBox}>
       <DatePicker
