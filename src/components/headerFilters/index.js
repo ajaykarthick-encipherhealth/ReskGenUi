@@ -151,7 +151,7 @@ const HeaderFilters = ({
   atCorner,
   isNextCreatedBySelector,
   selectReportOptions,
-  value
+  value,
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
@@ -217,7 +217,7 @@ const HeaderFilters = ({
               </div>
             </div>
           )}
-          
+
           {selectReportOptions && (
             <div className={defaultSize}>
               <label className={styles.label}>{selectlabel2}</label>
@@ -444,7 +444,7 @@ const HeaderFilters = ({
             {isAllocatedBySelector && (
               <div
                 className={defaultSize}
-                style={{position:"relative",left:atCorner && "-20px"}}
+                style={{ position: "relative", left: atCorner && "-20px" }}
                 onClick={() => {
                   dispatch(
                     getFilters(selectorField ? selectorField : "allocatedBy")
@@ -490,7 +490,6 @@ const HeaderFilters = ({
             {isCreatedBySelector && (
               <div
                 className={defaultSize}
-                
                 onClick={() => {
                   dispatch(
                     getFilters(

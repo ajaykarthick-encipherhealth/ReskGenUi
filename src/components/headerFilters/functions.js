@@ -425,8 +425,6 @@ export const renderUserPrfoileAvatar = (
   }
 };
 
-
-
 export const renderUserPrfoileAvatarDisabled = (
   firstName,
   lastName,

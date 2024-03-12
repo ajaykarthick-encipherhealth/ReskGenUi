@@ -2,21 +2,19 @@ import React, { useState } from "react";
 import TableStyle from "../table.module.css";
 import { Paginator } from "primereact/paginator";
 import { Empty, Modal, Popover } from "antd";
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
+import { Avatar, Divider, Tooltip } from "antd";
 import Footer from "../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
 import SpinnerDots from "../../spinner";
 import {
   dateFormate,
   renderUserPrfoileAvatar,
-  renderUserPrfoileAvatarGroup,
   sortFunction,
 } from "../../headerFilters/functions";
-import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
-import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
-import { useDispatch } from "react-redux";
-import { useRouter } from "next/router";
-import { Avatar, Divider, Tooltip } from "antd";
-import { AntDesignOutlined, UserOutlined } from "@ant-design/icons";
 
 function SentReportTable({
   details,
