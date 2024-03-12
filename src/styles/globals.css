@@ -14172,3 +14172,6 @@ span.meat-name-details2 {
 .ant-progress-text {
   display: none !important;
 }
+:where(.css-dev-only-do-not-override-1b0bdye).ant-avatar > img {
+  object-fit: unset;
+}
