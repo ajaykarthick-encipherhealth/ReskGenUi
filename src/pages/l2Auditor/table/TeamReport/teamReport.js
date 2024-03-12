@@ -70,12 +70,10 @@ function TeamReport({
   };
 
   const auditstatusBodyTemplate = (rowData) => {
-    const declinedDataFromAudit = extractLatestData(
-      rowData?.auditDeclinedNotes
-    );
+    const declinedDataFromAudit = extractLatestData(rowData?.auditDeclineNotes);
 
     const declinedDataFromDeclined = extractLatestData(
-      rowData?.auditDeclinedNotes
+      rowData?.auditDeclineNotes
     );
 
     const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
