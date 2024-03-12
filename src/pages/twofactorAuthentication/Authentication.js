@@ -10,6 +10,7 @@ import {
   loginAction,
 } from "../../store/actions/AuthActions";
 import { encyptingPass } from "../../components/headerFilters/functions";
+import { notification } from "antd";
 
 export const codeLength = 6;
 export const generateCodeArray = () =>
@@ -62,12 +63,19 @@ const index = () => {
     if (seconds === 0) {
       setCode([]);
       inputRefs[1].current.focus();
-      setSeconds(30);
+
+      notification.warning({
+        description: "Oops! your time is expired",
+        duration: 10,
+        onClose: () => {
+          setSeconds(30);
+        },
+      });
     }
   }, [seconds]);
 
   useEffect(() => {
-    if (code?.length > 0) {
+    if (seconds > 0) {
       const intervalId = setInterval(() => {
         setSeconds((prevSeconds) => {
           if (prevSeconds === 0) {
@@ -76,12 +84,11 @@ const index = () => {
           return Math.max(0, prevSeconds - 1);
         });
       }, 1000);
-      return () => clearInterval(intervalId);
+      return () => {
+        clearInterval(intervalId);
+      };
     }
-    if (code?.length === 0) {
-      setSeconds(30);
-    }
-  }, [code]);
+  }, [seconds]);
   const handleBackspace = (index, e) => {
     if (e.keyCode === 8 && index > 0) {
       e.preventDefault();
@@ -99,9 +106,8 @@ const index = () => {
         {enableMFA ? (
           <>
             <div className={styles.content}>
-              Protecting your tickets is our top priority. Please confirm your
-              account by entering the authorization code sent to
-              **********@cogentai.com
+              Please confirm your account by entering the authorization code
+              from your authenticator app.
             </div>
             {/* code Input */}
             <div className={styles.codeBox}>
@@ -113,7 +119,13 @@ const index = () => {
                     type="number"
                     maxLength="1"
                     pattern="[0-9]"
-                    value={code?.length > 0 ? code[index - 1] : ""}
+                    value={
+                      code?.length > 0
+                        ? code[index - 1]
+                          ? code[index - 1]
+                          : ""
+                        : ""
+                    }
                     className={styles.codeInput}
                     onInput={(e) => handleInput(index, e)}
                     onKeyDown={(e) => handleBackspace(index, e)}
