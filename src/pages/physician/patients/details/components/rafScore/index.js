@@ -169,7 +169,7 @@ const RafScore = ({ rafScoreList }) => {
                   <div className={style.titleHead}>
                     <div className="row">
                       <div className="col-xl-6">V24 score</div>
-                      <div className="col-xl-6">V24Score(33%)</div>
+                      <div className="col-xl-6">V24Score(67%)</div>
                     </div>
                   </div>
                   <div className={style.detailsHead}>
@@ -186,7 +186,7 @@ const RafScore = ({ rafScoreList }) => {
                   <div className={style.titleHead}>
                     <div className="row">
                       <div className="col-xl-6">V28 score</div>
-                      <div className="col-xl-6">V28Score(67%)</div>
+                      <div className="col-xl-6">V28Score(33%)</div>
                     </div>
                   </div>
                   <div className={style.detailsHead}>
