@@ -203,11 +203,12 @@
 }
 .rafScoreMainContainer {
   height: 70vh;
+  overflow-y: scroll;
 }
-.rafScoreMainContainer:hover {
+/* .rafScoreMainContainer:hover {
   height: 70vh;
   overflow: scroll;
-}
+} */
 .rafScoreCard1 {
   border: 1px solid #f5f5f5;
   max-height: auto;

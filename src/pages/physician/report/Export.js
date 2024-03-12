@@ -204,7 +204,7 @@ const Export = ({
   const deleteUser = (userInfo) => {
     setUsersList((prevUserList) =>
       prevUserList?.filter(
-        (user) => user?.user[0]?.userId !== userInfo?.user[0]?.userId
+        (user) => user?.user[0]?.userId !== userInfo[0]?.userId
       )
     );
   };

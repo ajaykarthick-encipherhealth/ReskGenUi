@@ -218,16 +218,13 @@ const index = () => {
     if (selectedCoderOptReport && !select) {
       dispatch(
         getSelectUserList(
-          selectedCoderOptReport === null &&
-            selectedCoderOptReport?.value === "All"
-            ? " "
-            : selectedCoderOptReport?.value
+          selectedCoderOptReport === null &&selectedCoderOptReport?.value==='All'  ? "" : selectedCoderOptReport?.value
         )
       );
     }
   }, [selectedCoderOptReport]);
   const options = [
-    { value: " ", label: "All" },
+    { value: "", label: "All" },
     { value: "REVIEWER", label: "REVIEWER" },
     { value: "SUPERVISOR", label: "SUPERVISOR" },
   ];
