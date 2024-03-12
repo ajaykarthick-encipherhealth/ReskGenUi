@@ -17,11 +17,13 @@ import {
 export default function Login() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [enteredEmail, setEmail] = useState("");
+  const [enteredEmail, setEmail] = useState(
+    "ranjith01@encipherhealth.onmicrosoft.com"
+  );
   const [showPassword, setShowPassword] = useState(false);
   let errorsObj = { email: "", password: "" };
   const [errors, setErrors] = useState(errorsObj);
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("@Asdf123");
   const [isLoading, setIsLoading] = useState(false);
 
   const validateEmail = (enteredEmail) => {
@@ -135,7 +137,10 @@ export default function Login() {
                   )}
                 </div>
                 <div className="text-center mb-4">
-                  <button type="submit" className={`btn btn-block ${styles.btnColor} `}>
+                  <button
+                    type="submit"
+                    className={`btn btn-block ${styles.btnColor} `}
+                  >
                     LOGIN
                   </button>
                 </div>
