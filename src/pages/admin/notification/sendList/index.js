@@ -28,7 +28,7 @@ const SendList = ({ result }) => {
               </div>
               <div className={`col-xl-2  ${styles.timeContainer}`}>
                 <span className={styles.timeStatus}>
-                  {moment(data.createdDate).format("MM/DD/YYYY HH:MM:A")}
+                  {moment(data?.createdDate).format("MM/DD/YYYY hh:mm:A")}
                 </span>
                 {/* <span className={styles.typeStatus}>
                   {data.notificationType}
