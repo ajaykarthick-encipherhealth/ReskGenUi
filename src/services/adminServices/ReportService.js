@@ -148,7 +148,7 @@ export const SelectUserList = async (role) => {
   }
 };
 
-export const updateSentReport = (data, oldUser) => async (dispatch) => {
+export const updateSentReport = (data) => async (dispatch) => {
   const token = localStorage.getItem("token");
   try {
     dispatch({

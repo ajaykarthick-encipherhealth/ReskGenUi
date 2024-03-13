@@ -253,6 +253,7 @@ function SentReportTable({
           setSelectedRows={setSelectedRows}
           setSelectAll={setSelectAll}
           selectedRows={selectedRows}
+          isSent={true}
         />
       )}
     </div>

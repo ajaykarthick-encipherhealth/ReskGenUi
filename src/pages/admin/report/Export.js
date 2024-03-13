@@ -4,13 +4,13 @@ import styles from "./report.module.css";
 import {
   getExportDetails,
   getUsersList,
-  updateSentReport,
 } from "../../../store/actions/adminAction/ReportActions";
 import { useDispatch, useSelector } from "react-redux";
+import { updateSentReport } from "../../../services/adminServices/ReportService";
 
 const { Option } = Select;
 
-const checkBoxData = [
+export const checkBoxData = [
   {
     id: 1,
     title: "patientId",
@@ -107,6 +107,7 @@ const Export = ({
   setSelectedRows,
   setSelectAll,
   selectedRows,
+  isSent,
 }) => {
   const dispatch = useDispatch();
   const usersList = useSelector((state) => state.report?.usersList);
@@ -148,9 +149,10 @@ const Export = ({
     const filteredData = usersList?.response?.filter(
       (data) => data?.userName === value[0]
     );
+
     setSelectedList(filteredData?.map((item) => item?.userName));
     setSelectedUser((prevUsers) => [
-      { ...prevUsers, user: filteredData, role: null },
+      { ...prevUsers, user: value[0], role: null },
     ]);
     setOpen(false);
   };
@@ -167,9 +169,7 @@ const Export = ({
   };
 
   const filteredOptions = options?.filter((option) => {
-    return !userList?.some((data) =>
-      data?.user?.some((info) => info?.userName?.includes(option?.value))
-    );
+    return !userList?.some((data) => option?.value === data?.user);
   });
 
   const debouncedSearch = debounce((value) => {
@@ -178,15 +178,8 @@ const Export = ({
   const handleSearch = (e) => {
     debouncedSearch(e);
   };
-
   const onFinish = (values) => {
-    const patientIds = rowsLength?.data?.map((item) => item?.patientId);
-    const userAndAccess =
-      selectedRows?.receivedUsers?.length === 0 &&
-      userList?.reduce((result, { user, role }) => {
-        result[user.map((info) => info?.userName)] = role;
-        return result;
-      }, {});
+    const patientIds = rowsLength?.map((item) => item?.patientId);
     const editUserAndAccess = userList.reduce((result, { user, role }) => {
       if (Array.isArray(user)) {
         user.forEach((info) => {
@@ -204,9 +197,9 @@ const Export = ({
     const data = {
       fields: fields,
       patientIds: patientIds,
-      fileType: values.ReportTYpe,
-      reportName: values.ReportName,
-      userAndAccess: userAndAccess,
+      fileType: values?.ReportTYpe,
+      reportName: values?.ReportName,
+      userAndAccess: editUserAndAccess,
     };
 
     const updatedData = {
@@ -215,11 +208,11 @@ const Export = ({
       userAndAccess: editUserAndAccess,
       removedUsers: removedUsers,
     };
-    console.log(updatedData);
-    if (selectedRows?.receivedUsers?.lengt === 0) {
+
+    if (!isSent) {
       dispatch(getExportDetails(data));
     } else {
-      dispatch(updateSentReport(updatedData, oldUser));
+      dispatch(updateSentReport(updatedData));
     }
     form.resetFields();
     setUsersList([]);
@@ -253,14 +246,8 @@ const Export = ({
     setSelectedList([]);
     if (selectedRows?.receivedUsers?.length > 0) {
       setDisplay(true);
-      const data = [
-        {
-          user: [selectedRows?.receivedUsers[0]?.userDetails],
-          role: selectedRows?.receivedUsers[0]?.role,
-        },
-      ];
 
-      setUsersList(data);
+      setUsersList(selectedRows?.receivedUsers);
     } else {
       setDisplay(false);
       setUsersList([]);
@@ -297,7 +284,7 @@ const Export = ({
             onChange={(e) => setReportName(e.target.value)}
           />
         </Form.Item>
-        {rowsLength && (
+        {!isSent && (
           <>
             <Form.Item
               label="Report Type"
@@ -437,11 +424,11 @@ const Export = ({
                     color: "#fff",
                   }}
                   disabled={
-                    selectedUser &&
+                    selectedUser?.length > 0 &&
                     selectedUser[0]?.user &&
-                    selectedUser[0]?.role &&
-                    selectedUser[0]?.user?.length <= 1
-                      ? false
+                    selectedUser[0]?.role
+                      ? // selectedUser[0]?.user?.length <= 1
+                        false
                       : true
                   }
                 >
@@ -457,13 +444,6 @@ const Export = ({
               {userList?.map((item, index) => (
                 <div className={styles.userName}>
                   <div key={index} className={styles.userRoleContainer}>
-                    {/* {item?.user?.map(
-                      (info) => `${info?.firstName}  ${info?.lastName}`
-                    )}
-                  </div>
-                  <div key={index} className={styles.userRoleContainer}>
-                    {item.role}
-                  </div> */}
                     {item?.user?.length > 0 && Array.isArray(item?.user)
                       ? item?.user?.map(
                           (info) => `${info?.firstName}  ${info?.lastName}`
@@ -471,29 +451,12 @@ const Export = ({
                       : item?.user}
                   </div>
                   <div key={index} className={styles.userRoleContainer}>
-                    {/* {selectedRows?.length === 0 ? ( */}
-                    {item.role}
-                    {/* ) : (
-                      <Select
-                        onChange={(value) => {
-                          handleSelectedRole(value);
-                        }}
-                        className={styles.selectDiv}
-                        value={
-                          selectedUser?.length > 0
-                            ? selectedUser?.map((item) => item.role)
-                            : item?.role
-                        }
-                      >
-                        <Option value="READ">Read</Option>
-                        <Option value="DOWNLOAD">Download</Option>
-                      </Select>
-                    )} */}
+                    {item?.role}
                   </div>
 
                   <div
                     style={{ cursor: "pointer" }}
-                    onClick={() => deleteUser(item.user)}
+                    onClick={() => deleteUser(item?.user)}
                   >
                     X
                   </div>
