@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import TableStyle from "../../../../components/table/table.module.css";
 import { Paginator } from "primereact/paginator";
-import { Empty, Modal, Popover } from "antd";
+import { Empty, Modal, Popover, Avatar } from "antd";
 import Footer from "../../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
-import { dateFormate, sortFunction } from "../../../../components/headerFilters/functions";
+import {
+  dateFormate,
+  getBackgroundColor,
+  renderUserPrfoileAvatar,
+  sortFunction,
+} from "../../../../components/headerFilters/functions";
 import SpinnerDots from "../../../../components/spinner";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { selectedReport } from "../../../../store/actions/l2Action/AuditReportAction";
-
 
 function SentReportTable({
   details,
@@ -24,13 +28,20 @@ function SentReportTable({
   receivedStartDate,
   receivedEndDate,
 }) {
-  const dispatch=useDispatch()
-  const router=useRouter()
+  const dispatch = useDispatch();
+  const router = useRouter();
   const [selectedUsers, setSelectedUsers] = useState([]);
 
   const displayReceivedUsers = (list) => {
     setSelectedUsers(list);
   };
+
+  const hashes = selectedUsers.map((user) => {
+    const hash = (user.userDetails.firstName.charCodeAt(0) % 6) + 1;
+    return hash;
+  });
+  const mostCommonHash = getBackgroundColor(hashes);
+  const backgroundColor = getBackgroundColor(mostCommonHash);
 
   const popCOntent = (
     <div style={{ width: "100%" }}>
@@ -46,19 +57,32 @@ function SentReportTable({
             return (
               <tr key={index}>
                 <td
-                  style={{
-                    borderTop: "  0.2px solid #e1e1e1",
-                    borderLeft: "  0.2px solid #e1e1e1",
-                    borderBottom: "  0.2px solid #e1e1e1",
-                  }}
+                  className={TableStyle.firstTdBorder}
+                  style={{ textAlign: "center" }}
                 >
-                  {row.user}
+                  {row.userDetails.firstName ||
+                  row.userDetails.lastName ||
+                  row.userDetails.profileImageUrl ? (
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <span style={{ marginRight: "10px" }}>
+                        {renderUserPrfoileAvatar(
+                          row.userDetails.firstName,
+                          row.userDetails.lastName,
+                          row.userDetails.profileImageUrl,
+                          "header"
+                        )}
+                      </span>
+                      <span>
+                        {row.userDetails.firstName} {row.userDetails.lastName}
+                      </span>
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: "center" }}>---</div>
+                  )}
                 </td>
                 <td
-                  style={{
-                    borderTop: "  0.2px solid #e1e1e1",
-                    borderBottom: "  0.2px solid #e1e1e1",
-                  }}
+                  className={TableStyle.lastBorder}
+                  
                 >
                   {row.role}
                 </td>
@@ -79,7 +103,9 @@ function SentReportTable({
     };
     dispatch(selectedReport(info));
     router?.push(
-      `/l2Auditor/report/individualreport?reportId=${row?._id}&l2Auditor=${true}`
+      `/l2Auditor/report/individualreport?reportId=${
+        row?._id
+      }&l2Auditor=${true}`
     );
   };
   return (
@@ -93,10 +119,10 @@ function SentReportTable({
               <tr>
                 <th>REPORT ID</th>
                 <th>REPORT NAME</th>
-                <th style={{paddingLeft:"100px"}}>USER LIST</th>
+                <th style={{ textAlign: "center" }}>USER LIST</th>
                 <th
                   className={TableStyle.rowStyle}
-                  style={{ cursor: "pointer" ,paddingLeft:"15px"}}
+                  style={{ cursor: "pointer", paddingLeft: "15px" }}
                   onClick={() => {
                     sortFunction(sortOrder, setSortOrder, setSort, "sendDate");
                   }}
@@ -117,8 +143,10 @@ function SentReportTable({
                   const formattedDate = dateFormate(dayjs, row?.sendDate);
 
                   return (
-                    <tr key={index} style={{ height: "40px" }} 
-                    onClick={() => handleReceiverReport(row)}
+                    <tr
+                      key={index}
+                      style={{ height: "40px" }}
+                      onClick={() => handleReceiverReport(row)}
                     >
                       <td
                         style={{
@@ -146,23 +174,45 @@ function SentReportTable({
                           borderTop: "  0.2px solid #e1e1e1",
                           cursor: "pointer",
                           borderBottom: "  0.2px solid #e1e1e1",
-                          width:"25%"
+
+                          textAlign: "center",
                         }}
                         className={TableStyle.childBorder}
                       >
-                        <Popover content={popCOntent} style={{position:"relative",left:"-330px"}}>
+                        <Popover
+                          content={popCOntent}
+                          style={{ position: "relative", left: "-330px" }}
+                        >
                           <div
                             onMouseOver={() =>
                               displayReceivedUsers(row.receivedUsers)
                             }
                           >
-                            {row?.receivedUsers?.slice(0, 2)?.map((data) => (
-                              <ul>
-                                <li style={{ marginBottom: "5px"}}>
-                                  {data.user}
-                                </li>
-                              </ul>
-                            ))}
+                            <Avatar.Group maxCount={2}>
+                              {row?.receivedUsers?.map((data, index) => (
+                                <div key={index}>
+                                  {data.userDetails.profileImageUrl ? (
+                                    <Avatar
+                                      src={data.userDetails.profileImageUrl}
+                                    />
+                                  ) : (
+                                    <Avatar
+                                      style={{
+                                        backgroundColor: backgroundColor,
+                                      }}
+                                    >
+                                      {`${
+                                        data.userDetails.firstName?.charAt(0) ||
+                                        ""
+                                      }${
+                                        data.userDetails.lastName?.charAt(0) ||
+                                        ""
+                                      }`}
+                                    </Avatar>
+                                  )}
+                                </div>
+                              ))}
+                            </Avatar.Group>
                           </div>
                         </Popover>
                       </td>
@@ -207,4 +257,3 @@ function SentReportTable({
 }
 
 export default SentReportTable;
-
