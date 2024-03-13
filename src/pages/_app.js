@@ -79,12 +79,6 @@ function MyApp({ Component, pageProps }) {
             setValidatePath(true);
           } else {
             setShowTerminal(true);
-            const timer = setTimeout(() => {
-              dispatch(refreshToken());
-            }, 30 * 60 * 1000);
-            return () => {
-              clearTimeout(timer);
-            };
           }
         }
       })

@@ -178,11 +178,16 @@ export function loginAction(email, router, code, password, mfa, skip) {
             pathname: `/twofactorAuthentication/SelectRole`,
             search: `params=${encodedParams}`,
           });
+          setTimeout(() => {
+            dispatch(refreshToken());
+            localStorage.setItem("currentTime",Date.now())
+          }, 60 * 1000);
         }
         if (response.data?.response === null) {
           notification.error({
             description: response?.data?.message,
           });
+          
         }
       })
       .catch((err) => {
