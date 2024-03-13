@@ -26,7 +26,7 @@ config.autoAddCss = false;
 function MyApp({ Component, pageProps }) {
   const dispatch = useDispatch();
   const router = useRouter();
-  const msgReply = useSelector((state) => state.workFlow.chatReply);
+  const msgReply = useSelector((state) => state.auth.chatReply);
   const [showTerminal, setShowTerminal] = useState(true);
   const [validatedPath, setValidatePath] = useState();
 
@@ -109,6 +109,7 @@ function MyApp({ Component, pageProps }) {
               emojis={true}
               title="CogentAI"
               subtitle="Chat with CogentAI"
+              autoFocus={true}
             />
           )}
           <Component {...pageProps} />
