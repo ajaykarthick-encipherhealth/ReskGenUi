@@ -181,7 +181,7 @@ export function loginAction(email, router, code, password, mfa, skip) {
           });
           setTimeout(() => {
             dispatch(refreshToken());
-          }, 15 * 60 * 1000);
+          }, 30 * 60 * 1000);
         }
         if (response.data?.response === null) {
           notification.error({
