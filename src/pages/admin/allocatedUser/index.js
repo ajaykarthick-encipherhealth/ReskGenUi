@@ -28,6 +28,7 @@ import {
   generateOptionsList,
   generateOptionsLists,
 } from "../../../components/headerFilters/functions";
+import { useDispatch } from "react-redux";
 
 import {
   disableFutureDate,
@@ -35,6 +36,8 @@ import {
 } from "../../../components/headerFilters/functions";
 import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
 import Selector from "../../../components/selector";
+import { getSelectUserList } from "../../../store/actions/adminAction/DashboardAction";
+import { getFilters } from "../../../store/actions/AuthActions";
 
 const { RangePicker } = DatePicker;
 
@@ -86,12 +89,15 @@ export default function Patient() {
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
   const filteredList = useSelector((state) => state.auth.filterList);
+  const selectUserList = useSelector(
+    (state) => state?.AdminDashboardReducers?.selectedUsers
+  );
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab === 1) {
       getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
     }
   }, [pageNo, pageSize, sort, activeTab]);
-
+  const dispatch = useDispatch();
   const getAllList = async (
     pageNo = 0,
     pageSize = 15,
@@ -354,6 +360,7 @@ export default function Patient() {
       </tr>
     );
   };
+  
   const statusOptions = [
     { label: "ALL", value: "" },
     { label: "COMPLETED", value: "COMPLETED" },
@@ -438,7 +445,7 @@ export default function Patient() {
       getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
     } else {
       console.log(sort, "test");
-      getL2PatientList(l2selectUser, pageNoL2Patient, sort, "");
+      getL2PatientList(l2selectUser, pageNoL2Patient, sort, "", selectedOptions,allocatedOption);
       setIsLoading(false);
     }
     setAllocateClicked(false);
@@ -454,8 +461,34 @@ export default function Patient() {
     allocateClicked,
     selectedOption,
     filterBatchCount,
-  ]);
+    selectedOptions,
+    allocatedOption
 
+  ]);
+  // useEffect(() => {
+  //   if (selectedCoderOptReport ) {
+  //     dispatch(
+  //       getSelectUserList(
+  //         selectedCoderOptReport === null &&selectedCoderOptReport?.value==='All'  ? "" : selectedCoderOptReport?.value
+  //       )
+  //     );
+
+  //   }
+  // }, [selectedCoderOptReport]);
+  // const options = [
+  //   { value: "", label: "All" },
+  //   { value: "REVIEWER", label: "REVIEWER" },
+  //   { value: "SUPERVISOR", label: "SUPERVISOR" },
+  // ];
+
+  // const optionsUser = selectUserList?.data?.response?.map((res) => ({
+  //   value: res.userName,
+  //   label: res.firstName + " " + res.lastName,
+  // }));
+
+  useEffect(() => {
+    dispatch(getFilters("patientAllocated"));
+  }, []);
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
