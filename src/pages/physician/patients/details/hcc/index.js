@@ -34,6 +34,7 @@ import {
   faSitemap,
   faCircleUser,
   faTrash,
+  faAngleDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { CalendarOutlined } from "@ant-design/icons";
 import {
@@ -312,6 +313,7 @@ const Hcc = ({ patientHccResult }) => {
   const [providerNameEcnounterList, setProviderNameEcnounterList] = useState(
     []
   );
+  const [popoverVisible, setPopoverVisible] = useState(false);
 
   const getMeatFound = (code, data, value) => {
     const result = data?.filter(
@@ -3542,6 +3544,7 @@ const Hcc = ({ patientHccResult }) => {
   };
 
   const handleChangePageNumber = async (value) => {
+    setPopoverVisible(false);
     var str_array = value.split(",");
     var pageNumber = str_array[0];
     var findData = str_array[1];
@@ -3747,6 +3750,45 @@ const Hcc = ({ patientHccResult }) => {
     });
   };
 
+  const PopContent = (
+    <div className={styles.innerPop}>
+      <div className={styles.displayDiv}>
+        <div className={styles.closeContainer}>
+          <FontAwesomeIcon
+            icon={faClose}
+            style={{
+              size: 5,
+              color: "#fff",
+            }}
+            className={styles.close_icon}
+            onClick={() => setPopoverVisible(false)}
+          />
+        </div>
+        {pageNumberOptions
+          ? pageNumberOptions?.map((data) => (
+              <div className={styles.hoverDiv}>
+                <div className={`row ${styles.selectDetailsContainer}`}>
+                  <div className="col-xl-3">
+                    <span className={styles.selectHead}>{data.label}</span>
+                  </div>
+                  {data?.options.map((data2) => (
+                    <div className={`col-xl-3 ${styles.selectDetailsDiv}`}>
+                      <span
+                        onClick={() => handleChangePageNumber(data2.value)}
+                        className={styles.selectDetails}
+                      >
+                        {data2?.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))
+          : null}
+      </div>
+    </div>
+  );
+
   return (
     <>
       {fileLoading ? (
@@ -3852,12 +3894,32 @@ const Hcc = ({ patientHccResult }) => {
                 ) : null}
                 {isDosSelect == true ? (
                   <div className="col-xl-3">
-                    <Select
+                    {/* <Select
                       className={`ant_select_form`}
                       onChange={handleChangePageNumber}
                       options={pageNumberOptions}
                       placeholder="Dos Page Number"
-                    />
+                    /> */}
+                    <Popover
+                      open={popoverVisible}
+                      content={PopContent}
+                      placement="bottom"
+                      trigger={"click"}
+                      onOpenChange={() => setPopoverVisible(true)}
+                    >
+                      <div className={styles.dosContainer}>
+                        <span className={styles.dosPageNumber}>
+                          Select Dos Page Number
+                        </span>
+                        <FontAwesomeIcon
+                          icon={faAngleDown}
+                          style={{
+                            size: 10,
+                            color: "#e6e6e6",
+                          }}
+                        />
+                      </div>
+                    </Popover>
                   </div>
                 ) : null}
               </div>
