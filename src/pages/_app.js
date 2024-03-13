@@ -109,6 +109,7 @@ function MyApp({ Component, pageProps }) {
               emojis={true}
               title="CogentAI"
               subtitle="Chat with CogentAI"
+              autoFocus={true}
             />
           )}
           <Component {...pageProps} />
