@@ -67,7 +67,7 @@ function AllocatedL2AdminList({
           {data.patientAllocatedFirstName ||
           data.patientAllocatedLastName ||
           data?.patientAllocatedProfileImage ? (
-            <div style={{ display: "flex", aligndatas: "center" }}>
+            <div style={{ display: "flex", alignItems: "center" }}>
               {" "}
               <span style={{ marginRight: "10px" }}>
                 {" "}
