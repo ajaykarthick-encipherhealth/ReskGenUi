@@ -151,7 +151,7 @@ const HeaderFilters = ({
   atCorner,
   isNextCreatedBySelector,
   selectReportOptions,
-  value
+  value,
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
@@ -217,7 +217,7 @@ const HeaderFilters = ({
               </div>
             </div>
           )}
-          
+
           {selectReportOptions && (
             <div className={defaultSize}>
               <label className={styles.label}>{selectlabel2}</label>
@@ -226,16 +226,12 @@ const HeaderFilters = ({
                   value={defaultSelectValue2 ? defaultSelectValue2 : ""}
                   onChange={(selectedOption) => {
                     setSelectedOption2(selectedOption);
-                    // if (selectOptions3) {
-                    //   setSelectedOption3(null);
-                    //   setSelect(null);
-                    // }
+
                     if (selectedOption?.label === "All") {
                       setSelectedOption3(null);
                     }
                   }}
                   options={selectReportOptions}
-                  // placeholder={defaultSelectValue2}
                   className="custom-react-select"
                   isSearchable={false}
                 />
@@ -269,13 +265,13 @@ const HeaderFilters = ({
                   onChange={(selectedOption) => {
                     if (selectedCoderOptReport?.value === "SUPERVISOR") {
                       setSelectedOption3(selectedOption);
-                      setSelectedOption2(null);
+                      // setSelectedOption2(null);
                       setSelect(null);
                     }
                     if (selectedCoderOptReport?.value === "REVIEWER") {
                       setSelect(selectedOption?.value);
                       setSelectedOption3(selectedOption);
-                      setSelectedOption2(null);
+                      // setSelectedOption2(null);
                     }
                   }}
                   className="custom-react-select"
@@ -444,7 +440,7 @@ const HeaderFilters = ({
             {isAllocatedBySelector && (
               <div
                 className={defaultSize}
-                style={{position:"relative",left:atCorner && "-20px"}}
+                style={{ position: "relative", left: atCorner && "-20px" }}
                 onClick={() => {
                   dispatch(
                     getFilters(selectorField ? selectorField : "allocatedBy")
@@ -490,7 +486,6 @@ const HeaderFilters = ({
             {isCreatedBySelector && (
               <div
                 className={defaultSize}
-                
                 onClick={() => {
                   dispatch(
                     getFilters(

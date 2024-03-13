@@ -14,7 +14,7 @@ export const patientDetails = async (
   const token = localStorage.getItem("token");
   const orgId = localStorage.getItem("orgId");
   const searchValue = filter === "ALL" ? "" : filter;
-  const url = `dbservice/patient/adminreport?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}&username=${userName}&managerid=${selectManager}&orgid=${orgId}`;
+  const url = `dbservice/patient/adminreport?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}&username=${userName==='REVIEWER'?selectManager:""}&managerid=${userName==='SUPERVISOR'?selectManager:""}&orgid=${orgId}`;
 
   try {
     const response = await axios.get(`${ENDPOINTS?.apiEndoint}${url}`, {
