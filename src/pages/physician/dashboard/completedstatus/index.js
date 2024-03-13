@@ -22,6 +22,8 @@ const CompletedStatus = () => {
   const [selectedMonth, setSelectedMonth] = useState(
     currentDate.getMonth() + 1
   );
+  const [year, setYear] = useState();
+  const [month, setMonth] = useState();
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const dispatch = useDispatch();
   const router = useRouter();
@@ -82,7 +84,10 @@ const CompletedStatus = () => {
   if (currentBtn === "Monthly") {
     xAxisData = monthNames;
   } else if (currentBtn === "Daily") {
-    xAxisData = getDays(completedDatas?.data?.response?.completedData && Object.keys(completedDatas?.data?.response?.completedData)?.length);
+    xAxisData = getDays(
+      completedDatas?.data?.response?.completedData &&
+        Object.keys(completedDatas?.data?.response?.completedData)?.length
+    );
   } else if (currentBtn === "Weekly") {
     xAxisData = weekNames;
   }
@@ -157,17 +162,20 @@ const CompletedStatus = () => {
           <div className={styles.buttonDiv}>
             <div className={styles.picker}>
               <YearPicker
-                onChange={handleYearChange}
-                type={"year"}
+                onChangeYear={handleYearChange}
+                onChangeMonth={handleMonthChange}
+                type={currentBtn}
                 bgColor="#F3F3FF"
+                val={month}
+                val1={year}
               />
-              {currentBtn !== "Monthly" && (
+              {/* {currentBtn !== "Monthly" && (
                 <YearPicker
                   onChange={handleMonthChange}
                   type={"month"}
                   bgColor="#F3F3FF"
                 />
-              )}
+              )} */}
             </div>
             <div className={styles.btnScroller}>
               <Buttonscroller

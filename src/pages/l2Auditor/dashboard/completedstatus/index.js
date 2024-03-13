@@ -25,6 +25,8 @@ const CompletedStatus = () => {
     currentDate.getMonth() + 1
   );
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
+  const [year, setYear] = useState();
+  const [month, setMonth] = useState();
 
   let completedWeeks = new Set();
   let allocatedWeeks = new Set();
@@ -53,9 +55,11 @@ const CompletedStatus = () => {
 
   const handleYearChange = (date, dateString) => {
     setSelectedYear(dateString);
+    setYear(date)
   };
   const handleMonthChange = (date) => {
     const selectedDate = new Date(date);
+    setMonth(date)
     const monthNumber = (selectedDate.getMonth() + 1)
       .toString()
       .padStart(2, "0");
@@ -167,18 +171,21 @@ const CompletedStatus = () => {
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
             <div className={styles.picker}>
-              <YearPicker
-                onChange={handleYearChange}
-                type={"year"}
+            <YearPicker
+                onChangeYear={handleYearChange}
+                onChangeMonth={handleMonthChange}
+                type={currentBtn}
                 bgColor="#F3F3FF"
+                val={month}
+                val1={year}
               />
-              {currentBtn !== "Monthly" && (
+              {/* {currentBtn !== "Monthly" && (
                 <YearPicker
                   onChange={handleMonthChange}
                   type={"month"}
                   bgColor="#F3F3FF"
                 />
-              )}
+              )} */}
             </div>
             <div className={styles.btnScroller}>
               <Buttonscroller

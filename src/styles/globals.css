@@ -14188,3 +14188,6 @@ input[type="number"] {
 .background-white {
   background: #fff;
 }
+.pickerChnages > .ant-picker-input:hover > .ant-picker-clear {
+  display: none !important;
+}

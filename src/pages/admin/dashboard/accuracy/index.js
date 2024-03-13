@@ -156,7 +156,8 @@ const Accuracy = () => {
       return param?.data?.response.map((item) => item[val]);
     } else if (
       year == currentDate.getFullYear() &&
-      month == currentDate.getMonth() + 1
+      month == currentDate.getMonth() + 1 &&
+      currentBtn !== "Monthly"
     ) {
       if (currentBtn == "Daily") {
         return param?.data?.response.map(
@@ -171,6 +172,10 @@ const Accuracy = () => {
           (item, index) => index < new Date().getMonth() + 1 && item[val]
         );
       }
+    } else if (year == currentDate.getFullYear() && currentBtn == "Monthly") {
+      return param?.data?.response.map(
+        (item, index) => index < new Date().getMonth() + 1 && item[val]
+      );
     } else {
       return false;
     }
@@ -188,7 +193,8 @@ const Accuracy = () => {
       return param.map((item) => item);
     } else if (
       year == currentDate.getFullYear() &&
-      month == currentDate.getMonth() + 1
+      month == currentDate.getMonth() + 1 &&
+      currentBtn != "Monthly"
     ) {
       if (currentBtn == "Daily") {
         return param.map((item, index) => index < new Date().getDate() && item);
@@ -201,8 +207,10 @@ const Accuracy = () => {
           (item, index) => index < new Date().getMonth() + 1 && item
         );
       }
-
-      return param.map((item, index) => index < new Date().getDate() && item);
+    } else if (year == currentDate.getFullYear() && currentBtn == "Monthly") {
+      return param.map(
+        (item, index) => index < new Date().getMonth() + 1 && item
+      );
     } else {
       return false;
     }

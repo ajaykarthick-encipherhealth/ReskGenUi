@@ -17,33 +17,32 @@ const YearPicker = ({
 
   return (
     <>
-      {/* {type !== "Monthly" && ( */}
-        <div className={styles.pickerBox}>
-          <DatePicker
-            onChange={onChangeYear}
-            picker={"year"}
-            value={dayjs(val1?val1:currentDate, "YYYY")}
-            format={"YYYY"}
-            className={styles.picker}
-            style={{ backgroundColor: bgColor }}
-            suffixIcon={<Image src={arrow} />}
-          />
-        </div>
-      {/* )} */}
-
-      {type !== "Monthly" && 
       <div className={styles.pickerBox}>
         <DatePicker
-          onChange={onChangeMonth}
-          picker={"month"}
-          value={dayjs(val?val:currentDate, "mm")}
-          format={"MM"}
-          className={styles.picker}
+          onChange={onChangeYear}
+          picker={"year"}
+          value={dayjs(val1 ? val1 : currentDate, "YYYY")}
+          format={"YYYY"}
+          className={`${styles.picker} pickerChnages`}
           style={{ backgroundColor: bgColor }}
           suffixIcon={<Image src={arrow} />}
         />
       </div>
-}
+
+      {type !== "Monthly" && (
+        <div className={styles.pickerBox}>
+          <DatePicker
+            onChange={onChangeMonth}
+            picker={"month"}
+            value={dayjs(val ? val : currentDate, "mm")}
+            format={"MM"}
+            className={`${styles.picker} pickerChnages`}
+            style={{ backgroundColor: bgColor }}
+            suffixIcon={<Image src={arrow} />}
+            
+          />
+        </div>
+      )}
     </>
   );
 };

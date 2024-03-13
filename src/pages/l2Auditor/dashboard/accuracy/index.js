@@ -61,6 +61,9 @@ const Accuracy = () => {
   const [selectMemberType, setSelectMemberType] = useState("TEAM");
   const [selectUser, setSelectUser] = useState([]);
   const [isindividual, setIsindividual] = useState(false);
+  const [year, setYear] = useState();
+  const [month, setMonth] = useState();
+
   const dispatch = useDispatch();
   const accuracyDatas = useSelector((state) => state?.l2Dashboard?.accuracy);
   const individualUserList = useSelector(
@@ -88,38 +91,44 @@ const Accuracy = () => {
       label: res.firstName + " " + res.lastName,
     })
   );
-  const chartBlockedDates = (year, month, param, val) => {
+  const chartBlockedDates = (year, month, param, val, currentBtn) => {
     year = Number(year);
     month = Number(month);
     if (year < currentDate.getFullYear()) {
-      return param?.data?.response?.mapAccuracy?.map((item) => item[val]);
+      return param?.data?.mapAccuracy?.map((item) => item[val]);
     } else if (
       year == currentDate.getFullYear() &&
       month < currentDate.getMonth() + 1
     ) {
-      return param?.data?.response?.mapAccuracy?.map((item) => item[val]);
+      console.log( param?.data?.response)
+      return param?.data?.mapAccuracy?.map((item) => item[val]);
     } else if (
       year == currentDate.getFullYear() &&
-      month == currentDate.getMonth() + 1
+      month == currentDate.getMonth() + 1 &&
+      currentBtn !== "Monthly"
     ) {
       if (currentBtn == "Daily") {
-        return param?.data?.response?.mapAccuracy?.map(
+        return param?.data?.mapAccuracy?.map(
           (item, index) => index < new Date().getDate() && item[val]
         );
       } else if (currentBtn == "Weekly") {
-        return param?.data?.response?.mapAccuracy?.map(
+        return param?.data?.mapAccuracy?.map(
           (item, index) => index < getDateWeek(currentDate) && item[val]
         );
       } else if (currentBtn == "Monthly") {
-        return param?.data?.response?.mapAccuracy?.map(
+        return param?.data?.mapAccuracy?.map(
           (item, index) => index < new Date().getMonth() + 1 && item[val]
         );
       }
-     
+    } else if (year == currentDate.getFullYear() && currentBtn == "Monthly") {
+      return param?.data?.mapAccuracy?.map(
+        (item, index) => index < new Date().getMonth() + 1 && item[val]
+      );
     } else {
       return false;
     }
   };
+
   const memberTypeChanges = (e) => {
     setSelectMemberType(e);
     setIsindividual(false);
@@ -158,9 +167,11 @@ const Accuracy = () => {
 
   const handleYearChange = (date, dateString) => {
     setSelectedYear(dateString);
+    setYear(date);
   };
   const handleMonthChange = (date) => {
     const selectedDate = new Date(date);
+    setMonth(date);
     const monthNumber = (selectedDate.getMonth() + 1)
       .toString()
       .padStart(2, "0");
@@ -380,17 +391,20 @@ const Accuracy = () => {
             <div className="d-flex">
               <div className={styles.picker}>
                 <YearPicker
-                  onChange={handleYearChange}
-                  type={"year"}
+                  onChangeYear={handleYearChange}
+                  onChangeMonth={handleMonthChange}
+                  type={currentBtn}
                   bgColor="#E6EEFF"
+                  val={month}
+                  val1={year}
                 />
-                {currentBtn !== "Monthly" && (
+                {/* {currentBtn !== "Monthly" && (
                   <YearPicker
                     onChange={handleMonthChange}
                     type={"month"}
                     bgColor="#E6EEFF"
                   />
-                )}
+                )} */}
               </div>
               <div className={styles.btnScroller}>
                 <Buttonscroller
