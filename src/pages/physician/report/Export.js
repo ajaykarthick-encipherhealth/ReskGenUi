@@ -117,8 +117,7 @@ const Export = ({
     };
 
     if (!isSent) {
-      console.log(data)
-      // dispatch(getExportDetails(data));
+      dispatch(getExportDetails(data));
     } else {
       dispatch(updateSentReport(updatedData));
     }
@@ -333,7 +332,7 @@ const Export = ({
                   disabled={
                     selectedUser &&
                     selectedUser[0]?.user &&
-                    selectedUser[0]?.role 
+                    selectedUser[0]?.role
                       ? false
                       : true
                   }
