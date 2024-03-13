@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/navigation";
+import Select from "react-select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -24,6 +25,11 @@ import TableStyle from "../../../components/table/table.module.css";
 import Image from "next/image";
 import leftArrow from "../../../images/svg/leftArrow.svg";
 import {
+  generateOptionsList,
+  generateOptionsLists,
+} from "../../../components/headerFilters/functions";
+
+import {
   disableFutureDate,
   renderUserPrfoile,
 } from "../../../components/headerFilters/functions";
@@ -40,7 +46,6 @@ const statusOption = [
   { value: "LOW", label: "LOW" },
 ];
 export default function Patient() {
-  const navigate = useRouter();
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [addPatientId, setAddPatientId] = useState(false);
@@ -73,10 +78,14 @@ export default function Patient() {
   const [searchString, setSearchString] = useState("");
   const [checkedLoading, setCheckedLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOptions, setSelectedOptions] = useState("");
+  const [allocatedOption, setAllocatedOption] = useState("");
+
   const [batchCount, setBatchCount] = useState("");
   const [filterBatchCount, setFilterBatchCount] = useState(false);
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
+  const filteredList = useSelector((state) => state.auth.filterList);
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab === 1) {
       getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
@@ -345,12 +354,19 @@ export default function Patient() {
       </tr>
     );
   };
+  const statusOptions = [
+    { label: "ALL", value: "" },
+    { label: "COMPLETED", value: "COMPLETED" },
+    { label: "DECLINED", value: "DECLINED" },
+  ];
 
   const getL2PatientList = async (
     data,
     pageNoL2Patient,
     sort,
-    searchString
+    searchString,
+    selectedOptions,
+    allocatedOption
   ) => {
     setTableLoading(true);
     setIsLoading(true);
@@ -366,7 +382,9 @@ export default function Patient() {
       sort?.sortDir ? sort?.sortDir : "DESC"
     }&sortfield=${
       sort?.sortField ? sort?.sortField : "dueDate"
-    }&searchstring=${searchString}`;
+    }&searchstring=${searchString}&processedStatus=${
+      selectedOptions ? selectedOptions : ""
+    }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       var resultMap = [];
@@ -404,7 +422,6 @@ export default function Patient() {
     var resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=0&size=${totalElementsPatient}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
-      var resultMap = [];
       var result = response?.data?.response;
       const data = result?.content?.map((item) => ({
         id: item.patientId,
@@ -484,6 +501,7 @@ export default function Patient() {
                               </div>
                             </div>
                           </div>
+
                           {!isPatientList && activeTab == 1 ? (
                             <>
                               <div className="col-xl-2">
@@ -540,8 +558,35 @@ export default function Patient() {
                                 </div>
                               </div>
                             </>
-                          ) : (
+                          ) : !isPatientList && activeTab == 2 ? (
                             <div className="col-xl-6"></div>
+                          ) : (
+                            <>
+                              <div className="col-xl-2">
+                                <div>
+                                  <Selector
+                                    selectlabel={"Reviewer"}
+                                    setSelectedOption={setAllocatedOption}
+                                    selectOptions={generateOptionsList(
+                                      filteredList
+                                    )}
+                                    defaultSelectValue1={""}
+                                    // isClose={true}
+                                  />
+                                </div>
+                              </div>
+                              <div className="col-xl-2">
+                                <div>
+                                  <Selector
+                                    selectlabel={"Status"}
+                                    setSelectedOption={setSelectedOptions}
+                                    selectOptions={statusOptions}
+                                    defaultSelectValue1={""}
+                                    // isClose={true}
+                                  />
+                                </div>
+                              </div>
+                            </>
                           )}
                           <div className="col-xl-4 mt-4">
                             {isPatientList || activeTab === 1 ? (
@@ -602,7 +647,6 @@ export default function Patient() {
                                     eventKey="team"
                                     onClick={() => {
                                       setTableLoading(true);
-                                      
                                     }}
                                   >
                                     Supervisor Allocation
