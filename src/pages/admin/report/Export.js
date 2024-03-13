@@ -2,10 +2,94 @@ import { Button, Checkbox, Form, Input, Modal, Radio, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import styles from "./report.module.css";
 import {
-  getExportDetails, getUsersList,
+  getExportDetails,
+  getUsersList,
+  updateSentReport,
 } from "../../../store/actions/adminAction/ReportActions";
 import { useDispatch, useSelector } from "react-redux";
+
 const { Option } = Select;
+
+const checkBoxData = [
+  {
+    id: 1,
+    title: "patientId",
+    heading: "Patient Id",
+    checked: false,
+  },
+  {
+    id: 2,
+    title: "patientName",
+    heading: "Patient Name",
+    checked: false,
+  },
+  {
+    id: 3,
+    title: "dob",
+    heading: "Dob",
+    checked: false,
+  },
+  {
+    id: 4,
+    title: "processedDate",
+    heading: "Processed Date",
+    checked: false,
+  },
+  {
+    id: 5,
+    title: "providerName",
+    heading: "Provider Name",
+    checked: false,
+  },
+  {
+    id: 6,
+    title: "allocatedOn",
+    heading: "Allocated On",
+    checked: false,
+  },
+  {
+    id: 7,
+    title: "noOfValidCodes",
+    heading: "No Of Valid Codes",
+    checked: false,
+  },
+  {
+    id: 8,
+    title: "noOfSuggestedCodes",
+    heading: "No Of Suggested Codes",
+    checked: false,
+  },
+  {
+    id: 9,
+    title: "noOfDeletedCodes",
+    heading: "No Of Deleted Codes",
+    checked: false,
+  },
+  {
+    id: 10,
+    title: "totalCodes",
+    heading: "Total Codes",
+    checked: false,
+  },
+  {
+    id: 11,
+    title: "allocatedUserId",
+    heading: "Allocated UserId",
+    checked: false,
+  },
+  {
+    id: 12,
+    title: "comments",
+    heading: "Comments",
+    checked: false,
+  },
+  {
+    id: 13,
+    title: "validDisease",
+    heading: "Valid Disease",
+    checked: false,
+  },
+];
 
 export const debounce = (func, delay) => {
   let timer;
@@ -22,7 +106,9 @@ const Export = ({
   setIsModalVisible,
   setSelectedRows,
   setSelectAll,
+  selectedRows,
 }) => {
+  const dispatch = useDispatch();
   const usersList = useSelector((state) => state.report?.usersList);
   const [selectedUser, setSelectedUser] = useState();
   const [search, setSearch] = useState("");
@@ -31,87 +117,10 @@ const Export = ({
   const [selectedList, setSelectedList] = useState([]);
   const [open, setOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState("");
+  const [removedUsers, setRemovedUsers] = useState([]);
+  const [reportName, setReportName] = useState("");
   const [form] = Form.useForm();
-  const checkBoxData = [
-    {
-      id: 1,
-      title: "patientId",
-      heading: "Patient Id",
-      checked: false,
-    },
-    {
-      id: 2,
-      title: "patientName",
-      heading: "Patient Name",
-      checked: false,
-    },
-    {
-      id: 3,
-      title: "dob",
-      heading: "Dob",
-      checked: false,
-    },
-    {
-      id: 4,
-      title: "processedDate",
-      heading: "Processed Date",
-      checked: false,
-    },
-    {
-      id: 5,
-      title: "providerName",
-      heading: "Provider Name",
-      checked: false,
-    },
-    {
-      id: 6,
-      title: "allocatedOn",
-      heading: "Allocated On",
-      checked: false,
-    },
-    {
-      id: 7,
-      title: "noOfValidCodes",
-      heading: "No Of Valid Codes",
-      checked: false,
-    },
-    {
-      id: 8,
-      title: "noOfSuggestedCodes",
-      heading: "No Of Suggested Codes",
-      checked: false,
-    },
-    {
-      id: 9,
-      title: "noOfDeletedCodes",
-      heading: "No Of Deleted Codes",
-      checked: false,
-    },
-    {
-      id: 10,
-      title: "totalCodes",
-      heading: "Total Codes",
-      checked: false,
-    },
-    {
-      id: 11,
-      title: "allocatedUserId",
-      heading: "Allocated UserId",
-      checked: false,
-    },
-    {
-      id: 12,
-      title: "comments",
-      heading: "Comments",
-      checked: false,
-    },
-    {
-      id: 13,
-      title: "validDisease",
-      heading: "Valid Disease",
-      checked: false,
-    },
-  ];
+
   const [checkall, setCheckAll] = useState(checkBoxData);
 
   useEffect(() => {
@@ -120,7 +129,7 @@ const Export = ({
     var orgId = localStorage.getItem("orgId");
     dispatch(getUsersList(orgId, search));
   }, [search]);
-  const dispatch = useDispatch();
+
   const options = usersList?.response
     ?.map(
       (data) =>
@@ -140,11 +149,14 @@ const Export = ({
       (data) => data?.userName === value[0]
     );
     setSelectedList(filteredData?.map((item) => item?.userName));
-    setSelectedUser((prevUsers) => [{ ...prevUsers, user: filteredData,role:null }]);
+    setSelectedUser((prevUsers) => [
+      { ...prevUsers, user: filteredData, role: null },
+    ]);
     setOpen(false);
   };
 
   const handleSelectedRole = (value) => {
+    console.log(value);
     setSelectedUser((prevUsers) =>
       prevUsers?.map((item) => {
         if (value) {
@@ -155,13 +167,17 @@ const Export = ({
     );
   };
 
-  const filteredOptions =
-    userList &&
-    options?.filter((option) => {
-      return !userList?.some((data) =>
-        data?.user?.some((info) => info?.userName?.includes(option?.value))
-      );
-    });
+  const filteredOptions = !selectedRows
+    ? options?.filter((option) => {
+        return !userList?.some((data) =>
+          data?.user?.some((info) => info?.userName?.includes(option?.value))
+        );
+      })
+    : options?.filter((option) => {
+        return selectedRows?.receivedUsers?.filter(
+          (data) => data !== option?.value
+        );
+      });
 
   const debouncedSearch = debounce((value) => {
     setSearch(value);
@@ -172,11 +188,22 @@ const Export = ({
 
   const onFinish = (values) => {
     const patientIds = rowsLength?.data?.map((item) => item?.patientId);
-    const userAndAccess = userList?.reduce((result, { user, role }) => {
-      result[user.map((info) => info?.userName)] = role;
+    const userAndAccess =
+      selectedRows?.receivedUsers?.length === 0 &&
+      userList?.reduce((result, { user, role }) => {
+        result[user.map((info) => info?.userName)] = role;
+        return result;
+      }, {});
+    const editUserAndAccess = userList.reduce((result, { user, role }) => {
+      if (Array.isArray(user)) {
+        user.forEach((info) => {
+          result[info.userName] = role;
+        });
+      } else {
+        result[user] = role;
+      }
       return result;
     }, {});
-
     const fields = checkall?.reduce((acc, data) => {
       acc[data?.title] = data?.checked;
       return acc;
@@ -188,7 +215,22 @@ const Export = ({
       reportName: values.ReportName,
       userAndAccess: userAndAccess,
     };
-    dispatch(getExportDetails(data));
+    // dispatch(getExportDetails(data));
+    // const userEmail = Object.keys(userAndAccess)[0];
+    // const role = userAndAccess;
+    const updatedData = {
+      reportName: values?.ReportName,
+      reportId: selectedRows?._id,
+      userAndAccess: editUserAndAccess,
+      removedUsers: removedUsers,
+    };
+    console.log(updatedData);
+
+    // if (selectedRows?.receivedUsers?.lengt === 0) {
+    //   dispatch(getExportDetails(data));
+    // } else {
+    //   dispatch(updateSentReport(updatedData, oldUser));
+    // }
     form.resetFields();
     setUsersList([]);
     setCheckAll((prev) => {
@@ -204,13 +246,48 @@ const Export = ({
   };
 
   const deleteUser = (userInfo) => {
-    setUsersList((prevUserList) =>
-      prevUserList?.filter(
-        (user) => user?.user[0]?.userId !== userInfo[0]?.userId
-      )
-    );
+    // setUsersList((prevUserList) =>
+    //   prevUserList?.filter(
+    //     (user) => user?.user[0]?.userId !== userInfo[0]?.userId
+    //   )
+    // );
+    if (Array?.isArray(userInfo)) {
+      setUsersList((prevUserList) =>
+        prevUserList?.filter(
+          (info) => info?.user[0]?.userId !== userInfo[0]?.userId
+        )
+      );
+    } else {
+      setRemovedUsers((prev) => [...prev, userInfo]);
+      setUsersList((prevUserList) =>
+        prevUserList?.filter((info) => info?.user !== userInfo)
+      );
+    }
   };
+  useEffect(() => {
+    setSelectedList([]);
+    if (selectedRows?.receivedUsers?.length > 0) {
+      setDisplay(true);
+      const data = [
+        {
+          user: [selectedRows?.receivedUsers[0]?.userDetails],
+          role: selectedRows?.receivedUsers[0]?.role,
+        },
+      ];
 
+      setUsersList(data);
+    } else {
+      setDisplay(false);
+      setUsersList([]);
+    }
+  }, [selectedRows, isModalVisible]);
+  form.setFieldsValue({
+    ReportName:
+      selectedRows?.receivedUsers?.length > 0
+        ? selectedRows?.reportName
+        : reportName,
+  });
+  console.log(userList);
   return (
     <Modal
       title="Export "
@@ -230,88 +307,93 @@ const Export = ({
             },
           ]}
         >
-          <Input />
+          <Input
+            disabled={selectedRows?.reportName ? true : false}
+            onChange={(e) => setReportName(e.target.value)}
+          />
         </Form.Item>
-
-        <Form.Item
-          label="Report Type"
-          name="ReportTYpe"
-          rules={[
-            {
-              required: true,
-              message: "Please Select your Option!",
-            },
-          ]}
-        >
-          <Radio.Group>
-            <Radio.Button value="EXCEL" className={styles.excel}>
-              Excel
-            </Radio.Button>
-            <Radio.Button value="CSV" className={styles.excel}>
-              CSV
-            </Radio.Button>
-          </Radio.Group>
-        </Form.Item>
-
-        <Form.Item
-          label="Report Fields"
-          name="ReportFields"
-          rules={[
-            {
-              required: true,
-              message: "Please Select your Option!",
-            },
-          ]}
-        >
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "16px",
-              margin: "0px 0",
-            }}
-          >
-            <Checkbox
-              key={0}
-              value={"all"}
-              onChange={(e) => {
-                if (e.target.value === "all") {
-                  setCheckAll((prev) => {
-                    return prev?.map((data) => {
-                      return { ...data, checked: e.target.checked };
-                    });
-                  });
-                }
-              }}
+        {rowsLength && (
+          <>
+            <Form.Item
+              label="Report Type"
+              name="ReportTYpe"
+              rules={[
+                {
+                  required: true,
+                  message: "Please Select your Option!",
+                },
+              ]}
             >
-              {" "}
-              Check All
-            </Checkbox>
-            {checkall?.map((data) => (
-              <>
+              <Radio.Group>
+                <Radio.Button value="EXCEL" className={styles.excel}>
+                  Excel
+                </Radio.Button>
+                <Radio.Button value="CSV" className={styles.excel}>
+                  CSV
+                </Radio.Button>
+              </Radio.Group>
+            </Form.Item>
+
+            <Form.Item
+              label="Report Fields"
+              name="ReportFields"
+              rules={[
+                {
+                  required: true,
+                  message: "Please Select your Option!",
+                },
+              ]}
+            >
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, 1fr)",
+                  gap: "16px",
+                  margin: "0px 0",
+                }}
+              >
                 <Checkbox
-                  key={data?.id}
-                  value={data?.title}
-                  checked={data?.checked}
+                  key={0}
+                  value={"all"}
                   onChange={(e) => {
-                    setCheckAll((prev) => {
-                      return prev?.map((data) => {
-                        if (data?.title === e.target.value) {
+                    if (e.target.value === "all") {
+                      setCheckAll((prev) => {
+                        return prev?.map((data) => {
                           return { ...data, checked: e.target.checked };
-                        } else {
-                          return data;
-                        }
+                        });
                       });
-                    });
+                    }
                   }}
                 >
-                  {data.heading}
+                  {" "}
+                  Check All
                 </Checkbox>
-              </>
-            ))}
-          </div>
-        </Form.Item>
-
+                {checkall?.map((data) => (
+                  <>
+                    <Checkbox
+                      key={data?.id}
+                      value={data?.title}
+                      checked={data?.checked}
+                      onChange={(e) => {
+                        setCheckAll((prev) => {
+                          return prev?.map((data) => {
+                            if (data?.title === e.target.value) {
+                              return { ...data, checked: e.target.checked };
+                            } else {
+                              return data;
+                            }
+                          });
+                        });
+                      }}
+                    >
+                      {data.heading}
+                    </Checkbox>
+                  </>
+                ))}
+              </div>
+            </Form.Item>
+          </>
+        )}
         <div style={{ display: "flex", marginBottom: "20px" }}>
           <div style={{ width: "100%" }}>
             <Form.Item
@@ -390,12 +472,38 @@ const Export = ({
               {userList?.map((item, index) => (
                 <div className={styles.userName}>
                   <div key={index} className={styles.userRoleContainer}>
-                    {item?.user?.map(
+                    {/* {item?.user?.map(
                       (info) => `${info?.firstName}  ${info?.lastName}`
                     )}
                   </div>
                   <div key={index} className={styles.userRoleContainer}>
                     {item.role}
+                  </div> */}
+                    {item?.user?.length > 0 && Array.isArray(item?.user)
+                      ? item?.user?.map(
+                          (info) => `${info?.firstName}  ${info?.lastName}`
+                        )
+                      : item?.user}
+                  </div>
+                  <div key={index} className={styles.userRoleContainer}>
+                    {/* {selectedRows?.length === 0 ? ( */}
+                    {item.role}
+                    {/* ) : (
+                      <Select
+                        onChange={(value) => {
+                          handleSelectedRole(value);
+                        }}
+                        className={styles.selectDiv}
+                        value={
+                          selectedUser?.length > 0
+                            ? selectedUser?.map((item) => item.role)
+                            : item?.role
+                        }
+                      >
+                        <Option value="READ">Read</Option>
+                        <Option value="DOWNLOAD">Download</Option>
+                      </Select>
+                    )} */}
                   </div>
 
                   <div
