@@ -306,6 +306,7 @@ export const refreshToken = () => async (dispatch) => {
           data: response.data,
         },
       });
+      localStorage.setItem("refreshTokenTime",Date.now())
       localStorage.setItem("token", response?.data?.response);
     }
   } catch (err) {

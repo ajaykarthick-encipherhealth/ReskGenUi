@@ -11,6 +11,7 @@ import {
   accuracy,
   filters,
   CurrentUser,
+  refreshToken,
 } from "../../services/AuthService";
 import { notification } from "antd";
 import ENDPOINTS from "../../utility/enpoints";
@@ -180,14 +181,12 @@ export function loginAction(email, router, code, password, mfa, skip) {
           });
           setTimeout(() => {
             dispatch(refreshToken());
-            localStorage.setItem("currentTime",Date.now())
-          }, 60 * 1000);
+          }, 15 * 60 * 1000);
         }
         if (response.data?.response === null) {
           notification.error({
             description: response?.data?.message,
           });
-          
         }
       })
       .catch((err) => {
