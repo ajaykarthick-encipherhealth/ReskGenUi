@@ -15,7 +15,7 @@ import "react-circular-progressbar/dist/styles.css";
 import SentReportTable from "../table/sentReport/sentReport";
 import ReceivedReport from "../table/receivedReport/receivedReport";
 import CoderReport from "../table/CoderReport/coderReport";
-import Export, { debounce } from "./Export";
+import Export from "./Export";
 import {
   getActiveTab,
   getReceivedDetails,
@@ -26,6 +26,7 @@ import {
 import SpinnerDots from "../../../components/spinner";
 import TeamReport from "../table/TeamReport/teamReport";
 import { disableFutureDate } from "../../../components/headerFilters/functions";
+import { debounce } from "../../admin/report/Export";
 
 const statusOptions = [
   { label: "All", value: "ALL" },

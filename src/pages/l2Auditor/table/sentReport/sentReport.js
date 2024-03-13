@@ -15,6 +15,9 @@ import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { selectedReport } from "../../../../store/actions/l2Action/AuditReportAction";
+import EditButton from "../../../../images/adminUsers/EditButton";
+import Export from "../../report/Export";
+
 
 function SentReportTable({
   details,
@@ -31,6 +34,9 @@ function SentReportTable({
   const dispatch = useDispatch();
   const router = useRouter();
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
 
   const displayReceivedUsers = (list) => {
     setSelectedUsers(list);
@@ -108,6 +114,9 @@ function SentReportTable({
       }&l2Auditor=${true}`
     );
   };
+  const closeModal=()=>{
+    setOpenEdit(false)
+  }
   return (
     <div className={TableStyle.classContaineer}>
       {!details?.data ? (
@@ -119,7 +128,9 @@ function SentReportTable({
               <tr>
                 <th>REPORT ID</th>
                 <th>REPORT NAME</th>
+
                 <th style={{ textAlign: "center" }}>USER LIST</th>
+
                 <th
                   className={TableStyle.rowStyle}
                   style={{ cursor: "pointer", paddingLeft: "15px" }}
@@ -134,6 +145,7 @@ function SentReportTable({
                     <ArrowDownOutlined />
                   )}
                 </th>
+                <th style={{ textAlign: "center" }}>ACTION</th>
               </tr>
             </thead>
 
@@ -146,7 +158,7 @@ function SentReportTable({
                     <tr
                       key={index}
                       style={{ height: "40px" }}
-                      onClick={() => handleReceiverReport(row)}
+
                     >
                       <td
                         style={{
@@ -155,6 +167,7 @@ function SentReportTable({
                           borderBottom: "  0.2px solid #e1e1e1",
                         }}
                         className={TableStyle.childBorder}
+                        onClick={() => handleReceiverReport(row)}
                       >
                         {row._id}
                       </td>
@@ -165,6 +178,7 @@ function SentReportTable({
                           borderBottom: "  0.2px solid #e1e1e1",
                         }}
                         className={TableStyle.childBorder}
+                        onClick={() => handleReceiverReport(row)}
                       >
                         {row.reportName}
                       </td>
@@ -175,9 +189,12 @@ function SentReportTable({
                           cursor: "pointer",
                           borderBottom: "  0.2px solid #e1e1e1",
 
+
                           textAlign: "center",
+
                         }}
                         className={TableStyle.childBorder}
+                        onClick={() => handleReceiverReport(row)}
                       >
                         <Popover
                           content={popCOntent}
@@ -219,13 +236,28 @@ function SentReportTable({
                       <td
                         style={{
                           borderTop: "  0.2px solid #e1e1e1",
-
-                          borderBottom: "  0.2px solid #e1e1e1",
-                          borderRight: "  0.2px solid #e1e1e1",
                         }}
                         className={TableStyle.childBorder}
+                        onClick={() => handleReceiverReport(row)}
                       >
                         {formattedDate}
+                      </td>
+                      <td
+                        style={{
+                          textAlign: "center",
+                          borderTop: " 0.2px solid #e1e1e1",
+                          borderBottom: " 0.2px solid #e1e1e1",
+                          borderRight: " 0.2px solid #e1e1e1",
+                        }}
+                      >
+                        <div
+                          onClick={() => {
+                            setSelectedRows(row);
+                            setOpenEdit(true);
+                          }}
+                        >
+                          <EditButton />
+                        </div>
                       </td>
                     </tr>
                   );
@@ -252,6 +284,17 @@ function SentReportTable({
           Total count: {details?.totalElements > 0 ? details?.totalElements : 0}
         </div>
       </div>
+      {openEdit && (
+        <Export
+          isModalVisible={openEdit}
+          closeModal={closeModal}
+          setIsModalVisible={setOpenEdit}
+          setSelectedRows={setSelectedRows}
+          setSelectAll={setSelectAll}
+          selectedRows={selectedRows}
+          isSent={true}
+        />
+      )}
     </div>
   );
 }

@@ -6,16 +6,9 @@ import {
   getUsersList,
 } from "../../../store/actions/ReportActions";
 import { useDispatch, useSelector } from "react-redux";
+import { checkBoxData, debounce } from "../../admin/report/Export";
 const { Option } = Select;
 
-export const debounce = (func, delay) => {
-  let timer;
-  return function (...args) {
-    const context = this;
-    clearTimeout(timer);
-    timer = setTimeout(() => func.apply(context, args), delay);
-  };
-};
 const Export = ({
   isModalVisible,
   closeModal,
@@ -23,6 +16,8 @@ const Export = ({
   setIsModalVisible,
   setSelectedRows,
   setSelectAll,
+  selectedRows,
+  isSent,
 }) => {
   const usersList = useSelector((state) => state.report?.usersList);
   const list = useSelector((state) => state.report.row);
@@ -33,89 +28,11 @@ const Export = ({
   const [selectedList, setSelectedList] = useState([]);
   const [open, setOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState("");
+  const [removedUsers, setRemovedUsers] = useState([]);
+  const [reportName, setReportName] = useState("");
   const [form] = Form.useForm();
   const idList = list?.map((data) => data?.patientId);
 
-  const checkBoxData = [
-    {
-      id: 1,
-      title: "patientId",
-      heading: "Patient Id",
-      checked: false,
-    },
-    {
-      id: 2,
-      title: "patientName",
-      heading: "Patient Name",
-      checked: false,
-    },
-    {
-      id: 3,
-      title: "dob",
-      heading: "Dob",
-      checked: false,
-    },
-    {
-      id: 4,
-      title: "processedDate",
-      heading: "Processed Date",
-      checked: false,
-    },
-    {
-      id: 5,
-      title: "providerName",
-      heading: "Provider Name",
-      checked: false,
-    },
-    {
-      id: 6,
-      title: "allocatedOn",
-      heading: "Allocated On",
-      checked: false,
-    },
-    {
-      id: 7,
-      title: "noOfValidCodes",
-      heading: "No Of Valid Codes",
-      checked: false,
-    },
-    {
-      id: 8,
-      title: "noOfSuggestedCodes",
-      heading: "No Of Suggested Codes",
-      checked: false,
-    },
-    {
-      id: 9,
-      title: "noOfDeletedCodes",
-      heading: "No Of Deleted Codes",
-      checked: false,
-    },
-    {
-      id: 10,
-      title: "totalCodes",
-      heading: "Total Codes",
-      checked: false,
-    },
-    {
-      id: 11,
-      title: "allocatedUserId",
-      heading: "Allocated UserId",
-      checked: false,
-    },
-    {
-      id: 12,
-      title: "comments",
-      heading: "Comments",
-      checked: false,
-    },
-    {
-      id: 13,
-      title: "validDisease",
-      heading: "Valid Disease",
-      checked: false,
-    },
-  ];
   const [checkall, setCheckAll] = useState(checkBoxData);
 
   useEffect(() => {
@@ -144,7 +61,7 @@ const Export = ({
     );
     setSelectedList(filteredData?.map((item) => item?.userName));
     setSelectedUser((prevUsers) => [
-      { ...prevUsers, user: filteredData, role: null },
+      { ...prevUsers, user: value[0], role: null },
     ]);
     setOpen(false);
   };
@@ -168,9 +85,15 @@ const Export = ({
   };
 
   const onFinish = (values) => {
-    const patientIds = rowsLength?.data?.map((item) => item?.patientId);
-    const userAndAccess = userList?.reduce((result, { user, role }) => {
-      result[user.map((info) => info?.userName)] = role;
+    const patientIds = rowsLength?.map((item) => item?.patientId);
+    const editUserAndAccess = userList.reduce((result, { user, role }) => {
+      if (Array.isArray(user)) {
+        user.forEach((info) => {
+          result[info.userName] = role;
+        });
+      } else {
+        result[user] = role;
+      }
       return result;
     }, {});
 
@@ -183,10 +106,21 @@ const Export = ({
       patientIds: patientIds,
       fileType: values.ReportTYpe,
       reportName: values.ReportName,
-      userAndAccess: userAndAccess,
+      userAndAccess: editUserAndAccess,
       patientIds: idList,
     };
-    dispatch(getExportDetails(data));
+    const updatedData = {
+      reportName: values?.ReportName,
+      reportId: selectedRows?._id,
+      userAndAccess: editUserAndAccess,
+      removedUsers: removedUsers,
+    };
+
+    if (!isSent) {
+      dispatch(getExportDetails(data));
+    } else {
+      dispatch(updateSentReport(updatedData));
+    }
     form.resetFields();
     setUsersList([]);
     setCheckAll((prev) => {
@@ -209,14 +143,26 @@ const Export = ({
     );
   };
 
-  const filteredOptions =
-    userList &&
-    options?.filter((option) => {
-      return !userList?.some((data) =>
-        data?.user?.some((info) => info?.userName?.includes(option?.value))
-      );
-    });
+  const filteredOptions = options?.filter((option) => {
+    return !userList?.some((data) => option?.value === data?.user);
+  });
+  useEffect(() => {
+    setSelectedList([]);
+    if (selectedRows?.receivedUsers?.length > 0) {
+      setDisplay(true);
 
+      setUsersList(selectedRows?.receivedUsers);
+    } else {
+      setDisplay(false);
+      setUsersList([]);
+    }
+  }, [selectedRows, isModalVisible]);
+  form.setFieldsValue({
+    ReportName:
+      selectedRows?.receivedUsers?.length > 0
+        ? selectedRows?.reportName
+        : reportName,
+  });
   return (
     <Modal
       title="Export "
@@ -236,87 +182,94 @@ const Export = ({
             },
           ]}
         >
-          <Input />
+          <Input
+            disabled={selectedRows?.reportName ? true : false}
+            onChange={(e) => setReportName(e.target.value)}
+          />
         </Form.Item>
 
-        <Form.Item
-          label="Report Type"
-          name="ReportTYpe"
-          rules={[
-            {
-              required: true,
-              message: "Please Select your Option!",
-            },
-          ]}
-        >
-          <Radio.Group>
-            <Radio.Button value="EXCEL" className={styles.excel}>
-              Excel
-            </Radio.Button>
-            <Radio.Button value="CSV" className={styles.excel}>
-              CSV
-            </Radio.Button>
-          </Radio.Group>
-        </Form.Item>
-
-        <Form.Item
-          label="Report Fields"
-          name="ReportFields"
-          rules={[
-            {
-              required: true,
-              message: "Please Select your Option!",
-            },
-          ]}
-        >
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "16px",
-              margin: "0px 0",
-            }}
-          >
-            <Checkbox
-              key={0}
-              value={"all"}
-              onChange={(e) => {
-                if (e.target.value === "all") {
-                  setCheckAll((prev) => {
-                    return prev?.map((data) => {
-                      return { ...data, checked: e.target.checked };
-                    });
-                  });
-                }
-              }}
+        {!isSent && (
+          <>
+            <Form.Item
+              label="Report Type"
+              name="ReportTYpe"
+              rules={[
+                {
+                  required: true,
+                  message: "Please Select your Option!",
+                },
+              ]}
             >
-              {" "}
-              Check All
-            </Checkbox>
-            {checkall?.map((data) => (
-              <>
+              <Radio.Group>
+                <Radio.Button value="EXCEL" className={styles.excel}>
+                  Excel
+                </Radio.Button>
+                <Radio.Button value="CSV" className={styles.excel}>
+                  CSV
+                </Radio.Button>
+              </Radio.Group>
+            </Form.Item>
+
+            <Form.Item
+              label="Report Fields"
+              name="ReportFields"
+              rules={[
+                {
+                  required: true,
+                  message: "Please Select your Option!",
+                },
+              ]}
+            >
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, 1fr)",
+                  gap: "16px",
+                  margin: "0px 0",
+                }}
+              >
                 <Checkbox
-                  key={data?.id}
-                  value={data?.title}
-                  checked={data?.checked}
+                  key={0}
+                  value={"all"}
                   onChange={(e) => {
-                    setCheckAll((prev) => {
-                      return prev?.map((data) => {
-                        if (data?.title === e.target.value) {
+                    if (e.target.value === "all") {
+                      setCheckAll((prev) => {
+                        return prev?.map((data) => {
                           return { ...data, checked: e.target.checked };
-                        } else {
-                          return data;
-                        }
+                        });
                       });
-                    });
+                    }
                   }}
                 >
-                  {data.heading}
+                  {" "}
+                  Check All
                 </Checkbox>
-              </>
-            ))}
-          </div>
-        </Form.Item>
+                {checkall?.map((data) => (
+                  <>
+                    <Checkbox
+                      key={data?.id}
+                      value={data?.title}
+                      checked={data?.checked}
+                      onChange={(e) => {
+                        setCheckAll((prev) => {
+                          return prev?.map((data) => {
+                            if (data?.title === e.target.value) {
+                              return { ...data, checked: e.target.checked };
+                            } else {
+                              return data;
+                            }
+                          });
+                        });
+                      }}
+                    >
+                      {data.heading}
+                    </Checkbox>
+                  </>
+                ))}
+              </div>
+            </Form.Item>
+          </>
+        )}
 
         <div style={{ display: "flex", marginBottom: "20px" }}>
           <div style={{ width: "100%" }}>
@@ -379,8 +332,7 @@ const Export = ({
                   disabled={
                     selectedUser &&
                     selectedUser[0]?.user &&
-                    selectedUser[0]?.role &&
-                    selectedUser[0]?.user?.length <= 1
+                    selectedUser[0]?.role
                       ? false
                       : true
                   }
@@ -397,12 +349,14 @@ const Export = ({
               {userList?.map((item, index) => (
                 <div className={styles.userName}>
                   <div key={index} className={styles.userRoleContainer}>
-                    {item?.user?.map(
-                      (info) => `${info?.firstName}  ${info?.lastName}`
-                    )}
+                    {item?.user?.length > 0 && Array.isArray(item?.user)
+                      ? item?.user?.map(
+                          (info) => `${info?.firstName}  ${info?.lastName}`
+                        )
+                      : item?.user}
                   </div>
                   <div key={index} className={styles.userRoleContainer}>
-                    {item.role}
+                    {item?.role}
                   </div>
 
                   <div

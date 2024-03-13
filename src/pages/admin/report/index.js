@@ -329,6 +329,7 @@ const index = () => {
                           setIsModalVisible={setIsModalVisible}
                           setSelectedRows={setSelectedRows}
                           setSelectAll={setSelectAll}
+                          // selectedRows={selectedRows}
                         />
 
                         <div

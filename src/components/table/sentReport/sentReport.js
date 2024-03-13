@@ -3,9 +3,13 @@ import { Paginator } from "primereact/paginator";
 import { Empty, Modal, Popover } from "antd";
 import { Avatar, Divider, Tooltip } from "antd";
 import dayjs from "dayjs";
+import EditButton from "../../../images/adminUsers/EditButton";
+import SpinnerDots from "../../spinner";
+import { dateFormate, sortFunction } from "../../headerFilters/functions";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
+import Export from "../../../pages/admin/report/Export";
 import TableStyle from "../table.module.css";
 import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
 import SpinnerDots from "../../spinner";
@@ -15,6 +19,7 @@ import {
   renderUserPrfoileAvatar,
   sortFunction,
 } from "../../headerFilters/functions";
+
 
 function SentReportTable({
   details,
@@ -31,6 +36,9 @@ function SentReportTable({
 }) {
   const dispatch = useDispatch();
   const router = useRouter();
+  const [openEdit, setOpenEdit] = useState(false);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const displayReceivedUsers = (list) => {
     setSelectedUsers(list);
@@ -118,6 +126,9 @@ function SentReportTable({
           }&sentreport=${true}`
         );
   };
+  const closeModal=()=>{
+    setOpenEdit(false)
+  }
   return (
     <div className={TableStyle.classContaineer}>
       {!details?.data ? (
@@ -129,6 +140,7 @@ function SentReportTable({
               <tr>
                 <th>REPORT ID</th>
                 <th>REPORT NAME</th>
+                <th style={{ paddingLeft: "100px" }}>USER LIST</th>
                 <th style={{ textAlign: "center" }}>USER LIST</th>
                 <th
                   className={TableStyle.rowStyle}
@@ -144,6 +156,7 @@ function SentReportTable({
                     <ArrowDownOutlined />
                   )}
                 </th>
+                <th style={{ textAlign: "center" }}>ACTION</th>
               </tr>
             </thead>
 
@@ -156,7 +169,6 @@ function SentReportTable({
                     <tr
                       key={index}
                       style={{ height: "40px" }}
-                      onClick={() => handleReceiverReport(row)}
                     >
                       <td
                         style={{
@@ -165,6 +177,7 @@ function SentReportTable({
                           borderBottom: "  0.2px solid #e1e1e1",
                         }}
                         className={TableStyle.childBorder}
+                        onClick={() => handleReceiverReport(row)}
                       >
                         {row._id}
                       </td>
@@ -175,6 +188,7 @@ function SentReportTable({
                           borderBottom: "  0.2px solid #e1e1e1",
                         }}
                         className={TableStyle.childBorder}
+                        onClick={() => handleReceiverReport(row)}
                       >
                         {row.reportName}
                       </td>
@@ -184,10 +198,11 @@ function SentReportTable({
                           borderTop: "  0.2px solid #e1e1e1",
                           cursor: "pointer",
                           borderBottom: "  0.2px solid #e1e1e1",
-                          // width: "25%",
                           textAlign: "center",
+
                         }}
                         className={TableStyle.childBorder}
+                        onClick={() => handleReceiverReport(row)}
                       >
                         <Popover
                           content={popCOntent}
@@ -231,12 +246,30 @@ function SentReportTable({
                         style={{
                           borderTop: "  0.2px solid #e1e1e1",
 
-                          borderBottom: "  0.2px solid #e1e1e1",
-                          borderRight: "  0.2px solid #e1e1e1",
+                          // borderBottom: "  0.2px solid #e1e1e1",
+                          // borderRight: "  0.2px solid #e1e1e1",
                         }}
                         className={TableStyle.childBorder}
+                        onClick={() => handleReceiverReport(row)}
                       >
                         {formattedDate}
+                      </td>
+                      <td
+                        style={{
+                          textAlign: "center",
+                          borderTop: " 0.2px solid #e1e1e1",
+                          borderBottom: " 0.2px solid #e1e1e1",
+                          borderRight: " 0.2px solid #e1e1e1",
+                        }}
+                      >
+                        <div
+                          onClick={() => {
+                            setSelectedRows(row);
+                            setOpenEdit(true);
+                          }}
+                        >
+                          <EditButton />
+                        </div>
                       </td>
                     </tr>
                   );
@@ -263,6 +296,17 @@ function SentReportTable({
           Total count: {details?.totalElements > 0 ? details?.totalElements : 0}
         </div>
       </div>
+      {openEdit && (
+        <Export
+          isModalVisible={openEdit}
+          closeModal={closeModal}
+          setIsModalVisible={setOpenEdit}
+          setSelectedRows={setSelectedRows}
+          setSelectAll={setSelectAll}
+          selectedRows={selectedRows}
+          isSent={true}
+        />
+      )}
     </div>
   );
 }
