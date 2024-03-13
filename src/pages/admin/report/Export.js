@@ -156,7 +156,6 @@ const Export = ({
   };
 
   const handleSelectedRole = (value) => {
-    console.log(value);
     setSelectedUser((prevUsers) =>
       prevUsers?.map((item) => {
         if (value) {
@@ -167,17 +166,11 @@ const Export = ({
     );
   };
 
-  const filteredOptions = !selectedRows
-    ? options?.filter((option) => {
-        return !userList?.some((data) =>
-          data?.user?.some((info) => info?.userName?.includes(option?.value))
-        );
-      })
-    : options?.filter((option) => {
-        return selectedRows?.receivedUsers?.filter(
-          (data) => data !== option?.value
-        );
-      });
+  const filteredOptions = options?.filter((option) => {
+    return !userList?.some((data) =>
+      data?.user?.some((info) => info?.userName?.includes(option?.value))
+    );
+  });
 
   const debouncedSearch = debounce((value) => {
     setSearch(value);
@@ -215,9 +208,7 @@ const Export = ({
       reportName: values.ReportName,
       userAndAccess: userAndAccess,
     };
-    // dispatch(getExportDetails(data));
-    // const userEmail = Object.keys(userAndAccess)[0];
-    // const role = userAndAccess;
+
     const updatedData = {
       reportName: values?.ReportName,
       reportId: selectedRows?._id,
@@ -225,12 +216,11 @@ const Export = ({
       removedUsers: removedUsers,
     };
     console.log(updatedData);
-
-    // if (selectedRows?.receivedUsers?.lengt === 0) {
-    //   dispatch(getExportDetails(data));
-    // } else {
-    //   dispatch(updateSentReport(updatedData, oldUser));
-    // }
+    if (selectedRows?.receivedUsers?.lengt === 0) {
+      dispatch(getExportDetails(data));
+    } else {
+      dispatch(updateSentReport(updatedData, oldUser));
+    }
     form.resetFields();
     setUsersList([]);
     setCheckAll((prev) => {
@@ -246,11 +236,6 @@ const Export = ({
   };
 
   const deleteUser = (userInfo) => {
-    // setUsersList((prevUserList) =>
-    //   prevUserList?.filter(
-    //     (user) => user?.user[0]?.userId !== userInfo[0]?.userId
-    //   )
-    // );
     if (Array?.isArray(userInfo)) {
       setUsersList((prevUserList) =>
         prevUserList?.filter(
@@ -287,7 +272,7 @@ const Export = ({
         ? selectedRows?.reportName
         : reportName,
   });
-  console.log(userList);
+
   return (
     <Modal
       title="Export "
