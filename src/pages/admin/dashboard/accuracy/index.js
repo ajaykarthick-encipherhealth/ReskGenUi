@@ -71,6 +71,8 @@ const Accuracy = () => {
     currentDate.getMonth() + 1
   );
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
+  const [year, setYear] = useState();
+  const [month, setMonth] = useState();
 
   const dispatch = useDispatch();
   const accuracyDatas = useSelector(
@@ -103,9 +105,11 @@ const Accuracy = () => {
   };
   const handleYearChange = (date, dateString) => {
     setSelectedYear(dateString);
+    setYear(date);
   };
   const handleMonthChange = (date) => {
     const selectedDate = new Date(date);
+    setMonth(date);
     const monthNumber = (selectedDate.getMonth() + 1)
       .toString()
       .padStart(2, "0");
@@ -162,12 +166,11 @@ const Accuracy = () => {
         return param?.data?.response.map(
           (item, index) => index < getDateWeek(currentDate) && item[val]
         );
-      } else if(currentBtn == "Monthly"){
+      } else if (currentBtn == "Monthly") {
         return param?.data?.response.map(
-          (item, index) => index < new Date().getMonth()+1 && item[val]
+          (item, index) => index < new Date().getMonth() + 1 && item[val]
         );
       }
-     
     } else {
       return false;
     }
@@ -188,11 +191,15 @@ const Accuracy = () => {
       month == currentDate.getMonth() + 1
     ) {
       if (currentBtn == "Daily") {
-         return param.map((item, index) => index < new Date().getDate() && item)
+        return param.map((item, index) => index < new Date().getDate() && item);
       } else if (currentBtn == "Weekly") {
-        return param.map((item, index) => index < getDateWeek(currentDate) && item);
-      } else if(currentBtn == "Monthly"){
-        return param.map((item, index) => index < new Date().getMonth()+1 && item);
+        return param.map(
+          (item, index) => index < getDateWeek(currentDate) && item
+        );
+      } else if (currentBtn == "Monthly") {
+        return param.map(
+          (item, index) => index < new Date().getMonth() + 1 && item
+        );
       }
 
       return param.map((item, index) => index < new Date().getDate() && item);
@@ -415,7 +422,6 @@ const Accuracy = () => {
     ],
   };
   useEffect(() => {
-    console.log(currentTabBtn, currentBtn, "test");
     if (currentTabBtn === "CogentAI Accuracy") {
       if (currentBtn === "Daily") {
         dispatch(getAccuracyDaily(selectedYear, selectedMonth));
@@ -467,17 +473,20 @@ const Accuracy = () => {
             <div className="d-flex">
               <div className={styles.picker}>
                 <YearPicker
-                  onChange={handleYearChange}
-                  type={"year"}
+                  onChangeYear={handleYearChange}
+                  onChangeMonth={handleMonthChange}
+                  type={currentBtn}
                   bgColor="#E6EEFF"
+                  val={month}
+                  val1={year}
                 />
-                {currentBtn !== "Monthly" && (
+                {/* {currentBtn !== "Monthly" && (
                   <YearPicker
                     onChange={handleMonthChange}
-                    type={"month"}
+                    type={activeButton}
                     bgColor="#E6EEFF"
                   />
-                )}
+                )} */}
               </div>
               <div className={styles.btnScroller}>
                 <Buttonscroller
