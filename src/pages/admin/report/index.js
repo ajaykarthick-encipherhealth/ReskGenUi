@@ -88,6 +88,7 @@ const index = () => {
   const [selectUser, setSelectUser] = useState([]);
   const [selectManager, setSelectedManger] = useState("");
   const [select, setSelect] = useState(null);
+ 
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
     return ReceivedOptions?.push({ label: item.sender, value: item.sender });
@@ -220,14 +221,14 @@ const index = () => {
     if (selectedCoderOptReport && !select) {
       dispatch(
         getSelectUserList(
-          selectedCoderOptReport === null &&selectedCoderOptReport?.value==='All'  ? " " : selectedCoderOptReport?.value
+          selectedCoderOptReport === null &&selectedCoderOptReport?.value==='All'  ? "" : selectedCoderOptReport?.value
         )
       );
       
     }
   }, [selectedCoderOptReport]);
   const options = [
-    { value: " ", label: "All" },
+    { value: "", label: "All" },
     { value: "REVIEWER", label: "REVIEWER" },
     { value: "SUPERVISOR", label: "SUPERVISOR" },
   ];
