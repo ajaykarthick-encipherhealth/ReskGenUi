@@ -11,6 +11,7 @@ import {
   accuracy,
   filters,
   CurrentUser,
+  refreshToken,
 } from "../../services/AuthService";
 import { notification } from "antd";
 import ENDPOINTS from "../../utility/enpoints";
@@ -178,6 +179,9 @@ export function loginAction(email, router, code, password, mfa, skip) {
             pathname: `/twofactorAuthentication/SelectRole`,
             search: `params=${encodedParams}`,
           });
+          setTimeout(() => {
+            dispatch(refreshToken());
+          }, 30 * 60 * 1000);
         }
         if (response.data?.response === null) {
           notification.error({
