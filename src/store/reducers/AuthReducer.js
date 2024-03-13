@@ -32,7 +32,7 @@ const initialState = {
   qrcode: "",
   accuracy: "",
   filterList: null,
-  url: null,
+  url: false,
   userInfo: null,
 };
 
