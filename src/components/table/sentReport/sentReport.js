@@ -5,14 +5,12 @@ import { Avatar, Divider, Tooltip } from "antd";
 import dayjs from "dayjs";
 import EditButton from "../../../images/adminUsers/EditButton";
 import SpinnerDots from "../../spinner";
-import { dateFormate, sortFunction } from "../../headerFilters/functions";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import Export from "../../../pages/admin/report/Export";
 import TableStyle from "../table.module.css";
 import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
-import SpinnerDots from "../../spinner";
 import {
   dateFormate,
   getBackgroundColor,

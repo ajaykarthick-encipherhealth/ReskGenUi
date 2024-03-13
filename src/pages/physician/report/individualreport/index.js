@@ -25,7 +25,6 @@ import file from "../../../../images/report/file.svg";
 import calender from "../../../../images/report/calender.svg";
 import send from "../../../../images/report/send.svg";
 import download from "../../../../images/report/download.svg";
-import { debounce } from "../Export";
 import Header from "../../../../jsx/layouts/nav/Header";
 import Footer from "../../../../jsx/layouts/Footer";
 import SpinnerDots from "../../../../components/spinner";
@@ -33,6 +32,7 @@ import leftArrow from "../../../../images/svg/leftArrow.svg";
 import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
 import { useRouter } from "next/router";
 import { getReportActiveTab } from "../../../../store/actions/adminAction/ReportActions";
+import { debounce } from "../../../admin/report/Export";
 
 const IndividualReceiverReport = () => {
   const dispatch = useDispatch();
