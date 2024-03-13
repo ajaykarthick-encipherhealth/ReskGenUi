@@ -296,11 +296,11 @@ function CoderReport({
                   )}
                 </th>
                 <th>COMMENTS </th>
-                <th className={TableStyle.rowAudited}>AUDITOR NAME </th>
+                <th className={TableStyle.rowAudited}>SUPERVISOR NAME</th>
                 <th>RAF SCORE </th>
                 <th>HCC </th>
                 <th>FLAG </th>
-                <th className={TableStyle.rowStyle2}>STATUS</th>
+                <th style={{ paddingLeft: "69px" }}>STATUS</th>
                 <th>
                   <div
                     style={{ display: "flex", justifyContent: "space-around" }}

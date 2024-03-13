@@ -134,7 +134,7 @@ const AdminList = ({ userList }) => {
                 {/* quality */}
                 <td
                   className={TableStyle.lastBorder}
-                  style={{ height: "40px !important" }}
+                  style={{ height: "40px !important" , width:"30px"}}
                 >
                   <Tooltip title={` Quality : ${Math.round(item?.accuracy)}%`}>
                     <div className="notificationIcon">
