@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import TableStyle from "../table.module.css";
 import { Paginator } from "primereact/paginator";
 import { Empty, Modal, Popover } from "antd";
+import { Avatar, Divider, Tooltip } from "antd";
+import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
-import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
-import { Avatar, Divider, Tooltip } from "antd";
-import Footer from "../../../jsx/layouts/Footer";
-import dayjs from "dayjs";
+import TableStyle from "../table.module.css";
+import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
 import SpinnerDots from "../../spinner";
 import {
   dateFormate,
