@@ -6,6 +6,7 @@ import Footer from "../../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
 import {
   dateFormate,
+  getBackgroundColor,
   renderUserPrfoileAvatar,
   sortFunction,
 } from "../../../../components/headerFilters/functions";
@@ -34,24 +35,7 @@ function SentReportTable({
   const displayReceivedUsers = (list) => {
     setSelectedUsers(list);
   };
-  const getBackgroundColor = (randomNumber) => {
-    switch (randomNumber) {
-      case 1:
-        return "#F28585";
-      case 2:
-        return "#04306F";
-      case 3:
-        return "#E6A4B4";
-      case 4:
-        return "#607274";
-      case 5:
-        return "#DED0B6";
-      case 6:
-        return "#C3E2C2";
-      default:
-        return "#9BB8CD";
-    }
-  };
+
   const hashes = selectedUsers.map((user) => {
     const hash = (user.userDetails.firstName.charCodeAt(0) % 6) + 1;
     return hash;
