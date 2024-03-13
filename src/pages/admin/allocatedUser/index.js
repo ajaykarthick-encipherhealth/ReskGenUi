@@ -360,7 +360,7 @@ export default function Patient() {
       </tr>
     );
   };
-  
+
   const statusOptions = [
     { label: "ALL", value: "" },
     { label: "COMPLETED", value: "COMPLETED" },
@@ -444,8 +444,14 @@ export default function Patient() {
     if (!isPatientList) {
       getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
     } else {
-      console.log(sort, "test");
-      getL2PatientList(l2selectUser, pageNoL2Patient, sort, "", selectedOptions,allocatedOption);
+      getL2PatientList(
+        l2selectUser,
+        pageNoL2Patient,
+        sort,
+        "",
+        selectedOptions,
+        allocatedOption
+      );
       setIsLoading(false);
     }
     setAllocateClicked(false);
@@ -462,8 +468,7 @@ export default function Patient() {
     selectedOption,
     filterBatchCount,
     selectedOptions,
-    allocatedOption
-
+    allocatedOption,
   ]);
   // useEffect(() => {
   //   if (selectedCoderOptReport ) {
