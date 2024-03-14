@@ -4,10 +4,10 @@ import TableStyle from "../../table.module.css";
 import { notification, Select as AntSelect, Empty, Spin, Popover } from "antd";
 import { useDispatch } from "react-redux";
 import { LoadingOutlined } from "@ant-design/icons";
+import Image from "next/image";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { selectedRoWDetails } from "../../../../store/actions/adminAction/fileProcessingActions";
 import Pending from "../../../../../src/images/trackingImages/PendingTrack.png";
-
 import Hold from "../../../../../src/images/trackingImages/HoldTrack.png";
 import Completed from "../../../../../src/images/trackingImages/CompletedTrack.png";
 import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
@@ -17,7 +17,6 @@ import {
   renderUserPrfoileAvatar,
 } from "../../../headerFilters/functions";
 import { extractLatestData } from "../../../../pages/l2Auditor/auditing";
-import Image from "next/image";
 
 function AllocatedL2AdminList({
   patinetListAll,
