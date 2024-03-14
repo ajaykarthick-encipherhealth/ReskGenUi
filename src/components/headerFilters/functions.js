@@ -307,6 +307,31 @@ export const generateOptionsList = (items) => {
     // }
   }
 };
+export const generateOptionsLists = (items) => {
+  if (!items?.data) {
+    return [{ label: "Loading...", value: "Loading..." }];
+  } else {
+    // if (
+    //   items?.data !== null &&
+    //   !items?.loading &&
+    //   items?.data?.data?.response?.length > 0
+    // ) {
+    const options = [
+      { label: "All", value: "" },
+      ...items?.data?.data?.response?.map((item) => ({
+        label: (
+          <span>
+            {item?.patientAllocatedFirstName}&nbsp;&nbsp;
+            {item?.patientAllocatedLastName}
+          </span>
+        ),
+        value: item?.patientAllocated,
+      })),
+    ].filter(Boolean);
+    return options;
+    // }
+  }
+};
 
 export const getBackgroundColor = (randomNumber) => {
   switch (randomNumber) {

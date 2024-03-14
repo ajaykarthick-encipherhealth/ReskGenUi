@@ -11,7 +11,7 @@ import {
   accuracy,
   filters,
   CurrentUser,
-  currentUser,
+  refreshToken,
 } from "../../services/AuthService";
 import { notification } from "antd";
 import ENDPOINTS from "../../utility/enpoints";
@@ -69,7 +69,7 @@ export function Logout(navigate) {
 
 export const getMFAValidation = (username, route, password) => {
   return () => {
-    mfaValidation(username, route,password).then((response) => {
+    mfaValidation(username, route, password).then((response) => {
       const skip = response?.data?.response?.skipEntryAvailable;
       const mfa = response?.data?.response?.mfaIsEnabled;
       if (response?.data?.response) {
@@ -179,6 +179,9 @@ export function loginAction(email, router, code, password, mfa, skip) {
             pathname: `/twofactorAuthentication/SelectRole`,
             search: `params=${encodedParams}`,
           });
+          setTimeout(() => {
+            dispatch(refreshToken());
+          }, 30 * 60 * 1000);
         }
         if (response.data?.response === null) {
           notification.error({
@@ -297,7 +300,12 @@ export const getCurrentUser = (userId, router) => {
 
 export const preSendURl = (type, file) => async (dispatch) => {
   const token = localStorage.getItem("token");
-
+  dispatch({
+    type: PROFILE_URL,
+    payload: {
+      loading: true,
+    },
+  });
   if (type) {
     try {
       let response = await axios.get(
@@ -362,6 +370,12 @@ export const updateImage = (url) => async (dispatch) => {
 
       if (response?.data) {
         dispatch(getCurrentUser(userId));
+        dispatch({
+          type: PROFILE_URL,
+          payload: {
+            loading: false,
+          },
+        });
       }
     } catch (error) {
       console.log("error", error);

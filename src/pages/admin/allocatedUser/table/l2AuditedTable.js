@@ -203,6 +203,7 @@ function L2AllocatedAdminList({
           )}
         </tbody>
       </table>:
+      
        <AllocatedAdminList
        patinetListAll={patinetListAll}
        selectAllChecked={selectAllChecked}

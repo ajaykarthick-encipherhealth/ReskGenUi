@@ -88,6 +88,7 @@ const index = () => {
   const [selectUser, setSelectUser] = useState([]);
   const [selectManager, setSelectedManger] = useState("");
   const [select, setSelect] = useState(null);
+ 
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
     return ReceivedOptions?.push({ label: item.sender, value: item.sender });
@@ -144,11 +145,7 @@ const index = () => {
   const handleTabs = (name) => {
     setSelectedDates(null);
     // setActiveTab(name);
-    dispatch(
-      getActiveTab(
-        name
-      )
-    );
+    dispatch(getActiveTab(name));
   };
   useEffect(() => {
     dispatch(getSelectUserList(selectMemberType));
@@ -182,7 +179,9 @@ const index = () => {
           selectedCoderOpt,
           selectedCoderOptReport?.value ? selectedCoderOptReport?.value : "",
           sort,
-          (selectManager?.value && selectedCoderOptReport?.value !== "All") ? selectManager?.value: ""
+          selectManager?.value && selectedCoderOptReport?.value !== "All"
+            ? selectManager?.value
+            : ""
         )
       );
     }
@@ -223,7 +222,6 @@ const index = () => {
           selectedCoderOptReport === null &&selectedCoderOptReport?.value==='All'  ? "" : selectedCoderOptReport?.value
         )
       );
-      
     }
   }, [selectedCoderOptReport]);
   const options = [
@@ -239,11 +237,7 @@ const index = () => {
 
   useEffect(() => {
     if (reportActiveTab) {
-      dispatch(
-        getActiveTab(
-          reportActiveTab
-        )
-      );
+      dispatch(getActiveTab(reportActiveTab));
     }
   }, [reportActiveTab]);
 
@@ -272,7 +266,10 @@ const index = () => {
                             // selector
                             selectlabel="Select Status"
                             isSelector={
-                              !reportActiveTab || reportActiveTab === "CoderReport" ? true : false
+                              !reportActiveTab ||
+                              reportActiveTab === "CoderReport"
+                                ? true
+                                : false
                             }
                             setSelectedOption={setSelectedCoderOpt}
                             selectOptions={statusOptions}
@@ -281,11 +278,13 @@ const index = () => {
 
                             selectlabel2="Select User Role"
                             selectReportOptions={
-                              !reportActiveTab || reportActiveTab === "CoderReport" ? options : null
+                              !reportActiveTab ||
+                              reportActiveTab === "CoderReport"
+                                ? options
+                                : null
                             }
                             setSelectedOption2={setSelectedCoderOptReport}
                             defaultSelectValue2={selectedCoderOptReport}
-
                             // selector3
                             isSelector3={
                               selectUserList?.data?.response?.length
@@ -330,6 +329,7 @@ const index = () => {
                           setIsModalVisible={setIsModalVisible}
                           setSelectedRows={setSelectedRows}
                           setSelectAll={setSelectAll}
+                          // selectedRows={selectedRows}
                         />
 
                         <div

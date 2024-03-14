@@ -14222,6 +14222,10 @@ span.meat-name-details2 {
   display: none !important;
 }
 
+:where(.css-dev-only-do-not-override-1b0bdye).ant-avatar > img {
+  object-fit: unset;
+
+}
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -14235,4 +14239,8 @@ input[type="number"] {
 
 .background-white {
   background: #fff;
+
+}
+.pickerChnages > .ant-picker-input:hover > .ant-picker-clear {
+  display: none !important;
 }

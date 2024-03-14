@@ -20,6 +20,7 @@ import {
   Avatar,
   Modal,
   Divider,
+  Spin,
 } from "antd";
 import styles from "../../../styles/file-managemnt.module.css";
 import { IMAGES, SVGICON } from "../../constant/theme";
@@ -62,6 +63,8 @@ import editImg from "../../../images/svg/edit.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 import { faMessage } from "@fortawesome/free-regular-svg-icons";
+import { LoadingOutlined } from "@ant-design/icons";
+
 const btnItems = [
   {
     id: 1,
@@ -102,6 +105,7 @@ const Header = () => {
   const accuracy = useSelector((state) => state.auth.accuracy);
   const currentUserInfo = useSelector((state) => state.auth.userInfo);
   const codDetails = useSelector((state) => state.auth.codeDetails);
+  const profileUploadedTime = useSelector((state) => state.auth.url);
   const stateActive = router.pathname;
   const [headerFix, setheaderFix] = useState(false);
   const [userName, setUserName] = useState("");
@@ -203,7 +207,6 @@ const Header = () => {
     };
   };
 
-  const percentage = 95;
   const PopContent = (
     <div className={styles.innerPop}>
       <div className={styles.codesContainer}>
@@ -527,14 +530,28 @@ const Header = () => {
                                       display: "flex",
                                     }}
                                   >
-                                    <div style={{ width: "80px" }}>
-                                      {renderUserPrfoile(
-                                        userName,
-                                        lastName,
-                                        profileImg,
-                                        "header",
-                                        "70px",
-                                        "70px"
+                                    <div
+                                      style={{ width: "80px", height: "80px" }}
+                                    >
+                                      {profileUploadedTime?.loading ? (
+                                        <Spin
+                                          indicator={
+                                            <LoadingOutlined
+                                              style={{ fontSize: 24 }}
+                                            />
+                                          }
+                                          loading={profileUploadedTime?.loading}
+                                          style={{ marginTop: "10px" }}
+                                        />
+                                      ) : (
+                                        renderUserPrfoile(
+                                          userName,
+                                          lastName,
+                                          profileImg,
+                                          "header",
+                                          "70px",
+                                          "70px"
+                                        )
                                       )}
                                       <div
                                         onClick={() => {
@@ -600,11 +617,23 @@ const Header = () => {
                                   style={{ marginTop: "-3px" }}
                                   onClick={() => setOpenContent(false)}
                                 >
-                                  {renderUserPrfoile(
-                                    userName,
-                                    lastName,
-                                    profileImg,
-                                    "header"
+                                  {profileUploadedTime?.loading ? (
+                                    <Spin
+                                      indicator={
+                                        <LoadingOutlined
+                                          style={{ fontSize: 20 }}
+                                        />
+                                      }
+                                      loading={profileUploadedTime?.loading}
+                                      style={{ marginTop: "10px" }}
+                                    />
+                                  ) : (
+                                    renderUserPrfoile(
+                                      userName,
+                                      lastName,
+                                      profileImg,
+                                      "header"
+                                    )
                                   )}
                                 </div>
                               </div>

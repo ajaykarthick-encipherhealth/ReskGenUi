@@ -14,6 +14,7 @@ import {
   PROFILE_URL,
   CURRENTUSER_INFO,
 } from "../actions/AuthActions";
+import { CHATBOT } from "../actions/DashboardActions";
 
 const initialState = {
   auth: {
@@ -32,8 +33,9 @@ const initialState = {
   qrcode: "",
   accuracy: "",
   filterList: null,
-  url: null,
+  url: false,
   userInfo: null,
+  chatReply:null
 };
 
 const initialStatePatient = {
@@ -132,6 +134,12 @@ export function AuthReducer(state = initialState, action) {
     return {
       ...state,
       userInfo: action.payload,
+    };
+  }
+  if (action.type === CHATBOT) {
+    return {
+      ...state,
+      chatReply: action.payload,
     };
   }
   return state;

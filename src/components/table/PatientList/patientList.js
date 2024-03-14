@@ -282,7 +282,7 @@ function PatientTable({
 
             <th className={TableStyle.rowStyle}> ALLOCATED BY</th>
             <th style={{ paddingLeft: "35px" }}>PRIORITY</th>
-            <th style={{ paddingLeft: "65px" }}>STATUS</th>
+            <th style={{ paddingLeft: "79px" }}>STATUS</th>
           </tr>
         </thead>
 

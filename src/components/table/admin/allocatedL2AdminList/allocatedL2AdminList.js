@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import TableStyle from "../../table.module.css";
-import { notification, Select as AntSelect, Empty, Spin } from "antd";
+import { notification, Select as AntSelect, Empty, Spin, Popover } from "antd";
 import { useDispatch } from "react-redux";
 import { LoadingOutlined } from "@ant-design/icons";
+import Image from "next/image";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { selectedRoWDetails } from "../../../../store/actions/adminAction/fileProcessingActions";
+import Pending from "../../../../../src/images/trackingImages/PendingTrack.png";
+import Hold from "../../../../../src/images/trackingImages/HoldTrack.png";
+import Completed from "../../../../../src/images/trackingImages/CompletedTrack.png";
+import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
+import Abort from "../../../../../src/images/trackingImages/Abort.png";
 import {
-  processstatusBodyTemplate,
   sortFunction,
   renderUserPrfoileAvatar,
 } from "../../../headerFilters/functions";
+import { extractLatestData } from "../../../../pages/l2Auditor/auditing";
 
 function AllocatedL2AdminList({
   patinetListAll,
@@ -47,6 +53,84 @@ function AllocatedL2AdminList({
 
     setSelectedRows(updatedRows);
   };
+  const processstatusBodyTemplate = (rowData) => {
+    const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
+
+    switch (rowData.processedStatus) {
+      case "COMPLETED":
+        return (
+          <Popover placement="bottom" title="Status: COMPLETED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Completed} style={{ height: "13%", width: "13%" }} />
+            </div>
+          </Popover>
+        );
+
+      case "PENDING":
+        return (
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "13%", width: "13%" }} />
+            </div>
+          </Popover>
+        );
+
+      case "DECLINED":
+        return (
+          <Popover
+            placement="bottom"
+            title="Status: DECLINED"
+            content={`Reason: ${
+              declinedDataFromDeclined ? declinedDataFromDeclined : "---"
+            }`}
+          >
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Declined} style={{ height: "13%", width: "13%" }} />
+            </div>
+          </Popover>
+        );
+      case "NOTCOMPUTED":
+        return (
+          <Popover placement="bottom" title="Status: NOT COMPUTED">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "13%", width: "13%" }} />
+            </div>
+          </Popover>
+        );
+      case "COMPUTED":
+        return (
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "13%", width: "13%" }} />
+            </div>
+          </Popover>
+        );
+      case "HOLD":
+        return (
+          <Popover placement="bottom" title="Status: HOLD">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Hold} style={{ height: "13%", width: "13%" }} />
+            </div>
+          </Popover>
+        );
+      case "ABORTED_BY_CRON":
+        return (
+          <Popover placement="bottom" title="Status: ABORTED BY CRON">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Abort} style={{ height: "13%", width: "13%" }} />
+            </div>
+          </Popover>
+        );
+      case null:
+        return (
+          <Popover placement="bottom" title="Status: PENDING">
+            <div className="patient-status" style={{ textAlign: "center" }}>
+              <Image src={Pending} style={{ height: "15%", width: "15%" }} />
+            </div>
+          </Popover>
+        );
+    }
+  };
   const renderRows = () => {
     return patinetListAll?.map((data, index) => (
       <tr
@@ -67,7 +151,7 @@ function AllocatedL2AdminList({
           {data.patientAllocatedFirstName ||
           data.patientAllocatedLastName ||
           data?.patientAllocatedProfileImage ? (
-            <div style={{ display: "flex", aligndatas: "center" }}>
+            <div style={{ display: "flex", alignItems: "center" }}>
               {" "}
               <span style={{ marginRight: "10px" }}>
                 {" "}

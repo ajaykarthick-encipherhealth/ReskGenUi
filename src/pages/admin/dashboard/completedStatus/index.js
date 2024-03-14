@@ -37,6 +37,9 @@ const CompletedStatus = () => {
   const [selectUser, setSelectUser] = useState([]);
   const [isindividual, setIsindividual] = useState(false);
   const [selectMemberType, setSelectMemberType] = useState("");
+  const [year, setYear] = useState();
+  const [month, setMonth] = useState();
+
   let completedWeeks = new Set();
   let allocatedWeeks = new Set();
 
@@ -68,9 +71,11 @@ const CompletedStatus = () => {
 
   const handleYearChange = (date, dateString) => {
     setSelectedYear(dateString);
+    setYear(date);
   };
   const handleMonthChange = (date) => {
     const selectedDate = new Date(date);
+    setMonth(date);
     const monthNumber = (selectedDate.getMonth() + 1)
       .toString()
       .padStart(2, "0");
@@ -168,7 +173,6 @@ const CompletedStatus = () => {
     { value: "", label: "ALL" },
     { value: "REVIEWER", label: "REVIEWER" },
     { value: "SUPERVISOR", label: "SUPERVISOR" },
-    
   ];
 
   const memberTypeChanges = (e) => {
@@ -194,12 +198,10 @@ const CompletedStatus = () => {
   );
 
   useEffect(() => {
-    console.log(selectMemberType, "1");
     dispatch(getSelectUserList(selectMemberType));
   }, [selectMemberType]);
 
   useEffect(() => {
-    console.log(selectMemberType, "2");
     dispatch(
       getCompletedStatus(
         currentBtn.toUpperCase(),
@@ -247,17 +249,20 @@ const CompletedStatus = () => {
             </div>
             <div className={styles.picker}>
               <YearPicker
-                onChange={handleYearChange}
-                type={"year"}
+                onChangeYear={handleYearChange}
+                onChangeMonth={handleMonthChange}
+                type={currentBtn}
                 bgColor="#F3F3FF"
+                val={month}
+                val1={year}
               />
-              {currentBtn !== "Monthly" && (
+              {/* {currentBtn !== "Monthly" && (
                 <YearPicker
                   onChange={handleMonthChange}
                   type={"month"}
                   bgColor="#F3F3FF"
                 />
-              )}
+              )} */}
             </div>
             <div className={styles.btnScroller}>
               <Buttonscroller
