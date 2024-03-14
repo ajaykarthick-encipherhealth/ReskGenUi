@@ -7,7 +7,7 @@ import calender from "../../../../images/dashboard/calender.png";
 import Card from "../../../../components/card";
 import allocated from "../../../../images/dashboard/allocated.png";
 import pending from "../../../../images/dashboard/Pending_2.png";
-import hold from "../../../../images/dashboard/hold.png";
+import hold from "../../../../images/dashboard/HoldTrack.png";
 import { Col, Empty, Row, Spin } from "antd";
 import HeadTitle from "../../../../components/headtitle";
 import holdbg from "../../.../../../../images/dashboard/holdbg.png";
