@@ -65,10 +65,10 @@ function MyApp({ Component, pageProps }) {
     fetch(currentPath)
       .then((response) => {
         if (!response.ok) {
-          if (response.status === 404) {
-            setShowTerminal(false);
-          }
-        }else{
+          // if (response.status === 404) {
+          setShowTerminal(false);
+          // }
+        } else {
           if (
             currentPath === "/" ||
             currentPath?.includes("/login") ||
@@ -85,7 +85,6 @@ function MyApp({ Component, pageProps }) {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-   
   }, [router]);
 
   return (
