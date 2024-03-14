@@ -1245,40 +1245,56 @@
 }
 .pendingBtn {
   font-size: 13px;
-  color: #5da9e4;
+  color: #5da9e4 !important;
   background: #c2e1f9 !important;
   border: none !important;
   box-shadow: none !important;
   border-radius: 6px;
   width: 170px !important;
+  padding: 3px;
+  height: 35px !important;
 }
 .holdBtnHcc {
   font-size: 13px;
-  color: #d8c11b;
+  color: #d8c11b !important;
   background: #faead1 !important;
   border-radius: 6px !important;
   border: none !important;
   box-shadow: none !important;
   width: 170px !important;
 }
+.holdBtnHccs {
+  font-size: 13px;
+  color: #ad94fa !important;
+  background: #ddd5f8 !important;
+  border-radius: 6px !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 170px !important;
+  padding: 3px;
+  height: 35px !important;
+}
 .completedBtnHcc {
   font-size: 13px;
-  color: #3a9b94;
+  color: #3a9b94 !important;
   background: #daf1ef !important;
   border-radius: 6px !important;
   border: none !important;
   box-shadow: none !important;
   width: 170px !important;
+  padding: 3px;
+  height: 35px !important;
 }
 
 .declinedBtnHcc {
   font-size: 13px;
-  color: #3a9b94;
+  color: #ff0000 !important;
   background: #fcc !important;
   border-radius: 6px !important;
   border: none !important;
   box-shadow: none !important;
   width: 170px !important;
+  height: 35px !important;
 }
 
 .name_missed path {

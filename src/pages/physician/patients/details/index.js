@@ -156,6 +156,7 @@ const Details = ({}) => {
   const [allocateClicked, setAllocateClicked] = useState(false);
   const [error, setError] = useState({ year: "" });
   const [hccValidCount, setHccValidCount] = useState(0);
+  const [menuIsOpen, setMenuIsOpen] = useState(false);
 
   const flagPostList = [
     {
@@ -388,7 +389,7 @@ const Details = ({}) => {
     const menu = (
       <Menu>
         {result?.processedStatus != "HOLD" ? (
-          <Menu.Item key="1" onClick={() => handleActionClick("HOLD")}>
+          <Menu.Item key="1" onClick={() => {handleActionClick("HOLD"); setMenuIsOpen(false)}}>
             <div className="patient-status">
               <span className={`badge hold-text`}>HOLD</span>
             </div>
@@ -396,7 +397,7 @@ const Details = ({}) => {
         ) : null}
         {result?.processedStatus != "PENDING" &&
         result?.processedStatus != "COMPUTED" ? (
-          <Menu.Item key="2" onClick={() => handleActionClick("PENDING")}>
+          <Menu.Item key="2" onClick={() => {handleActionClick("PENDING"); setMenuIsOpen(false)}}>
             <div className="patient-status">
               <span className={`badge processing-text`}>PENDING</span>
             </div>
@@ -406,7 +407,7 @@ const Details = ({}) => {
           <Menu.Item
             key="3"
             disabled={flagFirstData?.flag !== undefined ? false : true}
-            onClick={() => handleActionClick("DECLINE")}
+            onClick={() => {handleActionClick("DECLINE");  setMenuIsOpen(false)}}
           >
             <Tooltip
               title={
@@ -423,8 +424,8 @@ const Details = ({}) => {
           </Menu.Item>
         ) : null}
 
-        {result?.processedStatus != "COMPLETE" ? (
-          <Menu.Item key="4" onClick={() => handleActionClick("COMPLETE")}>
+        {result?.processedStatus != "COMPLETED" ? (
+          <Menu.Item key="4" onClick={() => {handleActionClick("COMPLETE");  setMenuIsOpen(false)}}>
             <div className="patient-status">
               <span className={`badge processed-text`}>COMPLETED</span>
             </div>
@@ -436,14 +437,14 @@ const Details = ({}) => {
     const menu2 = (
       <Menu>
         {result?.processedStatus != "HOLD" ? (
-          <Menu.Item key="1" onClick={() => handleActionClick("HOLD")}>
+          <Menu.Item key="1" onClick={() => {handleActionClick("HOLD"); setMenuIsOpen(false)}}>
             <div className="patient-status">
               <span className={`badge hold-text`}>HOLD</span>
             </div>
           </Menu.Item>
         ) : null}
         {result?.processedStatus != "PENDING" ? (
-          <Menu.Item key="2" onClick={() => handleActionClick("PENDING")}>
+          <Menu.Item key="2" onClick={() => {handleActionClick("PENDING"); setMenuIsOpen(false)}}>
             <div className="patient-status">
               <span className={`badge processing-text`}>PENDING</span>
             </div>
@@ -452,7 +453,7 @@ const Details = ({}) => {
         {result?.processedStatus != "DECLINE" ? (
           <Menu.Item
             key="3"
-            onClick={() => handleActionClick("DECLINE")}
+            onClick={() => {handleActionClick("DECLINE"); setMenuIsOpen(false)}}
             disabled={flagFirstData?.flag !== undefined ? false : true}
           >
             <Tooltip
@@ -471,13 +472,13 @@ const Details = ({}) => {
         ) : null}
 
         {result?.processedStatus != "COMPLETE" ? (
-          <Menu.Item key="4" onClick={() => handleActionClick("COMPLETE")}>
+          <Menu.Item key="4" onClick={() => {handleActionClick("COMPLETE");  setMenuIsOpen(false)}}>
             <div className="patient-status">
               <span className={`badge processed-text`}>COMPLETED</span>
             </div>
           </Menu.Item>
         ) : null}
-        <Menu.Item key="5" onClick={() => handleActionClick("ADD RADIOLOGY")}>
+        <Menu.Item key="5" onClick={() => {handleActionClick("ADD RADIOLOGY"); setMenuIsOpen(false)}}>
           <div className="patient-status">
             <span className={`badge  ${visitStyles.add_text}`}>
               + ADD RADIOLOGY
@@ -489,14 +490,14 @@ const Details = ({}) => {
     const menu3 = (
       <Menu>
         {result?.processedStatus != "HOLD" ? (
-          <Menu.Item key="1" onClick={() => handleActionClick("HOLD")}>
+          <Menu.Item key="1" onClick={() => {handleActionClick("HOLD"); setMenuIsOpen(false)}}>
             <div className="patient-status">
               <span className={`badge hold-text`}>HOLD</span>
             </div>
           </Menu.Item>
         ) : null}
         {result?.processedStatus != "PENDING" ? (
-          <Menu.Item key="2" onClick={() => handleActionClick("PENDING")}>
+          <Menu.Item key="2" onClick={() => {handleActionClick("PENDING");  setMenuIsOpen(false)}}>
             <div className="patient-status">
               <span className={`badge processing-text`}>PENDING</span>
             </div>
@@ -505,7 +506,7 @@ const Details = ({}) => {
         {result?.processedStatus != "DECLINE" ? (
           <Menu.Item
             key="3"
-            onClick={() => handleActionClick("DECLINE")}
+            onClick={() => {handleActionClick("DECLINE");  setMenuIsOpen(false)}}
             disabled={flagFirstData?.flag !== undefined ? false : true}
           >
             <Tooltip
@@ -524,13 +525,13 @@ const Details = ({}) => {
         ) : null}
 
         {result?.processedStatus != "COMPLETE" ? (
-          <Menu.Item key="4" onClick={() => handleActionClick("COMPLETE")}>
+          <Menu.Item key="4" onClick={() => {handleActionClick("COMPLETE");  setMenuIsOpen(false)}}>
             <div className="patient-status">
               <span className={`badge processed-text`}>COMPLETED</span>
             </div>
           </Menu.Item>
         ) : null}
-        <Menu.Item key="5" onClick={() => handleActionClick("ADD LAB")}>
+        <Menu.Item key="5" onClick={() => {handleActionClick("ADD LAB"); setMenuIsOpen(false)}}>
           <div className="patient-status">
             <span className={`badge  ${visitStyles.add_text}`}>+ ADD LAB</span>
           </div>
@@ -544,6 +545,7 @@ const Details = ({}) => {
             key="4"
             onClick={() => {
               allocatePatient();
+              setMenuIsOpen(false);
             }}
           >
             <div className="patient-status">
@@ -551,14 +553,26 @@ const Details = ({}) => {
             </div>
           </Menu.Item>
         )}
-        <Menu.Item key="5" onClick={() => handleActionClick("ADD RADIOLOGY")}>
+        <Menu.Item
+          key="5"
+          onClick={() => {
+            handleActionClick("ADD RADIOLOGY");
+            setMenuIsOpen(false);
+          }}
+        >
           <div className="patient-status">
             <span className={`badge  ${visitStyles.add_text}`}>
               + ADD RADIOLOGY
             </span>
           </div>
         </Menu.Item>
-        <Menu.Item key="6" onClick={() => handleActionClick("ADD LAB")}>
+        <Menu.Item
+          key="6"
+          onClick={() => {
+            handleActionClick("ADD LAB");
+            setMenuIsOpen(false);
+          }}
+        >
           <div className="patient-status">
             <span className={`badge processing-text`}>+ ADD LAB</span>
           </div>
@@ -2040,20 +2054,80 @@ const Details = ({}) => {
                       <div className="col-xl-1 col-sm-12">
                         {userRole == "admin" ? (
                           <div className={`${visitStyles.actionbtnContainer}`}>
-                            <Dropdown.Button
-                              type="primary"
-                              className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
-                              icon={<DownOutlined />}
+                            <Dropdown
                               overlay={adminActionItems}
+                              onVisibleChange={(v) => setMenuIsOpen(v)}
+                              visible={menuIsOpen}
+                              className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
                             >
-                              {patienIdDetails?.allocatedOn
-                                ? "ALLOCATED"
-                                : "ALLOCATE"}
-                            </Dropdown.Button>
+                              <Button
+                                type="primary"
+                                className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
+                              >
+                                <span>
+                                  {patienIdDetails?.allocatedOn
+                                    ? "ALLOCATED"
+                                    : "ALLOCATE"}
+                                </span>
+                                <span style={{ marginLeft: "10px" }}>
+                                  <DownOutlined />
+                                </span>
+                              </Button>
+                            </Dropdown>
                           </div>
                         ) : userRole == "supervisor" ? (
                           <div className={`${visitStyles.actionbtnContainer}`}>
-                            <Dropdown.Button
+                            <Dropdown
+                              overlay={renderAuditMenu()}
+                              onVisibleChange={(v) => setMenuIsOpen(v)}
+                              visible={menuIsOpen}
+                              className={
+                                patienIdDetails?.auditedStatus == "AUDITHOLD"
+                                  ? `auditHoldBtnHcc`
+                                  : patienIdDetails?.auditedStatus ==
+                                    "AUDIT_PENDING"
+                                  ? `auditPendingBtnHcc`
+                                  : patienIdDetails?.auditedStatus == "AUDITED"
+                                  ? `auditBtnHcc`
+                                  : patienIdDetails?.auditedStatus == "REAUDIT"
+                                  ? `reauditBtnHcc`
+                                  : patienIdDetails?.auditedStatus ==
+                                    "AUDIT_DECLINED"
+                                  ? `declineBtnHcc`
+                                  : `auditBtnHcc`
+                              }
+                            >
+                              <Button
+                                type="primary"
+                                className={
+                                  patienIdDetails?.auditedStatus == "AUDITHOLD"
+                                    ? `auditHoldBtnHcc`
+                                    : patienIdDetails?.auditedStatus ==
+                                      "AUDIT_PENDING"
+                                    ? `auditPendingBtnHcc`
+                                    : patienIdDetails?.auditedStatus ==
+                                      "AUDITED"
+                                    ? `auditBtnHcc`
+                                    : patienIdDetails?.auditedStatus ==
+                                      "REAUDIT"
+                                    ? `reauditBtnHcc`
+                                    : patienIdDetails?.auditedStatus ==
+                                      "AUDIT_DECLINED"
+                                    ? `declineBtnHcc`
+                                    : `auditBtnHcc`
+                                }
+                              >
+                                <span>
+                                  {patienIdDetails?.auditedStatus != null
+                                    ? patienIdDetails?.auditedStatus
+                                    : "AUDIT"}
+                                </span>
+                                <span style={{ marginLeft: "10px" }}>
+                                  <DownOutlined />
+                                </span>
+                              </Button>
+                            </Dropdown>
+                            {/* <Dropdown.Button
                               type="primary"
                               className={
                                 patienIdDetails?.auditedStatus == "AUDITHOLD"
@@ -2076,15 +2150,12 @@ const Details = ({}) => {
                               {patienIdDetails?.auditedStatus != null
                                 ? patienIdDetails?.auditedStatus
                                 : "AUDIT"}
-                            </Dropdown.Button>
+                            </Dropdown.Button> */}
                           </div>
                         ) : (
                           <div className={`${visitStyles.actionbtnContainer}`}>
                             {patienIdDetails?.processedStatus == "COMPLETED" ? (
-                              <Dropdown.Button
-                                type="primary"
-                                className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
-                                icon={<DownOutlined />}
+                              <Dropdown
                                 overlay={
                                   activeTab == 3
                                     ? actionItems2
@@ -2092,13 +2163,46 @@ const Details = ({}) => {
                                     ? actionItems3
                                     : actionItems
                                 }
+                                onVisibleChange={(v) => setMenuIsOpen(v)}
+                                visible={menuIsOpen}
+                                className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
                               >
-                                COMPLETED
-                              </Dropdown.Button>
+                                <Button
+                                  type="primary"
+                                  className={`completedBtnHcc ${visitStyles.completedBtnHcc}`}
+                                >
+                                  <span>COMPLETED</span>
+                                  <span style={{ marginLeft: "10px" }}>
+                                    <DownOutlined />
+                                  </span>
+                                </Button>
+                              </Dropdown>
                             ) : patienIdDetails?.processedStatus ==
                               "DECLINED" ? (
                               <div className={`col-xl-12`}>
-                                <Dropdown.Button
+                                <Dropdown
+                                  overlay={
+                                    activeTab == 3
+                                      ? actionItems2
+                                      : activeTab == 4
+                                      ? actionItems3
+                                      : actionItems
+                                  }
+                                  onVisibleChange={(v) => setMenuIsOpen(v)}
+                                  visible={menuIsOpen}
+                                  className={`declinedBtnHcc ${visitStyles.declinedBtnHcc}`}
+                                >
+                                  <Button
+                                    type="primary"
+                                    className={`declinedBtnHcc ${visitStyles.declinedBtnHcc}`}
+                                  >
+                                    <span>DECLINED</span>
+                                    <span style={{ marginLeft: "10px" }}>
+                                      <DownOutlined />
+                                    </span>
+                                  </Button>
+                                </Dropdown>
+                                {/* <Dropdown.Button 
                                   type="primary"
                                   className={`declinedBtnHcc ${visitStyles.declinedBtnHcc}`}
                                   icon={<DownOutlined />}
@@ -2110,16 +2214,11 @@ const Details = ({}) => {
                                       : actionItems
                                   }
                                 >
-                                  {/* <Popover placement="bottom" content="tst"> */}
                                   DECLINED
-                                  {/* </Popover> */}
-                                </Dropdown.Button>
+                                </Dropdown.Button>*/}
                               </div>
                             ) : patienIdDetails?.processedStatus == "HOLD" ? (
-                              <Dropdown.Button
-                                type="primary"
-                                className={`holdBtnHcc ${visitStyles.holdBtnHcc}`}
-                                icon={<DownOutlined />}
+                              <Dropdown
                                 overlay={
                                   activeTab == 3
                                     ? actionItems2
@@ -2127,12 +2226,59 @@ const Details = ({}) => {
                                     ? actionItems3
                                     : actionItems
                                 }
+                                onVisibleChange={(v) => setMenuIsOpen(v)}
+                                visible={menuIsOpen}
+                                className={`holdBtnHcc ${visitStyles.holdBtnHccs}`}
                               >
-                                HOLD
-                              </Dropdown.Button>
+                                <Button
+                                  type="primary"
+                                  className={`holdBtnHcc ${visitStyles.holdBtnHccs}`}
+                                >
+                                  <span>HOLD</span>
+                                  <span style={{ marginLeft: "10px" }}>
+                                    <DownOutlined />
+                                  </span>
+                                </Button>
+                              </Dropdown>
                             ) : (
+                              // <Dropdown.Button
+                              //   type="primary"
+                              //   className={`holdBtnHcc ${visitStyles.holdBtnHcc}`}
+                              //   icon={<DownOutlined />}
+                              //   overlay={
+                              //     activeTab == 3
+                              //       ? actionItems2
+                              //       : activeTab == 4
+                              //       ? actionItems3
+                              //       : actionItems
+                              //   }
+                              // >
+                              //   HOLD
+                              // </Dropdown.Button>
                               <div className={`col-xl-12`}>
-                                <Dropdown.Button
+                                <Dropdown
+                                  overlay={
+                                    activeTab == 3
+                                      ? actionItems2
+                                      : activeTab == 4
+                                      ? actionItems3
+                                      : actionItems
+                                  }
+                                  onVisibleChange={(v) => setMenuIsOpen(v)}
+                                  visible={menuIsOpen}
+                                  className={`pendingBtn ${visitStyles.pendingBtn}`}
+                                >
+                                  <Button
+                                    type="primary"
+                                    className={`pendingBtn ${visitStyles.pendingBtn}`}
+                                  >
+                                    <span>PENDING</span>
+                                    <span style={{ marginLeft: "10px" }}>
+                                      <DownOutlined />
+                                    </span>
+                                  </Button>
+                                </Dropdown>
+                                {/* <Dropdown.Button
                                   type="primary"
                                   className={`pendingBtn ${visitStyles.pendingBtn}`}
                                   icon={<DownOutlined />}
@@ -2145,7 +2291,7 @@ const Details = ({}) => {
                                   }
                                 >
                                   PENDING
-                                </Dropdown.Button>
+                                </Dropdown.Button> */}
                               </div>
                             )}
                           </div>

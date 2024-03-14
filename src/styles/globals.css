@@ -13677,6 +13677,16 @@ overflow: scroll;
   display: none;
 }
 
+.auditBtnHcc {
+  color: #377880 !important;
+  background: #d4eaed !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 180px !important;
+  padding: 0px !important;
+  height: 35px !important;
+}
+
 .auditBtnHcc button.ant-btn.ant-btn-compact-first-item {
   color: #377880 !important;
   background: #d4eaed !important;
@@ -13706,6 +13716,16 @@ overflow: scroll;
   background: #d4eaed !important;
   border: none !important;
   box-shadow: none !important;
+}
+
+.declineBtnHcc {
+  color: #ff5e5e !important;
+  background: #ffdede !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 180px !important;
+  padding: 0px !important;
+  height: 35px !important;
 }
 
 .declineBtnHcc button.ant-btn.ant-btn-compact-first-item {
@@ -13738,6 +13758,15 @@ overflow: scroll;
   border: none !important;
   box-shadow: none !important;
 }
+.reauditBtnHcc {
+  color: #964b00 !important;
+  background: #ffd1a3 !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 180px !important;
+  padding: 0px !important;
+  height: 35px !important;
+}
 .reauditBtnHcc button.ant-btn.ant-btn-compact-first-item {
   color: #964b00 !important;
   background: #ffd1a3 !important;
@@ -13768,6 +13797,15 @@ overflow: scroll;
   box-shadow: none !important;
 }
 
+.auditHoldBtnHcc {
+  color: #ce9900 !important;
+  background: #ffebad !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 180px !important;
+  padding: 0px !important;
+  height: 35px !important;
+}
 .auditHoldBtnHcc button.ant-btn.ant-btn-compact-first-item {
   color: #ce9900 !important;
   background: #ffebad !important;
@@ -13796,6 +13834,16 @@ overflow: scroll;
   background: #ffebad !important;
   border: none !important;
   box-shadow: none !important;
+}
+
+.auditPendingBtnHcc {
+  color: #e28213 !important;
+  background: #fbe7d0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 180px !important;
+  padding: 0px !important;
+  height: 35px !important;
 }
 
 .auditPendingBtnHcc button.ant-btn.ant-btn-compact-first-item {
