@@ -28,23 +28,23 @@ const index = () => {
 
   const inputRefs = Array.from({ length: codeLength + 1 }, () => useRef(null));
 
-  const handleInput = (index, e) => {
-    const value = e.target.value;
-    const numbers = code.slice(0, 6);
-    if (!isNaN(value) && value?.length === 1) {
-      numbers.push(value);
-    }
-    setCode(numbers);
-    if (code[index - 1] && value) {
-      const addOndigit = value[1];
-      const splittedVal = [...code, ...addOndigit];
-      setCode(splittedVal);
-      inputRefs[index + 1]?.current?.focus();
-    }
-    if (value?.length === 1 && index < inputRefs?.length - 1) {
-      inputRefs[index + 1]?.current?.focus();
-    }
-  };
+  // const handleInput = (index, e) => {
+  //   const value = e.target.value;
+  //   const numbers = code.slice(0, 6);
+  //   if (!isNaN(value) && value?.length === 1) {
+  //     numbers.push(value);
+  //   }
+  //   setCode(numbers);
+  //   if (code[index - 1] && value) {
+  //     const addOndigit = value[1];
+  //     const splittedVal = [...code, ...addOndigit];
+  //     setCode(splittedVal);
+  //     inputRefs[index + 1]?.current?.focus();
+  //   }
+  //   if (value?.length === 1 && index < inputRefs?.length - 1) {
+  //     inputRefs[index + 1]?.current?.focus();
+  //   }
+  // };
 
   useEffect(() => {
     inputRefs[1]?.current?.focus();
@@ -89,13 +89,32 @@ const index = () => {
       };
     }
   }, [seconds]);
+
+  const handleInput = (index, e) => {
+    const value = e.target.value;
+    if (!isNaN(value) && value.length === 1) {
+      const updatedCode = [...code];
+      updatedCode[index - 1] = value;
+      setCode(updatedCode);
+      if (index === inputRefs?.length) {
+        inputRefs[index]?.current?.focus();
+      } else {
+        inputRefs[index + 1]?.current?.focus();
+      }
+    }
+  };
+
   const handleBackspace = (index, e) => {
     if (e.keyCode === 8 && index > 0) {
       e.preventDefault();
-      const updatedCode = [...code?.slice(0, 6)];
-      updatedCode.splice(index - 1, 1);
+      const updatedCode = [...code];
+      updatedCode[index - 1] = "";
       setCode(updatedCode);
-      inputRefs[index - 1]?.current?.focus();
+      if (index <= 5 && index === inputRefs?.length) {
+        inputRefs[index]?.current?.focus();
+      } else {
+        inputRefs[index - 1]?.current?.focus();
+      }
     }
   };
   return (
