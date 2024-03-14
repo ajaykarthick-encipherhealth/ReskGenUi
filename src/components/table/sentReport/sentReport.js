@@ -18,7 +18,6 @@ import {
   sortFunction,
 } from "../../headerFilters/functions";
 
-
 function SentReportTable({
   details,
   onSentPageChange,
@@ -43,7 +42,7 @@ function SentReportTable({
   };
 
   const hashes = selectedUsers.map((user) => {
-    const hash = (user.userDetails.firstName.charCodeAt(0) % 6) + 1;
+    const hash = (user?.userDetails?.firstName.charCodeAt(0) % 6) + 1;
     return hash;
   });
   const mostCommonHash = getBackgroundColor(hashes);
@@ -66,22 +65,23 @@ function SentReportTable({
                   className={TableStyle.childBorder}
                   style={{ textAlign: "center" }}
                 >
-                  {row.userDetails.firstName ||
-                  row.userDetails.lastName ||
-                  row.userDetails.profileImageUrl ? (
+                  {row?.userDetails?.firstName ||
+                  row?.userDetails?.lastName ||
+                  row?.userDetails?.profileImageUrl ? (
                     <div style={{ display: "flex", alignItems: "center" }}>
                       {" "}
                       <span style={{ marginRight: "10px" }}>
                         {" "}
                         {renderUserPrfoileAvatar(
-                          row.userDetails.firstName,
-                          row.userDetails.lastName,
-                          row.userDetails.profileImageUrl,
+                          row?.userDetails?.firstName,
+                          row?.userDetails?.lastName,
+                          row?.userDetails?.profileImageUrl,
                           "header"
                         )}
                       </span>
                       <span>
-                        {row.userDetails.firstName} {row.userDetails.lastName}
+                        {row?.userDetails?.firstName}{" "}
+                        {row?.userDetails?.lastName}
                       </span>
                     </div>
                   ) : (
@@ -124,9 +124,9 @@ function SentReportTable({
           }&sentreport=${true}`
         );
   };
-  const closeModal=()=>{
-    setOpenEdit(false)
-  }
+  const closeModal = () => {
+    setOpenEdit(false);
+  };
   return (
     <div className={TableStyle.classContaineer}>
       {!details?.data ? (
@@ -138,7 +138,6 @@ function SentReportTable({
               <tr>
                 <th>REPORT ID</th>
                 <th>REPORT NAME</th>
-                <th style={{ paddingLeft: "100px" }}>USER LIST</th>
                 <th style={{ textAlign: "center" }}>USER LIST</th>
                 <th
                   className={TableStyle.rowStyle}
@@ -164,10 +163,7 @@ function SentReportTable({
                   const formattedDate = dateFormate(dayjs, row?.sendDate);
 
                   return (
-                    <tr
-                      key={index}
-                      style={{ height: "40px" }}
-                    >
+                    <tr key={index} style={{ height: "40px" }}>
                       <td
                         style={{
                           borderTop: "  0.2px solid #e1e1e1",
@@ -197,7 +193,6 @@ function SentReportTable({
                           cursor: "pointer",
                           borderBottom: "  0.2px solid #e1e1e1",
                           textAlign: "center",
-
                         }}
                         className={TableStyle.childBorder}
                         onClick={() => handleReceiverReport(row)}
@@ -214,7 +209,7 @@ function SentReportTable({
                             <Avatar.Group maxCount={2}>
                               {row?.receivedUsers?.map((data, index) => (
                                 <div key={index}>
-                                  {data.userDetails.profileImageUrl ? (
+                                  {data?.userDetails?.profileImageUrl ? (
                                     <Avatar
                                       style={{ objectFit: "unset" }}
                                       src={data.userDetails.profileImageUrl}
@@ -226,11 +221,13 @@ function SentReportTable({
                                       }}
                                     >
                                       {`${
-                                        data.userDetails.firstName?.charAt(0) ||
-                                        ""
+                                        data?.userDetails?.firstName?.charAt(
+                                          0
+                                        ) || ""
                                       }${
-                                        data.userDetails.lastName?.charAt(0) ||
-                                        ""
+                                        data?.userDetails?.lastName?.charAt(
+                                          0
+                                        ) || ""
                                       }`}
                                     </Avatar>
                                   )}

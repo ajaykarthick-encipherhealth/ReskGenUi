@@ -7,6 +7,7 @@ import {
 } from "../../../store/actions/adminAction/ReportActions";
 import { useDispatch, useSelector } from "react-redux";
 import { updateSentReport } from "../../../services/adminServices/ReportService";
+import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
 
 const { Option } = Select;
 
@@ -213,6 +214,11 @@ const Export = ({
       dispatch(getExportDetails(data));
     } else {
       dispatch(updateSentReport(updatedData));
+      dispatch(
+        getActiveTab(
+          "SentReport"
+        )
+      );
     }
     form.resetFields();
     setUsersList([]);

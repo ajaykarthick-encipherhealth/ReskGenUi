@@ -1,5 +1,8 @@
 import axios from "axios";
 import ENDPOINTS from "../utility/enpoints";
+import { getSentDetails } from "../store/actions/ReportActions";
+
+export const UPDATE_SENTREPORT='UPDATE_SENTREPORT'
 
 export const patientDetails = async (pagenum,startDate="",endDate="",search,filter="",sort) => {
   const token = localStorage.getItem("token");
@@ -24,7 +27,7 @@ export const patientDetails = async (pagenum,startDate="",endDate="",search,filt
 export const SentReport = async (pagenum,startDate="",endDate="",search,sort) => {
   const token = localStorage.getItem("token");
  
-  const url= `dbservice/reportdetails/sent?pageNo=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}`
+  const url= `dbservice/reportdetails/sent?pageNo=${pagenum}&size=15&startdate=${startDate?startDate:""}&enddate=${endDate?endDate:""}&searchstring=${search?search:""}&sortfield=${sort?.sortField?sort?.sortField:""}&sortdirection=${sort?.sortDir?sort?.sortDir:""}`
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}${url}`,
@@ -111,4 +114,36 @@ export const getFile=(pathname)=>{
   );
 }
 
-
+export const updateSentReport = (data) => async (dispatch) => {
+  const token = localStorage.getItem("token");
+  try {
+    dispatch({
+      type: UPDATE_SENTREPORT,
+      payload: {
+        loading: true,
+        data: null,
+      },
+    });
+    const response = await axios.post(
+      `${ENDPOINTS.apiEndoint}dbservice/reportdetails/updatereportstatus`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response?.data) {
+      dispatch({
+        type: UPDATE_SENTREPORT,
+        payload: {
+          loading: false,
+          data: response.data,
+        },
+      });
+      dispatch(getSentDetails(0));
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};

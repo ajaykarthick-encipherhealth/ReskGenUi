@@ -7,6 +7,8 @@ import {
 } from "../../../store/actions/ReportActions";
 import { useDispatch, useSelector } from "react-redux";
 import { checkBoxData, debounce } from "../../admin/report/Export";
+import { updateSentReport } from "../../../services/ReportService";
+import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
 const { Option } = Select;
 
 const Export = ({
@@ -120,6 +122,7 @@ const Export = ({
       dispatch(getExportDetails(data));
     } else {
       dispatch(updateSentReport(updatedData));
+      dispatch(getActiveTab("SentReport"));
     }
     form.resetFields();
     setUsersList([]);
@@ -136,11 +139,18 @@ const Export = ({
   };
 
   const deleteUser = (userInfo) => {
-    setUsersList((prevUserList) =>
-      prevUserList?.filter(
-        (user) => user?.user[0]?.userId !== userInfo[0]?.userId
-      )
-    );
+    if (Array?.isArray(userInfo)) {
+      setUsersList((prevUserList) =>
+        prevUserList?.filter(
+          (info) => info?.user[0]?.userId !== userInfo[0]?.userId
+        )
+      );
+    } else {
+      setRemovedUsers((prev) => [...prev, userInfo]);
+      setUsersList((prevUserList) =>
+        prevUserList?.filter((info) => info?.user !== userInfo)
+      );
+    }
   };
 
   const filteredOptions = options?.filter((option) => {

@@ -1,5 +1,6 @@
 import axios from "axios";
 import ENDPOINTS from "../../utility/enpoints";
+import { getSentDetails } from "../../store/actions/adminAction/ReportActions";
 
 export const UPDATE_SENTREPORT='UPDATE_SENTREPORT'
 export const patientDetails = async (
@@ -37,7 +38,7 @@ export const SentReport = async (
 ) => {
   const token = localStorage.getItem("token");
 
-  const url = `dbservice/reportdetails/sent?pageNo=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&sortfield=${
+  const url = `dbservice/reportdetails/sent?pageNo=${pagenum}&size=15&startdate=${startDate?startDate:""}&enddate=${endDate?endDate:""}&searchstring=${search?search:""}&sortfield=${
     sort?.sortField ? sort?.sortField : ""
   }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}`;
   try {
@@ -175,7 +176,7 @@ export const updateSentReport = (data) => async (dispatch) => {
           data: response.data,
         },
       });
-      dispatch(SentReport(0));
+      dispatch(getSentDetails(0));
     }
   } catch (err) {
     console.log(err);

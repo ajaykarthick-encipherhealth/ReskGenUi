@@ -383,7 +383,6 @@ const Header = () => {
     }
   }, [msgReply, selectedbtn, search, selectedOption, currentUserInfo]);
 
-  console.log(profileUploadedTime);
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
