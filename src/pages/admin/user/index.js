@@ -100,43 +100,60 @@ const UserList = () => {
   };
 
   const handleSubmit = async (event) => {
-    const form = event.currentTarget;
     event.preventDefault();
-    const role = localStorage.getItem("userRole");
-    const passValidation = getValidatePassword(
-      formData?.password,
-      setErrors,
-      setIsLoading
-    );
-    const isConfirmPasswordValid = validateConfirmPassword(
-      formData.password,
-      formData.confirmPassword,
-      setErrors,
-      setIsLoading
-    );
-    if (
-      form.checkValidity() === true &&
-      passValidation &&
-      isConfirmPasswordValid
-    ) {
-      formData.tenantId = localTenantId;
-      formData.organizationId = localOrgId;
-      formData.role = roleValue ? roleValue : [role.toUpperCase()];
-      var response = await AddUser(formData, setErrors);
-      if (response?.data?.status === "SUCCESS") {
-        setAddUser(false);
-        setUseAdd(true);
-        setFormData({
-          ...intialValues,
-          userName: "",
-          confirmPassword: "",
-        });
-        setErrors({
-          email: "",
-          password: "",
-          confirmPass: "",
-        });
-        setIsLoadingBtn(false);
+    const form = event.currentTarget;
+
+    if (formData.userName.includes("@")) {
+      setErrors({
+        ...errors,
+        email: "Username cannot be an email address",
+      });
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setErrors({
+        ...errors,
+        confirmPass: "Passwords do not match",
+      });
+      return;
+    }
+
+    if (form.checkValidity() === true) {
+      const passValidation = getValidatePassword(
+        formData?.password,
+        setErrors,
+        setIsLoading
+      );
+      const isConfirmPasswordValid = validateConfirmPassword(
+        formData.password,
+        formData.confirmPassword,
+        setErrors,
+        setIsLoading
+      );
+
+      if (passValidation && isConfirmPasswordValid) {
+        formData.tenantId = localTenantId;
+        formData.organizationId = localOrgId;
+        formData.role = roleValue ? roleValue : [role.toUpperCase()];
+
+        const response = await AddUser(formData, setErrors);
+
+        if (response?.data?.status === "SUCCESS") {
+          setAddUser(false);
+          setUseAdd(true);
+          setFormData({
+            ...intialValues,
+            userName: "",
+            confirmPassword: "",
+          });
+          setErrors({
+            email: "",
+            password: "",
+            confirmPass: "",
+          });
+          setIsLoadingBtn(false);
+        }
       }
     }
 
@@ -486,6 +503,11 @@ const UserList = () => {
                         value={formData?.userName}
                       />
                     </div>
+                    {errors?.email ? (
+                      <div className="text-danger fs-12">{errors?.email}</div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <div className="col-xl-6 mb-3">
                     <Form.Label>
@@ -605,10 +627,12 @@ const UserList = () => {
                         </span>
                       </div>
                     </div>
-                    {errors?.confirmPass && (
+                    {errors?.confirmPass ? (
                       <div className="text-danger fs-12">
                         {errors?.confirmPass}
                       </div>
+                    ) : (
+                      ""
                     )}
                   </div>
                 </div>
