@@ -19,7 +19,7 @@ const Screen = () => {
 
 
     const gotoPatientDetails = (data) => {
-        navigate.push('/physician/patients');
+        navigate.push('/reviewer/patients');
     };
 
 

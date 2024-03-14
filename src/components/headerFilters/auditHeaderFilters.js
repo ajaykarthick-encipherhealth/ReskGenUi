@@ -3,7 +3,7 @@ import Select from "react-select";
 import { DatePicker, Popover } from "antd";
 import Image from "next/image";
 import dayjs from "dayjs";
-import styles from "../../pages/physician/report/report.module.css";
+import styles from "../../pages/reviewer/report/report.module.css";
 import Legends from "../legends";
 import DateRangePicker from "../rangepicker";
 import Selector from "../selector";

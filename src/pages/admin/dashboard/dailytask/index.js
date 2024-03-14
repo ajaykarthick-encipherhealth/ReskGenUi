@@ -247,7 +247,7 @@ const DailyTask = () => {
                         //       dayDate: data?.dateString,
                         //     })
                         //   );
-                        //   router?.push("/l2Auditor/user");
+                        //   router?.push("/supervisor/user");
                         // }}
                       >
                         {/* <div className={styles.headerDisplay}>
@@ -292,7 +292,7 @@ const DailyTask = () => {
                                     //       status: item?.name,
                                     //     })
                                     //   );
-                                    //   router?.push("/physician/patients");
+                                    //   router?.push("/reviewer/patients");
                                     // }}
                                   >
                                     <div

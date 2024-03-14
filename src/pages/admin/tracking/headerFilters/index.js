@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap";
 import { Badge, DatePicker, Popover } from "antd";
 import Image from "next/image";
 import dayjs from "dayjs";
-import styles from "../../../../pages/physician/report/report.module.css";
+import styles from "../../../../pages/reviewer/report/report.module.css";
 import allocateStyle from "../../../../pages/admin/allocatedUser/allocate/style.module.css";
 import Export from "../../../../images/svg/Export";
 import Selector from "../../../../components/selector";

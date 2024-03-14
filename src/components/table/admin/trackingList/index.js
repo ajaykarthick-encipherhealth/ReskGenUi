@@ -44,7 +44,7 @@ function TrackingTable({
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
-      navigate.push("/physician/patients/details");
+      navigate.push("/reviewer/patients/details");
     } else {
       notification.warning({
         message: data.patientId + " file not processed. Please wait.",

@@ -16,7 +16,7 @@ import {
   sortFunction,
   renderUserPrfoileAvatar,
 } from "../../../headerFilters/functions";
-import { extractLatestData } from "../../../../pages/l2Auditor/auditing";
+import { extractLatestData } from "../../../../pages/supervisor/auditing";
 
 function AllocatedL2AdminList({
   patinetListAll,

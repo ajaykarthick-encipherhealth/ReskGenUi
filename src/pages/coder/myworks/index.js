@@ -17,7 +17,7 @@ const Screen = () => {
   const navigate = useRouter();
 
   const gotoPatientDetails = (data) => {
-    navigate.push("/physician/patients");
+    navigate.push("/reviewer/patients");
   };
 
   const series = [

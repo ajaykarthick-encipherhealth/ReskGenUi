@@ -17,7 +17,7 @@ import AllocatedL2AdminList from "../../../components/table/admin/allocatedL2Adm
 import allocateStyle from "./allocate/style.module.css";
 import AllocateModal from "./allocate";
 import L2AllocateModal from "./l2allocate";
-import reportStyles from "../../physician/report/report.module.css";
+import reportStyles from "../../reviewer/report/report.module.css";
 import moment from "moment/moment";
 import { Tab, Nav } from "react-bootstrap";
 import SpinnerDots from "../../../components/spinner";

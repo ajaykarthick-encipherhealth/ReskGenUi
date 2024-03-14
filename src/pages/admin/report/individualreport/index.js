@@ -17,7 +17,7 @@ import ExcelDisplay, {
 } from "../../../../components/table/receivedReport/ExcelDisplay";
 import CSVDisplay from "../../../../components/table/receivedReport/CSVDisplay";
 import styles from "../../../../components/table/receivedReport/receivedReport.module.css";
-import reportStyles from "../../../physician/report/report.module.css";
+import reportStyles from "../../../reviewer/report/report.module.css";
 import search from "../../../../images/report/search.svg";
 import sortImg from "../../../../images/report/sort.svg";
 import id from "../../../../images/report/id.svg";

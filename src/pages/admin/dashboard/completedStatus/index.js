@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import * as echarts from "echarts";
 import ReactECharts from "echarts-for-react";
-import { Buttons } from "../../../physician/workingstatus";
+import { Buttons } from "../../../reviewer/workingstatus";
 import Buttonscroller from "../../../../components/buttonSroller";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";

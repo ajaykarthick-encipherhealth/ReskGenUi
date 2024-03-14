@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import styles from "../../../pages/l2Auditor/dashboard/styles.module.css";
+import styles from "../../../pages/supervisor/dashboard/styles.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
@@ -32,7 +32,7 @@ import AuditedDeclineTrack from "../../../../src/images/trackingImages/AuditDecl
 import Abort from "../../../../src/images/trackingImages/Abort.png";
 
 import Image from "next/image";
-import { extractLatestData } from "../../l2Auditor/auditing";
+import { extractLatestData } from "../../supervisor/auditing";
 const bullets = [
   {
     title: "Processed Status",
@@ -320,7 +320,7 @@ export default function Patient() {
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
-      navigate.push("/physician/patients/details");
+      navigate.push("/reviewer/patients/details");
     } else {
       notification.warning({
         message: data.patientId + " file not processed Please wait",

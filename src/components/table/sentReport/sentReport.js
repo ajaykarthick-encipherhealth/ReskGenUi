@@ -114,7 +114,7 @@ function SentReportTable({
     dispatch(selectedReport(info));
     isPhysician
       ? router?.push(
-          `/physician/report/individualreport?reportId=${
+          `/reviewer/report/individualreport?reportId=${
             row?._id
           }&sentreport=${true}`
         )

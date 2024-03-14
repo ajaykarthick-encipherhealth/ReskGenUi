@@ -53,7 +53,7 @@ function ReceivedReport({
     };
     dispatch(selectedReport(info));
     router?.push(
-      `/l2Auditor/report/individualreport?reportId=${info?.reportUser?.reportId}`
+      `/supervisor/report/individualreport?reportId=${info?.reportUser?.reportId}`
     );
   };
 
