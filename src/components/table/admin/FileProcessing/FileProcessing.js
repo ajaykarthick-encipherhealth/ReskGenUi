@@ -157,7 +157,11 @@ function FileProcessingTable({ patinetListAll, loading }) {
       stepperVisible?.map((value, i) => (i === index ? !value : false));
     setStepperVisible(updatedVisibility);
     const failed = errStages[data?.processStageChart];
-    setFiledList(failed);
+    if (failed) {
+      setFiledList(failed);
+    }else{
+      setFiledList()
+    }
   };
 
   useEffect(() => {
@@ -457,7 +461,7 @@ function FileProcessingTable({ patinetListAll, loading }) {
                 style={{
                   height: "20px",
                 }}
-               className="antTextHide"
+                className="antTextHide"
                 strokeColor={
                   stageChartMap2[data?.processStageChart] === "Finished"
                     ? "green"
