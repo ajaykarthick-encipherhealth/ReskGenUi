@@ -1,6 +1,8 @@
 import axios from "axios";
 import ENDPOINTS from "../utility/enpoints";
 
+export const UPDATE_SENTREPORT='UPDATE_SENTREPORT'
+
 export const patientDetails = async (pagenum,startDate="",endDate="",search,filter="",sort) => {
   const token = localStorage.getItem("token");
 
