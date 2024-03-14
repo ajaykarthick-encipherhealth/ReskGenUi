@@ -102,8 +102,7 @@ const UserList = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
-  
-    // Validate if username contains '@' symbol
+
     if (formData.userName.includes("@")) {
       setErrors({
         ...errors,
@@ -111,8 +110,7 @@ const UserList = () => {
       });
       return;
     }
-  
-    // Check if passwords match
+
     if (formData.password !== formData.confirmPassword) {
       setErrors({
         ...errors,
@@ -120,8 +118,7 @@ const UserList = () => {
       });
       return;
     }
-  
-    // Perform form validation
+
     if (form.checkValidity() === true) {
       const passValidation = getValidatePassword(
         formData?.password,
@@ -134,19 +131,15 @@ const UserList = () => {
         setErrors,
         setIsLoading
       );
-  
-      // Proceed if both password and confirm password are valid
+
       if (passValidation && isConfirmPasswordValid) {
         formData.tenantId = localTenantId;
         formData.organizationId = localOrgId;
         formData.role = roleValue ? roleValue : [role.toUpperCase()];
-        
-        // Call the service to add user
+
         const response = await AddUser(formData, setErrors);
-  
-        // Check if user addition was successful
+
         if (response?.data?.status === "SUCCESS") {
-          // Reset form and errors after successful addition
           setAddUser(false);
           setUseAdd(true);
           setFormData({
@@ -163,11 +156,9 @@ const UserList = () => {
         }
       }
     }
-  
-    // Set validated to true to display validation errors
+
     setValidated(true);
   };
-  
 
   const switchHandler = (event, id) => {
     const isChecked = event;
@@ -511,13 +502,12 @@ const UserList = () => {
                         autoComplete="none"
                         value={formData?.userName}
                       />
-                    
                     </div>
                     {errors?.email ? (
-                      <div className="text-danger fs-12">
-                        {errors?.email}
-                      </div>
-                    ): ""}
+                      <div className="text-danger fs-12">{errors?.email}</div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <div className="col-xl-6 mb-3">
                     <Form.Label>
@@ -641,7 +631,9 @@ const UserList = () => {
                       <div className="text-danger fs-12">
                         {errors?.confirmPass}
                       </div>
-                    ) : ""}
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
                 <div>
