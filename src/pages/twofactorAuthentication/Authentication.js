@@ -62,7 +62,7 @@ const index = () => {
   useEffect(() => {
     if (seconds === 0) {
       setCode([]);
-      inputRefs[1].current.focus();
+      inputRefs[1].current?.focus();
 
       notification.warning({
         description: "Oops! your time is expired",
