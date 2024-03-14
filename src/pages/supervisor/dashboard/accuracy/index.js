@@ -91,37 +91,55 @@ const Accuracy = () => {
       label: res.firstName + " " + res.lastName,
     })
   );
+
   const chartBlockedDates = (year, month, param, val, currentBtn) => {
     year = Number(year);
     month = Number(month);
-    if (year < currentDate.getFullYear()) {
-      return param?.data?.mapAccuracy?.map((item) => item[val]);
+    if (
+      year < currentDate.getFullYear() &&
+      param?.data?.response?.mapAccuracy?.length > 0
+    ) {
+      return param?.data?.response?.mapAccuracy?.map((item) => item[val]);
     } else if (
       year == currentDate.getFullYear() &&
-      month < currentDate.getMonth() + 1
+      month < currentDate.getMonth() + 1 &&
+      param?.data?.response?.mapAccuracy?.length > 0
     ) {
-      console.log( param?.data?.response)
-      return param?.data?.mapAccuracy?.map((item) => item[val]);
+      return param?.data?.response?.mapAccuracy?.map((item) => item[val]);
     } else if (
       year == currentDate.getFullYear() &&
       month == currentDate.getMonth() + 1 &&
-      currentBtn !== "Monthly"
+      currentBtn !== "Monthly" &&
+      param?.data?.response?.mapAccuracy?.length > 0
     ) {
-      if (currentBtn == "Daily") {
-        return param?.data?.mapAccuracy?.map(
+      if (
+        currentBtn == "Daily" &&
+        param?.data?.response?.mapAccuracy?.length > 0
+      ) {
+        return param?.data?.response?.mapAccuracy?.map(
           (item, index) => index < new Date().getDate() && item[val]
         );
-      } else if (currentBtn == "Weekly") {
-        return param?.data?.mapAccuracy?.map(
+      } else if (
+        currentBtn == "Weekly" &&
+        param?.data?.response?.mapAccuracy?.length > 0
+      ) {
+        return param?.data?.response?.mapAccuracy?.map(
           (item, index) => index < getDateWeek(currentDate) && item[val]
         );
-      } else if (currentBtn == "Monthly") {
-        return param?.data?.mapAccuracy?.map(
+      } else if (
+        currentBtn == "Monthly" &&
+        param?.data?.response?.mapAccuracy?.length > 0
+      ) {
+        return param?.data?.response?.mapAccuracy?.map(
           (item, index) => index < new Date().getMonth() + 1 && item[val]
         );
       }
-    } else if (year == currentDate.getFullYear() && currentBtn == "Monthly") {
-      return param?.data?.mapAccuracy?.map(
+    } else if (
+      year == currentDate.getFullYear() &&
+      currentBtn == "Monthly" &&
+      param?.data?.response?.mapAccuracy?.length > 0
+    ) {
+      return param?.data?.response?.mapAccuracy?.map(
         (item, index) => index < new Date().getMonth() + 1 && item[val]
       );
     } else {
