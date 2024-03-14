@@ -130,13 +130,21 @@ const Accuracy = () => {
 
   let highlightIndex = -1;
   if (currentBtn === "Monthly") {
-    highlightIndex = currentDate.getMonth();
+    if (parseInt(selectedYear) === new Date().getFullYear()) {
+      highlightIndex = currentDate.getMonth();
+    }
   } else if (currentBtn === "Daily") {
-    highlightIndex = currentDate.getDate() - 1;
+    if (
+      parseInt(selectedYear) === new Date().getFullYear() &&
+      selectedMonth === new Date().getMonth() + 1
+    ) {
+      highlightIndex = currentDate.getDate() - 1;
+    }
   } else if (currentBtn === "Weekly") {
-    const currentWeek = getDateWeek(currentDate);
-
-    highlightIndex = currentWeek - 1;
+    if (parseInt(selectedYear) === new Date().getFullYear()) {
+      const currentWeek = getDateWeek(currentDate);
+      highlightIndex = currentWeek - 1;
+    }
   }
 
   let data = [];
