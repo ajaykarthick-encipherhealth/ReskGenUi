@@ -5,7 +5,7 @@ export default class Index extends Component {
   componentDidMount = () => {
     var login = localStorage.getItem("loginCheck");
     if (login == "true") {
-      Router.push("/physician/dashboard");
+      Router.push("/reviewer/dashboard");
     } else {
       Router.push("/login");
     }

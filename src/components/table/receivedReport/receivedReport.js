@@ -46,11 +46,11 @@ function ReceivedReport({
     dispatch(selectedReport(info));
     if (isPhysician) {
       router?.push(
-        `/physician/report/individualreport?reportId=${info?.reportUser?.reportId}`
+        `/reviewer/report/individualreport?reportId=${info?.reportUser?.reportId}`
       );
     } else {
       router?.push(
-        `/physician/report/individualreport?reportId=${
+        `/reviewer/report/individualreport?reportId=${
           info?.reportUser?.reportId
         }&isAdminPage=${true}`
       );

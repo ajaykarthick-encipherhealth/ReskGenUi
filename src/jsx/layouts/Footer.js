@@ -16,7 +16,7 @@ const Footer = () => {
     <footer className="text-center">
       <div
         className={
-          currentPath === "/physician/patients/details"
+          currentPath === "/reviewer/patients/details"
             ? `d-flex background-white`
             : `d-flex`
         }

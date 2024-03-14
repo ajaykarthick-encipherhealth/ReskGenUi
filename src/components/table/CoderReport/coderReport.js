@@ -25,7 +25,7 @@ import Completed from "../../../../src/images/trackingImages/CompletedTrack.png"
 import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
 import AuditedDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
 import Abort from "../../../../src/images/trackingImages/Abort.png";
-import { extractLatestData } from "../../../pages/l2Auditor/auditing";
+import { extractLatestData } from "../../../pages/supervisor/auditing";
 import Image from "next/image";
 
 function CoderReport({

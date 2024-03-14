@@ -299,9 +299,9 @@ const Header = () => {
     if (key === "admin") {
       router.push("/admin/user");
     } else if (key === "reviewer") {
-      router.push("/physician/dashboard");
+      router.push("/reviewer/dashboard");
     } else if (key === "supervisor") {
-      router.push("/l2Auditor/dashboard");
+      router.push("/supervisor/dashboard");
     } else if (key === "provider") {
       router.push("/provider/comparison");
     } else if (key === "ehr") {
@@ -391,7 +391,7 @@ const Header = () => {
             <div className="header-logo">
               <Image src={IMAGES.headerLogo} />
             </div>
-            {stateActive != "/physician/home" ? (
+            {stateActive != "/reviewer/home" ? (
               <div>
                 <ul className="metismenu header-menu d-flex" id="menu">
                   {menuList.map((data, index) => {

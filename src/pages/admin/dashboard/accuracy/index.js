@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Buttonscroller from "../../../../components/buttonSroller";
-import { Buttons } from "../../../physician/workingstatus";
+import { Buttons } from "../../../reviewer/workingstatus";
 import ReactECharts from "echarts-for-react";
 import accuracy from "../../../../images/dashboard/accuracy.png";
 import Image from "next/image";
