@@ -42,7 +42,7 @@ function SentReportTable({
   };
 
   const hashes = selectedUsers.map((user) => {
-    const hash = (user.userDetails.firstName.charCodeAt(0) % 6) + 1;
+    const hash = (user?.userDetails?.firstName?.charCodeAt(0) % 6) + 1;
     return hash;
   });
   const mostCommonHash = getBackgroundColor(hashes);
@@ -65,27 +65,27 @@ function SentReportTable({
                   className={TableStyle.firstTdBorder}
                   style={{ textAlign: "center" }}
                 >
-                  {row.userDetails.firstName ||
-                  row.userDetails.lastName ||
-                  row.userDetails.profileImageUrl ? (
+                  {row?.userDetails?.firstName ||
+                  row?.userDetails?.lastName ||
+                  row?.userDetails?.profileImageUrl ? (
                     <div style={{ display: "flex", alignItems: "center" }}>
                       <span style={{ marginRight: "10px" }}>
                         {renderUserPrfoileAvatar(
-                          row.userDetails.firstName,
-                          row.userDetails.lastName,
-                          row.userDetails.profileImageUrl,
+                          row?.userDetails?.firstName,
+                          row?.userDetails?.lastName,
+                          row?.userDetails?.profileImageUrl,
                           "header"
                         )}
                       </span>
                       <span>
-                        {row.userDetails.firstName} {row.userDetails.lastName}
+                        {row?.userDetails?.firstName} {row?.userDetails?.lastName}
                       </span>
                     </div>
                   ) : (
                     <div style={{ textAlign: "center" }}>---</div>
                   )}
                 </td>
-                <td className={TableStyle.lastBorder}>{row.role}</td>
+                <td className={TableStyle.lastBorder}>{row?.role}</td>
               </tr>
             );
           })}
@@ -194,9 +194,9 @@ function SentReportTable({
                             <Avatar.Group maxCount={2}>
                               {row?.receivedUsers?.map((data, index) => (
                                 <div key={index}>
-                                  {data.userDetails.profileImageUrl ? (
+                                  {data?.userDetails?.profileImageUrl ? (
                                     <Avatar
-                                      src={data.userDetails.profileImageUrl}
+                                      src={data?.userDetails?.profileImageUrl}
                                     />
                                   ) : (
                                     <Avatar
@@ -205,10 +205,10 @@ function SentReportTable({
                                       }}
                                     >
                                       {`${
-                                        data.userDetails.firstName?.charAt(0) ||
+                                        data?.userDetails?.firstName?.charAt(0) ||
                                         ""
                                       }${
-                                        data.userDetails.lastName?.charAt(0) ||
+                                        data?.userDetails?.lastName?.charAt(0) ||
                                         ""
                                       }`}
                                     </Avatar>
