@@ -296,7 +296,7 @@ function CoderReport({
                   )}
                 </th>
                 <th>COMMENTS </th>
-                <th className={TableStyle.rowAudited}>SUPERVISOR NAME</th>
+                <th className={TableStyle.rowAudited}>USER NAME</th>
                 <th>RAF SCORE </th>
                 <th>HCC </th>
                 <th>FLAG </th>
