@@ -5,7 +5,8 @@ import { getExportDetails } from "../../../store/actions/ReportActions";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsersList } from "../../../store/actions/adminAction/ReportActions";
 import { checkBoxData, debounce } from "../../admin/report/Export";
-import { updateSentReport } from "../../../services/adminServices/ReportService";
+import { updateSentReport } from "../../../services/ReportService";
+
 const { Option } = Select;
 
 const Export = ({
@@ -163,7 +164,7 @@ const Export = ({
         ? selectedRows?.reportName
         : reportName,
   });
-  console.log(selectedUser);
+
   return (
     <Modal
       title="Export "

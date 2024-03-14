@@ -111,4 +111,36 @@ export const getFile=(pathname)=>{
   );
 }
 
-
+export const updateSentReport = (data) => async (dispatch) => {
+  const token = localStorage.getItem("token");
+  try {
+    dispatch({
+      type: UPDATE_SENTREPORT,
+      payload: {
+        loading: true,
+        data: null,
+      },
+    });
+    const response = await axios.post(
+      `${ENDPOINTS.apiEndoint}dbservice/reportdetails/updatereportstatus`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response?.data) {
+      dispatch({
+        type: UPDATE_SENTREPORT,
+        payload: {
+          loading: false,
+          data: response.data,
+        },
+      });
+      dispatch(SentReport(0));
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
