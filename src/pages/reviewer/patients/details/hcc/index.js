@@ -156,17 +156,6 @@ const Hcc = ({ patientHccResult }) => {
 
   const [activeTab, setActiveTab] = useState(1);
   const [activeTabHead, setActiveTabHead] = useState("file");
-
-  const [unmatchHccListRadiology, setUnMatchHccListRadiology] = useState([]);
-  const [newValidDiseaseListRadiology, setNewValidDiseaseListRadiology] =
-    useState([]);
-  const [newInValidDiseaseListRadiology, setInNewValidDiseaseListRadiology] =
-    useState([]);
-  const [comboDiseaseCodesListRadiology, setComboDiseaseCodesListRadiology] =
-    useState([]);
-  const [meatCriteriaListRadiology, setMeatCriteriaListRadiology] = useState(
-    []
-  );
   const [selectFileURLRadiology, setSelectFileURLRadiology] = useState([]);
   const [isModalOpenRadiology, setIsModalOpenRadiology] = useState(false);
   const [isModalOpenLab, setIsModalOpenLab] = useState(false);
@@ -673,6 +662,8 @@ const Hcc = ({ patientHccResult }) => {
               isHccValid: true,
               defaultPosition: res.defaultPosition,
               providerName: providerList,
+              children: res.children ? res.children : [],
+              isMostSpecific: res.isMostSpecific,
             });
           });
 
@@ -742,6 +733,8 @@ const Hcc = ({ patientHccResult }) => {
                   getPlace: "Hcc",
                   defaultPosition: res.defaultPosition,
                   providerName: providerList,
+                  children: res.children ? res.children : [],
+                  isMostSpecific: res.isMostSpecific,
                 });
               } else {
                 // suggestListAll.push({
@@ -4379,6 +4372,33 @@ const Hcc = ({ patientHccResult }) => {
                                                   </div>
                                                 </Popconfirm>
                                               )}
+                                              {data.isMostSpecific == true && (
+                                                <div
+                                                  className={
+                                                    visitStyles.close_icon
+                                                  }
+                                                  style={{
+                                                    background: "#c7f3c6",
+                                                  }}
+                                                  onClick={() => {
+                                                    setOpens(true);
+                                                    setCombiTree([
+                                                      {
+                                                        ...data,
+                                                        expanded: true,
+                                                      },
+                                                    ]);
+                                                  }}
+                                                >
+                                                  <FontAwesomeIcon
+                                                    icon={faSitemap}
+                                                    style={{
+                                                      size: 8,
+                                                      color: "#088f39",
+                                                    }}
+                                                  />
+                                                </div>
+                                              )}
                                             </div>
                                             <div
                                               className={`${visitStyles.hoverActiveHcc}`}
@@ -5422,6 +5442,26 @@ const Hcc = ({ patientHccResult }) => {
                                             }
                                           </div>
                                         </Popconfirm>
+                                        {data.isMostSpecific == true && (
+                                          <div
+                                            className={visitStyles.close_icon}
+                                            style={{ background: "#c7f3c6" }}
+                                            onClick={() => {
+                                              setOpens(true);
+                                              setCombiTree([
+                                                { ...data, expanded: true },
+                                              ]);
+                                            }}
+                                          >
+                                            <FontAwesomeIcon
+                                              icon={faSitemap}
+                                              style={{
+                                                size: 8,
+                                                color: "#088f39",
+                                              }}
+                                            />
+                                          </div>
+                                        )}
                                       </div>
                                     </div>
                                     <div className="d-flex justify-content-between">
@@ -6182,6 +6222,33 @@ const Hcc = ({ patientHccResult }) => {
                                                     />
                                                   </div>
                                                 </Popconfirm>
+                                              )}
+                                              {data.isMostSpecific == true && (
+                                                <div
+                                                  className={
+                                                    visitStyles.close_icon
+                                                  }
+                                                  style={{
+                                                    background: "#c7f3c6",
+                                                  }}
+                                                  onClick={() => {
+                                                    setOpens(true);
+                                                    setCombiTree([
+                                                      {
+                                                        ...data,
+                                                        expanded: true,
+                                                      },
+                                                    ]);
+                                                  }}
+                                                >
+                                                  <FontAwesomeIcon
+                                                    icon={faSitemap}
+                                                    style={{
+                                                      size: 8,
+                                                      color: "#088f39",
+                                                    }}
+                                                  />
+                                                </div>
                                               )}
                                             </div>
                                             <div
