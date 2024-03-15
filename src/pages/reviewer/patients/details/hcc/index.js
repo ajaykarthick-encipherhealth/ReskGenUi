@@ -5852,7 +5852,7 @@ const Hcc = ({ patientHccResult }) => {
                                                   }
                                                   className="btn btn-danger btn-sm light ms-1"
                                                 >
-                                                  Cancel
+                                                  Back
                                                 </Button>
                                               </div>
                                             </Form>
@@ -6060,7 +6060,7 @@ const Hcc = ({ patientHccResult }) => {
                                                   }
                                                   className="btn btn-danger btn-sm light ms-1"
                                                 >
-                                                  Cancel
+                                                  Back
                                                 </Button>
                                               </div>
                                             </Form>

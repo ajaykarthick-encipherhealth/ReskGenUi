@@ -1,5 +1,5 @@
 import React from "react";
-import { Offcanvas,Button } from "react-bootstrap";
+import { Offcanvas, Button } from "react-bootstrap";
 import visitStyles from "../../../styles/visitdata.module.css";
 import Form from "react-bootstrap/Form";
 import Spinner from "../../../components/spinner";
@@ -45,6 +45,7 @@ const Addpatients = ({
                   Patient Id <span className="text-danger">*</span>{" "}
                 </Form.Label>
                 <Form.Control
+                  className="text-capitalize"
                   name="patientId"
                   required
                   type="text"
@@ -67,7 +68,8 @@ const Addpatients = ({
               <Button type="submit" className="btn btn-primary btn-sm me-1">
                 {"Submit"}
               </Button>
-              <Button className="btn-sm me-1"
+              <Button
+                className="btn-sm me-1"
                 onClick={() => setAddPatientId(false)}
                 style={{
                   backgroundColor: "#ffdede",
