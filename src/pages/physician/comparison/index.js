@@ -304,7 +304,7 @@ const Hcc = ({ patientHccResult }) => {
         <div className={visitStyles.headerFixed}>
           <div class="content-body">
             <div
-              className={`container-fluid ${styles.container_fluid_patient}`}
+              className={`container-fluid ${styles.container_fluid}`}
             >
               <div className={styles.mainContainer}>
                 <div className="row">
