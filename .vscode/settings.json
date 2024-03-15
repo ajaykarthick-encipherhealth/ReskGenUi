@@ -9,5 +9,9 @@
   },
 
   "eslint.validate": ["javascript", "javascriptreact"],
-  "eslint.enable": true
+  "eslint.enable": true,
+  "sonarlint.connectedMode.project": {
+    "connectionId": "https-sonar-encipherhealth-com-",
+    "projectKey": "sonarqube"
+  }
 }
