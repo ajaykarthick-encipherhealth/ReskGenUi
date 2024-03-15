@@ -303,6 +303,7 @@ const Hcc = ({ patientHccResult }) => {
     []
   );
   const [popoverVisible, setPopoverVisible] = useState(false);
+  const [hccVersionDetails, setHccVersionDetails] = useState(null);
 
   const getMeatFound = (code, data, value) => {
     const result = data?.filter(
@@ -1922,36 +1923,27 @@ const Hcc = ({ patientHccResult }) => {
     );
     setvalidHccDetails(data);
     const response = await axios.get(
-      ENDPOINTS.apiEndoint + `dbservice/hccdisease?diagnosisCode=${code}`
+      ENDPOINTS.apiEndoint +
+        `dbservice/hccdisease/icd10mappingForDisease?year=${selectedDosValue}&diagnosisCode=${code}`
     );
     if (response.data) {
+      var value = [];
       result = response.data.response;
-      data = (
-        <div className="validhcc-details">
-          {/* <Spin className='ml-2 ms-1' size="small" /> */}
-          {/* <div>{value}</div> */}
-          <div>
-            cmsHcc_V22_for_2023_payment_year :{" "}
-            {result.cmsHcc_Model_Category_V22_for_2023_payment_year}
-          </div>
-          <div>
-            cmsHcc_V24_for_2023_payment_year :{" "}
-            {result.cmsHcc_Model_Category_V24_for_2023_payment_year}
-          </div>
-          <div>cmsHcc_V22 : {result.cmsHcc_model_category_V22}</div>
-          <div>cmsHcc_V24 : {result.cmsHcc_model_category_V24}</div>
-          <div>
-            rxHcc_V05_for_2023_payment_year :{" "}
-            {result.rxHcc_Model_Category_V05_for_2023_payment_year}
-          </div>
-          <div>
-            rxHcc_V08_for_2023_payment_year :{" "}
-            {result.rxHcc_model_category_V08_for_2023_payment_year}
-          </div>
-          <div>rxHcc_V05 : {result.rxHcc_model_category_V05}</div>
-          <div>rxHcc_V08 : {result.rxHcc_model_category_V08}</div>
-        </div>
-      );
+      for (var key in result) {
+        if (
+          key != "id" &&
+          key != "description" &&
+          key != "year" &&
+          key != "diagnosisCode" &&
+          result[key] != null
+        ) {
+          value.push({
+            name: key,
+            value: result[key],
+          });
+        }
+      }
+      setHccVersionDetails(value);
     }
 
     setvalidHccDetails(data);
@@ -3782,6 +3774,43 @@ const Hcc = ({ patientHccResult }) => {
     </div>
   );
 
+  const PopContentHccVersion = (
+    <div className={styles.innerPop}>
+      <div className={styles.displayDiv}>
+        {hccVersionDetails ? (
+          <>
+            {hccVersionDetails.length != 0 ? (
+              hccVersionDetails?.map((data) => (
+                <div className={styles.hoverDiv}>
+                  <div className={`row ${styles.selectDetailsContainer}`}>
+                    <div className="col-xl-3">
+                      <span className={styles.selectHead}>{data.name}</span>
+                    </div>
+                    <div className="col-xl-3">
+                      <span className={styles.selectHead}>{data.value}</span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className={styles.hoverDiv}>
+                <div className={`row ${styles.selectDetailsContainerNoData}`}>
+                  <div className="col-xl-3 text-center">
+                    <span className={styles.selectHead}>NO DATA</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className={visitStyles.loadingFileHeader}>
+            <Spinner />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
   return (
     <>
       {fileLoading ? (
@@ -3995,7 +4024,7 @@ const Hcc = ({ patientHccResult }) => {
                                               data.diagnosisCode
                                             )
                                           }
-                                          content={validHccDetails}
+                                          content={PopContentHccVersion}
                                           title={data.diagnosisCode}
                                           placement="bottom"
                                           trigger="click"
@@ -4262,7 +4291,7 @@ const Hcc = ({ patientHccResult }) => {
                                                     data.diagnosisCode
                                                   )
                                                 }
-                                                content={validHccDetails}
+                                                content={PopContentHccVersion}
                                                 title={data.diagnosisCode}
                                                 placement="bottom"
                                                 trigger="click"
@@ -5382,7 +5411,7 @@ const Hcc = ({ patientHccResult }) => {
                                               data.diagnosisCode
                                             )
                                           }
-                                          content={validHccDetails}
+                                          content={PopContentHccVersion}
                                           title={data.diagnosisCode}
                                           placement="bottom"
                                           trigger="click"
@@ -5823,7 +5852,7 @@ const Hcc = ({ patientHccResult }) => {
                                                   }
                                                   className="btn btn-danger btn-sm light ms-1"
                                                 >
-                                                  Cancel
+                                                  Back
                                                 </Button>
                                               </div>
                                             </Form>
@@ -6031,7 +6060,7 @@ const Hcc = ({ patientHccResult }) => {
                                                   }
                                                   className="btn btn-danger btn-sm light ms-1"
                                                 >
-                                                  Cancel
+                                                  Back
                                                 </Button>
                                               </div>
                                             </Form>
@@ -6124,7 +6153,7 @@ const Hcc = ({ patientHccResult }) => {
                                                     data.diagnosisCode
                                                   )
                                                 }
-                                                content={validHccDetails}
+                                                content={PopContentHccVersion}
                                                 title={data.diagnosisCode}
                                                 placement="bottom"
                                                 trigger="click"
@@ -7064,7 +7093,7 @@ const Hcc = ({ patientHccResult }) => {
                                       data.diagnosisCode
                                     )
                                   }
-                                  content={validHccDetails}
+                                  content={PopContentHccVersion}
                                   title={data.diagnosisCode}
                                   placement="bottom"
                                   trigger="click"
@@ -7418,7 +7447,7 @@ const Hcc = ({ patientHccResult }) => {
                                               data.diagnosisCode
                                             )
                                           }
-                                          content={validHccDetails}
+                                          content={PopContentHccVersion}
                                           title={data.diagnosisCode}
                                           placement="bottom"
                                           trigger="click"

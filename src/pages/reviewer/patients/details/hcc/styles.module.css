@@ -319,6 +319,12 @@
   margin-top: 5px;
   justify-content: space-between;
 }
+.selectDetailsContainerNoData {
+  display: flex;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  justify-content: center;
+}
 .selectDetailsDiv {
   /* background: red; */
   width: 150px;
