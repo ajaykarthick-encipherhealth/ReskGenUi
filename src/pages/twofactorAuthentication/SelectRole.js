@@ -22,13 +22,16 @@ const SelectRole = () => {
   const [selectItems, setSelectItems] = useState([]);
 
   const rolesList = role?.slice().reverse();
-  const items =
-    rolesList?.length > 0
+  const items = [
+    { value: "physician", label: "PHYSICIAN" },
+
+    ...(rolesList?.length > 0
       ? rolesList?.map((info) => ({
           value: info,
           label: info,
         }))
-      : [];
+      : []),
+  ];
 
   const onSubmitRole = async (e) => {
     e.preventDefault();
@@ -65,6 +68,7 @@ const SelectRole = () => {
       reviewer: { userRole: "reviewer", route: "/reviewer/dashboard" },
       supervisor: { userRole: "supervisor", route: "/supervisor/dashboard" },
       provider: { userRole: "provider", route: "/provider/comparison" },
+      physician: { userRole: "physician", route: "/physician/dashboard" },
     };
     const selectedRoleInfo = rolesMapping[selectedRole];
     if (selectedRoleInfo && !roleError) {

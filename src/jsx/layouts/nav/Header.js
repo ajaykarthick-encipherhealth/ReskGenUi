@@ -32,6 +32,7 @@ import {
   L2AuditorMenuList,
   ProviderMenuList,
   EHRMenuList,
+  PhysicianMenuList,
 } from "./Menu";
 import ENDPOINTS from "../../../utility/enpoints";
 import axios from "../../../utility/axiosConfig";
@@ -320,6 +321,8 @@ const Header = () => {
         return ProviderMenuList;
       case "ehr":
         return EHRMenuList;
+      case "physician":
+        return PhysicianMenuList
       default:
         return [];
     }
