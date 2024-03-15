@@ -192,7 +192,7 @@ export const PhysicianMenuList = [
   {
     title: "Comparision",
     iconStyle:SVGICON.physicianComparision,
-    to: "/physician/comparision",
+    to: "/physician/comparison",
   },
   
 ];
