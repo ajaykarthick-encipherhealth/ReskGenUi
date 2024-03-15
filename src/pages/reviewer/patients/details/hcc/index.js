@@ -670,13 +670,13 @@ const Hcc = ({ patientHccResult }) => {
           if (result.suggestRadiologyCombo != null) {
             result.suggestRadiologyCombo.map((res, index) => {
               var providerList = [];
-              res.provider?.map((res2, index) => {
+              res.providers?.map((res2, index) => {
                 providerList.push(res2.providerName);
               });
               const encounterDatearray = res?.encounterDate?.split(",");
               suggestListAll.push({
                 actualDescription: res.diseaseName,
-                capturedSections: [],
+                capturedSections: res.capturedSections,
                 diagnosisCode: res.diagnosisCodeCombo,
                 encounterDate: res.encounterDate,
                 encounterDateSplit: encounterDatearray,
@@ -1683,7 +1683,7 @@ const Hcc = ({ patientHccResult }) => {
     if (
       documentPlace == "Radio" ||
       whereCome == "Radio" ||
-      whereCome == "Radio-combo"
+      documentPlace == "Radio-combo"
     ) {
       handleOpenModalRadiology(value, disDescription, true);
     } else if (documentPlace == "Lab" || whereCome == "Lab") {
@@ -3087,7 +3087,7 @@ const Hcc = ({ patientHccResult }) => {
             )
           }
           style={{ backgroundColor: backColor, color: textColor }}
-          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader} ${backColor}`}
+          className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
         >
           {res}
         </span>
@@ -3130,7 +3130,7 @@ const Hcc = ({ patientHccResult }) => {
             )
           }
           style={{ backgroundColor: backColor, color: textColor }}
-          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+          className={`cr-pointer mt-2 text-start ${visitStyles.captureheader}`}
         >
           {res}
         </span>
@@ -3146,7 +3146,7 @@ const Hcc = ({ patientHccResult }) => {
       var sectionMapArr = res ? (
         <span
           onClick={() => getEncounterDetailsHcc(res, code, place, meatResult)}
-          className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+          className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
         >
           <i>
             <CalendarOutlined className={visitStyles.calenderIcon} />
@@ -3203,7 +3203,7 @@ const Hcc = ({ patientHccResult }) => {
       var sectionMapArr = (
         <span
           onClick={() => getEncounterDetails(res)}
-          className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+          className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
         >
           <i>
             <CalendarOutlined className={visitStyles.calenderIcon} />
@@ -3288,7 +3288,7 @@ const Hcc = ({ patientHccResult }) => {
         <span
           onClick={() => handleOpenModal(value, dis, encounterDate, meatresult)}
           style={{ backgroundColor: backColor, color: textColor }}
-          className={`mt-2 text-start cr-pointer ${visitStyles.captureheaderMeat}`}
+          className={`cr-pointer mt-2 text-start ${visitStyles.captureheaderMeat}`}
         >
           {value}
         </span>
@@ -3318,7 +3318,7 @@ const Hcc = ({ patientHccResult }) => {
         <span
           onClick={() => handleOpenModal(value, dis, encounterDate, meatresult)}
           style={{ backgroundColor: backColor, color: textColor }}
-          className={`mt-2 text-start cr-pointer ${visitStyles.captureheaderMeatView}`}
+          className={`cr-pointer mt-2 text-start ${visitStyles.captureheaderMeatView}`}
         >
           {value}
         </span>
@@ -3731,7 +3731,7 @@ const Hcc = ({ patientHccResult }) => {
       var backColor = result[0]?.colors;
       var sectionMapArr = (
         <span
-          className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+          className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
         >
           <i>
             <CalendarOutlined className={visitStyles.calenderIcon} />
@@ -3953,7 +3953,7 @@ const Hcc = ({ patientHccResult }) => {
                                         className={`${visitStyles.hcc_card_nameHead}`}
                                       >
                                         <div className="media-body">
-                                          <span className="mb-1 disease-name d-flex">
+                                          <span className="disease-name d-flex mb-1">
                                             <span className="valid-dis-name">
                                               {data.diagnosisCode}
                                             </span>{" "}
@@ -4219,7 +4219,7 @@ const Hcc = ({ patientHccResult }) => {
                                               className={`${visitStyles.hcc_card_nameHead}`}
                                             >
                                               <div className="media-body">
-                                                <span className="mb-1 disease-name d-flex">
+                                                <span className="disease-name d-flex mb-1">
                                                   <span className="valid-dis-name">
                                                     {data.diagnosisCode}
                                                   </span>{" "}
@@ -4410,6 +4410,36 @@ const Hcc = ({ patientHccResult }) => {
                                                   {getProviderNameList(
                                                     data?.providerName
                                                   )}
+                                                  {data.getPlace == "Lab" ? (
+                                                    <Tooltip title="LAB">
+                                                      <span
+                                                        className={` mt-2 ${visitStyles.labStatus}`}
+                                                        bg={`  mt-2 bg-bg-seven `}
+                                                      >
+                                                        Lab
+                                                      </span>
+                                                    </Tooltip>
+                                                  ) : data.getPlace ==
+                                                    "Radio" ? (
+                                                    <Tooltip title="RADIOLOGY">
+                                                      <span
+                                                        className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                                        bg={`  mt-2 bg-bg-eight `}
+                                                      >
+                                                        Radiology
+                                                      </span>
+                                                    </Tooltip>
+                                                  ) : data.getPlace ==
+                                                    "Radio-combo" ? (
+                                                    <Tooltip title="RADIOLOGY COMBO CODES">
+                                                      <span
+                                                        className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                                        bg={`  mt-2 bg-bg-eight `}
+                                                      >
+                                                        Radiology - Combo Codes
+                                                      </span>
+                                                    </Tooltip>
+                                                  ) : null}
                                                 </div>
                                                 <div
                                                   className={`${visitStyles.encounterAndSectionHeader}`}
@@ -4419,35 +4449,6 @@ const Hcc = ({ patientHccResult }) => {
                                                     data.diagnosisCode
                                                   )}
                                                 </div>
-                                                {data.getPlace == "Lab" ? (
-                                                  <Tooltip title="LAB">
-                                                    <span
-                                                      className={` mt-2 ${visitStyles.labStatus}`}
-                                                      bg={`  mt-2 bg-bg-seven `}
-                                                    >
-                                                      Lab
-                                                    </span>
-                                                  </Tooltip>
-                                                ) : data.getPlace == "Radio" ? (
-                                                  <Tooltip title="RADIOLOGY">
-                                                    <span
-                                                      className={` mt-2 ${visitStyles.radiologyStatus}`}
-                                                      bg={`  mt-2 bg-bg-eight `}
-                                                    >
-                                                      Radiology
-                                                    </span>
-                                                  </Tooltip>
-                                                ) : data.getPlace ==
-                                                  "Radio-combo" ? (
-                                                  <Tooltip title="RADIOLOGY COMBO CODES">
-                                                    <span
-                                                      className={` mt-2 ${visitStyles.radiologyStatus}`}
-                                                      bg={`  mt-2 bg-bg-eight `}
-                                                    >
-                                                      Radiology - Combo Codes
-                                                    </span>
-                                                  </Tooltip>
-                                                ) : null}
                                               </div>
                                               <div
                                                 className={`${visitStyles.encounterAndSectionHeader}`}
@@ -4502,7 +4503,7 @@ const Hcc = ({ patientHccResult }) => {
                                         className={`${visitStyles.hcc_card_nameHead}`}
                                       >
                                         <div className="media-body">
-                                          <span className="mb-1 disease-name d-flex">
+                                          <span className="disease-name d-flex mb-1">
                                             <span className="valid-dis-name">
                                               {data.diagnosisCode}
                                             </span>{" "}
@@ -4959,7 +4960,7 @@ const Hcc = ({ patientHccResult }) => {
                                   <div className="col-xl-3">
                                     <div className="row">
                                       <div className="col-xl-4 d-grid">
-                                        <span className="font-bold meat-name-details">
+                                        <span className="meat-name-details font-bold">
                                           {item.diagnosisCode}
                                         </span>
                                         {item.category == "Valid" ? (
@@ -5305,7 +5306,7 @@ const Hcc = ({ patientHccResult }) => {
                   <RafScore rafScoreList={rafScore} />
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey="file">
-                  <div className="my-post-content pt-3 row">
+                  <div className="my-post-content row pt-3">
                     {!isFileFormShow ? (
                       <div className="col-xl-3">
                         <ul className="timeline">
@@ -5338,7 +5339,7 @@ const Hcc = ({ patientHccResult }) => {
                                       className={` justify-content-between ${visitStyles.hcc_card_nameHead}`}
                                     >
                                       <div>
-                                        <span className="mb-1 disease-name d-flex">
+                                        <span className="disease-name d-flex mb-1">
                                           <span className="valid-dis-name">
                                             {data.diagnosisCode}
                                           </span>{" "}
@@ -6080,7 +6081,7 @@ const Hcc = ({ patientHccResult }) => {
                                               className={`${visitStyles.hcc_card_nameHead}`}
                                             >
                                               <div className="media-body">
-                                                <span className="mb-1 disease-name d-flex">
+                                                <span className="disease-name d-flex mb-1">
                                                   <span className="valid-dis-name">
                                                     {data.diagnosisCode}
                                                   </span>{" "}
@@ -6301,7 +6302,9 @@ const Hcc = ({ patientHccResult }) => {
                                                     data.actualDescription
                                                   )}
                                                 </div>
-                                              ) : data.getPlace == "Radio" ? (
+                                              ) : data.getPlace == "Radio" ||
+                                                data.getPlace ==
+                                                  "Radio-combo" ? (
                                                 <div
                                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                                 >
@@ -6364,7 +6367,7 @@ const Hcc = ({ patientHccResult }) => {
                                         className={`${visitStyles.hcc_card_nameHead}`}
                                       >
                                         <div className="media-body">
-                                          <span className="mb-1 disease-name d-flex">
+                                          <span className="disease-name d-flex mb-1">
                                             <span className="valid-dis-name">
                                               {data.diagnosisCode}
                                             </span>{" "}
@@ -6562,7 +6565,7 @@ const Hcc = ({ patientHccResult }) => {
                                   </>
                                   <div className="row">
                                     <div className="col-xl-1 d-grid">
-                                      <span className="font-bold meat-name-details">
+                                      <span className="meat-name-details font-bold">
                                         {item.diagnosisCode}
                                       </span>
                                     </div>
@@ -6643,7 +6646,7 @@ const Hcc = ({ patientHccResult }) => {
                                         <div>
                                           <div className="row">
                                             <div className="col-xl-1 d-grid">
-                                              <span className="font-bold meat-name-details">
+                                              <span className="meat-name-details font-bold">
                                                 {item.diagnosisCode}
                                               </span>
                                             </div>
@@ -6990,7 +6993,7 @@ const Hcc = ({ patientHccResult }) => {
           footer={false}
         >
           <div className="section-container">
-            <div className="my-post-content pt-3 row">
+            <div className="my-post-content row pt-3">
               {!isFileFormShow ? (
                 <div className="col-xl-2">
                   <ul className="timeline">
@@ -7021,7 +7024,7 @@ const Hcc = ({ patientHccResult }) => {
                                 className={`${visitStyles.hcc_card_nameHead}`}
                               >
                                 <div>
-                                  <span className="mb-1 disease-name d-flex">
+                                  <span className="disease-name d-flex mb-1">
                                     <span className="valid-dis-name">
                                       {data.diagnosisCode}
                                     </span>{" "}
@@ -7375,7 +7378,7 @@ const Hcc = ({ patientHccResult }) => {
                                         className={`${visitStyles.hcc_card_nameHead}`}
                                       >
                                         <div className="media-body">
-                                          <span className="mb-1 disease-name d-flex">
+                                          <span className="disease-name d-flex mb-1">
                                             <span className="valid-dis-name">
                                               {data.diagnosisCode}
                                             </span>{" "}
@@ -7619,7 +7622,7 @@ const Hcc = ({ patientHccResult }) => {
                                   className={`${visitStyles.hcc_card_nameHead}`}
                                 >
                                   <div className="media-body">
-                                    <span className="mb-1 disease-name d-flex">
+                                    <span className="disease-name d-flex mb-1">
                                       <span className="valid-dis-name">
                                         {data.diagnosisCode}
                                       </span>{" "}
