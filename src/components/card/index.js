@@ -4,12 +4,22 @@ const Card = ({
   children,
   Bgcolor = "#fff",
   padding,
-  borderRadius
+  borderRadius,
+  width,
+  height,
+  bg,
+  display,
+  placeItems
 }) => {
   const cardStyle = {
     backgroundColor: Bgcolor,
+    background: bg && bg,
     padding: padding ? padding : "5px",
     borderRadius: borderRadius ? borderRadius : "16px",
+    width: width && width,
+    height: height && height,
+    display: display && display,
+    placeItems: placeItems && placeItems,
   };
   return (
     <div className={styles.card} style={cardStyle}>
