@@ -9,11 +9,11 @@ const Card = ({
   height,
   bg,
   display,
-  placeItems
+  placeItems,
 }) => {
   const cardStyle = {
-    backgroundColor: Bgcolor,
-    background: bg && bg,
+    // backgroundColor: Bgcolor,
+    background: bg ? bg : Bgcolor,
     padding: padding ? padding : "5px",
     borderRadius: borderRadius ? borderRadius : "16px",
     width: width && width,
