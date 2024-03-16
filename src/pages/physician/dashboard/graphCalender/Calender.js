@@ -68,8 +68,8 @@ const Calender = () => {
         <table className={styles.caletdertable}>
           <thead className={styles.calenderHeader}>
             <tr>
-              {daysInaWeek?.map((item) => (
-                <td style={{ width: "20px" }}>{item}</td>
+              {daysInaWeek?.map((item,index) => (
+                <td style={{ width: "20px",borderRadius: index===0? "8px 0 0 8px":index===6? "0 8px 8px 0" :""}}>{item}</td>
               ))}
             </tr>
           </thead>
