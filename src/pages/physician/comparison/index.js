@@ -2,10 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Badge, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import moment from "moment";
-import { Popover } from "antd";
-import { Progress, Modal } from "antd";
+import { Progress, Modal, Popover } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUser, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleUser,
+  faPlus,
+  faUserCircle,
+  faVenusMars,
+  faCalendarAlt,
+  faIdCardClip,
+} from "@fortawesome/free-solid-svg-icons";
 import { CalendarOutlined } from "@ant-design/icons";
 import styles from "./styles.module.css";
 import visitStyles from "../../../styles/visitdata.module.css";
@@ -13,12 +19,6 @@ import Header from "../../../jsx/layouts/nav/Header";
 import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { SVGICON } from "../../../jsx/constant/theme";
-import {
-  faUserCircle,
-  faVenusMars,
-  faCalendarAlt,
-  faIdCardClip,
-} from "@fortawesome/free-solid-svg-icons";
 
 const Hcc = ({ patientHccResult }) => {
   const [validHccList, setvalidHccList] = useState([]);
@@ -181,17 +181,17 @@ const Hcc = ({ patientHccResult }) => {
   }
 
   const getCaptureSectionBackground = (value, diagnosisCode) => {
-    var dublicateCaptureDelete = removeDuplicates(value);
+    let dublicateCaptureDelete = removeDuplicates(value);
     return dublicateCaptureDelete.map((res) => {
       const result = captureSectionMatching.filter(
         (res2) => res2.sectionName == res
       );
-      var backColor = result[0]?.backgroundColor;
-      var textColor = result[0]?.sectionColor;
+      let backColor = result[0]?.backgroundColor;
+      let textColor = result[0]?.sectionColor;
       var disCode = diagnosisCode;
       var headerNames = result[0]?.sectionName;
 
-      var sectionMapArr = (
+      let sectionMapArr = (
         <span
           style={{ backgroundColor: backColor, color: textColor }}
           className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
@@ -204,7 +204,7 @@ const Hcc = ({ patientHccResult }) => {
   };
 
   const getProviderNameList = (data) => {
-    var value = data?.map((res) =>
+    let value = data?.map((res) =>
       res.providerName ? (
         <Badge
           className={
@@ -236,7 +236,7 @@ const Hcc = ({ patientHccResult }) => {
     return value?.map((res) => {
       const result = encounterDateMatching.filter((res2) => res2.name == res);
       var backColor = result[0]?.colors;
-      var sectionMapArr = (
+      let sectionMapArr = (
         <span className={`mt-2 text-start cr-pointer ${styles.encounterDate}`}>
           <i style={{ marginRight: "5px" }}>
             <CalendarOutlined className={visitStyles.calenderIcon} />
@@ -259,7 +259,7 @@ const Hcc = ({ patientHccResult }) => {
   };
 
   const compareHccList = () => {
-    var data = {
+    let data = {
       cogentAiPercentage: 100,
       clientPercentage: 75,
       cogentAiScore: "2.337",
@@ -272,7 +272,7 @@ const Hcc = ({ patientHccResult }) => {
     const validDisArray = [];
     validhcc?.map((res, index) => {
       const encounterDatearray = res?.encounterDate?.split(",");
-      var providerList = [];
+      let providerList = [];
       providerList.push({
         providerName: res.providerName,
         authorizedProvider: true,
@@ -293,7 +293,7 @@ const Hcc = ({ patientHccResult }) => {
     const validDisClientArray = [];
     validClientHcc?.map((res, index) => {
       const encounterDatearray = res?.encounterDate?.split(",");
-      var providerList = [];
+      let providerList = [];
       providerList.push({
         providerName: res.providerName,
         authorizedProvider: true,
