@@ -7,6 +7,7 @@ import HeadTitle from "../../../../components/headtitle";
 import Legends from "../../../../components/legends";
 import buttonStyle from "../../../admin/dashboard/completedStatus/styles.module.css";
 import { Buttons } from "../../../reviewer/workingstatus";
+import styles from "./styles.module.css";
 
 const GraphData = () => {
   const [activeButton, setActiveButton] = useState(0);
@@ -32,10 +33,26 @@ const GraphData = () => {
         "NOV",
         "DEC",
       ],
+
+      axisLine: {
+        lineStyle: {
+          color: "#d9d9d9",
+        },
+      },
+      axisTick: {
+        show: false,
+      },
+      axisLabel: {
+        color: "gray",
+        fontWeight: "500",
+      },
     },
     yAxis: {
       type: "value",
       show: true,
+      axisLabel: {
+        formatter: "{value}%",
+      },
     },
     tooltip: {
       show: true,
@@ -75,8 +92,8 @@ const GraphData = () => {
   return (
     <>
       <Card padding="10px">
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <div style={{ marginTop: "-20px" }}>
+        <div className={styles.innerWrapper}>
+          <div className={styles.header}>
             {" "}
             <HeadTitle header="RAF Secure" />
           </div>
