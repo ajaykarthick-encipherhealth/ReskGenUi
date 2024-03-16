@@ -14224,7 +14224,6 @@ span.meat-name-details2 {
 
 :where(.css-dev-only-do-not-override-1b0bdye).ant-avatar > img {
   object-fit: unset;
-
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -14239,8 +14238,39 @@ input[type="number"] {
 
 .background-white {
   background: #fff;
-
 }
 .pickerChnages > .ant-picker-input:hover > .ant-picker-clear {
   display: none !important;
+}
+.calendarBox,
+.calendarBox:hover,
+.calendarBox:focus,
+.calendarBox:active {
+  height: 25px;
+  width: 86px;
+  border-radius: 10px;
+  background: #04306f;
+  color: #fff;
+}
+.calendarBox > .ant-picker-outlined > .ant-picker-focused {
+  background-color: #04306f !important;
+  color: #fff !important;
+}
+.calendarBox > .ant-picker-input {
+  background: #04306f !important;
+  color: #fff !important;
+  padding: 0px !important;
+}
+.calendarBox > .ant-picker-input:hover > .ant-picker-clear {
+  display: none !important;
+}
+.calendarBox:focus-within,
+.calendarBox .ant-picker-input:focus,
+.calendarBox .ant-picker-input:active {
+  background: #04306f !important;
+}
+
+.calendarBox > .ant-picker-panel-container > .ant-picker {
+  background: #04306f !important;
+  color: #fff !important;
 }

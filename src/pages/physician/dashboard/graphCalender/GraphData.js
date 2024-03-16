@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import * as echarts from "echarts";
 import ReactECharts from "echarts-for-react";
 import Card from "../../../../components/card";
 import Buttonscroller from "../../../../components/buttonSroller";
@@ -11,10 +10,8 @@ import styles from "./styles.module.css";
 
 const GraphData = () => {
   const [activeButton, setActiveButton] = useState(0);
-  const [currentBtn, setCurrentBtn] = useState("Daily");
   const handleButtonClick = (index, btn) => {
     setActiveButton(index);
-    setCurrentBtn(btn);
   };
   const option = {
     xAxis: {

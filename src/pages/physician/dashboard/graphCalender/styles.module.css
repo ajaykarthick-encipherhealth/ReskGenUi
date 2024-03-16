@@ -11,8 +11,17 @@
 }
 .innerWrapper {
   display: flex;
+  width:100%;
   justify-content: space-between;
 }
 .header {
   margin-top: -20px;
+}
+.calHeader{
+  display: flex;
+  width:70%;
+}
+.calHeader >span{
+  font-size: 18px;
+  font-weight: 600;
 }
