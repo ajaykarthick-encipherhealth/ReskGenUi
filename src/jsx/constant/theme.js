@@ -16,6 +16,9 @@ export const IMAGES = {
   loginPageLogo2: require("../../images/logo/new_logo_2.png"),
   chatIcons: require("../../images/chat/chatIcon.png"),
   headerLogo: require("../../images/logo/header_logo.png"),
+  loginPageLogo3: require("../../images/logo/CAICell.png"),
+  aiChatIcon: require("../../images/chat/icons-chat.png"),
+  aiCloseChat: require("../../images/chat/icons-close.png"),
 };
 export const SVGICON = {
   MainLogo: (
