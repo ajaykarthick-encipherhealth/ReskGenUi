@@ -7,7 +7,7 @@ import patients from "../../../images/physician/patients.svg";
 import completed from "../../../images/physician/completed.svg";
 import upcoming from "../../../images/physician/upcoming.svg";
 import raf from "../../../images/physician/raf.svg";
-import GraphCalender from './graphCalender/Index'
+import GraphCalender from "./graphCalender/Index";
 
 const CardData = [
   {

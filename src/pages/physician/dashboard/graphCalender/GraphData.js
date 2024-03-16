@@ -1,0 +1,111 @@
+import React, { useState } from "react";
+import * as echarts from "echarts";
+import ReactECharts from "echarts-for-react";
+import Card from "../../../../components/card";
+import Buttonscroller from "../../../../components/buttonSroller";
+import HeadTitle from "../../../../components/headtitle";
+import Legends from "../../../../components/legends";
+import buttonStyle from "../../../admin/dashboard/completedStatus/styles.module.css";
+import { Buttons } from "../../../reviewer/workingstatus";
+
+const GraphData = () => {
+  const [activeButton, setActiveButton] = useState(0);
+  const [currentBtn, setCurrentBtn] = useState("Daily");
+  const handleButtonClick = (index, btn) => {
+    setActiveButton(index);
+    setCurrentBtn(btn);
+  };
+  const option = {
+    xAxis: {
+      type: "category",
+      data: [
+        "JAN",
+        "FEB",
+        "MAR",
+        "APR",
+        "MAY",
+        "JUN",
+        "JUL",
+        "AUG",
+        "SEP",
+        "OCT",
+        "NOV",
+        "DEC",
+      ],
+    },
+    yAxis: {
+      type: "value",
+      show: true,
+    },
+    tooltip: {
+      show: true,
+      trigger: "axis",
+      formatter: function (params) {
+        return `Cogent AI RAF score: ${params[0]?.dataIndex}<br/>Client AI RAF score: ${params[0]?.dataIndex}`;
+      },
+    },
+    series: [
+      {
+        data: [80, 30, 10, 70, 30, 120, 100, 10, 33, 41, 28, 19],
+        type: "line",
+        lineStyle: { color: "rgba(48, 112, 245, 1)" },
+        smooth: true,
+        showSymbol: false,
+      },
+      {
+        data: [10, 20, 30, 40, 50, 16, 50, 40, 20, 86, 58, 17],
+        type: "line",
+        lineStyle: { color: "rgba(60, 154, 146, 1)" },
+        smooth: true,
+        showSymbol: false,
+      },
+    ],
+  };
+
+  const bullets = [
+    {
+      color: "rgba(48, 112, 245, 1)",
+      name: "Cogent AI RAF score",
+    },
+    {
+      color: "rgba(60, 154, 146, 1)",
+      name: "Client AI RAF score",
+    },
+  ];
+  return (
+    <>
+      <Card padding="10px">
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div style={{ marginTop: "-20px" }}>
+            {" "}
+            <HeadTitle header="RAF Secure" />
+          </div>
+          <div>
+            <Buttonscroller
+              Buttons={Buttons}
+              handleButtonClick={handleButtonClick}
+              activeButton={activeButton}
+              activeColor="#fff"
+              inActiveColor="
+                #000000"
+              activeBg="#04306f"
+              inActiveBg="
+                #E6EEFF"
+              containerBg="
+                #E6EEFF"
+            />
+          </div>
+        </div>
+        <ReactECharts
+          option={option}
+          style={{ width: "100%", height: "90%", marginTop: "-15px" }}
+        />
+        <div className={buttonStyle.bulletContainer}>
+          <Legends bullets={bullets} />
+        </div>
+      </Card>
+    </>
+  );
+};
+
+export default GraphData;
