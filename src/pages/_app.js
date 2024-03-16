@@ -27,7 +27,7 @@ function MyApp({ Component, pageProps }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const msgReply = useSelector((state) => state.auth.chatReply);
-  const [showTerminal, setShowTerminal] = useState(true);
+  const [showTerminal, setShowTerminal] = useState(false);
   const [validatedPath, setValidatePath] = useState();
 
   const handleNewUserMessage = (newMessage) => {
