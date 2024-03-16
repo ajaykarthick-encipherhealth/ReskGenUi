@@ -45,7 +45,7 @@ const Calender = () => {
 
   const weeks = chunkArray(days, 7);
   const count = ["10", "09", "08", "07", "06", "05", "03", "04", "01"];
- 
+
   return (
     <Card borderRadius="10px" width="100%" height="418px" padding="10px">
       <div className={styles.innerWrapper} style={{ marginBottom: "10px" }}>
@@ -68,16 +68,30 @@ const Calender = () => {
         <table className={styles.caletdertable}>
           <thead className={styles.calenderHeader}>
             <tr>
-              {daysInaWeek?.map((item,index) => (
-                <td style={{ width: "20px",borderRadius: index===0? "8px 0 0 8px":index===6? "0 8px 8px 0" :""}}>{item}</td>
+              {daysInaWeek?.map((item, index) => (
+                <td
+                  style={{
+                    borderRadius:
+                      index === 0
+                        ? "8px 0 0 8px"
+                        : index === 6
+                        ? "0 8px 8px 0"
+                        : "",
+                  }}
+                >
+                  {item}
+                </td>
               ))}
             </tr>
           </thead>
-          <tbody>
+          <tbody style={{ marginTop: "20px" }}>
             {weeks.map((week, index) => (
-              <tr key={index}  onMouseLeave={() => {
-                setDisplayCount(false);
-              }}>
+              <tr
+                key={index}
+                onMouseLeave={() => {
+                  setDisplayCount(false);
+                }}
+              >
                 {week.map((day, dayIndex) => (
                   <td key={dayIndex}>
                     <div
@@ -85,14 +99,16 @@ const Calender = () => {
                       onMouseOver={() => {
                         const dateString = day.props.children;
                         setHoveredIndex(dateString);
-                        setDisplayCount(true)
+                        setDisplayCount(true);
                       }}
-                     
+                      style={{ textAlign: "center" }}
                     >
                       {day}
-                      {displayCount && hoveredIndex=== day.props.children &&  (
+                      {displayCount && hoveredIndex === day.props.children && (
                         <div className={styles.countContainer}>
-                          <span>{count[hoveredIndex]?count[hoveredIndex]:0}</span>
+                          <span>
+                            {count[hoveredIndex] ? count[hoveredIndex] : 0}
+                          </span>
                         </div>
                       )}
                     </div>
