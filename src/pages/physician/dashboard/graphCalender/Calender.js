@@ -140,7 +140,6 @@ const Calender = () => {
                         {day?.dateIndex}
 
                         <div className={styles.countContainer}>
-                          {console.log(count[day?.dateIndex])}
                           {(dayjs(dateString, "D/MM/YYYY").isSame(
                             currentDate,
                             "day"
