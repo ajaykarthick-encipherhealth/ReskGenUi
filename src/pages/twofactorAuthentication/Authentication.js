@@ -2,21 +2,17 @@ import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import Image from "next/image";
+import { notification } from "antd";
 import styles from "../../styles/auth.module.css";
 import twofactorImage from "../../images/svg/twofactorAuthentication.svg";
-import {
-  getQrCode,
-  getValidateCode,
-  loginAction,
-} from "../../store/actions/AuthActions";
+import { getValidateCode, loginAction } from "../../store/actions/AuthActions";
 import { encyptingPass } from "../../components/headerFilters/functions";
-import { notification } from "antd";
 
 export const codeLength = 6;
 export const generateCodeArray = () =>
   Array.from({ length: codeLength + 1 }, (_, index) => index + 1);
 
-const index = () => {
+const Index = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [seconds, setSeconds] = useState(30);
@@ -28,31 +24,12 @@ const index = () => {
 
   const inputRefs = Array.from({ length: codeLength + 1 }, () => useRef(null));
 
-  // const handleInput = (index, e) => {
-  //   const value = e.target.value;
-  //   const numbers = code.slice(0, 6);
-  //   if (!isNaN(value) && value?.length === 1) {
-  //     numbers.push(value);
-  //   }
-  //   setCode(numbers);
-  //   if (code[index - 1] && value) {
-  //     const addOndigit = value[1];
-  //     const splittedVal = [...code, ...addOndigit];
-  //     setCode(splittedVal);
-  //     inputRefs[index + 1]?.current?.focus();
-  //   }
-  //   if (value?.length === 1 && index < inputRefs?.length - 1) {
-  //     inputRefs[index + 1]?.current?.focus();
-  //   }
-  // };
-
   useEffect(() => {
     inputRefs[1]?.current?.focus();
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const encodedParams = urlParams.get("params");
     const decodedParams = JSON.parse(atob(encodedParams));
-    const { mfa, skipEntry, username, password } = decodedParams;
     setEnableMFA(decodedParams?.mfa);
     setUsername(decodedParams?.username);
     setPassword(decodedParams?.password);
@@ -139,11 +116,7 @@ const index = () => {
                     maxLength="1"
                     pattern="[0-9]"
                     value={
-                      code?.length > 0
-                        ? code[index - 1]
-                          ? code[index - 1]
-                          : ""
-                        : ""
+                      code?.length > 0 && code[index - 1] ? code[index - 1] : ""
                     }
                     className={styles.codeInput}
                     onInput={(e) => handleInput(index, e)}
@@ -252,4 +225,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;
