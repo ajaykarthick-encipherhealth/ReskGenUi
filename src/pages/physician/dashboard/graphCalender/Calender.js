@@ -12,8 +12,10 @@ const Calender = () => {
   const initialSelectedDate = dayjs().format(dateFormat);
   const [selectedDate, setSelectedDate] = useState(initialSelectedDate);
   const [days, setDays] = useState();
-  const [displayCount, setDisplayCount] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState();
+
+  const [fromDate, setFromDate] = useState();
+  const [toDate, setToDate] = useState();
   const handleDates = (date, datstring) => {
     setSelectedDate(datstring);
   };
@@ -26,18 +28,15 @@ const Calender = () => {
 
     for (let i = 1; i <= daysInMonth; i++) {
       const date = selectedMonth.date(i);
-      monthDates.push(
-        <div key={i} className="dateCell">
-          {date.format("D")}
-        </div>
-      );
+      monthDates?.push({
+        dateIndex: date.format("D"),
+        date: `${date.format("D")}/${dayjs(selectedDate).format("MM/YYYY")}`,
+      });
     }
 
     return setDays(monthDates);
   };
-  useEffect(() => {
-    renderCalendar();
-  }, [selectedDate]);
+
   const chunkArray = (arr, size) =>
     Array.from({ length: Math.ceil(arr?.length / size) }, (_, i) =>
       arr.slice(i * size, i * size + size)
@@ -45,6 +44,27 @@ const Calender = () => {
 
   const weeks = chunkArray(days, 7);
   const count = ["10", "09", "08", "07", "06", "05", "03", "04", "01"];
+
+  const handleDateSelection = (dateString) => {
+    const date = `${dateString}/${dayjs(selectedDate).format("MM/YYYY")}`;
+    if (!fromDate && !toDate) {
+      setFromDate({
+        date: date,
+        dateIndex: dateString,
+      });
+    } else {
+      if (fromDate && !toDate) {
+        setToDate({
+          date: date,
+          dateIndex: dateString,
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    renderCalendar();
+  }, [selectedDate]);
 
   return (
     <Card borderRadius="10px" width="100%" height="418px" padding="10px">
@@ -85,35 +105,61 @@ const Calender = () => {
             </tr>
           </thead>
           <tbody style={{ marginTop: "20px" }}>
-            {weeks.map((week, index) => (
+            {weeks?.map((week, index) => (
               <tr
                 key={index}
                 onMouseLeave={() => {
-                  setDisplayCount(false);
+                  setHoveredIndex();
                 }}
               >
-                {week.map((day, dayIndex) => (
-                  <td key={dayIndex}>
-                    <div
-                      className={styles.dateCell}
-                      onMouseOver={() => {
-                        const dateString = day.props.children;
-                        setHoveredIndex(dateString);
-                        setDisplayCount(true);
-                      }}
-                      style={{ textAlign: "center" }}
-                    >
-                      {day}
-                      {displayCount && hoveredIndex === day.props.children && (
+                {week?.map((day, dayIndex) => {
+                  const dateString = day?.date;
+                  const currentDate = dayjs().startOf("day");
+                  const cellClassName = `${styles.dateCell} ${
+                    dayjs(dateString, "D/MM/YYYY").isSame(currentDate, "day") ||
+                    dayjs(dateString, "D/MM/YYYY").isBefore(currentDate, "day")
+                      ? styles.hoverdate
+                      : ""
+                  }`;
+
+                  return (
+                    <td key={dayIndex}>
+                      <div
+                        className={cellClassName}
+                        onMouseOver={() => {
+                          const dateString = day.dateIndex;
+                          setHoveredIndex(dateString);
+                        }}
+                        onClick={() =>
+                          handleDateSelection(
+                            hoveredIndex === day.dateIndex ? day.dateIndex : ""
+                          )
+                        }
+                        style={{ textAlign: "center" }}
+                      >
+                        {day?.dateIndex}
+
                         <div className={styles.countContainer}>
-                          <span>
-                            {count[hoveredIndex] ? count[hoveredIndex] : 0}
-                          </span>
+                          {console.log(count[day?.dateIndex])}
+                          {(dayjs(dateString, "D/MM/YYYY").isSame(
+                            currentDate,
+                            "day"
+                          ) ||
+                            dayjs(dateString, "D/MM/YYYY").isBefore(
+                              currentDate,
+                              "day"
+                            )) && (
+                            <span>
+                              {count[day?.dateIndex]
+                                ? count[day?.dateIndex]
+                                : 0}
+                            </span>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  </td>
-                ))}
+                      </div>
+                    </td>
+                  );
+                })}
               </tr>
             ))}
           </tbody>
