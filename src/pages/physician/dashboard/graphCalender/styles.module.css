@@ -11,7 +11,7 @@
 }
 .innerWrapper {
   display: flex;
-  width:100%;
+  width: 100%;
   justify-content: space-between;
 }
 .header {
@@ -39,12 +39,11 @@
 }
 .dateCell {
   width: 60%;
-  height: 50px;
+  height: 40px;
   text-align: center;
   cursor: pointer;
   border-radius: 70%;
-  margin: auto;
-  padding: 6px;
+  margin: 5px auto;
 }
 .countContainer {
   margin-top: -5px;
@@ -53,9 +52,29 @@
   color: rgba(140, 144, 151, 1);
   font-weight: 400;
   font-size: 12px;
+  padding: 5px;
 }
-.dateCell:hover {
+.hoverdate {
   background-color: rgba(198, 244, 251, 1);
   border-radius: 70%;
 }
-  
+.filterBtn {
+  background-color: rgba(255, 255, 255, 1);
+  width: auto;
+  border: none;
+  padding: 5px;
+  margin-right: 10px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+}
+
+@media screen and (width<1400px) {
+  .dateCell {
+    height: 40px;
+  }
+}
+@media screen and (width>1500px) {
+  .dateCell {
+    height: 50px;
+  }
+}
