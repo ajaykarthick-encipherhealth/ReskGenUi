@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Image from "next/image";
+import Form from "react-bootstrap/Form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationArrow } from "@fortawesome/free-solid-svg-icons";
 import { getChatReply } from "../../store/actions/DashboardActions";
@@ -16,6 +17,8 @@ const AICHAT = ({ openMsg, offMsg }) => {
   const [inputValue, setInputValue] = useState({
     question: "",
   });
+  const [validated, setValidated] = useState(false);
+
   let messagesEndRef = useRef(null);
 
   const handleChange = async (e) => {
@@ -24,9 +27,17 @@ const AICHAT = ({ openMsg, offMsg }) => {
     setInputValue({ ...inputValue, [key]: value });
   };
 
-  const handleNewUserMessage = () => {
-    dispatch(getChatReply(inputValue.question));
-    inputValue.question = "";
+  const handleNewUserMessage = (event) => {
+    const form = event.currentTarget;
+    event.preventDefault();
+
+    if (form.checkValidity() === true) {
+      dispatch(getChatReply(inputValue.question));
+      inputValue.question = "";
+      setValidated(false);
+    } else {
+      setValidated(true);
+    }
   };
 
   useEffect(() => {
@@ -35,6 +46,7 @@ const AICHAT = ({ openMsg, offMsg }) => {
       block: "end",
     });
     inputValue.question = "";
+    setValidated(false);
   }, [msgReply?.data?.length]);
 
   return (
@@ -116,30 +128,35 @@ const AICHAT = ({ openMsg, offMsg }) => {
                 ))}
               </div>
               <div className="card-footer type_msg">
-                <div className="input-group">
-                  <textarea
-                    className={`form-control ${styles.textareaContainer}`}
-                    placeholder="Type your message..."
-                    onChange={handleChange}
-                    id="question"
-                    name="question"
-                    value={inputValue.question}
-                  ></textarea>
-                  <div className="input-group-append">
-                    <button
-                      onClick={() => handleNewUserMessage()}
-                      type="button"
-                      className="btn btn-primary"
-                    >
-                      <FontAwesomeIcon
-                        icon={faLocationArrow}
-                        style={{
-                          color: "#fff",
-                        }}
-                      />
-                    </button>
+                <Form
+                  noValidate
+                  validated={validated}
+                  onSubmit={handleNewUserMessage}
+                  autoComplete="off"
+                >
+                  <div className="input-group">
+                    <input
+                      required
+                      type="text"
+                      className={`form-control ${styles.textareaContainer}`}
+                      placeholder="Type your message..."
+                      onChange={handleChange}
+                      id="question"
+                      name="question"
+                      value={inputValue.question}
+                    ></input>
+                    <div className="input-group-append">
+                      <button type="submit" className="btn btn-primary">
+                        <FontAwesomeIcon
+                          icon={faLocationArrow}
+                          style={{
+                            color: "#fff",
+                          }}
+                        />
+                      </button>
+                    </div>
                   </div>
-                </div>
+                </Form>
               </div>
             </div>
           </div>
