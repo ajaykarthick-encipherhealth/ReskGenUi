@@ -163,7 +163,6 @@ const Accuracy = () => {
     highlightIndex = currentWeek - 1;
   }
 
- 
   const options = {
     chart: {
       type: "column",
@@ -366,8 +365,7 @@ const Accuracy = () => {
                   <Spin loading={accuracyDatas?.loading} />
                 </div>
               )}
-               {!accuracyDatas?.loading &&
-                accuracyDatas?.data?.response ? (
+              {!accuracyDatas?.loading && accuracyDatas?.data?.response ? (
                 options && (
                   <div className={styles.highchartStyle}>
                     <HighchartsReact
@@ -389,11 +387,10 @@ const Accuracy = () => {
                 <div className={styles.heading}>Average Quality</div>
               </div>
               <div className={styles.month}>
-                {currentBtn === "Daily"
-                  && `Day ${currentDate.getDate()}`}
-                   {currentBtn === "Monthly"
-                  ? `Month ${monthNames[currentDate.getMonth()]}`
-                  : `Week ${getDateWeek(currentDate)}`}
+                {currentBtn === "Daily" && `Day ${currentDate.getDate()}`}
+                {currentBtn === "Monthly" &&
+                  `Month ${monthNames[currentDate.getMonth()]}`}
+                {currentBtn === "Weekly" && `Week ${getDateWeek(currentDate)}`}
               </div>
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
