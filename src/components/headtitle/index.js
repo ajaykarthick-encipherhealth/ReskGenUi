@@ -27,8 +27,8 @@ const HeadTitle = ({
   const startOfMonth = currentDate.startOf("month");
   useEffect(() => {
     setSelectedDates([
-      dayjs(currentDate).format("MM/DD/YYYY"),
-      dayjs(startOfMonth).format("MM/DD/YYYY"),
+      dayjs(currentDate).format("YYYY-MM-DD"),
+      dayjs(startOfMonth).format("YYYY-MM-DD"),
     ]);
   }, []);
 
@@ -101,8 +101,8 @@ const HeadTitle = ({
               marginLeft: "-78px",
             }}
             placeholder={[
-              dayjs(currentDate).format("MM/DD/YYYY"),
-              dayjs(startOfMonth).format("MM/DD/YYYY"),
+              dayjs(currentDate).format("YYYY-MM-DD"),
+              dayjs(startOfMonth).format("YYYY-MM-DD"),
             ]}
             open={openPicker}
             value={selectedDates}
