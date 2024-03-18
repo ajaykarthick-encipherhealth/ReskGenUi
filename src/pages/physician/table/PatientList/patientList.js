@@ -1,28 +1,19 @@
 import React, { useState } from "react";
-import moment from "moment";
-import TableStyle from "../../../../components/table/table.module.css";
-import { notification, Select as AntSelect, Empty, Tooltip } from "antd";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
+import dayjs from "dayjs";
+import { notification, Select as AntSelect, Empty } from "antd";
+import TableStyle from "../../../../components/table/table.module.css";
 import { SVGICON } from "../../../../jsx/constant/theme";
 import { getPriorityChange } from "../../../../store/actions/PatientsActions";
-import dayjs from "dayjs";
-import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import {
   renderUserPrfoileAvatar,
   sortFunction,
 } from "../../../../components/headerFilters/functions";
 
-function PatientTable({
-  patinetListAll,
-  statusBodyTemplate,
-  patientDetails,
-  setSort,
-}) {
+function PatientTable({ patinetListAll, patientDetails, setSort }) {
   const dispatch = useDispatch();
   const navigate = useRouter();
-  const [sortDueOrder, setSortDueOrder] = useState("DESC");
-  const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
   const [sortAuditOrder, setSortAuditOrder] = useState("DESC");
 
   const priorityOptions = [
@@ -203,8 +194,6 @@ function PatientTable({
     },
   ];
 
-
-
   const handlePriorityChange = (patientId, selectedValue) => {
     setSelectedPriority((prev) => ({
       ...prev,
@@ -341,13 +330,6 @@ function PatientTable({
               style={{ paddingLeft: "30px" }}
             >
               PRIORITY
-              <span style={{ padding: "10px", cursor: "pointer" }}>
-                {sortAuditOrder === "ASC" ? (
-                  <ArrowUpOutlined />
-                ) : (
-                  <ArrowDownOutlined />
-                )}
-              </span>
             </th>
           </tr>
         </thead>

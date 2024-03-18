@@ -1,29 +1,24 @@
 import React, { useState, useEffect } from "react";
-import Header from "../../../jsx/layouts/nav/Header";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch } from "react-redux";
-import { patientDetails } from "../../../store/actions/AuthActions";
-import { DatePicker, Spin, Popover, notification } from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { Paginator } from "primereact/paginator";
-import Footer from "../../../jsx/layouts/Footer";
+import { Popover, notification } from "antd";
+import Header from "../../../jsx/layouts/nav/Header";
+import { patientDetails } from "../../../store/actions/AuthActions";
 import PatientTable from "../table/PatientList/patientList";
 import SpinnerDots from "../../../components/spinner";
 import HeaderFilters from "../../../components/headerFilters";
 import { getWorkListFilter } from "../../../store/actions/l2Action/AuditorAction";
-import { generateOptionsList } from "../../../components/headerFilters/functions";
+import { PatientsList } from "../../../store/actions/physicianAction/patientsActions";
+import { priorityOptions } from "../../../components/headerFilters/functions";
 import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
 import NotAudited from "../../../../src/images/trackingImages/NotAuditedTrack.png";
 import AuditHold from "../../../../src/images/trackingImages/AuditHoldTrack.png";
 import ReAudit from "../../../../src/images/trackingImages/reAuditTrack.png";
 import AuditPending from "../../../../src/images/trackingImages/AuditPending.png";
-import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
-import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
-import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
-import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
 import AuditeDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
 
 export function extractLatestData(notes) {
@@ -367,7 +362,7 @@ export default function Patients() {
     getAllList(response?.response);
   };
 
-  // const options = [{ label: "All", value: "" }, ...priorityOptions];
+  const options = [{ label: "All", value: "" }, ...priorityOptions];
 
   return (
     <>
@@ -390,7 +385,7 @@ export default function Patients() {
                             selectlabel="Select Priority"
                             isSelector={true}
                             setSelectedOption={SetSelectedOption}
-                            selectOptions={statusOptions}
+                            selectOptions={options}
                             defaultSelectValue1={"Select Status"}
                             // select status
                             pickerlabe6="Select Priority"
