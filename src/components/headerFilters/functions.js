@@ -1,12 +1,9 @@
 import { Avatar } from "antd";
-import { SVGICON } from "../../jsx/constant/theme";
-import TableStyle from "../table/table.module.css";
 import moment from "moment";
-import { Popover } from "antd";
-
 import dayjs from "dayjs";
 import CryptoJS from "crypto-js";
-import bcrypt from "bcryptjs";
+import { SVGICON } from "../../jsx/constant/theme";
+import TableStyle from "../table/table.module.css";
 
 // for search
 export const searchFunction = (
@@ -61,13 +58,14 @@ export const processstatusBodyTemplate = (rowData) => {
     case "NOTCOMPUTED":
       return (
         <div className="patient-status">
-          <span className={`badge processing-text`}>Pending</span>
+          <span className={`badge processing-text`}>Not Computed</span>
         </div>
       );
+
     case "COMPUTED":
       return (
         <div className="patient-status">
-          <span className={`badge processing-text`}>Pending</span>
+          <span className={`badge processing-text`}>Computed</span>
         </div>
       );
     case "HOLD":
@@ -79,14 +77,14 @@ export const processstatusBodyTemplate = (rowData) => {
     case null:
       return (
         <div className="patient-status">
-          <span className={`badge processing-text`}>Pending</span>
+          <span className={`badge processing-text`}></span>
         </div>
       );
   }
 };
 
 // for rangepicker
-export const handleRnagePicker = (
+export const handleRnagePicker = ({
   dates,
   dateString,
   setStartDate,
@@ -96,13 +94,13 @@ export const handleRnagePicker = (
   setReceivedStartDate,
   setReceivedEndDate,
   setCoderStartDate,
-  setCoderEndDate
-) => {
+  setCoderEndDate,
+}) => {
   if (dates === null || (Array.isArray(dates) && dates.length === 0)) {
     if (setSelectedDates) {
       setSelectedDates(null);
     }
-    if (activeTab === "SentReport") {
+    if (activeTab === "SentReport" || !activeTab) {
       setStartDate("");
       setEndDate("");
     } else if (activeTab === "ReceivedReport") {
@@ -111,11 +109,7 @@ export const handleRnagePicker = (
     } else if (activeTab === "CoderReport") {
       setCoderStartDate("");
       setCoderEndDate("");
-    } else {
-      setStartDate("");
-      setEndDate("");
     }
-
     return;
   }
 
@@ -132,7 +126,7 @@ export const handleRnagePicker = (
   if (setSelectedDates) {
     setSelectedDates([dayjs(dateString[0]), dayjs(dateString[1])]);
   }
-  if (activeTab === "SentReport") {
+  if (activeTab === "SentReport" || !activeTab) {
     setStartDate(formattedDates[0]);
     setEndDate(formattedDates[1]);
   } else if (activeTab === "ReceivedReport") {
@@ -141,9 +135,6 @@ export const handleRnagePicker = (
   } else if (activeTab === "CoderReport") {
     setCoderStartDate(formattedDates[0]);
     setCoderEndDate(formattedDates[1]);
-  } else {
-    setStartDate(formattedDates[0]);
-    setEndDate(formattedDates[1]);
   }
 };
 
@@ -287,11 +278,6 @@ export const generateOptionsList = (items) => {
   if (!items?.data) {
     return [{ label: "Loading...", value: "Loading..." }];
   } else {
-    // if (
-    //   items?.data !== null &&
-    //   !items?.loading &&
-    //   items?.data?.data?.response?.length > 0
-    // ) {
     const options = [
       { label: "All", value: "" },
       ...items?.data?.data?.response?.map((item) => ({
@@ -311,11 +297,6 @@ export const generateOptionsLists = (items) => {
   if (!items?.data) {
     return [{ label: "Loading...", value: "Loading..." }];
   } else {
-    // if (
-    //   items?.data !== null &&
-    //   !items?.loading &&
-    //   items?.data?.data?.response?.length > 0
-    // ) {
     const options = [
       { label: "All", value: "" },
       ...items?.data?.data?.response?.map((item) => ({
@@ -329,7 +310,6 @@ export const generateOptionsLists = (items) => {
       })),
     ].filter(Boolean);
     return options;
-    // }
   }
 };
 
@@ -366,7 +346,7 @@ export const renderUserPrfoile = (
   const backgroundColor = field ? getBackgroundColor(hash) : "#F3C217";
 
   if (!imageUrl) {
-    var profileAvatar = (
+    const profileAvatar = (
       <Avatar
         style={{
           backgroundColor: backgroundColor,
@@ -386,7 +366,7 @@ export const renderUserPrfoile = (
     );
     return profileAvatar;
   } else {
-    var profileAvatar = (
+    const profileAvatar = (
       <img
         src={imageUrl}
         alt="avatar"
@@ -414,7 +394,7 @@ export const renderUserPrfoileAvatar = (
   const backgroundColor = field ? getBackgroundColor(hash) : "#F3C217";
 
   if (!imageUrl) {
-    var profileAvatar = (
+    const profileAvatar = (
       <Avatar
         style={{
           backgroundColor: backgroundColor,
@@ -434,7 +414,7 @@ export const renderUserPrfoileAvatar = (
     );
     return profileAvatar;
   } else {
-    var profileAvatar = (
+    const profileAvatar = (
       <img
         src={imageUrl}
         alt="avatar"
@@ -458,11 +438,9 @@ export const renderUserPrfoileAvatarDisabled = (
 ) => {
   const firstNameInitial = firstName?.charAt(0) || "";
   const secondNameInitial = lastName?.charAt(0) || "";
-  const hash = (firstNameInitial.charCodeAt(0) % 6) + 1;
-  const backgroundColor = field ? getBackgroundColor(hash) : "#F3C217";
 
   if (!imageUrl) {
-    var profileAvatar = (
+    const profileAvatar = (
       <Avatar
         style={{
           backgroundColor: "gray",
@@ -482,7 +460,7 @@ export const renderUserPrfoileAvatarDisabled = (
     );
     return profileAvatar;
   } else {
-    var profileAvatar = (
+    const profileAvatar = (
       <img
         src={imageUrl}
         alt="avatar"
@@ -512,7 +490,7 @@ export const renderUserPrfoileAvatarCustom = (
   const backgroundColor = field ? getBackgroundColor(hash) : "#F3C217";
 
   if (!imageUrl) {
-    var profileAvatar = (
+    const profileAvatar = (
       <Avatar
         style={{
           backgroundColor: backgroundColor,
@@ -532,7 +510,7 @@ export const renderUserPrfoileAvatarCustom = (
     );
     return profileAvatar;
   } else {
-    var profileAvatar = (
+    const profileAvatar = (
       <img
         src={imageUrl}
         alt="avatar"
@@ -636,7 +614,7 @@ export const validateConfirmPassword = (
 };
 
 export const validateYear = (year, setErrors) => {
-  const yearPattern = /^[0-9]{4}$/;
+  const yearPattern = /^\d{4}$/;
   const correctYear = parseInt(year) > 0;
   const currentYear = new Date().getFullYear();
 
@@ -663,10 +641,10 @@ export const validateYear = (year, setErrors) => {
   return true;
 };
 const encryptData = (data, key, iv) => {
-  var keyUtf8 = CryptoJS.enc.Utf8.parse(key);
-  var ivUtf8 = CryptoJS.enc.Utf8.parse(iv);
+  const keyUtf8 = CryptoJS.enc.Utf8.parse(key);
+  const ivUtf8 = CryptoJS.enc.Utf8.parse(iv);
 
-  var encrypted = CryptoJS.AES.encrypt(data, keyUtf8, {
+  const encrypted = CryptoJS.AES.encrypt(data, keyUtf8, {
     iv: ivUtf8,
     mode: CryptoJS.mode.CBC,
     padding: CryptoJS.pad.Pkcs7,
@@ -688,10 +666,10 @@ function generateRandomString() {
 }
 
 export const encyptingPass = (password) => {
-  var plaintextData = password;
-  var encryptionKey = "B27AA05B9A2490D1AE59B33B45CFD4B0"; // Should be 16, 24, or 32 bytes
-  var initializationVector = generateRandomString(); // Should be 16 bytes
-  var encryptedData = encryptData(
+  const plaintextData = password;
+  const encryptionKey = "B27AA05B9A2490D1AE59B33B45CFD4B0"; // Should be 16, 24, or 32 bytes
+  const initializationVector = generateRandomString(); // Should be 16 bytes
+  const encryptedData = encryptData(
     plaintextData,
     encryptionKey,
     initializationVector

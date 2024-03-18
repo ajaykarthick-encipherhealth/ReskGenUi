@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Select from "react-select";
 import { Button } from "react-bootstrap";
-import { Badge, DatePicker, Popover } from "antd";
+import { DatePicker, Popover } from "antd";
 import Image from "next/image";
 import dayjs from "dayjs";
+import { useDispatch } from "react-redux";
 import styles from "../../pages/reviewer/report/report.module.css";
 import allocateStyle from "../../pages/admin/allocatedUser/allocate/style.module.css";
 import Export from "../../images/svg/Export";
@@ -15,7 +16,6 @@ import { disableFutureDate, handleRnagePicker2 } from "./functions";
 import filter from "../../images/svg/filter.svg";
 import warning from "../../images/svg/warning.svg";
 import { getFilters } from "../../store/actions/AuthActions";
-import { useDispatch, useSelector } from "react-redux";
 
 const { RangePicker } = DatePicker;
 
@@ -265,13 +265,13 @@ const HeaderFilters = ({
                   onChange={(selectedOption) => {
                     if (selectedCoderOptReport?.value === "SUPERVISOR") {
                       setSelectedOption3(selectedOption);
-                      // setSelectedOption2(null);
+                      
                       setSelect(null);
                     }
                     if (selectedCoderOptReport?.value === "REVIEWER") {
                       setSelect(selectedOption?.value);
                       setSelectedOption3(selectedOption);
-                      // setSelectedOption2(null);
+                      
                     }
                   }}
                   className="custom-react-select"
@@ -296,7 +296,7 @@ const HeaderFilters = ({
                 setReceivedEndDate={setReceivedEndDate}
                 setCoderStartDate={setCoderStartDate}
                 setCoderEndDate={setCoderEndDate}
-                disabled={disable != "Yes" && true}
+                disabled={disable != "Yes" ? true:false}
               />
             </div>
           )}
