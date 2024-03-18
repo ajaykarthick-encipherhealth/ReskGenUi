@@ -4,6 +4,9 @@
   padding-top: 55px !important;
   background-color: #fff !important;
 }
+.container_fluid{
+  background-color: #F0F6FE !important;
+}
 
 .patient_info_details svg {
   color: rgb(36, 21, 113);

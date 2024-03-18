@@ -16,11 +16,11 @@
   margin-bottom: 10px;
 }
 .headerName {
-  color: #3070f5 !important;
+  color: #000 !important;
   font-size: 20px !important;
 }
 .headerName2 {
-  color: #3c9a92 !important;
+  color: #000!important;
   font-size: 20px !important;
 }
 .compareBtn {
@@ -111,7 +111,8 @@
   font-size: 20px !important;
 }
 .rafPercentage {
-  margin-top: 50px;
+  margin-top: 30px;
+  font-weight: bold;
 }
 .accuracyConatiner {
   padding: 10px;
@@ -159,4 +160,18 @@
 }
 .patientListContainer {
   margin-bottom: 20px;
+}
+.currentYearText {
+  color: #546c8db2;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 4;
+  text-align: center;
+}
+.previousYearText {
+  color: #000000;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 4;
+  text-align: center;
 }

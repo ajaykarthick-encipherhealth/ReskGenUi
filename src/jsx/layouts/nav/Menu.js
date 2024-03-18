@@ -1,5 +1,4 @@
 import { SVGICON } from "../../constant/theme";
-import workingstatusActive from "../../../images/workingstatus/workingstatusInactive.png";
 
 export const MenuList = [
   {
@@ -177,4 +176,23 @@ export const EHRMenuList = [
     to: "/ehr/patients",
     childRoute: "/ehr/patients/details",
   },
+];
+
+export const PhysicianMenuList = [
+  {
+    title: "Dashbaord",
+    iconStyle: SVGICON.dashboardIcon,
+    to: "/physician/dashboard",
+  },
+  {
+    title: "Patients",
+    iconStyle:SVGICON.physicianPatient,
+    to: "/physician/patients",
+  },
+  {
+    title: "Comparision",
+    iconStyle:SVGICON.physicianComparision,
+    to: "/physician/comparison",
+  },
+  
 ];
