@@ -22,6 +22,8 @@ import UnAuthorized from "../403page";
 import { refreshToken } from "../services/AuthService";
 import { useRouter } from "next/router";
 config.autoAddCss = false;
+import {Popover} from "antd";
+import AICHAT from "../components/aiChat";
 
 function MyApp({ Component, pageProps }) {
   const dispatch = useDispatch();
@@ -95,15 +97,16 @@ function MyApp({ Component, pageProps }) {
       <PrimeReactProvider>
         <Provider store={store}>
           {showTerminal && (
-            <TerminalComponent
-              handleNewUserMessage={handleNewUserMessage}
-              handleQuickButtonClicked={handleQuickButtonClicked}
-              showBadge={false}
-              emojis={true}
-              title="CogentAI"
-              subtitle="Chat with CogentAI"
-              autoFocus={true}
-            />
+            <AICHAT openMsg={true}/>
+          //   <TerminalComponent
+          //   handleNewUserMessage={handleNewUserMessage}
+          //   handleQuickButtonClicked={handleQuickButtonClicked}
+          //   showBadge={false}
+          //   emojis={true}
+          //   title="CogentAI"
+          //   subtitle="Chat with CogentAI"
+          //   autoFocus={true}
+          // />
           )}
           <Component {...pageProps} />
           {showTerminal && <Footer />}
