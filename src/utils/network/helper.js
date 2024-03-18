@@ -1,4 +1,4 @@
-import { osName } from "react-device-detect";
+// import { osName } from "react-device-detect";
 // import { tokenKey } from "../config";
 // import { removeStorage, setStorage } from "../storages";
 
