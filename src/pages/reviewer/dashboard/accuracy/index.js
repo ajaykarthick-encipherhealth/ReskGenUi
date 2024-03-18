@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Buttonscroller from "../../../../components/buttonSroller";
 import { Buttons } from "../../workingstatus";
-import ReactECharts from "echarts-for-react";
 import accuracy from "../../../../images/dashboard/accuracy.png";
 import Image from "next/image";
 import Card from "../../../../components/card/index";
@@ -164,10 +163,6 @@ const Accuracy = () => {
     highlightIndex = currentWeek - 1;
   }
 
-  let data = [];
-  if (currentBtn && accuracyDatas?.data?.response) {
-    data = Object.values(accuracyDatas?.data?.response);
-  }
   const options = {
     chart: {
       type: "column",
@@ -346,13 +341,6 @@ const Accuracy = () => {
                 val={month}
                 val1={year}
               />
-              {/* {currentBtn !== "Monthly" && (
-                <YearPicker
-                  onChange={handleMonthChange}
-                  type={"month"}
-                  bgColor="#E6EEFF"
-                />
-              )} */}
             </div>
             <div className={styles.btnScroller}>
               <Buttonscroller
@@ -372,12 +360,12 @@ const Accuracy = () => {
           </div>
           <div className={styles.header}>
             <div style={{ width: "85%", overflowX: "scroll" }}>
-              {accuracyDatas?.loading ? (
+              {accuracyDatas?.loading && (
                 <div className={spinSTYles.spinStyle}>
                   <Spin loading={accuracyDatas?.loading} />
                 </div>
-              ) : accuracyDatas?.loading === false &&
-                accuracyDatas?.data?.response ? (
+              )}
+              {!accuracyDatas?.loading && accuracyDatas?.data?.response ? (
                 options && (
                   <div className={styles.highchartStyle}>
                     <HighchartsReact
@@ -399,11 +387,10 @@ const Accuracy = () => {
                 <div className={styles.heading}>Average Quality</div>
               </div>
               <div className={styles.month}>
-                {currentBtn === "Daily"
-                  ? `Day ${currentDate.getDate()}`
-                  : currentBtn === "Monthly"
-                  ? `Month ${monthNames[currentDate.getMonth()]}`
-                  : `Week ${getDateWeek(currentDate)}`}
+                {currentBtn === "Daily" && `Day ${currentDate.getDate()}`}
+                {currentBtn === "Monthly" &&
+                  `Month ${monthNames[currentDate.getMonth()]}`}
+                {currentBtn === "Weekly" && `Week ${getDateWeek(currentDate)}`}
               </div>
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import styles from "./styles.module.css";
 import dayjs from "dayjs";
 import Image from "next/image";
@@ -98,11 +98,15 @@ const WorkFlow = () => {
       <Card borderRadius="28px">
         {!worlFlowData ||
         worlFlowData?.loading ||
-        worlFlowData?.data === null ? (
+        worlFlowData?.data === null && (
           <div className={spinSTYles.spinStyle}>
             <Spin loading={worlFlowData?.loading} />
           </div>
-        ) : worlFlowData?.data?.response ? (
+        ) } 
+        {
+          worlFlowData ||
+          !worlFlowData?.loading ||
+          worlFlowData?.data !== null && worlFlowData?.data?.response ? (
           <Row className={styles.carddiv}>
             {card1Data?.map((data) => (
               <Col

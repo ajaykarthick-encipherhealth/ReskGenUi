@@ -70,9 +70,11 @@ const CompletedStatus = () => {
   };
 
   const handleYearChange = (date, dateString) => {
+    setYear(date);
     setSelectedYear(dateString);
   };
   const handleMonthChange = (date) => {
+    setMonth(date);
     const selectedDate = new Date(date);
     const monthNumber = (selectedDate.getMonth() + 1)
       .toString()
@@ -169,13 +171,6 @@ const CompletedStatus = () => {
                 val={month}
                 val1={year}
               />
-              {/* {currentBtn !== "Monthly" && (
-                <YearPicker
-                  onChange={handleMonthChange}
-                  type={"month"}
-                  bgColor="#F3F3FF"
-                />
-              )} */}
             </div>
             <div className={styles.btnScroller}>
               <Buttonscroller
@@ -191,12 +186,13 @@ const CompletedStatus = () => {
             </div>
           </div>
 
-          {completedDatas?.loading ? (
+          {completedDatas?.loading && (
             <div className={spinSTYles.spinStyle}>
               <Spin loading={completedDatas?.loading} />
             </div>
-          ) : completedDatas?.loading === false &&
-            completedDatas?.data?.response ? (
+          )}
+          {!completedDatas?.loading&&
+          completedDatas?.data?.response ? (
             <>
               <ReactECharts
                 option={option}
