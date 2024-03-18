@@ -126,6 +126,12 @@ const HeaderFilters = ({
   setSelAllocatedTo,
   defaultAllocateTo,
 
+  //priority
+  isAnotherPicker6,
+  pickerlabe6,
+  setPriority,
+  defaultPriority,
+
   // createdTo
   isCreatedBySelector,
   createdTolabel,
@@ -568,6 +574,25 @@ const HeaderFilters = ({
                       }
                       disabledDate={(current) => disableFutureDate(current)}
                     />
+                  </div>
+                </div>
+              </>
+            )}
+              {isAnotherPicker6 && (
+              <>
+                <div className={defaultSize}>
+                  <label className={styles.label}>{pickerlabe6}</label>
+                  <div>
+                  <Select
+                    onChange={(selectedOption) => {
+                      setPriority(selectedOption?.value);
+                    }}
+                    options={allocatedToOptoons}
+                    className="custom-react-select"
+                    isSearchable={false}
+                    placeholder={defaultPriority}
+                  />
+                   
                   </div>
                 </div>
               </>
