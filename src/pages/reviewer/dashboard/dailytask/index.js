@@ -4,7 +4,7 @@ import Image from "next/image";
 import ReactECharts from "echarts-for-react";
 import left from "../../../../images/dashboard/left.png";
 import right from "../../../../images/dashboard/right.png";
-import { Col, Empty, Row, Spin } from "antd";
+import { Col, Row, Spin } from "antd";
 import Card from "../../../../components/card";
 import HeadTitle from "../../../../components/headtitle";
 import dayjs from "dayjs";
@@ -202,16 +202,12 @@ const DailyTask = () => {
   };
   const showNext = () => {
     if (currentDays?.length > 3) {
-      const updatedData = currentDays?.shift();
-      const datas = [];
-      const valyes = currentDays?.map((item) => {
-        datas?.push({
-          id: item?.id,
-          day: item?.day,
-          date: item?.date,
-          dateString: item?.dateString,
-        });
-      });
+      const datas = currentDays?.map((item) => ({
+        id: item?.id,
+        day: item?.day,
+        date: item?.date,
+        dateString: item?.dateString,
+      }));
       setSelectedDate(datas);
     }
   };
@@ -307,11 +303,9 @@ const DailyTask = () => {
                                     {item.name}
                                   </div>
                                   <div className={styles.subText}>
-                                    {item.name === "Pending"
-                                      ? data.pending
-                                      : item.name === "Declined"
-                                      ? data?.decline
-                                      : item.name === "Hold"
+                                    {item.name === "Pending" && data.pending}
+                                    {item.name === "Declined" && data?.decline}
+                                    {item.name === "Hold"
                                       ? data.hold
                                       : item.name === "Completed" &&
                                         data?.completed}
