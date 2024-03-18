@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
-import Header from "../../../jsx/layouts/nav/Header";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { Paginator } from "primereact/paginator";
 import { Popover, notification } from "antd";
+import Header from "../../../jsx/layouts/nav/Header";
 import { patientDetails } from "../../../store/actions/AuthActions";
 import PatientTable from "../table/PatientList/patientList";
 import SpinnerDots from "../../../components/spinner";
