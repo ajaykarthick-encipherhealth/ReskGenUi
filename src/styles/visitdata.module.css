@@ -1371,10 +1371,20 @@
 .patientDetailsHead {
   height: 70vh;
   margin-right: 0px;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 .patientDetailsHead:hover {
   height: 70vh;
+  overflow-y: scroll;
+  margin-right: 0px;
+}
+.patientDetailsHead2 {
+  height: 65vh;
+  margin-right: 0px;
+  overflow-y: scroll;
+}
+.patientDetailsHead2:hover {
+  height: 65vh;
   overflow-y: scroll;
   margin-right: 0px;
 }

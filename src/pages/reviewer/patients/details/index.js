@@ -53,6 +53,8 @@ import { validateYear } from "../../../../components/headerFilters/functions";
 import { getPatientID } from "../../../../store/actions/PatientsActions";
 import { useDispatch } from "react-redux";
 import Timeline from "./timline";
+import ReviwerWorkList from "./components/reviwerWorklist";
+import SupervisorWorkList from "./components/supervisorWorklist";
 
 const Details = ({}) => {
   const navigate = useRouter();
@@ -157,6 +159,7 @@ const Details = ({}) => {
   const [error, setError] = useState({ year: "" });
   const [hccValidCount, setHccValidCount] = useState(0);
   const [menuIsOpen, setMenuIsOpen] = useState(false);
+  const [workListPatientId, setWorkListPatientId] = useState(null);
 
   const flagPostList = [
     {
@@ -389,7 +392,13 @@ const Details = ({}) => {
     const menu = (
       <Menu>
         {result?.processedStatus != "HOLD" ? (
-          <Menu.Item key="1" onClick={() => {handleActionClick("HOLD"); setMenuIsOpen(false)}}>
+          <Menu.Item
+            key="1"
+            onClick={() => {
+              handleActionClick("HOLD");
+              setMenuIsOpen(false);
+            }}
+          >
             <div className="patient-status">
               <span className={`badge hold-text`}>HOLD</span>
             </div>
@@ -397,7 +406,13 @@ const Details = ({}) => {
         ) : null}
         {result?.processedStatus != "PENDING" &&
         result?.processedStatus != "COMPUTED" ? (
-          <Menu.Item key="2" onClick={() => {handleActionClick("PENDING"); setMenuIsOpen(false)}}>
+          <Menu.Item
+            key="2"
+            onClick={() => {
+              handleActionClick("PENDING");
+              setMenuIsOpen(false);
+            }}
+          >
             <div className="patient-status">
               <span className={`badge processing-text`}>PENDING</span>
             </div>
@@ -407,7 +422,10 @@ const Details = ({}) => {
           <Menu.Item
             key="3"
             disabled={flagFirstData?.flag !== undefined ? false : true}
-            onClick={() => {handleActionClick("DECLINE");  setMenuIsOpen(false)}}
+            onClick={() => {
+              handleActionClick("DECLINE");
+              setMenuIsOpen(false);
+            }}
           >
             <Tooltip
               title={
@@ -425,7 +443,13 @@ const Details = ({}) => {
         ) : null}
 
         {result?.processedStatus != "COMPLETED" ? (
-          <Menu.Item key="4" onClick={() => {handleActionClick("COMPLETE");  setMenuIsOpen(false)}}>
+          <Menu.Item
+            key="4"
+            onClick={() => {
+              handleActionClick("COMPLETE");
+              setMenuIsOpen(false);
+            }}
+          >
             <div className="patient-status">
               <span className={`badge processed-text`}>COMPLETED</span>
             </div>
@@ -437,14 +461,26 @@ const Details = ({}) => {
     const menu2 = (
       <Menu>
         {result?.processedStatus != "HOLD" ? (
-          <Menu.Item key="1" onClick={() => {handleActionClick("HOLD"); setMenuIsOpen(false)}}>
+          <Menu.Item
+            key="1"
+            onClick={() => {
+              handleActionClick("HOLD");
+              setMenuIsOpen(false);
+            }}
+          >
             <div className="patient-status">
               <span className={`badge hold-text`}>HOLD</span>
             </div>
           </Menu.Item>
         ) : null}
         {result?.processedStatus != "PENDING" ? (
-          <Menu.Item key="2" onClick={() => {handleActionClick("PENDING"); setMenuIsOpen(false)}}>
+          <Menu.Item
+            key="2"
+            onClick={() => {
+              handleActionClick("PENDING");
+              setMenuIsOpen(false);
+            }}
+          >
             <div className="patient-status">
               <span className={`badge processing-text`}>PENDING</span>
             </div>
@@ -453,7 +489,10 @@ const Details = ({}) => {
         {result?.processedStatus != "DECLINE" ? (
           <Menu.Item
             key="3"
-            onClick={() => {handleActionClick("DECLINE"); setMenuIsOpen(false)}}
+            onClick={() => {
+              handleActionClick("DECLINE");
+              setMenuIsOpen(false);
+            }}
             disabled={flagFirstData?.flag !== undefined ? false : true}
           >
             <Tooltip
@@ -472,13 +511,25 @@ const Details = ({}) => {
         ) : null}
 
         {result?.processedStatus != "COMPLETE" ? (
-          <Menu.Item key="4" onClick={() => {handleActionClick("COMPLETE");  setMenuIsOpen(false)}}>
+          <Menu.Item
+            key="4"
+            onClick={() => {
+              handleActionClick("COMPLETE");
+              setMenuIsOpen(false);
+            }}
+          >
             <div className="patient-status">
               <span className={`badge processed-text`}>COMPLETED</span>
             </div>
           </Menu.Item>
         ) : null}
-        <Menu.Item key="5" onClick={() => {handleActionClick("ADD RADIOLOGY"); setMenuIsOpen(false)}}>
+        <Menu.Item
+          key="5"
+          onClick={() => {
+            handleActionClick("ADD RADIOLOGY");
+            setMenuIsOpen(false);
+          }}
+        >
           <div className="patient-status">
             <span className={`badge  ${visitStyles.add_text}`}>
               + ADD RADIOLOGY
@@ -490,14 +541,26 @@ const Details = ({}) => {
     const menu3 = (
       <Menu>
         {result?.processedStatus != "HOLD" ? (
-          <Menu.Item key="1" onClick={() => {handleActionClick("HOLD"); setMenuIsOpen(false)}}>
+          <Menu.Item
+            key="1"
+            onClick={() => {
+              handleActionClick("HOLD");
+              setMenuIsOpen(false);
+            }}
+          >
             <div className="patient-status">
               <span className={`badge hold-text`}>HOLD</span>
             </div>
           </Menu.Item>
         ) : null}
         {result?.processedStatus != "PENDING" ? (
-          <Menu.Item key="2" onClick={() => {handleActionClick("PENDING");  setMenuIsOpen(false)}}>
+          <Menu.Item
+            key="2"
+            onClick={() => {
+              handleActionClick("PENDING");
+              setMenuIsOpen(false);
+            }}
+          >
             <div className="patient-status">
               <span className={`badge processing-text`}>PENDING</span>
             </div>
@@ -506,7 +569,10 @@ const Details = ({}) => {
         {result?.processedStatus != "DECLINE" ? (
           <Menu.Item
             key="3"
-            onClick={() => {handleActionClick("DECLINE");  setMenuIsOpen(false)}}
+            onClick={() => {
+              handleActionClick("DECLINE");
+              setMenuIsOpen(false);
+            }}
             disabled={flagFirstData?.flag !== undefined ? false : true}
           >
             <Tooltip
@@ -525,13 +591,25 @@ const Details = ({}) => {
         ) : null}
 
         {result?.processedStatus != "COMPLETE" ? (
-          <Menu.Item key="4" onClick={() => {handleActionClick("COMPLETE");  setMenuIsOpen(false)}}>
+          <Menu.Item
+            key="4"
+            onClick={() => {
+              handleActionClick("COMPLETE");
+              setMenuIsOpen(false);
+            }}
+          >
             <div className="patient-status">
               <span className={`badge processed-text`}>COMPLETED</span>
             </div>
           </Menu.Item>
         ) : null}
-        <Menu.Item key="5" onClick={() => {handleActionClick("ADD LAB"); setMenuIsOpen(false)}}>
+        <Menu.Item
+          key="5"
+          onClick={() => {
+            handleActionClick("ADD LAB");
+            setMenuIsOpen(false);
+          }}
+        >
           <div className="patient-status">
             <span className={`badge  ${visitStyles.add_text}`}>+ ADD LAB</span>
           </div>
@@ -1084,19 +1162,6 @@ const Details = ({}) => {
     setFlagContainerActive(value);
     if (value == "Filter") {
       setFlagContainerActiveTitle("My Work Queue");
-      var result = await patientListFilter(
-        localUserId,
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        0
-      );
-      setPatientList(result?.response?.patientDTOList?.content);
-      setTotalElements(result?.response?.patientDTOList?.totalElements);
-      setFilterDataLoading(false);
     }
 
     if (value == "Timeline") {
@@ -1148,8 +1213,8 @@ const Details = ({}) => {
 
   const getPatientListToDetails = (userId, orgId, tenantId) => {
     setPatientResultReload(false);
-    getPatientDetails(userId, orgId, tenantId);
     getPatientIdDetails(userId);
+    getPatientDetails(userId, orgId, tenantId);
     setLocalPatientId(userId);
   };
 
@@ -1749,6 +1814,13 @@ const Details = ({}) => {
       getPatientIdDetails(localPatientId, flagFirstData);
     }
   }, [flagFirstData?.flag]);
+
+  useEffect(() => {
+    if (workListPatientId) {
+      getPatientListToDetails(workListPatientId, localOrgId, localTenantId);
+      console.log(workListPatientId);
+    }
+  }, [workListPatientId]);
 
   return (
     <>
@@ -2884,218 +2956,17 @@ const Details = ({}) => {
                       />
                     ) : flagContainerActive == "Filter" ? (
                       <>
-                        {" "}
-                        <div className={`row ${visitStyles.patientListHead}`}>
-                          <div
-                            className={visitStyles.flags}
-                            style={{ marginTop: "15px", marginBottom: "20px" }}
-                          >
-                            <div className={visitStyles.flags}>
-                              <span
-                                className={visitStyles.completed}
-                                style={{ background: "#3a9b94 !important" }}
-                              ></span>
-                              <span className={visitStyles.flagCodes}>
-                                Completed
-                              </span>
-                            </div>
-                            <div className={visitStyles.flags}>
-                              <span className={visitStyles.pending}></span>
-                              <span className={visitStyles.flagCodes}>
-                                Pending
-                              </span>
-                            </div>
-                            <div className={visitStyles.flags}>
-                              <span className={visitStyles.hold}></span>
-                              <span className={visitStyles.flagCodes}>
-                                Hold
-                              </span>
-                            </div>
-                            <div className={visitStyles.flags}>
-                              <span className={visitStyles.declined}></span>
-                              <span className={visitStyles.flagCodes}>
-                                Declined
-                              </span>
-                            </div>
-                          </div>
-                          <div className="col-xl-9">
-                            <div class="form-group has-search">
-                              <FontAwesomeIcon
-                                className="fa fa-search form-control-feedback"
-                                icon={faSearch}
-                              />
-                              <InputText
-                                type="text"
-                                onChange={(e) => filterChangePatientId(e)}
-                                className="form-control new-form-control"
-                                placeholder="Search"
-                              />
-                              <RangePicker
-                                open={openPicker}
-                                onChange={(dates, dateStrings) => {
-                                  handleDatePickerChange(dateStrings);
-                                }}
-                                suffixIcon={false}
-                                className={visitStyles.datepicker}
-                              />
-                              <RangePicker
-                                open={openPicker2}
-                                onChange={(dates, dateStrings) => {
-                                  handleChangeprocessedDate(dateStrings);
-                                }}
-                                suffixIcon={false}
-                                className={visitStyles.datepicker}
-                              />
-                            </div>
-                          </div>
-
-                          <div className="col-xl-3">
-                            <div className={visitStyles.content}>
-                              <span
-                                className={visitStyles.circleCard}
-                                onClick={handleFilterClick}
-                              >
-                                <span></span>
-                                {showIcons ? (
-                                  <FontAwesomeIcon
-                                    icon={faClose}
-                                    height={30}
-                                    width={30}
-                                    color="#A20404"
-                                    onClick={() => {
-                                      closeFilterIcons(false);
-                                      setOpenPicker(false);
-                                      setOpenPicker2(false);
-                                    }}
-                                  />
-                                ) : (
-                                  SVGICON.filter
-                                )}
-                              </span>
-                              {showIcons && (
-                                <div className={visitStyles.iconContainer}>
-                                  <Tooltip title="Status" placement="left">
-                                    <span
-                                      className={visitStyles.circleCard}
-                                      onClick={handleShowCard}
-                                    >
-                                      {SVGICON.dashboard}
-                                    </span>
-                                  </Tooltip>
-                                  <Tooltip title="Due Date" placement="left">
-                                    <span
-                                      className={visitStyles.circleCard}
-                                      onClick={() => {
-                                        setOpenPicker(!openPicker);
-                                        setOpenPicker2(false);
-                                      }}
-                                    >
-                                      {SVGICON.dateIcon}
-                                    </span>
-                                  </Tooltip>
-                                  <Tooltip
-                                    title="Completed Date"
-                                    placement="left"
-                                  >
-                                    <span
-                                      className={visitStyles.circleCard}
-                                      onClick={() => {
-                                        setOpenPicker2(!openPicker2);
-                                        setOpenPicker(false);
-                                      }}
-                                    >
-                                      {SVGICON.dateIcon}
-                                    </span>
-                                  </Tooltip>
-                                </div>
-                              )}
-                              {showCard && (
-                                <div
-                                  className={visitStyles.menuCard}
-                                  onMouseEnter={() => setShowCard(true)}
-                                  onMouseLeave={() => setShowCard(false)}
-                                >
-                                  <ul>
-                                    {statuses.map((status, index) => (
-                                      <li
-                                        onClick={() =>
-                                          getFiltePatientListStatus(status)
-                                        }
-                                        className={visitStyles.nameList}
-                                        key={index}
-                                      >
-                                        {status}
-                                      </li>
-                                    ))}
-                                  </ul>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                          {!filterDataLoading ? (
-                            <>
-                              <div className={visitStyles.patientListHead}>
-                                <ul
-                                  className={`${visitStyles.patientDetailsHead}`}
-                                >
-                                  {patientList?.map((data, index) => (
-                                    <li
-                                      className={`${visitStyles.nameList} ${visitStyles.patientList}`}
-                                      key={index}
-                                      onClick={() =>
-                                        getPatientListToDetails(
-                                          data.patientId,
-                                          localOrgId,
-                                          localTenantId
-                                        )
-                                      }
-                                    >
-                                      {data.patientId} - {data.patientName}
-                                      {data.processedStatus == "COMPLETED" ? (
-                                        <span
-                                          className={visitStyles.completed}
-                                          style={{
-                                            background: "#3a9b94 !important",
-                                          }}
-                                        ></span>
-                                      ) : data.processedStatus == "PENDING" ||
-                                        data.processedStatus == "COMPUTED" ? (
-                                        <span
-                                          className={visitStyles.pending}
-                                        ></span>
-                                      ) : data.processedStatus == "HOLD" ? (
-                                        <span
-                                          className={visitStyles.hold}
-                                        ></span>
-                                      ) : data.processedStatus == "DECLINED" ? (
-                                        <span
-                                          className={visitStyles.declined}
-                                        ></span>
-                                      ) : null}
-                                    </li>
-                                  ))}
-                                  {patientList?.length == 0 ? (
-                                    <h5 className="text-center">NO DATA</h5>
-                                  ) : null}
-                                </ul>
-                              </div>
-                            </>
-                          ) : (
-                            <div
-                              className={`${visitStyles.userDetailsCard} ${visitStyles.loadingContainer}`}
-                            >
-                              <LoadingSpinner />
-                            </div>
-                          )}
-                        </div>
-                        <div className="patient-filte-page">
-                          <Paginator
-                            first={paginationFirst}
-                            rows={15}
-                            totalRecords={totalElements}
-                            onPageChange={onPageChange}
+                        {userRole == "supervisor" ? (
+                          <SupervisorWorkList
+                            localUserId={localUserId}
+                            setWorkListPatientId={setWorkListPatientId}
                           />
-                        </div>
+                        ) : (
+                          <ReviwerWorkList
+                            localUserId={localUserId}
+                            setWorkListPatientId={setWorkListPatientId}
+                          />
+                        )}
                       </>
                     ) : flagContainerActive == "Comments" ? (
                       <div className="offcanvas-body">

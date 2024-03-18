@@ -138,6 +138,7 @@ export const L2AuditorMenuList = [
     title: "Audited Queue",
     iconStyle: SVGICON.patientListIcon,
     to: "/supervisor/auditing",
+    childRoute: "/reviewer/patients/details",
   },
   // {
   //   title: "Org",
