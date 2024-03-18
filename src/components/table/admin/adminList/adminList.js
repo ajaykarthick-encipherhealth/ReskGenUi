@@ -138,8 +138,15 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
           <thead className={TableStyle.classThead}>
             <tr>
               <th className={TableStyle.rowEmailStyle}>NAME</th>
-              <th className={TableStyle.rowEmailStyle}>EMAIL</th>
-              <th style={{ paddingLeft: "130px", width: "170px" }}>ROLE</th>
+              <th style={{ paddingLeft: "20px" }}>EMAIL</th>
+              <th
+                style={{
+                  textAlign: "center",
+                  paddingLeft: "50px",
+                }}
+              >
+                ROLE
+              </th>
               <th
                 style={{ cursor: "pointer", textAlign: "center" }}
                 onClick={() => {
@@ -153,12 +160,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                   <ArrowDownOutlined />
                 )}
               </th>
-              <th
-                className={TableStyle.rowStyle}
-                style={{ textAlign: "center" }}
-              >
-                MFA
-              </th>
+              <th style={{ textAlign: "center" }}>MFA</th>
               <th style={{ textAlign: "center" }}>ACTION</th>
               <th style={{ textAlign: "center" }}>USER STATUS</th>
             </tr>
