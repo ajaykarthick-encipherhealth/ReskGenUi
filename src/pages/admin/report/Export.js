@@ -15,7 +15,7 @@ export const checkBoxData = [
   {
     id: 1,
     title: "patientId",
-    heading: "Patient Id",
+    heading: "Patient ID",
     checked: false,
   },
   {

@@ -1859,7 +1859,7 @@ const Details = ({}) => {
                             <div className="row">
                               <div className="col-xl-3 col-sm-12">
                                 <FontAwesomeIcon icon={faIdCardClip} />
-                                <label>Patient Id</label>
+                                <label>Patient ID</label>
                                 <h6 className="ageDtails">
                                   {patientDocumentResult.patientId}
                                 </h6>
@@ -2775,7 +2775,7 @@ const Details = ({}) => {
                           <div className="row">
                             <div className="col-xl-12 mb-3">
                               <Form.Label>
-                                Patient Id
+                                Patient ID
                                 <span className="text-danger">*</span>
                               </Form.Label>
                               <Form.Control
@@ -2865,7 +2865,7 @@ const Details = ({}) => {
                           <div className="row">
                             <div className="col-xl-12 mb-3">
                               <Form.Label>
-                                Patient Id
+                                Patient ID
                                 <span className="text-danger">*</span>
                               </Form.Label>
                               <Form.Control

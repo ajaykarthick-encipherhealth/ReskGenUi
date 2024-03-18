@@ -323,7 +323,7 @@ export default function Patient() {
                           <thead>
                             <tr>
                               <th>SI.NO</th>
-                              <th>Patient Id</th>
+                              <th>Patient ID</th>
                               <th>Patient Name</th>
                               <th>File Name</th>
                               <th>Status</th>
@@ -473,7 +473,7 @@ export default function Patient() {
                   </div>
                   <div className="col-xl-12 mb-3">
                     <Form.Label>
-                      Patient Id <span className="text-danger">*</span>{" "}
+                      Patient ID <span className="text-danger">*</span>{" "}
                     </Form.Label>
                     <Form.Control
                       name="patientId"

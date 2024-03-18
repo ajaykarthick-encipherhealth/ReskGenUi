@@ -199,12 +199,12 @@ export default function Patient() {
         if (response.data.message == "patient Already Present") {
           setIsLoadingBtn(false);
           notification.warning({
-            message: "Patient Id Already Present",
+            message: "Patient ID Already Present",
             duration: 1,
           });
         } else {
           notification.success({
-            message: "Patient Id Created Successfully!",
+            message: "Patient ID Created Successfully!",
             duration: 1,
           });
 
@@ -414,7 +414,7 @@ export default function Patient() {
                               onClick={addPatientFormId}
                               className={`btn btn-primary btn-sm ms-2 flr ${visitStyles.addPatientIdBtn}`}
                             >
-                              + Add Patient Id
+                              + Add Patient ID
                             </Button>
                           </div> */}
                         </div>

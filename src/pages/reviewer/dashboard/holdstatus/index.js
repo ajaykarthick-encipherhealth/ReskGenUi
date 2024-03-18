@@ -45,7 +45,7 @@ const HoldStatus = () => {
     <table className={styles.classTable}>
       <thead className={styles.tableHead}>
         <tr>
-          <th>Patient Id</th>
+          <th>Patient ID</th>
           <th>Reason</th>
         </tr>
       </thead>
