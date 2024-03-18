@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect,useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import csvToJson from "csvtojson";
 import * as XLSX from "xlsx";
@@ -12,9 +12,7 @@ import {
   selectedReport,
   getSentDetails,
 } from "../../../../store/actions/ReportActions";
-import ExcelDisplay, {
-  exportToExcel,
-} from "../../../../components/table/receivedReport/ExcelDisplay";
+import ExcelDisplay from "../../../../components/table/receivedReport/ExcelDisplay";
 import CSVDisplay from "../../../../components/table/receivedReport/CSVDisplay";
 import styles from "../../../../components/table/receivedReport/receivedReport.module.css";
 import reportStyles from "../../../reviewer/report/report.module.css";
@@ -26,7 +24,6 @@ import calender from "../../../../images/report/calender.svg";
 import send from "../../../../images/report/send.svg";
 import download from "../../../../images/report/download.svg";
 import Header from "../../../../jsx/layouts/nav/Header";
-import Footer from "../../../../jsx/layouts/Footer";
 import SpinnerDots from "../../../../components/spinner";
 import leftArrow from "../../../../images/svg/leftArrow.svg";
 import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
@@ -48,14 +45,13 @@ const IndividualReceiverReport = () => {
   const [reportInfo, setReportInfo] = useState();
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [receivedSort, setReceivedSort] = useState("DESC");
-  const [detailsContent, setDetailsContent] = useState(
-    reportDatas
-      ? reportDatas?.data?.response?.content
-      : sentReportDatas?.data?.response?.data
-  );
 
   const [loading, setLoading] = useState(false);
   const [isSentReport, setIsSentReport] = useState(false);
+  const [isAdminPage, setIsAdminPage] = useState(false);
+
+  const [detailsContent, setDetailsContent] = useState();
+
   const fetchData = async (url) => {
     setLoading(true);
     try {
@@ -102,8 +98,12 @@ const IndividualReceiverReport = () => {
   useEffect(() => {
     const id = new URLSearchParams(window.location.search).get("reportId");
     const reportConfirm = new URLSearchParams(window.location.search).get(
-      "l2Auditor"
+      "sentreport"
     );
+    const isAdminPage = new URLSearchParams(window.location.search).get(
+      "isAdminPage"
+    );
+    setIsAdminPage(isAdminPage);
     if (reportConfirm) {
       setIsSentReport(true);
       dispatch(getSentDetails(0, "", "", searchValue, sort));
@@ -112,7 +112,7 @@ const IndividualReceiverReport = () => {
       dispatch(getReceivedDetails(0, "", "", searchValue, sort));
       dispatch(getSelectedReportDetails(id));
     }
-  }, [searchValue, sort]);
+  }, [searchValue, sort, router]);
   useEffect(() => {
     if (url) {
       fetchData(url);
@@ -120,27 +120,22 @@ const IndividualReceiverReport = () => {
   }, [url]);
 
   useEffect(() => {
-    if (reportDatas?.data || sentReportDatas?.data) {
+    if (reportDatas?.data || (sentReportDatas?.data && isSentReport)) {
       setDetailsContent(
-        reportDatas
-          ? reportDatas?.data?.response?.content
-          : sentReportDatas?.data?.response?.data
+        isSentReport
+          ? sentReportDatas?.data?.response?.data
+          : reportDatas?.data?.response?.content
       );
       const id = new URLSearchParams(window.location.search).get("reportId");
       const reportdata = reportDatas?.data?.response?.content?.filter(
         (item) => item?.reportId === id
       );
-
-      if (
-        (reportdata && reportdata?.length > 0) ||
-        (sentReportDatas && sentReportDatas?.data?.response?.data?.length > 0)
-      ) {
-        setReportInfo(
-          reportdata ? reportdata[0] : sentReportDatas?.data?.response?.data[0]
-        );
-      }
+      const sentdata = sentReportDatas?.data?.response?.data?.filter(
+        (item) => item?._id === id
+      );
+      setReportInfo(!isSentReport ? reportdata[0] : sentdata[0]);
     }
-  }, [reportDatas, sentReportDatas]);
+  }, [reportDatas, sentReportDatas, isSentReport]);
 
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
@@ -161,9 +156,19 @@ const IndividualReceiverReport = () => {
                   style={{ width: "40px", height: "30px" }}
                   className={reportStyles.filterBtn}
                   onClick={() => {
-                    router?.push("/supervisor/report");
+                    if (isAdminPage) {
+                      router?.push("/admin/report");
+                    } else {
+                      router?.push("/reviewer/report");
+                    }
+
                     dispatch(
                       getActiveTab(
+                        isSentReport ? "SentReport" : "ReceivedReport"
+                      )
+                    );
+                    dispatch(
+                      getReportActiveTab(
                         isSentReport ? "SentReport" : "ReceivedReport"
                       )
                     );
@@ -212,7 +217,6 @@ const IndividualReceiverReport = () => {
                             onClick={() => {
                               dispatch(selectedReport({ reportUser: item }));
                               setReportInfo(item);
-
                               dispatch(
                                 getSelectedReportDetails(
                                   isSentReport ? item?._id : item?.reportId,
@@ -275,7 +279,7 @@ const IndividualReceiverReport = () => {
             <div>
               {" "}
               <Image src={send} alt="noimg" />
-              &nbsp;{isSentReport?"Reciever":"Sender"}:&nbsp;
+              &nbsp;{isSentReport ? "Reciever" : "Sender"}:&nbsp;
               {reportInfo?.sender}
             </div>
             <div>
@@ -327,9 +331,7 @@ const IndividualReceiverReport = () => {
                 overflowX: "scroll",
               }}
             >
-              {(!url?.extention &&
-                (tableData?.length === 0 || csvTableData?.length === 0)) ||
-              loading ? (
+              {loading && (
                 <div
                   style={{
                     display: "flex",
@@ -339,21 +341,25 @@ const IndividualReceiverReport = () => {
                 >
                   loading....
                 </div>
-              ) : url?.extention === "csv" ? (
+              )}
+              {url?.extention === "csv" && !loading && (
                 <CSVDisplay
                   tableData={csvTableData}
                   fileUrl={url?.path}
                   extention={url?.extention}
                   loading={loading}
                 />
-              ) : (
-                <ExcelDisplay
-                  tableData={tableData}
-                  fileUrl={url?.path}
-                  extention={url?.extention}
-                  loading={loading}
-                />
               )}
+              {url?.extention === "xlsx" &&
+                tableData?.length > 0 &&
+                !loading && (
+                  <ExcelDisplay
+                    tableData={tableData}
+                    fileUrl={url?.path}
+                    extention={url?.extention}
+                    loading={loading}
+                  />
+                )}
             </div>
           </div>
         </div>
