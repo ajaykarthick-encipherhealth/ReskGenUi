@@ -1,7 +1,8 @@
-import { DASHBOARDCHART } from "../../../services/physicianService/DashbaordServices";
+import { DASHBOARDCHART,GRAPHDATA } from "../../../services/physicianService/DashbaordServices";
 
   const initialState = {
-    data:null
+    data:null,
+    graphData:null
   };
 
   export const PhysicianDashboardReducer = (state = initialState, action) => {
@@ -11,5 +12,11 @@ import { DASHBOARDCHART } from "../../../services/physicianService/DashbaordServ
         data: action.payload,
       };
     }
+    if (action.type === GRAPHDATA) {
+        return {
+          ...state,
+          graphData: action.payload,
+        };
+      }
     return state;
 };

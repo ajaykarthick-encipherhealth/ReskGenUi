@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactECharts from "echarts-for-react";
 import Card from "../../../../components/card";
 import Buttonscroller from "../../../../components/buttonSroller";
@@ -7,29 +7,68 @@ import Legends from "../../../../components/legends";
 import buttonStyle from "../../../admin/dashboard/completedStatus/styles.module.css";
 import { Buttons } from "../../../reviewer/workingstatus";
 import styles from "./styles.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { GraphContent } from "../../../../services/physicianService/DashbaordServices";
+import YearPicker from "../../../../components/yearpicker";
+import { getDays, monthNames } from "../../../reviewer/dashboard/accuracy";
 
 const GraphData = () => {
+  const dispatch = useDispatch();
+  const graphInfo = useSelector(
+    (state) => state?.physicianDashbaord?.graphData
+  );
+  const ClientRafScore = graphInfo?.data?.response?.clientRafScore?.sort(
+    (a, b) => a._id.month - b._id.month
+  );
+  const CogentAiRafScore = graphInfo?.data?.response?.cogentAiRafScore?.sort(
+    (a, b) => a._id.month - b._id.month
+  );
   const [activeButton, setActiveButton] = useState(0);
+  const [currentBtn, setCurrentBtn] = useState("Daily");
+  const currentDate = new Date();
+  const [selectedMonth, setSelectedMonth] = useState(
+    currentDate.getMonth() + 1
+  );
+  const [year, setYear] = useState();
+  const [month, setMonth] = useState();
+  const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
+
+  const ClientRaf = ClientRafScore?.map((item) => item?.count);
+  const CogentAiRaf = CogentAiRafScore?.map((item) => item?.count);
+
+  const clientWeeks = new Set(
+    graphInfo?.data?.response?.clientRafScore?.map((item) => item?._id?.week)
+  );
+  const cogentWeeks = new Set(
+    graphInfo?.data?.response?.cogentAiRafScore?.map((item) => item?._id?.week)
+  );
+
+  const uniqueWeeks = new Set([...clientWeeks, ...cogentWeeks]);
+
+  const weekNames = Array.from(uniqueWeeks)
+    .sort((a, b) => a - b)
+    .map((week) => `Week ${week}`);
+
+  let xAxisData = [];
+  if (currentBtn === "Monthly") {
+    xAxisData = monthNames;
+  } else if (currentBtn === "Daily") {
+    xAxisData = getDays(
+      graphInfo?.data?.response?.cogentAiRafScore &&
+        Object.keys(graphInfo?.data?.response?.cogentAiRafScore)?.length
+    );
+  } else if (currentBtn === "Weekly") {
+    xAxisData = weekNames;
+  }
+
   const handleButtonClick = (index, btn) => {
     setActiveButton(index);
+    setCurrentBtn(btn);
   };
   const option = {
     xAxis: {
       type: "category",
-      data: [
-        "JAN",
-        "FEB",
-        "MAR",
-        "APR",
-        "MAY",
-        "JUN",
-        "JUL",
-        "AUG",
-        "SEP",
-        "OCT",
-        "NOV",
-        "DEC",
-      ],
+      data: xAxisData,
 
       axisLine: {
         lineStyle: {
@@ -48,26 +87,29 @@ const GraphData = () => {
       type: "value",
       show: true,
       axisLabel: {
-        formatter: "{value}%",
+        formatter: "{value}",
       },
     },
     tooltip: {
       show: true,
       trigger: "axis",
       formatter: function (params) {
-        return `Cogent AI RAF score: ${params[0]?.dataIndex}<br/>Client AI RAF score: ${params[0]?.dataIndex}`;
+        const dataIndex = params[0]?.dataIndex;
+        const ClientRafVal = ClientRaf[dataIndex];
+        const CogentAiRafVal = CogentAiRaf[dataIndex];
+        return `Completed: ${ClientRafVal}<br/>Allocated: ${CogentAiRafVal}`;
       },
     },
     series: [
       {
-        data: [80, 30, 10, 70, 30, 120, 100, 10, 33, 41, 28, 19],
+        data: CogentAiRaf,
         type: "line",
         lineStyle: { color: "rgba(48, 112, 245, 1)" },
         smooth: true,
         showSymbol: false,
       },
       {
-        data: [10, 20, 30, 40, 50, 16, 50, 40, 20, 86, 58, 17],
+        data: ClientRaf,
         type: "line",
         lineStyle: { color: "rgba(60, 154, 146, 1)" },
         smooth: true,
@@ -86,6 +128,22 @@ const GraphData = () => {
       name: "Client AI RAF score",
     },
   ];
+  const handleYearChange = (date, dateString) => {
+    setYear(dateString);
+    setSelectedYear(dateString);
+  };
+  const handleMonthChange = (date) => {
+    setMonth(date);
+    const selectedDate = new Date(date);
+    const monthNumber = (selectedDate.getMonth() + 1)
+      .toString()
+      .padStart(2, "0");
+    setSelectedMonth(monthNumber);
+  };
+  useEffect(() => {
+    dispatch(GraphContent("ID-001", currentBtn, selectedMonth, selectedYear));
+  }, [currentBtn, selectedMonth, selectedYear]);
+
   return (
     <>
       <Card padding="10px">
@@ -94,7 +152,15 @@ const GraphData = () => {
             {" "}
             <HeadTitle header="RAF Secure" />
           </div>
-          <div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <YearPicker
+              onChangeYear={handleYearChange}
+              onChangeMonth={handleMonthChange}
+              type={currentBtn}
+              bgColor="#F3F3FF"
+              val={month}
+              val1={year}
+            />
             <Buttonscroller
               Buttons={Buttons}
               handleButtonClick={handleButtonClick}
