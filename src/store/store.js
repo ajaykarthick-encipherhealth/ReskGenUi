@@ -20,6 +20,7 @@ import { AuditReportReducer } from "./reducers/l2Reducers/AuditReportReducer";
 import { AdminDashboardReducer } from "./reducers/adminRecucers/dashboardReducer";
 import { AdminReportReducer } from "./reducers/adminRecucers/ReportReducer";
 import { PhyicianReducer } from "./reducers/physicianReducers/patientsReducers";
+import { PhysicianDashboardReducer } from "./reducers/physicianReducers/DashboardReducer";
 
 const middleware = applyMiddleware(thunk);
 
@@ -45,7 +46,10 @@ const reducers = combineReducers({
   AdminDashboardReducers: AdminDashboardReducer,
   adminReport: AdminReportReducer,
   l2User: L2UserReducers,
-  PhyicianReducer:PhyicianReducer
+
+  // physician
+  PhyicianReducer:PhyicianReducer,
+  physicianDashbaord:PhysicianDashboardReducer
 
   //form: reduxFormReducer,
 });
