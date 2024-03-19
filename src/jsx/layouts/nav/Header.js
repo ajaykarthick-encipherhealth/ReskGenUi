@@ -64,7 +64,7 @@ import editImg from "../../../images/svg/edit.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 import { faMessage } from "@fortawesome/free-regular-svg-icons";
-import { LoadingOutlined } from "@ant-design/icons";
+import { LoadingOutlined, SettingOutlined } from "@ant-design/icons";
 
 const btnItems = [
   {
@@ -322,7 +322,7 @@ const Header = () => {
       case "ehr":
         return EHRMenuList;
       case "physician":
-        return PhysicianMenuList
+        return PhysicianMenuList;
       default:
         return [];
     }
@@ -483,6 +483,19 @@ const Header = () => {
                             </div>
                           </Tooltip>
                         )}
+                        <div className="chatheaderIcon" onClick={() => router.push('/admin/settings')}>
+                          <SettingOutlined
+                            style={{
+                              width: "23px",
+                              height: "26px",
+                              marginTop: "8px",
+                              fontWeight: "700",
+                              marginRight: "10px",
+                              color: "#241572",
+                              fontSize: "30px",
+                            }}
+                          />
+                        </div>
                         <div
                           className="chatheaderIcon"
                           onClick={() => gotoChat()}
