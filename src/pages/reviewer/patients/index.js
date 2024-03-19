@@ -1,23 +1,19 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { DatePicker, Popover, Tooltip } from "antd";
-import { useDispatch } from "react-redux";
-import { notification } from "antd";
+import { DatePicker, Popover, notification } from "antd";
 import { InputText } from "primereact/inputtext";
 import moment from "moment";
 import dayjs from "dayjs";
 import { Paginator } from "primereact/paginator";
-import visitStyles from "../../../styles/visitdata.module.css";
 import Header from "../../../jsx/layouts/nav/Header";
 import { patientDetails } from "../../../store/actions/AuthActions";
 import PatientTable from "../../../components/table/PatientList/patientList";
 import LoadingSpinner from "../../../components/spinner";
-import Footer from "../../../jsx/layouts/Footer";
 import { getpatientsListFilter } from "../../../store/actions/PatientsActions";
 import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
 import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
@@ -30,7 +26,6 @@ import {
   priorityOptions,
 } from "../../../components/headerFilters/functions";
 import DailyTask from "./dailytask";
-import Legends from "../../../components/legends";
 import HeaderFilters from "../../../components/headerFilters";
 import Image from "next/image";
 import styles from "../report/report.module.css";
@@ -42,26 +37,22 @@ export default function Patient() {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const navigate = useRouter();
-  const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [inputValue, setInputValue] = useState({
+  const inputValue  = {
     year: "",
     name: "",
     patientId: "",
-  });
+  };
   const filteratedDashboardData = useSelector(
     (state) => state.patients.filteredList
   );
   const [patinetListAll, setPatinetListAll] = useState([]);
-  const [tenantId, setTenantId] = useState("");
-  const [localOrgId, setLocalOrgId] = useState("");
   const [localUserId, setLocalUserId] = useState("");
 
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [totalElements, setTotalElements] = useState(10);
-  const [tableLoading, setTableLoading] = useState(true);
   const [trackChart, setTrackChart] = useState({
     COMPLETED: 0,
     PENDING: 0,
@@ -110,16 +101,12 @@ export default function Patient() {
     setDefaultStartDate(
       dayjs(dayDateFormated).format("MM-DD-YYYY") + "T00:00:00.000Z"
     );
-    setDefaultEndDate(dayjs(dayDateFormated).format("MM-DD-YYYY")) +
-      "T23:59:59.000Z";
+    setDefaultEndDate(
+      dayjs(dayDateFormated).format("MM-DD-YYYY") + "T23:59:59.000Z");
   }, [dayDateFormated]);
 
   useEffect(() => {
-    var tenId = localStorage.getItem("tenantId");
-    var uId = localStorage.getItem("userId");
-    var orgId = localStorage.getItem("orgId");
-    setTenantId(tenId);
-    setLocalOrgId(orgId);
+    const uId = localStorage.getItem("userId");
     setLocalUserId(uId);
     getFilteApi(
       pageNo,
@@ -136,12 +123,11 @@ export default function Patient() {
 
   useEffect(() => {
     if (patientsListFilter) {
-      var resultMap = [];
-      var result = patientsListFilter?.response?.patientDTOList?.content;
+      const resultMap = [];
+      const result = patientsListFilter?.response?.patientDTOList?.content;
       setTotalElements(
         patientsListFilter?.response?.patientDTOList?.totalElements
       );
-      console.log(result, "test");
 
       result?.map((res) => {
         resultMap.push({
@@ -157,7 +143,6 @@ export default function Patient() {
           priority: res.priority,
           processedStatus: res.processedStatus,
           processedDate: res.processedDate,
-          createdAt: res.createdAt,
           allocatedByFirstName: res.allocatedByFirstName,
           allocatedByLastName: res.allocatedByLastName,
           allocatedByProfileImage: res.allocatedByProfileImage,
@@ -167,11 +152,8 @@ export default function Patient() {
         });
       });
       setTrackChart(patientsListFilter?.response?.processStatusCount);
-      var newArray = [];
-      newArray = [...patinetListAll, ...resultMap];
       setPatinetListAll(resultMap);
       setIsLoading(false);
-      setTableLoading(false);
     }
   }, [patientsListFilter]);
 
@@ -186,9 +168,8 @@ export default function Patient() {
     sort,
     selectedPriority
   ) => {
-    // setIsLoading(true);
-    var uId = localStorage.getItem("userId");
-    var resoureUrl = `dbservice/patient/filter?patientAllocated=${uId}&page=${
+    const uId = localStorage.getItem("userId");
+    const resoureUrl = `dbservice/patient/filter?patientAllocated=${uId}&page=${
       pageNo ? pageNo : 0
     }&size=${pageSize ? pageSize : 15}&processedStatus=${
       statusValue ? statusValue : ""
@@ -207,14 +188,13 @@ export default function Patient() {
   const getNameSearch = async (searchtext) => {
     setIsLoading(true);
     setSearchTextValue(searchtext);
-    var resoureUrl = `dbservice/patient/filter?patientAllocated=${localUserId}&page=0&size=${pageSize}&processedStatus=${statusSelectedValue}&dueDateStart=${dueDateStart}&dueDateEnd=${dueDateEnd}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchtext}`;
+    const resoureUrl = `dbservice/patient/filter?patientAllocated=${localUserId}&page=0&size=${pageSize}&processedStatus=${statusSelectedValue}&dueDateStart=${dueDateStart}&dueDateEnd=${dueDateEnd}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchtext}`;
     dispatch(getpatientsListFilter(resoureUrl));
   };
 
   const addPatientFile = (data) => {
     inputValue.patientId = data.patientId;
     inputValue.name = data.patientName;
-    setValidated(false);
     setAddPatient(true);
     setIsLoadingBtn(false);
   };
@@ -223,7 +203,6 @@ export default function Patient() {
     dispatch(patientDetails(data));
     if (data.computing == 2) {
       const controller = new AbortController();
-      const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
       navigate.push("/reviewer/patients/details");
@@ -252,7 +231,6 @@ export default function Patient() {
     setPaginationFirst(e.first);
     setPageNo(e.page);
     setPageSize(e.rows);
-    setTableLoading(true);
     getFilteApi(
       e.page,
       15,
@@ -298,7 +276,7 @@ export default function Patient() {
     },
   ];
   const onChangeStatus = (selectedOption) => {
-    var value = selectedOption.value;
+    let value = selectedOption.value;
     if (value == "ALL") {
       value = "";
     }
@@ -314,7 +292,7 @@ export default function Patient() {
     );
   };
   const onChangePriority = (selectedOption) => {
-    var value = selectedOption?.value;
+    let value = selectedOption?.value;
     if (value == "All") {
       value = "";
     }
@@ -429,7 +407,7 @@ export default function Patient() {
         );
       case "COMPUTED":
         return (
-          <Popover placement="bottom" title="Status: PENDING">
+          <Popover placement="bottom" title="Status: COMPUTED">
             <div className="patient-status" style={{ textAlign: "center" }}>
               <Image src={Pending} style={{ height: "18%", width: "18%" }} />
             </div>
@@ -453,7 +431,7 @@ export default function Patient() {
         );
       case null:
         return (
-          <Popover placement="bottom" title="Status: PENDING">
+          <Popover placement="bottom" title="">
             <div className="patient-status" style={{ textAlign: "center" }}>
               <Image src={Pending} style={{ height: "18%", width: "18%" }} />
             </div>
