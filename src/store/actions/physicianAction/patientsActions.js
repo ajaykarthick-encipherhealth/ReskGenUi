@@ -5,39 +5,24 @@ import {
 
 export const LIST = "LIST";
 
-
-export const getPatients = (
-  pageNo,
-  computationStart,
-  computationEnd,
-  status,
-  search,
-  createdStartDate,
-  createdEndDate,
-  selAllocatedTo,
-  selAllocatedBy,
-  selCreatedBy,
-  sort
-) => {
+export const getPatients = () => {
   return (dispatch) => {
+    dispatch({
+      type: LIST,
+      payload: {
+        loading: true,
+        data: null,
+      },
+    });
     try {
-      PatientsList(
-        pageNo,
-        computationStart,
-        computationEnd,
-        status,
-        search,
-        createdStartDate,
-        createdEndDate,
-        selAllocatedTo,
-        selAllocatedBy,
-        selCreatedBy,
-        sort
-      ).then((response) => {
-        if (response) {
+      PatientsList().then((response) => {
+        if (response?.data) {
           dispatch({
             type: LIST,
-            payload: response.data,
+            payload: {
+              loading: false,
+              data: response?.data,
+            },
           });
         }
       });
@@ -46,4 +31,3 @@ export const getPatients = (
     }
   };
 };
-

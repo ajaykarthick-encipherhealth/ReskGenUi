@@ -55,6 +55,10 @@
   top: 0;
   z-index: 1;
 }
+.grayedOut {
+  opacity: 0.5;
+  transition: opacity 0.5s ease;
+}
 
 /* .classThead th {
   padding: 12px;
