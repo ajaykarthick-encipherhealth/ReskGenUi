@@ -14261,3 +14261,7 @@ input[type="number"] {
   background-color: #000000 !important;
   border: 2px solid #555555 !important;
 }
+
+.hcc_form > .ant-select-selector {
+  height: 42px !important;
+}
