@@ -35,7 +35,7 @@ import {
   EyeOutlined, EyeInvisibleOutlined
 } from '@ant-design/icons';
 import moment from 'moment';
-import { fetchEventSource } from "@microsoft/fetch-event-source";
+// import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { Paginator } from 'primereact/paginator';
 import { Calendar } from 'primereact/calendar';
 
@@ -384,70 +384,70 @@ export default function Patient() {
 
     var resoureUrl = `https://hcc.encipherhealth.com/secure/aiservice/ai/events?userId=${uId}&tenantId=${tenId}`
     const fetchData = async () => {
-     let eventSource = await fetchEventSource(resoureUrl, {
-        method: "get",
-        mode: 'cors',
-        signal: signal,
-        headers: {
-          // Accept: "text/event-stream",
-          "Authorization": `Bearer ` + accessToken,
-          // 'Cache-Control': 'no-cache',
-          // 'Connection': 'keep-alive',
-          // 'Accept': "text/event-stream",
-          // 'Access-Control-Allow-Origin':"*"
-        },
-        withCredentials: true,
-        onopen(res) {        
-            console.log("Client side error ", res);
-        },
-        onmessage(event) {
-          console.log("Client Events Trigger ");
-          const parsedData = JSON.parse(event.data);
-          processedList = parsedData;
-          var checkProcessedValue =[];
-          processedList.map((res) => {
-            checkProcessedValue.push({
-              "patientId":res,             
-            })
-          }
-          )
+    //  let eventSource = await fetchEventSource(resoureUrl, {
+    //     method: "get",
+    //     mode: 'cors',
+    //     signal: signal,
+    //     headers: {
+    //       // Accept: "text/event-stream",
+    //       "Authorization": `Bearer ` + accessToken,
+    //       // 'Cache-Control': 'no-cache',
+    //       // 'Connection': 'keep-alive',
+    //       // 'Accept': "text/event-stream",
+    //       // 'Access-Control-Allow-Origin':"*"
+    //     },
+    //     withCredentials: true,
+    //     onopen(res) {        
+    //         console.log("Client side error ", res);
+    //     },
+    //     onmessage(event) {
+    //       console.log("Client Events Trigger ");
+    //       const parsedData = JSON.parse(event.data);
+    //       processedList = parsedData;
+    //       var checkProcessedValue =[];
+    //       processedList.map((res) => {
+    //         checkProcessedValue.push({
+    //           "patientId":res,             
+    //         })
+    //       }
+    //       )
 
 
 
-          const array1 = patientResult;
-          const array2 = checkProcessedValue;
-          console.log(array2)
-          console.log(patientResult)
+    //       const array1 = patientResult;
+    //       const array2 = checkProcessedValue;
+    //       console.log(array2)
+    //       console.log(patientResult)
 
     
-          const hashMap2 = array2.reduce((carry, item) => {
-            const { patientId } = item;
-            if (!carry[patientId]) {
-              carry[patientId] = item;
-            }
-            return carry;
-          }, {});
+    //       const hashMap2 = array2.reduce((carry, item) => {
+    //         const { patientId } = item;
+    //         if (!carry[patientId]) {
+    //           carry[patientId] = item;
+    //         }
+    //         return carry;
+    //       }, {});
     
     
-          const output = array1.map(item => {
-            const newName = hashMap2[item.patientId];
-            if (newName) {
-              item.computing = 2;
-            }
-            return item;
-          });
+    //       const output = array1.map(item => {
+    //         const newName = hashMap2[item.patientId];
+    //         if (newName) {
+    //           item.computing = 2;
+    //         }
+    //         return item;
+    //       });
     
-          setPatinetListAll(output);
-        },
-        onclose() {
-          controller.abort();
-          console.log("Connection closed by the server");
-        },
-        onerror(err) {
-          controller.abort()
-          console.log("There was an error from server", err);
-        },
-      });
+    //       setPatinetListAll(output);
+    //     },
+    //     onclose() {
+    //       controller.abort();
+    //       console.log("Connection closed by the server");
+    //     },
+    //     onerror(err) {
+    //       controller.abort()
+    //       console.log("There was an error from server", err);
+    //     },
+    //   });
     };
 
 
