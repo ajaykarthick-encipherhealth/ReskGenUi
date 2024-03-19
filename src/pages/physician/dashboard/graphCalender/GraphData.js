@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import ReactECharts from "echarts-for-react";
+import { Empty, Spin } from "antd";
+import styles from "./styles.module.css";
+import spinSTYles from '../../../../styles/auth.module.css'
 import Card from "../../../../components/card";
 import Buttonscroller from "../../../../components/buttonSroller";
 import HeadTitle from "../../../../components/headtitle";
 import Legends from "../../../../components/legends";
 import buttonStyle from "../../../admin/dashboard/completedStatus/styles.module.css";
 import { Buttons } from "../../../reviewer/workingstatus";
-import styles from "./styles.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { GraphContent } from "../../../../services/physicianService/DashbaordServices";
 import YearPicker from "../../../../components/yearpicker";
@@ -176,13 +178,27 @@ const GraphData = () => {
             />
           </div>
         </div>
-        <ReactECharts
-          option={option}
-          style={{ width: "100%", height: "90%", marginTop: "-15px" }}
-        />
-        <div className={buttonStyle.bulletContainer}>
-          <Legends bullets={bullets} />
-        </div>
+        {graphInfo?.loading &
+        (
+          <div className={spinSTYles.spinStyle}>
+            <Spin loading={graphInfo?.loading} />
+          </div>
+        )}
+        {!graphInfo?.loading && graphInfo?.data?.response ? (
+          <>
+            <ReactECharts
+              option={option}
+              style={{ width: "100%", height: "90%", marginTop: "-15px" }}
+            />
+            <div className={buttonStyle.bulletContainer}>
+              <Legends bullets={bullets} />
+            </div>
+          </>
+        ) : (
+          <div className={spinSTYles.spinStyle}>
+            <Empty />
+          </div>
+        )}
       </Card>
     </>
   );
