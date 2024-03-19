@@ -19,6 +19,7 @@ import ReAudit from "../../../../../../../src/images/trackingImages/reAuditTrack
 import AuditPending from "../../../../../../../src/images/trackingImages/AuditPending.png";
 import AuditeDeclineTrack from "../../../../../../../src/images/trackingImages/AuditDeclined.png";
 import Legends from "../../../../../../components/legends";
+import { disableFutureDate } from "../../../../../../components/headerFilters/functions";
 
 export function extractLatestData(notes) {
   let declinedData;
@@ -321,6 +322,7 @@ const SupervisorWorkList = ({ localUserId, setWorkListPatientId }) => {
               }}
               suffixIcon={false}
               className={visitStyles.datepicker}
+              disabledDate={(current) => disableFutureDate(current)}
             />
             <RangePicker
               open={openPicker2}
@@ -329,6 +331,7 @@ const SupervisorWorkList = ({ localUserId, setWorkListPatientId }) => {
               }}
               suffixIcon={false}
               className={visitStyles.datepicker}
+              disabledDate={(current) => disableFutureDate(current)}
             />
           </div>
         </div>

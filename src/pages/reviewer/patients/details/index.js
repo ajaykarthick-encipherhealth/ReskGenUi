@@ -1,17 +1,13 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import NavBar from "../../../../jsx/layouts/nav/Header";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../utility/enpoints";
 import visitStyles from "../../../../styles/visitdata.module.css";
-import { InputText } from "primereact/inputtext";
-import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
-import moment, { months } from "moment";
+import moment from "moment";
 import TableStyle from "../../../../components/table/table.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faClose,
-  faSearch,
   faArrowLeft,
   faUserCircle,
   faVenusMars,
@@ -21,19 +17,22 @@ import {
   faAngleDoubleRight,
   faAngleDoubleLeft,
 } from "@fortawesome/free-solid-svg-icons";
-import { Popover, Menu, DatePicker, Dropdown } from "antd";
+import {
+  Popover,
+  Menu,
+  Dropdown,
+  Avatar,
+  Tooltip,
+  Modal,
+  notification,
+} from "antd";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
 import Select from "react-select";
-import { Modal } from "antd";
-import { Button } from "react-bootstrap";
+import { Button, Offcanvas } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import { Offcanvas } from "react-bootstrap";
 import { DownOutlined } from "@ant-design/icons";
-import { notification } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Avatar, Tooltip } from "antd";
-import { Paginator } from "primereact/paginator";
 import Hcc from "./hcc/index";
 import NonHcc from "./non-hcc/index";
 import Radiology from "./radiology/index";
@@ -41,25 +40,22 @@ import Lab from "./lab/index";
 import SpinnerDots from "../../../../components/spinner";
 import AllocateModal from "../../../admin/allocatedUser/allocate";
 import {
-  patientListFilter,
   auditPatientupdate,
   reAuditupdate,
   auditPending,
   auditHold,
   auditDecline,
 } from "../../../../services/PatientsListSevice";
-import LoadingSpinner from "../../../../components/loadingSpinner";
 import { validateYear } from "../../../../components/headerFilters/functions";
 import { getPatientID } from "../../../../store/actions/PatientsActions";
-import { useDispatch } from "react-redux";
 import Timeline from "./timline";
 import ReviwerWorkList from "./components/reviwerWorklist";
 import SupervisorWorkList from "./components/supervisorWorklist";
+import AdminWorkList from "./components/adminWorklist";
 
 const Details = ({}) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
-  const { RangePicker } = DatePicker;
   const sideMenu = useSelector((state) => state.sideMenu);
   const [confirmNotesModalDecline, setConfirmNotesModalDecline] =
     useState(false);
@@ -106,17 +102,10 @@ const Details = ({}) => {
   const [isLoadingDos, setIsLoadingDos] = useState(true);
   const [suggestedModal, setSuggestedModal] = useState(false);
   const [selectedDosValue, setSelectedDosValue] = useState("");
-  const [suggestedHccList, setSuggestedHccList] = useState([]);
-  const [labFileDosList, setLabFileDosList] = useState([]);
-  const [labFileDosListDefaultSelect, setLabFileDosListDefaultSelect] =
-    useState([]);
   const [isValidAction, setIsValidAction] = useState("");
-  const [deletedHccList, setDeletedHccList] = useState([]);
   const [isModalComments, setIsModalComments] = useState(false);
   const [flagContainerActive, setFlagContainerActive] = useState("");
   const [flagContainerActiveTitle, setFlagContainerActiveTitle] = useState("");
-  const [showIcons, setShowIcons] = useState(false);
-  const [showCard, setShowCard] = useState(false);
   const [patientList, setPatientList] = useState([]);
   const [sideNavLabelActiveKey, setSideNavLabelActiveKey] = useState("HCC");
   const [isSideNavShow, setIsSideNavShow] = useState(false);
@@ -125,8 +114,6 @@ const Details = ({}) => {
   const [commentList, setCommentList] = useState([]);
   const [notesList, setNotesList] = useState([]);
   const [flagResultList, setFlagResultList] = useState([]);
-  const [openPicker, setOpenPicker] = useState(false);
-  const [openPicker2, setOpenPicker2] = useState(false);
   const [actionItems, setActionItems] = useState([]);
   const [actionItems2, setActionItems2] = useState([]);
   const [actionItems3, setActionItems3] = useState([]);
@@ -145,15 +132,6 @@ const Details = ({}) => {
   const [allocateModal, setAllocateModal] = useState(false);
   const [selectedRowsId, setSelectedRowsId] = useState([]);
   const [selectedChart, setSelectedChart] = useState([]);
-  const [processedStatus, setProcessedStatus] = useState("");
-  const [searchtext, setSearchtext] = useState("");
-  const [dueDateStart, setDueDateStart] = useState("");
-  const [dueDateEnd, setDueDateEnd] = useState("");
-  const [processedStart, setProcessedStart] = useState("");
-  const [processedEnd, setProcessedEnd] = useState("");
-  const [pageNo, setPageNo] = useState(0);
-  const [paginationFirst, setPaginationFirst] = useState(0);
-  const [totalElements, setTotalElements] = useState(10);
   const [confirmAuditModal, setConfirmAuditModal] = useState(false);
   const [allocateClicked, setAllocateClicked] = useState(false);
   const [error, setError] = useState({ year: "" });
@@ -186,15 +164,6 @@ const Details = ({}) => {
         <>
           MRN_ID_MISMATCH
           <i className={visitStyles.id_missed}>{SVGICON.emptyFlagSmall}</i>
-        </>
-      ),
-    },
-    {
-      value: "PROVIDER_SIGN_MISSED",
-      label: (
-        <>
-          PROVIDER_SIGN_MISSED
-          <i className={visitStyles.sign_missed}>{SVGICON.emptyFlagSmall}</i>
         </>
       ),
     },
@@ -269,65 +238,6 @@ const Details = ({}) => {
     },
   ];
 
-  const filterChangePatientId = async (e) => {
-    setSearchtext(e.target.value);
-    var result = await patientListFilter(
-      localUserId,
-      processedStatus,
-      e.target.value,
-      dueDateStart,
-      dueDateEnd,
-      processedStart,
-      processedEnd,
-      pageNo
-    );
-    setOpenPicker(false);
-    setOpenPicker2(false);
-    setPatientList(result?.response?.patientDTOList?.content);
-    setTotalElements(result?.response?.patientDTOList?.totalElements);
-  };
-  const onPageChange = async (e) => {
-    setPaginationFirst(e.first);
-    setPageNo(e.page);
-    var result = await patientListFilter(
-      localUserId,
-      processedStatus,
-      searchtext,
-      dueDateStart,
-      dueDateEnd,
-      processedStart,
-      processedEnd,
-      e.page
-    );
-    setPatientList(result?.response?.patientDTOList?.content);
-    setTotalElements(result?.response?.patientDTOList?.totalElements);
-  };
-
-  const handleFilterClick = () => {
-    setShowIcons(!showIcons);
-  };
-  const closeFilterIcons = async () => {
-    setShowIcons(false);
-    setOpenPicker(false);
-    setOpenPicker2(false);
-    var result = await patientListFilter(
-      localUserId,
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      0
-    );
-    setPatientList(result?.response?.patientDTOList?.content);
-    setTotalElements(result?.response?.patientDTOList?.totalElements);
-  };
-  const handleShowCard = () => {
-    setShowCard(!showCard);
-    setShowCard(true);
-  };
-
   const handleChange = async (e) => {
     const key = e.target.name;
     if (key == "encodedDate") {
@@ -344,10 +254,10 @@ const Details = ({}) => {
   };
 
   useEffect(() => {
-    var orgId = localStorage.getItem("orgId");
-    var tenId = localStorage.getItem("tenantId");
-    var patientId = localStorage.getItem("patientId");
-    var uId = localStorage.getItem("userId");
+    const orgId = localStorage.getItem("orgId");
+    const tenId = localStorage.getItem("tenantId");
+    const patientId = localStorage.getItem("patientId");
+    const uId = localStorage.getItem("userId");
     const userRoleLocal = localStorage.getItem("userRole");
     setUserRole(userRoleLocal);
     setLocalOrgId(orgId);
@@ -769,8 +679,6 @@ const Details = ({}) => {
     setIsModalComments(false);
     setFlagContainerActive("");
     setConfirmCompleteModal(false);
-    setOpenPicker(false);
-    setOpenPicker2(false);
   };
 
   const handleSubmitValidNotes = async (event) => {
@@ -1218,24 +1126,6 @@ const Details = ({}) => {
     setLocalPatientId(userId);
   };
 
-  const getFiltePatientListStatus = async (value) => {
-    setProcessedStatus(value);
-    var result = await patientListFilter(
-      localUserId,
-      value,
-      searchtext,
-      dueDateStart,
-      dueDateEnd,
-      processedStart,
-      processedEnd,
-      pageNo
-    );
-    setOpenPicker(false);
-    setOpenPicker2(false);
-    setPatientList(result?.response?.patientDTOList?.content);
-    setTotalElements(result?.response?.patientDTOList?.totalElements);
-  };
-
   const handleSubmitFlag = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
@@ -1448,50 +1338,6 @@ const Details = ({}) => {
       setFlagFirstData(response?.data?.response[0]);
     }
     setFilterDataLoading(false);
-  };
-
-  const handleDatePickerChange = async (dateString) => {
-    let convertStartDate =
-      moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
-    let convertEndDate =
-      moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
-    setDueDateStart(convertStartDate);
-    setDueDateEnd(convertEndDate);
-    setOpenPicker(false);
-    var result = await patientListFilter(
-      localUserId,
-      processedStatus,
-      searchtext,
-      convertStartDate,
-      convertEndDate,
-      processedStart,
-      processedEnd,
-      pageNo
-    );
-    setPatientList(result?.response?.patientDTOList?.content);
-    setTotalElements(result?.response?.patientDTOList?.totalElements);
-  };
-
-  const handleChangeprocessedDate = async (dateString) => {
-    let convertStartDate =
-      moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
-    let convertEndDate =
-      moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
-    setProcessedStart(convertStartDate);
-    setProcessedEnd(convertEndDate);
-    setOpenPicker2(false);
-    var result = await patientListFilter(
-      localUserId,
-      processedStatus,
-      searchtext,
-      dueDateStart,
-      dueDateEnd,
-      convertStartDate,
-      convertEndDate,
-      pageNo
-    );
-    setPatientList(result?.response?.patientDTOList?.content);
-    setTotalElements(result?.response?.patientDTOList?.totalElements);
   };
 
   const handleActionClick = (value) => {
@@ -2956,7 +2802,12 @@ const Details = ({}) => {
                       />
                     ) : flagContainerActive == "Filter" ? (
                       <>
-                        {userRole == "supervisor" ? (
+                        {userRole == "admin" ? (
+                          <AdminWorkList
+                            localUserId={localUserId}
+                            setWorkListPatientId={setWorkListPatientId}
+                          />
+                        ) : userRole == "supervisor" ? (
                           <SupervisorWorkList
                             localUserId={localUserId}
                             setWorkListPatientId={setWorkListPatientId}

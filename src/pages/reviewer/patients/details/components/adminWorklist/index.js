@@ -1,54 +1,69 @@
 import React, { useState, useEffect } from "react";
-import { Tooltip, DatePicker } from "antd";
+import { Empty, Popover, Tooltip, DatePicker } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
 import { Paginator } from "primereact/paginator";
-import moment from "moment";
+import { useSelector, useDispatch } from "react-redux";
+import moment, { months } from "moment";
+import Image from "next/image";
+import { getPatients } from "../../../../../../store/actions/adminAction/patientsActions";
 import { patientListFilter } from "../../../../../../services/PatientsListSevice";
 import visitStyles from "../../../../../../styles/visitdata.module.css";
 import LoadingSpinner from "../../../../../../components/loadingSpinner";
-import { SVGICON } from "../../../../../../jsx/constant/theme";
+import { IMAGES, SVGICON } from "../../../../../../jsx/constant/theme";
+import Legends from "../../../../../../components/legends";
 import { disableFutureDate } from "../../../../../../components/headerFilters/functions";
 
-const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
+export function extractLatestData(notes) {
+  let declinedData;
+  if (notes && typeof notes === "object") {
+    const entries = Object.entries(notes);
+    const latestKey = Math.max(...entries.map(([key, value]) => parseInt(key)));
+    entries.forEach(([key, value]) => {
+      if (parseInt(key) === latestKey) {
+        declinedData = value;
+      }
+    });
+  }
+
+  return declinedData;
+}
+
+const AdminWorkList = ({ localUserId, setWorkListPatientId }) => {
+  const dispatch = useDispatch();
+  const result = useSelector((state) => state.adminList.patients);
   const { RangePicker } = DatePicker;
   const [showIcons, setShowIcons] = useState(false);
   const [showCard, setShowCard] = useState(false);
   const [openPicker, setOpenPicker] = useState(false);
   const [openPicker2, setOpenPicker2] = useState(false);
   const [patientList, setPatientList] = useState([]);
-  const [processedStatus, setProcessedStatus] = useState("");
-  const [searchtext, setSearchtext] = useState("");
-  const [dueDateStart, setDueDateStart] = useState("");
-  const [dueDateEnd, setDueDateEnd] = useState("");
-  const [processedStart, setProcessedStart] = useState("");
-  const [processedEnd, setProcessedEnd] = useState("");
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [totalElements, setTotalElements] = useState(10);
   const [filterDataLoading, setFilterDataLoading] = useState(true);
+  const [patientSortOrder, setPatientSortOrder] = useState("ASC");
+  const [sort, setSort] = useState({ sortDir: "", sortField: "" });
+  const [selCreatedBy, setSelCreatedBy] = useState("");
+  const [selAllocatedBy, setSelAllocatedBy] = useState("");
+  const [completedStartDate, setCompletedStartDate] = useState("");
+  const [completedEndDate, setCompletedEndDate] = useState("");
+  const [computedStartDate, setComputedStartDate] = useState("");
+  const [computedEndDate, setComputedEndDate] = useState("");
+  const [selectedOption, SetSelectedOption] = useState("");
+  const [search, setSearch] = useState("");
+  const [closeSlider, setCloseSlider] = useState(true);
+  const [selAllocatedTo, setSelAllocatedTo] = useState("");
 
   const getWorkList = async () => {
-    var result = await patientListFilter(
-      localUserId,
-      processedStatus,
-      searchtext,
-      dueDateStart,
-      dueDateEnd,
-      processedStart,
-      processedEnd,
-      pageNo
-    );
-    setOpenPicker(false);
-    setOpenPicker2(false);
-    setPatientList(result?.response?.patientDTOList?.content);
-    setTotalElements(result?.response?.patientDTOList?.totalElements);
+    setPatientList(result?.response?.content);
+    setTotalElements(result?.response?.totalElements);
     setFilterDataLoading(false);
   };
 
   const filterChangePatientId = async (e) => {
-    setSearchtext(e.target.value);
+    setSearch(e.target.value);
   };
   const onPageChange = async (e) => {
     setPaginationFirst(e.first);
@@ -62,18 +77,7 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
     setShowIcons(false);
     setOpenPicker(false);
     setOpenPicker2(false);
-    var result = await patientListFilter(
-      localUserId,
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      0
-    );
-    setPatientList(result?.response?.patientDTOList?.content);
-    setTotalElements(result?.response?.patientDTOList?.totalElements);
+    setCloseSlider(false);
   };
   const handleShowCard = () => {
     setShowCard(!showCard);
@@ -89,8 +93,8 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
       moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
     let convertEndDate =
       moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
-    setDueDateStart(convertStartDate);
-    setDueDateEnd(convertEndDate);
+    setComputedStartDate(convertStartDate);
+    setComputedEndDate(convertEndDate);
     setOpenPicker(false);
   };
 
@@ -99,29 +103,72 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
       moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
     let convertEndDate =
       moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
-    setProcessedStart(convertStartDate);
-    setProcessedEnd(convertEndDate);
+    setCompletedStartDate(convertStartDate);
+    setCompletedEndDate(convertEndDate);
     setOpenPicker2(false);
   };
   const getFiltePatientListStatus = async (value) => {
-    setProcessedStatus(value);
+    SetSelectedOption(value);
     setOpenPicker(false);
     setOpenPicker2(false);
   };
 
-  const statuses = ["PENDING", "COMPLETED", "HOLD", "DECLINED"];
+  const statusOptions = [
+    { label: "ALL", value: "" },
+    { label: "PROCESSING", value: "1", status: 1 },
+    { label: "COMPUTED", value: "2", status: 2 },
+    { label: "FAILED", value: "3", status: 3 },
+    { label: "NOT COMPUTED", value: "0", status: 0 },
+  ];
+
+  const bullets = [
+    {
+      color: "#34ace8",
+      name: "Computed",
+    },
+    {
+      color: "#452b90",
+      name: "Processing",
+    },
+    {
+      color: "#be3144",
+      name: "Not Computed",
+    },
+  ];
 
   useEffect(() => {
-    setFilterDataLoading(true);
     getWorkList();
+  }, [result, pageNo]);
+
+  useEffect(() => {
+    dispatch(
+      getPatients(
+        pageNo,
+        computedStartDate,
+        computedEndDate,
+        selectedOption,
+        search,
+        completedStartDate,
+        completedEndDate,
+        selAllocatedTo,
+        selAllocatedBy,
+        selCreatedBy,
+        sort
+      )
+    );
   }, [
-    processedStatus,
-    searchtext,
-    dueDateStart,
-    dueDateEnd,
-    processedStart,
-    processedEnd,
     pageNo,
+    computedStartDate,
+    computedEndDate,
+    selectedOption,
+    search,
+    completedStartDate,
+    completedEndDate,
+    patientSortOrder,
+    selAllocatedBy,
+    sort,
+    selCreatedBy,
+    closeSlider,
   ]);
 
   return (
@@ -131,25 +178,7 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
           className={visitStyles.flags}
           style={{ marginTop: "15px", marginBottom: "20px" }}
         >
-          <div className={visitStyles.flags}>
-            <span
-              className={visitStyles.completed}
-              style={{ background: "#3a9b94 !important" }}
-            ></span>
-            <span className={visitStyles.flagCodes}>Completed</span>
-          </div>
-          <div className={visitStyles.flags}>
-            <span className={visitStyles.pending}></span>
-            <span className={visitStyles.flagCodes}>Pending</span>
-          </div>
-          <div className={visitStyles.flags}>
-            <span className={visitStyles.hold}></span>
-            <span className={visitStyles.flagCodes}>Hold</span>
-          </div>
-          <div className={visitStyles.flags}>
-            <span className={visitStyles.declined}></span>
-            <span className={visitStyles.flagCodes}>Declined</span>
-          </div>
+          <Legends bullets={bullets} display="ruby" padding="0 0px 10px 0" />
         </div>
         <div className="col-xl-9">
           <div class="form-group has-search">
@@ -217,7 +246,7 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
                     {SVGICON.dashboard}
                   </span>
                 </Tooltip>
-                <Tooltip title="Due Date" placement="left">
+                <Tooltip title="Computed Date" placement="left">
                   <span
                     className={visitStyles.circleCard}
                     onClick={() => {
@@ -228,7 +257,7 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
                     {SVGICON.dateIcon}
                   </span>
                 </Tooltip>
-                <Tooltip title="Completed Date" placement="left">
+                <Tooltip title="Created Date" placement="left">
                   <span
                     className={visitStyles.circleCard}
                     onClick={() => {
@@ -248,13 +277,13 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
                 onMouseLeave={() => setShowCard(false)}
               >
                 <ul>
-                  {statuses.map((status, index) => (
+                  {statusOptions.map((status, index) => (
                     <li
-                      onClick={() => getFiltePatientListStatus(status)}
+                      onClick={() => getFiltePatientListStatus(status.value)}
                       className={visitStyles.nameList}
                       key={index}
                     >
-                      {status}
+                      {status.label}
                     </li>
                   ))}
                 </ul>
@@ -262,7 +291,7 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
             )}
           </div>
         </div>
-        {!filterDataLoading ? (
+        {result?.response?.content ? (
           <>
             <div className={visitStyles.patientListHead}>
               <ul className={`${visitStyles.patientDetailsHead}`}>
@@ -283,10 +312,12 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
                     ) : data.processedStatus == "PENDING" ||
                       data.processedStatus == "COMPUTED" ? (
                       <span className={visitStyles.pending}></span>
-                    ) : data.processedStatus == "HOLD" ? (
-                      <span className={visitStyles.hold}></span>
-                    ) : data.processedStatus == "DECLINED" ? (
+                    ) : data.processedStatus == "NOTCOMPUTED" ? (
+                      <span className={visitStyles.processing}></span>
+                    ) : data.processedStatus == "FAILED" ? (
                       <span className={visitStyles.declined}></span>
+                    ) : data.processedStatus == "ABORTED_BY_CRON" ? (
+                      <span className={visitStyles.failed}></span>
                     ) : null}
                   </li>
                 ))}
@@ -316,4 +347,4 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
   );
 };
 
-export default ReviwerWorkList;
+export default AdminWorkList;
