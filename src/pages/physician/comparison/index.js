@@ -329,7 +329,7 @@ const Hcc = ({ patientHccResult }) => {
                       <div className="row">
                         <div className="col-xl-2 col-sm-12">
                           <FontAwesomeIcon icon={faIdCardClip} />
-                          <label>Patient Id</label>
+                          <label>Patient ID</label>
                           <h6 className="ageDtails">
                             {patientDetails.patientId}
                           </h6>

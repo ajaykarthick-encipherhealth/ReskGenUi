@@ -294,7 +294,7 @@ export default function Patient() {
       );
       if (response?.status == 200) {
         notification.success({
-          message: "Patient Id Created Successfully!",
+          message: "Patient ID Created Successfully!",
         });
         setAddPatientId(false);
         setIsLoadingBtn(false);
@@ -704,7 +704,7 @@ export default function Patient() {
                             <div className='col-xl-3'>
                               <div class="form-group has-search">
                                 <FontAwesomeIcon className='fa fa-search form-control-feedback' icon={faSearch} />
-                                <InputText type="text" onChange={(e) => filterChangePatientId(e)} className="form-control new-form-control" placeholder="Patient Id" />
+                                <InputText type="text" onChange={(e) => filterChangePatientId(e)} className="form-control new-form-control" placeholder="Patient ID" />
                               </div>
 
                             </div>
@@ -730,7 +730,7 @@ export default function Patient() {
                         <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
                           <DataTable value={patinetListAll} paginator={false} rows={10} rowsPerPageOptions={[10, 25, 50, 100]} dataKey="id" filters={filters} filterDisplay="menu">
                             <Column header="SI.NO" headerStyle={{ width: '3rem' }} body={(data, options) => paginationFirst +  options.rowIndex + 1}></Column>
-                            <Column field="patientId" header="Patient Id" />
+                            <Column field="patientId" header="Patient ID" />
                             <Column field="patientName" header="Patient Name" />
                             <Column field="fileName" header="File Name" />
                             <Column field="status" body={statusBodyTemplate} header="File Status" />
@@ -751,7 +751,7 @@ export default function Patient() {
                             <thead>
                               <tr>
                                 <th>SI.NO</th>
-                                <th>Patient Id</th>
+                                <th>Patient ID</th>
                                 <th>Patient Name</th>
                                 <th>File Name</th>
                                 <th>Status</th>
@@ -877,7 +877,7 @@ export default function Patient() {
                 <div className="row">
                   <div className="col-xl-12 mb-3">
                     <Form.Label>
-                      Patient Id <span className="text-danger">*</span>{" "}
+                      Patient ID <span className="text-danger">*</span>{" "}
                     </Form.Label>
                     <Form.Control
                       name="patientId"
@@ -971,7 +971,7 @@ export default function Patient() {
                 <div className="row">
                   <div className="col-xl-12 mb-3">
                     <Form.Label>
-                      Patient Id <span className="text-danger">*</span>{" "}
+                      Patient ID <span className="text-danger">*</span>{" "}
                     </Form.Label>
                     <Form.Control
                       name="patientId"

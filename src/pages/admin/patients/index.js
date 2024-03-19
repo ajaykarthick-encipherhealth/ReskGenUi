@@ -270,12 +270,12 @@ export default function Patient() {
           // if (response.data.message == "patient Already Present") {
           //   setIsLoadingBtn(false);
           //   notification.warning({
-          //     message: "Patient Id Already Present",
+          //     message: "Patient ID Already Present",
           //     duration: 1,
           //   });
           // } else {
           //   notification.success({
-          //     message: "Patient Id Created Successfully!",
+          //     message: "Patient ID Created Successfully!",
           //     duration: 1,
           //   });
           dispatch(
@@ -539,7 +539,7 @@ export default function Patient() {
                           <HeaderFilters
                             setSearch={setSearch}
                             isSearch={true}
-                            searchlabel="Search By Patient Id / Name"
+                            searchlabel="Search By Patient ID / Name"
                             // select status
                             selectlabel="Status"
                             isSelector={true}
