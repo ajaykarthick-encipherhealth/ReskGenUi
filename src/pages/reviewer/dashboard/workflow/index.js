@@ -104,8 +104,8 @@ const WorkFlow = () => {
           </div>
         ) } 
         {
-          worlFlowData ||
-          !worlFlowData?.loading ||
+          worlFlowData &&
+          !worlFlowData?.loading &&
           worlFlowData?.data !== null && worlFlowData?.data?.response ? (
           <Row className={styles.carddiv}>
             {card1Data?.map((data) => (
