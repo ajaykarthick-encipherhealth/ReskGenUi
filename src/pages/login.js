@@ -22,7 +22,6 @@ export default function Login() {
   let errorsObj = { email: "", password: "" };
   const [errors, setErrors] = useState(errorsObj);
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   const validateEmail = (enteredEmail) => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
@@ -51,10 +50,8 @@ export default function Login() {
     const passValidation = getValidatePassword(
       password,
       setErrors,
-      setIsLoading
     );
     if (emailValidation && passValidation) {
-      setIsLoading(true);
       setErrors({
         email: "",
         password: "",

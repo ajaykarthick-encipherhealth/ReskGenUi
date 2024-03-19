@@ -558,7 +558,7 @@ export const handleTogglePasswordVisibility = (
   setShowPassword(!showPassword);
 };
 
-export const getValidatePassword = (password, setErrors, setIsLoading) => {
+export const getValidatePassword = (password, setErrors) => {
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
 
@@ -566,21 +566,18 @@ export const getValidatePassword = (password, setErrors, setIsLoading) => {
     setErrors({
       password: "Please enter the password",
     });
-    setIsLoading(false);
     return false;
   }
   if (password.length < 8) {
     setErrors({
       password: "Password should be greater than 8 characters",
     });
-    setIsLoading(false);
     return false;
   }
   if (password.length > 14) {
     setErrors({
       password: "Password should be less than 14 characters",
     });
-    setIsLoading(false);
     return false;
   }
   if (password.length > 0 && !passwordRegex.test(password)) {
@@ -588,7 +585,6 @@ export const getValidatePassword = (password, setErrors, setIsLoading) => {
       password:
         "Password must contain at least 1 capital letter, 1 small letter, 1 number, and 1 special character",
     });
-    setIsLoading(false);
     return false;
   }
 
@@ -599,14 +595,12 @@ export const validateConfirmPassword = (
   password,
   confirmPassword,
   setErrors,
-  setIsLoading
 ) => {
   if (password !== confirmPassword) {
     setErrors({
       email: "",
       confirmPass: "Passwords do not match",
     });
-    setIsLoading(false);
     return false;
   }
 
