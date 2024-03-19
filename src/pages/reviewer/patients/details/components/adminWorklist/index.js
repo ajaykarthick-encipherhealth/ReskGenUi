@@ -12,13 +12,6 @@ import { patientListFilter } from "../../../../../../services/PatientsListSevice
 import visitStyles from "../../../../../../styles/visitdata.module.css";
 import LoadingSpinner from "../../../../../../components/loadingSpinner";
 import { IMAGES, SVGICON } from "../../../../../../jsx/constant/theme";
-import { getWorkListFilter } from "../../../../../../store/actions/l2Action/AuditorAction";
-import AuditedTrack from "../../../../../../../src/images/trackingImages/AuditedTrack.png";
-import NotAudited from "../../../../../../../src/images/trackingImages/NotAuditedTrack.png";
-import AuditHold from "../../../../../../../src/images/trackingImages/AuditHoldTrack.png";
-import ReAudit from "../../../../../../../src/images/trackingImages/reAuditTrack.png";
-import AuditPending from "../../../../../../../src/images/trackingImages/AuditPending.png";
-import AuditeDeclineTrack from "../../../../../../../src/images/trackingImages/AuditDeclined.png";
 import Legends from "../../../../../../components/legends";
 import { disableFutureDate } from "../../../../../../components/headerFilters/functions";
 
