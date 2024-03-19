@@ -6070,7 +6070,10 @@ const Hcc = ({ patientHccResult }) => {
                                                 </div>
                                                 <div className={`col-xl-6`}>
                                                   <Form.Label>
-                                                    Encoded date
+                                                    Encoded date{" "}
+                                                    <span className="text-danger">
+                                                      *
+                                                    </span>
                                                   </Form.Label>
                                                   <div
                                                     className={
@@ -6093,6 +6096,9 @@ const Hcc = ({ patientHccResult }) => {
                                                 <div className="col-xl-6 mb-3">
                                                   <Form.Label>
                                                     Description
+                                                    <span className="text-danger">
+                                                      *
+                                                    </span>
                                                   </Form.Label>
                                                   <textarea
                                                     className="form-control"
@@ -8740,7 +8746,10 @@ const Hcc = ({ patientHccResult }) => {
                                 />
                               </div>
                               <div className={`col-xl-12`}>
-                                <Form.Label>Encoded date</Form.Label>
+                                <Form.Label>
+                                  Encoded date{" "}
+                                  <span className="text-danger">*</span>
+                                </Form.Label>
                                 <div className={visitStyles.fileFormDate}>
                                   <Form.Control
                                     required
@@ -8754,7 +8763,10 @@ const Hcc = ({ patientHccResult }) => {
                               </div>
 
                               <div className="col-xl-12 mb-3">
-                                <Form.Label>Description</Form.Label>
+                                <Form.Label>
+                                  Description{" "}
+                                  <span className="text-danger">*</span>
+                                </Form.Label>
                                 <textarea
                                   className="form-control"
                                   id="actualDescription"
