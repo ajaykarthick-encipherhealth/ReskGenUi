@@ -8,11 +8,11 @@ import { Paginator } from "primereact/paginator";
 import { Popover, notification } from "antd";
 import Header from "../../../jsx/layouts/nav/Header";
 import { patientDetails } from "../../../store/actions/AuthActions";
-import PatientTable from "../table/PatientList/patientList";
+// import PatientTable from "../table/PatientList/patientList";
 import SpinnerDots from "../../../components/spinner";
 import HeaderFilters from "../../../components/headerFilters";
 import { getWorkListFilter } from "../../../store/actions/l2Action/AuditorAction";
-import { PatientsList } from "../../../store/actions/physicianAction/patientsActions";
+// import { PatientsList } from "../../../store/actions/physicianAction/patientsActions";
 import { priorityOptions } from "../../../components/headerFilters/functions";
 import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
 import NotAudited from "../../../../src/images/trackingImages/NotAuditedTrack.png";
@@ -422,7 +422,7 @@ export default function Patients() {
                           <SpinnerDots />
                         ) : (
                           <>
-                            <PatientTable
+                            {/* <PatientTable
                               patinetListAll={patinetListAll}
                               actionBodyTemplate={actionBodyTemplate}
                               statusBodyTemplate={processstatusBodyTemplate}
@@ -430,7 +430,7 @@ export default function Patients() {
                               patientDetails={patientDetails}
                               sort={sort}
                               setSort={setSort}
-                            />
+                            /> */}
                             <div>
                               <div className="pagination-container">
                                 <Paginator
