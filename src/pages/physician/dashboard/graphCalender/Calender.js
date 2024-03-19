@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { useSelector, useDispatch } from "react-redux";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
+import styles from "./styles.module.css";
+import { CalenderData } from "../../../../services/physicianService/DashbaordServices";
 import Card from "../../../../components/card";
 import calenderIcon from "../../../../images/physician/calender.svg";
-import styles from "./styles.module.css";
 
 const daysInaWeek = ["S", "M", "T", "W", "T", "F", "S"];
 const Calender = () => {
+  const dispatch = useDispatch();
   const dateFormat = "MMM YYYY";
   const initialSelectedDate = dayjs().format(dateFormat);
+  const calInfo = useSelector(
+    (state) => state?.physicianDashbaord?.calenderData
+  );
   const [selectedDate, setSelectedDate] = useState(initialSelectedDate);
   const [days, setDays] = useState();
   const [hoveredIndex, setHoveredIndex] = useState();
@@ -43,7 +49,6 @@ const Calender = () => {
     );
 
   const weeks = chunkArray(days, 7);
-  const count = ["10", "09", "08", "07", "06", "05", "03", "04", "01"];
 
   const handleDateSelection = (dateString) => {
     const date = `${dateString}/${dayjs(selectedDate).format("MM/YYYY")}`;
@@ -64,6 +69,16 @@ const Calender = () => {
 
   useEffect(() => {
     renderCalendar();
+    const dateObj = new Date(selectedDate);
+    const monthName = dateObj.toLocaleString("en-US", { month: "long" });
+
+    dispatch(
+      CalenderData(
+        "ID-001",
+        monthName?.toUpperCase(),
+        dayjs(selectedDate).format("YYYY")
+      )
+    );
   }, [selectedDate]);
 
   return (
@@ -94,9 +109,7 @@ const Calender = () => {
                     borderRadius:
                       index === 0
                         ? "8px 0 0 8px"
-                        : index === 6
-                        ? "0 8px 8px 0"
-                        : "",
+                        : index === 6 && "0 8px 8px 0",
                   }}
                 >
                   {item}
@@ -115,12 +128,24 @@ const Calender = () => {
                 {week?.map((day, dayIndex) => {
                   const dateString = day?.date;
                   const currentDate = dayjs().startOf("day");
-                  const cellClassName = `${styles.dateCell} ${
-                    dayjs(dateString, "D/MM/YYYY").isSame(currentDate, "day") ||
-                    dayjs(dateString, "D/MM/YYYY").isBefore(currentDate, "day")
-                      ? styles.hoverdate
-                      : ""
-                  }`;
+                  let cellClassName;
+
+                  const dateComparison = dayjs(dateString, "D/MM/YYYY");
+
+                  if (dateComparison.isBefore(currentDate, "day")) {
+                    cellClassName = `${styles.dateCell} ${styles.hoverdate}`;
+                  } else if (dateComparison.isSame(currentDate, "day")) {
+                    cellClassName = `${styles.dateCell} ${styles.hoverCurrentDate}`;
+                  } else {
+                    cellClassName = `${styles.dateCell} ${styles.futureHoverdate}`;
+                  }
+                  const convertedDate = dayjs(day?.date, "D/MM/YYYY").format(
+                    "YYYY-MM-DD[T]HH:mm:ss[Z]"
+                  );
+
+                  const targetData = calInfo?.data?.response?.find(
+                    (item) => item?.date === convertedDate
+                  );
 
                   return (
                     <td key={dayIndex}>
@@ -135,25 +160,33 @@ const Calender = () => {
                             hoveredIndex === day.dateIndex ? day.dateIndex : ""
                           )
                         }
-                        style={{ textAlign: "center" }}
+                        style={{
+                          textAlign: "center",
+                          paddingTop: "3px",
+                          color:
+                            dayjs(dateString, "D/MM/YYYY").isSame(
+                              currentDate,
+                              "day"
+                            ) && "#fff",
+                        }}
                       >
                         {day?.dateIndex}
 
                         <div className={styles.countContainer}>
-                          {(dayjs(dateString, "D/MM/YYYY").isSame(
-                            currentDate,
-                            "day"
-                          ) ||
-                            dayjs(dateString, "D/MM/YYYY").isBefore(
-                              currentDate,
-                              "day"
-                            )) && (
-                            <span>
-                              {count[day?.dateIndex]
-                                ? count[day?.dateIndex]
-                                : 0}
-                            </span>
-                          )}
+                          <span
+                            className={
+                              dayjs(dateString, "D/MM/YYYY").isSame(
+                                currentDate,
+                                "day"
+                              )
+                                ? styles.CurrentSTyle
+                                : styles.textContainer
+                            }
+                          >
+                            {targetData?.patientCount
+                              ? targetData?.patientCount
+                              : 0}
+                          </span>
                         </div>
                       </div>
                     </td>

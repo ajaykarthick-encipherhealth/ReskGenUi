@@ -1,10 +1,11 @@
 import axios from "axios";
+import dayjs from "dayjs";
 
 export const endPoint = "http://localhost:8080/";
 
 export const DASHBOARDCHART = "DASHBOARDCHART";
 export const GRAPHDATA = "GRAPHDATA";
-export const CALENDER='CALENDER';
+export const CALENDER = "CALENDER";
 
 export const DashbaoudContent =
   (physicianId = "ID-001") =>
@@ -41,7 +42,7 @@ export const DashbaoudContent =
   };
 
 export const GraphContent =
-  (physicianId,currentBtn, selectedMonth, selectedYear) =>
+  (physicianId, currentBtn, selectedMonth, selectedYear) =>
   async (dispatch) => {
     const token = localStorage.getItem("token");
     dispatch({
@@ -51,9 +52,10 @@ export const GraphContent =
         data: null,
       },
     });
+    const currentdate = dayjs().format("DD");
     try {
       const response = await axios.get(
-        `${endPoint}statistics?physicianId=${physicianId}&year=${selectedYear}&month=${selectedMonth}&date=18&range=${currentBtn}`,
+        `${endPoint}statistics?physicianId=${physicianId}&year=${selectedYear}&month=${selectedMonth}&date=${currentdate}&range=${currentBtn}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -74,37 +76,34 @@ export const GraphContent =
     }
   };
 
-
-  export const CalenderData =
-  (physicianId,month,year) =>
-  async (dispatch) => {
-    const token = localStorage.getItem("token");
-    dispatch({
-      type: CALENDER,
-      payload: {
-        loading: true,
-        data: null,
-      },
-    });
-    try {
-      const response = await axios.get(
-        `${endPoint}calender?physicianId=ID-001&month=MARCH&year=2024`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (response) {
-        dispatch({
-          type: CALENDER,
-          payload: {
-            loading: false,
-            data: response.data,
-          },
-        });
+export const CalenderData = (physicianId, month, year) => async (dispatch) => {
+  const token = localStorage.getItem("token");
+  dispatch({
+    type: CALENDER,
+    payload: {
+      loading: true,
+      data: null,
+    },
+  });
+  try {
+    const response = await axios.get(
+      `${endPoint}calender?physicianId=${physicianId}&month=${month}&year=${year}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
-    } catch (err) {
-      console.log(err);
+    );
+    if (response) {
+      dispatch({
+        type: CALENDER,
+        payload: {
+          loading: false,
+          data: response.data,
+        },
+      });
     }
-  };
+  } catch (err) {
+    console.log(err);
+  }
+};

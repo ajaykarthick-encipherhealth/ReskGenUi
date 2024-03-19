@@ -143,7 +143,7 @@ const GraphData = () => {
     setSelectedMonth(monthNumber);
   };
   useEffect(() => {
-    dispatch(GraphContent("ID-001", currentBtn, selectedMonth, selectedYear));
+    dispatch(GraphContent("ID-001", currentBtn.toUpperCase(), selectedMonth, selectedYear));
   }, [currentBtn, selectedMonth, selectedYear]);
 
   return (
