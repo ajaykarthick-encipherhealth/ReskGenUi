@@ -199,7 +199,6 @@ const Index = () => {
                   }}
                   name="ENABLE MFA"
                   width="100%"
-                  marginBottom="10px"
                 />
               </div>
               {skip && (
