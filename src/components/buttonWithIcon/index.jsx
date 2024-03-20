@@ -10,8 +10,8 @@ const RegularButtonWithIcon = ({ type, name, onClick, width, icon }) => {
       onClick={onClick}
       style={{ width: width }}
     >
-      <span style={{ width: "20px", paddingRight: "12px" }}>{icon}</span>
-      {name}
+      <span style={{ width: "20px", marginRight: "12px" }}>{icon}</span>
+      <span className={Style.btnText}>{name}</span>
     </button>
   );
 };
