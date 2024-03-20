@@ -27,6 +27,7 @@ import RafSummary from "./RafSummary";
 import ModalContent from "./ModalContent";
 import { COLORS3 } from "../../reviewer/patients/details/hcc";
 import Image from "next/image";
+import { getPatients } from "../../../store/actions/physicianAction/patientsActions";
 
 const Hcc = () => {
   const dispatch = useDispatch();
@@ -284,7 +285,9 @@ const Hcc = () => {
                       </div>
                       <div style={{ display: "flex", justifyContent: "end" }}>
                         <button
-                          onClick={() => setFileUploadModal(true)}
+                          onClick={() => {
+                            setFileUploadModal(true)
+                            dispatch(getPatients());}}
                           className={`${styles.addFileBtn}`}
                         >
                          <Image src={leftArrow} alt="noimg" width={25} height={23} style={{marginTop:"-2px"}}/>Patients List

@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Form, Offcanvas } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import styles from "./styles.module.css";
 
 const ModalContent = ({
@@ -9,6 +10,8 @@ const ModalContent = ({
   validated,
   setFileUploadModal,
 }) => {
+  const patientsList = useSelector((state) => state.PhyicianReducer.patients);
+console.log(patientsList)
   return (
     <Offcanvas show={fileUploadModal} className="offcanvas-end" placement="end">
       <div className={styles.closeIcon}>
