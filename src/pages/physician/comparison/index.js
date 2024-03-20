@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Badge } from "react-bootstrap";
+import { Badge, Button } from "react-bootstrap";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,9 +9,12 @@ import {
   faVenusMars,
   faCalendarAlt,
   faIdCardClip,
+  faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
-import leftArrow from '../../../images/physician/leftArrow.svg'
+import leftArrow from "../../../images/physician/leftArrow.svg";
 import { CalendarOutlined } from "@ant-design/icons";
+import Image from "next/image";
+import { useRouter } from "next/router";
 import styles from "./styles.module.css";
 import visitStyles from "../../../styles/visitdata.module.css";
 import Header from "../../../jsx/layouts/nav/Header";
@@ -26,11 +29,11 @@ import CogentAIResult from "./CogentAIResult";
 import RafSummary from "./RafSummary";
 import ModalContent from "./ModalContent";
 import { COLORS3 } from "../../reviewer/patients/details/hcc";
-import Image from "next/image";
 import { getPatients } from "../../../store/actions/physicianAction/patientsActions";
 
 const Hcc = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const comparisonData = useSelector((state) => state.physicianComparison.data);
   const colorsData = useSelector((state) => state.physicianComparison.colors);
   const [validHccList, setvalidHccList] = useState([]);
@@ -39,7 +42,7 @@ const Hcc = () => {
   const [cogentSuggestedHccList, setCogentSuggestedHccList] = useState([]);
   const [fileUploadModal, setFileUploadModal] = useState(false);
   const [validated, setValidated] = useState(false);
-  const [selectedPatient,setSelectedPatient]=useState()
+  const [selectedPatient, setSelectedPatient] = useState();
 
   function removeDuplicates(array) {
     let output = [];
@@ -75,10 +78,9 @@ const Hcc = () => {
   };
 
   const getProviderNameList = (res) => {
-    let value =
-      res?.providerName ? (
-        <div>
-          <Badge
+    let value = res?.providerName ? (
+      <div>
+        <Badge
           className={
             res?.authorizedProvider === true
               ? `mt-2 text-start ${styles.provider_name}`
@@ -99,9 +101,9 @@ const Hcc = () => {
           </i>
           {res?.providerName}
         </Badge>
-        </div>
-      ) : null
-  
+      </div>
+    ) : null;
+
     return value;
   };
 
@@ -137,9 +139,24 @@ const Hcc = () => {
     event.preventDefault();
     setValidated(true);
   };
-
+  const backToPatientData = () => {
+    dispatch(getPatients(null));
+    router.back();
+  };
   useEffect(() => {
-    dispatch(getComparisionData("ID-001", selectedPatient?selectedPatient:"ID-002"));
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const encodedParams = urlParams.get("id");
+   
+    setSelectedPatient(JSON.parse(atob(encodedParams))?.id);
+    if (selectedPatient) {
+      dispatch(
+        getComparisionData(
+          "ID-001",
+          selectedPatient
+        )
+      );
+    }
     dispatch(getColors());
   }, [selectedPatient]);
 
@@ -189,38 +206,36 @@ const Hcc = () => {
       const validLabhcc = clientResult?.suggestRadiology[clientLabYear];
 
       if (validClienthcc?.length > 0 && validCogentHcc?.length > 0) {
-     
         setvalidHccList(validClienthcc);
         setvalidClienHccList(validCogentHcc);
         setClientSuggestedHccList([
-          ... validSuggestedhcc?.map(item => ({
+          ...validSuggestedhcc?.map((item) => ({
             ...item,
-            getPlace: "Lab"
+            getPlace: "Lab",
           })),
-          ... validUnmatchededhcc.map(item => ({
+          ...validUnmatchededhcc.map((item) => ({
             ...item,
-            getPlace: "Hcc"
+            getPlace: "Hcc",
           })),
-          ... validLabhcc.map(item => ({
+          ...validLabhcc.map((item) => ({
             ...item,
-            getPlace: "Radio"
+            getPlace: "Radio",
           })),
         ]);
         setCogentSuggestedHccList([
-          ... validClientSuggestedHcc?.map(item => ({
+          ...validClientSuggestedHcc?.map((item) => ({
             ...item,
-            getPlace: "Lab"
+            getPlace: "Lab",
           })),
-          ... validClientUnmatchededHcc?.map(item => ({
+          ...validClientUnmatchededHcc?.map((item) => ({
             ...item,
-            getPlace: "Hcc"
+            getPlace: "Hcc",
           })),
-         
-          ... validClientLabHcc?.map(item => ({
+
+          ...validClientLabHcc?.map((item) => ({
             ...item,
-            getPlace: "Radio"
-          }))
-         
+            getPlace: "Radio",
+          })),
         ]);
       }
     }
@@ -245,6 +260,20 @@ const Hcc = () => {
                       }}
                     >
                       <div className="row" style={{ width: "90%" }}>
+                        <Button
+                          onClick={backToPatientData}
+                          className={`${visitStyles.backArrowBtn}`}
+                          style={{
+                            marginTop: "0px",
+                          }}
+                        >
+                          <FontAwesomeIcon
+                            icon={faArrowLeft}
+                            style={{
+                              color: "rgb(38 50 107)",
+                            }}
+                          />
+                        </Button>
                         <div className="col-xl-2 col-sm-12">
                           <FontAwesomeIcon icon={faIdCardClip} />
                           <label>Patient Id</label>
@@ -287,11 +316,19 @@ const Hcc = () => {
                       <div style={{ display: "flex", justifyContent: "end" }}>
                         <button
                           onClick={() => {
-                            setFileUploadModal(true)
-                            dispatch(getPatients());}}
+                            setFileUploadModal(true);
+                            dispatch(getPatients());
+                          }}
                           className={`${styles.addFileBtn}`}
                         >
-                         <Image src={leftArrow} alt="noimg" width={25} height={23} style={{marginTop:"-2px"}}/>Patients List
+                          <Image
+                            src={leftArrow}
+                            alt="noimg"
+                            width={25}
+                            height={23}
+                            style={{ marginTop: "-2px" }}
+                          />
+                          Patients List
                         </button>
                       </div>
                     </div>

@@ -3,39 +3,44 @@ import { Empty, Avatar } from "antd";
 import TableStyle from "../../../../components/table/table.module.css";
 import classnames from "classnames";
 import { SVGICON } from "../../../../jsx/constant/theme";
+import { useRouter } from "next/router";
 
-export const priorityStatus = (value,iconsOnly) => {
+export const priorityStatus = (value, iconsOnly) => {
   switch (value) {
     case "URGENT":
       return (
         <>
           <i>{SVGICON.alert}</i>{" "}
-          {!iconsOnly &&<span style={{ fontSize: "13px", color: "red" }}>Urgent</span>}
+          {!iconsOnly && (
+            <span style={{ fontSize: "13px", color: "red" }}>Urgent</span>
+          )}
         </>
       );
     case "HIGH":
       return (
         <>
           <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
-          {!iconsOnly &&<span style={{ fontSize: "13px", color: "#cf940a" }}>
-            High
-          </span>}
+          {!iconsOnly && (
+            <span style={{ fontSize: "13px", color: "#cf940a" }}>High</span>
+          )}
         </>
       );
     case "NORMAL":
       return (
         <>
           <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
-          {!iconsOnly &&<span style={{ fontSize: "13px", color: "#4466ff " }}>
-            Normal
-          </span>}
+          {!iconsOnly && (
+            <span style={{ fontSize: "13px", color: "#4466ff " }}>Normal</span>
+          )}
         </>
       );
     case "LOW":
       return (
         <>
           <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
-          {!iconsOnly &&<span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>}
+          {!iconsOnly && (
+            <span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>
+          )}
         </>
       );
     default:
@@ -45,8 +50,16 @@ export const priorityStatus = (value,iconsOnly) => {
 
 function PatientTable({ patinetListAll }) {
   const currentDate = dayjs();
+  const router = useRouter();
 
-
+  const handleRoute = (id) => {
+    const encodedParams = btoa(
+      JSON.stringify({
+       id:id
+      })
+    );
+    router.push(`/physician/comparison?id=${encodedParams}`);
+  };
 
   const renderRows = () => {
     return patinetListAll?.length === 0 ? (
@@ -60,12 +73,16 @@ function PatientTable({ patinetListAll }) {
         });
         return (
           <tr key={index}>
-            <td className={classnames(TableStyle.firstTdBorder, tdClass)}>
+            <td
+              className={classnames(TableStyle.firstTdBorder, tdClass)}
+              onClick={() => handleRoute(data?.id)}
+            >
               {data.mrnNumber ? data.mrnNumber : "---"}
             </td>
             <td
               className={classnames(TableStyle.childBorder, tdClass)}
               style={{ paddingLeft: "50px" }}
+              onClick={() => handleRoute(data?.id)}
             >
               {data.patientName || data?.profilePictureUrl ? (
                 <div style={{ display: "flex", alignItems: "center" }}>
@@ -78,12 +95,16 @@ function PatientTable({ patinetListAll }) {
                 <div style={{}}>---</div>
               )}
             </td>
-            <td className={classnames(TableStyle.childBorder, tdClass)}>
+            <td
+              className={classnames(TableStyle.childBorder, tdClass)}
+              onClick={() => handleRoute(data?.id)}
+            >
               {data?.rafScore ? data?.rafScore : "---"}
             </td>
             <td
               className={classnames(TableStyle.childBorder, tdClass)}
               style={{ paddingLeft: "40px" }}
+              onClick={() => handleRoute(data?.id)}
             >
               {data?.date ? formattedDate : "---"} &nbsp; &nbsp;
               {data?.time ? data?.time : "---"}

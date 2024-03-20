@@ -12,9 +12,11 @@ const ModalContent = ({
   handleSubmit,
   validated,
   setFileUploadModal,
-  setSelectedPatient
+  setSelectedPatient,
+  selectedPatient
 }) => {
   const patientsList = useSelector((state) => state.PhyicianReducer.patients);
+  const FilteredList=patientsList?.data?.response?.filter(item=>(item?.id !== selectedPatient))
   return (
     <Offcanvas
       show={fileUploadModal}
@@ -42,7 +44,7 @@ const ModalContent = ({
         <div className="container-fluid">
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <div className="row">
-              {patientsList?.data?.response?.map((info) => (
+              {FilteredList?.map((info) => (
                 <div className={styles.patientListContainer} onClick={()=>{setSelectedPatient(info?.id)}}>
                   <div style={{ marginBottom: "10px" }}>
                     {info.patientName || info?.profilePictureUrl ? (
