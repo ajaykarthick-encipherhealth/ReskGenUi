@@ -3,9 +3,12 @@
   border-radius: 10px;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   margin-bottom: 25px;
+  height:90%;
+  overflow-y: scroll;
 }
 .mainContainer {
   padding-top: 20px;
+  width:100%;
 }
 .headerTitle {
   margin-top: 20px;
