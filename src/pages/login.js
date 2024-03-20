@@ -13,6 +13,7 @@ import {
   getValidatePassword,
   handleTogglePasswordVisibility,
 } from "../components/headerFilters/functions";
+import RegularButton from "../components/button";
 
 export default function Login() {
   const router = useRouter();
@@ -47,10 +48,7 @@ export default function Login() {
   const onLogin = async (e) => {
     e.preventDefault();
     const emailValidation = validateEmail(enteredEmail);
-    const passValidation = getValidatePassword(
-      password,
-      setErrors,
-    );
+    const passValidation = getValidatePassword(password, setErrors);
     if (emailValidation && passValidation) {
       setErrors({
         email: "",
@@ -132,12 +130,7 @@ export default function Login() {
                   )}
                 </div>
                 <div className="text-center mb-4">
-                  <button
-                    type="submit"
-                    className={`btn btn-block ${styles.btnColor} `}
-                  >
-                    LOGIN
-                  </button>
+                  <RegularButton type="submit" name="LOGIN" width="100%" />
                 </div>
               </form>
             </div>

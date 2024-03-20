@@ -6,6 +6,7 @@ import { IMAGES } from "../../jsx/constant/theme";
 import LoginBack from "../../images/logo/login-back.jpg";
 import styles from "../../styles/auth.module.css";
 import { checkDeviceLogin, logoutAllDevice } from "../../services/AuthService";
+import RegularButton from "../../components/button";
 
 const SelectRole = () => {
   const router = useRouter();
@@ -69,7 +70,7 @@ const SelectRole = () => {
     const urlParams = new URLSearchParams(queryString);
     const encodedParams = urlParams.get("params");
     const decodedParams = JSON.parse(atob(encodedParams));
-    const { mfa,username, password } = decodedParams;
+    const { mfa, username, password } = decodedParams;
     const skipParam = decodedParams?.skipEntry;
     const encodeParams = btoa(
       JSON.stringify({
@@ -138,27 +139,21 @@ const SelectRole = () => {
                     </span>
                   )}
                 </div>
-                <div className="d-flex">
-                  <div className="col-lg-6 mx-2">
-                    <button
-                      className={styles.backBtn}
-                      onClick={() => {
-                        setSelectedRole(null);
-                        setRoleError(false);
-                        router?.push({
-                          pathname: `/twofactorAuthentication/Authentication`,
-                          search: `params=${decodedParams}`,
-                        });
-                      }}
-                    >
-                      {"BACK"}
-                    </button>
-                  </div>
-                  <div className="col-lg-6">
-                    <button type="submit" className={styles.sendBtn}>
-                      {"NEXT"}
-                    </button>
-                  </div>
+                <div className="d-flex justify-content-between">
+                  <RegularButton
+                    onClick={() => {
+                      setSelectedRole(null);
+                      setRoleError(false);
+                      router?.push({
+                        pathname: `/twofactorAuthentication/Authentication`,
+                        search: `params=${decodedParams}`,
+                      });
+                    }}
+                    type="outline"
+                    name="BACK"
+                    width="240px"
+                  />
+                  <RegularButton type="submit" name="NEXT" width="240px" />
                 </div>
               </form>
             </div>

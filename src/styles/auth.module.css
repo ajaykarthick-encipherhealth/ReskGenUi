@@ -320,3 +320,6 @@ img.auth_ehrLogo3 {
     overflow: visible;
   }
 }
+.enableMfaBtn {
+  margin-bottom: 10px;
+}
