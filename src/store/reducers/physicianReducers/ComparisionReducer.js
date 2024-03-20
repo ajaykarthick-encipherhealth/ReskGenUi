@@ -1,7 +1,8 @@
-import { COMPARISON } from "../../../services/physicianService/comparisionService";
+import { COMPARISON,COLORS } from "../../../services/physicianService/comparisionService";
 
 const initialState = {
     data:null,
+    colors:null
   };
 
 
@@ -10,6 +11,12 @@ const initialState = {
       return {
         ...state,
         data: action.payload,
+      };
+    }
+    if (action.type === COLORS) {
+      return {
+        ...state,
+        colors: action.payload,
       };
     }
    
