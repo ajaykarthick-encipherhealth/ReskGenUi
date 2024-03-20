@@ -4,47 +4,49 @@ import TableStyle from "../../../../components/table/table.module.css";
 import classnames from "classnames";
 import { SVGICON } from "../../../../jsx/constant/theme";
 
+export const priorityStatus = (value,iconsOnly) => {
+  switch (value) {
+    case "URGENT":
+      return (
+        <>
+          <i>{SVGICON.alert}</i>{" "}
+          {!iconsOnly &&<span style={{ fontSize: "13px", color: "red" }}>Urgent</span>}
+        </>
+      );
+    case "HIGH":
+      return (
+        <>
+          <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
+          {!iconsOnly &&<span style={{ fontSize: "13px", color: "#cf940a" }}>
+            High
+          </span>}
+        </>
+      );
+    case "NORMAL":
+      return (
+        <>
+          <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
+          {!iconsOnly &&<span style={{ fontSize: "13px", color: "#4466ff " }}>
+            Normal
+          </span>}
+        </>
+      );
+    case "LOW":
+      return (
+        <>
+          <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
+          {!iconsOnly &&<span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>}
+        </>
+      );
+    default:
+      break;
+  }
+};
+
 function PatientTable({ patinetListAll }) {
   const currentDate = dayjs();
 
-  const priorityStatus = (value) => {
-    switch (value) {
-      case "URGENT":
-        return (
-          <>
-            <i>{SVGICON.alert}</i>{" "}
-            <span style={{ fontSize: "13px", color: "red" }}>Urgent</span>{" "}
-          </>
-        );
-      case "HIGH":
-        return (
-          <>
-            <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
-            <span style={{ fontSize: "13px", color: "#cf940a" }}>
-              High
-            </span>{" "}
-          </>
-        );
-      case "NORMAL":
-        return (
-          <>
-            <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
-            <span style={{ fontSize: "13px", color: "#4466ff " }}>
-              Normal
-            </span>{" "}
-          </>
-        );
-      case "LOW":
-        return (
-          <>
-            <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
-            <span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>{" "}
-          </>
-        );
-      default:
-        break;
-    }
-  };
+
 
   const renderRows = () => {
     return patinetListAll?.length === 0 ? (

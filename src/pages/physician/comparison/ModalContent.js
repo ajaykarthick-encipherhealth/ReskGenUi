@@ -1,7 +1,10 @@
 import React from "react";
 import { Button, Form, Offcanvas } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import dayjs from "dayjs";
 import styles from "./styles.module.css";
+import { priorityStatus } from "../table/PatientList/patientList";
+import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
 
 const ModalContent = ({
   fileUploadModal,
@@ -11,10 +14,10 @@ const ModalContent = ({
   setFileUploadModal,
 }) => {
   const patientsList = useSelector((state) => state.PhyicianReducer.patients);
-console.log(patientsList)
   return (
-    <Offcanvas show={fileUploadModal} className="offcanvas-end" placement="end">
+    <Offcanvas show={fileUploadModal} className="offcanvas-end" placement="end" style={{padding:"0px"}}>
       <div className={styles.closeIcon}>
+        <div> <span>Patients</span></div>
         <button
           type="button"
           className="btn-close"
@@ -28,26 +31,40 @@ console.log(patientsList)
 
       <div className="offcanvas-body">
         <div className="container-fluid">
+           
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
-            <div className="row">
-              <div className={styles.patientListContainer}>
-                <div>
-                  <h6 className={styles.patientName}>EH_1234 / Mary E Stone</h6>
-                </div>
-                <div>
-                  <h6 className={styles.patientName}>
-                    EH_1235 / Snyder, Earl A
-                  </h6>
-                </div>
-                <div>
-                  <h6 className={styles.patientName}>
-                    EH_1234 / VAIN, Rosemary
-                  </h6>
-                </div>
+          
+              <div className="row">
+                {patientsList?.data?.response?.map((info) => (
+                  <div
+                    className={styles.patientListContainer}
+                  >
+                    <div style={{ marginBottom: "10px" }}>
+                      {info.patientName || info?.profilePictureUrl ? (
+                        <div  className={styles.patientsDisply}>
+                          <span style={{ margin: "10px" }}>
+                            {renderUserPrfoileAvatar(
+                              info.patientName,
+                              "",
+                              info?.profilePictureUrl
+                            )}
+                          </span>
+                          <div> 
+                            <span>{info?.patientName}</span>
+                            <div> {dayjs(info?.date).format("MM-DD-YYYY")}</div>
+                          </div>
+                        </div>
+                      ) : (
+                        <span>---</span>
+                      )}
+                    </div>
+                    <div style={{marginTop:"10px"}}>{priorityStatus(info?.priority,true)}</div>
+                  </div>
+                ))}
               </div>
-            </div>
+            
 
-            <div>
+            <div style={{marginTop:"20px"}}>
               <Button type="submit" className="btn btn-primary btn-sm me-1">
                 Submit
               </Button>

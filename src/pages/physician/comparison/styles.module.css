@@ -187,8 +187,26 @@
   text-align: center;
 }
 .closeIcon{
-  width:96%;
+  width:80%;
   display:flex;
-  justify-content:end;
-  padding-top:10px;
+  justify-content:space-between;
+  padding-top:20px;
+  margin: auto;
+  font-size: 18px;
+  font-weight: 600;
+}
+.patientsDisply{
+  display:flex;
+}
+ .patientListContainer{
+  display:flex;
+  justify-content: space-between;
+  cursor: pointer;
+  margin-bottom: 10px;
+  padding-top: 10px;
+  margin-left: 0px;
+}
+.patientListContainer:hover{
+  box-shadow: 0 0px 4px 0 rgba(0, 0,0,0.2);
+  border-radius: 16px;
 }
