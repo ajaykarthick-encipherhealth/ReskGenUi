@@ -1,313 +1,103 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
-import { notification, Select as AntSelect, Empty } from "antd";
+import { Empty, Avatar } from "antd";
 import TableStyle from "../../../../components/table/table.module.css";
+import classnames from "classnames";
 import { SVGICON } from "../../../../jsx/constant/theme";
-import { getPriorityChange } from "../../../../store/actions/PatientsActions";
-import {
-  renderUserPrfoileAvatar,
-  sortFunction,
-} from "../../../../components/headerFilters/functions";
 
-function PatientTable({ patinetListAll, patientDetails, setSort }) {
-  const dispatch = useDispatch();
-  const navigate = useRouter();
-  const [sortAuditOrder, setSortAuditOrder] = useState("DESC");
+function PatientTable({ patinetListAll }) {
+  const currentDate = dayjs();
 
-  const priorityOptions = [
-    {
-      value: "URGENT",
-      label: (
-        <>
-          <i>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px", color: "red" }}>Urgent</span>{" "}
-        </>
-      ),
-    },
-    {
-      value: "HIGH",
-      label: (
-        <>
-          <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px", color: "#cf940a" }}>High</span>{" "}
-        </>
-      ),
-    },
-    {
-      value: "NORMAL",
-      label: (
-        <>
-          <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
-          <span style={{ fontSize: "13px", color: "#4466ff " }}>
-            Normal
-          </span>{" "}
-        </>
-      ),
-    },
-    {
-      value: "LOW",
-      label: (
-        <>
-          <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
-          <span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>{" "}
-        </>
-      ),
-    },
-  ];
-  const dummyData = [
-    {
-      patientId: 1482921,
-      patientName: "Alice Smith",
-      rafScore: "1.1245",
-      dateTime: "Today 9:30 AM",
-      priority: "URGENT",
-      firstName: "Alice",
-      lastName: "Smith",
-    },
-    {
-      patientId: 1482922,
-      patientName: "Bob Johnson",
-      rafScore: "1.2356",
-      dateTime: "Today 10:45 AM",
-      priority: "HIGH",
-      firstName: "Bob",
-      lastName: "Johnson",
-    },
-    {
-      patientId: 1482923,
-      patientName: "Eva Martinez",
-      rafScore: "1.3142",
-      dateTime: "Today 11:20 AM",
-      priority: "LOW",
-      firstName: "Eva",
-      lastName: "Martinez",
-    },
-    {
-      patientId: 1482924,
-      patientName: "David Brown",
-      rafScore: "1.4567",
-      dateTime: "Today 1:00 PM",
-      priority: "NORMAL",
-      firstName: "David",
-      lastName: "Brown",
-    },
-    {
-      patientId: 1482925,
-      patientName: "Sophia Lee",
-      rafScore: "1.5334",
-      dateTime: "Today 2:15 PM",
-      priority: "HIGH",
-      firstName: "Sophia",
-      lastName: "Lee",
-    },
-    {
-      patientId: 1482926,
-      patientName: "Michael Johnson",
-      rafScore: "1.6723",
-      dateTime: "Today 3:30 PM",
-      priority: "URGENT",
-      firstName: "Michael",
-      lastName: "Johnson",
-    },
-    {
-      patientId: 1482927,
-      patientName: "Olivia Garcia",
-      rafScore: "1.7132",
-      dateTime: "Today 4:45 PM",
-      priority: "NORMAL",
-      firstName: "Olivia",
-      lastName: "Garcia",
-    },
-    {
-      patientId: 1482928,
-      patientName: "William Martinez",
-      rafScore: "1.8256",
-      dateTime: "Today 6:00 PM",
-      priority: "HIGH",
-      firstName: "William",
-      lastName: "Martinez",
-    },
-    {
-      patientId: 1482929,
-      patientName: "Emily Wilson",
-      rafScore: "1.9321",
-      dateTime: "Today 7:15 PM",
-      priority: "LOW",
-      firstName: "Emily",
-      lastName: "Wilson",
-    },
-    {
-      patientId: 1482930,
-      patientName: "James Taylor",
-      rafScore: "2.0145",
-      dateTime: "Today 8:30 PM",
-      priority: "NORMAL",
-      firstName: "James",
-      lastName: "Taylor",
-    },
-    {
-      patientId: 1482926,
-      patientName: "Michael Johnson",
-      rafScore: "1.6723",
-      dateTime: "Today 3:30 PM",
-      priority: "URGENT",
-      firstName: "Michael",
-      lastName: "Johnson",
-    },
-    {
-      patientId: 1482927,
-      patientName: "Olivia Garcia",
-      rafScore: "1.7132",
-      dateTime: "Today 4:45 PM",
-      priority: "NORMAL",
-      firstName: "Olivia",
-      lastName: "Garcia",
-    },
-    {
-      patientId: 1482928,
-      patientName: "William Martinez",
-      rafScore: "1.8256",
-      dateTime: "Today 6:00 PM",
-      priority: "HIGH",
-      firstName: "William",
-      lastName: "Martinez",
-    },
-    {
-      patientId: 1482929,
-      patientName: "Emily Wilson",
-      rafScore: "1.9321",
-      dateTime: "Today 7:15 PM",
-      priority: "LOW",
-      firstName: "Emily",
-      lastName: "Wilson",
-    },
-    {
-      patientId: 1482930,
-      patientName: "James Taylor",
-      rafScore: "2.0145",
-      dateTime: "Today 8:30 PM",
-      priority: "NORMAL",
-      firstName: "James",
-      lastName: "Taylor",
-    },
-  ];
-
-  const handlePriorityChange = (patientId, selectedValue) => {
-    setSelectedPriority((prev) => ({
-      ...prev,
-      id: patientId,
-      value: selectedValue,
-    }));
-  };
-
-  const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
-    if (data.computing === 2) {
-      const controller = new AbortController();
-      const { signal } = controller;
-      controller.abort();
-      localStorage.setItem("patientId", data.patientId);
-      navigate.push("/reviewer/patients/details");
-    } else {
-      notification.warning({
-        message: data.patientId + " file not processed. Please wait.",
-      });
-    }
-  };
-
-  const handleTableRowClick = (e) => {
-    const targetTd = e.target.closest("td");
-    if (targetTd) {
-      const dataIndex = targetTd.parentElement.rowIndex - 1;
-      const clickedData = patinetListAll[dataIndex];
-      gotoPatientDetails(clickedData);
+  const priorityStatus = (value) => {
+    switch (value) {
+      case "URGENT":
+        return (
+          <>
+            <i>{SVGICON.alert}</i>{" "}
+            <span style={{ fontSize: "13px", color: "red" }}>Urgent</span>{" "}
+          </>
+        );
+      case "HIGH":
+        return (
+          <>
+            <i className={TableStyle.highFlag}>{SVGICON.alert}</i>
+            <span style={{ fontSize: "13px", color: "#cf940a" }}>
+              High
+            </span>{" "}
+          </>
+        );
+      case "NORMAL":
+        return (
+          <>
+            <i className={TableStyle.normalFlag}>{SVGICON.alert}</i>
+            <span style={{ fontSize: "13px", color: "#4466ff " }}>
+              Normal
+            </span>{" "}
+          </>
+        );
+      case "LOW":
+        return (
+          <>
+            <i className={TableStyle.lowFlag}>{SVGICON.alert}</i>{" "}
+            <span style={{ fontSize: "13px", color: "#87909e" }}>Low</span>{" "}
+          </>
+        );
+      default:
+        break;
     }
   };
 
   const renderRows = () => {
-    return dummyData?.length === 0 ? (
+    return patinetListAll?.length === 0 ? (
       <Empty />
     ) : (
-      dummyData?.map((data, index) => (
-        <tr key={index}>
-          <td
-            className={TableStyle.firstTdBorder}
-            onClick={handleTableRowClick}
-          >
-            {data.patientId ? data.patientId : "---"}
-          </td>
-
-          <td
-            className={TableStyle.childBorder}
-            style={{ paddingLeft: "50px" }}
-            onClick={handleTableRowClick}
-          >
-            {data.firstName ||
-            data.lastName ||
-            data?.patientAllocatedProfileImage ? (
-              <div style={{ display: "flex", alignItems: "center" }}>
-                {" "}
-                <span style={{ marginRight: "10px" }}>
-                  {" "}
-                  {renderUserPrfoileAvatar(
-                    data.firstName,
-                    data.lastName,
-                    data?.patientAllocatedProfileImage,
-                    "header"
-                  )}
-                </span>
-                <span>
-                  {data.firstName} {data.lastName}
-                </span>
-              </div>
-            ) : (
-              <div style={{}}>---</div>
-            )}
-          </td>
-          <td
-            className={TableStyle.childBorder}
-            style={{ paddingLeft: "50px" }}
-            onClick={handleTableRowClick}
-          >
-            {data?.rafScore ? data?.rafScore : "---"}
-          </td>
-          <td
-            className={TableStyle.childBorder}
-            style={{ paddingLeft: "40px" }}
-            onClick={handleTableRowClick}
-          >
-            {data?.dateTime ? data?.dateTime : "---"}{" "}
-          </td>
-
-          <td className={TableStyle.childBorder} style={{ width: "200px" }}>
-            <AntSelect
-              options={priorityOptions}
-              placeholder="Set priority"
-              className={`custom-ant-select ${TableStyle.customAntSelect}`}
-              showSearch={false}
-              defaultValue={data?.priority ? data.priority : "Set Priority"}
-              disabled={!data?.priority ? true : false}
-              onChange={(value) => {
-                handlePriorityChange(data?.patientId, value);
-                dispatch(
-                  getPriorityChange(
-                    data?.patientId,
-                    dayjs(data?.lastModifiedDate)?.format("YYYY"),
-                    value
-                  )
-                );
-              }}
-              style={{ width: "80%" }}
-            />
-          </td>
-
-          {/* <td className={TableStyle.lastBorder}>{actionBodyTemplate(data)}</td> */}
-        </tr>
-      ))
+      patinetListAll?.map((data, index) => {
+        const formattedDate = dayjs(data.date).format("YYYY-MM-DD");
+        const isPastDate = dayjs(data.date).isBefore(currentDate, "day");
+        const tdClass = classnames({
+          [TableStyle.grayedOut]: isPastDate,
+        });
+        return (
+          <tr key={index}>
+            <td className={classnames(TableStyle.firstTdBorder, tdClass)}>
+              {data.mrnNumber ? data.mrnNumber : "---"}
+            </td>
+            <td
+              className={classnames(TableStyle.childBorder, tdClass)}
+              style={{ paddingLeft: "50px" }}
+            >
+              {data.patientName || data?.profilePictureUrl ? (
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <span style={{ marginRight: "10px" }}>
+                    <Avatar src={data?.profilePictureUrl} />
+                  </span>
+                  <span>{data.patientName}</span>
+                </div>
+              ) : (
+                <div style={{}}>---</div>
+              )}
+            </td>
+            <td className={classnames(TableStyle.childBorder, tdClass)}>
+              {data?.rafScore ? data?.rafScore : "---"}
+            </td>
+            <td
+              className={classnames(TableStyle.childBorder, tdClass)}
+              style={{ paddingLeft: "40px" }}
+            >
+              {data?.date ? formattedDate : "---"} &nbsp; &nbsp;
+              {data?.time ? data?.time : "---"}
+            </td>
+            <td
+              className={classnames(TableStyle.childBorder, tdClass)}
+              style={{ width: "200px" }}
+            >
+              {data?.priority ? priorityStatus(data?.priority) : "---"}
+            </td>
+          </tr>
+        );
+      })
     );
   };
+
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
@@ -317,25 +107,11 @@ function PatientTable({ patinetListAll, patientDetails, setSort }) {
             <th className={TableStyle.rowStyle2}>PATIENT NAME</th>
             <th className={TableStyle.rowStyle2}>RAF SCORE</th>
             <th className={TableStyle.rowStyle2}> DATE & TIME</th>
-
-            <th
-              onClick={() => {
-                sortFunction(
-                  sortAuditOrder,
-                  setSortAuditOrder,
-                  setSort,
-                  "auditAllocatedDate"
-                );
-              }}
-              style={{ paddingLeft: "30px" }}
-            >
-              PRIORITY
-            </th>
+            <th style={{ paddingLeft: "30px" }}>PRIORITY</th>
           </tr>
         </thead>
-
         <tbody>
-          {dummyData?.length <= 0 ? (
+          {patinetListAll?.length <= 0 ? (
             <tr>
               <td colSpan="10">
                 <Empty />
