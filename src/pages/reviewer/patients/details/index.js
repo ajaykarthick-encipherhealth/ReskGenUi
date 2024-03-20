@@ -1936,33 +1936,13 @@ const Details = ({}) => {
                             <div className="col-xl-12 col-sm-12">
                               {!isLoadingDos ? (
                                 <>
-                                  {activeTab == 3 ? (
-                                    <Select
-                                      onChange={(e) => dosOnChange(e)}
-                                      options={dosYearRadiology}
-                                      className={`custom-react-select ${visitStyles.dosSelectPicker}`}
-                                      defaultValue={
-                                        dosYearDefalutSelectRadiology
-                                      }
-                                      isSearchable={false}
-                                    />
-                                  ) : activeTab == 4 ? (
-                                    <Select
-                                      onChange={(e) => dosOnChange(e)}
-                                      options={labFileDosList}
-                                      className={`custom-react-select ${visitStyles.dosSelectPicker}`}
-                                      defaultValue={labFileDosListDefaultSelect}
-                                      isSearchable={false}
-                                    />
-                                  ) : (
-                                    <Select
-                                      onChange={(e) => dosOnChange(e)}
-                                      options={dosYear}
-                                      className={`custom-react-select ${visitStyles.dosSelectPicker}`}
-                                      defaultValue={dosYearDefalutSelect}
-                                      isSearchable={false}
-                                    />
-                                  )}
+                                  <Select
+                                    onChange={(e) => dosOnChange(e)}
+                                    options={dosYear}
+                                    className={`custom-react-select ${visitStyles.dosSelectPicker}`}
+                                    defaultValue={dosYearDefalutSelect}
+                                    isSearchable={false}
+                                  />
                                 </>
                               ) : null}
                             </div>
