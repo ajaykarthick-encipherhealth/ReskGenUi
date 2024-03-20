@@ -47,3 +47,7 @@
   background-color: #043069;
   color: #fff;
 }
+
+.connect {
+  cursor: pointer;
+}
