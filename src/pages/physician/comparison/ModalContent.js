@@ -7,9 +7,22 @@ const ModalContent = ({
   closeModal,
   handleSubmit,
   validated,
+  setFileUploadModal,
 }) => {
   return (
     <Offcanvas show={fileUploadModal} className="offcanvas-end" placement="end">
+      <div className={styles.closeIcon}>
+        <button
+          type="button"
+          className="btn-close"
+          onClick={() => {
+            setFileUploadModal(false);
+          }}
+        >
+          <i className="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
       <div className="offcanvas-body">
         <div className="container-fluid">
           <Form noValidate validated={validated} onSubmit={handleSubmit}>

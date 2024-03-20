@@ -5,12 +5,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch, useSelector } from "react-redux";
 import {
   faCircleUser,
-  faPlus,
   faUserCircle,
   faVenusMars,
   faCalendarAlt,
   faIdCardClip,
 } from "@fortawesome/free-solid-svg-icons";
+import leftArrow from '../../../images/physician/leftArrow.svg'
 import { CalendarOutlined } from "@ant-design/icons";
 import styles from "./styles.module.css";
 import visitStyles from "../../../styles/visitdata.module.css";
@@ -26,6 +26,7 @@ import CogentAIResult from "./CogentAIResult";
 import RafSummary from "./RafSummary";
 import ModalContent from "./ModalContent";
 import { COLORS3 } from "../../reviewer/patients/details/hcc";
+import Image from "next/image";
 
 const Hcc = () => {
   const dispatch = useDispatch();
@@ -284,15 +285,9 @@ const Hcc = () => {
                       <div style={{ display: "flex", justifyContent: "end" }}>
                         <button
                           onClick={() => setFileUploadModal(true)}
-                          className={`${visitStyles.combo_add_btn} ${styles.addFileBtn}`}
+                          className={`${styles.addFileBtn}`}
                         >
-                          <FontAwesomeIcon
-                            icon={faPlus}
-                            style={{
-                              color: "#fff",
-                              size: 12,
-                            }}
-                          />
+                         <Image src={leftArrow} alt="noimg" width={25} height={23} style={{marginTop:"-2px"}}/>Patients List
                         </button>
                       </div>
                     </div>
@@ -368,6 +363,7 @@ const Hcc = () => {
             fileUploadModal={fileUploadModal}
             handleSubmit={handleSubmit}
             validated={validated}
+            setFileUploadModal={setFileUploadModal}
           />
         </div>
       </div>
