@@ -39,6 +39,7 @@ const Hcc = () => {
   const [cogentSuggestedHccList, setCogentSuggestedHccList] = useState([]);
   const [fileUploadModal, setFileUploadModal] = useState(false);
   const [validated, setValidated] = useState(false);
+  const [selectedPatient,setSelectedPatient]=useState()
 
   function removeDuplicates(array) {
     let output = [];
@@ -138,9 +139,9 @@ const Hcc = () => {
   };
 
   useEffect(() => {
-    dispatch(getComparisionData("ID-001", "ID-002"));
+    dispatch(getComparisionData("ID-001", selectedPatient?selectedPatient:"ID-002"));
     dispatch(getColors());
-  }, []);
+  }, [selectedPatient]);
 
   const clientYear = comparisonData?.data
     ? Object.keys(comparisonData?.data?.clientResult?.validDisease)
@@ -367,6 +368,8 @@ const Hcc = () => {
             handleSubmit={handleSubmit}
             validated={validated}
             setFileUploadModal={setFileUploadModal}
+            selectedPatient={selectedPatient}
+            setSelectedPatient={setSelectedPatient}
           />
         </div>
       </div>
