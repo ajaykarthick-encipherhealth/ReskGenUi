@@ -7,6 +7,7 @@ import styles from "../../styles/auth.module.css";
 import twofactorImage from "../../images/svg/twofactorAuthentication.svg";
 import { getValidateCode, loginAction } from "../../store/actions/AuthActions";
 import { encyptingPass } from "../../components/headerFilters/functions";
+import RegularButton from "../../components/button";
 
 export const codeLength = 6;
 export const generateCodeArray = () =>
@@ -180,27 +181,30 @@ const Index = () => {
             </>
           ) : (
             <>
-              <button
-                className={styles.sendBtn}
-                onClick={() => {
-                  const encodedParams = btoa(
-                    JSON.stringify({
-                      username: username,
-                      password: password,
-                    })
-                  );
+              <div className={styles.enableMfaBtn}>
+                <RegularButton
+                  type="submit"
+                  onClick={() => {
+                    const encodedParams = btoa(
+                      JSON.stringify({
+                        username: username,
+                        password: password,
+                      })
+                    );
 
-                  router?.push({
-                    pathname: `/twofactorAuthentication/GetOTP`,
-                    search: `params=${encodedParams}`,
-                  });
-                }}
-              >
-                ENABLE MFA
-              </button>
+                    router?.push({
+                      pathname: `/twofactorAuthentication/GetOTP`,
+                      search: `params=${encodedParams}`,
+                    });
+                  }}
+                  name="ENABLE MFA"
+                  width="100%"
+                  marginBottom="10px"
+                />
+              </div>
               {skip && (
-                <button
-                  className={styles.sendBtn}
+                <RegularButton
+                  type="submit"
                   onClick={() => {
                     dispatch(
                       loginAction(
@@ -213,9 +217,26 @@ const Index = () => {
                       )
                     );
                   }}
-                >
-                  SETUP LATER
-                </button>
+                  name="SETUP LATER"
+                  width="100%"
+                />
+                // <button
+                //   className={styles.sendBtn}
+                //   onClick={() => {
+                //     dispatch(
+                //       loginAction(
+                //         username,
+                //         router,
+                //         code?.join(""),
+                //         password,
+                //         enableMFA,
+                //         skip
+                //       )
+                //     );
+                //   }}
+                // >
+                //   SETUP LATER
+                // </button>
               )}
             </>
           )}

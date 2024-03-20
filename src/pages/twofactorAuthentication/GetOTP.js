@@ -10,6 +10,7 @@ import settings from "../../images/svg/settings.svg";
 import { codeLength, generateCodeArray } from "./Authentication";
 import { getQrCode, getValidateCode } from "../../store/actions/AuthActions";
 import { encyptingPass } from "../../components/headerFilters/functions";
+import RegularButton from "../../components/button";
 
 const GetOTP = () => {
   const dispatch = useDispatch();
@@ -135,26 +136,27 @@ const GetOTP = () => {
         </div>
 
         <div className={styles.btnDiv}>
-          <button
-            className={styles.sendBtn}
-            style={{ width: "16%", margin: "auto" }}
-            onClick={() => {
-              const codeString = code?.join("");
-              if (codeString?.length > 0) {
-                dispatch(
-                  getValidateCode(
-                    username,
-                    encyptingPass(codeString),
-                    router,
-                    "",
-                    password
-                  )
-                );
-              }
-            }}
-          >
-            VALIDATE
-          </button>
+          <div style={{ margin: "auto" }}>
+            <RegularButton
+              type="submit"
+              name="VALIDATE"
+              width="280px"
+              onClick={() => {
+                const codeString = code?.join("");
+                if (codeString?.length > 0) {
+                  dispatch(
+                    getValidateCode(
+                      username,
+                      encyptingPass(codeString),
+                      router,
+                      "",
+                      password
+                    )
+                  );
+                }
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>
