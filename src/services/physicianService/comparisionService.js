@@ -4,7 +4,7 @@ import { endPoint } from "./DashbaordServices";
 export const COMPARISON = "COMPARISON";
 
 export const getComparisionData =
-  (physicianId = "ID-001",patientId='ID-002') =>
+  (physicianId,patientId) =>
   async (dispatch) => {
     const token = localStorage.getItem("token");
     dispatch({

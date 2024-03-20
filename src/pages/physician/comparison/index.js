@@ -26,7 +26,8 @@ const Hcc = () => {
   const comparisonData = useSelector((state) => state.physicianComparison.data);
   const [validHccList, setvalidHccList] = useState([]);
   const [validClienHccList, setvalidClienHccList] = useState([]);
-  const [suggestedHccList, setSuggestedHccList] = useState([]);
+  const [clientSuggestedHccList, setClientSuggestedHccList] = useState([]);
+  const [cogentSuggestedHccList, setCogentSuggestedHccList] = useState([]);
   const [captureSectionMatching, setCaptureSectionMatching] = useState([]);
   const [fileUploadModal, setFileUploadModal] = useState(false);
   const [validated, setValidated] = useState(false);
@@ -35,17 +36,6 @@ const Hcc = () => {
   const currentYear = new Date().getFullYear();
   const twoYearsAgo = currentYear - 2;
   const oneYearAgo = currentYear - 1;
-  const clientYear =
-    comparisonData?.data ?
-    Object.keys(comparisonData?.data?.clientResult?.validDisease):"";
-  const cogentYear =
-    comparisonData?.data ?
-    Object.keys(comparisonData?.data?.cogentAIResult?.validDisease):"";
-
-  const validhcc =comparisonData?.data?.clientResult&& comparisonData?.data?.clientResult?.validDisease[clientYear];
-
-  const validClientHcc =comparisonData?.data?.cogentAIResult &&
-    comparisonData?.data?.cogentAIResult?.validDisease[cogentYear];
 
   function removeDuplicates(array) {
     let output = [];
@@ -140,59 +130,79 @@ const Hcc = () => {
     setCompareResults(data);
   };
 
-  useEffect(()=>{
-    dispatch(getComparisionData());
-  },[])
+  useEffect(() => {
+    dispatch(getComparisionData("ID-001", "ID-002"));
+  }, []);
 
   useEffect(() => {
-if(validhcc && validClientHcc){
-  const validDisArray = [];
-  validhcc?.length>0 && validhcc?.map((res, index) => {
-    const encounterDatearray = res?.encounterDate?.split(",");
-    let providerList = [];
-    providerList?.push({
-      providerName: res?.providerName,
-      authorizedProvider: true,
-    });
-    validDisArray?.push({
-      actualDescription: res?.actualDescription,
-      capturedSections: res?.capturedSections,
-      diagnosisCode: res?.diagnosisCode,
-      encounterDate: res?.encounterDate,
-      encounterDateSplit: encounterDatearray,
-      isManuallyAdded: res?.isManuallyAdded,
-      isHccValid: res?.isHccValid,
-      defaultPosition: res?.defaultPosition,
-      providerName: providerList,
-      dbDescription: res?.dbDescription,
-    });
-  });
-  const validDisClientArray = [];
-  validClientHcc?.length>0 && validClientHcc?.map((res, index) => {
-    const encounterDatearray = res?.encounterDate?.split(",");
-    let providerList = [];
-    providerList?.push({
-      providerName: res?.providerName,
-      authorizedProvider: true,
-    });
-    validDisClientArray?.push({
-      actualDescription: res?.actualDescription,
-      capturedSections: res?.capturedSections,
-      diagnosisCode: res?.diagnosisCode,
-      encounterDate: res?.encounterDate,
-      encounterDateSplit: encounterDatearray,
-      isManuallyAdded: res?.isManuallyAdded,
-      isHccValid: res?.isHccValid,
-      defaultPosition: res?.defaultPosition,
-      providerName: providerList,
-      dbDescription: res?.dbDescription,
-    });
-  });
-  setvalidHccList(validDisArray);
-  setvalidClienHccList(validDisClientArray);
-}
-  }, []);
-console.log(validhcc,validClientHcc)
+    const clientYear = comparisonData?.data
+      ? Object.keys(comparisonData?.data?.clientResult?.validDisease)
+      : "";
+    const cogentYear = comparisonData?.data
+      ? Object.keys(comparisonData?.data?.cogentAIResult?.validDisease)
+      : "";
+
+    const validhcc =
+      comparisonData?.data?.clientResult &&
+      comparisonData?.data?.clientResult?.validDisease[clientYear];
+
+    const validClientHcc =
+      comparisonData?.data?.cogentAIResult &&
+      comparisonData?.data?.cogentAIResult?.validDisease[cogentYear];
+
+    console.log(comparisonData?.data?.clientResult);
+    if (validhcc?.length > 0 && validClientHcc?.length > 0) {
+      const validDisArray = [];
+      validhcc?.length > 0 &&
+        validhcc?.map((res, index) => {
+          const encounterDatearray = res?.encounterDate?.split(",");
+          let providerList = [];
+          providerList?.push({
+            providerName: res?.providerName,
+            authorizedProvider: true,
+          });
+          validDisArray?.push({
+            actualDescription: res?.actualDescription,
+            capturedSections: res?.capturedSections,
+            diagnosisCode: res?.diagnosisCode,
+            encounterDate: res?.encounterDate,
+            encounterDateSplit: encounterDatearray,
+            isManuallyAdded: res?.isManuallyAdded,
+            isHccValid: res?.isHccValid,
+            defaultPosition: res?.defaultPosition,
+            providerName: providerList,
+            dbDescription: res?.dbDescription,
+          });
+        });
+      const validDisClientArray = [];
+      validClientHcc?.length > 0 &&
+        validClientHcc?.map((res, index) => {
+          const encounterDatearray = res?.encounterDate?.split(",");
+          let providerList = [];
+          providerList?.push({
+            providerName: res?.providerName,
+            authorizedProvider: true,
+          });
+          validDisClientArray?.push({
+            actualDescription: res?.actualDescription,
+            capturedSections: res?.capturedSections,
+            diagnosisCode: res?.diagnosisCode,
+            encounterDate: res?.encounterDate,
+            encounterDateSplit: encounterDatearray,
+            isManuallyAdded: res?.isManuallyAdded,
+            isHccValid: res?.isHccValid,
+            defaultPosition: res?.defaultPosition,
+            providerName: providerList,
+            dbDescription: res?.dbDescription,
+          });
+        });
+      setvalidHccList(validDisArray);
+      setvalidClienHccList(validDisClientArray);
+      setClientSuggestedHccList();
+      setCogentSuggestedHccList();
+    }
+  }, [comparisonData]);
+
   return (
     <div className={`show`}>
       <Header />
@@ -249,280 +259,379 @@ console.log(validhcc,validClientHcc)
                 </div>
                 <div className="col-xl-6">
                   <div className="row">
-                    {comparisonData?.loading?<SpinnerDots/>:
-                   <> <div className="col-xl-6">
-                   {/* <h6 className={styles.patientName}>
-                     EH-2032 / Diana M Pallo
-                   </h6> */}
-
-                   <div className={styles.headerTitle}>
-                     <div className="d-flex">
-                       <h6 className={styles.headerName2}>Client Results</h6>
-                       <button
-                         onClick={() => setFileUploadModal(true)}
-                         className={`${visitStyles.combo_add_btn} ${styles.addFileBtn}`}
-                       >
-                         <FontAwesomeIcon
-                           icon={faPlus}
-                           style={{
-                             color: "#fff",
-                             size: 12,
-                           }}
-                         />
-                       </button>
-                     </div>
-                     <div>
-                       <button
-                         className={styles.compareBtn}
-                         onClick={() => compareHccList()}
-                       >
-                         Compare
-                       </button>
-                     </div>
-                   </div>
-                   <div className={`my-post-content ${styles.mainCard}`}>
-                     <div className="widget-media   ps--active-y">
-                       <div className="row">
-                         <div className="col-xl-12">
-                           <ul className="timeline">
-                             <div
-                               className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
-                             >
-                               <span
-                                 className={`${visitStyles.hcc_title_name}`}
-                               >
-                                 HCC
-                               </span>
-                               <div className="d-flex justify-content-center">
-                                 <span
-                                   className={`${visitStyles.hcc_title_badge}`}
-                                 >
-                                   {validHccList?.length}
-                                 </span>
-                               </div>
-                             </div>
-                             <div className={visitStyles.container}>
-                               <div className={visitStyles.hccStickey_head}>
-                                 {validHccList?.length>0 && validClienHccList.map((data, _i) => (
-                                   <li>
-                                     <div
-                                       className={`hccActiveCard ${visitStyles.hcc_card}`}
-                                     >
-                                       <div
-                                         className={`${visitStyles.hcc_card_nameHead}`}
-                                       >
-                                         <div className="media-body">
-                                           <span className="mb-1 disease-name d-flex">
-                                             <span className="valid-dis-name">
-                                               {data.diagnosisCode} -
-                                             </span>
-                                             <Popover
-                                               content={
-                                                 data.actualDescription
-                                               }
-                                               trigger="hover"
-                                             >
-                                               {data.actualDescription}
-                                             </Popover>
-                                           </span>
-                                         </div>
-                                       </div>
-                                       <div
-                                         className={`${visitStyles.hoverActiveHcc}`}
-                                       >
-                                         <div
-                                           className={`${visitStyles.encounterAndSectionHeader}`}
-                                         >
-                                           {getProviderNameList(
-                                             data?.providerName
-                                           )}
-                                           {getEncounterDateBackgroundHcc(
-                                             data.encounterDateSplit,
-                                             data.diagnosisCode
-                                           )}
-                                         </div>
-                                         <div
-                                           className={`${visitStyles.encounterAndSectionHeader}`}
-                                         >
-                                           {getCaptureSectionBackground(
-                                             data.capturedSections,
-                                             data.diagnosisCode
-                                           )}
-                                         </div>
-                                       </div>
-                                     </div>
-                                   </li>
-                                 ))}
-                               </div>
-                             </div>
-                           </ul>
-                         </div>
-                       </div>
-                     </div>
-                   </div>
-                 </div>
-                 <div className="col-xl-6">
-                   {/* <h6 className={styles.patientName}>
-                     EH_1234 / Mary E Stone
-                   </h6> */}
-                   <div className={styles.headerTitle}>
-                     <h6 className={styles.headerName}>Cogent AI Results</h6>
-                   </div>
-                   <div className={`my-post-content ${styles.mainCard}`}>
-                     <div className="widget-media   ps--active-y">
-                       <div className="row">
-                         <div className="col-xl-12">
-                           <ul className="timeline">
-                             <div
-                               className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
-                             >
-                               <span
-                                 className={`${visitStyles.hcc_title_name}`}
-                               >
-                                 HCC
-                               </span>
-                               <div className="d-flex justify-content-center">
-                                 <span
-                                   className={`${visitStyles.hcc_title_badge}`}
-                                 >
-                                   {validHccList.length}
-                                 </span>
-                               </div>
-                             </div>
-                             <div className={styles.container}>
-                               <div className={visitStyles.hccStickey_head}>
-                                 {validHccList.map((data) => (
-                                   <li>
-                                     <div
-                                       className={`hccActiveCard ${visitStyles.hcc_card}`}
-                                     >
-                                       <div
-                                         className={`${visitStyles.hcc_card_nameHead}`}
-                                       >
-                                         <div className="media-body">
-                                           <span className="mb-1 disease-name d-flex">
-                                             <span className="valid-dis-name">
-                                               {data.diagnosisCode} -
-                                             </span>
-                                             <Popover
-                                               content={
-                                                 data.actualDescription
-                                               }
-                                               trigger="hover"
-                                             >
-                                               {data.actualDescription}
-                                             </Popover>
-                                           </span>
-                                         </div>
-                                       </div>
-                                       <div
-                                         className={`${visitStyles.hoverActiveHcc}`}
-                                       >
-                                         <div
-                                           className={`${visitStyles.encounterAndSectionHeader}`}
-                                         >
-                                           {getProviderNameList(
-                                             data?.providerName
-                                           )}
-                                           {getEncounterDateBackgroundHcc(
-                                             data.encounterDateSplit,
-                                             data.diagnosisCode
-                                           )}
-                                         </div>
-                                         <div
-                                           className={`${visitStyles.encounterAndSectionHeader}`}
-                                         >
-                                           {getCaptureSectionBackground(
-                                             data.capturedSections,
-                                             data.diagnosisCode
-                                           )}
-                                         </div>
-                                       </div>
-                                     </div>
-                                   </li>
-                                 ))}
-                               </div>
-                             </div>
-                           </ul>
-                         </div>
-                         <div className="col-xl-12">
-                           <ul className="timeline">
-                             <div
-                               className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
-                             >
-                               <span
-                                 className={`${visitStyles.suggested_title_name}`}
-                               >
-                                 SUGGESTED CODES
-                               </span>
-                               <div className="d-flex justify-content-center">
-                                 <span
-                                   className={`${visitStyles.suggested_title_badge}`}
-                                 >
-                                   {suggestedHccList.length}
-                                 </span>
-                               </div>
-                             </div>
-                             <div className={visitStyles.suggestedcontainer}>
-                               <div className={visitStyles.hccStickey_head}>
-                                 {suggestedHccList.map((data) => (
-                                   <li>
-                                     <div
-                                       className={`hccActiveCard ${visitStyles.hcc_card}`}
-                                     >
-                                       <div
-                                         className={`${visitStyles.hcc_card_nameHead}`}
-                                       >
-                                         <div className="media-body">
-                                           <span className="mb-1 disease-name d-flex">
-                                             <span className="valid-dis-name">
-                                               {data.diagnosisCode} -
-                                             </span>
-                                             <Popover
-                                               content={
-                                                 data.actualDescription
-                                               }
-                                               trigger="hover"
-                                             >
-                                               {data.actualDescription}
-                                             </Popover>
-                                           </span>
-                                         </div>
-                                       </div>
-                                       <div
-                                         className={`${visitStyles.hoverActiveHcc}`}
-                                       >
-                                         <div
-                                           className={`${visitStyles.encounterAndSectionHeader}`}
-                                         >
-                                           {getProviderNameList(
-                                             data?.providerName
-                                           )}
-                                           {getEncounterDateBackgroundHcc(
-                                             data.encounterDateSplit,
-                                             data.diagnosisCode
-                                           )}
-                                         </div>
-                                         <div
-                                           className={`${visitStyles.encounterAndSectionHeader}`}
-                                         >
-                                           {getCaptureSectionBackground(
-                                             data.capturedSections,
-                                             data.diagnosisCode
-                                           )}
-                                         </div>
-                                       </div>
-                                     </div>
-                                   </li>
-                                 ))}
-                               </div>
-                             </div>
-                           </ul>
-                         </div>
-                       </div>
-                     </div>
-                   </div>
-                 </div></>}
+                    {comparisonData?.loading ? (
+                      <SpinnerDots />
+                    ) : (
+                      <>
+                        {" "}
+                        <div className="col-xl-6">
+                          <div className={styles.headerTitle}>
+                            <div className="d-flex">
+                              <h6 className={styles.headerName2}>
+                                Client Results
+                              </h6>
+                              <button
+                                onClick={() => setFileUploadModal(true)}
+                                className={`${visitStyles.combo_add_btn} ${styles.addFileBtn}`}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faPlus}
+                                  style={{
+                                    color: "#fff",
+                                    size: 12,
+                                  }}
+                                />
+                              </button>
+                            </div>
+                            <div>
+                              <button
+                                className={styles.compareBtn}
+                                onClick={() => compareHccList()}
+                              >
+                                Compare
+                              </button>
+                            </div>
+                          </div>
+                          <div className={`my-post-content ${styles.mainCard}`}>
+                            <div className="widget-media   ps--active-y">
+                              <div className="row">
+                                <div className="col-xl-12">
+                                  <ul className="timeline">
+                                    <div
+                                      className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
+                                    >
+                                      <span
+                                        className={`${visitStyles.hcc_title_name}`}
+                                      >
+                                        HCC
+                                      </span>
+                                      <div className="d-flex justify-content-center">
+                                        <span
+                                          className={`${visitStyles.hcc_title_badge}`}
+                                        >
+                                          {validHccList?.length}
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <div className={styles.container}>
+                                      <div
+                                        className={visitStyles.hccStickey_head}
+                                      >
+                                        {validHccList?.map((data) => (
+                                          <li>
+                                            <div
+                                              className={`hccActiveCard ${visitStyles.hcc_card}`}
+                                            >
+                                              <div
+                                                className={`${visitStyles.hcc_card_nameHead}`}
+                                              >
+                                                <div className="media-body">
+                                                  <span className="mb-1 disease-name d-flex">
+                                                    <span className="valid-dis-name">
+                                                      {data.diagnosisCode} -
+                                                    </span>
+                                                    <Popover
+                                                      content={
+                                                        data.actualDescription
+                                                      }
+                                                      trigger="hover"
+                                                    >
+                                                      {data.actualDescription}
+                                                    </Popover>
+                                                  </span>
+                                                </div>
+                                              </div>
+                                              <div
+                                                className={`${visitStyles.hoverActiveHcc}`}
+                                              >
+                                                <div
+                                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                                >
+                                                  {getProviderNameList(
+                                                    data?.providerName
+                                                  )}
+                                                  {getEncounterDateBackgroundHcc(
+                                                    data.encounterDateSplit,
+                                                    data.diagnosisCode
+                                                  )}
+                                                </div>
+                                                <div
+                                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                                >
+                                                  {getCaptureSectionBackground(
+                                                    data.capturedSections,
+                                                    data.diagnosisCode
+                                                  )}
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </li>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  </ul>
+                                </div>
+                                <div className="col-xl-12">
+                                  <ul className="timeline">
+                                    <div
+                                      className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
+                                    >
+                                      <span
+                                        className={`${visitStyles.suggested_title_name}`}
+                                      >
+                                        SUGGESTED CODES
+                                      </span>
+                                      <div className="d-flex justify-content-center">
+                                        <span
+                                          className={`${visitStyles.suggested_title_badge}`}
+                                        >
+                                          {clientSuggestedHccList?.length}
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <div
+                                      className={visitStyles.suggestedcontainer}
+                                    >
+                                      <div
+                                        className={visitStyles.hccStickey_head}
+                                      >
+                                        {clientSuggestedHccList?.length > 0 &&
+                                          clientSuggestedHccList?.map(
+                                            (data) => (
+                                              <li>
+                                                <div
+                                                  className={`hccActiveCard ${visitStyles.hcc_card}`}
+                                                >
+                                                  <div
+                                                    className={`${visitStyles.hcc_card_nameHead}`}
+                                                  >
+                                                    <div className="media-body">
+                                                      <span className="mb-1 disease-name d-flex">
+                                                        <span className="valid-dis-name">
+                                                          {data.diagnosisCode} -
+                                                        </span>
+                                                        <Popover
+                                                          content={
+                                                            data.actualDescription
+                                                          }
+                                                          trigger="hover"
+                                                        >
+                                                          {
+                                                            data.actualDescription
+                                                          }
+                                                        </Popover>
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                  <div
+                                                    className={`${visitStyles.hoverActiveHcc}`}
+                                                  >
+                                                    <div
+                                                      className={`${visitStyles.encounterAndSectionHeader}`}
+                                                    >
+                                                      {getProviderNameList(
+                                                        data?.providerName
+                                                      )}
+                                                      {getEncounterDateBackgroundHcc(
+                                                        data.encounterDateSplit,
+                                                        data.diagnosisCode
+                                                      )}
+                                                    </div>
+                                                    <div
+                                                      className={`${visitStyles.encounterAndSectionHeader}`}
+                                                    >
+                                                      {getCaptureSectionBackground(
+                                                        data.capturedSections,
+                                                        data.diagnosisCode
+                                                      )}
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </li>
+                                            )
+                                          )}
+                                      </div>
+                                    </div>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-xl-6">
+                          <div className={styles.headerTitle}>
+                            <h6 className={styles.headerName}>
+                              Cogent AI Results
+                            </h6>
+                          </div>
+                          <div className={`my-post-content ${styles.mainCard}`}>
+                            <div className="widget-media   ps--active-y">
+                              <div className="row">
+                                <div className="col-xl-12">
+                                  <ul className="timeline">
+                                    <div
+                                      className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
+                                    >
+                                      <span
+                                        className={`${visitStyles.hcc_title_name}`}
+                                      >
+                                        HCC
+                                      </span>
+                                      <div className="d-flex justify-content-center">
+                                        <span
+                                          className={`${visitStyles.hcc_title_badge}`}
+                                        >
+                                          {validClienHccList?.length}
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <div className={styles.container}>
+                                      <div
+                                        className={visitStyles.hccStickey_head}
+                                      >
+                                        {validClienHccList?.map((data) => (
+                                          <li>
+                                            <div
+                                              className={`hccActiveCard ${visitStyles.hcc_card}`}
+                                            >
+                                              <div
+                                                className={`${visitStyles.hcc_card_nameHead}`}
+                                              >
+                                                <div className="media-body">
+                                                  <span className="mb-1 disease-name d-flex">
+                                                    <span className="valid-dis-name">
+                                                      {data.diagnosisCode} -
+                                                    </span>
+                                                    <Popover
+                                                      content={
+                                                        data.actualDescription
+                                                      }
+                                                      trigger="hover"
+                                                    >
+                                                      {data.actualDescription}
+                                                    </Popover>
+                                                  </span>
+                                                </div>
+                                              </div>
+                                              <div
+                                                className={`${visitStyles.hoverActiveHcc}`}
+                                              >
+                                                <div
+                                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                                >
+                                                  {getProviderNameList(
+                                                    data?.providerName
+                                                  )}
+                                                  {getEncounterDateBackgroundHcc(
+                                                    data.encounterDateSplit,
+                                                    data.diagnosisCode
+                                                  )}
+                                                </div>
+                                                <div
+                                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                                >
+                                                  {getCaptureSectionBackground(
+                                                    data.capturedSections,
+                                                    data.diagnosisCode
+                                                  )}
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </li>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  </ul>
+                                </div>
+                                <div className="col-xl-12">
+                                  <ul className="timeline">
+                                    <div
+                                      className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
+                                    >
+                                      <span
+                                        className={`${visitStyles.suggested_title_name}`}
+                                      >
+                                        SUGGESTED CODES
+                                      </span>
+                                      <div className="d-flex justify-content-center">
+                                        <span
+                                          className={`${visitStyles.suggested_title_badge}`}
+                                        >
+                                          {cogentSuggestedHccList?.length}
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <div
+                                      className={visitStyles.suggestedcontainer}
+                                    >
+                                      <div
+                                        className={visitStyles.hccStickey_head}
+                                      >
+                                        {cogentSuggestedHccList?.length > 0 &&
+                                          cogentSuggestedHccList?.map(
+                                            (data) => (
+                                              <li>
+                                                <div
+                                                  className={`hccActiveCard ${visitStyles.hcc_card}`}
+                                                >
+                                                  <div
+                                                    className={`${visitStyles.hcc_card_nameHead}`}
+                                                  >
+                                                    <div className="media-body">
+                                                      <span className="mb-1 disease-name d-flex">
+                                                        <span className="valid-dis-name">
+                                                          {data.diagnosisCode} -
+                                                        </span>
+                                                        <Popover
+                                                          content={
+                                                            data.actualDescription
+                                                          }
+                                                          trigger="hover"
+                                                        >
+                                                          {
+                                                            data.actualDescription
+                                                          }
+                                                        </Popover>
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                  <div
+                                                    className={`${visitStyles.hoverActiveHcc}`}
+                                                  >
+                                                    <div
+                                                      className={`${visitStyles.encounterAndSectionHeader}`}
+                                                    >
+                                                      {getProviderNameList(
+                                                        data?.providerName
+                                                      )}
+                                                      {getEncounterDateBackgroundHcc(
+                                                        data.encounterDateSplit,
+                                                        data.diagnosisCode
+                                                      )}
+                                                    </div>
+                                                    <div
+                                                      className={`${visitStyles.encounterAndSectionHeader}`}
+                                                    >
+                                                      {getCaptureSectionBackground(
+                                                        data.capturedSections,
+                                                        data.diagnosisCode
+                                                      )}
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </li>
+                                            )
+                                          )}
+                                      </div>
+                                    </div>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
                 <div className="col-xl-6">
