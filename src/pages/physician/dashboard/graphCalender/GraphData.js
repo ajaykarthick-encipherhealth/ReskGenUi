@@ -178,7 +178,7 @@ const GraphData = () => {
             />
           </div>
         </div>
-        {graphInfo?.loading &
+        {graphInfo?.loading &&
         (
           <div className={spinSTYles.spinStyle}>
             <Spin loading={graphInfo?.loading} />
