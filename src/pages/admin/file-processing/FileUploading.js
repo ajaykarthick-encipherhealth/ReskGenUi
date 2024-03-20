@@ -1,5 +1,5 @@
 import React from "react";
-import { Offcanvas, Spinner, Button } from "react-bootstrap";
+import { Offcanvas, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 
 const FileUploading = ({
@@ -106,7 +106,6 @@ const FileUploading = ({
                   backgroundColor: "#ffdede",
                   borderColor: "#ffdede",
                   color: "#ff5e5e",
-                  //   height: "32px",
                 }}
               >
                 Cancel

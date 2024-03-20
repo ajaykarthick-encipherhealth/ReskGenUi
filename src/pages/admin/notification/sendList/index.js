@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import moment, { months } from "moment";
+import React from "react";
+import moment from "moment";
 import styles from "../style.module.css";
 import { renderUserPrfoileAvatarCustom } from "../../../../components/headerFilters/functions";
 
@@ -30,9 +30,6 @@ const SendList = ({ result }) => {
                 <span className={styles.timeStatus}>
                   {moment(data?.createdDate).format("MM/DD/YYYY hh:mm:A")}
                 </span>
-                {/* <span className={styles.typeStatus}>
-                  {data.notificationType}
-                </span> */}
               </div>
             </div>
           </div>

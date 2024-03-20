@@ -1,24 +1,15 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Button } from "react-bootstrap";
-import { Offcanvas } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
+import React, { useState, useEffect } from "react";
+
 import { Nav, Tab } from "react-bootstrap";
 import NavBar from "../../../jsx/layouts/nav";
 
-import styles from "../../../styles/file-managemnt.module.css";
 import FileProcessing from "./file-processing";
 import DataValidation from "./data-validation";
 import { useSelector } from "react-redux";
 
 const FileManagement = () => {
   const sideMenu = useSelector((state) => state.sideMenu);
-
-  const [validated, setValidated] = useState(false);
-  const [addPatient, setAddPatient] = useState(false);
-  const [selectFile, setSelectFile] = useState([]);
-  const [selectFileName, setSelectFileName] = useState("Upload File");
   const [activeComponent, setActiveComponent] = useState(<FileProcessing />);
-
   const navigetPage = (pageTitle) => {
     console.log(pageTitle);
     if (pageTitle == "File Processing") {
@@ -30,30 +21,6 @@ const FileManagement = () => {
   };
 
   useEffect(() => {}, []);
-
-  const addPatientForm = () => {
-    setValidated(false);
-    setAddPatient(true);
-  };
-
-  const onChangeFile = (e) => {
-    console.log(e[0]);
-    setSelectFile(e[0]);
-    var splitString = e[0].name.split(".");
-    setSelectFileName(splitString[0]);
-  };
-
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    console.log(form);
-    event.preventDefault();
-    if (form.checkValidity() === true) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
-    setValidated(true);
-  };
 
   const tabList = [
     { title: "File Processing", type: "File Processing" },

@@ -12,8 +12,6 @@
 }
 .msgDiv {
   display: flex;
-  /* height:500px;
-  overflow-y: scroll; */
 }
 .msgCOntainer {
   width: 100%;
@@ -31,7 +29,7 @@
   font-weight: 500;
   color: #000;
 }
-.time{
+.time {
   font-size: 12px;
   font-weight: 400;
   color: #000;
@@ -48,7 +46,7 @@
   overflow: hidden;
   position: relative;
 }
-.no_notificarion_container{
+.no_notificarion_container {
   height: 100%;
   overflow: hidden;
   position: relative;
@@ -60,8 +58,6 @@
   height: 150px;
   width: 150px;
 }
-
-
 
 .container:hover {
   overflow-y: scroll;

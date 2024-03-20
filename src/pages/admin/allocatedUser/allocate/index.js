@@ -1,17 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Avatar, DatePicker, Modal, notification } from "antd";
-import {
-  faSearch,
-  faLock,
-  faXmark,
-  faUser,
-} from "@fortawesome/free-solid-svg-icons";
-import { InputText } from "primereact/inputtext";
 import modalStyle from "./style.module.css";
+import { InputText } from "primereact/inputtext";
 import { useEffect, useState } from "react";
+import Router from "next/router";
+import { faSearch, faXmark, faUser } from "@fortawesome/free-solid-svg-icons";
 import axios from "../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../utility/enpoints";
-import Router from "next/router";
 import { disablePastDate } from "../../../../components/headerFilters/functions";
 
 const AllocateModal = ({
@@ -44,10 +39,10 @@ const AllocateModal = ({
   };
 
   const getUserList = async (search) => {
-    var resoureUrl = `dbservice/user/getL1UsersByOrgIdAndTenantId?orgid=daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5&searchString=${search}`;
+    let resoureUrl = `dbservice/user/getL1UsersByOrgIdAndTenantId?orgid=daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5&searchString=${search}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
-      var result = response?.data?.response;
+      let result = response?.data?.response;
       const user = result?.map((item) => {
         return {
           firstName: item.firstName,
@@ -62,7 +57,7 @@ const AllocateModal = ({
   };
 
   const setAllocate = async () => {
-    var resoureUrl = `dbservice/patient/admin/assignPatients`;
+    let resoureUrl = `dbservice/patient/admin/assignPatients`;
     const response = await axios.post(ENDPOINTS.apiEndoint + resoureUrl, {
       userId: activeEmail,
       dueDate: `${allocateDate + "T00:00:00.000Z"}`,
@@ -84,10 +79,10 @@ const AllocateModal = ({
   };
 
   const getAllCheckList = async (selectEmail) => {
-    var resoureUrl = `/management/admin/getProcessedStatus?userName=${selectEmail}`;
+    let resoureUrl = `/management/admin/getProcessedStatus?userName=${selectEmail}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
-      var result = response?.data?.response;
+      let result = response?.data?.response;
       setChart(result);
     }
   };
@@ -114,7 +109,6 @@ const AllocateModal = ({
       title="Select User"
       footer={false}
       width={700}
-      // style={{height: "800px"}}
       className="allocate_modal_container"
     >
       <div class="form-group has-search">
@@ -178,8 +172,6 @@ const AllocateModal = ({
                     </p>
                   </div>
                 </div>
-
-                {/* <div className="m-2">{handleStatus(item.status)}</div> */}
               </div>
               {activeCard == item.id && (
                 <>
@@ -201,10 +193,8 @@ const AllocateModal = ({
                             } else {
                               setAllocateDate("");
                             }
-                        
                           }}
                           disabledDate={(current) => disablePastDate(current)}
-                          // value={moment(allocateDate, 'YYYY-MM-DD')}
                         />
                       </div>
                       <div className="d-flex my-3">

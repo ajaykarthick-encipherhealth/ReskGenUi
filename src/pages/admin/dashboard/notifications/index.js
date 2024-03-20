@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import styles from "./styles.module.css";
-import Card from "../../../../components/card/index";
-import HeadTitle from "../../../../components/headtitle";
-import { Modal, Spin } from "antd";
-import { SVGICON } from "../../../../jsx/constant/theme";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import moment from "moment";
 import Image from "next/image";
+import { Modal, Spin } from "antd";
+import Card from "../../../../components/card/index";
+import HeadTitle from "../../../../components/headtitle";
+import { SVGICON } from "../../../../jsx/constant/theme";
 import NoNotification from "../../../../images/dashboard/no-notification.png";
-import spinSTYles from '../../../../styles/auth.module.css'
+import spinSTYles from "../../../../styles/auth.module.css";
 
 const Notifications = () => {
   const [openNotifications, setOpenNotification] = useState(false);
@@ -22,18 +22,8 @@ const Notifications = () => {
     setOpenNotification(false);
   };
 
-  const emailSplitFunction = (email) => {
-   if(email){
-    let emailSplit = email?.split("@");
-    return capitalizeFirstLetter(emailSplit[0]);
-   }
-  };
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
   const notificationData =
-     notificationResponse?.data?.content?.length > 0 ? (
+    notificationResponse?.data?.content?.length > 0 ? (
       notificationResponse?.data?.content?.map((info) => (
         <div className={styles.msgDiv}>
           <div style={{ marginTop: "10px" }}>
@@ -45,8 +35,12 @@ const Notifications = () => {
             <div className={styles.time}>
               {moment(info?.createdDate).format("MM-DD-YYYY")}&nbsp;{" "}
               {moment(info?.createdDate).format("hh:mm:A")} &nbsp;{" "}
-              {`${info?.fromUserDetails?.firstName?info?.fromUserDetails?.firstName:""} (${
-                info?.fromUserDetails?.role?info?.fromUserDetails?.role:""
+              {`${
+                info?.fromUserDetails?.firstName
+                  ? info?.fromUserDetails?.firstName
+                  : ""
+              } (${
+                info?.fromUserDetails?.role ? info?.fromUserDetails?.role : ""
               })`}
             </div>
           </div>
@@ -54,7 +48,10 @@ const Notifications = () => {
       ))
     ) : (
       <div className={styles.no_notificarion_container}>
-         {!notificationResponse?.loading && notificationResponse?.data?.content?.length===0 && <Image src={NoNotification} alt="" />}
+        {!notificationResponse?.loading &&
+          notificationResponse?.data?.content?.length === 0 && (
+            <Image src={NoNotification} alt="" />
+          )}
       </div>
     );
 
@@ -95,9 +92,7 @@ const Notifications = () => {
         onCancel={handleOk}
       >
         {notificationResponse?.loading ? (
-          <div
-          className={spinSTYles.spinStyle}
-          >
+          <div className={spinSTYles.spinStyle}>
             <Spin loading={notificationResponse?.loading} />
           </div>
         ) : (

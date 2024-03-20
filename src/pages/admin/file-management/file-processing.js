@@ -1,41 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Button } from "react-bootstrap";
-import axios from "../../../utility/axiosConfig";
-import { Offcanvas } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
+import React, { useState, useEffect } from "react";
 import Select from "react-select";
-import { SVGICON } from "../../../jsx/constant/theme";
 import LoadingSpinner from "../../../jsx/components/spinner/spinner";
-// import './file-management.css';
 
 const FileProcessing = () => {
-  const [validated, setValidated] = useState(false);
   const [fileProcessingList, setFileProcessingList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [addUser, setAddUser] = useState(false);
-
-  const recordsPage = 10;
-  const lastIndex = currentPage * recordsPage;
-  const firstIndex = lastIndex - recordsPage;
-
-  const [npage, setNPage] = useState("");
-  const [number, setNumber] = useState([]);
-  const [records, setRecords] = useState([]);
-
-  function prePage() {
-    if (currentPage !== 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  }
-  function changeCPage(id) {
-    setCurrentPage(id);
-  }
-  function nextPage() {
-    if (currentPage !== npage) {
-      setCurrentPage(currentPage + 1);
-    }
-  }
 
   useEffect(() => {
     const datas = [

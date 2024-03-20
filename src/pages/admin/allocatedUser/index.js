@@ -1,46 +1,35 @@
 import React, { useState, useEffect } from "react";
-import Header from "../../../jsx/layouts/nav/Header";
-import { useSelector } from "react-redux";
-import axios from "../../../utility/axiosConfig";
-import ENDPOINTS from "../../../utility/enpoints";
-import { useRouter } from "next/navigation";
-import Select from "react-select";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useSelector, useDispatch } from "react-redux";
+import Image from "next/image";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { DatePicker, Empty } from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
 import { Paginator } from "primereact/paginator";
-import Footer from "../../../jsx/layouts/Footer";
+import moment from "moment/moment";
+import { Tab, Nav } from "react-bootstrap";
+import Header from "../../../jsx/layouts/nav/Header";
+import axios from "../../../utility/axiosConfig";
+import ENDPOINTS from "../../../utility/enpoints";
 import AllocatedAdminList from "../../../components/table/admin/allocatedAdminList/allocatedAdminList";
 import AllocatedL2AdminList from "../../../components/table/admin/allocatedL2AdminList/allocatedL2AdminList";
 import allocateStyle from "./allocate/style.module.css";
 import AllocateModal from "./allocate";
 import L2AllocateModal from "./l2allocate";
 import reportStyles from "../../reviewer/report/report.module.css";
-import moment from "moment/moment";
-import { Tab, Nav } from "react-bootstrap";
 import SpinnerDots from "../../../components/spinner";
 import TableStyle from "../../../components/table/table.module.css";
-import Image from "next/image";
 import leftArrow from "../../../images/svg/leftArrow.svg";
 import {
   generateOptionsList,
-  generateOptionsLists,
-} from "../../../components/headerFilters/functions";
-import { useDispatch } from "react-redux";
-
-import {
   disableFutureDate,
   renderUserPrfoile,
 } from "../../../components/headerFilters/functions";
-import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
 import Selector from "../../../components/selector";
-import { getSelectUserList } from "../../../store/actions/adminAction/DashboardAction";
 import { getFilters } from "../../../store/actions/AuthActions";
 
 const { RangePicker } = DatePicker;
-
 const statusOption = [
   { value: "", label: "ALL" },
   { value: "URGENT", label: "URGENT" },
@@ -48,6 +37,7 @@ const statusOption = [
   { value: "NORMAL", label: "NORMAL" },
   { value: "LOW", label: "LOW" },
 ];
+
 export default function Patient() {
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -83,21 +73,13 @@ export default function Patient() {
   const [selectedOption, setSelectedOption] = useState("");
   const [selectedOptions, setSelectedOptions] = useState("");
   const [allocatedOption, setAllocatedOption] = useState("");
-
   const [batchCount, setBatchCount] = useState("");
   const [filterBatchCount, setFilterBatchCount] = useState(false);
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
   const filteredList = useSelector((state) => state.auth.filterList);
-  const selectUserList = useSelector(
-    (state) => state?.AdminDashboardReducers?.selectedUsers
-  );
-  useEffect(() => {
-    if (typeof pageNo == "number" && activeTab === 1) {
-      getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
-    }
-  }, [pageNo, pageSize, sort, activeTab]);
   const dispatch = useDispatch();
+
   const getAllList = async (
     pageNo = 0,
     pageSize = 15,
@@ -109,15 +91,15 @@ export default function Patient() {
     sort
   ) => {
     const uId = localStorage.getItem("userId");
-    var resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=${uId}&computationStart=${startDate}&computationEnd=${endDate}&isAllocation=${allocate}&status=${status}&searchString=${search}&sortdirection=${
+    let resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=${uId}&computationStart=${startDate}&computationEnd=${endDate}&isAllocation=${allocate}&status=${status}&searchString=${search}&sortdirection=${
       sort?.sortDir
     }&sortfield=${sort?.sortField}&priority=${
       selectedOption ? selectedOption : ""
     }&batchCount=${batchCount}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response?.data) {
-      var resultMap = [];
-      var result = response?.data?.response?.content;
+      let resultMap = [];
+      let result = response?.data?.response?.content;
       setTotalElements(response?.data?.response?.totalElements);
       result?.map((res) => {
         resultMap.push({
@@ -140,7 +122,7 @@ export default function Patient() {
   const getAllCheckList = async (sort) => {
     setIsLoading(true);
     const uId = localStorage.getItem("userId");
-    var resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${
+    let resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${
       batchCount ? batchCount : pageSize
     }&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
       sort?.sortDir
@@ -149,7 +131,7 @@ export default function Patient() {
     }&batchCount=${batchCount}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
-      var result = response?.data?.response?.content;
+      let result = response?.data?.response?.content;
       const data = result.map((item) => ({
         id: item.patientId,
         name: item.patientName,
@@ -160,17 +142,13 @@ export default function Patient() {
     }
   };
 
-  useEffect(() => {
-    if (selectAllChecked) {
-      if (isPatientList == true) {
-        getAllCheckListL2(sort);
-      } else {
-        getAllCheckList(sort);
-      }
-    } else {
-      setSelectedRowsId([]);
-    }
-  }, [selectAllChecked, sort, isPatientList]);
+  const onPageChange = (e) => {
+    setIsLoading(true);
+    setPaginationFirst(e.first);
+    setPageNo(e.page);
+    setPageSize(e.rows);
+    setTableLoading(true);
+  };
 
   const handleReceivedDatePicker = (date, dateString) => {
     if (dateString[0] == "") {
@@ -198,6 +176,15 @@ export default function Patient() {
     }
   };
 
+  const onPageChangePatient = (e) => {
+    setIsLoading(true);
+    setPaginationFirst(e.first);
+    setPageNoL2Patient(e.page);
+    setPageSize(e.rows);
+    getL2PatientList(l2selectUser, e.page, sort, "");
+    setTableLoading(true);
+  };
+
   const getNameSearch = (search) => {
     setSearchString(search);
     if (activeTab == 1) {
@@ -220,31 +207,12 @@ export default function Patient() {
     }
   };
 
-  const onPageChange = (e) => {
-    setIsLoading(true);
-    setPaginationFirst(e.first);
-    setPageNo(e.page);
-    setPageSize(e.rows);
-    setTableLoading(true);
-  };
-
-  const onPageChangePatient = (e) => {
-    setIsLoading(true);
-    setPaginationFirst(e.first);
-    setPageNoL2Patient(e.page);
-    setPageSize(e.rows);
-    getL2PatientList(l2selectUser, e.page, sort, "");
-    setTableLoading(true);
-  };
-
   const handleOpneModal = () => {
     setValidated(false);
     setAddPatientId(false);
     if (activeTab == 2) {
-      // setSort({ sortDir: "", sortField: "" });
       setAllocateModalL2(true);
     } else {
-      // setSort({ sortDir: "", sortField: "" });
       setAllocateModal(true);
     }
   };
@@ -267,13 +235,13 @@ export default function Patient() {
     }
   };
   const getAuditL2List = async (pageNo, searchString) => {
-    var orgId = localStorage.getItem("orgId");
-    var tenantid = localStorage.getItem("tenantId");
-    var resoureUrl = `dbservice/l2audit?orgid=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}`;
+    let orgId = localStorage.getItem("orgId");
+    let tenantid = localStorage.getItem("tenantId");
+    let resoureUrl = `dbservice/l2audit?orgid=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
-      var resultMap = [];
-      var result = response?.data?.response?.content;
+      let resultMap = [];
+      let result = response?.data?.response?.content;
       setTotalElementsUser(response?.data?.response?.content?.totalElements);
       result?.map((res) => {
         resultMap.push({
@@ -299,6 +267,24 @@ export default function Patient() {
       setTableLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (selectAllChecked) {
+      if (isPatientList == true) {
+        getAllCheckListL2(sort);
+      } else {
+        getAllCheckList(sort);
+      }
+    } else {
+      setSelectedRowsId([]);
+    }
+  }, [selectAllChecked, sort, isPatientList]);
+
+  useEffect(() => {
+    if (typeof pageNo == "number" && activeTab === 1) {
+      getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
+    }
+  }, [pageNo, pageSize, sort, activeTab]);
 
   const renderRows = () => {
     return !tableLoading && l2UserListAll?.length > 0 ? (
@@ -333,7 +319,7 @@ export default function Patient() {
               <div style={{ textAlign: "center" }}>---</div>
             )}
           </td>
-          <td className={TableStyle.childBorder} >
+          <td className={TableStyle.childBorder}>
             {data.totalFileAuditAllocated
               ? data.totalFileAuditAllocated
               : "---"}
@@ -341,7 +327,7 @@ export default function Patient() {
           <td className={TableStyle.childBorder}>
             {data.totalFileAudited ? data.totalFileAudited : "---"}
           </td>
-         
+
           <td className={TableStyle.childBorder}>
             {data.totalFileAuditPending ? data.totalFileAuditPending : "---"}
           </td>
@@ -378,13 +364,13 @@ export default function Patient() {
   ) => {
     setTableLoading(true);
     setIsLoading(true);
-    var dataMap = {
+    let dataMap = {
       firstName: data?.firstName,
       lastName: data?.lastName,
       userName: data?.userName,
     };
     setL2selectUser(dataMap);
-    var resoureUrl = `dbservice/l2audit/patients?username=${
+    let resoureUrl = `dbservice/l2audit/patients?username=${
       data?.userName
     }&page=${pageNoL2Patient}&size=${pageSize}&sortdirection=${
       sort?.sortDir ? sort?.sortDir : "DESC"
@@ -395,8 +381,8 @@ export default function Patient() {
     }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
-      var resultMap = [];
-      var result = response?.data?.response?.content;
+      let resultMap = [];
+      let result = response?.data?.response?.content;
       setTotalElementsPatient(response?.data?.response?.totalElements);
       result?.map((res) => {
         resultMap.push({
@@ -427,10 +413,10 @@ export default function Patient() {
 
   const getAllCheckListL2 = async (sort) => {
     setCheckedLoading(true);
-    var resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=0&size=${totalElementsPatient}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
+    let resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=0&size=${totalElementsPatient}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
-      var result = response?.data?.response;
+      let result = response?.data?.response;
       const data = result?.content?.map((item) => ({
         id: item.patientId,
         name: item.patientName,
@@ -471,26 +457,6 @@ export default function Patient() {
     selectedOptions,
     allocatedOption,
   ]);
-  // useEffect(() => {
-  //   if (selectedCoderOptReport ) {
-  //     dispatch(
-  //       getSelectUserList(
-  //         selectedCoderOptReport === null &&selectedCoderOptReport?.value==='All'  ? "" : selectedCoderOptReport?.value
-  //       )
-  //     );
-
-  //   }
-  // }, [selectedCoderOptReport]);
-  // const options = [
-  //   { value: "", label: "All" },
-  //   { value: "REVIEWER", label: "REVIEWER" },
-  //   { value: "SUPERVISOR", label: "SUPERVISOR" },
-  // ];
-
-  // const optionsUser = selectUserList?.data?.response?.map((res) => ({
-  //   value: res.userName,
-  //   label: res.firstName + " " + res.lastName,
-  // }));
 
   useEffect(() => {
     dispatch(getFilters("patientAllocated"));
