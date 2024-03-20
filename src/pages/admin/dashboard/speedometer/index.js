@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from "react";
 import * as echarts from "echarts";
+import ReactECharts from "echarts-for-react";
+import { useSelector,useDispatch } from "react-redux";
 import styles from "./style.module.css";
 import HeadTitle from "../../../../components/headtitle";
-import ReactECharts from "echarts-for-react";
 import Card from "../../../../components/card";
-import { useSelector } from "react-redux";
 import {
   getManagers,
   getSppedoMeterDatas,
 } from "../../../../services/adminServices/DashboardService";
-import { useDispatch } from "react-redux";
 import { Select, Spin } from "antd";
 import spinSTYles from "../../../../styles/auth.module.css";
 import completStyle from "../completedStatus/styles.module.css";
 
-const { Option } = Select;
 const SpeedoMeter = () => {
   const dispatch = useDispatch();
   const managerOptions = useSelector(
@@ -24,7 +22,6 @@ const SpeedoMeter = () => {
     (state) => state.AdminDashboardReducers.speedometer
   );
   const [selectOption, setSelectedOption] = useState();
-  const [search, setSearch] = useState();
   const selectorOptions = managerOptions?.data?.response
     ? [
         { label: "Clear", value: "clear" },
@@ -201,7 +198,6 @@ const SpeedoMeter = () => {
                   className={spinSTYles.spinStyle}
                   style={{
                     height: "300px",
-                    // paddingTop: "100px",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
