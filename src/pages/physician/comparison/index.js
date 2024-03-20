@@ -25,6 +25,7 @@ import ClientResult from "./ClientResult";
 import CogentAIResult from "./CogentAIResult";
 import RafSummary from "./RafSummary";
 import ModalContent from "./ModalContent";
+import { COLORS3 } from "../../reviewer/patients/details/hcc";
 
 const Hcc = () => {
   const dispatch = useDispatch();
@@ -70,12 +71,13 @@ const Hcc = () => {
     });
   };
 
-  const getProviderNameList = (data) => {
-    let value = data?.map((res) =>
-      res.providerName ? (
-        <Badge
+  const getProviderNameList = (res) => {
+    let value =
+      res?.providerName ? (
+        <div>
+          <Badge
           className={
-            res.authorizedProvider === true
+            res?.authorizedProvider === true
               ? `mt-2 text-start ${styles.provider_name}`
               : `mt-2 text-start ${visitStyles.un_provider_name}`
           }
@@ -88,25 +90,36 @@ const Hcc = () => {
                 size: 10,
                 marginRight: "5px",
                 color:
-                  res.authorizedProvider === true ? "#008000bf" : "#ff0000cc",
+                  res?.authorizedProvider === true ? "#008000bf" : "#ff0000cc",
               }}
             />
           </i>
-          {res.providerName}
+          {res?.providerName}
         </Badge>
+        </div>
       ) : null
-    );
+  
     return value;
   };
 
   const getEncounterDateBackgroundHcc = (value, code) => {
-    return value?.map((res) => {
+    const encounterDateMatching = [];
+    return value?.split(",")?.map((res, index) => {
+      encounterDateMatching?.push({
+        name: res,
+        colors: COLORS3[index],
+      });
+
+      const result = encounterDateMatching.filter((res2) => res2.name == res);
+      let backColor = result[0]?.colors;
       let sectionMapArr = (
-        <span className={`mt-2 text-start cr-pointer ${styles.encounterDate}`}>
+        <span
+          className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+        >
           <i style={{ marginRight: "5px" }}>
             <CalendarOutlined className={visitStyles.calenderIcon} />
           </i>
-          {moment(res).format("MMM DD")}
+          {moment(res, "MM/DD/YYYY").format("MMM DD")}
         </span>
       );
       return sectionMapArr;
@@ -159,29 +172,52 @@ const Hcc = () => {
 
     if (clientResult && cogentAIResult) {
       const validClienthcc = clientResult?.validDisease[clientYear];
-      const validCogentHcc = cogentAIResult?.validDisease[cogentYear];
-      const validSuggestedhcc = clientResult.suggestLab[clientSuggestedYear];
       const validClientSuggestedHcc =
         cogentAIResult?.suggestLab[cogentSuggestedYear];
-      const validUnmatchededhcc =
-        clientResult?.unmatchedDisease[clientUnmatchedYear];
       const validClientUnmatchededHcc =
         cogentAIResult?.unmatchedDisease[cogentUnmatchedYear];
-      const validLabhcc = clientResult?.suggestRadiology[clientLabYear];
       const validClientLabHcc = cogentAIResult?.suggestRadiology[cogentLabYear];
 
+      const validCogentHcc = cogentAIResult?.validDisease[cogentYear];
+      const validSuggestedhcc = clientResult.suggestLab[clientSuggestedYear];
+      const validUnmatchededhcc =
+        clientResult?.unmatchedDisease[clientUnmatchedYear];
+
+      const validLabhcc = clientResult?.suggestRadiology[clientLabYear];
+
       if (validClienthcc?.length > 0 && validCogentHcc?.length > 0) {
+     
         setvalidHccList(validClienthcc);
         setvalidClienHccList(validCogentHcc);
         setClientSuggestedHccList([
-          ...validSuggestedhcc,
-          ...validUnmatchededhcc,
-          ...validLabhcc,
+          ... validSuggestedhcc?.map(item => ({
+            ...item,
+            getPlace: "Lab"
+          })),
+          ... validUnmatchededhcc.map(item => ({
+            ...item,
+            getPlace: "Hcc"
+          })),
+          ... validLabhcc.map(item => ({
+            ...item,
+            getPlace: "Radio"
+          })),
         ]);
         setCogentSuggestedHccList([
-          ...validClientSuggestedHcc,
-          ...validClientUnmatchededHcc,
-          ...validClientLabHcc,
+          ... validClientSuggestedHcc?.map(item => ({
+            ...item,
+            getPlace: "Lab"
+          })),
+          ... validClientUnmatchededHcc?.map(item => ({
+            ...item,
+            getPlace: "Hcc"
+          })),
+         
+          ... validClientLabHcc?.map(item => ({
+            ...item,
+            getPlace: "Radio"
+          }))
+         
         ]);
       }
     }
@@ -195,10 +231,17 @@ const Hcc = () => {
           <div className={`container-fluid ${styles.container_fluid}`}>
             <div className={styles.mainContainer}>
               <div className="row">
-                <div className="col-xl-8 col-sm-12">
+                <div className="col-xl-12 col-sm-12">
                   <div className={`${visitStyles.patient_info_details}`}>
-                    <div className="card-body">
-                      <div className="row">
+                    <div
+                      className="card-body"
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <div className="row" style={{ width: "90%" }}>
                         <div className="col-xl-2 col-sm-12">
                           <FontAwesomeIcon icon={faIdCardClip} />
                           <label>Patient Id</label>
@@ -238,6 +281,20 @@ const Hcc = () => {
                           </h6>
                         </div>
                       </div>
+                      <div style={{ display: "flex", justifyContent: "end" }}>
+                        <button
+                          onClick={() => setFileUploadModal(true)}
+                          className={`${visitStyles.combo_add_btn} ${styles.addFileBtn}`}
+                        >
+                          <FontAwesomeIcon
+                            icon={faPlus}
+                            style={{
+                              color: "#fff",
+                              size: 12,
+                            }}
+                          />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -254,18 +311,6 @@ const Hcc = () => {
                               <h6 className={styles.headerName2}>
                                 Client Results
                               </h6>
-                              <button
-                                onClick={() => setFileUploadModal(true)}
-                                className={`${visitStyles.combo_add_btn} ${styles.addFileBtn}`}
-                              >
-                                <FontAwesomeIcon
-                                  icon={faPlus}
-                                  style={{
-                                    color: "#fff",
-                                    size: 12,
-                                  }}
-                                />
-                              </button>
                             </div>
                           </div>
                           <div className={`my-post-content ${styles.mainCard}`}>
@@ -280,6 +325,7 @@ const Hcc = () => {
                                   getCaptureSectionBackground
                                 }
                                 clientSuggestedHccList={clientSuggestedHccList}
+                                comparisonData={comparisonData}
                               />
                             </div>
                           </div>
@@ -302,6 +348,7 @@ const Hcc = () => {
                                   getCaptureSectionBackground
                                 }
                                 cogentSuggestedHccList={cogentSuggestedHccList}
+                                comparisonData={comparisonData}
                               />
                             </div>
                           </div>
