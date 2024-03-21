@@ -8,7 +8,7 @@ const RegularButton = ({ type, name, onClick, width }) => {
         type === "outline" ? Style.outer : Style.btnColor
       }`}
       onClick={onClick}
-      style={{ width: width }}
+      style={{ width: width}}
     >
       {name}
     </button>
