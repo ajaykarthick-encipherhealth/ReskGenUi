@@ -1,20 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Modal, DatePicker } from "antd";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tab, Nav } from "react-bootstrap";
-import Select from "react-select";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch } from "react-redux";
-import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
 import "react-circular-progressbar/dist/styles.css";
 import styles from "./report.module.css";
 import Header from "../../../jsx/layouts/nav/Header";
 import SentReportTable from "../../../components/table/sentReport/sentReport";
 import ReceivedReport from "../../../components/table/receivedReport/receivedReport";
-import CoderReport from "../../../components/table/CoderReport/coderReport";
-import Export, { debounce } from "./Export";
 import {
   getReceivedDetails,
   getReportDetails,
@@ -22,7 +17,6 @@ import {
 } from "../../../store/actions/adminAction/ReportActions";
 import { getSelectUserList } from "../../../store/actions/adminAction/DashboardAction";
 import SpinnerDots from "../../../components/spinner";
-import HeaderFilters from "../../../components/headerFilters";
 import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
 import { disableFutureDate } from "../../../components/headerFilters/functions";
 import Selector from "../../../components/selector";
@@ -293,10 +287,8 @@ const index = () => {
     (state) => state.adminReport?.receivedDetails
   );
   const [status, setStatus] = useState("");
-  const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("FIHR");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
   const [comments, setComments] = useState();
@@ -328,9 +320,7 @@ const index = () => {
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
-  const [isindividual, setIsindividual] = useState(false);
   const [selectMemberType, setSelectMemberType] = useState("");
-  const [selectUser, setSelectUser] = useState([]);
   const [selectManager, setSelectedManger] = useState("");
   const [select, setSelect] = useState(null);
 
@@ -341,14 +331,10 @@ const index = () => {
   const SentOptions = [];
   const uniqueRoles = new Set();
 
-  const completedDatas = useSelector(
-    (state) => state?.AdminDashboardReducers?.completedStatus
-  );
+
   const selectUserList = useSelector(
     (state) => state?.AdminDashboardReducers?.selectedUsers
   );
-
-  const activeTabs = useSelector((state) => state?.adminReport?.activetab);
 
   SentReportDetails?.data?.response?.data?.forEach((data) => {
     data?.receivedUsers?.forEach((item) => {
@@ -359,14 +345,7 @@ const index = () => {
       }
     });
   });
-  const memberTypeChanges = (e) => {
-    setSelectMemberType(e);
-    setIsindividual(false);
-    setSelectUser([]);
-    if (e != "All") {
-      setIsindividual(true);
-    }
-  };
+
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -381,15 +360,9 @@ const index = () => {
     setSentPageNo(e.page);
   };
 
-  const closeModal = () => {
-    setIsModalVisible(false);
-    setSelectedRows([]);
-    setSelectAll(false);
-  };
 
   const handleTabs = (name) => {
     setSelectedDates(null);
-    // setActiveTab(name);
     dispatch(getActiveTab(name));
   };
   useEffect(() => {
@@ -472,11 +445,7 @@ const index = () => {
       );
     }
   }, [selectedCoderOptReport]);
-  const options = [
-    { value: "", label: "All" },
-    { value: "REVIEWER", label: "REVIEWER" },
-    { value: "SUPERVISOR", label: "SUPERVISOR" },
-  ];
+
 
   const optionsUser =
     selectUserList?.data?.response?.map((res) => ({
@@ -717,54 +686,7 @@ const index = () => {
                                     ) : (
                                       <p>Comments not found</p>
                                     )}
-                                    {/* <div className={styles.datas}>
-                                      Visit Data
-                                    </div>
-                                    <div className={styles.description}>
-                                      Lorem Ipsum is simply dummy text of the
-                                      printing and typesetting industry.
-                                    </div>
-                                  </div>
-                                  <div className={styles.data}>
-                                    <div className={styles.datas}>
-                                      Combination codes
-                                    </div>
-                                    <div className={styles.description}>
-                                      Lorem Ipsum is simply dummy text of the
-                                      printing and typesetting industry.
-                                    </div>
-                                  </div>
-                                  <div className={styles.data}>
-                                    <div className={styles.datas}>
-                                      M.E.A.T criteria
-                                    </div>
-                                    <div className={styles.description}>
-                                      Lorem Ipsum is simply dummy text of the
-                                      printing and typesetting industry.
-                                    </div>
-                                  </div>
-                                  <div className={styles.heads}>
-                                    <span className={styles.headText}>
-                                      Radiology{" "}
-                                    </span>
-                                  </div>
-                                  <div className={styles.data}>
-                                    <div className={styles.datas}>
-                                      Visit Data
-                                    </div>
-                                    <div className={styles.description}>
-                                      Lorem Ipsum is simply dummy text of the
-                                      printing and typesetting industry.
-                                    </div>
-                                  </div>
-                                  <div className={styles.data}>
-                                    <div className={styles.datas}>
-                                      Combination codes
-                                    </div>
-                                    <div className={styles.description}>
-                                      Lorem Ipsum is simply dummy text of the
-                                      printing and typesetting industry.
-                                    </div> */}
+                                    
                                   </div>
                                 </div>
                               </div>
