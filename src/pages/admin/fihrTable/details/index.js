@@ -9,12 +9,7 @@ import { InputText } from "primereact/inputtext";
 import "react-circular-progressbar/dist/styles.css";
 import styles from "../fihr.module.css";
 import Header from "../../../../jsx/layouts/nav/Header";
-import reportStyles from "../../report/report.module.css";
-import {
-  getReceivedDetails,
-  getReportDetails,
-  getSentDetails,
-} from "../../../../store/actions/adminAction/ReportActions";
+import { getSentDetails } from "../../../../store/actions/adminAction/ReportActions";
 import { getSelectUserList } from "../../../../store/actions/adminAction/DashboardAction";
 import SpinnerDots from "../../../../components/spinner";
 import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
@@ -22,6 +17,11 @@ import { disableFutureDate } from "../../../../components/headerFilters/function
 import Selector from "../../../../components/selector";
 import { useRouter } from "next/router";
 import DetailsTable from "../../../../components/table/admin/FihrPatient/DetailsTable";
+import computed from "../../../../images/fihr/computed.svg";
+import profile from "../../../../images/fihr/profile.svg";
+import person from "../../../../images/fihr/person.svg";
+import statusIcon from "../../../../images/fihr/status.svg";
+import calender from "../../../../images/fihr/calender.svg";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -36,7 +36,7 @@ const { RangePicker } = DatePicker;
 const FIHRData = [
   {
     patientId: "#1234",
-    patientName:"Ether park",
+    patientName: "Ether park",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -51,7 +51,7 @@ const FIHRData = [
   },
   {
     patientId: "#1234",
-    patientName:"Ether park",
+    patientName: "Ether park",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -66,7 +66,7 @@ const FIHRData = [
   },
   {
     patientId: "#1234",
-    patientName:"Ether park",
+    patientName: "Ether park",
     patientCount: "100",
     status: "computed",
     statusValue: "200/23",
@@ -81,7 +81,7 @@ const FIHRData = [
   },
   {
     patientId: "#1234",
-    patientName:"Ether park",
+    patientName: "Ether park",
     patientCount: "100",
     status: "failed",
     statusValue: "200/23",
@@ -96,7 +96,7 @@ const FIHRData = [
   },
   {
     patientId: "#1234",
-    patientName:"Ether park",
+    patientName: "Ether park",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -112,7 +112,7 @@ const FIHRData = [
   },
   {
     patientId: "#1234",
-    patientName:"Ether park",
+    patientName: "Ether park",
     patientCount: "100",
     status: "computed",
     statusValue: "200/23",
@@ -127,7 +127,7 @@ const FIHRData = [
   },
   {
     patientId: "#1234",
-    patientName:"Ether park",
+    patientName: "Ether park",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -142,7 +142,7 @@ const FIHRData = [
   },
   {
     patientId: "#1234",
-    patientName:"Ether park",
+    patientName: "Ether park",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -158,7 +158,7 @@ const FIHRData = [
   },
   {
     patientId: "#1234",
-    patientName:"Ether park",
+    patientName: "Ether park",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -173,7 +173,7 @@ const FIHRData = [
   },
   {
     patientId: "#1234",
-    patientName:"Ether park",
+    patientName: "Ether park",
     patientCount: "100",
     status: "failed",
     statusValue: "200/23",
@@ -188,7 +188,7 @@ const FIHRData = [
   },
   {
     patientId: "#1234",
-    patientName:"Ether park",
+    patientName: "Ether park",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -203,7 +203,7 @@ const FIHRData = [
   },
   {
     patientId: "#1234",
-    patientName:"Ether park",
+    patientName: "Ether park",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -219,7 +219,7 @@ const FIHRData = [
 
   {
     patientId: "#1234",
-    patientName:"Ether park",
+    patientName: "Ether park",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -234,7 +234,7 @@ const FIHRData = [
   },
   {
     patientId: "#1234",
-    patientName:"Ether park",
+    patientName: "Ether park",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -249,7 +249,7 @@ const FIHRData = [
   },
   {
     patientId: "#1234",
-    patientName:"Ether park",
+    patientName: "Ether park",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -264,7 +264,7 @@ const FIHRData = [
   },
   {
     patientId: "#1234",
-    patientName:"Ether park",
+    patientName: "Ether park",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -279,7 +279,7 @@ const FIHRData = [
   },
   {
     patientId: "#1234",
-    patientName:"Ether park",
+    patientName: "Ether park",
     patientCount: "100",
     status: "processing",
     statusValue: "200/23",
@@ -317,17 +317,12 @@ const Index = () => {
 
   const [pageNo, setPageNo] = useState(0);
   const [sentPageNo, setSentPageNo] = useState(0);
-  const [receivedPageNo, setReceivedPageNo] = useState(0);
 
   const [paginationFirst, setPaginationFirst] = useState(0);
-  const [paginationReceivedFirst, setPaginationReceivedFirst] = useState(0);
-  const [paginationSentFirst, setPaginationSentFirst] = useState(0);
 
   const [modal, setModal] = useState(false);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
-
-  const [selectedDates, setSelectedDates] = useState(null);
 
   const [selectedCoderOptReport, setSelectedCoderOptReport] = useState("");
 
@@ -410,6 +405,44 @@ const Index = () => {
     }
   }, [reportActiveTab]);
 
+  const headerData = [
+    {
+      id: 1,
+      title: "Batch Name",
+      icon: profile,
+      name: "Folder Name6",
+    },
+    {
+      id: 2,
+      title: "Status",
+      icon: statusIcon,
+      name: "Completed 270/280",
+    },
+    {
+      id: 3,
+      title: "Computed",
+      icon: computed,
+      name: "269/280",
+    },
+    {
+      id: 4,
+      title: "Uploaded By",
+      icon: person,
+      name: "Nicolas Miles",
+    },
+    {
+      id: 5,
+      title: "Upload Date",
+      icon: calender,
+      name: "03/15/2024",
+    },
+    {
+      id: 6,
+      title: "Year Of Service",
+      icon: calender,
+      name: "2022, 2023, 2024",
+    },
+  ];
   return (
     <>
       <Header />
@@ -424,7 +457,6 @@ const Index = () => {
                 <div className="">
                   <div className="card-body p-0">
                     <div className="table-responsive active-projects task-table">
-                      <div className={styles.topHeader}>details</div>
                       <div className={styles.topHeader}>
                         <button
                           className={`${styles.backButtonStyle}`}
@@ -434,7 +466,24 @@ const Index = () => {
                         >
                           <Image src={leftArrow} />
                         </button>
-
+                        <div style={{width:"95%",display:"flex",margin:"auto"}}>
+                        
+                          {headerData?.map((item) => (
+                            <div className="col-xl-2">
+                              <div style={{display:"flex"}}>
+                                <Image src={item?.icon} alt="npimg" />
+                                <div className={styles.topTitle}>
+                                {item?.title}
+                                  </div>
+                              </div>
+                              <div>{item?.name}</div>
+                            </div>
+                          ))}
+                         
+                        </div>
+                        <span></span>
+                      </div>
+                      <div className={styles.topHeader}>
                         <div className="col-lg-2 mx-2">
                           <label>Search by Name or ID</label>
                           <div class="form-group has-search">
