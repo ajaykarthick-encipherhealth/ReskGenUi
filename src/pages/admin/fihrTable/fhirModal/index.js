@@ -35,6 +35,7 @@ function FhirDrawer({ isDrawerOpen, setIsDrawerOpen }) {
                   name="name"
                   required
                   type="text"
+                  placeholder="Enter batch name"
                   // onChange={handleChange}
                 />
               </div>
@@ -43,7 +44,7 @@ function FhirDrawer({ isDrawerOpen, setIsDrawerOpen }) {
                 <Form.Label>
                   Upload File <span className="text-danger">*</span>{" "}
                 </Form.Label>
-                <UploadFile title={"Upload Excel, CSV & Drag and drop your files"}/>
+                <UploadFile title="Upload Excel, CSV & Drag and drop your files" />
               </div>
 
               <div className="col-xl-12 mb-3">
@@ -54,15 +55,14 @@ function FhirDrawer({ isDrawerOpen, setIsDrawerOpen }) {
                   name="year"
                   required
                   type="number"
+                  placeholder="Enter year of service"
                   // onChange={handleChange}
                 />
               </div>
 
               {/* Proceed Button */}
               <div className="col-xl-12 mb-3 d-grid justify-content-center">
-                <Button variant="primary" type="submit">
-                  Proceed
-                </Button>
+                <Button type="submit">Proceed</Button>
               </div>
             </div>
           </Form>
