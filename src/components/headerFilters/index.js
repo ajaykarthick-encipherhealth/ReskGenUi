@@ -79,6 +79,19 @@ const HeaderFilters = ({
   defaultEndDate2,
   isAnotherPicker,
 
+  //if has time picker
+  isRangeTimePicker,
+  timePickerlabel,
+  defaultStartTime,
+  defaultEndTime,
+  setStartTime,
+  setEndTime,
+  setSelectedTime,
+  setReceivedStartTime,
+  setReceivedEndTime,
+  setCoderStartTime,
+  setCoderEndTime,
+
   // if has allocated date picker
   pickerlabe3,
   defaultStartDate3,
@@ -305,6 +318,38 @@ const HeaderFilters = ({
                 disabled={disable != "Yes" && true}
               />
             </div>
+          )}
+
+          {isRangeTimePicker && (
+            <>
+              <div className={defaultSize} style={{ width: "20%" }}>
+                <label className={styles.label}>{timePickerlabel}</label>
+                <div>
+                  <RangePicker
+                    showTime={{ format: "HH:mm" }} // Specify the time format
+                    format="YYYY-MM-DD HH:mm" // Specify the combined date and time format
+                    // value={dayjs(selectedDates2).format('MM-DD-YYYY')}
+                    // onChange={(date, dateString) =>
+                    //   handleRnagePicker2({
+                    //     date,
+                    //     dateString,
+                    //     setStartDate2,
+                    //     setEndDate2,
+                    //   })
+                    // }
+                    // defaultValue={
+                    //   defaultEndDate2 && defaultStartDate2
+                    //     ? [
+                    //         dayjs(defaultStartDate2, "YYYY-MM-DD"),
+                    //         dayjs(defaultEndDate2, "YYYY-MM-DD"),
+                    //       ]
+                    //     : []
+                    // }
+                    // disabledDate={(current) => disableFutureDate(current)}
+                  />
+                </div>
+              </div>
+            </>
           )}
 
           {isAnotherPicker && (
@@ -578,21 +623,20 @@ const HeaderFilters = ({
                 </div>
               </>
             )}
-              {isAnotherPicker6 && (
+            {isAnotherPicker6 && (
               <>
                 <div className={defaultSize}>
                   <label className={styles.label}>{pickerlabe6}</label>
                   <div>
-                  <Select
-                    onChange={(selectedOption) => {
-                      setPriority(selectedOption?.value);
-                    }}
-                    options={allocatedToOptoons}
-                    className="custom-react-select"
-                    isSearchable={false}
-                    placeholder={defaultPriority}
-                  />
-                   
+                    <Select
+                      onChange={(selectedOption) => {
+                        setPriority(selectedOption?.value);
+                      }}
+                      options={allocatedToOptoons}
+                      className="custom-react-select"
+                      isSearchable={false}
+                      placeholder={defaultPriority}
+                    />
                   </div>
                 </div>
               </>

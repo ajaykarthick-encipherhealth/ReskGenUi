@@ -5,7 +5,7 @@ import {
 
 export const LIST = "LIST";
 
-export const getPatients = () => {
+export const getPatients = (physicianId, from, to, priority, search) => {
   return (dispatch) => {
     dispatch({
       type: LIST,
@@ -15,7 +15,7 @@ export const getPatients = () => {
       },
     });
     try {
-      PatientsList().then((response) => {
+      PatientsList(physicianId, from, to, priority, search).then((response) => {
         if (response?.data) {
           dispatch({
             type: LIST,
