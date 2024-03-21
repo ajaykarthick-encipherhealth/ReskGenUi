@@ -45,7 +45,7 @@ const bullets = [
     name: "Not Computed",
   },
   {
-    color: "red",
+    color: "#e88d8d",
     name: "Failed",
   },
 ];
