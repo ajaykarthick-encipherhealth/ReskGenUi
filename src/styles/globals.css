@@ -14265,3 +14265,28 @@ input[type="number"] {
 .hcc_form > .ant-select-selector {
   height: 42px !important;
 }
+
+
+.customTooltip .ant-tooltip-inner {
+  color: yellow !important;
+  background-color: green !important;
+}
+
+.customTooltip .ant-tooltip-placement-bottom .ant-tooltip-arrow,
+.customTooltip .ant-tooltip-placement-bottomLeft .ant-tooltip-arrow,
+.customTooltip .ant-tooltip-placement-bottomRight .ant-tooltip-arrow {
+  border-bottom-color: green !important;
+}
+.fihrComputedProgressText >.ant-progress-text {
+  color:rgba(11, 96, 176, 1) !important;
+}
+.fihrProgressText >.ant-progress-text {
+  color:rgba(252, 103, 54, 1) !important;
+}
+.fihrFailedProgressText >.ant-progress-text {
+  color:red !important;
+}
+
+.fihrComputedProgressText >.ant-progress-inner >.ant-progress-bg::after{
+  background-color: green !important;
+}
