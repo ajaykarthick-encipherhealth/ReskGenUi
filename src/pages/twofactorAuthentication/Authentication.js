@@ -149,31 +149,35 @@ const Index = () => {
         <div className={styles.lastContainer}>
           {enableMFA ? (
             <>
-              <button
-                className={styles.sendBtn}
-                onClick={() => {
-                  const codeString = code?.join("");
-                  dispatch(
-                    getValidateCode(
-                      username,
-                      encyptingPass(codeString),
-                      router,
-                      "validate",
-                      password
-                    )
-                  );
-                }}
-              >
-                SUBMIT
-              </button>
-              <button
+              <div className={styles.enableMfaBtn}>
+                <RegularButton
+                  type="submit"
+                  onClick={() => {
+                    const codeString = code?.join("");
+                    dispatch(
+                      getValidateCode(
+                        username,
+                        encyptingPass(codeString),
+                        router,
+                        "validate",
+                        password
+                      )
+                    );
+                  }}
+                  name="SUBMIT"
+                  width={200}
+                />
+              </div>
+              <RegularButton
+                type="outline"
+                name="BACK"
                 className={styles.backBtn}
                 onClick={() => {
                   router.push("/login");
                 }}
-              >
-                BACK
-              </button>
+                width={200}
+              />
+
               {/* <div className={styles.redirect}>
                 <span className={styles.code}> Didn't get a Code? </span>
                 <span className={styles.link}>Send again</span>

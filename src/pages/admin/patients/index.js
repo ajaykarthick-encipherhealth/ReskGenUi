@@ -44,13 +44,17 @@ const bullets = [
     color: "#be3144",
     name: "Not Computed",
   },
+  {
+    color: "#e88d8d",
+    name: "Failed",
+  },
 ];
 
 const statusOptions = [
   { label: "ALL", value: "" },
   { label: "PROCESSING", value: "1", status: 1 },
   { label: "COMPUTED", value: "2", status: 2 },
-  { label: "FAILED", value: "3", status: 3},
+  { label: "FAILED", value: "3", status: 3 },
   { label: "NOT COMPUTED", value: "0", status: 0 },
 ];
 
@@ -64,7 +68,7 @@ export default function Patient() {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(true);
   const [addPatient, setAddPatient] = useState(false);
-  const [addPatientId, setAddPatientId] = useState(false);                                            
+  const [addPatientId, setAddPatientId] = useState(false);
   const [selectFile, setSelectFile] = useState(null);
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
   const [completedStartDate, setCompletedStartDate] = useState("");
@@ -398,9 +402,13 @@ export default function Patient() {
         <button
           onClick={() => addPatientFile(rowData)}
           className="btn hegiht10 shadow  sharp me-1 action-btn"
-          style={{background:"#04306f"}}
+          style={{ background: "#04306f" }}
         >
-          <FontAwesomeIcon icon={faUpload} fontSize={11} style={{color:"#ffff"}}/>
+          <FontAwesomeIcon
+            icon={faUpload}
+            fontSize={11}
+            style={{ color: "#ffff" }}
+          />
         </button>
       </div>
     );

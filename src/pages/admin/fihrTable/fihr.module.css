@@ -302,3 +302,51 @@
 .uploadInput {
   display: none;
 }
+.backButtonStyle {
+  background-color: rgba(255, 255, 255, 1);
+  width: 40px;
+  height: 42px;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+  /* margin-top: 30px; */
+}
+.topHeader {
+  display: flex;
+  width: 97%;
+  margin: auto;
+  margin-top: 20px;
+}
+.refreshBtn {
+  width: 22px;
+  height: 22px;
+  margin-left: 5px;
+  background-color: rgba(250, 209, 209, 1);
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding-left: 3px;
+}
+.progreddBr {
+  width: 40%;
+  margin: auto;
+}
+.progressDIv {
+  position: relative;
+  left: 10px;
+}
+
+@media screen and (width>1500px) {
+  .progressDIv {
+    position: relative;
+    left: 22px;
+  }
+}
+.topTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(136, 136, 136, 1);
+  margin: 0px 0 5px 5px;
+}

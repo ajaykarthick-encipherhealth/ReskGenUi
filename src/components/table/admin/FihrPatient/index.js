@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
-import { Badge, Empty, Popover, Tooltip } from "antd";
+import React, { useEffect, useState } from "react";
+import { Empty, Popover, Tooltip } from "antd";
+import warning from "../../../../images/fihr/warning.svg";
+import waningFilled from "../../../../images/fihr/warningFilled.svg";
 import TableStyle from "../../table.module.css";
-import { SVGICON } from "../../../../jsx/constant/theme";
 import { Paginator } from "primereact/paginator";
 import { selectedRow } from "../../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
@@ -9,11 +10,10 @@ import dayjs from "dayjs";
 import {
   dateFormate,
   renderUserPrfoileAvatar,
-  sortFunction,
 } from "../../../headerFilters/functions";
 import moment from "moment";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
+import Image from "next/image";
+import { useRouter } from "next/router";
 
 function FIHRPatinetTable({
   reportListAll,
@@ -24,7 +24,8 @@ function FIHRPatinetTable({
   tableData,
 }) {
   const dispatch = useDispatch();
-
+  const router=useRouter()
+  const [display, setDisplay] = useState({});
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
   }, [selectedRows]);
@@ -32,10 +33,10 @@ function FIHRPatinetTable({
   const dateFormateAlign = (dates) => {
     return dates?.map((res, index) => {
       if (index < 1) {
-        var sectionMapArr = <span>{moment(res).year()}</span>;
+        let sectionMapArr = <span>{moment(res).year()}</span>;
         return sectionMapArr;
       } else if (dates.length - 1 == index) {
-        var sectionMapArr = (
+        let sectionMapArr = (
           <Popover
             content={
               <>
@@ -61,6 +62,9 @@ function FIHRPatinetTable({
     });
   };
 
+  const handleRow=(row)=>{
+    router?.push("/admin/fihrTable/details")
+  }
   return (
     <div className={TableStyle.classContaineer}>
       {reportListAll?.data?.length === 0 ? (
@@ -72,36 +76,18 @@ function FIHRPatinetTable({
               <>
                 <th>BATCH ID</th>
                 <th>PATIENT COUNT</th>
-                {/* <th
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    sortFunction(
-                      sortOrder,
-                      setSortOrder,
-                      setSort,
-                      "processedDate"
-                    );
-                  }}
-                >
-                  COMPLETED DATE{" "}
-                  {sortOrder === "ASC" ? (
-                    <ArrowUpOutlined />
-                  ) : (
-                    <ArrowDownOutlined />
-                  )}
-                </th> */}
-                <th>STATUS </th>
+                <th style={{ paddingLeft: "40px" }}>STATUS </th>
                 <th>YEAR OF SERVICE</th>
                 <th className={TableStyle.rowAudited}>INITIATED BY </th>
-                <th>BATCH INITIATED DATE </th>
+                <th style={{textAlign:"center"}}>BATCH INITIATED DATE </th>
               </>
             </tr>
           </thead>
 
           <tbody className={TableStyle.bodytable}>
-            {tableData.length > 0 ? (
-              tableData.map((row, index) => (
-                <tr key={index}>
+            {tableData?.length > 0 ? (
+              tableData?.map((row, index) => (
+                <tr key={index} onClick={()=>{handleRow(row)}} style={{ height: "40px" }}>
                   <>
                     <td className={TableStyle.childBorder}>
                       {row?.batchID ? row?.batchID : "---"}
@@ -113,9 +99,47 @@ function FIHRPatinetTable({
                     <td className={TableStyle.childBorder}>
                       <div>
                         <span className="text-capitalize mx-2">
-                          {row.status}
+                          {row?.status}
                         </span>
-                        <span>{row.statusValue}</span>
+                        <span>
+                          <span
+                            className="customTooltip"
+                            onMouseOver={() => {
+                              setDisplay((prevState) => ({
+                                ...prevState,
+                                [index]: true,
+                              }));
+                            }}
+                          >
+                            {row?.failedCount && (
+                              <Tooltip
+                                title={
+                                  <span>
+                                    <span className={TableStyle?.toolTipCOnt}>
+                                      {row?.failedCount}
+                                    </span>
+                                    <span>Files Pending</span>
+                                  </span>
+                                }
+                              >
+                                <Image
+                                  onMouseLeave={() => {
+                                    setDisplay((prevState) => ({
+                                      ...prevState,
+                                      [index]: false,
+                                    }));
+                                  }}
+                                  width={15}
+                                  height={15}
+                                  src={display[index] ? waningFilled : warning}
+                                  alt="noimg"
+                                  className={TableStyle.imgContainer}
+                                />
+                              </Tooltip>
+                            )}
+                          </span>
+                          {row?.statusValue}
+                        </span>
                       </div>
                     </td>
 
@@ -128,17 +152,17 @@ function FIHRPatinetTable({
                       className={TableStyle.childBorder}
                       style={{ textAlign: "left", paddingLeft: "110px" }}
                     >
-                      {row.initiatedByFirstName ||
-                      row.initiatedByLastName ||
-                      row.auditedByProfileImage ? (
+                      {row?.initiatedByFirstName ||
+                      row?.initiatedByLastName ||
+                      row?.auditedByProfileImage ? (
                         <div style={{ display: "flex", alignItems: "center" }}>
                           {" "}
                           <span style={{ marginRight: "10px" }}>
                             {" "}
                             {renderUserPrfoileAvatar(
-                              row.initiatedByFirstName,
-                              row.initiatedByLastName,
-                              row.auditedByProfileImage,
+                              row?.initiatedByFirstName,
+                              row?.initiatedByLastName,
+                              row?.auditedByProfileImage,
                               "header"
                             )}
                           </span>
@@ -150,7 +174,7 @@ function FIHRPatinetTable({
                         <div style={{ paddingLeft: "70px" }}>---</div>
                       )}
                     </td>
-                    <td className={TableStyle.childBorder}>
+                    <td className={TableStyle.childBorder} style={{textAlign:"center"}}>
                       {dateFormate(dayjs, row?.initialedDate)}
                     </td>
                   </>
@@ -170,11 +194,11 @@ function FIHRPatinetTable({
         <Paginator
           first={paginationFirst}
           rows={15}
-          totalRecords={ReportPatientDetails?.totalElements}
+          totalRecords={tableData?.length}
           onPageChange={onPageChange}
         />
         <div className="total-pages">
-          Total count: {ReportPatientDetails?.totalElements}
+          Total count: {tableData?.length}
         </div>
       </div>
     </div>
