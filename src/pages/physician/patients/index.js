@@ -65,7 +65,7 @@ export default function Patients() {
                             isRangeTimePicker={true}
                             timePickerlabel={"Date and time Range"}
                             addUser={false}
-                            setSearch={""}
+                            setSearch={setSearch}
                           />
                         </div>
                       </div>
