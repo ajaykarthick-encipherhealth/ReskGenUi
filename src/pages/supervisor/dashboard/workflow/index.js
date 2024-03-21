@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import styles from "./styles.module.css";
 import Image from "next/image";
+import { Col, Empty, Row, Spin } from "antd";
+import styles from "./styles.module.css";
 import completed from "../../../../images/dashboard/completed.png";
 import calender from "../../../../images/dashboard/calender.png";
 import Card from "../../../../components/card";
 import allocated from "../../../../images/dashboard/allocation.png";
-import { Col, Empty, Row, Spin } from "antd";
 import HeadTitle from "../../../../components/headtitle";
 import holdbg from "../../.../../../../images/dashboard/holdbg.png";
 import allocatedbg from "../../.../../../../images/dashboard/allocatedbg.png";
