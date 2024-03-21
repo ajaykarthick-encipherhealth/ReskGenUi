@@ -1089,7 +1089,8 @@ const Radiology = ({}) => {
 
   const showErrorMessage = () => {
     setOpens(false);
-    notification.info({ message: "Tree Not Available" });
+    notification.destroy();
+    notification.info({ message: "Tree Not Available", duration: 1 });
   };
 
   const getCaptureSectionBackgroundMeat = (
