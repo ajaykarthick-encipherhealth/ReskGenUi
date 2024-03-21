@@ -21,8 +21,10 @@ import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction"
 import { disableFutureDate } from "../../../components/headerFilters/functions";
 import Selector from "../../../components/selector";
 import FIHRPatinetTable from "../../../components/table/admin/FihrPatient";
+import PdfTable from "../../../components/table/admin/pdfTable";
 import RegularButton from "../../../components/button";
 import FhirDrawer from "./fhirModal";
+
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -363,9 +365,11 @@ const Index = () => {
       }
     });
   });
+
   const handleUploadButtonClick = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
+
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -569,19 +573,25 @@ const Index = () => {
                                     eventKey="nonhcc"
                                   ></Tab.Pane>
                                   <Tab.Pane id="my-posts" eventKey="pdf">
-                                    <SentReportTable
-                                      paginationFirst={paginationSentFirst}
-                                      details={
-                                        SentReportDetails?.data?.response
+                                    <PdfTable
+                                      setModal={setModal}
+                                      modal={modal}
+                                      reportListAll={filteredCOder}
+                                      paginationFirst={paginationFirst}
+                                      ReportPatientDetails={
+                                        ReportPatientDetails?.response
                                       }
-                                      onSentPageChange={onSentPageChange}
-                                      loading={SentReportDetails?.loading}
-                                      setSortOrder={setSentSortOrder}
-                                      sortOrder={sentSortOrder}
+                                      onPageChange={onPageChange}
+                                      comments={comments}
+                                      setComments={setComments}
+                                      setSelectedRows={setSelectedRows}
+                                      selectedRows={selectedRows}
+                                      setSelectAll={setSelectAll}
+                                      selectAll={selectAll}
+                                      setSortOrder={setCoderSortOrder}
+                                      sortOrder={coderSortOrder}
                                       setSort={setSort}
-                                      receivedPageNo={sentPageNo}
-                                      receivedStartDate={startDate}
-                                      receivedEndDate={endDate}
+                                      tableData={FIHRData}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane
