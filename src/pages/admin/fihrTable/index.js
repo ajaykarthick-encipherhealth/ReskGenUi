@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, DatePicker } from "antd";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tab, Nav } from "react-bootstrap";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -21,6 +21,7 @@ import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction"
 import { disableFutureDate } from "../../../components/headerFilters/functions";
 import Selector from "../../../components/selector";
 import FIHRPatinetTable from "../../../components/table/admin/FihrPatient";
+import PdfTable from "../../../components/table/admin/pdfTable";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -130,7 +131,8 @@ const FIHRData = [
     initiatedByFirstName: "John",
     initiatedByLastName: "Jacobs",
     initialedDate: "2024-03-11T12:16:30.091Z",
-  }, {
+  },
+  {
     batchID: "#1234",
     patientCount: "100",
     status: "processing",
@@ -228,7 +230,8 @@ const FIHRData = [
     initiatedByFirstName: "John",
     initiatedByLastName: "Jacobs",
     initialedDate: "2024-03-11T12:16:30.091Z",
-  }, {
+  },
+  {
     batchID: "#1234",
     patientCount: "100",
     status: "processing",
@@ -331,7 +334,6 @@ const Index = () => {
   const SentOptions = [];
   const uniqueRoles = new Set();
 
-
   const selectUserList = useSelector(
     (state) => state?.AdminDashboardReducers?.selectedUsers
   );
@@ -346,7 +348,6 @@ const Index = () => {
     });
   });
 
-
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
@@ -359,7 +360,6 @@ const Index = () => {
     setPaginationSentFirst(e.first);
     setSentPageNo(e.page);
   };
-
 
   const handleTabs = (name) => {
     setSelectedDates(null);
@@ -445,7 +445,6 @@ const Index = () => {
       );
     }
   }, [selectedCoderOptReport]);
-
 
   const optionsUser =
     selectUserList?.data?.response?.map((res) => ({
@@ -587,19 +586,25 @@ const Index = () => {
                                     eventKey="nonhcc"
                                   ></Tab.Pane>
                                   <Tab.Pane id="my-posts" eventKey="pdf">
-                                    <SentReportTable
-                                      paginationFirst={paginationSentFirst}
-                                      details={
-                                        SentReportDetails?.data?.response
+                                    <PdfTable
+                                      setModal={setModal}
+                                      modal={modal}
+                                      reportListAll={filteredCOder}
+                                      paginationFirst={paginationFirst}
+                                      ReportPatientDetails={
+                                        ReportPatientDetails?.response
                                       }
-                                      onSentPageChange={onSentPageChange}
-                                      loading={SentReportDetails?.loading}
-                                      setSortOrder={setSentSortOrder}
-                                      sortOrder={sentSortOrder}
+                                      onPageChange={onPageChange}
+                                      comments={comments}
+                                      setComments={setComments}
+                                      setSelectedRows={setSelectedRows}
+                                      selectedRows={selectedRows}
+                                      setSelectAll={setSelectAll}
+                                      selectAll={selectAll}
+                                      setSortOrder={setCoderSortOrder}
+                                      sortOrder={coderSortOrder}
                                       setSort={setSort}
-                                      receivedPageNo={sentPageNo}
-                                      receivedStartDate={startDate}
-                                      receivedEndDate={endDate}
+                                      tableData={FIHRData}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane
@@ -686,7 +691,6 @@ const Index = () => {
                                     ) : (
                                       <p>Comments not found</p>
                                     )}
-                                    
                                   </div>
                                 </div>
                               </div>
