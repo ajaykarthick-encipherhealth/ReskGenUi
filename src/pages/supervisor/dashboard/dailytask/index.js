@@ -4,14 +4,13 @@ import Image from "next/image";
 import ReactECharts from "echarts-for-react";
 import left from "../../../../images/dashboard/left.png";
 import right from "../../../../images/dashboard/right.png";
-import { Col, Empty, Row, Spin } from "antd";
+import { Col, Row, Spin } from "antd";
 import Card from "../../../../components/card";
 import HeadTitle from "../../../../components/headtitle";
 import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
 import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
-import { getFilteredList } from "../../../../store/actions/PatientsActions";
 import { getDailyTaskDatas } from "../../../../store/actions/l2Action/DashboardAction";
 import spinSTYles from "../../../../styles/auth.module.css";
 const DailyTask = () => {
@@ -257,23 +256,10 @@ const DailyTask = () => {
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   {uniqueData?.slice(0, 3)?.map((data, index) => (
-                    <Col
-                      key={index}
-                      span={7}
-                      className={styles.sliderdiv}
-                      // onClick={() => setSelectedDate(currentWeek[index])}
-                    >
+                    <Col key={index} span={7} className={styles.sliderdiv}>
                       <h4
                         className={styles.headerTitle}
                         style={{ fontSize: "16px" }}
-                        // onClick={() => {
-                        //   dispatch(
-                        //     getFilteredList({
-                        //       dayDate: data?.dateString,
-                        //     })
-                        //   );
-                        //   router?.push("/supervisor/user");
-                        // }}
                       >
                         <div className={styles.headerDisplay}>
                           <span> {data.day}</span>
@@ -286,7 +272,6 @@ const DailyTask = () => {
                       <Row>
                         <Col span={12}>
                           <div className={styles.container}>
-                           
                             <ReactECharts
                               option={getChartOption(
                                 data?.allocated,
@@ -305,18 +290,7 @@ const DailyTask = () => {
                             {bullets?.map((item) => {
                               return (
                                 <div className={styles.container}>
-                                  <div
-                                    style={{ display: "flex" }}
-                                    // onClick={() => {
-                                    //   dispatch(
-                                    //     getFilteredList({
-                                    //       date: data?.dateString,
-                                    //       status: item?.name,
-                                    //     })
-                                    //   );
-                                    //   router?.push("/reviewer/patients");
-                                    // }}
-                                  >
+                                  <div style={{ display: "flex" }}>
                                     <div
                                       className={styles.bgColor}
                                       style={{

@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import Image from "next/image";
+import { Paginator } from "primereact/paginator";
 import { Badge, Empty, Tooltip, Popover } from "antd";
 import TableStyle from "../../../../components/table/table.module.css";
 import { SVGICON } from "../../../../jsx/constant/theme";
-import { Paginator } from "primereact/paginator";
 import { selectedRow } from "../../../../store/actions/ReportActions";
-import { useDispatch } from "react-redux";
-import Footer from "../../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
 import {
   dateFormate,
@@ -14,14 +14,12 @@ import {
 } from "../../../../components/headerFilters/functions";
 import visitStyles from "../../../../styles/visitdata.module.css";
 import Pending from "../../../../../src/images/trackingImages/PendingTrack.png";
-
 import Hold from "../../../../../src/images/trackingImages/HoldTrack.png";
 import Completed from "../../../../../src/images/trackingImages/CompletedTrack.png";
 import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
 import Abort from "../../../../../src/images/trackingImages/Abort.png";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { extractLatestData } from "../../../supervisor/auditing";
-import Image from "next/image";
 
 function CoderReport({
   setModal,
@@ -30,7 +28,6 @@ function CoderReport({
   paginationFirst,
   ReportPatientDetails,
   onPageChange,
-  comments,
   setComments,
   selectedRows,
   setSelectedRows,
@@ -355,11 +352,7 @@ function CoderReport({
                         {row?.patientName ? row?.patientName : "---"}
                       </td>
 
-                      <td
-                        // onClick={setModal(false)}
-                        className={TableStyle.childBorder}
-                      >
-                        {/* {row?.processedDate} */}
+                      <td className={TableStyle.childBorder}>
                         {dateFormate(dayjs, row?.processedDate)}
                       </td>
                       <td className={TableStyle.childBorder}>

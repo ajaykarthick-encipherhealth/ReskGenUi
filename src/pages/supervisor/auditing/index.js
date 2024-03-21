@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
-import Header from "../../../jsx/layouts/nav/Header";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "react-facebook-loading/dist/react-facebook-loading.css";
-import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch } from "react-redux";
-import { patientDetails } from "../../../store/actions/AuthActions";
-import { DatePicker, Spin, Popover, notification } from "antd";
 import { Paginator } from "primereact/paginator";
-import Footer from "../../../jsx/layouts/Footer";
+import { Popover, notification } from "antd";
+import "react-facebook-loading/dist/react-facebook-loading.css";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import Header from "../../../jsx/layouts/nav/Header";
+import { patientDetails } from "../../../store/actions/AuthActions";
 import PatientTable from "../table/PatientList/patientList";
 import SpinnerDots from "../../../components/spinner";
 import HeaderFilters from "../../../components/headerFilters";
@@ -20,10 +18,6 @@ import NotAudited from "../../../../src/images/trackingImages/NotAuditedTrack.pn
 import AuditHold from "../../../../src/images/trackingImages/AuditHoldTrack.png";
 import ReAudit from "../../../../src/images/trackingImages/reAuditTrack.png";
 import AuditPending from "../../../../src/images/trackingImages/AuditPending.png";
-import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
-import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
-import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
-import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
 import AuditeDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
 
 export function extractLatestData(notes) {
@@ -76,7 +70,6 @@ const statusOptions = [
   { label: "AUDITED", value: "AUDITED" },
   { label: "AUDIT_PENDING", value: "AUDIT_PENDING" },
   { label: "RE AUDIT", value: "REAUDIT" },
-  // { label: "DECLINED", value: "DECLINED" },
   { label: "AUDIT HOLD", value: "AUDITHOLD" },
   { label: "AUDIT DECLINED", value: "AUDIT_DECLINED" },
 ];
@@ -121,22 +114,12 @@ export default function Patient() {
   const [search, setSearch] = useState("");
   const [selCreatedBy, setSelCreatedBy] = useState("");
 
-  const allocatedByOptionsSet = new Set();
 
-  const createdByOptions = [
-    { label: "All", value: "All" },
-    ...patinetListAll
-      ?.map((item) =>
-        item?.patientAllocated
-          ? { label: item?.patientAllocated, value: item?.patientAllocated }
-          : null
-      )
-      .filter(Boolean),
-  ];
+
   useEffect(() => {
-    var tenId = localStorage.getItem("tenantId");
-    var uId = localStorage.getItem("userId");
-    var orgId = localStorage.getItem("orgId");
+    let tenId = localStorage.getItem("tenantId");
+    let uId = localStorage.getItem("userId");
+    let orgId = localStorage.getItem("orgId");
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
@@ -177,8 +160,8 @@ export default function Patient() {
 
   const getAllList = (info) => {
     if (response) {
-      var resultMap = [];
-      var result = response?.response?.content;
+      let resultMap = [];
+      let result = response?.response?.content;
       setTotalElements(response?.response?.totalElements);
       result?.map((res) => {
         resultMap.push({
@@ -194,7 +177,6 @@ export default function Patient() {
           priority: res.priority,
           processedStatus: res.processedStatus,
           processedDate: res.processedDate,
-          createdAt: res.createdAt,
           auditedStatus: res.auditedStatus,
           patientAllocated: res.patientAllocated,
           auditAllocatedDate: res.auditAllocatedDate,
@@ -211,7 +193,7 @@ export default function Patient() {
           accuracyScore: res.accuracyScore,
         });
       });
-      var newArray = [];
+      let newArray = [];
       newArray = [...patinetListAll, ...resultMap];
       setPatinetListAll(resultMap);
       setIsLoading(false);

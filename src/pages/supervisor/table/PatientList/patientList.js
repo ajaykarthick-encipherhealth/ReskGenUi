@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import moment from "moment";
-import TableStyle from "../../../../components/table/table.module.css";
-import { notification, Select as AntSelect, Empty, Tooltip } from "antd";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
+import dayjs from "dayjs";
+import { notification, Select as AntSelect, Empty, Tooltip } from "antd";
+import TableStyle from "../../../../components/table/table.module.css";
 import { SVGICON } from "../../../../jsx/constant/theme";
 import { getPriorityChange } from "../../../../store/actions/PatientsActions";
-import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import {
   renderUserPrfoileAvatar,
@@ -228,7 +228,6 @@ function PatientTable({
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
             {statusBodyTemplate(data)}
           </td>
-          {/* <td className={TableStyle.lastBorder}>{actionBodyTemplate(data)}</td> */}
         </tr>
       ))
     );
@@ -313,7 +312,6 @@ function PatientTable({
             <th>AUDIT ALLOCATED BY</th>
             <th style={{ paddingLeft: "30px" }}>PRIORITY</th>
             <th className={TableStyle.rowStyle2}>AUDIT STATUS</th>
-            {/* <th>Action</th> */}
           </tr>
         </thead>
 

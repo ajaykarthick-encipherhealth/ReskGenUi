@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./receivedReport.module.css";
 
-const CSVDisplay = ({ tableData,fileUrl, extention }) => {
+const CSVDisplay = ({ tableData, fileUrl, extention }) => {
   const [tableHead, setTableHead] = useState([]);
   useEffect(() => {
     if (Array.isArray(tableData) && tableData.length > 0) {

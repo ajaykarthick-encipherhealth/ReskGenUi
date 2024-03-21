@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
+import { useSelector } from "react-redux";
+import dayjs from "dayjs";
 import { Col, Empty, Row, Spin } from "antd";
 import styles from "./styles.module.css";
-import completed from "../../../../images/dashboard/completed.png";
 import calender from "../../../../images/dashboard/calender.png";
 import Card from "../../../../components/card";
 import allocated from "../../../../images/dashboard/allocation.png";
 import HeadTitle from "../../../../components/headtitle";
-import holdbg from "../../.../../../../images/dashboard/holdbg.png";
 import allocatedbg from "../../.../../../../images/dashboard/allocatedbg.png";
 import reAuditbg from "../../.../../../../images/dashboard/reAuditbg.png";
 import auditedbg from "../../.../../../../images/dashboard/auditedbg.png";
@@ -20,9 +20,6 @@ import declineIcon from "../../.../../../../images/trackingImages/AuditDeclined.
 import reAuditIcon from "../../.../../../../images/trackingImages/reAuditTrack.png";
 import auditHoldIcon from "../../.../../../../images/trackingImages/AuditHoldTrack.png";
 import auditedIcon from "../../.../../../../images/trackingImages/AuditedTrack.png";
-
-import { useSelector } from "react-redux";
-import dayjs from "dayjs";
 import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
 
 const WorkFlow = () => {

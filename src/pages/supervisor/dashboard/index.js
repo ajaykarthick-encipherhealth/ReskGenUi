@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
-import { Col, Row } from "antd";
-import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import dayjs from "dayjs";
 import { useRouter } from "next/router";
+import dayjs from "dayjs";
+import { Col, Row } from "antd";
 import Header from "../../../jsx/layouts/nav/Header";
 import styles from "./styles.module.css";
 import WorkFlow from "./workflow";
@@ -12,10 +11,9 @@ import Accuracy from "./accuracy";
 import Notifications from "./notifications";
 import CompletedStatus from "./completedstatus";
 import HoldStatus from "./holdstatus";
-import Footer from "../../../jsx/layouts/Footer";
 import { getWorkFlow } from "../../../store/actions/l2Action/DashboardAction";
 
-const index = () => {
+const Index = () => {
   const currentDate = dayjs();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -74,4 +72,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;

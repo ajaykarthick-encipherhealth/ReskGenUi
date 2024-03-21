@@ -4,7 +4,6 @@
 }
 .header {
   display: flex;
-  /* justify-content: space-between; */
   font-size: 18px;
   font-weight: 600;
   margin: 20px;
@@ -18,7 +17,6 @@
 .picker{
   /* width: 30%; */
   display: flex;
-  /* justify-content: space-between; */
 }
 .accuracy {
   width:25%;
@@ -51,11 +49,6 @@
 }
 
 .percentage {
-  /* margin: 10px 0; */
-  /* height:50%; */
-  /* font-size: 1.2rem;
-  color: #000000;
-  font-weight: 600; */
   display: flex;
   justify-content: center;
   align-items: center;

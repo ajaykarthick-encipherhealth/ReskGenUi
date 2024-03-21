@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "./receivedReport.module.css";
-import dayjs from "dayjs";
-import Spreadsheet, { CellBase, Matrix } from "react-spreadsheet";
+import Spreadsheet from "react-spreadsheet";
 
 const ExcelDisplay = ({ tableData }) => {
   const [data, setData] = useState();

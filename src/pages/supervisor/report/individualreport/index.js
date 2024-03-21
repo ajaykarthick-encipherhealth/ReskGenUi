@@ -205,7 +205,6 @@ const IndividualReceiverReport = () => {
                     <div>No data</div>
                   ) : (
                     detailsContent
-                      // ?.filter((item) => item?.reportId !== selectedRow?.reportId)
                       ?.map((item) => (
                         <div key={item.reportId ? item.reportId : item._d}>
                           <div
