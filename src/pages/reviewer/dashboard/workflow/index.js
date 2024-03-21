@@ -1,12 +1,12 @@
-import React, {useState } from "react";
+import React, { useState } from "react";
 import styles from "./styles.module.css";
 import dayjs from "dayjs";
 import Image from "next/image";
-import completed from "../../../../images/dashboard/completed.png";
+import completed from "../../../../images/trackingImages/CompletedTrack.png";
 import calender from "../../../../images/dashboard/calender.png";
 import Card from "../../../../components/card";
 import allocated from "../../../../images/dashboard/allocated.png";
-import pending from "../../../../images/dashboard/Pending_2.png";
+import pending from "../../../../images/trackingImages/PendingTrack.png";
 import hold from "../../../../images/dashboard/HoldTrack.png";
 import { Col, Empty, Row, Spin } from "antd";
 import HeadTitle from "../../../../components/headtitle";
@@ -97,16 +97,16 @@ const WorkFlow = () => {
       />
       <Card borderRadius="28px">
         {!worlFlowData ||
-        worlFlowData?.loading ||
-        worlFlowData?.data === null && (
-          <div className={spinSTYles.spinStyle}>
-            <Spin loading={worlFlowData?.loading} />
-          </div>
-        ) } 
-        {
-          worlFlowData &&
-          !worlFlowData?.loading &&
-          worlFlowData?.data !== null && worlFlowData?.data?.response ? (
+          worlFlowData?.loading ||
+          (worlFlowData?.data === null && (
+            <div className={spinSTYles.spinStyle}>
+              <Spin loading={worlFlowData?.loading} />
+            </div>
+          ))}
+        {worlFlowData &&
+        !worlFlowData?.loading &&
+        worlFlowData?.data !== null &&
+        worlFlowData?.data?.response ? (
           <Row className={styles.carddiv}>
             {card1Data?.map((data) => (
               <Col
