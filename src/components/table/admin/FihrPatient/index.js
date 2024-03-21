@@ -87,7 +87,7 @@ function FIHRPatinetTable({
           <tbody className={TableStyle.bodytable}>
             {tableData?.length > 0 ? (
               tableData?.map((row, index) => (
-                <tr key={index} onClick={()=>{handleRow(row)}}>
+                <tr key={index} onClick={()=>{handleRow(row)}} style={{ height: "40px" }}>
                   <>
                     <td className={TableStyle.childBorder}>
                       {row?.batchID ? row?.batchID : "---"}
