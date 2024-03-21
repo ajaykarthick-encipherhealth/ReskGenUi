@@ -21,6 +21,8 @@ import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction"
 import { disableFutureDate } from "../../../components/headerFilters/functions";
 import Selector from "../../../components/selector";
 import FIHRPatinetTable from "../../../components/table/admin/FihrPatient";
+import RegularButton from "../../../components/button";
+import FhirDrawer from "./fhirModal";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -145,7 +147,22 @@ const FIHRData = [
     initiatedByFirstName: "John",
     initiatedByLastName: "Jacobs",
     initialedDate: "2024-03-11T12:16:30.091Z",
+  },
+  {
+    batchID: "#1234",
+    patientCount: "100",
+    status: "processing",
+    statusValue: "200/23",
+    yearOfService: [
+      "2024-03-11T12:16:30.091Z",
+      "2023-03-11T12:16:30.091Z",
+      "2022-03-11T12:16:30.091Z",
+    ],
+    initiatedByFirstName: "John",
+    initiatedByLastName: "Jacobs",
+    initialedDate: "2024-03-11T12:16:30.091Z",
     failedCount: "200",
+
   },
   {
     batchID: "#1234",
@@ -324,6 +341,7 @@ const Index = () => {
   const [selectMemberType, setSelectMemberType] = useState("");
 
   const [select, setSelect] = useState(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
@@ -345,6 +363,9 @@ const Index = () => {
       }
     });
   });
+  const handleUploadButtonClick = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -425,49 +446,63 @@ const Index = () => {
                     <div className="card-body p-0">
                       <div className="table-responsive active-projects task-table">
                         <div className="d-flex">
-                          <div className="col-lg-2 mx-2">
-                            <label>Search by Name or ID</label>
-                            <div class="form-group has-search">
-                              <FontAwesomeIcon
-                                className="fa fa-search form-control-feedback"
-                                icon={faSearch}
-                              />
-                              <InputText
-                                type="text"
-                                onChange={(e) => getNameSearch(e.target.value)}
-                                value={""}
-                                className="form-control new-form-control"
-                                placeholder="Search"
-                              />
+                          <div className="d-flex">
+                            <div className="col-lg-4 mx-2">
+                              <label>Search by Name or ID</label>
+                              <div class="form-group has-search">
+                                <FontAwesomeIcon
+                                  className="fa fa-search form-control-feedback"
+                                  icon={faSearch}
+                                />
+                                <InputText
+                                  type="text"
+                                  onChange={(e) =>
+                                    getNameSearch(e.target.value)
+                                  }
+                                  value={""}
+                                  className="form-control new-form-control"
+                                  placeholder="Search"
+                                />
+                              </div>
+                            </div>
+                            <div className="col-xl-4 mx-2">
+                              <label>Date</label>
+                              <div>
+                                <RangePicker
+                                  format="MM-DD-YYYY"
+                                  onChange={(dates, dateStrings) => {
+                                    setDateRange(dateStrings);
+                                    handleReceivedDatePicker(
+                                      dates,
+                                      dateStrings
+                                    );
+                                  }}
+                                  disabledDate={(current) =>
+                                    disableFutureDate(current)
+                                  }
+                                />
+                              </div>
+                            </div>
+                            <div className="col-xl-4 mx-2">
+                              <div>
+                                <Selector
+                                  selectlabel={"Select Status"}
+                                  setSelectedOption={setStatus}
+                                  selectOptions={statusOptions}
+                                  defaultSelectValue1={""}
+                                  // isClose={true}
+                                />
+                              </div>
                             </div>
                           </div>
-                          <div className="col-xl-2 mx-2">
-                            <label>Date</label>
-                            <div>
-                              <RangePicker
-                                format="MM-DD-YYYY"
-                                onChange={(dates, dateStrings) => {
-                                  setDateRange(dateStrings);
-                                  handleReceivedDatePicker(dates, dateStrings);
-                                }}
-                                disabledDate={(current) =>
-                                  disableFutureDate(current)
-                                }
-                              />
-                            </div>
-                          </div>
-                          <div className="col-xl-2 mx-2">
-                            <div>
-                              <Selector
-                                selectlabel={"Select Status"}
-                                setSelectedOption={setStatus}
-                                selectOptions={statusOptions}
-                                defaultSelectValue1={""}
-                                // isClose={true}
-                              />
-                            </div>
+                          <div
+                            className={styles.btnContainer}
+                            onClick={handleUploadButtonClick}
+                          >
+                            <RegularButton name={"Upload"} />
                           </div>
                         </div>
+
                         <div
                           id="task-tbl_wrapper"
                           className="dataTables_wrapper no-footer"
@@ -585,6 +620,12 @@ const Index = () => {
                               </Tab.Container>
                             </div>
                           </div>
+                          {isDrawerOpen && (
+                            <FhirDrawer
+                              isDrawerOpen={isDrawerOpen}
+                              setIsDrawerOpen={setIsDrawerOpen}
+                            />
+                          )}
 
                           {modal && (
                             <Modal
