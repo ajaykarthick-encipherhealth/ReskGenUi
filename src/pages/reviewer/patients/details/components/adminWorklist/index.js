@@ -134,6 +134,10 @@ const AdminWorkList = ({ localUserId, setWorkListPatientId }) => {
       color: "#be3144",
       name: "Not Computed",
     },
+    {
+      color: "#e88d8d",
+      name: "Failed",
+    },
   ];
 
   useEffect(() => {

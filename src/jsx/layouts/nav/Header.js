@@ -62,9 +62,13 @@ import ImageUploader from "../../../components/imageUploading/ImageUploader";
 import logout from "../../../images/svg/logout.svg";
 import editImg from "../../../images/svg/edit.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell } from "@fortawesome/free-regular-svg-icons";
+import { faBell, faClose } from "@fortawesome/free-regular-svg-icons";
 import { faMessage } from "@fortawesome/free-regular-svg-icons";
-import { LoadingOutlined, SettingOutlined } from "@ant-design/icons";
+import {
+  LoadingOutlined,
+  SettingOutlined,
+  CloseCircleOutlined,
+} from "@ant-design/icons";
 
 const btnItems = [
   {
@@ -125,6 +129,7 @@ const Header = () => {
   const [lastName, setLastName] = useState();
   const [openUploader, setOpenUploader] = useState();
   const [openContent, setOpenContent] = useState(false);
+  const [popoverVisible, setPopoverVisible] = useState(false);
 
   const getStatus = (data) => {
     const isCMS = data?.cmsHcc_model_category_V24_for_2023_payment_year;
@@ -211,31 +216,45 @@ const Header = () => {
   const PopContent = (
     <div className={styles.innerPop}>
       <div className={styles.codesContainer}>
-        <div style={{ width: "70%" }}>
-          {btnItems?.map((data) => (
-            <button
-              onClick={() => {
-                setSelectedBtn(data?.name);
-              }}
-              className={
-                selectedbtn === data?.name
-                  ? styles.activeBtn
-                  : styles.inactiveBtn
-              }
-            >
-              {data?.name}
-            </button>
-          ))}
-        </div>
-        <div style={{ width: "30%", margin: "-25px 30px 0 0" }}>
-          {selectedbtn === "HCC" && (
-            <Selector
-              selectlabel={""}
-              setSelectedOption={setSelectedOption}
-              selectOptions={Options}
-              defaultSelectValue1={Options[0]}
+        <div
+          style={{
+            width: "90%",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <div>
+            {btnItems?.map((data) => (
+              <button
+                onClick={() => {
+                  setSelectedBtn(data?.name);
+                }}
+                className={
+                  selectedbtn === data?.name
+                    ? styles.activeBtn
+                    : styles.inactiveBtn
+                }
+              >
+                {data?.name}
+              </button>
+            ))}
+          </div>
+          <div style={{ width: "30%", margin: "-25px 30px 0 0" }}>
+            {selectedbtn === "HCC" && (
+              <Selector
+                selectlabel={""}
+                setSelectedOption={setSelectedOption}
+                selectOptions={Options}
+                defaultSelectValue1={Options[0]}
+              />
+            )}
+          </div>
+          <div className={styles.closeContainer}>
+            <CloseCircleOutlined
+              onClick={() => setPopoverVisible(false)}
+              className={styles.close_icon}
             />
-          )}
+          </div>
         </div>
       </div>
       <div className={styles.codesContainer}>
@@ -443,6 +462,8 @@ const Header = () => {
                             content={PopContent}
                             placement="bottom"
                             trigger={"click"}
+                            open={popoverVisible}
+                            onOpenChange={() => setPopoverVisible(true)}
                           >
                             <Button className={styles.codeBtn}>
                               <div style={{ margin: " -7px 0 0 -25px" }}>
@@ -483,7 +504,10 @@ const Header = () => {
                             </div>
                           </Tooltip>
                         )}
-                        <div className="chatheaderIcon" onClick={() => router.push('/admin/settings')}>
+                        <div
+                          className="chatheaderIcon"
+                          onClick={() => router.push("/admin/settings")}
+                        >
                           <SettingOutlined
                             style={{
                               width: "23px",

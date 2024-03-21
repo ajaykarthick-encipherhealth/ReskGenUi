@@ -372,3 +372,8 @@
   height: 22px;
   margin: 5px 0 0px 0;
 }
+.close_icon {
+  width: 18px;
+  cursor: pointer;
+  font-size: 20px;
+}
