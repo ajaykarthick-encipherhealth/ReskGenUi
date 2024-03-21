@@ -243,5 +243,46 @@
 }
 .label{
   margin-left:8px;
+}
+.backButtonStyle{
+  background-color: 
+  rgba(255, 255, 255, 1);
+  width:40px;
+  height:42px;
+  border:none;
+  border-radius: 8px;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+  margin-top: 30px;
+}
+.topHeader{
+  display:flex;
+  width:97%;
+  margin:auto;
+  margin-top: 20px;
+}
+.refreshBtn{
+  width:25px;
+  height:25px;
+  margin-left:5px;
+  background-color:rgba(250, 209, 209, 1);
+  border-radius:10px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  cursor:pointer;
+}
+.progreddBr{
+width:30%;
+margin: auto;
+}
+.progressDIv{
+  position:relative;
+  left:10px;
+}
 
+@media screen and (width>1500px) {
+  .progressDIv{
+    position:relative;
+    left:30px;
+  }
 }

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Modal, DatePicker } from "antd";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tab, Nav } from "react-bootstrap";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
 import "react-circular-progressbar/dist/styles.css";
-import styles from "./report.module.css";
+import styles from "./fihr.module.css";
 import Header from "../../../jsx/layouts/nav/Header";
 import SentReportTable from "../../../components/table/sentReport/sentReport";
 import ReceivedReport from "../../../components/table/receivedReport/receivedReport";
@@ -64,7 +64,7 @@ const FIHRData = [
   {
     batchID: "#1234",
     patientCount: "100",
-    status: "processing",
+    status: "completed",
     statusValue: "200/23",
     yearOfService: [
       "2024-03-11T12:16:30.091Z",
@@ -102,6 +102,21 @@ const FIHRData = [
     initiatedByFirstName: "John",
     initiatedByLastName: "Jacobs",
     initialedDate: "2024-03-11T12:16:30.091Z",
+    failedCount: "200",
+  },
+  {
+    batchID: "#1234",
+    patientCount: "100",
+    status: "completed",
+    statusValue: "200/23",
+    yearOfService: [
+      "2024-03-11T12:16:30.091Z",
+      "2023-03-11T12:16:30.091Z",
+      "2022-03-11T12:16:30.091Z",
+    ],
+    initiatedByFirstName: "John",
+    initiatedByLastName: "Jacobs",
+    initialedDate: "2024-03-11T12:16:30.091Z",
   },
   {
     batchID: "#1234",
@@ -130,19 +145,7 @@ const FIHRData = [
     initiatedByFirstName: "John",
     initiatedByLastName: "Jacobs",
     initialedDate: "2024-03-11T12:16:30.091Z",
-  }, {
-    batchID: "#1234",
-    patientCount: "100",
-    status: "processing",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
+    failedCount: "200",
   },
   {
     batchID: "#1234",
@@ -228,7 +231,8 @@ const FIHRData = [
     initiatedByFirstName: "John",
     initiatedByLastName: "Jacobs",
     initialedDate: "2024-03-11T12:16:30.091Z",
-  }, {
+  },
+  {
     batchID: "#1234",
     patientCount: "100",
     status: "processing",
@@ -308,20 +312,17 @@ const Index = () => {
   const [endDate, setEndDate] = useState();
   const [receivedStartDate, setReceivedStartDate] = useState();
   const [receivedEndDate, setReceivedEndDate] = useState();
-  const [coderStartDate, setCoderStartDate] = useState();
-  const [coderEndDate, setCoderEndDate] = useState();
   const [selectedDates, setSelectedDates] = useState(null);
-  const [selectedCoderOpt, setSelectedCoderOpt] = useState("");
+  
   const [selectedCoderOptReport, setSelectedCoderOptReport] = useState("");
-  const [coderSearch, setCoderSearch] = useState("");
+
   const [sentSearch, setSentSearch] = useState("");
-  const [receivedSearch, setReceivedSearch] = useState("");
   const [receivedSortOrder, setReceivedSortOrder] = useState("DESC");
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [selectMemberType, setSelectMemberType] = useState("");
-  const [selectManager, setSelectedManger] = useState("");
+
   const [select, setSelect] = useState(null);
 
   const ReceivedOptions = [];
@@ -330,7 +331,6 @@ const Index = () => {
   });
   const SentOptions = [];
   const uniqueRoles = new Set();
-
 
   const selectUserList = useSelector(
     (state) => state?.AdminDashboardReducers?.selectedUsers
@@ -346,7 +346,6 @@ const Index = () => {
     });
   });
 
-
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
@@ -359,7 +358,6 @@ const Index = () => {
     setPaginationSentFirst(e.first);
     setSentPageNo(e.page);
   };
-
 
   const handleTabs = (name) => {
     setSelectedDates(null);
@@ -375,60 +373,10 @@ const Index = () => {
         getSentDetails(sentPageNo, startDate, endDate, sentSearch, sort)
       );
     }
-    if (reportActiveTab === "ReceivedReport") {
-      dispatch(
-        getReceivedDetails(
-          receivedPageNo,
-          receivedStartDate,
-          receivedEndDate,
-          receivedSearch,
-          sort
-        )
-      );
-    }
-
-    if (!reportActiveTab || reportActiveTab === "FIHR") {
-      dispatch(
-        getReportDetails(
-          pageNo,
-          coderStartDate,
-          coderEndDate,
-          coderSearch,
-          selectedCoderOpt,
-          selectedCoderOptReport?.value ? selectedCoderOptReport?.value : "",
-          sort,
-          selectManager?.value && selectedCoderOptReport?.value !== "All"
-            ? selectManager?.value
-            : ""
-        )
-      );
-    }
     if (ExportResponse) {
       setIsModalVisible(false);
     }
-  }, [
-    pageNo,
-    sentPageNo,
-    receivedPageNo,
-    reportActiveTab,
-    ExportResponse,
-    selectedCoderOpt,
-    selectedCoderOptReport,
-    coderSearch,
-    coderStartDate,
-    coderEndDate,
-    startDate,
-    endDate,
-    sentSearch,
-    receivedPageNo,
-    receivedStartDate,
-    receivedEndDate,
-    receivedSearch,
-    receivedSortOrder,
-    sort,
-    selectManager,
-    select,
-  ]);
+  }, [sentPageNo, startDate, endDate, sentSearch, sort, ExportResponse]);
 
   useEffect(() => {
     setFilteredCoder(ReportPatientDetails?.response);
@@ -445,7 +393,6 @@ const Index = () => {
       );
     }
   }, [selectedCoderOptReport]);
-
 
   const optionsUser =
     selectUserList?.data?.response?.map((res) => ({
@@ -468,9 +415,9 @@ const Index = () => {
       <Header />
       <div className={styles.maincontainer}>
         <div class="content-body">
-          {!ReportPatientDetails?.response ? (
+          {/* {!ReportPatientDetails?.response ? (
             <SpinnerDots />
-          ) : (
+          ) : ( */}
             <div className="container-fluid">
               <div className="row">
                 <div className="col-xl-12">
@@ -686,7 +633,6 @@ const Index = () => {
                                     ) : (
                                       <p>Comments not found</p>
                                     )}
-                                    
                                   </div>
                                 </div>
                               </div>
@@ -699,7 +645,7 @@ const Index = () => {
                 </div>
               </div>
             </div>
-          )}
+          {/* )} */}
         </div>
       </div>
     </>
