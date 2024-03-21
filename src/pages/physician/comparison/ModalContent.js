@@ -45,7 +45,9 @@ const ModalContent = ({
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <div className="row">
               {FilteredList?.map((info) => (
-                <div className={styles.patientListContainer} onClick={()=>{setSelectedPatient(info?.id)}}>
+                <div className={styles.patientListContainer} onClick={()=>{
+                  setSelectedPatient(info?.id)
+                  setFileUploadModal(false)}}>
                   <div style={{ marginBottom: "10px" }}>
                     {info.patientName || info?.profilePictureUrl ? (
                       <div className={styles.patientsDisply}>
@@ -58,13 +60,14 @@ const ModalContent = ({
                         </span>
                         <div>
                           <span>{info?.patientName}</span>
-                          <div> {dayjs(info?.date).format("MM-DD-YYYY")}</div>
+                          <div className={styles.subTitle}> {info?.mrnNumber}</div>
                         </div>
                       </div>
                     ) : (
                       <span>---</span>
                     )}
                   </div>
+                  <div style={{ marginTop: "10px" }}>{dayjs(info?.date).format("dddd hh:mm")}</div>
                   <div style={{ marginTop: "10px" }}>
                     {priorityStatus(info?.priority, true)}
                   </div>

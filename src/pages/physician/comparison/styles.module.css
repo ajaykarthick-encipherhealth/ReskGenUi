@@ -3,8 +3,9 @@
   border-radius: 10px;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   margin-bottom: 25px;
-  height:90%;
-  overflow-y: scroll;
+  height:88%;
+  /* overflow-y: scroll; */
+  overflow: hidden;
 }
 .mainContainer {
   padding-top: 20px;
@@ -170,7 +171,12 @@
   cursor: pointer;
 }
 .patientListContainer {
-  margin-bottom: 20px;
+  display:flex;
+  justify-content: space-between;
+  cursor: pointer;
+  margin-bottom: 10px;
+  padding-top: 10px;
+  margin-left: 0px;
 }
 .currentYearText {
   color: #546c8db2;
@@ -198,15 +204,13 @@
 .patientsDisply{
   display:flex;
 }
- .patientListContainer{
-  display:flex;
-  justify-content: space-between;
-  cursor: pointer;
-  margin-bottom: 10px;
-  padding-top: 10px;
-  margin-left: 0px;
-}
 .patientListContainer:hover{
   box-shadow: 0 0px 4px 0 rgba(0, 0,0,0.2);
   border-radius: 16px;
+}
+.subTitle{
+  color:rgba(136, 136, 136, 1);
+  font-family: 400;
+  font-size: 12px;
+
 }

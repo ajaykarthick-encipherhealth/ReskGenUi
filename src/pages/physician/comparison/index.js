@@ -31,11 +31,97 @@ import ModalContent from "./ModalContent";
 import { COLORS3 } from "../../reviewer/patients/details/hcc";
 import { getPatients } from "../../../store/actions/physicianAction/patientsActions";
 
+
+export function removeDuplicates(array) {
+  let output = [];
+  if (array) {
+    for (let item of array) {
+      if (!output.includes(item)) output.push(item);
+    }
+  }
+  return output;
+}
+
+export const getCaptureSectionBackground = (value, diagnosisCode,colorsData) => {
+  let dublicateCaptureDelete = removeDuplicates(value);
+
+  return dublicateCaptureDelete.map((res) => {
+    const result =
+      colorsData?.data?.response?.length > 0 &&
+      colorsData?.data?.response?.filter((res2) => res2?.sectionName == res);
+
+    let backColor = result[0]?.backgroundColor;
+    let textColor = result[0]?.sectionColor;
+
+    let sectionMapArr = (
+      <span
+        style={{ backgroundColor: backColor, color: textColor }}
+        className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+      >
+        {res}
+      </span>
+    );
+    return sectionMapArr;
+  });
+};
+
+export const getProviderNameList = (res) => {
+  let value = res?.providerName ? (
+    <div>
+      <Badge
+        className={
+          res?.authorizedProvider === true
+            ? `mt-2 text-start ${styles.provider_name}`
+            : `mt-2 text-start ${visitStyles.un_provider_name}`
+        }
+      >
+        <i>
+          {" "}
+          <FontAwesomeIcon
+            icon={faCircleUser}
+            style={{
+              size: 10,
+              marginRight: "5px",
+              color:
+                res?.authorizedProvider === true ? "#008000bf" : "#ff0000cc",
+            }}
+          />
+        </i>
+        {res?.providerName}
+      </Badge>
+    </div>
+  ) : null;
+
+  return value;
+};
+
+export const getEncounterDateBackgroundHcc = (value, code) => {
+  const encounterDateMatching = [];
+  return value?.split(",")?.map((res, index) => {
+    encounterDateMatching?.push({
+      name: res,
+      colors: COLORS3[index],
+    });
+
+    const result = encounterDateMatching.filter((res2) => res2.name == res);
+    let backColor = result[0]?.colors;
+    let sectionMapArr = (
+      <span
+        className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+      >
+        <i style={{ marginRight: "5px" }}>
+          <CalendarOutlined className={visitStyles.calenderIcon} />
+        </i>
+        {moment(res, "MM/DD/YYYY").format("MMM DD")}
+      </span>
+    );
+    return sectionMapArr;
+  });
+};
 const Hcc = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const comparisonData = useSelector((state) => state.physicianComparison.data);
-  const colorsData = useSelector((state) => state.physicianComparison.colors);
   const [validHccList, setvalidHccList] = useState([]);
   const [validClienHccList, setvalidClienHccList] = useState([]);
   const [clientSuggestedHccList, setClientSuggestedHccList] = useState([]);
@@ -44,92 +130,7 @@ const Hcc = () => {
   const [validated, setValidated] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState();
 
-  function removeDuplicates(array) {
-    let output = [];
-    if (array) {
-      for (let item of array) {
-        if (!output.includes(item)) output.push(item);
-      }
-    }
-    return output;
-  }
 
-  const getCaptureSectionBackground = (value, diagnosisCode) => {
-    let dublicateCaptureDelete = removeDuplicates(value);
-
-    return dublicateCaptureDelete.map((res) => {
-      const result =
-        colorsData?.data?.response?.length > 0 &&
-        colorsData?.data?.response?.filter((res2) => res2?.sectionName == res);
-
-      let backColor = result[0]?.backgroundColor;
-      let textColor = result[0]?.sectionColor;
-
-      let sectionMapArr = (
-        <span
-          style={{ backgroundColor: backColor, color: textColor }}
-          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
-        >
-          {res}
-        </span>
-      );
-      return sectionMapArr;
-    });
-  };
-
-  const getProviderNameList = (res) => {
-    let value = res?.providerName ? (
-      <div>
-        <Badge
-          className={
-            res?.authorizedProvider === true
-              ? `mt-2 text-start ${styles.provider_name}`
-              : `mt-2 text-start ${visitStyles.un_provider_name}`
-          }
-        >
-          <i>
-            {" "}
-            <FontAwesomeIcon
-              icon={faCircleUser}
-              style={{
-                size: 10,
-                marginRight: "5px",
-                color:
-                  res?.authorizedProvider === true ? "#008000bf" : "#ff0000cc",
-              }}
-            />
-          </i>
-          {res?.providerName}
-        </Badge>
-      </div>
-    ) : null;
-
-    return value;
-  };
-
-  const getEncounterDateBackgroundHcc = (value, code) => {
-    const encounterDateMatching = [];
-    return value?.split(",")?.map((res, index) => {
-      encounterDateMatching?.push({
-        name: res,
-        colors: COLORS3[index],
-      });
-
-      const result = encounterDateMatching.filter((res2) => res2.name == res);
-      let backColor = result[0]?.colors;
-      let sectionMapArr = (
-        <span
-          className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
-        >
-          <i style={{ marginRight: "5px" }}>
-            <CalendarOutlined className={visitStyles.calenderIcon} />
-          </i>
-          {moment(res, "MM/DD/YYYY").format("MMM DD")}
-        </span>
-      );
-      return sectionMapArr;
-    });
-  };
   const closeModal = () => {
     setFileUploadModal(false);
     setValidated(false);
@@ -147,8 +148,10 @@ const Hcc = () => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const encodedParams = urlParams.get("id");
-   
-    setSelectedPatient(JSON.parse(atob(encodedParams))?.id);
+   if(encodedParams){
+
+     setSelectedPatient(JSON.parse(atob(encodedParams))?.id);
+   }
     if (selectedPatient) {
       dispatch(
         getComparisionData(
@@ -341,7 +344,7 @@ const Hcc = () => {
                     ) : (
                       <>
                         {" "}
-                        <div className="col-xl-6">
+                        <div className="col-xl-6" style={{overflow:"hidden"}}>
                           <div className={styles.headerTitle}>
                             <div className="d-flex">
                               <h6 className={styles.headerName2}>
