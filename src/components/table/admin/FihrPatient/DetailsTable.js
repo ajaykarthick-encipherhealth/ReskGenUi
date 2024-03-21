@@ -28,6 +28,7 @@ const DetailsTable = ({
                 <th>PATIENT NAME</th>
                 <th style={{ textAlign: "center" }}>STATUS </th>
                 <th style={{ textAlign: "center" }}> COMPUTED DATE TIME</th>
+                <th style={{ textAlign: "center" }}>YEAR OF SERVICE</th>
               </>
             </tr>
           </thead>
@@ -102,6 +103,14 @@ const DetailsTable = ({
                           />
                         </div>
                       </div>
+                    </td>
+                    <td
+                      className={TableStyle.childBorder}
+                      style={{ textAlign: "center" }}
+                    >
+                      {row?.initialedDate
+                        ? dayjs(row?.initialedDate).format("MM/DD/YYYY hh:mm A")
+                        : "---"}
                     </td>
                     <td
                       className={TableStyle.childBorder}
