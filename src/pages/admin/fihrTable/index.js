@@ -6,7 +6,7 @@ import { Tab, Nav } from "react-bootstrap";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
 import "react-circular-progressbar/dist/styles.css";
-import styles from "./report.module.css";
+import styles from "./fihr.module.css";
 import Header from "../../../jsx/layouts/nav/Header";
 import SentReportTable from "../../../components/table/sentReport/sentReport";
 import ReceivedReport from "../../../components/table/receivedReport/receivedReport";
@@ -22,6 +22,9 @@ import { disableFutureDate } from "../../../components/headerFilters/functions";
 import Selector from "../../../components/selector";
 import FIHRPatinetTable from "../../../components/table/admin/FihrPatient";
 import PdfTable from "../../../components/table/admin/pdfTable";
+import RegularButton from "../../../components/button";
+import FhirDrawer from "./fhirModal";
+
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -65,7 +68,50 @@ const FIHRData = [
   {
     batchID: "#1234",
     patientCount: "100",
+    status: "completed",
+    statusValue: "200/23",
+    yearOfService: [
+      "2024-03-11T12:16:30.091Z",
+      "2023-03-11T12:16:30.091Z",
+      "2022-03-11T12:16:30.091Z",
+    ],
+    initiatedByFirstName: "John",
+    initiatedByLastName: "Jacobs",
+    initialedDate: "2024-03-11T12:16:30.091Z",
+  },
+  {
+    batchID: "#1234",
+    patientCount: "100",
     status: "processing",
+    statusValue: "200/23",
+    yearOfService: [
+      "2024-03-11T12:16:30.091Z",
+      "2023-03-11T12:16:30.091Z",
+      "2022-03-11T12:16:30.091Z",
+    ],
+    initiatedByFirstName: "John",
+    initiatedByLastName: "Jacobs",
+    initialedDate: "2024-03-11T12:16:30.091Z",
+  },
+  {
+    batchID: "#1234",
+    patientCount: "100",
+    status: "processing",
+    statusValue: "200/23",
+    yearOfService: [
+      "2024-03-11T12:16:30.091Z",
+      "2023-03-11T12:16:30.091Z",
+      "2022-03-11T12:16:30.091Z",
+    ],
+    initiatedByFirstName: "John",
+    initiatedByLastName: "Jacobs",
+    initialedDate: "2024-03-11T12:16:30.091Z",
+    failedCount: "200",
+  },
+  {
+    batchID: "#1234",
+    patientCount: "100",
+    status: "completed",
     statusValue: "200/23",
     yearOfService: [
       "2024-03-11T12:16:30.091Z",
@@ -117,34 +163,8 @@ const FIHRData = [
     initiatedByFirstName: "John",
     initiatedByLastName: "Jacobs",
     initialedDate: "2024-03-11T12:16:30.091Z",
-  },
-  {
-    batchID: "#1234",
-    patientCount: "100",
-    status: "processing",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
-  },
-  {
-    batchID: "#1234",
-    patientCount: "100",
-    status: "processing",
-    statusValue: "200/23",
-    yearOfService: [
-      "2024-03-11T12:16:30.091Z",
-      "2023-03-11T12:16:30.091Z",
-      "2022-03-11T12:16:30.091Z",
-    ],
-    initiatedByFirstName: "John",
-    initiatedByLastName: "Jacobs",
-    initialedDate: "2024-03-11T12:16:30.091Z",
+    failedCount: "200",
+
   },
   {
     batchID: "#1234",
@@ -311,21 +331,19 @@ const Index = () => {
   const [endDate, setEndDate] = useState();
   const [receivedStartDate, setReceivedStartDate] = useState();
   const [receivedEndDate, setReceivedEndDate] = useState();
-  const [coderStartDate, setCoderStartDate] = useState();
-  const [coderEndDate, setCoderEndDate] = useState();
   const [selectedDates, setSelectedDates] = useState(null);
-  const [selectedCoderOpt, setSelectedCoderOpt] = useState("");
+  
   const [selectedCoderOptReport, setSelectedCoderOptReport] = useState("");
-  const [coderSearch, setCoderSearch] = useState("");
+
   const [sentSearch, setSentSearch] = useState("");
-  const [receivedSearch, setReceivedSearch] = useState("");
   const [receivedSortOrder, setReceivedSortOrder] = useState("DESC");
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [selectMemberType, setSelectMemberType] = useState("");
-  const [selectManager, setSelectedManger] = useState("");
+
   const [select, setSelect] = useState(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
@@ -347,6 +365,11 @@ const Index = () => {
       }
     });
   });
+
+  const handleUploadButtonClick = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
+
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
@@ -375,60 +398,10 @@ const Index = () => {
         getSentDetails(sentPageNo, startDate, endDate, sentSearch, sort)
       );
     }
-    if (reportActiveTab === "ReceivedReport") {
-      dispatch(
-        getReceivedDetails(
-          receivedPageNo,
-          receivedStartDate,
-          receivedEndDate,
-          receivedSearch,
-          sort
-        )
-      );
-    }
-
-    if (!reportActiveTab || reportActiveTab === "FIHR") {
-      dispatch(
-        getReportDetails(
-          pageNo,
-          coderStartDate,
-          coderEndDate,
-          coderSearch,
-          selectedCoderOpt,
-          selectedCoderOptReport?.value ? selectedCoderOptReport?.value : "",
-          sort,
-          selectManager?.value && selectedCoderOptReport?.value !== "All"
-            ? selectManager?.value
-            : ""
-        )
-      );
-    }
     if (ExportResponse) {
       setIsModalVisible(false);
     }
-  }, [
-    pageNo,
-    sentPageNo,
-    receivedPageNo,
-    reportActiveTab,
-    ExportResponse,
-    selectedCoderOpt,
-    selectedCoderOptReport,
-    coderSearch,
-    coderStartDate,
-    coderEndDate,
-    startDate,
-    endDate,
-    sentSearch,
-    receivedPageNo,
-    receivedStartDate,
-    receivedEndDate,
-    receivedSearch,
-    receivedSortOrder,
-    sort,
-    selectManager,
-    select,
-  ]);
+  }, [sentPageNo, startDate, endDate, sentSearch, sort, ExportResponse]);
 
   useEffect(() => {
     setFilteredCoder(ReportPatientDetails?.response);
@@ -467,9 +440,9 @@ const Index = () => {
       <Header />
       <div className={styles.maincontainer}>
         <div class="content-body">
-          {!ReportPatientDetails?.response ? (
+          {/* {!ReportPatientDetails?.response ? (
             <SpinnerDots />
-          ) : (
+          ) : ( */}
             <div className="container-fluid">
               <div className="row">
                 <div className="col-xl-12">
@@ -477,49 +450,63 @@ const Index = () => {
                     <div className="card-body p-0">
                       <div className="table-responsive active-projects task-table">
                         <div className="d-flex">
-                          <div className="col-lg-2 mx-2">
-                            <label>Search by Name or ID</label>
-                            <div class="form-group has-search">
-                              <FontAwesomeIcon
-                                className="fa fa-search form-control-feedback"
-                                icon={faSearch}
-                              />
-                              <InputText
-                                type="text"
-                                onChange={(e) => getNameSearch(e.target.value)}
-                                value={""}
-                                className="form-control new-form-control"
-                                placeholder="Search"
-                              />
+                          <div className="d-flex">
+                            <div className="col-lg-4 mx-2">
+                              <label>Search by Name or ID</label>
+                              <div class="form-group has-search">
+                                <FontAwesomeIcon
+                                  className="fa fa-search form-control-feedback"
+                                  icon={faSearch}
+                                />
+                                <InputText
+                                  type="text"
+                                  onChange={(e) =>
+                                    getNameSearch(e.target.value)
+                                  }
+                                  value={""}
+                                  className="form-control new-form-control"
+                                  placeholder="Search"
+                                />
+                              </div>
+                            </div>
+                            <div className="col-xl-4 mx-2">
+                              <label>Date</label>
+                              <div>
+                                <RangePicker
+                                  format="MM-DD-YYYY"
+                                  onChange={(dates, dateStrings) => {
+                                    setDateRange(dateStrings);
+                                    handleReceivedDatePicker(
+                                      dates,
+                                      dateStrings
+                                    );
+                                  }}
+                                  disabledDate={(current) =>
+                                    disableFutureDate(current)
+                                  }
+                                />
+                              </div>
+                            </div>
+                            <div className="col-xl-4 mx-2">
+                              <div>
+                                <Selector
+                                  selectlabel={"Select Status"}
+                                  setSelectedOption={setStatus}
+                                  selectOptions={statusOptions}
+                                  defaultSelectValue1={""}
+                                  // isClose={true}
+                                />
+                              </div>
                             </div>
                           </div>
-                          <div className="col-xl-2 mx-2">
-                            <label>Date</label>
-                            <div>
-                              <RangePicker
-                                format="MM-DD-YYYY"
-                                onChange={(dates, dateStrings) => {
-                                  setDateRange(dateStrings);
-                                  handleReceivedDatePicker(dates, dateStrings);
-                                }}
-                                disabledDate={(current) =>
-                                  disableFutureDate(current)
-                                }
-                              />
-                            </div>
-                          </div>
-                          <div className="col-xl-2 mx-2">
-                            <div>
-                              <Selector
-                                selectlabel={"Select Status"}
-                                setSelectedOption={setStatus}
-                                selectOptions={statusOptions}
-                                defaultSelectValue1={""}
-                                // isClose={true}
-                              />
-                            </div>
+                          <div
+                            className={styles.btnContainer}
+                            onClick={handleUploadButtonClick}
+                          >
+                            <RegularButton name={"Upload"} />
                           </div>
                         </div>
+
                         <div
                           id="task-tbl_wrapper"
                           className="dataTables_wrapper no-footer"
@@ -643,6 +630,12 @@ const Index = () => {
                               </Tab.Container>
                             </div>
                           </div>
+                          {isDrawerOpen && (
+                            <FhirDrawer
+                              isDrawerOpen={isDrawerOpen}
+                              setIsDrawerOpen={setIsDrawerOpen}
+                            />
+                          )}
 
                           {modal && (
                             <Modal
@@ -703,7 +696,7 @@ const Index = () => {
                 </div>
               </div>
             </div>
-          )}
+          {/* )} */}
         </div>
       </div>
     </>

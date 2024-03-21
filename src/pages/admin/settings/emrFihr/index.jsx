@@ -2,7 +2,7 @@ import React from "react";
 import Style from "./../style.module.css";
 import Epic from "../../../../images/svg/settingsIcons/icons/epic.png";
 import Athena from "../../../../images/svg/settingsIcons/icons/athena.png";
-import Cerner from "../../../../images/svg/settingsIcons/icons/Cerner.png";
+import Cerner from "../../../../images/svg/settingsIcons/icons/cerner.png";
 import EClinical from "../../../../images/svg/settingsIcons/icons/eclinicalworks.png";
 import Image from "next/image";
 import { Tag } from "antd";

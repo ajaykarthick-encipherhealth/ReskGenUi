@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import styles from "./styles.module.css";
 import { preSendURl } from "../../store/actions/AuthActions";
+import upload from "../../images/fihr/upload.png";
+import Image from "next/image";
 
 const ImageUploader = ({ setOpenUploader, setOpenContent }) => {
   const fileInputRef = useRef(null);
@@ -40,16 +42,25 @@ const ImageUploader = ({ setOpenUploader, setOpenContent }) => {
 
   return (
     <div className={styles.videoflex}>
-      <label className={styles.videoflex}>
-        <input
-          className="input"
-          type="file"
-          onChange={handleChange}
-          ref={fileInputRef}
-          accept=".png,.jpg,.jpeg"
-        />
-        Upload Profile
-      </label>
+      <div className=" text-center" typeof="file">
+        <div>
+        <Image src={upload} alt="Image" />
+
+        </div>
+        <div>
+            <label>
+          <input
+            className="input"
+            type="file"
+            onChange={handleChange}
+            ref={fileInputRef}
+            accept=".png,.jpg,.jpeg"
+          />
+          Upload Profile
+        </label>
+        </div>
+      
+      </div>
     </div>
   );
 };
