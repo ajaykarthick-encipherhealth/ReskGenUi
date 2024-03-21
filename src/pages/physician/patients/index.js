@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Paginator } from "primereact/paginator";
 
@@ -32,9 +32,15 @@ export default function Patients() {
   const sideMenu = useSelector((state) => state.sideMenu);
   const response = useSelector((state) => state.PhyicianReducer.patients);
 
+  const [physicianId, setPhysicianId] = useState("ID-001");
+  const [from, setFrom] = useState("2024-03-20T00:00:00Z");
+  const [to, setTo] = useState("2024-03-20T23:59:59Z");
+  const [priority, setPriority] = useState("");
+  const [search, setSearch] = useState("");
+
   useEffect(() => {
-    dispatch(getPatients());
-  }, []);
+    dispatch(getPatients(physicianId, from, to, priority, search));
+  }, [dispatch, physicianId, from, to, priority, search]);
 
   return (
     <>
@@ -50,38 +56,16 @@ export default function Patients() {
                       <div className="tbl-caption  align-items-center">
                         <div className="tbl-caption  align-items-center">
                           <HeaderFilters
-                            // setSearch={setSearch}
                             isSearch={true}
-                            searchlabel="Search By Patient Id / Name"
-                            // select status
-                            selectlabel="Select Priority"
-                            isSelector={true}
-                            // setSelectedOption={SetSelectedOption}
-                            // selectOptions={options}
+                            searchlabel="Search By MRN / Patient Name"
                             defaultSelectValue1={"Select Status"}
-                            // select status
-                            pickerlabe6="Select Priority"
-                            isAnotherPicker6={true}
-                            //  setSelectedOption={SetSelectedOption}
-                            // allocatedToOptoons={statusOptions}
                             defaultPriority={"Select Status"}
-                            // computation date
-                            pickerlabel="Date"
                             defaultStartDate={""}
                             defaultEndDate={""}
-                            // setStartDate={setstartDate}
-                            // setEndDate={setendDate}
-                            isRangePicker={true}
-                            // created by
-                            // isNextCreatedBySelector={true}
-                            // createdTolabel="Select Priority"
-                            // optionKey="patientAllocated"
-                            // createdByOptoons={generateOptionsList(filteredList)}
-                            // setSelCreatedBy={setSelCreatedBy}
+                            isRangeTimePicker={true}
+                            timePickerlabel={"Date and time Range"}
                             addUser={false}
-                            // addUserForm={addPatientFormId}
-                            // bullets={bullets}
-                            // isNextRow={true}
+                            setSearch={""}
                           />
                         </div>
                       </div>
@@ -100,15 +84,8 @@ export default function Patients() {
                             />
                             <div>
                               <div className="pagination-container">
-                                <Paginator
-                                  // first={paginationFirst}
-                                  rows={15}
-                                  // totalRecords={totalElements}
-                                  // onPageChange={onPageChange}
-                                />
-                                <div className="total-pages">
-                                  {/* Total count: {totalElements} */}
-                                </div>
+                                <Paginator rows={15} />
+                                <div className="total-pages"></div>
                               </div>
                             </div>
                           </>

@@ -96,6 +96,7 @@ export const AdminMenuList = [
     iconStyle: SVGICON.Notification,
     to: "/admin/notification",
   },
+
   // {
   //   title: "Auditing Window",
   //   iconStyle: SVGICON.Usermanagement,
@@ -186,13 +187,12 @@ export const PhysicianMenuList = [
   },
   {
     title: "Patients",
-    iconStyle:SVGICON.physicianPatient,
+    iconStyle: SVGICON.physicianPatient,
     to: "/physician/patients",
   },
   {
     title: "Comparision",
-    iconStyle:SVGICON.physicianComparision,
+    iconStyle: SVGICON.physicianComparision,
     to: "/physician/comparison",
   },
-  
 ];
