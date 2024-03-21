@@ -188,11 +188,7 @@ export const PhysicianMenuList = [
     title: "Patients",
     iconStyle:SVGICON.physicianPatient,
     to: "/physician/patients",
-  },
-  {
-    title: "Comparision",
-    iconStyle:SVGICON.physicianComparision,
-    to: "/physician/comparison",
+    childRoute:"/physician/comparison"
   },
   
 ];
