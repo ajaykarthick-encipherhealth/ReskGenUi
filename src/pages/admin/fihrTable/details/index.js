@@ -466,20 +466,24 @@ const Index = () => {
                         >
                           <Image src={leftArrow} />
                         </button>
-                        <div style={{width:"95%",display:"flex",margin:"auto"}}>
-                        
+                        <div
+                          style={{
+                            width: "95%",
+                            display: "flex",
+                            margin: "auto",
+                          }}
+                        >
                           {headerData?.map((item) => (
                             <div className="col-xl-2">
-                              <div style={{display:"flex"}}>
+                              <div style={{ display: "flex" }}>
                                 <Image src={item?.icon} alt="npimg" />
                                 <div className={styles.topTitle}>
-                                {item?.title}
-                                  </div>
+                                  {item?.title}
+                                </div>
                               </div>
                               <div>{item?.name}</div>
                             </div>
                           ))}
-                         
                         </div>
                         <span></span>
                       </div>

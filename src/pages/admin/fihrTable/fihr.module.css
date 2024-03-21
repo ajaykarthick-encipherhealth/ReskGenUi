@@ -154,7 +154,6 @@
   margin-right: 10px;
   border-radius: 8px;
   margin-top: 25px;
-
 }
 .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
   background-color: #04306f !important;
@@ -176,7 +175,6 @@
   font-weight: 400;
   margin-right: 10px;
   padding-top: 5px;
-
 }
 .dateDisplay {
   display: flex;
@@ -213,8 +211,8 @@
   padding: 5px;
   box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.2);
 }
-.userRoleContainer{
-  width:50%;
+.userRoleContainer {
+  width: 50%;
 }
 .userName {
   display: flex;
@@ -224,71 +222,69 @@
   border-radius: 8px;
   margin-bottom: 10px;
 }
-.filterBtn{
-  background-color: 
-  rgba(255, 255, 255, 1);
-  width:110px;
-  height:42px;
-  border:none;
+.filterBtn {
+  background-color: rgba(255, 255, 255, 1);
+  width: 110px;
+  height: 42px;
+  border: none;
   border-radius: 8px;
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
 }
-.titleBar{
+.titleBar {
   font-size: 18px;
   font-weight: 700;
   margin-left: 10px;
 }
-.backDiv{
+.backDiv {
   margin: 33px 10px 0px 0;
 }
-.label{
-  margin-left:8px;
+.label {
+  margin-left: 8px;
 }
-.backButtonStyle{
-  background-color: 
-  rgba(255, 255, 255, 1);
-  width:40px;
-  height:42px;
-  border:none;
+.backButtonStyle {
+  background-color: rgba(255, 255, 255, 1);
+  width: 40px;
+  height: 42px;
+  border: none;
   border-radius: 8px;
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
   /* margin-top: 30px; */
 }
-.topHeader{
-  display:flex;
-  width:97%;
-  margin:auto;
+.topHeader {
+  display: flex;
+  width: 97%;
+  margin: auto;
   margin-top: 20px;
 }
-.refreshBtn{
-  width:25px;
-  height:25px;
-  margin-left:5px;
-  background-color:rgba(250, 209, 209, 1);
-  border-radius:10px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  cursor:pointer;
+.refreshBtn {
+  width: 25px;
+  height: 25px;
+  margin-left: 5px;
+  background-color: rgba(250, 209, 209, 1);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
-.progreddBr{
-width:30%;
-margin: auto;
+.progreddBr {
+  width: 30%;
+  margin: auto;
 }
-.progressDIv{
-  position:relative;
-  left:10px;
+.progressDIv {
+  position: relative;
+  left: 10px;
 }
 
 @media screen and (width>1500px) {
-  .progressDIv{
-    position:relative;
-    left:30px;
+  .progressDIv {
+    position: relative;
+    left: 30px;
   }
 }
-.topTitle{
+.topTitle {
   font-size: 16px;
   font-weight: 600;
-  color:rgba(136, 136, 136, 1);
+  color: rgba(136, 136, 136, 1);
   margin: 0px 0 5px 5px;
 }
