@@ -272,7 +272,7 @@ const FIHRData = [
   },
 ];
 
-const index = () => {
+const Index = () => {
   const dispatch = useDispatch();
   const ExportResponse = useSelector((state) => state.adminReport?.exportRes);
 
@@ -706,4 +706,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;
