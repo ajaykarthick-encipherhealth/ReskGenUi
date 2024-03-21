@@ -457,7 +457,7 @@ const Index = () => {
                 <div className="">
                   <div className="card-body p-0">
                     <div className="table-responsive active-projects task-table">
-                      <div className={styles.topHeader}>
+                      <div className={styles.topHeader} style={{marginBottom:"40px"}}>
                         <button
                           className={`${styles.backButtonStyle}`}
                           onClick={() => {
