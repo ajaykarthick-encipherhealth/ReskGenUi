@@ -123,7 +123,7 @@ const Accuracy = () => {
   }
 
   let highlightIndex = -1;
-  console.log(selectedMonth)
+
   if (currentBtn === "Monthly") {
     if (parseInt(selectedYear) === new Date().getFullYear()) {
       highlightIndex = currentDate.getMonth();
