@@ -106,9 +106,7 @@ const Accuracy = () => {
   const handleMonthChange = (date) => {
     const selectedDate = new Date(date);
     setMonth(date);
-    const monthNumber = (selectedDate.getMonth() + 1)
-      .toString()
-      .padStart(2, "0");
+    const monthNumber = parseInt(selectedDate.getMonth()) + 1;
     setSelectedMonth(monthNumber);
   };
 
@@ -125,6 +123,7 @@ const Accuracy = () => {
   }
 
   let highlightIndex = -1;
+  console.log(selectedMonth)
   if (currentBtn === "Monthly") {
     if (parseInt(selectedYear) === new Date().getFullYear()) {
       highlightIndex = currentDate.getMonth();
@@ -132,8 +131,8 @@ const Accuracy = () => {
   } else if (currentBtn === "Daily") {
     if (
       parseInt(selectedYear) === new Date().getFullYear() &&
-      selectedMonth === new Date().getMonth() + 1
-    ) {
+      selectedMonth === new Date().getMonth()+1
+      ) {
       highlightIndex = currentDate.getDate() - 1;
     }
   } else if (currentBtn === "Weekly") {
@@ -457,7 +456,7 @@ const Accuracy = () => {
       );
     }
   }, [currentBtn, selectedMonth, selectedYear, router, currentTabBtn]);
-
+ 
   return (
     <>
       <HeadTitle header="Accuracy and Quality Insights" />
