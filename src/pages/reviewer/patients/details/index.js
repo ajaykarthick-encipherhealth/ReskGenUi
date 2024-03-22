@@ -2724,7 +2724,10 @@ const Details = ({}) => {
                             </div>
 
                             <div className="col-xl-12 mb-3">
-                              <Form.Label>File</Form.Label>
+                              <Form.Label>
+                                File
+                                <span className="text-danger">*</span>
+                              </Form.Label>
                               <Form.Control
                                 type="file"
                                 accept="application/pdf,text/plain"

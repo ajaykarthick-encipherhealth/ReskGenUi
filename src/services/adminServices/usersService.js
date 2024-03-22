@@ -107,7 +107,6 @@ export const enableUser = (
       : checked
       ? { ...data, accountEnabled: checkedVal }
       : data;
-
     if (
       (field && role && user !== undefined) ||
       (checked !== undefined && checked !== null && user !== undefined)
@@ -129,8 +128,8 @@ export const enableUser = (
             payload: response.data,
           });
           notification.success({
-            description: `${user?.firstName}${user?.lastName} has ${
-              checkedVal === 0 ? "disabled" : "enabled"
+            description: `${user?.firstName} ${user?.lastName} has ${
+              checkedVal === false ? "disabled" : "enabled"
             } successfully`,
           });
           dispatch(getUsers(0));

@@ -14265,3 +14265,8 @@ input[type="number"] {
 .hcc_form > .ant-select-selector {
   height: 42px !important;
 }
+.ant-dropdown {
+  width: 100px !important;
+  display: flex;
+  justify-content: center;
+}
