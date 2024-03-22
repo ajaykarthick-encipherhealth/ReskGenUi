@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
-import { Badge, Empty, Popover, Tooltip } from "antd";
+import { Empty, Popover } from "antd";
 import TableStyle from "../../table.module.css";
-import { SVGICON } from "../../../../jsx/constant/theme";
 import { Paginator } from "primereact/paginator";
 import { selectedRow } from "../../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
@@ -9,11 +8,9 @@ import dayjs from "dayjs";
 import {
   dateFormate,
   renderUserPrfoileAvatar,
-  sortFunction,
+
 } from "../../../headerFilters/functions";
 import moment from "moment";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 
 function PdfTable({
   reportListAll,
@@ -32,10 +29,10 @@ function PdfTable({
   const dateFormateAlign = (dates) => {
     return dates?.map((res, index) => {
       if (index < 1) {
-        var sectionMapArr = <span>{moment(res).year()}</span>;
+        let sectionMapArr = <span>{moment(res).year()}</span>;
         return sectionMapArr;
       } else if (dates.length - 1 == index) {
-        var sectionMapArr = (
+        let sectionMapArr = (
           <Popover
             content={
               <>
@@ -72,24 +69,7 @@ function PdfTable({
               <>
                 <th>BATCH ID</th>
                 <th>PATIENT COUNT</th>
-                {/* <th
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    sortFunction(
-                      sortOrder,
-                      setSortOrder,
-                      setSort,
-                      "processedDate"
-                    );
-                  }}
-                >
-                  COMPLETED DATE{" "}
-                  {sortOrder === "ASC" ? (
-                    <ArrowUpOutlined />
-                  ) : (
-                    <ArrowDownOutlined />
-                  )}
-                </th> */}
+               
                 <th>STATUS </th>
                 <th>YEAR OF SERVICE</th>
                 <th className={TableStyle.rowAudited}>INITIATED BY </th>

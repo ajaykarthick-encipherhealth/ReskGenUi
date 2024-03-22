@@ -16,6 +16,41 @@ const DetailsTable = ({
   onPageChange,
   tableData,
 }) => {
+  const getColors = (row) => {
+    let strokeColor;
+    let progressTextClass;
+    let textColor;
+    let imageSrc;
+
+    switch (row?.status) {
+      case "computed":
+        strokeColor = "rgba(11, 96, 176, 1)";
+        progressTextClass = "fihrComputedProgressText";
+        textColor = "rgba(11, 96, 176, 1)";
+        imageSrc = completed;
+        break;
+      case "failed":
+        strokeColor = "red";
+        progressTextClass = "fihrFailedProgressText";
+        textColor = "red";
+        imageSrc = failed;
+        break;
+      case "processing":
+        strokeColor = "rgba(252, 103, 54, 1)";
+        progressTextClass = "fihrProgressText";
+        textColor = "rgba(252, 103, 54, 1)";
+        imageSrc = processing;
+        break;
+      default:
+        strokeColor = "rgba(252, 103, 54, 1)";
+        progressTextClass = "fihrProgressText";
+        textColor = "rgba(252, 103, 54, 1)";
+        imageSrc = completed;
+    }
+
+    return { strokeColor, progressTextClass, textColor, imageSrc };
+  };
+
   return (
     <div className={TableStyle.classContaineer}>
       {reportListAll?.data?.length === 0 ? (
@@ -29,7 +64,6 @@ const DetailsTable = ({
                 <th>PATIENT NAME</th>
                 <th style={{ textAlign: "center" }}>STATUS </th>
                 <th style={{ textAlign: "center" }}> COMPUTED DATE TIME</th>
-                
               </>
             </tr>
           </thead>
@@ -58,20 +92,11 @@ const DetailsTable = ({
                             display: "flex",
                             margin: "auto",
                             justifyContent: "center",
-                            color:
-                              row?.status === "computed"
-                                ? "rgba(11, 96, 176, 1)"
-                                : row?.status === "failed"
-                                ? "red"
-                                : "rgba(252, 103, 54, 1)",
+                            color: getColors(row)?.textColor,
                           }}
                         >
                           <Image
-                            src={
-                              row?.status === "processing"
-                                ? processing
-                                : row?.status==="failed"?failed:completed
-                            }
+                            src={getColors(row)?.imageSrc}
                             style={{ paddingRight: "5px" }}
                           />
                           {row?.status}
@@ -84,23 +109,10 @@ const DetailsTable = ({
                         <div className={styles.progressDIv}>
                           <Progress
                             percent={80}
-                            strokeColor={
-                              row?.status === "computed"
-                                ? "rgba(11, 96, 176, 1)"
-                                : row?.status === "failed"
-                                ? "red"
-                                : "rgba(252, 103, 54, 1)"
-                            }
-                            className={`
-                                ${styles.progreddBr}
-                              ${
-                                row?.status === "computed"
-                                  ? "fihrComputedProgressText"
-                                  : row?.status === "processing"
-                                  ? "fihrProgressText"
-                                  : "fihrFailedProgressText"
-                              }
-                            `}
+                            strokeColor={getColors(row)?.strokeColor}
+                            className={`${styles.progreddBr} ${
+                              getColors(row)?.progressTextClass
+                            }`}
                           />
                         </div>
                       </div>
@@ -113,7 +125,6 @@ const DetailsTable = ({
                         ? dayjs(row?.initialedDate).format("MM/DD/YYYY hh:mm A")
                         : "---"}
                     </td>
-                   
                   </>
                 </tr>
               ))
