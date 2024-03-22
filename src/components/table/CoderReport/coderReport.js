@@ -288,11 +288,14 @@ function CoderReport({
                   )}
                 </th>
                 <th>COMMENTS </th>
-                <th className={TableStyle.rowAudited}>USER NAME</th>
+                <th className={TableStyle.rowAuditedAdmin}>AUDITOR NAME</th>
+                <th className={TableStyle.rowAuditedAdmin}>
+                  PATIENT ALLOCATE TO
+                </th>
                 <th>RAF SCORE </th>
                 <th>HCC </th>
                 <th>FLAG </th>
-                <th style={{ paddingLeft: "69px" }}>STATUS</th>
+                <th style={{ paddingLeft: "22px" }}>STATUS</th>
                 <th>
                   <div
                     style={{ display: "flex", justifyContent: "space-around" }}
@@ -366,7 +369,7 @@ function CoderReport({
                       </td>
                       <td
                         className={TableStyle.childBorder}
-                        style={{ textAlign: "left", paddingLeft: "110px" }}
+                        style={{ textAlign: "left", paddingLeft: "50px" }}
                       >
                         {row.auditedByFirstName ||
                         row.auditedByLastName ||
@@ -386,6 +389,35 @@ function CoderReport({
                             </span>
                             <span>
                               {row.auditedByFirstName} {row.auditedByLastName}
+                            </span>
+                          </div>
+                        ) : (
+                          <div style={{ textAlign: "center" }}>---</div>
+                        )}
+                      </td>
+                      <td
+                        className={TableStyle.childBorder}
+                        style={{ textAlign: "left", paddingLeft: "50px" }}
+                      >
+                        {row.patientAllocatedFirstName ||
+                        row.patientAllocatedLastName ||
+                        row.patientAllocatedProfileImage ? (
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            {" "}
+                            <span style={{ marginRight: "10px" }}>
+                              {" "}
+                              {renderUserPrfoileAvatar(
+                                row.patientAllocatedFirstName,
+                                row.patientAllocatedLastName,
+                                row.patientAllocatedProfileImage,
+                                "header"
+                              )}
+                            </span>
+                            <span>
+                              {row.patientAllocatedFirstName}{" "}
+                              {row.patientAllocatedLastName}
                             </span>
                           </div>
                         ) : (
@@ -465,7 +497,7 @@ function CoderReport({
                       </td>
                       <td
                         className={TableStyle.childBorder}
-                        style={{ textAlign: "left", paddingLeft: "110px" }}
+                        style={{ textAlign: "left", paddingLeft: "50px" }}
                       >
                         {row.auditedByFirstName ||
                         row.auditedByLastName ||
@@ -485,6 +517,35 @@ function CoderReport({
                             </span>
                             <span>
                               {row.auditedByFirstName} {row.auditedByLastName}
+                            </span>
+                          </div>
+                        ) : (
+                          <div style={{ paddingLeft: "70px" }}>---</div>
+                        )}
+                      </td>
+                      <td
+                        className={TableStyle.childBorder}
+                        style={{ textAlign: "left", paddingLeft: "50px" }}
+                      >
+                        {row.patientAllocatedFirstName ||
+                        row.patientAllocatedLastName ||
+                        row.patientAllocatedProfileImage ? (
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            {" "}
+                            <span style={{ marginRight: "10px" }}>
+                              {" "}
+                              {renderUserPrfoileAvatar(
+                                row.patientAllocatedFirstName,
+                                row.patientAllocatedLastName,
+                                row.patientAllocatedProfileImage,
+                                "header"
+                              )}
+                            </span>
+                            <span>
+                              {row.patientAllocatedFirstName}{" "}
+                              {row.patientAllocatedLastName}
                             </span>
                           </div>
                         ) : (

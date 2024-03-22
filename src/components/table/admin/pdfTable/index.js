@@ -1,4 +1,8 @@
 import React, { useEffect } from "react";
+import { Empty, Popover } from "antd";
+import TableStyle from "../../table.module.css";
+import { Paginator } from "primereact/paginator";
+import { selectedRow } from "../../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
 import dayjs from "dayjs";
 import { Paginator } from "primereact/paginator";
@@ -10,6 +14,7 @@ import {
   dateFormate,
   renderUserPrfoileAvatar,
 } from "../../../headerFilters/functions";
+import moment from "moment";
 
 function PdfTable({
   reportListAll,
@@ -28,10 +33,10 @@ function PdfTable({
   const dateFormateAlign = (dates) => {
     return dates?.map((res, index) => {
       if (index < 1) {
-        var sectionMapArr = <span>{moment(res).year()}</span>;
+        let sectionMapArr = <span>{moment(res).year()}</span>;
         return sectionMapArr;
       } else if (dates.length - 1 == index) {
-        var sectionMapArr = (
+        let sectionMapArr = (
           <Popover
             content={
               <>
