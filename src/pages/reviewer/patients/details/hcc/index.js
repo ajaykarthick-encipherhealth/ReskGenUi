@@ -305,6 +305,7 @@ const Hcc = ({ patientHccResult }) => {
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [hccVersionDetails, setHccVersionDetails] = useState(null);
   const [selectProviderInfo, setSelectProviderInfo] = useState(null);
+  const [hccFormTab, setHccFormTab] = useState("HCCFORM");
 
   const getMeatFound = (code, data, value) => {
     const result = data?.filter(
@@ -1527,6 +1528,7 @@ const Hcc = ({ patientHccResult }) => {
   };
 
   const handleCloseModal = () => {
+    setHccFormTab("HCCFORM");
     setAddValidCodeCheck(null);
     setValidated(false);
     setIsModalOpen(false);
@@ -2177,57 +2179,56 @@ const Hcc = ({ patientHccResult }) => {
     if (addValidCodeCheck == true) {
       setAddValidCodeCheck(null);
       if (form.checkValidity() === true) {
-        let convertDate = moment(inputValue.encodedDate).format("MM-DD-YYYY");
-
-        var dataFormatSuggested = {
-          patientComputeDetailId: localPatientId,
-          year: dos,
-          tenantId: localTenantId,
-          diseaseFormat: {
-            diagnosisCode: inputValue.diagnosisCode,
-            actualDescription: inputValue.actualDescription,
-            encounterDate: convertDate,
-            capturedSections: [inputValue.capturedSections],
-          },
-          providerInfo: {
-            providerName: inputValue.providerName,
-            authorizedProvider:
-              selectProviderInfo == "authorizedProvider" ? true : false,
-            noCredential: selectProviderInfo == "noCredential" ? true : false,
-            unAuthorizeProvider:
-              selectProviderInfo == "unAuthorizeProvider" ? true : false,
-            unSigned: selectProviderInfo == "unSigned" ? true : false,
-          },
-        };
-
-        try {
-          const response = await axios.post(
-            ENDPOINTS.apiEndointFileUploadHcc +
-              `aiservice/patient/addvaliddisease`,
-            dataFormatSuggested
-          );
-          if (response?.status == 200) {
-            notification.success({
-              message: "Saved Successfully!",
-              placement: "top",
-              duration: 1,
-            });
-            form.reset();
-            setIsModalOpenValidCodes(false);
-            setIsFileFormShow(false);
-            setInputValueFileDate("");
-
-            getPatientDetailsReload(
-              localPatientId,
-              localOrgId,
-              localTenantId,
-              "fileNotLoad"
-            );
-            handleCloseForm();
-            setIsModalOpenValid(false);
-          } else {
-          }
-        } catch (e) {}
+        setHccFormTab("MEATFORM");
+        setValidated(false);
+        // let convertDate = moment(inputValue.encodedDate).format("MM-DD-YYYY");
+        // var dataFormatSuggested = {
+        //   patientComputeDetailId: localPatientId,
+        //   year: dos,
+        //   tenantId: localTenantId,
+        //   diseaseFormat: {
+        //     diagnosisCode: inputValue.diagnosisCode,
+        //     actualDescription: inputValue.actualDescription,
+        //     encounterDate: convertDate,
+        //     capturedSections: [inputValue.capturedSections],
+        //   },
+        //   providerInfo: {
+        //     providerName: inputValue.providerName,
+        //     authorizedProvider:
+        //       selectProviderInfo == "authorizedProvider" ? true : false,
+        //     noCredential: selectProviderInfo == "noCredential" ? true : false,
+        //     unAuthorizeProvider:
+        //       selectProviderInfo == "unAuthorizeProvider" ? true : false,
+        //     unSigned: selectProviderInfo == "unSigned" ? true : false,
+        //   },
+        // };
+        // try {
+        //   const response = await axios.post(
+        //     ENDPOINTS.apiEndointFileUploadHcc +
+        //       `aiservice/patient/addvaliddisease`,
+        //     dataFormatSuggested
+        //   );
+        //   if (response?.status == 200) {
+        //     notification.success({
+        //       message: "Saved Successfully!",
+        //       placement: "top",
+        //       duration: 1,
+        //     });
+        //     form.reset();
+        //     setIsModalOpenValidCodes(false);
+        //     setIsFileFormShow(false);
+        //     setInputValueFileDate("");
+        //     getPatientDetailsReload(
+        //       localPatientId,
+        //       localOrgId,
+        //       localTenantId,
+        //       "fileNotLoad"
+        //     );
+        //     handleCloseForm();
+        //     setIsModalOpenValid(false);
+        //   } else {
+        //   }
+        // } catch (e) {}
       }
     }
 
@@ -2237,71 +2238,77 @@ const Hcc = ({ patientHccResult }) => {
     var dos = dosYearDefalutSelect.label;
     const form = event.currentTarget;
     event.preventDefault();
-    if (addValidCodeCheck == true) {
-      setAddValidCodeCheck(null);
-      if (form.checkValidity() === true) {
-        let convertDate = moment(inputValue.encodedDate).format("MM-DD-YYYY");
+    setAddValidCodeCheck(null);
+    if (form.checkValidity() === true) {
+      let convertDate = moment(inputValue.encodedDate).format("MM-DD-YYYY");
 
-        var dataFormatSuggested = {
-          patientComputeDetailId: localPatientId,
-          year: dos,
-          meatDetail: {
-            diseaseName: inputValueMeat.diseaseName,
-            diagnosisCode: inputValueMeat.diseaseName,
-            isMeatCriteriaPresent: inputValueMeat.isMeatCriteriaPresent,
-            monitorCapturedFromHeader: inputValueMeat.monitorCapturedFromHeader,
-            monitor: inputValueMeat.monitor,
-            evaluateCapturedFromHeader:
-              inputValueMeat.evaluateCapturedFromHeader,
-            evaluate: inputValueMeat.evaluate,
-            assessmentCapturedFromHeader:
-              inputValueMeat.assessmentCapturedFromHeader,
-            assessment: inputValueMeat.assessment,
-            treatmentCapturedFromHeader:
-              inputValueMeat.treatmentCapturedFromHeader,
-            treatment: inputValueMeat.treatment,
-            radiology: false,
-            lab: false,
-            isManuallyAdded: true,
-            encounterDate: convertDate,
-          },
-          // diseaseFormat: {
-          //   diagnosisCode: inputValue.diagnosisCode,
-          //   actualDescription: inputValue.actualDescription,
-          //   encounterDate: convertDate,
-          //   capturedSections: [inputValue.capturedSections],
-          // },
-        };
+      var dataFormatSuggested = {
+        patientComputeDetailId: localPatientId,
+        year: dos,
+        meatDetail: {
+          diseaseName: inputValue.actualDescription,
+          diagnosisCode: inputValue.diagnosisCode,
+          isMeatCriteriaPresent: inputValueMeat.isMeatCriteriaPresent,
+          monitorCapturedFromHeader: inputValueMeat.monitorCapturedFromHeader,
+          monitor: inputValueMeat.monitor,
+          evaluateCapturedFromHeader: inputValueMeat.evaluateCapturedFromHeader,
+          evaluate: inputValueMeat.evaluate,
+          assessmentCapturedFromHeader:
+            inputValueMeat.assessmentCapturedFromHeader,
+          assessment: inputValueMeat.assessment,
+          treatmentCapturedFromHeader:
+            inputValueMeat.treatmentCapturedFromHeader,
+          treatment: inputValueMeat.treatment,
+          radiology: false,
+          lab: false,
+          isManuallyAdded: true,
+          encounterDate: convertDate,
+        },
+        diseaseFormat: {
+          diagnosisCode: inputValue.diagnosisCode,
+          actualDescription: inputValue.actualDescription,
+          encounterDate: convertDate,
+          capturedSections: [inputValue.capturedSections],
+        },
+        providerInfo: {
+          providerName: inputValue.providerName,
+          authorizedProvider:
+            selectProviderInfo == "authorizedProvider" ? true : false,
+          noCredential: selectProviderInfo == "noCredential" ? true : false,
+          unAuthorizeProvider:
+            selectProviderInfo == "unAuthorizeProvider" ? true : false,
+          unSigned: selectProviderInfo == "unSigned" ? true : false,
+        },
+      };
 
-        try {
-          const response = await axios.post(
-            ENDPOINTS.apiEndointFileUploadHcc +
-              `dbservice/patient/compute/addvaliddisease`,
-            dataFormatSuggested
+      try {
+        const response = await axios.post(
+          ENDPOINTS.apiEndointFileUploadHcc +
+            `dbservice/patient/compute/addvaliddisease`,
+          dataFormatSuggested
+        );
+        if (response?.status == 200) {
+          notification.success({
+            message: "Saved Successfully!",
+            placement: "top",
+            duration: 1,
+          });
+          form.reset();
+          setIsModalOpenValidCodes(false);
+          setIsFileFormShow(false);
+          setInputValueFileDate("");
+
+          getPatientDetailsReload(
+            localPatientId,
+            localOrgId,
+            localTenantId,
+            "fileNotLoad"
           );
-          if (response?.status == 200) {
-            notification.success({
-              message: "Saved Successfully!",
-              placement: "top",
-              duration: 1,
-            });
-            form.reset();
-            setIsModalOpenValidCodes(false);
-            setIsFileFormShow(false);
-            setInputValueFileDate("");
-
-            getPatientDetailsReload(
-              localPatientId,
-              localOrgId,
-              localTenantId,
-              "fileNotLoad"
-            );
-            handleCloseForm();
-            setIsModalOpenValid(false);
-          } else {
-          }
-        } catch (e) {}
-      }
+          handleCloseForm();
+          setIsModalOpenValid(false);
+        } else {
+        }
+      } catch (e) {}
     }
 
     setValidated(true);
@@ -5666,476 +5673,324 @@ const Hcc = ({ patientHccResult }) => {
                     {isFileFormShow ? (
                       <div className="col-xl-4">
                         <div
-                          className={`profile-tab ${visitStyles.visitdata_header_card2}`}
+                          className={`className="col-xl-12 ${styles.hccFormContainer}`}
                         >
-                          <div className="custom-tab-1 ">
-                            <Tab.Container defaultActiveKey="hccForm">
-                              <div className="row">
-                                <div className="col-xl-12">
-                                  <Nav as="ul" className="nav nav-tabs">
-                                    <Nav.Item as="li" className="nav-item">
-                                      <Nav.Link
-                                        to="#my-posts"
-                                        eventKey="hccForm"
-                                        className={visitStyles.navColor}
+                          {hccFormTab == "HCCFORM" ? (
+                            <div className="offcanvas-body">
+                              <div className={visitStyles.fileFormContianer}>
+                                <div className={styles.formTitleContaniner}>
+                                  <h6 className={styles.formTitle}>HCC</h6>
+                                </div>
+                                <Form
+                                  noValidate
+                                  validated={validated}
+                                  onSubmit={handleFormSubmit}
+                                >
+                                  <div className="row">
+                                    <div className="col-xl-12">
+                                      <Form.Label>
+                                        Code{" "}
+                                        <span className="text-danger">*</span>{" "}
+                                      </Form.Label>
+                                      <Form.Control
+                                        required
+                                        type="text"
+                                        id="diagnosisCode"
+                                        name="diagnosisCode"
+                                        onChange={handleChange}
+                                        value={inputValue.diagnosisCode}
+                                      />
+                                      {addValidCodeCheck == false ? (
+                                        <span
+                                          className={
+                                            visitStyles.invalidHccCodeError
+                                          }
+                                        >
+                                          Invalid Hcc Code
+                                        </span>
+                                      ) : addValidCodeCheck == true ? (
+                                        <span
+                                          className={
+                                            visitStyles.validHccCodeError
+                                          }
+                                        >
+                                          Valid Hcc Code
+                                        </span>
+                                      ) : null}
+                                    </div>
+                                    <div className="col-xl-12">
+                                      <Form.Label>Provider name</Form.Label>
+                                      <Form.Control
+                                        type="text"
+                                        id="providerName"
+                                        name="providerName"
+                                        onChange={handleChange}
+                                        value={inputValue.providerName}
+                                      />
+                                    </div>
+                                    <div className="col-xl-12 ">
+                                      <Form.Label>Provider Info</Form.Label>
+                                      <Select
+                                        className={`ant_select_form hcc_form mb-2`}
+                                        onChange={(value) =>
+                                          handleSelectProvider(value)
+                                        }
                                       >
-                                        HCC
-                                      </Nav.Link>
-                                    </Nav.Item>
-                                    <Nav.Item as="li" className="nav-item">
-                                      <Nav.Link
-                                        to="#my-posts"
-                                        eventKey="meatForm"
-                                        className={visitStyles.navColor}
-                                        activeClassName={visitStyles.activeLink}
-                                      >
-                                        MEAT
-                                      </Nav.Link>
-                                    </Nav.Item>
-                                  </Nav>
-
-                                  <Tab.Content>
-                                    <Tab.Pane id="my-posts" eventKey="hccForm">
-                                      <div
-                                        className={`className="col-xl-12 ${styles.hccFormContainer}`}
-                                      >
-                                        <div className="offcanvas-body">
-                                          <div
-                                            className={
-                                              visitStyles.fileFormContianer
-                                            }
+                                        {providerInfoList?.map((data) => (
+                                          <Option
+                                            key={data?.value}
+                                            value={data?.value}
                                           >
-                                            <Form
-                                              noValidate
-                                              validated={validated}
-                                              onSubmit={handleFormSubmit}
-                                            >
-                                              <div className="row">
-                                                <div className="col-xl-12">
-                                                  <Form.Label>
-                                                    Code{" "}
-                                                    <span className="text-danger">
-                                                      *
-                                                    </span>{" "}
-                                                  </Form.Label>
-                                                  <Form.Control
-                                                    required
-                                                    type="text"
-                                                    id="diagnosisCode"
-                                                    name="diagnosisCode"
-                                                    onChange={handleChange}
-                                                  />
-                                                  {addValidCodeCheck ==
-                                                  false ? (
-                                                    <span
-                                                      className={
-                                                        visitStyles.invalidHccCodeError
-                                                      }
-                                                    >
-                                                      Invalid Hcc Code
-                                                    </span>
-                                                  ) : addValidCodeCheck ==
-                                                    true ? (
-                                                    <span
-                                                      className={
-                                                        visitStyles.validHccCodeError
-                                                      }
-                                                    >
-                                                      Valid Hcc Code
-                                                    </span>
-                                                  ) : null}
-                                                </div>
-                                                <div className="col-xl-12">
-                                                  <Form.Label>
-                                                    Provider name
-                                                  </Form.Label>
-                                                  <Form.Control
-                                                    type="text"
-                                                    id="providerName"
-                                                    name="providerName"
-                                                    onChange={handleChange}
-                                                  />
-                                                </div>
-                                                <div className="col-xl-12 ">
-                                                  <Form.Label>
-                                                    Provider Info
-                                                  </Form.Label>
-                                                  <Select
-                                                    className={`ant_select_form hcc_form mb-2`}
-                                                    onChange={(value) =>
-                                                      handleSelectProvider(
-                                                        value
-                                                      )
-                                                    }
-                                                  >
-                                                    {providerInfoList?.map(
-                                                      (data) => (
-                                                        <Option
-                                                          key={data?.value}
-                                                          value={data?.value}
-                                                        >
-                                                          {data?.label}
-                                                        </Option>
-                                                      )
-                                                    )}
-                                                  </Select>
-                                                </div>
-                                                <div className="col-xl-12">
-                                                  <Form.Label>
-                                                    Section{" "}
-                                                    <span className="text-danger">
-                                                      *
-                                                    </span>{" "}
-                                                  </Form.Label>
-                                                  <Form.Control
-                                                    required
-                                                    type="text"
-                                                    id="capturedSections"
-                                                    name="capturedSections"
-                                                    onChange={handleChange}
-                                                  />
-                                                </div>
-                                                <div className={`col-xl-12`}>
-                                                  <Form.Label>
-                                                    Encoded date{" "}
-                                                    <span className="text-danger">
-                                                      *
-                                                    </span>{" "}
-                                                  </Form.Label>
+                                            {data?.label}
+                                          </Option>
+                                        ))}
+                                      </Select>
+                                    </div>
+                                    <div className="col-xl-12">
+                                      <Form.Label>
+                                        Section{" "}
+                                        <span className="text-danger">*</span>{" "}
+                                      </Form.Label>
+                                      <Form.Control
+                                        required
+                                        type="text"
+                                        id="capturedSections"
+                                        name="capturedSections"
+                                        onChange={handleChange}
+                                        value={inputValue.capturedSections}
+                                      />
+                                    </div>
+                                    <div className={`col-xl-12`}>
+                                      <Form.Label>
+                                        Encoded date{" "}
+                                        <span className="text-danger">*</span>{" "}
+                                      </Form.Label>
 
-                                                  {/* <Form.Control
+                                      {/* <Form.Control
                                                       required
                                                       type="date"
                                                       id="encodedDate"
                                                       name="encodedDate"
                                                       onChange={handleChange}
                                                     /> */}
-                                                  <div
-                                                    className={
-                                                      visitStyles.fileFormDate
-                                                    }
-                                                  >
-                                                    <Form.Control
-                                                      required
-                                                      type="text"
-                                                      id="encodedDate"
-                                                      name="encodedDate"
-                                                      onChange={handleChange}
-                                                      value={inputValueFileDate}
-                                                    />
-                                                    {!dragFileDate ? (
-                                                      <span
-                                                        onClick={() =>
-                                                          setdragFileDate(true)
-                                                        }
-                                                      >
-                                                        {" "}
-                                                        <FontAwesomeIcon
-                                                          icon={faCalendar}
-                                                          style={{
-                                                            color: "#918585",
-                                                          }}
-                                                        />
-                                                      </span>
-                                                    ) : (
-                                                      <span
-                                                        onClick={() =>
-                                                          setdragFileDate(false)
-                                                        }
-                                                      >
-                                                        {" "}
-                                                        <FontAwesomeIcon
-                                                          icon={faClose}
-                                                          style={{
-                                                            color: "#918585",
-                                                          }}
-                                                        />
-                                                      </span>
-                                                    )}
-                                                  </div>
-                                                </div>
-                                                <DatePicker
-                                                  format="MM-DD-YYYY"
-                                                  onChange={(
-                                                    dates,
-                                                    dateStrings
-                                                  ) => {
-                                                    handleDatePickerChangeFile(
-                                                      dates,
-                                                      dateStrings
-                                                    );
-                                                  }}
-                                                  open={dragFileDate}
-                                                  showNow={false}
-                                                  style={{
-                                                    visibility: "hidden",
-                                                    boxShadow: "none",
-                                                    marginBottom: "-45px",
-                                                  }}
-                                                  placeholder="MM-DD-YYYY"
-                                                  className="form-control"
-                                                />
-                                                {/* <DatePicker/> */}
-
-                                                <div className="col-xl-12 mb-3">
-                                                  <Form.Label>
-                                                    Description{" "}
-                                                    <span className="text-danger">
-                                                      *
-                                                    </span>{" "}
-                                                  </Form.Label>
-                                                  <textarea
-                                                    className={`${styles.hccTextArea}`}
-                                                    id="actualDescription"
-                                                    name="actualDescription"
-                                                    onChange={
-                                                      handleChangeSuggested
-                                                    }
-                                                    // value={inputValue.actualDescription}
-                                                    rows="5"
-                                                    required
-                                                  ></textarea>
-                                                </div>
-                                              </div>
-
-                                              <div>
-                                                <Button
-                                                  type="submit"
-                                                  className="btn btn-primary btn-sm me-1"
-                                                >
-                                                  Submit
-                                                </Button>
-                                                <Button
-                                                  type="reset"
-                                                  // onClick={() =>
-                                                  //   handleCloseModal()
-                                                  // }
-                                                  className="btn btn-danger btn-sm light ms-1"
-                                                >
-                                                  Cancel
-                                                </Button>
-                                              </div>
-                                            </Form>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </Tab.Pane>
-                                    <Tab.Pane id="my-posts" eventKey="meatForm">
-                                      <div
-                                        className={`className="col-xl-12 ${styles.hccFormContainer}`}
-                                      >
-                                        <div className="offcanvas-body">
-                                          <div
-                                            className={
-                                              visitStyles.fileFormContianer
+                                      <div className={visitStyles.fileFormDate}>
+                                        <Form.Control
+                                          required
+                                          type="text"
+                                          id="encodedDate"
+                                          name="encodedDate"
+                                          onChange={handleChange}
+                                          value={inputValueFileDate}
+                                        />
+                                        {!dragFileDate ? (
+                                          <span
+                                            onClick={() =>
+                                              setdragFileDate(true)
                                             }
                                           >
-                                            <Form
-                                              noValidate
-                                              validated={validated}
-                                              onSubmit={handleFormSubmitMeat}
-                                            >
-                                              <div className="row">
-                                                <div className="col-xl-6">
-                                                  <Form.Label>
-                                                    Code{" "}
-                                                    <span className="text-danger">
-                                                      *
-                                                    </span>{" "}
-                                                  </Form.Label>
-                                                  <Form.Control
-                                                    required
-                                                    type="text"
-                                                    id="diagnosisCode"
-                                                    name="diagnosisCode"
-                                                    onChange={handleChangeMeat}
-                                                  />
-                                                  {addValidCodeCheck ==
-                                                  false ? (
-                                                    <span
-                                                      className={
-                                                        visitStyles.invalidHccCodeError
-                                                      }
-                                                    >
-                                                      Invalid Hcc Code
-                                                    </span>
-                                                  ) : addValidCodeCheck ==
-                                                    true ? (
-                                                    <span
-                                                      className={
-                                                        visitStyles.validHccCodeError
-                                                      }
-                                                    >
-                                                      Valid Hcc Code
-                                                    </span>
-                                                  ) : null}
-                                                </div>
-                                                <div className="col-xl-6">
-                                                  <Form.Label>
-                                                    Disease Name
-                                                  </Form.Label>
-                                                  <Form.Control
-                                                    type="text"
-                                                    id="diseaseName"
-                                                    name="diseaseName"
-                                                    onChange={handleChangeMeat}
-                                                  />
-                                                </div>
-                                                <div className="col-xl-6">
-                                                  <Form.Label>
-                                                    Monitor Header
-                                                  </Form.Label>
-                                                  <Form.Control
-                                                    type="text"
-                                                    id="monitorCapturedFromHeader"
-                                                    name="monitorCapturedFromHeader"
-                                                    onChange={handleChangeMeat}
-                                                  />
-                                                </div>
-                                                <div className="col-xl-6">
-                                                  <Form.Label>
-                                                    Monitor
-                                                  </Form.Label>
-                                                  <Form.Control
-                                                    type="text"
-                                                    id="monitor"
-                                                    name="monitor"
-                                                    onChange={handleChangeMeat}
-                                                  />
-                                                </div>
-                                                <div className="col-xl-6">
-                                                  <Form.Label>
-                                                    Evaluate Header
-                                                  </Form.Label>
-                                                  <Form.Control
-                                                    type="text"
-                                                    id="evaluateCapturedFromHeader"
-                                                    name="evaluateCapturedFromHeader"
-                                                    onChange={handleChangeMeat}
-                                                  />
-                                                </div>
-                                                <div className="col-xl-6">
-                                                  <Form.Label>
-                                                    Evaluate
-                                                  </Form.Label>
-                                                  <Form.Control
-                                                    type="text"
-                                                    id="evaluate"
-                                                    name="evaluate"
-                                                    onChange={handleChangeMeat}
-                                                  />
-                                                </div>
-                                                <div className="col-xl-6">
-                                                  <Form.Label>
-                                                    Assessment Header
-                                                  </Form.Label>
-                                                  <Form.Control
-                                                    type="text"
-                                                    id="assessmentCapturedFromHeader"
-                                                    name="assessmentCapturedFromHeader"
-                                                    onChange={handleChangeMeat}
-                                                  />
-                                                </div>
-                                                <div className="col-xl-6">
-                                                  <Form.Label>
-                                                    Assessment
-                                                  </Form.Label>
-                                                  <Form.Control
-                                                    type="text"
-                                                    id="assessment"
-                                                    name="assessment"
-                                                    onChange={handleChangeMeat}
-                                                  />
-                                                </div>
-                                                <div className="col-xl-6">
-                                                  <Form.Label>
-                                                    Treatment Header
-                                                  </Form.Label>
-                                                  <Form.Control
-                                                    type="text"
-                                                    id="treatmentCapturedFromHeader"
-                                                    name="treatmentCapturedFromHeader"
-                                                    onChange={handleChangeMeat}
-                                                  />
-                                                </div>
-                                                <div className="col-xl-6">
-                                                  <Form.Label>
-                                                    Treatment
-                                                  </Form.Label>
-                                                  <Form.Control
-                                                    type="text"
-                                                    id="treatment"
-                                                    name="treatment"
-                                                    onChange={handleChangeMeat}
-                                                  />
-                                                </div>
-                                                <div className={`col-xl-6`}>
-                                                  <Form.Label>
-                                                    Encoded date{" "}
-                                                    <span className="text-danger">
-                                                      *
-                                                    </span>
-                                                  </Form.Label>
-                                                  <div
-                                                    className={
-                                                      visitStyles.fileFormDate
-                                                    }
-                                                  >
-                                                    <Form.Control
-                                                      required
-                                                      type="text"
-                                                      id="encodedDate"
-                                                      name="encodedDate"
-                                                      onChange={
-                                                        handleChangeMeat
-                                                      }
-                                                      value={inputValueFileDate}
-                                                    />
-                                                  </div>
-                                                </div>
-
-                                                <div className="col-xl-6 mb-3">
-                                                  <Form.Label>
-                                                    Description
-                                                    <span className="text-danger">
-                                                      *
-                                                    </span>
-                                                  </Form.Label>
-                                                  <textarea
-                                                    className="form-control"
-                                                    id="actualDescription"
-                                                    name="actualDescription"
-                                                    onChange={handleChangeMeat}
-                                                    rows="5"
-                                                    required
-                                                  ></textarea>
-                                                </div>
-                                              </div>
-
-                                              <div>
-                                                <Button
-                                                  type="submit"
-                                                  className="btn btn-primary btn-sm me-1"
-                                                >
-                                                  Submit
-                                                </Button>
-                                                <Button
-                                                  type="reset"
-                                                  className="btn btn-danger btn-sm light ms-1"
-                                                >
-                                                  Cancel
-                                                </Button>
-                                              </div>
-                                            </Form>
-                                          </div>
-                                        </div>
+                                            {" "}
+                                            <FontAwesomeIcon
+                                              icon={faCalendar}
+                                              style={{
+                                                color: "#918585",
+                                              }}
+                                            />
+                                          </span>
+                                        ) : (
+                                          <span
+                                            onClick={() =>
+                                              setdragFileDate(false)
+                                            }
+                                          >
+                                            {" "}
+                                            <FontAwesomeIcon
+                                              icon={faClose}
+                                              style={{
+                                                color: "#918585",
+                                              }}
+                                            />
+                                          </span>
+                                        )}
                                       </div>
-                                    </Tab.Pane>
-                                  </Tab.Content>
-                                </div>
+                                    </div>
+                                    <DatePicker
+                                      format="MM-DD-YYYY"
+                                      onChange={(dates, dateStrings) => {
+                                        handleDatePickerChangeFile(
+                                          dates,
+                                          dateStrings
+                                        );
+                                      }}
+                                      open={dragFileDate}
+                                      showNow={false}
+                                      style={{
+                                        visibility: "hidden",
+                                        boxShadow: "none",
+                                        marginBottom: "-45px",
+                                      }}
+                                      placeholder="MM-DD-YYYY"
+                                      className="form-control"
+                                    />
+                                    {/* <DatePicker/> */}
+
+                                    <div className="col-xl-12 mb-3">
+                                      <Form.Label>
+                                        Description{" "}
+                                        <span className="text-danger">*</span>{" "}
+                                      </Form.Label>
+                                      <textarea
+                                        className={`${styles.hccTextArea}`}
+                                        id="actualDescription"
+                                        name="actualDescription"
+                                        onChange={handleChangeSuggested}
+                                        // value={inputValue.actualDescription}
+                                        rows="5"
+                                        required
+                                        value={inputValue.actualDescription}
+                                      ></textarea>
+                                    </div>
+                                  </div>
+
+                                  <div>
+                                    <Button
+                                      type="submit"
+                                      className="btn btn-primary btn-sm me-1"
+                                    >
+                                      Next
+                                    </Button>
+                                    <Button
+                                      type="reset"
+                                      // onClick={() =>
+                                      //   handleCloseModal()
+                                      // }
+                                      className="btn btn-danger btn-sm light ms-1"
+                                    >
+                                      Cancel
+                                    </Button>
+                                  </div>
+                                </Form>
                               </div>
-                            </Tab.Container>
-                          </div>
+                            </div>
+                          ) : (
+                            <div className="offcanvas-body">
+                              <div className={visitStyles.fileFormContianer}>
+                                <div className={styles.formTitleContaniner}>
+                                  <h6 className={styles.formTitle}>MEAT</h6>
+                                </div>
+                                <Form
+                                  noValidate
+                                  validated={validated}
+                                  onSubmit={handleFormSubmitMeat}
+                                >
+                                  <div className="row">
+                                    <div className="col-xl-12">
+                                      <Form.Label>Monitor Header</Form.Label>
+                                      <Form.Control
+                                        type="text"
+                                        id="monitorCapturedFromHeader"
+                                        name="monitorCapturedFromHeader"
+                                        onChange={handleChangeMeat}
+                                        value={
+                                          inputValueMeat.monitorCapturedFromHeader
+                                        }
+                                      />
+                                    </div>
+                                    <div className="col-xl-12">
+                                      <Form.Label>Monitor</Form.Label>
+                                      <Form.Control
+                                        type="text"
+                                        id="monitor"
+                                        name="monitor"
+                                        onChange={handleChangeMeat}
+                                        value={inputValueMeat.monitor}
+                                      />
+                                    </div>
+                                    <div className="col-xl-12">
+                                      <Form.Label>Evaluate Header</Form.Label>
+                                      <Form.Control
+                                        type="text"
+                                        id="evaluateCapturedFromHeader"
+                                        name="evaluateCapturedFromHeader"
+                                        onChange={handleChangeMeat}
+                                        value={
+                                          inputValueMeat.evaluateCapturedFromHeader
+                                        }
+                                      />
+                                    </div>
+                                    <div className="col-xl-12">
+                                      <Form.Label>Evaluate</Form.Label>
+                                      <Form.Control
+                                        type="text"
+                                        id="evaluate"
+                                        name="evaluate"
+                                        onChange={handleChangeMeat}
+                                        value={inputValueMeat.evaluate}
+                                      />
+                                    </div>
+                                    <div className="col-xl-12">
+                                      <Form.Label>Assessment Header</Form.Label>
+                                      <Form.Control
+                                        type="text"
+                                        id="assessmentCapturedFromHeader"
+                                        name="assessmentCapturedFromHeader"
+                                        onChange={handleChangeMeat}
+                                        value={
+                                          inputValueMeat.assessmentCapturedFromHeader
+                                        }
+                                      />
+                                    </div>
+                                    <div className="col-xl-12">
+                                      <Form.Label>Assessment</Form.Label>
+                                      <Form.Control
+                                        type="text"
+                                        id="assessment"
+                                        name="assessment"
+                                        onChange={handleChangeMeat}
+                                        value={inputValueMeat.assessment}
+                                      />
+                                    </div>
+                                    <div className="col-xl-12">
+                                      <Form.Label>Treatment Header</Form.Label>
+                                      <Form.Control
+                                        type="text"
+                                        id="treatmentCapturedFromHeader"
+                                        name="treatmentCapturedFromHeader"
+                                        onChange={handleChangeMeat}
+                                        value={
+                                          inputValueMeat.treatmentCapturedFromHeader
+                                        }
+                                      />
+                                    </div>
+                                    <div className="col-xl-12 mb-4">
+                                      <Form.Label>Treatment</Form.Label>
+                                      <Form.Control
+                                        type="text"
+                                        id="treatment"
+                                        name="treatment"
+                                        onChange={handleChangeMeat}
+                                        value={inputValueMeat.treatment}
+                                      />
+                                    </div>
+                                  </div>
+
+                                  <div>
+                                    <Button
+                                      type="submit"
+                                      className="btn btn-primary btn-sm me-1"
+                                    >
+                                      Submit
+                                    </Button>
+                                    <Button
+                                      onClick={() => setHccFormTab("HCCFORM")}
+                                      className="btn btn-danger btn-sm light ms-1"
+                                    >
+                                      Back
+                                    </Button>
+                                  </div>
+                                </Form>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     ) : null}
@@ -8473,334 +8328,253 @@ const Hcc = ({ patientHccResult }) => {
         </div>
         <div className="offcanvas-body">
           <div className="container-fluid">
-            <div
-              className={`profile-tab ${visitStyles.visitdata_header_card2}`}
-            >
-              <div className="custom-tab-1 ">
-                <Tab.Container defaultActiveKey="hccForm">
-                  <div className="row">
-                    <div className="col-xl-12">
-                      <Nav as="ul" className="nav nav-tabs">
-                        <Nav.Item as="li" className="nav-item">
-                          <Nav.Link
-                            to="#my-posts"
-                            eventKey="hccForm"
-                            className={visitStyles.navColor}
-                          >
-                            HCC
-                          </Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item as="li" className="nav-item">
-                          <Nav.Link
-                            to="#my-posts"
-                            eventKey="meatForm"
-                            className={visitStyles.navColor}
-                            activeClassName={visitStyles.activeLink}
-                          >
-                            MEAT
-                          </Nav.Link>
-                        </Nav.Item>
-                      </Nav>
-
-                      <Tab.Content>
-                        <Tab.Pane id="my-posts" eventKey="hccForm">
-                          <Form
-                            noValidate
-                            validated={validated}
-                            onSubmit={handleFormSubmit}
-                          >
-                            <div className="row">
-                              <div className="col-xl-12">
-                                <Form.Label>
-                                  Code <span className="text-danger">*</span>{" "}
-                                </Form.Label>
-                                <Form.Control
-                                  required
-                                  type="text"
-                                  id="diagnosisCode"
-                                  name="diagnosisCode"
-                                  onChange={handleChange}
-                                />
-                                {addValidCodeCheck == false ? (
-                                  <span
-                                    className={visitStyles.invalidHccCodeError}
-                                  >
-                                    Invalid Hcc Code
-                                  </span>
-                                ) : addValidCodeCheck == true ? (
-                                  <span
-                                    className={visitStyles.validHccCodeError}
-                                  >
-                                    Valid Hcc Code
-                                  </span>
-                                ) : null}
-                              </div>
-                              <div className="col-xl-12">
-                                <Form.Label>Provider name</Form.Label>
-                                <Form.Control
-                                  type="text"
-                                  id="providerName"
-                                  name="providerName"
-                                  onChange={handleChange}
-                                />
-                              </div>
-                              <div className="col-xl-12 ">
-                                <Form.Label>Provider Info</Form.Label>
-                                <Select
-                                  className={`ant_select_form hcc_form mb-2`}
-                                  onChange={(value) =>
-                                    handleSelectProvider(value)
-                                  }
-                                >
-                                  {providerInfoList?.map((data) => (
-                                    <Option
-                                      key={data?.value}
-                                      value={data?.value}
-                                    >
-                                      {data?.label}
-                                    </Option>
-                                  ))}
-                                </Select>
-                              </div>
-                              <div className="col-xl-12">
-                                <Form.Label>
-                                  Section <span className="text-danger">*</span>{" "}
-                                </Form.Label>
-                                <Form.Control
-                                  required
-                                  type="text"
-                                  id="capturedSections"
-                                  name="capturedSections"
-                                  onChange={handleChange}
-                                />
-                              </div>
-                              <div className={`col-xl-12`}>
-                                <Form.Label>
-                                  Encoded date{" "}
-                                  <span className="text-danger">*</span>{" "}
-                                </Form.Label>
-
-                                {/* <Form.Control
-                                                      required
-                                                      type="date"
-                                                      id="encodedDate"
-                                                      name="encodedDate"
-                                                      onChange={handleChange}
-                                                    /> */}
-                                <div className={visitStyles.fileFormDate}>
-                                  <Form.Control
-                                    required
-                                    type="date"
-                                    id="encodedDate"
-                                    name="encodedDate"
-                                    onChange={handleChange}
-                                    value={inputValueFileDate}
-                                  />
-                                </div>
-                              </div>
-
-                              <div className="col-xl-12 mb-3">
-                                <Form.Label>
-                                  Description{" "}
-                                  <span className="text-danger">*</span>{" "}
-                                </Form.Label>
-                                <textarea
-                                  className={`${styles.hccTextArea}`}
-                                  id="actualDescription"
-                                  name="actualDescription"
-                                  onChange={handleChangeSuggested}
-                                  // value={inputValue.actualDescription}
-                                  rows="5"
-                                  required
-                                ></textarea>
-                              </div>
-                            </div>
-
-                            <div>
-                              <Button
-                                type="submit"
-                                className="btn btn-primary btn-sm me-1"
-                              >
-                                Submit
-                              </Button>
-                              <Button
-                                // type="reset"
-                                onClick={() => handleCloseModal()}
-                                className="btn btn-danger btn-sm light ms-1"
-                              >
-                                Cancel
-                              </Button>
-                            </div>
-                          </Form>
-                        </Tab.Pane>
-                        <Tab.Pane id="my-posts" eventKey="meatForm">
-                          <Form
-                            noValidate
-                            validated={validated}
-                            onSubmit={handleFormSubmitMeat}
-                          >
-                            <div className="row">
-                              <div className="col-xl-12">
-                                <Form.Label>
-                                  Code <span className="text-danger">*</span>{" "}
-                                </Form.Label>
-                                <Form.Control
-                                  required
-                                  type="text"
-                                  id="diagnosisCode"
-                                  name="diagnosisCode"
-                                  onChange={handleChangeMeat}
-                                />
-                                {addValidCodeCheck == false ? (
-                                  <span
-                                    className={visitStyles.invalidHccCodeError}
-                                  >
-                                    Invalid Hcc Code
-                                  </span>
-                                ) : addValidCodeCheck == true ? (
-                                  <span
-                                    className={visitStyles.validHccCodeError}
-                                  >
-                                    Valid Hcc Code
-                                  </span>
-                                ) : null}
-                              </div>
-                              <div className="col-xl-12">
-                                <Form.Label>Disease Name</Form.Label>
-                                <Form.Control
-                                  type="text"
-                                  id="diseaseName"
-                                  name="diseaseName"
-                                  onChange={handleChangeMeat}
-                                />
-                              </div>
-                              <div className="col-xl-12">
-                                <Form.Label>Monitor Header</Form.Label>
-                                <Form.Control
-                                  type="text"
-                                  id="monitorCapturedFromHeader"
-                                  name="monitorCapturedFromHeader"
-                                  onChange={handleChangeMeat}
-                                />
-                              </div>
-                              <div className="col-xl-12">
-                                <Form.Label>Monitor</Form.Label>
-                                <Form.Control
-                                  type="text"
-                                  id="monitor"
-                                  name="monitor"
-                                  onChange={handleChangeMeat}
-                                />
-                              </div>
-                              <div className="col-xl-12">
-                                <Form.Label>Evaluate Header</Form.Label>
-                                <Form.Control
-                                  type="text"
-                                  id="evaluateCapturedFromHeader"
-                                  name="evaluateCapturedFromHeader"
-                                  onChange={handleChangeMeat}
-                                />
-                              </div>
-                              <div className="col-xl-12">
-                                <Form.Label>Evaluate</Form.Label>
-                                <Form.Control
-                                  type="text"
-                                  id="evaluate"
-                                  name="evaluate"
-                                  onChange={handleChangeMeat}
-                                />
-                              </div>
-                              <div className="col-xl-12">
-                                <Form.Label>Assessment Header</Form.Label>
-                                <Form.Control
-                                  type="text"
-                                  id="assessmentCapturedFromHeader"
-                                  name="assessmentCapturedFromHeader"
-                                  onChange={handleChangeMeat}
-                                />
-                              </div>
-                              <div className="col-xl-12">
-                                <Form.Label>Assessment</Form.Label>
-                                <Form.Control
-                                  type="text"
-                                  id="assessment"
-                                  name="assessment"
-                                  onChange={handleChangeMeat}
-                                />
-                              </div>
-                              <div className="col-xl-12">
-                                <Form.Label>Treatment Header</Form.Label>
-                                <Form.Control
-                                  type="text"
-                                  id="treatmentCapturedFromHeader"
-                                  name="treatmentCapturedFromHeader"
-                                  onChange={handleChangeMeat}
-                                />
-                              </div>
-                              <div className="col-xl-12">
-                                <Form.Label>Treatment</Form.Label>
-                                <Form.Control
-                                  type="text"
-                                  id="treatment"
-                                  name="treatment"
-                                  onChange={handleChangeMeat}
-                                />
-                              </div>
-                              <div className={`col-xl-12`}>
-                                <Form.Label>
-                                  Encoded date{" "}
-                                  <span className="text-danger">*</span>
-                                </Form.Label>
-                                <div className={visitStyles.fileFormDate}>
-                                  <Form.Control
-                                    required
-                                    type="date"
-                                    id="encodedDate"
-                                    name="encodedDate"
-                                    onChange={handleChangeMeat}
-                                    value={inputValueFileDate}
-                                  />
-                                </div>
-                              </div>
-
-                              <div className="col-xl-12 mb-3">
-                                <Form.Label>
-                                  Description{" "}
-                                  <span className="text-danger">*</span>
-                                </Form.Label>
-                                <textarea
-                                  className="form-control"
-                                  id="actualDescription"
-                                  name="actualDescription"
-                                  onChange={handleChangeMeat}
-                                  rows="5"
-                                  required
-                                ></textarea>
-                              </div>
-                            </div>
-
-                            <div>
-                              <Button
-                                type="submit"
-                                className="btn btn-primary btn-sm me-1"
-                              >
-                                Submit
-                              </Button>
-                              <Button
-                                // type="reset"
-                                onClick={() => handleCloseModal()}
-                                className="btn btn-danger btn-sm light ms-1"
-                              >
-                                Cancel
-                              </Button>
-                            </div>
-                          </Form>
-                        </Tab.Pane>
-                      </Tab.Content>
-                    </div>
+            <div className={`className="col-xl-12`}>
+              {hccFormTab == "HCCFORM" ? (
+                <div>
+                  <div className={styles.formTitleContaniner}>
+                    <h6 className={styles.formTitle}>HCC</h6>
                   </div>
-                </Tab.Container>
-              </div>
+                  <Form
+                    noValidate
+                    validated={validated}
+                    onSubmit={handleFormSubmit}
+                  >
+                    <div className="row">
+                      <div className="col-xl-12">
+                        <Form.Label>
+                          Code <span className="text-danger">*</span>{" "}
+                        </Form.Label>
+                        <Form.Control
+                          required
+                          type="text"
+                          id="diagnosisCode"
+                          name="diagnosisCode"
+                          onChange={handleChange}
+                          value={inputValue.diagnosisCode}
+                        />
+                        {addValidCodeCheck == false ? (
+                          <span className={visitStyles.invalidHccCodeError}>
+                            Invalid Hcc Code
+                          </span>
+                        ) : addValidCodeCheck == true ? (
+                          <span className={visitStyles.validHccCodeError}>
+                            Valid Hcc Code
+                          </span>
+                        ) : null}
+                      </div>
+                      <div className="col-xl-12">
+                        <Form.Label>Provider name</Form.Label>
+                        <Form.Control
+                          type="text"
+                          id="providerName"
+                          name="providerName"
+                          onChange={handleChange}
+                          value={inputValue.providerName}
+                        />
+                      </div>
+                      <div className="col-xl-12 ">
+                        <Form.Label>Provider Info</Form.Label>
+                        <Select
+                          className={`ant_select_form hcc_form mb-2`}
+                          onChange={(value) => handleSelectProvider(value)}
+                        >
+                          {providerInfoList?.map((data) => (
+                            <Option key={data?.value} value={data?.value}>
+                              {data?.label}
+                            </Option>
+                          ))}
+                        </Select>
+                      </div>
+                      <div className="col-xl-12">
+                        <Form.Label>
+                          Section <span className="text-danger">*</span>{" "}
+                        </Form.Label>
+                        <Form.Control
+                          required
+                          type="text"
+                          id="capturedSections"
+                          name="capturedSections"
+                          onChange={handleChange}
+                          value={inputValue.capturedSections}
+                        />
+                      </div>
+                      <div className={`col-xl-12`}>
+                        <Form.Label>
+                          Encoded date <span className="text-danger">*</span>{" "}
+                        </Form.Label>
+
+                        <Form.Control
+                          required
+                          type="date"
+                          id="encodedDate"
+                          name="encodedDate"
+                          onChange={handleChange}
+                          placeholder="MM/DD/YYYY"
+                        />
+                      </div>
+                      <DatePicker
+                        format="MM-DD-YYYY"
+                        onChange={(dates, dateStrings) => {
+                          handleDatePickerChangeFile(dates, dateStrings);
+                        }}
+                        open={dragFileDate}
+                        showNow={false}
+                        style={{
+                          visibility: "hidden",
+                          boxShadow: "none",
+                          marginBottom: "-45px",
+                        }}
+                        placeholder="MM-DD-YYYY"
+                        className="form-control"
+                      />
+                      {/* <DatePicker/> */}
+
+                      <div className="col-xl-12 mb-3">
+                        <Form.Label>
+                          Description <span className="text-danger">*</span>{" "}
+                        </Form.Label>
+                        <textarea
+                          className={`${styles.hccTextArea}`}
+                          id="actualDescription"
+                          name="actualDescription"
+                          onChange={handleChangeSuggested}
+                          // value={inputValue.actualDescription}
+                          rows="5"
+                          required
+                          value={inputValue.actualDescription}
+                        ></textarea>
+                      </div>
+                    </div>
+
+                    <div>
+                      <Button
+                        type="submit"
+                        className="btn btn-primary btn-sm me-1"
+                      >
+                        Next
+                      </Button>
+                      <Button
+                        type="reset"
+                        // onClick={() =>
+                        //   handleCloseModal()
+                        // }
+                        className="btn btn-danger btn-sm light ms-1"
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </Form>
+                </div>
+              ) : (
+                <div>
+                  <div className={styles.formTitleContaniner}>
+                    <h6 className={styles.formTitle}>MEAT</h6>
+                  </div>
+                  <Form
+                    noValidate
+                    validated={validated}
+                    onSubmit={handleFormSubmitMeat}
+                  >
+                    <div className="row">
+                      <div className="col-xl-12">
+                        <Form.Label>Monitor Header</Form.Label>
+                        <Form.Control
+                          type="text"
+                          id="monitorCapturedFromHeader"
+                          name="monitorCapturedFromHeader"
+                          onChange={handleChangeMeat}
+                          value={inputValueMeat.monitorCapturedFromHeader}
+                        />
+                      </div>
+                      <div className="col-xl-12">
+                        <Form.Label>Monitor</Form.Label>
+                        <Form.Control
+                          type="text"
+                          id="monitor"
+                          name="monitor"
+                          onChange={handleChangeMeat}
+                          value={inputValueMeat.monitor}
+                        />
+                      </div>
+                      <div className="col-xl-12">
+                        <Form.Label>Evaluate Header</Form.Label>
+                        <Form.Control
+                          type="text"
+                          id="evaluateCapturedFromHeader"
+                          name="evaluateCapturedFromHeader"
+                          onChange={handleChangeMeat}
+                          value={inputValueMeat.evaluateCapturedFromHeader}
+                        />
+                      </div>
+                      <div className="col-xl-12">
+                        <Form.Label>Evaluate</Form.Label>
+                        <Form.Control
+                          type="text"
+                          id="evaluate"
+                          name="evaluate"
+                          onChange={handleChangeMeat}
+                          value={inputValueMeat.evaluate}
+                        />
+                      </div>
+                      <div className="col-xl-12">
+                        <Form.Label>Assessment Header</Form.Label>
+                        <Form.Control
+                          type="text"
+                          id="assessmentCapturedFromHeader"
+                          name="assessmentCapturedFromHeader"
+                          onChange={handleChangeMeat}
+                          value={inputValueMeat.assessmentCapturedFromHeader}
+                        />
+                      </div>
+                      <div className="col-xl-12">
+                        <Form.Label>Assessment</Form.Label>
+                        <Form.Control
+                          type="text"
+                          id="assessment"
+                          name="assessment"
+                          onChange={handleChangeMeat}
+                          value={inputValueMeat.assessment}
+                        />
+                      </div>
+                      <div className="col-xl-12">
+                        <Form.Label>Treatment Header</Form.Label>
+                        <Form.Control
+                          type="text"
+                          id="treatmentCapturedFromHeader"
+                          name="treatmentCapturedFromHeader"
+                          onChange={handleChangeMeat}
+                          value={inputValueMeat.treatmentCapturedFromHeader}
+                        />
+                      </div>
+                      <div className="col-xl-12 mb-4">
+                        <Form.Label>Treatment</Form.Label>
+                        <Form.Control
+                          type="text"
+                          id="treatment"
+                          name="treatment"
+                          onChange={handleChangeMeat}
+                          value={inputValueMeat.treatment}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <Button
+                        type="submit"
+                        className="btn btn-primary btn-sm me-1"
+                      >
+                        Submit
+                      </Button>
+                      <Button
+                        onClick={() => setHccFormTab("HCCFORM")}
+                        className="btn btn-danger btn-sm light ms-1"
+                      >
+                        Back
+                      </Button>
+                    </div>
+                  </Form>
+                </div>
+              )}
             </div>
           </div>
         </div>

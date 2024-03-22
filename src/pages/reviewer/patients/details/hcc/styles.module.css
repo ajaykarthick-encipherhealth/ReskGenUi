@@ -389,3 +389,13 @@
   font-weight: 600 !important;
   text-align: center;
 }
+
+.formTitleContaniner {
+  background: #efe6e6;
+  border-radius: 10px;
+  text-align: center;
+}
+.formTitle {
+  font-weight: 600 !important;
+  padding: 10px;
+}
