@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import Image from "next/image";
+import {
+  LoadingOutlined,
+  ArrowUpOutlined,
+  ArrowDownOutlined,
+} from "@ant-design/icons";
 import moment from "moment";
 import TableStyle from "../../table.module.css";
-import { notification, Select as AntSelect, Empty, Spin, Popover } from "antd";
-import { useDispatch } from "react-redux";
-import { LoadingOutlined } from "@ant-design/icons";
-import Image from "next/image";
-import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import { Select as AntSelect, Empty, Spin, Popover } from "antd";
 import { selectedRoWDetails } from "../../../../store/actions/adminAction/fileProcessingActions";
 import Pending from "../../../../../src/images/trackingImages/PendingTrack.png";
 import Hold from "../../../../../src/images/trackingImages/HoldTrack.png";
@@ -304,8 +307,7 @@ function AllocatedL2AdminList({
       </table>
       <div></div>
     </div>
-  ); // const updatedRows = selectAll ? [] : reportListAll;
-  // setSelectedRows(updatedRows);;
+  );
 }
 
 export default AllocatedL2AdminList;

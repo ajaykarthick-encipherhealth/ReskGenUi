@@ -1,5 +1,4 @@
 import React from "react";
-import { IMAGES, SVGICON } from "../constant/theme";
 import Hcc_LOGO from "../../images/dashboard/EncipherLogo1.png";
 
 import Image from "next/image";

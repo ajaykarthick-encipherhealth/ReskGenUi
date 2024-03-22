@@ -1,19 +1,15 @@
 import React, { useEffect } from "react";
-import { Badge, Empty, Popover, Tooltip } from "antd";
-import TableStyle from "../../table.module.css";
-import { SVGICON } from "../../../../jsx/constant/theme";
-import { Paginator } from "primereact/paginator";
-import { selectedRow } from "../../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
 import dayjs from "dayjs";
+import { Paginator } from "primereact/paginator";
+import { Empty, Popover } from "antd";
+import moment from "moment";
+import TableStyle from "../../table.module.css";
+import { selectedRow } from "../../../../store/actions/ReportActions";
 import {
   dateFormate,
   renderUserPrfoileAvatar,
-  sortFunction,
 } from "../../../headerFilters/functions";
-import moment from "moment";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 
 function PdfTable({
   reportListAll,
@@ -72,24 +68,6 @@ function PdfTable({
               <>
                 <th>BATCH ID</th>
                 <th>PATIENT COUNT</th>
-                {/* <th
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    sortFunction(
-                      sortOrder,
-                      setSortOrder,
-                      setSort,
-                      "processedDate"
-                    );
-                  }}
-                >
-                  COMPLETED DATE{" "}
-                  {sortOrder === "ASC" ? (
-                    <ArrowUpOutlined />
-                  ) : (
-                    <ArrowDownOutlined />
-                  )}
-                </th> */}
                 <th>STATUS </th>
                 <th>YEAR OF SERVICE</th>
                 <th className={TableStyle.rowAudited}>INITIATED BY </th>

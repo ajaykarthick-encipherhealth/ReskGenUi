@@ -29,11 +29,7 @@ export const PhysicanMenuList = [
     iconStyle: SVGICON.dashboardIcon,
     to: "/reviewer/dashboard",
   },
-  // {
-  //     title:'Patient List1',
-  //     iconStyle:SVGICON.patientListIcon,
-  //     to: '/reviewer/patient',
-  // },
+
   {
     title: "My Work Queue",
     iconStyle: SVGICON.patientListIcon,
@@ -46,11 +42,6 @@ export const PhysicanMenuList = [
     to: "/reviewer/report",
     childRoute: "/reviewer/report/individualreport",
   },
-  // {
-  //   title: "Working Status",
-  //   iconStyle: SVGICON.workingStatus,
-  //   to: "/reviewer/workingstatus",
-  // },
 ];
 export const AdminMenuList = [
   {
@@ -187,13 +178,12 @@ export const PhysicianMenuList = [
   },
   {
     title: "Patients",
-    iconStyle:SVGICON.physicianPatient,
+    iconStyle: SVGICON.physicianPatient,
     to: "/physician/patients",
   },
   {
     title: "Comparision",
-    iconStyle:SVGICON.physicianComparision,
+    iconStyle: SVGICON.physicianComparision,
     to: "/physician/comparison",
   },
-  
 ];

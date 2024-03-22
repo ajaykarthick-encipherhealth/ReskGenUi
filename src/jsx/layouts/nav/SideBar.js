@@ -1,5 +1,4 @@
 /// Menu
-import Collapse from "react-bootstrap/Collapse";
 import React, { useState, useEffect } from "react";
 
 /// Link
@@ -7,14 +6,13 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { SVGICON } from "../../constant/theme";
 
-import { MenuList, PhysicanMenuList ,L2AuditMenuList} from "./Menu";
+import { MenuList, PhysicanMenuList, L2AuditMenuList } from "./Menu";
 import { useDispatch, useSelector } from "react-redux";
 import { navtoggle } from "../../../store/actions/AuthActions";
 
 export default function SideBar() {
   const router = useRouter();
   const [stateActive, setStateActive] = useState(router.pathname);
-  // const [sideMenu, setsideMenu] = useState(false);
   const [userRole, setUserRole] = useState("");
 
   const dispatch = useDispatch();
@@ -24,7 +22,6 @@ export default function SideBar() {
   };
 
   useEffect(() => {
-    // Perform localStorage action
     const item = localStorage.getItem("userRole");
     setUserRole(item);
   }, []);
@@ -52,7 +49,11 @@ export default function SideBar() {
                 >
                   <Link href={data.to}>
                     <div className="menu-icon">{data.iconStyle}</div>{" "}
-                    <span className={`nav-text text-white ${sideMenu ? "d-none" : ""}`}>
+                    <span
+                      className={`nav-text text-white ${
+                        sideMenu ? "d-none" : ""
+                      }`}
+                    >
                       {data.title}
                     </span>
                   </Link>
@@ -70,15 +71,20 @@ export default function SideBar() {
                 >
                   <Link href={data.to}>
                     <div className="menu-icon">{data.iconStyle}</div>{" "}
-                    <span className={`nav-text text-white ${sideMenu ? "d-none" : ""}`}>
+                    <span
+                      className={`nav-text text-white ${
+                        sideMenu ? "d-none" : ""
+                      }`}
+                    >
                       {data.title}
                     </span>
                   </Link>
                 </li>
               );
             })}
-          </ul>)
-          : <ul className="metismenu" id="menu">
+          </ul>
+        ) : (
+          <ul className="metismenu" id="menu">
             {PhysicanMenuList.map((data, index) => {
               return (
                 <li
@@ -87,7 +93,11 @@ export default function SideBar() {
                 >
                   <Link href={data.to}>
                     <div className="menu-icon">{data.iconStyle}</div>{" "}
-                    <span className={`nav-text text-white ${sideMenu ? "d-none" : ""}`}>
+                    <span
+                      className={`nav-text text-white ${
+                        sideMenu ? "d-none" : ""
+                      }`}
+                    >
                       {data.title}
                     </span>
                   </Link>
@@ -95,7 +105,7 @@ export default function SideBar() {
               );
             })}
           </ul>
-        }
+        )}
       </div>
     </div>
   );
