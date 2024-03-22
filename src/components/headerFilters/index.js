@@ -20,39 +20,37 @@ import { getFilters } from "../../store/actions/AuthActions";
 const { RangePicker } = DatePicker;
 
 const HeaderFilters = ({
-  // for search
+  // Search Props
   setSearch,
   isSearch,
   searchlabel,
-  // for report
+
+  // Report Props
   setSentSearch,
   setReceivedSearch,
   setCoderSearch,
 
-  // for select
+  // Select Props
   selectlabel,
   isSelector,
   setSelectedOption,
   selectOptions,
   defaultSelectValue1,
-  selectedValue,
-
-  // if has 2 selectors
   selectlabel2,
   defaultSelectValue2,
   selectOptions2,
   setSelectedOption2,
-  selectedValue2,
-
-  // if has 3 selectors
   selectlabel3,
-  defaultSelectValue3,
   selectOptions3,
   isSelector3,
   setSelectedOption3,
 
-  // for picker
+  // Picker Props
   pickerlabel,
+  pickerlabe2,
+  pickerlabe3,
+  pickerlabe4,
+  pickerlabe5,
   activeTab,
   selectedDates,
   setSelectedDates,
@@ -60,80 +58,49 @@ const HeaderFilters = ({
   defaultEndDate,
   setStartDate,
   setEndDate,
-  isRangePicker,
-  disabled,
-  pickerStartValue,
-  pickerEndValue,
-  // for report
   setReceivedStartDate,
   setReceivedEndDate,
   setCoderStartDate,
   setCoderEndDate,
-
-  // if has 2 pickers
-  pickerlabe2,
   setStartDate2,
   setEndDate2,
-  selectedDates2,
   defaultStartDate2,
   defaultEndDate2,
-  isAnotherPicker,
-
-  // if has allocated date picker
-  pickerlabe3,
-  defaultStartDate3,
-  defaultEndDate3,
   setStartDate3,
   setEndDate3,
-  isAnotherPicker2,
-
-  // if has audited date oicker
-  pickerlabe4,
   setStartDate4,
   setEndDate4,
-  defaultStartDate4,
-  defaultEndDate4,
-  isAnotherPicker3,
-
-  // if has audited allocated date oicker
-  pickerlabe5,
   setStartDate5,
   setEndDate5,
-  defaultStartDate5,
-  defaultEndDate5,
+  isRangePicker,
+  isAnotherPicker,
+  isAnotherPicker2,
+  isAnotherPicker3,
   isAnotherPicker5,
 
-  // conditions to display extra components
+  // Additional Props
   addUser,
-  handleExport,
   rowsLength,
   addUserForm,
   selectedRowsId,
   handleOpneModal,
   isAllocate,
-
-  // allocatedBY
   isAllocatedBySelector,
   allocatedBylabel,
   allocatedByOptoons,
   setSelAllocatedBy,
   defaultAllocatedBy,
-
-  // allocatedTo
   isAllocatedToSelector,
   allocatedTolabel,
   allocatedToOptoons,
   setSelAllocatedTo,
   defaultAllocateTo,
-
-  // createdTo
   isCreatedBySelector,
   createdTolabel,
   createdByOptoons,
   setSelCreatedBy,
   defaultCreatedBy,
   selectedCoderOptReport,
-
   bullets,
   isNextRow,
   btnTitle,
@@ -155,6 +122,16 @@ const HeaderFilters = ({
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
+  let columnClass;
+  if (addUser) {
+    if (addBtn) {
+      columnClass = "col-xl-4";
+    } else {
+      columnClass = "col-xl-1";
+    }
+  } else {
+    columnClass = "col-xl-4";
+  }
   return (
     <>
       <div style={{ height: atCorner && "45px" }}>
@@ -265,13 +242,12 @@ const HeaderFilters = ({
                   onChange={(selectedOption) => {
                     if (selectedCoderOptReport?.value === "SUPERVISOR") {
                       setSelectedOption3(selectedOption);
-                      
+
                       setSelect(null);
                     }
                     if (selectedCoderOptReport?.value === "REVIEWER") {
                       setSelect(selectedOption?.value);
                       setSelectedOption3(selectedOption);
-                      
                     }
                   }}
                   className="custom-react-select"
@@ -296,7 +272,7 @@ const HeaderFilters = ({
                 setReceivedEndDate={setReceivedEndDate}
                 setCoderStartDate={setCoderStartDate}
                 setCoderEndDate={setCoderEndDate}
-                disabled={disable != "Yes" ? true:false}
+                disabled={disable != "Yes" ? true : false}
               />
             </div>
           )}
@@ -375,12 +351,7 @@ const HeaderFilters = ({
             </div>
           )}
           {addUser && (
-            <div
-              className={`${
-                addUser ? `col-xl-${addBtn ? "4" : "1"}` : "col-xl-4"
-              }`}
-              style={{ marginTop: "29px" }}
-            >
+            <div className={columnClass} style={{ marginTop: "29px" }}>
               <Button
                 onClick={addUserForm}
                 style={{ background: "#04306f" }}
