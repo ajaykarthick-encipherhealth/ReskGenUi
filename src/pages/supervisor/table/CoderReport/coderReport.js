@@ -266,60 +266,58 @@ function CoderReport({
         <table className={TableStyle.classTable}>
           <thead className={TableStyle.classTTotalhead}>
             <tr>
-              <>
-                <th></th>
-                <th className={TableStyle.rowStyle2}>PATIENT ID</th>
-                <th>PATIENT NAME</th>
-                <th
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    sortFunction(
-                      sortOrder,
-                      setSortOrder,
-                      setSort,
-                      "processedDate"
-                    );
-                  }}
+              <th></th>
+              <th className={TableStyle.rowStyle2}>PATIENT ID</th>
+              <th>PATIENT NAME</th>
+              <th
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  sortFunction(
+                    sortOrder,
+                    setSortOrder,
+                    setSort,
+                    "processedDate"
+                  );
+                }}
+              >
+                COMPLETED DATE{" "}
+                {sortOrder === "ASC" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
+              </th>
+              <th>COMMENTS </th>
+              <th className={TableStyle.rowAudited}>SUPERVISOR NAME </th>
+              <th>RAF SCORE </th>
+              <th>HCC </th>
+              <th>FLAG </th>
+              <th style={{ paddingLeft: "79px" }}>STATUS</th>
+              <th>
+                <div
+                  style={{ display: "flex", justifyContent: "space-around" }}
                 >
-                  COMPLETED DATE{" "}
-                  {sortOrder === "ASC" ? (
-                    <ArrowUpOutlined />
-                  ) : (
-                    <ArrowDownOutlined />
-                  )}
-                </th>
-                <th>COMMENTS </th>
-                <th className={TableStyle.rowAudited}>SUPERVISOR NAME </th>
-                <th>RAF SCORE </th>
-                <th>HCC </th>
-                <th>FLAG </th>
-                <th style={{ paddingLeft: "79px" }}>STATUS</th>
-                <th>
-                  <div
-                    style={{ display: "flex", justifyContent: "space-around" }}
-                  >
-                    <input
-                      type="checkbox"
-                      onChange={handleHeaderCheckboxChange}
-                      style={{
-                        paddingTop: "10px",
-                        width: "20px",
-                        height: "20px",
-                        flexhrink: "0",
-                        borderRadius: "4px",
-                      }}
-                      checked={selectAll}
-                      className={
-                        selectAll && l2Auditor
-                          ? TableStyle.customChecked3
-                          : selectAll
-                          ? TableStyle.customChecked2
-                          : ""
-                      }
-                    />
-                  </div>
-                </th>
-              </>
+                  <input
+                    type="checkbox"
+                    onChange={handleHeaderCheckboxChange}
+                    style={{
+                      paddingTop: "10px",
+                      width: "20px",
+                      height: "20px",
+                      flexhrink: "0",
+                      borderRadius: "4px",
+                    }}
+                    checked={selectAll}
+                    className={
+                      selectAll && l2Auditor
+                        ? TableStyle.customChecked3
+                        : selectAll
+                        ? TableStyle.customChecked2
+                        : ""
+                    }
+                  />
+                </div>
+              </th>
             </tr>
           </thead>
 

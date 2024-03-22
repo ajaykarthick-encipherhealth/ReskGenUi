@@ -1,7 +1,6 @@
 import { Button, Checkbox, Form, Input, Modal, Radio, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import styles from "./report.module.css";
 import { getExportDetails } from "../../../store/actions/ReportActions";
 import { getUsersList } from "../../../store/actions/adminAction/ReportActions";
@@ -256,26 +255,24 @@ const Export = ({
                   Check All
                 </Checkbox>
                 {checkall?.map((data) => (
-                  <>
-                    <Checkbox
-                      key={data?.id}
-                      value={data?.title}
-                      checked={data?.checked}
-                      onChange={(e) => {
-                        setCheckAll((prev) => {
-                          return prev?.map((data) => {
-                            if (data?.title === e.target.value) {
-                              return { ...data, checked: e.target.checked };
-                            } else {
-                              return data;
-                            }
-                          });
+                  <Checkbox
+                    key={data?.id}
+                    value={data?.title}
+                    checked={data?.checked}
+                    onChange={(e) => {
+                      setCheckAll((prev) => {
+                        return prev?.map((data) => {
+                          if (data?.title === e.target.value) {
+                            return { ...data, checked: e.target.checked };
+                          } else {
+                            return data;
+                          }
                         });
-                      }}
-                    >
-                      {data.heading}
-                    </Checkbox>
-                  </>
+                      });
+                    }}
+                  >
+                    {data.heading}
+                  </Checkbox>
                 ))}
               </div>
             </Form.Item>

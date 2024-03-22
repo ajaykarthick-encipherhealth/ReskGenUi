@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import TableStyle from "../../../../components/table/table.module.css";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
 import { Paginator } from "primereact/paginator";
-import { Empty, Modal, Popover, Avatar } from "antd";
-import Footer from "../../../../jsx/layouts/Footer";
+import { Empty, Popover, Avatar } from "antd";
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
+import TableStyle from "../../../../components/table/table.module.css";
 import {
   dateFormate,
   getBackgroundColor,
@@ -11,9 +13,6 @@ import {
   sortFunction,
 } from "../../../../components/headerFilters/functions";
 import SpinnerDots from "../../../../components/spinner";
-import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
-import { useDispatch } from "react-redux";
-import { useRouter } from "next/router";
 import { selectedReport } from "../../../../store/actions/l2Action/AuditReportAction";
 import EditButton from "../../../../images/adminUsers/EditButton";
 import Export from "../../report/Export";
@@ -22,7 +21,6 @@ function SentReportTable({
   details,
   onSentPageChange,
   paginationFirst,
-  loading,
   sortOrder,
   setSortOrder,
   setSort,
@@ -78,7 +76,8 @@ function SentReportTable({
                         )}
                       </span>
                       <span>
-                        {row?.userDetails?.firstName} {row?.userDetails?.lastName}
+                        {row?.userDetails?.firstName}{" "}
+                        {row?.userDetails?.lastName}
                       </span>
                     </div>
                   ) : (
@@ -116,148 +115,146 @@ function SentReportTable({
       {!details?.data ? (
         <SpinnerDots />
       ) : (
-        <>
-          <table className={TableStyle.classTable}>
-            <thead className={TableStyle.classTTotalhead}>
-              <tr>
-                <th>REPORT ID</th>
-                <th>REPORT NAME</th>
-                <th style={{ textAlign: "center" }}>USER LIST</th>
-                <th
-                  className={TableStyle.rowStyle}
-                  style={{ cursor: "pointer", paddingLeft: "15px" }}
-                  onClick={() => {
-                    sortFunction(sortOrder, setSortOrder, setSort, "sendDate");
-                  }}
-                >
-                  DATE{" "}
-                  {sortOrder === "ASC" ? (
-                    <ArrowUpOutlined />
-                  ) : (
-                    <ArrowDownOutlined />
-                  )}
-                </th>
-                <th style={{ textAlign: "center" }}>ACTION</th>
-              </tr>
-            </thead>
+        <table className={TableStyle.classTable}>
+          <thead className={TableStyle.classTTotalhead}>
+            <tr>
+              <th>REPORT ID</th>
+              <th>REPORT NAME</th>
+              <th style={{ textAlign: "center" }}>USER LIST</th>
+              <th
+                className={TableStyle.rowStyle}
+                style={{ cursor: "pointer", paddingLeft: "15px" }}
+                onClick={() => {
+                  sortFunction(sortOrder, setSortOrder, setSort, "sendDate");
+                }}
+              >
+                DATE{" "}
+                {sortOrder === "ASC" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
+              </th>
+              <th style={{ textAlign: "center" }}>ACTION</th>
+            </tr>
+          </thead>
 
-            <tbody>
-              {details?.data?.length > 0 ? (
-                details?.data?.map((row, index) => {
-                  const formattedDate = dateFormate(dayjs, row?.sendDate);
+          <tbody>
+            {details?.data?.length > 0 ? (
+              details?.data?.map((row, index) => {
+                const formattedDate = dateFormate(dayjs, row?.sendDate);
 
-                  return (
-                    <tr key={index} style={{ height: "40px" }}>
-                      <td
-                        style={{
-                          borderTop: "  0.2px solid #e1e1e1",
-                          borderLeft: "  0.2px solid #e1e1e1",
-                          borderBottom: "  0.2px solid #e1e1e1",
-                        }}
-                        className={TableStyle.childBorder}
-                        onClick={() => handleReceiverReport(row)}
-                      >
-                        {row._id}
-                      </td>
-                      <td
-                        style={{
-                          borderTop: "  0.2px solid #e1e1e1",
+                return (
+                  <tr key={index} style={{ height: "40px" }}>
+                    <td
+                      style={{
+                        borderTop: "  0.2px solid #e1e1e1",
+                        borderLeft: "  0.2px solid #e1e1e1",
+                        borderBottom: "  0.2px solid #e1e1e1",
+                      }}
+                      className={TableStyle.childBorder}
+                      onClick={() => handleReceiverReport(row)}
+                    >
+                      {row._id}
+                    </td>
+                    <td
+                      style={{
+                        borderTop: "  0.2px solid #e1e1e1",
 
-                          borderBottom: "  0.2px solid #e1e1e1",
-                        }}
-                        className={TableStyle.childBorder}
-                        onClick={() => handleReceiverReport(row)}
-                      >
-                        {row.reportName}
-                      </td>
+                        borderBottom: "  0.2px solid #e1e1e1",
+                      }}
+                      className={TableStyle.childBorder}
+                      onClick={() => handleReceiverReport(row)}
+                    >
+                      {row.reportName}
+                    </td>
 
-                      <td
-                        style={{
-                          borderTop: "  0.2px solid #e1e1e1",
-                          cursor: "pointer",
-                          borderBottom: "  0.2px solid #e1e1e1",
+                    <td
+                      style={{
+                        borderTop: "  0.2px solid #e1e1e1",
+                        cursor: "pointer",
+                        borderBottom: "  0.2px solid #e1e1e1",
 
-                          textAlign: "center",
-                        }}
-                        className={TableStyle.childBorder}
-                        onClick={() => handleReceiverReport(row)}
-                      >
-                        <Popover
-                          content={popCOntent}
-                          style={{ position: "relative", left: "-330px" }}
-                        >
-                          <div
-                            onMouseOver={() =>
-                              displayReceivedUsers(row.receivedUsers)
-                            }
-                          >
-                            <Avatar.Group maxCount={2}>
-                              {row?.receivedUsers?.map((data, index) => (
-                                <div key={index}>
-                                  {data?.userDetails?.profileImageUrl ? (
-                                    <Avatar
-                                      src={data?.userDetails?.profileImageUrl}
-                                    />
-                                  ) : (
-                                    <Avatar
-                                      style={{
-                                        backgroundColor: backgroundColor,
-                                      }}
-                                    >
-                                      {`${
-                                        data?.userDetails?.firstName?.charAt(0) ||
-                                        ""
-                                      }${
-                                        data?.userDetails?.lastName?.charAt(0) ||
-                                        ""
-                                      }`}
-                                    </Avatar>
-                                  )}
-                                </div>
-                              ))}
-                            </Avatar.Group>
-                          </div>
-                        </Popover>
-                      </td>
-                      <td
-                        style={{
-                          borderTop: "  0.2px solid #e1e1e1",
-                        }}
-                        className={TableStyle.childBorder}
-                        onClick={() => handleReceiverReport(row)}
-                      >
-                        {formattedDate}
-                      </td>
-                      <td
-                        style={{
-                          textAlign: "center",
-                          borderTop: " 0.2px solid #e1e1e1",
-                          borderBottom: " 0.2px solid #e1e1e1",
-                          borderRight: " 0.2px solid #e1e1e1",
-                        }}
+                        textAlign: "center",
+                      }}
+                      className={TableStyle.childBorder}
+                      onClick={() => handleReceiverReport(row)}
+                    >
+                      <Popover
+                        content={popCOntent}
+                        style={{ position: "relative", left: "-330px" }}
                       >
                         <div
-                          onClick={() => {
-                            setSelectedRows(row);
-                            setOpenEdit(true);
-                          }}
+                          onMouseOver={() =>
+                            displayReceivedUsers(row.receivedUsers)
+                          }
                         >
-                          <EditButton />
+                          <Avatar.Group maxCount={2}>
+                            {row?.receivedUsers?.map((data, index) => (
+                              <div key={index}>
+                                {data?.userDetails?.profileImageUrl ? (
+                                  <Avatar
+                                    src={data?.userDetails?.profileImageUrl}
+                                  />
+                                ) : (
+                                  <Avatar
+                                    style={{
+                                      backgroundColor: backgroundColor,
+                                    }}
+                                  >
+                                    {`${
+                                      data?.userDetails?.firstName?.charAt(0) ||
+                                      ""
+                                    }${
+                                      data?.userDetails?.lastName?.charAt(0) ||
+                                      ""
+                                    }`}
+                                  </Avatar>
+                                )}
+                              </div>
+                            ))}
+                          </Avatar.Group>
                         </div>
-                      </td>
-                    </tr>
-                  );
-                })
-              ) : (
-                <tr>
-                  <td colSpan={4}>
-                    <Empty />
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </>
+                      </Popover>
+                    </td>
+                    <td
+                      style={{
+                        borderTop: "  0.2px solid #e1e1e1",
+                      }}
+                      className={TableStyle.childBorder}
+                      onClick={() => handleReceiverReport(row)}
+                    >
+                      {formattedDate}
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                        borderTop: " 0.2px solid #e1e1e1",
+                        borderBottom: " 0.2px solid #e1e1e1",
+                        borderRight: " 0.2px solid #e1e1e1",
+                      }}
+                    >
+                      <div
+                        onClick={() => {
+                          setSelectedRows(row);
+                          setOpenEdit(true);
+                        }}
+                      >
+                        <EditButton />
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td colSpan={4}>
+                  <Empty />
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       )}
       <div className="pagination-container">
         <Paginator

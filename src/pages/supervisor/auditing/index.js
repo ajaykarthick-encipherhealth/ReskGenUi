@@ -114,8 +114,6 @@ export default function Patient() {
   const [search, setSearch] = useState("");
   const [selCreatedBy, setSelCreatedBy] = useState("");
 
-
-
   useEffect(() => {
     let tenId = localStorage.getItem("tenantId");
     let uId = localStorage.getItem("userId");
@@ -350,90 +348,88 @@ export default function Patient() {
   };
 
   return (
-    <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
-        <Header />
-        <div class="content-body">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-xl-12">
-                <div className="">
-                  <div className="card-body p-0">
-                    <div className="table-responsive active-projects task-table">
+    <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <Header />
+      <div class="content-body">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-xl-12">
+              <div className="">
+                <div className="card-body p-0">
+                  <div className="table-responsive active-projects task-table">
+                    <div className="tbl-caption  align-items-center">
                       <div className="tbl-caption  align-items-center">
-                        <div className="tbl-caption  align-items-center">
-                          <HeaderFilters
-                            setSearch={setSearch}
-                            isSearch={true}
-                            searchlabel="Search By Patient ID / Name"
-                            // select status
-                            selectlabel="Select Audited Status"
-                            isSelector={true}
-                            setSelectedOption={SetSelectedOption}
-                            selectOptions={statusOptions}
-                            defaultSelectValue1={"Select Status"}
-                            // computation date
-                            pickerlabel="Audit Due Date"
-                            defaultStartDate={""}
-                            defaultEndDate={""}
-                            setStartDate={setComputedStartDate}
-                            setEndDate={setComputedEndDate}
-                            isRangePicker={true}
-                            // completed date
-                            pickerlabe2="Audited Date"
-                            defaultStartDate2={""}
-                            defaultEndDate2={""}
-                            setStartDate2={setCompletedStartDate}
-                            setEndDate2={setCompletedEndDate}
-                            isAnotherPicker={true}
-                            defaultAllocateTo={"All"}
-                            // created by
-                            isNextCreatedBySelector={true}
-                            createdTolabel="Reviewer"
-                            optionKey="patientAllocated"
-                            createdByOptoons={generateOptionsList(filteredList)}
-                            setSelCreatedBy={setSelCreatedBy}
-                            addUser={false}
-                            addUserForm={addPatientFormId}
-                            bullets={bullets}
-                            // isNextRow={true}
-                          />
-                        </div>
+                        <HeaderFilters
+                          setSearch={setSearch}
+                          isSearch={true}
+                          searchlabel="Search By Patient ID / Name"
+                          // select status
+                          selectlabel="Select Audited Status"
+                          isSelector={true}
+                          setSelectedOption={SetSelectedOption}
+                          selectOptions={statusOptions}
+                          defaultSelectValue1={"Select Status"}
+                          // computation date
+                          pickerlabel="Audit Due Date"
+                          defaultStartDate={""}
+                          defaultEndDate={""}
+                          setStartDate={setComputedStartDate}
+                          setEndDate={setComputedEndDate}
+                          isRangePicker={true}
+                          // completed date
+                          pickerlabe2="Audited Date"
+                          defaultStartDate2={""}
+                          defaultEndDate2={""}
+                          setStartDate2={setCompletedStartDate}
+                          setEndDate2={setCompletedEndDate}
+                          isAnotherPicker={true}
+                          defaultAllocateTo={"All"}
+                          // created by
+                          isNextCreatedBySelector={true}
+                          createdTolabel="Reviewer"
+                          optionKey="patientAllocated"
+                          createdByOptoons={generateOptionsList(filteredList)}
+                          setSelCreatedBy={setSelCreatedBy}
+                          addUser={false}
+                          addUserForm={addPatientFormId}
+                          bullets={bullets}
+                          // isNextRow={true}
+                        />
                       </div>
+                    </div>
 
-                      <div
-                        id="task-tbl_wrapper"
-                        className="dataTables_wrapper no-footer"
-                      >
-                        {isLoading ? (
-                          <SpinnerDots />
-                        ) : (
-                          <>
-                            <PatientTable
-                              patinetListAll={patinetListAll}
-                              actionBodyTemplate={actionBodyTemplate}
-                              statusBodyTemplate={processstatusBodyTemplate}
-                              gotoPatientDetails={gotoPatientDetails}
-                              patientDetails={patientDetails}
-                              sort={sort}
-                              setSort={setSort}
-                            />
-                            <div>
-                              <div className="pagination-container">
-                                <Paginator
-                                  first={paginationFirst}
-                                  rows={15}
-                                  totalRecords={totalElements}
-                                  onPageChange={onPageChange}
-                                />
-                                <div className="total-pages">
-                                  Total count: {totalElements}
-                                </div>
+                    <div
+                      id="task-tbl_wrapper"
+                      className="dataTables_wrapper no-footer"
+                    >
+                      {isLoading ? (
+                        <SpinnerDots />
+                      ) : (
+                        <>
+                          <PatientTable
+                            patinetListAll={patinetListAll}
+                            actionBodyTemplate={actionBodyTemplate}
+                            statusBodyTemplate={processstatusBodyTemplate}
+                            gotoPatientDetails={gotoPatientDetails}
+                            patientDetails={patientDetails}
+                            sort={sort}
+                            setSort={setSort}
+                          />
+                          <div>
+                            <div className="pagination-container">
+                              <Paginator
+                                first={paginationFirst}
+                                rows={15}
+                                totalRecords={totalElements}
+                                onPageChange={onPageChange}
+                              />
+                              <div className="total-pages">
+                                Total count: {totalElements}
                               </div>
                             </div>
-                          </>
-                        )}
-                      </div>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -442,6 +438,6 @@ export default function Patient() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

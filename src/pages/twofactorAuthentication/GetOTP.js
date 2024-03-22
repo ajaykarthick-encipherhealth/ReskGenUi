@@ -117,21 +117,19 @@ const GetOTP = () => {
           {generateCodeArray()
             .slice(0, generateCodeArray().length - 1)
             .map((index) => (
-              <>
-                <input
-                  key={index}
-                  type="number"
-                  maxLength="1"
-                  pattern="[0-9]"
-                  value={
-                    code?.length > 0 && code[index - 1] ? code[index - 1] : ""
-                  }
-                  className={styles.codeInput}
-                  onInput={(e) => handleInput(index, e)}
-                  onKeyDown={(e) => handleBackspace(index, e)}
-                  ref={inputRefs[index]}
-                />
-              </>
+              <input
+                key={index}
+                type="number"
+                maxLength="1"
+                pattern="[0-9]"
+                value={
+                  code?.length > 0 && code[index - 1] ? code[index - 1] : ""
+                }
+                className={styles.codeInput}
+                onInput={(e) => handleInput(index, e)}
+                onKeyDown={(e) => handleBackspace(index, e)}
+                ref={inputRefs[index]}
+              />
             ))}
         </div>
 

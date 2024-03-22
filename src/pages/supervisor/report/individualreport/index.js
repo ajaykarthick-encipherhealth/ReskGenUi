@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import csvToJson from "csvtojson";
 import * as XLSX from "xlsx";
@@ -204,58 +204,57 @@ const IndividualReceiverReport = () => {
                   {searchValue && detailsContent?.length === 0 ? (
                     <div>No data</div>
                   ) : (
-                    detailsContent
-                      ?.map((item) => (
-                        <div key={item.reportId ? item.reportId : item._d}>
-                          <div
-                            style={{
-                              display: "flex",
-                              cursor: "pointer",
-                              marginBottom: "10px",
-                            }}
-                            onClick={() => {
-                              dispatch(selectedReport({ reportUser: item }));
-                              setReportInfo(item);
-                              dispatch(
-                                getSelectedReportDetails(
-                                  isSentReport ? item?._id : item?.reportId,
-                                  item
-                                )
-                              );
-                            }}
-                          >
-                            <div className={styles.user}>
-                              <div>{item?.reportName}</div>
-                              {item?.type && (
-                                <div
-                                  style={{ margin: "5px 0 0 5px" }}
-                                  className={
-                                    item.type === "EXCEL"
-                                      ? styles.excelStyle
-                                      : styles.csvSTyle
-                                  }
-                                >
-                                  {item?.type}
-                                </div>
-                              )}
-                              {item?.role && (
-                                <div
-                                  className={
-                                    item.role.toLowerCase() === "download"
-                                      ? styles.download1
-                                      : styles.read
-                                  }
-                                >
-                                  {item?.role.toLowerCase()}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                          <div className={styles.date}>
-                            {dayjs(item?.receiveDate).format("MM-DD-YYYY")}
+                    detailsContent?.map((item) => (
+                      <div key={item.reportId ? item.reportId : item._d}>
+                        <div
+                          style={{
+                            display: "flex",
+                            cursor: "pointer",
+                            marginBottom: "10px",
+                          }}
+                          onClick={() => {
+                            dispatch(selectedReport({ reportUser: item }));
+                            setReportInfo(item);
+                            dispatch(
+                              getSelectedReportDetails(
+                                isSentReport ? item?._id : item?.reportId,
+                                item
+                              )
+                            );
+                          }}
+                        >
+                          <div className={styles.user}>
+                            <div>{item?.reportName}</div>
+                            {item?.type && (
+                              <div
+                                style={{ margin: "5px 0 0 5px" }}
+                                className={
+                                  item.type === "EXCEL"
+                                    ? styles.excelStyle
+                                    : styles.csvSTyle
+                                }
+                              >
+                                {item?.type}
+                              </div>
+                            )}
+                            {item?.role && (
+                              <div
+                                className={
+                                  item.role.toLowerCase() === "download"
+                                    ? styles.download1
+                                    : styles.read
+                                }
+                              >
+                                {item?.role.toLowerCase()}
+                              </div>
+                            )}
                           </div>
                         </div>
-                      ))
+                        <div className={styles.date}>
+                          {dayjs(item?.receiveDate).format("MM-DD-YYYY")}
+                        </div>
+                      </div>
+                    ))
                   )}
                 </>
               )}

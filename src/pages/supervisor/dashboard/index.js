@@ -20,7 +20,7 @@ const Index = () => {
   const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
 
   const last30thDate = currentDate?.subtract(31, "day");
-  const lastDateWithTime = currentDate?.endOf("day")
+  const lastDateWithTime = currentDate?.endOf("day");
 
   const startDate = DateRanges
     ? new Date(DateRanges?.startDate).toISOString()
@@ -63,9 +63,7 @@ const Index = () => {
               <HoldStatus />
             </Col>
           </Row>
-          <Row className={styles.lastRow}>
-          
-          </Row>
+          <Row className={styles.lastRow}></Row>
         </div>
       </div>
     </div>
