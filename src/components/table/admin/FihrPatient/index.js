@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Empty, Popover, Tooltip } from "antd";
 import warning from "../../../../images/fihr/warning.svg";
 import waningFilled from "../../../../images/fihr/warningFilled.svg";
 import TableStyle from "../../table.module.css";
 import { Paginator } from "primereact/paginator";
-import { selectedRow } from "../../../../store/actions/ReportActions";
-import { useDispatch } from "react-redux";
 import dayjs from "dayjs";
 import {
   dateFormate,
@@ -18,17 +16,13 @@ import { useRouter } from "next/router";
 function FIHRPatinetTable({
   reportListAll,
   paginationFirst,
-  ReportPatientDetails,
   onPageChange,
-  selectedRows,
   tableData,
 }) {
-  const dispatch = useDispatch();
+ 
   const router=useRouter()
   const [display, setDisplay] = useState({});
-  useEffect(() => {
-    dispatch(selectedRow(selectedRows));
-  }, [selectedRows]);
+
 
   const dateFormateAlign = (dates) => {
     return dates?.map((res, index) => {
