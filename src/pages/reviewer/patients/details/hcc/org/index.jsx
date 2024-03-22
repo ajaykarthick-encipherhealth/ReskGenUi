@@ -314,10 +314,10 @@ const CamboTree = ({ tree }) => {
 
   return (
     <div style={{ backgroundColor: "#fbfdff" }}>
-      <button className="btns-primary btn-app-primary mx-1" onClick={zoomIn}>
+      <button className="btns-primary btn-app-primary mx-1" onClick={zoomOut}>
         zoom-in
       </button>
-      <button className="btns-primary btn-app-outline-primary" onClick={zoomOut}>
+      <button className="btns-primary btn-app-outline-primary" onClick={zoomIn}>
         zoom-out
       </button>
       <div className={`overflow-x-auto ${Style.chart}`}>
