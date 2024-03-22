@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import processing from "../../../../images/fihr/processing.svg";
 import completed from "../.././../../images/fihr/completed.svg";
 import refresh from "../.././../../images/fihr/refrsh.svg";
+import failed from "../.././../../images/fihr/failed.svg";
 import TableStyle from "../../table.module.css";
 import Image from "next/image";
 import styles from "../../../../pages/admin/fihrTable/fihr.module.css";
@@ -28,7 +29,7 @@ const DetailsTable = ({
                 <th>PATIENT NAME</th>
                 <th style={{ textAlign: "center" }}>STATUS </th>
                 <th style={{ textAlign: "center" }}> COMPUTED DATE TIME</th>
-                <th style={{ textAlign: "center" }}>YEAR OF SERVICE</th>
+                
               </>
             </tr>
           </thead>
@@ -69,7 +70,7 @@ const DetailsTable = ({
                             src={
                               row?.status === "processing"
                                 ? processing
-                                : completed
+                                : row?.status==="failed"?failed:completed
                             }
                             style={{ paddingRight: "5px" }}
                           />
@@ -112,14 +113,7 @@ const DetailsTable = ({
                         ? dayjs(row?.initialedDate).format("MM/DD/YYYY hh:mm A")
                         : "---"}
                     </td>
-                    <td
-                      className={TableStyle.childBorder}
-                      style={{ textAlign: "center" }}
-                    >
-                      {row?.initialedDate
-                        ? dayjs(row?.initialedDate).format("MM/DD/YYYY hh:mm A")
-                        : "---"}
-                    </td>
+                   
                   </>
                 </tr>
               ))

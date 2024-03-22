@@ -530,17 +530,6 @@ const Index = () => {
                             />
                           </div>
                         </div>
-                        <div className="col-xl-2 mx-2">
-                          <div>
-                            <Selector
-                              selectlabel={"Year of services"}
-                              setSelectedOption={setStatus}
-                              selectOptions={statusOptions}
-                              defaultSelectValue1={""}
-                              // isClose={true}
-                            />
-                          </div>
-                        </div>
                       </div>
                       <div
                         id="task-tbl_wrapper"
