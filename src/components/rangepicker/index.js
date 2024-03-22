@@ -1,10 +1,10 @@
 import { DatePicker } from "antd";
 import React from "react";
+import dayjs from "dayjs";
 import {
   disableFutureDate,
   handleRnagePicker,
 } from "../headerFilters/functions";
-import dayjs from "dayjs";
 
 const { RangePicker } = DatePicker;
 const DateRangePicker = ({
@@ -40,8 +40,8 @@ const DateRangePicker = ({
               setReceivedStartDate,
               setReceivedEndDate,
               setCoderStartDate,
-              setCoderEndDate
-          })
+              setCoderEndDate,
+            })
           }
           defaultValue={
             defaultEndDate && defaultStartDate

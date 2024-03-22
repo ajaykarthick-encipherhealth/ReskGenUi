@@ -3,9 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import dynamic from "next/dynamic";
 import Swal from "sweetalert2";
-import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import "react-chat-widget/lib/styles.css";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
@@ -13,30 +11,30 @@ import { Button } from "react-bootstrap";
 import {
   Badge,
   Dropdown,
-  Select,
   Tooltip,
   Drawer,
   Popover,
-  Avatar,
   Modal,
   Divider,
   Spin,
 } from "antd";
+import {
+  LoadingOutlined,
+  SettingOutlined,
+  CloseCircleOutlined,
+  DownOutlined,
+} from "@ant-design/icons";
 import styles from "../../../styles/file-managemnt.module.css";
-import { IMAGES, SVGICON } from "../../constant/theme";
+import { IMAGES } from "../../constant/theme";
 import {
   AdminMenuList,
-  MenuList,
   PhysicanMenuList,
-  L2AuditMenuList,
   L2AuditorMenuList,
   ProviderMenuList,
   EHRMenuList,
   PhysicianMenuList,
 } from "./Menu";
 import ENDPOINTS from "../../../utility/enpoints";
-import axios from "../../../utility/axiosConfig";
-import { getChatReply } from "../../../store/actions/DashboardActions";
 import {
   getNotificationAlert,
   getNotificationList,
@@ -62,13 +60,7 @@ import ImageUploader from "../../../components/imageUploading/ImageUploader";
 import logout from "../../../images/svg/logout.svg";
 import editImg from "../../../images/svg/edit.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell, faClose } from "@fortawesome/free-regular-svg-icons";
-import { faMessage } from "@fortawesome/free-regular-svg-icons";
-import {
-  LoadingOutlined,
-  SettingOutlined,
-  CloseCircleOutlined,
-} from "@ant-design/icons";
+import { faMessage, faBell } from "@fortawesome/free-regular-svg-icons";
 
 const btnItems = [
   {
@@ -124,7 +116,6 @@ const Header = () => {
   const [selectedbtn, setSelectedBtn] = useState("ICD-10");
   const [dropdownContent, setDropdownContent] = useState();
   const [currentRole, setCurrentRole] = useState();
-  const [isChat, setIsChat] = useState(false);
   const [profileImg, setProfileImg] = useState();
   const [lastName, setLastName] = useState();
   const [openUploader, setOpenUploader] = useState();
@@ -191,7 +182,7 @@ const Header = () => {
     if (userRole === "ehr") {
       setDropdownContent(["EHR"]);
     }
-    var userId = currentUserInfo?.data?.response?.id;
+    let userId = currentUserInfo?.data?.response?.id;
     const userName = currentUserInfo?.data?.response?.userName;
 
     dispatch(getNotificationList(userId));
@@ -385,7 +376,6 @@ const Header = () => {
 
   const gotoChat = () => {
     setOpenMsg(true);
-    // window.open("/chat",'_blank');
   };
   useEffect(() => {
     const userRoleLocal = localStorage.getItem("userRole");
@@ -498,8 +488,6 @@ const Header = () => {
                                       : Math.round(100)
                                   }%`}
                                 />
-
-                                {/* <div style={{fontSize:"10px", textAlign:"center", fontWeight:"bold"}}>Quality</div> */}
                               </div>
                             </div>
                           </Tooltip>
@@ -525,7 +513,6 @@ const Header = () => {
                           onClick={() => gotoChat()}
                         >
                           <div style={{ color: "#04306f" }}>
-                            {/* <i class="far fa-message"></i> */}
                             <div style={{ color: "#04306f" }}>
                               <FontAwesomeIcon
                                 icon={faMessage}

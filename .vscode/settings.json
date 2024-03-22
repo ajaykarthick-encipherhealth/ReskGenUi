@@ -11,7 +11,7 @@
   "eslint.validate": ["javascript", "javascriptreact"],
   "eslint.enable": true,
   "sonarlint.connectedMode.project": {
-    "connectionId": "https-encipherhealth-com",
+    "connectionId": "https-sonar-encipherhealth-com",
     "projectKey": "sonarqube"
   }
 }

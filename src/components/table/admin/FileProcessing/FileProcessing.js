@@ -1,23 +1,17 @@
 import React, { useEffect, useState } from "react";
-import TableStyle from "../../table.module.css";
-import { Empty, Progress, Steps, Tooltip } from "antd";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import {
-  completedReport,
-  getPatientsList,
-} from "../../../../store/actions/adminAction/fileProcessingActions";
-import ENDPOINTS from "../../../../utility/enpoints";
-import { DownOutlined, UpOutlined } from "@ant-design/icons";
-import SpinnerDots from "../../../spinner";
+import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
-import { flightRouterStateSchema } from "next/dist/server/app-render/types";
+import { DownOutlined, UpOutlined } from "@ant-design/icons";
+import { Empty, Progress, Steps, Tooltip } from "antd";
+import TableStyle from "../../table.module.css";
+import { getPatientsList } from "../../../../store/actions/adminAction/fileProcessingActions";
+import ENDPOINTS from "../../../../utility/enpoints";
+import SpinnerDots from "../../../spinner";
 
 export const eventStreming = (
   ENDPOINTS,
   setParsedData,
   pageNo,
-  pageSize,
   getPatients,
   dispatch,
   computedStartDate,
@@ -147,7 +141,7 @@ function FileProcessingTable({ patinetListAll, loading }) {
   const handleToggleStepper = (index, data) => {
     setIsFInished(true);
     setToggle((prevToggle) => ({
-      ...Object.fromEntries(Object.keys(prevToggle).map((key) => [key, false])), // Close all other items
+      ...Object.fromEntries(Object.keys(prevToggle).map((key) => [key, false])),
       [data?.patientId]: !prevToggle[data.patientId],
     }));
     setActiveId(data?.patientId);
@@ -159,15 +153,15 @@ function FileProcessingTable({ patinetListAll, loading }) {
     const failed = errStages[data?.processStageChart];
     if (failed) {
       setFiledList(failed);
-    }else{
-      setFiledList()
+    } else {
+      setFiledList();
     }
   };
 
   useEffect(() => {
     const id = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
-    let isFinished = false; // State variable to track if FINISHED status received
+    let isFinished = false;
     const sse = new EventSource(
       `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}`
     );
@@ -187,28 +181,20 @@ function FileProcessingTable({ patinetListAll, loading }) {
         isFinished = true;
         setIsFInished(true);
         sse.close();
-        // setLoading(false);
       }
     };
 
-    // if (!finished) {
     sse.addEventListener("file-status-event", fileStatusEventListener);
-    // } else {
-    //   sse.close();
-    //   setLoading(false);
-    // }
 
     sse.onerror = () => {
       if (!isFinished) {
         sse.close();
-        // setLoading(false);
       }
     };
 
     return () => {
       sse.removeEventListener("file-status-event", fileStatusEventListener);
       sse.close();
-      // setLoading(false);
     };
   }, [activeId]);
 

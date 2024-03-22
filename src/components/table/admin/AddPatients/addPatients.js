@@ -1,11 +1,10 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import moment from "moment";
 import TableStyle from "../../table.module.css";
 import { notification, Select as AntSelect, Empty } from "antd";
-import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
-import dayjs from "dayjs";
-import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { selectedRoWDetails } from "../../../../store/actions/adminAction/fileProcessingActions";
 import {
   renderUserPrfoileAvatar,
@@ -26,19 +25,6 @@ function AddPatientListTable({
 
   const dispatch = useDispatch();
   const navigate = useRouter();
-
-  const [sortConfig, setSortConfig] = useState({
-    key: null,
-    direction: null,
-  });
-
-  const requestSort = (key) => {
-    let direction = "asc";
-    if (sortConfig.key === key && sortConfig.direction === "asc") {
-      direction = "desc";
-    }
-    setSortConfig({ key, direction });
-  };
 
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
@@ -62,24 +48,6 @@ function AddPatientListTable({
       const clickedData = patinetListAll[dataIndex];
       gotoPatientDetails(clickedData);
     }
-  };
-
-  const sortTableByDate = () => {
-    const sortedContent = [...detailsContent];
-
-    if (sortDueOrder === "asc") {
-      sortedContent.sort((a, b) =>
-        dayjs(a.processedDate).diff(dayjs(b.processedDate))
-      );
-      setSortDueOrder("desc");
-    } else {
-      sortedContent.sort((a, b) =>
-        dayjs(b.processedDate).diff(dayjs(a.processedDate))
-      );
-      setSortDueOrder("asc");
-    }
-
-    setDetailsContent(sortedContent);
   };
 
   const renderRows = () => {

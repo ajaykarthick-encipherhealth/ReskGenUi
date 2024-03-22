@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Paginator } from "primereact/paginator";
-import { Empty, Modal, Popover } from "antd";
-import { Avatar, Divider, Tooltip } from "antd";
+import { Empty, Popover } from "antd";
+import { Avatar } from "antd";
 import dayjs from "dayjs";
 import EditButton from "../../../images/adminUsers/EditButton";
 import SpinnerDots from "../../spinner";
@@ -240,9 +240,6 @@ function SentReportTable({
                       <td
                         style={{
                           borderTop: "  0.2px solid #e1e1e1",
-
-                          // borderBottom: "  0.2px solid #e1e1e1",
-                          // borderRight: "  0.2px solid #e1e1e1",
                         }}
                         className={TableStyle.childBorder}
                         onClick={() => handleReceiverReport(row)}

@@ -3,7 +3,6 @@ import TableStyle from "../table.module.css";
 import dayjs from "dayjs";
 import { Paginator } from "primereact/paginator";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
-import Footer from "../../../jsx/layouts/Footer";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { selectedReport } from "../../../store/actions/ReportActions";
@@ -22,7 +21,6 @@ function ReceivedReport({
   receivedStartDate,
   receivedEndDate,
   paginationFirst,
-  loading,
   sortOrder,
   setSortOrder,
   setSort,
@@ -126,17 +124,7 @@ function ReceivedReport({
                     >
                       {row.role}
                     </td>
-                    {/* <td
-                      style={{
-                        borderTop: "  0.2px solid #e1e1e1",
 
-                        borderBottom: "  0.2px solid #e1e1e1",
-                        textAlign: "center",
-                      }}
-                      className={TableStyle.childBorder}
-                    >
-                      {row.sender}
-                    </td> */}
                     <td
                       className={TableStyle.childBorder}
                       style={{
@@ -206,21 +194,6 @@ function ReceivedReport({
           Total count: {details?.totalElements > 0 ? details?.totalElements : 0}
         </div>
       </div>
-      {/* <Modal
-        open={openModal}
-        footer={false}
-        className={styles.classModal}
-        onCancel={() => setOpenModal(false)}
-      >
-        <IndividualReceiverReport
-          reportUser={reportUser}
-          // ReceivedDetails={details}
-          setReportUser={setReportUser}
-          receivedPageNo={receivedPageNo}
-          receivedStartDate={receivedStartDate}
-          receivedEndDate={receivedEndDate}
-        />
-      </Modal> */}
     </div>
   );
 }
