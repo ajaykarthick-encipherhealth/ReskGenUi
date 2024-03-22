@@ -287,12 +287,16 @@
   font-size: 18px;
   margin-top: -12px;
 }
-.toolTipCOnt{
-  color:rgba(246,104,0,1);
-  font-weight:600;
-  font-size:16px;
-  padding-right:5px;
+.toolTipCOnt {
+  color: rgba(246, 104, 0, 1);
+  font-weight: 600;
+  font-size: 16px;
+  padding-right: 5px;
 }
-.imgContainer{
-  margin:-3px 2px 0 0px
+.imgContainer {
+  margin: -3px 2px 0 0px;
+}
+.rowAuditedAdmin {
+  width: 250px;
+  text-align: center;
 }
