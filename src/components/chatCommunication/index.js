@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { over } from "stompjs";
 import { v4 as uuidv4 } from "uuid";
 import TimeAgo from "react-timeago";
@@ -9,6 +9,7 @@ import { Badge, Avatar, Tooltip } from "antd";
 import styles from "./styles.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faCircleUser,
   faPaperPlane,
   faLink,
   faCircle,
@@ -17,9 +18,9 @@ import {
   faCheck,
   faFileText,
   faCircleDown,
-  faTrash,
+  faTrash
 } from "@fortawesome/free-solid-svg-icons";
-import { CloseCircleOutlined } from "@ant-design/icons";
+import { WechatOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { Tab, Nav } from "react-bootstrap";
 import moment from "moment";
 
@@ -30,7 +31,9 @@ import {
   getChatHistory,
   getUsers,
   getHandleChatHistory,
+  getHandleResetReadHistory,
   handleFilePost,
+  addUser,
 } from "../../services/ChatService";
 
 const ChatCommunication = ({ openMsg, offMsg }) => {
@@ -69,21 +72,23 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
   };
 
   useEffect(() => {
-    let userName = localStorage.getItem("userId");
+    var userName = localStorage.getItem("userId");
     handleUsername(userName);
     if (message && chatAction === "load") {
       scrollToBottom();
+    } else if (message && chatAction === "add") {
+      // scrollToTop();
     }
   }, [message, chatAction]);
   const fetchChatHistory = async (username) => {
-    let result = await getChatHistory(username);
+    var result = await getChatHistory(username);
     setMessagedMembersList(result);
     setSearchedInMembersList(result);
     searchedInMembersListRef.current = result;
   };
 
   const fetchUsers = async () => {
-    let data = await getUsers();
+    var data = await getUsers();
     const temp = [];
     data?.forEach((item) => {
       temp.push(item);
@@ -158,7 +163,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
           memberList[index].lastMessage = payloadData.message;
           memberList[index].lastUpdatedDate = payloadData.timeStamp;
         } else {
-          memberList[index]?.unreadCount = memberList[index]?.unreadCount;
+          memberList[index].unreadCount = memberList[index].unreadCount;
         }
       });
       const chat = memberList[updatedChatCountIndex];
@@ -340,7 +345,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
       }
     } else {
       connect();
-
+      // handleSendMessage();
       setFileModal(false);
     }
   };
@@ -405,9 +410,18 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
     const messageIds = [];
     privateMessages.map((msg) => {
       if (msg.messageStatus === "UNREAD") {
-        messageIds?.push(msg.id);
+        messageIds.push(msg.id);
       }
     });
+    if (messageIds.length > 0) {
+      var dataBody = {
+        messageIds: messageIds,
+        messageStatus: "READ",
+        primaryUser: sender.primaryUser,
+        secondaryUser: sender.secondaryUser,
+      };
+      const result = await getHandleResetReadHistory(dataBody);
+    }
   };
   const handleUpdateUrl = (activeMember) => {
     activeSecondaryUserRef.current = activeMember;
@@ -435,12 +449,12 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
         progress: undefined,
         theme: "colored",
       });
-
+      // fileInput.value = '';
       return false;
     } else {
       let formData = new FormData();
       formData.append("file", file);
-      let result = await handleFilePost(formData);
+      var result = await handleFilePost(formData);
       setUserData({
         ...userData,
         fileUrl: result?.response?.fileUploadedUrl,
@@ -451,7 +465,12 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
       setFileModal(true);
     }
   };
-  const addUserToDatabase = async (username) => {};
+  const addUserToDatabase = async (username) => {
+    var dataBoday = {
+      name: username,
+    };
+    var result = await addUser(dataBoday);
+  };
 
   const handleSearchMembers = (e) => {
     if (e.target.value.length > 0) {
@@ -534,7 +553,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
     const firstNameInitial = firstName?.charAt(0) || "";
     const secondNameInitial = lastName?.charAt(0) || "";
     if (!imageUrl) {
-      let profileAvatar = (
+      var profileAvatar = (
         <Avatar
           style={{
             backgroundColor: "#F3C217 ",
@@ -554,7 +573,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
       );
       return profileAvatar;
     } else {
-      let profileAvatar = (
+      var profileAvatar = (
         <img
           src={imageUrl}
           alt="avatar"
@@ -736,9 +755,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                 currentChatMember?.sender
                                                   ?.secondaryUser !==
                                                   secondaryUser && (
-                                                  <Badge
-                                                    className={`className="badge bg-danger float-end ${styles.unreadCount}`}
-                                                  >
+                                                  <Badge className={`className="badge bg-danger float-end ${styles.unreadCount}`}>
                                                     {unreadCount}
                                                   </Badge>
                                                 )}
@@ -993,12 +1010,16 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                     !chat.fileType.includes(
                                                       "image"
                                                     ) && (
-                                                      <FontAwesomeIcon
-                                                        icon={faFileText}
-                                                        style={{
-                                                          color: "#212529",
-                                                        }}
-                                                      />
+                                                      
+ <FontAwesomeIcon
+ icon={
+  faFileText
+ }
+ style={{
+  color: "#212529",
+ }}
+/>
+                                                     
                                                     )}
                                                   <p className="mb-0">
                                                     {chat.message}
@@ -1007,12 +1028,15 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                         className="download-link"
                                                         href={chat.fileUrl}
                                                       >
-                                                        <FontAwesomeIcon
-                                                          icon={faCircleDown}
-                                                          style={{
-                                                            color: "#212529",
-                                                          }}
-                                                        />
+                                                         <FontAwesomeIcon
+ icon={
+  faCircleDown
+ }
+ style={{
+  color: "#212529",
+ }}
+/>
+                                                      
                                                       </a>
                                                     )}
                                                     {chat.senderName ===
@@ -1024,8 +1048,10 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                             placement="bottom"
                                                             title="Sent"
                                                           >
-                                                            <FontAwesomeIcon
-                                                              icon={faCheck}
+                                                           <FontAwesomeIcon
+                                                              icon={
+                                                                faCheck
+                                                              }
                                                               style={{
                                                                 color: "black",
                                                                 marginLeft:
@@ -1067,7 +1093,9 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                             title="Unread"
                                                           >
                                                             <FontAwesomeIcon
-                                                              icon={faCheck}
+                                                              icon={
+                                                                faCheck
+                                                              }
                                                               style={{
                                                                 color: "white",
                                                                 marginLeft:
@@ -1283,9 +1311,11 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                   {!imgExtensions.exec(userData.fileName) ? (
                                     <>
                                       <FontAwesomeIcon
-                                        icon={faFileText}
-                                        style={{ color: "grey" }}
-                                      />
+ icon={
+  faFileText
+ }
+  style={{ color: "grey" }}
+/>
                                       <p className="mt-4">
                                         {userData.fileName}{" "}
                                         <FontAwesomeIcon
@@ -1468,8 +1498,10 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                             placement="bottom"
                                                             title="Sent"
                                                           >
-                                                            <FontAwesomeIcon
-                                                              icon={faCheck}
+                                                           <FontAwesomeIcon
+                                                              icon={
+                                                                faCheck
+                                                              }
                                                               style={{
                                                                 color: "white",
                                                                 marginLeft:
@@ -1488,7 +1520,7 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                             placement="bottom"
                                                             title="Read"
                                                           >
-                                                            <FontAwesomeIcon
+                                                           <FontAwesomeIcon
                                                               icon={
                                                                 faCheckDouble
                                                               }
@@ -1511,7 +1543,9 @@ const ChatCommunication = ({ openMsg, offMsg }) => {
                                                             title="Unread"
                                                           >
                                                             <FontAwesomeIcon
-                                                              icon={faCheck}
+                                                              icon={
+                                                                faCheck
+                                                              }
                                                               style={{
                                                                 color: "white",
                                                                 marginLeft:
