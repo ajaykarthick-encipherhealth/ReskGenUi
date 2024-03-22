@@ -1,20 +1,18 @@
 import "bootstrap/dist/css/bootstrap.css";
-import "../styles/globals.css"; // Import your global CSS here
+import "../styles/globals.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
+import "primereact/resources/themes/lara-light-indigo/theme.css";
+import "primereact/resources/primereact.min.css";
 import { wrapper, store } from "../store/store";
 import { Provider, useSelector } from "react-redux";
-import { PrimeReactProvider } from "primereact/api";
-import "primereact/resources/themes/lara-light-indigo/theme.css";
-//core
-import "primereact/resources/primereact.min.css";
-//icons
-
-import { config } from "@fortawesome/fontawesome-svg-core";
-import Footer from "../jsx/layouts/Footer";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-config.autoAddCss = false;
+import { PrimeReactProvider } from "primereact/api";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import Footer from "../jsx/layouts/Footer";
 import AICHAT from "../components/aiChat";
+
+config.autoAddCss = false;
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -63,30 +61,13 @@ function MyApp({ Component, pageProps }) {
   }, [router]);
 
   return (
-    <>
-      {/* {!validatedPath ? (
-        <UnAuthorized />
-      ) : ( */}
-      <PrimeReactProvider>
-        <Provider store={store}>
-          {showTerminal && (
-            <AICHAT openMsg={true} />
-            //   <TerminalComponent
-            //   handleNewUserMessage={handleNewUserMessage}
-            //   handleQuickButtonClicked={handleQuickButtonClicked}
-            //   showBadge={false}
-            //   emojis={true}
-            //   title="CogentAI"
-            //   subtitle="Chat with CogentAI"
-            //   autoFocus={true}
-            // />
-          )}
-          <Component {...pageProps} />
-          {showTerminal && <Footer />}
-        </Provider>
-      </PrimeReactProvider>
-      {/* )} */}
-    </>
+    <PrimeReactProvider>
+      <Provider store={store}>
+        {showTerminal && <AICHAT openMsg={true} />}
+        <Component {...pageProps} />
+        {showTerminal && <Footer />}
+      </Provider>
+    </PrimeReactProvider>
   );
 }
 

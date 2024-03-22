@@ -1,8 +1,8 @@
 import { Button, Checkbox, Form, Input, Modal, Radio, Select } from "antd";
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styles from "./report.module.css";
 import { getExportDetails } from "../../../store/actions/ReportActions";
-import { useDispatch, useSelector } from "react-redux";
 import { getUsersList } from "../../../store/actions/adminAction/ReportActions";
 import { checkBoxData, debounce } from "../../admin/report/Export";
 import { updateSentReport } from "../../../services/ReportService";
@@ -39,7 +39,7 @@ const Export = ({
   useEffect(() => {
     setCurrentUser(localStorage.getItem("userId"));
 
-    var orgId = localStorage.getItem("orgId");
+    let orgId = localStorage.getItem("orgId");
     dispatch(getUsersList(orgId, search));
   }, [search]);
   const dispatch = useDispatch();
@@ -92,17 +92,16 @@ const Export = ({
 
   const onFinish = (values) => {
     const patientIds = rowsLength?.map((item) => item?.patientId);
-    const editUserAndAccess =
-      userList.reduce((result, { user, role }) => {
-        if (Array.isArray(user)) {
-          user.forEach((info) => {
-            result[info.userName] = role;
-          });
-        } else {
-          result[user] = role;
-        }
-        return result;
-      }, {});
+    const editUserAndAccess = userList.reduce((result, { user, role }) => {
+      if (Array.isArray(user)) {
+        user.forEach((info) => {
+          result[info.userName] = role;
+        });
+      } else {
+        result[user] = role;
+      }
+      return result;
+    }, {});
     const fields = checkall?.reduce((acc, data) => {
       acc[data?.title] = data?.checked;
       return acc;
@@ -126,11 +125,7 @@ const Export = ({
       dispatch(getExportDetails(data));
     } else {
       dispatch(updateSentReport(updatedData));
-      dispatch(
-        getActiveTab(
-          "SentReport"
-        )
-      );
+      dispatch(getActiveTab("SentReport"));
     }
     form.resetFields();
     setUsersList([]);
@@ -260,26 +255,24 @@ const Export = ({
                   Check All
                 </Checkbox>
                 {checkall?.map((data) => (
-                  <>
-                    <Checkbox
-                      key={data?.id}
-                      value={data?.title}
-                      checked={data?.checked}
-                      onChange={(e) => {
-                        setCheckAll((prev) => {
-                          return prev?.map((data) => {
-                            if (data?.title === e.target.value) {
-                              return { ...data, checked: e.target.checked };
-                            } else {
-                              return data;
-                            }
-                          });
+                  <Checkbox
+                    key={data?.id}
+                    value={data?.title}
+                    checked={data?.checked}
+                    onChange={(e) => {
+                      setCheckAll((prev) => {
+                        return prev?.map((data) => {
+                          if (data?.title === e.target.value) {
+                            return { ...data, checked: e.target.checked };
+                          } else {
+                            return data;
+                          }
                         });
-                      }}
-                    >
-                      {data.heading}
-                    </Checkbox>
-                  </>
+                      });
+                    }}
+                  >
+                    {data.heading}
+                  </Checkbox>
                 ))}
               </div>
             </Form.Item>

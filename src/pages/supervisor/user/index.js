@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Paginator } from "primereact/paginator";
 import AdminList from "../table/adminList/adminList";
 import Header from "../../../jsx/layouts/nav/Header";
 import HeaderFilters from "../../../components/headerFilters";
 import SpinnerDots from "../../../components/spinner";
-import Footer from "../../../jsx/layouts/Footer";
 import { getL2Users } from "../../../store/actions/l2Action/userActions";
 
 const UserList = () => {
@@ -17,7 +15,6 @@ const UserList = () => {
   const [userListAll, setUserListAll] = useState([]);
   const [totalElements, setTotalElements] = useState(15);
   const [pageCount, setPageCount] = useState(0);
-
   const [search, setSearch] = useState("");
 
   const onPageChange = (e) => {
@@ -33,7 +30,7 @@ const UserList = () => {
   }, [usersData]);
 
   useEffect(() => {
-    dispatch(getL2Users( pageCount,search ));
+    dispatch(getL2Users(pageCount, search));
   }, [pageCount, search]);
 
   return (
@@ -74,7 +71,7 @@ const UserList = () => {
                             onPageChange={onPageChange}
                           />
                           <div className="total-pages">
-                            Total count: {totalElements?totalElements:0}
+                            Total count: {totalElements ? totalElements : 0}
                           </div>
                         </div>
                       </div>

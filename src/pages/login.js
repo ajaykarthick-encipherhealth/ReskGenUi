@@ -79,7 +79,6 @@ export default function Login() {
             <div className="login-form">
               <div className="login-head">
                 <h5 className="title">Log in to your account</h5>
-                {/* <p>Login page allows users to enter login credentials for authentication and access to secure content.</p> */}
               </div>
               <h6 className="login-title">
                 <span>Login</span>

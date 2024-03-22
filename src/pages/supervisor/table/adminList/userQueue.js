@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import { Empty, Select, Tooltip, Badge, Popover } from "antd";
-import moment from "moment";
-import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
+import { Empty, Select, Badge, Popover } from "antd";
+import moment from "moment";
+import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import TableStyle from "../../../../components/table/table.module.css";
 import {
   priorityOptions,
-  processstatusBodyTemplate,
   renderUserPrfoile,
   renderUserPrfoileAvatar,
   sortFunction,
@@ -164,7 +163,6 @@ const UserQueue = ({ userList, setSort, auditBodyTemplate }) => {
                 : "---"}
             </Popover>
           </td>
-          {/* Audited details */}
           <td
             className={TableStyle.childBorder}
             onClick={(e) => handleTableRowClick(e, data?.patientId)}

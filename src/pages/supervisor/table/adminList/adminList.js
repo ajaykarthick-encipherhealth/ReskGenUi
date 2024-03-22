@@ -1,9 +1,9 @@
 import React from "react";
+import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
 import { Empty, Tooltip } from "antd";
 import { CircularProgressbar } from "react-circular-progressbar";
 import TableStyle from "../../../../components/table/table.module.css";
-import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
 import { storeUserValues } from "../../../../store/actions/l2Action/userActions";
 
 const AdminList = ({ userList }) => {
@@ -20,13 +20,10 @@ const AdminList = ({ userList }) => {
         <thead className={TableStyle.classThead}>
           <tr>
             <th>NAME</th>
-
             <th>ALLOCATED</th>
             <th>COMPLETED</th>
             <th>PENDING</th>
             <th>HOLD</th>
-            {/* <th>HCC VALID IDENTIFICATION</th>
-            <th>REJECTED COUNT</th> */}
             <th>INVALID</th>
             <th>QUALITY</th>
           </tr>
@@ -39,7 +36,6 @@ const AdminList = ({ userList }) => {
                 style={{ height: "35px" }}
                 onClick={() => gotoUserQueue(item)}
               >
-                {/* user id */}
                 <td
                   className={TableStyle.childBorder}
                   style={{ height: "47px !important" }}
@@ -60,9 +56,7 @@ const AdminList = ({ userList }) => {
                       : "---"}
                   </span>
                 </td>
-                {/* user name */}
 
-                {/* allocated */}
                 <td
                   className={TableStyle.childBorder}
                   style={{ height: "40px !important" }}
@@ -73,7 +67,6 @@ const AdminList = ({ userList }) => {
                       : "---"}
                   </span>
                 </td>
-                {/* completed */}
                 <td
                   className={TableStyle.childBorder}
                   style={{ height: "40px !important" }}
@@ -84,7 +77,6 @@ const AdminList = ({ userList }) => {
                       : "---"}
                   </span>
                 </td>
-                {/* pending */}
                 <td
                   className={TableStyle.childBorder}
                   style={{ height: "40px !important" }}
@@ -94,7 +86,6 @@ const AdminList = ({ userList }) => {
                   </span>
                 </td>
 
-                {/* hold */}
                 <td
                   className={TableStyle.lastBorder}
                   style={{ height: "40px !important" }}
@@ -103,25 +94,7 @@ const AdminList = ({ userList }) => {
                     {item?.totalFileHold ? item?.totalFileHold : "---"}
                   </span>
                 </td>
-                {/* hcc valid identificatio */}
-                {/* <td
-                  className={TableStyle.lastBorder}
-                  style={{ height: "40px !important" }}
-                >
-                  <span>
-                    {item?.totalFileHold ? item?.totalFileHold : "---"}
-                  </span>
-                </td>
-            
-                <td
-                  className={TableStyle.lastBorder}
-                  style={{ height: "40px !important" }}
-                >
-                  <span>
-                    {item?.totalFileHold ? item?.totalFileHold : "---"}
-                  </span>
-                </td> */}
-                {/* invalid */}
+
                 <td
                   className={TableStyle.childBorder}
                   style={{ height: "40px !important" }}
@@ -131,10 +104,9 @@ const AdminList = ({ userList }) => {
                   </span>
                 </td>
 
-                {/* quality */}
                 <td
                   className={TableStyle.lastBorder}
-                  style={{ height: "40px !important" , width:"30px"}}
+                  style={{ height: "40px !important", width: "30px" }}
                 >
                   <Tooltip title={` Quality : ${Math.round(item?.accuracy)}%`}>
                     <div className="notificationIcon">

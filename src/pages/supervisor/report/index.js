@@ -1,17 +1,15 @@
 import styles from "./report.module.css";
-import React, { useState, useEffect } from "react";
-import { Modal, DatePicker } from "antd";
-import Header from "../../../jsx/layouts/nav/Header";
-import { useSelector } from "react-redux";
-import dayjs from "dayjs";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useSelector, useDispatch } from "react-redux";
 import { Tab, Nav } from "react-bootstrap";
 import Select from "react-select";
+import React, { useState, useEffect } from "react";
+import { Modal, DatePicker } from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch } from "react-redux";
 import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
 import "react-circular-progressbar/dist/styles.css";
+import Header from "../../../jsx/layouts/nav/Header";
 import SentReportTable from "../table/sentReport/sentReport";
 import ReceivedReport from "../table/receivedReport/receivedReport";
 import CoderReport from "../table/CoderReport/coderReport";
@@ -35,7 +33,7 @@ const statusOptions = [
   { label: "Declined", value: "DECLINED" },
   { label: "Hold", value: "HOLD" },
 ];
-const index = () => {
+const Index = () => {
   const dispatch = useDispatch();
   const TeamReportDetails = useSelector(
     (state) => state.AuditReport?.teamDetails
@@ -54,26 +52,20 @@ const index = () => {
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
   const rowsLength = useSelector((state) => state?.report?.row);
   const [isLoading, setIsLoading] = useState(true);
-  // const [activeTab, setActiveTab] = useState("AuditReport");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
-  const [filteredTeam, setFilteredTeam] = useState([]);
   const [comments, setComments] = useState();
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [pageNo, setPageNo] = useState(0);
   const [sentPageNo, setSentPageNo] = useState(0);
   const [receivedPageNo, setReceivedPageNo] = useState(0);
-
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [paginationReceivedFirst, setPaginationReceivedFirst] = useState(0);
   const [paginationSentFirst, setPaginationSentFirst] = useState(0);
-
   const [tableLoading, setTableLoading] = useState(true);
   const [modal, setModal] = useState(false);
   const { RangePicker } = DatePicker;
-
-  const [modalVisible, setModalVisible] = useState(false);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [receivedStartDate, setReceivedStartDate] = useState();
@@ -670,4 +662,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;

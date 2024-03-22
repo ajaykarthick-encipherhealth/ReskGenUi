@@ -37,6 +37,7 @@ const Index = () => {
     const skipParam = decodedParams?.skipEntry;
     setSkip(skipParam);
   }, []);
+
   useEffect(() => {
     if (seconds === 0) {
       setCode([]);
@@ -177,11 +178,6 @@ const Index = () => {
                 }}
                 width={200}
               />
-
-              {/* <div className={styles.redirect}>
-                <span className={styles.code}> Didn't get a Code? </span>
-                <span className={styles.link}>Send again</span>
-              </div> */}
             </>
           ) : (
             <>
@@ -223,23 +219,6 @@ const Index = () => {
                   name="SETUP LATER"
                   width="100%"
                 />
-                // <button
-                //   className={styles.sendBtn}
-                //   onClick={() => {
-                //     dispatch(
-                //       loginAction(
-                //         username,
-                //         router,
-                //         code?.join(""),
-                //         password,
-                //         enableMFA,
-                //         skip
-                //       )
-                //     );
-                //   }}
-                // >
-                //   SETUP LATER
-                // </button>
               )}
             </>
           )}

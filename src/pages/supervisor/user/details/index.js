@@ -1,13 +1,11 @@
-import React from 'react'
-import Details from '../../../reviewer/patients/details'
-
-
+import React from "react";
+import Details from "../../../reviewer/patients/details";
 const index = () => {
   return (
     <div>
-      <Details/>
+      <Details />
     </div>
-  )
-}
+  );
+};
 
-export default index
+export default index;

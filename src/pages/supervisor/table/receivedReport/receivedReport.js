@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
-import TableStyle from "../../../../components/table/table.module.css";
-import dayjs from "dayjs";
-import { Paginator } from "primereact/paginator";
-import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { selectedReport } from "../../../../store/actions/ReportActions";
+import TableStyle from "../../../../components/table/table.module.css";
+import dayjs from "dayjs";
 import { Empty } from "antd";
-import Footer from "../../../../jsx/layouts/Footer";
+import { Paginator } from "primereact/paginator";
+import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import { selectedReport } from "../../../../store/actions/ReportActions";
 import {
   dateFormate,
   renderUserPrfoileAvatar,
@@ -33,18 +32,6 @@ function ReceivedReport({
   useEffect(() => {
     setDetailsContent(details?.content);
   }, [details]);
-
-  const sortTableByDate = () => {
-    const sortedContent = [...detailsContent];
-    if (sortOrder === "asc") {
-      sortedContent.sort((a, b) => dayjs(a.sendDate).diff(dayjs(b.sendDate)));
-      setSortOrder("desc");
-    } else {
-      sortedContent.sort((a, b) => dayjs(b.sendDate).diff(dayjs(a.sendDate)));
-      setSortOrder("asc");
-    }
-    setDetailsContent(sortedContent);
-  };
 
   const router = useRouter();
   const handleReceiverReport = (row) => {
@@ -153,9 +140,7 @@ function ReceivedReport({
                           <div
                             style={{ display: "flex", alignItems: "center" }}
                           >
-                            {" "}
                             <span style={{ marginRight: "10px" }}>
-                              {" "}
                               {renderUserPrfoileAvatar(
                                 row.senderDetails?.firstName,
                                 row.senderDetails?.lastName,
@@ -202,21 +187,6 @@ function ReceivedReport({
           Total count: {details?.totalElements > 0 ? details?.totalElements : 0}
         </div>
       </div>
-      {/* <Modal
-        open={openModal}
-        footer={false}
-        className={styles.classModal}
-        onCancel={() => setOpenModal(false)}
-      >
-        <IndividualReceiverReport
-          reportUser={reportUser}
-          // ReceivedDetails={details}
-          setReportUser={setReportUser}
-          receivedPageNo={receivedPageNo}
-          receivedStartDate={receivedStartDate}
-          receivedEndDate={receivedEndDate}
-        />
-      </Modal> */}
     </div>
   );
 }
