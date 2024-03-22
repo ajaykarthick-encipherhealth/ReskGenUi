@@ -2293,6 +2293,8 @@ const Hcc = ({ patientHccResult }) => {
             placement: "top",
             duration: 1,
           });
+          setHccFormTab("HCCFORM");
+
           form.reset();
           setIsModalOpenValidCodes(false);
           setIsFileFormShow(false);
