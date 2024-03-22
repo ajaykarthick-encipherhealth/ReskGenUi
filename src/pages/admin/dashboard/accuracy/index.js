@@ -132,8 +132,8 @@ const Accuracy = () => {
   } else if (currentBtn === "Daily") {
     if (
       parseInt(selectedYear) === new Date().getFullYear() &&
-      selectedMonth === new Date().getMonth() + 1
-    ) {
+      selectedMonth === `0${new Date().getMonth()+1}`
+      ) {
       highlightIndex = currentDate.getDate() - 1;
     }
   } else if (currentBtn === "Weekly") {
@@ -457,7 +457,7 @@ const Accuracy = () => {
       );
     }
   }, [currentBtn, selectedMonth, selectedYear, router, currentTabBtn]);
-
+ 
   return (
     <>
       <HeadTitle header="Accuracy and Quality Insights" />
