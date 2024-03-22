@@ -1,3 +1,39 @@
+:root {
+  --app-primary: #04306f;
+  --app-primary-hover: #6c9ddd;
+}
+
+.btns-primary {
+  padding: 7px;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 20px;
+  border: none;
+}
+
+.btn-app-primary {
+  background-color: var(--app-primary);
+  color: #ffffff;
+  text-transform: capitalize;
+}
+.btn-app-primary:hover {
+  background-color: var(--app-primary-hover);
+  color: #fff;
+}
+
+.btn-app-outline-primary {
+  color: var(--app-primary);
+  border: 1px solid var(--app-primary);
+  background: transparent;
+  text-transform: capitalize;
+  padding: 6px;
+}
+.btn-app-outline-primary:hover {
+  background-color: var(--app-primary-hover);
+  color: #fff;
+}
+
 body {
   font-family: "Manrope", sans-serif !important;
 }
@@ -14269,4 +14305,29 @@ input[type="number"] {
   width: 100px !important;
   display: flex;
   justify-content: center;
+}
+
+
+.customTooltip .ant-tooltip-inner {
+  color: yellow !important;
+  background-color: green !important;
+}
+
+.customTooltip .ant-tooltip-placement-bottom .ant-tooltip-arrow,
+.customTooltip .ant-tooltip-placement-bottomLeft .ant-tooltip-arrow,
+.customTooltip .ant-tooltip-placement-bottomRight .ant-tooltip-arrow {
+  border-bottom-color: green !important;
+}
+.fihrComputedProgressText >.ant-progress-text {
+  color:rgba(11, 96, 176, 1) !important;
+}
+.fihrProgressText >.ant-progress-text {
+  color:rgba(252, 103, 54, 1) !important;
+}
+.fihrFailedProgressText >.ant-progress-text {
+  color:red !important;
+}
+
+.fihrComputedProgressText >.ant-progress-inner >.ant-progress-bg::after{
+  background-color: green !important;
 }
