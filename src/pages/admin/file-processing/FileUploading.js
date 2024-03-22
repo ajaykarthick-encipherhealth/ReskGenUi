@@ -100,13 +100,8 @@ const FileUploading = ({
                 {"Submit"}
               </Button>
               <Button
-                className="btn-sm me-1"
+                className="btn btn-danger btn-sm light ms-1"
                 onClick={() => setAddPatient(false)}
-                style={{
-                  backgroundColor: "#ffdede",
-                  borderColor: "#ffdede",
-                  color: "#ff5e5e",
-                }}
               >
                 Cancel
               </Button>

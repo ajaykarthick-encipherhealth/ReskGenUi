@@ -23,23 +23,23 @@ export default function Login() {
   let errorsObj = { email: "", password: "" };
   const [errors, setErrors] = useState(errorsObj);
   const [password, setPassword] = useState("");
+  const [emailErro, setEmailError] = useState("");
 
   const validateEmail = (enteredEmail) => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+    setEmailError({ email: "" });
 
     if (enteredEmail?.length === 0) {
-      setErrors({
+      setEmailError({
         email: "Please enter the email",
       });
 
-      setIsLoading(false);
       return false;
     }
     if (enteredEmail?.length > 0 && !emailRegex.test(enteredEmail)) {
-      setErrors({
+      setEmailError({
         email: "Invalid email",
       });
-      setIsLoading(false);
       return false;
     }
 
@@ -91,11 +91,14 @@ export default function Login() {
                     type="email"
                     className="form-control"
                     value={enteredEmail}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setEmail(e.target.value), validateEmail(e.target.value);
+                    }}
+                    placeholder="Enter Email"
                   />
-                  {errors?.email && (
+                  {emailErro?.email && (
                     <div className="text-danger fs-12 mt-3">
-                      {errors?.email}
+                      {emailErro?.email}
                     </div>
                   )}
                 </div>
@@ -109,6 +112,7 @@ export default function Login() {
                       onChange={(e) => {
                         setPassword(e.target.value);
                       }}
+                      placeholder="Enter Password"
                     />
                     <div className="input-group-append">
                       <span className={styles.loginpasswordBox}>
