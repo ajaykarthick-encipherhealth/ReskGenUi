@@ -5,16 +5,11 @@ import { Paginator } from "primereact/paginator";
 import { selectedRow } from "../../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
 import dayjs from "dayjs";
-import { Paginator } from "primereact/paginator";
-import { Empty, Popover } from "antd";
 import moment from "moment";
-import TableStyle from "../../table.module.css";
-import { selectedRow } from "../../../../store/actions/ReportActions";
 import {
   dateFormate,
   renderUserPrfoileAvatar,
 } from "../../../headerFilters/functions";
-import moment from "moment";
 
 function PdfTable({
   reportListAll,
