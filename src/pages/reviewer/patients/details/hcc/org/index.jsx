@@ -171,7 +171,7 @@ const CamboTree = ({ tree }) => {
                           className={visitStyles.calenderIcon}
                         />
                       </i>
-                      {moment(res).format("MMM DD")}
+                      {moment(item).format("MMM DD")}
                     </span>
                   ) : null
                 )}

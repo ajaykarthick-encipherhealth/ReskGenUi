@@ -11,7 +11,6 @@ import {
   renderUserPrfoileAvatar,
 } from "../../../headerFilters/functions";
 
-
 function PdfTable({
   reportListAll,
   paginationFirst,
