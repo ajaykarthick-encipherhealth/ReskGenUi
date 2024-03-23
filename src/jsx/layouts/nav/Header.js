@@ -492,7 +492,7 @@ const Header = () => {
                             </div>
                           </Tooltip>
                         )}
-                        <div
+                        {/* <div
                           className="chatheaderIcon"
                           onClick={() => router.push("/admin/settings")}
                         >
@@ -507,7 +507,7 @@ const Header = () => {
                               fontSize: "30px",
                             }}
                           />
-                        </div>
+                        </div> */}
                         <div
                           className="chatheaderIcon"
                           onClick={() => gotoChat()}

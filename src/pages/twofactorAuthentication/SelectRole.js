@@ -19,6 +19,7 @@ const SelectRole = () => {
   const rolesList = role?.slice().reverse();
   const items = [
     { value: "physician", label: "PHYSICIAN" },
+    { value: "provider", label: "PROVIDER" },
 
     ...(rolesList?.length > 0
       ? rolesList?.map((info) => ({
@@ -55,7 +56,7 @@ const SelectRole = () => {
       admin: { userRole: "admin", route: "/admin/dashboard" },
       reviewer: { userRole: "reviewer", route: "/reviewer/dashboard" },
       supervisor: { userRole: "supervisor", route: "/supervisor/dashboard" },
-      provider: { userRole: "provider", route: "/provider/comparison" },
+      provider: { userRole: "provider", route: "/provider/fhirTable" },
       physician: { userRole: "physician", route: "/physician/dashboard" },
     };
     const selectedRoleInfo = rolesMapping[selectedRole];
