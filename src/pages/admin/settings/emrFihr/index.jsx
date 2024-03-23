@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use, useEffect } from "react";
 import Style from "./../style.module.css";
 import Epic from "../../../../images/svg/settingsIcons/icons/epic.png";
 import Athena from "../../../../images/svg/settingsIcons/icons/athena.png";
@@ -6,8 +6,17 @@ import Cerner from "../../../../images/svg/settingsIcons/icons/cerner.png";
 import EClinical from "../../../../images/svg/settingsIcons/icons/eclinicalworks.png";
 import Image from "next/image";
 import { Tag } from "antd";
+import { getFihrList } from "../../../../store/actions/tanantAdminAction/FihrActions";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import { getDateAndTime } from "../../../../components/headerFilters/functions";
 
 const EmrFhir = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const FihrList = useSelector(
+    (state) => state?.tanantAdmin?.fihr_list?.fihr_list
+  );
   const data = [
     {
       id: 1,
@@ -39,20 +48,26 @@ const EmrFhir = () => {
     },
   ];
 
+  useEffect(() => {
+    dispatch(getFihrList(router));
+  }, []);
+
   return (
     <div>
       <div className="p-3">
         <div className={Style.title}>FHIR Integration</div>
       </div>
       <div>
-        {data.map((item) => (
+        {FihrList?.map((item) => (
           <div
             className={`p-1 px-3 d-inline-block m-2 border rounded-3`}
             style={{
               background: `${
-                item.status !== "Connected" ? "#efefef" : ""
+                item.status.toLowerCase() !== "connected" ? "#efefef" : ""
               }`,
-              cursor: `${item.status !== "Connected" ? "no-drop" : ""}`,
+              cursor: `${
+                item.status.toLowerCase() !== "connected" ? "no-drop" : ""
+              }`,
             }}
           >
             <div className="p-2 text-center">
@@ -60,7 +75,15 @@ const EmrFhir = () => {
                 className="d-flex justify-content-center"
                 style={{ height: "80px", alignItems: "center" }}
               >
-                <Image src={item.img} width={100} alt="epic" />
+                {item.emr == "Epic" ? (
+                  <Image src={Epic} width={100} alt="epic" />
+                ) : item.emr == "Athena" ? (
+                  <Image src={Athena} width={100} alt="Athena" />
+                ) : item.emr == "EClinical" ? (
+                  <Image src={EClinical} width={100} alt="EClinical" />
+                ) : item.emr == "Cerner" ? (
+                  <Image src={Cerner} width={100} alt="Cerner" />
+                ) : null}
               </div>
               <div className="my-1">
                 <span>{item.status}</span>
@@ -68,19 +91,37 @@ const EmrFhir = () => {
                   className={Style.flagDot}
                   style={{
                     backgroundColor: `${
-                      item.status != "Connected" ? "#C70000" : "#389e0d"
+                      item.status.toLowerCase() != "connected"
+                        ? "#C70000"
+                        : "#389e0d"
                     }`,
                   }}
                 ></span>
               </div>
-              <div className="my-2">{item.date}</div>
+              <div className="my-2">
+                {item.updatedDate ? getDateAndTime(item.updatedDate) : "---"}
+              </div>
               <div className={`my-2`}>
-                <Tag
-                  color={item.status == "Connected" ? "red" : "green"}
-                  style={{ cursor: `${item.status !== "Connected" ? "no-drop" : "pointer"}` }}
-                >
-                  {item.status == "Connected" ? "Disconnect" : "Connect"}
-                </Tag>
+                {item.status.toLowerCase() == "not_initiated" ? (
+                  <Tag>Connect</Tag>
+                ) : (
+                  <Tag
+                    color={
+                      item.status.toLowerCase() == "connected" ? "red" : "green"
+                    }
+                    style={{
+                      cursor: `${
+                        item.status.toLowerCase() !== "connected"
+                          ? "no-drop"
+                          : "pointer"
+                      }`,
+                    }}
+                  >
+                    {item.status.toLowerCase() == "connected"
+                      ? "Disconnect"
+                      : "Connect"}
+                  </Tag>
+                )}
               </div>
             </div>
           </div>

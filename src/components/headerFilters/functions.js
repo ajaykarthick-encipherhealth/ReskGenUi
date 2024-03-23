@@ -671,3 +671,8 @@ export const encyptingPass = (password) => {
   const values = { pass: encryptedData, iv: initializationVector };
   return values;
 };
+
+
+export const getDateAndTime = (date) => {
+  return moment(date).format('MM/DD/YYYY h:mm A')
+}
