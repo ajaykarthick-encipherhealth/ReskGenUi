@@ -13,7 +13,7 @@ import Header from "../../../../jsx/layouts/nav/Header";
 import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
 import { disableFutureDate } from "../../../../components/headerFilters/functions";
 import Selector from "../../../../components/selector";
-import DetailedFihrTable from "../../../../components/table/provider/FihrPatient/DetailedFihrTable";
+import DetailedFihrTable from "../../../../components/table/tenantTable/FihrPatient/DetailedFihrTable";
 import computed from "../../../../images/fihr/computed.svg";
 import profile from "../../../../images/fihr/profile.svg";
 import person from "../../../../images/fihr/person.svg";

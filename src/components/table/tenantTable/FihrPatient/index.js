@@ -57,7 +57,7 @@ function FIHRPatinetTable({
   };
 
   const handleRow=(row)=>{
-    router?.push("/provider/fhirTable/details")
+    router?.push("/tenantAdmin/fhirTable/details")
   }
   return (
     <div className={TableStyle.classContaineer}>
