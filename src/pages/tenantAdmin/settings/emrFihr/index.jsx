@@ -1,4 +1,4 @@
-import React, { use, useEffect } from "react";
+import React, { use, useEffect, useState } from "react";
 import Style from "./../style.module.css";
 import Epic from "../../../../images/svg/settingsIcons/icons/epic.png";
 import Athena from "../../../../images/svg/settingsIcons/icons/athena.png";
@@ -10,43 +10,29 @@ import { getFihrList } from "../../../../store/actions/tanantAdminAction/FihrAct
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { getDateAndTime } from "../../../../components/headerFilters/functions";
+import axios from "axios";
+import ENDPOINTS from "../../../../utility/enpoints";
+import { Modal } from "antd";
 
 const EmrFhir = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [emrUrl, setEmrUrl] = useState("");
   const FihrList = useSelector(
     (state) => state?.tanantAdmin?.fihr_list?.fihr_list
   );
-  const data = [
-    {
-      id: 1,
-      status: "Disconnected",
-      date: "2024-03-11T12:16:30.192Z",
-      img: Epic,
-      connection: "Connect",
-    },
-    {
-      id: 1,
-      status: "Connected",
-      date: "2024-03-11T12:16:30.192Z",
-      img: Athena,
-      connection: "Connect",
-    },
-    {
-      id: 1,
-      status: "Disconnected",
-      date: "2024-03-11T12:16:30.192Z",
-      img: EClinical,
-      connection: "Connect",
-    },
-    {
-      id: 1,
-      status: "Disconnected",
-      date: "2024-03-11T12:16:30.192Z",
-      img: Cerner,
-      connection: "Connect",
-    },
-  ];
+
+  const handleConnection = async (emr) => {
+    try {
+      const res = await axios.get(
+        ENDPOINTS?.apiLocal + `emr/fhir/getAuthorization?emr=${emr}`
+      );
+      setEmrUrl(res.data.urlToRedirect);
+      setOpen(true);
+      // window.open(res.data.urlToRedirect, "_blank");
+    } catch (error) {}
+  };
 
   useEffect(() => {
     dispatch(getFihrList(router));
@@ -116,6 +102,7 @@ const EmrFhir = () => {
                           : "pointer"
                       }`,
                     }}
+                    onClick={() => handleConnection(item.emr.toLowerCase())}
                   >
                     {item.status.toLowerCase() == "connected"
                       ? "Disconnect"
@@ -127,6 +114,22 @@ const EmrFhir = () => {
           </div>
         ))}
       </div>
+      <Modal
+        title={""}
+        width="90%"
+        // height="90vh"
+        centered
+        open={open}
+        onOk={() => setOpen(false)}
+        onCancel={() => setOpen(false)}
+        footer={null}
+      >
+        <iframe
+          style={{ width: "100%", marginTop: "20px", height: "90vh" }}
+          src={emrUrl}
+          title="W3Schools Free Online Web Tutorials"
+        ></iframe>
+      </Modal>
     </div>
   );
 };
