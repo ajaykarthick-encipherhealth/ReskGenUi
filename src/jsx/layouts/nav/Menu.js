@@ -147,13 +147,13 @@ export const ProviderMenuList = [
   {
     title: "Patients Sync",
     iconStyle: SVGICON.adminUser,
-    to: "/provider/fhirTable",
+    to: "/tenantAdmin/fhirTable",
     childRoute: "/fhirTable/details",
   },
   {
     title: "Settings",
     iconStyle: SVGICON.settingsIcon,
-    to: "/provider/settings",
+    to: "/tenantAdmin/settings",
   },
 ];
 

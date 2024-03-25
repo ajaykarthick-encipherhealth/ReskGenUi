@@ -177,7 +177,7 @@ const Header = () => {
     setLastName(currentUserInfo?.data?.response?.lastName);
     setDropdownContent(currentUserInfo?.data?.response?.role);
     if (getUserId == "johnson@encipherhealth.onmicrosoft.com") {
-      setDropdownContent(["PROVIDER"]);
+      setDropdownContent(["TENANT"]);
     }
     if (userRole === "ehr") {
       setDropdownContent(["EHR"]);
@@ -313,8 +313,8 @@ const Header = () => {
       router.push("/reviewer/dashboard");
     } else if (key === "supervisor") {
       router.push("/supervisor/dashboard");
-    } else if (key === "provider") {
-      router.push("/provider/comparison");
+    } else if (key === "tenant") {
+      router.push("/tenant/fhirTable");
     } else if (key === "ehr") {
       router.push("/ehr/patients");
     }
@@ -327,7 +327,7 @@ const Header = () => {
         return PhysicanMenuList;
       case "supervisor":
         return L2AuditorMenuList;
-      case "provider":
+      case "tenant":
         return ProviderMenuList;
       case "ehr":
         return EHRMenuList;
@@ -613,8 +613,8 @@ const Header = () => {
                                           ? "Reviewer"
                                           : currentRole == "supervisor"
                                           ? "Supervisor"
-                                          : currentRole == "provider"
-                                          ? "Provider"
+                                          : currentRole == "tenant"
+                                          ? "Tenant Admin"
                                           : currentRole == "ehr"
                                           ? "EHR"
                                           : "Admin"}
@@ -704,8 +704,8 @@ const Header = () => {
                                 ? "Reviewer"
                                 : currentRole == "supervisor"
                                 ? "Supervisor"
-                                : currentRole == "provider"
-                                ? "Provider"
+                                : currentRole == "tenant"
+                                ? "Tenant"
                                 : currentRole == "ehr"
                                 ? "EHR"
                                 : "Admin"}

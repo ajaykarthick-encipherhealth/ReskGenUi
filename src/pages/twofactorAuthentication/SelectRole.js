@@ -19,7 +19,8 @@ const SelectRole = () => {
   const rolesList = role?.slice().reverse();
   const items = [
     { value: "physician", label: "PHYSICIAN" },
-    { value: "provider", label: "PROVIDER" },
+    { value: "provider", label: "TENANT ADMIN" },
+  
 
     ...(rolesList?.length > 0
       ? rolesList?.map((info) => ({
@@ -57,6 +58,8 @@ const SelectRole = () => {
       reviewer: { userRole: "reviewer", route: "/reviewer/dashboard" },
       supervisor: { userRole: "supervisor", route: "/supervisor/dashboard" },
       provider: { userRole: "provider", route: "/provider/fhirTable" },
+      provider: { userRole: "tenant", route: "/tenantAdmin/fhirTable" },
+
       physician: { userRole: "physician", route: "/physician/dashboard" },
     };
     const selectedRoleInfo = rolesMapping[selectedRole];
@@ -86,7 +89,7 @@ const SelectRole = () => {
     let rolesArray = JSON.parse(localStorage.getItem("roles"));
     let getUserId = localStorage.getItem("userId");
     if (getUserId == "johnson@encipherhealth.onmicrosoft.com") {
-      rolesArray = ["PROVIDER"];
+      rolesArray = ["TENANT ADMIN"];
     }
     setRole(rolesArray);
   }, []);

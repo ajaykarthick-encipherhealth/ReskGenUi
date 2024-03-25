@@ -11,8 +11,8 @@ import Header from "../../../jsx/layouts/nav/Header";
 import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
 import { disableFutureDate } from "../../../components/headerFilters/functions";
 import Selector from "../../../components/selector";
-import FIHRPatinetTable from "../../../components/table/provider/FihrPatient/index";
-import PdfTable from "../../../components/table/provider/pdfTable";
+import FIHRPatinetTable from "../../../components/table/tenantTable/FihrPatient/index";
+import PdfTable from "../../../components/table/tenantTable/pdfTable";
 import RegularButton from "../../../components/button";
 import FhirDrawer from "./fhirModal";
 
