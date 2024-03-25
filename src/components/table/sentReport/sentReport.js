@@ -30,6 +30,7 @@ function SentReportTable({
   receivedStartDate,
   receivedEndDate,
   isPhysician,
+  isAdmin
 }) {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -121,7 +122,7 @@ function SentReportTable({
       : router?.push(
           `/admin/report/individualreport?reportId=${
             row?._id
-          }&sentreport=${true}`
+          }&sentreport=${true}&isAdmin=${isAdmin}`
         );
   };
   const closeModal = () => {

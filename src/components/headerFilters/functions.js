@@ -7,7 +7,7 @@ import TableStyle from "../table/table.module.css";
 
 // for search
 export const searchFunction = (
-  e,
+  searchValue,
   setSearch,
   setSentSearch,
   setReceivedSearch,

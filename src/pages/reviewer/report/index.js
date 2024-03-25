@@ -1,20 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Modal, DatePicker } from "antd";
 import { useSelector } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tab, Nav } from "react-bootstrap";
-import Select from "react-select";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
-import { FilterMatchMode } from "primereact/api";
-import { InputText } from "primereact/inputtext";
 import "react-circular-progressbar/dist/styles.css";
 import styles from "./report.module.css";
 import Header from "../../../jsx/layouts/nav/Header";
 import SentReportTable from "../../../components/table/sentReport/sentReport";
 import ReceivedReport from "../../../components/table/receivedReport/receivedReport";
 import CoderReport from "../../../components/table/CoderReport/coderReport";
-import Export, { debounce } from "./Export";
+import Export from "./Export";
 import {
   getReceivedDetails,
   getReportDetails,
@@ -24,7 +19,6 @@ import SpinnerDots from "../../../components/spinner";
 import HeaderFilters from "../../../components/headerFilters";
 import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
 
-const { RangePicker } = DatePicker;
 const statusOptions = [
   { label: "All", value: "ALL" },
   { label: "Completed", value: "COMPLETED" },
@@ -44,7 +38,9 @@ const index = () => {
   const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState(reportActiveTab?reportActiveTab:"CoderReport");
+  const [activeTab, setActiveTab] = useState(
+    reportActiveTab ? reportActiveTab : "CoderReport"
+  );
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
   const [comments, setComments] = useState();
@@ -115,11 +111,7 @@ const index = () => {
   const handleTabs = (name) => {
     setSelectedDates(null);
     // setActiveTab(name);
-    dispatch(
-      getActiveTab(
-        name
-      )
-    );
+    dispatch(getActiveTab(name));
   };
   useEffect(() => {
     setIsLoading(false);
@@ -203,10 +195,16 @@ const index = () => {
                             setCoderSearch={setCoderSearch}
                             isSearch={true}
                             searchlabel="Search by Name"
+                            coderSearch={coderSearch}
+                            receivedSearch={receivedSearch}
+                            sentSearch={sentSearch}
                             // selector
                             selectlabel="Select Status"
                             isSelector={
-                              !reportActiveTab || reportActiveTab === "CoderReport"? true : false
+                              !reportActiveTab ||
+                              reportActiveTab === "CoderReport"
+                                ? true
+                                : false
                             }
                             setSelectedOption={setSelectedCoderOpt}
                             selectOptions={statusOptions}
@@ -226,7 +224,9 @@ const index = () => {
                             setReceivedEndDate={setReceivedEndDate}
                             setCoderStartDate={setCoderStartDate}
                             setCoderEndDate={setCoderEndDate}
-                            activeTab={!reportActiveTab?"CoderReport":reportActiveTab}
+                            activeTab={
+                              !reportActiveTab ? "CoderReport" : reportActiveTab
+                            }
                             rowsLength={rowsLength}
                             setIsModalVisible={setIsModalVisible}
                             selectedDates={selectedDates}
@@ -253,7 +253,7 @@ const index = () => {
                           >
                             <div className="custom-tab-1">
                               <Tab.Container
-                                 defaultActiveKey={
+                                defaultActiveKey={
                                   reportActiveTab === "ReceivedReport"
                                     ? "meatCriteria"
                                     : reportActiveTab === "SentReport"

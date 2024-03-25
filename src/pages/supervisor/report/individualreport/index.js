@@ -29,6 +29,7 @@ import leftArrow from "../../../../images/svg/leftArrow.svg";
 import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
 import { useRouter } from "next/router";
 import { debounce } from "../../../admin/report/Export";
+import { getReportActiveTab } from "../../../../store/actions/adminAction/ReportActions";
 
 const IndividualReceiverReport = () => {
   const dispatch = useDispatch();
@@ -159,7 +160,7 @@ const IndividualReceiverReport = () => {
                     if (isAdminPage) {
                       router?.push("/admin/report");
                     } else {
-                      router?.push("/reviewer/report");
+                      router?.push("/supervisor/report");
                     }
 
                     dispatch(
@@ -185,6 +186,7 @@ const IndividualReceiverReport = () => {
                   onChange={(e) => filterChange(e)}
                   placeholder="Search"
                   className={styles.search}
+                  maxLength={25}
                 />
                 <Image src={search} alt="noimg" style={{ marginTop: "5px" }} />
               </div>

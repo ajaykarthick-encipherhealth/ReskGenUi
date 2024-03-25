@@ -102,7 +102,7 @@ const IndividualReceiverReport = () => {
       "sentreport"
     );
     const isAdminPage = new URLSearchParams(window.location.search).get(
-      "isAdminPage"
+      "isAdmin"
     );
     setIsAdminPage(isAdminPage);
     if (reportConfirm) {
@@ -186,6 +186,7 @@ const IndividualReceiverReport = () => {
                   onChange={(e) => filterChange(e)}
                   placeholder="Search"
                   className={styles.search}
+                  maxLength={25}
                 />
                 <Image src={search} alt="noimg" style={{ marginTop: "5px" }} />
               </div>

@@ -24,6 +24,10 @@ const HeaderFilters = ({
   setSearch,
   isSearch,
   searchlabel,
+  coderSearch,
+  receivedSearch,
+  sentSearch,
+  search,
 
   // Report Props
   setSentSearch,
@@ -152,6 +156,10 @@ const HeaderFilters = ({
                 setSentSearch={setSentSearch}
                 setReceivedSearch={setReceivedSearch}
                 setCoderSearch={setCoderSearch}
+                coderSearch={coderSearch}
+                receivedSearch={receivedSearch}
+                sentSearch={sentSearch}
+                search={search}
               />
             </div>
           )}

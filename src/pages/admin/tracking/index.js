@@ -638,6 +638,7 @@ export default function Patient() {
                             setAuditSelAllocatedTo={setAuditSelAllocatedTo}
                             setSearch={setSearchTextValue}
                             isSearch={true}
+                            search={searchTextValue}
                             searchlabel="Search By Patient Name / Id"
                             // select status
                             selectlabel="Select Status"
