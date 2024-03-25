@@ -1,21 +1,10 @@
-import React, { useRef } from "react";
+import React  from "react";
 import { Form, Offcanvas, Button } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faUpload } from "@fortawesome/free-solid-svg-icons";
-// import styles from "../report.module.css";
 import UploadFile from "../uploadFile";
 
 function FhirDrawer({ isDrawerOpen, setIsDrawerOpen }) {
   const handleClose = () => {
     setIsDrawerOpen(false);
-  };
-
-  const fileInputRef = useRef(null);
-
-  const handleUploadButtonClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
   };
 
   return (

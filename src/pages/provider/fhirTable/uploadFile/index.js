@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import styles from "../fihr.module.css";
+import styles from "../fhir.module.css";
 import upload from "../../../../images/fihr/upload.png";
 
 function UploadFile({ title }) {
