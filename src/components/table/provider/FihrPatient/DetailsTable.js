@@ -2,13 +2,13 @@ import React from "react";
 import { Empty, Progress } from "antd";
 import { Paginator } from "primereact/paginator";
 import dayjs from "dayjs";
+import Image from "next/image";
 import processing from "../../../../images/fihr/processing.svg";
 import completed from "../.././../../images/fihr/completed.svg";
 import refresh from "../.././../../images/fihr/refrsh.svg";
 import failed from "../.././../../images/fihr/failed.svg";
 import TableStyle from "../../table.module.css";
-import Image from "next/image";
-import styles from "../../../../pages/admin/fihrTable/fihr.module.css";
+import styles from "../../../../pages/provider/fhirTable/fhir.module.css";
 
 const DetailsTable = ({
   reportListAll,
@@ -62,8 +62,8 @@ const DetailsTable = ({
               <>
                 <th>PATIENT ID</th>
                 <th>PATIENT NAME</th>
-                <th style={{ textAlign: "center" }}>STATUS </th>
                 <th style={{ textAlign: "center" }}> COMPUTED DATE TIME</th>
+                <th style={{ textAlign: "center" }}>STATUS </th>
               </>
             </tr>
           </thead>
@@ -79,7 +79,14 @@ const DetailsTable = ({
                     <td className={TableStyle.childBorder}>
                       {row?.patientName ? row?.patientName : "---"}
                     </td>
-
+                    <td
+                      className={TableStyle.childBorder}
+                      style={{ textAlign: "center" }}
+                    >
+                      {row?.initialedDate
+                        ? dayjs(row?.initialedDate).format("MM/DD/YYYY hh:mm A")
+                        : "---"}
+                    </td>
                     <td
                       className={TableStyle.childBorder}
                       style={{ textAlign: "center" }}
@@ -117,14 +124,7 @@ const DetailsTable = ({
                         </div>
                       </div>
                     </td>
-                    <td
-                      className={TableStyle.childBorder}
-                      style={{ textAlign: "center" }}
-                    >
-                      {row?.initialedDate
-                        ? dayjs(row?.initialedDate).format("MM/DD/YYYY hh:mm A")
-                        : "---"}
-                    </td>
+                   
                   </>
                 </tr>
               ))

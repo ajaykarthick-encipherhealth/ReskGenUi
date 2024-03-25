@@ -6,23 +6,16 @@ import { Tab, Nav } from "react-bootstrap";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
 import "react-circular-progressbar/dist/styles.css";
-import styles from "./fihr.module.css";
+import styles from "./fhir.module.css";
 import Header from "../../../jsx/layouts/nav/Header";
 import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
 import { disableFutureDate } from "../../../components/headerFilters/functions";
 import Selector from "../../../components/selector";
-import FIHRPatinetTable from "../../../components/table/admin/FihrPatient";
-import PdfTable from "../../../components/table/admin/pdfTable";
+import FIHRPatinetTable from "../../../components/table/provider/FihrPatient/index";
+import PdfTable from "../../../components/table/provider/pdfTable";
 import RegularButton from "../../../components/button";
 import FhirDrawer from "./fhirModal";
 
-const statusOptions = [
-  { label: "All", value: "ALL" },
-  { label: "Completed", value: "COMPLETED" },
-  { label: "Pending", value: "PENDING" },
-  { label: "Declined", value: "DECLINED" },
-  { label: "Hold", value: "HOLD" },
-];
 
 const { RangePicker } = DatePicker;
 
@@ -329,7 +322,7 @@ const Index = () => {
                 <div className="">
                   <div className="card-body p-0">
                     <div className="table-responsive active-projects task-table">
-                      <div className="d-flex">
+                      <div className="d-flex" style={{width:"98%",margin:"auto"}}>
                         <div className="d-flex">
                           <div className="col-lg-4 mx-2">
                             <label>Search by Name or ID</label>

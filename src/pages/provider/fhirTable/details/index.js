@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Modal, DatePicker } from "antd";
+import { DatePicker } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Image from "next/image";
-import leftArrow from "../../../../images/svg/leftArrow.svg";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
 import "react-circular-progressbar/dist/styles.css";
-import styles from "../fihr.module.css";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import leftArrow from "../../../../images/svg/leftArrow.svg";
+import styles from "../fhir.module.css";
 import Header from "../../../../jsx/layouts/nav/Header";
 import { getSentDetails } from "../../../../store/actions/adminAction/ReportActions";
 import { getSelectUserList } from "../../../../store/actions/adminAction/DashboardAction";
-import SpinnerDots from "../../../../components/spinner";
 import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
 import { disableFutureDate } from "../../../../components/headerFilters/functions";
 import Selector from "../../../../components/selector";
-import { useRouter } from "next/router";
-import DetailsTable from "../../../../components/table/admin/FihrPatient/DetailsTable";
+import DetailsTable from "../../../../components/table/provider/FihrPatient/DetailsTable";
 import computed from "../../../../images/fihr/computed.svg";
 import profile from "../../../../images/fihr/profile.svg";
 import person from "../../../../images/fihr/person.svg";
@@ -474,7 +473,7 @@ const Index = () => {
                           }}
                         >
                           {headerData?.map((item) => (
-                            <div className="col-xl-2">
+                            <div className="col-xl-2" key={item?.id}>
                               <div style={{ display: "flex" }}>
                                 <Image src={item?.icon} alt="npimg" />
                                 <div className={styles.topTitle}>
@@ -490,7 +489,7 @@ const Index = () => {
                       <div className={styles.topHeader}>
                         <div className="col-lg-2 mx-2">
                           <label>Search by Name or ID</label>
-                          <div class="form-group has-search">
+                          <div className="form-group has-search">
                             <FontAwesomeIcon
                               className="fa fa-search form-control-feedback"
                               icon={faSearch}
