@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Select from "react-select";
 import { Button } from "react-bootstrap";
-import { DatePicker, Popover } from "antd";
+import { DatePicker, Popover, Tooltip } from "antd";
 import Image from "next/image";
 import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
@@ -391,23 +391,27 @@ const HeaderFilters = ({
               } d-flex justify-content-end`}
             >
               <div className="row flr">
-                <button
-                  onClick={() => {
-                    setIsModalVisible(true);
-                  }}
-                  className={
-                    rowsLength?.length === 0 ? styles.csv : styles.export
+                <Tooltip
+                  title={
+                    rowsLength?.length === 0 ? "Select report to export" : ""
                   }
-                  disabled={
-                    rowsLength?.length > 0 || rowsLength?.data?.length > 0
-                      ? false
-                      : true
-                  }
-                  style={{ color: "#04306f" }}
                 >
-                  <Export />
-                  Export
-                </button>
+                  <button
+                    onClick={() => {
+                      setIsModalVisible(true);
+                    }}
+                    className={styles.export}
+                    disabled={
+                      rowsLength?.length > 0 || rowsLength?.data?.length > 0
+                        ? false
+                        : true
+                    }
+                    style={{ color: "#04306f" }}
+                  >
+                    <Export />
+                    Export
+                  </button>
+                </Tooltip>
               </div>
             </div>
           )}
