@@ -10,12 +10,10 @@ import { useRouter } from "next/router";
 import leftArrow from "../../../../images/svg/leftArrow.svg";
 import styles from "../fhir.module.css";
 import Header from "../../../../jsx/layouts/nav/Header";
-import { getSentDetails } from "../../../../store/actions/adminAction/ReportActions";
-import { getSelectUserList } from "../../../../store/actions/adminAction/DashboardAction";
 import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
 import { disableFutureDate } from "../../../../components/headerFilters/functions";
 import Selector from "../../../../components/selector";
-import DetailsTable from "../../../../components/table/provider/FihrPatient/DetailsTable";
+import DetailedFihrTable from "../../../../components/table/provider/FihrPatient/DetailedFihrTable";
 import computed from "../../../../images/fihr/computed.svg";
 import profile from "../../../../images/fihr/profile.svg";
 import person from "../../../../images/fihr/person.svg";
@@ -296,113 +294,24 @@ const FIHRData = [
 const Index = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const ExportResponse = useSelector((state) => state.adminReport?.exportRes);
 
-  const ReportPatientDetails = useSelector(
-    (state) => state.adminReport?.details
-  );
-  const SentReportDetails = useSelector(
-    (state) => state.adminReport?.sentDetails
-  );
-
-  const ReceivedReportDetails = useSelector(
-    (state) => state.adminReport?.receivedDetails
-  );
-  const [status, setStatus] = useState("");
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [filteredCOder, setFilteredCoder] = useState([]);
-
+  const [status, setStatus] = useState("");
+  const [dateRange, setDateRange] = useState();
+  const [search, setSearch] = useState();
   const [pageNo, setPageNo] = useState(0);
-  const [sentPageNo, setSentPageNo] = useState(0);
-
   const [paginationFirst, setPaginationFirst] = useState(0);
-
-  const [modal, setModal] = useState(false);
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
-
-  const [selectedCoderOptReport, setSelectedCoderOptReport] = useState("");
-
-  const [sentSearch, setSentSearch] = useState("");
-
-  const [sort, setSort] = useState({ sortDir: "", sortField: "" });
-  const [selectMemberType, setSelectMemberType] = useState("");
-
-  const [select, setSelect] = useState(null);
-
-  const ReceivedOptions = [];
-  ReceivedReportDetails?.data?.response?.content?.map((item) => {
-    return ReceivedOptions?.push({ label: item.sender, value: item.sender });
-  });
-  const SentOptions = [];
-  const uniqueRoles = new Set();
-
-  const selectUserList = useSelector(
-    (state) => state?.AdminDashboardReducers?.selectedUsers
-  );
-
-  SentReportDetails?.data?.response?.data?.forEach((data) => {
-    data?.receivedUsers?.forEach((item) => {
-      const role = item.role;
-      if (!uniqueRoles.has(role)) {
-        SentOptions.push({ label: role, value: role });
-        uniqueRoles.add(role);
-      }
-    });
-  });
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
   };
-  useEffect(() => {
-    dispatch(getSelectUserList(selectMemberType));
-  }, [selectMemberType]);
-  useEffect(() => {
-    setIsLoading(false);
-    if (reportActiveTab === "PDF") {
-      dispatch(
-        getSentDetails(sentPageNo, startDate, endDate, sentSearch, sort)
-      );
-    }
-    if (ExportResponse) {
-      setIsModalVisible(false);
-    }
-  }, [sentPageNo, startDate, endDate, sentSearch, sort, ExportResponse]);
-
-  useEffect(() => {
-    setFilteredCoder(ReportPatientDetails?.response);
-  }, [ReportPatientDetails]);
-  useEffect(() => {
-    if (selectedCoderOptReport && !select) {
-      dispatch(
-        getSelectUserList(
-          selectedCoderOptReport === null &&
-            selectedCoderOptReport?.value === "All"
-            ? ""
-            : selectedCoderOptReport?.value
-        )
-      );
-    }
-  }, [selectedCoderOptReport]);
-
-  const optionsUser =
-    selectUserList?.data?.response?.map((res) => ({
-      value: res.userName,
-      label: res.firstName + " " + res.lastName,
-    })) || [];
-
-  if (optionsUser.length > 0) {
-    optionsUser.unshift({ value: "", label: "All" });
-  }
 
   useEffect(() => {
     if (reportActiveTab) {
       dispatch(getActiveTab(reportActiveTab));
     }
-  }, [reportActiveTab]);
+  }, [reportActiveTab,status,search,pageNo,dateRange]);
 
   const headerData = [
     {
@@ -446,7 +355,7 @@ const Index = () => {
     <>
       <Header />
       <div className={styles.maincontainer}>
-        <div class="content-body">
+        <div className="content-body">
           {/* {!ReportPatientDetails?.response ? (
             <SpinnerDots />
           ) : ( */}
@@ -456,7 +365,10 @@ const Index = () => {
                 <div className="">
                   <div className="card-body p-0">
                     <div className="table-responsive active-projects task-table">
-                      <div className={styles.topHeader} style={{marginBottom:"40px"}}>
+                      <div
+                        className={styles.topHeader}
+                        style={{ marginBottom: "40px" }}
+                      >
                         <button
                           className={`${styles.backButtonStyle}`}
                           onClick={() => {
@@ -488,7 +400,7 @@ const Index = () => {
                       </div>
                       <div className={styles.topHeader}>
                         <div className="col-lg-2 mx-2">
-                          <label>Search by Name or ID</label>
+                          <label htmlFor="search">Search by Name or ID</label>
                           <div className="form-group has-search">
                             <FontAwesomeIcon
                               className="fa fa-search form-control-feedback"
@@ -496,7 +408,7 @@ const Index = () => {
                             />
                             <InputText
                               type="text"
-                              onChange={(e) => getNameSearch(e.target.value)}
+                              onChange={(e) => setSearch(e.target.value)}
                               value={""}
                               className="form-control new-form-control"
                               placeholder="Search"
@@ -504,13 +416,12 @@ const Index = () => {
                           </div>
                         </div>
                         <div className="col-xl-2 mx-2">
-                          <label>Date</label>
+                          <label htmlFor="date">Date</label>
                           <div>
                             <RangePicker
                               format="MM-DD-YYYY"
                               onChange={(dates, dateStrings) => {
                                 setDateRange(dateStrings);
-                                handleReceivedDatePicker(dates, dateStrings);
                               }}
                               disabledDate={(current) =>
                                 disableFutureDate(current)
@@ -525,7 +436,6 @@ const Index = () => {
                               setSelectedOption={setStatus}
                               selectOptions={statusOptions}
                               defaultSelectValue1={""}
-                              // isClose={true}
                             />
                           </div>
                         </div>
@@ -538,11 +448,8 @@ const Index = () => {
                           className="profile-tab "
                           style={{ marginTop: "20px" }}
                         >
-                          <DetailsTable
-                            setModal={setModal}
+                          <DetailedFihrTable
                             paginationFirst={paginationFirst}
-                            modal={modal}
-                            reportListAll={filteredCOder}
                             onPageChange={onPageChange}
                             tableData={FIHRData}
                           />
