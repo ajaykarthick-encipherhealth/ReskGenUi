@@ -473,7 +473,7 @@ const Index = () => {
                           }}
                         >
                           {headerData?.map((item) => (
-                            <div className="col-xl-2">
+                            <div className="col-xl-2" key={item?.id}>
                               <div style={{ display: "flex" }}>
                                 <Image src={item?.icon} alt="npimg" />
                                 <div className={styles.topTitle}>
@@ -489,7 +489,7 @@ const Index = () => {
                       <div className={styles.topHeader}>
                         <div className="col-lg-2 mx-2">
                           <label>Search by Name or ID</label>
-                          <div class="form-group has-search">
+                          <div className="form-group has-search">
                             <FontAwesomeIcon
                               className="fa fa-search form-control-feedback"
                               icon={faSearch}
