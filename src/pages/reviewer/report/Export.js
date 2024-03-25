@@ -201,6 +201,7 @@ const Export = ({
             placeholder=""
             isSearch={false}
             isDisabled={selectedRows?.reportName ? true : false}
+            isInputFiled={true}
           />
         </Form.Item>
 

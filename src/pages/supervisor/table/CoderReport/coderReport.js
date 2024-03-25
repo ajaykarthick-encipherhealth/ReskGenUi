@@ -424,7 +424,7 @@ function CoderReport({
                           onChange={() => {
                             handleRowCheckboxChange(row);
                           }}
-                          checked={selectedRows?.some(
+                          checked={Array.isArray(selectedRows) && selectedRows?.some(
                             (selectedRow) =>
                               selectedRow.patientId === row.patientId
                           )}
@@ -499,10 +499,13 @@ function CoderReport({
                           onChange={() => {
                             handleRowCheckboxChange(row);
                           }}
-                          checked={selectedRows?.some(
-                            (selectedRow) =>
-                              selectedRow.patientId === row.patientId
-                          )}
+                          checked={
+                            Array.isArray(selectedRows) &&
+                            selectedRows?.some(
+                              (selectedRow) =>
+                                selectedRow.patientId === row.patientId
+                            )
+                          }
                           className={TableStyle.customChecked}
                         />
                       </td>

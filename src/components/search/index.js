@@ -1,8 +1,4 @@
-import React from "react";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { InputText } from "primereact/inputtext";
-import { searchFunction } from "../headerFilters/functions";
+import React, { useEffect } from "react";
 import InputField from "../input";
 
 const Search = ({
@@ -15,10 +11,13 @@ const Search = ({
   coderSearch,
   receivedSearch,
   sentSearch,
-  search
-
+  search,
 }) => {
-
+  useEffect(() => {
+    setCoderSearch("");
+    setReceivedSearch("");
+    setSentSearch("");
+  }, [activeTab]);
   return (
     <div>
       <label style={{ marginLeft: "8px" }}>{searchlabel}</label>
@@ -45,7 +44,6 @@ const Search = ({
         type="text"
         placeholder="Search"
         isSearch={true}
-       
       />
     </div>
   );

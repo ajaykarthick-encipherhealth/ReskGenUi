@@ -7,6 +7,7 @@ import { getUsersList } from "../../../store/actions/adminAction/ReportActions";
 import { checkBoxData, debounce } from "../../admin/report/Export";
 import { updateSentReport } from "../../../services/ReportService";
 import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
+import InputField from "../../../components/input";
 
 const { Option } = Select;
 
@@ -32,7 +33,7 @@ const Export = ({
   const [removedUsers, setRemovedUsers] = useState([]);
   const [reportName, setReportName] = useState("");
   const [form] = Form.useForm();
-  const idList = list?.map((data) => data?.patientId);
+  const idList = Array.isArray(list) && list?.map((data) => data?.patientId);
 
   const [checkall, setCheckAll] = useState(checkBoxData);
 
@@ -169,7 +170,7 @@ const Export = ({
   }, [selectedRows, isModalVisible]);
   form.setFieldsValue({
     ReportName:
-      selectedRows?.receivedUsers?.length > 0
+    selectedRows?.reportName
         ? selectedRows?.reportName
         : reportName,
   });
@@ -193,9 +194,15 @@ const Export = ({
             },
           ]}
         >
-          <Input
-            disabled={selectedRows?.reportName ? true : false}
-            onChange={(e) => setReportName(e.target.value)}
+          <InputField
+            inputValue={reportName?reportName : selectedRows?.reportName}
+            setInputValue={setReportName}
+            delay={1000}
+            type="text"
+            placeholder=""
+            isSearch={false}
+            isDisabled={selectedRows?.reportName ? true : false}
+            isInputFiled={true}
           />
         </Form.Item>
         {!isSent && (

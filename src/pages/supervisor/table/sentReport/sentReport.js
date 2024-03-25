@@ -27,12 +27,13 @@ function SentReportTable({
   receivedPageNo,
   receivedStartDate,
   receivedEndDate,
+  setSelectedRows,
+  selectedRows,
 }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [openEdit, setOpenEdit] = useState(false);
-  const [selectedRows, setSelectedRows] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
 
   const displayReceivedUsers = (list) => {
@@ -104,7 +105,7 @@ function SentReportTable({
     router?.push(
       `/supervisor/report/individualreport?reportId=${
         row?._id
-      }&l2Auditor=${true}`
+      }&sentreport=${true}`
     );
   };
   const closeModal = () => {

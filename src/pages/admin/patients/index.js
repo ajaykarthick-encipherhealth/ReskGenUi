@@ -548,6 +548,7 @@ export default function Patient() {
                             setSearch={setSearch}
                             isSearch={true}
                             searchlabel="Search By Patient ID / Name"
+                            search={search}
                             // select status
                             selectlabel="Status"
                             isSelector={true}

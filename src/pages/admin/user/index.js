@@ -275,6 +275,7 @@ const UserList = () => {
                         setSearch={setSearch}
                         isSearch={true}
                         searchlabel="Search By Username"
+                        search={search}
                         // select status
                         selectlabel="Select Status"
                         isSelector={true}

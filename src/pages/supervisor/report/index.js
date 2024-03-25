@@ -297,6 +297,7 @@ const Index = () => {
                                   onChange={(e) => filterChangePatientId(e)}
                                   className="form-control new-form-control"
                                   placeholder="Search"
+                                  maxLength={25}
                                 />
                               </div>
                             </div>
@@ -406,14 +407,6 @@ const Index = () => {
                             )}
                           </div>
                         </div>
-                        <Export
-                          isModalVisible={isModalVisible}
-                          closeModal={closeModal}
-                          rowsLength={rowsLength}
-                          setIsModalVisible={setIsModalVisible}
-                          setSelectedRows={setSelectedRows}
-                          setSelectAll={setSelectAll}
-                        />
 
                         <div
                           id="task-tbl_wrapper"
@@ -557,6 +550,9 @@ const Index = () => {
                                       receivedPageNo={sentPageNo}
                                       receivedStartDate={startDate}
                                       receivedEndDate={endDate}
+                                      setSelectedRows={setSelectedRows}
+                                      selectedRows={selectedRows}
+                                     
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane
@@ -656,6 +652,15 @@ const Index = () => {
               </div>
             </div>
           )}
+          <Export
+            isModalVisible={isModalVisible}
+            closeModal={closeModal}
+            rowsLength={rowsLength}
+            setIsModalVisible={setIsModalVisible}
+            setSelectedRows={setSelectedRows}
+            selectedRows={selectedRows}
+            setSelectAll={setSelectAll}
+          />
         </div>
       </div>
     </>

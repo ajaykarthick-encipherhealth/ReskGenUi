@@ -270,6 +270,9 @@ const index = () => {
                             setReceivedSearch={setReceivedSearch}
                             setCoderSearch={setCoderSearch}
                             isSearch={true}
+                            coderSearch={coderSearch}
+                            receivedSearch={receivedSearch}
+                            sentSearch={sentSearch}
                             searchlabel="Search by Name"
                             // selector
                             selectlabel="Select Status"
@@ -450,6 +453,7 @@ const index = () => {
                                       receivedPageNo={sentPageNo}
                                       receivedStartDate={startDate}
                                       receivedEndDate={endDate}
+                                      isAdmin={true}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane
@@ -473,6 +477,7 @@ const index = () => {
                                         setSortOrder={setReceivedSortOrder}
                                         sortOrder={receivedSortOrder}
                                         setSort={setSort}
+                                        isAdmin={true}
                                       />
                                     )}
                                   </Tab.Pane>

@@ -15,6 +15,7 @@ import {
   searchFunction,
 } from "../../../../components/headerFilters/functions";
 import { getFilters } from "../../../../store/actions/AuthActions";
+import InputField from "../../../../components/input";
 
 const { RangePicker } = DatePicker;
 const HeaderFilters = ({
@@ -23,6 +24,7 @@ const HeaderFilters = ({
   isSearch,
   searchlabel,
   searchValue,
+  search,
   // for report
   setSentSearch,
   setReceivedSearch,
@@ -438,27 +440,18 @@ const HeaderFilters = ({
                 {" "}
                 <label style={{ marginLeft: "8px" }}>{searchlabel}</label>
                 <div class="form-group has-search">
-                  <FontAwesomeIcon
-                    className="fa fa-search form-control-feedback"
-                    icon={faSearch}
+                  <InputField
+                   isSearch={true}
+                   placeholder="Search"
+                   inputValue={clear ? "" : searchValue}
+                   setInputValue={setSearch}
+                   delay={1000}
+                   type="text"
+                   isDisabled={false}
+                   isInputFiled={false}
                   />
-                  <InputText
-                    type="text"
-                    value={clear ? "" : searchValue}
-                    onChange={(e) => {
-                      searchFunction(
-                        e,
-                        setSearch,
-                        setSentSearch,
-                        setReceivedSearch,
-                        setCoderSearch,
-                        activeTab
-                      );
-                      setClear(false);
-                    }}
-                    className="form-control new-form-control"
-                    placeholder="Search"
-                  />
+
+                
                 </div>
               </div>
             )}

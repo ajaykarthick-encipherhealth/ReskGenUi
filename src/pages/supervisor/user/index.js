@@ -46,6 +46,7 @@ const UserList = () => {
                     <div className="tbl-caption  align-items-center">
                       <HeaderFilters
                         setSearch={setSearch}
+                        search={search}
                         isSearch={true}
                         searchlabel="Search By Username"
                       />

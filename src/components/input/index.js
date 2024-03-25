@@ -10,13 +10,13 @@ const InputField = ({
   setInputValue,
   delay,
   type,
-  isDisabled
+  isDisabled,
+  isInputFiled,
 }) => {
 
 const handleChange = (e) => {
   const value = e.target.value;
     setInputValue(value);
- 
 };
   return (
     <div className="form-group has-search">
@@ -30,11 +30,10 @@ const handleChange = (e) => {
         type={type}
         value={inputValue}
         onChange={handleChange}
-        className="form-control new-form-control"
+        className={isInputFiled?"form-control new-inputform-control":"form-control new-form-control"}
         placeholder={placeholder}
         maxLength={25}
         disabled={isDisabled?true:false}
-        style={{border:"1px solid #d9d9d9",boxShadow:"none"}}
       />
     </div>
   );
