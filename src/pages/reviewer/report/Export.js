@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { checkBoxData, debounce } from "../../admin/report/Export";
 import { updateSentReport } from "../../../services/ReportService";
 import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
+import InputField from "../../../components/input";
 const { Option } = Select;
 
 const Export = ({
@@ -192,9 +193,14 @@ const Export = ({
             },
           ]}
         >
-          <Input
-            disabled={selectedRows?.reportName ? true : false}
-            onChange={(e) => setReportName(e.target.value)}
+          <InputField
+            inputValue={reportName}
+            setInputValue={setReportName}
+            delay={1000}
+            type="text"
+            placeholder=""
+            isSearch={false}
+            isDisabled={selectedRows?.reportName ? true : false}
           />
         </Form.Item>
 

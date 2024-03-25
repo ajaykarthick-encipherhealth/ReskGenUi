@@ -44,7 +44,9 @@ const index = () => {
   const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState(reportActiveTab?reportActiveTab:"CoderReport");
+  const [activeTab, setActiveTab] = useState(
+    reportActiveTab ? reportActiveTab : "CoderReport"
+  );
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
   const [comments, setComments] = useState();
@@ -115,11 +117,7 @@ const index = () => {
   const handleTabs = (name) => {
     setSelectedDates(null);
     // setActiveTab(name);
-    dispatch(
-      getActiveTab(
-        name
-      )
-    );
+    dispatch(getActiveTab(name));
   };
   useEffect(() => {
     setIsLoading(false);
@@ -203,10 +201,16 @@ const index = () => {
                             setCoderSearch={setCoderSearch}
                             isSearch={true}
                             searchlabel="Search by Name"
+                            coderSearch={coderSearch}
+                            receivedSearch={receivedSearch}
+                            sentSearch={sentSearch}
                             // selector
                             selectlabel="Select Status"
                             isSelector={
-                              !reportActiveTab || reportActiveTab === "CoderReport"? true : false
+                              !reportActiveTab ||
+                              reportActiveTab === "CoderReport"
+                                ? true
+                                : false
                             }
                             setSelectedOption={setSelectedCoderOpt}
                             selectOptions={statusOptions}
@@ -226,7 +230,9 @@ const index = () => {
                             setReceivedEndDate={setReceivedEndDate}
                             setCoderStartDate={setCoderStartDate}
                             setCoderEndDate={setCoderEndDate}
-                            activeTab={!reportActiveTab?"CoderReport":reportActiveTab}
+                            activeTab={
+                              !reportActiveTab ? "CoderReport" : reportActiveTab
+                            }
                             rowsLength={rowsLength}
                             setIsModalVisible={setIsModalVisible}
                             selectedDates={selectedDates}
@@ -253,7 +259,7 @@ const index = () => {
                           >
                             <div className="custom-tab-1">
                               <Tab.Container
-                                 defaultActiveKey={
+                                defaultActiveKey={
                                   reportActiveTab === "ReceivedReport"
                                     ? "meatCriteria"
                                     : reportActiveTab === "SentReport"
