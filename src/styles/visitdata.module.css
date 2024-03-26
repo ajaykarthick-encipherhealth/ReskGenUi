@@ -1493,13 +1493,14 @@
   border-radius: 10px;
 }
 .fileFormDate {
-  display: flex;
+  display: contents;
 }
 .fileFormDate span {
-  position: absolute;
-  margin-left: 24%;
-  margin-top: 10px;
+  position: relative;
   cursor: pointer;
+  float: right;
+  bottom: 30px;
+  right: 8px;
 }
 .hcc_card_addCode {
   margin-bottom: 10px !important;
