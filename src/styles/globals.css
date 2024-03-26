@@ -12236,7 +12236,7 @@ tbody > tr {
   flex-shrink: 0;
   border: none !important;
 }
-.new-inputform-control{
+.new-inputform-control {
   border-radius: 8px !important;
   background: #fff !important;
   box-shadow: none !important;
@@ -12261,7 +12261,7 @@ tbody > tr {
 
 .header-menu li {
   /* margin: 20px 15px 0px 15px !important; */
-  margin: 0px 15px 0px 15px !important;
+  /* margin: 0px 15px 0px 15px !important; */
   padding: 10px;
 }
 
@@ -14315,7 +14315,6 @@ input[type="number"] {
   justify-content: center;
 }
 
-
 .customTooltip .ant-tooltip-inner {
   color: yellow !important;
   background-color: green !important;
@@ -14326,16 +14325,16 @@ input[type="number"] {
 .customTooltip .ant-tooltip-placement-bottomRight .ant-tooltip-arrow {
   border-bottom-color: green !important;
 }
-.fihrComputedProgressText >.ant-progress-text {
-  color:rgba(11, 96, 176, 1) !important;
+.fihrComputedProgressText > .ant-progress-text {
+  color: rgba(11, 96, 176, 1) !important;
 }
-.fihrProgressText >.ant-progress-text {
-  color:rgba(252, 103, 54, 1) !important;
+.fihrProgressText > .ant-progress-text {
+  color: rgba(252, 103, 54, 1) !important;
 }
-.fihrFailedProgressText >.ant-progress-text {
-  color:red !important;
+.fihrFailedProgressText > .ant-progress-text {
+  color: red !important;
 }
 
-.fihrComputedProgressText >.ant-progress-inner >.ant-progress-bg::after{
+.fihrComputedProgressText > .ant-progress-inner > .ant-progress-bg::after {
   background-color: green !important;
 }
