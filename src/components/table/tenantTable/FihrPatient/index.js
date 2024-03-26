@@ -19,10 +19,8 @@ function FIHRPatinetTable({
   onPageChange,
   tableData,
 }) {
- 
-  const router=useRouter()
+  const router = useRouter();
   const [display, setDisplay] = useState({});
-
 
   const dateFormateAlign = (dates) => {
     return dates?.map((res, index) => {
@@ -56,9 +54,10 @@ function FIHRPatinetTable({
     });
   };
 
-  const handleRow=(row)=>{
-    router?.push("/tenantAdmin/fhirTable/details")
-  }
+  const handleRow = (row) => {
+    router?.push("/tenantAdmin/fhirTable/details");
+  };
+
   return (
     <div className={TableStyle.classContaineer}>
       {reportListAll?.data?.length === 0 ? (
@@ -73,7 +72,7 @@ function FIHRPatinetTable({
                 <th style={{ paddingLeft: "40px" }}>STATUS </th>
                 <th>YEAR OF SERVICE</th>
                 <th className={TableStyle.rowAudited}>INITIATED BY </th>
-                <th style={{textAlign:"center"}}>BATCH INITIATED DATE </th>
+                <th style={{ textAlign: "center" }}>BATCH INITIATED DATE </th>
               </>
             </tr>
           </thead>
@@ -81,7 +80,13 @@ function FIHRPatinetTable({
           <tbody className={TableStyle.bodytable}>
             {tableData?.length > 0 ? (
               tableData?.map((row, index) => (
-                <tr key={index} onClick={()=>{handleRow(row)}} style={{ height: "40px" }}>
+                <tr
+                  key={index}
+                  onClick={() => {
+                    handleRow(row);
+                  }}
+                  style={{ height: "40px" }}
+                >
                   <>
                     <td className={TableStyle.childBorder}>
                       {row?.batchID ? row?.batchID : "---"}
@@ -92,10 +97,29 @@ function FIHRPatinetTable({
                     </td>
                     <td className={TableStyle.childBorder}>
                       <div>
-                        <span className="text-capitalize mx-2">
+                        <span
+                          className="text-capitalize mx-2"
+                          style={{
+                            color:
+                              row.status === "processing"
+                                ? "#2D6187"
+                                : row.status === "completed"
+                                ? "#008A0E"
+                                : "black",
+                          }}
+                        >
                           {row?.status}
                         </span>
-                        <span>
+                        <span
+                          style={{
+                            color:
+                              row.status === "processing"
+                                ? "#2D6187"
+                                : row.status === "completed"
+                                ? "#008A0E"
+                                : "black",
+                          }}
+                        >
                           <span
                             className="customTooltip"
                             onMouseOver={() => {
@@ -168,7 +192,10 @@ function FIHRPatinetTable({
                         <div style={{ paddingLeft: "70px" }}>---</div>
                       )}
                     </td>
-                    <td className={TableStyle.childBorder} style={{textAlign:"center"}}>
+                    <td
+                      className={TableStyle.childBorder}
+                      style={{ textAlign: "center" }}
+                    >
                       {dateFormate(dayjs, row?.initialedDate)}
                     </td>
                   </>
@@ -191,9 +218,7 @@ function FIHRPatinetTable({
           totalRecords={tableData?.length}
           onPageChange={onPageChange}
         />
-        <div className="total-pages">
-          Total count: {tableData?.length}
-        </div>
+        <div className="total-pages">Total count: {tableData?.length}</div>
       </div>
     </div>
   );

@@ -22,6 +22,8 @@ import {
   LoadingOutlined,
   CloseCircleOutlined,
   DownOutlined,
+  SettingOutlined
+
 } from "@ant-design/icons";
 import styles from "../../../styles/file-managemnt.module.css";
 import { IMAGES } from "../../constant/theme";
