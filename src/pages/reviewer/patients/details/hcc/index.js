@@ -3847,6 +3847,16 @@ const Hcc = ({ patientHccResult }) => {
     setSelectProviderInfo(value);
   };
 
+  const handleFormClear=()=>{
+    inputValue.diagnosisCode = "";
+    inputValue.providerName = "";
+    inputValue.actualDescription = "";
+    inputValue.capturedSections = "";
+    setAddValidCodeCheck(null);
+    setInputValueFileDate("");
+    setSelectProviderInfo(null);
+  }
+
   return (
     <>
       {fileLoading ? (
@@ -5741,6 +5751,7 @@ const Hcc = ({ patientHccResult }) => {
                                         onChange={(value) =>
                                           handleSelectProvider(value)
                                         }
+                                        value={selectProviderInfo}
                                       >
                                         {providerInfoList?.map((data) => (
                                           <Option
@@ -5866,9 +5877,9 @@ const Hcc = ({ patientHccResult }) => {
                                     </Button>
                                     <Button
                                       type="reset"
-                                      // onClick={() =>
-                                      //   handleCloseModal()
-                                      // }
+                                      onClick={() =>
+                                        handleFormClear()
+                                      }
                                       className="btn btn-danger btn-sm light ms-1"
                                     >
                                       Cancel
@@ -8383,6 +8394,7 @@ const Hcc = ({ patientHccResult }) => {
                         <Select
                           className={`ant_select_form hcc_form mb-2`}
                           onChange={(value) => handleSelectProvider(value)}
+                          value={selectProviderInfo}
                         >
                           {providerInfoList?.map((data) => (
                             <Option key={data?.value} value={data?.value}>
@@ -8461,9 +8473,9 @@ const Hcc = ({ patientHccResult }) => {
                       </Button>
                       <Button
                         type="reset"
-                        // onClick={() =>
-                        //   handleCloseModal()
-                        // }
+                        onClick={() =>
+                          handleFormClear()
+                        }
                         className="btn btn-danger btn-sm light ms-1"
                       >
                         Cancel
