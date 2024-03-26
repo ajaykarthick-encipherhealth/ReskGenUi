@@ -565,7 +565,7 @@ function FileProcessingTable({ patinetListAll, loading }) {
             <tr>
               <th>PATIENT ID</th>
               <th>PATIENT NAME</th>
-              <th style={{textAlign:"center"}}>UPLOAD STATUS</th>
+              <th style={{paddingLeft:"27%"}}>UPLOAD STATUS</th>
             </tr>
           </thead>
 
