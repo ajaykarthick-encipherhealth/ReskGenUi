@@ -87,7 +87,11 @@ export const AdminMenuList = [
     iconStyle: SVGICON.Notification,
     to: "/admin/notification",
   },
-
+  {
+    title: "FeedBack",
+    iconStyle: SVGICON.Notification,
+    to: "/admin/feedback",
+  },
   // {
   //   title: "Auditing Window",
   //   iconStyle: SVGICON.Usermanagement,
