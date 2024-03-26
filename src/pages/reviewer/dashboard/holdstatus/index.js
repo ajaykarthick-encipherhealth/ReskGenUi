@@ -24,7 +24,6 @@ const HoldStatus = () => {
   const handleOk = () => {
     setOpenHoldStatus(false);
   };
-  console.log(holdStatusData?.data?.response)
 
   const processedData = holdStatusData?.data?.response?.map((item) => {
     let testValue = "no data";

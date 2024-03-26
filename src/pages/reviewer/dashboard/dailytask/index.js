@@ -202,11 +202,12 @@ const DailyTask = () => {
   };
   const showNext = () => {
     if (currentDays?.length > 3) {
-      const datas = currentDays?.map((item) => ({
-        id: item?.id,
-        day: item?.day,
-        date: item?.date,
-        dateString: item?.dateString,
+      const updatedData = currentDays.shift();
+      const datas = currentDays.map(({ id, day, date, dateString }) => ({
+        id,
+        day,
+        date,
+        dateString,
       }));
       setSelectedDate(datas);
     }
