@@ -89,7 +89,7 @@ export default function Login() {
                   <label className="mb-1 text-dark">Email</label>
                   <input
                     type="email"
-                    className="form-control"
+                    className="form-control px-2"
                     value={enteredEmail}
                     onChange={(e) => {
                       setEmail(e.target.value), validateEmail(e.target.value);
@@ -107,7 +107,7 @@ export default function Login() {
                   <div>
                     <input
                       type={showPassword ? "text" : "password"}
-                      className="form-control"
+                      className="form-control px-2"
                       value={password}
                       onChange={(e) => {
                         setPassword(e.target.value);
