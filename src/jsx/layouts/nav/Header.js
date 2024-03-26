@@ -20,7 +20,6 @@ import {
 } from "antd";
 import {
   LoadingOutlined,
-  SettingOutlined,
   CloseCircleOutlined,
   DownOutlined,
 } from "@ant-design/icons";
@@ -217,6 +216,7 @@ const Header = () => {
           <div>
             {btnItems?.map((data) => (
               <button
+              key={data?.id}
                 onClick={() => {
                   setSelectedBtn(data?.name);
                 }}
@@ -256,7 +256,7 @@ const Header = () => {
       <div className={styles.displayDiv}>
         {codDetails?.response
           ? codDetails?.response?.map((data) => (
-              <div className={styles.hoverDiv}>
+              <div className={styles.hoverDiv} key={data?.id}>
                 {data?.diagnosisCode} &nbsp;
                 {data?.description}&nbsp;
                 {selectedbtn === "HCC" && (
