@@ -88,6 +88,75 @@ const addOnCodeColor = [
   "geekblue",
   "purple",
 ];
+
+export const getMeatFound = (code, data, value) => {
+  const result = data?.filter(
+    (res2) => res2?.diagnosisCode?.replace(".", "") == code?.replace(".", "")
+  );
+  var backColor = "#f93d3d";
+  var meatTitle = "MEAT";
+  if (result.length != 0) {
+    switch (value) {
+      case "M":
+        if (result[0]?.monitor) {
+          backColor = "#15b315";
+        }
+        meatTitle = "Monitor";
+        break;
+      case "E":
+        if (result[0]?.evaluate) {
+          backColor = "#15b315";
+        }
+        meatTitle = "Evaluate";
+        break;
+      case "A":
+        if (result[0]?.assessment) {
+          backColor = "#15b315";
+        }
+        meatTitle = "Assessment";
+        break;
+      case "T":
+        if (result[0]?.treatment) {
+          backColor = "#15b315";
+        }
+        meatTitle = "Treatment";
+        break;
+      default:
+        null;
+    }
+  }
+  // var badgeMap = (
+  //   <span
+  //     style={{ backgroundColor: backColor, color: "white" }}
+  //     className={`mt-2 ${styles.badgeMeat}`}
+  //   >
+  //     {value}
+  //   </span>
+  // );
+  return (
+    <Tooltip title={meatTitle} placement="bottom">
+      <span
+        style={{ backgroundColor: backColor, color: "white" }}
+        className={`mt-2 ${styles.badgeMeat}`}
+      >
+        {value}
+      </span>
+    </Tooltip>
+  );
+};
+
+export const COLORS3 = [
+  "encounterDateTag1",
+  "encounterDateTag2",
+  "encounterDateTag3",
+  "encounterDateTag4",
+  "encounterDateTag5",
+  "encounterDateTag6",
+  "encounterDateTag7",
+  "encounterDateTag8",
+  "encounterDateTag9",
+  "encounterDateTag10",
+];
 const Hcc = ({ patientHccResult }) => {
   const navigate = useRouter();
   let searchKeywords = [];
@@ -307,61 +376,7 @@ const Hcc = ({ patientHccResult }) => {
   const [selectProviderInfo, setSelectProviderInfo] = useState(null);
   const [hccFormTab, setHccFormTab] = useState("HCCFORM");
 
-  const getMeatFound = (code, data, value) => {
-    const result = data?.filter(
-      (res2) => res2?.diagnosisCode?.replace(".", "") == code?.replace(".", "")
-    );
-    var backColor = "#f93d3d";
-    var meatTitle = "MEAT";
-    if (result.length != 0) {
-      switch (value) {
-        case "M":
-          if (result[0]?.monitor) {
-            backColor = "#15b315";
-          }
-          meatTitle = "Monitor";
-          break;
-        case "E":
-          if (result[0]?.evaluate) {
-            backColor = "#15b315";
-          }
-          meatTitle = "Evaluate";
-          break;
-        case "A":
-          if (result[0]?.assessment) {
-            backColor = "#15b315";
-          }
-          meatTitle = "Assessment";
-          break;
-        case "T":
-          if (result[0]?.treatment) {
-            backColor = "#15b315";
-          }
-          meatTitle = "Treatment";
-          break;
-        default:
-          null;
-      }
-    }
-    // var badgeMap = (
-    //   <span
-    //     style={{ backgroundColor: backColor, color: "white" }}
-    //     className={`mt-2 ${styles.badgeMeat}`}
-    //   >
-    //     {value}
-    //   </span>
-    // );
-    return (
-      <Tooltip title={meatTitle} placement="bottom">
-        <span
-          style={{ backgroundColor: backColor, color: "white" }}
-          className={`mt-2 ${styles.badgeMeat}`}
-        >
-          {value}
-        </span>
-      </Tooltip>
-    );
-  };
+
 
   const handleAddButtonClick = () => {
     setIsAddButtonClicked(true);
@@ -847,18 +862,7 @@ const Hcc = ({ patientHccResult }) => {
           "sectionTag8",
         ];
 
-        const COLORS3 = [
-          "encounterDateTag1",
-          "encounterDateTag2",
-          "encounterDateTag3",
-          "encounterDateTag4",
-          "encounterDateTag5",
-          "encounterDateTag6",
-          "encounterDateTag7",
-          "encounterDateTag8",
-          "encounterDateTag9",
-          "encounterDateTag10",
-        ];
+
 
         validDiseaseNewRes?.map((res) => {
           res.capturedSections?.map((res2, index) => {

@@ -1,0 +1,32 @@
+.RowCon {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  .RowCon1{
+    width: 100%;
+    display: flex;
+  }
+  .innerdiv {
+    width: 80% !important;
+    display: grid !important;
+    margin: auto;
+    place-items: center;
+  }
+  .IconDIv{
+      padding:20px;
+      border-radius: 50%;
+      display: grid !important;
+      margin: auto;
+      place-items: center;
+      background-color: #fff;;
+  }
+  .title{
+      padding: 10px 0;
+      font-weight: 600;
+      font-size: 18px;
+  }
+  .count{
+      font-weight: 700;
+      font-size: 30px;
+  }

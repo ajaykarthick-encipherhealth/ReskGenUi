@@ -38,6 +38,22 @@ export function extractLatestData(notes) {
 
   return declinedData;
 }
+
+export default function Patients() {
+  const dispatch = useDispatch();
+  const sideMenu = useSelector((state) => state.sideMenu);
+  const response = useSelector((state) => state.PhyicianReducer.patients);
+
+  const [physicianId, setPhysicianId] = useState("ID-001");
+  const [from, setFrom] = useState("2024-03-20T00:00:00Z");
+  const [to, setTo] = useState("2024-03-20T23:59:59Z");
+  const [priority, setPriority] = useState("");
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    dispatch(getPatients(physicianId, from, to, priority, search));
+  }, [dispatch, physicianId, from, to, priority, search]);
+
 import Image from "next/image";
 const bullets = [
   {
@@ -363,7 +379,6 @@ export default function Patients() {
   };
 
   const options = [{ label: "All", value: "" }, ...priorityOptions];
-
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -380,7 +395,7 @@ export default function Patients() {
                           <HeaderFilters
                             setSearch={setSearch}
                             isSearch={true}
-                            searchlabel="Search By Patient ID / Name"
+                            searchlabel="Search By Patient MRN / Name"
                             // select status
                             selectlabel="Select Priority"
                             isSelector={true}
