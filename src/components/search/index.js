@@ -14,9 +14,11 @@ const Search = ({
   search,
 }) => {
   useEffect(() => {
-    setCoderSearch("");
-    setReceivedSearch("");
-    setSentSearch("");
+    if (activeTab) {
+      setCoderSearch("");
+      setReceivedSearch("");
+      setSentSearch("");
+    }
   }, [activeTab]);
   return (
     <div>
