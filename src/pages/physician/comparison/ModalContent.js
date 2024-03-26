@@ -15,7 +15,7 @@ const ModalContent = ({
   setSelectedPatient,
   selectedPatient
 }) => {
-  const patientsList = useSelector((state) => state.PhyicianReducer.patients);
+  const patientsList = useSelector((state) => state.phyicianReducer.patients);
   const FilteredList=patientsList?.data?.response?.filter(item=>(item?.id !== selectedPatient))
   return (
     <Offcanvas
