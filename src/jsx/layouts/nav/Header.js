@@ -630,10 +630,10 @@ const Header = () => {
                                     className={styles.footerDiv}
                                     onClick={logoutFunction}
                                   >
-                                    <Image src={logout} />
+                                    {/* <Image src={logout} /> */}
                                     <span className={styles.footerCont}>
                                       {" "}
-                                      Logout
+                                      Log out
                                     </span>
                                   </div>
                                 </div>
