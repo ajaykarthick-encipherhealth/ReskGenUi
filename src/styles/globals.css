@@ -14321,6 +14321,7 @@ input[type="number"] {
 .calendarBox > .ant-picker-panel-container > .ant-picker {
   background: #04306f !important;
   color: #fff !important;
+}
 
 .msg_card_body::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3) !important;
