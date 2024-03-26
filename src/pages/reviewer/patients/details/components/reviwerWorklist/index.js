@@ -104,12 +104,15 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
     setOpenPicker2(false);
   };
   const getFiltePatientListStatus = async (value) => {
+    if (value == "ALL") {
+      value = "";
+    }
     setProcessedStatus(value);
     setOpenPicker(false);
     setOpenPicker2(false);
   };
 
-  const statuses = ["PENDING", "COMPLETED", "HOLD", "DECLINED"];
+  const statuses = ["ALL","PENDING", "COMPLETED", "HOLD", "DECLINED"];
 
   useEffect(() => {
     getWorkList();
