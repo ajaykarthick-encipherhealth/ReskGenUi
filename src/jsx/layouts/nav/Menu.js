@@ -150,11 +150,11 @@ export const ProviderMenuList = [
     to: "/tenantAdmin/fhirTable",
     childRoute: "/fhirTable/details",
   },
-  {
-    title: "Settings",
-    iconStyle: SVGICON.settingsIcon,
-    to: "/tenantAdmin/settings",
-  },
+  // {
+  //   title: "Settings",
+  //   iconStyle: SVGICON.settingsIcon,
+  //   to: "/tenantAdmin/settings",
+  // },
 ];
 
 export const EHRMenuList = [

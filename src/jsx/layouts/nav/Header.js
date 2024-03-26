@@ -447,7 +447,7 @@ const Header = () => {
                   <div className="header-profile2 cr-pointer">
                     <div className="nav-link i-false" as="div">
                       <div className="header-info2 d-flex align-items-center">
-                        {userRole !== "admin" && (
+                        {userRole !== "admin" && userRole !== "tenant" && (
                           <Popover
                             content={PopContent}
                             placement="bottom"
@@ -492,22 +492,25 @@ const Header = () => {
                             </div>
                           </Tooltip>
                         )}
-                        {/* <div
-                          className="chatheaderIcon"
-                          onClick={() => router.push("/admin/settings")}
-                        >
-                          <SettingOutlined
-                            style={{
-                              width: "23px",
-                              height: "26px",
-                              marginTop: "8px",
-                              fontWeight: "700",
-                              marginRight: "10px",
-                              color: "#241572",
-                              fontSize: "30px",
-                            }}
-                          />
-                        </div> */}
+
+                        {userRole === "tenant" && (
+                          <div
+                            className="chatheaderIcon"
+                            onClick={() => router.push("/tenantAdmin/settings")}
+                          >
+                            <SettingOutlined
+                              style={{
+                                width: "23px",
+                                height: "26px",
+                                marginTop: "8px",
+                                fontWeight: "700",
+                                marginRight: "10px",
+                                color: "#241572",
+                                fontSize: "30px",
+                              }}
+                            />
+                          </div>
+                        )}
                         <div
                           className="chatheaderIcon"
                           onClick={() => gotoChat()}
