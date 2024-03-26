@@ -1,20 +1,10 @@
-import React, { useState } from "react";
-import moment from "moment";
-import TableStyle from "../../traclingTable.module.css";
-
-import {
-  Avatar,
-  Tooltip,
-  notification,
-  Select as AntSelect,
-  Empty,
-} from "antd";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
-
-import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
-import { useEffect } from "react";
+import moment from "moment";
+import { notification, Select as AntSelect, Empty } from "antd";
+import TableStyle from "../../traclingTable.module.css";
 import {
   renderUserPrfoileAvatar,
   sortFunction,
@@ -33,7 +23,6 @@ function TrackingTable({
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortAuditDueOrder, setSortAuditDueOrder] = useState("DESC");
   const [detailsContent, setDetailsContent] = useState(patinetListAll);
-  const [userName, setUserName] = useState("");
   const dispatch = useDispatch();
   const navigate = useRouter();
 
@@ -65,23 +54,17 @@ function TrackingTable({
     setDetailsContent(patinetListAll);
   }, [patinetListAll]);
 
-  const getInitials = (firstName, lastName) => {
-    const firstNameInitial = firstName?.charAt(0) || "";
-    const secondNameInitial = lastName?.charAt(0) || "";
-    return firstNameInitial?.toUpperCase() + secondNameInitial?.toUpperCase();
-  };
-  const renderUserName = (firstName, lastName) => {
-    const userName = firstName ? firstName + " " + lastName : "Praveen";
-    return userName;
-  };
-
   const renderRows = () => {
     return patinetListAll?.map((data, index) => (
       <tr key={index}>
         <td className={TableStyle.firstTdBorder} onClick={handleTableRowClick}>
           <div> {data.patientId} </div> <div> {data.patientName} </div>
         </td>
-        <td className={TableStyle.childBorder} style={{ textAlign: "left"}} onClick={handleTableRowClick}>
+        <td
+          className={TableStyle.childBorder}
+          style={{ textAlign: "left" }}
+          onClick={handleTableRowClick}
+        >
           {data.allocatedByFirstName ||
           data.allocatedByLastName ||
           data.allocatedByProfileImage ? (
@@ -104,7 +87,11 @@ function TrackingTable({
             <div style={{ textAlign: "center" }}>---</div>
           )}
         </td>
-        <td className={TableStyle.childBorder} style={{ textAlign: "left" }} onClick={handleTableRowClick}>
+        <td
+          className={TableStyle.childBorder}
+          style={{ textAlign: "left" }}
+          onClick={handleTableRowClick}
+        >
           {data.auditAllocatedByFirstName ||
           data.auditAllocatedByLastName ||
           data.auditAllocatedByProfileImage ? (
@@ -128,7 +115,11 @@ function TrackingTable({
           )}
         </td>
 
-        <td className={TableStyle.childBorder} style={{ textAlign: "left" }} onClick={handleTableRowClick}>
+        <td
+          className={TableStyle.childBorder}
+          style={{ textAlign: "left" }}
+          onClick={handleTableRowClick}
+        >
           {data.auditedAssignedFirstName ||
           data.auditedAssignedLastName ||
           data.auditedAssignedProfileImage ? (
@@ -152,7 +143,11 @@ function TrackingTable({
           )}
         </td>
 
-        <td className={TableStyle.childBorder} style={{ textAlign: "left" }} onClick={handleTableRowClick}>
+        <td
+          className={TableStyle.childBorder}
+          style={{ textAlign: "left" }}
+          onClick={handleTableRowClick}
+        >
           {data.patientAllocatedFirstName ||
           data.patientAllocatedLastName ||
           data.patientAllocatedProfileImage ? (

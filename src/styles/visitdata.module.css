@@ -1,11 +1,11 @@
 .container_fluid_patient {
-  height: 100vh !important;
+  /* height: 100vh !important; */
   overflow: hidden;
   padding-top: 55px !important;
   background-color: #fff !important;
 }
-.container_fluid{
-  background-color: #F0F6FE !important;
+.container_fluid {
+  background-color: #f0f6fe !important;
 }
 
 .patient_info_details svg {
@@ -812,6 +812,7 @@
   left: 17pc;
 }
 .menuCard {
+  width: 180px;
   display: inline-flex;
   padding: 15px 23px 21px 22px;
   flex-direction: column;
@@ -821,7 +822,7 @@
   background: #fff;
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
   position: relative;
-  right: 10pc;
+  right: 12pc;
   bottom: 174px;
   top: -126px;
   cursor: pointer;
@@ -1060,6 +1061,22 @@
   width: 10px;
   background: #ad94fa;
 
+  margin-right: 5px;
+  margin-top: 2px;
+  border-radius: 20px;
+}
+.processing {
+  height: 10px;
+  width: 10px;
+  background: #452b90;
+  margin-right: 5px;
+  margin-top: 2px;
+  border-radius: 20px;
+}
+.failed {
+  height: 10px;
+  width: 10px;
+  background: #e88d8d;
   margin-right: 5px;
   margin-top: 2px;
   border-radius: 20px;
@@ -1374,10 +1391,20 @@
 .patientDetailsHead {
   height: 70vh;
   margin-right: 0px;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 .patientDetailsHead:hover {
   height: 70vh;
+  overflow-y: scroll;
+  margin-right: 0px;
+}
+.patientDetailsHead2 {
+  height: 65vh;
+  margin-right: 0px;
+  overflow-y: scroll;
+}
+.patientDetailsHead2:hover {
+  height: 65vh;
   overflow-y: scroll;
   margin-right: 0px;
 }

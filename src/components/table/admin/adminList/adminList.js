@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Empty, Popover, Select, Switch } from "antd";
 import dayjs from "dayjs";
 import TableStyle from "../../table.module.css";
@@ -8,7 +8,6 @@ import EditButton from "../../../../images/adminUsers/EditButton";
 import {
   capitalizeFirstLetter,
   dateFormate,
-  renderUserPrfoile,
   renderUserPrfoileAvatar,
   renderUserPrfoileAvatarDisabled,
   sortFunction,
@@ -16,7 +15,6 @@ import {
 import { enableUser } from "../../../../services/adminServices/usersService";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import SpinnerDots from "../../../spinner";
-import { useSelector } from "react-redux";
 import EditButtonDisbled from "../../../../images/adminUsersDisabled/EditButtonDisabled";
 import { getSelectUserList } from "../../../../store/actions/adminAction/DashboardAction";
 
@@ -84,7 +82,6 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                 onChange={handleManager}
                 options={optionsUser?.length > 0 ? optionsUser : []}
                 placeholder={"Change Manager"}
-                // defaultValue={isMultiple ? magerData.role : magerData?.role}
                 open={openManager}
                 onDropdownVisibleChange={(visible) => setOpenManager(visible)}
               />
@@ -138,8 +135,15 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
           <thead className={TableStyle.classThead}>
             <tr>
               <th className={TableStyle.rowEmailStyle}>NAME</th>
-              <th className={TableStyle.rowEmailStyle}>EMAIL</th>
-              <th style={{ paddingLeft: "130px", width: "170px" }}>ROLE</th>
+              <th style={{ paddingLeft: "20px" }}>EMAIL</th>
+              <th
+                style={{
+                  textAlign: "center",
+                  paddingLeft: "50px",
+                }}
+              >
+                ROLE
+              </th>
               <th
                 style={{ cursor: "pointer", textAlign: "center" }}
                 onClick={() => {
@@ -153,12 +157,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                   <ArrowDownOutlined />
                 )}
               </th>
-              <th
-                className={TableStyle.rowStyle}
-                style={{ textAlign: "center" }}
-              >
-                MFA
-              </th>
+              <th style={{ textAlign: "center" }}>MFA</th>
               <th style={{ textAlign: "center" }}>ACTION</th>
               <th style={{ textAlign: "center" }}>USER STATUS</th>
             </tr>

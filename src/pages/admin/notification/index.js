@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Checkbox, Radio, Select, notification } from "antd";
+import { Radio, Select, notification } from "antd";
 import { Button, Spinner } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Header from "../../../jsx/layouts/nav/Header";
 import styles from "./style.module.css";
 import SendList from "./sendList/index";
@@ -120,7 +118,7 @@ const Notification = ({}) => {
   };
 
   const validDateForm = () => {
-    var check = true;
+    let check = true;
     setErrmessage("");
     setErrmessageRadio("");
     if (inputValue.content == "") {
@@ -138,7 +136,7 @@ const Notification = ({}) => {
     if (validDateForm()) {
       setIsBtnLoading(true);
       setErrmessage("");
-      var data = {
+      let data = {
         managerId: null,
         isAdmin: selectCheckBox == "ADMIN" ? true : false,
         isSupervisor: selectCheckBox == "SUPERVISOR" ? true : false,
@@ -148,7 +146,7 @@ const Notification = ({}) => {
         content: inputValue.content,
         all: selectCheckBox === "ALL" ? true : false,
       };
-      var result = await postNotification(data);
+      let result = await postNotification(data);
       if (result.status == "SUCCESS") {
         setInputValue({
           notificationType: "INFO",
@@ -172,12 +170,12 @@ const Notification = ({}) => {
   };
 
   const getNotificationResult = async () => {
-    var result = await getNotificationList();
+    let result = await getNotificationList();
     setNotificationList(result);
   };
 
   const getTeamUser = async () => {
-    var result = await SelectUserList("SUPERVISOR");
+    let result = await SelectUserList("SUPERVISOR");
     const options = result?.response?.map((data) => ({
       label: data?.firstName + "" + data?.lastName,
       value: data?.userName,
@@ -216,20 +214,7 @@ const Notification = ({}) => {
         <Header />
         <div class="content-body">
           <div className="container-fluid">
-            {/* <div className="d-flex">
-              <Button
-                className={styles.notificationBtn}
-              >
-                Send
-              </Button>
-              <Button
-                className={`ms-3 ${styles.notificationBtn}`}
-              >
-                Receive
-              </Button>
-            </div> */}
             <div
-              // className={`row notification ${styles.checkBoxConatiner}`}
               style={{
                 display: "flex",
 
@@ -237,7 +222,6 @@ const Notification = ({}) => {
               }}
             >
               <div style={{ paddingTop: "8px" }}>
-                {/* <Checkbox.Group options={options} onChange={onChange} /> */}
                 <Radio.Group
                   options={radioOptions}
                   onChange={onChange}
@@ -321,9 +305,6 @@ const Notification = ({}) => {
                   ) : null}
                   Send
                 </Button>
-                {/* <Button className={`ms-3 ${styles.notificationCancelBtn}`}>
-                  Cancel
-                </Button> */}
               </div>
             </div>
 

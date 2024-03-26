@@ -31,6 +31,7 @@ const CamboTree = ({ tree }) => {
   const [background, setBackground] = useState([]);
   const [trees, setTrees] = useState(Tree);
   const [isLoading, setLoading] = useState(tree);
+  const [zoom, setZoom] = useState({ width: 350, height: 185 });
   const getBackgroundColor = async () => {
     try {
       const response = await axios.get(
@@ -52,6 +53,21 @@ const CamboTree = ({ tree }) => {
 
     return output;
   }
+
+  const zoomIn = () => {
+    if (zoom.width < 500 && zoom.width > 200) {
+      setZoom((prev) => {
+        return { width: prev.width - 30, height: prev.height - 10 };
+      });
+    }
+    // setZoom((prev) => ({ width: prev.width - 30, height: prev.height - 10 }));
+  };
+
+  const zoomOut = () => {
+    if (zoom.width <= 350) {
+      setZoom((prev) => ({ width: prev.width + 30, height: prev.height + 10 }));
+    }
+  };
 
   const getProviderNameList = (data) => {
     var dublicateCaptureDelete = removeDuplicates(data);
@@ -155,7 +171,7 @@ const CamboTree = ({ tree }) => {
                           className={visitStyles.calenderIcon}
                         />
                       </i>
-                      {moment(res).format("MMM DD")}
+                      {moment(item).format("MMM DD")}
                     </span>
                   ) : null
                 )}
@@ -249,7 +265,10 @@ const CamboTree = ({ tree }) => {
       }
     };
     return (
-      <div className={Style.cards}>
+      <div
+        className={Style.cards}
+        style={{ width: zoom.width, height: zoom.width < 300 ? "auto" : 185 }}
+      >
         <div className={Style.code}>
           {node.diagnosisCodeCombo
             ? node.diagnosisCodeCombo
@@ -295,6 +314,12 @@ const CamboTree = ({ tree }) => {
 
   return (
     <div style={{ backgroundColor: "#fbfdff" }}>
+      <button className="btns-primary btn-app-primary mx-1" onClick={zoomOut}>
+        zoom-in
+      </button>
+      <button className="btns-primary btn-app-outline-primary" onClick={zoomIn}>
+        zoom-out
+      </button>
       <div className={`overflow-x-auto ${Style.chart}`}>
         {isLoading ? (
           <SpinnerDots />

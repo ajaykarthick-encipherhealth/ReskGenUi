@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import styles from "./styles.module.css";
-import Card from "../../../../components/card/index";
-import HeadTitle from "../../../../components/headtitle";
-import { Modal, Spin } from "antd";
-import { SVGICON } from "../../../../jsx/constant/theme";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import moment from "moment";
 import Image from "next/image";
-import NoNotification from "../../../../images/dashboard/no-notification.png";
+import { Modal, Spin } from "antd";
+import styles from "./styles.module.css";
 import spinSTYles from "../../../../styles/auth.module.css";
+import Card from "../../../../components/card/index";
+import HeadTitle from "../../../../components/headtitle";
+import { SVGICON } from "../../../../jsx/constant/theme";
+import NoNotification from "../../../../images/dashboard/no-notification.png";
 
 const Notifications = () => {
   const [openNotifications, setOpenNotification] = useState(false);
@@ -21,16 +21,6 @@ const Notifications = () => {
   const handleOk = () => {
     setOpenNotification(false);
   };
-
-  const emailSplitFunction = (email) => {
-    if (email) {
-      let emailSplit = email.split("@");
-      return capitalizeFirstLetter(emailSplit[0]);
-    }
-  };
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
 
   const notificationData =
     notificationResponse?.data?.content?.length > 0 ? (

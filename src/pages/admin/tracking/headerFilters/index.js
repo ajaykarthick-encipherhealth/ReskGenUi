@@ -1,19 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import Select from "react-select";
-import { Button } from "react-bootstrap";
-import { Badge, DatePicker, Popover } from "antd";
+import { DatePicker, Popover } from "antd";
 import Image from "next/image";
-import dayjs from "dayjs";
 import styles from "../../../../pages/reviewer/report/report.module.css";
-import allocateStyle from "../../../../pages/admin/allocatedUser/allocate/style.module.css";
-import Export from "../../../../images/svg/Export";
-import Selector from "../../../../components/selector";
-import Search from "../../../../components/search";
-import filter from "../../../../images/svg/filter.svg";
 import warning from "../../../../images/svg/warning.svg";
 import { useDispatch } from "react-redux";
 import Legends from "../../../../components/legends";
-import DateRangePicker from "../../../../components/rangepicker";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -23,6 +15,7 @@ import {
   searchFunction,
 } from "../../../../components/headerFilters/functions";
 import { getFilters } from "../../../../store/actions/AuthActions";
+import InputField from "../../../../components/input";
 
 const { RangePicker } = DatePicker;
 const HeaderFilters = ({
@@ -31,6 +24,7 @@ const HeaderFilters = ({
   isSearch,
   searchlabel,
   searchValue,
+  search,
   // for report
   setSentSearch,
   setReceivedSearch,
@@ -132,11 +126,9 @@ const HeaderFilters = ({
   setSelectedDates3,
   setSelectedDates4,
   setSelectedDates5,
-  auditallocatedToOptoons
+  auditallocatedToOptoons,
 }) => {
   const dispatch = useDispatch();
-  const [showFilters, setShowFilters] = useState(defaultShow);
- 
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -210,7 +202,6 @@ const HeaderFilters = ({
                 }}
                 disabledDate={(current) => disableFutureDate(current)}
                 onCalendarClose={() => {
-                
                   setSelectedDates([]);
                 }}
               />
@@ -302,14 +293,7 @@ const HeaderFilters = ({
                   isSearchable={false}
                 />
               </div>
-              {/* <Selector
-                selectlabel={"Processed Status"}
-                setSelectedOption={setSelectedOption}
-                selectOptions={selectOptions}
-                defaultSelectValue1={defaultSelectValue1}
-                selectorValue={clear?"":selector4value}
-                setClear={setClear}
-              /> */}
+            
             </div>
           ) : null}
 
@@ -329,19 +313,12 @@ const HeaderFilters = ({
                   isSearchable={false}
                 />
               </div>
-              {/* <Selector
-                selectlabel={"Audit Status"}
-                setSelectedOption={setAuditSelectedOption}
-                selectOptions={auditStatusOptions}
-                defaultSelectValue1={defaultSelectValue1}
-                selectorValue={clear ? "" : selector5value}
-                setClear={setClear}
-              /> */}
+              
             </div>
           ) : null}
         </div>
       </div>
-      {showFilters && (
+      {defaultShow && (
         <div style={{ marginTop: "50px" }}>
           <div className="row filter-contain">
             {isRangePicker && (
@@ -353,7 +330,6 @@ const HeaderFilters = ({
                     format="YYYY-MM-DD"
                     onCalendarChange={(val) => setSelectedDates4(val)}
                     onChange={(date, dateString) => {
-                     
                       handleRnagePicker2({
                         date,
                         dateString,
@@ -464,38 +440,19 @@ const HeaderFilters = ({
                 {" "}
                 <label style={{ marginLeft: "8px" }}>{searchlabel}</label>
                 <div class="form-group has-search">
-                  <FontAwesomeIcon
-                    className="fa fa-search form-control-feedback"
-                    icon={faSearch}
+                  <InputField
+                   isSearch={true}
+                   placeholder="Search"
+                   inputValue={clear ? "" : searchValue}
+                   setInputValue={setSearch}
+                   delay={1000}
+                   type="text"
+                   isDisabled={false}
+                   isInputFiled={false}
                   />
-                  <InputText
-                    type="text"
-                    value={clear ? "" : searchValue}
-                    onChange={(e) => {
-                      searchFunction(
-                        e,
-                        setSearch,
-                        setSentSearch,
-                        setReceivedSearch,
-                        setCoderSearch,
-                        activeTab
-                      );
-                      setClear(false);
-                    }}
-                    className="form-control new-form-control"
-                    placeholder="Search"
-                  />
+
+                
                 </div>
-                {/* <Search
-                  searchlabel={searchlabel}
-                  setSearch={setSearch}
-                  activeTab={activeTab}
-                  setSentSearch={setSentSearch}
-                  setReceivedSearch={setReceivedSearch}
-                  setCoderSearch={setCoderSearch}
-                  searchValue={clear ? "" : searchValue}
-                  setClear={setClear}
-                /> */}
               </div>
             )}
             <div className={`${bullets ? "col-xl-2" : "col-xl-4"}`}>

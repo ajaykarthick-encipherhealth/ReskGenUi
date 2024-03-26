@@ -1,5 +1,5 @@
 import React from "react";
-import { Offcanvas, Spinner, Button } from "react-bootstrap";
+import { Offcanvas, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 
 const FileUploading = ({
@@ -43,7 +43,7 @@ const FileUploading = ({
             <div className="row">
               <div className="col-xl-12 mb-3">
                 <Form.Label>
-                  Patient Id <span className="text-danger">*</span>{" "}
+                  Patient ID <span className="text-danger">*</span>{" "}
                 </Form.Label>
                 <Form.Control
                   name="patientId"
@@ -100,14 +100,8 @@ const FileUploading = ({
                 {"Submit"}
               </Button>
               <Button
-                className="btn-sm me-1"
+                className="btn btn-danger btn-sm light ms-1"
                 onClick={() => setAddPatient(false)}
-                style={{
-                  backgroundColor: "#ffdede",
-                  borderColor: "#ffdede",
-                  color: "#ff5e5e",
-                  //   height: "32px",
-                }}
               >
                 Cancel
               </Button>

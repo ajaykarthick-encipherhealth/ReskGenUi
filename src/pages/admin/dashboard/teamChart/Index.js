@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import ReactECharts from "echarts-for-react";
 import HeadTitle from "../../../../components/headtitle";
 import styles from "./styles.module.css";
 import Card from "../../../../components/card";
-import { Empty, Spin, Select } from "antd";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { Empty, Spin } from "antd";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { TeamChart } from "../../../../services/adminServices/DashboardService";
@@ -21,39 +19,19 @@ const BarChart = () => {
   const teamChartData = useSelector(
     (state) => state.AdminDashboardReducers.teamData
   );
-  const [selectUser, setSelectUser] = useState([]);
-
-  const selectUserList = useSelector(
-    (state) => state?.AdminDashboardReducers?.selectedUsers
-  );
 
   const datas = teamChartData?.data ? teamChartData?.data : [];
-  const team = datas?.response?.map((info) => {
-    const firstNameInitial = info?.firstName?.charAt(0) || "";
-    const lastNameInitial = info?.lastName?.charAt(0) || "";
-    return `${firstNameInitial}${lastNameInitial}`;
-  });
+
   const teams = datas?.response?.map((info) => {
     const firstNameInitial = info?.firstName;
-    const lastNameInitial = info?.lastName?.charAt(0) || "";
     return `${firstNameInitial}`;
   });
-  const colors = [
-    "#F4EDFD",
-    // "#D4A8FF",
-    "#EAD8FE",
-    "#DBB9FE",
-    "#962DFF",
-
-    // "#BF80FF",
-    "#CC99FF",
-  ];
-  var series = [
+  const colors = ["#F4EDFD", "#EAD8FE", "#DBB9FE", "#962DFF", "#CC99FF"];
+  let series = [
     {
       data: datas?.response?.map((item) =>
         item?.totalFileAllocated ? item.totalFileAllocated : 0
       ),
-      // data: [120, 330, 20, 50, 20, 120, 330, 20, 50, 20],
       type: "bar",
       stack: "a",
       name: "totalFileAllocated",
@@ -62,7 +40,6 @@ const BarChart = () => {
       data: datas?.response?.map((item) =>
         item?.totalFileProcessed ? item.totalFileProcessed : 0
       ),
-      // data: [120, 330, 90, 150, 20, 120, 330, 20, 50, 20],
       type: "bar",
       stack: "a",
       name: "totalFileProcessed",
@@ -72,7 +49,6 @@ const BarChart = () => {
       data: datas?.response?.map((item) =>
         item?.totalFilePending ? item.totalFilePending : 0
       ),
-      // data: [120, 30, 220, 50, 120, 120, 330, 20, 50, 20],
       type: "bar",
       stack: "a",
       name: "totalFilePending",
@@ -81,7 +57,6 @@ const BarChart = () => {
       data: datas?.response?.map((item) =>
         item?.totalFileDeclined ? item.totalFileDeclined : 0
       ),
-      // data: [120, 300, 160, 250, 90, 120, 330, 20, 50, 20],
       type: "bar",
       stack: "a",
       name: "totalFileDeclined",
@@ -115,13 +90,9 @@ const BarChart = () => {
     const data = series[i].data;
     const info = stackInfo[series[i]?.stack];
     for (let j = 0; j < series[i]?.data?.length; ++j) {
-      const isEnd = info.stackEnd[j] === i;
-      const topBorder = isEnd ? 20 : 0;
-      const bottomBorder = 0;
       data[j] = {
         value: data[j],
         itemStyle: {
-          // borderRadius: [bottomBorder, topBorder, topBorder, bottomBorder],
           color: colors[i],
         },
       };
@@ -198,10 +169,8 @@ const BarChart = () => {
     bar: {
       width: "30px",
     },
-    // colors: ["#00BC13", "#ED9331", "#DBB9FE", , "#F4EDFD"],
     chart: {
       type: "bar",
-      // height: "600px",
       horizontal: true,
       stacked: true,
       toolbar: {
@@ -254,15 +223,6 @@ const BarChart = () => {
         show: true,
       },
       categories: teams,
-      // axisBorder: {
-      //   show: false,
-      // },
-      // axisBorder: {
-      //   show: false,
-      // },
-      // axisTicks: {
-      //   show: false, // Hide the y-axis ticks
-      // },
     },
     legend: {
       show: false,
@@ -274,19 +234,6 @@ const BarChart = () => {
     },
   };
 
-  const onChangeUser = (e) => {
-    setSelectUser([e]);
-  };
-
-  const optionsUser = [];
-
-  const individualUserRes = selectUserList?.data?.response?.map((res) =>
-    optionsUser.push({
-      value: res.userName,
-      label: res.firstName + " " + res.lastName,
-    })
-  );
-
   useEffect(() => {
     dispatch(TeamChart(router));
   }, [router]);
@@ -297,16 +244,7 @@ const BarChart = () => {
       <div className={styles.card5}>
         <Card borderRadius="28px" padding="0px">
           <div className={styles.buttonDiv}>
-            <div className={styles.select}>
-              {/* <Select
-                showSearch
-                value={selectUser}
-                placeholder="Select Team"
-                className={`custom_select_user ${styles.custom_select_user}`}
-                onChange={(e) => onChangeUser(e)}
-                options={optionsUser}
-              /> */}
-            </div>
+            <div className={styles.select}></div>
             <div className={styles.header}>
               <div
                 style={{
@@ -335,15 +273,6 @@ const BarChart = () => {
                       type="bar"
                       height={630}
                     />
-                    // <ReactECharts
-                    //   option={option}
-                    //   style={{
-                    //     width: "100%",
-                    //     height: "680px",
-                    //     marginTop: "-30px",
-                    //     overflowY: "hidden",
-                    //   }}
-                    // />
                   )
                 ) : (
                   <div className={spinSTYles.spinStyle}>

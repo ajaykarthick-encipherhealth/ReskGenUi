@@ -31,6 +31,7 @@ import {
   faInfo,
   faPlus,
   faArrowsAlt,
+  faSitemap,
 } from "@fortawesome/free-solid-svg-icons";
 import { CalendarOutlined } from "@ant-design/icons";
 import { Popconfirm, Divider, Popover, Menu, DatePicker, Dropdown } from "antd";
@@ -40,6 +41,7 @@ import { Modal } from "antd";
 import { useRouter } from "next/navigation";
 import { getProviderDetails } from "../../../../../services/PatientsListSevice";
 import Spinner from "../../../../../components/loadingSpinner";
+import CamboTree from "../hcc/org";
 
 const Radiology = ({}) => {
   const navigate = useRouter();
@@ -104,7 +106,8 @@ const Radiology = ({}) => {
   const [rafScore, setRAFScore] = useState([]);
   const [patientDetails, setPatientDetails] = useState([]);
   const [patientDetailsRadiology, setPatientDetailsRadiology] = useState([]);
-
+  const [combiTree, setCombiTree] = useState({});
+  const [opens, setOpens] = useState(false);
   const [rafHccList, setRafScoreHccList] = useState([]);
   const [isMatchBtn, setIsMatchBtn] = useState(false);
   const [matchHccList, setMatchHccList] = useState([]);
@@ -1084,6 +1087,12 @@ const Radiology = ({}) => {
     // setProviderDetails(data);
   };
 
+  const showErrorMessage = () => {
+    setOpens(false);
+    notification.destroy();
+    notification.info({ message: "Tree Not Available", duration: 1 });
+  };
+
   const getCaptureSectionBackgroundMeat = (
     value,
     dis,
@@ -1556,33 +1565,55 @@ const Radiology = ({}) => {
                                         >
                                           <span>{item.diseaseName}</span>
                                         </div>
-                                        <div className="col-xl-1 comboclose">
-                                          <Popconfirm
-                                            title="You want move to Invalid?"
-                                            description={item.diseaseName}
-                                            onConfirm={confirmComboInvalid}
-                                            placement="leftTop"
-                                            okText="Yes"
-                                            cancelText="No"
-                                            onOpenChange={() =>
-                                              onchangeCombo(
-                                                item.diseaseName,
-                                                item.addOnCode
-                                              )
-                                            }
-                                          >
-                                            <div
-                                              className={visitStyles.close_icon}
+                                        <div className="col-xl-1 ">
+                                          <div>
+                                            <Popconfirm
+                                              title="You want move to Invalid?"
+                                              description={item.diseaseName}
+                                              onConfirm={confirmComboInvalid}
+                                              placement="leftTop"
+                                              okText="Yes"
+                                              cancelText="No"
+                                              onOpenChange={() =>
+                                                onchangeCombo(
+                                                  item.diseaseName,
+                                                  item.addOnCode
+                                                )
+                                              }
                                             >
-                                              <FontAwesomeIcon
-                                                icon={faArrowsAlt}
-                                                style={{
-                                                  size: 8,
-                                                  color: "#a80404",
-                                                }}
-                                              />
-                                            </div>
-                                          </Popconfirm>
+                                              <div
+                                                className={
+                                                  visitStyles.close_icon
+                                                }
+                                              >
+                                                <FontAwesomeIcon
+                                                  icon={faArrowsAlt}
+                                                  style={{
+                                                    size: 8,
+                                                    color: "#a80404",
+                                                  }}
+                                                />
+                                              </div>
+                                            </Popconfirm>
+                                          </div>
+                                          <div
+                                            className={visitStyles.close_icon}
+                                            style={{ background: "#c7f3c6" }}
+                                            onClick={() => {
+                                              setOpens(true);
+                                              setCombiTree([
+                                                { ...item, expanded: true },
+                                              ]);
+                                            }}
+                                          >
+                                            <FontAwesomeIcon
+                                              icon={faSitemap}
+                                              style={{
+                                                size: 8,
+                                                color: "#088f39",
+                                              }}
+                                            />
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
@@ -2269,6 +2300,22 @@ const Radiology = ({}) => {
             </div>
           </div>
         </Modal>
+      )}
+
+      {opens && combiTree[0]?.children?.length > 0 ? (
+        <Modal
+          title={fileModalHeader}
+          width="90%"
+          centered
+          open={opens}
+          onOk={() => setOpens(false)}
+          onCancel={() => setOpens(false)}
+          footer={null}
+        >
+          <CamboTree tree={combiTree} />
+        </Modal>
+      ) : (
+        opens && showErrorMessage()
       )}
       {isModalOpenRadiology && (
         <Modal

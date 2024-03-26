@@ -1,24 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Button, Spinner } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
+import "react-facebook-loading/dist/react-facebook-loading.css";
+import { notification } from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import Header from "../../../jsx/layouts/nav/Header";
-import { useSelector } from "react-redux";
 import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
-import { useRouter } from "next/navigation";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "react-facebook-loading/dist/react-facebook-loading.css";
-import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch } from "react-redux";
 import { patientDetails } from "../../../store/actions/AuthActions";
-import { notification } from "antd";
-import { InputText } from "primereact/inputtext";
-import { Paginator } from "primereact/paginator";
-import Footer from "../../../jsx/layouts/Footer";
-import visitStyles from "../../../styles/visitdata.module.css";
 import FileProcessingTable from "../../../components/table/admin/FileProcessing/FileProcessing";
 import FileUploading from "./FileUploading";
 import Addpatients from "./Addpatiens";
-import SpinnerDots from "../../../components/spinner";
 import { getPatients } from "../../../store/actions/adminAction/patientsActions";
 
 export default function Patient() {
@@ -45,7 +38,6 @@ export default function Patient() {
 
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(15);
-  const [paginationFirst, setPaginationFirst] = useState(0);
 
   const [totalElements, setTotalElements] = useState(10);
   const [tableLoading, setTableLoading] = useState(true);
@@ -54,9 +46,9 @@ export default function Patient() {
   const sideMenu = useSelector((state) => state.sideMenu);
   const navigate = useRouter();
   useEffect(() => {
-    var tenId = localStorage.getItem("tenantId");
-    var uId = localStorage.getItem("userId");
-    var orgId = localStorage.getItem("orgId");
+    let tenId = localStorage.getItem("tenantId");
+    let uId = localStorage.getItem("userId");
+    let orgId = localStorage.getItem("orgId");
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
@@ -65,11 +57,11 @@ export default function Patient() {
 
   const getAllList = async (uId, pageNo, pageSize) => {
     setTableLoading(true);
-    var resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
+    let resoureUrl = `dbservice/patient/getbyuser?userId=${uId}&page=${pageNo}&size=${pageSize}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
-      var resultMap = [];
-      var result = response?.data?.response?.content;
+      let resultMap = [];
+      let result = response?.data?.response?.content;
       setTotalElements(response?.data?.response?.totalElements);
 
       result?.map((res) => {
@@ -96,49 +88,6 @@ export default function Patient() {
       setTableLoading(false);
     }
   };
-
-  // const getNameSearch = async (searchtext) => {
-  //   setIsLoading(true);
-  //   if (searchtext) {
-  //     var resoureUrl = `dbservice/patient/compute/search?searchtext=${searchtext}&pageno=${0}&pagesize=${12}`;
-  //     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-  //     if (response.data) {
-  //       var resultMap = [];
-  //       var result = response.data?.response?.content;
-  //       setTotalElements(response.data?.response?.totalElements);
-
-  //       result?.map((res) => {
-  //         resultMap.push({
-  //           patientId: res.patientId,
-  //           patientName: res.patientName,
-  //           fileName: res.fileName,
-  //           computing: res.computing,
-  //           createdAt: res.createdAt,
-  //           lastModifiedDate: res.lastModifiedDate,
-  //           dueDate: res.dueDate,
-  //           allocatedBy: res.allocatedBy,
-  //           allocatedOn: res.allocatedOn,
-  //           priority: res.priority,
-  //           processedStatus: res.processedStatus,
-  //           createdAt: res.createdAt,
-  //           processedDate: res.processedDate,
-  //         });
-  //       });
-  //       var newArray = [];
-  //       newArray = [...patinetListAll, ...resultMap];
-  //       setPatinetListAll(resultMap);
-  //       setIsLoading(false);
-  //       setTableLoading(false);
-  //     }
-  //   } else {
-  //     getAllList(localUserId, pageNo, pageSize);
-  //   }
-  // };
-
-  // const addPatientFormId = () => {
-  //   setValidated(false);
-  //   setAddPatientId(true);
-  // };
 
   const addPatientFile = (data) => {
     inputValue.patientId = data.patientId;
@@ -199,12 +148,12 @@ export default function Patient() {
         if (response.data.message == "patient Already Present") {
           setIsLoadingBtn(false);
           notification.warning({
-            message: "Patient Id Already Present",
+            message: "Patient ID Already Present",
             duration: 1,
           });
         } else {
           notification.success({
-            message: "Patient Id Created Successfully!",
+            message: "Patient ID Created Successfully!",
             duration: 1,
           });
 
@@ -214,7 +163,6 @@ export default function Patient() {
       } else {
         setIsLoadingBtn(false);
       }
-      // setAddPatientId(false);
       getAllList(localUserId, pageNo, pageSize);
     }
 
@@ -367,17 +315,7 @@ export default function Patient() {
       setIsLoadingBtn(false);
     }
     setAddPatient(false);
-    // setIsLoadingBtn(false);
     setSelectFileRadiology(null);
-  };
-
-  const onPageChange = (e) => {
-    setIsLoading(true);
-    setPaginationFirst(e.first);
-    setPageNo(e.page);
-    setPageSize(e.rows);
-    setTableLoading(true);
-    getAllList(localUserId, e.page, e.rows);
   };
 
   return (
@@ -392,63 +330,25 @@ export default function Patient() {
                   <div className="card-body p-0">
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption  align-items-center">
-                        <div className="row filter-contain">
-                          {/* <div className="col-xl-2">
-                            <label>Search by Name or ID</label>
-                            <div class="form-group has-search">
-                              <FontAwesomeIcon
-                                className="fa fa-search form-control-feedback"
-                                icon={faSearch}
-                              />
-                              <InputText
-                                type="text"
-                                onChange={(e) => getNameSearch(e.target.value)}
-                                className="form-control new-form-control"
-                                placeholder="Search"
-                              />
-                            </div>
-                          </div> */}
-
-                          {/* <div className="col-xl-10">
-                            <Button
-                              onClick={addPatientFormId}
-                              className={`btn btn-primary btn-sm ms-2 flr ${visitStyles.addPatientIdBtn}`}
-                            >
-                              + Add Patient Id
-                            </Button>
-                          </div> */}
-                        </div>
+                        <div className="row filter-contain"></div>
                       </div>
 
                       <div
                         id="task-tbl_wrapper"
                         className="dataTables_wrapper no-footer"
                       >
-                        {patinetListAll?.length===0 && tableLoading?
-                        "":
-                        <FileProcessingTable
-                          patinetListAll={patinetListAll}
-                          actionBodyTemplate={actionBodyTemplate}
-                          statusBodyTemplate={processstatusBodyTemplate}
-                          gotoPatientDetails={gotoPatientDetails}
-                          patientDetails={patientDetails}
-                          loading={tableLoading}
-                        />
-}
-                        {/* <div>
-                              <div className="pagination-container">
-                                <Paginator
-                                  first={paginationFirst}
-                                  rows={15}
-                                  totalRecords={totalElements}
-                                  onPageChange={onPageChange}
-                                />
-                                <div className="total-pages">
-                                  Total count: {totalElements}
-                                </div>
-                              </div>
-                            </div> */}
-
+                        {patinetListAll?.length === 0 && tableLoading ? (
+                          ""
+                        ) : (
+                          <FileProcessingTable
+                            patinetListAll={patinetListAll}
+                            actionBodyTemplate={actionBodyTemplate}
+                            statusBodyTemplate={processstatusBodyTemplate}
+                            gotoPatientDetails={gotoPatientDetails}
+                            patientDetails={patientDetails}
+                            loading={tableLoading}
+                          />
+                        )}
                       </div>
                     </div>
                   </div>

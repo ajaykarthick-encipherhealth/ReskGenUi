@@ -1,32 +1,28 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import styles from "./styles.module.css";
+import Image from "next/image";
+import HighchartsReact from "highcharts-react-official";
+import Highcharts from "highcharts";
+import { Empty, Spin, Select } from "antd";
 import Buttonscroller from "../../../../components/buttonSroller";
 import { Buttons } from "../../../reviewer/workingstatus";
-import ReactECharts from "echarts-for-react";
 import accuracy from "../../../../images/dashboard/accuracy.png";
-import Image from "next/image";
 import Card from "../../../../components/card/index";
-import styles from "./styles.module.css";
 import HeadTitle from "../../../../components/headtitle";
 import { useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
-import { useRouter } from "next/router";
 import {
-  getAccuracyScore,
   getAccuracyScoreNew,
   getUserByIndividual,
 } from "../../../../store/actions/l2Action/DashboardAction";
-import { Empty, Spin, Select } from "antd";
 import spinSTYles from "../../../../styles/auth.module.css";
-import moment from "moment";
-import HighchartsReact from "highcharts-react-official";
-import Highcharts from "highcharts";
 
 export const getDateWeek = (date) => {
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
   const firstDayWeek = firstDayOfMonth.getDay();
   const currentDate = date.getDate();
   const startingWeek = Math.ceil((currentDate + firstDayWeek) / 7);
-  var currentWeek = moment().isoWeek().toString();
   return startingWeek;
 };
 
@@ -66,9 +62,7 @@ const Accuracy = () => {
 
   const dispatch = useDispatch();
   const accuracyDatas = useSelector((state) => state?.l2Dashboard?.accuracy);
-  const individualUserList = useSelector(
-    (state) => state?.l2Dashboard?.individualUser
-  );
+
   const numberOfWeeks =
     accuracyDatas?.data?.response?.mapAccuracy &&
     Object?.keys(accuracyDatas?.data?.response.mapAccuracy)?.length;
@@ -84,13 +78,6 @@ const Accuracy = () => {
     { value: "INDIVIDUAL", label: "INDIVIDUAL" },
   ];
   const optionsUser = [];
-
-  const individualUserRes = individualUserList?.data?.response?.map((res) =>
-    optionsUser.push({
-      value: res.userName,
-      label: res.firstName + " " + res.lastName,
-    })
-  );
 
   const chartBlockedDates = (year, month, param, val, currentBtn) => {
     year = Number(year);
@@ -255,7 +242,7 @@ const Accuracy = () => {
           },
         },
         opposite: false,
-        min: 0, // Set the minimum value
+        min: 0,
         max: 100,
       },
       {
@@ -274,9 +261,9 @@ const Accuracy = () => {
           },
         },
         opposite: true,
-        min: 0, // Set the minimum value
-        max: 10, // Set the maximum value
-        tickInterval: 4, // Set the tick interval to 1
+        min: 0,
+        max: 10,
+        tickInterval: 4,
       },
     ],
     legend: {
@@ -321,9 +308,6 @@ const Accuracy = () => {
             "<br/>" +
             "Total Correct: " +
             finalData.totalCorrectCount
-            // "<br/>" +
-            // "Total Wrong: " +
-            // finalData.totalWrongCount
           );
         } else {
           return "No data available";
@@ -343,11 +327,6 @@ const Accuracy = () => {
       },
     },
     series: [
-      // {
-      //   name: "averageScore",
-      //   data: accuracyDatas?.data?.response.map((item) => item.averageScore),
-      //   color: "#cc0000",
-      // },
       {
         name: "totalCorrectCount",
         data: accuracyDatas?.data?.response?.mapAccuracy?.map(
@@ -356,11 +335,7 @@ const Accuracy = () => {
         color: "#0b59f1",
         yAxis: 1,
       },
-      // {
-      //   name: "totalWrongCount",
-      //   data: accuracyDatas?.data?.response.map((item) => item.totalWrongCount),
-      //   color: "#0000cc",
-      // },
+
       {
         name: "Temperature",
         type: "spline",
@@ -416,13 +391,6 @@ const Accuracy = () => {
                   val={month}
                   val1={year}
                 />
-                {/* {currentBtn !== "Monthly" && (
-                  <YearPicker
-                    onChange={handleMonthChange}
-                    type={"month"}
-                    bgColor="#E6EEFF"
-                  />
-                )} */}
               </div>
               <div className={styles.btnScroller}>
                 <Buttonscroller

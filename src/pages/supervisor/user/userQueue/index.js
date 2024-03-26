@@ -1,31 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { useSelector } from "react-redux";
 import { Paginator } from "primereact/paginator";
+import { Popover } from "antd";
 import styles from "../../../reviewer/report/report.module.css";
 import Header from "../../../../jsx/layouts/nav/Header";
-import HeaderFilters from "../../../../components/headerFilters";
 import SpinnerDots from "../../../../components/spinner";
-import Footer from "../../../../jsx/layouts/Footer";
 import UserQueue from "../../table/adminList/userQueue";
-import AuditeDeclineTrack from "../../../../../src/images/trackingImages/AuditDeclined.png";
-import AuditedTrack from "../../../../../src/images/trackingImages/AuditedTrack.png";
-import NotAudited from "../../../../../src/images/trackingImages/NotAuditedTrack.png";
-import AuditHold from "../../../../../src/images/trackingImages/AuditHoldTrack.png";
-import ReAudit from "../../../../../src/images/trackingImages/reAuditTrack.png";
 import Completed from "../../../../../src/images/trackingImages/CompletedTrack.png";
-import AuditPending from "../../../../../src/images/trackingImages/AuditPending.png";
 import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
 import { extractLatestData } from "../../auditing";
-
-import { Popover } from "antd";
-
-import {
-  generateOptionsList,
-  getFilteredOption,
-} from "../../../../components/headerFilters/functions";
+import { generateOptionsList } from "../../../../components/headerFilters/functions";
 import audited from "../../../../images/svg/audited.svg";
 import reAudit from "../../../../images/svg/reAudit.svg";
 import auditHold from "../../../../images/svg/auditHold.svg";
@@ -37,10 +23,7 @@ import {
 import leftArrow from "../../../../images/svg/leftArrow.svg";
 import AuditHeaderFilters from "../../../../components/headerFilters/auditHeaderFilters";
 import userStyles from "./styles.module.css";
-import {
-  getCurrentUser,
-  getFilters,
-} from "../../../../store/actions/AuthActions";
+import { getFilters } from "../../../../store/actions/AuthActions";
 
 const bullets = [
   {
@@ -104,7 +87,7 @@ const AuditOptions = [
   { label: "AUDIT PENDING", value: "AUDIT_PENDING" },
   { label: "AUDIT DECLINED", value: "AUDIT_DECLINED" },
 ];
-const index = () => {
+const Index = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const usersData = useSelector((state) => state.l2User?.userData);
@@ -147,7 +130,6 @@ const index = () => {
     if (usersData) {
       setUserListAll(usersData?.data?.response);
       setTotalElements(usersData?.data?.response?.totalElements);
-      // dispatch(getFilters("allocatedBy"))
     }
   }, [usersData]);
 
@@ -170,7 +152,6 @@ const index = () => {
         auditedEndDate,
         allocatedStartDate,
         allocatedEndDate,
-        // auditor values
         selectedAuditOption,
         selAuditAllocatedBy,
         aduitCompletedStartDate,
@@ -291,158 +272,156 @@ const index = () => {
   };
 
   return (
-    <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
-        <Header />
+    <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <Header />
 
-        <div class="content-body">
-          <div className="container-fluid">
-            <div className="row">
-              <div
-                className={"col-xl-12 d-flex"}
-                style={{
-                  position: "relative",
-                  left: "40px",
-                  bottom: "10px",
-                  cursor: "pointer",
+      <div class="content-body">
+        <div className="container-fluid">
+          <div className="row">
+            <div
+              className={"col-xl-12 d-flex"}
+              style={{
+                position: "relative",
+                left: "40px",
+                bottom: "10px",
+                cursor: "pointer",
+              }}
+            >
+              <button
+                style={{ width: "40px", height: "40px" }}
+                className={styles.filterBtn}
+                onClick={() => {
+                  router.push("/supervisor/user");
                 }}
               >
-                <button
-                  style={{ width: "40px", height: "40px" }}
-                  className={styles.filterBtn}
-                  onClick={() => {
-                    router.push("/supervisor/user");
+                <Image src={leftArrow} />
+              </button>
+              <div className={userStyles.userNameContainer}>
+                <img
+                  src={currentUser?.data?.response?.profileImageUrl}
+                  alt="User Avatar"
+                  width={35}
+                  height={35}
+                  style={{
+                    borderRadius: "50%",
+                    marginRight: "5px",
                   }}
-                >
-                  <Image src={leftArrow} />
-                </button>
-                <div className={userStyles.userNameContainer}>
-                  <img
-                    src={currentUser?.data?.response?.profileImageUrl}
-                    alt="User Avatar"
-                    width={35}
-                    height={35}
-                    style={{
-                      borderRadius: "50%",
-                      marginRight: "5px",
-                    }}
-                  />
-                  <span>
-                    {currentUser?.data?.response?.firstName}{" "}
-                    {currentUser?.data?.response?.lastName}
-                  </span>
-                </div>
+                />
+                <span>
+                  {currentUser?.data?.response?.firstName}{" "}
+                  {currentUser?.data?.response?.lastName}
+                </span>
               </div>
-              <div className="col-xl-12">
-                <div className="card-body p-0">
-                  <div className="table-responsive active-projects task-table">
-                    <div className="tbl-caption  align-items-center">
-                      <AuditHeaderFilters
-                        setSearch={setSearch}
-                        isSearch={true}
-                        searchlabel="Search By Patient Id / Name"
-                        // auditedStatus
-                        selectlabel2="Audit Status"
-                        isSelector2={true}
-                        setSelectedOption2={setSelectedAuditOption}
-                        selectOptions2={AuditOptions}
-                        defaultSelectValue2={"Select Status"}
-                        //audit due date
-                        audipickerlabel1="Audit Due Date"
-                        audidefaultStartDate={""}
-                        audidefaultEndDate={""}
-                        audisetStartDate={setAduitDueStartDate}
-                        audisetEndDate={setAduitDueEndDate}
-                        isAduitDueDate={true}
-                        // audited completed date
-                        audipickerlabe2="Audit Completed Date"
-                        audidefaultStartDate2={""}
-                        audidefaultEndDate2={""}
-                        audisetStartDate2={setAduitCompletedStartDate}
-                        audisetEndDate2={setAduitCompletedEndDate}
-                        isAuditCompleteDate={true}
-                        // allocated by
-                        isAuditAllocatedBy={true}
-                        audiallocatedBylabel="Audit AllocatedBy"
-                        auditallocatedByOptions={generateOptionsList(
-                          filteredList
-                        )}
-                        audisetSelAllocatedBy={setSelAuditAllocatedBy}
-                        // audidefaultAllocatedBy={""}
-                        // select status
-                        selectlabel="Reviewed Status"
-                        isSelector={true}
-                        setSelectedOption={setSelectedOption}
-                        selectOptions={statusOptions}
-                        defaultSelectValue1={"Select Status"}
-                        // due date
-                        pickerlabel="Due Date"
-                        defaultStartDate={""}
-                        defaultEndDate={""}
-                        setStartDate={setDueStartDate}
-                        setEndDate={setDueEndDate}
-                        isRangePicker={true}
-                        // completed date
-                        pickerlabe2="Completed Date"
-                        defaultStartDate2={""}
-                        defaultEndDate2={""}
-                        setStartDate2={setCompletedStartDate}
-                        setEndDate2={setCompletedEndDate}
-                        isAnotherPicker={true}
-                        // defaultAllocateTo={""}
-                        // allocated by
-                        isAllocatedBySelector={true}
-                        allocatedBylabel=" AllocatedBy"
-                        allocatedByOptoons={generateOptionsList(filteredList)}
-                        setSelAllocatedBy={setSelAllocatedBy}
-                        // defaultAllocatedBy={"All"}
-                        // allocated date
-                        pickerlabe3="Allocated Date"
-                        defaultStartDate3={""}
-                        defaultEndDate3={""}
-                        setStartDate3={setAllocatedStartDate}
-                        setEndDate3={setAllocatedEndDate}
-                        isAllocatedDate={true}
-                        // Auditeddate
-                        pickerlabe4="Audited Date"
-                        defaultStartDate4={""}
-                        defaultEndDate4={""}
-                        setStartDate4={setAuditedStartDate}
-                        setEndDate4={setAuditedEnsDate}
-                        isAnotherPicker3={true}
-                        addUser={false}
-                        bullets={bullets}
-                        isNextRow={true}
-                        badges={badges}
-                        getFilters={getFilters}
-                        username={userName}
-                      />
-                    </div>
-                    <div
-                      id="task-tbl_wrapper"
-                      className="dataTables_wrapper no-footer"
-                    >
-                      {!userListAll?.content ? (
-                        <SpinnerDots />
-                      ) : (
-                        <UserQueue
-                          userList={userListAll?.content}
-                          sort={sort}
-                          setSort={setSort}
-                          auditBodyTemplate={auditstatusBodyTemplate}
-                        />
+            </div>
+            <div className="col-xl-12">
+              <div className="card-body p-0">
+                <div className="table-responsive active-projects task-table">
+                  <div className="tbl-caption  align-items-center">
+                    <AuditHeaderFilters
+                      setSearch={setSearch}
+                      isSearch={true}
+                      search={search}
+                      searchlabel="Search By Patient ID / Name"
+                      // auditedStatus
+                      selectlabel2="Audit Status"
+                      isSelector2={true}
+                      setSelectedOption2={setSelectedAuditOption}
+                      selectOptions2={AuditOptions}
+                      defaultSelectValue2={"Select Status"}
+                      //audit due date
+                      audipickerlabel1="Audit Due Date"
+                      audidefaultStartDate={""}
+                      audidefaultEndDate={""}
+                      audisetStartDate={setAduitDueStartDate}
+                      audisetEndDate={setAduitDueEndDate}
+                      isAduitDueDate={true}
+                      // audited completed date
+                      audipickerlabe2="Audit Completed Date"
+                      audidefaultStartDate2={""}
+                      audidefaultEndDate2={""}
+                      audisetStartDate2={setAduitCompletedStartDate}
+                      audisetEndDate2={setAduitCompletedEndDate}
+                      isAuditCompleteDate={true}
+                      // allocated by
+                      isAuditAllocatedBy={true}
+                      audiallocatedBylabel="Audit AllocatedBy"
+                      auditallocatedByOptions={generateOptionsList(
+                        filteredList
                       )}
-                      <div>
-                        <div className="pagination-container">
-                          <Paginator
-                            first={paginationFirst}
-                            rows={15}
-                            totalRecords={totalElements}
-                            onPageChange={onPageChange}
-                          />
-                          <div className="total-pages">
-                            Total count: {totalElements ? totalElements : 0}
-                          </div>
+                      audisetSelAllocatedBy={setSelAuditAllocatedBy}
+                      // select status
+                      selectlabel="Reviewed Status"
+                      isSelector={true}
+                      setSelectedOption={setSelectedOption}
+                      selectOptions={statusOptions}
+                      defaultSelectValue1={"Select Status"}
+                      // due date
+                      pickerlabel="Due Date"
+                      defaultStartDate={""}
+                      defaultEndDate={""}
+                      setStartDate={setDueStartDate}
+                      setEndDate={setDueEndDate}
+                      isRangePicker={true}
+                      // completed date
+                      pickerlabe2="Completed Date"
+                      defaultStartDate2={""}
+                      defaultEndDate2={""}
+                      setStartDate2={setCompletedStartDate}
+                      setEndDate2={setCompletedEndDate}
+                      isAnotherPicker={true}
+                      // defaultAllocateTo={""}
+                      // allocated by
+                      isAllocatedBySelector={true}
+                      allocatedBylabel=" AllocatedBy"
+                      allocatedByOptoons={generateOptionsList(filteredList)}
+                      setSelAllocatedBy={setSelAllocatedBy}
+                      // defaultAllocatedBy={"All"}
+                      // allocated date
+                      pickerlabe3="Allocated Date"
+                      defaultStartDate3={""}
+                      defaultEndDate3={""}
+                      setStartDate3={setAllocatedStartDate}
+                      setEndDate3={setAllocatedEndDate}
+                      isAllocatedDate={true}
+                      // Auditeddate
+                      pickerlabe4="Audited Date"
+                      defaultStartDate4={""}
+                      defaultEndDate4={""}
+                      setStartDate4={setAuditedStartDate}
+                      setEndDate4={setAuditedEnsDate}
+                      isAnotherPicker3={true}
+                      addUser={false}
+                      bullets={bullets}
+                      isNextRow={true}
+                      badges={badges}
+                      getFilters={getFilters}
+                      username={userName}
+                    />
+                  </div>
+                  <div
+                    id="task-tbl_wrapper"
+                    className="dataTables_wrapper no-footer"
+                  >
+                    {!userListAll?.content ? (
+                      <SpinnerDots />
+                    ) : (
+                      <UserQueue
+                        userList={userListAll?.content}
+                        sort={sort}
+                        setSort={setSort}
+                        auditBodyTemplate={auditstatusBodyTemplate}
+                      />
+                    )}
+                    <div>
+                      <div className="pagination-container">
+                        <Paginator
+                          first={paginationFirst}
+                          rows={15}
+                          totalRecords={totalElements}
+                          onPageChange={onPageChange}
+                        />
+                        <div className="total-pages">
+                          Total count: {totalElements ? totalElements : 0}
                         </div>
                       </div>
                     </div>
@@ -453,8 +432,8 @@ const index = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
-export default index;
+export default Index;

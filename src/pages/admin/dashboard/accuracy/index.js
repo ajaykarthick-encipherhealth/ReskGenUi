@@ -10,9 +10,8 @@ import HeadTitle from "../../../../components/headtitle";
 import { useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
-import { Empty, Spin, Select } from "antd";
+import { Empty, Spin } from "antd";
 import spinSTYles from "../../../../styles/auth.module.css";
-import moment from "moment";
 import {
   getAccuracyDaily,
   getAccuracyMOnthly,
@@ -37,7 +36,6 @@ export const getDateWeek = (date) => {
   const firstDayWeek = firstDayOfMonth.getDay();
   const currentDate = date.getDate();
   const startingWeek = Math.ceil((currentDate + firstDayWeek) / 7);
-  var currentWeek = moment().isoWeek().toString();
   return startingWeek;
 };
 
@@ -100,8 +98,6 @@ const Accuracy = () => {
   const handleTabButtonClick = (index, btn) => {
     setActiveTabButton(index);
     setCurrentTabBtn(btn);
-    // setActiveButton(0);
-    // setCurrentBtn("Daily");
   };
   const handleYearChange = (date, dateString) => {
     setSelectedYear(dateString);
@@ -110,9 +106,7 @@ const Accuracy = () => {
   const handleMonthChange = (date) => {
     const selectedDate = new Date(date);
     setMonth(date);
-    const monthNumber = (selectedDate.getMonth() + 1)
-      .toString()
-      .padStart(2, "0");
+    const monthNumber = parseInt(selectedDate.getMonth()) + 1;
     setSelectedMonth(monthNumber);
   };
 
@@ -129,6 +123,7 @@ const Accuracy = () => {
   }
 
   let highlightIndex = -1;
+
   if (currentBtn === "Monthly") {
     if (parseInt(selectedYear) === new Date().getFullYear()) {
       highlightIndex = currentDate.getMonth();
@@ -136,8 +131,8 @@ const Accuracy = () => {
   } else if (currentBtn === "Daily") {
     if (
       parseInt(selectedYear) === new Date().getFullYear() &&
-      selectedMonth === new Date().getMonth() + 1
-    ) {
+      selectedMonth === new Date().getMonth()+1
+      ) {
       highlightIndex = currentDate.getDate() - 1;
     }
   } else if (currentBtn === "Weekly") {
@@ -327,14 +322,14 @@ const Accuracy = () => {
           },
         },
         opposite: true,
-        // min: 0,
-        // max: 10,
+
         tickInterval: 4,
       },
     ],
     legend: {
       enabled: false,
     },
+
     credits: {
       enabled: false,
     },
@@ -461,7 +456,7 @@ const Accuracy = () => {
       );
     }
   }, [currentBtn, selectedMonth, selectedYear, router, currentTabBtn]);
-
+ 
   return (
     <>
       <HeadTitle header="Accuracy and Quality Insights" />
@@ -496,13 +491,6 @@ const Accuracy = () => {
                   val={month}
                   val1={year}
                 />
-                {/* {currentBtn !== "Monthly" && (
-                  <YearPicker
-                    onChange={handleMonthChange}
-                    type={activeButton}
-                    bgColor="#E6EEFF"
-                  />
-                )} */}
               </div>
               <div className={styles.btnScroller}>
                 <Buttonscroller

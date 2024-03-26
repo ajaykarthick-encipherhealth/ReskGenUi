@@ -1,18 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Avatar, DatePicker, Modal, notification } from "antd";
-import {
-  faSearch,
-  faLock,
-  faXmark,
-  faUser,
-} from "@fortawesome/free-solid-svg-icons";
-import { InputText } from "primereact/inputtext";
+import { faXmark, faUser } from "@fortawesome/free-solid-svg-icons";
 import modalStyle from "./style.module.css";
 import { useEffect, useState } from "react";
 import axios from "../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../utility/enpoints";
-import Router from "next/router";
-import { disableFutureDate, disablePastDate } from "../../../../components/headerFilters/functions";
+import { disablePastDate } from "../../../../components/headerFilters/functions";
 import moment from "moment";
 
 const L2AllocateModal = ({
@@ -38,33 +31,15 @@ const L2AllocateModal = ({
     hold: null,
     allocated: null,
   });
+
   const getInitials = (firstName, lastName) => {
     const firstNameInitial = firstName?.charAt(0) || "";
     const secondNameInitial = lastName?.charAt(0) || "";
-
     return firstNameInitial?.toUpperCase() + secondNameInitial?.toUpperCase();
   };
 
-  const getUserList = async (search) => {
-    var resoureUrl = `dbservice/user/getUsersByOrgIdAndTenantId?orgid=daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5&searchString=${search}`;
-    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    if (response.data) {
-      var result = response?.data?.response;
-      const user = result?.map((item) => {
-        return {
-          firstName: item.firstName,
-          lastName: item.lastName,
-          id: item.id,
-          role: item.role,
-          email: item.userName,
-        };
-      });
-      setUserDetails(user);
-    }
-  };
-
   const setAllocate = async () => {
-    var resoureUrl = `dbservice/patient/admin/assignPatients/l2audit`;
+    let resoureUrl = `dbservice/patient/admin/assignPatients/l2audit`;
     const response = await axios.post(ENDPOINTS.apiEndoint + resoureUrl, {
       userId: selectedUser?.userName,
       dueDate: `${allocateDate + "T23:00:00.999Z"}`,
@@ -87,10 +62,10 @@ const L2AllocateModal = ({
 
   const getAllCheckList = async () => {
     if (selectedUser) {
-      var resoureUrl = `dbservice/l2audit/statistics?username=${selectedUser?.userName}`;
+      let resoureUrl = `dbservice/l2audit/statistics?username=${selectedUser?.userName}`;
       const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
       if (response.data) {
-        var result = response?.data?.response;
+        let result = response?.data?.response;
         setChart(result);
       }
     }
@@ -134,19 +109,17 @@ const L2AllocateModal = ({
                 style={{ backgroundColor: "#04306F" }}
               >
                 {selectedUser?.firstName ? (
-                  getInitials(selectedUser?.firstName,selectedUser?.lastName)
+                  getInitials(selectedUser?.firstName, selectedUser?.lastName)
                 ) : (
                   <FontAwesomeIcon className="fa fa-search" icon={faUser} />
                 )}
               </Avatar>
               <div className="p-3">
                 <p className={`${modalStyle.listName} mb-1`}>
-                  {selectedUser?.firstName}  {selectedUser?.lastName}
+                  {selectedUser?.firstName} {selectedUser?.lastName}
                 </p>
               </div>
             </div>
-
-            {/* <div className="m-2">{handleStatus(item.status)}</div> */}
           </div>
           <>
             <div className="row px-3" style={{ paddingTop: "50px" }}>
@@ -166,10 +139,10 @@ const L2AllocateModal = ({
                         setAllocateDate("");
                       }
                     }}
-                    disabledDate={(current) => 
-                      disablePastDate(current)
+                    disabledDate={(current) => disablePastDate(current)}
+                    value={
+                      allocateDate ? moment(allocateDate, "YYYY-MM-DD") : ""
                     }
-                    value={allocateDate ? moment(allocateDate, 'YYYY-MM-DD') : ""}
                   />
                 </div>
                 <div className="d-flex my-3">

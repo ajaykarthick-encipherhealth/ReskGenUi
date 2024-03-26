@@ -345,15 +345,24 @@
 .footerDiv {
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-top: -10px;
   cursor: pointer;
+  height:40px;
+}
+.footerDiv:hover{
+ background-color: #DD6B55;
+ border-radius: 4px;
 }
 .footerCont {
   font-size: 16px;
   font-weight: 500;
-  color: #909090;
-  margin: -5px 0 0 5px;
+  color: #DD6B55;
+  /* margin: -5px 0 0 5px; */
 }
+.footerDiv:hover > .footerCont{
+  color:#fff;
+} 
 .edit {
   width: 30px;
   height: 30px;
@@ -371,4 +380,9 @@
   width: 22px;
   height: 22px;
   margin: 5px 0 0px 0;
+}
+.close_icon {
+  width: 18px;
+  cursor: pointer;
+  font-size: 20px;
 }

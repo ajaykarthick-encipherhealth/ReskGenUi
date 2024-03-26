@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import styles from "../../styles/auth.module.css";
 import twofactorImage from "../../images/svg/twofactorAuthentication.svg";
@@ -9,8 +9,8 @@ import hamburgermenu from "../../images/svg/hamburgermenu.svg";
 import settings from "../../images/svg/settings.svg";
 import { codeLength, generateCodeArray } from "./Authentication";
 import { getQrCode, getValidateCode } from "../../store/actions/AuthActions";
-import { useSelector } from "react-redux";
 import { encyptingPass } from "../../components/headerFilters/functions";
+import RegularButton from "../../components/button";
 
 const GetOTP = () => {
   const dispatch = useDispatch();
@@ -28,7 +28,6 @@ const GetOTP = () => {
     const encodedParams = urlParams.get("params");
     if (encodedParams) {
       const decodedParams = JSON.parse(atob(encodedParams));
-      const { username, password } = decodedParams;
       setUsername(decodedParams?.username);
       setPassword(decodedParams?.password);
       dispatch(getQrCode(decodedParams?.username, router));
@@ -55,7 +54,7 @@ const GetOTP = () => {
       const updatedCode = [...code];
       updatedCode[index - 1] = "";
       setCode(updatedCode);
-      if ((index <=5) && (index===inputRefs?.length)) {
+      if (index <= 5 && index === inputRefs?.length) {
         inputRefs[index]?.current?.focus();
       } else {
         inputRefs[index - 1]?.current?.focus();
@@ -118,49 +117,44 @@ const GetOTP = () => {
           {generateCodeArray()
             .slice(0, generateCodeArray().length - 1)
             .map((index) => (
-              <>
-                <input
-                  key={index}
-                  type="number"
-                  maxLength="1"
-                  pattern="[0-9]"
-                  value={
-                    code?.length > 0
-                      ? code[index - 1]
-                        ? code[index - 1]
-                        : ""
-                      : ""
-                  }
-                  className={styles.codeInput}
-                  onInput={(e) => handleInput(index, e)}
-                  onKeyDown={(e) => handleBackspace(index, e)}
-                  ref={inputRefs[index]}
-                />
-              </>
+              <input
+                key={index}
+                type="number"
+                maxLength="1"
+                pattern="[0-9]"
+                value={
+                  code?.length > 0 && code[index - 1] ? code[index - 1] : ""
+                }
+                className={styles.codeInput}
+                onInput={(e) => handleInput(index, e)}
+                onKeyDown={(e) => handleBackspace(index, e)}
+                ref={inputRefs[index]}
+              />
             ))}
         </div>
 
         <div className={styles.btnDiv}>
-          <button
-            className={styles.sendBtn}
-            style={{ width: "16%", margin: "auto" }}
-            onClick={() => {
-              const codeString = code?.join("");
-              if (codeString?.length > 0) {
-                dispatch(
-                  getValidateCode(
-                    username,
-                    encyptingPass(codeString),
-                    router,
-                    "",
-                    password
-                  )
-                );
-              }
-            }}
-          >
-            VALIDATE
-          </button>
+          <div style={{ margin: "auto" }}>
+            <RegularButton
+              type="submit"
+              name="VALIDATE"
+              width="280px"
+              onClick={() => {
+                const codeString = code?.join("");
+                if (codeString?.length > 0) {
+                  dispatch(
+                    getValidateCode(
+                      username,
+                      encyptingPass(codeString),
+                      router,
+                      "",
+                      password
+                    )
+                  );
+                }
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>

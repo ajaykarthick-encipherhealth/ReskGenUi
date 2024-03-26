@@ -88,7 +88,7 @@ const index = () => {
   const [selectUser, setSelectUser] = useState([]);
   const [selectManager, setSelectedManger] = useState("");
   const [select, setSelect] = useState(null);
- 
+
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
     return ReceivedOptions?.push({ label: item.sender, value: item.sender });
@@ -219,7 +219,10 @@ const index = () => {
     if (selectedCoderOptReport && !select) {
       dispatch(
         getSelectUserList(
-          selectedCoderOptReport === null &&selectedCoderOptReport?.value==='All'  ? "" : selectedCoderOptReport?.value
+          selectedCoderOptReport === null &&
+            selectedCoderOptReport?.value === "All"
+            ? ""
+            : selectedCoderOptReport?.value
         )
       );
     }
@@ -230,10 +233,15 @@ const index = () => {
     { value: "SUPERVISOR", label: "SUPERVISOR" },
   ];
 
-  const optionsUser = selectUserList?.data?.response?.map((res) => ({
-    value: res.userName,
-    label: res.firstName + " " + res.lastName,
-  }));
+  const optionsUser =
+    selectUserList?.data?.response?.map((res) => ({
+      value: res.userName,
+      label: res.firstName + " " + res.lastName,
+    })) || [];
+
+  if (optionsUser.length > 0) {
+    optionsUser.unshift({ value: "", label: "All" });
+  }
 
   useEffect(() => {
     if (reportActiveTab) {
@@ -262,6 +270,9 @@ const index = () => {
                             setReceivedSearch={setReceivedSearch}
                             setCoderSearch={setCoderSearch}
                             isSearch={true}
+                            coderSearch={coderSearch}
+                            receivedSearch={receivedSearch}
+                            sentSearch={sentSearch}
                             searchlabel="Search by Name"
                             // selector
                             selectlabel="Select Status"
@@ -312,7 +323,9 @@ const index = () => {
                             setReceivedEndDate={setReceivedEndDate}
                             setCoderStartDate={setCoderStartDate}
                             setCoderEndDate={setCoderEndDate}
-                            activeTab={!reportActiveTab?"CoderReport":reportActiveTab}
+                            activeTab={
+                              !reportActiveTab ? "CoderReport" : reportActiveTab
+                            }
                             rowsLength={rowsLength}
                             setIsModalVisible={setIsModalVisible}
                             selectedDates={selectedDates}
@@ -440,6 +453,7 @@ const index = () => {
                                       receivedPageNo={sentPageNo}
                                       receivedStartDate={startDate}
                                       receivedEndDate={endDate}
+                                      isAdmin={true}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane
@@ -463,6 +477,7 @@ const index = () => {
                                         setSortOrder={setReceivedSortOrder}
                                         sortOrder={receivedSortOrder}
                                         setSort={setSort}
+                                        isAdmin={true}
                                       />
                                     )}
                                   </Tab.Pane>

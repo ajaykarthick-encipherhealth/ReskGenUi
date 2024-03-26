@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import styles from "./styles.module.css";
+import { Empty, Modal, Spin } from "antd";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
-import { Empty, Modal, Spin } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/router";
 import { getPatientID } from "../../../../store/actions/PatientsActions";
 import { getHoldStatusData } from "../../../../store/actions/l2Action/DashboardAction";
-import spinSTYles from '../../../../styles/auth.module.css'
+import spinSTYles from "../../../../styles/auth.module.css";
+
 const HoldStatus = () => {
   const [openHoldStatus, setOpenHoldStatus] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
+
   useEffect(() => {
     dispatch(getHoldStatusData(router));
   }, []);
@@ -43,7 +45,7 @@ const HoldStatus = () => {
     <table className={styles.classTable}>
       <thead className={styles.tableHead}>
         <tr>
-          <th>Patient Id</th>
+          <th>Patient ID</th>
           <th>Reason</th>
         </tr>
       </thead>
@@ -65,7 +67,7 @@ const HoldStatus = () => {
         ) : (
           <tr>
             <td colSpan="2">
-            <Empty/>
+              <Empty />
             </td>
           </tr>
         )}
@@ -76,7 +78,6 @@ const HoldStatus = () => {
     <>
       <HeadTitle
         header="Hold Status"
-        // icon={calender}
         anchorTag="anchor"
         handleOpen={handleOpen}
       />
@@ -110,9 +111,7 @@ const HoldStatus = () => {
         onCancel={handleOk}
       >
         {holdStatusData?.laoding ? (
-          <div
-          className={spinSTYles.spinStyle}
-          >
+          <div className={spinSTYles.spinStyle}>
             <Spin loading={holdStatusData?.loading} />
           </div>
         ) : (

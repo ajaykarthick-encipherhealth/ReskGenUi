@@ -186,12 +186,12 @@ const UserList = () => {
         if (response.data.message == "patient Already Present") {
           setIsLoadingBtn(false);
           notification.warning({
-            message: "Patient Id Already Present",
+            message: "Patient ID Already Present",
             duration: 1,
           });
         } else {
           notification.success({
-            message: "Patient Id Created Successfully!",
+            message: "Patient ID Created Successfully!",
             duration: 1,
           });
           setAddPatientId(false);
@@ -275,6 +275,7 @@ const UserList = () => {
                         setSearch={setSearch}
                         isSearch={true}
                         searchlabel="Search By Username"
+                        search={search}
                         // select status
                         selectlabel="Select Status"
                         isSelector={true}
@@ -372,7 +373,7 @@ const UserList = () => {
                 <div className="row">
                   <div className="col-xl-12 mb-3">
                     <Form.Label>
-                      Patient Id <span className="text-danger">*</span>{" "}
+                      Patient ID <span className="text-danger">*</span>{" "}
                     </Form.Label>
                     <Form.Control
                       name="patientId"

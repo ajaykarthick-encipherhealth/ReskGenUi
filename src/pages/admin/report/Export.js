@@ -8,6 +8,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { updateSentReport } from "../../../services/adminServices/ReportService";
 import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
+import InputField from "../../../components/input";
 
 const { Option } = Select;
 
@@ -15,7 +16,7 @@ export const checkBoxData = [
   {
     id: 1,
     title: "patientId",
-    heading: "Patient Id",
+    heading: "Patient ID",
     checked: false,
   },
   {
@@ -285,9 +286,15 @@ const Export = ({
             },
           ]}
         >
-          <Input
-            disabled={selectedRows?.reportName ? true : false}
-            onChange={(e) => setReportName(e.target.value)}
+          <InputField
+            inputValue={reportName?reportName : selectedRows?.reportName}
+            setInputValue={setReportName}
+            delay={1000}
+            type="text"
+            placeholder=""
+            isSearch={false}
+            isDisabled={selectedRows?.reportName ? true : false}
+            isInputFiled={true}
           />
         </Form.Item>
         {!isSent && (

@@ -38,24 +38,20 @@ const bullets = [
     title: "Processed Status",
     option: [
       {
-        color: "#5da9e4",
+        color: "#0078D4",
         name: "Pending",
       },
       {
-        color: "red",
+        color: "#EB5252",
         name: "Declined",
       },
       {
-        color: "#3a9b94",
+        color: "#00BC13",
         name: "Completed",
       },
       {
-        color: "#AD94FA",
+        color: "#3C0AD2",
         name: "Hold",
-      },
-      {
-        color: "#3B3486",
-        name: "ABORTED BY CRON",
       },
     ],
   },
@@ -63,11 +59,11 @@ const bullets = [
     title: "Audited Status",
     option: [
       {
-        color: "#377880",
+        color: "#4AA1AB",
         name: "AUDITED",
       },
       {
-        color: "#E28213",
+        color: "#BD3A79",
         name: "AUDIT PENDING",
       },
       {
@@ -75,11 +71,11 @@ const bullets = [
         name: "RE AUDIT",
       },
       {
-        color: "red",
+        color: "#EB5252",
         name: "DECLINED",
       },
       {
-        color: "#CE9900",
+        color: "#EBAE00",
         name: "AUDIT HOLD",
       },
       {
@@ -638,6 +634,7 @@ export default function Patient() {
                             setAuditSelAllocatedTo={setAuditSelAllocatedTo}
                             setSearch={setSearchTextValue}
                             isSearch={true}
+                            search={searchTextValue}
                             searchlabel="Search By Patient Name / Id"
                             // select status
                             selectlabel="Select Status"

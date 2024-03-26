@@ -1,8 +1,6 @@
 import React from "react";
-import { Offcanvas,Button } from "react-bootstrap";
-import visitStyles from "../../../styles/visitdata.module.css";
+import { Offcanvas, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import Spinner from "../../../components/spinner";
 
 const Addpatients = ({
   addPatientId,
@@ -10,7 +8,6 @@ const Addpatients = ({
   validated,
   handleSubmitPatientId,
   handleChangePatientId,
-  isLoadingBtn,
 }) => {
   return (
     <Offcanvas
@@ -42,9 +39,10 @@ const Addpatients = ({
             <div className="row">
               <div className="col-xl-12 mb-3">
                 <Form.Label>
-                  Patient Id <span className="text-danger">*</span>{" "}
+                  Patient ID <span className="text-danger">*</span>{" "}
                 </Form.Label>
                 <Form.Control
+                  className="text-capitalize"
                   name="patientId"
                   required
                   type="text"
@@ -67,14 +65,9 @@ const Addpatients = ({
               <Button type="submit" className="btn btn-primary btn-sm me-1">
                 {"Submit"}
               </Button>
-              <Button className="btn-sm me-1"
+              <Button
+                className="btn btn-danger btn-sm light ms-1"
                 onClick={() => setAddPatientId(false)}
-                style={{
-                  backgroundColor: "#ffdede",
-                  borderColor: "#ffdede",
-                  color: "#ff5e5e",
-                  height: "32px",
-                }}
               >
                 Cancel
               </Button>

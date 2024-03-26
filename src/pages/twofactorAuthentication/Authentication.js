@@ -2,21 +2,18 @@ import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import Image from "next/image";
+import { notification } from "antd";
 import styles from "../../styles/auth.module.css";
 import twofactorImage from "../../images/svg/twofactorAuthentication.svg";
-import {
-  getQrCode,
-  getValidateCode,
-  loginAction,
-} from "../../store/actions/AuthActions";
+import { getValidateCode, loginAction } from "../../store/actions/AuthActions";
 import { encyptingPass } from "../../components/headerFilters/functions";
-import { notification } from "antd";
+import RegularButton from "../../components/button";
 
 export const codeLength = 6;
 export const generateCodeArray = () =>
   Array.from({ length: codeLength + 1 }, (_, index) => index + 1);
 
-const index = () => {
+const Index = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [seconds, setSeconds] = useState(30);
@@ -28,37 +25,19 @@ const index = () => {
 
   const inputRefs = Array.from({ length: codeLength + 1 }, () => useRef(null));
 
-  // const handleInput = (index, e) => {
-  //   const value = e.target.value;
-  //   const numbers = code.slice(0, 6);
-  //   if (!isNaN(value) && value?.length === 1) {
-  //     numbers.push(value);
-  //   }
-  //   setCode(numbers);
-  //   if (code[index - 1] && value) {
-  //     const addOndigit = value[1];
-  //     const splittedVal = [...code, ...addOndigit];
-  //     setCode(splittedVal);
-  //     inputRefs[index + 1]?.current?.focus();
-  //   }
-  //   if (value?.length === 1 && index < inputRefs?.length - 1) {
-  //     inputRefs[index + 1]?.current?.focus();
-  //   }
-  // };
-
   useEffect(() => {
     inputRefs[1]?.current?.focus();
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const encodedParams = urlParams.get("params");
     const decodedParams = JSON.parse(atob(encodedParams));
-    const { mfa, skipEntry, username, password } = decodedParams;
     setEnableMFA(decodedParams?.mfa);
     setUsername(decodedParams?.username);
     setPassword(decodedParams?.password);
     const skipParam = decodedParams?.skipEntry;
     setSkip(skipParam);
   }, []);
+
   useEffect(() => {
     if (seconds === 0) {
       setCode([]);
@@ -139,11 +118,7 @@ const index = () => {
                     maxLength="1"
                     pattern="[0-9]"
                     value={
-                      code?.length > 0
-                        ? code[index - 1]
-                          ? code[index - 1]
-                          : ""
-                        : ""
+                      code?.length > 0 && code[index - 1] ? code[index - 1] : ""
                     }
                     className={styles.codeInput}
                     onInput={(e) => handleInput(index, e)}
@@ -175,59 +150,60 @@ const index = () => {
         <div className={styles.lastContainer}>
           {enableMFA ? (
             <>
-              <button
-                className={styles.sendBtn}
-                onClick={() => {
-                  const codeString = code?.join("");
-                  dispatch(
-                    getValidateCode(
-                      username,
-                      encyptingPass(codeString),
-                      router,
-                      "validate",
-                      password
-                    )
-                  );
-                }}
-              >
-                SUBMIT
-              </button>
-              <button
+              <div className={styles.enableMfaBtn}>
+                <RegularButton
+                  type="submit"
+                  onClick={() => {
+                    const codeString = code?.join("");
+                    dispatch(
+                      getValidateCode(
+                        username,
+                        encyptingPass(codeString),
+                        router,
+                        "validate",
+                        password
+                      )
+                    );
+                  }}
+                  name="SUBMIT"
+                  width={200}
+                />
+              </div>
+              <RegularButton
+                type="outline"
+                name="BACK"
                 className={styles.backBtn}
                 onClick={() => {
                   router.push("/login");
                 }}
-              >
-                BACK
-              </button>
-              {/* <div className={styles.redirect}>
-                <span className={styles.code}> Didn't get a Code? </span>
-                <span className={styles.link}>Send again</span>
-              </div> */}
+                width={200}
+              />
             </>
           ) : (
             <>
-              <button
-                className={styles.sendBtn}
-                onClick={() => {
-                  const encodedParams = btoa(
-                    JSON.stringify({
-                      username: username,
-                      password: password,
-                    })
-                  );
+              <div className={styles.enableMfaBtn}>
+                <RegularButton
+                  type="submit"
+                  onClick={() => {
+                    const encodedParams = btoa(
+                      JSON.stringify({
+                        username: username,
+                        password: password,
+                      })
+                    );
 
-                  router?.push({
-                    pathname: `/twofactorAuthentication/GetOTP`,
-                    search: `params=${encodedParams}`,
-                  });
-                }}
-              >
-                ENABLE MFA
-              </button>
+                    router?.push({
+                      pathname: `/twofactorAuthentication/GetOTP`,
+                      search: `params=${encodedParams}`,
+                    });
+                  }}
+                  name="ENABLE MFA"
+                  width="100%"
+                />
+              </div>
               {skip && (
-                <button
-                  className={styles.sendBtn}
+                <RegularButton
+                  type="submit"
                   onClick={() => {
                     dispatch(
                       loginAction(
@@ -240,9 +216,9 @@ const index = () => {
                       )
                     );
                   }}
-                >
-                  SETUP LATER
-                </button>
+                  name="SETUP LATER"
+                  width="100%"
+                />
               )}
             </>
           )}
@@ -252,4 +228,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;

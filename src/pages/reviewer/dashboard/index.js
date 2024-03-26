@@ -12,9 +12,8 @@ import { getWorkFlow } from "../../../store/actions/DashboardActions";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
-import Footer from "../../../jsx/layouts/Footer";
 
-const index = () => {
+const Index = () => {
   const currentDate = dayjs();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -69,4 +68,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;

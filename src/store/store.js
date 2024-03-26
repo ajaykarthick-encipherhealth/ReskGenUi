@@ -22,6 +22,8 @@ import { AdminReportReducer } from "./reducers/adminRecucers/ReportReducer";
 import { PhyicianReducer } from "./reducers/physicianReducers/patientsReducers";
 import { PhysicianDashboardReducer } from "./reducers/physicianReducers/DashboardReducer";
 import { PhysicianComparisonReducer } from "./reducers/physicianReducers/ComparisionReducer";
+import { TanantAdminService } from "./reducers/tanantAdminReducers/fihrReducers";
+
 
 const middleware = applyMiddleware(thunk);
 
@@ -47,13 +49,12 @@ const reducers = combineReducers({
   AdminDashboardReducers: AdminDashboardReducer,
   adminReport: AdminReportReducer,
   l2User: L2UserReducers,
-
   // physician
   PhyicianReducer:PhyicianReducer,
   physicianDashbaord:PhysicianDashboardReducer,
-  physicianComparison:PhysicianComparisonReducer
+  physicianComparison:PhysicianComparisonReducer,
+  tanantAdmin: TanantAdminService,
 
-  //form: reduxFormReducer,
 });
 
 //const store = createStore(rootReducers);

@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import { Empty, Spin } from "antd";
 import * as echarts from "echarts";
 import ReactECharts from "echarts-for-react";
 import { Buttons } from "../../../reviewer/workingstatus";
@@ -8,10 +11,7 @@ import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
 import Legends from "../../../../components/legends";
 import { monthNames, getDays } from "../accuracy";
-import { useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
-import { useRouter } from "next/router";
-import { Empty, Spin } from "antd";
 import { getDeliveryStatus } from "../../../../store/actions/l2Action/DashboardAction";
 import spinSTYles from "../../../../styles/auth.module.css";
 const DeliveryStatus = () => {

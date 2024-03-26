@@ -1,3 +1,4 @@
+import { message } from "antd";
 import {
   workStatusApi,
   DailyTaskApi,
@@ -15,6 +16,7 @@ export const COMPLETED = "COMPLETED";
 export const HOLD_STATUS = "HOLD_STATUS";
 export const SELECTED_DAY = "SELECTED_DAY";
 export const CHATBOT = "CHATBOT";
+var chatBotAllMessage = [];
 
 export const getSelectedDay = (day) => ({
   type: SELECTED_DAY,
@@ -68,7 +70,7 @@ export const getDailyTaskDatas = (date, router) => {
   };
 };
 
-export const getAccuracyScore = (btn, month, year, router,isAdmin) => {
+export const getAccuracyScore = (btn, month, year, router, isAdmin) => {
   return (dispatch) => {
     dispatch({
       type: ACCURACY,
@@ -77,7 +79,7 @@ export const getAccuracyScore = (btn, month, year, router,isAdmin) => {
       },
     });
     try {
-      accuracyScore(btn, month, year, router,isAdmin).then((response) => {
+      accuracyScore(btn, month, year, router, isAdmin).then((response) => {
         dispatch({
           type: ACCURACY,
           payload: {
@@ -144,14 +146,19 @@ export const getChatReply = (msg) => {
       type: CHATBOT,
       payload: {
         loading: true,
+        data: chatBotAllMessage,
       },
     });
     try {
       ChatBot(msg).then((response) => {
+        chatBotAllMessage.push({
+          details: response,
+          question: msg,
+        });
         dispatch({
           type: CHATBOT,
           payload: {
-            data: response,
+            data: chatBotAllMessage,
             loading: false,
           },
         });

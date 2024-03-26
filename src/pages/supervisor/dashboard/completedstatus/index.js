@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
-import styles from "./styles.module.css";
 import * as echarts from "echarts";
 import ReactECharts from "echarts-for-react";
+import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import styles from "./styles.module.css";
+import { Empty, Spin } from "antd";
 import { Buttons } from "../../../reviewer/workingstatus";
 import Buttonscroller from "../../../../components/buttonSroller";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
 import Legends from "../../../../components/legends";
 import { monthNames, getDays } from "../accuracy";
-import { useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
-import { useRouter } from "next/router";
-import { Empty, Spin } from "antd";
 import { getCOmpletedScore } from "../../../../store/actions/l2Action/DashboardAction";
 import spinSTYles from "../../../../styles/auth.module.css";
 const CompletedStatus = () => {
@@ -55,11 +55,11 @@ const CompletedStatus = () => {
 
   const handleYearChange = (date, dateString) => {
     setSelectedYear(dateString);
-    setYear(date)
+    setYear(date);
   };
   const handleMonthChange = (date) => {
     const selectedDate = new Date(date);
-    setMonth(date)
+    setMonth(date);
     const monthNumber = (selectedDate.getMonth() + 1)
       .toString()
       .padStart(2, "0");
@@ -171,7 +171,7 @@ const CompletedStatus = () => {
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
             <div className={styles.picker}>
-            <YearPicker
+              <YearPicker
                 onChangeYear={handleYearChange}
                 onChangeMonth={handleMonthChange}
                 type={currentBtn}
@@ -179,13 +179,6 @@ const CompletedStatus = () => {
                 val={month}
                 val1={year}
               />
-              {/* {currentBtn !== "Monthly" && (
-                <YearPicker
-                  onChange={handleMonthChange}
-                  type={"month"}
-                  bgColor="#F3F3FF"
-                />
-              )} */}
             </div>
             <div className={styles.btnScroller}>
               <Buttonscroller

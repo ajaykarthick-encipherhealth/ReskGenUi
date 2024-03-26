@@ -1,5 +1,4 @@
 import React from "react";
-import styles from "./styles.module.css";
 import { IMAGES } from "../../jsx/constant/theme";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,12 +6,6 @@ import {
   faLocationArrow
 } from "@fortawesome/free-solid-svg-icons";
 const Chat = ({ openMsg ,offMsg}) => {
-
-  const emailSplitFunction = (email) => {
-    let emailSplit = email.split("@");
-    return emailSplit[0];
-  }
-
   return (
     <div
     className={`card chatbox chat dlab-chat-history-box chat-history-card ${openMsg ? "" : "d-none"}`}

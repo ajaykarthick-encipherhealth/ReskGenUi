@@ -1,26 +1,18 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
-import { Button } from "react-bootstrap";
-import { Badge } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
-import Select from "react-select";
-import { SVGICON } from "../../../jsx/constant/theme";
-import LoadingSpinner from "../../../jsx/components/spinner/spinner";
+import React, { useState, useEffect } from "react";
 import NavBar from "../../../jsx/layouts/nav";
 import { useSelector } from "react-redux";
-import { Offcanvas } from "react-bootstrap";
-
-import axios from "../../../utility/axiosConfig";
-import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/navigation";
+import { Spin } from "antd";
+import { Offcanvas, Button, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAngleLeft,
   faAngleRight,
-  faSpinner,
   faCheck,
 } from "@fortawesome/free-solid-svg-icons";
-import { Space, Spin } from "antd";
-import { NativeEventSource, EventSourcePolyfill } from "event-source-polyfill";
+import { EventSourcePolyfill } from "event-source-polyfill";
+import axios from "../../../utility/axiosConfig";
+import ENDPOINTS from "../../../utility/enpoints";
 
 export default function Patient() {
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -28,16 +20,6 @@ export default function Patient() {
   const [validated, setValidated] = useState(false);
   const [dataValidationList, setDataValidationList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [addUser, setAddUser] = useState(false);
-
-  const recordsPage = 10;
-  const lastIndex = currentPage * recordsPage;
-  const firstIndex = lastIndex - recordsPage;
-
-  const [npage, setNPage] = useState("");
-  const [number, setNumber] = useState([]);
-  const [records, setRecords] = useState([]);
   const [addPatient, setAddPatient] = useState(false);
   const [selectFile, setSelectFile] = useState([]);
   const [inputValue, setInputValue] = useState({
@@ -48,7 +30,6 @@ export default function Patient() {
 
   const [pageCount, setPageCount] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
-  const [pageOptions, setPageOptions] = useState(0);
   const [canPreviousPage, setCanPreviousPage] = useState(false);
   const [canNextPage, setCanNextPage] = useState(true);
   const [canMaxPage, setCanMaxPage] = useState(10);
@@ -323,7 +304,7 @@ export default function Patient() {
                           <thead>
                             <tr>
                               <th>SI.NO</th>
-                              <th>Patient Id</th>
+                              <th>Patient ID</th>
                               <th>Patient Name</th>
                               <th>File Name</th>
                               <th>Status</th>
@@ -473,7 +454,7 @@ export default function Patient() {
                   </div>
                   <div className="col-xl-12 mb-3">
                     <Form.Label>
-                      Patient Id <span className="text-danger">*</span>{" "}
+                      Patient ID <span className="text-danger">*</span>{" "}
                     </Form.Label>
                     <Form.Control
                       name="patientId"

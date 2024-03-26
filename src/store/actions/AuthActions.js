@@ -85,6 +85,11 @@ export const getMFAValidation = (username, route, password) => {
           pathname: `/twofactorAuthentication/Authentication`,
           search: `params=${encodedParams}`,
         });
+      } else {
+        notification.error({
+          message: response?.data?.message,
+          duration: 1,
+        });
       }
     });
   };

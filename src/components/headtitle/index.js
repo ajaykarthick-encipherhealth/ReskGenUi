@@ -22,13 +22,12 @@ const HeadTitle = ({
   const dispatch = useDispatch();
   const [selectedDates, setSelectedDates] = useState([]);
   const [dateValues, setDates] = useState();
-  const [isDisabled, setIsDisabled] = useState(true);
   const currentDate = dayjs();
   const startOfMonth = currentDate.startOf("month");
   useEffect(() => {
     setSelectedDates([
-      dayjs(currentDate).format("MM/DD/YYYY"),
-      dayjs(startOfMonth).format("MM/DD/YYYY"),
+      dayjs(currentDate).format("YYYY-MM-DD"),
+      dayjs(startOfMonth).format("YYYY-MM-DD"),
     ]);
   }, []);
 
@@ -86,11 +85,9 @@ const HeadTitle = ({
         onOk={() => {
           dispatch(getDateRange(dateValues));
           setOpenPicker(false);
-          setIsDisabled(false);
         }}
         onCancel={() => {
           setOpenPicker(false);
-          setIsDisabled(false);
         }}
       >
         <div className={styles.modalDetails}>
@@ -101,13 +98,12 @@ const HeadTitle = ({
               marginLeft: "-78px",
             }}
             placeholder={[
-              dayjs(currentDate).format("MM/DD/YYYY"),
-              dayjs(startOfMonth).format("MM/DD/YYYY"),
+              dayjs(currentDate).format("YYYY-MM-DD"),
+              dayjs(startOfMonth).format("YYYY-MM-DD"),
             ]}
             open={openPicker}
             value={selectedDates}
             onChange={(dates, dateStrings) => {
-              setIsDisabled(false);
               setSelectedDates(dates);
               handleDatePickerChange(dateStrings);
             }}

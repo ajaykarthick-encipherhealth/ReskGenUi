@@ -1,12 +1,12 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import Image from "next/image";
+import moment from "moment";
+import { Modal, Spin } from "antd";
 import styles from "./styles.module.css";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
-import { Modal, Spin } from "antd";
 import { SVGICON } from "../../../../jsx/constant/theme";
-import { useSelector, useDispatch } from "react-redux";
-import moment from "moment";
-import Image from "next/image";
 import NoNotification from "../../../../images/dashboard/no-notification.png";
 import spinSTYles from "../../../../styles/auth.module.css";
 const Notifications = () => {
@@ -21,16 +21,6 @@ const Notifications = () => {
     setOpenNotification(false);
   };
 
-  const emailSplitFunction = (email) => {
-    if (email) {
-      let emailSplit = email.split("@");
-      return capitalizeFirstLetter(emailSplit[0]);
-    }
-  };
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
   const notificationData =
     notificationResponse?.data?.content?.length > 0 ? (
       notificationResponse?.data?.content?.map((info) => (
@@ -44,8 +34,12 @@ const Notifications = () => {
             <div className={styles.time}>
               {moment(info?.createdDate).format("MM-DD-YYYY")}&nbsp;{" "}
               {moment(info?.createdDate).format("hh:mm:A")} &nbsp;{" "}
-              {`${info?.fromUserDetails?.firstName?info?.fromUserDetails?.firstName:""} (${
-                info?.fromUserDetails?.role?info?.fromUserDetails?.role:""
+              {`${
+                info?.fromUserDetails?.firstName
+                  ? info?.fromUserDetails?.firstName
+                  : ""
+              } (${
+                info?.fromUserDetails?.role ? info?.fromUserDetails?.role : ""
               })`}
             </div>
           </div>
@@ -53,9 +47,10 @@ const Notifications = () => {
       ))
     ) : (
       <div className={styles.no_notificarion_container}>
-
-         {!notificationResponse?.loading && notificationResponse?.data?.content?.length===0 &&<Image src={NoNotification} alt="" />}
-
+        {!notificationResponse?.loading &&
+          notificationResponse?.data?.content?.length === 0 && (
+            <Image src={NoNotification} alt="" />
+          )}
       </div>
     );
 

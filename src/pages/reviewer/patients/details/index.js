@@ -1,17 +1,13 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import NavBar from "../../../../jsx/layouts/nav/Header";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../utility/enpoints";
 import visitStyles from "../../../../styles/visitdata.module.css";
-import { InputText } from "primereact/inputtext";
-import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
-import moment, { months } from "moment";
+import moment from "moment";
 import TableStyle from "../../../../components/table/table.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faClose,
-  faSearch,
   faArrowLeft,
   faUserCircle,
   faVenusMars,
@@ -21,19 +17,22 @@ import {
   faAngleDoubleRight,
   faAngleDoubleLeft,
 } from "@fortawesome/free-solid-svg-icons";
-import { Popover, Menu, DatePicker, Dropdown } from "antd";
+import {
+  Popover,
+  Menu,
+  Dropdown,
+  Avatar,
+  Tooltip,
+  Modal,
+  notification,
+} from "antd";
 import { IMAGES, SVGICON } from "../../../../jsx/constant/theme";
 import Select from "react-select";
-import { Modal } from "antd";
-import { Button } from "react-bootstrap";
+import { Button, Offcanvas } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import { Offcanvas } from "react-bootstrap";
 import { DownOutlined } from "@ant-design/icons";
-import { notification } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Avatar, Tooltip } from "antd";
-import { Paginator } from "primereact/paginator";
 import Hcc from "./hcc/index";
 import NonHcc from "./non-hcc/index";
 import Radiology from "./radiology/index";
@@ -41,23 +40,22 @@ import Lab from "./lab/index";
 import SpinnerDots from "../../../../components/spinner";
 import AllocateModal from "../../../admin/allocatedUser/allocate";
 import {
-  patientListFilter,
   auditPatientupdate,
   reAuditupdate,
   auditPending,
   auditHold,
   auditDecline,
 } from "../../../../services/PatientsListSevice";
-import LoadingSpinner from "../../../../components/loadingSpinner";
 import { validateYear } from "../../../../components/headerFilters/functions";
 import { getPatientID } from "../../../../store/actions/PatientsActions";
-import { useDispatch } from "react-redux";
 import Timeline from "./timline";
+import ReviwerWorkList from "./components/reviwerWorklist";
+import SupervisorWorkList from "./components/supervisorWorklist";
+import AdminWorkList from "./components/adminWorklist";
 
 const Details = ({}) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
-  const { RangePicker } = DatePicker;
   const sideMenu = useSelector((state) => state.sideMenu);
   const [confirmNotesModalDecline, setConfirmNotesModalDecline] =
     useState(false);
@@ -104,17 +102,10 @@ const Details = ({}) => {
   const [isLoadingDos, setIsLoadingDos] = useState(true);
   const [suggestedModal, setSuggestedModal] = useState(false);
   const [selectedDosValue, setSelectedDosValue] = useState("");
-  const [suggestedHccList, setSuggestedHccList] = useState([]);
-  const [labFileDosList, setLabFileDosList] = useState([]);
-  const [labFileDosListDefaultSelect, setLabFileDosListDefaultSelect] =
-    useState([]);
   const [isValidAction, setIsValidAction] = useState("");
-  const [deletedHccList, setDeletedHccList] = useState([]);
   const [isModalComments, setIsModalComments] = useState(false);
   const [flagContainerActive, setFlagContainerActive] = useState("");
   const [flagContainerActiveTitle, setFlagContainerActiveTitle] = useState("");
-  const [showIcons, setShowIcons] = useState(false);
-  const [showCard, setShowCard] = useState(false);
   const [patientList, setPatientList] = useState([]);
   const [sideNavLabelActiveKey, setSideNavLabelActiveKey] = useState("HCC");
   const [isSideNavShow, setIsSideNavShow] = useState(false);
@@ -123,8 +114,6 @@ const Details = ({}) => {
   const [commentList, setCommentList] = useState([]);
   const [notesList, setNotesList] = useState([]);
   const [flagResultList, setFlagResultList] = useState([]);
-  const [openPicker, setOpenPicker] = useState(false);
-  const [openPicker2, setOpenPicker2] = useState(false);
   const [actionItems, setActionItems] = useState([]);
   const [actionItems2, setActionItems2] = useState([]);
   const [actionItems3, setActionItems3] = useState([]);
@@ -143,20 +132,12 @@ const Details = ({}) => {
   const [allocateModal, setAllocateModal] = useState(false);
   const [selectedRowsId, setSelectedRowsId] = useState([]);
   const [selectedChart, setSelectedChart] = useState([]);
-  const [processedStatus, setProcessedStatus] = useState("");
-  const [searchtext, setSearchtext] = useState("");
-  const [dueDateStart, setDueDateStart] = useState("");
-  const [dueDateEnd, setDueDateEnd] = useState("");
-  const [processedStart, setProcessedStart] = useState("");
-  const [processedEnd, setProcessedEnd] = useState("");
-  const [pageNo, setPageNo] = useState(0);
-  const [paginationFirst, setPaginationFirst] = useState(0);
-  const [totalElements, setTotalElements] = useState(10);
   const [confirmAuditModal, setConfirmAuditModal] = useState(false);
   const [allocateClicked, setAllocateClicked] = useState(false);
   const [error, setError] = useState({ year: "" });
   const [hccValidCount, setHccValidCount] = useState(0);
   const [menuIsOpen, setMenuIsOpen] = useState(false);
+  const [workListPatientId, setWorkListPatientId] = useState(null);
 
   const flagPostList = [
     {
@@ -183,15 +164,6 @@ const Details = ({}) => {
         <>
           MRN_ID_MISMATCH
           <i className={visitStyles.id_missed}>{SVGICON.emptyFlagSmall}</i>
-        </>
-      ),
-    },
-    {
-      value: "PROVIDER_SIGN_MISSED",
-      label: (
-        <>
-          PROVIDER_SIGN_MISSED
-          <i className={visitStyles.sign_missed}>{SVGICON.emptyFlagSmall}</i>
         </>
       ),
     },
@@ -266,65 +238,6 @@ const Details = ({}) => {
     },
   ];
 
-  const filterChangePatientId = async (e) => {
-    setSearchtext(e.target.value);
-    var result = await patientListFilter(
-      localUserId,
-      processedStatus,
-      e.target.value,
-      dueDateStart,
-      dueDateEnd,
-      processedStart,
-      processedEnd,
-      pageNo
-    );
-    setOpenPicker(false);
-    setOpenPicker2(false);
-    setPatientList(result?.response?.patientDTOList?.content);
-    setTotalElements(result?.response?.patientDTOList?.totalElements);
-  };
-  const onPageChange = async (e) => {
-    setPaginationFirst(e.first);
-    setPageNo(e.page);
-    var result = await patientListFilter(
-      localUserId,
-      processedStatus,
-      searchtext,
-      dueDateStart,
-      dueDateEnd,
-      processedStart,
-      processedEnd,
-      e.page
-    );
-    setPatientList(result?.response?.patientDTOList?.content);
-    setTotalElements(result?.response?.patientDTOList?.totalElements);
-  };
-
-  const handleFilterClick = () => {
-    setShowIcons(!showIcons);
-  };
-  const closeFilterIcons = async () => {
-    setShowIcons(false);
-    setOpenPicker(false);
-    setOpenPicker2(false);
-    var result = await patientListFilter(
-      localUserId,
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      0
-    );
-    setPatientList(result?.response?.patientDTOList?.content);
-    setTotalElements(result?.response?.patientDTOList?.totalElements);
-  };
-  const handleShowCard = () => {
-    setShowCard(!showCard);
-    setShowCard(true);
-  };
-
   const handleChange = async (e) => {
     const key = e.target.name;
     if (key == "encodedDate") {
@@ -341,10 +254,10 @@ const Details = ({}) => {
   };
 
   useEffect(() => {
-    var orgId = localStorage.getItem("orgId");
-    var tenId = localStorage.getItem("tenantId");
-    var patientId = localStorage.getItem("patientId");
-    var uId = localStorage.getItem("userId");
+    const orgId = localStorage.getItem("orgId");
+    const tenId = localStorage.getItem("tenantId");
+    const patientId = localStorage.getItem("patientId");
+    const uId = localStorage.getItem("userId");
     const userRoleLocal = localStorage.getItem("userRole");
     setUserRole(userRoleLocal);
     setLocalOrgId(orgId);
@@ -389,7 +302,13 @@ const Details = ({}) => {
     const menu = (
       <Menu>
         {result?.processedStatus != "HOLD" ? (
-          <Menu.Item key="1" onClick={() => {handleActionClick("HOLD"); setMenuIsOpen(false)}}>
+          <Menu.Item
+            key="1"
+            onClick={() => {
+              handleActionClick("HOLD");
+              setMenuIsOpen(false);
+            }}
+          >
             <div className="patient-status">
               <span className={`badge hold-text`}>HOLD</span>
             </div>
@@ -397,7 +316,13 @@ const Details = ({}) => {
         ) : null}
         {result?.processedStatus != "PENDING" &&
         result?.processedStatus != "COMPUTED" ? (
-          <Menu.Item key="2" onClick={() => {handleActionClick("PENDING"); setMenuIsOpen(false)}}>
+          <Menu.Item
+            key="2"
+            onClick={() => {
+              handleActionClick("PENDING");
+              setMenuIsOpen(false);
+            }}
+          >
             <div className="patient-status">
               <span className={`badge processing-text`}>PENDING</span>
             </div>
@@ -407,7 +332,10 @@ const Details = ({}) => {
           <Menu.Item
             key="3"
             disabled={flagFirstData?.flag !== undefined ? false : true}
-            onClick={() => {handleActionClick("DECLINE");  setMenuIsOpen(false)}}
+            onClick={() => {
+              handleActionClick("DECLINE");
+              setMenuIsOpen(false);
+            }}
           >
             <Tooltip
               title={
@@ -425,7 +353,13 @@ const Details = ({}) => {
         ) : null}
 
         {result?.processedStatus != "COMPLETED" ? (
-          <Menu.Item key="4" onClick={() => {handleActionClick("COMPLETE");  setMenuIsOpen(false)}}>
+          <Menu.Item
+            key="4"
+            onClick={() => {
+              handleActionClick("COMPLETE");
+              setMenuIsOpen(false);
+            }}
+          >
             <div className="patient-status">
               <span className={`badge processed-text`}>COMPLETED</span>
             </div>
@@ -437,14 +371,26 @@ const Details = ({}) => {
     const menu2 = (
       <Menu>
         {result?.processedStatus != "HOLD" ? (
-          <Menu.Item key="1" onClick={() => {handleActionClick("HOLD"); setMenuIsOpen(false)}}>
+          <Menu.Item
+            key="1"
+            onClick={() => {
+              handleActionClick("HOLD");
+              setMenuIsOpen(false);
+            }}
+          >
             <div className="patient-status">
               <span className={`badge hold-text`}>HOLD</span>
             </div>
           </Menu.Item>
         ) : null}
         {result?.processedStatus != "PENDING" ? (
-          <Menu.Item key="2" onClick={() => {handleActionClick("PENDING"); setMenuIsOpen(false)}}>
+          <Menu.Item
+            key="2"
+            onClick={() => {
+              handleActionClick("PENDING");
+              setMenuIsOpen(false);
+            }}
+          >
             <div className="patient-status">
               <span className={`badge processing-text`}>PENDING</span>
             </div>
@@ -453,7 +399,10 @@ const Details = ({}) => {
         {result?.processedStatus != "DECLINE" ? (
           <Menu.Item
             key="3"
-            onClick={() => {handleActionClick("DECLINE"); setMenuIsOpen(false)}}
+            onClick={() => {
+              handleActionClick("DECLINE");
+              setMenuIsOpen(false);
+            }}
             disabled={flagFirstData?.flag !== undefined ? false : true}
           >
             <Tooltip
@@ -472,13 +421,25 @@ const Details = ({}) => {
         ) : null}
 
         {result?.processedStatus != "COMPLETE" ? (
-          <Menu.Item key="4" onClick={() => {handleActionClick("COMPLETE");  setMenuIsOpen(false)}}>
+          <Menu.Item
+            key="4"
+            onClick={() => {
+              handleActionClick("COMPLETE");
+              setMenuIsOpen(false);
+            }}
+          >
             <div className="patient-status">
               <span className={`badge processed-text`}>COMPLETED</span>
             </div>
           </Menu.Item>
         ) : null}
-        <Menu.Item key="5" onClick={() => {handleActionClick("ADD RADIOLOGY"); setMenuIsOpen(false)}}>
+        <Menu.Item
+          key="5"
+          onClick={() => {
+            handleActionClick("ADD RADIOLOGY");
+            setMenuIsOpen(false);
+          }}
+        >
           <div className="patient-status">
             <span className={`badge  ${visitStyles.add_text}`}>
               + ADD RADIOLOGY
@@ -490,14 +451,26 @@ const Details = ({}) => {
     const menu3 = (
       <Menu>
         {result?.processedStatus != "HOLD" ? (
-          <Menu.Item key="1" onClick={() => {handleActionClick("HOLD"); setMenuIsOpen(false)}}>
+          <Menu.Item
+            key="1"
+            onClick={() => {
+              handleActionClick("HOLD");
+              setMenuIsOpen(false);
+            }}
+          >
             <div className="patient-status">
               <span className={`badge hold-text`}>HOLD</span>
             </div>
           </Menu.Item>
         ) : null}
         {result?.processedStatus != "PENDING" ? (
-          <Menu.Item key="2" onClick={() => {handleActionClick("PENDING");  setMenuIsOpen(false)}}>
+          <Menu.Item
+            key="2"
+            onClick={() => {
+              handleActionClick("PENDING");
+              setMenuIsOpen(false);
+            }}
+          >
             <div className="patient-status">
               <span className={`badge processing-text`}>PENDING</span>
             </div>
@@ -506,7 +479,10 @@ const Details = ({}) => {
         {result?.processedStatus != "DECLINE" ? (
           <Menu.Item
             key="3"
-            onClick={() => {handleActionClick("DECLINE");  setMenuIsOpen(false)}}
+            onClick={() => {
+              handleActionClick("DECLINE");
+              setMenuIsOpen(false);
+            }}
             disabled={flagFirstData?.flag !== undefined ? false : true}
           >
             <Tooltip
@@ -525,13 +501,25 @@ const Details = ({}) => {
         ) : null}
 
         {result?.processedStatus != "COMPLETE" ? (
-          <Menu.Item key="4" onClick={() => {handleActionClick("COMPLETE");  setMenuIsOpen(false)}}>
+          <Menu.Item
+            key="4"
+            onClick={() => {
+              handleActionClick("COMPLETE");
+              setMenuIsOpen(false);
+            }}
+          >
             <div className="patient-status">
               <span className={`badge processed-text`}>COMPLETED</span>
             </div>
           </Menu.Item>
         ) : null}
-        <Menu.Item key="5" onClick={() => {handleActionClick("ADD LAB"); setMenuIsOpen(false)}}>
+        <Menu.Item
+          key="5"
+          onClick={() => {
+            handleActionClick("ADD LAB");
+            setMenuIsOpen(false);
+          }}
+        >
           <div className="patient-status">
             <span className={`badge  ${visitStyles.add_text}`}>+ ADD LAB</span>
           </div>
@@ -691,8 +679,6 @@ const Details = ({}) => {
     setIsModalComments(false);
     setFlagContainerActive("");
     setConfirmCompleteModal(false);
-    setOpenPicker(false);
-    setOpenPicker2(false);
   };
 
   const handleSubmitValidNotes = async (event) => {
@@ -1084,19 +1070,6 @@ const Details = ({}) => {
     setFlagContainerActive(value);
     if (value == "Filter") {
       setFlagContainerActiveTitle("My Work Queue");
-      var result = await patientListFilter(
-        localUserId,
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        0
-      );
-      setPatientList(result?.response?.patientDTOList?.content);
-      setTotalElements(result?.response?.patientDTOList?.totalElements);
-      setFilterDataLoading(false);
     }
 
     if (value == "Timeline") {
@@ -1148,27 +1121,9 @@ const Details = ({}) => {
 
   const getPatientListToDetails = (userId, orgId, tenantId) => {
     setPatientResultReload(false);
-    getPatientDetails(userId, orgId, tenantId);
     getPatientIdDetails(userId);
+    getPatientDetails(userId, orgId, tenantId);
     setLocalPatientId(userId);
-  };
-
-  const getFiltePatientListStatus = async (value) => {
-    setProcessedStatus(value);
-    var result = await patientListFilter(
-      localUserId,
-      value,
-      searchtext,
-      dueDateStart,
-      dueDateEnd,
-      processedStart,
-      processedEnd,
-      pageNo
-    );
-    setOpenPicker(false);
-    setOpenPicker2(false);
-    setPatientList(result?.response?.patientDTOList?.content);
-    setTotalElements(result?.response?.patientDTOList?.totalElements);
   };
 
   const handleSubmitFlag = async (event) => {
@@ -1383,50 +1338,6 @@ const Details = ({}) => {
       setFlagFirstData(response?.data?.response[0]);
     }
     setFilterDataLoading(false);
-  };
-
-  const handleDatePickerChange = async (dateString) => {
-    let convertStartDate =
-      moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
-    let convertEndDate =
-      moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
-    setDueDateStart(convertStartDate);
-    setDueDateEnd(convertEndDate);
-    setOpenPicker(false);
-    var result = await patientListFilter(
-      localUserId,
-      processedStatus,
-      searchtext,
-      convertStartDate,
-      convertEndDate,
-      processedStart,
-      processedEnd,
-      pageNo
-    );
-    setPatientList(result?.response?.patientDTOList?.content);
-    setTotalElements(result?.response?.patientDTOList?.totalElements);
-  };
-
-  const handleChangeprocessedDate = async (dateString) => {
-    let convertStartDate =
-      moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
-    let convertEndDate =
-      moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
-    setProcessedStart(convertStartDate);
-    setProcessedEnd(convertEndDate);
-    setOpenPicker2(false);
-    var result = await patientListFilter(
-      localUserId,
-      processedStatus,
-      searchtext,
-      dueDateStart,
-      dueDateEnd,
-      convertStartDate,
-      convertEndDate,
-      pageNo
-    );
-    setPatientList(result?.response?.patientDTOList?.content);
-    setTotalElements(result?.response?.patientDTOList?.totalElements);
   };
 
   const handleActionClick = (value) => {
@@ -1750,6 +1661,13 @@ const Details = ({}) => {
     }
   }, [flagFirstData?.flag]);
 
+  useEffect(() => {
+    if (workListPatientId) {
+      getPatientListToDetails(workListPatientId, localOrgId, localTenantId);
+      console.log(workListPatientId);
+    }
+  }, [workListPatientId]);
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -1787,7 +1705,7 @@ const Details = ({}) => {
                             <div className="row">
                               <div className="col-xl-3 col-sm-12">
                                 <FontAwesomeIcon icon={faIdCardClip} />
-                                <label>Patient Id</label>
+                                <label>Patient ID</label>
                                 <h6 className="ageDtails">
                                   {patientDocumentResult.patientId}
                                 </h6>
@@ -2018,33 +1936,13 @@ const Details = ({}) => {
                             <div className="col-xl-12 col-sm-12">
                               {!isLoadingDos ? (
                                 <>
-                                  {activeTab == 3 ? (
-                                    <Select
-                                      onChange={(e) => dosOnChange(e)}
-                                      options={dosYearRadiology}
-                                      className={`custom-react-select ${visitStyles.dosSelectPicker}`}
-                                      defaultValue={
-                                        dosYearDefalutSelectRadiology
-                                      }
-                                      isSearchable={false}
-                                    />
-                                  ) : activeTab == 4 ? (
-                                    <Select
-                                      onChange={(e) => dosOnChange(e)}
-                                      options={labFileDosList}
-                                      className={`custom-react-select ${visitStyles.dosSelectPicker}`}
-                                      defaultValue={labFileDosListDefaultSelect}
-                                      isSearchable={false}
-                                    />
-                                  ) : (
-                                    <Select
-                                      onChange={(e) => dosOnChange(e)}
-                                      options={dosYear}
-                                      className={`custom-react-select ${visitStyles.dosSelectPicker}`}
-                                      defaultValue={dosYearDefalutSelect}
-                                      isSearchable={false}
-                                    />
-                                  )}
+                                  <Select
+                                    onChange={(e) => dosOnChange(e)}
+                                    options={dosYear}
+                                    className={`custom-react-select ${visitStyles.dosSelectPicker}`}
+                                    defaultValue={dosYearDefalutSelect}
+                                    isSearchable={false}
+                                  />
                                 </>
                               ) : null}
                             </div>
@@ -2703,7 +2601,7 @@ const Details = ({}) => {
                           <div className="row">
                             <div className="col-xl-12 mb-3">
                               <Form.Label>
-                                Patient Id
+                                Patient ID
                                 <span className="text-danger">*</span>
                               </Form.Label>
                               <Form.Control
@@ -2734,7 +2632,9 @@ const Details = ({}) => {
                             </div>
 
                             <div className="col-xl-12 mb-3">
-                              <Form.Label>File</Form.Label>
+                              <Form.Label>
+                                File <span className="text-danger">*</span>
+                              </Form.Label>
                               <Form.Control
                                 type="file"
                                 accept="application/pdf,text/plain"
@@ -2793,7 +2693,7 @@ const Details = ({}) => {
                           <div className="row">
                             <div className="col-xl-12 mb-3">
                               <Form.Label>
-                                Patient Id
+                                Patient ID
                                 <span className="text-danger">*</span>
                               </Form.Label>
                               <Form.Control
@@ -2824,7 +2724,10 @@ const Details = ({}) => {
                             </div>
 
                             <div className="col-xl-12 mb-3">
-                              <Form.Label>File</Form.Label>
+                              <Form.Label>
+                                File
+                                <span className="text-danger">*</span>
+                              </Form.Label>
                               <Form.Control
                                 type="file"
                                 accept="application/pdf,text/plain"
@@ -2884,218 +2787,22 @@ const Details = ({}) => {
                       />
                     ) : flagContainerActive == "Filter" ? (
                       <>
-                        {" "}
-                        <div className={`row ${visitStyles.patientListHead}`}>
-                          <div
-                            className={visitStyles.flags}
-                            style={{ marginTop: "15px", marginBottom: "20px" }}
-                          >
-                            <div className={visitStyles.flags}>
-                              <span
-                                className={visitStyles.completed}
-                                style={{ background: "#3a9b94 !important" }}
-                              ></span>
-                              <span className={visitStyles.flagCodes}>
-                                Completed
-                              </span>
-                            </div>
-                            <div className={visitStyles.flags}>
-                              <span className={visitStyles.pending}></span>
-                              <span className={visitStyles.flagCodes}>
-                                Pending
-                              </span>
-                            </div>
-                            <div className={visitStyles.flags}>
-                              <span className={visitStyles.hold}></span>
-                              <span className={visitStyles.flagCodes}>
-                                Hold
-                              </span>
-                            </div>
-                            <div className={visitStyles.flags}>
-                              <span className={visitStyles.declined}></span>
-                              <span className={visitStyles.flagCodes}>
-                                Declined
-                              </span>
-                            </div>
-                          </div>
-                          <div className="col-xl-9">
-                            <div class="form-group has-search">
-                              <FontAwesomeIcon
-                                className="fa fa-search form-control-feedback"
-                                icon={faSearch}
-                              />
-                              <InputText
-                                type="text"
-                                onChange={(e) => filterChangePatientId(e)}
-                                className="form-control new-form-control"
-                                placeholder="Search"
-                              />
-                              <RangePicker
-                                open={openPicker}
-                                onChange={(dates, dateStrings) => {
-                                  handleDatePickerChange(dateStrings);
-                                }}
-                                suffixIcon={false}
-                                className={visitStyles.datepicker}
-                              />
-                              <RangePicker
-                                open={openPicker2}
-                                onChange={(dates, dateStrings) => {
-                                  handleChangeprocessedDate(dateStrings);
-                                }}
-                                suffixIcon={false}
-                                className={visitStyles.datepicker}
-                              />
-                            </div>
-                          </div>
-
-                          <div className="col-xl-3">
-                            <div className={visitStyles.content}>
-                              <span
-                                className={visitStyles.circleCard}
-                                onClick={handleFilterClick}
-                              >
-                                <span></span>
-                                {showIcons ? (
-                                  <FontAwesomeIcon
-                                    icon={faClose}
-                                    height={30}
-                                    width={30}
-                                    color="#A20404"
-                                    onClick={() => {
-                                      closeFilterIcons(false);
-                                      setOpenPicker(false);
-                                      setOpenPicker2(false);
-                                    }}
-                                  />
-                                ) : (
-                                  SVGICON.filter
-                                )}
-                              </span>
-                              {showIcons && (
-                                <div className={visitStyles.iconContainer}>
-                                  <Tooltip title="Status" placement="left">
-                                    <span
-                                      className={visitStyles.circleCard}
-                                      onClick={handleShowCard}
-                                    >
-                                      {SVGICON.dashboard}
-                                    </span>
-                                  </Tooltip>
-                                  <Tooltip title="Due Date" placement="left">
-                                    <span
-                                      className={visitStyles.circleCard}
-                                      onClick={() => {
-                                        setOpenPicker(!openPicker);
-                                        setOpenPicker2(false);
-                                      }}
-                                    >
-                                      {SVGICON.dateIcon}
-                                    </span>
-                                  </Tooltip>
-                                  <Tooltip
-                                    title="Completed Date"
-                                    placement="left"
-                                  >
-                                    <span
-                                      className={visitStyles.circleCard}
-                                      onClick={() => {
-                                        setOpenPicker2(!openPicker2);
-                                        setOpenPicker(false);
-                                      }}
-                                    >
-                                      {SVGICON.dateIcon}
-                                    </span>
-                                  </Tooltip>
-                                </div>
-                              )}
-                              {showCard && (
-                                <div
-                                  className={visitStyles.menuCard}
-                                  onMouseEnter={() => setShowCard(true)}
-                                  onMouseLeave={() => setShowCard(false)}
-                                >
-                                  <ul>
-                                    {statuses.map((status, index) => (
-                                      <li
-                                        onClick={() =>
-                                          getFiltePatientListStatus(status)
-                                        }
-                                        className={visitStyles.nameList}
-                                        key={index}
-                                      >
-                                        {status}
-                                      </li>
-                                    ))}
-                                  </ul>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                          {!filterDataLoading ? (
-                            <>
-                              <div className={visitStyles.patientListHead}>
-                                <ul
-                                  className={`${visitStyles.patientDetailsHead}`}
-                                >
-                                  {patientList?.map((data, index) => (
-                                    <li
-                                      className={`${visitStyles.nameList} ${visitStyles.patientList}`}
-                                      key={index}
-                                      onClick={() =>
-                                        getPatientListToDetails(
-                                          data.patientId,
-                                          localOrgId,
-                                          localTenantId
-                                        )
-                                      }
-                                    >
-                                      {data.patientId} - {data.patientName}
-                                      {data.processedStatus == "COMPLETED" ? (
-                                        <span
-                                          className={visitStyles.completed}
-                                          style={{
-                                            background: "#3a9b94 !important",
-                                          }}
-                                        ></span>
-                                      ) : data.processedStatus == "PENDING" ||
-                                        data.processedStatus == "COMPUTED" ? (
-                                        <span
-                                          className={visitStyles.pending}
-                                        ></span>
-                                      ) : data.processedStatus == "HOLD" ? (
-                                        <span
-                                          className={visitStyles.hold}
-                                        ></span>
-                                      ) : data.processedStatus == "DECLINED" ? (
-                                        <span
-                                          className={visitStyles.declined}
-                                        ></span>
-                                      ) : null}
-                                    </li>
-                                  ))}
-                                  {patientList?.length == 0 ? (
-                                    <h5 className="text-center">NO DATA</h5>
-                                  ) : null}
-                                </ul>
-                              </div>
-                            </>
-                          ) : (
-                            <div
-                              className={`${visitStyles.userDetailsCard} ${visitStyles.loadingContainer}`}
-                            >
-                              <LoadingSpinner />
-                            </div>
-                          )}
-                        </div>
-                        <div className="patient-filte-page">
-                          <Paginator
-                            first={paginationFirst}
-                            rows={15}
-                            totalRecords={totalElements}
-                            onPageChange={onPageChange}
+                        {userRole == "admin" ? (
+                          <AdminWorkList
+                            localUserId={localUserId}
+                            setWorkListPatientId={setWorkListPatientId}
                           />
-                        </div>
+                        ) : userRole == "supervisor" ? (
+                          <SupervisorWorkList
+                            localUserId={localUserId}
+                            setWorkListPatientId={setWorkListPatientId}
+                          />
+                        ) : (
+                          <ReviwerWorkList
+                            localUserId={localUserId}
+                            setWorkListPatientId={setWorkListPatientId}
+                          />
+                        )}
                       </>
                     ) : flagContainerActive == "Comments" ? (
                       <div className="offcanvas-body">

@@ -29,11 +29,7 @@ export const PhysicanMenuList = [
     iconStyle: SVGICON.dashboardIcon,
     to: "/reviewer/dashboard",
   },
-  // {
-  //     title:'Patient List1',
-  //     iconStyle:SVGICON.patientListIcon,
-  //     to: '/reviewer/patient',
-  // },
+
   {
     title: "My Work Queue",
     iconStyle: SVGICON.patientListIcon,
@@ -46,11 +42,6 @@ export const PhysicanMenuList = [
     to: "/reviewer/report",
     childRoute: "/reviewer/report/individualreport",
   },
-  // {
-  //   title: "Working Status",
-  //   iconStyle: SVGICON.workingStatus,
-  //   to: "/reviewer/workingstatus",
-  // },
 ];
 export const AdminMenuList = [
   {
@@ -138,6 +129,7 @@ export const L2AuditorMenuList = [
     title: "Audited Queue",
     iconStyle: SVGICON.patientListIcon,
     to: "/supervisor/auditing",
+    childRoute: "/reviewer/patients/details",
   },
   // {
   //   title: "Org",
@@ -153,21 +145,17 @@ export const L2AuditorMenuList = [
 ];
 
 export const ProviderMenuList = [
-  // {
-  //   title: "Dashboard",
-  //   iconStyle: SVGICON.dashboardIcon,
-  //   to: "/provider/dashboard",
-  // },
   {
-    title: "Comparison",
+    title: "Patients Sync",
     iconStyle: SVGICON.adminUser,
-    to: "/provider/comparison",
+    to: "/tenantAdmin/fhirTable",
+    childRoute: "/fhirTable/details",
   },
-  {
-    title: "Query",
-    iconStyle: SVGICON.patientListIcon,
-    to: "/provider/query",
-  },
+  // {
+  //   title: "Settings",
+  //   iconStyle: SVGICON.settingsIcon,
+  //   to: "/tenantAdmin/settings",
+  // },
 ];
 
 export const EHRMenuList = [
