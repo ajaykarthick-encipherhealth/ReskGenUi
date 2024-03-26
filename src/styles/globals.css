@@ -14370,3 +14370,7 @@ input[type="number"] {
 .fihrComputedProgressText > .ant-progress-inner > .ant-progress-bg::after {
   background-color: green !important;
 }
+:where(.css-dev-only-do-not-override-djtmh8).ant-picker-dropdown
+  .ant-picker-date-panel {
+  width: 88%;
+}
