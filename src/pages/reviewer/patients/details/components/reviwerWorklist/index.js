@@ -112,7 +112,6 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
   const statuses = ["PENDING", "COMPLETED", "HOLD", "DECLINED"];
 
   useEffect(() => {
-    setFilterDataLoading(true);
     getWorkList();
   }, [
     processedStatus,
