@@ -90,10 +90,24 @@ function PdfTable({
                     </td>
                     <td className={TableStyle.childBorder}>
                       <div>
-                        <span className="text-capitalize mx-2">
+                        <span className="text-capitalize mx-2"  style={{
+                            color:
+                              row.status === "processing"
+                                ? "#2D6187"
+                                : row.status === "completed"
+                                ? "#008A0E"
+                                : "black",
+                          }}>
                           {row.status}
                         </span>
-                        <span>{row.statusValue}</span>
+                        <span  style={{
+                            color:
+                              row.status === "processing"
+                                ? "#2D6187"
+                                : row.status === "completed"
+                                ? "#008A0E"
+                                : "black",
+                          }}>{row.statusValue}</span>
                       </div>
                     </td>
 
