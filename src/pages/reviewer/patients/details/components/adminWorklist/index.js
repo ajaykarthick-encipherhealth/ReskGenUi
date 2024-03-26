@@ -140,6 +140,44 @@ const AdminWorkList = ({ localUserId, setWorkListPatientId }) => {
     },
   ];
 
+  const processstatusBodyTemplate = (rowData) => {
+    const isFinished =
+      patientList?.length > 0 &&
+      patientList?.find(
+        (data) =>
+          data?.patientId === rowData?.patientId &&
+          data?.processStageChart === "FINISHED"
+      ) !== undefined;
+
+    const rowStatus =
+      rowData?.computing === 0 && patientList?.length === 0
+        ? "Not Computed"
+        : rowData?.computing == 1
+        ? "Processing"
+        : isFinished || rowData?.computing == 2
+        ? "Computed"
+        : rowData?.computing == 3
+        ? "Failed"
+        : "Not Computed";
+    return (
+      <div className="patient-status">
+        <div
+          className={visitStyles.roleStyleWQ}
+          style={{
+            backgroundColor:
+              rowStatus === "Computed"
+                ? " #34ace8"
+                : rowStatus === "Processing"
+                ? "#452b90"
+                : rowStatus === "Failed"
+                ? "#e88d8d"
+                : "#be3144",
+          }}
+        ></div>
+      </div>
+    );
+  };
+
   useEffect(() => {
     getWorkList();
   }, [result, pageNo]);
@@ -306,23 +344,7 @@ const AdminWorkList = ({ localUserId, setWorkListPatientId }) => {
                     onClick={() => getPatientListToDetails(data.patientId)}
                   >
                     {data.patientId} - {data.patientName}
-                    {data.processedStatus == "COMPLETED" ? (
-                      <span
-                        className={visitStyles.completed}
-                        style={{
-                          background: "#3a9b94 !important",
-                        }}
-                      ></span>
-                    ) : data.processedStatus == "PENDING" ||
-                      data.processedStatus == "COMPUTED" ? (
-                      <span className={visitStyles.pending}></span>
-                    ) : data.processedStatus == "NOTCOMPUTED" ? (
-                      <span className={visitStyles.processing}></span>
-                    ) : data.processedStatus == "FAILED" ? (
-                      <span className={visitStyles.declined}></span>
-                    ) : data.processedStatus == "ABORTED_BY_CRON" ? (
-                      <span className={visitStyles.failed}></span>
-                    ) : null}
+                    {processstatusBodyTemplate(data)}
                   </li>
                 ))}
                 {patientList?.length == 0 ? (
