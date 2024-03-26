@@ -115,7 +115,7 @@ const HeadTitle = ({
             style={{
               cursor: "pointer",
               position: "relative",
-              left: "280px",
+              left: "383px",
               top: "-40px",
             }}
             onClick={() => {
