@@ -419,7 +419,10 @@ const HeaderFilters = ({
       </div>
       {showFilters && (
         <div style={{ marginTop: "50px" }}>
-          <div className="row filter-contain">
+          <div
+            className="row filter-contain"
+            style={{ width: atCorner ? "110%" : "100%" }}
+          >
             {isAllocatedBySelector && (
               <div
                 className={defaultSize}
