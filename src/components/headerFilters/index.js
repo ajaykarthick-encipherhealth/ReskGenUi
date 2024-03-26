@@ -52,7 +52,6 @@ const HeaderFilters = ({
   // Picker Props
   pickerlabel,
   pickerlabe2,
-  pickerlabe3,
   pickerlabe4,
   pickerlabe5,
   activeTab,

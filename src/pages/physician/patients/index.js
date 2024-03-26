@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
@@ -39,22 +40,6 @@ export function extractLatestData(notes) {
   return declinedData;
 }
 
-export default function Patients() {
-  const dispatch = useDispatch();
-  const sideMenu = useSelector((state) => state.sideMenu);
-  const response = useSelector((state) => state.PhyicianReducer.patients);
-
-  const [physicianId, setPhysicianId] = useState("ID-001");
-  const [from, setFrom] = useState("2024-03-20T00:00:00Z");
-  const [to, setTo] = useState("2024-03-20T23:59:59Z");
-  const [priority, setPriority] = useState("");
-  const [search, setSearch] = useState("");
-
-  useEffect(() => {
-    dispatch(getPatients(physicianId, from, to, priority, search));
-  }, [dispatch, physicianId, from, to, priority, search]);
-
-import Image from "next/image";
 const bullets = [
   {
     color: "#377880",
