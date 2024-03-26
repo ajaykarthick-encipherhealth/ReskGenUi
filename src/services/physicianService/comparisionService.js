@@ -1,5 +1,4 @@
 import axios from "axios";
-import { endPoint } from "./DashbaordServices";
 import ENDPOINTS from "../../utility/enpoints";
 
 export const COMPARISON = "COMPARISON";
@@ -17,7 +16,7 @@ export const getComparisionData =
     });
     try {
       const response = await axios.get(
-        `${endPoint}comparison?physicianId=${physicianId}&patientId=${patientId}`,
+        `${ENDPOINTS?.apiLocal}comparison?physicianId=${physicianId}&patientId=${patientId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

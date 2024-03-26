@@ -92,18 +92,19 @@ function PatientTable({ patinetListAll }) {
                   <span>{data.patientName}</span>
                 </div>
               ) : (
-                <div style={{}}>---</div>
+                <div>---</div>
               )}
             </td>
             <td
               className={classnames(TableStyle.childBorder, tdClass)}
               onClick={() => handleRoute(data?.id)}
+              style={{textAlign:"left"}}
             >
               {data?.rafScore ? data?.rafScore : "---"}
             </td>
             <td
               className={classnames(TableStyle.childBorder, tdClass)}
-              style={{ paddingLeft: "40px" }}
+              style={{ textAlign:"center"}}
               onClick={() => handleRoute(data?.id)}
             >
               {data?.date ? formattedDate : "---"} &nbsp; &nbsp;
@@ -111,7 +112,7 @@ function PatientTable({ patinetListAll }) {
             </td>
             <td
               className={classnames(TableStyle.childBorder, tdClass)}
-              style={{ width: "200px" }}
+              style={{ textAlign:"center"}}
             >
               {data?.priority ? priorityStatus(data?.priority) : "---"}
             </td>
@@ -128,9 +129,9 @@ function PatientTable({ patinetListAll }) {
           <tr>
             <th>MRN NUMBER</th>
             <th className={TableStyle.rowStyle2}>PATIENT NAME</th>
-            <th className={TableStyle.rowStyle2}>RAF SCORE</th>
-            <th className={TableStyle.rowStyle2}> DATE & TIME</th>
-            <th style={{ paddingLeft: "30px" }}>PRIORITY</th>
+            <th >RAF SCORE</th>
+            <th style={{textAlign:"center"}}> DATE & TIME</th>
+            <th style={{textAlign:"center"}}>PRIORITY</th>
           </tr>
         </thead>
         <tbody>

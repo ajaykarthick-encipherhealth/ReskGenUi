@@ -50,7 +50,7 @@ const reducers = combineReducers({
   adminReport: AdminReportReducer,
   l2User: L2UserReducers,
   // physician
-  PhyicianReducer:PhyicianReducer,
+  phyicianReducer:PhyicianReducer,
   physicianDashbaord:PhysicianDashboardReducer,
   physicianComparison:PhysicianComparisonReducer,
   tanantAdmin: TanantAdminService,

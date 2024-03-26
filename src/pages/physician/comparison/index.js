@@ -339,7 +339,7 @@ const Hcc = () => {
                 </div>
                 <div className="col-xl-6">
                   <div className="row">
-                    {comparisonData?.loading ? (
+                    {comparisonData?.loading || !comparisonData? (
                       <SpinnerDots />
                     ) : (
                       <>

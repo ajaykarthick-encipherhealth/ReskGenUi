@@ -1,7 +1,6 @@
 import axios from "axios";
 import dayjs from "dayjs";
-
-export const endPoint = "http://localhost:8080/";
+import ENDPOINTS from "../../utility/enpoints";
 
 export const DASHBOARDCHART = "DASHBOARDCHART";
 export const GRAPHDATA = "GRAPHDATA";
@@ -20,7 +19,7 @@ export const DashbaoudContent =
     });
     try {
       const response = await axios.get(
-        `${endPoint}physician/dashboard?physicianId=${physicianId}`,
+        `${ENDPOINTS?.apiLocal}physician/dashboard?physicianId=${physicianId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -55,7 +54,7 @@ export const GraphContent =
     const currentdate = dayjs().format("DD");
     try {
       const response = await axios.get(
-        `${endPoint}statistics?physicianId=${physicianId}&year=${selectedYear}&month=${selectedMonth}&date=${currentdate}&range=${currentBtn}`,
+        `${ENDPOINTS?.apiLocal}statistics?physicianId=${physicianId}&year=${selectedYear}&month=${selectedMonth}&date=${currentdate}&range=${currentBtn}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -87,7 +86,7 @@ export const CalenderData = (physicianId, month, year) => async (dispatch) => {
   });
   try {
     const response = await axios.get(
-      `${endPoint}calender?physicianId=${physicianId}&month=${month}&year=${year}`,
+      `${ENDPOINTS?.apiLocal}calender?physicianId=${physicianId}&month=${month}&year=${year}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
