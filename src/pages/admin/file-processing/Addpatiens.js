@@ -67,12 +67,12 @@ const Addpatients = ({
               <Button type="submit" className="btn btn-primary btn-sm me-1">
                 {"Submit"}
               </Button>
-              {/* <Button
+              <Button
                 className="btn btn-danger btn-sm light ms-1"
                 onClick={() => setAddPatientId(false)}
               >
                 Cancel
-              </Button> */}
+              </Button>
             </div>
           </Form>
         </div>
