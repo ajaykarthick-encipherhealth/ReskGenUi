@@ -28,7 +28,7 @@ export const checkBoxData = [
   {
     id: 3,
     title: "dob",
-    heading: "Dob",
+    heading: "DOB",
     checked: false,
   },
   {
@@ -76,7 +76,7 @@ export const checkBoxData = [
   {
     id: 11,
     title: "allocatedUserId",
-    heading: "Allocated UserId",
+    heading: "Allocated UserID",
     checked: false,
   },
   {
