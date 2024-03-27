@@ -553,7 +553,7 @@ export default function Patient() {
                                     value={batchCount}
                                     className="form-control new-form-controls"
                                     placeholder="Batch Count"
-                                    style={{ width: "40%" }}
+                                    style={{ width: "60%"}}
                                   />
                                   <button
                                     onClick={() => setFilterBatchCount(true)}
@@ -594,7 +594,7 @@ export default function Patient() {
                               </div>
                             </>
                           )}
-                          <div className="col-xl-4 mt-4">
+                          <div className={`col-xl-4 mt-4 ${TableStyle.allocateBtn}`}>
                             {isPatientList || activeTab === 1 ? (
                               <>
                                 <button
