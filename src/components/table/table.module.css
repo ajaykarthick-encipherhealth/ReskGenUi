@@ -218,7 +218,7 @@
   justify-content: center;
   color: #fff;
   font-weight: 800;
-  font-size: 18px;
+  font-size: 16px;
   margin-top: -2px;
 }
 .customChecked2[type="checkbox"] {
@@ -273,7 +273,7 @@
   color: #04306f;
   font-weight: 800;
   font-size: 18px;
-  margin-top: -12px;
+  margin-top: -15px;
 }
 .toolTipCOnt {
   color: rgba(246, 104, 0, 1);
