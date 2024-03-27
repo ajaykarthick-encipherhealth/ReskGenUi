@@ -233,7 +233,6 @@ function TrackingTable({
         <thead className={TableStyle.classThead}>
           <tr>
             <th>PATIENTS</th>
-
             <th style={{ textAlign: "left", paddingLeft: "20px" }}>
               ALLOCATED BY
             </th>
@@ -282,7 +281,6 @@ function TrackingTable({
                 )}
               </span>
             </th>
-
             <th style={{ textAlign: "center" }}>SUPERVISOR</th>
             <th
               onClick={() => {
