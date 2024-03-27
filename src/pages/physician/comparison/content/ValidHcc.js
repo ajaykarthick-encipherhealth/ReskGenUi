@@ -10,6 +10,11 @@ import {
 import { getMeatFound } from "../../../reviewer/patients/details/hcc";
 import { useSelector } from "react-redux";
 
+export const reusableElipses = (str, count) => {
+  {
+    str?.length > count - 5 ? `${str?.substring(0, count)}...` : str;
+  }
+};
 const ValidHcc = ({ content, meatCriteriaList, ProviderName }) => {
   const colorsData = useSelector((state) => state.physicianComparison.colors);
   return (
@@ -38,16 +43,10 @@ const ValidHcc = ({ content, meatCriteriaList, ProviderName }) => {
                           {data?.diagnosisCode} -
                         </span>
                         <Popover
-                          content={
-                            data.actualDescription.length > 25
-                              ? `${data.actualDescription.substring(0, 25)}...`
-                              : data.actualDescription
-                          }
+                          content={data.actualDescription}
                           trigger="hover"
                         >
-                          {data?.actualDescription.length > 25
-                            ? `${data?.actualDescription.substring(0, 30)}...`
-                            : data?.actualDescription}
+                          {reusableElipses(data?.actualDescription, 30)}
                         </Popover>
                       </span>
                     </div>
