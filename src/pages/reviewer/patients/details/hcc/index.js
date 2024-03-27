@@ -11,19 +11,14 @@ import File from "./file";
 const Hcc = () => {
   const [activeTabHead, setActiveTabHead] = useState("file");
   const [flagTagActive, setFlagTagActive] = useState(false);
-  const [fileLoading, setFileLoading] = useState(false);
-  const selectTab = () => {};
+  const selectTab = (num) => {
+    setFlagTagActive(false);
+    if(num == 1){
+      setFlagTagActive(true)
+    }
+  };
   return (
     <>
-      {fileLoading ? (
-        <div className={styles.overlay_style}>
-          <div className={styles.overlay__inner_style}>
-            <div className={styles.overlay__content_style}>
-              <span className={styles.spinner_style}></span>
-            </div>
-          </div>
-        </div>
-      ) : null}
       <div className={visitStyles.visitdata_tab_body}>
         <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
           <div className="custom-tab-1 ">
