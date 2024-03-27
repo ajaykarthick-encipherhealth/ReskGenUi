@@ -365,8 +365,6 @@ const Combo = ({}) => {
 
   const handleCloseModal = () => {
     setValidated(false);
-    setIsModalOpen(false);
-    setIsModalOpenValid(false);
     setIsModalOpenCaptureSection(false);
     setIsAddComboCode(false);
     setFindFileKeyword(null);
@@ -406,14 +404,12 @@ const Combo = ({}) => {
       } else {
         setFileInitialPage(null);
       }
-      setIsLoadingSection(true);
       if (findFileKeyword == splitPoint) {
         setFileLoading(false);
         var dataset = value + " / (" + disDescription + ")";
       }
       setFindFileKeyword(splitPoint);
 
-      setIsModalOpen(true);
       var dataset = value + " / (" + disDescription + ")";
       setSelectMeatName(dataset);
     } catch (error) {
@@ -512,14 +508,8 @@ const Combo = ({}) => {
       setDocumentLoaded(true);
       var dataset = "Lab" + " - (" + disDescription + ")";
       setSelectMeatName(dataset + " -  " + "Loading...");
-      setIsLoadingSection(true);
       setIsModalOpenLab(true);
     } else {
-      if (whereCome == "nonHcc") {
-        setNonHccActiveCodes(true);
-      } else {
-        setNonHccActiveCodes(false);
-      }
       if (check === "valid") {
         var dataset = value + " - (" + disDescription + ")";
         setSelectMeatName(dataset + " -  " + "Loading...");
@@ -528,7 +518,6 @@ const Combo = ({}) => {
             <Spinner />
           </div>
         );
-        setIsLoadingSection(true);
         var headerName = dotLoading;
         setFileModalHeader(headerName);
         if (documentPlace == "COMBO") {
@@ -620,7 +609,6 @@ const Combo = ({}) => {
           "Loading...";
         setFileModalHeader(headerName);
 
-        setIsLoadingSection(true);
       } else {
         setSelectActiveCode(value);
         var splitPoint = "";
@@ -637,13 +625,8 @@ const Combo = ({}) => {
         setDocumentLoaded(true);
         var dataset = value + " - (" + disDescription + ")";
         setSelectMeatName(dataset + " -  " + "Loading...");
-        setIsLoadingSection(true);
-        setIsModalOpen(true);
       }
     }
-
-    // setIsModalOpenValid(true)
-    // getSectionResult(value.toLowerCase());
   };
   const handleOpenModalRadiology = (value, disDescription, radiologyCheck) => {
     setFileInitialPage(null);
@@ -657,12 +640,9 @@ const Combo = ({}) => {
       setDocumentLoaded(true);
       var dataset = "Radiology" + " - (" + disDescription + ")";
       setSelectMeatName(dataset + " -  " + "Loading...");
-      setIsLoadingSection(true);
     } else {
       handleOpenModal(value, disDescription);
     }
-    // setIsModalOpenValid(true)
-    // getSectionResult(value.toLowerCase());
   };
   const handleChangeSuggested = async (e) => {
     const key = e.target.name;
@@ -842,7 +822,6 @@ const Combo = ({}) => {
       if (place == "MEAT") {
         setSelectMeatName(headerName);
         setSelectMeatResult(meatResult);
-        setIsModalOpen(true);
       } else if (place == "COMBO") {
         setIsModalOpenCaptureSection(true);
       } else {
