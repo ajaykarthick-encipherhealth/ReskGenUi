@@ -81,9 +81,6 @@ const VisitData = ({}) => {
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
   );
-  const sectionColorListTest = useSelector(
-    (state) => state?.ReviewerReducers
-  );
   const hccFileDetails = useSelector(
     (state) => state?.ReviewerReducers?.hccFileDetails
   );
@@ -4699,7 +4696,7 @@ const VisitData = ({}) => {
 
                 <div>
                   <Button type="submit" className="btn btn-primary btn-sm me-1">
-                    {isLoading ? "Loding..." : "Submit"}
+                    Submit
                   </Button>
                   <Button
                     onClick={() => handleCloseModal()}
@@ -4746,7 +4743,7 @@ const VisitData = ({}) => {
 
                 <div>
                   <Button type="submit" className="btn btn-primary btn-sm me-1">
-                    {isLoading ? "Loding..." : "Submit"}
+                    Submit
                   </Button>
                   <Button
                     onClick={() => handleCloseModal()}

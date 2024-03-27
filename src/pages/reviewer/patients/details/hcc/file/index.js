@@ -5280,7 +5280,7 @@ const File = ({}) => {
 
                 <div>
                   <Button type="submit" className="btn btn-primary btn-sm me-1">
-                    {isLoading ? "Loding..." : "Submit"}
+                    Submit
                   </Button>
                   <Button
                     onClick={() => handleCloseModal()}
@@ -5327,7 +5327,7 @@ const File = ({}) => {
 
                 <div>
                   <Button type="submit" className="btn btn-primary btn-sm me-1">
-                    {isLoading ? "Loding..." : "Submit"}
+                    Submit
                   </Button>
                   <Button
                     onClick={() => handleCloseModal()}
