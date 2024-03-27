@@ -60,6 +60,7 @@ function TrackingTable({
         <td className={TableStyle.firstTdBorder} onClick={handleTableRowClick}>
           <div> {data.patientId} </div> <div> {data.patientName} </div>
         </td>
+
         <td
           className={TableStyle.childBorder}
           style={{ textAlign: "left" }}
@@ -89,6 +90,16 @@ function TrackingTable({
         </td>
         <td
           className={TableStyle.childBorder}
+          onClick={handleTableRowClick}
+          style={{ textAlign: "center" }}
+        >
+          {data.allocatedOn
+            ? moment(data.allocatedOn).format("MM-DD-YYYY")
+            : "---"}
+        </td>
+
+        <td
+          className={TableStyle.childBorder}
           style={{ textAlign: "left" }}
           onClick={handleTableRowClick}
         >
@@ -113,6 +124,15 @@ function TrackingTable({
           ) : (
             <div style={{ textAlign: "center" }}>---</div>
           )}
+        </td>
+        <td
+          className={TableStyle.childBorder}
+          onClick={handleTableRowClick}
+          style={{ textAlign: "center" }}
+        >
+          {data.auditAllocatedDate
+            ? moment(data.auditAllocatedDate).format("MM-DD-YYYY")
+            : "---"}
         </td>
 
         <td
@@ -145,6 +165,16 @@ function TrackingTable({
 
         <td
           className={TableStyle.childBorder}
+          onClick={handleTableRowClick}
+          style={{ textAlign: "center" }}
+        >
+          {data.auditDueDate
+            ? moment(data.auditDueDate).format("MM-DD-YYYY")
+            : "---"}
+        </td>
+
+        <td
+          className={TableStyle.childBorder}
           style={{ textAlign: "left" }}
           onClick={handleTableRowClick}
         >
@@ -170,25 +200,6 @@ function TrackingTable({
             <div style={{ textAlign: "center" }}>---</div>
           )}
         </td>
-        <td
-          className={TableStyle.childBorder}
-          onClick={handleTableRowClick}
-          style={{ textAlign: "center" }}
-        >
-          {data.allocatedOn
-            ? moment(data.allocatedOn).format("MM-DD-YYYY")
-            : "---"}
-        </td>
-
-        <td
-          className={TableStyle.childBorder}
-          onClick={handleTableRowClick}
-          style={{ textAlign: "center" }}
-        >
-          {data.auditAllocatedDate
-            ? moment(data.auditAllocatedDate).format("MM-DD-YYYY")
-            : "---"}
-        </td>
 
         <td
           className={TableStyle.childBorder}
@@ -199,13 +210,11 @@ function TrackingTable({
         </td>
 
         <td
-          className={TableStyle.childBorder}
+          className={TableStyle.lastBorder}
           onClick={handleTableRowClick}
           style={{ textAlign: "center" }}
         >
-          {data.auditDueDate
-            ? moment(data.auditDueDate).format("MM-DD-YYYY")
-            : "---"}
+          {statusBodyTemplate(data)}
         </td>
         <td
           className={TableStyle.lastBorder}
@@ -213,13 +222,6 @@ function TrackingTable({
           style={{ textAlign: "center" }}
         >
           {auditBodyTemplate(data)}
-        </td>
-        <td
-          className={TableStyle.lastBorder}
-          onClick={handleTableRowClick}
-          style={{ textAlign: "center" }}
-        >
-          {statusBodyTemplate(data)}
         </td>
       </tr>
     ));
@@ -235,9 +237,6 @@ function TrackingTable({
             <th style={{ textAlign: "left", paddingLeft: "20px" }}>
               ALLOCATED BY
             </th>
-            <th style={{ textAlign: "center" }}>AUDIT ALLOCATED BY</th>
-            <th style={{ textAlign: "center" }}>SUPERVISOR</th>
-            <th style={{ paddingLeft: "45px" }}>REVIEWER</th>
             <th
               style={{
                 cursor: "pointer",
@@ -255,7 +254,7 @@ function TrackingTable({
                 <ArrowDownOutlined />
               )}
             </th>
-
+            <th style={{ textAlign: "center" }}>AUDIT ALLOCATED BY</th>
             <th
               onClick={() => {
                 sortFunction(
@@ -284,29 +283,7 @@ function TrackingTable({
               </span>
             </th>
 
-            <th
-              onClick={() => {
-                sortFunction(sortDueOrder, setSortDueOrder, setSort, "dueDate");
-              }}
-              style={{ textAlign: "center" }}
-            >
-              DUE DATE
-              <span
-                style={{
-                  padding: "10px",
-                  cursor: "pointer",
-                  textAlign: "center",
-                  paddingLeft: "15px",
-                }}
-              >
-                {sortDueOrder === "ASC" ? (
-                  <ArrowUpOutlined />
-                ) : (
-                  <ArrowDownOutlined />
-                )}
-              </span>
-            </th>
-
+            <th style={{ textAlign: "center" }}>SUPERVISOR</th>
             <th
               onClick={() => {
                 sortFunction(
@@ -334,8 +311,33 @@ function TrackingTable({
                 )}
               </span>
             </th>
-            <th style={{ textAlign: "center" }}>AUDIT STATUS</th>
+            <th style={{ paddingLeft: "45px" }}>REVIEWER</th>
+
+            <th
+              onClick={() => {
+                sortFunction(sortDueOrder, setSortDueOrder, setSort, "dueDate");
+              }}
+              style={{ textAlign: "center" }}
+            >
+              DUE DATE
+              <span
+                style={{
+                  padding: "10px",
+                  cursor: "pointer",
+                  textAlign: "center",
+                  paddingLeft: "15px",
+                }}
+              >
+                {sortDueOrder === "ASC" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
+              </span>
+            </th>
+
             <th style={{ textAlign: "center" }}>PROCESSED STATUS</th>
+            <th style={{ textAlign: "center" }}>AUDIT STATUS</th>
           </tr>
         </thead>
 
