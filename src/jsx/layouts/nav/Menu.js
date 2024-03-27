@@ -89,7 +89,7 @@ export const AdminMenuList = [
   },
   {
     title: "FeedBack",
-    iconStyle: SVGICON.Notification,
+    iconStyle: SVGICON.ReportIcon,
     to: "/admin/feedback",
   },
   // {
