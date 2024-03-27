@@ -42,6 +42,11 @@ export const PhysicanMenuList = [
     to: "/reviewer/report",
     childRoute: "/reviewer/report/individualreport",
   },
+  {
+    title: "FeedBack",
+    iconStyle: SVGICON.ReportIcon,
+    to: "/reviewer/feedback",
+  },
 ];
 export const AdminMenuList = [
   {
@@ -115,6 +120,7 @@ export const L2AuditMenuList = [
     iconStyle: SVGICON.Usermanagement,
     to: "/coder/auditing",
   },
+
 ];
 export const L2AuditorMenuList = [
   {
@@ -134,6 +140,11 @@ export const L2AuditorMenuList = [
     iconStyle: SVGICON.patientListIcon,
     to: "/supervisor/auditing",
     childRoute: "/reviewer/patients/details",
+  },
+  {
+    title: "FeedBack",
+    iconStyle: SVGICON.ReportIcon,
+    to: "/supervisor/feedback",
   },
   // {
   //   title: "Org",
