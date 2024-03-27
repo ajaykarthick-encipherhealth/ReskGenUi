@@ -95,13 +95,13 @@ const File = ({}) => {
     (state) => state?.ReviewerReducers?.patientDetails
   );
   const sectionColorList = useSelector(
-    (state) => state?.ReviewerReducers?.sectionColorList.result?.response
+    (state) => state?.ReviewerReducers?.sectionColorList
   );
   const hccFileDetails = useSelector(
     (state) => state?.ReviewerReducers?.hccFileDetails
   );
   const fileDosPageNumberList = useSelector(
-    (state) => state?.ReviewerReducers.dosPageNumberList?.result
+    (state) => state?.ReviewerReducers.dosPageNumberList
   );
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const { toolbarPluginInstance } = defaultLayoutPluginInstance;
@@ -915,7 +915,7 @@ const File = ({}) => {
           });
         });
 
-        var sectionColorResult = sectionColorList;
+        var sectionColorResult = sectionColorList.result?.response;
 
         let sectionColorResultMatch = sectionColorResult?.filter((o1) =>
           dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
@@ -2824,7 +2824,7 @@ const File = ({}) => {
   };
 
   const getFileDosPageNumber = async () => {
-    var result = fileDosPageNumberList;
+    var result = fileDosPageNumberList?.result;
     var groupPageNumber = [];
     var groupEncounterDate = [];
     for (var key in result?.response) {

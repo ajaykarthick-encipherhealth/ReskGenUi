@@ -63,30 +63,14 @@ import { Avatar, Tooltip } from "antd";
 import Spinner from "../../../../../../components/loadingSpinner";
 import styles from "../styles.module.css";
 import {
-  getFilePageNumber,
   getMeatQueryList,
   submitMeatQuery,
   updateMeatQuery,
-  getProviderDetails,
-  manuallyAddComboCode,
-  deleteMeatQuery,
-  getProviderEncounterDetails,
 } from "../../../../../../services/PatientsListSevice";
 import { getPatientDetailsResult } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import CamboTree from "../org";
 
 const { Option } = Select;
-const addOnCodeColor = [
-  "magenta",
-  "red",
-  "volcano",
-  "orange",
-  "gold",
-  "cyan",
-  "blue",
-  "geekblue",
-  "purple",
-];
 const VisitData = ({}) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -95,7 +79,7 @@ const VisitData = ({}) => {
     (state) => state?.ReviewerReducers?.patientDetails
   );
   const sectionColorList = useSelector(
-    (state) => state?.ReviewerReducers?.sectionColorList.result?.response
+    (state) => state?.ReviewerReducers?.sectionColorList
   );
   const sectionColorListTest = useSelector(
     (state) => state?.ReviewerReducers
@@ -104,7 +88,7 @@ const VisitData = ({}) => {
     (state) => state?.ReviewerReducers?.hccFileDetails
   );
   const fileDosPageNumberList = useSelector(
-    (state) => state?.ReviewerReducers.dosPageNumberList?.result
+    (state) => state?.ReviewerReducers.dosPageNumberList
   );
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const { toolbarPluginInstance } = defaultLayoutPluginInstance;
@@ -862,7 +846,7 @@ const VisitData = ({}) => {
           });
         });
 
-        var sectionColorResult = sectionColorList;
+        var sectionColorResult = sectionColorList.result?.response;
 
         let sectionColorResultMatch = sectionColorResult?.filter((o1) =>
           dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
@@ -2431,7 +2415,7 @@ const VisitData = ({}) => {
   };
 
   const getFileDosPageNumber = async () => {
-    var result = fileDosPageNumberList;
+    var result = fileDosPageNumberList?.result;
     var groupPageNumber = [];
     var groupEncounterDate = [];
     for (var key in result?.response) {

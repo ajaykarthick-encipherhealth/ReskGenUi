@@ -8,7 +8,7 @@ import Meat from "./meat";
 import RafScore from "./raf";
 import MeatQuery from "./meatQuery";
 import File from "./file";
-const Hcc = ({}) => {
+const Hcc = () => {
   const [activeTabHead, setActiveTabHead] = useState("file");
   const [flagTagActive, setFlagTagActive] = useState(false);
   const [fileLoading, setFileLoading] = useState(false);
