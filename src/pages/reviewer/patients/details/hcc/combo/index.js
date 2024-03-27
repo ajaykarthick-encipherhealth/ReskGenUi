@@ -403,17 +403,13 @@ const Combo = ({}) => {
         }
         pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
         setFileInitialPage(pageNumber);
-        setFileDosPageNumber(pageNumber);
       } else {
         setFileInitialPage(null);
-        setFileDosPageNumber(null);
       }
-      setMeatModalTitle(dotLoading);
       setIsLoadingSection(true);
       if (findFileKeyword == splitPoint) {
         setFileLoading(false);
         var dataset = value + " / (" + disDescription + ")";
-        setMeatModalTitle(dataset);
       }
       setFindFileKeyword(splitPoint);
 
@@ -427,7 +423,6 @@ const Combo = ({}) => {
       }
       setFindFileKeyword(splitPoint);
       setFileInitialPage(null);
-      setFileDosPageNumber(null);
     }
   };
 
@@ -464,11 +459,9 @@ const Combo = ({}) => {
           });
         }
         setFileInitialPage(pageNumber);
-        setFileDosPageNumber(pageNumber);
       } else {
         splitPoint = headerNames;
         setFileInitialPage(null);
-        setFileDosPageNumber(null);
       }
       setTargetPages(
         (targetPage) =>
@@ -487,7 +480,6 @@ const Combo = ({}) => {
       }
       setFindFileKeyword(splitPoint);
       setFileInitialPage(null);
-      setFileDosPageNumber(null);
     }
   };
   const handleOpenModalCombinationCode = async (
@@ -511,7 +503,6 @@ const Combo = ({}) => {
       handleOpenModalRadiology(value, disDescription, true);
     } else if (documentPlace == "Lab" || whereCome == "Lab") {
       setFileInitialPage(null);
-      setFileDosPageNumber(null);
       var splitPoint = disDescription.substring(" ", 40);
       setFindFileKeyword(splitPoint);
       setTimeout(() => {
@@ -596,7 +587,6 @@ const Combo = ({}) => {
           }
           setFindFileKeyword(splitPoint);
           setFileInitialPage(null);
-          setFileDosPageNumber(null);
         }
       } else if (check == "valid2") {
         setSelectActiveCode(value);
@@ -657,7 +647,6 @@ const Combo = ({}) => {
   };
   const handleOpenModalRadiology = (value, disDescription, radiologyCheck) => {
     setFileInitialPage(null);
-    setFileDosPageNumber(null);
     if (radiologyCheck == true) {
       var splitPoint = disDescription.substring(" ", 40);
       setFindFileKeyword(splitPoint);
@@ -862,7 +851,6 @@ const Combo = ({}) => {
       if (findPageNumber[0].startPage.length != 0) {
         var pageNumber = findPageNumber[0].startPage[0].pageNumber - 1;
         setFileInitialPage(pageNumber);
-        setFileDosPageNumber(pageNumber);
         var splitPoint = date.substring(" ", 5);
         setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
         setFindFileKeyword(splitPoint);
@@ -914,7 +902,6 @@ const Combo = ({}) => {
     setFileLoading(true);
     var pageIndex = pageNumber - 1;
     setFileInitialPage(pageIndex);
-    setFileDosPageNumber(pageIndex);
     setTargetPages(
       (targetPage) =>
         targetPage.pageIndex === pageNumber ||
