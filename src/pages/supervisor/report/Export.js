@@ -169,10 +169,9 @@ const Export = ({
     }
   }, [selectedRows, isModalVisible]);
   form.setFieldsValue({
-    ReportName:
-    selectedRows?.reportName
-        ? selectedRows?.reportName
-        : reportName,
+    ReportName: selectedRows?.reportName
+      ? selectedRows?.reportName
+      : reportName,
   });
 
   return (
@@ -195,7 +194,7 @@ const Export = ({
           ]}
         >
           <InputField
-            inputValue={reportName?reportName : selectedRows?.reportName}
+            inputValue={reportName ? reportName : selectedRows?.reportName}
             setInputValue={setReportName}
             delay={1000}
             type="text"
@@ -382,7 +381,7 @@ const Export = ({
               ))}
             </div>
           ) : (
-            "No Users Selected"
+            <div className={styles.noUser}>No User Selected</div>
           )}
         </div>
 

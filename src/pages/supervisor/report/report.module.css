@@ -176,3 +176,9 @@
   border-radius: 8px;
   margin-bottom: 10px;
 }
+.noUser {
+  justify-content: center;
+  margin: 60px;
+  align-items: center;
+  display: flex;
+}

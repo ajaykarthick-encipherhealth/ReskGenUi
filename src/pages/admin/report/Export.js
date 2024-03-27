@@ -215,11 +215,7 @@ const Export = ({
       dispatch(getExportDetails(data));
     } else {
       dispatch(updateSentReport(updatedData));
-      dispatch(
-        getActiveTab(
-          "SentReport"
-        )
-      );
+      dispatch(getActiveTab("SentReport"));
     }
     form.resetFields();
     setUsersList([]);
@@ -287,7 +283,7 @@ const Export = ({
           ]}
         >
           <InputField
-            inputValue={reportName?reportName : selectedRows?.reportName}
+            inputValue={reportName ? reportName : selectedRows?.reportName}
             setInputValue={setReportName}
             delay={1000}
             type="text"
@@ -477,7 +473,7 @@ const Export = ({
               ))}
             </div>
           ) : (
-            "No Users Selected"
+            <div className={styles.noUser}>No User Selected</div>
           )}
         </div>
 

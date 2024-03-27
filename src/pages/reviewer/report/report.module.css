@@ -153,7 +153,6 @@
   margin-right: 10px;
   border-radius: 8px;
   margin-top: 25px;
-
 }
 .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
   background-color: #04306f !important;
@@ -176,7 +175,6 @@
   text-align: center;
   margin-right: 10px;
   padding-top: 5px;
-
 }
 .dateDisplay {
   display: flex;
@@ -213,8 +211,8 @@
   padding: 5px;
   box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.2);
 }
-.userRoleContainer{
-  width:50%;
+.userRoleContainer {
+  width: 50%;
 }
 .userName {
   display: flex;
@@ -224,24 +222,28 @@
   border-radius: 8px;
   margin-bottom: 10px;
 }
-.filterBtn{
-  background-color: 
-  rgba(255, 255, 255, 1);
-  width:110px;
-  height:42px;
-  border:none;
+.filterBtn {
+  background-color: rgba(255, 255, 255, 1);
+  width: 110px;
+  height: 42px;
+  border: none;
   border-radius: 8px;
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
 }
-.titleBar{
+.titleBar {
   font-size: 18px;
   font-weight: 700;
   margin-left: 10px;
 }
-.backDiv{
+.backDiv {
   margin: 33px 10px 0px 0;
 }
-.label{
-  margin-left:8px;
-
+.label {
+  margin-left: 8px;
+}
+.noUser {
+  justify-content: center;
+  margin: 60px;
+  align-items: center;
+  display: flex;
 }
