@@ -41,24 +41,21 @@ const ImageUploader = ({ setOpenUploader, setOpenContent }) => {
   }, []);
 
   return (
-    <div className={styles.videoflex}>
-      <div className=" text-center" typeof="file">
-        <div>
+    <div className={styles.cover}>
+      <label>
+        <input
+          className="input"
+          type="file"
+          onChange={handleChange}
+          ref={fileInputRef}
+          accept=".png,.jpg,.jpeg"
+        />
+
+        <div className={styles.videoflex}>
           <Image src={upload} alt="Image" />
+          Upload Profile
         </div>
-        <div>
-          <label>
-            <input
-              className="input"
-              type="file"
-              onChange={handleChange}
-              ref={fileInputRef}
-              accept=".png,.jpg,.jpeg"
-            />
-            Upload Profile
-          </label>
-        </div>
-      </div>
+      </label>
     </div>
   );
 };

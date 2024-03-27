@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
@@ -31,6 +31,7 @@ import Image from "next/image";
 import styles from "../report/report.module.css";
 import filter from "../../../images/svg/filter.svg";
 import { extractLatestData } from "../../supervisor/auditing";
+import InputField from "../../../components/input";
 
 const { RangePicker } = DatePicker;
 export default function Patient() {
@@ -38,7 +39,7 @@ export default function Patient() {
   const sideMenu = useSelector((state) => state.sideMenu);
   const navigate = useRouter();
   const [isLoading, setIsLoading] = useState(true);
-  const inputValue  = {
+  const inputValue = {
     year: "",
     name: "",
     patientId: "",
@@ -102,7 +103,8 @@ export default function Patient() {
       dayjs(dayDateFormated).format("MM-DD-YYYY") + "T00:00:00.000Z"
     );
     setDefaultEndDate(
-      dayjs(dayDateFormated).format("MM-DD-YYYY") + "T23:59:59.000Z");
+      dayjs(dayDateFormated).format("MM-DD-YYYY") + "T23:59:59.000Z"
+    );
   }, [dayDateFormated]);
 
   useEffect(() => {
@@ -117,9 +119,10 @@ export default function Patient() {
       processedStart,
       processedEnd,
       sort,
-      selectedPriority
+      selectedPriority,
+      searchTextValue
     );
-  }, [filteratedDashboardData, sort, selectedPriority]);
+  }, [filteratedDashboardData, sort, selectedPriority,searchTextValue]);
 
   useEffect(() => {
     if (patientsListFilter) {
@@ -155,7 +158,7 @@ export default function Patient() {
       setPatinetListAll(resultMap);
       setIsLoading(false);
     }
-  }, [patientsListFilter]);
+  }, [patientsListFilter,searchTextValue]);
 
   const getFilteApi = async (
     pageNo,
@@ -166,7 +169,8 @@ export default function Patient() {
     pStart,
     pEnd,
     sort,
-    selectedPriority
+    selectedPriority,
+    searchTextValue
   ) => {
     const uId = localStorage.getItem("userId");
     const resoureUrl = `dbservice/patient/filter?patientAllocated=${uId}&page=${
@@ -464,20 +468,15 @@ export default function Patient() {
                           >
                             <div className="col-xl-2">
                               <label>Search by Name or ID</label>
-                              <div class="form-group has-search">
-                                <FontAwesomeIcon
-                                  className="fa fa-search form-control-feedback"
-                                  icon={faSearch}
-                                />
-                                <InputText
-                                  type="text"
-                                  onChange={(e) =>
-                                    getNameSearch(e.target.value)
-                                  }
-                                  className="form-control new-form-control"
-                                  placeholder="Search"
-                                />
-                              </div>
+                              <InputField
+                                inputValue={searchTextValue}
+                                setInputValue={setSearchTextValue}
+                                delay={1000}
+                                type="text"
+                                onChange={getNameSearch}
+                                placeholder="Search"
+                                isSearch={true}
+                              />
                             </div>
                             <div className="col-xl-2">
                               <label>Select Status</label>

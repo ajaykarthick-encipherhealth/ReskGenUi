@@ -1,0 +1,23 @@
+.status {
+  padding: 7px 0;
+  width: 125px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pending {
+  background-color: #cce9ff;
+  color: #0078d4;
+}
+
+.approved {
+  background-color: #daf1ee;
+  color: #235952;
+}
+
+.decline {
+    background-color: #EFDCDC;
+  color: #9A4444;
+}

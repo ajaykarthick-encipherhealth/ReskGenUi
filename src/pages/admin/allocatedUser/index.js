@@ -474,7 +474,7 @@ export default function Patient() {
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption  align-items-center">
                         <div className="row filter-contain">
-                          <div className="d-flex col-xl-2">
+                          <div className={`${isPatientList && 'd-flex'} col-xl-2`}>
                             {isPatientList && (
                               <div className={reportStyles.backDiv}>
                                 <button
@@ -502,6 +502,7 @@ export default function Patient() {
                                   value={searchString}
                                   className="form-control new-form-control"
                                   placeholder="Search"
+                                  maxLength={25}
                                 />
                               </div>
                             </div>
@@ -552,7 +553,7 @@ export default function Patient() {
                                     value={batchCount}
                                     className="form-control new-form-controls"
                                     placeholder="Batch Count"
-                                    style={{ width: "40%" }}
+                                    style={{ width: "60%"}}
                                   />
                                   <button
                                     onClick={() => setFilterBatchCount(true)}
@@ -593,7 +594,7 @@ export default function Patient() {
                               </div>
                             </>
                           )}
-                          <div className="col-xl-4 mt-4">
+                          <div className={`col-xl-4 mt-4 ${TableStyle.allocateBtn}`}>
                             {isPatientList || activeTab === 1 ? (
                               <>
                                 <button

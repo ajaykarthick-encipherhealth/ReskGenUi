@@ -7,7 +7,6 @@
 .export {
   width: 100px;
   height: 40px;
-  color: black;
   text-align: center;
   background: rgba(19, 61, 212, 0.15);
   border: 1px solid #133dd4;
@@ -15,7 +14,6 @@
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  text-align: center;
   margin-right: 10px;
   margin-top: 25px;
   border-radius: 8px;
@@ -104,11 +102,9 @@
   height: 40px;
   color: black;
   text-align: center;
-
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  text-align: center;
   margin-right: 10px;
   margin-top: 25px;
   border-radius: 8px;
@@ -119,14 +115,12 @@
 .excel {
   width: 100px;
   height: 40px;
-
   color: black;
   text-align: center;
   padding-top: 5px;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  text-align: center;
   margin-right: 10px;
 }
 .dateDisplay {
@@ -175,4 +169,14 @@
   box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   margin-bottom: 10px;
+}
+.noUser {
+  justify-content: center;
+  margin: 60px;
+  align-items: center;
+  display: flex;
+}
+.fields{
+  width:100px;
+  text-align: start;
 }

@@ -12,9 +12,9 @@ const Hcc = ({}) => {
   const [activeTabHead, setActiveTabHead] = useState("file");
   const [flagTagActive, setFlagTagActive] = useState(false);
   const [fileLoading, setFileLoading] = useState(false);
-  const selectTab =()=>{
+
+
     
-  }
   return (
     <>
       {fileLoading ? (

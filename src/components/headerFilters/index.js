@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Select from "react-select";
 import { Button } from "react-bootstrap";
-import { DatePicker, Popover } from "antd";
+import { DatePicker, Popover, Tooltip } from "antd";
 import Image from "next/image";
 import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
@@ -24,6 +24,10 @@ const HeaderFilters = ({
   setSearch,
   isSearch,
   searchlabel,
+  coderSearch,
+  receivedSearch,
+  sentSearch,
+  search,
 
   // Report Props
   setSentSearch,
@@ -48,7 +52,6 @@ const HeaderFilters = ({
   // Picker Props
   pickerlabel,
   pickerlabe2,
-  pickerlabe3,
   pickerlabe4,
   pickerlabe5,
   activeTab,
@@ -66,6 +69,23 @@ const HeaderFilters = ({
   setEndDate2,
   defaultStartDate2,
   defaultEndDate2,
+  //if has time picker
+  isRangeTimePicker,
+  timePickerlabel,
+  defaultStartTime,
+  defaultEndTime,
+  setStartTime,
+  setEndTime,
+  setSelectedTime,
+  setReceivedStartTime,
+  setReceivedEndTime,
+  setCoderStartTime,
+  setCoderEndTime,
+
+  // if has allocated date picker
+  pickerlabe3,
+  defaultStartDate3,
+  defaultEndDate3,
   setStartDate3,
   setEndDate3,
   setStartDate4,
@@ -95,6 +115,13 @@ const HeaderFilters = ({
   allocatedToOptoons,
   setSelAllocatedTo,
   defaultAllocateTo,
+
+  //priority
+  isAnotherPicker6,
+  pickerlabe6,
+  setPriority,
+  defaultPriority,
+
   isCreatedBySelector,
   createdTolabel,
   createdByOptoons,
@@ -152,6 +179,10 @@ const HeaderFilters = ({
                 setSentSearch={setSentSearch}
                 setReceivedSearch={setReceivedSearch}
                 setCoderSearch={setCoderSearch}
+                coderSearch={coderSearch}
+                receivedSearch={receivedSearch}
+                sentSearch={sentSearch}
+                search={search}
               />
             </div>
           )}
@@ -277,6 +308,38 @@ const HeaderFilters = ({
             </div>
           )}
 
+          {isRangeTimePicker && (
+            <>
+              <div className={defaultSize} style={{ width: "20%" }}>
+                <label className={styles.label}>{timePickerlabel}</label>
+                <div>
+                  <RangePicker
+                    showTime={{ format: "HH:mm" }} // Specify the time format
+                    format="YYYY-MM-DD HH:mm" // Specify the combined date and time format
+                    // value={dayjs(selectedDates2).format('MM-DD-YYYY')}
+                    // onChange={(date, dateString) =>
+                    //   handleRnagePicker2({
+                    //     date,
+                    //     dateString,
+                    //     setStartDate2,
+                    //     setEndDate2,
+                    //   })
+                    // }
+                    // defaultValue={
+                    //   defaultEndDate2 && defaultStartDate2
+                    //     ? [
+                    //         dayjs(defaultStartDate2, "YYYY-MM-DD"),
+                    //         dayjs(defaultEndDate2, "YYYY-MM-DD"),
+                    //       ]
+                    //     : []
+                    // }
+                    // disabledDate={(current) => disableFutureDate(current)}
+                  />
+                </div>
+              </div>
+            </>
+          )}
+
           {isAnotherPicker && (
             <>
               <div className={defaultSize}>
@@ -383,23 +446,27 @@ const HeaderFilters = ({
               } d-flex justify-content-end`}
             >
               <div className="row flr">
-                <button
-                  onClick={() => {
-                    setIsModalVisible(true);
-                  }}
-                  className={
-                    rowsLength?.length === 0 ? styles.csv : styles.export
+                <Tooltip
+                  title={
+                    rowsLength?.length === 0 ? "Select report to export" : ""
                   }
-                  disabled={
-                    rowsLength?.length > 0 || rowsLength?.data?.length > 0
-                      ? false
-                      : true
-                  }
-                  style={{ color: "#04306f" }}
                 >
-                  <Export />
-                  Export
-                </button>
+                  <button
+                    onClick={() => {
+                      setIsModalVisible(true);
+                    }}
+                    className={styles.export}
+                    disabled={
+                      rowsLength?.length > 0 || rowsLength?.data?.length > 0
+                        ? false
+                        : true
+                    }
+                    style={{ color: "#04306f" }}
+                  >
+                    <Export />
+                    Export
+                  </button>
+                </Tooltip>
               </div>
             </div>
           )}
@@ -407,7 +474,10 @@ const HeaderFilters = ({
       </div>
       {showFilters && (
         <div style={{ marginTop: "50px" }}>
-          <div className="row filter-contain">
+          <div
+            className="row filter-contain"
+            style={{ width: atCorner ? "110%" : "100%" }}
+          >
             {isAllocatedBySelector && (
               <div
                 className={defaultSize}
@@ -538,6 +608,24 @@ const HeaderFilters = ({
                         })
                       }
                       disabledDate={(current) => disableFutureDate(current)}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+            {isAnotherPicker6 && (
+              <>
+                <div className={defaultSize}>
+                  <label className={styles.label}>{pickerlabe6}</label>
+                  <div>
+                    <Select
+                      onChange={(selectedOption) => {
+                        setPriority(selectedOption?.value);
+                      }}
+                      options={allocatedToOptoons}
+                      className="custom-react-select"
+                      isSearchable={false}
+                      placeholder={defaultPriority}
                     />
                   </div>
                 </div>

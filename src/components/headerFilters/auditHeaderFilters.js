@@ -20,6 +20,7 @@ const AuditHeaderFilters = ({
   setSearch,
   isSearch,
   searchlabel,
+  search,
   // for report
   setSentSearch,
   setReceivedSearch,
@@ -117,6 +118,7 @@ const AuditHeaderFilters = ({
                 setSentSearch={setSentSearch}
                 setReceivedSearch={setReceivedSearch}
                 setCoderSearch={setCoderSearch}
+                search={search}
               />
             </div>
           )}

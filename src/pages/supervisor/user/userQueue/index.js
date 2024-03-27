@@ -320,6 +320,7 @@ const Index = () => {
                     <AuditHeaderFilters
                       setSearch={setSearch}
                       isSearch={true}
+                      search={search}
                       searchlabel="Search By Patient ID / Name"
                       // auditedStatus
                       selectlabel2="Audit Status"

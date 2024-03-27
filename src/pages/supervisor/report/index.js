@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Tab, Nav } from "react-bootstrap";
 import Select from "react-select";
 import React, { useState, useEffect } from "react";
-import { Modal, DatePicker } from "antd";
+import { Modal, DatePicker, Tooltip } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FilterMatchMode } from "primereact/api";
@@ -14,6 +14,7 @@ import SentReportTable from "../table/sentReport/sentReport";
 import ReceivedReport from "../table/receivedReport/receivedReport";
 import CoderReport from "../table/CoderReport/coderReport";
 import Export from "./Export";
+import ExportImg from "../../../images/svg/Export";
 import {
   getActiveTab,
   getReceivedDetails,
@@ -297,6 +298,7 @@ const Index = () => {
                                   onChange={(e) => filterChangePatientId(e)}
                                   className="form-control new-form-control"
                                   placeholder="Search"
+                                  maxLength={25}
                                 />
                               </div>
                             </div>
@@ -358,62 +360,35 @@ const Index = () => {
                               reportActiveTab === "AuditReport") && (
                               <div className="col-xl-6">
                                 <div className="row flr">
-                                  <button
-                                    onClick={handleExport}
-                                    className={
+                                  <Tooltip
+                                    title={
                                       rowsLength?.length === 0
-                                        ? styles.csv
-                                        : styles.export
-                                    }
-                                    disabled={
-                                      rowsLength?.length > 0 ||
-                                      rowsLength?.data?.length > 0
-                                        ? false
-                                        : true
+                                        ? "Select report to export"
+                                        : ""
                                     }
                                   >
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="15"
-                                      height="15"
-                                      viewBox="0 0 20 20"
-                                      fill="none"
-                                      className="me-2"
+                                    <button
+                                      onClick={() => {
+                                        setIsModalVisible(true);
+                                      }}
+                                      className={styles.export}
+                                      disabled={
+                                        rowsLength?.length > 0 ||
+                                        rowsLength?.data?.length > 0
+                                          ? false
+                                          : true
+                                      }
+                                      style={{ color: "#04306f" }}
                                     >
-                                      <path
-                                        d="M13.7 7.41699C16.7 7.67533 17.925 9.21699 17.925 12.592V12.7003C17.925 16.4253 16.4333 17.917 12.7083 17.917H7.28332C3.55832 17.917 2.06665 16.4253 2.06665 12.7003V12.592C2.06665 9.24199 3.27498 7.70032 6.22498 7.42532"
-                                        stroke="#133DD4"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                      />
-                                      <path
-                                        d="M10 12.4999V3.0166"
-                                        stroke="#133DD4"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                      />
-                                      <path
-                                        d="M12.7916 4.87467L9.9999 2.08301L7.20825 4.87467"
-                                        stroke="#133DD4"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                      />
-                                    </svg>
-                                    Export
-                                  </button>
+                                      <ExportImg />
+                                      Export
+                                    </button>
+                                  </Tooltip>
                                 </div>
                               </div>
                             )}
                           </div>
                         </div>
-                        <Export
-                          isModalVisible={isModalVisible}
-                          closeModal={closeModal}
-                          rowsLength={rowsLength}
-                          setIsModalVisible={setIsModalVisible}
-                          setSelectedRows={setSelectedRows}
-                          setSelectAll={setSelectAll}
-                        />
 
                         <div
                           id="task-tbl_wrapper"
@@ -557,6 +532,8 @@ const Index = () => {
                                       receivedPageNo={sentPageNo}
                                       receivedStartDate={startDate}
                                       receivedEndDate={endDate}
+                                      setSelectedRows={setSelectedRows}
+                                      selectedRows={selectedRows}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane
@@ -656,6 +633,15 @@ const Index = () => {
               </div>
             </div>
           )}
+          <Export
+            isModalVisible={isModalVisible}
+            closeModal={closeModal}
+            rowsLength={rowsLength}
+            setIsModalVisible={setIsModalVisible}
+            setSelectedRows={setSelectedRows}
+            selectedRows={selectedRows}
+            setSelectAll={setSelectAll}
+          />
         </div>
       </div>
     </>

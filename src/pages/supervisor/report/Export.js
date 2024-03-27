@@ -7,6 +7,7 @@ import { getUsersList } from "../../../store/actions/adminAction/ReportActions";
 import { checkBoxData, debounce } from "../../admin/report/Export";
 import { updateSentReport } from "../../../services/ReportService";
 import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
+import InputField from "../../../components/input";
 
 const { Option } = Select;
 
@@ -32,7 +33,7 @@ const Export = ({
   const [removedUsers, setRemovedUsers] = useState([]);
   const [reportName, setReportName] = useState("");
   const [form] = Form.useForm();
-  const idList = list?.map((data) => data?.patientId);
+  const idList = Array.isArray(list) && list?.map((data) => data?.patientId);
 
   const [checkall, setCheckAll] = useState(checkBoxData);
 
@@ -168,10 +169,9 @@ const Export = ({
     }
   }, [selectedRows, isModalVisible]);
   form.setFieldsValue({
-    ReportName:
-      selectedRows?.receivedUsers?.length > 0
-        ? selectedRows?.reportName
-        : reportName,
+    ReportName: selectedRows?.reportName
+      ? selectedRows?.reportName
+      : reportName,
   });
 
   return (
@@ -184,7 +184,7 @@ const Export = ({
     >
       <Form form={form} name="basic" onFinish={onFinish}>
         <Form.Item
-          label="Report Name"
+          label={<div className={styles.fields}>Report Name</div>}
           name="ReportName"
           rules={[
             {
@@ -193,15 +193,21 @@ const Export = ({
             },
           ]}
         >
-          <Input
-            disabled={selectedRows?.reportName ? true : false}
-            onChange={(e) => setReportName(e.target.value)}
+          <InputField
+            inputValue={reportName ? reportName : selectedRows?.reportName}
+            setInputValue={setReportName}
+            delay={1000}
+            type="text"
+            placeholder=""
+            isSearch={false}
+            isDisabled={selectedRows?.reportName ? true : false}
+            isInputFiled={true}
           />
         </Form.Item>
         {!isSent && (
           <>
             <Form.Item
-              label="Report Type"
+              label={<div className={styles.fields}>Report Type</div>}
               name="ReportTYpe"
               rules={[
                 {
@@ -221,7 +227,7 @@ const Export = ({
             </Form.Item>
 
             <Form.Item
-              label="Report Fields"
+              label={<div className={styles.fields}>Report Fields</div>}
               name="ReportFields"
               rules={[
                 {
@@ -282,8 +288,9 @@ const Export = ({
         <div style={{ display: "flex", marginBottom: "20px" }}>
           <div style={{ width: "100%" }}>
             <Form.Item
-              label="Send To"
+              label={<div className={styles.fields}>Send To</div>}
               name="User"
+              required
               rules={[
                 {
                   required: false,
@@ -375,7 +382,7 @@ const Export = ({
               ))}
             </div>
           ) : (
-            "No Users Selected"
+            <div className={styles.noUser}>No User Selected</div>
           )}
         </div>
 

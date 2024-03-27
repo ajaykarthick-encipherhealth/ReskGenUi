@@ -20,9 +20,10 @@ import {
 } from "antd";
 import {
   LoadingOutlined,
-  SettingOutlined,
   CloseCircleOutlined,
   DownOutlined,
+  SettingOutlined
+
 } from "@ant-design/icons";
 import styles from "../../../styles/file-managemnt.module.css";
 import { IMAGES } from "../../constant/theme";
@@ -177,7 +178,7 @@ const Header = () => {
     setLastName(currentUserInfo?.data?.response?.lastName);
     setDropdownContent(currentUserInfo?.data?.response?.role);
     if (getUserId == "johnson@encipherhealth.onmicrosoft.com") {
-      setDropdownContent(["PROVIDER"]);
+      setDropdownContent(["TENANT"]);
     }
     if (userRole === "ehr") {
       setDropdownContent(["EHR"]);
@@ -217,6 +218,7 @@ const Header = () => {
           <div>
             {btnItems?.map((data) => (
               <button
+              key={data?.id}
                 onClick={() => {
                   setSelectedBtn(data?.name);
                 }}
@@ -256,7 +258,7 @@ const Header = () => {
       <div className={styles.displayDiv}>
         {codDetails?.response
           ? codDetails?.response?.map((data) => (
-              <div className={styles.hoverDiv}>
+              <div className={styles.hoverDiv} key={data?.id}>
                 {data?.diagnosisCode} &nbsp;
                 {data?.description}&nbsp;
                 {selectedbtn === "HCC" && (
@@ -313,8 +315,8 @@ const Header = () => {
       router.push("/reviewer/dashboard");
     } else if (key === "supervisor") {
       router.push("/supervisor/dashboard");
-    } else if (key === "provider") {
-      router.push("/provider/comparison");
+    } else if (key === "tenant") {
+      router.push("/tenant/fhirTable");
     } else if (key === "ehr") {
       router.push("/ehr/patients");
     }
@@ -327,7 +329,7 @@ const Header = () => {
         return PhysicanMenuList;
       case "supervisor":
         return L2AuditorMenuList;
-      case "provider":
+      case "tenant":
         return ProviderMenuList;
       case "ehr":
         return EHRMenuList;
@@ -447,7 +449,7 @@ const Header = () => {
                   <div className="header-profile2 cr-pointer">
                     <div className="nav-link i-false" as="div">
                       <div className="header-info2 d-flex align-items-center">
-                        {userRole !== "admin" && (
+                        {userRole !== "admin" && userRole !== "tenant" && (
                           <Popover
                             content={PopContent}
                             placement="bottom"
@@ -492,22 +494,25 @@ const Header = () => {
                             </div>
                           </Tooltip>
                         )}
-                        {/* <div
-                          className="chatheaderIcon"
-                          onClick={() => router.push("/admin/settings")}
-                        >
-                          <SettingOutlined
-                            style={{
-                              width: "23px",
-                              height: "26px",
-                              marginTop: "8px",
-                              fontWeight: "700",
-                              marginRight: "10px",
-                              color: "#241572",
-                              fontSize: "30px",
-                            }}
-                          />
-                        </div> */}
+
+                        {userRole === "tenant" && (
+                          <div
+                            className="chatheaderIcon"
+                            onClick={() => router.push("/tenantAdmin/settings")}
+                          >
+                            <SettingOutlined
+                              style={{
+                                width: "23px",
+                                height: "26px",
+                                marginTop: "8px",
+                                fontWeight: "700",
+                                marginRight: "10px",
+                                color: "#241572",
+                                fontSize: "30px",
+                              }}
+                            />
+                          </div>
+                        )}
                         <div
                           className="chatheaderIcon"
                           onClick={() => gotoChat()}
@@ -613,8 +618,8 @@ const Header = () => {
                                           ? "Reviewer"
                                           : currentRole == "supervisor"
                                           ? "Supervisor"
-                                          : currentRole == "provider"
-                                          ? "Provider"
+                                          : currentRole == "tenant"
+                                          ? "Tenant Admin"
                                           : currentRole == "ehr"
                                           ? "EHR"
                                           : "Admin"}
@@ -627,10 +632,10 @@ const Header = () => {
                                     className={styles.footerDiv}
                                     onClick={logoutFunction}
                                   >
-                                    <Image src={logout} />
+                                    {/* <Image src={logout} /> */}
                                     <span className={styles.footerCont}>
                                       {" "}
-                                      Logout
+                                      Log out
                                     </span>
                                   </div>
                                 </div>
@@ -704,8 +709,8 @@ const Header = () => {
                                 ? "Reviewer"
                                 : currentRole == "supervisor"
                                 ? "Supervisor"
-                                : currentRole == "provider"
-                                ? "Provider"
+                                : currentRole == "tenant"
+                                ? "Tenant"
                                 : currentRole == "ehr"
                                 ? "EHR"
                                 : "Admin"}

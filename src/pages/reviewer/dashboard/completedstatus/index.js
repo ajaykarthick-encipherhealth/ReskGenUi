@@ -191,8 +191,8 @@ const CompletedStatus = () => {
               <Spin loading={completedDatas?.loading} />
             </div>
           )}
-          {!completedDatas?.loading&&
-          completedDatas?.data?.response ? (
+
+          {completedDatas?.data?.response ? (
             <>
               <ReactECharts
                 option={option}
@@ -203,9 +203,11 @@ const CompletedStatus = () => {
               </div>
             </>
           ) : (
-            <div className={spinSTYles.spinStyle}>
+            !completedDatas?.loading && (
+              <div className={spinSTYles.spinStyle}>
               <Empty />
             </div>
+            )
           )}
         </Card>
       </div>

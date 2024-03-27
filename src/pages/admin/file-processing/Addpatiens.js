@@ -45,12 +45,11 @@ const Addpatients = ({
                   className="text-capitalize"
                   name="patientId"
                   required
+                  pattern="^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$"
                   type="text"
                   onChange={handleChangePatientId}
                 />
-                <Form.Control.Feedback type="invalid">
-                  Please enter patient ID
-                </Form.Control.Feedback>
+                <small small id="emailHelp" class="form-text text-muted">Patient Id must contain one special character, numbers and letters.</small>
               </div>
               <div className="col-xl-12 mb-3">
                 <Form.Label>
@@ -62,9 +61,6 @@ const Addpatients = ({
                   type="text"
                   onChange={handleChangePatientId}
                 />
-                <Form.Control.Feedback type="invalid">
-                  Please enter patient name
-                </Form.Control.Feedback>
               </div>
             </div>
             <div>

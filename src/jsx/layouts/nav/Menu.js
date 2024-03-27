@@ -87,6 +87,11 @@ export const AdminMenuList = [
     iconStyle: SVGICON.Notification,
     to: "/admin/notification",
   },
+  {
+    title: "FeedBack",
+    iconStyle: SVGICON.ReportIcon,
+    to: "/admin/feedback",
+  },
   // {
   //   title: "Auditing Window",
   //   iconStyle: SVGICON.Usermanagement,
@@ -147,14 +152,14 @@ export const ProviderMenuList = [
   {
     title: "Patients Sync",
     iconStyle: SVGICON.adminUser,
-    to: "/provider/fhirTable",
+    to: "/tenantAdmin/fhirTable",
     childRoute: "/fhirTable/details",
   },
-  {
-    title: "Settings",
-    iconStyle: SVGICON.settingsIcon,
-    to: "/provider/settings",
-  },
+  // {
+  //   title: "Settings",
+  //   iconStyle: SVGICON.settingsIcon,
+  //   to: "/tenantAdmin/settings",
+  // },
 ];
 
 export const EHRMenuList = [
@@ -176,10 +181,7 @@ export const PhysicianMenuList = [
     title: "Patients",
     iconStyle: SVGICON.physicianPatient,
     to: "/physician/patients",
-  },
-  {
-    title: "Comparision",
-    iconStyle: SVGICON.physicianComparision,
-    to: "/physician/comparison",
+    childRoute:"/physician/comparison"
+
   },
 ];
