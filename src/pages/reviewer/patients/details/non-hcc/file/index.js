@@ -151,56 +151,19 @@ const File = ({}) => {
       setPatientDocumentResult(result);
       if (result.validDisease != null) {
         setPatientFileDTO(result.fileDetailDTO);
-        var validDis = "";
         var invalidDis = "";
-        var comboDis = "";
-        var meatCri = "";
         var dosYearArr = [];
-        var rafScore = null;
-        var validDiseaseNewRes = [];
         var invalidDiseaseNewRes = [];
         var unMatchRes = [];
-        var unMatchResHcc = [];
-        var unMatchResNonHcc = [];
-        var meatCriColorTagList = [];
-
-        var suggestRadiologyList = [];
-        var suggestLabList = [];
-
-        var suggestListAll = [];
         var suggestListAllNonHcc = [];
-        var deleteHccList = [];
-        var unMacthResList = [];
-
-        validDis = result.validDisease;
-        validDiseaseNewRes = result.validDisease;
-        // invalidDiseaseNewRes =validDisArray;
-
         result.encounterYears.map((res) => {
           dosYearArr.push({ value: res, label: res });
         });
         const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
-
         const highestDosValue = dosYearArr.filter(
           (i) => parseInt(i.value) === highestDOS
         );
         setSelectedDosValue(highestDosValue[0].value);
-
-        var validDisArray = [];
-        var validEncounterDateArray = [];
-        validDiseaseNewRes.map((res, index) => {
-          const encounterDatearray = res.encounterDate.split(",");
-          validDisArray.push({
-            actualDescription: res.actualDescription,
-            capturedSections: res.capturedSections,
-            diagnosisCode: res.diagnosisCode,
-            encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
-            isManuallyAdded: res.isManuallyAdded,
-            isHccValid: res.isHccValid,
-            defaultPosition: res.defaultPosition,
-          });
-        });
         result.invalidDisease.map((res, index) => {
           const encounterDatearray = res.encounterDate.split(",");
           var providerList = [];
@@ -219,95 +182,10 @@ const File = ({}) => {
             providerName: providerList,
           });
         });
-
-        if (result.deletedDiseases != null) {
-          result.deletedDiseases.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(",");
-            deleteHccList.push({
-              actualDescription: res.actualDescription,
-              capturedSections: res.capturedSections,
-              diagnosisCode: res.diagnosisCode,
-              encounterDate: res.encounterDate,
-              encounterDateSplit: encounterDatearray,
-              isManuallyAdded: res.isManuallyAdded,
-              isHccValid: res.isHccValid,
-              defaultPosition: res.defaultPosition,
-            });
-          });
-        }
-        if (result.suggestRadiology != null) {
-          // var checkDosRadio = [];
-          // for (var key in result.suggestRadiology) {
-          //   checkDosRadio.push({ value: key, label: key });
-          // }
-          // getPatientDetailsRadiologyYear(orgId,tenId)
-          suggestRadiologyList = result.suggestRadiology;
-          suggestRadiologyList.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(",");
-            suggestListAll.push({
-              actualDescription: res.actualDescription,
-              capturedSections: res.capturedSections,
-              diagnosisCode: res.diagnosisCode,
-              encounterDate: res.encounterDate,
-              encounterDateSplit: encounterDatearray,
-              getPlace: "Radio",
-              isHccValid: true,
-              defaultPosition: res.defaultPosition,
-            });
-          });
-
-          if (result.suggestRadiologyCombo != null) {
-            result.suggestRadiologyCombo.map((res, index) => {
-              const encounterDatearray = res.encounterDate.split(",");
-              suggestListAll.push({
-                actualDescription: res.diseaseName,
-                capturedSections: [],
-                diagnosisCode: res.diagnosisCodeCombo,
-                encounterDate: res.encounterDate,
-                encounterDateSplit: encounterDatearray,
-                getPlace: "Radio-combo",
-                isHccValid: true,
-                // defaultPosition:res.defaultPosition
-              });
-            });
-          }
-        }
-
-        if (result.suggestLab != null) {
-          // getLabReportDetails(orgId,tenId)
-          suggestLabList = result.suggestLab;
-          suggestLabList.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(",");
-            suggestListAll.push({
-              actualDescription: res.actualDescription,
-              capturedSections: res.capturedSections,
-              diagnosisCode: res.diagnosisCode,
-              encounterDate: res.encounterDate,
-              encounterDateSplit: encounterDatearray,
-              getPlace: "Lab",
-              isHccValid: true,
-              defaultPosition: res.defaultPosition,
-            });
-          });
-        }
-
         if (result.unMatchedDisease != null) {
           unMatchRes = result.unMatchedDisease;
           unMatchRes.map((res, index) => {
             const encounterDatearray = res.encounterDate.split(",");
-            if (res.isHccValid == true) {
-              suggestListAll.push({
-                actualDescription: res.actualDescription,
-                diagnosisCodeFinding: res.diagnosisCode,
-                isHccValid: res.isHccValid,
-                capturedSections: res.capturedSections,
-                diagnosisCode: res.diagnosisCode,
-                encounterDate: res.encounterDate,
-                encounterDateSplit: encounterDatearray,
-                getPlace: "Hcc",
-                defaultPosition: res.defaultPosition,
-              });
-            } else {
               suggestListAllNonHcc.push({
                 actualDescription: res.actualDescription,
                 diagnosisCodeFinding: res.diagnosisCode,
@@ -318,54 +196,13 @@ const File = ({}) => {
                 encounterDateSplit: encounterDatearray,
                 getPlace: "Hcc",
               });
-            }
           });
         }
-
         invalidDis = result.invalidDisease;
-        comboDis = result.comboDisease;
-        meatCri = result.meatCriteria;
-
-        // validDiseaseNewRes = validDiseaseNew[2019]
-
-        var invalidDiseasesArray = [];
-        var validDiseasesArray = [];
-
-        for (var key in invalidDis) {
-          invalidDiseasesArray.push({ name: invalidDis[key] });
-        }
-        for (var key in validDis) {
-          validDiseasesArray.push({ name: validDis[key] });
-        }
-
         setInNewValidDiseaseList(invalidDiseaseNewRes);
         setSuggestedNonHccList(suggestListAllNonHcc);
         var capturedSectionsColorsMatching = [];
         var capturedSectionsArr = [];
-
-        const COLORS = [
-          "bg-bg-seven",
-          "bg-third",
-          "bg-bg-four",
-          "bg-bg-five",
-          "bg-bg-six",
-          "bg-bg-eight",
-          "bg-bg-nine",
-          "bg-bg-ten",
-          "bg-bg-leven",
-        ];
-
-        const COLORS2 = [
-          "sectionTag1",
-          "sectionTag2",
-          "sectionTag3",
-          "sectionTag4",
-          "sectionTag5",
-          "sectionTag6",
-          "sectionTag7",
-          "sectionTag8",
-        ];
-
         const COLORS3 = [
           "encounterDateTag1",
           "encounterDateTag2",
@@ -376,25 +213,7 @@ const File = ({}) => {
           "encounterDateTag7",
           "encounterDateTag8",
         ];
-
-        validDiseaseNewRes.map((res) => {
-          res.capturedSections.map((res2, index) => {
-            capturedSectionsArr.push({
-              name: res2,
-              diagnosisCode: res.diagnosisCode,
-            });
-          });
-        });
         invalidDiseaseNewRes.map((res) => {
-          res.capturedSections.map((res2, index) => {
-            capturedSectionsArr.push({
-              name: res2,
-              diagnosisCode: res.diagnosisCode,
-            });
-          });
-        });
-
-        suggestListAll.map((res) => {
           res.capturedSections.map((res2, index) => {
             capturedSectionsArr.push({
               name: res2,
@@ -409,7 +228,6 @@ const File = ({}) => {
           capturedSectionsColorsMatching.push({
             name: res.name,
             diagnosisCode: res.diagnosisCode,
-            colors: COLORS2[index],
           });
         });
 
@@ -447,46 +265,9 @@ const File = ({}) => {
 
         setCaptureSectionMatching(newArrayColorMatchs);
 
-        // setCaptureSectionMatching(capturedSectionsColorsMatching);
-
         var encounterDateColorsMatching = [];
         var encounterDateArr = [];
-
-        validDiseaseNewRes.map((res) => {
-          const array = res.encounterDate.split(",");
-          array.map((res2) => {
-            encounterDateArr.push({
-              name: res2,
-            });
-          });
-        });
-
         result.invalidDisease.map((res) => {
-          const array = res.encounterDate.split(",");
-          array.map((res2) => {
-            encounterDateArr.push({
-              name: res2,
-            });
-          });
-        });
-
-        result.unMatchedDisease.map((res) => {
-          const array = res.encounterDate.split(",");
-          array.map((res2) => {
-            encounterDateArr.push({
-              name: res2,
-            });
-          });
-        });
-        result.suggestRadiology?.map((res) => {
-          const array = res.encounterDate.split(",");
-          array.map((res2) => {
-            encounterDateArr.push({
-              name: res2,
-            });
-          });
-        });
-        result.suggestLab?.map((res) => {
           const array = res.encounterDate.split(",");
           array.map((res2) => {
             encounterDateArr.push({
