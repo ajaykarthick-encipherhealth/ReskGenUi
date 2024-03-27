@@ -1705,20 +1705,6 @@ const Meat = ({}) => {
     inputValue.actualDescription = "adakd dvasdv";
   };
 
-  const getPatientDetailsReload = async (
-    patientId,
-    orgId,
-    tenId,
-    fileloadCondition
-  ) => {
-    dispatch(getPatientDetailsResult(patientId));
-  };
-
-  const addValidCodeFile = async (event) => {
-    setIsFileFormShow(true);
-    setValidated(false);
-  };
-
   function removeDuplicates(array) {
     let output = [];
     if (array) {
@@ -1764,85 +1750,6 @@ const Meat = ({}) => {
       } else {
       }
     } catch (e) {}
-  };
-
-  const getCaptureSectionBackgroundFile = (
-    value,
-    encounterDate,
-    actualDescription
-  ) => {
-    // getSectionTagColor(value);
-    var dublicateCaptureDelete = removeDuplicates(value);
-    return dublicateCaptureDelete.map((res) => {
-      const result = captureSectionMatching.filter(
-        (res2) => res2.sectionName == res
-      );
-      var backColor = result[0]?.backgroundColor;
-      var textColor = result[0]?.sectionColor;
-      var disCode = result[0]?.diagnosisCode;
-      var headerNames = result[0]?.sectionName;
-      var sectionMapArr = (
-        <span
-          onClick={() =>
-            findValueDocument(
-              disCode,
-              res,
-              headerNames,
-              encounterDate,
-              actualDescription
-            )
-          }
-          style={{ backgroundColor: backColor, color: textColor }}
-          className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
-        >
-          {res}
-        </span>
-      );
-      return sectionMapArr;
-    });
-  };
-
-  const getCaptureSectionBackground = (
-    value,
-    documentPlace,
-    encounterDate,
-    actualDescription,
-    testModal,
-    diagnosisCode
-  ) => {
-    var dublicateCaptureDelete = removeDuplicates(value);
-    return dublicateCaptureDelete.map((res) => {
-      const result = captureSectionMatching.filter(
-        (res2) => res2.sectionName == res
-      );
-      var backColor = result[0]?.backgroundColor;
-      var textColor = result[0]?.sectionColor;
-      var disCode = diagnosisCode;
-      var headerNames = result[0]?.sectionName;
-
-      var sectionMapArr = (
-        <span
-          onClick={() =>
-            handleOpenModalCombinationCode(
-              disCode,
-              res,
-              "valid",
-              "null",
-              documentPlace,
-              encounterDate,
-              headerNames,
-              actualDescription,
-              testModal
-            )
-          }
-          style={{ backgroundColor: backColor, color: textColor }}
-          className={`cr-pointer mt-2 text-start ${visitStyles.captureheader}`}
-        >
-          {res}
-        </span>
-      );
-      return sectionMapArr;
-    });
   };
 
   const getEncounterDateBackgroundHcc = (value, code, place, meatResult) => {
@@ -1902,25 +1809,6 @@ const Meat = ({}) => {
     }
   };
 
-  const getEncounterDateBackground = (value) => {
-    return value?.map((res) => {
-      const result = encounterDateMatching.filter((res2) => res2.name == res);
-      var backColor = result[0]?.colors;
-      var sectionMapArr = (
-        <span
-          onClick={() => getEncounterDetails(res)}
-          className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
-        >
-          <i>
-            <CalendarOutlined className={visitStyles.calenderIcon} />
-          </i>
-          {moment(res).format("MMM DD")}
-        </span>
-      );
-      return sectionMapArr;
-    });
-  };
-
   const getEncounterDetails = async (date) => {
     const findPageNumber = listPageNumber.filter((i) => i.date === date);
     if (findPageNumber.length != 0) {
@@ -1943,34 +1831,6 @@ const Meat = ({}) => {
         setFindFileKeyword(splitPoint);
       }
     }
-    // var dotLoading = (
-    //   <div className={visitStyles.loadingFileHeader}>
-    //     <Spinner />
-    //   </div>
-    // );
-    // setProviderDetails(dotLoading);
-    // var encounterDate = moment(date).format("MM/DD/YYYY");
-    // var result = await getProviderDetails(localPatientId, encounterDate);
-    // var data = "";
-    // if (result?.status == "SUCCESS") {
-    //   var datas = result.response;
-    //   data = (
-    //     <div className="validhcc-details">
-    //       <div>Provider Name : {datas.providerName}</div>
-    //       <div>Authorized Provider : {datas.authorizedProvider}</div>
-    //       <div>UnAuthorize Provider : {datas.unAuthorizeProvider}</div>
-    //       <div>No Credential : {datas.noCredential}</div>
-    //       <div>UnSigned : {datas.unSigned}</div>
-    //     </div>
-    //   );
-    // } else {
-    //   data = (
-    //     <div className="validhcc-details">
-    //       <div>Provider Not Found</div>
-    //     </div>
-    //   );
-    // }
-    // setProviderDetails(data);
   };
 
   const getCaptureSectionBackgroundMeat = (
@@ -2061,13 +1921,6 @@ const Meat = ({}) => {
     setMeatQueriedDetailsShow(false);
   };
 
-  const providerInfoList = [
-    { value: "authorizedProvider", label: "Authorized Provider" },
-    { value: "noCredential", label: "No Credential" },
-    { value: "unAuthorizeProvider", label: "UnAuthorize Provider" },
-    { value: "unSigned", label: "Un Signed" },
-  ];
-
   const headersList = [
     { value: "A/P", label: "A/P" },
     { value: "PMH", label: "PMH" },
@@ -2107,10 +1960,6 @@ const Meat = ({}) => {
     { value: "Lymphangiography", label: "Lymphangiography" },
     { value: "Intravenous Pyelogram", label: "Intravenous Pyelogram" },
     { value: "OTHERS", label: "OTHERS" },
-  ];
-  const dosListMeat = [
-    { value: "08/01/2023", label: "08/01/2023" },
-    { value: "24/06/2023", label: "24/06/2023" },
   ];
 
   const handleSubmitMeatQuery = async (event) => {
@@ -2192,29 +2041,6 @@ const Meat = ({}) => {
     } else {
     }
   };
-  const selectTab = async (number) => {
-    setActiveTabNumber(number);
-    setSelectPreviousCode(null);
-    setFlagTagActive(false);
-    setIsDosSelect(false);
-    setFileInitialPage(0);
-    switch (number) {
-      case 1:
-        setFlagTagActive(true);
-        setIsDosSelect(false);
-        break;
-      case 5:
-        setIsDosSelect(true);
-        break;
-      case 6:
-        var result = await getMeatQueryList(selectedDosValue, localPatientId);
-        setMeatQueryList(result.response);
-        break;
-      default:
-        null;
-    }
-  };
-
   const getFileDosPageNumber = async () => {
     var result = fileDosPageNumberList;
     var groupPageNumber = [];
@@ -2248,38 +2074,6 @@ const Meat = ({}) => {
     setPageNumberOptions(groupPageNumber);
     setListPageNumber(groupEncounterDate);
   };
-
-  const handleChangePageNumber = async (value) => {
-    setPopoverVisible(false);
-    var str_array = value.split(",");
-    var pageNumber = str_array[0];
-    var findData = str_array[1];
-    setFindFileKeyword(null);
-    setFileLoading(true);
-    var pageIndex = pageNumber - 1;
-    setFileInitialPage(pageIndex);
-    setFileDosPageNumber(pageIndex);
-    setTargetPages(
-      (targetPage) =>
-        targetPage.pageIndex === pageNumber ||
-        targetPage.pageIndex === pageNumber + 1 ||
-        targetPage.pageIndex === pageNumber + 2
-    );
-    setFindFileKeyword(findData);
-  };
-
-  const getPreviousData = (code, action) => {
-    const result = meatQueryList.filter(
-      (res) => res.diagnosisCode == code && res.currentQuery != true
-    );
-    setSelectPreviousCode(code);
-    var querySort = result;
-    querySort.sort(function (a, b) {
-      return b.queryVersion - a.queryVersion;
-    });
-    setMeatQueryListPrevious(querySort);
-  };
-
   const handleSelect = (value, title) => {
     setInputValue({ ...inputValue, [title]: value });
   };
@@ -2301,29 +2095,6 @@ const Meat = ({}) => {
       var textColor = result[0]?.sectionColor;
       var value = ["09/19/2023"];
       var sectionMapArr = (
-        // <Popover
-        //   content={
-        //     <>
-        //       {value?.map((res3) => {
-        //         const result = encounterDateMatching.filter(
-        //           (res2) => res2.name == res3
-        //         );
-        //         var backColor = result[0]?.colors;
-        //         <span
-        //           className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
-        //         >
-        //           <i>
-        //             <CalendarOutlined className={visitStyles.calenderIcon} />
-        //           </i>
-        //           {moment(res3).format("MMM DD")}
-        //         </span>;
-        //       })}
-        //     </>
-        //   }
-        //   trigger={["click"]}
-        //   placement="bottom"
-        //   onClick={() => getEncounterProviderDetails(res)}
-        // >
         <span
           className={`mt-2 text-start ${visitStyles.provider_name}`}
           style={{ backgroundColor: backColor, color: textColor }}
@@ -2344,76 +2115,8 @@ const Meat = ({}) => {
       );
       return sectionMapArr;
     });
-
-    // var value = data?.map((res) =>
-    //   res.providerName ? (
-    //     <Badge
-    //       className={
-    //         res.authorizedProvider === true
-    //           ? `mt-2 text-start ${visitStyles.provider_name}`
-    //           : `mt-2 text-start ${visitStyles.un_provider_name}`
-    //       }
-    //     >
-    //       <i>
-    //         {" "}
-    //         <FontAwesomeIcon
-    //           icon={faCircleUser}
-    //           style={{
-    //             size: 10,
-    //             color:
-    //               res.authorizedProvider === true ? "#008000bf" : "#ff0000cc",
-    //           }}
-    //         />
-    //       </i>
-    //       {res.providerName}
-    //     </Badge>
-    //   ) : null
-    // );
-    // return value;
   };
 
-  const addComboCode = () => {
-    setIsAddComboCode(true);
-  };
-
-  const handleSubmitComboCode = async (event) => {
-    var dos = dosYearDefalutSelect.label;
-
-    const form = event.currentTarget;
-    event.preventDefault();
-    if (form.checkValidity() === true) {
-      var updateDataformat = {
-        patientId: localPatientId,
-        dosYear: selectedDosValue,
-        comboCode: inputValue.comboCode,
-        additionalCode: inputValue.additionalCode,
-        description: inputValue.description,
-      };
-      var result = await manuallyAddComboCode(updateDataformat);
-      if (result.status == "SUCCESS") {
-        setIsAddComboCode(false);
-        notification.success({
-          message: result.message,
-          placement: "top",
-          duration: 1,
-        });
-        getPatientDetailsReload(
-          localPatientId,
-          localOrgId,
-          localTenantId,
-          "fileNotLoad"
-        );
-      }
-
-      setValidated(true);
-    }
-  };
-
-  const underScoreRemove = (value) => {
-    var str = value;
-    var newStr = str.replace(/_/g, " ");
-    return newStr;
-  };
 
   const showErrorMessage = () => {
     setOpens(false);
@@ -2421,134 +2124,18 @@ const Meat = ({}) => {
     notification.info({ message: "Tree Not Available", duration: 1 });
   };
 
-  const confirmMeatQuery = async (code) => {
-    var result = await deleteMeatQuery(localPatientId, code);
-    if (result.status == "SUCCESS") {
-      var result = await getMeatQueryList(selectedDosValue, localPatientId);
-      setMeatQueryList(result.response);
-      notification.success({
-        message: result.message,
-        placement: "top",
-        duration: 1,
-      });
-    } else {
-    }
-  };
-
-  const getEncounterProviderDetails = async (name) => {
-    // var result = await getProviderEncounterDetails(localPatientId, name);
-
-    var value = ["09/19/2023"];
-
-    return value?.map((res) => {
-      const result = encounterDateMatching.filter((res2) => res2.name == res);
-      var backColor = result[0]?.colors;
-      var sectionMapArr = (
-        <span
-          className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
-        >
-          <i>
-            <CalendarOutlined className={visitStyles.calenderIcon} />
-          </i>
-          {moment(res).format("MMM DD")}
-        </span>
-      );
-      return sectionMapArr;
-    });
-  };
-
-  const PopContent = (
-    <div className={styles.innerPop}>
-      <div className={styles.displayDiv}>
-        <div className={styles.closeContainer}>
-          <FontAwesomeIcon
-            icon={faClose}
-            style={{
-              size: 5,
-              color: "#fff",
-            }}
-            className={styles.close_icon}
-            onClick={() => setPopoverVisible(false)}
-          />
-        </div>
-        {pageNumberOptions
-          ? pageNumberOptions?.map((data) => (
-              <div className={styles.hoverDiv}>
-                <div className={`row ${styles.selectDetailsContainer}`}>
-                  <div className="col-xl-3">
-                    <span className={styles.selectHead}>{data.label}</span>
-                  </div>
-                  {data?.options.map((data2) => (
-                    <div className={`col-xl-3 ${styles.selectDetailsDiv}`}>
-                      <span
-                        onClick={() => handleChangePageNumber(data2.value)}
-                        className={styles.selectDetails}
-                      >
-                        {data2?.label}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))
-          : null}
-      </div>
-    </div>
-  );
-
-  const PopContentHccVersion = (
-    <div className={styles.innerPop}>
-      <div className={styles.displayDiv}>
-        {hccVersionDetails ? (
-          <>
-            {hccVersionDetails.length != 0 ? (
-              hccVersionDetails?.map((data) => (
-                <div className={styles.hoverDiv}>
-                  <div className={`row ${styles.selectDetailsContainer}`}>
-                    <div className="col-xl-3">
-                      <span className={styles.selectHead}>{data.name}</span>
-                    </div>
-                    <div className="col-xl-3">
-                      <span className={styles.selectHead}>{data.value}</span>
-                    </div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className={styles.hoverDiv}>
-                <div className={`row ${styles.selectDetailsContainerNoData}`}>
-                  <div className="col-xl-3 text-center">
-                    <span className={styles.selectHead}>NO DATA</span>
-                  </div>
-                </div>
-              </div>
-            )}
-          </>
-        ) : (
-          <div className={visitStyles.loadingFileHeader}>
-            <Spinner />
-          </div>
-        )}
-      </div>
-    </div>
-  );
-
-  const handleSelectProvider = (value) => {
-    setSelectProviderInfo(value);
-  };
-
-  const handleFormClear = () => {
-    inputValue.diagnosisCode = "";
-    inputValue.providerName = "";
-    inputValue.actualDescription = "";
-    inputValue.capturedSections = "";
-    setAddValidCodeCheck(null);
-    setInputValueFileDate("");
-    setSelectProviderInfo(null);
-  };
 
   return (
     <>
+      {fileLoading ? (
+        <div className={styles.overlay_style}>
+          <div className={styles.overlay__inner_style}>
+            <div className={styles.overlay__content_style}>
+              <span className={styles.spinner_style}></span>
+            </div>
+          </div>
+        </div>
+      ) : null}
       <div className="my-post-content pt-3">
         <div className={visitStyles.meat_head_card}>
           <div className="row">

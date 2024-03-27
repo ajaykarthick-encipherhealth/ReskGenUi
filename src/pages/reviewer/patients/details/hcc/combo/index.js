@@ -2068,6 +2068,15 @@ const Combo = ({}) => {
 
   return (
     <>
+      {fileLoading ? (
+        <div className={styles.overlay_style}>
+          <div className={styles.overlay__inner_style}>
+            <div className={styles.overlay__content_style}>
+              <span className={styles.spinner_style}></span>
+            </div>
+          </div>
+        </div>
+      ) : null}
       <div className={`${visitStyles.comboContainer}`}>
         <div className={`row ${visitStyles.comboContainer2}`}>
           <div className="col-xl-6">

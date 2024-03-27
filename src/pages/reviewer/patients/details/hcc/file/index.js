@@ -3157,6 +3157,15 @@ const File = ({}) => {
 
   return (
     <>
+    {fileLoading ? (
+        <div className={styles.overlay_style}>
+          <div className={styles.overlay__inner_style}>
+            <div className={styles.overlay__content_style}>
+              <span className={styles.spinner_style}></span>
+            </div>
+          </div>
+        </div>
+      ) : null}
       <div className="my-post-content row pt-3">
         {!isFileFormShow ? (
           <div className="col-xl-3">
