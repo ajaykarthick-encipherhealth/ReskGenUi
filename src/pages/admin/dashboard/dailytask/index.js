@@ -14,7 +14,9 @@ import { GetUserCount } from "../../../../services/adminServices/DashboardServic
 const DailyTask = () => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
-  const dailyStatusData = useSelector((state) => state.l2Dashboard.dailyTask);
+  const dailyStatusData = useSelector((state) => state?.l2Dashboard?.dailyTask);
+  const val= useSelector((state) => state);
+  console.log(val)
   const dispatch = useDispatch();
   const router = useRouter();
 

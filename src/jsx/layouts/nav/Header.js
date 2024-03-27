@@ -99,11 +99,11 @@ const Header = () => {
     (state) => state?.notificationDatas?.notificationList
   );
 
-  const msgReply = useSelector((state) => state.workFlow.chatReply);
-  const accuracy = useSelector((state) => state.auth.accuracy);
-  const currentUserInfo = useSelector((state) => state.auth.userInfo);
-  const codDetails = useSelector((state) => state.auth.codeDetails);
-  const profileUploadedTime = useSelector((state) => state.auth.url);
+  const msgReply = useSelector((state) => state?.workFlow?.chatReply);
+  const accuracy = useSelector((state) => state?.auth?.accuracy);
+  const currentUserInfo = useSelector((state) => state?.auth?.userInfo);
+  const codDetails = useSelector((state) => state?.auth?.codeDetails);
+  const profileUploadedTime = useSelector((state) => state?.auth?.url);
   const stateActive = router.pathname;
   const [headerFix, setheaderFix] = useState(false);
   const [userName, setUserName] = useState("");

@@ -17,7 +17,7 @@ const BarChart = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const teamChartData = useSelector(
-    (state) => state.AdminDashboardReducers.teamData
+    (state) => state?.AdminDashboardReducers?.teamData
   );
 
   const datas = teamChartData?.data ? teamChartData?.data : [];
