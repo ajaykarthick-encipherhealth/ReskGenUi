@@ -5,37 +5,14 @@
   background: #f0f6fe;
 }
 .export {
-  /* width: 108px;
-  height: 38px;
-  flex-shrink: 0;
-
-  border-radius: 8px;
-  border: 1px solid #133dd4;
-  background: rgba(19, 61, 212, 0.15);
-  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
-  color: #133dd4 !important;
-  font-family: Manrope;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  letter-spacing: 0.48px;
-  display: flex;
-  margin-right: 17px;
-  padding: 10px; */
   width: 100px;
   height: 40px;
-  text-align: center;
   color: #241571 !important;
   background: rgba(19, 61, 212, 0.15);
   border: 1px solid #241571;
-  /* box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08); */
-  /* padding-top: 5px; */
-  /* box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25); */
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  text-align: center;
   margin-right: 10px;
   margin-top: 25px;
   border-radius: 8px;
@@ -105,27 +82,7 @@
   text-align: center;
   cursor: pointer;
 }
-/* .excel:active {
-  width: 100px;
-  height: 40px;
-  flex-shrink: 0;
-  border-radius: 8px;
 
-  background: #04306f;
-  border: none;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  color: #fff;
-
-  background: #04306f !important;
-  border: none !important;
-  color: #fff !important;
-
-  font-family: Manrope;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-} */
 .excel:active {
   background-color: #04306f;
   color: #fff;
@@ -143,13 +100,9 @@
   width: 100px;
   height: 40px;
   color: black;
-  text-align: center;
-  /* padding-top: 5px; */
-  /* box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25); */
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  text-align: center;
   margin-right: 10px;
   border-radius: 8px;
   margin-top: 25px;
@@ -160,19 +113,11 @@
 .excel {
   width: 100px;
   height: 40px;
-  /* border-radius: 8px; */
-  /* border: 0.5px solid #b1aeae; */
-  /* flex-shrink: 0;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  background: #f5f9fe;
-  font-family: Manrope; */
   color: black;
   text-align: center;
-  /* padding-top: 5px; */
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  text-align: center;
   margin-right: 10px;
   padding-top: 5px;
 }
@@ -246,4 +191,8 @@
   margin: 60px;
   align-items: center;
   display: flex;
+}
+.fields{
+  width:100px;
+  text-align: start;
 }
