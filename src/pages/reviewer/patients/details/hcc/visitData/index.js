@@ -97,6 +97,15 @@ const VisitData = ({}) => {
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList.result?.response
   );
+  const sectionColorListTest = useSelector(
+    (state) => state?.ReviewerReducers
+  );
+  const hccFileDetails = useSelector(
+    (state) => state?.ReviewerReducers?.hccFileDetails
+  );
+  const fileDosPageNumberList = useSelector(
+    (state) => state?.ReviewerReducers.dosPageNumberList?.result
+  );
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const { toolbarPluginInstance } = defaultLayoutPluginInstance;
   const { searchPluginInstance } = toolbarPluginInstance;
@@ -433,8 +442,6 @@ const VisitData = ({}) => {
   const pageClickPdfFile = (e) => {};
 
   useEffect(() => {
-    console.log("tresr");
-    // loadFilterPatientList();
     var orgId = localStorage.getItem("orgId");
     var tenId = localStorage.getItem("tenantId");
     var patientId = localStorage.getItem("patientId");
@@ -453,6 +460,16 @@ const VisitData = ({}) => {
     setUserDetails(dotLoading);
     setvalidHccDetails(dotLoading);
   }, [patientDetailsResult]);
+
+  useEffect(() => {
+    if(hccFileDetails?.result?.response){
+    setSelectFileURL(hccFileDetails?.result?.response)
+    }  
+  }, [hccFileDetails]);
+
+  useEffect(() => {
+    getFileDosPageNumber();
+  }, [fileDosPageNumberList]);
 
   useEffect(() => {
     // loadFilterPatientList();
@@ -494,11 +511,9 @@ const VisitData = ({}) => {
     tenId,
     fileloadCondition
   ) => {
-    getFileDosPageNumber();
     setIsModalComments(false);
-    if (patientDetailsResult?.result?.response && sectionColorList) {
+    if (patientDetailsResult?.result?.response) {
       var result = patientDetailsResult?.result?.response;
-      console.log(result);
       setPatientDocumentResult(result);
       setPatientDetails(result);
       if (result.validDisease != null) {
@@ -1055,17 +1070,17 @@ const VisitData = ({}) => {
   }
 
   const getPatientPdfFile = async (fileId, tenId) => {
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
-    );
-    if (response.data) {
-      var result = response.data.response;
-      setSelectFileURL(response.data.response);
-      setSelectFileURLValid(response.data.response);
-      setIsLoading(false);
-      setIsLoadingDos(false);
-    }
+    // const response = await axios.get(
+    //   ENDPOINTS.apiEndoint +
+    //     `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
+    // );
+    // if (response.data) {
+    //   var result = response.data.response;
+    //   setSelectFileURL(response.data.response);
+    //   setSelectFileURLValid(response.data.response);
+    //   setIsLoading(false);
+    //   setIsLoadingDos(false);
+    // }
   };
 
   const getPatientPdfFileRadiology = async (fileId, tenId) => {
@@ -2416,9 +2431,7 @@ const VisitData = ({}) => {
   };
 
   const getFileDosPageNumber = async () => {
-    var result = await getFilePageNumber(
-      patientDetailsResult?.result?.response.fileId
-    );
+    var result = fileDosPageNumberList;
     var groupPageNumber = [];
     var groupEncounterDate = [];
     for (var key in result?.response) {

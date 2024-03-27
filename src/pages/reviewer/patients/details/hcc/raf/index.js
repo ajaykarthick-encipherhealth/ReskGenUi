@@ -10,8 +10,6 @@ const RafScore = ({}) => {
     (state) =>
       state?.ReviewerReducers?.patientDetails?.result?.response?.rafScore
   );
-  console.log(rafScoreList);
-
   const [rafScoreData, setRafScoreData] = useState([]);
 
   function getRafDetails(dxCode, version) {

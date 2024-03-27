@@ -98,7 +98,6 @@ const MeatQuery = ({}) => {
     (state) => state?.ReviewerReducers?.meatQueryList
   );
 
-  console.log(meatQueryDetails);
 
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const { toolbarPluginInstance } = defaultLayoutPluginInstance;
@@ -336,8 +335,6 @@ const MeatQuery = ({}) => {
   };
 
   useEffect(() => {
-    console.log("test");
-    // loadFilterPatientList();
     var orgId = localStorage.getItem("orgId");
     var tenId = localStorage.getItem("tenantId");
     var patientId = localStorage.getItem("patientId");
@@ -364,10 +361,8 @@ const MeatQuery = ({}) => {
     fileloadCondition
   ) => {
     var result = patientDetailsResult?.result?.response;
-    console.log(result);
     if (result?.dos) {
       //   var result2 = await getMeatQueryList(result?.dos, localPatientId);
-      //   console.log(result2)
       //   setMeatQueryList(result2.response);
     }
   };

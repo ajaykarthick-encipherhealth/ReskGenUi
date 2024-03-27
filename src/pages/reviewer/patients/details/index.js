@@ -52,7 +52,7 @@ import Timeline from "./timline";
 import ReviwerWorkList from "./components/reviwerWorklist";
 import SupervisorWorkList from "./components/supervisorWorklist";
 import AdminWorkList from "./components/adminWorklist";
-import { getPatientDetailsResult,getMeatQueryList,getAllSectionColor } from "../../../../store/actions/ReviewerAction/PatientDetailsAction";
+import { getPatientDetailsResult,getMeatQueryList,getAllSectionColor,getHccFileDetails ,getDosPageNumber} from "../../../../store/actions/ReviewerAction/PatientDetailsAction";
 
 
 const Details = ({}) => {
@@ -60,6 +60,8 @@ const Details = ({}) => {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const patientDetailsResult = useSelector((state) => state?.ReviewerReducers?.patientDetails);
+  const sectionColorList = useSelector((state) => state?.ReviewerReducers?.sectionColorList);
+
   console.log(patientDetailsResult)
   const [confirmNotesModalDecline, setConfirmNotesModalDecline] =
     useState(false);
@@ -262,10 +264,10 @@ const Details = ({}) => {
     dispatch(getAllSectionColor());
     dispatch(getPatientDetailsResult(selectPatientId ? selectPatientId?.patirntId : patientId));
 
+
   }, []);
   
   useEffect(() => {
-    console.log("dispatch")
     const orgId = localStorage.getItem("orgId");
     const tenId = localStorage.getItem("tenantId");
     const patientId = localStorage.getItem("patientId");
@@ -289,6 +291,13 @@ const Details = ({}) => {
     );
 
   }, [patientDetailsResult]);
+
+
+  useEffect(() => {
+    dispatch(getHccFileDetails(patientDetailsResult?.result?.response?.fileDetailDTO?.azureBlobPath));
+    dispatch(getDosPageNumber(patientDetailsResult?.result?.response?.fileId));
+  }, [patientDetailsResult?.result?.response?.fileDetailDTO?.azureBlobPath]);
+  
 
   const getPatientIdDetails = async (patientId, flagFirstData) => {
     const response = await axios.get(
@@ -1683,7 +1692,7 @@ const Details = ({}) => {
         <NavBar />
         <div className={visitStyles.headerFixed}>
           <div class="content-body">
-            {patientDetailsResult?.loading == true ? (
+            {sectionColorList?.loading == true ? (
               <SpinnerDots />
             ) : (
               <div

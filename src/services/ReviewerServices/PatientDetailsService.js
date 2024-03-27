@@ -49,3 +49,35 @@ export async function SectionColor() {
   } catch (err) {
   }
 }
+
+export async function HccFileDeatils(fileId) {
+  const token = localStorage.getItem("token");
+  const tenId = localStorage.getItem("tenantId");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+  }
+}
+export async function DosPageNumber(fileId) {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/pageNumber/startAndStopPageNo?fileId=${fileId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+  }
+}

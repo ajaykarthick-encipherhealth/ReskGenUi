@@ -97,6 +97,14 @@ const Meat = ({}) => {
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList.result?.response
   );
+  const hccFileDetails = useSelector(
+    (state) => state?.ReviewerReducers?.hccFileDetails
+  );
+
+  const fileDosPageNumberList = useSelector(
+    (state) => state?.ReviewerReducers.dosPageNumberList?.result
+  );
+
 
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const { toolbarPluginInstance } = defaultLayoutPluginInstance;
@@ -376,6 +384,16 @@ const Meat = ({}) => {
   }, [patientDetailsResult]);
 
   useEffect(() => {
+    if(hccFileDetails?.result?.response){
+    setSelectFileURL(hccFileDetails?.result?.response)
+    }  
+  }, [hccFileDetails]);
+
+  useEffect(() => {
+    getFileDosPageNumber();
+  }, [fileDosPageNumberList]);
+
+  useEffect(() => {
     // loadFilterPatientList();
     var orgId = localStorage.getItem("orgId");
     var tenId = localStorage.getItem("tenantId");
@@ -415,7 +433,6 @@ const Meat = ({}) => {
     tenId,
     fileloadCondition
   ) => {
-    getFileDosPageNumber();
     setNewValidDiseaseList([]);
     setInNewValidDiseaseList([]);
     setNewUnMatchHccList([]);
@@ -438,7 +455,7 @@ const Meat = ({}) => {
     //   ENDPOINTS.apiEndoint +
     //   `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
     // );
-    if (patientDetailsResult?.result?.response && sectionColorList) {
+    if (patientDetailsResult?.result?.response) {
       var result = patientDetailsResult?.result?.response;
       setPatientDocumentResult(result);
       setPatientDetails(result);
@@ -1254,17 +1271,17 @@ const Meat = ({}) => {
   }
 
   const getPatientPdfFile = async (fileId, tenId) => {
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
-    );
-    if (response.data) {
-      var result = response.data.response;
-      setSelectFileURL(response.data.response);
-      setSelectFileURLValid(response.data.response);
-      setIsLoading(false);
-      setIsLoadingDos(false);
-    }
+    // const response = await axios.get(
+    //   ENDPOINTS.apiEndoint +
+    //     `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
+    // );
+    // if (response.data) {
+    //   var result = response.data.response;
+    //   setSelectFileURL(response.data.response);
+    //   setSelectFileURLValid(response.data.response);
+    //   setIsLoading(false);
+    //   setIsLoadingDos(false);
+    // }
   };
 
   const getPatientPdfFileRadiology = async (fileId, tenId) => {
@@ -2199,9 +2216,7 @@ const Meat = ({}) => {
   };
 
   const getFileDosPageNumber = async () => {
-    var result = await getFilePageNumber(
-      patientDetailsResult?.result?.response.fileId
-    );
+    var result = fileDosPageNumberList;
     var groupPageNumber = [];
     var groupEncounterDate = [];
     for (var key in result?.response) {
