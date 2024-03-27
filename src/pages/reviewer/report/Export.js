@@ -386,7 +386,8 @@ const Export = ({
               ))}
             </div>
           ) : (
-            "No Users Selected"
+            <div className={styles.noUser}>No User Selected</div>
+
           )}
         </div>
 

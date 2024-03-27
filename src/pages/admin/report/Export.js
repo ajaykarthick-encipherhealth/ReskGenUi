@@ -28,7 +28,7 @@ export const checkBoxData = [
   {
     id: 3,
     title: "dob",
-    heading: "Dob",
+    heading: "DOB",
     checked: false,
   },
   {
@@ -76,7 +76,7 @@ export const checkBoxData = [
   {
     id: 11,
     title: "allocatedUserId",
-    heading: "Allocated UserId",
+    heading: "Allocated UserID",
     checked: false,
   },
   {
@@ -215,11 +215,7 @@ const Export = ({
       dispatch(getExportDetails(data));
     } else {
       dispatch(updateSentReport(updatedData));
-      dispatch(
-        getActiveTab(
-          "SentReport"
-        )
-      );
+      dispatch(getActiveTab("SentReport"));
     }
     form.resetFields();
     setUsersList([]);
@@ -287,7 +283,7 @@ const Export = ({
           ]}
         >
           <InputField
-            inputValue={reportName?reportName : selectedRows?.reportName}
+            inputValue={reportName ? reportName : selectedRows?.reportName}
             setInputValue={setReportName}
             delay={1000}
             type="text"
@@ -477,7 +473,7 @@ const Export = ({
               ))}
             </div>
           ) : (
-            "No Users Selected"
+            <div className={styles.noUser}>No User Selected</div>
           )}
         </div>
 
