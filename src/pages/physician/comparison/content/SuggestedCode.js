@@ -7,6 +7,7 @@ import {
   getCaptureSectionBackground,
 } from "../index";
 import { useSelector } from "react-redux";
+import { reusableElipses } from "./ValidHcc";
 
 const SuggestedCode = ({ content, ProviderName }) => {
   const colorsData = useSelector((state) => state.physicianComparison.colors);
@@ -40,22 +41,10 @@ const SuggestedCode = ({ content, ProviderName }) => {
                               {data?.diagnosisCode} -
                             </span>
                             <Popover
-                              content={
-                                data?.actualDescription.length > 25
-                                  ? `${data?.actualDescription.substring(
-                                      0,
-                                      25
-                                    )}...`
-                                  : data?.actualDescription
-                              }
+                              content={data?.actualDescription}
                               trigger="hover"
                             >
-                              {data?.actualDescription.length > 25
-                                ? `${data?.actualDescription.substring(
-                                    0,
-                                    30
-                                  )}...`
-                                : data.actualDescription}
+                              {reusableElipses(data?.actualDescription, 30)}
                             </Popover>
                           </span>
                         </div>
