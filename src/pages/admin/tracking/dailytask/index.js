@@ -6,11 +6,11 @@ import Card from "../../../../components/card";
 const DailyTask = ({ trackChart }) => {
   const bullets = [
     {
-      color: "#5da9e4",
+      color: "#0078D4",
       name: "Pending",
     },
     {
-      color: "#AD94FA",
+      color: "#3C0AD2",
       name: "Hold",
     },
     {
@@ -18,7 +18,7 @@ const DailyTask = ({ trackChart }) => {
       name: "Declined",
     },
     {
-      color: "#B4EFBA",
+      color: "#00BC13",
       name: "Completed",
     },
   ];
