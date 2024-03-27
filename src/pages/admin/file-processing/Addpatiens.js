@@ -48,6 +48,9 @@ const Addpatients = ({
                   type="text"
                   onChange={handleChangePatientId}
                 />
+                <Form.Control.Feedback type="invalid">
+                  Please enter patient ID
+                </Form.Control.Feedback>
               </div>
               <div className="col-xl-12 mb-3">
                 <Form.Label>
@@ -59,18 +62,21 @@ const Addpatients = ({
                   type="text"
                   onChange={handleChangePatientId}
                 />
+                <Form.Control.Feedback type="invalid">
+                  Please enter patient name
+                </Form.Control.Feedback>
               </div>
             </div>
             <div>
               <Button type="submit" className="btn btn-primary btn-sm me-1">
                 {"Submit"}
               </Button>
-              <Button
+              {/* <Button
                 className="btn btn-danger btn-sm light ms-1"
                 onClick={() => setAddPatientId(false)}
               >
                 Cancel
-              </Button>
+              </Button> */}
             </div>
           </Form>
         </div>
