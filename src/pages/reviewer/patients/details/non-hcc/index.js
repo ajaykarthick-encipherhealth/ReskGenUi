@@ -11,7 +11,7 @@ const NonHcc = ({}) => {
       <div className={visitStyles.visitdata_tab_body}>
         <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
           <div className="custom-tab-1">
-            <Tab.Container defaultActiveKey={activeTabHead}>
+            <Tab.Container defaultActiveKey="file">
               <Nav as="ul" className="nav nav-tabs">
                 <Nav.Item as="li" className="nav-item">
                   <Nav.Link
