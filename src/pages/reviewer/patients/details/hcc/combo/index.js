@@ -215,7 +215,7 @@ const Combo = ({}) => {
     if (patientDetailsResult?.result?.response) {
       var result = patientDetailsResult?.result?.response;
       setPatientDocumentResult(result);
-      if (result.validDisease != null) {      
+      if (result?.comboDisease) {      
         var combiDisArray = [];
         if (result?.comboDisease) {
           result?.comboDisease.map((res, index) => {
@@ -260,8 +260,8 @@ const Combo = ({}) => {
         var encounterDateArr = []; 
         
         result?.comboDisease?.map((res) => {
-          const array = res?.encounterDate.split(",");
-          array.map((res2) => {
+          const array = res?.encounterDate?.split(",");
+          array?.map((res2) => {
             encounterDateArr?.push({
               name: res2,
             });
