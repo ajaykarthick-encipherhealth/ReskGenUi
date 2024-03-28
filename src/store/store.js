@@ -1,7 +1,7 @@
 import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import { PostsReducer, toggleMenu } from "./reducers/PostsReducer";
 import thunk from "redux-thunk";
-import { AuthReducer, PatientStore } from "./reducers/AuthReducer";
+import { AuthReducer } from "./reducers/AuthReducer";
 import todoReducers from "./reducers/Reducers";
 import { DashboardReducer } from "./reducers/DashboradReducer";
 import { PatientsReducer } from "./reducers/PatientsReducer";
@@ -23,6 +23,8 @@ import { PhyicianReducer } from "./reducers/physicianReducers/patientsReducers";
 import { PhysicianDashboardReducer } from "./reducers/physicianReducers/DashboardReducer";
 import { PhysicianComparisonReducer } from "./reducers/physicianReducers/ComparisionReducer";
 import { TanantAdminService } from "./reducers/tanantAdminReducers/fihrReducers";
+import { ReviewerReducers } from "./reducers/ReviewerReducers/ReviewerReducers";
+
 
 
 const middleware = applyMiddleware(thunk);
@@ -33,7 +35,7 @@ const reducers = combineReducers({
   sideMenu: toggleMenu,
   posts: PostsReducer,
   auth: AuthReducer,
-  patientDetails: PatientStore,
+  ReviewerReducers: ReviewerReducers,
   todoReducers,
   workFlow: DashboardReducer,
   // workFlows: AdminDashboardReducer,

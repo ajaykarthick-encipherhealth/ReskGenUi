@@ -1,0 +1,83 @@
+import axios from "axios";
+import ENDPOINTS from "../../utility/enpoints";
+
+export async function PatientDetails(patientId) {
+  const token = localStorage.getItem("token");
+  const orgId = localStorage.getItem("orgId");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+  }
+}
+export async function MeatQuery(dos,patientId) {
+  const token = localStorage.getItem("token");
+  const orgId = localStorage.getItem("orgId");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/meatquery/getMeatQueryList?dosYear=${dos}&patientId=${patientId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+  }
+}
+
+export async function SectionColor() {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/section/color/getallsections`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+  }
+}
+
+export async function HccFileDeatils(fileId) {
+  const token = localStorage.getItem("token");
+  const tenId = localStorage.getItem("tenantId");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+  }
+}
+export async function DosPageNumber(fileId) {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/pageNumber/startAndStopPageNo?fileId=${fileId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+  }
+}

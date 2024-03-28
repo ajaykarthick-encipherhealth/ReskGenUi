@@ -52,11 +52,17 @@ import Timeline from "./timline";
 import ReviwerWorkList from "./components/reviwerWorklist";
 import SupervisorWorkList from "./components/supervisorWorklist";
 import AdminWorkList from "./components/adminWorklist";
+import { getPatientDetailsResult,getMeatQueryList,getAllSectionColor,getHccFileDetails ,getDosPageNumber} from "../../../../store/actions/ReviewerAction/PatientDetailsAction";
+
 
 const Details = ({}) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
+  const patientDetailsResult = useSelector((state) => state?.ReviewerReducers?.patientDetails);
+  const sectionColorList = useSelector((state) => state?.ReviewerReducers?.sectionColorList);
+
+  console.log(patientDetailsResult)
   const [confirmNotesModalDecline, setConfirmNotesModalDecline] =
     useState(false);
   const [confirmNotesModalHold, setConfirmNotesModalHold] = useState(false);
@@ -254,37 +260,44 @@ const Details = ({}) => {
   };
 
   useEffect(() => {
+    const patientId = localStorage.getItem("patientId");
+    dispatch(getAllSectionColor());
+    dispatch(getPatientDetailsResult(selectPatientId ? selectPatientId?.patirntId : patientId));
+
+
+  }, []);
+  
+  useEffect(() => {
     const orgId = localStorage.getItem("orgId");
     const tenId = localStorage.getItem("tenantId");
     const patientId = localStorage.getItem("patientId");
     const uId = localStorage.getItem("userId");
     const userRoleLocal = localStorage.getItem("userRole");
+
     setUserRole(userRoleLocal);
     setLocalOrgId(orgId);
     setLocalTenantId(tenId);
     setLocalUserId(uId);
     setLocalPatientId(selectPatientId ? selectPatientId?.patirntId : patientId);
+
     getPatientDetails(
       selectPatientId ? selectPatientId?.patirntId : patientId,
       orgId,
       tenId
     );
+
     getPatientIdDetails(
       selectPatientId ? selectPatientId?.patirntId : patientId
     );
-    var userSpinner = (
-      <div className={visitStyles.userDetailsCard}>
-        <div className="bouncing-loader">
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-      </div>
-    );
-    var currentTime = moment().format("hh:mm");
-    setCurrentTime(currentTime);
-    setUserDetails(userSpinner);
-  }, []);
+
+  }, [patientDetailsResult]);
+
+
+  useEffect(() => {
+    dispatch(getHccFileDetails(patientDetailsResult?.result?.response?.fileDetailDTO?.azureBlobPath));
+    dispatch(getDosPageNumber(patientDetailsResult?.result?.response?.fileId));
+  }, [patientDetailsResult?.result?.response?.fileDetailDTO?.azureBlobPath]);
+  
 
   const getPatientIdDetails = async (patientId, flagFirstData) => {
     const response = await axios.get(
@@ -582,12 +595,15 @@ const Details = ({}) => {
     fileloadCondition
   ) => {
     setDosYear([]);
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
-    );
-    if (response.data) {
-      var result = response.data.response;
+    // const response = await axios.get(
+    //   ENDPOINTS.apiEndoint +
+    //     `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
+    // );
+    if (patientDetailsResult?.result?.response) {
+      var result = patientDetailsResult?.result?.response;
+      dispatch(getMeatQueryList(result?.dos,patientId));
+      console.log(result)
+
       setPatientDocumentResult(result);
       setPatientDetails(result);
       if (result.validDisease != null) {
@@ -1122,7 +1138,9 @@ const Details = ({}) => {
   const getPatientListToDetails = (userId, orgId, tenantId) => {
     setPatientResultReload(false);
     getPatientIdDetails(userId);
-    getPatientDetails(userId, orgId, tenantId);
+    // getPatientDetails(userId, orgId, tenantId);
+    dispatch(getPatientDetailsResult(userId));
+
     setLocalPatientId(userId);
   };
 
@@ -1674,7 +1692,7 @@ const Details = ({}) => {
         <NavBar />
         <div className={visitStyles.headerFixed}>
           <div class="content-body">
-            {isLoading ? (
+            {sectionColorList?.loading == true ? (
               <SpinnerDots />
             ) : (
               <div
