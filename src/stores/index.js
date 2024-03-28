@@ -23,6 +23,7 @@ import { PhyicianReducer } from "../store/reducers/physicianReducers/patientsRed
 import { PhysicianDashboardReducer } from "../store/reducers/physicianReducers/DashboardReducer";
 import { PhysicianComparisonReducer } from "../store/reducers/physicianReducers/ComparisionReducer";
 import { TanantAdminService } from "../store/reducers/tanantAdminReducers/fihrReducers";
+import { ReviewerReducers } from "../store/reducers/ReviewerReducers/ReviewerReducers";
 
 const reducers = combineReducers({
   // old reducers
@@ -48,6 +49,7 @@ const reducers = combineReducers({
   physicianDashbaord: PhysicianDashboardReducer,
   physicianComparison: PhysicianComparisonReducer,
   tanantAdmin: TanantAdminService, 
+  ReviewerReducers: ReviewerReducers,
 
 });
 
