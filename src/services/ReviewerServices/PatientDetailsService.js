@@ -17,6 +17,24 @@ export async function PatientDetails(patientId) {
   } catch (err) {
   }
 }
+
+export async function RadiologyDeatils(patientId) {
+  const token = localStorage.getItem("token");
+  const orgId = localStorage.getItem("orgId");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+  }
+}
+
 export async function MeatQuery(dos,patientId) {
   const token = localStorage.getItem("token");
   const orgId = localStorage.getItem("orgId");
@@ -62,6 +80,7 @@ export async function HccFileDeatils(fileId) {
         },
       }
     );
+    console.log(response.data)
     return response.data;
   } catch (err) {
   }
