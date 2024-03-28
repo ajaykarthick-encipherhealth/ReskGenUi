@@ -3,7 +3,7 @@ import "../styles/globals.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
-import { wrapper, store } from "../store/store";
+import { wrapper, store } from "../stores/index";
 import { Provider, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -16,7 +16,7 @@ config.autoAddCss = false;
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
-  const msgReply = useSelector((state) => state.auth.chatReply);
+  const msgReply = useSelector((state) => state?.auth?.chatReply);
   const [showTerminal, setShowTerminal] = useState(false);
 
   useEffect(() => {

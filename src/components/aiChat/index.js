@@ -11,8 +11,8 @@ import { IMAGES } from "../../jsx/constant/theme";
 
 const AICHAT = ({ openMsg, offMsg }) => {
   const dispatch = useDispatch();
-  const msgReply = useSelector((state) => state.auth.chatReply);
-  const currentUserInfo = useSelector((state) => state.auth.userInfo);
+  const msgReply = useSelector((state) => state?.auth?.chatReply);
+  const currentUserInfo = useSelector((state) => state?.auth?.userInfo);
   const [activeChat, setActiveChat] = useState(false);
   const [inputValue, setInputValue] = useState({
     question: "",
