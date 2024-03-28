@@ -7,13 +7,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "../styles/auth.module.css";
 import LoginBack from "../images/logo/login-back.jpg";
 import { IMAGES } from "../jsx/constant/theme";
-import { getMFAValidation } from "../store/actions/AuthActions";
 import {
   encyptingPass,
   getValidatePassword,
   handleTogglePasswordVisibility,
 } from "../components/headerFilters/functions";
 import RegularButton from "../components/button";
+import { getMFAValidation } from "../stores/authflow/actions";
 
 export default function Login() {
   const router = useRouter();

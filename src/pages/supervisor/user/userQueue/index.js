@@ -23,7 +23,7 @@ import {
 import leftArrow from "../../../../images/svg/leftArrow.svg";
 import AuditHeaderFilters from "../../../../components/headerFilters/auditHeaderFilters";
 import userStyles from "./styles.module.css";
-import { getFilters } from "../../../../store/actions/AuthActions";
+import { getFilters } from "../../../../stores/authflow/actions";
 
 const bullets = [
   {

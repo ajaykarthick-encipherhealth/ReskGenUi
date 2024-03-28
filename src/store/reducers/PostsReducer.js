@@ -1,4 +1,4 @@
-import { NAVTOGGLE } from '../actions/AuthActions';
+import { NAVTOGGLE } from '../../stores/authflow/actions';
 import {
     CONFIRMED_CREATE_POST_ACTION,
     CONFIRMED_DELETE_POST_ACTION,

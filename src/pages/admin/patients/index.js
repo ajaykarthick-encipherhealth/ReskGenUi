@@ -10,7 +10,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
-import { patientDetails } from "../../../store/actions/AuthActions";
 import { DatePicker, Spin, notification } from "antd";
 import { InputText } from "primereact/inputtext";
 import { Paginator } from "primereact/paginator";
@@ -30,6 +29,7 @@ import {
   generateOptionsList,
   validateYear,
 } from "../../../components/headerFilters/functions";
+import { patientDetails } from "../../../stores/authflow/actions";
 
 const bullets = [
   {

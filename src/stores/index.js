@@ -4,8 +4,6 @@ import promiseMiddleware from "redux-promise";
 import { createWrapper } from "next-redux-wrapper";
 import { PostsReducer } from "../store/reducers/PostsReducer";
 import { toggleMenu } from "../store/reducers/PostsReducer";
-import { AuthReducer } from "../store/reducers/AuthReducer";
-import { PatientStore } from "../store/reducers/AuthReducer";
 import { DashboardReducer } from "../store/reducers/DashboradReducer";
 import { PatientsReducer } from "../store/reducers/PatientsReducer";
 import { ReportReducer } from "../store/reducers/ReportReducer";
@@ -24,6 +22,7 @@ import { PhysicianDashboardReducer } from "../store/reducers/physicianReducers/D
 import { PhysicianComparisonReducer } from "../store/reducers/physicianReducers/ComparisionReducer";
 import { TanantAdminService } from "../store/reducers/tanantAdminReducers/fihrReducers";
 import { ReviewerReducers } from "../store/reducers/ReviewerReducers/ReviewerReducers";
+import { AuthReducer, PatientStore } from "./authflow/reducers";
 
 const reducers = combineReducers({
   // old reducers

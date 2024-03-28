@@ -11,7 +11,6 @@ import moment from "moment";
 import dayjs from "dayjs";
 import { Paginator } from "primereact/paginator";
 import Header from "../../../jsx/layouts/nav/Header";
-import { patientDetails } from "../../../store/actions/AuthActions";
 import PatientTable from "../../../components/table/PatientList/patientList";
 import LoadingSpinner from "../../../components/spinner";
 import { getpatientsListFilter } from "../../../store/actions/PatientsActions";
@@ -32,6 +31,7 @@ import styles from "../report/report.module.css";
 import filter from "../../../images/svg/filter.svg";
 import { extractLatestData } from "../../supervisor/auditing";
 import InputField from "../../../components/input";
+import { patientDetails } from "../../../stores/authflow/actions";
 
 const { RangePicker } = DatePicker;
 export default function Patient() {
