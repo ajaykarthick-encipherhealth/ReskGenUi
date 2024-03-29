@@ -1,4 +1,4 @@
-import { PatientDetails,MeatQuery,SectionColor ,HccFileDeatils,DosPageNumber,RadiologyDeatils} from "../../../services/ReviewerServices/PatientDetailsService";
+import { PatientDetails,MeatQuery,SectionColor ,HccFileDeatils,DosPageNumber,RadiologyDeatils,LabDeatils} from "../../../services/ReviewerServices/PatientDetailsService";
 
   export const GET_PATIENT_DETAILS = "GET_PATIENT_DETAILS";
   export const GET_MEAT_QUERY = "GET_MEAT_QUERY";
@@ -7,6 +7,8 @@ import { PatientDetails,MeatQuery,SectionColor ,HccFileDeatils,DosPageNumber,Rad
   export const GET_DOS_PAGE = "GET_DOS_PAGE";
   export const GET_RADIOLOGY_DETAILS = "GET_RADIOLOGY_DETAILS";
   export const GET_RADIOLOGY_FILE = "GET_RADIOLOGY_FILE";
+  export const GET_LAB_DETAILS = "GET_LAB_DETAILS";
+  export const GET_LAB_FILE = "GET_LAB_FILE";
 
 
   
@@ -46,6 +48,30 @@ import { PatientDetails,MeatQuery,SectionColor ,HccFileDeatils,DosPageNumber,Rad
         RadiologyDeatils(patientid).then((response) => {
           dispatch({
             type: GET_RADIOLOGY_DETAILS,
+            payload: {
+              result: response,
+              loading: false,
+            },
+          });
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+  };
+
+  export const getLabDetails = (patientid) => {
+    return (dispatch) => {
+      dispatch({
+        type: GET_LAB_DETAILS,
+        payload: {
+          loading: true,
+        },
+      });
+      try {
+        LabDeatils(patientid).then((response) => {
+          dispatch({
+            type: GET_LAB_DETAILS,
             payload: {
               result: response,
               loading: false,
@@ -168,6 +194,30 @@ import { PatientDetails,MeatQuery,SectionColor ,HccFileDeatils,DosPageNumber,Rad
         HccFileDeatils(fileId).then((response) => {
           dispatch({
             type: GET_RADIOLOGY_FILE,
+            payload: {
+              result: response,
+              loading: false,
+            },
+          });
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+  };
+
+  export const getLabFileDetails = (fileId) => {
+    return (dispatch) => {
+      dispatch({
+        type: GET_LAB_FILE,
+        payload: {
+          loading: true,
+        },
+      });
+      try {
+        HccFileDeatils(fileId).then((response) => {
+          dispatch({
+            type: GET_LAB_FILE,
             payload: {
               result: response,
               loading: false,

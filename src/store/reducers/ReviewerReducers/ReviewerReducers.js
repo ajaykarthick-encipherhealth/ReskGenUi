@@ -1,4 +1,4 @@
-import { GET_PATIENT_DETAILS ,GET_MEAT_QUERY,GET_SECTION_COLOR,GET_HCC_FILE,GET_DOS_PAGE,GET_RADIOLOGY_DETAILS,GET_RADIOLOGY_FILE} from "../../actions/ReviewerAction/PatientDetailsAction";
+import { GET_PATIENT_DETAILS ,GET_MEAT_QUERY,GET_SECTION_COLOR,GET_HCC_FILE,GET_DOS_PAGE,GET_RADIOLOGY_DETAILS,GET_RADIOLOGY_FILE,GET_LAB_DETAILS,GET_LAB_FILE} from "../../actions/ReviewerAction/PatientDetailsAction";
 
   const initialState = {
     patientDetails: null,
@@ -8,6 +8,8 @@ import { GET_PATIENT_DETAILS ,GET_MEAT_QUERY,GET_SECTION_COLOR,GET_HCC_FILE,GET_
     dosPageNumberList:null,
     radiologyDeatils:null,
     radiologyFileDetails:null,
+    labDeatils:null,
+    labFileDetails:null,
   };
   
   export const ReviewerReducers = (state = initialState, action) => {
@@ -51,6 +53,18 @@ import { GET_PATIENT_DETAILS ,GET_MEAT_QUERY,GET_SECTION_COLOR,GET_HCC_FILE,GET_
       return {
         ...state,
         radiologyFileDetails: action.payload,
+      };
+    }
+    if (action.type === GET_LAB_DETAILS) {
+      return {
+        ...state,
+        labDeatils: action.payload,
+      };
+    }
+    if (action.type === GET_LAB_FILE) {
+      return {
+        ...state,
+        labFileDetails: action.payload,
       };
     }
     return state;
