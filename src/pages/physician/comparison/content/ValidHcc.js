@@ -11,8 +11,10 @@ import { getMeatFound } from "../../../reviewer/patients/details/hcc";
 import { useSelector } from "react-redux";
 
 export const reusableElipses = (str, count) => {
-  {
-    str?.length > count - 5 ? `${str?.substring(0, count)}...` : str;
+  if (str?.length > count - 5) {
+    return `${str?.substring(0, count)}...`;
+  } else {
+    return str;
   }
 };
 const ValidHcc = ({ content, meatCriteriaList, ProviderName }) => {

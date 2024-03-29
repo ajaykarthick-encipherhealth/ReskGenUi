@@ -2,6 +2,7 @@ import moment from "moment";
 import { renderUserPrfoileAvatar } from "../headerFilters/functions";
 import Style from "./table.module.css";
 import AppPagination from "./pagination";
+import { reusableElipses } from "../../pages/physician/comparison/content/ValidHcc";
 
 const AppTable = ({
   data,
@@ -133,7 +134,8 @@ const TableRow = ({ item, column, status }) => {
                 : Style.childBorder
             }
           >
-            {item[`${columnItem.value}`]}
+            {reusableElipses(item[`${columnItem.value}`], 30)}
+            {/* {item[`${columnItem.value}`]} */}
           </td>
         );
       })}
