@@ -26,6 +26,7 @@ const File = ({}) => {
   const radiologyFile = useSelector(
     (state) => state?.ReviewerReducers?.radiologyFileDetails
   );
+  console.log(radiologyDetailsResult)
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
   );
@@ -67,12 +68,17 @@ const File = ({}) => {
   };
 
   useEffect(() => {
+    setNewValidDiseaseListRadiology([]);
+    setInNewValidDiseaseListRadiology([]);
+    setRadiologyFileDetailCheck(false);
     getPatientDetailsRadiologyYear();
   }, [radiologyDetailsResult]);
-
+  
   useEffect(() => {
+    setSelectFileURLRadiology([]);
     getPatientPdfFileRadiology();
   }, [radiologyFile?.result?.response]);
+
 
   const getPatientDetailsRadiologyYear = async () => {
     var patientId = localStorage.getItem("patientId");
@@ -265,7 +271,7 @@ const File = ({}) => {
   }
 
   const getPatientPdfFileRadiology = async (fileId, tenId) => {
-    if (radiologyFile?.result?.response) {
+    if (radiologyFile?.result?.response && radiologyDetailsResult?.result?.response?.patientId) {
       setSelectFileURLRadiology(radiologyFile?.result?.response);
     }
   };
@@ -336,7 +342,6 @@ const File = ({}) => {
 
   const getCaptureSectionBackgroundFile = (value) => {
     var dublicateCaptureDelete = removeDuplicates(value);
-    console.log(dublicateCaptureDelete);
     return dublicateCaptureDelete.map((res) => {
       const result = captureSectionMatching.filter(
         (res2) => res2.sectionName == res

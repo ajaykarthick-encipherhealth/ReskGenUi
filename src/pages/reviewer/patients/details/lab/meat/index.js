@@ -47,10 +47,12 @@ const Meat = ({}) => {
   };
 
   useEffect(() => {
+    setLabReportMeatList([]);
     getLabReportDetails();
   }, [labDetailsResult]);
 
   useEffect(() => {
+    setLabReportFile([]);
     getLabReportFiles();
   }, [labFile?.result?.response]);
 
@@ -198,7 +200,7 @@ const Meat = ({}) => {
   }
 
   const getLabReportFiles = async (fileId, tenId) => {
-    if (labFile?.result?.response) {
+    if (labFile?.result?.response && labDetailsResult?.result?.response?.patientId){
       setLabReportFile(labFile?.result?.response);
     }
   };
@@ -223,7 +225,6 @@ const Meat = ({}) => {
     meatresult
   ) => {
     if (value) {
-      console.log(value);
       const result = captureSectionMatching.filter(
         (res2) => res2.sectionName == value
       );

@@ -69,9 +69,13 @@ const VisitData = ({}) => {
   };
 
   useEffect(() => {
+    setNewValidDiseaseListRadiology([]);
+    setInNewValidDiseaseListRadiology([]);
     getPatientDetailsRadiologyYear();
   }, [radiologyDetailsResult]);
+
   useEffect(() => {
+    setSelectFileURLRadiology([]);
     getPatientPdfFileRadiology();
   }, [radiologyFile?.result?.response]);
 
@@ -245,7 +249,7 @@ const VisitData = ({}) => {
   }
 
   const getPatientPdfFileRadiology = async (fileId, tenId) => {
-    if (radiologyFile?.result?.response) {
+    if (radiologyFile?.result?.response && radiologyDetailsResult?.result?.response?.patientId) {
       setSelectFileURLRadiology(radiologyFile?.result?.response);
     }
   };

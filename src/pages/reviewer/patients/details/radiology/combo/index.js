@@ -38,9 +38,10 @@ const Combo = ({}) => {
   const [comboDiseaseCodesListRadiology, setComboDiseaseCodesListRadiology] =
     useState([]);
 
-  useEffect(() => {
-    getPatientDetailsRadiologyYear();
-  }, [radiologyDetailsResult]);
+    useEffect(() => {
+      setComboDiseaseCodesListRadiology([]);
+      getPatientDetailsRadiologyYear();
+    }, [radiologyDetailsResult]);
 
   const getPatientDetailsRadiologyYear = async () => {
     if (radiologyDetailsResult?.result?.response) {

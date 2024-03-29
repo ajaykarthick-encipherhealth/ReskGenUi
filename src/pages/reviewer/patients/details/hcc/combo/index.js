@@ -482,7 +482,6 @@ const Combo = ({}) => {
     actualDescription,
     testModal
   ) => {
-    console.log("test");
     setFileLoading(true);
     setDocumentLoaded(false);
     var dataset = value + " - (" + disDescription + ")";
@@ -532,7 +531,6 @@ const Combo = ({}) => {
         patientDocumentResult.patientName +
         " / " +
         dataset;
-      console.log(headerName);
       setFileModalTitle(headerName);
       setDocumentLoaded(true);
     } catch (error) {

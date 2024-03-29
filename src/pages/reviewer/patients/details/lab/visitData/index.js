@@ -44,10 +44,12 @@ const VisitData = ({}) => {
   };
 
   useEffect(() => {
+    setLabReportValidList([]);
     getLabReportDetails();
   }, [labDetailsResult]);
 
   useEffect(() => {
+    setLabReportFile([]);
     getLabReportFiles();
   }, [labFile?.result?.response]);
 
@@ -211,7 +213,7 @@ const VisitData = ({}) => {
   }
 
   const getLabReportFiles = async (fileId, tenId) => {
-    if (labFile?.result?.response) {
+    if (labFile?.result?.response && labDetailsResult?.result?.response?.patientId){
       setLabReportFile(labFile?.result?.response);
     }
   };

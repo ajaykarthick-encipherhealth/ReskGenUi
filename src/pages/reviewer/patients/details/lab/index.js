@@ -23,7 +23,6 @@ const Lab = ({}) => {
   const labDetailsResultTest = useSelector(
     (state) => state?.ReviewerReducers
   );
-  console.log(labDetailsResultTest)
   useEffect(() => {
     const patientId = localStorage.getItem("patientId");
     dispatch(getLabDetails(patientId));
@@ -31,7 +30,6 @@ const Lab = ({}) => {
 
   useEffect(() => {
     if (labDetailsResult?.result?.response) {
-      console.log(labDetailsResult?.result?.response);
       if (labDetailsResult?.result?.response?.labFileDetail) {
         dispatch(
           getLabFileDetails(

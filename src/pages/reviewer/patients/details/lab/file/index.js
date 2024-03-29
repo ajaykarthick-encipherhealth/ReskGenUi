@@ -56,10 +56,13 @@ const File = ({}) => {
   };
 
   useEffect(() => {
+    setLabReportValidList([]);
+    setLabResultStatus(false);
     getLabReportDetails();
   }, [labDetailsResult]);
 
   useEffect(() => {
+    setLabReportFile([]);
     getLabReportFiles();
   }, [labFile?.result?.response]);
 
@@ -244,7 +247,7 @@ const File = ({}) => {
   }
 
   const getLabReportFiles = async (fileId, tenId) => {
-    if (labFile?.result?.response) {
+    if (labFile?.result?.response && labDetailsResult?.result?.response?.patientId) {
       setLabReportFile(labFile?.result?.response);
     }
   };
