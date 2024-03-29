@@ -20,9 +20,6 @@ import { faAngleLeft, faAngleRight, faClose, faUpload, faCheck, faBan, faAdd, fa
 import { Space, Spin } from 'antd';
 import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
 import { connect, useDispatch } from 'react-redux';
-import {
-  patientDetails,
-} from '../../../store/actions/AuthActions';
 import { notification } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { DataTable } from 'primereact/datatable';

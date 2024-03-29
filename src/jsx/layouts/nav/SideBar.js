@@ -8,7 +8,7 @@ import { SVGICON } from "../../constant/theme";
 
 import { MenuList, PhysicanMenuList, L2AuditMenuList } from "./Menu";
 import { useDispatch, useSelector } from "react-redux";
-import { navtoggle } from "../../../store/actions/AuthActions";
+import { navtoggle } from "../../../stores/authflow/actions";
 
 export default function SideBar() {
   const router = useRouter();

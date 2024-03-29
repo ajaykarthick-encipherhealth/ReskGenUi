@@ -15,7 +15,7 @@ import Search from "../search";
 import { disableFutureDate, handleRnagePicker2 } from "./functions";
 import filter from "../../images/svg/filter.svg";
 import warning from "../../images/svg/warning.svg";
-import { getFilters } from "../../store/actions/AuthActions";
+import { getFilters } from "../../stores/authflow/actions";
 
 const { RangePicker } = DatePicker;
 

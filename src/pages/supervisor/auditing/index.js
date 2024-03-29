@@ -7,7 +7,6 @@ import { Popover, notification } from "antd";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import Header from "../../../jsx/layouts/nav/Header";
-import { patientDetails } from "../../../store/actions/AuthActions";
 import PatientTable from "../table/PatientList/patientList";
 import SpinnerDots from "../../../components/spinner";
 import HeaderFilters from "../../../components/headerFilters";
@@ -38,6 +37,7 @@ export function extractLatestData(notes) {
   return declinedData;
 }
 import Image from "next/image";
+import { patientDetails } from "../../../stores/authflow/actions";
 const bullets = [
   {
     color: "#377880",

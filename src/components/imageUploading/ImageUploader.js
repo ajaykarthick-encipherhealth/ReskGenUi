@@ -2,8 +2,8 @@ import React, { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import Image from "next/image";
 import styles from "./styles.module.css";
-import { preSendURl } from "../../store/actions/AuthActions";
 import upload from "../../images/fihr/upload.png";
+import { preSendURl } from "../../stores/authflow/actions";
 
 const ImageUploader = ({ setOpenUploader, setOpenContent }) => {
   const fileInputRef = useRef(null);

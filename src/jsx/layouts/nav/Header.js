@@ -48,20 +48,15 @@ import {
 } from "../../../store/actions/PatientsActions";
 import CodeIcon from "../../../images/svg/CodeIcon";
 import Search from "../../../components/search";
-import {
-  getAccuracy,
-  getCoderDetails,
-  getCurrentUser,
-} from "../../../store/actions/AuthActions";
 import Selector from "../../../components/selector";
 import ChatCommunication from "../../../components/chatCommunication/index";
 import { renderUserPrfoile } from "../../../components/headerFilters/functions";
-import { logoutAllDevice } from "../../../services/AuthService";
 import ImageUploader from "../../../components/imageUploading/ImageUploader";
 import logout from "../../../images/svg/logout.svg";
 import editImg from "../../../images/svg/edit.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage, faBell } from "@fortawesome/free-regular-svg-icons";
+import { getAccuracy, getCoderDetails, getCurrentUser, logoutAllDevice } from "../../../stores/authflow/actions";
 
 const btnItems = [
   {

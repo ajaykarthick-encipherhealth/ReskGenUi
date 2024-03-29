@@ -5,9 +5,9 @@ import Image from "next/image";
 import { notification } from "antd";
 import styles from "../../styles/auth.module.css";
 import twofactorImage from "../../images/svg/twofactorAuthentication.svg";
-import { getValidateCode, loginAction } from "../../store/actions/AuthActions";
 import { encyptingPass } from "../../components/headerFilters/functions";
 import RegularButton from "../../components/button";
+import { getValidateCode, loginAction } from "../../stores/authflow/actions";
 
 export const codeLength = 6;
 export const generateCodeArray = () =>
@@ -42,14 +42,15 @@ const Index = () => {
     if (seconds === 0) {
       setCode([]);
       inputRefs[1].current?.focus();
-
-      notification.warning({
-        description: "Oops! your time is expired",
-        duration: 10,
-        onClose: () => {
-          setSeconds(30);
-        },
-      });
+      if (enableMFA) {
+        notification.warning({
+          description: "Oops! your time is expired",
+          duration: 10,
+          onClose: () => {
+            setSeconds(30);
+          },
+        });
+      }
     }
   }, [seconds]);
 

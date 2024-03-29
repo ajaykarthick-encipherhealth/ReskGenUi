@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { ThemeContext } from "../../../context/ThemeContext";
 import { SVGICON } from "../../constant/theme";
-import { navtoggle } from "../../../store/actions/AuthActions";
+import { navtoggle } from "../../../stores/authflow/actions";
+
 
 const NavHader = () => {
   const { openMenuToggle } = useContext(ThemeContext);

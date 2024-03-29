@@ -7,7 +7,6 @@ import { notification } from "antd";
 import styles from "../styles/auth.module.css";
 import LoginBack from "../images/logo/login-back.jpg";
 import { IMAGES } from "../jsx/constant/theme";
-import { submitLogin } from "../services/AuthService";
 import {
   getValidatePassword,
   handleTogglePasswordVisibility,
@@ -17,6 +16,7 @@ import AthenaLogo from "../images/ehr/athena.png";
 import EpicLogo from "../images/ehr/epic_1.png";
 import worksLogo from "../images/ehr/eclinicalworks.png";
 import cernerLogo from "../images/ehr/cerner.png";
+import { submitLogin } from "../stores/authflow/actions";
 
 export default function Login() {
   const router = useRouter();

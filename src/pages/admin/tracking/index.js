@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
-import { patientDetails } from "../../../store/actions/AuthActions";
 import { Popover, Tooltip, notification } from "antd";
 import { Paginator } from "primereact/paginator";
 import Footer from "../../../jsx/layouts/Footer";
@@ -33,6 +32,7 @@ import Abort from "../../../../src/images/trackingImages/Abort.png";
 
 import Image from "next/image";
 import { extractLatestData } from "../../supervisor/auditing";
+import { patientDetails } from "../../../stores/authflow/actions";
 const bullets = [
   {
     title: "Processed Status",

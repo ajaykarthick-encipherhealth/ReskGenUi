@@ -1,7 +1,7 @@
 import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import { PostsReducer, toggleMenu } from "./reducers/PostsReducer";
 import thunk from "redux-thunk";
-import { AuthReducer } from "./reducers/AuthReducer";
+// import { AuthReducer } from "./reducers/AuthReducer";
 import todoReducers from "./reducers/Reducers";
 import { DashboardReducer } from "./reducers/DashboradReducer";
 import { PatientsReducer } from "./reducers/PatientsReducer";
@@ -34,7 +34,7 @@ const composeEnhancers = compose;
 const reducers = combineReducers({
   sideMenu: toggleMenu,
   posts: PostsReducer,
-  auth: AuthReducer,
+  // auth: AuthReducer,
   ReviewerReducers: ReviewerReducers,
   todoReducers,
   workFlow: DashboardReducer,

@@ -4,11 +4,11 @@ import { useRouter } from "next/navigation";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { Paginator } from "primereact/paginator";
 import Header from "../../../jsx/layouts/nav/Header";
-import { patientDetails } from "../../../store/actions/AuthActions";
 import SpinnerDots from "../../../components/spinner";
 import HeaderFilters from "../../../components/headerFilters";
 import { getPatients } from "../../../store/actions/physicianAction/patientsActions";
 import PatientTable from "../table/PatientList/patientList";
+import { patientDetails } from "../../../stores/authflow/actions";
 
 export function extractLatestData(notes) {
   let declinedData;

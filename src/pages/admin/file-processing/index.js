@@ -8,11 +8,11 @@ import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import Header from "../../../jsx/layouts/nav/Header";
 import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
-import { patientDetails } from "../../../store/actions/AuthActions";
 import FileProcessingTable from "../../../components/table/admin/FileProcessing/FileProcessing";
 import FileUploading from "./FileUploading";
 import Addpatients from "./Addpatiens";
 import { getPatients } from "../../../store/actions/adminAction/patientsActions";
+import { patientDetails } from "../../../stores/authflow/actions";
 
 export default function Patient() {
   const [validated, setValidated] = useState(false);

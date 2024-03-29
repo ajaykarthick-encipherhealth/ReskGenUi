@@ -14,8 +14,8 @@ import {
   handleRnagePicker2,
   searchFunction,
 } from "../../../../components/headerFilters/functions";
-import { getFilters } from "../../../../store/actions/AuthActions";
 import InputField from "../../../../components/input";
+import { getFilters } from "../../../../stores/authflow/actions";
 
 const { RangePicker } = DatePicker;
 const HeaderFilters = ({

@@ -5,8 +5,8 @@ import { useRouter } from "next/router";
 import { IMAGES } from "../../jsx/constant/theme";
 import LoginBack from "../../images/logo/login-back.jpg";
 import styles from "../../styles/auth.module.css";
-import { checkDeviceLogin, logoutAllDevice } from "../../services/AuthService";
 import RegularButton from "../../components/button";
+import { checkDeviceLogin, logoutAllDevice } from "../../stores/authflow/actions";
 
 const SelectRole = () => {
   const router = useRouter();
