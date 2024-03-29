@@ -13,13 +13,10 @@ import {
 import SpinnerDots from "../../../../../components/spinner";
 
 const Radiology = ({}) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
   const radiologyDetailsResult = useSelector(
     (state) => state?.ReviewerReducers?.radiologyDeatils
-  );
-  const radiologyFile = useSelector(
-    (state) => state?.ReviewerReducers?.radiologyFileDetails
   );
   useEffect(() => {
     const patientId = localStorage.getItem("patientId");
@@ -28,7 +25,6 @@ const Radiology = ({}) => {
 
   useEffect(() => {
     if (radiologyDetailsResult?.result?.response) {
-      console.log(radiologyDetailsResult?.result?.response);
       if (radiologyDetailsResult?.result?.response?.radiologyFileDetail) {
         dispatch(
           getRadiologyFileDetails(

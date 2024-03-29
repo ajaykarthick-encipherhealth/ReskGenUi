@@ -12,7 +12,7 @@ import {
 import SpinnerDots from "../../../../../components/spinner";
 
 const Lab = ({}) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
   const labDetailsResult = useSelector(
     (state) => state?.ReviewerReducers?.labDeatils

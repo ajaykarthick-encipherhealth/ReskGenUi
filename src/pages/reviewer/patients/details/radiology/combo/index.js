@@ -56,9 +56,7 @@ const Combo = ({}) => {
           comboDis = result.comboDisease[dateofService];
         }
         setComboDiseaseCodesListRadiology(comboDis);
-      } else {
-        setIsLoading(false);
-      }
+      } 
     }
   };
 

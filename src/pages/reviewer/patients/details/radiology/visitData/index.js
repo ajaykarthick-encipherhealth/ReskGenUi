@@ -237,8 +237,6 @@ const VisitData = ({}) => {
         setEncounterDateMatching(encounterDateColorsMatching);
         setNewValidDiseaseListRadiology(validDisArray);
         setInNewValidDiseaseListRadiology(invalidDisArray);
-      } else {
-        setIsLoading(false);
       }
     }
   };

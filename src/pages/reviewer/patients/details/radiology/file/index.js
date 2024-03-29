@@ -33,9 +33,6 @@ const File = ({}) => {
   const { toolbarPluginInstance } = defaultLayoutPluginInstance;
   const { searchPluginInstance } = toolbarPluginInstance;
   const { highlight } = searchPluginInstance;
-
-  const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingSection, setIsLoadingSection] = useState(true);
   const [invalidMoveDiseasesList, setInvalidMoveDiseasesList] = useState([]);
   const [selectDiseasesName, setSelectDiseasesName] = useState("");
   const [localTenantId, setLocalTenantId] = useState("");
@@ -260,8 +257,6 @@ const File = ({}) => {
         setNewValidDiseaseListRadiology(validDisArray);
         setInNewValidDiseaseListRadiology(invalidDisArray);
         setIsLoadingDos(false);
-      } else {
-        setIsLoading(false);
       }
     }
   };
@@ -311,23 +306,6 @@ const File = ({}) => {
     setNewValidDiseaseList(newArray);
   };
 
-  const handleOpenModal = (value, disDescription) => {
-    var splitPoint = disDescription.substring(" ", 40);
-    setTimeout(() => {
-      highlight({
-        keyword: splitPoint,
-        matchCase: true,
-        // wholeWords:true
-      });
-      var dataset = value + " - (" + disDescription + ")";
-      setSelectMeatName(dataset);
-    }, 2000);
-    setDocumentLoaded(true);
-    var dataset = value + " - (" + disDescription + ")";
-    setSelectMeatName(dataset + " -  " + "Loading...");
-    setIsLoadingSection(true);
-    setIsModalOpenRadiology(true);
-  };
   const findValueDocument = (value, disDescription) => {
     var splitPoint = disDescription.substring(" ", 40);
 

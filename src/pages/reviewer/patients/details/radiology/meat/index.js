@@ -137,8 +137,6 @@ const Meat = ({}) => {
           });
         });
         setMeatCriteriaListRadiology(meatListArr);
-      } else {
-        setIsLoading(false);
       }
     }
   };

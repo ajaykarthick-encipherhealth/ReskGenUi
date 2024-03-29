@@ -1,8 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Tab, Nav, Badge } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import axios from "../../../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../../../utility/enpoints";
 import visitStyles from "../../../../../../styles/visitdata.module.css";
 import { Viewer, Worker, ProgressBar } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
@@ -12,11 +9,9 @@ import {
   faCircleUser,
   faCheck,
   faInfo,
-  faArrowsAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { CalendarOutlined } from "@ant-design/icons";
 import { Popconfirm, Divider, Popover, Menu, DatePicker, Dropdown } from "antd";
-import Select from "react-select";
 import { Modal } from "antd";
 
 const VisitData = ({}) => {
@@ -29,211 +24,20 @@ const VisitData = ({}) => {
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
   );
-
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const { toolbarPluginInstance } = defaultLayoutPluginInstance;
   const { searchPluginInstance } = toolbarPluginInstance;
   const { highlight } = searchPluginInstance;
-  const { RangePicker } = DatePicker;
-
-  const sideMenu = useSelector((state) => state.sideMenu);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isFileFormShow, setIsFileFormShow] = useState(false);
-  const [isModalOpenValid, setIsModalOpenValid] = useState(false);
-  const [isModalOpenValidCodes, setIsModalOpenValidCodes] = useState(false);
-  const [isModalOpenCaptureSection, setIsModalOpenCaptureSection] =
-    useState(false);
-  const [confirmNotesModalDecline, setConfirmNotesModalDecline] =
-    useState(false);
-  const [confirmNotesModalHold, setConfirmNotesModalHold] = useState(false);
-
-  const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
-  const [confirmNotesModalInValid, setConfirmNotesModalInValid] =
-    useState(false);
-
-  const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingSection, setIsLoadingSection] = useState(true);
-  const [invalidDiseasesList, setInvalidDiseasesList] = useState([]);
   const [invalidMoveDiseasesList, setInvalidMoveDiseasesList] = useState([]);
-  const [comboDiseaseCodesList, setComboDiseaseCodesList] = useState([]);
-  const [invalidComboDiseaseCodesList, setInvalidComboDiseaseCodesList] =
-    useState([]);
-
-  const [validDiseasesList, setValidDiseasesList] = useState([]);
-  const [selectDiseasesName, setSelectDiseasesName] = useState("");
-  const [meatCriteriaList, setMeatCriteriaList] = useState([]);
-  const [invalidMeatCriteriaList, setInvalidMeatCriteriaList] = useState([]);
-  const [selectCode, setSelectCode] = useState("");
-  const [dosYear, setDosYear] = useState("");
-  const [dosYearRadiology, setDosYearRadiology] = useState("");
-  const [dosYearDefalutSelect, setDosYearDefalutSelect] = useState("");
-  const [dosYearDefalutSelectRadiology, setDosYearDefalutSelectRadiology] =
-    useState("");
-  const [localOrgId, setLocalOrgId] = useState("");
-  const [localTenantId, setLocalTenantId] = useState("");
-  const [selectMeatFileId, setSelectMeatFileId] = useState("");
   const [selectMeatName, setSelectMeatName] = useState("");
-  const [sectionList, setSectionList] = useState([]);
-  const [patientDocumentResult, setPatientDocumentResult] = useState([]);
-  const [selectFileURL, setSelectFileURL] = useState([]);
-  const [selectFileURLValid, setSelectFileURLValid] = useState([]);
-  const [validated, setValidated] = useState(false);
-  const [rafScore, setRAFScore] = useState([]);
-  const [patientDetails, setPatientDetails] = useState([]);
-  const [patientDetailsRadiology, setPatientDetailsRadiology] = useState([]);
-
-  const [rafHccList, setRafScoreHccList] = useState([]);
-  const [isMatchBtn, setIsMatchBtn] = useState(false);
-  const [matchHccList, setMatchHccList] = useState([]);
-  const [newValidDiseaseList, setNewValidDiseaseList] = useState([]);
-  const [newInValidDiseaseList, setInNewValidDiseaseList] = useState([]);
-  const [unMatchResList, setNewUnMatchHccList] = useState([]);
-  const [meatColorCodeList, setMeatColorCodeList] = useState([]);
-
-  const [dbDescriptionRes, setDbDescriptionRes] = useState([]);
-
-  const [openPopover, setOpenPopover] = useState(false);
-
-  const [activeTab, setActiveTab] = useState(1);
-  const [activeTabHead, setActiveTabHead] = useState("file");
-
-  const [unmatchHccListRadiology, setUnMatchHccListRadiology] = useState([]);
-  const [newValidDiseaseListRadiology, setNewValidDiseaseListRadiology] =
-    useState([]);
-  const [newInValidDiseaseListRadiology, setInNewValidDiseaseListRadiology] =
-    useState([]);
-  const [comboDiseaseCodesListRadiology, setComboDiseaseCodesListRadiology] =
-    useState([]);
-  const [meatCriteriaListRadiology, setMeatCriteriaListRadiology] = useState(
-    []
-  );
-  const [selectFileURLRadiology, setSelectFileURLRadiology] = useState([]);
-  const [isModalOpenRadiology, setIsModalOpenRadiology] = useState(false);
   const [isModalOpenLab, setIsModalOpenLab] = useState(false);
-  const [isModalOpenLabMeat, setIsModalOpenLabMeat] = useState(false);
-
-  const [radiologyResCheck, setRadiologyResCheck] = useState(false);
-  const [radiologyFileProcessing, setRadiologyFileProcessing] = useState(
-    "Please wait file processing..."
-  );
-
-  const [isLoadingBtn, setIsLoadingBtn] = useState(false);
-  const [addPatient, setAddPatient] = useState(false);
-  const [labReportSlider, setLapReportSlider] = useState(false);
-  const [inputValue, setInputValue] = useState({
-    year: "",
-    name: "",
-    patientId: "",
-    notes: "",
-    diagnosisCode: "",
-    actualDescription: "",
-    capturedSections: "",
-    encodedDate: "",
-    flag: "",
-    comments: "",
-  });
-
-  const [selectFileRadiology, setSelectFileRadiology] = useState(null);
-  const [selectLabReportFile, setSelectLabReportFile] = useState(null);
-
-  const [localUserId, setLocalUserId] = useState("");
-  const [localPatientId, setLocalPatientId] = useState("");
-
-  const [validHccDetails, setvalidHccDetails] = useState("");
-  const [validLocalFileDownloadAndView, setValidLocalFileDownloadAndView] =
-    useState([]);
-
-  const [unMatchListNonHcc, setUnmatchListNonHcc] = useState([]);
-  const [comboDiseaseCodesListNonHcc, setComboDiseaseCodesListNonHcc] =
-    useState([]);
-  const [meatCriteriaListNonHcc, setMeatCriteriaListNonHcc] = useState([]);
-  const [yearOfServiceList, setYearOfServiceList] = useState([]);
-  const [isLoadingDos, setIsLoadingDos] = useState(true);
-  const [suggestedModal, setSuggestedModal] = useState(false);
-  const [suggesteSelectValue, setSuggestedSelectValue] = useState("");
-  const [suggesteSelectCode, setSuggestedSelectCode] = useState("");
-  const [selectedDosValue, setSelectedDosValue] = useState("");
-  const [suggestedBtnTitle, setSuggestedBtnTitle] = useState("Add");
-  const [selectInvalidDetails, setSelectInvalidDetails] = useState(false);
-  const [selectActiveCode, setSelectActiveCode] = useState("");
   const [labReportValidList, setLabReportValidList] = useState([]);
-  const [labReportMeatList, setLabReportMeatList] = useState([]);
   const [labReportFile, setLabReportFile] = useState([]);
-  const [suggestedHccList, setSuggestedHccList] = useState([]);
-  const [suggestedNonHccList, setSuggestedNonHccList] = useState([]);
-  const [nonHccActiveCodes, setNonHccActiveCodes] = useState(false);
-  const [radiologyFileDateofServieList, setFileRadiologyDateofServiceList] =
-    useState([]);
-  const [radiologyFileDateDefaulteSelect, setRadiologyFileDateDefaulteSelect] =
-    useState("");
-  const [radiologyResult, setRadiologyResult] = useState("");
-  const [radiologyResultStatus, setRadiologyResultStatus] = useState(false);
-  const [labResultStatus, setLabResultStatus] = useState(false);
-  const [labFileDateofServieList, setFileLabDateofServiceList] = useState([]);
-  const [labFileDateDefaulteSelect, setLabFileDateDefaulteSelect] =
-    useState("");
-  const [labResult, setLabResult] = useState("");
-  const [labFileDosList, setLabFileDosList] = useState([]);
-  const [labFileDosListDefaultSelect, setLabFileDosListDefaultSelect] =
-    useState([]);
-  const [saveBtnTitle, setSaveBtnTitle] = useState("Save");
-  const [completedBtnTitle, setCompleteBtnTitle] = useState("Complete");
-  const [declineBtnTitle, setDeclineBtnTitle] = useState("Decline");
-
-  const [suggestRadiology, setSuggestRadiology] = useState([]);
-  const [suggestLab, setSuggestLab] = useState([]);
-
-  const [buttonClicked, setButtonClicked] = useState(false);
-  const [isAddButtonClicked, setIsAddButtonClicked] = useState(false);
-  const [isValidAction, setIsValidAction] = useState("");
-  const [deletedHccList, setDeletedHccList] = useState([]);
-  const [isModalComments, setIsModalComments] = useState(false);
-  const [flagContainerActive, setFlagContainerActive] = useState("");
-  const [flagContainerActiveTitle, setFlagContainerActiveTitle] = useState("");
-  const [showIcons, setShowIcons] = useState(false);
-  const [filter, setFilter] = useState("");
-  const [showCard, setShowCard] = useState(false);
-  const [patientList, setPatientList] = useState([]);
-  const [sideNavLabelActiveKey, setSideNavLabelActiveKey] = useState("HCC");
-  const [isSideNavShow, setIsSideNavShow] = useState(false);
-  const [timelineData, setTimeLineData] = useState([]);
-  const [flagTagActive, setFlagTagActive] = useState(true);
-  const [addValidCodeCheck, setAddValidCodeCheck] = useState(null);
-  const [patienIdDetails, setPatienIdDetails] = useState("");
-  const [commentList, setCommentList] = useState([]);
-  const [notesList, setNotesList] = useState([]);
-  const [flagResultList, setFlagResultList] = useState([]);
-  const [openPicker, setOpenPicker] = useState(false);
-  const [selectedDates, setSelectedDates] = useState([]);
-  const [actionItems, setActionItems] = useState([]);
-  const [actionItems2, setActionItems2] = useState([]);
-  const [actionItems3, setActionItems3] = useState([]);
-  const [confirmCompleteModal, setConfirmCompleteModal] = useState(false);
-  const [userDetails, setUserDetails] = useState("");
-  const [currentTime, setCurrentTime] = useState("");
-  const [commentsTrigger, setCommentsTrigger] = useState(false);
   const [captureSectionMatching, setCaptureSectionMatching] = useState([]);
   const [encounterDateMatching, setEncounterDateMatching] = useState([]);
-  const [flagFirstData, setFlagFirstData] = useState([]);
-  const [fileModalHeader, setFileModalHeader] = useState("");
-  const [filterDataLoading, setFilterDataLoading] = useState(true);
-
-  const [pageNo, setPageNo] = useState(0);
-  const [pageSize, setPageSize] = useState(15);
-  const [paginationFirst, setPaginationFirst] = useState(0);
-  const [totalElements, setTotalElements] = useState(10);
-
-  const [labFileFilterList, setLabFileFilterList] = useState(10);
-  const [radiologyFileDetailCheck, setRadiologyFileDetailCheck] =
-    useState(false);
-  const [dragFileDate, setdragFileDate] = useState(false);
-  const [inputValueFileDate, setInputValueFileDate] = useState("");
-
-  const [isDocumentLoaded, setDocumentLoaded] = React.useState(false);
   const [providerDetails, setProviderDetails] = useState("");
-  const [selectMeatResult, setSelectMeatResult] = useState(null);
   const [patientLabDetails, setPatientLabDetails] = useState(null);
-  const [activeTabNumber, setActiveTabNumber] = useState(0);
+  const [isDocumentLoaded, setDocumentLoaded] = React.useState(false);
 
   const handleDocumentLoad = () => {
     setDocumentLoaded(true);
@@ -250,52 +54,19 @@ const VisitData = ({}) => {
   const getLabReportDetails = async (orgId, tenId) => {
     var resultTest = labDetailsResult?.result?.response;
     setPatientLabDetails(resultTest);
-    var dosYearArrFile = [];
-    var fileDatesArr = [];
-    if (resultTest?.labFileDetail) {
-      if (resultTest.labFileDetail.length != 0) {
-        resultTest.labFileDetail.map((res, index) => {
-          for (var key in res.documentDos) {
-            fileDatesArr.push({ value: key, label: key });
-          }
-        });
-        for (var key in resultTest.labFileDetail[0].documentDos) {
-          dosYearArrFile.push({ value: key, label: key });
-        }
-        setFileLabDateofServiceList(dosYearArrFile);
-        setLabFileDateDefaulteSelect(dosYearArrFile[0]);
-        var fileDetails = resultTest.labFileDetail;
-        getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
-      }
-    }
-
-    setLabFileFilterList(fileDatesArr);
-
     if (resultTest?.labFileDetail) {
       var result = resultTest;
-      setLabResult(result);
       var dosYearArr = [];
       var dosYearArrFile = [];
       var validDiseaseNewRes = [];
-      var meatRes = [];
 
       for (var key in result.validDisease) {
         dosYearArr.push({ value: key, label: key });
       }
 
-      setLabFileDosList(dosYearArr);
-
       var validDisArray = [];
-
       if (dosYearArr.length != 0) {
         var dateofService = dosYearArr[0].value;
-
-        const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
-
-        const highestDosValue = dosYearArr.filter(
-          (i) => i.value === highestDOS
-        );
-
         validDiseaseNewRes = result.validDisease[dateofService];
         validDiseaseNewRes.map((res, index) => {
           const encounterDatearray = res.encounterDate.split(",");
@@ -364,7 +135,6 @@ const VisitData = ({}) => {
           });
         });
 
-
         var sectionColorResult = sectionColorList.result?.response;
         let sectionColorResultMatch = sectionColorResult.filter((o1) =>
           dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
@@ -422,125 +192,8 @@ const VisitData = ({}) => {
         });
 
         setEncounterDateMatching(encounterDateColorsMatching);
-
-        // setCaptureSectionMatching(capturedSectionsColorsMatching);
-        // setCaptureSectionMatching(newArray);
-
-        meatRes = result.meatCriteria[dateofService];
-        if (result.labFileDetail != null || result.labFileDetail.length != 0) {
-          for (var key in result.labFileDetail[0].documentDos) {
-            dosYearArrFile.push({ value: key, label: key });
-          }
-          setFileLabDateofServiceList(dosYearArrFile);
-          setLabFileDateDefaulteSelect(dosYearArrFile[0]);
-          var fileDetails = result.labFileDetail;
-          getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
-        }
       }
-
-      const COLORS = [
-        "encounterDateTag1",
-        "encounterDateTag2",
-        "encounterDateTag3",
-        "encounterDateTag4",
-        "encounterDateTag5",
-        "encounterDateTag6",
-        "encounterDateTag7",
-        "encounterDateTag8",
-      ];
-
-      var meatListArr = [];
-      var meatMoniterHead = [];
-      var meatEvaluteHead = [];
-      var meatAssesmentHead = [];
-      var meatTreatMentHead = [];
-      var allMeatHead = [];
-      var allMeatHeadColorArr = [];
-      var allMeatHeadColor = [];
-      var dublicateRemoveSecondArr = [];
-
-      meatRes.map((res, index) => {
-        if (res.monitorCapturedFromHeader != "") {
-          meatMoniterHead.push({
-            header: res.monitorCapturedFromHeader,
-          });
-        }
-        if (res.evaluateCapturedFromHeader != "") {
-          meatEvaluteHead.push({
-            header: res.evaluateCapturedFromHeader,
-          });
-        }
-        if (res.assessmentCapturedFromHeader != "") {
-          meatAssesmentHead.push({
-            header: res.assessmentCapturedFromHeader,
-          });
-        }
-        if (res.treatmentCapturedFromHeader != "") {
-          meatTreatMentHead.push({
-            header: res.treatmentCapturedFromHeader,
-          });
-        }
-        var newArray = [];
-        newArray = [
-          ...allMeatHead,
-          ...meatMoniterHead,
-          ...meatEvaluteHead,
-          ...meatAssesmentHead,
-          ...meatTreatMentHead,
-        ];
-        var dublicateRemoveArr = getUniqueListBy(newArray, "header");
-        dublicateRemoveArr.map((res3, index) => {
-          allMeatHeadColor.push({
-            header: res3.header,
-            color: COLORS[index],
-          });
-        });
-        allMeatHeadColorArr = allMeatHeadColor;
-
-        dublicateRemoveSecondArr = getUniqueListBy(allMeatHeadColor, "header");
-        setMeatColorCodeList(dublicateRemoveSecondArr);
-      });
-
-      meatRes.map((res, index) => {
-        meatListArr.push({
-          diagnosisCode: res.diagnosisCode,
-          diseaseName: res.diseaseName,
-          monitorCapturedFromHeader: res.monitorCapturedFromHeader,
-          assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
-          evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
-          treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
-          radiology: res.radiology,
-          monitorCapturedFromHeaderColor: colorCodeMatch(
-            dublicateRemoveSecondArr,
-            res.monitorCapturedFromHeader
-          ),
-          assessmentCapturedFromHeaderColor: colorCodeMatch(
-            dublicateRemoveSecondArr,
-            res.assessmentCapturedFromHeader
-          ),
-          evaluateCapturedFromHeaderColor: colorCodeMatch(
-            dublicateRemoveSecondArr,
-            res.evaluateCapturedFromHeader
-          ),
-          treatmentCapturedFromHeaderColor: colorCodeMatch(
-            dublicateRemoveSecondArr,
-            res.treatmentCapturedFromHeader
-          ),
-          monitorColor: COLORS[index],
-          meatColor: COLORS[index],
-          assessment: res.assessment,
-          monitor: res.monitor,
-          evaluate: res.evaluate,
-          treatment: res.treatment,
-          isMeatCriteriaPresent: res.isMeatCriteriaPresent,
-        });
-      });
-
       setLabReportValidList(validDisArray);
-      setLabReportMeatList(meatListArr);
-      setLabFileDosListDefaultSelect(dosYearArr[0]);
-      setLabResultStatus(true);
-      setIsLoadingDos(false);
     }
   };
   function getUniqueListBy(arr, key) {
@@ -564,50 +217,10 @@ const VisitData = ({}) => {
   };
 
   const handleCloseModal = () => {
-    setAddValidCodeCheck(null);
-    setValidated(false);
-    setIsModalOpen(false);
-    setIsModalOpenValid(false);
-    setConfirmNotesModalValid(false);
-    setConfirmNotesModalInValid(false);
-    setIsModalOpenRadiology(false);
-    setSuggestedModal(false);
-    setIsModalOpenValidCodes(false);
-    setIsModalOpenCaptureSection(false);
-    setConfirmNotesModalDecline(false);
-    setConfirmNotesModalHold(false);
-    setIsAddButtonClicked(false);
-    setConfirmNotesModalDecline(false);
-    setIsAddButtonClicked(false);
-    setIsModalComments(false);
-    setFlagContainerActive("");
-    setConfirmCompleteModal(false);
     setIsModalOpenLab(false);
-    setIsFileFormShow(false);
-    setIsModalOpenLabMeat(false);
-    setActiveTabNumber(activeTabNumber == null ? 0 : null);
-  };
-
-  const handleOpenModal = (value, disDescription) => {
-    var splitPoint = disDescription.substring(" ", 40);
-    setTimeout(() => {
-      highlight({
-        keyword: splitPoint,
-        matchCase: true,
-        // wholeWords:true
-      });
-      var dataset = value + " - (" + disDescription + ")";
-      setSelectMeatName(dataset);
-    }, 2000);
-    setDocumentLoaded(true);
-    var dataset = value + " - (" + disDescription + ")";
-    setSelectMeatName(dataset + " -  " + "Loading...");
-    setIsLoadingSection(true);
-    setIsModalOpenLab(true);
   };
   const findValueDocument = (value, disDescription) => {
     var splitPoint = disDescription.substring(" ", 40);
-
     highlight({
       keyword: splitPoint,
     });
@@ -634,19 +247,7 @@ const VisitData = ({}) => {
     var dataset = actualDescription + " - (" + disDescription + ")";
     // setSelectMeatName(dataset);
     setSelectMeatName(dataset + " -  " + "Loading...");
-    setIsLoadingSection(true);
     setIsModalOpenLab(true);
-  };
-
-  const dosOnChangeLabFile = async (e) => {
-    var dosKeyValue = e.value;
-    labResult.labFileDetail.map((res, index) => {
-      for (var key in res.documentDos) {
-        if (key == dosKeyValue) {
-          getLabReportFiles(res.azureBlobPath, localTenantId);
-        }
-      }
-    });
   };
 
   function removeDuplicates(array) {
@@ -745,35 +346,6 @@ const VisitData = ({}) => {
     });
   };
 
-  const getCaptureSectionBackgroundMeat = (
-    value,
-    dis,
-    radiology,
-    meatresult
-  ) => {
-    if (value) {
-      console.log(value);
-      const result = captureSectionMatching.filter(
-        (res2) => res2.sectionName == value
-      );
-      var backColor = result[0]?.backgroundColor;
-      var textColor = result[0]?.sectionColor;
-      var disCode = result[0]?.diagnosisCode;
-      var headerNames = result[0]?.sectionName;
-
-      var sectionMapArr = (
-        <span
-          onClick={() => handleOpenModalLab(value, dis, radiology, meatresult)}
-          style={{ backgroundColor: backColor, color: textColor }}
-          className={`mt-2 text-start cr-pointer ${visitStyles.captureheaderMeat}`}
-        >
-          {value}
-        </span>
-      );
-      return sectionMapArr;
-    }
-  };
-
   const getEncounterDetails = async (date) => {
     var date = moment(date).format("DD");
     highlight({
@@ -809,75 +381,6 @@ const VisitData = ({}) => {
     // setProviderDetails(data);
   };
 
-  const confirmInvalidMeat = () =>
-    new Promise((resolve) => {
-      meatMoveInvalidConfirm();
-      setTimeout(() => resolve(null), 1000);
-    });
-
-  const meatMoveInvalidConfirm = () => {
-    const result = meatCriteriaList.filter(
-      (res) => res.diseaseName != selectDiseasesName
-    );
-    const result2 = meatCriteriaList.filter(
-      (res) => res.diseaseName == selectDiseasesName
-    );
-    setMeatCriteriaList(result);
-    var newArray = [];
-    newArray = [...invalidMeatCriteriaList, ...result2];
-    setInvalidMeatCriteriaList(newArray);
-  };
-
-  const onchangeMeat = (data, code) => {
-    setSelectDiseasesName(data);
-    setSelectCode(code);
-  };
-
-  const handleOpenModalLab = (
-    value,
-    disDescription,
-    radiologyCheck,
-    meatresult
-  ) => {
-    setSelectMeatResult(meatresult);
-    if (radiologyCheck == true) {
-      var splitPoint = disDescription.substring(" ", 40);
-      setTimeout(() => {
-        highlight({
-          keyword: splitPoint,
-          // matchCase: true,
-          // wholeWords:true
-        });
-        var dataset = value + " - (" + disDescription + ")";
-        setSelectMeatName(dataset);
-      }, 2000);
-      setDocumentLoaded(true);
-      var dataset = value + " - (" + disDescription + ")";
-      // setSelectMeatName(dataset);
-      setSelectMeatName(dataset + " -  " + "Loading...");
-      setIsLoadingSection(true);
-      setIsModalOpenLabMeat(true);
-    } else {
-      var splitPoint = disDescription.substring(" ", 40);
-      setTimeout(() => {
-        highlight({
-          keyword: splitPoint,
-          matchCase: true,
-          // wholeWords:true
-        });
-        var dataset = value + " - (" + disDescription + ")";
-        setSelectMeatName(dataset);
-      }, 2000);
-      setDocumentLoaded(true);
-      var dataset = value + " - (" + disDescription + ")";
-      setSelectMeatName(dataset + " -  " + "Loading...");
-      setIsLoadingSection(true);
-      setIsModalOpenLabMeat(true);
-    }
-    // setIsModalOpenValid(true)
-    // getSectionResult(value.toLowerCase());
-  };
-
   const getProviderNameList = (data) => {
     var dublicateCaptureDelete = removeDuplicates(data);
     return dublicateCaptureDelete.map((res) => {
@@ -907,15 +410,6 @@ const VisitData = ({}) => {
       return sectionMapArr;
     });
   };
-
-  useEffect(() => {
-    var tenId = localStorage.getItem("tenantId");
-    if (patientLabDetails?.labFileDetail) {
-      var fileDetails = patientLabDetails.labFileDetail;
-      getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
-    }
-  }, [activeTabNumber]);
-
   return (
     <>
       <div className="my-post-content pt-3">
