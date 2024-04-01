@@ -24,6 +24,7 @@ import { ReviewerReducers } from "../store/reducers/ReviewerReducers/ReviewerRed
 import { AuthReducer, PatientStore } from "./authflow/reducers";
 
 import {reducer as updateDashboardReducer} from './reviewer/dashboard'
+
 const reducers = combineReducers({
   // old reducers
   sideMenu: toggleMenu,
@@ -49,7 +50,7 @@ const reducers = combineReducers({
   physicianComparison: PhysicianComparisonReducer,
   tanantAdmin: TanantAdminService, 
   ReviewerReducers: ReviewerReducers,
-  reviewerReducer: updateDashboardReducer,
+  reviewer: updateDashboardReducer,
 
 });
 

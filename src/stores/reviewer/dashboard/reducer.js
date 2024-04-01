@@ -3,7 +3,7 @@ import { handleActions } from "redux-actions";
 import { workFlowAction } from "./actions";
 
 
-const getWorkFlow = handleActions(
+const WorkFlowData = handleActions(
   {
     [workFlowAction.SUCCEEDED]: (state, { payload }) => {
       return payload;
@@ -13,5 +13,5 @@ const getWorkFlow = handleActions(
 );
 
 export default combineReducers({
-  getWorkFlow,
+  WorkFlowData,
 });

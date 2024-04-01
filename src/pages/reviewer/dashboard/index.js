@@ -11,10 +11,10 @@ import HoldStatus from "./holdstatus";
 // import { getWorkFlow } from "../../../store/actions/DashboardActions";
 import { useDispatch, useSelector ,connect} from "react-redux";
 import dayjs from "dayjs";
-import { actions as dashbaordActions } from "../../../stores/reviewer/dashboard/actions";
+import { actions as dashbaordActions } from "../../../stores/reviewer/dashboard";
 import { useRouter } from "next/router";
 
-const Index = ({data}) => {
+const Index = ({WorlFlow,workFlowData}) => {
   const currentDate = dayjs();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -31,9 +31,9 @@ const Index = ({data}) => {
 
   useEffect(() => {
     // dispatch(getWorkFlow(startDate, endDate, router));
-    // workFlowData(startDate, endDate)
-  }, [startDate, endDate]);
-
+    workFlowData({startDate, endDate})
+  }, [startDate, endDate,WorlFlow]);
+// console.log(WorlFlow)
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
@@ -72,7 +72,7 @@ const Index = ({data}) => {
 
 const enhancer = connect(
   (state) => ({
-    data: state
+    WorlFlow: state
   }),
   {
     workFlowData:dashbaordActions.workFlowAction
