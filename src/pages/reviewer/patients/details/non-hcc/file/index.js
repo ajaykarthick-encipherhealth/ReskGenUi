@@ -186,6 +186,7 @@ const File = ({}) => {
           unMatchRes = result.unMatchedDisease;
           unMatchRes.map((res, index) => {
             const encounterDatearray = res.encounterDate.split(",");
+            if (res?.isHccValid == false) {
               suggestListAllNonHcc.push({
                 actualDescription: res.actualDescription,
                 diagnosisCodeFinding: res.diagnosisCode,
@@ -196,7 +197,9 @@ const File = ({}) => {
                 encounterDateSplit: encounterDatearray,
                 getPlace: "Hcc",
               });
+            }
           });
+        
         }
         invalidDis = result.invalidDisease;
         setInNewValidDiseaseList(invalidDiseaseNewRes);
