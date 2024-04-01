@@ -1429,6 +1429,9 @@ const Meat = ({}) => {
       var dataset = value + " / (" + disDescription + ")";
       setSelectMeatName(dataset);
     } catch (error) {
+      setIsModalOpen(true);
+      var dataset = value + " / (" + disDescription + ")";
+      setSelectMeatName(dataset);
       splitPoint = value;
       if (findFileKeyword == value) {
         setFileLoading(false);
