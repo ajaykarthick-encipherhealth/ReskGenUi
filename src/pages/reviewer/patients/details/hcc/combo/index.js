@@ -15,12 +15,8 @@ import {
   faCircleUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { CalendarOutlined } from "@ant-design/icons";
-import {
-  Popconfirm,
-  Select,
-  Tag,
-} from "antd";
-import {SVGICON } from "../../../../../../jsx/constant/theme";
+import { Popconfirm, Select, Tag } from "antd";
+import { SVGICON } from "../../../../../../jsx/constant/theme";
 import { Modal } from "antd";
 import { Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
@@ -29,9 +25,7 @@ import { notification } from "antd";
 import { useRouter } from "next/navigation";
 import Spinner from "../../../../../../components/loadingSpinner";
 import styles from "../styles.module.css";
-import {
-  manuallyAddComboCode
-} from "../../../../../../services/PatientsListSevice";
+import { manuallyAddComboCode } from "../../../../../../services/PatientsListSevice";
 import { getPatientDetailsResult } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import CamboTree from "../org";
 const addOnCodeColor = [
@@ -157,7 +151,6 @@ const Combo = ({}) => {
     }
   };
 
-
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
     var tenId = localStorage.getItem("tenantId");
@@ -169,9 +162,9 @@ const Combo = ({}) => {
   }, [patientDetailsResult]);
 
   useEffect(() => {
-    if(hccFileDetails?.result?.response){
-    setSelectFileURL(hccFileDetails?.result?.response)
-    }  
+    if (hccFileDetails?.result?.response) {
+      setSelectFileURL(hccFileDetails?.result?.response);
+    }
   }, [hccFileDetails]);
 
   useEffect(() => {
@@ -215,7 +208,7 @@ const Combo = ({}) => {
     if (patientDetailsResult?.result?.response) {
       var result = patientDetailsResult?.result?.response;
       setPatientDocumentResult(result);
-      if (result?.comboDisease) {      
+      if (result?.comboDisease) {
         var combiDisArray = [];
         if (result?.comboDisease) {
           result?.comboDisease.map((res, index) => {
@@ -257,8 +250,8 @@ const Combo = ({}) => {
           "encounterDateTag10",
         ];
         var encounterDateColorsMatching = [];
-        var encounterDateArr = []; 
-        
+        var encounterDateArr = [];
+
         result?.comboDisease?.map((res) => {
           const array = res?.encounterDate?.split(",");
           array?.map((res2) => {
@@ -277,7 +270,7 @@ const Combo = ({}) => {
             colors: COLORS3[index],
           });
         });
-        setEncounterDateMatching(encounterDateColorsMatching);       
+        setEncounterDateMatching(encounterDateColorsMatching);
         setCaptureSectionMatching(sectionColorList.result?.response);
       } else {
       }
@@ -491,157 +484,62 @@ const Combo = ({}) => {
   ) => {
     setFileLoading(true);
     setDocumentLoaded(false);
-    if (
-      documentPlace == "Radio" ||
-      whereCome == "Radio" ||
-      documentPlace == "Radio-combo"
-    ) {
-      handleOpenModalRadiology(value, disDescription, true);
-    } else if (documentPlace == "Lab" || whereCome == "Lab") {
-      setFileInitialPage(null);
-      var splitPoint = disDescription.substring(" ", 40);
-      setFindFileKeyword(splitPoint);
-      setTimeout(() => {
-        var dataset = "Lab" + " - (" + disDescription + ")";
-        setSelectMeatName(dataset);
-      }, 2000);
-      setDocumentLoaded(true);
-      var dataset = "Lab" + " - (" + disDescription + ")";
-      setSelectMeatName(dataset + " -  " + "Loading...");
-      setIsModalOpenLab(true);
-    } else {
-      if (check === "valid") {
-        var dataset = value + " - (" + disDescription + ")";
-        setSelectMeatName(dataset + " -  " + "Loading...");
-        var dotLoading = (
-          <div className={visitStyles.loadingFileHeader}>
-            <Spinner />
-          </div>
-        );
-        var headerName = dotLoading;
-        setFileModalHeader(headerName);
-        if (documentPlace == "COMBO") {
-          setIsModalOpenCaptureSection(true);
-        } else {
-          if (testModal == "Suggested") {
-          } else {
-          }
-        }
-
-        var fileId = patientFileDTO.fileId;
-        const encounterDatesValue = encounterDate.split(",");
-        const encounterDatesHeader = encounterDatesValue[0];
-        var splitPoint = "";
-        var pageNumber = null;
-        splitPoint = actualDescription.substring(" ", 20);
-        try {
-          const response = await axios.get(
-            ENDPOINTS.apiEndoint +
-              `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}&stringFileWord=${splitPoint}`
-          );
-          var result = response.data.response;
-          if (response?.data?.status == "SUCCESS") {
-            if (result?.first == false) {
-              splitPoint = headerNames;
-            }
-            pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
-            setFileInitialPage(pageNumber);
-          } else {
-            splitPoint = headerNames;
-          }
-          setSelectActiveCode(value);
-
-          setFindFileKeyword(splitPoint);
-          var dataset =
-            value +
-            " - (" +
-            disDescription +
-            ")" +
-            " / (" +
-            actualDescription +
-            ")";
-          setSelectMeatName(dataset);
-          var headerName =
-            patientDocumentResult.patientId +
-            " / " +
-            patientDocumentResult.patientName +
-            " / " +
-            dataset;
-          setFileModalTitle(headerName);
-          setDocumentLoaded(true);
-        } catch (error) {
+    var dataset = value + " - (" + disDescription + ")";
+    setSelectMeatName(dataset + " -  " + "Loading...");
+    var dotLoading = (
+      <div className={visitStyles.loadingFileHeader}>
+        <Spinner />
+      </div>
+    );
+    var headerName = dotLoading;
+    setFileModalHeader(headerName);
+    setIsModalOpenCaptureSection(true);
+    var fileId = patientFileDTO.fileId;
+    const encounterDatesValue = encounterDate.split(",");
+    const encounterDatesHeader = encounterDatesValue[0];
+    var splitPoint = "";
+    var pageNumber = null;
+    splitPoint = actualDescription.substring(" ", 20);
+    try {
+      const response = await axios.get(
+        ENDPOINTS.apiEndoint +
+          `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}&stringFileWord=${splitPoint}`
+      );
+      var result = response.data.response;
+      if (response?.data?.status == "SUCCESS") {
+        if (result?.first == false) {
           splitPoint = headerNames;
-          if (findFileKeyword == headerNames) {
-            setFileLoading(false);
-          }
-          setFindFileKeyword(splitPoint);
-          setFileInitialPage(null);
         }
-      } else if (check == "valid2") {
-        setSelectActiveCode(value);
-        var splitPoint = "";
-        splitPoint = disDescription;
-        setTimeout(() => {
-          highlight({
-            keyword: splitPoint,
-            matchCase: true,
-          });
-          var dataset = value + " - (" + disDescription + ")";
-          setSelectMeatName(dataset);
-          var headerName =
-            patientDocumentResult.patientId +
-            " / " +
-            patientDocumentResult.patientName +
-            " / " +
-            dataset;
-          setFileModalHeader(headerName);
-        }, 2000);
-        setDocumentLoaded(true);
-        var dataset = value + " - (" + disDescription + ")";
-        setSelectMeatName(dataset + " -  " + "Loading...");
-        var headerName =
-          patientDocumentResult.patientId +
-          " / " +
-          patientDocumentResult.patientName +
-          " / " +
-          dataset +
-          " -  " +
-          "Loading...";
-        setFileModalHeader(headerName);
-
+        pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
+        setFileInitialPage(pageNumber);
       } else {
-        setSelectActiveCode(value);
-        var splitPoint = "";
-        splitPoint = disDescription.substring(" ", 20);
-        setTimeout(() => {
-          highlight({
-            keyword: splitPoint,
-            matchCase: true,
-            // wholeWords:true
-          });
-          var dataset = value + " - (" + disDescription + ")";
-          setSelectMeatName(dataset);
-        }, 2000);
-        setDocumentLoaded(true);
-        var dataset = value + " - (" + disDescription + ")";
-        setSelectMeatName(dataset + " -  " + "Loading...");
+        splitPoint = headerNames;
       }
-    }
-  };
-  const handleOpenModalRadiology = (value, disDescription, radiologyCheck) => {
-    setFileInitialPage(null);
-    if (radiologyCheck == true) {
-      var splitPoint = disDescription.substring(" ", 40);
       setFindFileKeyword(splitPoint);
-      setTimeout(() => {
-        var dataset = "Radiology" + " - (" + disDescription + ")";
-        setSelectMeatName(dataset);
-      }, 2000);
+      var dataset =
+        value +
+        " - (" +
+        disDescription +
+        ")" +
+        " / (" +
+        actualDescription +
+        ")";
+      setSelectMeatName(dataset);
+      var headerName =
+        patientDocumentResult.patientId +
+        " / " +
+        patientDocumentResult.patientName +
+        " / " +
+        dataset;
+      setFileModalTitle(headerName);
       setDocumentLoaded(true);
-      var dataset = "Radiology" + " - (" + disDescription + ")";
-      setSelectMeatName(dataset + " -  " + "Loading...");
-    } else {
-      handleOpenModal(value, disDescription);
+    } catch (error) {
+      splitPoint = headerNames;
+      if (findFileKeyword == headerNames) {
+        setFileLoading(false);
+      }
+      setFindFileKeyword(splitPoint);
+      setFileInitialPage(null);
     }
   };
   const handleChangeSuggested = async (e) => {
@@ -669,42 +567,6 @@ const Combo = ({}) => {
 
     return output;
   }
-
-  const stringToColour = (str) => {
-    let hash = 0;
-    str.split("").forEach((char) => {
-      hash = char.charCodeAt(0) + ((hash << 5) - hash);
-    });
-    let colour = "#";
-    for (let i = 0; i < 3; i++) {
-      const value = (hash >> (i * 8)) & 0xff;
-      colour += value.toString(16).padStart(2, "0");
-    }
-    return colour;
-  };
-
-  const submitSectionColors = async (
-    sectionName,
-    sectionColor,
-    backgroundColor
-  ) => {
-    var postData = {
-      backgroundColor: backgroundColor,
-      sectionColor: sectionColor,
-      sectionName: sectionName,
-    };
-
-    try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/section/color/save`,
-        postData
-      );
-      var result = response.data;
-      if (result.status == "SUCCESS") {
-      } else {
-      }
-    } catch (e) {}
-  };
 
   const getCaptureSectionBackgroundFile = (
     value,
@@ -1159,7 +1021,7 @@ const Combo = ({}) => {
                                 >
                                   {getEncounterDateBackgroundHcc(
                                     item.encounterDateSplit,
-                                    item.diagnosisCode,
+                                    item.diagnosisCodeCombo,
                                     "COMBO"
                                   )}
                                 </div>
@@ -1172,7 +1034,7 @@ const Combo = ({}) => {
                                     item.encounterDate,
                                     item.diseaseName,
                                     null,
-                                    item.diagnosisCode
+                                    item.diagnosisCodeCombo
                                   )}
                                 </div>
                               </div>

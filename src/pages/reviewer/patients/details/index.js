@@ -61,8 +61,7 @@ const Details = ({}) => {
   const sideMenu = useSelector((state) => state.sideMenu);
   const patientDetailsResult = useSelector((state) => state?.ReviewerReducers?.patientDetails);
   const sectionColorList = useSelector((state) => state?.ReviewerReducers?.sectionColorList);
-
-  console.log(patientDetailsResult)
+  const patientAllResult = useSelector((state) => state?.ReviewerReducers);
   const [confirmNotesModalDecline, setConfirmNotesModalDecline] =
     useState(false);
   const [confirmNotesModalHold, setConfirmNotesModalHold] = useState(false);
@@ -602,7 +601,6 @@ const Details = ({}) => {
     if (patientDetailsResult?.result?.response) {
       var result = patientDetailsResult?.result?.response;
       dispatch(getMeatQueryList(result?.dos,patientId));
-      console.log(result)
 
       setPatientDocumentResult(result);
       setPatientDetails(result);
@@ -1682,7 +1680,6 @@ const Details = ({}) => {
   useEffect(() => {
     if (workListPatientId) {
       getPatientListToDetails(workListPatientId, localOrgId, localTenantId);
-      console.log(workListPatientId);
     }
   }, [workListPatientId]);
 
