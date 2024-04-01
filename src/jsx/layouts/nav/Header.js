@@ -3,9 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import dynamic from "next/dynamic";
 import Swal from "sweetalert2";
-import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import "react-chat-widget/lib/styles.css";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
@@ -13,28 +11,31 @@ import { Button } from "react-bootstrap";
 import {
   Badge,
   Dropdown,
-  Select,
   Tooltip,
   Drawer,
   Popover,
-  Avatar,
   Modal,
   Divider,
+  Spin,
 } from "antd";
+import {
+  LoadingOutlined,
+  CloseCircleOutlined,
+  DownOutlined,
+  SettingOutlined
+
+} from "@ant-design/icons";
 import styles from "../../../styles/file-managemnt.module.css";
-import { IMAGES, SVGICON } from "../../constant/theme";
+import { IMAGES } from "../../constant/theme";
 import {
   AdminMenuList,
-  MenuList,
   PhysicanMenuList,
-  L2AuditMenuList,
   L2AuditorMenuList,
   ProviderMenuList,
   EHRMenuList,
+  PhysicianMenuList,
 } from "./Menu";
 import ENDPOINTS from "../../../utility/enpoints";
-import axios from "../../../utility/axiosConfig";
-import { getChatReply } from "../../../store/actions/DashboardActions";
 import {
   getNotificationAlert,
   getNotificationList,
@@ -47,21 +48,16 @@ import {
 } from "../../../store/actions/PatientsActions";
 import CodeIcon from "../../../images/svg/CodeIcon";
 import Search from "../../../components/search";
-import {
-  getAccuracy,
-  getCoderDetails,
-  getCurrentUser,
-} from "../../../store/actions/AuthActions";
 import Selector from "../../../components/selector";
 import ChatCommunication from "../../../components/chatCommunication/index";
 import { renderUserPrfoile } from "../../../components/headerFilters/functions";
-import { logoutAllDevice } from "../../../services/AuthService";
 import ImageUploader from "../../../components/imageUploading/ImageUploader";
 import logout from "../../../images/svg/logout.svg";
 import editImg from "../../../images/svg/edit.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell } from "@fortawesome/free-regular-svg-icons";
-import { faMessage } from "@fortawesome/free-regular-svg-icons";
+import { faMessage, faBell } from "@fortawesome/free-regular-svg-icons";
+import { getAccuracy, getCoderDetails, getCurrentUser, logoutAllDevice } from "../../../stores/authflow/actions";
+
 const btnItems = [
   {
     id: 1,
@@ -98,10 +94,11 @@ const Header = () => {
     (state) => state?.notificationDatas?.notificationList
   );
 
-  const msgReply = useSelector((state) => state.workFlow.chatReply);
-  const accuracy = useSelector((state) => state.auth.accuracy);
-  const currentUserInfo = useSelector((state) => state.auth.userInfo);
-  const codDetails = useSelector((state) => state.auth.codeDetails);
+  const msgReply = useSelector((state) => state?.workFlow?.chatReply);
+  const accuracy = useSelector((state) => state?.auth?.accuracy);
+  const currentUserInfo = useSelector((state) => state?.auth?.userInfo);
+  const codDetails = useSelector((state) => state?.auth?.codeDetails);
+  const profileUploadedTime = useSelector((state) => state?.auth?.url);
   const stateActive = router.pathname;
   const [headerFix, setheaderFix] = useState(false);
   const [userName, setUserName] = useState("");
@@ -115,11 +112,11 @@ const Header = () => {
   const [selectedbtn, setSelectedBtn] = useState("ICD-10");
   const [dropdownContent, setDropdownContent] = useState();
   const [currentRole, setCurrentRole] = useState();
-  const [isChat, setIsChat] = useState(false);
   const [profileImg, setProfileImg] = useState();
   const [lastName, setLastName] = useState();
   const [openUploader, setOpenUploader] = useState();
   const [openContent, setOpenContent] = useState(false);
+  const [popoverVisible, setPopoverVisible] = useState(false);
 
   const getStatus = (data) => {
     const isCMS = data?.cmsHcc_model_category_V24_for_2023_payment_year;
@@ -176,12 +173,12 @@ const Header = () => {
     setLastName(currentUserInfo?.data?.response?.lastName);
     setDropdownContent(currentUserInfo?.data?.response?.role);
     if (getUserId == "johnson@encipherhealth.onmicrosoft.com") {
-      setDropdownContent(["PROVIDER"]);
+      setDropdownContent(["TENANT"]);
     }
     if (userRole === "ehr") {
       setDropdownContent(["EHR"]);
     }
-    var userId = currentUserInfo?.data?.response?.id;
+    let userId = currentUserInfo?.data?.response?.id;
     const userName = currentUserInfo?.data?.response?.userName;
 
     dispatch(getNotificationList(userId));
@@ -203,35 +200,49 @@ const Header = () => {
     };
   };
 
-  const percentage = 95;
   const PopContent = (
     <div className={styles.innerPop}>
       <div className={styles.codesContainer}>
-        <div style={{ width: "70%" }}>
-          {btnItems?.map((data) => (
-            <button
-              onClick={() => {
-                setSelectedBtn(data?.name);
-              }}
-              className={
-                selectedbtn === data?.name
-                  ? styles.activeBtn
-                  : styles.inactiveBtn
-              }
-            >
-              {data?.name}
-            </button>
-          ))}
-        </div>
-        <div style={{ width: "30%", margin: "-25px 30px 0 0" }}>
-          {selectedbtn === "HCC" && (
-            <Selector
-              selectlabel={""}
-              setSelectedOption={setSelectedOption}
-              selectOptions={Options}
-              defaultSelectValue1={Options[0]}
+        <div
+          style={{
+            width: "90%",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <div>
+            {btnItems?.map((data) => (
+              <button
+              key={data?.id}
+                onClick={() => {
+                  setSelectedBtn(data?.name);
+                }}
+                className={
+                  selectedbtn === data?.name
+                    ? styles.activeBtn
+                    : styles.inactiveBtn
+                }
+              >
+                {data?.name}
+              </button>
+            ))}
+          </div>
+          <div style={{ width: "30%", margin: "-25px 30px 0 0" }}>
+            {selectedbtn === "HCC" && (
+              <Selector
+                selectlabel={""}
+                setSelectedOption={setSelectedOption}
+                selectOptions={Options}
+                defaultSelectValue1={Options[0]}
+              />
+            )}
+          </div>
+          <div className={styles.closeContainer}>
+            <CloseCircleOutlined
+              onClick={() => setPopoverVisible(false)}
+              className={styles.close_icon}
             />
-          )}
+          </div>
         </div>
       </div>
       <div className={styles.codesContainer}>
@@ -242,7 +253,7 @@ const Header = () => {
       <div className={styles.displayDiv}>
         {codDetails?.response
           ? codDetails?.response?.map((data) => (
-              <div className={styles.hoverDiv}>
+              <div className={styles.hoverDiv} key={data?.id}>
                 {data?.diagnosisCode} &nbsp;
                 {data?.description}&nbsp;
                 {selectedbtn === "HCC" && (
@@ -296,11 +307,11 @@ const Header = () => {
     if (key === "admin") {
       router.push("/admin/user");
     } else if (key === "reviewer") {
-      router.push("/physician/dashboard");
+      router.push("/reviewer/dashboard");
     } else if (key === "supervisor") {
-      router.push("/l2Auditor/dashboard");
-    } else if (key === "provider") {
-      router.push("/provider/comparison");
+      router.push("/supervisor/dashboard");
+    } else if (key === "tenant") {
+      router.push("/tenant/fhirTable");
     } else if (key === "ehr") {
       router.push("/ehr/patients");
     }
@@ -313,10 +324,12 @@ const Header = () => {
         return PhysicanMenuList;
       case "supervisor":
         return L2AuditorMenuList;
-      case "provider":
+      case "tenant":
         return ProviderMenuList;
       case "ehr":
         return EHRMenuList;
+      case "physician":
+        return PhysicianMenuList;
       default:
         return [];
     }
@@ -360,7 +373,6 @@ const Header = () => {
 
   const gotoChat = () => {
     setOpenMsg(true);
-    // window.open("/chat",'_blank');
   };
   useEffect(() => {
     const userRoleLocal = localStorage.getItem("userRole");
@@ -388,7 +400,7 @@ const Header = () => {
             <div className="header-logo">
               <Image src={IMAGES.headerLogo} />
             </div>
-            {stateActive != "/physician/home" ? (
+            {stateActive != "/reviewer/home" ? (
               <div>
                 <ul className="metismenu header-menu d-flex" id="menu">
                   {menuList.map((data, index) => {
@@ -432,11 +444,13 @@ const Header = () => {
                   <div className="header-profile2 cr-pointer">
                     <div className="nav-link i-false" as="div">
                       <div className="header-info2 d-flex align-items-center">
-                        {userRole !== "admin" && (
+                        {userRole !== "admin" && userRole !== "tenant" && (
                           <Popover
                             content={PopContent}
                             placement="bottom"
                             trigger={"click"}
+                            open={popoverVisible}
+                            onOpenChange={() => setPopoverVisible(true)}
                           >
                             <Button className={styles.codeBtn}>
                               <div style={{ margin: " -7px 0 0 -25px" }}>
@@ -471,18 +485,34 @@ const Header = () => {
                                       : Math.round(100)
                                   }%`}
                                 />
-
-                                {/* <div style={{fontSize:"10px", textAlign:"center", fontWeight:"bold"}}>Quality</div> */}
                               </div>
                             </div>
                           </Tooltip>
+                        )}
+
+                        {userRole === "tenant" && (
+                          <div
+                            className="chatheaderIcon"
+                            onClick={() => router.push("/tenantAdmin/settings")}
+                          >
+                            <SettingOutlined
+                              style={{
+                                width: "23px",
+                                height: "26px",
+                                marginTop: "8px",
+                                fontWeight: "700",
+                                marginRight: "10px",
+                                color: "#241572",
+                                fontSize: "30px",
+                              }}
+                            />
+                          </div>
                         )}
                         <div
                           className="chatheaderIcon"
                           onClick={() => gotoChat()}
                         >
                           <div style={{ color: "#04306f" }}>
-                            {/* <i class="far fa-message"></i> */}
                             <div style={{ color: "#04306f" }}>
                               <FontAwesomeIcon
                                 icon={faMessage}
@@ -527,14 +557,28 @@ const Header = () => {
                                       display: "flex",
                                     }}
                                   >
-                                    <div style={{ width: "80px" }}>
-                                      {renderUserPrfoile(
-                                        userName,
-                                        lastName,
-                                        profileImg,
-                                        "header",
-                                        "70px",
-                                        "70px"
+                                    <div
+                                      style={{ width: "80px", height: "80px" }}
+                                    >
+                                      {profileUploadedTime?.loading ? (
+                                        <Spin
+                                          indicator={
+                                            <LoadingOutlined
+                                              style={{ fontSize: 24 }}
+                                            />
+                                          }
+                                          loading={profileUploadedTime?.loading}
+                                          style={{ marginTop: "10px" }}
+                                        />
+                                      ) : (
+                                        renderUserPrfoile(
+                                          userName,
+                                          lastName,
+                                          profileImg,
+                                          "header",
+                                          "70px",
+                                          "70px"
+                                        )
                                       )}
                                       <div
                                         onClick={() => {
@@ -569,8 +613,8 @@ const Header = () => {
                                           ? "Reviewer"
                                           : currentRole == "supervisor"
                                           ? "Supervisor"
-                                          : currentRole == "provider"
-                                          ? "Provider"
+                                          : currentRole == "tenant"
+                                          ? "Tenant Admin"
                                           : currentRole == "ehr"
                                           ? "EHR"
                                           : "Admin"}
@@ -583,10 +627,10 @@ const Header = () => {
                                     className={styles.footerDiv}
                                     onClick={logoutFunction}
                                   >
-                                    <Image src={logout} />
+                                    {/* <Image src={logout} /> */}
                                     <span className={styles.footerCont}>
                                       {" "}
-                                      Logout
+                                      Log out
                                     </span>
                                   </div>
                                 </div>
@@ -600,11 +644,23 @@ const Header = () => {
                                   style={{ marginTop: "-3px" }}
                                   onClick={() => setOpenContent(false)}
                                 >
-                                  {renderUserPrfoile(
-                                    userName,
-                                    lastName,
-                                    profileImg,
-                                    "header"
+                                  {profileUploadedTime?.loading ? (
+                                    <Spin
+                                      indicator={
+                                        <LoadingOutlined
+                                          style={{ fontSize: 20 }}
+                                        />
+                                      }
+                                      loading={profileUploadedTime?.loading}
+                                      style={{ marginTop: "10px" }}
+                                    />
+                                  ) : (
+                                    renderUserPrfoile(
+                                      userName,
+                                      lastName,
+                                      profileImg,
+                                      "header"
+                                    )
                                   )}
                                 </div>
                               </div>
@@ -648,8 +704,8 @@ const Header = () => {
                                 ? "Reviewer"
                                 : currentRole == "supervisor"
                                 ? "Supervisor"
-                                : currentRole == "provider"
-                                ? "Provider"
+                                : currentRole == "tenant"
+                                ? "Tenant"
                                 : currentRole == "ehr"
                                 ? "EHR"
                                 : "Admin"}

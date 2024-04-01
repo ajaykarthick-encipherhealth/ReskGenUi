@@ -17,7 +17,6 @@ const initialState = {
   completed: null,
   holdStatus: null,
   dayDetails: null,
-  chatReply:null
 };
 
 export const DashboardReducer = (state = initialState, action) => {
@@ -61,12 +60,6 @@ export const DashboardReducer = (state = initialState, action) => {
     return {
       ...state,
       dayDetails: action.payload,
-    };
-  }
-  if (action.type === CHATBOT) {
-    return {
-      ...state,
-      chatReply: action.payload,
     };
   }
   return state;

@@ -3,7 +3,7 @@ import Select from "react-select";
 import { DatePicker, Popover } from "antd";
 import Image from "next/image";
 import dayjs from "dayjs";
-import styles from "../../pages/physician/report/report.module.css";
+import styles from "../../pages/reviewer/report/report.module.css";
 import Legends from "../legends";
 import DateRangePicker from "../rangepicker";
 import Selector from "../selector";
@@ -11,8 +11,8 @@ import Search from "../search";
 import { disableFutureDate, handleRnagePicker2 } from "./functions";
 import filter from "../../images/svg/filter.svg";
 import warning from "../../images/svg/warning.svg";
-import { getFilters } from "../../store/actions/AuthActions";
 import { useDispatch } from "react-redux";
+import { getFilters } from "../../stores/authflow/actions";
 
 const { RangePicker } = DatePicker;
 const AuditHeaderFilters = ({
@@ -20,6 +20,7 @@ const AuditHeaderFilters = ({
   setSearch,
   isSearch,
   searchlabel,
+  search,
   // for report
   setSentSearch,
   setReceivedSearch,
@@ -117,6 +118,7 @@ const AuditHeaderFilters = ({
                 setSentSearch={setSentSearch}
                 setReceivedSearch={setReceivedSearch}
                 setCoderSearch={setCoderSearch}
+                search={search}
               />
             </div>
           )}

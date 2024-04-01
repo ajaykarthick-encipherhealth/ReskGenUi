@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Buttonscroller from "../../../../components/buttonSroller";
-import { Buttons } from "../../../physician/workingstatus";
+import { Buttons } from "../../../reviewer/workingstatus";
 import ReactECharts from "echarts-for-react";
 import accuracy from "../../../../images/dashboard/accuracy.png";
 import Image from "next/image";
@@ -10,9 +10,8 @@ import HeadTitle from "../../../../components/headtitle";
 import { useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
 import { useRouter } from "next/router";
-import { Empty, Spin, Select } from "antd";
+import { Empty, Spin } from "antd";
 import spinSTYles from "../../../../styles/auth.module.css";
-import moment from "moment";
 import {
   getAccuracyDaily,
   getAccuracyMOnthly,
@@ -37,7 +36,6 @@ export const getDateWeek = (date) => {
   const firstDayWeek = firstDayOfMonth.getDay();
   const currentDate = date.getDate();
   const startingWeek = Math.ceil((currentDate + firstDayWeek) / 7);
-  var currentWeek = moment().isoWeek().toString();
   return startingWeek;
 };
 
@@ -71,6 +69,8 @@ const Accuracy = () => {
     currentDate.getMonth() + 1
   );
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
+  const [year, setYear] = useState();
+  const [month, setMonth] = useState();
 
   const dispatch = useDispatch();
   const accuracyDatas = useSelector(
@@ -98,17 +98,15 @@ const Accuracy = () => {
   const handleTabButtonClick = (index, btn) => {
     setActiveTabButton(index);
     setCurrentTabBtn(btn);
-    // setActiveButton(0);
-    // setCurrentBtn("Daily");
   };
   const handleYearChange = (date, dateString) => {
     setSelectedYear(dateString);
+    setYear(date);
   };
   const handleMonthChange = (date) => {
     const selectedDate = new Date(date);
-    const monthNumber = (selectedDate.getMonth() + 1)
-      .toString()
-      .padStart(2, "0");
+    setMonth(date);
+    const monthNumber = parseInt(selectedDate.getMonth()) + 1;
     setSelectedMonth(monthNumber);
   };
 
@@ -125,14 +123,23 @@ const Accuracy = () => {
   }
 
   let highlightIndex = -1;
-  if (currentBtn === "Monthly") {
-    highlightIndex = currentDate.getMonth();
-  } else if (currentBtn === "Daily") {
-    highlightIndex = currentDate.getDate() - 1;
-  } else if (currentBtn === "Weekly") {
-    const currentWeek = getDateWeek(currentDate);
 
-    highlightIndex = currentWeek - 1;
+  if (currentBtn === "Monthly") {
+    if (parseInt(selectedYear) === new Date().getFullYear()) {
+      highlightIndex = currentDate.getMonth();
+    }
+  } else if (currentBtn === "Daily") {
+    if (
+      parseInt(selectedYear) === new Date().getFullYear() &&
+      selectedMonth === new Date().getMonth()+1
+      ) {
+      highlightIndex = currentDate.getDate() - 1;
+    }
+  } else if (currentBtn === "Weekly") {
+    if (parseInt(selectedYear) === new Date().getFullYear()) {
+      const currentWeek = getDateWeek(currentDate);
+      highlightIndex = currentWeek - 1;
+    }
   }
 
   let data = [];
@@ -152,7 +159,8 @@ const Accuracy = () => {
       return param?.data?.response.map((item) => item[val]);
     } else if (
       year == currentDate.getFullYear() &&
-      month == currentDate.getMonth() + 1
+      month == currentDate.getMonth() + 1 &&
+      currentBtn !== "Monthly"
     ) {
       if (currentBtn == "Daily") {
         return param?.data?.response.map(
@@ -162,12 +170,15 @@ const Accuracy = () => {
         return param?.data?.response.map(
           (item, index) => index < getDateWeek(currentDate) && item[val]
         );
-      } else if(currentBtn == "Monthly"){
+      } else if (currentBtn == "Monthly") {
         return param?.data?.response.map(
-          (item, index) => index < new Date().getMonth()+1 && item[val]
+          (item, index) => index < new Date().getMonth() + 1 && item[val]
         );
       }
-     
+    } else if (year == currentDate.getFullYear() && currentBtn == "Monthly") {
+      return param?.data?.response.map(
+        (item, index) => index < new Date().getMonth() + 1 && item[val]
+      );
     } else {
       return false;
     }
@@ -185,17 +196,24 @@ const Accuracy = () => {
       return param.map((item) => item);
     } else if (
       year == currentDate.getFullYear() &&
-      month == currentDate.getMonth() + 1
+      month == currentDate.getMonth() + 1 &&
+      currentBtn != "Monthly"
     ) {
       if (currentBtn == "Daily") {
-         return param.map((item, index) => index < new Date().getDate() && item)
+        return param.map((item, index) => index < new Date().getDate() && item);
       } else if (currentBtn == "Weekly") {
-        return param.map((item, index) => index < getDateWeek(currentDate) && item);
-      } else if(currentBtn == "Monthly"){
-        return param.map((item, index) => index < new Date().getMonth()+1 && item);
+        return param.map(
+          (item, index) => index < getDateWeek(currentDate) && item
+        );
+      } else if (currentBtn == "Monthly") {
+        return param.map(
+          (item, index) => index < new Date().getMonth() + 1 && item
+        );
       }
-
-      return param.map((item, index) => index < new Date().getDate() && item);
+    } else if (year == currentDate.getFullYear() && currentBtn == "Monthly") {
+      return param.map(
+        (item, index) => index < new Date().getMonth() + 1 && item
+      );
     } else {
       return false;
     }
@@ -304,14 +322,14 @@ const Accuracy = () => {
           },
         },
         opposite: true,
-        // min: 0,
-        // max: 10,
+
         tickInterval: 4,
       },
     ],
     legend: {
       enabled: false,
     },
+
     credits: {
       enabled: false,
     },
@@ -415,7 +433,6 @@ const Accuracy = () => {
     ],
   };
   useEffect(() => {
-    console.log(currentTabBtn, currentBtn, "test");
     if (currentTabBtn === "CogentAI Accuracy") {
       if (currentBtn === "Daily") {
         dispatch(getAccuracyDaily(selectedYear, selectedMonth));
@@ -439,7 +456,7 @@ const Accuracy = () => {
       );
     }
   }, [currentBtn, selectedMonth, selectedYear, router, currentTabBtn]);
-
+ 
   return (
     <>
       <HeadTitle header="Accuracy and Quality Insights" />
@@ -467,17 +484,13 @@ const Accuracy = () => {
             <div className="d-flex">
               <div className={styles.picker}>
                 <YearPicker
-                  onChange={handleYearChange}
-                  type={"year"}
+                  onChangeYear={handleYearChange}
+                  onChangeMonth={handleMonthChange}
+                  type={currentBtn}
                   bgColor="#E6EEFF"
+                  val={month}
+                  val1={year}
                 />
-                {currentBtn !== "Monthly" && (
-                  <YearPicker
-                    onChange={handleMonthChange}
-                    type={"month"}
-                    bgColor="#E6EEFF"
-                  />
-                )}
               </div>
               <div className={styles.btnScroller}>
                 <Buttonscroller

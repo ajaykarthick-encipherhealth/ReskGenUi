@@ -1,26 +1,23 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
 import styles from "./styles.module.css";
-import Image from "next/image";
 import ReactECharts from "echarts-for-react";
-import left from "../../../../images/dashboard/left.png";
-import right from "../../../../images/dashboard/right.png";
-import { Col, Empty, Row, Spin } from "antd";
+import dayjs from "dayjs";
+import { Col, Row, Spin } from "antd";
 import Card from "../../../../components/card";
 import HeadTitle from "../../../../components/headtitle";
-import dayjs from "dayjs";
-import { useDispatch, useSelector } from "react-redux";
-import Legends from "../../../../components/legends";
-import { useRouter } from "next/router";
-import { getFilteredList } from "../../../../store/actions/PatientsActions";
 import { getDailyTaskDatas } from "../../../../store/actions/l2Action/DashboardAction";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { GetUserCount } from "../../../../services/adminServices/DashboardService";
+
 const DailyTask = () => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
-
-  const dailyStatusData = useSelector((state) => state.l2Dashboard.dailyTask);
+  const dailyStatusData = useSelector((state) => state?.l2Dashboard?.dailyTask);
   const dispatch = useDispatch();
+  const router = useRouter();
+
   const [roles, setRoles] = useState({
     REVIEWER: 0,
     SUPERVISOR: 0,
@@ -41,6 +38,7 @@ const DailyTask = () => {
       name: "Admin",
     },
   ];
+
   const daysOfWeek = [
     "Sunday",
     "Monday",
@@ -50,50 +48,6 @@ const DailyTask = () => {
     "Friday",
     "Saturday",
   ];
-
-  const router = useRouter();
-  useEffect(() => {
-    const days = [];
-    for (let i = 0; i < 3; i++) {
-      const today = new Date();
-      today.setDate(today.getDate() - i);
-      const dayIndex = today.getDay();
-      days.push({
-        day: daysOfWeek[dayIndex],
-        date: dayjs(today)?.format("MM-DD-YYYY"),
-        dateString: today?.toISOString(),
-      });
-    }
-
-    setSelectedDate(days);
-
-    days?.map((data, index) => {
-      return dispatch(getDailyTaskDatas(data?.dateString, router));
-    });
-  }, []);
-
-  useEffect(() => {
-    if (dailyStatusData && selectedDate) {
-      getDays(selectedDate, dailyStatusData);
-    }
-  }, [dailyStatusData, selectedDate]);
-
-  const showPrevious = () => {
-    const lastData = currentDays[0];
-    const date = dayjs(lastData?.date).subtract(1, "date");
-    const datas = [
-      {
-        id: currentDays?.length + 1,
-        day: dayjs(date).format("dddd"),
-        date: date?.format("MM-DD-YYYY"),
-        dateString: date?.toISOString(),
-      },
-    ];
-    setSelectedDate((prev) => [...prev, ...datas]);
-    datas?.map((data, index) => {
-      return dispatch(getDailyTaskDatas(data?.dateString, router));
-    });
-  };
 
   const getDays = (selectedDate, statusData) => {
     const processedDays = selectedDate?.map((dayInfo, index) => {
@@ -219,6 +173,32 @@ const DailyTask = () => {
     getUser();
   }, []);
 
+  useEffect(() => {
+    const days = [];
+    for (let i = 0; i < 3; i++) {
+      const today = new Date();
+      today.setDate(today.getDate() - i);
+      const dayIndex = today.getDay();
+      days.push({
+        day: daysOfWeek[dayIndex],
+        date: dayjs(today)?.format("MM-DD-YYYY"),
+        dateString: today?.toISOString(),
+      });
+    }
+
+    setSelectedDate(days);
+
+    days?.map((data, index) => {
+      return dispatch(getDailyTaskDatas(data?.dateString, router));
+    });
+  }, []);
+
+  useEffect(() => {
+    if (dailyStatusData && selectedDate) {
+      getDays(selectedDate, dailyStatusData);
+    }
+  }, [dailyStatusData, selectedDate]);
+
   return (
     <>
       <HeadTitle header="Total Users" />
@@ -232,32 +212,11 @@ const DailyTask = () => {
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   {uniqueData?.slice(0, 1)?.map((data, index) => (
-                    <Col
-                      key={index}
-                      span={70}
-
-                      // onClick={() => setSelectedDate(currentWeek[index])}
-                    >
+                    <Col key={index} span={70}>
                       <h4
                         className={styles.headerTitle}
                         style={{ fontSize: "16px" }}
-                        // onClick={() => {
-                        //   dispatch(
-                        //     getFilteredList({
-                        //       dayDate: data?.dateString,
-                        //     })
-                        //   );
-                        //   router?.push("/l2Auditor/user");
-                        // }}
-                      >
-                        {/* <div className={styles.headerDisplay}>
-                          <span> {data.day}</span>
-                          <span className={styles.dateDisplay}>
-                            {" "}
-                            {`(${data.date})`}{" "}
-                          </span>
-                        </div> */}
-                      </h4>
+                      ></h4>
 
                       <Row>
                         <Col span={12}>
@@ -283,18 +242,7 @@ const DailyTask = () => {
                             {bullets?.map((item) => {
                               return (
                                 <div className={styles.container}>
-                                  <div
-                                    style={{ display: "flex" }}
-                                    // onClick={() => {
-                                    //   dispatch(
-                                    //     getFilteredList({
-                                    //       date: data?.dateString,
-                                    //       status: item?.name,
-                                    //     })
-                                    //   );
-                                    //   router?.push("/physician/patients");
-                                    // }}
-                                  >
+                                  <div style={{ display: "flex" }}>
                                     <div
                                       className={styles.bgColor}
                                       style={{
@@ -326,10 +274,6 @@ const DailyTask = () => {
                   <Spin loading={dailyStatusData?.loading} />
                 </div>
               )}
-
-              {/* <div className={styles.infoCards}>
-                <Legends bullets={bullets} />
-              </div> */}
             </Col>
             <Col span={1}></Col>
           </Row>

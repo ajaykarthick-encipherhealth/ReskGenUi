@@ -7,12 +7,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "../styles/auth.module.css";
 import LoginBack from "../images/logo/login-back.jpg";
 import { IMAGES } from "../jsx/constant/theme";
-import { getMFAValidation } from "../store/actions/AuthActions";
 import {
   encyptingPass,
   getValidatePassword,
   handleTogglePasswordVisibility,
 } from "../components/headerFilters/functions";
+import RegularButton from "../components/button";
+import { getMFAValidation } from "../stores/authflow/actions";
 
 export default function Login() {
   const router = useRouter();
@@ -22,24 +23,23 @@ export default function Login() {
   let errorsObj = { email: "", password: "" };
   const [errors, setErrors] = useState(errorsObj);
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [emailErro, setEmailError] = useState("");
 
   const validateEmail = (enteredEmail) => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+    setEmailError({ email: "" });
 
     if (enteredEmail?.length === 0) {
-      setErrors({
+      setEmailError({
         email: "Please enter the email",
       });
 
-      setIsLoading(false);
       return false;
     }
     if (enteredEmail?.length > 0 && !emailRegex.test(enteredEmail)) {
-      setErrors({
+      setEmailError({
         email: "Invalid email",
       });
-      setIsLoading(false);
       return false;
     }
 
@@ -48,13 +48,8 @@ export default function Login() {
   const onLogin = async (e) => {
     e.preventDefault();
     const emailValidation = validateEmail(enteredEmail);
-    const passValidation = getValidatePassword(
-      password,
-      setErrors,
-      setIsLoading
-    );
+    const passValidation = getValidatePassword(password, setErrors);
     if (emailValidation && passValidation) {
-      setIsLoading(true);
       setErrors({
         email: "",
         password: "",
@@ -84,7 +79,6 @@ export default function Login() {
             <div className="login-form">
               <div className="login-head">
                 <h5 className="title">Log in to your account</h5>
-                {/* <p>Login page allows users to enter login credentials for authentication and access to secure content.</p> */}
               </div>
               <h6 className="login-title">
                 <span>Login</span>
@@ -95,13 +89,16 @@ export default function Login() {
                   <label className="mb-1 text-dark">Email</label>
                   <input
                     type="email"
-                    className="form-control"
+                    className="form-control px-2"
                     value={enteredEmail}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setEmail(e.target.value), validateEmail(e.target.value);
+                    }}
+                    placeholder="Enter Email"
                   />
-                  {errors?.email && (
+                  {emailErro?.email && (
                     <div className="text-danger fs-12 mt-3">
-                      {errors?.email}
+                      {emailErro?.email}
                     </div>
                   )}
                 </div>
@@ -110,11 +107,12 @@ export default function Login() {
                   <div>
                     <input
                       type={showPassword ? "text" : "password"}
-                      className="form-control"
+                      className="form-control px-2"
                       value={password}
                       onChange={(e) => {
                         setPassword(e.target.value);
                       }}
+                      placeholder="Enter Password"
                     />
                     <div className="input-group-append">
                       <span className={styles.loginpasswordBox}>
@@ -135,9 +133,7 @@ export default function Login() {
                   )}
                 </div>
                 <div className="text-center mb-4">
-                  <button type="submit" className={`btn btn-block ${styles.btnColor} `}>
-                    LOGIN
-                  </button>
+                  <RegularButton type="submit" name="LOGIN" width="100%" />
                 </div>
               </form>
             </div>

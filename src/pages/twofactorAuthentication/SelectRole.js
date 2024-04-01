@@ -1,34 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { Select, notification, Modal } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { selectedUserRole } from "../../store/actions/AuthActions";
 import { IMAGES } from "../../jsx/constant/theme";
 import LoginBack from "../../images/logo/login-back.jpg";
 import styles from "../../styles/auth.module.css";
-import { checkDeviceLogin, logoutAllDevice } from "../../services/AuthService";
+import RegularButton from "../../components/button";
+import { checkDeviceLogin, logoutAllDevice } from "../../stores/authflow/actions";
 
 const SelectRole = () => {
-  const dispatch = useDispatch();
   const router = useRouter();
-  const [username, setUsername] = useState();
   const [selectedRole, setSelectedRole] = useState(null);
   const [roleError, setRoleError] = useState(false);
   const [role, setRole] = useState();
   const [decodedParams, setDecodedParams] = useState();
   const [confirmModal, setConfirmModal] = useState(false);
-  const [logoutMessgae, setLogoutMessage] = useState("");
-  const [selectItems, setSelectItems] = useState([]);
 
   const rolesList = role?.slice().reverse();
-  const items =
-    rolesList?.length > 0
+  const items = [
+  
+
+    ...(rolesList?.length > 0
       ? rolesList?.map((info) => ({
           value: info,
           label: info,
         }))
-      : [];
+      : []),
+  ];
 
   const onSubmitRole = async (e) => {
     e.preventDefault();
@@ -36,13 +34,6 @@ const SelectRole = () => {
       setRoleError(true);
     } else {
       loginSuccessCallBack();
-      // var result = await checkDeviceLogin();
-      // if (result?.data?.response == "ALREADY_LOGGED_IN") {
-      //   setLogoutMessage(result?.data?.message);
-      //   setConfirmModal(true);
-      // } else {
-      //   loginSuccessCallBack();
-      // }
     }
   };
 
@@ -62,9 +53,12 @@ const SelectRole = () => {
     setRoleError(false);
     const rolesMapping = {
       admin: { userRole: "admin", route: "/admin/dashboard" },
-      reviewer: { userRole: "reviewer", route: "/physician/dashboard" },
-      supervisor: { userRole: "supervisor", route: "/l2Auditor/dashboard" },
-      provider: { userRole: "provider", route: "/provider/comparison" },
+      reviewer: { userRole: "reviewer", route: "/reviewer/dashboard" },
+      supervisor: { userRole: "supervisor", route: "/supervisor/dashboard" },
+      provider: { userRole: "provider", route: "/provider/fhirTable" },
+      provider: { userRole: "tenant", route: "/tenantAdmin/fhirTable" },
+
+      physician: { userRole: "physician", route: "/physician/dashboard" },
     };
     const selectedRoleInfo = rolesMapping[selectedRole];
     if (selectedRoleInfo && !roleError) {
@@ -74,13 +68,11 @@ const SelectRole = () => {
     }
   };
   useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    setUsername(searchParams.get("username"));
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const encodedParams = urlParams.get("params");
     const decodedParams = JSON.parse(atob(encodedParams));
-    const { mfa, skipEntry, username, password } = decodedParams;
+    const { mfa, username, password } = decodedParams;
     const skipParam = decodedParams?.skipEntry;
     const encodeParams = btoa(
       JSON.stringify({
@@ -92,10 +84,10 @@ const SelectRole = () => {
     );
     setDecodedParams(encodeParams);
 
-    var rolesArray = JSON.parse(localStorage.getItem("roles"));
-    var getUserId = localStorage.getItem("userId");
+    let rolesArray = JSON.parse(localStorage.getItem("roles"));
+    let getUserId = localStorage.getItem("userId");
     if (getUserId == "johnson@encipherhealth.onmicrosoft.com") {
-      rolesArray = ["PROVIDER"];
+      rolesArray = ["TENANT ADMIN"];
     }
     setRole(rolesArray);
   }, []);
@@ -149,27 +141,21 @@ const SelectRole = () => {
                     </span>
                   )}
                 </div>
-                <div className="d-flex">
-                  <div className="col-lg-6 mx-2">
-                    <button
-                      className={styles.backBtn}
-                      onClick={() => {
-                        setSelectedRole(null);
-                        setRoleError(false);
-                        router?.push({
-                          pathname: `/twofactorAuthentication/Authentication`,
-                          search: `params=${decodedParams}`,
-                        });
-                      }}
-                    >
-                      {"BACK"}
-                    </button>
-                  </div>
-                  <div className="col-lg-6">
-                    <button type="submit" className={styles.sendBtn}>
-                      {"NEXT"}
-                    </button>
-                  </div>
+                <div className="d-flex justify-content-between">
+                  <RegularButton
+                    onClick={() => {
+                      setSelectedRole(null);
+                      setRoleError(false);
+                      router?.push({
+                        pathname: `/twofactorAuthentication/Authentication`,
+                        search: `params=${decodedParams}`,
+                      });
+                    }}
+                    type="outline"
+                    name="BACK"
+                    width="240px"
+                  />
+                  <RegularButton type="submit" name="NEXT" width="240px" />
                 </div>
               </form>
             </div>
@@ -177,7 +163,7 @@ const SelectRole = () => {
         </div>
       </div>
       <Modal
-        title={logoutMessgae}
+        title={""}
         open={confirmModal}
         centered
         onOk={handleLogout}

@@ -107,7 +107,6 @@ export const enableUser = (
       : checked
       ? { ...data, accountEnabled: checkedVal }
       : data;
-
     if (
       (field && role && user !== undefined) ||
       (checked !== undefined && checked !== null && user !== undefined)
@@ -129,9 +128,7 @@ export const enableUser = (
             payload: response.data,
           });
           notification.success({
-            description: `${user?.firstName}${user?.lastName} has ${
-              checkedVal === 0 ? "disabled" : "enabled"
-            } successfully`,
+            description: `${user?.firstName} ${user?.lastName} has ${response.data.response.message} `,
           });
           dispatch(getUsers(0));
           if (setPopoverVisible) {

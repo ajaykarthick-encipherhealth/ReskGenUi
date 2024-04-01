@@ -1,37 +1,35 @@
 import React, { useState, useEffect } from "react";
-import Header from "../../../jsx/layouts/nav/Header";
-import { useSelector } from "react-redux";
-import axios from "../../../utility/axiosConfig";
-import ENDPOINTS from "../../../utility/enpoints";
-import { useRouter } from "next/navigation";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useSelector, useDispatch } from "react-redux";
+import Image from "next/image";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { DatePicker, Empty } from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
 import { Paginator } from "primereact/paginator";
-import Footer from "../../../jsx/layouts/Footer";
+import moment from "moment/moment";
+import { Tab, Nav } from "react-bootstrap";
+import Header from "../../../jsx/layouts/nav/Header";
+import axios from "../../../utility/axiosConfig";
+import ENDPOINTS from "../../../utility/enpoints";
 import AllocatedAdminList from "../../../components/table/admin/allocatedAdminList/allocatedAdminList";
 import AllocatedL2AdminList from "../../../components/table/admin/allocatedL2AdminList/allocatedL2AdminList";
 import allocateStyle from "./allocate/style.module.css";
 import AllocateModal from "./allocate";
 import L2AllocateModal from "./l2allocate";
-import reportStyles from "../../physician/report/report.module.css";
-import moment from "moment/moment";
-import { Tab, Nav } from "react-bootstrap";
+import reportStyles from "../../reviewer/report/report.module.css";
 import SpinnerDots from "../../../components/spinner";
 import TableStyle from "../../../components/table/table.module.css";
-import Image from "next/image";
 import leftArrow from "../../../images/svg/leftArrow.svg";
 import {
+  generateOptionsList,
   disableFutureDate,
   renderUserPrfoile,
 } from "../../../components/headerFilters/functions";
-import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
 import Selector from "../../../components/selector";
+import { getFilters } from "../../../stores/authflow/actions";
 
 const { RangePicker } = DatePicker;
-
 const statusOption = [
   { value: "", label: "ALL" },
   { value: "URGENT", label: "URGENT" },
@@ -39,8 +37,8 @@ const statusOption = [
   { value: "NORMAL", label: "NORMAL" },
   { value: "LOW", label: "LOW" },
 ];
+
 export default function Patient() {
-  const navigate = useRouter();
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [addPatientId, setAddPatientId] = useState(false);
@@ -73,15 +71,14 @@ export default function Patient() {
   const [searchString, setSearchString] = useState("");
   const [checkedLoading, setCheckedLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOptions, setSelectedOptions] = useState("");
+  const [allocatedOption, setAllocatedOption] = useState("");
   const [batchCount, setBatchCount] = useState("");
   const [filterBatchCount, setFilterBatchCount] = useState(false);
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
-  useEffect(() => {
-    if (typeof pageNo == "number" && activeTab === 1) {
-      getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
-    }
-  }, [pageNo, pageSize, sort, activeTab]);
+  const filteredList = useSelector((state) => state.auth.filterList);
+  const dispatch = useDispatch();
 
   const getAllList = async (
     pageNo = 0,
@@ -94,15 +91,15 @@ export default function Patient() {
     sort
   ) => {
     const uId = localStorage.getItem("userId");
-    var resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=${uId}&computationStart=${startDate}&computationEnd=${endDate}&isAllocation=${allocate}&status=${status}&searchString=${search}&sortdirection=${
+    let resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=${uId}&computationStart=${startDate}&computationEnd=${endDate}&isAllocation=${allocate}&status=${status}&searchString=${search}&sortdirection=${
       sort?.sortDir
     }&sortfield=${sort?.sortField}&priority=${
       selectedOption ? selectedOption : ""
     }&batchCount=${batchCount}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response?.data) {
-      var resultMap = [];
-      var result = response?.data?.response?.content;
+      let resultMap = [];
+      let result = response?.data?.response?.content;
       setTotalElements(response?.data?.response?.totalElements);
       result?.map((res) => {
         resultMap.push({
@@ -125,7 +122,7 @@ export default function Patient() {
   const getAllCheckList = async (sort) => {
     setIsLoading(true);
     const uId = localStorage.getItem("userId");
-    var resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${
+    let resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${
       batchCount ? batchCount : pageSize
     }&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
       sort?.sortDir
@@ -134,7 +131,7 @@ export default function Patient() {
     }&batchCount=${batchCount}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
-      var result = response?.data?.response?.content;
+      let result = response?.data?.response?.content;
       const data = result.map((item) => ({
         id: item.patientId,
         name: item.patientName,
@@ -145,17 +142,13 @@ export default function Patient() {
     }
   };
 
-  useEffect(() => {
-    if (selectAllChecked) {
-      if (isPatientList == true) {
-        getAllCheckListL2(sort);
-      } else {
-        getAllCheckList(sort);
-      }
-    } else {
-      setSelectedRowsId([]);
-    }
-  }, [selectAllChecked, sort, isPatientList]);
+  const onPageChange = (e) => {
+    setIsLoading(true);
+    setPaginationFirst(e.first);
+    setPageNo(e.page);
+    setPageSize(e.rows);
+    setTableLoading(true);
+  };
 
   const handleReceivedDatePicker = (date, dateString) => {
     if (dateString[0] == "") {
@@ -183,6 +176,15 @@ export default function Patient() {
     }
   };
 
+  const onPageChangePatient = (e) => {
+    setIsLoading(true);
+    setPaginationFirst(e.first);
+    setPageNoL2Patient(e.page);
+    setPageSize(e.rows);
+    getL2PatientList(l2selectUser, e.page, sort, "");
+    setTableLoading(true);
+  };
+
   const getNameSearch = (search) => {
     setSearchString(search);
     if (activeTab == 1) {
@@ -205,31 +207,12 @@ export default function Patient() {
     }
   };
 
-  const onPageChange = (e) => {
-    setIsLoading(true);
-    setPaginationFirst(e.first);
-    setPageNo(e.page);
-    setPageSize(e.rows);
-    setTableLoading(true);
-  };
-
-  const onPageChangePatient = (e) => {
-    setIsLoading(true);
-    setPaginationFirst(e.first);
-    setPageNoL2Patient(e.page);
-    setPageSize(e.rows);
-    getL2PatientList(l2selectUser, e.page, sort, "");
-    setTableLoading(true);
-  };
-
   const handleOpneModal = () => {
     setValidated(false);
     setAddPatientId(false);
     if (activeTab == 2) {
-      // setSort({ sortDir: "", sortField: "" });
       setAllocateModalL2(true);
     } else {
-      // setSort({ sortDir: "", sortField: "" });
       setAllocateModal(true);
     }
   };
@@ -252,13 +235,13 @@ export default function Patient() {
     }
   };
   const getAuditL2List = async (pageNo, searchString) => {
-    var orgId = localStorage.getItem("orgId");
-    var tenantid = localStorage.getItem("tenantId");
-    var resoureUrl = `dbservice/l2audit?orgid=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}`;
+    let orgId = localStorage.getItem("orgId");
+    let tenantid = localStorage.getItem("tenantId");
+    let resoureUrl = `dbservice/l2audit?orgid=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
-      var resultMap = [];
-      var result = response?.data?.response?.content;
+      let resultMap = [];
+      let result = response?.data?.response?.content;
       setTotalElementsUser(response?.data?.response?.content?.totalElements);
       result?.map((res) => {
         resultMap.push({
@@ -284,6 +267,24 @@ export default function Patient() {
       setTableLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (selectAllChecked) {
+      if (isPatientList == true) {
+        getAllCheckListL2(sort);
+      } else {
+        getAllCheckList(sort);
+      }
+    } else {
+      setSelectedRowsId([]);
+    }
+  }, [selectAllChecked, sort, isPatientList]);
+
+  useEffect(() => {
+    if (typeof pageNo == "number" && activeTab === 1) {
+      getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
+    }
+  }, [pageNo, pageSize, sort, activeTab]);
 
   const renderRows = () => {
     return !tableLoading && l2UserListAll?.length > 0 ? (
@@ -319,13 +320,14 @@ export default function Patient() {
             )}
           </td>
           <td className={TableStyle.childBorder}>
-            {data.totalFileAudited ? data.totalFileAudited : "---"}
-          </td>
-          <td className={TableStyle.childBorder}>
             {data.totalFileAuditAllocated
               ? data.totalFileAuditAllocated
               : "---"}
           </td>
+          <td className={TableStyle.childBorder}>
+            {data.totalFileAudited ? data.totalFileAudited : "---"}
+          </td>
+
           <td className={TableStyle.childBorder}>
             {data.totalFileAuditPending ? data.totalFileAuditPending : "---"}
           </td>
@@ -346,31 +348,41 @@ export default function Patient() {
     );
   };
 
+  const statusOptions = [
+    { label: "ALL", value: "" },
+    { label: "COMPLETED", value: "COMPLETED" },
+    { label: "DECLINED", value: "DECLINED" },
+  ];
+
   const getL2PatientList = async (
     data,
     pageNoL2Patient,
     sort,
-    searchString
+    searchString,
+    selectedOptions,
+    allocatedOption
   ) => {
     setTableLoading(true);
     setIsLoading(true);
-    var dataMap = {
+    let dataMap = {
       firstName: data?.firstName,
       lastName: data?.lastName,
       userName: data?.userName,
     };
     setL2selectUser(dataMap);
-    var resoureUrl = `dbservice/l2audit/patients?username=${
+    let resoureUrl = `dbservice/l2audit/patients?username=${
       data?.userName
     }&page=${pageNoL2Patient}&size=${pageSize}&sortdirection=${
       sort?.sortDir ? sort?.sortDir : "DESC"
     }&sortfield=${
       sort?.sortField ? sort?.sortField : "dueDate"
-    }&searchstring=${searchString}`;
+    }&searchstring=${searchString}&processedStatus=${
+      selectedOptions ? selectedOptions : ""
+    }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
-      var resultMap = [];
-      var result = response?.data?.response?.content;
+      let resultMap = [];
+      let result = response?.data?.response?.content;
       setTotalElementsPatient(response?.data?.response?.totalElements);
       result?.map((res) => {
         resultMap.push({
@@ -401,11 +413,10 @@ export default function Patient() {
 
   const getAllCheckListL2 = async (sort) => {
     setCheckedLoading(true);
-    var resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=0&size=${totalElementsPatient}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
+    let resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=0&size=${totalElementsPatient}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
-      var resultMap = [];
-      var result = response?.data?.response;
+      let result = response?.data?.response;
       const data = result?.content?.map((item) => ({
         id: item.patientId,
         name: item.patientName,
@@ -420,8 +431,14 @@ export default function Patient() {
     if (!isPatientList) {
       getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
     } else {
-      console.log(sort, "test");
-      getL2PatientList(l2selectUser, pageNoL2Patient, sort, "");
+      getL2PatientList(
+        l2selectUser,
+        pageNoL2Patient,
+        sort,
+        "",
+        selectedOptions,
+        allocatedOption
+      );
       setIsLoading(false);
     }
     setAllocateClicked(false);
@@ -437,8 +454,13 @@ export default function Patient() {
     allocateClicked,
     selectedOption,
     filterBatchCount,
+    selectedOptions,
+    allocatedOption,
   ]);
 
+  useEffect(() => {
+    dispatch(getFilters("patientAllocated"));
+  }, []);
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -452,7 +474,7 @@ export default function Patient() {
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption  align-items-center">
                         <div className="row filter-contain">
-                          <div className="d-flex col-xl-2">
+                          <div className={`${isPatientList && 'd-flex'} col-xl-2`}>
                             {isPatientList && (
                               <div className={reportStyles.backDiv}>
                                 <button
@@ -480,10 +502,12 @@ export default function Patient() {
                                   value={searchString}
                                   className="form-control new-form-control"
                                   placeholder="Search"
+                                  maxLength={25}
                                 />
                               </div>
                             </div>
                           </div>
+
                           {!isPatientList && activeTab == 1 ? (
                             <>
                               <div className="col-xl-2">
@@ -529,7 +553,7 @@ export default function Patient() {
                                     value={batchCount}
                                     className="form-control new-form-controls"
                                     placeholder="Batch Count"
-                                    style={{ width: "40%" }}
+                                    style={{ width: "60%"}}
                                   />
                                   <button
                                     onClick={() => setFilterBatchCount(true)}
@@ -540,10 +564,37 @@ export default function Patient() {
                                 </div>
                               </div>
                             </>
-                          ) : (
+                          ) : !isPatientList && activeTab == 2 ? (
                             <div className="col-xl-6"></div>
+                          ) : (
+                            <>
+                              <div className="col-xl-2">
+                                <div>
+                                  <Selector
+                                    selectlabel={"Reviewer"}
+                                    setSelectedOption={setAllocatedOption}
+                                    selectOptions={generateOptionsList(
+                                      filteredList
+                                    )}
+                                    defaultSelectValue1={""}
+                                    // isClose={true}
+                                  />
+                                </div>
+                              </div>
+                              <div className="col-xl-2">
+                                <div>
+                                  <Selector
+                                    selectlabel={"Status"}
+                                    setSelectedOption={setSelectedOptions}
+                                    selectOptions={statusOptions}
+                                    defaultSelectValue1={""}
+                                    // isClose={true}
+                                  />
+                                </div>
+                              </div>
+                            </>
                           )}
-                          <div className="col-xl-4 mt-4">
+                          <div className={`col-xl-4 mt-4 ${TableStyle.allocateBtn}`}>
                             {isPatientList || activeTab === 1 ? (
                               <>
                                 <button
@@ -602,7 +653,6 @@ export default function Patient() {
                                     eventKey="team"
                                     onClick={() => {
                                       setTableLoading(true);
-                                      
                                     }}
                                   >
                                     Supervisor Allocation
@@ -669,8 +719,9 @@ export default function Patient() {
                                               >
                                                 <tr>
                                                   <th>NAME</th>
-                                                  <th>AUDIT PROCESSED</th>
                                                   <th>AUDIT ALLOCATED</th>
+                                                  <th>AUDIT PROCESSED</th>
+
                                                   <th>AUDIT PENDING</th>
                                                   <th>AUDIT HOLD</th>
                                                   <th>AUDIT INVALID</th>

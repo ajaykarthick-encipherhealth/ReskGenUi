@@ -1,5 +1,4 @@
 import { SVGICON } from "../../constant/theme";
-import workingstatusActive from "../../../images/workingstatus/workingstatusInactive.png";
 
 export const MenuList = [
   {
@@ -28,30 +27,21 @@ export const PhysicanMenuList = [
   {
     title: "Dashboard",
     iconStyle: SVGICON.dashboardIcon,
-    to: "/physician/dashboard",
+    to: "/reviewer/dashboard",
   },
-  // {
-  //     title:'Patient List1',
-  //     iconStyle:SVGICON.patientListIcon,
-  //     to: '/physician/patient',
-  // },
+
   {
     title: "My Work Queue",
     iconStyle: SVGICON.patientListIcon,
-    to: "/physician/patients",
-    childRoute: "/physician/patients/details",
+    to: "/reviewer/patients",
+    childRoute: "/reviewer/patients/details",
   },
   {
     title: "Report",
     iconStyle: SVGICON.ReportIcon,
-    to: "/physician/report",
-    childRoute: "/physician/report/individualreport",
-  },
-  // {
-  //   title: "Working Status",
-  //   iconStyle: SVGICON.workingStatus,
-  //   to: "/physician/workingstatus",
-  // },
+    to: "/reviewer/report",
+    childRoute: "/reviewer/report/individualreport",
+  }
 ];
 export const AdminMenuList = [
   {
@@ -69,7 +59,7 @@ export const AdminMenuList = [
     title: "Patients",
     iconStyle: SVGICON.patientListIcon,
     to: "/admin/patients",
-    childRoute: "/physician/patients/details",
+    childRoute: "/reviewer/patients/details",
   },
   {
     title: "File Processing",
@@ -120,54 +110,52 @@ export const L2AuditMenuList = [
     iconStyle: SVGICON.Usermanagement,
     to: "/coder/auditing",
   },
+
 ];
 export const L2AuditorMenuList = [
   {
     title: "Dashboard",
     iconStyle: SVGICON.dashboardIcon,
-    to: "/l2Auditor/dashboard",
+    to: "/supervisor/dashboard",
   },
   {
     title: "User Queue",
     iconStyle: SVGICON.adminUser,
-    to: "/l2Auditor/user",
-    childRoute: "/l2Auditor/user/userQueue",
-    childRoute2: "/l2Auditor/user/details",
+    to: "/supervisor/user",
+    childRoute: "/supervisor/user/userQueue",
+    childRoute2: "/supervisor/user/details",
   },
   {
     title: "Audited Queue",
     iconStyle: SVGICON.patientListIcon,
-    to: "/l2Auditor/auditing",
+    to: "/supervisor/auditing",
+    childRoute: "/reviewer/patients/details",
   },
   // {
   //   title: "Org",
   //   iconStyle: SVGICON.ReportIcon,
-  //   to: "/l2Auditor/org",
+  //   to: "/supervisor/org",
   // },
   {
     title: "Report",
     iconStyle: SVGICON.ReportIcon,
-    to: "/l2Auditor/report",
-    childRoute: "/l2Auditor/report/individualreport",
+    to: "/supervisor/report",
+    childRoute: "/supervisor/report/individualreport",
   },
 ];
 
 export const ProviderMenuList = [
-  // {
-  //   title: "Dashboard",
-  //   iconStyle: SVGICON.dashboardIcon,
-  //   to: "/provider/dashboard",
-  // },
   {
-    title: "Comparison",
+    title: "Patients Sync",
     iconStyle: SVGICON.adminUser,
-    to: "/provider/comparison",
+    to: "/tenantAdmin/fhirTable",
+    childRoute: "/fhirTable/details",
   },
-  {
-    title: "Query",
-    iconStyle: SVGICON.patientListIcon,
-    to: "/provider/query",
-  },
+  // {
+  //   title: "Settings",
+  //   iconStyle: SVGICON.settingsIcon,
+  //   to: "/tenantAdmin/settings",
+  // },
 ];
 
 export const EHRMenuList = [
@@ -176,5 +164,20 @@ export const EHRMenuList = [
     iconStyle: SVGICON.adminUser,
     to: "/ehr/patients",
     childRoute: "/ehr/patients/details",
+  },
+];
+
+export const PhysicianMenuList = [
+  {
+    title: "Dashbaord",
+    iconStyle: SVGICON.dashboardIcon,
+    to: "/physician/dashboard",
+  },
+  {
+    title: "Patients",
+    iconStyle: SVGICON.physicianPatient,
+    to: "/physician/patients",
+    childRoute:"/physician/comparison"
+
   },
 ];

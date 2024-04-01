@@ -1,8 +1,11 @@
 .container_fluid_patient {
-  height: 100vh !important;
+  /* height: 100vh !important; */
   overflow: hidden;
   padding-top: 55px !important;
   background-color: #fff !important;
+}
+.container_fluid {
+  background-color: #f0f6fe !important;
 }
 
 .patient_info_details svg {
@@ -809,6 +812,7 @@
   left: 17pc;
 }
 .menuCard {
+  width: 180px;
   display: inline-flex;
   padding: 15px 23px 21px 22px;
   flex-direction: column;
@@ -818,7 +822,7 @@
   background: #fff;
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
   position: relative;
-  right: 10pc;
+  right: 12pc;
   bottom: 174px;
   top: -126px;
   cursor: pointer;
@@ -1046,7 +1050,7 @@
 .declined {
   height: 10px;
   width: 10px;
-  background: #be3144;
+  background: #e88d8d;
 
   margin-right: 5px;
   margin-top: 2px;
@@ -1057,6 +1061,22 @@
   width: 10px;
   background: #ad94fa;
 
+  margin-right: 5px;
+  margin-top: 2px;
+  border-radius: 20px;
+}
+.processing {
+  height: 10px;
+  width: 10px;
+  background: #452b90;
+  margin-right: 5px;
+  margin-top: 2px;
+  border-radius: 20px;
+}
+.failed {
+  height: 10px;
+  width: 10px;
+  background: #e88d8d;
   margin-right: 5px;
   margin-top: 2px;
   border-radius: 20px;
@@ -1245,40 +1265,56 @@
 }
 .pendingBtn {
   font-size: 13px;
-  color: #5da9e4;
+  color: #5da9e4 !important;
   background: #c2e1f9 !important;
   border: none !important;
   box-shadow: none !important;
   border-radius: 6px;
   width: 170px !important;
+  padding: 3px;
+  height: 35px !important;
 }
 .holdBtnHcc {
   font-size: 13px;
-  color: #d8c11b;
+  color: #d8c11b !important;
   background: #faead1 !important;
   border-radius: 6px !important;
   border: none !important;
   box-shadow: none !important;
   width: 170px !important;
 }
+.holdBtnHccs {
+  font-size: 13px;
+  color: #ad94fa !important;
+  background: #ddd5f8 !important;
+  border-radius: 6px !important;
+  border: none !important;
+  box-shadow: none !important;
+  width: 170px !important;
+  padding: 3px;
+  height: 35px !important;
+}
 .completedBtnHcc {
   font-size: 13px;
-  color: #3a9b94;
+  color: #3a9b94 !important;
   background: #daf1ef !important;
   border-radius: 6px !important;
   border: none !important;
   box-shadow: none !important;
   width: 170px !important;
+  padding: 3px;
+  height: 35px !important;
 }
 
 .declinedBtnHcc {
   font-size: 13px;
-  color: #3a9b94;
+  color: #ff0000 !important;
   background: #fcc !important;
   border-radius: 6px !important;
   border: none !important;
   box-shadow: none !important;
   width: 170px !important;
+  height: 35px !important;
 }
 
 .name_missed path {
@@ -1355,10 +1391,20 @@
 .patientDetailsHead {
   height: 70vh;
   margin-right: 0px;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 .patientDetailsHead:hover {
   height: 70vh;
+  overflow-y: scroll;
+  margin-right: 0px;
+}
+.patientDetailsHead2 {
+  height: 65vh;
+  margin-right: 0px;
+  overflow-y: scroll;
+}
+.patientDetailsHead2:hover {
+  height: 65vh;
   overflow-y: scroll;
   margin-right: 0px;
 }
@@ -1447,13 +1493,14 @@
   border-radius: 10px;
 }
 .fileFormDate {
-  display: flex;
+  display: contents;
 }
 .fileFormDate span {
-  position: absolute;
-  margin-left: 24%;
-  margin-top: 10px;
+  position: relative;
   cursor: pointer;
+  float: right;
+  bottom: 30px;
+  right: 8px;
 }
 .hcc_card_addCode {
   margin-bottom: 10px !important;
@@ -1467,6 +1514,13 @@
   font-weight: 500;
   font-size: 14px;
   padding-top: 3px;
+}
+.roleStyleWQ {
+  height: 10px;
+  width: 10px;
+  margin-right: 5px;
+  margin-top: 2px;
+  border-radius: 20px;
 }
 .validHcccontainer {
   min-height: 83vh;
@@ -1556,4 +1610,8 @@
 }
 .meat_lable {
   font-weight: 600;
+}
+.loadingContainer {
+  display: flex;
+  justify-content: center;
 }

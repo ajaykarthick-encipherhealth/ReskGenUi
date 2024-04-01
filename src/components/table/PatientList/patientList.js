@@ -1,66 +1,32 @@
 import React, { useState } from "react";
 import moment from "moment";
 import TableStyle from "../table.module.css";
-import {
-  faSort,
-  faSortUp,
-  faSortDown,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Avatar,
-  Tooltip,
-  notification,
-  Select as AntSelect,
-  Empty,
-} from "antd";
+import { notification, Select as AntSelect, Empty } from "antd";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
-import AllocatedUserCard from "../../allocatedUserDetails/AllocatedUserCard";
-import visitStyles from "../../../styles/visitdata.module.css";
-import { SVGICON } from "../../../jsx/constant/theme";
 import { getPriorityChange } from "../../../store/actions/PatientsActions";
 import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
-import { Paginator } from "primereact/paginator";
-import SpinnerDots from "../../spinner";
 import {
   priorityOptions,
   sortFunction,
-  renderUserPrfoile,
   renderUserPrfoileAvatar,
 } from "../../headerFilters/functions";
 
-const { Option } = AntSelect;
-
 function PatientTable({
   patinetListAll,
-  actionBodyTemplate,
   statusBodyTemplate,
   patientDetails,
-  paginationFirst,
-  totalElements,
-  onPageChange,
+
   setSort,
   getFilteApi,
 }) {
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
-  const [detailsContent, setDetailsContent] = useState(patinetListAll);
   const [sortAllocateOrder, setSortAllocateOrder] = useState("DESC");
 
   const dispatch = useDispatch();
   const navigate = useRouter();
-
-  const [sortConfig, setSortConfig] = useState({
-    key: null,
-    direction: null,
-  });
-  const [hoveredAvatar, setHoveredAvatar] = useState(null);
-  const [selectedPriority, setSelectedPriority] = useState({
-    id: "meat-01",
-    value: "HIGH",
-  });
 
   const handlePriorityChange = (patientId, selectedValue) => {
     setSelectedPriority((prev) => ({
@@ -70,30 +36,6 @@ function PatientTable({
     }));
   };
 
-  const handleAvatarHover = (data) => {
-    setHoveredAvatar(data);
-  };
-
-  const handleAvatarClick = (data) => {
-    gotoPatientDetails(data);
-  };
-
-  const requestSort = (key) => {
-    console.log(key);
-    let direction = "asc";
-    if (sortConfig.key === key && sortConfig.direction === "asc") {
-      direction = "desc";
-    }
-    setSortConfig({ key, direction });
-  };
-
-  const getClassNamesFor = (name) => {
-    if (!sortConfig) {
-      return;
-    }
-    return sortConfig.key === name ? sortConfig.direction : undefined;
-  };
-
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
     if (data.computing === 2) {
@@ -101,7 +43,7 @@ function PatientTable({
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
-      navigate.push("/physician/patients/details");
+      navigate.push("/reviewer/patients/details");
     } else {
       notification.warning({
         message: data.patientId + " file not processed. Please wait.",
@@ -118,14 +60,6 @@ function PatientTable({
     }
   };
 
-  const TickMark = () => (
-    <div style={{ marginLeft: "5pc", textAlign: "end" }}>✓</div>
-  );
-
-  const dummyProfileImageUrl =
-    "https://avatars.githubusercontent.com/u/68529028?s=64&v=4";
-  const nullImg =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA78Na63ws7B7EAWYgTr9BxhX_Z8oLa1nvOA&usqp=CAU";
   const renderRows = () => {
     return patinetListAll?.length === 0 ? (
       <Empty />
@@ -282,7 +216,7 @@ function PatientTable({
 
             <th className={TableStyle.rowStyle}> ALLOCATED BY</th>
             <th style={{ paddingLeft: "35px" }}>PRIORITY</th>
-            <th style={{ paddingLeft: "65px" }}>STATUS</th>
+            <th style={{ paddingLeft: "79px" }}>STATUS</th>
           </tr>
         </thead>
 

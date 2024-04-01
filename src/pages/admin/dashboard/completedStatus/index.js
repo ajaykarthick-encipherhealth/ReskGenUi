@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
+import { useRouter } from "next/router";
+import { Empty, Spin, Select } from "antd";
 import * as echarts from "echarts";
 import ReactECharts from "echarts-for-react";
-import { Buttons } from "../../../physician/workingstatus";
+import { Buttons } from "../../../reviewer/workingstatus";
 import Buttonscroller from "../../../../components/buttonSroller";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
@@ -10,23 +12,19 @@ import Legends from "../../../../components/legends";
 import { monthNames, getDays } from "../accuracy";
 import { useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
-import { useRouter } from "next/router";
-import { Empty, Spin, Select } from "antd";
 import {
   getCompletedStatus,
   getSelectUserList,
 } from "../../../../store/actions/adminAction/DashboardAction";
-
 import spinSTYles from "../../../../styles/auth.module.css";
+
 const CompletedStatus = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const completedDatas = useSelector(
     (state) => state?.AdminDashboardReducers?.completedStatus
   );
-  const selectUserList = useSelector(
-    (state) => state?.AdminDashboardReducers?.selectedUsers
-  );
+
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const currentDate = new Date();
@@ -37,6 +35,9 @@ const CompletedStatus = () => {
   const [selectUser, setSelectUser] = useState([]);
   const [isindividual, setIsindividual] = useState(false);
   const [selectMemberType, setSelectMemberType] = useState("");
+  const [year, setYear] = useState();
+  const [month, setMonth] = useState();
+
   let completedWeeks = new Set();
   let allocatedWeeks = new Set();
 
@@ -68,16 +69,17 @@ const CompletedStatus = () => {
 
   const handleYearChange = (date, dateString) => {
     setSelectedYear(dateString);
+    setYear(date);
   };
   const handleMonthChange = (date) => {
     const selectedDate = new Date(date);
+    setMonth(date);
     const monthNumber = (selectedDate.getMonth() + 1)
       .toString()
       .padStart(2, "0");
     setSelectedMonth(monthNumber);
   };
 
-  // Inside your component function
   let xAxisData = [];
 
   if (currentBtn === "Monthly") {
@@ -168,7 +170,6 @@ const CompletedStatus = () => {
     { value: "", label: "ALL" },
     { value: "REVIEWER", label: "REVIEWER" },
     { value: "SUPERVISOR", label: "SUPERVISOR" },
-    
   ];
 
   const memberTypeChanges = (e) => {
@@ -186,20 +187,11 @@ const CompletedStatus = () => {
 
   const optionsUser = [];
 
-  const individualUserRes = selectUserList?.data?.response?.map((res) =>
-    optionsUser.push({
-      value: res.userName,
-      label: res.firstName + " " + res.lastName,
-    })
-  );
-
   useEffect(() => {
-    console.log(selectMemberType, "1");
     dispatch(getSelectUserList(selectMemberType));
   }, [selectMemberType]);
 
   useEffect(() => {
-    console.log(selectMemberType, "2");
     dispatch(
       getCompletedStatus(
         currentBtn.toUpperCase(),
@@ -247,17 +239,13 @@ const CompletedStatus = () => {
             </div>
             <div className={styles.picker}>
               <YearPicker
-                onChange={handleYearChange}
-                type={"year"}
+                onChangeYear={handleYearChange}
+                onChangeMonth={handleMonthChange}
+                type={currentBtn}
                 bgColor="#F3F3FF"
+                val={month}
+                val1={year}
               />
-              {currentBtn !== "Monthly" && (
-                <YearPicker
-                  onChange={handleMonthChange}
-                  type={"month"}
-                  bgColor="#F3F3FF"
-                />
-              )}
             </div>
             <div className={styles.btnScroller}>
               <Buttonscroller

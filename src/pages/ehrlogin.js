@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { useDispatch } from "react-redux";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { notification } from "antd";
 import styles from "../styles/auth.module.css";
 import LoginBack from "../images/logo/login-back.jpg";
 import { IMAGES } from "../jsx/constant/theme";
-import { submitLogin } from "../services/AuthService";
 import {
   getValidatePassword,
   handleTogglePasswordVisibility,
@@ -17,11 +16,10 @@ import AthenaLogo from "../images/ehr/athena.png";
 import EpicLogo from "../images/ehr/epic_1.png";
 import worksLogo from "../images/ehr/eclinicalworks.png";
 import cernerLogo from "../images/ehr/cerner.png";
-import { notification } from "antd";
+import { submitLogin } from "../stores/authflow/actions";
 
 export default function Login() {
   const router = useRouter();
-  const dispatch = useDispatch();
   const [enteredEmail, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   let errorsObj = { email: "", password: "" };
@@ -66,16 +64,16 @@ export default function Login() {
         password: "",
       });
       localStorage.setItem("userRole", "ehr");
-      var response = await submitLogin(enteredEmail, encyptingPass(password));
+      let response = await submitLogin(enteredEmail, encyptingPass(password));
       console.log(response);
-      var result = response?.data?.response;
+      let result = response?.data?.response;
       if (response?.data?.status === "SUCCESS") {
         let emailSplit = enteredEmail?.split("@");
         notification.success({
           message: "Login Successfully",
           duration: 1,
         });
-        var rolesArray = ["EHR"];
+        let rolesArray = ["EHR"];
         localStorage.setItem("role", "ehr");
         localStorage.setItem("roles", rolesArray);
         localStorage.setItem("token", result.access_token);
@@ -91,8 +89,6 @@ export default function Login() {
           description: response?.data?.message,
         });
       }
-
-      // dispatch(getMFAValidation(enteredEmail, router, password));
     } else {
       return;
     }
@@ -117,7 +113,6 @@ export default function Login() {
             <div className="login-form">
               <div className="login-head">
                 <h5 className="title">Connect to EHR Account</h5>
-                {/* <p>Login page allows users to enter login credentials for authentication and access to secure content.</p> */}
               </div>
               <h6 className="login-title">
                 <span>Login</span>

@@ -5,7 +5,6 @@ import { SVGICON } from "../../../jsx/constant/theme";
 import { Paginator } from "primereact/paginator";
 import { selectedRow } from "../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
-import Footer from "../../../jsx/layouts/Footer";
 import dayjs from "dayjs";
 import {
   dateFormate,
@@ -14,18 +13,12 @@ import {
 } from "../../headerFilters/functions";
 import visitStyles from "../../../styles/visitdata.module.css";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
-import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
-import NotAudited from "../../../../src/images/trackingImages/NotAuditedTrack.png";
-import AuditHold from "../../../../src/images/trackingImages/AuditHoldTrack.png";
-import ReAudit from "../../../../src/images/trackingImages/reAuditTrack.png";
-import AuditPending from "../../../../src/images/trackingImages/AuditPending.png";
 import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
 import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
 import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
 import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
-import AuditedDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
 import Abort from "../../../../src/images/trackingImages/Abort.png";
-import { extractLatestData } from "../../../pages/l2Auditor/auditing";
+import { extractLatestData } from "../../../pages/supervisor/auditing";
 import Image from "next/image";
 
 function CoderReport({
@@ -35,7 +28,6 @@ function CoderReport({
   paginationFirst,
   ReportPatientDetails,
   onPageChange,
-  comments,
   setComments,
   selectedRows,
   setSelectedRows,
@@ -296,11 +288,14 @@ function CoderReport({
                   )}
                 </th>
                 <th>COMMENTS </th>
-                <th className={TableStyle.rowAudited}>AUDITOR NAME </th>
+                <th className={TableStyle.rowAuditedAdmin}>AUDITOR NAME</th>
+                <th className={TableStyle.rowAuditedAdmin}>
+                  PATIENT ALLOCATE TO
+                </th>
                 <th>RAF SCORE </th>
                 <th>HCC </th>
                 <th>FLAG </th>
-                <th className={TableStyle.rowStyle2}>STATUS</th>
+                <th style={{ paddingLeft: "22px" }}>STATUS</th>
                 <th>
                   <div
                     style={{ display: "flex", justifyContent: "space-around" }}
@@ -353,11 +348,7 @@ function CoderReport({
                         {row?.patientName ? row?.patientName : "---"}
                       </td>
 
-                      <td
-                        // onClick={setModal(false)}
-                        className={TableStyle.childBorder}
-                      >
-                        {/* {row?.processedDate} */}
+                      <td className={TableStyle.childBorder}>
                         {dateFormate(dayjs, row?.processedDate)}
                       </td>
                       <td className={TableStyle.childBorder}>
@@ -378,7 +369,7 @@ function CoderReport({
                       </td>
                       <td
                         className={TableStyle.childBorder}
-                        style={{ textAlign: "left", paddingLeft: "110px" }}
+                        style={{ textAlign: "left", paddingLeft: "50px" }}
                       >
                         {row.auditedByFirstName ||
                         row.auditedByLastName ||
@@ -398,6 +389,35 @@ function CoderReport({
                             </span>
                             <span>
                               {row.auditedByFirstName} {row.auditedByLastName}
+                            </span>
+                          </div>
+                        ) : (
+                          <div style={{ textAlign: "center" }}>---</div>
+                        )}
+                      </td>
+                      <td
+                        className={TableStyle.childBorder}
+                        style={{ textAlign: "left", paddingLeft: "50px" }}
+                      >
+                        {row.patientAllocatedFirstName ||
+                        row.patientAllocatedLastName ||
+                        row.patientAllocatedProfileImage ? (
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            {" "}
+                            <span style={{ marginRight: "10px" }}>
+                              {" "}
+                              {renderUserPrfoileAvatar(
+                                row.patientAllocatedFirstName,
+                                row.patientAllocatedLastName,
+                                row.patientAllocatedProfileImage,
+                                "header"
+                              )}
+                            </span>
+                            <span>
+                              {row.patientAllocatedFirstName}{" "}
+                              {row.patientAllocatedLastName}
                             </span>
                           </div>
                         ) : (
@@ -477,7 +497,7 @@ function CoderReport({
                       </td>
                       <td
                         className={TableStyle.childBorder}
-                        style={{ textAlign: "left", paddingLeft: "110px" }}
+                        style={{ textAlign: "left", paddingLeft: "50px" }}
                       >
                         {row.auditedByFirstName ||
                         row.auditedByLastName ||
@@ -497,6 +517,35 @@ function CoderReport({
                             </span>
                             <span>
                               {row.auditedByFirstName} {row.auditedByLastName}
+                            </span>
+                          </div>
+                        ) : (
+                          <div style={{ paddingLeft: "70px" }}>---</div>
+                        )}
+                      </td>
+                      <td
+                        className={TableStyle.childBorder}
+                        style={{ textAlign: "left", paddingLeft: "50px" }}
+                      >
+                        {row.patientAllocatedFirstName ||
+                        row.patientAllocatedLastName ||
+                        row.patientAllocatedProfileImage ? (
+                          <div
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            {" "}
+                            <span style={{ marginRight: "10px" }}>
+                              {" "}
+                              {renderUserPrfoileAvatar(
+                                row.patientAllocatedFirstName,
+                                row.patientAllocatedLastName,
+                                row.patientAllocatedProfileImage,
+                                "header"
+                              )}
+                            </span>
+                            <span>
+                              {row.patientAllocatedFirstName}{" "}
+                              {row.patientAllocatedLastName}
                             </span>
                           </div>
                         ) : (

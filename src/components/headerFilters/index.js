@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Select from "react-select";
 import { Button } from "react-bootstrap";
-import { Badge, DatePicker, Popover } from "antd";
+import { DatePicker, Popover, Tooltip } from "antd";
 import Image from "next/image";
 import dayjs from "dayjs";
-import styles from "../../pages/physician/report/report.module.css";
+import { useDispatch } from "react-redux";
+import styles from "../../pages/reviewer/report/report.module.css";
 import allocateStyle from "../../pages/admin/allocatedUser/allocate/style.module.css";
 import Export from "../../images/svg/Export";
 import Legends from "../legends";
@@ -14,45 +15,45 @@ import Search from "../search";
 import { disableFutureDate, handleRnagePicker2 } from "./functions";
 import filter from "../../images/svg/filter.svg";
 import warning from "../../images/svg/warning.svg";
-import { getFilters } from "../../store/actions/AuthActions";
-import { useDispatch, useSelector } from "react-redux";
+import { getFilters } from "../../stores/authflow/actions";
 
 const { RangePicker } = DatePicker;
 
 const HeaderFilters = ({
-  // for search
+  // Search Props
   setSearch,
   isSearch,
   searchlabel,
-  // for report
+  coderSearch,
+  receivedSearch,
+  sentSearch,
+  search,
+
+  // Report Props
   setSentSearch,
   setReceivedSearch,
   setCoderSearch,
 
-  // for select
+  // Select Props
   selectlabel,
   isSelector,
   setSelectedOption,
   selectOptions,
   defaultSelectValue1,
-  selectedValue,
-
-  // if has 2 selectors
   selectlabel2,
   defaultSelectValue2,
   selectOptions2,
   setSelectedOption2,
-  selectedValue2,
-
-  // if has 3 selectors
   selectlabel3,
-  defaultSelectValue3,
   selectOptions3,
   isSelector3,
   setSelectedOption3,
 
-  // for picker
+  // Picker Props
   pickerlabel,
+  pickerlabe2,
+  pickerlabe4,
+  pickerlabe5,
   activeTab,
   selectedDates,
   setSelectedDates,
@@ -60,24 +61,26 @@ const HeaderFilters = ({
   defaultEndDate,
   setStartDate,
   setEndDate,
-  isRangePicker,
-  disabled,
-  pickerStartValue,
-  pickerEndValue,
-  // for report
   setReceivedStartDate,
   setReceivedEndDate,
   setCoderStartDate,
   setCoderEndDate,
-
-  // if has 2 pickers
-  pickerlabe2,
   setStartDate2,
   setEndDate2,
-  selectedDates2,
   defaultStartDate2,
   defaultEndDate2,
-  isAnotherPicker,
+  //if has time picker
+  isRangeTimePicker,
+  timePickerlabel,
+  defaultStartTime,
+  defaultEndTime,
+  setStartTime,
+  setEndTime,
+  setSelectedTime,
+  setReceivedStartTime,
+  setReceivedEndTime,
+  setCoderStartTime,
+  setCoderEndTime,
 
   // if has allocated date picker
   pickerlabe3,
@@ -85,55 +88,46 @@ const HeaderFilters = ({
   defaultEndDate3,
   setStartDate3,
   setEndDate3,
-  isAnotherPicker2,
-
-  // if has audited date oicker
-  pickerlabe4,
   setStartDate4,
   setEndDate4,
-  defaultStartDate4,
-  defaultEndDate4,
-  isAnotherPicker3,
-
-  // if has audited allocated date oicker
-  pickerlabe5,
   setStartDate5,
   setEndDate5,
-  defaultStartDate5,
-  defaultEndDate5,
+  isRangePicker,
+  isAnotherPicker,
+  isAnotherPicker2,
+  isAnotherPicker3,
   isAnotherPicker5,
 
-  // conditions to display extra components
+  // Additional Props
   addUser,
-  handleExport,
   rowsLength,
   addUserForm,
   selectedRowsId,
   handleOpneModal,
   isAllocate,
-
-  // allocatedBY
   isAllocatedBySelector,
   allocatedBylabel,
   allocatedByOptoons,
   setSelAllocatedBy,
   defaultAllocatedBy,
-
-  // allocatedTo
   isAllocatedToSelector,
   allocatedTolabel,
   allocatedToOptoons,
   setSelAllocatedTo,
   defaultAllocateTo,
 
-  // createdTo
+  //priority
+  isAnotherPicker6,
+  pickerlabe6,
+  setPriority,
+  defaultPriority,
+
   isCreatedBySelector,
   createdTolabel,
   createdByOptoons,
   setSelCreatedBy,
   defaultCreatedBy,
   selectedCoderOptReport,
-
   bullets,
   isNextRow,
   btnTitle,
@@ -155,6 +149,16 @@ const HeaderFilters = ({
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
+  let columnClass;
+  if (addUser) {
+    if (addBtn) {
+      columnClass = "col-xl-4";
+    } else {
+      columnClass = "col-xl-1";
+    }
+  } else {
+    columnClass = "col-xl-4";
+  }
   return (
     <>
       <div style={{ height: atCorner && "45px" }}>
@@ -175,6 +179,10 @@ const HeaderFilters = ({
                 setSentSearch={setSentSearch}
                 setReceivedSearch={setReceivedSearch}
                 setCoderSearch={setCoderSearch}
+                coderSearch={coderSearch}
+                receivedSearch={receivedSearch}
+                sentSearch={sentSearch}
+                search={search}
               />
             </div>
           )}
@@ -265,13 +273,12 @@ const HeaderFilters = ({
                   onChange={(selectedOption) => {
                     if (selectedCoderOptReport?.value === "SUPERVISOR") {
                       setSelectedOption3(selectedOption);
-                      // setSelectedOption2(null);
+
                       setSelect(null);
                     }
                     if (selectedCoderOptReport?.value === "REVIEWER") {
                       setSelect(selectedOption?.value);
                       setSelectedOption3(selectedOption);
-                      // setSelectedOption2(null);
                     }
                   }}
                   className="custom-react-select"
@@ -296,9 +303,41 @@ const HeaderFilters = ({
                 setReceivedEndDate={setReceivedEndDate}
                 setCoderStartDate={setCoderStartDate}
                 setCoderEndDate={setCoderEndDate}
-                disabled={disable != "Yes" && true}
+                disabled={disable != "Yes" ? true : false}
               />
             </div>
+          )}
+
+          {isRangeTimePicker && (
+            <>
+              <div className={defaultSize} style={{ width: "20%" }}>
+                <label className={styles.label}>{timePickerlabel}</label>
+                <div>
+                  <RangePicker
+                    showTime={{ format: "HH:mm" }} // Specify the time format
+                    format="YYYY-MM-DD HH:mm" // Specify the combined date and time format
+                    // value={dayjs(selectedDates2).format('MM-DD-YYYY')}
+                    // onChange={(date, dateString) =>
+                    //   handleRnagePicker2({
+                    //     date,
+                    //     dateString,
+                    //     setStartDate2,
+                    //     setEndDate2,
+                    //   })
+                    // }
+                    // defaultValue={
+                    //   defaultEndDate2 && defaultStartDate2
+                    //     ? [
+                    //         dayjs(defaultStartDate2, "YYYY-MM-DD"),
+                    //         dayjs(defaultEndDate2, "YYYY-MM-DD"),
+                    //       ]
+                    //     : []
+                    // }
+                    // disabledDate={(current) => disableFutureDate(current)}
+                  />
+                </div>
+              </div>
+            </>
           )}
 
           {isAnotherPicker && (
@@ -375,12 +414,7 @@ const HeaderFilters = ({
             </div>
           )}
           {addUser && (
-            <div
-              className={`${
-                addUser ? `col-xl-${addBtn ? "4" : "1"}` : "col-xl-4"
-              }`}
-              style={{ marginTop: "29px" }}
-            >
+            <div className={columnClass} style={{ marginTop: "29px" }}>
               <Button
                 onClick={addUserForm}
                 style={{ background: "#04306f" }}
@@ -412,23 +446,27 @@ const HeaderFilters = ({
               } d-flex justify-content-end`}
             >
               <div className="row flr">
-                <button
-                  onClick={() => {
-                    setIsModalVisible(true);
-                  }}
-                  className={
-                    rowsLength?.length === 0 ? styles.csv : styles.export
+                <Tooltip
+                  title={
+                    rowsLength?.length === 0 ? "Select report to export" : ""
                   }
-                  disabled={
-                    rowsLength?.length > 0 || rowsLength?.data?.length > 0
-                      ? false
-                      : true
-                  }
-                  style={{ color: "#04306f" }}
                 >
-                  <Export />
-                  Export
-                </button>
+                  <button
+                    onClick={() => {
+                      setIsModalVisible(true);
+                    }}
+                    className={styles.export}
+                    disabled={
+                      rowsLength?.length > 0 || rowsLength?.data?.length > 0
+                        ? false
+                        : true
+                    }
+                    style={{ color: "#04306f" }}
+                  >
+                    <Export />
+                    Export
+                  </button>
+                </Tooltip>
               </div>
             </div>
           )}
@@ -436,7 +474,10 @@ const HeaderFilters = ({
       </div>
       {showFilters && (
         <div style={{ marginTop: "50px" }}>
-          <div className="row filter-contain">
+          <div
+            className="row filter-contain"
+            style={{ width: atCorner ? "110%" : "100%" }}
+          >
             {isAllocatedBySelector && (
               <div
                 className={defaultSize}
@@ -567,6 +608,24 @@ const HeaderFilters = ({
                         })
                       }
                       disabledDate={(current) => disableFutureDate(current)}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+            {isAnotherPicker6 && (
+              <>
+                <div className={defaultSize}>
+                  <label className={styles.label}>{pickerlabe6}</label>
+                  <div>
+                    <Select
+                      onChange={(selectedOption) => {
+                        setPriority(selectedOption?.value);
+                      }}
+                      options={allocatedToOptoons}
+                      className="custom-react-select"
+                      isSearchable={false}
+                      placeholder={defaultPriority}
                     />
                   </div>
                 </div>

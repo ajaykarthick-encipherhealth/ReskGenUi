@@ -10,7 +10,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
-import { patientDetails } from "../../../store/actions/AuthActions";
 import { DatePicker, Spin, notification } from "antd";
 import { InputText } from "primereact/inputtext";
 import { Paginator } from "primereact/paginator";
@@ -30,6 +29,7 @@ import {
   generateOptionsList,
   validateYear,
 } from "../../../components/headerFilters/functions";
+import { patientDetails } from "../../../stores/authflow/actions";
 
 const bullets = [
   {
@@ -44,13 +44,17 @@ const bullets = [
     color: "#be3144",
     name: "Not Computed",
   },
+  {
+    color: "#e88d8d",
+    name: "Failed",
+  },
 ];
 
 const statusOptions = [
   { label: "ALL", value: "" },
   { label: "PROCESSING", value: "1", status: 1 },
   { label: "COMPUTED", value: "2", status: 2 },
-  { label: "FAILED", value: "3", status: 3},
+  { label: "FAILED", value: "3", status: 3 },
   { label: "NOT COMPUTED", value: "0", status: 0 },
 ];
 
@@ -64,7 +68,7 @@ export default function Patient() {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(true);
   const [addPatient, setAddPatient] = useState(false);
-  const [addPatientId, setAddPatientId] = useState(false);                                            
+  const [addPatientId, setAddPatientId] = useState(false);
   const [selectFile, setSelectFile] = useState(null);
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
   const [completedStartDate, setCompletedStartDate] = useState("");
@@ -270,12 +274,12 @@ export default function Patient() {
           // if (response.data.message == "patient Already Present") {
           //   setIsLoadingBtn(false);
           //   notification.warning({
-          //     message: "Patient Id Already Present",
+          //     message: "Patient ID Already Present",
           //     duration: 1,
           //   });
           // } else {
           //   notification.success({
-          //     message: "Patient Id Created Successfully!",
+          //     message: "Patient ID Created Successfully!",
           //     duration: 1,
           //   });
           dispatch(
@@ -323,7 +327,7 @@ export default function Patient() {
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
-      navigate.push("/physician/patients/details");
+      navigate.push("/reviewer/patients/details");
     } else {
       notification.warning({
         message: data.patientId + " file not processed Please wait",
@@ -398,9 +402,13 @@ export default function Patient() {
         <button
           onClick={() => addPatientFile(rowData)}
           className="btn hegiht10 shadow  sharp me-1 action-btn"
-          style={{background:"#04306f"}}
+          style={{ background: "#04306f" }}
         >
-          <FontAwesomeIcon icon={faUpload} fontSize={11} style={{color:"#ffff"}}/>
+          <FontAwesomeIcon
+            icon={faUpload}
+            fontSize={11}
+            style={{ color: "#ffff" }}
+          />
         </button>
       </div>
     );
@@ -539,7 +547,8 @@ export default function Patient() {
                           <HeaderFilters
                             setSearch={setSearch}
                             isSearch={true}
-                            searchlabel="Search By Patient Id / Name"
+                            searchlabel="Search By Patient ID / Name"
+                            search={search}
                             // select status
                             selectlabel="Status"
                             isSelector={true}

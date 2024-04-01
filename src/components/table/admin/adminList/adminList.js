@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Empty, Popover, Select, Switch } from "antd";
 import dayjs from "dayjs";
 import TableStyle from "../../table.module.css";
@@ -8,7 +8,6 @@ import EditButton from "../../../../images/adminUsers/EditButton";
 import {
   capitalizeFirstLetter,
   dateFormate,
-  renderUserPrfoile,
   renderUserPrfoileAvatar,
   renderUserPrfoileAvatarDisabled,
   sortFunction,
@@ -16,7 +15,6 @@ import {
 import { enableUser } from "../../../../services/adminServices/usersService";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import SpinnerDots from "../../../spinner";
-import { useSelector } from "react-redux";
 import EditButtonDisbled from "../../../../images/adminUsersDisabled/EditButtonDisabled";
 import { getSelectUserList } from "../../../../store/actions/adminAction/DashboardAction";
 
@@ -84,7 +82,6 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                 onChange={handleManager}
                 options={optionsUser?.length > 0 ? optionsUser : []}
                 placeholder={"Change Manager"}
-                // defaultValue={isMultiple ? magerData.role : magerData?.role}
                 open={openManager}
                 onDropdownVisibleChange={(visible) => setOpenManager(visible)}
               />
@@ -362,7 +359,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                   )}
 
                   <td
-                    className={TableStyle.lastBorder}
+                    className={usersData?.data?.response?.content?.length > 0 ? TableStyle.lastBorder : TableStyle.noDataBorder }
                     style={{
                       height: "40px !important",
                       textAlign: "center",

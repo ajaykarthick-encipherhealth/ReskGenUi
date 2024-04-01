@@ -1,7 +1,7 @@
 import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import { PostsReducer, toggleMenu } from "./reducers/PostsReducer";
 import thunk from "redux-thunk";
-import { AuthReducer, PatientStore } from "./reducers/AuthReducer";
+// import { AuthReducer } from "./reducers/AuthReducer";
 import todoReducers from "./reducers/Reducers";
 import { DashboardReducer } from "./reducers/DashboradReducer";
 import { PatientsReducer } from "./reducers/PatientsReducer";
@@ -19,6 +19,13 @@ import { L2UserReducers } from "./reducers/l2Reducers/usersReducers";
 import { AuditReportReducer } from "./reducers/l2Reducers/AuditReportReducer";
 import { AdminDashboardReducer } from "./reducers/adminRecucers/dashboardReducer";
 import { AdminReportReducer } from "./reducers/adminRecucers/ReportReducer";
+import { PhyicianReducer } from "./reducers/physicianReducers/patientsReducers";
+import { PhysicianDashboardReducer } from "./reducers/physicianReducers/DashboardReducer";
+import { PhysicianComparisonReducer } from "./reducers/physicianReducers/ComparisionReducer";
+import { TanantAdminService } from "./reducers/tanantAdminReducers/fihrReducers";
+import { ReviewerReducers } from "./reducers/ReviewerReducers/ReviewerReducers";
+
+
 
 const middleware = applyMiddleware(thunk);
 
@@ -27,8 +34,8 @@ const composeEnhancers = compose;
 const reducers = combineReducers({
   sideMenu: toggleMenu,
   posts: PostsReducer,
-  auth: AuthReducer,
-  patientDetails: PatientStore,
+  // auth: AuthReducer,
+  ReviewerReducers: ReviewerReducers,
   todoReducers,
   workFlow: DashboardReducer,
   // workFlows: AdminDashboardReducer,
@@ -44,8 +51,12 @@ const reducers = combineReducers({
   AdminDashboardReducers: AdminDashboardReducer,
   adminReport: AdminReportReducer,
   l2User: L2UserReducers,
+  // physician
+  phyicianReducer:PhyicianReducer,
+  physicianDashbaord:PhysicianDashboardReducer,
+  physicianComparison:PhysicianComparisonReducer,
+  tanantAdmin: TanantAdminService,
 
-  //form: reduxFormReducer,
 });
 
 //const store = createStore(rootReducers);

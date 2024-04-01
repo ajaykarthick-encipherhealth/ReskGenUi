@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import {
+  ArrowUpOutlined,
+  ArrowDownOutlined,
+  LoadingOutlined,
+} from "@ant-design/icons";
 import moment from "moment";
 import TableStyle from "../../table.module.css";
-import { notification, Select as AntSelect, Empty, Spin } from "antd";
-import { useDispatch } from "react-redux";
-import { LoadingOutlined } from "@ant-design/icons";
-import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import { Select as AntSelect, Empty, Spin } from "antd";
 import { selectedRoWDetails } from "../../../../store/actions/adminAction/fileProcessingActions";
 import { priorityStatus, sortFunction } from "../../../headerFilters/functions";
 
@@ -146,7 +149,6 @@ function AllocatedAdminList({
                   type="checkbox"
                   onClick={() => setSelectAllChecked(!selectAllChecked)}
                   style={{
-                    // paddingTop: "10px",
                     width: "20px",
                     height: "20px",
                     flexhrink: "0",

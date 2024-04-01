@@ -1,6 +1,8 @@
 import axios from "axios";
 import ENDPOINTS from "../../utility/enpoints";
+import { getSentDetails } from "../../store/actions/adminAction/ReportActions";
 
+export const UPDATE_SENTREPORT='UPDATE_SENTREPORT'
 export const patientDetails = async (
   pagenum,
   startDate = "",
@@ -36,7 +38,9 @@ export const SentReport = async (
 ) => {
   const token = localStorage.getItem("token");
 
-  const url = `dbservice/reportdetails/sent?pageNo=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}`;
+  const url = `dbservice/reportdetails/sent?pageNo=${pagenum}&size=15&startdate=${startDate?startDate:""}&enddate=${endDate?endDate:""}&searchstring=${search?search:""}&sortfield=${
+    sort?.sortField ? sort?.sortField : ""
+  }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}`;
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}${url}`,
@@ -142,5 +146,39 @@ export const SelectUserList = async (role) => {
     if (err?.response?.status === 401) {
       router.push("/login");
     }
+  }
+};
+
+export const updateSentReport = (data) => async (dispatch) => {
+  const token = localStorage.getItem("token");
+  try {
+    dispatch({
+      type: UPDATE_SENTREPORT,
+      payload: {
+        loading: true,
+        data: null,
+      },
+    });
+    const response = await axios.post(
+      `${ENDPOINTS.apiEndoint}dbservice/reportdetails/updatereportstatus`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (response?.data) {
+      dispatch({
+        type: UPDATE_SENTREPORT,
+        payload: {
+          loading: false,
+          data: response.data,
+        },
+      });
+      dispatch(getSentDetails(0));
+    }
+  } catch (err) {
+    console.log(err);
   }
 };

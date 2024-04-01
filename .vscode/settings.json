@@ -2,12 +2,16 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
   },
   "[javascriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
 
   "eslint.validate": ["javascript", "javascriptreact"],
-  "eslint.enable": true
+  "eslint.enable": true,
+  "sonarlint.connectedMode.project": {
+    "connectionId": "https-sonar-encipherhealth-com",
+    "projectKey": "sonarqube"
+  }
 }

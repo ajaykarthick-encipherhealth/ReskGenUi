@@ -88,7 +88,7 @@ const index = () => {
   const [selectUser, setSelectUser] = useState([]);
   const [selectManager, setSelectedManger] = useState("");
   const [select, setSelect] = useState(null);
- 
+
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
     return ReceivedOptions?.push({ label: item.sender, value: item.sender });
@@ -145,11 +145,7 @@ const index = () => {
   const handleTabs = (name) => {
     setSelectedDates(null);
     // setActiveTab(name);
-    dispatch(
-      getActiveTab(
-        name
-      )
-    );
+    dispatch(getActiveTab(name));
   };
   useEffect(() => {
     dispatch(getSelectUserList(selectMemberType));
@@ -183,7 +179,9 @@ const index = () => {
           selectedCoderOpt,
           selectedCoderOptReport?.value ? selectedCoderOptReport?.value : "",
           sort,
-          (selectManager?.value && selectedCoderOptReport?.value !== "All") ? selectManager?.value: ""
+          selectManager?.value && selectedCoderOptReport?.value !== "All"
+            ? selectManager?.value
+            : ""
         )
       );
     }
@@ -221,10 +219,12 @@ const index = () => {
     if (selectedCoderOptReport && !select) {
       dispatch(
         getSelectUserList(
-          selectedCoderOptReport === null &&selectedCoderOptReport?.value==='All'  ? "" : selectedCoderOptReport?.value
+          selectedCoderOptReport === null &&
+            selectedCoderOptReport?.value === "All"
+            ? ""
+            : selectedCoderOptReport?.value
         )
       );
-      
     }
   }, [selectedCoderOptReport]);
   const options = [
@@ -233,18 +233,19 @@ const index = () => {
     { value: "SUPERVISOR", label: "SUPERVISOR" },
   ];
 
-  const optionsUser = selectUserList?.data?.response?.map((res) => ({
-    value: res.userName,
-    label: res.firstName + " " + res.lastName,
-  }));
+  const optionsUser =
+    selectUserList?.data?.response?.map((res) => ({
+      value: res.userName,
+      label: res.firstName + " " + res.lastName,
+    })) || [];
+
+  if (optionsUser.length > 0) {
+    optionsUser.unshift({ value: "", label: "All" });
+  }
 
   useEffect(() => {
     if (reportActiveTab) {
-      dispatch(
-        getActiveTab(
-          reportActiveTab
-        )
-      );
+      dispatch(getActiveTab(reportActiveTab));
     }
   }, [reportActiveTab]);
 
@@ -269,11 +270,17 @@ const index = () => {
                             setReceivedSearch={setReceivedSearch}
                             setCoderSearch={setCoderSearch}
                             isSearch={true}
+                            coderSearch={coderSearch}
+                            receivedSearch={receivedSearch}
+                            sentSearch={sentSearch}
                             searchlabel="Search by Name"
                             // selector
                             selectlabel="Select Status"
                             isSelector={
-                              !reportActiveTab || reportActiveTab === "CoderReport" ? true : false
+                              !reportActiveTab ||
+                              reportActiveTab === "CoderReport"
+                                ? true
+                                : false
                             }
                             setSelectedOption={setSelectedCoderOpt}
                             selectOptions={statusOptions}
@@ -282,11 +289,13 @@ const index = () => {
 
                             selectlabel2="Select User Role"
                             selectReportOptions={
-                              !reportActiveTab || reportActiveTab === "CoderReport" ? options : null
+                              !reportActiveTab ||
+                              reportActiveTab === "CoderReport"
+                                ? options
+                                : null
                             }
                             setSelectedOption2={setSelectedCoderOptReport}
                             defaultSelectValue2={selectedCoderOptReport}
-
                             // selector3
                             isSelector3={
                               selectUserList?.data?.response?.length
@@ -314,7 +323,9 @@ const index = () => {
                             setReceivedEndDate={setReceivedEndDate}
                             setCoderStartDate={setCoderStartDate}
                             setCoderEndDate={setCoderEndDate}
-                            activeTab={!reportActiveTab?"CoderReport":reportActiveTab}
+                            activeTab={
+                              !reportActiveTab ? "CoderReport" : reportActiveTab
+                            }
                             rowsLength={rowsLength}
                             setIsModalVisible={setIsModalVisible}
                             selectedDates={selectedDates}
@@ -331,6 +342,7 @@ const index = () => {
                           setIsModalVisible={setIsModalVisible}
                           setSelectedRows={setSelectedRows}
                           setSelectAll={setSelectAll}
+                          // selectedRows={selectedRows}
                         />
 
                         <div
@@ -441,6 +453,7 @@ const index = () => {
                                       receivedPageNo={sentPageNo}
                                       receivedStartDate={startDate}
                                       receivedEndDate={endDate}
+                                      isAdmin={true}
                                     />
                                   </Tab.Pane>
                                   <Tab.Pane
@@ -464,6 +477,7 @@ const index = () => {
                                         setSortOrder={setReceivedSortOrder}
                                         sortOrder={receivedSortOrder}
                                         setSort={setSort}
+                                        isAdmin={true}
                                       />
                                     )}
                                   </Tab.Pane>

@@ -24,23 +24,21 @@
   border-radius: 10px 0 0 10px !important;
 }
 
-/* table tr {background-color: #eaeefa!important;} */
-
 .classTable table th {
   padding-top: 12px !important;
   padding-bottom: 12px !important;
-  /* border-radius: 8px!important;
-    border: 0.2px solid #04306f!important;
-    
-    background: #FAFCFF!important; */
 }
 
 .classTable td:first-child,
 .classTable th:first-child {
   border-radius: 10px 0 0 10px !important;
 }
-.classTable td:last-child,
-.classTable th:last-child {
+.nodataborder {
+  border-radius: 10px !important;
+}
+
+.classTable th:last-child,
+.classTable td:last-child {
   border-radius: 0 10px 10px 0 !important;
 }
 
@@ -55,13 +53,11 @@
   top: 0;
   z-index: 1;
 }
+.grayedOut {
+  opacity: 0.5;
+  transition: opacity 0.5s ease;
+}
 
-/* .classThead th {
-  padding: 12px;
-
-} */
-
-/* Webkit (Chrome, Safari) scrollbar styles */
 .classTable &::-webkit-scrollbar {
   width: 12px;
 }
@@ -90,7 +86,6 @@
 .lastBorder {
   border-top: 0.2px solid #e1e1e1;
   border-bottom: 0.2px solid #e1e1e1;
-  /* border-right: 0.2px solid #e1e1e1; */
 }
 .classTable tbody tr td {
   font-size: 13px;
@@ -108,10 +103,7 @@
 }
 .classTable tbody tr:hover {
   cursor: pointer;
-  /* box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 
-    0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15); */
   border-radius: 10px 10px 10px 10px !important;
-  /* box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 0 20px 7px -19px #8298b7, 0 1px 3px 1px rgba(60,64,67,.15); */
   background-color: #ffff !important;
 }
 .highFlag path {
@@ -126,8 +118,6 @@
 .custom-ant-select {
   width: 100%;
 }
-
-/* Style for the dropdown selector */
 
 .customAntSelect > div {
   border: none !important;
@@ -161,7 +151,7 @@
 }
 .innerProcessingDiv:nth-child(1) {
   position: relative;
-  left: -15px;
+  left: -4px;
 }
 .innerProcessingDiv:nth-child(2) {
   position: relative;
@@ -230,7 +220,7 @@
   justify-content: center;
   color: #fff;
   font-weight: 800;
-  font-size: 18px;
+  font-size: 16px;
   margin-top: -2px;
 }
 .customChecked2[type="checkbox"] {
@@ -285,5 +275,24 @@
   color: #04306f;
   font-weight: 800;
   font-size: 18px;
-  margin-top: -12px;
+  margin-top: -15px;
+}
+.toolTipCOnt {
+  color: rgba(246, 104, 0, 1);
+  font-weight: 600;
+  font-size: 16px;
+  padding-right: 5px;
+}
+.imgContainer {
+  margin: -3px 2px 0 0px;
+}
+
+.rowAuditedAdmin {
+  width: 250px;
+  text-align: center;
+}
+.allocateBtn {
+  display: flex;
+  justify-content: end;
+  align-items: end;
 }

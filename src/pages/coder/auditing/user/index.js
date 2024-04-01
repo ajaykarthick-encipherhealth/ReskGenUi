@@ -21,9 +21,6 @@ import { faAngleLeft, faAngleRight, faClose, faUpload, faCheck, faBan, faAdd, fa
 import { Space, Spin } from 'antd';
 import { NativeEventSource, EventSourcePolyfill } from 'event-source-polyfill';
 import { connect, useDispatch } from 'react-redux';
-import {
-  patientDetails,
-} from '../../../../store/actions/AuthActions';
 import { notification } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { DataTable } from 'primereact/datatable';
@@ -35,9 +32,10 @@ import {
   EyeOutlined, EyeInvisibleOutlined
 } from '@ant-design/icons';
 import moment from 'moment';
-import { fetchEventSource } from "@microsoft/fetch-event-source";
+// import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { Paginator } from 'primereact/paginator';
 import { Calendar } from 'primereact/calendar';
+import { patientDetails } from '../../../../stores/authflow/actions';
 
 
 
@@ -294,7 +292,7 @@ export default function Patient() {
       );
       if (response?.status == 200) {
         notification.success({
-          message: "Patient Id Created Successfully!",
+          message: "Patient ID Created Successfully!",
         });
         setAddPatientId(false);
         setIsLoadingBtn(false);
@@ -384,70 +382,70 @@ export default function Patient() {
 
     var resoureUrl = `https://hcc.encipherhealth.com/secure/aiservice/ai/events?userId=${uId}&tenantId=${tenId}`
     const fetchData = async () => {
-     let eventSource = await fetchEventSource(resoureUrl, {
-        method: "get",
-        mode: 'cors',
-        signal: signal,
-        headers: {
-          // Accept: "text/event-stream",
-          "Authorization": `Bearer ` + accessToken,
-          // 'Cache-Control': 'no-cache',
-          // 'Connection': 'keep-alive',
-          // 'Accept': "text/event-stream",
-          // 'Access-Control-Allow-Origin':"*"
-        },
-        withCredentials: true,
-        onopen(res) {        
-            console.log("Client side error ", res);
-        },
-        onmessage(event) {
-          console.log("Client Events Trigger ");
-          const parsedData = JSON.parse(event.data);
-          processedList = parsedData;
-          var checkProcessedValue =[];
-          processedList.map((res) => {
-            checkProcessedValue.push({
-              "patientId":res,             
-            })
-          }
-          )
+    //  let eventSource = await fetchEventSource(resoureUrl, {
+    //     method: "get",
+    //     mode: 'cors',
+    //     signal: signal,
+    //     headers: {
+    //       // Accept: "text/event-stream",
+    //       "Authorization": `Bearer ` + accessToken,
+    //       // 'Cache-Control': 'no-cache',
+    //       // 'Connection': 'keep-alive',
+    //       // 'Accept': "text/event-stream",
+    //       // 'Access-Control-Allow-Origin':"*"
+    //     },
+    //     withCredentials: true,
+    //     onopen(res) {        
+    //         console.log("Client side error ", res);
+    //     },
+    //     onmessage(event) {
+    //       console.log("Client Events Trigger ");
+    //       const parsedData = JSON.parse(event.data);
+    //       processedList = parsedData;
+    //       var checkProcessedValue =[];
+    //       processedList.map((res) => {
+    //         checkProcessedValue.push({
+    //           "patientId":res,             
+    //         })
+    //       }
+    //       )
 
 
 
-          const array1 = patientResult;
-          const array2 = checkProcessedValue;
-          console.log(array2)
-          console.log(patientResult)
+    //       const array1 = patientResult;
+    //       const array2 = checkProcessedValue;
+    //       console.log(array2)
+    //       console.log(patientResult)
 
     
-          const hashMap2 = array2.reduce((carry, item) => {
-            const { patientId } = item;
-            if (!carry[patientId]) {
-              carry[patientId] = item;
-            }
-            return carry;
-          }, {});
+    //       const hashMap2 = array2.reduce((carry, item) => {
+    //         const { patientId } = item;
+    //         if (!carry[patientId]) {
+    //           carry[patientId] = item;
+    //         }
+    //         return carry;
+    //       }, {});
     
     
-          const output = array1.map(item => {
-            const newName = hashMap2[item.patientId];
-            if (newName) {
-              item.computing = 2;
-            }
-            return item;
-          });
+    //       const output = array1.map(item => {
+    //         const newName = hashMap2[item.patientId];
+    //         if (newName) {
+    //           item.computing = 2;
+    //         }
+    //         return item;
+    //       });
     
-          setPatinetListAll(output);
-        },
-        onclose() {
-          controller.abort();
-          console.log("Connection closed by the server");
-        },
-        onerror(err) {
-          controller.abort()
-          console.log("There was an error from server", err);
-        },
-      });
+    //       setPatinetListAll(output);
+    //     },
+    //     onclose() {
+    //       controller.abort();
+    //       console.log("Connection closed by the server");
+    //     },
+    //     onerror(err) {
+    //       controller.abort()
+    //       console.log("There was an error from server", err);
+    //     },
+    //   });
     };
 
 
@@ -704,7 +702,7 @@ export default function Patient() {
                             <div className='col-xl-3'>
                               <div class="form-group has-search">
                                 <FontAwesomeIcon className='fa fa-search form-control-feedback' icon={faSearch} />
-                                <InputText type="text" onChange={(e) => filterChangePatientId(e)} className="form-control new-form-control" placeholder="Patient Id" />
+                                <InputText type="text" onChange={(e) => filterChangePatientId(e)} className="form-control new-form-control" placeholder="Patient ID" />
                               </div>
 
                             </div>
@@ -730,7 +728,7 @@ export default function Patient() {
                         <div id="task-tbl_wrapper" className="dataTables_wrapper no-footer">
                           <DataTable value={patinetListAll} paginator={false} rows={10} rowsPerPageOptions={[10, 25, 50, 100]} dataKey="id" filters={filters} filterDisplay="menu">
                             <Column header="SI.NO" headerStyle={{ width: '3rem' }} body={(data, options) => paginationFirst +  options.rowIndex + 1}></Column>
-                            <Column field="patientId" header="Patient Id" />
+                            <Column field="patientId" header="Patient ID" />
                             <Column field="patientName" header="Patient Name" />
                             <Column field="fileName" header="File Name" />
                             <Column field="status" body={statusBodyTemplate} header="File Status" />
@@ -751,7 +749,7 @@ export default function Patient() {
                             <thead>
                               <tr>
                                 <th>SI.NO</th>
-                                <th>Patient Id</th>
+                                <th>Patient ID</th>
                                 <th>Patient Name</th>
                                 <th>File Name</th>
                                 <th>Status</th>
@@ -877,7 +875,7 @@ export default function Patient() {
                 <div className="row">
                   <div className="col-xl-12 mb-3">
                     <Form.Label>
-                      Patient Id <span className="text-danger">*</span>{" "}
+                      Patient ID <span className="text-danger">*</span>{" "}
                     </Form.Label>
                     <Form.Control
                       name="patientId"
@@ -971,7 +969,7 @@ export default function Patient() {
                 <div className="row">
                   <div className="col-xl-12 mb-3">
                     <Form.Label>
-                      Patient Id <span className="text-danger">*</span>{" "}
+                      Patient ID <span className="text-danger">*</span>{" "}
                     </Form.Label>
                     <Form.Control
                       name="patientId"

@@ -1,0 +1,78 @@
+.clickBtn {
+  /* background: blue; */
+  position: fixed;
+  z-index: 9;
+  left: 96%;
+  top: 93%;
+  border: none !important;
+  background: #043069 !important;
+  border-radius: 40px;
+  width: 40px;
+  height: 40px;
+}
+.clickBtn img {
+  width: 25px;
+  height: 25px;
+}
+.chatContainer {
+  width: 25%;
+  height: 65vh !important;
+  position: fixed;
+  z-index: 999;
+  left: 73%;
+  top: 27%;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px !important;
+}
+.detailsContainer {
+  height: 500px !important;
+  overflow-y: scroll !important;
+  padding: 20px !important;
+}
+.scrollBottom {
+  height: 200px;
+}
+.lastChat {
+  margin-bottom: 200px;
+}
+.chatMainHead {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+.chatHead {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.chatHead img {
+  width: 12%;
+  height: 100%;
+  background: #fff;
+  border-radius: 100%;
+}
+.chatTitleCard {
+  background: #04306f !important;
+  display: flex;
+  justify-content: center !important;
+}
+.chatTitle {
+  color: #fff !important;
+  font-size: 18px !important;
+  padding: 8px 0px 0px 6px;
+}
+.textareaContainer {
+  border: 1px solid #dfe1e4 !important;
+  padding: 10px !important;
+  margin-right: 10px !important;
+  font-size: 16px !important;
+}
+
+/* .detailsContainer::-webkit-scrollbar {
+  width: 100px;
+  background: transparent;
+}
+
+.detailsContainer::-webkit-scrollbar {
+  border-radius: 10px;
+  background: rgb(173, 162, 162);
+} */

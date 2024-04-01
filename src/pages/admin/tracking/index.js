@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import styles from "../../../pages/l2Auditor/dashboard/styles.module.css";
+import styles from "../../../pages/supervisor/dashboard/styles.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch } from "react-redux";
-import { patientDetails } from "../../../store/actions/AuthActions";
 import { Popover, Tooltip, notification } from "antd";
 import { Paginator } from "primereact/paginator";
 import Footer from "../../../jsx/layouts/Footer";
@@ -32,42 +31,40 @@ import AuditedDeclineTrack from "../../../../src/images/trackingImages/AuditDecl
 import Abort from "../../../../src/images/trackingImages/Abort.png";
 
 import Image from "next/image";
-import { extractLatestData } from "../../l2Auditor/auditing";
+import { extractLatestData } from "../../supervisor/auditing";
+import { patientDetails } from "../../../stores/authflow/actions";
 const bullets = [
   {
     title: "Processed Status",
     option: [
       {
-        color: "#5da9e4",
-        name: "Pending",
+        color: "#0078D4",
+        name: "PENDING",
       },
       {
-        color: "red",
-        name: "Declined",
+        color: "#3C0AD2",
+        name: "HOLD",
       },
       {
-        color: "#3a9b94",
-        name: "Completed",
+        color: "#EB5252",
+        name: "DECLINED",
       },
       {
-        color: "#AD94FA",
-        name: "Hold",
+        color: "#00BC13",
+        name: "COMPLETED",
       },
-      {
-        color: "#3B3486",
-        name: "ABORTED BY CRON",
-      },
+     
     ],
   },
   {
     title: "Audited Status",
     option: [
       {
-        color: "#377880",
+        color: "#4AA1AB",
         name: "AUDITED",
       },
       {
-        color: "#E28213",
+        color: "#BD3A79",
         name: "AUDIT PENDING",
       },
       {
@@ -75,11 +72,11 @@ const bullets = [
         name: "RE AUDIT",
       },
       {
-        color: "red",
+        color: "#EB5252",
         name: "DECLINED",
       },
       {
-        color: "#CE9900",
+        color: "#EBAE00",
         name: "AUDIT HOLD",
       },
       {
@@ -133,9 +130,6 @@ export default function Patient() {
     patientId: "",
   });
   const [patinetListAll, setPatinetListAll] = useState([]);
-  const [tenantId, setTenantId] = useState("");
-  const [localOrgId, setLocalOrgId] = useState("");
-  const [localUserId, setLocalUserId] = useState("");
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
@@ -171,24 +165,9 @@ export default function Patient() {
 
   const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
 
-  const allocatedToOptions = [
-    { label: "All", value: "All" },
-    ...patinetListAll
-      ?.map((item) =>
-        item?.patientAllocated
-          ? { label: item?.patientAllocated, value: item?.patientAllocated }
-          : null
-      )
-      .filter(Boolean),
-  ];
+
 
   useEffect(() => {
-    var tenId = localStorage.getItem("tenantId");
-    var uId = localStorage.getItem("userId");
-    var orgId = localStorage.getItem("orgId");
-    setTenantId(tenId);
-    setLocalOrgId(orgId);
-    setLocalUserId(uId);
     const datas = {
       pageNo,
       dueDateStart: clear ? "" : dueDateStart,
@@ -320,7 +299,7 @@ export default function Patient() {
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
-      navigate.push("/physician/patients/details");
+      navigate.push("/reviewer/patients/details");
     } else {
       notification.warning({
         message: data.patientId + " file not processed Please wait",
@@ -412,80 +391,6 @@ export default function Patient() {
             </div>
           </Popover>
         );
-    }
-  };
-
-  const auditstatusBodyTemplateIcon = (rowData) => {
-    switch (rowData.auditedStatus) {
-      case "AUDIT_PENDING":
-        return (
-          <div className="patient-status">
-            <span
-              className={`badge Auditprocessing-text`}
-              style={{ color: "#E28213", background: "#FBE7D0 !important" }}
-            >
-              Pending
-            </span>
-          </div>
-        );
-
-      case "DECLINED":
-        return (
-          <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>
-              Declined
-            </span>
-          </div>
-        );
-
-      case "AUDITHOLD":
-        return (
-          <div className="patient-status">
-            <span
-              className={`badge Audithold-text`}
-              style={{ color: "#CE9900" }}
-            >
-              Audit Hold
-            </span>
-          </div>
-        );
-      case "REAUDIT":
-        return (
-          <div className="patient-status">
-            <span className={`badge reAudit-text`} style={{ color: "#964B00" }}>
-              Re Audit
-            </span>
-          </div>
-        );
-      case "AUDITED":
-        return (
-          <div className="patient-status">
-            <span className={`badge audited-text`} style={{ color: "#377880" }}>
-              Audited
-            </span>
-          </div>
-        );
-      case "AUDITED":
-        return (
-          <div className="patient-status">
-            <span className={`badge audited-text`} style={{ color: "#377880" }}>
-              Audited
-            </span>
-          </div>
-        );
-      case "NOT_AUDIT":
-        return (
-          <div className="patient-status">
-            <span
-              className={`badge audited-text`}
-              style={{ color: "red", background: "#fcc" }}
-            >
-              Not Audited
-            </span>
-          </div>
-        );
-      case null:
-        return <div className="patient-status">---</div>;
     }
   };
 
@@ -638,6 +543,7 @@ export default function Patient() {
                             setAuditSelAllocatedTo={setAuditSelAllocatedTo}
                             setSearch={setSearchTextValue}
                             isSearch={true}
+                            search={searchTextValue}
                             searchlabel="Search By Patient Name / Id"
                             // select status
                             selectlabel="Select Status"

@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import styles from "./styles.module.css";
-import { IMAGES } from "../../jsx/constant/theme";
-import Image from "next/image";
 import Chat from "../chat/index";
 import { Tooltip } from "antd";
 import moment from "moment";
@@ -9,17 +6,6 @@ import moment from "moment";
 const Notification = ({ notificationResponse }) => {
   const [openMsg, setOpenMsg] = useState(false);
   const notificationData = notificationResponse?.content;
-  const emailSplitFunction = (email) => {
-    if (email) {
-      let emailSplit = email?.split("@");
-      return capitalizeFirstLetter(emailSplit[0]);
-    }
-  };
-  function capitalizeFirstLetter(string) {
-    if (string) {
-      return string.charAt(0)?.toUpperCase() + string?.slice(1);
-    }
-  }
 
   const splitUserName = (name) => {
     if (name) {

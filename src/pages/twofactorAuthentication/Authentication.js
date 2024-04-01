@@ -2,20 +2,18 @@ import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import Image from "next/image";
+import { notification } from "antd";
 import styles from "../../styles/auth.module.css";
 import twofactorImage from "../../images/svg/twofactorAuthentication.svg";
-import {
-  getQrCode,
-  getValidateCode,
-  loginAction,
-} from "../../store/actions/AuthActions";
 import { encyptingPass } from "../../components/headerFilters/functions";
+import RegularButton from "../../components/button";
+import { getValidateCode, loginAction } from "../../stores/authflow/actions";
 
 export const codeLength = 6;
 export const generateCodeArray = () =>
   Array.from({ length: codeLength + 1 }, (_, index) => index + 1);
 
-const index = () => {
+const Index = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [seconds, setSeconds] = useState(30);
@@ -27,38 +25,37 @@ const index = () => {
 
   const inputRefs = Array.from({ length: codeLength + 1 }, () => useRef(null));
 
-  const handleInput = (index, e) => {
-    const value = e.target.value;
-    setCode((prev) => [...prev, ...value]);
-    if (value.length === 1 && index < inputRefs?.length - 1) {
-      inputRefs[index + 1].current.focus();
-    }
-  };
-
   useEffect(() => {
     inputRefs[1]?.current?.focus();
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const encodedParams = urlParams.get("params");
     const decodedParams = JSON.parse(atob(encodedParams));
-    const { mfa, skipEntry, username, password } = decodedParams;
     setEnableMFA(decodedParams?.mfa);
     setUsername(decodedParams?.username);
     setPassword(decodedParams?.password);
     const skipParam = decodedParams?.skipEntry;
-    setSkip(skipParam);;
+    setSkip(skipParam);
   }, []);
+
   useEffect(() => {
     if (seconds === 0) {
       setCode([]);
-      inputRefs[1].current.focus();
-      setSeconds(30);
+      inputRefs[1].current?.focus();
+      if (enableMFA) {
+        notification.warning({
+          description: "Oops! your time is expired",
+          duration: 10,
+          onClose: () => {
+            setSeconds(30);
+          },
+        });
+      }
     }
-
   }, [seconds]);
 
   useEffect(() => {
-    if (code?.length > 0) {
+    if (seconds > 0) {
       const intervalId = setInterval(() => {
         setSeconds((prevSeconds) => {
           if (prevSeconds === 0) {
@@ -67,25 +64,37 @@ const index = () => {
           return Math.max(0, prevSeconds - 1);
         });
       }, 1000);
-      return () => clearInterval(intervalId);
+      return () => {
+        clearInterval(intervalId);
+      };
     }
-    if (code?.length === 0) {
-      setSeconds(30);
+  }, [seconds]);
+
+  const handleInput = (index, e) => {
+    const value = e.target.value;
+    if (!isNaN(value) && value.length === 1) {
+      const updatedCode = [...code];
+      updatedCode[index - 1] = value;
+      setCode(updatedCode);
+      if (index === inputRefs?.length) {
+        inputRefs[index]?.current?.focus();
+      } else {
+        inputRefs[index + 1]?.current?.focus();
+      }
     }
-  }, [code]);
+  };
+
   const handleBackspace = (index, e) => {
     if (e.keyCode === 8 && index > 0) {
       e.preventDefault();
-      setCode((prev) => {
-        const newCode = [...prev];
-        newCode[index - 1] = "";
-        if (newCode[0] == "") {
-          return [];
-        } else {
-          return newCode;
-        }
-      });
-      inputRefs[index - 1]?.current?.focus();
+      const updatedCode = [...code];
+      updatedCode[index - 1] = "";
+      setCode(updatedCode);
+      if (index <= 5 && index === inputRefs?.length) {
+        inputRefs[index]?.current?.focus();
+      } else {
+        inputRefs[index - 1]?.current?.focus();
+      }
     }
   };
   return (
@@ -96,9 +105,8 @@ const index = () => {
         {enableMFA ? (
           <>
             <div className={styles.content}>
-              Protecting your tickets is our top priority. Please confirm your
-              account by entering the authorization code sent to
-              **********@cogentai.com
+              Please confirm your account by entering the authorization code
+              from your authenticator app.
             </div>
             {/* code Input */}
             <div className={styles.codeBox}>
@@ -110,7 +118,9 @@ const index = () => {
                     type="number"
                     maxLength="1"
                     pattern="[0-9]"
-                    value={code?.length > 0 ? code[index - 1] : ""}
+                    value={
+                      code?.length > 0 && code[index - 1] ? code[index - 1] : ""
+                    }
                     className={styles.codeInput}
                     onInput={(e) => handleInput(index, e)}
                     onKeyDown={(e) => handleBackspace(index, e)}
@@ -141,59 +151,60 @@ const index = () => {
         <div className={styles.lastContainer}>
           {enableMFA ? (
             <>
-              <button
-                className={styles.sendBtn}
-                onClick={() => {
-                  const codeString = code?.join("");
-                  dispatch(
-                    getValidateCode(
-                      username,
-                      encyptingPass(codeString),
-                      router,
-                      "validate",
-                      password
-                    )
-                  );
-                }}
-              >
-                SUBMIT
-              </button>
-              <button
+              <div className={styles.enableMfaBtn}>
+                <RegularButton
+                  type="submit"
+                  onClick={() => {
+                    const codeString = code?.join("");
+                    dispatch(
+                      getValidateCode(
+                        username,
+                        encyptingPass(codeString),
+                        router,
+                        "validate",
+                        password
+                      )
+                    );
+                  }}
+                  name="SUBMIT"
+                  width={200}
+                />
+              </div>
+              <RegularButton
+                type="outline"
+                name="BACK"
                 className={styles.backBtn}
                 onClick={() => {
                   router.push("/login");
                 }}
-              >
-                BACK
-              </button>
-              {/* <div className={styles.redirect}>
-                <span className={styles.code}> Didn't get a Code? </span>
-                <span className={styles.link}>Send again</span>
-              </div> */}
+                width={200}
+              />
             </>
           ) : (
             <>
-              <button
-                className={styles.sendBtn}
-                onClick={() => {
-                  const encodedParams = btoa(
-                    JSON.stringify({
-                      username: username,
-                      password: password,
-                    })
-                  );
+              <div className={styles.enableMfaBtn}>
+                <RegularButton
+                  type="submit"
+                  onClick={() => {
+                    const encodedParams = btoa(
+                      JSON.stringify({
+                        username: username,
+                        password: password,
+                      })
+                    );
 
-                  router?.push({
-                    pathname: `/twofactorAuthentication/GetOTP`,
-                    search: `params=${encodedParams}`,
-                  });
-                }}
-              >
-                ENABLE MFA
-              </button>
+                    router?.push({
+                      pathname: `/twofactorAuthentication/GetOTP`,
+                      search: `params=${encodedParams}`,
+                    });
+                  }}
+                  name="ENABLE MFA"
+                  width="100%"
+                />
+              </div>
               {skip && (
-                <button
-                  className={styles.sendBtn}
+                <RegularButton
+                  type="submit"
                   onClick={() => {
                     dispatch(
                       loginAction(
@@ -206,9 +217,9 @@ const index = () => {
                       )
                     );
                   }}
-                >
-                  SETUP LATER
-                </button>
+                  name="SETUP LATER"
+                  width="100%"
+                />
               )}
             </>
           )}
@@ -218,4 +229,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;
