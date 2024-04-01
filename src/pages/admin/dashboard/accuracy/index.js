@@ -305,6 +305,7 @@ const Accuracy = () => {
         opposite: false,
         min: 0,
         max: 100,
+        gridLineWidth: 0
       },
       {
         // Secondary yAxis (right)
