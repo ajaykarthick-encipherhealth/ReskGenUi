@@ -27,7 +27,7 @@ import {
   renderUserPrfoile,
 } from "../../../components/headerFilters/functions";
 import Selector from "../../../components/selector";
-import { getFilters } from "../../../stores/authflow";
+import { getFilters } from "../../../stores/authflow/actions";
 
 const { RangePicker } = DatePicker;
 const statusOption = [
