@@ -42,11 +42,11 @@ const bullets = [
   },
   {
     color: "#be3144",
-    name: "Not Computed",
+    name: "Failed",
   },
   {
     color: "#e88d8d",
-    name: "Failed",
+    name: "Not Computed",
   },
 ];
 
