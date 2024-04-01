@@ -33,10 +33,12 @@
 .classTable th:first-child {
   border-radius: 10px 0 0 10px !important;
 }
-.classTable td:last-child {
+.nodataborder {
   border-radius: 10px !important;
 }
-.classTable th:last-child {
+
+.classTable th:last-child,
+.classTable td:last-child {
   border-radius: 0 10px 10px 0 !important;
 }
 
@@ -289,8 +291,8 @@
   width: 250px;
   text-align: center;
 }
-.allocateBtn{
-  display:flex;
-  justify-content:end;
-  align-items:end;
+.allocateBtn {
+  display: flex;
+  justify-content: end;
+  align-items: end;
 }

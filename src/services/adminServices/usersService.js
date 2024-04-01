@@ -128,9 +128,7 @@ export const enableUser = (
             payload: response.data,
           });
           notification.success({
-            description: `${user?.firstName} ${user?.lastName} has ${
-              checkedVal === false ? "disabled" : "enabled"
-            } successfully`,
+            description: `${user?.firstName} ${user?.lastName} has ${response.data.response.message} `,
           });
           dispatch(getUsers(0));
           if (setPopoverVisible) {
