@@ -24,6 +24,9 @@ export async function checkStatus(response) {
     };
     throw error;
   }
+  if(response.status===401){
+    window.open("/login","_self")
+  }
   return data;
 }
 

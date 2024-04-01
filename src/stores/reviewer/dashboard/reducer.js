@@ -1,10 +1,11 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { loadDashboard } from "./actions";
+import { workFlowAction } from "./actions";
 
-const dashboard = handleActions(
+
+const getWorkFlow = handleActions(
   {
-    [loadDashboard.SUCCEEDED]: (state, { payload }) => {
+    [workFlowAction.SUCCEEDED]: (state, { payload }) => {
       return payload;
     },
   },
@@ -12,5 +13,5 @@ const dashboard = handleActions(
 );
 
 export default combineReducers({
-  dashboard,
+  getWorkFlow,
 });

@@ -1,10 +1,10 @@
-import { requestPortal } from "../../utils/network";
+import { requestPortal } from "../../../utils/network";
 
-export async function loadDashboard() {
+export async function workFlow({startDate, endDate}) {
   const options = {
     method: "GET",
   };
-  const data = await requestPortal(`dbservice/patient/getbyuser?userId=ajith01@encipherhealth.onmicrosoft.com&page=0&size=10
+  const data = await requestPortal(`management/dashboard/tile/statistics?start=${startDate}&end=${endDate}
   `, options);
   return data;
 }

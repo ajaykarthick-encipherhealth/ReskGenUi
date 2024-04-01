@@ -1,8 +1,7 @@
-import { checkAuth, checkStatus } from "./helper";
+import { checkStatus } from "./helper";
 import { getStorage } from "../storages";
-import { portalUrl, tokenKey } from "../config";
+import { tokenKey } from "../config";
 import ENDPOINTS from "../../utility/enpoints";
-import { useRouter } from "next/router";
 
 export async function requestPortal(url, options) {
   const token = await getStorage(tokenKey);
@@ -10,20 +9,20 @@ export async function requestPortal(url, options) {
   const actualOptions = {
     ...options,
     headers: {
-      Authorization: `${"Bearer"+ " " + token}` ,
+      Authorization: `${"Bearer" + " " + token}`,
       "Content-Type": "application/json",
     },
   };
   return fetch(actualUrl, actualOptions).then(checkStatus);
 }
 
-export async function requestExternal(url, options,path) {
+export async function requestExternal(url, options, path) {
   const actualUrl = `${ENDPOINTS.apiEndoint}${url}`;
   const actualOptions = {
     ...options,
     body: JSON.stringify(body),
     headers: {
-      Authorization: `${"Bearer"+ " " + token}` ,
+      Authorization: `${"Bearer" + " " + token}`,
       "Content-Type": "application/json",
     },
   };
@@ -31,7 +30,6 @@ export async function requestExternal(url, options,path) {
 }
 
 export async function requestAUthflow(url, options) {
-  const token = await getStorage(tokenKey);
   const actualUrl = `${ENDPOINTS.apiEndoint}${url}`;
   const actualOptions = {
     ...options,
@@ -40,12 +38,11 @@ export async function requestAUthflow(url, options) {
       "Content-Type": "application/json",
     },
   };
-  return fetch(actualUrl, actualOptions).then(async(res) => {
+  return fetch(actualUrl, actualOptions).then(async (res) => {
     const response = await res.json();
-    const userDetails = JSON.parse(options.body)
+    const userDetails = JSON.parse(options.body);
     const skip = response?.response?.skipEntryAvailable;
     const mfa = response?.response?.mfaIsEnabled;
-    console.log(userDetails, "test");
     if (response?.response) {
       const encodedParams = btoa(
         JSON.stringify({
@@ -55,12 +52,12 @@ export async function requestAUthflow(url, options) {
           password: userDetails.password,
         })
       );
-      console.log(encodedParams,"test")
       const searchParams = new URLSearchParams();
-searchParams.append('params', encodedParams);
+      searchParams.append("params", encodedParams);
       window.open(
- `/twofactorAuthentication/Authentication?params=${searchParams.toString()}`,
-       '_self');
+        `/twofactorAuthentication/Authentication?params=${searchParams.toString()}`,
+        "_self"
+      );
     } else {
       notification.error({
         message: response.message,

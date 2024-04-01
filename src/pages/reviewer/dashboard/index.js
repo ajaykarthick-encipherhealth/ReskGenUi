@@ -8,12 +8,13 @@ import Accuracy from "./accuracy";
 import Notifications from "./notifications";
 import CompletedStatus from "./completedstatus";
 import HoldStatus from "./holdstatus";
-import { getWorkFlow } from "../../../store/actions/DashboardActions";
-import { useDispatch, useSelector } from "react-redux";
+// import { getWorkFlow } from "../../../store/actions/DashboardActions";
+import { useDispatch, useSelector ,connect} from "react-redux";
 import dayjs from "dayjs";
+import { actions as dashbaordActions } from "../../../stores/reviewer/dashboard/actions";
 import { useRouter } from "next/router";
 
-const Index = () => {
+const Index = ({data}) => {
   const currentDate = dayjs();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -29,7 +30,8 @@ const Index = () => {
     : lastDateWithTime.toISOString().split("T")[0] + "T23:59:59.999Z";
 
   useEffect(() => {
-    dispatch(getWorkFlow(startDate, endDate, router));
+    // dispatch(getWorkFlow(startDate, endDate, router));
+    // workFlowData(startDate, endDate)
   }, [startDate, endDate]);
 
   return (
@@ -68,4 +70,12 @@ const Index = () => {
   );
 };
 
-export default Index;
+const enhancer = connect(
+  (state) => ({
+    data: state
+  }),
+  {
+    workFlowData:dashbaordActions.workFlowAction
+  }
+);
+export default enhancer(Index);
