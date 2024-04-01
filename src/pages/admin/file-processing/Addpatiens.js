@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Offcanvas, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 
@@ -9,9 +9,36 @@ const Addpatients = ({
   handleSubmitPatientId,
   handleChangePatientId,
 }) => {
+  const [error, setError] = useState("");
+
+  const handleValidation = (event) => {
+    const patientId = event.target.value;
+    if (!/\d/.test(patientId)) {
+      setError("Patient ID must contain at least one number.");
+    } else {
+      setError("");
+    }
+  };
+
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    const patientId = event.target.patientId.value;
+    if (
+      !/\d/.test(patientId) ||
+      !/[a-zA-Z]/.test(patientId) ||
+      !/[@$!%*?&-]/.test(patientId)
+    ) {
+      setError(
+        "Patient ID must contain at least one letter, one number, and one special character."
+      );
+    } else {
+      handleSubmitPatientId(event);
+    }
+  };
+
   return (
     <Offcanvas
-      onHide={setAddPatientId}
+      onHide={() => setAddPatientId(false)}
       show={addPatientId}
       className="offcanvas-end"
       placement="end"
@@ -33,7 +60,7 @@ const Addpatients = ({
           <Form
             noValidate
             validated={validated}
-            onSubmit={handleSubmitPatientId}
+            onSubmit={handleFormSubmit}
             autoComplete="off"
           >
             <div className="row">
@@ -45,11 +72,13 @@ const Addpatients = ({
                   className="text-capitalize"
                   name="patientId"
                   required
-                  pattern="^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$"
                   type="text"
-                  onChange={handleChangePatientId}
+                  onChange={(event) => {
+                    handleValidation(event);
+                    handleChangePatientId(event);
+                  }}
                 />
-                <small small id="emailHelp" class="form-text text-muted">Patient Id must contain one special character, numbers and letters.</small>
+                <small className="form-text text-danger">{error}</small>
               </div>
               <div className="col-xl-12 mb-3">
                 <Form.Label>
