@@ -695,7 +695,7 @@ const VisitData = ({}) => {
               providerName: providerList,
             });
           });
-        }
+        }    
 
         if (result.unMatchedDisease != null) {
           unMatchRes = result.unMatchedDisease;
@@ -744,6 +744,46 @@ const VisitData = ({}) => {
                 });
               }
             }
+          });
+        }
+        if (result?.suggestLabInReport) {
+          result?.suggestLabInReport?.map((res, index) => {
+            var providerList = [];
+            res?.provider?.map((res2, index) => {
+              providerList.push(res2.providerName);
+            });
+            const encounterDatearray = res?.encounterDate?.split(",");
+            suggestListAll.push({
+              actualDescription: res.actualDescription,
+              capturedSections: res.capturedSections,
+              diagnosisCode: res.diagnosisCode,
+              encounterDate: res.encounterDate,
+              encounterDateSplit: encounterDatearray,
+              getPlace: "Hcc",
+              isHccValid: true,
+              defaultPosition: res.defaultPosition,
+              providerName: providerList,
+            });
+          });
+        }
+        if (result?.suggestRadiologyInReport) {
+          result?.suggestRadiologyInReport?.map((res, index) => {
+            var providerList = [];
+            res?.provider?.map((res2, index) => {
+              providerList.push(res2.providerName);
+            });
+            const encounterDatearray = res?.encounterDate?.split(",");
+            suggestListAll.push({
+              actualDescription: res.actualDescription,
+              capturedSections: res.capturedSections,
+              diagnosisCode: res.diagnosisCode,
+              encounterDate: res.encounterDate,
+              encounterDateSplit: encounterDatearray,
+              getPlace: "Hcc",
+              isHccValid: true,
+              defaultPosition: res.defaultPosition,
+              providerName: providerList,
+            });
           });
         }
 
@@ -910,6 +950,22 @@ const VisitData = ({}) => {
           const array = res?.encounterDate.split(",");
           array.map((res2) => {
             encounterDateArr?.push({
+              name: res2,
+            });
+          });
+        });
+        result?.suggestLabInReport?.map((res) => {
+          const array = res?.encounterDate?.split(",");
+          array?.map((res2) => {
+            encounterDateArr.push({
+              name: res2,
+            });
+          });
+        });
+        result?.suggestRadiologyInReport?.map((res) => {
+          const array = res?.encounterDate?.split(",");
+          array?.map((res2) => {
+            encounterDateArr.push({
               name: res2,
             });
           });
