@@ -1721,7 +1721,7 @@ const Details = ({}) => {
                               <div className="col-xl-3 col-sm-12">
                                 <FontAwesomeIcon icon={faIdCardClip} />
                                 <label>Patient ID</label>
-                                <h6 className="ageDtails">
+                                <h6 className="ageDtails" style={{paddingLeft:"25px"}}>
                                   {patientDocumentResult.patientId}
                                 </h6>
                               </div>
@@ -1736,14 +1736,14 @@ const Details = ({}) => {
                               <div className="col-xl-2 col-sm-12">
                                 <FontAwesomeIcon icon={faCalendarAlt} />
                                 <label>Age</label>
-                                <h6 className="ageDtails">
+                                <h6 className="ageDtails" style={{paddingLeft:"20px"}}>
                                   {patientDocumentResult.age}
                                 </h6>
                               </div>
                               <div className="col-xl-2 col-sm-12">
                                 <FontAwesomeIcon icon={faVenusMars} />
                                 <label>Gender</label>
-                                <h6 className="ageDtails">
+                                <h6 className="ageDtails" style={{paddingLeft:"25px"}}>
                                   {patientDocumentResult.gender}
                                 </h6>
                               </div>
