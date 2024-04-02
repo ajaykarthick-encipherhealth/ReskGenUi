@@ -11756,6 +11756,7 @@ li.p-dropdown-item {
 
 .has-search .new-form-control {
   padding-left: 2.375rem;
+  font-size: 12px;
 }
 
 .has-search .form-control-feedback {
@@ -12397,7 +12398,7 @@ tbody > tr {
 }
 
 .custom-react-select > div > div:first-child div {
-  font-size: 0.875rem;
+  font-size: 12px;
   color: #6e6e6e;
 }
 
@@ -14373,4 +14374,7 @@ input[type="number"] {
   width: 85%;
   table-layout: fixed;
   border-collapse: collapse;
+}
+:where(.css-dev-only-do-not-override-djtmh8).ant-picker .ant-picker-input >input{
+  font-size: 10px;
 }
