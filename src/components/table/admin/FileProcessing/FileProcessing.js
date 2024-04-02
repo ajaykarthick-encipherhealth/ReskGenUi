@@ -227,39 +227,57 @@ function FileProcessingTable({ patinetListAll, loading }) {
         uploadStatus = 5;
         break;
       case "OCR":
+        uploadStatus = 20;
+        break;
       case "OCR_FAILED":
         uploadStatus = 10;
         break;
       case "SECTIONS_FILTER":
+        uploadStatus = 30;
+        break;
       case "SECTIONS_FILTER_FAILED":
         uploadStatus = 20;
         break;
       case "DISEASE_FOUND":
+        uploadStatus = 40;
+        break;
       case "DISEASE_FOUND_FAILED":
         uploadStatus = 30;
         break;
       case "VALID_DISEASE_SEPARATION":
+        uploadStatus = 50;
+        break;
       case "VALID_DISEASE_SEPARATION_FAILED":
         uploadStatus = 40;
         break;
 
       case "COMBINATION_CODES_FOUND":
+        uploadStatus = 60;
+        break;
       case "COMBINATION_CODES_FOUND_FAILED":
         uploadStatus = 50;
         break;
       case "MEAT_FOUND":
+        uploadStatus = 70;
+        break;
       case "MEAT_FOUND_FAILED":
         uploadStatus = 60;
         break;
       case "RAF_SCORE_FOUND":
+        uploadStatus = 80;
+        break;
       case "RAF_SCORE_FOUND_FAILED":
         uploadStatus = 70;
         break;
       case "STORED":
+        uploadStatus = 85;
+        break;
       case "STORED_FAILED":
         uploadStatus = 80;
         break;
       case "QUERY_CONDITIONS_FOUND":
+        uploadStatus = 95;
+        break;
       case "QUERY_CONDITIONS_FOUND_FAILED":
         uploadStatus = 90;
         break;

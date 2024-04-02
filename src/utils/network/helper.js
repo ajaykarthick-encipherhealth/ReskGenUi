@@ -18,7 +18,7 @@ export async function checkStatus(response) {
     window.open("/", "_self");
     return;
   }
-  if (response.status !== 202) {
+  if (response.status !== 200) {
     const error = {
       ...data,
     };
@@ -34,7 +34,7 @@ export async function checkAuth(response) {
     window.open("/", "_self");
     return;
   }
-  if (response.status !== 202) {
+  if (response.status !== 200) {
     const error = {
       ...data,
     };
