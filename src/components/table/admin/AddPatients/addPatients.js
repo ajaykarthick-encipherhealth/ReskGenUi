@@ -115,7 +115,7 @@ function AddPatientListTable({
               onClick={handleTableRowClick}
             >
               {data.computedDate
-                ? moment(data.computedDate).format("MM-DD-YYYY")
+                ? moment(data.computedDate).format("MM-DD-YYYY, h:mm a")
                 : "---"}
             </td>
             <td
@@ -124,7 +124,7 @@ function AddPatientListTable({
               onClick={handleTableRowClick}
             >
               {data.createdDate
-                ? moment(data.createdDate).format("MM-DD-YYYY")
+                ? moment(data.createdDate).format("MM-DD-YYYY, h:mm a")
                 : "---"}
             </td>
             <td
