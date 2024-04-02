@@ -289,7 +289,7 @@
 
 .hoverDiv {
   width: 95%;
-  padding-left: 25px;
+  /* padding-left: 25px; */
   margin-left: 10px;
   margin-bottom: 10px;
   border-bottom: 1px solid #e1edfe;
