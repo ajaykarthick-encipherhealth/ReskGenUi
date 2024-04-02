@@ -296,7 +296,11 @@ const Timeline = ({
                       <span className={visitStyles.timelineheading}>
                         {item.diagnosisCode} - Encounter file added
                       </span>
-                    ) : item.action == "HOLD" ? (
+                    ): item.action == "MEAT_ADDED" ? (
+                      <span className={visitStyles.timelineheading}>
+                        {item.diagnosisCode} - Meat added
+                      </span>
+                    )  : item.action == "HOLD" ? (
                       <span
                         className={visitStyles.timelineheading}
                         style={{ display: "flex" }}
@@ -390,12 +394,12 @@ const Timeline = ({
                         {` to`}
                         <span
                           style={{
-                            color: "red",
+                            color: "#3a9b94",
                             fontWeight: "700",
                             paddingLeft: "5px",
                           }}
                         >
-                          DECLINED
+                          PENDING
                         </span>
                         {/* Changed from
                         {item.previousProcessedState} to DECLINED */}
