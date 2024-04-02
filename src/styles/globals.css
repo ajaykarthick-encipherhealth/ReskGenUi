@@ -12560,7 +12560,7 @@ tbody > tr {
 
 .widget-timeline .timeline > li > .timeline-panel {
   border-radius: 0.625rem;
-  padding: 0.9375rem 1.25rem;
+  padding: 10px;
   position: relative;
   display: block;
   margin-left: 45px;
