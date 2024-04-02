@@ -32,7 +32,7 @@ import { Button, Offcanvas } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { DownOutlined } from "@ant-design/icons";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import Hcc from "./hcc/index";
 import NonHcc from "./non-hcc/index";
 import Radiology from "./radiology/index";
@@ -57,6 +57,8 @@ import { getPatientDetailsResult,getMeatQueryList,getAllSectionColor,getHccFileD
 
 const Details = ({}) => {
   const navigate = useRouter();
+  // const par = useParams()
+  // console.log(navigate.query, "testing");
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const patientDetailsResult = useSelector((state) => state?.ReviewerReducers?.patientDetails);
@@ -1303,8 +1305,15 @@ const Details = ({}) => {
 
   const backToPatientData = () => {
     dispatch(getPatientID(null));
-    navigate.back();
-    // navigate.push("/reviewer/patients");
+    const user = localStorage.getItem('userRole')
+    if (user && user.toLowerCase() === "admin") {
+      const { user: _, ...queryWithoutUser } = navigate.query;
+      const queryString = new URLSearchParams(queryWithoutUser).toString();
+      const url = queryString ? `/admin/patients?${queryString}` : '/admin/patients';
+      navigate.push(url);
+    } else {
+      navigate.back();
+    }
   };
 
   const splitUserName = (name) => {

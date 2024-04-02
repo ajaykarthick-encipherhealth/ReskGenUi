@@ -5,7 +5,7 @@ import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
 import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -105,6 +105,15 @@ export default function Patient() {
 
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [errors, setErrors] = useState({ year: "" });
+
+  useEffect(() => {
+    if (window !== "undefined") {
+      if (navigate) {
+        setPageNo(navigate?.query?.pageNo)
+        setPaginationFirst(navigate?.query?.paginationFirst)
+      }
+    }
+  }, [navigate])
 
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
@@ -530,7 +539,6 @@ export default function Patient() {
     setTableLoading(true);
     getAllList(response?.response);
   };
-
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -605,9 +613,10 @@ export default function Patient() {
                               statusBodyTemplate={processstatusBodyTemplate}
                               gotoPatientDetails={gotoPatientDetails}
                               patientDetails={patientDetails}
-                              setSortOrder={setComputedSortOrder}
+                              setSortOrder={setComputedSortOrder} 
                               sortOrder={computedSortOrder}
                               setSort={setSort}
+                              page={{pageNo, paginationFirst}}
                             />
                             <div>
                               <div className="pagination-container">
