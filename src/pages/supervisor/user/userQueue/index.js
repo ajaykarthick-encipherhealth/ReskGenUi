@@ -82,7 +82,7 @@ const statusOptions = [
 const AuditOptions = [
   { label: "ALL", value: "" },
   { label: "AUDITED", value: "AUDITED" },
-  { label: "AUDITHOLD", value: "AUDITHOLD" },
+  { label: "AUDIT HOLD", value: "AUDITHOLD" },
   { label: "REAUDIT", value: "REAUDIT" },
   { label: "AUDIT PENDING", value: "AUDIT_PENDING" },
   { label: "AUDIT DECLINED", value: "AUDIT_DECLINED" },
