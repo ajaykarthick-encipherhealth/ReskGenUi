@@ -3418,6 +3418,26 @@ const File = ({}) => {
           </Button>
         </div>
         <div className={isFileFormShow ? "col-xl-7" : "col-xl-6"}>
+        <Popover
+             open={popoverVisible}
+             content={PopContent}
+             placement="bottom"
+             trigger={"click"}
+             onOpenChange={() => setPopoverVisible(true)}
+           >
+             <div className={styles.dosContainer}>
+               <span className={styles.dosPageNumber}>
+                 Select Dos Page Number
+               </span>
+               <FontAwesomeIcon
+                 icon={faAngleDown}
+                 style={{
+                   size: 10,
+                   color: "#e6e6e6",
+                 }}
+               />
+             </div>
+           </Popover>
           <div className="card-body p-0">
             {hccFileDetails?.loading != true ?
             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
