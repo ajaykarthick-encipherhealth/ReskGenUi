@@ -19,7 +19,7 @@ const AdminList = ({ userList }) => {
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
-            <th>NAME</th>
+            <th>USERNAME</th>
             <th>ALLOCATED</th>
             <th>COMPLETED</th>
             <th>PENDING</th>
