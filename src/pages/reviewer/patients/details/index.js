@@ -946,35 +946,11 @@ const Details = ({}) => {
   };
 
   const handleSubmitHccComplete = async () => {
-    var dos = selectedDosValue;
-    var validObject = {};
-    var inValidObject = {};
-    var unmatachObject = {};
-    var comoboObject = {};
-    var meatObject = {};
-    var deletedObject = {};
-    var postData = {
+    var userData = {
       userId: localUserId,
-      patientId: localPatientId,
-      patientName: patientDocumentResult.patientName,
-      fileId: patientDocumentResult.patientName,
-      orgId: patientDocumentResult.orgId,
-      tenantId: patientDocumentResult.tenantId,
-      dob: patientDocumentResult.dob,
-      gender: patientDocumentResult.gender,
-      age: patientDocumentResult.age,
-      validDisease: patientDocumentResult.validDisease,
-      invalidDisease: patientDocumentResult.invalidDisease,
-      unmatchedDisease: patientDocumentResult.unmatchedDisease,
-      comboDisease: patientDocumentResult.comboDisease,
-      meatCriteria: patientDocumentResult.meatCriteria,
-      rafScore: patientDocumentResult.rafScore,
-      dosFiltered: patientDocumentResult.dosFiltered,
-      fileDetailDTO: patientDocumentResult.fileDetailDTO,
-      deletedDiseases: patientDocumentResult.deletedDiseases,
-      dos: selectedDosValue,
     };
-
+    var resultData = patientDetailsResult?.result?.response;
+    var postData = {...userData,...resultData};
     try {
       const response = await axios.post(
         ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/complete`,
