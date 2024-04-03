@@ -140,23 +140,23 @@ function PatientTable({
               <div style={{ textAlign: "center" }}>---</div>
             )}
           </td>
-          <td
+          <td 
             className={TableStyle.childBorder}
-            style={{ textAlign: "center", paddingLeft: "40px" }}
+            style={{ textAlign: "center", textAlign:"center" }}
             onClick={handleTableRowClick}
           >
             {data?.accuracyScore?.correctCount
               ? data?.accuracyScore?.correctCount
-              : "---"}
+              :<div   style={{ textAlign: "center" }}>---</div>}
           </td>
-          <td
+          <td 
             className={TableStyle.childBorder}
-            style={{ textAlign: "center", paddingLeft: "40px" }}
+            style={{ textAlign: "center" }}
             onClick={handleTableRowClick}
           >
             {data?.accuracyScore?.wrongCount
               ? data?.accuracyScore?.wrongCount
-              : "---"}{" "}
+              : <div   style={{ textAlign: "center", textAlign:"center" }}>---</div>}
           </td>
 
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
@@ -238,13 +238,13 @@ function PatientTable({
         <thead className={TableStyle.classThead}>
           <tr>
             <th>PATIENTS</th>
-            <th className={TableStyle.rowStyle2}>REVIEWER</th>
-            <th className={TableStyle.rowStyle2} style={{ cursor: "pointer" }}>
+            <th style={{paddingLeft:'60px'}}>REVIEWER</th>
+            <th  style={{ cursor: "pointer", textAlign:"center" }}>
               <Tooltip placement="bottom" title="REVIEWER CHANGES">
                 RC
               </Tooltip>
             </th>
-            <th className={TableStyle.rowStyle2} style={{ cursor: "pointer" }}>
+            <th  style={{ cursor: "pointer", textAlign:"center" }}>
               {" "}
               <Tooltip placement="bottom" title="REVIEWER CHANGES REJECTION">
                 RCR
@@ -309,7 +309,7 @@ function PatientTable({
               </span>
             </th>
 
-            <th>AUDIT ALLOCATED BY</th>
+            <th  style={{ paddingLeft: "30px" }}>AUDIT ALLOCATED BY</th>
             <th style={{ paddingLeft: "30px" }}>PRIORITY</th>
             <th className={TableStyle.rowStyle2}>AUDIT STATUS</th>
           </tr>
