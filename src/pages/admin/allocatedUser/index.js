@@ -319,22 +319,22 @@ export default function Patient() {
               <div style={{ textAlign: "center" }}>---</div>
             )}
           </td>
-          <td className={TableStyle.childBorder}>
+          <td className={TableStyle.childBorder} style={{textAlign:"center"}}>
             {data.totalFileAuditAllocated
               ? data.totalFileAuditAllocated
               : "---"}
           </td>
-          <td className={TableStyle.childBorder}>
+          <td className={TableStyle.childBorder} style={{textAlign:"center"}}>
             {data.totalFileAudited ? data.totalFileAudited : "---"}
           </td>
 
-          <td className={TableStyle.childBorder}>
+          <td className={TableStyle.childBorder} style={{textAlign:"center"}}>
             {data.totalFileAuditPending ? data.totalFileAuditPending : "---"}
           </td>
-          <td className={TableStyle.childBorder}>
+          <td className={TableStyle.childBorder} style={{textAlign:"center"}}>
             {data.totalFileAuditHold ? data.totalFileAuditHold : "---"}
           </td>
-          <td className={TableStyle.childBorder}>
+          <td className={TableStyle.childBorder} style={{textAlign:"center"}}>
             {data.totalFileAuditDeclined ? data.totalFileAuditDeclined : "---"}
           </td>
         </tr>
@@ -488,7 +488,7 @@ export default function Patient() {
                             )}
 
                             <div>
-                              <label>Search by Name or ID</label>
+                              <label> {!isPatientList && activeTab == 1 ? "Search by Name or ID"  : !isPatientList && activeTab == 2 ?   "Search by Name" : "Search by Name or ID" }</label>
                               <div class="form-group has-search">
                                 <FontAwesomeIcon
                                   className="fa fa-search form-control-feedback"
@@ -721,13 +721,13 @@ export default function Patient() {
                                                 }
                                               >
                                                 <tr>
-                                                  <th>NAME</th>
-                                                  <th>AUDIT ALLOCATED</th>
-                                                  <th>AUDIT PROCESSED</th>
+                                                  <th style={{paddingLeft:"80px"}} >NAME</th>
+                                                  <th style={{textAlign:"center"}}>AUDIT ALLOCATED</th>
+                                                  <th style={{textAlign:"center"}}>AUDIT PROCESSED</th>
 
-                                                  <th>AUDIT PENDING</th>
-                                                  <th>AUDIT HOLD</th>
-                                                  <th>AUDIT INVALID</th>
+                                                  <th style={{textAlign:"center"}}>AUDIT PENDING</th>
+                                                  <th style={{textAlign:"center"}}>AUDIT HOLD</th>
+                                                  <th style={{textAlign:"center"}}>AUDIT INVALID</th>
                                                 </tr>
                                               </thead>
 
