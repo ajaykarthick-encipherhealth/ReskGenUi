@@ -14375,8 +14375,8 @@ input[type="number"] {
   table-layout: fixed;
   border-collapse: collapse;
 }
-:where(.css-dev-only-do-not-override-djtmh8).ant-picker
+/* :where(.css-dev-only-do-not-override-djtmh8).ant-picker
   .ant-picker-input
   > input {
   font-size: 10px;
-}
+} */
