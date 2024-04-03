@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import moment from "moment";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import dayjs from "dayjs";
 import { notification, Select as AntSelect, Empty, Tooltip } from "antd";
 import TableStyle from "../../../../components/table/table.module.css";
@@ -18,6 +18,7 @@ function PatientTable({
   statusBodyTemplate,
   patientDetails,
   setSort,
+  page
 }) {
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -81,7 +82,7 @@ function PatientTable({
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
-      navigate.push("/reviewer/patients/details");
+      navigate.push({pathname:"/reviewer/patients/details", query: page});
     } else {
       notification.warning({
         message: data.patientId + " file not processed. Please wait.",

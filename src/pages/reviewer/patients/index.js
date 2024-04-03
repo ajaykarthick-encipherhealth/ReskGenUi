@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { useSelector, useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -123,6 +123,16 @@ export default function Patient() {
       searchTextValue
     );
   }, [filteratedDashboardData, sort, selectedPriority,searchTextValue]);
+
+  useEffect(() => {
+    if (window !== "undefined") {
+      if (navigate.query.pageNo) {
+        setIsLoading(true)
+        setPageNo(navigate?.query?.pageNo)
+        setPaginationFirst(navigate?.query?.paginationFirst)
+      }
+    }
+  }, [navigate])
 
   useEffect(() => {
     if (patientsListFilter) {
@@ -599,6 +609,7 @@ export default function Patient() {
                               sort={sort}
                               setSort={setSort}
                               getFilteApi={getFilteApi}
+                              page={{pageNo, paginationFirst}}
                             />
                             <div>
                               <div className="pagination-container">

@@ -1287,6 +1287,16 @@ const Details = ({}) => {
       const queryString = new URLSearchParams(queryWithoutUser).toString();
       const url = queryString ? `/admin/patients?${queryString}` : '/admin/patients';
       navigate.push(url);
+    } else  if (user && user.toLowerCase() === "reviewer") {
+      const { user: _, ...queryWithoutUser } = navigate.query;
+      const queryString = new URLSearchParams(queryWithoutUser).toString();
+      const url = queryString ? `/reviewer/patients?${queryString}` : '/reviewer/patients';
+      navigate.push(url);
+    } else  if (user && user.toLowerCase() === "supervisor") {
+      const { user: _, ...queryWithoutUser } = navigate.query;
+      const queryString = new URLSearchParams(queryWithoutUser).toString();
+      const url = queryString ? `/supervisor/auditing?${queryString}` : '/supervisor/auditing';
+      navigate.push(url);
     } else {
       navigate.back();
     }
