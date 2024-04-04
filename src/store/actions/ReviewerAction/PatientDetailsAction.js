@@ -12,7 +12,7 @@ import { PatientDetails,MeatQuery,SectionColor ,HccFileDeatils,DosPageNumber,Rad
 
 
   
-  export const getPatientDetailsResult = (patientid) => {
+  export const getPatientDetailsResult = (patientid,year) => {
     return (dispatch) => {
       dispatch({
         type: GET_PATIENT_DETAILS,
@@ -21,7 +21,7 @@ import { PatientDetails,MeatQuery,SectionColor ,HccFileDeatils,DosPageNumber,Rad
         },
       });
       try {
-        PatientDetails(patientid).then((response) => {
+        PatientDetails(patientid,year).then((response) => {
           dispatch({
             type: GET_PATIENT_DETAILS,
             payload: {
