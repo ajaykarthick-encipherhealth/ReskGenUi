@@ -69,12 +69,12 @@ export const AdminMenuList = [
   {
     title: "File Processing",
     iconStyle: SVGICON.Usermanagement,
-    to: "/admin/file-processing",
+    to: "/admin/fileprocessing",
   },
   {
     title: "Patient Allocate",
     iconStyle: SVGICON.Allocation,
-    to: "/admin/allocatedUser",
+    to: "/admin/allocatedusers",
   },
   {
     title: "Tracking",
@@ -132,7 +132,7 @@ export const L2AuditorMenuList = [
     title: "User Queue",
     iconStyle: SVGICON.adminUser,
     to: "/supervisor/user",
-    childRoute: "/supervisor/user/userQueue",
+    childRoute: "/supervisor/user/userqueue",
     childRoute2: "/supervisor/user/details",
   },
   {

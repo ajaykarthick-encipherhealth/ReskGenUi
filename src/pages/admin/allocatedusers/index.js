@@ -15,7 +15,6 @@ import ENDPOINTS from "../../../utility/enpoints";
 import AllocatedAdminList from "../../../components/table/admin/allocatedAdminList/allocatedAdminList";
 import AllocatedL2AdminList from "../../../components/table/admin/allocatedL2AdminList/allocatedL2AdminList";
 import allocateStyle from "./allocate/style.module.css";
-import AllocateModal from "./allocate";
 import L2AllocateModal from "./l2allocate";
 import reportStyles from "../../reviewer/report/report.module.css";
 import SpinnerDots from "../../../components/spinner";
@@ -28,6 +27,7 @@ import {
 } from "../../../components/headerFilters/functions";
 import Selector from "../../../components/selector";
 import { getFilters } from "../../../stores/authflow/actions";
+import AllocateModal from "./allocate";
 
 const { RangePicker } = DatePicker;
 const statusOption = [
@@ -319,22 +319,22 @@ export default function Patient() {
               <div style={{ textAlign: "center" }}>---</div>
             )}
           </td>
-          <td className={TableStyle.childBorder} style={{textAlign:"center"}}>
+          <td className={TableStyle.childBorder}>
             {data.totalFileAuditAllocated
               ? data.totalFileAuditAllocated
               : "---"}
           </td>
-          <td className={TableStyle.childBorder} style={{textAlign:"center"}}>
+          <td className={TableStyle.childBorder}>
             {data.totalFileAudited ? data.totalFileAudited : "---"}
           </td>
 
-          <td className={TableStyle.childBorder} style={{textAlign:"center"}}>
+          <td className={TableStyle.childBorder}>
             {data.totalFileAuditPending ? data.totalFileAuditPending : "---"}
           </td>
-          <td className={TableStyle.childBorder} style={{textAlign:"center"}}>
+          <td className={TableStyle.childBorder}>
             {data.totalFileAuditHold ? data.totalFileAuditHold : "---"}
           </td>
-          <td className={TableStyle.childBorder} style={{textAlign:"center"}}>
+          <td className={TableStyle.childBorder}>
             {data.totalFileAuditDeclined ? data.totalFileAuditDeclined : "---"}
           </td>
         </tr>
@@ -488,7 +488,7 @@ export default function Patient() {
                             )}
 
                             <div>
-                              <label> {!isPatientList && activeTab == 1 ? "Search by Name or ID"  : !isPatientList && activeTab == 2 ?   "Search by Name" : "Search by Name or ID" }</label>
+                              <label>Search by Name or ID</label>
                               <div class="form-group has-search">
                                 <FontAwesomeIcon
                                   className="fa fa-search form-control-feedback"
@@ -721,13 +721,13 @@ export default function Patient() {
                                                 }
                                               >
                                                 <tr>
-                                                  <th style={{paddingLeft:"80px"}} >NAME</th>
-                                                  <th style={{textAlign:"center"}}>AUDIT ALLOCATED</th>
-                                                  <th style={{textAlign:"center"}}>AUDIT PROCESSED</th>
+                                                  <th>NAME</th>
+                                                  <th>AUDIT ALLOCATED</th>
+                                                  <th>AUDIT PROCESSED</th>
 
-                                                  <th style={{textAlign:"center"}}>AUDIT PENDING</th>
-                                                  <th style={{textAlign:"center"}}>AUDIT HOLD</th>
-                                                  <th style={{textAlign:"center"}}>AUDIT INVALID</th>
+                                                  <th>AUDIT PENDING</th>
+                                                  <th>AUDIT HOLD</th>
+                                                  <th>AUDIT INVALID</th>
                                                 </tr>
                                               </thead>
 
