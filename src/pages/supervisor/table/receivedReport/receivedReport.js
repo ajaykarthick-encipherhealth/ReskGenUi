@@ -43,7 +43,7 @@ function ReceivedReport({
     };
     dispatch(selectedReport(info));
     router?.push(
-      `/supervisor/report/individualreport?reportId=${info?.reportUser?.reportId}`
+      `/supervisor/report/individualreport?reportId=${info?.reportUser?.reportId}&page=${receivedPageNo}&limit=${paginationFirst}`
     );
   };
 

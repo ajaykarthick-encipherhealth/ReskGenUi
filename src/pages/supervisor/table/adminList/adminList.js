@@ -12,7 +12,7 @@ const AdminList = ({ userList }) => {
 
   const gotoUserQueue = (item) => {
     dispatch(storeUserValues(item)),
-      router.push(`user/userQueue?userId=${item?.userName}`);
+      router.push(`user/userqueue?userId=${item?.userName}`);
   };
   return (
     <div className={TableStyle.classContaineer}>

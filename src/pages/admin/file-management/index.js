@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Nav, Tab } from "react-bootstrap";
 import NavBar from "../../../jsx/layouts/nav";
 
-import FileProcessing from "./file-processing";
+import FileProcessing from "./fileprocessing";
 import DataValidation from "./data-validation";
 import { useSelector } from "react-redux";
 

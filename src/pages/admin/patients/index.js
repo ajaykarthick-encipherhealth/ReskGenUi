@@ -19,8 +19,8 @@ import AddPatientListTable from "../../../components/table/admin/AddPatients/add
 import moment from "moment";
 import { getMessagesList } from "../../../store/actions/adminAction/fileProcessingActions";
 import { getPatients } from "../../../store/actions/adminAction/patientsActions";
-import FileUploading from "../file-processing/FileUploading";
-import Addpatients from "../file-processing/Addpatiens";
+import FileUploading from "../fileprocessing/FileUploading";
+import Addpatients from "../fileprocessing/Addpatiens";
 import SpinnerDots from "../../../components/spinner";
 import { LoadingOutlined } from "@ant-design/icons";
 import { eventStreming } from "../../../components/table/admin/FileProcessing/FileProcessing";

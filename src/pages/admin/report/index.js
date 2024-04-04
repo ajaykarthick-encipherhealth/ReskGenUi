@@ -24,6 +24,7 @@ import { getSelectUserList } from "../../../store/actions/adminAction/DashboardA
 import SpinnerDots from "../../../components/spinner";
 import HeaderFilters from "../../../components/headerFilters";
 import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
+import { useRouter } from "next/router";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -35,6 +36,7 @@ const statusOptions = [
 
 const index = () => {
   const dispatch = useDispatch();
+  const route = useRouter()
   const ExportResponse = useSelector((state) => state.adminReport?.exportRes);
 
   const ReportPatientDetails = useSelector(
@@ -249,6 +251,26 @@ const index = () => {
     }
   }, [reportActiveTab]);
 
+  useEffect(() => {
+    const page = new URLSearchParams(window.location.search).get("page");
+    const limit = new URLSearchParams(window.location.search).get("limit");
+    if (reportActiveTab === "ReceivedReport" && page) {
+      setReceivedPageNo(page)
+      setPaginationReceivedFirst(limit)
+    } else if (reportActiveTab === "SentReport" && page) {
+      setSentPageNo(page)
+      setPaginationSentFirst(limit)
+    } 
+  }, [reportActiveTab])
+
+
+  const backRender = () => {
+    const user = localStorage.getItem('userRole')
+    if (user == 'admin') {
+      route.push('/admin/report?page=0&limit=0')
+    }
+  }
+
   return (
     <>
       <Header />
@@ -369,6 +391,7 @@ const index = () => {
                                     className="nav-item"
                                     onClick={() => {
                                       handleTabs("CoderReport");
+                                      backRender()
                                     }}
                                   >
                                     <Nav.Link
@@ -383,6 +406,7 @@ const index = () => {
                                     className="nav-item"
                                     onClick={() => {
                                       handleTabs("SentReport");
+                                      backRender()
                                     }}
                                   >
                                     <Nav.Link
@@ -397,6 +421,7 @@ const index = () => {
                                     className="nav-item"
                                     onClick={() => {
                                       handleTabs("ReceivedReport");
+                                      backRender()
                                     }}
                                   >
                                     <Nav.Link
