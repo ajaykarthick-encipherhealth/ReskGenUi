@@ -1,23 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Button, Spinner } from "react-bootstrap";
-import Select from "react-select";
 import Header from "../../../jsx/layouts/nav/Header";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch } from "react-redux";
-import { DatePicker, Spin, notification } from "antd";
-import { InputText } from "primereact/inputtext";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import {  Spin, notification } from "antd";
 import { Paginator } from "primereact/paginator";
-import Footer from "../../../jsx/layouts/Footer";
 import visitStyles from "../../../styles/visitdata.module.css";
 import AddPatientListTable from "../../../components/table/admin/AddPatients/addPatients";
-import moment from "moment";
-import { getMessagesList } from "../../../store/actions/adminAction/fileProcessingActions";
 import { getPatients } from "../../../store/actions/adminAction/patientsActions";
 import FileUploading from "../fileprocessing/FileUploading";
 import Addpatients from "../fileprocessing/Addpatiens";
@@ -109,8 +102,8 @@ export default function Patient() {
   useEffect(() => {
     if (window !== "undefined") {
       if (navigate) {
-        setPageNo(navigate?.query?.pageNo)
-        setPaginationFirst(navigate?.query?.paginationFirst)
+        setPageNo(navigate?.query?.pageNo?navigate?.query?.pageNo:0)
+        setPaginationFirst(navigate?.query?.paginationFirst?navigate?.query?.paginationFirst:0)
       }
     }
   }, [navigate])
