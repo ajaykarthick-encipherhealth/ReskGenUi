@@ -158,7 +158,9 @@ const IndividualReceiverReport = () => {
                   className={reportStyles.filterBtn}
                   onClick={() => {
                     if (isAdminPage) {
-                      router?.push("/admin/report");
+                      const page = new URLSearchParams(window.location.search).get("page");
+                      const limit = new URLSearchParams(window.location.search).get("limit");
+                      router?.push(`/admin/report?page=${page}&limit=${limit}`);
                     } else {
                       router?.push("/reviewer/report");
                     }
