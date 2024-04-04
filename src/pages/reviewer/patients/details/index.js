@@ -55,10 +55,8 @@ import AdminWorkList from "./components/adminWorklist";
 import { getPatientDetailsResult,getMeatQueryList,getAllSectionColor,getHccFileDetails ,getDosPageNumber} from "../../../../store/actions/ReviewerAction/PatientDetailsAction";
 
 
-const Details = ({}) => {
+const Details = () => {
   const navigate = useRouter();
-  // const par = useParams()
-  // console.log(navigate.query, "testing");
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const patientDetailsResult = useSelector((state) => state?.ReviewerReducers?.patientDetails);
