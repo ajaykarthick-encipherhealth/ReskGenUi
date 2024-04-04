@@ -11756,7 +11756,7 @@ li.p-dropdown-item {
 
 .has-search .new-form-control {
   padding-left: 2.375rem;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .has-search .form-control-feedback {
@@ -12398,7 +12398,7 @@ tbody > tr {
 }
 
 .custom-react-select > div > div:first-child div {
-  font-size: 12px;
+  font-size: 14px;
   color: #6e6e6e;
 }
 
@@ -14375,8 +14375,9 @@ input[type="number"] {
   table-layout: fixed;
   border-collapse: collapse;
 }
-/* :where(.css-dev-only-do-not-override-djtmh8).ant-picker
-  .ant-picker-input
-  > input {
-  font-size: 10px;
-} */
+
+.dateRangeSize .ant-picker .ant-picker-input input {
+  font-size: 10px !important;
+}
+
+
