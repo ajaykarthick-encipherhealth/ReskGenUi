@@ -13,5 +13,5 @@ const WorkFlowData = handleActions(
 );
 
 export default combineReducers({
-  WorkFlowData,
+  response:WorkFlowData
 });

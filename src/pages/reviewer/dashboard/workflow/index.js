@@ -14,13 +14,13 @@ import holdbg from "../../.../../../../images/dashboard/holdbg.png";
 import allocatedbg from "../../.../../../../images/dashboard/allocatedbg.png";
 import pendingbg from "../../.../../../../images/dashboard/pendingbg.png";
 import completedbg from "../../.../../../../images/dashboard/completedbg.png";
-import { useSelector } from "react-redux";
+import { useSelector, connect } from "react-redux";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
 
-const WorkFlow = () => {
+const WorkFlow = ({ data }) => {
   const currentDate = dayjs();
-  const worlFlowData = useSelector((state) => state?.workFlow?.data);
+  const worlFlowData = data?.response;
   const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
   const [openPicker, setOpenPicker] = useState(false);
 
@@ -42,7 +42,7 @@ const WorkFlow = () => {
       id: 1,
       icon: allocated,
       title: "Allocated",
-      charts: worlFlowData?.data?.response?.allocated,
+      charts: worlFlowData?.response?.allocated,
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -52,7 +52,7 @@ const WorkFlow = () => {
       id: 2,
       icon: pending,
       title: "Pending",
-      charts: worlFlowData?.data?.response?.pending,
+      charts: worlFlowData?.response?.pending,
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -62,7 +62,7 @@ const WorkFlow = () => {
       id: 3,
       icon: hold,
       title: "Hold",
-      charts: worlFlowData?.data?.response?.hold,
+      charts: worlFlowData?.response?.hold,
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -72,7 +72,7 @@ const WorkFlow = () => {
       id: 4,
       icon: completed,
       title: "Completed",
-      charts: worlFlowData?.data?.response?.completed,
+      charts: worlFlowData?.response?.completed,
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -106,7 +106,7 @@ const WorkFlow = () => {
         {worlFlowData &&
         !worlFlowData?.loading &&
         worlFlowData?.data !== null &&
-        worlFlowData?.data?.response ? (
+        worlFlowData?.response ? (
           <Row className={styles.carddiv}>
             {card1Data?.map((data) => (
               <Col
@@ -138,5 +138,7 @@ const WorkFlow = () => {
     </div>
   );
 };
-
-export default WorkFlow;
+const enhancer = connect((state) => ({
+  data: state?.reviewer?.dashboard,
+}));
+export default enhancer(WorkFlow);
