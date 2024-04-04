@@ -12,7 +12,7 @@ import {useSelector ,connect} from "react-redux";
 import dayjs from "dayjs";
 import { actions as dashbaordActions } from "../../../stores/reviewer/dashboard";
 
-const Index = ({WorlFlow,workFlowData}) => {
+const Index = ({workFlowData}) => {
   const currentDate = dayjs();
   const last30thDate = currentDate.subtract(31, "day");
   const lastDateWithTime = currentDate.endOf("day");

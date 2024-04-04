@@ -2,7 +2,6 @@
 // import { handleActions } from "redux-actions";
 // import { workFlowAction } from "./actions";
 
-
 // const WorkFlowData = handleActions(
 //   {
 //     [workFlowAction.SUCCEEDED]: (state, { payload }) => {
@@ -18,29 +17,41 @@
 
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { workFlowAction } from "./actions";
+import { workFlowAction, dailyTaskAction, accuracyAction } from "./actions";
 
 const initialState = {
   loading: true,
-  data: null, 
-  error:null
+  data: null,
+  error: null,
 };
 
-const WorkFlowData = handleActions(
-  {
-    [workFlowAction.REQUESTED]: (state, action) => {
-      return { ...state, loading: true, error: null }; 
+const createReducer = (actionType) =>
+  handleActions(
+    {
+      [actionType.REQUESTED]: (state, action) => ({
+        ...state,
+        loading: true,
+        error: null,
+      }),
+      [actionType.SUCCEEDED]: (state, action) => ({
+        ...state,
+        loading: false,
+        data: action.payload,
+        error: null,
+      }),
+      [actionType.FAILED]: (state, action) => ({
+        ...state,
+        loading: false,
+        error: action.payload,
+      }),
     },
-    [workFlowAction.SUCCEEDED]: (state, action) => {
-      return { ...state, loading: false, data: action.payload, error: null }; 
-    },
-    [workFlowAction.FAILED]: (state, action) => {
-      return { ...state, loading: false, error: action.payload }; 
-    }
-  },
-  initialState 
-);
+    initialState
+  );
 
-export default combineReducers({
-  response: WorkFlowData
+const rootReducer = combineReducers({
+  workFlow: createReducer(workFlowAction),
+  dailyTask: createReducer(dailyTaskAction),
+  accuracy: createReducer(accuracyAction),
 });
+
+export default rootReducer;

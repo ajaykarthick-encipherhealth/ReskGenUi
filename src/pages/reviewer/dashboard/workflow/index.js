@@ -18,9 +18,8 @@ import { useSelector, connect } from "react-redux";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
 
-const WorkFlow = ({ data }) => {
+const WorkFlow = ({ worlFlowData }) => {
   const currentDate = dayjs();
-  const worlFlowData = data?.response?.data;
   const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
   const [openPicker, setOpenPicker] = useState(false);
 
@@ -42,7 +41,7 @@ const WorkFlow = ({ data }) => {
       id: 1,
       icon: allocated,
       title: "Allocated",
-      charts: worlFlowData?.data?.allocated,
+      charts: worlFlowData?.data?.response?.allocated,
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -52,7 +51,7 @@ const WorkFlow = ({ data }) => {
       id: 2,
       icon: pending,
       title: "Pending",
-      charts: worlFlowData?.response?.pending,
+      charts: worlFlowData?.data?.response?.pending,
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -62,7 +61,7 @@ const WorkFlow = ({ data }) => {
       id: 3,
       icon: hold,
       title: "Hold",
-      charts: worlFlowData?.response?.hold,
+      charts: worlFlowData?.data?.response?.hold,
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -72,13 +71,14 @@ const WorkFlow = ({ data }) => {
       id: 4,
       icon: completed,
       title: "Completed",
-      charts: worlFlowData?.response?.completed,
+      charts: worlFlowData?.data?.response?.completed,
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
       bg: completedbg,
     },
   ];
+
   return (
     <div className={styles.card1}>
       <HeadTitle
@@ -95,15 +95,12 @@ const WorkFlow = ({ data }) => {
         setOpenPicker={setOpenPicker}
       />
       <Card borderRadius="28px">
-        {data?.response?.loading && (
+        {worlFlowData?.loading && (
           <div className={spinSTYles.spinStyle}>
-            <Spin loading={data?.response?.loading} />
+            <Spin loading={worlFlowData?.loading} />
           </div>
         )}
-        {worlFlowData &&
-        !data?.response?.loading &&
-        worlFlowData?.response !== null &&
-        worlFlowData?.response ? (
+        {!worlFlowData?.loading && worlFlowData?.data?.response ? (
           <Row className={styles.carddiv}>
             {card1Data?.map((data) => (
               <Col
@@ -127,15 +124,17 @@ const WorkFlow = ({ data }) => {
             ))}
           </Row>
         ) : (
-          <div className={spinSTYles.spinStyle}>
-            <Empty />
-          </div>
+          !worlFlowData?.loading && (
+            <div className={spinSTYles.spinStyle}>
+              <Empty />
+            </div>
+          )
         )}
       </Card>
     </div>
   );
 };
 const enhancer = connect((state) => ({
-  data: state?.reviewer?.dashboard,
+  worlFlowData: state?.reviewer?.dashboard?.workFlow,
 }));
 export default enhancer(WorkFlow);
