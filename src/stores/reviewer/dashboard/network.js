@@ -44,3 +44,15 @@ export const accuracy = async ({ btn, month, year, isAdmin = false }) => {
   );
   return data;
 };
+
+export const completedScrore = async ({ btn, date, month, year }) => {
+  const options = {
+    method: "GET",
+  };
+  const url = `year=${year}&month=${month}&date=${date}&range=${btn}`;
+
+  const data = await requestPortal(`management/dashboard/line/statistics?${url}`,
+    options
+  );
+  return data;
+};

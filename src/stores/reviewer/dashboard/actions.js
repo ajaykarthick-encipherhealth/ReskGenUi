@@ -13,3 +13,8 @@ export const accuracyAction = createActionThunk(
   "ACCURACY",
   network.accuracy
 );
+
+export const completedScoreAction = createActionThunk(
+  "COMPLETED",
+  network.completedScrore
+);
