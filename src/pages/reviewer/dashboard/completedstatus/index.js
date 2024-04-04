@@ -8,10 +8,9 @@ import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
 import Legends from "../../../../components/legends";
 import { monthNames, getDays } from "../accuracy";
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
 import { actions as dashbaordActions } from "../../../../stores/reviewer/dashboard";
-import { useRouter } from "next/router";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { Empty, Spin } from "antd";
 
@@ -25,8 +24,6 @@ const CompletedStatus = ({getCOmpletedScore,completedDatas}) => {
   const [year, setYear] = useState();
   const [month, setMonth] = useState();
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
-  const dispatch = useDispatch();
-  const router = useRouter();
   useEffect(() => {
  
       getCOmpletedScore({
@@ -38,8 +35,6 @@ const CompletedStatus = ({getCOmpletedScore,completedDatas}) => {
       )
  
   }, [currentBtn, selectedMonth, selectedYear]);
-
-  // const completedDatas = useSelector((state) => state?.workFlow?.completed);
   const CompletedSortedData =
     completedDatas?.data?.response?.completedData?.sort(
       (a, b) => a._id.month - b._id.month

@@ -56,3 +56,13 @@ export const completedScrore = async ({ btn, date, month, year }) => {
   );
   return data;
 };
+
+export const holdStatus=async()=>{
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(`dbservice/dashboard/hold/charts`,
+    options
+  );
+  return data;
+}

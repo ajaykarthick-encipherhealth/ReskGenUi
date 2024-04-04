@@ -17,7 +17,7 @@
 
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { workFlowAction, dailyTaskAction, accuracyAction,completedScoreAction } from "./actions";
+import { workFlowAction, dailyTaskAction, accuracyAction,completedScoreAction, holdStatusAction } from "./actions";
 
 const initialState = {
   loading: true,
@@ -52,7 +52,8 @@ const rootReducer = combineReducers({
   workFlow: createReducer(workFlowAction),
   dailyTask: createReducer(dailyTaskAction),
   accuracy: createReducer(accuracyAction),
-  completedScore:createReducer(completedScoreAction)
+  completedScore:createReducer(completedScoreAction),
+  holdStatus:createReducer(holdStatusAction),
 });
 
 export default rootReducer;

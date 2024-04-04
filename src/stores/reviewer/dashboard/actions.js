@@ -18,3 +18,8 @@ export const completedScoreAction = createActionThunk(
   "COMPLETED",
   network.completedScrore
 );
+
+export const holdStatusAction = createActionThunk(
+  "HOLD_STATUS",
+  network.holdStatus
+);
