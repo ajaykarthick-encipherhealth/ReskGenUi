@@ -3,20 +3,19 @@ import styles from "./styles.module.css";
 import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
 import { Empty, Modal, Spin } from "antd";
-import { getHoldStatusData } from "../../../../store/actions/DashboardActions";
-import { useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
-import spinSTYles from '../../../../styles/auth.module.css'
+import spinSTYles from "../../../../styles/auth.module.css";
 import { getPatientID } from "../../../../store/actions/PatientsActions";
+import { actions as dashbaordActions } from "../../../../stores/reviewer/dashboard";
 
-const HoldStatus = () => {
+const HoldStatus = ({ getHoldStatusData, holdStatusData }) => {
   const [openHoldStatus, setOpenHoldStatus] = useState(false);
   const dispatch = useDispatch();
   const router = useRouter();
   useEffect(() => {
-    dispatch(getHoldStatusData(router));
+    getHoldStatusData();
   }, []);
-  const holdStatusData = useSelector((state) => state.l2Dashboard.holdStatus);
 
   const handleOpen = () => {
     setOpenHoldStatus(!openHoldStatus);
@@ -66,7 +65,7 @@ const HoldStatus = () => {
         ) : (
           <tr>
             <td colSpan="2">
-            <Empty/>
+              <Empty />
             </td>
           </tr>
         )}
@@ -83,7 +82,7 @@ const HoldStatus = () => {
       />
       <div className={styles.card6}>
         <Card borderRadius="28px" padding="10px">
-          {holdStatusData?.laoding ? (
+          {holdStatusData?.loading ? (
             <div
               style={{
                 width: "100%",
@@ -110,10 +109,8 @@ const HoldStatus = () => {
         closable={true}
         onCancel={handleOk}
       >
-        {holdStatusData?.laoding ? (
-          <div
-          className={spinSTYles.spinStyle}
-          >
+        {holdStatusData?.loading ? (
+          <div className={spinSTYles.spinStyle}>
             <Spin loading={holdStatusData?.loading} />
           </div>
         ) : (
@@ -126,5 +123,12 @@ const HoldStatus = () => {
     </>
   );
 };
-
-export default HoldStatus;
+const enhancer = connect(
+  (state) => ({
+    holdStatusData: state?.reviewer?.dashboard?.holdStatus,
+  }),
+  {
+    getHoldStatusData: dashbaordActions.holdStatusAction,
+  }
+);
+export default enhancer(HoldStatus);

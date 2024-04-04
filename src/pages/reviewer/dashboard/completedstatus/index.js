@@ -8,14 +8,13 @@ import Card from "../../../../components/card/index";
 import HeadTitle from "../../../../components/headtitle";
 import Legends from "../../../../components/legends";
 import { monthNames, getDays } from "../accuracy";
-import { useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
-import { getCOmpletedScore } from "../../../../store/actions/DashboardActions";
-import { useRouter } from "next/router";
+import { actions as dashbaordActions } from "../../../../stores/reviewer/dashboard";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { Empty, Spin } from "antd";
 
-const CompletedStatus = () => {
+const CompletedStatus = ({getCOmpletedScore,completedDatas}) => {
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const currentDate = new Date();
@@ -25,21 +24,17 @@ const CompletedStatus = () => {
   const [year, setYear] = useState();
   const [month, setMonth] = useState();
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
-  const dispatch = useDispatch();
-  const router = useRouter();
   useEffect(() => {
-    dispatch(
-      getCOmpletedScore(
-        currentBtn.toUpperCase(),
-        currentDate.getDate(),
-        selectedMonth,
-        selectedYear,
-        router
+ 
+      getCOmpletedScore({
+        btn:currentBtn.toUpperCase(),
+        date:currentDate.getDate(),
+        month:selectedMonth,
+        year:selectedYear,
+      }
       )
-    );
+ 
   }, [currentBtn, selectedMonth, selectedYear]);
-
-  const completedDatas = useSelector((state) => state?.workFlow?.completed);
   const CompletedSortedData =
     completedDatas?.data?.response?.completedData?.sort(
       (a, b) => a._id.month - b._id.month
@@ -214,5 +209,12 @@ const CompletedStatus = () => {
     </>
   );
 };
-
-export default CompletedStatus;
+const enhancer = connect(
+  (state) => ({
+    completedDatas: state?.reviewer?.dashboard?.completedScore
+  }),
+  {
+    getCOmpletedScore:dashbaordActions.completedScoreAction
+  }
+);
+export default enhancer(CompletedStatus);
