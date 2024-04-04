@@ -51,12 +51,12 @@ import Selector from "../../../components/selector";
 import ChatCommunication from "../../../components/chatCommunication/index";
 import { renderUserPrfoile } from "../../../components/headerFilters/functions";
 import ImageUploader from "../../../components/imageUploading/ImageUploader";
-import logout from "../../../images/svg/logout.svg";
 import editImg from "../../../images/svg/edit.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage, faBell } from "@fortawesome/free-regular-svg-icons";
 import { getAccuracy, getCoderDetails, getCurrentUser, logoutAllDevice } from "../../../stores/authflow/actions";
 import {actions as dashbaordActions} from '../../../stores/reviewer/dashboard'
+
 const btnItems = [
   {
     id: 1,
@@ -89,9 +89,6 @@ const Header = ({notificationResponse,getNotificationList}) => {
   const notificationAlertData = useSelector(
     (state) => state?.notificationDatas?.notificationAlert
   );
-  // const notificationResponse = useSelector(
-  //   (state) => state?.notificationDatas?.notificationList
-  // );
 
   const msgReply = useSelector((state) => state?.workFlow?.chatReply);
   const accuracy = useSelector((state) => state?.auth?.accuracy);

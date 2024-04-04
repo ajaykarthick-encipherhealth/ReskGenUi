@@ -1,6 +1,16 @@
 // import { combineReducers } from "redux";
 // import { handleActions } from "redux-actions";
-// import { workFlowAction } from "./actions";
+// import { workFlowAction } from "./actions";]
+
+
+// const getUsersDetailsLoading = handleActions(
+//   {
+//     [getUsersDetails.START]: () => true,
+//     [getUsersDetails.SUCCEEDED]: () => false,
+//     [getUsersDetails.FAILED]: () => false,
+//   },
+//   false
+// );
 
 // const WorkFlowData = handleActions(
 //   {
@@ -28,7 +38,7 @@ const initialState = {
 const createReducer = (actionType) =>
   handleActions(
     {
-      [actionType.REQUESTED]: (state, action) => ({
+      [actionType.STARTED]: (state, action) => ({
         ...state,
         loading: true,
         error: null,
