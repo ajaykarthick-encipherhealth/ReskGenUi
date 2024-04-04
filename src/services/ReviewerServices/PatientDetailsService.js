@@ -1,12 +1,17 @@
 import axios from "axios";
 import ENDPOINTS from "../../utility/enpoints";
 
-export async function PatientDetails(patientId) {
+export async function PatientDetails(patientId,year) {
   const token = localStorage.getItem("token");
   const orgId = localStorage.getItem("orgId");
+  var apiurl = `patientid=${patientId}&orgid=${orgId}`;
+  if(year){
+    apiurl = `patientid=${patientId}&orgid=${orgId}&year=${year}`
+  }
+ 
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`,
+      `${ENDPOINTS?.apiEndoint}dbservice/patient/compute/get?`+apiurl,
       {
         headers: {
           Authorization: `Bearer ${token}`,

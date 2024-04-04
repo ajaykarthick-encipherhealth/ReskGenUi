@@ -262,10 +262,15 @@ const Details = ({}) => {
 
   useEffect(() => {
     const patientId = localStorage.getItem("patientId");
+    getPatientIdDetails(
+      selectPatientId ? selectPatientId?.patirntId : patientId
+    );
+  }, []);
+
+  useEffect(() => {
+    const patientId = localStorage.getItem("patientId");
     dispatch(getAllSectionColor());
     dispatch(getPatientDetailsResult(selectPatientId ? selectPatientId?.patirntId : patientId));
-
-
   }, []);
   
   useEffect(() => {
@@ -287,11 +292,9 @@ const Details = ({}) => {
       tenId
     );
 
-    getPatientIdDetails(
-      selectPatientId ? selectPatientId?.patirntId : patientId
-    );
-
   }, [patientDetailsResult]);
+
+ 
 
 
   useEffect(() => {
@@ -591,15 +594,8 @@ const Details = ({}) => {
   const statuses = ["PENDING", "COMPLETED", "HOLD", "DECLINED"];
   const getPatientDetails = async (
     patientId,
-    orgId,
-    tenId,
-    fileloadCondition
   ) => {
-    setDosYear([]);
-    // const response = await axios.get(
-    //   ENDPOINTS.apiEndoint +
-    //     `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
-    // );
+    setHccValidCount(0);
     if (patientDetailsResult?.result?.response) {
       var result = patientDetailsResult?.result?.response;
       dispatch(getMeatQueryList(result?.dos,patientId));
@@ -632,7 +628,7 @@ const Details = ({}) => {
             });
           }
         });
-        setHccValidCount(validDisArray.length + result?.comboDisease?.length);
+        setHccValidCount(validDisArray.length);
 
         setNewValidDiseaseList(validDisArray);
         setDosYearDefalutSelect(highestDosValue[0]);
@@ -648,35 +644,11 @@ const Details = ({}) => {
       }
     }
   };
-  const getPatientDetailsYear = async (patientId, orgId, tenId, year) => {
+  const getPatientDetailsYear = async (year) => {
+    console.log(year,localPatientId)
     setSelectedDosValue(year);
     setIsModalComments(false);
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}&year=${year}`
-    );
-
-    if (response?.data) {
-      var result = response.data.response;
-      var validDisArray = [];
-      result?.validDisease?.map((res, index) => {
-        const encounterDatearray = res.encounterDate.split(",");
-        validDisArray.push({
-          actualDescription: res.actualDescription,
-          capturedSections: res.capturedSections,
-          diagnosisCode: res.diagnosisCode,
-          encounterDate: res.encounterDate,
-          encounterDateSplit: encounterDatearray,
-          isManuallyAdded: res.isManuallyAdded,
-          isHccValid: res.isHccValid,
-          defaultPosition: res.defaultPosition,
-        });
-      });
-      setNewValidDiseaseList(validDisArray);
-      setPatientDocumentResult(result);
-      setPatientDetails(result);
-      setPatientResultReload(true);
-    }
+    dispatch(getPatientDetailsResult(localPatientId,year));
   };
 
   const handleCloseModal = () => {
@@ -753,7 +725,7 @@ const Details = ({}) => {
 
   const dosOnChange = async (e) => {
     setPatientResultReload(false);
-    getPatientDetailsYear(localPatientId, localOrgId, localTenantId, e.value);
+    getPatientDetailsYear(e.value);
   };
 
   const submitSuggestedHcc = async (notes) => {
