@@ -50,7 +50,6 @@ const reducers = combineReducers({
   physicianComparison: PhysicianComparisonReducer,
   tanantAdmin: TanantAdminService,
   ReviewerReducers: ReviewerReducers,
-  // reviewer:UpdateDashboardReducer
   reviewer: combineReducers({
     dashboard: UpdateDashboardReducer,
   }),

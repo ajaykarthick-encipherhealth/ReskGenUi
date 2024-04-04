@@ -20,7 +20,7 @@ import { getSelectedDaysCount } from "../../../../components/headerFilters/funct
 
 const WorkFlow = ({ data }) => {
   const currentDate = dayjs();
-  const worlFlowData = data?.response;
+  const worlFlowData = data?.response?.data;
   const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
   const [openPicker, setOpenPicker] = useState(false);
 
@@ -42,7 +42,7 @@ const WorkFlow = ({ data }) => {
       id: 1,
       icon: allocated,
       title: "Allocated",
-      charts: worlFlowData?.response?.allocated,
+      charts: worlFlowData?.data?.allocated,
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -79,7 +79,6 @@ const WorkFlow = ({ data }) => {
       bg: completedbg,
     },
   ];
-
   return (
     <div className={styles.card1}>
       <HeadTitle
@@ -96,16 +95,14 @@ const WorkFlow = ({ data }) => {
         setOpenPicker={setOpenPicker}
       />
       <Card borderRadius="28px">
-        {!worlFlowData ||
-          worlFlowData?.loading ||
-          (worlFlowData?.data === null && (
-            <div className={spinSTYles.spinStyle}>
-              <Spin loading={worlFlowData?.loading} />
-            </div>
-          ))}
+        {data?.response?.loading && (
+          <div className={spinSTYles.spinStyle}>
+            <Spin loading={data?.response?.loading} />
+          </div>
+        )}
         {worlFlowData &&
-        !worlFlowData?.loading &&
-        worlFlowData?.data !== null &&
+        !data?.response?.loading &&
+        worlFlowData?.response !== null &&
         worlFlowData?.response ? (
           <Row className={styles.carddiv}>
             {card1Data?.map((data) => (
