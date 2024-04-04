@@ -117,12 +117,12 @@ function SentReportTable({
       ? router?.push(
           `/reviewer/report/individualreport?reportId=${
             row?._id
-          }&sentreport=${true}`
+          }&sentreport=${true}&page=${receivedPageNo}&limit=${paginationFirst}`
         )
       : router?.push(
           `/admin/report/individualreport?reportId=${
             row?._id
-          }&sentreport=${true}&isAdmin=${isAdmin}`
+          }&sentreport=${true}&isAdmin=${isAdmin}&page=${receivedPageNo}&limit=${paginationFirst}`
         );
   };
   const closeModal = () => {
@@ -282,7 +282,7 @@ function SentReportTable({
       <div className="pagination-container">
         <Paginator
           first={paginationFirst}
-          rows={15}
+          rows={1}
           totalRecords={details?.totalElements}
           onPageChange={onSentPageChange}
         />

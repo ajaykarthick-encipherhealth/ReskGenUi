@@ -160,7 +160,9 @@ const IndividualReceiverReport = () => {
                     if (isAdminPage) {
                       router?.push("/admin/report");
                     } else {
-                      router?.push("/supervisor/report");
+                      const page = new URLSearchParams(window.location.search).get("page");
+                      const limit = new URLSearchParams(window.location.search).get("limit");
+                      router?.push(`/supervisor/report?page=${page}&limit=${limit}`);
                     }
 
                     dispatch(

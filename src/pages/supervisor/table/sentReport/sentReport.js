@@ -105,7 +105,7 @@ function SentReportTable({
     router?.push(
       `/supervisor/report/individualreport?reportId=${
         row?._id
-      }&sentreport=${true}`
+      }&sentreport=${true}&page=${receivedPageNo}&limit=${paginationFirst}`
     );
   };
   const closeModal = () => {
@@ -260,7 +260,7 @@ function SentReportTable({
       <div className="pagination-container">
         <Paginator
           first={paginationFirst}
-          rows={15}
+          rows={1}
           totalRecords={details?.totalElements}
           onPageChange={onSentPageChange}
         />

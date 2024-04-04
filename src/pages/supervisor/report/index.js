@@ -26,6 +26,7 @@ import SpinnerDots from "../../../components/spinner";
 import TeamReport from "../table/TeamReport/teamReport";
 import { disableFutureDate } from "../../../components/headerFilters/functions";
 import { debounce } from "../../admin/report/Export";
+import { useRouter } from "next/router";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -36,6 +37,7 @@ const statusOptions = [
 ];
 const Index = () => {
   const dispatch = useDispatch();
+  const route = useRouter()
   const TeamReportDetails = useSelector(
     (state) => state.AuditReport?.teamDetails
   );
@@ -270,6 +272,27 @@ const Index = () => {
     setFilteredCoder(ReportPatientDetails?.response);
   }, [ReportPatientDetails, reportActiveTab]);
 
+
+  useEffect(() => {
+    const page = new URLSearchParams(window.location.search).get("page");
+    const limit = new URLSearchParams(window.location.search).get("limit");
+    if (reportActiveTab === "ReceivedReport" && page) {
+      setReceivedPageNo(page)
+      setPaginationReceivedFirst(limit)
+    } else if (reportActiveTab === "SentReport" && page) {
+      setSentPageNo(page)
+      setPaginationSentFirst(limit)
+    } 
+  }, [reportActiveTab])
+
+
+  const backRender = () => {
+    const user = localStorage.getItem('userRole')
+    if (user == 'supervisor') {
+      route.push('/supervisor/report?page=0&limit=0')
+    }
+  }
+
   return (
     <>
       <Header />
@@ -414,6 +437,7 @@ const Index = () => {
                                     className="nav-item"
                                     onClick={() => {
                                       handleTabs("AuditReport");
+                                      backRender()
                                     }}
                                   >
                                     <Nav.Link
@@ -428,6 +452,7 @@ const Index = () => {
                                     className="nav-item"
                                     onClick={() => {
                                       handleTabs("TeamReport");
+                                      backRender()
                                     }}
                                   >
                                     <Nav.Link to="#my-posts" eventKey="team">
@@ -439,6 +464,7 @@ const Index = () => {
                                     className="nav-item"
                                     onClick={() => {
                                       handleTabs("SentReport");
+                                      backRender()
                                     }}
                                   >
                                     <Nav.Link
@@ -453,6 +479,7 @@ const Index = () => {
                                     className="nav-item"
                                     onClick={() => {
                                       handleTabs("ReceivedReport");
+                                      backRender()
                                     }}
                                   >
                                     <Nav.Link
@@ -557,6 +584,7 @@ const Index = () => {
                                         setSortOrder={setReceivedSortOrder}
                                         sortOrder={receivedSortOrder}
                                         setSort={setSort}
+
                                       />
                                     )}
                                   </Tab.Pane>

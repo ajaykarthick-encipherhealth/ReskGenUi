@@ -44,13 +44,13 @@ function ReceivedReport({
     dispatch(selectedReport(info));
     if (isPhysician) {
       router?.push(
-        `/reviewer/report/individualreport?reportId=${info?.reportUser?.reportId}`
+        `/reviewer/report/individualreport?reportId=${info?.reportUser?.reportId}&page=${receivedPageNo}&limit=${paginationFirst}`
       );
     } else {
       router?.push(
         `/reviewer/report/individualreport?reportId=${
           info?.reportUser?.reportId
-        }&isAdminPage=${true}`
+        }&isAdminPage=${true}&page=${receivedPageNo}&limit=${paginationFirst}`
       );
     }
   };
