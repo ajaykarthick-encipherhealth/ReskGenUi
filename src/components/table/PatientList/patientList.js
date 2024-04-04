@@ -17,7 +17,6 @@ function PatientTable({
   patinetListAll,
   statusBodyTemplate,
   patientDetails,
-
   setSort,
   getFilteApi,
   page
