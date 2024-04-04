@@ -66,3 +66,14 @@ export const holdStatus=async()=>{
   );
   return data;
 }
+
+export const notification=async()=>{
+  const userId= localStorage.getItem("userId");
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(`communication/notification/${userId}?page=${0}&limit=100`,
+    options
+  );
+  return data;
+}

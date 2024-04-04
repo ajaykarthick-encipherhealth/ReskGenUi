@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch,connect } from "react-redux";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -38,7 +38,6 @@ import {
 import ENDPOINTS from "../../../utility/enpoints";
 import {
   getNotificationAlert,
-  getNotificationList,
   getNotificationAlertClear,
 } from "../../../store/actions/NotificationAction";
 import Notification from "../../../components/notification/index";
@@ -57,7 +56,7 @@ import editImg from "../../../images/svg/edit.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage, faBell } from "@fortawesome/free-regular-svg-icons";
 import { getAccuracy, getCoderDetails, getCurrentUser, logoutAllDevice } from "../../../stores/authflow/actions";
-
+import {actions as dashbaordActions} from '../../../stores/reviewer/dashboard'
 const btnItems = [
   {
     id: 1,
@@ -84,15 +83,15 @@ const Options = [
   },
 ];
 
-const Header = () => {
+const Header = ({notificationResponse,getNotificationList}) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const notificationAlertData = useSelector(
     (state) => state?.notificationDatas?.notificationAlert
   );
-  const notificationResponse = useSelector(
-    (state) => state?.notificationDatas?.notificationList
-  );
+  // const notificationResponse = useSelector(
+  //   (state) => state?.notificationDatas?.notificationList
+  // );
 
   const msgReply = useSelector((state) => state?.workFlow?.chatReply);
   const accuracy = useSelector((state) => state?.auth?.accuracy);
@@ -181,7 +180,7 @@ const Header = () => {
     let userId = currentUserInfo?.data?.response?.id;
     const userName = currentUserInfo?.data?.response?.userName;
 
-    dispatch(getNotificationList(userId));
+    getNotificationList(userId)
     const sse = new EventSource(
       `${ENDPOINTS?.apiEndoint}communication/push-notifications/${userName}?token=${token}`
     );
@@ -189,7 +188,7 @@ const Header = () => {
       const data = JSON.parse(event.data);
       if (data.length != 0) {
         dispatch(getNotificationAlert(data));
-        dispatch(getNotificationList(userId));
+       getNotificationList(userId)
       }
     });
     sse.onerror = () => {
@@ -730,7 +729,7 @@ const Header = () => {
         open={open}
       >
         {!openMsg ? (
-          <Notification notificationResponse={notificationResponse?.data} />
+          <Notification notificationResponse={notificationResponse?.data?.response} />
         ) : null}
       </Drawer>
 
@@ -755,5 +754,12 @@ const Header = () => {
     </div>
   );
 };
-
-export default Header;
+const enhancer = connect(
+  (state) => ({
+    notificationResponse: state?.reviewer?.dashboard?.notification
+  }),
+  {
+    getNotificationList:dashbaordActions.notificationAction
+  }
+);
+export default enhancer(Header);

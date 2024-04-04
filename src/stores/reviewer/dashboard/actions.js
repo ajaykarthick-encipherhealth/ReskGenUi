@@ -23,3 +23,8 @@ export const holdStatusAction = createActionThunk(
   "HOLD_STATUS",
   network.holdStatus
 );
+
+export const notificationAction = createActionThunk(
+  "NOTIFICATION",
+  network.notification
+);
