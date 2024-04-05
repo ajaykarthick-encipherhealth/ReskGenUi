@@ -2666,6 +2666,7 @@ const VisitData = ({}) => {
     setAddValidCodeCheck(null);
     setInputValueFileDate("");
     setSelectProviderInfo(null);
+    handleCloseModal()
   };
 
   const updateMeatQueryComments = async () => {
