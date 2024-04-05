@@ -2,6 +2,8 @@
 // import { tokenKey } from "../config";
 // import { removeStorage, setStorage } from "../storages";
 
+import Swal from "sweetalert2";
+
 const defaultHeaders = {
   "Content-Type": "application/json",
   // systemName: osName || "Unknown",
@@ -25,7 +27,18 @@ export async function checkStatus(response) {
     throw error;
   }
   if(response.status===401){
-    window.open("/login","_self")
+    Swal.fire({
+      title: '',
+      text: 'Your session has timed out. Please log in again.',
+      icon: 'warning',
+      confirmButtonText: 'Logout',
+      confirmButtonColor: "#DD6B55",
+      closeOnConfirm: false
+    }).then((result) => { 
+      if (result.isConfirmed) {
+         window.location = "/login"
+        } 
+    })
   }
   return data;
 }

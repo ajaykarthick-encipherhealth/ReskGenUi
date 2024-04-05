@@ -1,7 +1,7 @@
 import { notification } from "antd";
 import axios from "axios";
 import ENDPOINTS from "../../../utility/enpoints";
-
+import axiosConfig from "../../../utility/axiosConfig";
 export const ENABLEMFA = "ENABLEMFA";
 export const VALIDATE_CODE = "VALIDATE_CODE";
 export const VERIFYCODE = "VERIFYCODE";
@@ -289,7 +289,7 @@ export const getAccuracy = () => async (dispatch) => {
 export const getCurrentUser = (userId) => async (dispatch) => {
   const token = localStorage.getItem("token");
   try {
-    const response = await axios.get(
+    const response = await axiosConfig.get(
       `${ENDPOINTS?.apiEndoint}dbservice/user/get?userName=${userId}`,
 
       {
