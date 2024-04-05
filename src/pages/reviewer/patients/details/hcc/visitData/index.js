@@ -706,7 +706,6 @@ const VisitData = ({}) => {
               res?.provider?.map((res, index) => {
                 providerList.push(res.providerName);
               });
-              if (res.isHccValid == true) {
                 suggestListAll.push({
                   actualDescription: res.actualDescription,
                   diagnosisCodeFinding: res.diagnosisCode,
@@ -720,29 +719,7 @@ const VisitData = ({}) => {
                   providerName: providerList,
                   children: res.children ? res.children : [],
                   isMostSpecific: res.isMostSpecific,
-                });
-              } else {
-                // suggestListAll.push({
-                //   actualDescription: res.actualDescription,
-                //   diagnosisCodeFinding: res.diagnosisCodeFinding,
-                //   isHccValid: res.isHccValid,
-                //   capturedSections: res.capturedSections,
-                //   diagnosisCode: res.diagnosisCodeFinding,
-                //   encounterDate: res.encounterDate,
-                //   getPlace: "Hcc",
-                // });
-                suggestListAllNonHcc.push({
-                  actualDescription: res.actualDescription,
-                  diagnosisCodeFinding: res.diagnosisCode,
-                  isHccValid: res.isHccValid,
-                  capturedSections: res.capturedSections,
-                  diagnosisCode: res.diagnosisCode,
-                  encounterDate: res.encounterDate,
-                  encounterDateSplit: encounterDatearray,
-                  getPlace: "Hcc",
-                  providerName: providerList,
-                });
-              }
+                });            
             }
           });
         }
@@ -2984,7 +2961,6 @@ const VisitData = ({}) => {
                     {suggestedHccList?.map((data) => {
                       return (
                         <>
-                          {data.isHccValid == true ? (
                             <li>
                               <div
                                 className={`hccActiveCard ${visitStyles.hcc_card}`}
@@ -3205,7 +3181,7 @@ const VisitData = ({}) => {
                                 </div>
                               </div>
                             </li>
-                          ) : null}
+                         
                         </>
                       );
                     })}
