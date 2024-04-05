@@ -74,7 +74,7 @@ export const AdminMenuList = [
   {
     title: "Patient Allocate",
     iconStyle: SVGICON.Allocation,
-    to: "/admin/allocatedusers",
+    to: "/admin/allocateduser",
   },
   {
     title: "Tracking",

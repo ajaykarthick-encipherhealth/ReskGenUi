@@ -95,6 +95,8 @@ export default function Patient() {
   const [selAllocatedBy, setSelAllocatedBy] = useState("");
   const [selCreatedBy, setSelCreatedBy] = useState("");
   const [computedSortOrder, setComputedSortOrder] = useState("DESC");
+  const [selecteddates,setSelectedDates]=useState([])
+  const [selecteddates2,setSelectedDate2s]=useState([])
 
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [errors, setErrors] = useState({ year: "" });
@@ -564,6 +566,9 @@ export default function Patient() {
                             setEndDate={setComputedEndDate}
                             isRangePicker={true}
                             disable="Yes"
+                            selectedDates={selecteddates}
+                            setSelectedDates={setSelectedDates}
+                            
                             // created date
                             pickerlabe2="Created Date"
                             defaultStartDate2={""}
@@ -571,6 +576,8 @@ export default function Patient() {
                             setStartDate2={setCompletedStartDate}
                             setEndDate2={setCompletedEndDate}
                             isAnotherPicker={true}
+                            selectedDates2={selecteddates2}
+                            setSelectedDates2={setSelectedDates}
                             // defaultAllocateTo={"All"}
                             // allocated by
                             isAllocatedBySelector={true}

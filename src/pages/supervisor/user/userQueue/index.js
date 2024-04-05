@@ -116,6 +116,10 @@ const Index = () => {
   const [aduitCompletedEndDate, setAduitCompletedEndDate] = useState("");
   const [aduitDueStartDate, setAduitDueStartDate] = useState("");
   const [aduitDueEndDate, setAduitDueEndDate] = useState("");
+  const [selectedDates, setSelectedDates] = useState([]);
+  const [selectedDates2, setSelectedDates2] = useState([]);
+  const [selectedDates3, setSelectedDates3] = useState([]);
+
   const [sort, setSort] = useState({
     sortDir: "DESC",
     sortField: "auditDueDate",
@@ -335,6 +339,10 @@ const Index = () => {
                       audisetStartDate={setAduitDueStartDate}
                       audisetEndDate={setAduitDueEndDate}
                       isAduitDueDate={true}
+                      setSelectedAuditDueDates={setSelectedDates}
+                      selectedAuditDueDates={selectedDates}
+                      setSelectedAuditDates={setSelectedDates2}
+                      selectedAuditDates={selectedDates2}
                       // audited completed date
                       audipickerlabe2="Audit Completed Date"
                       audidefaultStartDate2={""}
@@ -362,6 +370,8 @@ const Index = () => {
                       setStartDate={setDueStartDate}
                       setEndDate={setDueEndDate}
                       isRangePicker={true}
+                      selectedDueDates={selectedDates3}
+                      setSelectedDueDates={setSelectedDates3}
                       // completed date
                       pickerlabe2="Completed Date"
                       defaultStartDate2={""}

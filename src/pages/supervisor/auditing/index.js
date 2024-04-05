@@ -113,6 +113,7 @@ export default function Patient() {
   const [parsedData, setParsedData] = useState([]);
   const [search, setSearch] = useState("");
   const [selCreatedBy, setSelCreatedBy] = useState("");
+  const [selectedDates, setSelectedDates] = useState([]);
 
   useEffect(() => {
     let tenId = localStorage.getItem("tenantId");
@@ -387,6 +388,9 @@ export default function Patient() {
                           setStartDate={setComputedStartDate}
                           setEndDate={setComputedEndDate}
                           isRangePicker={true}
+                          selectedDates={selectedDates}
+                          setSelectedDates={setSelectedDates}
+                          
                           // completed date
                           pickerlabe2="Audited Date"
                           defaultStartDate2={""}

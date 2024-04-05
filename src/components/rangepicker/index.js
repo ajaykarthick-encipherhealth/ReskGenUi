@@ -36,7 +36,6 @@ const DateRangePicker = ({
               dateString,
               setStartDate,
               setEndDate,
-              
               activeTab,
               setReceivedStartDate,
               setReceivedEndDate,
