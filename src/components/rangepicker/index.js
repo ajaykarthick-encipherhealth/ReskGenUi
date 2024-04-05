@@ -22,7 +22,6 @@ const DateRangePicker = ({
   setCoderEndDate,
   disabled,
 }) => {
-  console.log(selectedDates);
   return (
     <div>
       <label style={{ marginLeft: "8px" }}>{pickerlabel}</label>
