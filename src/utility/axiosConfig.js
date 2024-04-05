@@ -1,104 +1,88 @@
-const axios = require('axios');
-import LoadingSpinner from "../jsx/components/spinner/spinner";
+const axios = require("axios");
+import Swal from "sweetalert2";
 
-import ENDPOINTS from '../utility/enpoints';
-import Swal from 'sweetalert2';
-import { notification } from 'antd';
-
-
-// axios.defaults.baseURL = ENDPOINTS.apiEndoint;
-
-
-  axios.interceptors.request.use((config) => {    
-    let _list = ['/securityservice/auth/admin/login','/securityservice/auth/organization/create','/securityservice/auth/login']
-    const currentUrl = config?.url?.split('/secure')[1]
-
-    // console.log(currentUrl)
-    if(!_list.includes(currentUrl)) {
-      config.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;    }
+axios.interceptors.request.use(
+  (config) => {
+    let _list = [
+      "/securityservice/auth/admin/login",
+      "/securityservice/auth/organization/create",
+      "/securityservice/auth/login",
+    ];
+    const currentUrl = config?.url?.split("/secure")[1];
+    if (!_list.includes(currentUrl)) {
+      config.headers["Authorization"] = `Bearer ${localStorage.getItem(
+        "token"
+      )}`;
+    }
     return config;
-  }, (error) => {
-        console.log(error)
-  })
-  
-  axios.interceptors.response.use(function (response) { 
-    // console.log(response)
-    //  notification.success({
-    //   message: response.data.message,
-    // });
+  },
+  (error) => {
+    console.log(error);
+  }
+);
+
+axios.interceptors.response.use(
+  function (response) {
     return response;
-  }, function (error) {
-    
-    
+  },
+  function (error) {
     const statusCode = error?.response?.status;
-       
-    const methodName = error?.config?.method;
 
-
-    
-
-    if(statusCode === 500) {
+    if (statusCode === 500) {
       Swal.fire({
-        title: 'Internal Server Error!',
+        title: "Internal Server Error!",
         text: error?.response?.data.message,
-        icon: 'error',
-        confirmButtonText: 'OK',
+        icon: "error",
+        confirmButtonText: "OK",
         confirmButtonColor: "#DD6B55",
-        closeOnConfirm: false
-      }).then((result) => { 
+        closeOnConfirm: false,
+      }).then((result) => {
         if (result.isConfirmed) {
-         
-          } 
-      })
- 
+        }
+      });
     }
-    if(statusCode === 503) {
+    if (statusCode === 503) {
       Swal.fire({
-        title: 'Service Unavailable!',
+        title: "Service Unavailable!",
         text: error?.response?.data.message,
-        icon: 'error',
-        confirmButtonText: 'OK',
+        icon: "error",
+        confirmButtonText: "OK",
         confirmButtonColor: "#DD6B55",
-        closeOnConfirm: false
-      }).then((result) => { 
+        closeOnConfirm: false,
+      }).then((result) => {
         if (result.isConfirmed) {
-         
-          } 
-      })
- 
+        }
+      });
     }
-    if(statusCode === 400) {
+    if (statusCode === 400) {
       Swal.fire({
-        title: 'Bad Request!',
+        title: "Bad Request!",
         text: error?.response?.data.message,
-        icon: 'error',
-        confirmButtonText: 'OK',
+        icon: "error",
+        confirmButtonText: "OK",
         confirmButtonColor: "#DD6B55",
-        closeOnConfirm: false
-      }).then((result) => { 
+        closeOnConfirm: false,
+      }).then((result) => {
         if (result.isConfirmed) {
-         
-          } 
-      })
- 
+        }
+      });
     }
-    if(statusCode === 401) {
-      console.log("jhvjvj","401")
+    if (statusCode === 401) {
       Swal.fire({
-        title: '',
-        text: 'Your session has timed out. Please log in again.',
-        icon: 'warning',
-        confirmButtonText: 'Logout',
+        title: "",
+        text: "Your session has timed out. Please log in again.",
+        icon: "warning",
+        confirmButtonText: "Logout",
         confirmButtonColor: "#DD6B55",
-        closeOnConfirm: false
-      }).then((result) => { 
+        closeOnConfirm: false,
+      }).then((result) => {
         if (result.isConfirmed) {
-           window.location = "/login"
-          } 
-      })
-   
+          window.location = "/login";
+        }
+      });
     }
     return Promise.reject(error);
-  });
+  }
+);
 
-  export default axios;
+export default axios;

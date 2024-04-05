@@ -4,7 +4,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
 import { wrapper, store } from "../stores/index";
-import { Provider, useSelector } from "react-redux";
+import { Provider } from "react-redux";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { PrimeReactProvider } from "primereact/api";
@@ -16,25 +16,7 @@ config.autoAddCss = false;
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
-  const msgReply = useSelector((state) => state?.auth?.chatReply);
   const [showTerminal, setShowTerminal] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const {
-        addResponseMessage,
-        deleteMessages,
-      } = require("react-chat-widget");
-      if (msgReply?.loading) {
-        addResponseMessage("...");
-      } else {
-        deleteMessages(1);
-        addResponseMessage(
-          msgReply?.data ? msgReply?.data : "Welcome to CogentAI!"
-        );
-      }
-    }
-  }, [msgReply]);
 
   useEffect(() => {
     const currentPath = window.location.pathname;

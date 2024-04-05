@@ -1,10 +1,5 @@
-// import { osName } from "react-device-detect";
-// import { tokenKey } from "../config";
-// import { removeStorage, setStorage } from "../storages";
-
 const defaultHeaders = {
   "Content-Type": "application/json",
-  // systemName: osName || "Unknown",
 };
 
 export const setHeaders = async () => {
