@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./styles.module.css";
-import { useSelector } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import moment from "moment";
 import Image from "next/image";
 import { Modal, Spin } from "antd";
@@ -10,11 +10,11 @@ import { SVGICON } from "../../../../jsx/constant/theme";
 import NoNotification from "../../../../images/dashboard/no-notification.png";
 import spinSTYles from "../../../../styles/auth.module.css";
 
-const Notifications = () => {
+const Notifications = ({notificationResponse}) => {
   const [openNotifications, setOpenNotification] = useState(false);
-  const notificationResponse = useSelector(
-    (state) => state?.notificationDatas?.notificationList
-  );
+  // const notificationResponse = useSelector(
+  //   (state) => state?.notificationDatas?.notificationList
+  // );
   const handleOpen = () => {
     setOpenNotification(!openNotifications);
   };
@@ -23,8 +23,8 @@ const Notifications = () => {
   };
 
   const notificationData =
-    notificationResponse?.data?.content?.length > 0 ? (
-      notificationResponse?.data?.content?.map((info) => (
+    notificationResponse?.data?.response?.content?.length > 0 ? (
+      notificationResponse?.data?.response?.content?.map((info) => (
         <div className={styles.msgDiv}>
           <div style={{ marginTop: "10px" }}>
             {" "}
@@ -49,7 +49,7 @@ const Notifications = () => {
     ) : (
       <div className={styles.no_notificarion_container}>
         {!notificationResponse?.loading &&
-          notificationResponse?.data?.content?.length === 0 && (
+          notificationResponse?.data?.response?.content?.length === 0 && (
             <Image src={NoNotification} alt="" />
           )}
       </div>
@@ -104,5 +104,10 @@ const Notifications = () => {
     </>
   );
 };
-
-export default Notifications;
+const enhancer = connect(
+  (state) => ({
+    notificationResponse: state?.reviewer?.dashboard?.notification
+  }),
+  
+);
+export default enhancer(Notifications);
