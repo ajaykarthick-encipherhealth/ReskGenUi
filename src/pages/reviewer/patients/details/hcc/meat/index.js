@@ -1389,6 +1389,7 @@ const Meat = ({}) => {
   ) => {
     setSelectMeatResult(meatresult);
     setFileLoading(true);
+    setIsModalOpen(true);
     var splitPoint = disDescription.substring(" ", 20);
     var dotLoading = (
       <div className={visitStyles.loadingFileHeader}>
@@ -1399,11 +1400,14 @@ const Meat = ({}) => {
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
     var pageNumber = null;
+    var data = {
+      fileId:fileId,
+      header: value,
+      dos:encounterDatesHeader,
+      stringFileWord:splitPoint      
+    }
     try {
-      const response = await axios.get(
-        ENDPOINTS.apiEndoint +
-          `dbservice/pageNumber?header=${value}&fileId=${fileId}&dos=${encounterDatesHeader}&stringFileWord=${splitPoint}`
-      );
+      const response = await axios.post(ENDPOINTS.apiEndoint +`dbservice/pageNumber`,data);
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
         if (result?.first == false) {
@@ -1425,11 +1429,9 @@ const Meat = ({}) => {
       }
       setFindFileKeyword(splitPoint);
 
-      setIsModalOpen(true);
       var dataset = value + " / (" + disDescription + ")";
       setSelectMeatName(dataset);
     } catch (error) {
-      setIsModalOpen(true);
       var dataset = value + " / (" + disDescription + ")";
       setSelectMeatName(dataset);
       splitPoint = value;
@@ -1456,7 +1458,7 @@ const Meat = ({}) => {
     var splitPoint = actualDescription.substring(" ", 20);
     var pageNumber = null;
     try {
-      const response = await axios.get(
+      const response = await axios.post(
         ENDPOINTS.apiEndoint +
           `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}&stringFileWord=${splitPoint}`
       );
@@ -1568,7 +1570,7 @@ const Meat = ({}) => {
         var pageNumber = null;
         splitPoint = actualDescription.substring(" ", 20);
         try {
-          const response = await axios.get(
+          const response = await axios.post(
             ENDPOINTS.apiEndoint +
               `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}&stringFileWord=${splitPoint}`
           );
