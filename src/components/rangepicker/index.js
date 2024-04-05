@@ -27,15 +27,15 @@ const DateRangePicker = ({
       <label style={{ marginLeft: "8px" }}>{pickerlabel}</label>
       <div>
         <RangePicker
-          format={"YYYY-MM-DD"}
-          value={selectedDates ? selectedDates : undefined}
+          value={selectedDates ? selectedDates : ""}
+          format="YYYY-MM-DD"
+          onCalendarChange={(val) => setSelectedDates(val)}
           onChange={(date, dateString) =>
             handleRnagePicker({
               date,
               dateString,
               setStartDate,
               setEndDate,
-              setSelectedDates,
               activeTab,
               setReceivedStartDate,
               setReceivedEndDate,
@@ -43,6 +43,10 @@ const DateRangePicker = ({
               setCoderEndDate,
             })
           }
+          disabledDate={(current) => disableFutureDate(current)}
+          onCalendarClose={() => {
+            setSelectedDates([]);
+          }}
           defaultValue={
             defaultEndDate && defaultStartDate
               ? [
@@ -51,7 +55,6 @@ const DateRangePicker = ({
                 ]
               : []
           }
-          disabledDate={(current) => !disabled && disableFutureDate(current)}
         />
       </div>
     </div>
