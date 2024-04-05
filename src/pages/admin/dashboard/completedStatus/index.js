@@ -207,7 +207,7 @@ const CompletedStatus = () => {
   const optionsUser = managersList?.data?.response?.map(item=>(
     {value:item?.managerId,label:`${item?.firstName}  ${item?.lastName}`}
   ));
-console.log(managersList)
+
   return (
     <>
       <HeadTitle header="Completed Status" />
