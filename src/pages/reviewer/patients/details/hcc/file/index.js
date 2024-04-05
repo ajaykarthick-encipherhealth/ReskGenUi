@@ -1656,11 +1656,14 @@ const File = ({}) => {
     const encounterDatesHeader = encounterDatesValue[0];
     var splitPoint = actualDescription.substring(" ", 20);
     var pageNumber = null;
+    var data = {
+      fileId:fileId,
+      header: headerNames,
+      dos:encounterDatesHeader,
+      stringFileWord:splitPoint      
+    }
     try {
-      const response = await axios.get(
-        ENDPOINTS.apiEndoint +
-          `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}&stringFileWord=${splitPoint}`
-      );
+      const response = await axios.post(ENDPOINTS.apiEndoint +`dbservice/pageNumber`,data);
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
         pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
