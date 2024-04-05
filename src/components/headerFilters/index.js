@@ -365,6 +365,9 @@ const HeaderFilters = ({
                         : []
                     }
                     disabledDate={(current) => disableFutureDate(current)}
+                    onCalendarClose={() => {
+                      setSelectedDates(null);
+                    }}
                   />
                 </div>
               </div>
