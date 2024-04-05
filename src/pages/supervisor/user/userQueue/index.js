@@ -7,7 +7,7 @@ import { Popover } from "antd";
 import styles from "../../../reviewer/report/report.module.css";
 import Header from "../../../../jsx/layouts/nav/Header";
 import SpinnerDots from "../../../../components/spinner";
-import UserQueue from "../../table/adminList/userqueue";
+import UserQueue from "../../table/adminList/userQueue";
 import Completed from "../../../../../src/images/trackingImages/CompletedTrack.png";
 import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
 import { extractLatestData } from "../../auditing";
