@@ -10,6 +10,15 @@ const Timeline = ({
   userDetails,
   renderUserDetails,
 }) => {
+
+  
+  const underScoreRemove = (value) => {
+    if(value){
+    var str = value;
+    var newStr = str.replace(/_/g, " ");
+    return newStr;
+    }
+  };
   return (
     <div className={visitStyles.timeLine}>
       {!filterDataLoading ? (
@@ -404,7 +413,10 @@ const Timeline = ({
                         {/* Changed from
                         {item.previousProcessedState} to DECLINED */}
                       </span>
-                    ) : null}
+                    ) : <span className={visitStyles.timelineheading}>
+                    Changed from {""}
+                    {item.previousProcessedState} to {underScoreRemove(item.action)}
+                  </span>}
                     <span className={visitStyles.timelineDate}>
                       {moment(item.createdDate).format("MM-DD-YYYY hh:mm:A")}
                     </span>
