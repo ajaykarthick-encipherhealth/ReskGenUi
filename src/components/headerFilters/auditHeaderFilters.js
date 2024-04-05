@@ -89,6 +89,12 @@ const AuditHeaderFilters = ({
   audisetStartDate,
   audisetEndDate,
   isAduitDueDate,
+  setSelectedAuditDueDates,
+  selectedAuditDueDates,
+  selectedAuditDates,
+  setSelectedAuditDates,
+  setSelectedDueDates,
+  selectedDueDates,
 
   // audit complete date
   isAuditCompleteDate,
@@ -142,6 +148,8 @@ const AuditHeaderFilters = ({
                 setStartDate={audisetStartDate}
                 setEndDate={audisetEndDate}
                 disabled={true}
+                selectedDates={selectedAuditDueDates}
+                setSelectedDates={setSelectedAuditDueDates}
               />
             </div>
           )}
@@ -153,6 +161,8 @@ const AuditHeaderFilters = ({
                 defaultEndDate={audidefaultEndDate2}
                 setStartDate={audisetStartDate2}
                 setEndDate={audisetEndDate2}
+                selectedDates={selectedAuditDates}
+                setSelectedDates={setSelectedAuditDates}
               />
             </div>
           )}
@@ -245,6 +255,8 @@ const AuditHeaderFilters = ({
                   setStartDate={setStartDate}
                   setEndDate={setEndDate}
                   // disabled="pastDate"
+                  selectedDates={selectedDueDates}
+                  setSelectedDates={setSelectedDueDates}
                   disabled={true}
                 />
               </div>
@@ -307,7 +319,7 @@ const AuditHeaderFilters = ({
                 onClick={() => {
                   dispatch(getFilters("allocatedBy", username));
                 }}
-                style={{zIndex:"2"}}
+                style={{ zIndex: "2" }}
               >
                 <label className={styles.label}>{allocatedBylabel}</label>
                 <div class="form-group has-search">
