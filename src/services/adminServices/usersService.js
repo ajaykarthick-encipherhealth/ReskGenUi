@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../utility/axiosConfig";
 import ENDPOINTS from "../../utility/enpoints";
 import { notification } from "antd";
 import { ENABLE, getUsers } from "../../store/actions/adminAction/usersAction";
