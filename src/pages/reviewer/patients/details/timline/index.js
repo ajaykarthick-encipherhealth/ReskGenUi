@@ -13,9 +13,11 @@ const Timeline = ({
 
   
   const underScoreRemove = (value) => {
+    if(value){
     var str = value;
     var newStr = str.replace(/_/g, " ");
     return newStr;
+    }
   };
   return (
     <div className={visitStyles.timeLine}>
