@@ -106,7 +106,6 @@ const DailyTask = ({ trackChart }) => {
       ],
     };
   };
-
   return (
     <>
       {/* <HeadTitle header="" /> */}

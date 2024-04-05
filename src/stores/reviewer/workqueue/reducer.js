@@ -1,16 +1,38 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { loadDashboard } from "./actions";
+import { patientsAction } from "./actions";
 
-const dashboard = handleActions(
-  {
-    [loadDashboard.SUCCEEDED]: (state, { payload }) => {
-      return payload;
+const initialState = {
+  loading: true,
+  data: null,
+  error: null,
+};
+const createReducer = (actionType) =>
+  handleActions(
+    {
+      [actionType.STARTED]: (state, action) => ({
+        ...state,
+        loading: true,
+        error: null,
+      }),
+      [actionType.SUCCEEDED]: (state, action) => ({
+        ...state,
+        loading: false,
+        data: action.payload,
+        error: null,
+      }),
+      [actionType.FAILED]: (state, action) => ({
+        ...state,
+        loading: false,
+        error: action.payload,
+      }),
     },
-  },
-  {}
-);
+    initialState
+  );
 
-export default combineReducers({
-  dashboard,
+const dashbaordReducer = combineReducers({
+  patients: createReducer(patientsAction),
+
 });
+
+export default dashbaordReducer;

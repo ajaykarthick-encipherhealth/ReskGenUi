@@ -24,6 +24,7 @@ import { ReviewerReducers } from "../store/reducers/ReviewerReducers/ReviewerRed
 import { AuthReducer, PatientStore } from "./authflow/reducers";
 
 import { reducer as UpdateDashboardReducer } from "./reviewer/dashboard";
+import { reducer as updatedPatientsReducer} from './reviewer/workqueue';
 
 const reducers = combineReducers({
   // old reducers
@@ -52,6 +53,7 @@ const reducers = combineReducers({
   ReviewerReducers: ReviewerReducers,
   reviewer: combineReducers({
     dashboard: UpdateDashboardReducer,
+    workQueue:updatedPatientsReducer
   }),
 });
 

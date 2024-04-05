@@ -58,7 +58,7 @@ const createReducer = (actionType) =>
     initialState
   );
 
-const rootReducer = combineReducers({
+const dashbaordReducer = combineReducers({
   workFlow: createReducer(workFlowAction),
   dailyTask: createReducer(dailyTaskAction),
   accuracy: createReducer(accuracyAction),
@@ -67,4 +67,4 @@ const rootReducer = combineReducers({
   notification:createReducer(notificationAction)
 });
 
-export default rootReducer;
+export default dashbaordReducer;
