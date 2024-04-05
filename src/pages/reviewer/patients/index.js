@@ -116,7 +116,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
       selectedPriority,
       searchTextValue
     );
-  }, [filteratedDashboardData, sort, selectedPriority, searchTextValue]);
+  }, [filteratedDashboardData, sort, selectedPriority, searchTextValue,dueDateStart]);
 
   useEffect(() => {
     if (window !== "undefined") {
@@ -317,27 +317,9 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
         moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
       setDueDateStart(convertStartDate);
       setDueDateEnd(convertEndDate);
-      getFilteApi(
-        0,
-        pageSize,
-        statusSelectedValue,
-        convertStartDate,
-        convertEndDate,
-        processedStart,
-        processedEnd
-      );
     } else {
       setDueDateStart("");
       setDueDateEnd("");
-      getFilteApi(
-        0,
-        pageSize,
-        statusSelectedValue,
-        "",
-        "",
-        processedStart,
-        processedEnd
-      );
     }
   };
 
