@@ -41,7 +41,12 @@ export const PhysicanMenuList = [
     iconStyle: SVGICON.ReportIcon,
     to: "/reviewer/report",
     childRoute: "/reviewer/report/individualreport",
-  }
+  },
+  // {
+  //   title: "FeedBack",
+  //   iconStyle: SVGICON.ReportIcon,
+  //   to: "/reviewer/feedback",
+  // },
 ];
 export const AdminMenuList = [
   {
@@ -64,12 +69,12 @@ export const AdminMenuList = [
   {
     title: "File Processing",
     iconStyle: SVGICON.Usermanagement,
-    to: "/admin/file-processing",
+    to: "/admin/fileprocessing",
   },
   {
     title: "Patient Allocate",
     iconStyle: SVGICON.Allocation,
-    to: "/admin/allocatedUser",
+    to: "/admin/allocatedusers",
   },
   {
     title: "Tracking",
@@ -87,6 +92,11 @@ export const AdminMenuList = [
     iconStyle: SVGICON.Notification,
     to: "/admin/notification",
   },
+  // {
+  //   title: "FeedBack",
+  //   iconStyle: SVGICON.ReportIcon,
+  //   to: "/admin/feedback",
+  // },
   // {
   //   title: "Auditing Window",
   //   iconStyle: SVGICON.Usermanagement,
@@ -122,7 +132,7 @@ export const L2AuditorMenuList = [
     title: "User Queue",
     iconStyle: SVGICON.adminUser,
     to: "/supervisor/user",
-    childRoute: "/supervisor/user/userQueue",
+    childRoute: "/supervisor/user/userqueue",
     childRoute2: "/supervisor/user/details",
   },
   {
@@ -131,6 +141,11 @@ export const L2AuditorMenuList = [
     to: "/supervisor/auditing",
     childRoute: "/reviewer/patients/details",
   },
+  // {
+  //   title: "FeedBack",
+  //   iconStyle: SVGICON.ReportIcon,
+  //   to: "/supervisor/feedback",
+  // },
   // {
   //   title: "Org",
   //   iconStyle: SVGICON.ReportIcon,

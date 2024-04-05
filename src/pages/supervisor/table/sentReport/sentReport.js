@@ -105,7 +105,7 @@ function SentReportTable({
     router?.push(
       `/supervisor/report/individualreport?reportId=${
         row?._id
-      }&sentreport=${true}`
+      }&sentreport=${true}&page=${receivedPageNo}&limit=${paginationFirst}`
     );
   };
   const closeModal = () => {

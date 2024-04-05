@@ -32,13 +32,13 @@ import { Button, Offcanvas } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { DownOutlined } from "@ant-design/icons";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import Hcc from "./hcc/index";
 import NonHcc from "./non-hcc/index";
 import Radiology from "./radiology/index";
 import Lab from "./lab/index";
 import SpinnerDots from "../../../../components/spinner";
-import AllocateModal from "../../../admin/allocatedUser/allocate";
+import AllocateModal from "../../../admin/allocatedusers/allocate";
 import {
   auditPatientupdate,
   reAuditupdate,
@@ -55,7 +55,7 @@ import AdminWorkList from "./components/adminWorklist";
 import { getPatientDetailsResult,getMeatQueryList,getAllSectionColor,getHccFileDetails ,getDosPageNumber} from "../../../../store/actions/ReviewerAction/PatientDetailsAction";
 
 
-const Details = ({}) => {
+const Details = () => {
   const navigate = useRouter();
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -260,10 +260,15 @@ const Details = ({}) => {
 
   useEffect(() => {
     const patientId = localStorage.getItem("patientId");
+    getPatientIdDetails(
+      selectPatientId ? selectPatientId?.patirntId : patientId
+    );
+  }, []);
+
+  useEffect(() => {
+    const patientId = localStorage.getItem("patientId");
     dispatch(getAllSectionColor());
     dispatch(getPatientDetailsResult(selectPatientId ? selectPatientId?.patirntId : patientId));
-
-
   }, []);
   
   useEffect(() => {
@@ -285,11 +290,9 @@ const Details = ({}) => {
       tenId
     );
 
-    getPatientIdDetails(
-      selectPatientId ? selectPatientId?.patirntId : patientId
-    );
-
   }, [patientDetailsResult]);
+
+ 
 
 
   useEffect(() => {
@@ -589,15 +592,8 @@ const Details = ({}) => {
   const statuses = ["PENDING", "COMPLETED", "HOLD", "DECLINED"];
   const getPatientDetails = async (
     patientId,
-    orgId,
-    tenId,
-    fileloadCondition
   ) => {
-    setDosYear([]);
-    // const response = await axios.get(
-    //   ENDPOINTS.apiEndoint +
-    //     `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
-    // );
+    setHccValidCount(0);
     if (patientDetailsResult?.result?.response) {
       var result = patientDetailsResult?.result?.response;
       dispatch(getMeatQueryList(result?.dos,patientId));
@@ -630,7 +626,7 @@ const Details = ({}) => {
             });
           }
         });
-        setHccValidCount(validDisArray.length + result?.comboDisease?.length);
+        setHccValidCount(validDisArray.length);
 
         setNewValidDiseaseList(validDisArray);
         setDosYearDefalutSelect(highestDosValue[0]);
@@ -646,35 +642,11 @@ const Details = ({}) => {
       }
     }
   };
-  const getPatientDetailsYear = async (patientId, orgId, tenId, year) => {
+  const getPatientDetailsYear = async (year) => {
+    console.log(year,localPatientId)
     setSelectedDosValue(year);
     setIsModalComments(false);
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}&year=${year}`
-    );
-
-    if (response?.data) {
-      var result = response.data.response;
-      var validDisArray = [];
-      result?.validDisease?.map((res, index) => {
-        const encounterDatearray = res.encounterDate.split(",");
-        validDisArray.push({
-          actualDescription: res.actualDescription,
-          capturedSections: res.capturedSections,
-          diagnosisCode: res.diagnosisCode,
-          encounterDate: res.encounterDate,
-          encounterDateSplit: encounterDatearray,
-          isManuallyAdded: res.isManuallyAdded,
-          isHccValid: res.isHccValid,
-          defaultPosition: res.defaultPosition,
-        });
-      });
-      setNewValidDiseaseList(validDisArray);
-      setPatientDocumentResult(result);
-      setPatientDetails(result);
-      setPatientResultReload(true);
-    }
+    dispatch(getPatientDetailsResult(localPatientId,year));
   };
 
   const handleCloseModal = () => {
@@ -751,7 +723,7 @@ const Details = ({}) => {
 
   const dosOnChange = async (e) => {
     setPatientResultReload(false);
-    getPatientDetailsYear(localPatientId, localOrgId, localTenantId, e.value);
+    getPatientDetailsYear(e.value);
   };
 
   const submitSuggestedHcc = async (notes) => {
@@ -944,35 +916,11 @@ const Details = ({}) => {
   };
 
   const handleSubmitHccComplete = async () => {
-    var dos = selectedDosValue;
-    var validObject = {};
-    var inValidObject = {};
-    var unmatachObject = {};
-    var comoboObject = {};
-    var meatObject = {};
-    var deletedObject = {};
-    var postData = {
+    var userData = {
       userId: localUserId,
-      patientId: localPatientId,
-      patientName: patientDocumentResult.patientName,
-      fileId: patientDocumentResult.patientName,
-      orgId: patientDocumentResult.orgId,
-      tenantId: patientDocumentResult.tenantId,
-      dob: patientDocumentResult.dob,
-      gender: patientDocumentResult.gender,
-      age: patientDocumentResult.age,
-      validDisease: patientDocumentResult.validDisease,
-      invalidDisease: patientDocumentResult.invalidDisease,
-      unmatchedDisease: patientDocumentResult.unmatchedDisease,
-      comboDisease: patientDocumentResult.comboDisease,
-      meatCriteria: patientDocumentResult.meatCriteria,
-      rafScore: patientDocumentResult.rafScore,
-      dosFiltered: patientDocumentResult.dosFiltered,
-      fileDetailDTO: patientDocumentResult.fileDetailDTO,
-      deletedDiseases: patientDocumentResult.deletedDiseases,
-      dos: selectedDosValue,
     };
-
+    var resultData = patientDetailsResult?.result?.response;
+    var postData = {...userData,...resultData};
     try {
       const response = await axios.post(
         ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/complete`,
@@ -1303,8 +1251,15 @@ const Details = ({}) => {
 
   const backToPatientData = () => {
     dispatch(getPatientID(null));
-    navigate.back();
-    // navigate.push("/reviewer/patients");
+    const user = localStorage.getItem('userRole')
+    if (user && user.toLowerCase() === "admin") {
+      const { user: _, ...queryWithoutUser } = navigate.query;
+      const queryString = new URLSearchParams(queryWithoutUser).toString();
+      const url = queryString ? `/admin/patients?${queryString}` : '/admin/patients';
+      navigate.push(url);
+    } else {
+      navigate.back();
+    }
   };
 
   const splitUserName = (name) => {
@@ -1721,7 +1676,7 @@ const Details = ({}) => {
                               <div className="col-xl-3 col-sm-12">
                                 <FontAwesomeIcon icon={faIdCardClip} />
                                 <label>Patient ID</label>
-                                <h6 className="ageDtails">
+                                <h6 className="ageDtails" style={{paddingLeft:"25px"}}>
                                   {patientDocumentResult.patientId}
                                 </h6>
                               </div>
@@ -1736,14 +1691,14 @@ const Details = ({}) => {
                               <div className="col-xl-2 col-sm-12">
                                 <FontAwesomeIcon icon={faCalendarAlt} />
                                 <label>Age</label>
-                                <h6 className="ageDtails">
+                                <h6 className="ageDtails" style={{paddingLeft:"20px"}}>
                                   {patientDocumentResult.age}
                                 </h6>
                               </div>
                               <div className="col-xl-2 col-sm-12">
                                 <FontAwesomeIcon icon={faVenusMars} />
                                 <label>Gender</label>
-                                <h6 className="ageDtails">
+                                <h6 className="ageDtails" style={{paddingLeft:"25px"}}>
                                   {patientDocumentResult.gender}
                                 </h6>
                               </div>

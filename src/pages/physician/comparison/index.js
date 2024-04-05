@@ -302,7 +302,7 @@ const Hcc = () => {
                         <div className="col-xl-2 col-sm-12">
                           <FontAwesomeIcon icon={faVenusMars} />
                           <label>Gender</label>
-                          <h6 className="ageDtails">
+                          <h6 className="ageDtails" >
                             {comparisonData?.data?.clientResult?.gender}
                           </h6>
                         </div>

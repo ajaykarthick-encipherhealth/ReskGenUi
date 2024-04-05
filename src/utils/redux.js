@@ -25,7 +25,6 @@ export const createActionThunk = (type, fn) => {
 
       const succeeded = (data) => {
         const endedAt = new Date().getTime();
-
         dispatch(actionCreators[TYPE_SUCCEEDED](data));
 
         requestAnimationFrame(() => {

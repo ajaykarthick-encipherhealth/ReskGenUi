@@ -8,17 +8,16 @@ import { Col, Row, Spin } from "antd";
 import Card from "../../../../components/card";
 import HeadTitle from "../../../../components/headtitle";
 import dayjs from "dayjs";
-import { getDailyTaskDatas } from "../../../../store/actions/DashboardActions";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, connect } from "react-redux";
 import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
 import { getFilteredList } from "../../../../store/actions/PatientsActions";
 import spinSTYles from "../../../../styles/auth.module.css";
-const DailyTask = () => {
+import { actions as dashbaordActions } from "../../../../stores/reviewer/dashboard";
+
+const DailyTask = ({ dailyStatusData, DailyStatusData }) => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
-
-  const dailyStatusData = useSelector((state) => state.workFlow.dailyTask);
   const dispatch = useDispatch();
 
   const bullets = [
@@ -66,13 +65,13 @@ const DailyTask = () => {
     setSelectedDate(days);
 
     days?.map((data, index) => {
-      return dispatch(getDailyTaskDatas(data?.dateString, router));
+      return DailyStatusData({ date: data?.dateString });
     });
   }, []);
 
   useEffect(() => {
     if (dailyStatusData) {
-      getDays(selectedDate, dailyStatusData);
+      getDays(selectedDate, dailyStatusData?.data?.response);
     }
   }, [dailyStatusData]);
 
@@ -89,7 +88,7 @@ const DailyTask = () => {
     ];
     setSelectedDate((prev) => [...prev, ...datas]);
     datas?.map((data, index) => {
-      return dispatch(getDailyTaskDatas(data?.dateString, router));
+      return DailyStatusData({ date: data?.dateString });
     });
   };
 
@@ -342,5 +341,12 @@ const DailyTask = () => {
     </>
   );
 };
-
-export default DailyTask;
+const enhancer = connect(
+  (state) => ({
+    dailyStatusData: state?.reviewer,
+  }),
+  {
+    DailyStatusData: dashbaordActions.dailyTaskAction,
+  }
+);
+export default enhancer(DailyTask);

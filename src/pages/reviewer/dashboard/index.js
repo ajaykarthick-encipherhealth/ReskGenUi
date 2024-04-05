@@ -8,15 +8,12 @@ import Accuracy from "./accuracy";
 import Notifications from "./notifications";
 import CompletedStatus from "./completedstatus";
 import HoldStatus from "./holdstatus";
-import { getWorkFlow } from "../../../store/actions/DashboardActions";
-import { useDispatch, useSelector } from "react-redux";
+import {useSelector ,connect} from "react-redux";
 import dayjs from "dayjs";
-import { useRouter } from "next/router";
+import { actions as dashbaordActions } from "../../../stores/reviewer/dashboard";
 
-const Index = () => {
+const Index = ({workFlowData}) => {
   const currentDate = dayjs();
-  const router = useRouter();
-  const dispatch = useDispatch();
   const last30thDate = currentDate.subtract(31, "day");
   const lastDateWithTime = currentDate.endOf("day");
   const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
@@ -29,9 +26,8 @@ const Index = () => {
     : lastDateWithTime.toISOString().split("T")[0] + "T23:59:59.999Z";
 
   useEffect(() => {
-    dispatch(getWorkFlow(startDate, endDate, router));
-  }, [startDate, endDate]);
-
+    workFlowData({startDate, endDate})
+  }, [startDate,endDate]);
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
@@ -68,4 +64,12 @@ const Index = () => {
   );
 };
 
-export default Index;
+const enhancer = connect(
+  (state) => ({
+    WorlFlow: state
+  }),
+  {
+    workFlowData:dashbaordActions.workFlowAction
+  }
+);
+export default enhancer(Index);

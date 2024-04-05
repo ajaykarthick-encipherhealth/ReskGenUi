@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import moment from "moment";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import dayjs from "dayjs";
 import { notification, Select as AntSelect, Empty, Tooltip } from "antd";
 import TableStyle from "../../../../components/table/table.module.css";
@@ -18,6 +18,7 @@ function PatientTable({
   statusBodyTemplate,
   patientDetails,
   setSort,
+  page
 }) {
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -81,7 +82,7 @@ function PatientTable({
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
-      navigate.push("/reviewer/patients/details");
+      navigate.push({pathname:"/reviewer/patients/details", query: page});
     } else {
       notification.warning({
         message: data.patientId + " file not processed. Please wait.",
@@ -140,23 +141,23 @@ function PatientTable({
               <div style={{ textAlign: "center" }}>---</div>
             )}
           </td>
-          <td
+          <td 
             className={TableStyle.childBorder}
-            style={{ textAlign: "center", paddingLeft: "40px" }}
+            style={{ textAlign: "center", textAlign:"center" }}
             onClick={handleTableRowClick}
           >
             {data?.accuracyScore?.correctCount
               ? data?.accuracyScore?.correctCount
-              : "---"}
+              :<div   style={{ textAlign: "center" }}>---</div>}
           </td>
-          <td
+          <td 
             className={TableStyle.childBorder}
-            style={{ textAlign: "center", paddingLeft: "40px" }}
+            style={{ textAlign: "center" }}
             onClick={handleTableRowClick}
           >
             {data?.accuracyScore?.wrongCount
               ? data?.accuracyScore?.wrongCount
-              : "---"}{" "}
+              : <div   style={{ textAlign: "center", textAlign:"center" }}>---</div>}
           </td>
 
           <td className={TableStyle.childBorder} onClick={handleTableRowClick}>
@@ -238,13 +239,13 @@ function PatientTable({
         <thead className={TableStyle.classThead}>
           <tr>
             <th>PATIENTS</th>
-            <th className={TableStyle.rowStyle2}>REVIEWER</th>
-            <th className={TableStyle.rowStyle2} style={{ cursor: "pointer" }}>
+            <th style={{paddingLeft:'60px'}}>REVIEWER</th>
+            <th  style={{ cursor: "pointer", textAlign:"center" }}>
               <Tooltip placement="bottom" title="REVIEWER CHANGES">
                 RC
               </Tooltip>
             </th>
-            <th className={TableStyle.rowStyle2} style={{ cursor: "pointer" }}>
+            <th  style={{ cursor: "pointer", textAlign:"center" }}>
               {" "}
               <Tooltip placement="bottom" title="REVIEWER CHANGES REJECTION">
                 RCR
@@ -309,7 +310,7 @@ function PatientTable({
               </span>
             </th>
 
-            <th>AUDIT ALLOCATED BY</th>
+            <th  style={{ paddingLeft: "30px" }}>AUDIT ALLOCATED BY</th>
             <th style={{ paddingLeft: "30px" }}>PRIORITY</th>
             <th className={TableStyle.rowStyle2}>AUDIT STATUS</th>
           </tr>

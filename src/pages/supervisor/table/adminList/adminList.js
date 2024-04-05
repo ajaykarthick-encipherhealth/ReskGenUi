@@ -12,14 +12,14 @@ const AdminList = ({ userList }) => {
 
   const gotoUserQueue = (item) => {
     dispatch(storeUserValues(item)),
-      router.push(`user/userQueue?userId=${item?.userName}`);
+      router.push(`user/userqueue?userId=${item?.userName}`);
   };
   return (
     <div className={TableStyle.classContaineer}>
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
-            <th>NAME</th>
+            <th>USERNAME</th>
             <th>ALLOCATED</th>
             <th>COMPLETED</th>
             <th>PENDING</th>

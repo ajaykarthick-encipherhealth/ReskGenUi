@@ -117,12 +117,12 @@ function SentReportTable({
       ? router?.push(
           `/reviewer/report/individualreport?reportId=${
             row?._id
-          }&sentreport=${true}`
+          }&sentreport=${true}&page=${receivedPageNo}&limit=${paginationFirst}`
         )
       : router?.push(
           `/admin/report/individualreport?reportId=${
             row?._id
-          }&sentreport=${true}&isAdmin=${isAdmin}`
+          }&sentreport=${true}&isAdmin=${isAdmin}&page=${receivedPageNo}&limit=${paginationFirst}`
         );
   };
   const closeModal = () => {
@@ -139,7 +139,7 @@ function SentReportTable({
               <tr>
                 <th>REPORT ID</th>
                 <th>REPORT NAME</th>
-                <th style={{ textAlign: "center" }}>USER LIST</th>
+                <th>USER LIST</th>
                 <th
                   className={TableStyle.rowStyle}
                   style={{ cursor: "pointer", paddingLeft: "15px" }}
@@ -181,6 +181,7 @@ function SentReportTable({
                           borderTop: "  0.2px solid #e1e1e1",
 
                           borderBottom: "  0.2px solid #e1e1e1",
+                          paddingLeft:"8px"
                         }}
                         className={TableStyle.childBorder}
                         onClick={() => handleReceiverReport(row)}
@@ -193,7 +194,7 @@ function SentReportTable({
                           borderTop: "  0.2px solid #e1e1e1",
                           cursor: "pointer",
                           borderBottom: "  0.2px solid #e1e1e1",
-                          textAlign: "center",
+                          paddingLeft:'8px'
                         }}
                         className={TableStyle.childBorder}
                         onClick={() => handleReceiverReport(row)}

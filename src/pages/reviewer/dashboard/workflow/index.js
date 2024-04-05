@@ -14,13 +14,12 @@ import holdbg from "../../.../../../../images/dashboard/holdbg.png";
 import allocatedbg from "../../.../../../../images/dashboard/allocatedbg.png";
 import pendingbg from "../../.../../../../images/dashboard/pendingbg.png";
 import completedbg from "../../.../../../../images/dashboard/completedbg.png";
-import { useSelector } from "react-redux";
+import { useSelector, connect } from "react-redux";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
 
-const WorkFlow = () => {
+const WorkFlow = ({ worlFlowData }) => {
   const currentDate = dayjs();
-  const worlFlowData = useSelector((state) => state?.workFlow?.data);
   const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
   const [openPicker, setOpenPicker] = useState(false);
 
@@ -96,17 +95,12 @@ const WorkFlow = () => {
         setOpenPicker={setOpenPicker}
       />
       <Card borderRadius="28px">
-        {!worlFlowData ||
-          worlFlowData?.loading ||
-          (worlFlowData?.data === null && (
-            <div className={spinSTYles.spinStyle}>
-              <Spin loading={worlFlowData?.loading} />
-            </div>
-          ))}
-        {worlFlowData &&
-        !worlFlowData?.loading &&
-        worlFlowData?.data !== null &&
-        worlFlowData?.data?.response ? (
+        {worlFlowData?.loading && (
+          <div className={spinSTYles.spinStyle}>
+            <Spin loading={worlFlowData?.loading} />
+          </div>
+        )}
+        {!worlFlowData?.loading && worlFlowData?.data?.response ? (
           <Row className={styles.carddiv}>
             {card1Data?.map((data) => (
               <Col
@@ -130,13 +124,17 @@ const WorkFlow = () => {
             ))}
           </Row>
         ) : (
-          <div className={spinSTYles.spinStyle}>
-            <Empty />
-          </div>
+          !worlFlowData?.loading && (
+            <div className={spinSTYles.spinStyle}>
+              <Empty />
+            </div>
+          )
         )}
       </Card>
     </div>
   );
 };
-
-export default WorkFlow;
+const enhancer = connect((state) => ({
+  worlFlowData: state?.reviewer?.dashboard?.workFlow,
+}));
+export default enhancer(WorkFlow);

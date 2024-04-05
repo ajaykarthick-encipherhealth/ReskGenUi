@@ -64,7 +64,10 @@ function AllocatedL2AdminList({
         return (
           <Popover placement="bottom" title="Status: COMPLETED">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Completed} style={{ height: "13%", width: "13%" }} />
+              <Image
+                src={Completed}
+                style={{ height: "30px", width: "30px" }}
+              />
             </div>
           </Popover>
         );
@@ -73,7 +76,7 @@ function AllocatedL2AdminList({
         return (
           <Popover placement="bottom" title="Status: PENDING">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "13%", width: "13%" }} />
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -88,7 +91,7 @@ function AllocatedL2AdminList({
             }`}
           >
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Declined} style={{ height: "13%", width: "13%" }} />
+              <Image src={Declined} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -96,7 +99,7 @@ function AllocatedL2AdminList({
         return (
           <Popover placement="bottom" title="Status: NOT COMPUTED">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "13%", width: "13%" }} />
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -104,7 +107,7 @@ function AllocatedL2AdminList({
         return (
           <Popover placement="bottom" title="Status: PENDING">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "13%", width: "13%" }} />
+              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -112,7 +115,7 @@ function AllocatedL2AdminList({
         return (
           <Popover placement="bottom" title="Status: HOLD">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Hold} style={{ height: "13%", width: "13%" }} />
+              <Image src={Hold} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -120,7 +123,7 @@ function AllocatedL2AdminList({
         return (
           <Popover placement="bottom" title="Status: ABORTED BY CRON">
             <div className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Abort} style={{ height: "13%", width: "13%" }} />
+              <Image src={Abort} style={{ height: "30px", width: "30px" }} />
             </div>
           </Popover>
         );
@@ -226,8 +229,9 @@ function AllocatedL2AdminList({
           <tr>
             <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
-            <th>REVIEWER</th>
+            <th style={{ paddingLeft: "60px" }}>REVIEWER</th>
             <th
+              style={{ paddingLeft: "20px" }}
               onClick={() => {
                 sortFunction(sortDueOrder, setSortDueOrder, setSort, "dueDate");
                 setSortCompleteOrder("DESC");

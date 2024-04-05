@@ -2,8 +2,7 @@ import { createStore, applyMiddleware, combineReducers, compose } from "redux";
 import thunkMiddleware from "redux-thunk";
 import promiseMiddleware from "redux-promise";
 import { createWrapper } from "next-redux-wrapper";
-import { PostsReducer } from "../store/reducers/PostsReducer";
-import { toggleMenu } from "../store/reducers/PostsReducer";
+import { PostsReducer, toggleMenu } from "../store/reducers/PostsReducer";
 import { DashboardReducer } from "../store/reducers/DashboradReducer";
 import { PatientsReducer } from "../store/reducers/PatientsReducer";
 import { ReportReducer } from "../store/reducers/ReportReducer";
@@ -23,6 +22,9 @@ import { PhysicianComparisonReducer } from "../store/reducers/physicianReducers/
 import { TanantAdminService } from "../store/reducers/tanantAdminReducers/fihrReducers";
 import { ReviewerReducers } from "../store/reducers/ReviewerReducers/ReviewerReducers";
 import { AuthReducer, PatientStore } from "./authflow/reducers";
+
+import { reducer as UpdateDashboardReducer } from "./reviewer/dashboard";
+import { reducer as updatedPatientsReducer} from './reviewer/workqueue';
 
 const reducers = combineReducers({
   // old reducers
@@ -47,9 +49,12 @@ const reducers = combineReducers({
   phyicianReducer: PhyicianReducer,
   physicianDashbaord: PhysicianDashboardReducer,
   physicianComparison: PhysicianComparisonReducer,
-  tanantAdmin: TanantAdminService, 
+  tanantAdmin: TanantAdminService,
   ReviewerReducers: ReviewerReducers,
-
+  reviewer: combineReducers({
+    dashboard: UpdateDashboardReducer,
+    workQueue:updatedPatientsReducer
+  }),
 });
 
 const middlewares = [thunkMiddleware, promiseMiddleware];

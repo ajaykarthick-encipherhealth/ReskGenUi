@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import moment from "moment";
 import TableStyle from "../../table.module.css";
@@ -19,6 +19,7 @@ function AddPatientListTable({
   sortOrder,
   setSortOrder,
   setSort,
+  page
 }) {
   const [detailsContent, setDetailsContent] = useState(patinetListAll);
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
@@ -33,7 +34,8 @@ function AddPatientListTable({
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
-      navigate.push("/reviewer/patients/details");
+      // localStorage.setItem('paginations', JSON.stringify(page))
+      navigate.push({pathname: "/reviewer/patients/details", query:page});
     } else {
       notification.warning({
         message: data.patientId + " file not processed. Please wait.",

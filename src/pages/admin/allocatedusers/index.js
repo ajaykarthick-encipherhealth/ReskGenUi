@@ -15,7 +15,6 @@ import ENDPOINTS from "../../../utility/enpoints";
 import AllocatedAdminList from "../../../components/table/admin/allocatedAdminList/allocatedAdminList";
 import AllocatedL2AdminList from "../../../components/table/admin/allocatedL2AdminList/allocatedL2AdminList";
 import allocateStyle from "./allocate/style.module.css";
-import AllocateModal from "./allocate";
 import L2AllocateModal from "./l2allocate";
 import reportStyles from "../../reviewer/report/report.module.css";
 import SpinnerDots from "../../../components/spinner";
@@ -28,6 +27,7 @@ import {
 } from "../../../components/headerFilters/functions";
 import Selector from "../../../components/selector";
 import { getFilters } from "../../../stores/authflow/actions";
+import AllocateModal from "./allocate";
 
 const { RangePicker } = DatePicker;
 const statusOption = [

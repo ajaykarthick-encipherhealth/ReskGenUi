@@ -1,10 +1,15 @@
-import { requestPortal } from "../../utils/network";
+import { requestPortal } from "../../../utils/network";
 
-export async function loadDashboard() {
+export async function patientsList({url }) {
   const options = {
     method: "GET",
   };
-  const data = await requestPortal(`dbservice/patient/getbyuser?userId=ajith01@encipherhealth.onmicrosoft.com&page=0&size=10
-  `, options);
+  const uId = localStorage.getItem("userId");
+
+  const data = await requestPortal(
+    `dbservice/patient/filter?${url}
+  `,
+    options
+  );
   return data;
 }

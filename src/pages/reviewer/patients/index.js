@@ -1,25 +1,23 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
-import { useSelector, useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
+import { useSelector, useDispatch, connect } from "react-redux";
+import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import { faUpload, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { DatePicker, Popover, notification } from "antd";
-import { InputText } from "primereact/inputtext";
 import moment from "moment";
 import dayjs from "dayjs";
 import { Paginator } from "primereact/paginator";
 import Header from "../../../jsx/layouts/nav/Header";
 import PatientTable from "../../../components/table/PatientList/patientList";
 import LoadingSpinner from "../../../components/spinner";
-import { getpatientsListFilter } from "../../../store/actions/PatientsActions";
 import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
 import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
 import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
 import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
 import Abort from "../../../../src/images/trackingImages/Abort.png";
-
+import { actions as workqueueActions } from "../../../stores/reviewer/workqueue";
 import {
   disableFutureDate,
   priorityOptions,
@@ -34,7 +32,7 @@ import InputField from "../../../components/input";
 import { patientDetails } from "../../../stores/authflow/actions";
 
 const { RangePicker } = DatePicker;
-export default function Patient() {
+const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const navigate = useRouter();
@@ -83,10 +81,6 @@ export default function Patient() {
   );
   const [searchTextValue, setSearchTextValue] = useState("");
 
-  const patientsListFilter = useSelector(
-    (state) => state.patients.patientsListFilter
-  );
-
   const dayDateFormated = filteratedDashboardData?.date
     ? dayjs(filteratedDashboardData?.date).format("MM-DD-YYYY")
     : dayjs(filteratedDashboardData?.dayDate).format("MM-DD-YYYY");
@@ -122,14 +116,25 @@ export default function Patient() {
       selectedPriority,
       searchTextValue
     );
-  }, [filteratedDashboardData, sort, selectedPriority,searchTextValue]);
+  }, [filteratedDashboardData, sort, selectedPriority, searchTextValue,dueDateStart]);
+
+  useEffect(() => {
+    if (window !== "undefined") {
+      if (navigate.query.pageNo) {
+        setIsLoading(true);
+        setPageNo(navigate?.query?.pageNo);
+        setPaginationFirst(navigate?.query?.paginationFirst);
+      }
+    }
+  }, [navigate]);
 
   useEffect(() => {
     if (patientsListFilter) {
       const resultMap = [];
-      const result = patientsListFilter?.response?.patientDTOList?.content;
+      const result =
+        patientsListFilter?.data?.response?.patientDTOList?.content;
       setTotalElements(
-        patientsListFilter?.response?.patientDTOList?.totalElements
+        patientsListFilter?.data?.response?.patientDTOList?.totalElements
       );
 
       result?.map((res) => {
@@ -154,11 +159,11 @@ export default function Patient() {
           declinedNotes: res.declinedNotes,
         });
       });
-      setTrackChart(patientsListFilter?.response?.processStatusCount);
+      setTrackChart(patientsListFilter?.data?.response?.processStatusCount);
       setPatinetListAll(resultMap);
       setIsLoading(false);
     }
-  }, [patientsListFilter,searchTextValue]);
+  }, [patientsListFilter, searchTextValue]);
 
   const getFilteApi = async (
     pageNo,
@@ -186,14 +191,16 @@ export default function Patient() {
     }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&priority=${
       selectedPriority ? selectedPriority : ""
     }`;
-    dispatch(getpatientsListFilter(resoureUrl));
+    // dispatch(getpatientsListFilter(resoureUrl));
+    getpatientsListFilter({ url: resoureUrl });
   };
 
   const getNameSearch = async (searchtext) => {
     setIsLoading(true);
     setSearchTextValue(searchtext);
     const resoureUrl = `dbservice/patient/filter?patientAllocated=${localUserId}&page=0&size=${pageSize}&processedStatus=${statusSelectedValue}&dueDateStart=${dueDateStart}&dueDateEnd=${dueDateEnd}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchtext}`;
-    dispatch(getpatientsListFilter(resoureUrl));
+    // dispatch(getpatientsListFilter(resoureUrl));
+    getpatientsListFilter({ url: resoureUrl });
   };
 
   const addPatientFile = (data) => {
@@ -310,27 +317,9 @@ export default function Patient() {
         moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
       setDueDateStart(convertStartDate);
       setDueDateEnd(convertEndDate);
-      getFilteApi(
-        0,
-        pageSize,
-        statusSelectedValue,
-        convertStartDate,
-        convertEndDate,
-        processedStart,
-        processedEnd
-      );
     } else {
       setDueDateStart("");
       setDueDateEnd("");
-      getFilteApi(
-        0,
-        pageSize,
-        statusSelectedValue,
-        "",
-        "",
-        processedStart,
-        processedEnd
-      );
     }
   };
 
@@ -586,7 +575,7 @@ export default function Patient() {
                         id="task-tbl_wrapper"
                         className="dataTables_wrapper no-footer"
                       >
-                        {isLoading ? (
+                        {patientsListFilter?.loading ? (
                           <LoadingSpinner />
                         ) : (
                           <>
@@ -599,6 +588,7 @@ export default function Patient() {
                               sort={sort}
                               setSort={setSort}
                               getFilteApi={getFilteApi}
+                              page={{ pageNo, paginationFirst }}
                             />
                             <div>
                               <div className="pagination-container">
@@ -626,4 +616,13 @@ export default function Patient() {
       </div>
     </>
   );
-}
+};
+const enhancer = connect(
+  (state) => ({
+    patientsListFilter: state?.reviewer?.workQueue?.patients,
+  }),
+  {
+    getpatientsListFilter: workqueueActions.patientsAction,
+  }
+);
+export default enhancer(Patient);

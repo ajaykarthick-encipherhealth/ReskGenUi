@@ -18,8 +18,6 @@ const SelectRole = () => {
 
   const rolesList = role?.slice().reverse();
   const items = [
-  
-
     ...(rolesList?.length > 0
       ? rolesList?.map((info) => ({
           value: info,

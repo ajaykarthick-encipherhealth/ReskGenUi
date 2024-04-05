@@ -185,7 +185,7 @@ const HeaderFilters = ({
 
           <div className={defaultSize}>
             <label className={styles.label}>{pickerlabe4}</label>
-            <div>
+            <div className="dateRangeSize">
               <RangePicker
                 value={clear ? "" : selectedDates}
                 format="YYYY-MM-DD"
@@ -212,8 +212,8 @@ const HeaderFilters = ({
             <>
               <div className={defaultSize}>
                 <label className={styles.label}>{pickerlabe5}</label>
-                <div>
-                  <RangePicker
+                <div className="dateRangeSize">
+                  <RangePicker 
                     value={clear ? ["", ""] : selectedDates2}
                     format="YYYY-MM-DD"
                     onCalendarChange={(val) => setSelectedDates2(val)}
@@ -238,7 +238,7 @@ const HeaderFilters = ({
             <>
               <div className={defaultSize}>
                 <label className={styles.label}>{pickerlabe3}</label>
-                <div>
+                <div className="dateRangeSize">
                   <RangePicker
                     value={clear ? ["", ""] : selectedDates3}
                     format="YYYY-MM-DD"
@@ -324,7 +324,7 @@ const HeaderFilters = ({
             {isRangePicker && (
               <div className={defaultSize}>
                 <label className={styles.label}>{"Reviewer Due Date"}</label>
-                <div>
+                <div className="dateRangeSize">
                   <RangePicker
                     value={clear ? ["", ""] : selectedDates4}
                     format="YYYY-MM-DD"
@@ -336,7 +336,6 @@ const HeaderFilters = ({
                         setStartDate,
                         setEndDate,
                       });
-
                       setClear(false);
                     }}
                   />
@@ -365,7 +364,7 @@ const HeaderFilters = ({
                   <label className={styles.label}>
                     {"Supervisor Due Date"}
                   </label>
-                  <div>
+                  <div  className="dateRangeSize">
                     <RangePicker
                       value={clear ? ["", ""] : selectedDates5}
                       format="YYYY-MM-DD"

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Paginator } from "primereact/paginator";
 import { Popover, notification } from "antd";
@@ -149,6 +149,16 @@ export default function Patient() {
     sort,
     selCreatedBy,
   ]);
+
+  useEffect(() => {
+    if (window !== "undefined") {
+      if (navigate.query.pageNo) {
+        setIsLoading(true)
+        setPageNo(navigate?.query?.pageNo)
+        setPaginationFirst(navigate?.query?.paginationFirst)
+      }
+    }
+  }, [navigate])
 
   useEffect(() => {
     if (response?.response?.content) {
@@ -415,6 +425,7 @@ export default function Patient() {
                             patientDetails={patientDetails}
                             sort={sort}
                             setSort={setSort}
+                            page={{pageNo, paginationFirst}}
                           />
                           <div>
                             <div className="pagination-container">

@@ -3,7 +3,7 @@ import moment from "moment";
 import TableStyle from "../table.module.css";
 import { notification, Select as AntSelect, Empty } from "antd";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { getPriorityChange } from "../../../store/actions/PatientsActions";
 import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
@@ -17,9 +17,9 @@ function PatientTable({
   patinetListAll,
   statusBodyTemplate,
   patientDetails,
-
   setSort,
   getFilteApi,
+  page
 }) {
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
@@ -43,7 +43,7 @@ function PatientTable({
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
-      navigate.push("/reviewer/patients/details");
+      navigate.push({pathname: "/reviewer/patients/details", query:page});
     } else {
       notification.warning({
         message: data.patientId + " file not processed. Please wait.",
