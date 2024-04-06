@@ -851,7 +851,7 @@ const MeatQuery = ({}) => {
                   </Form.Label>
                   <Select
                     defaultValue={inputValue?.headerName}
-                    className={`ant_select_form`}
+                    className={`ant_select_form hcc_form mb-2`}
                     onChange={(value) => handleSelect(value, "headerName")}
                   >
                     {headersList?.map((data) => (
@@ -872,7 +872,7 @@ const MeatQuery = ({}) => {
                   </Form.Label>
                   <Select
                     defaultValue={inputValue?.imagingTestHeader}
-                    className={`ant_select_form`}
+                    className={`ant_select_form hcc_form mb-2`}
                     onChange={(value) =>
                       handleSelect(value, "imagingTestHeader")
                     }
@@ -908,7 +908,7 @@ const MeatQuery = ({}) => {
                   </Form.Label>
                   <Select
                     defaultValue={inputValue?.queryReason}
-                    className={`ant_select_form`}
+                    className={`ant_select_form hcc_form mb-2`}
                     onChange={(value) => handleSelect(value, "queryReason")}
                   >
                     {queryReasons?.map((data) => (

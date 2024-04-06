@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../utility/axiosConfig";
 import ENDPOINTS from "../utility/enpoints";
 import { getSentDetails } from "../store/actions/ReportActions";
 

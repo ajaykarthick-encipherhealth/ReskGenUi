@@ -1189,6 +1189,7 @@ const VisitData = ({}) => {
   };
 
   const handleCloseModal = () => {
+    setFormErr("");
     setHccFormTab("HCCFORM");
     setAddValidCodeCheck(null);
     setValidated(false);
@@ -1234,7 +1235,7 @@ const VisitData = ({}) => {
     const encounterDatesHeader = encounterDatesValue[0];
     var pageNumber = null;
     try {
-      const response = await axios.get(
+      const response = await axios.post(
         ENDPOINTS.apiEndoint +
           `dbservice/pageNumber?header=${value}&fileId=${fileId}&dos=${encounterDatesHeader}&stringFileWord=${splitPoint}`
       );
@@ -1286,11 +1287,14 @@ const VisitData = ({}) => {
     const encounterDatesHeader = encounterDatesValue[0];
     var splitPoint = actualDescription.substring(" ", 20);
     var pageNumber = null;
+    var data = {
+      fileId:fileId,
+      header: headerNames,
+      dos:encounterDatesHeader,
+      stringFileWord:splitPoint      
+    }
     try {
-      const response = await axios.get(
-        ENDPOINTS.apiEndoint +
-          `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}&stringFileWord=${splitPoint}`
-      );
+      const response = await axios.post(ENDPOINTS.apiEndoint +`dbservice/pageNumber`,data);
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
         pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
@@ -1398,11 +1402,14 @@ const VisitData = ({}) => {
         var splitPoint = "";
         var pageNumber = null;
         splitPoint = actualDescription.substring(" ", 20);
+        var data = {
+          fileId:fileId,
+          header: headerNames,
+          dos:encounterDatesHeader,
+          stringFileWord:splitPoint      
+        }
         try {
-          const response = await axios.get(
-            ENDPOINTS.apiEndoint +
-              `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}&stringFileWord=${splitPoint}`
-          );
+          const response = await axios.post(ENDPOINTS.apiEndoint +`dbservice/pageNumber`,data);
           var result = response.data.response;
           if (response?.data?.status == "SUCCESS") {
             if (result?.first == false) {
@@ -2386,6 +2393,7 @@ const VisitData = ({}) => {
   ];
 
   const handleSubmitMeatQuery = async (event) => {
+    setValidated(true);
     const form = event.currentTarget;
     event.preventDefault();
     if (
@@ -2414,6 +2422,7 @@ const VisitData = ({}) => {
       setFormErr(errors);
     } else {
       if (form.checkValidity() === true) {
+        setValidated(false);
         var dataformat = {
           patientId: localPatientId,
           diagnosisCode: inputValue.diagnosisCodeQuery,
@@ -2499,7 +2508,9 @@ const VisitData = ({}) => {
 
   const handleSelect = (value, title) => {
     setInputValue({ ...inputValue, [title]: value });
+        
   };
+  
 
   const emailSplitFunction = (email) => {
     if (meatQueriedDetailsModal) {
@@ -2666,6 +2677,7 @@ const VisitData = ({}) => {
     setAddValidCodeCheck(null);
     setInputValueFileDate("");
     setSelectProviderInfo(null);
+    handleCloseModal()
   };
 
   const updateMeatQueryComments = async () => {
@@ -2689,6 +2701,26 @@ const VisitData = ({}) => {
     } else {
     }
   };
+
+  useEffect(() => {
+    if(validated == true){
+    let errors = {
+      providername:
+        inputValue?.providerName === "" ? "Please enter provider name" : "",
+      quickQuery:
+        inputValue?.headerName === "" ? "Please select quick query" : "",
+      imagingQuery:
+        inputValue?.imagingTestHeader === ""
+          ? "Please select imaging query"
+          : "",
+      queryReason:
+        inputValue?.queryReason === "" ? "Please select quick reason" : "",
+      description:
+        inputValue?.description === "" ? "Please enter description" : "",
+    };
+    setFormErr(errors)
+  }
+  }, [inputValue]);
 
   return (
     <>
@@ -5141,7 +5173,7 @@ const VisitData = ({}) => {
                   </Form.Label>
                   <Select
                     defaultValue={inputValue?.headerName}
-                    className={`ant_select_form`}
+                    className={`ant_select_form hcc_form mb-2`}
                     onChange={(value) => handleSelect(value, "headerName")}
                   >
                     {headersList?.map((data) => (
@@ -5162,7 +5194,7 @@ const VisitData = ({}) => {
                   </Form.Label>
                   <Select
                     defaultValue={inputValue?.imagingTestHeader}
-                    className={`ant_select_form`}
+                    className={`ant_select_form hcc_form mb-2`}
                     onChange={(value) =>
                       handleSelect(value, "imagingTestHeader")
                     }
@@ -5198,7 +5230,7 @@ const VisitData = ({}) => {
                   </Form.Label>
                   <Select
                     defaultValue={inputValue?.queryReason}
-                    className={`ant_select_form`}
+                    className={`ant_select_form hcc_form mb-2`}
                     onChange={(value) => handleSelect(value, "queryReason")}
                   >
                     {queryReasons?.map((data) => (

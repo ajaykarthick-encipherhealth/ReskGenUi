@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../utility/axiosConfig";
 import ENDPOINTS from "../../utility/enpoints";
 
 // chnaged
@@ -15,9 +15,7 @@ export async function workStatusApi(startDate, endDate, router) {
     );
     return response.data;
   } catch (err) {
-    if (err?.response?.status === 401) {
-      router.push("/login");
-    }
+    console.log(err)
   }
 }
 
@@ -36,9 +34,7 @@ export const DailyTaskApi = async (date, router) => {
     );
     return response.data;
   } catch (err) {
-    if (err?.response?.status === 401) {
-      router?.push("/login");
-    }
+   console.log(err)
   }
 };
 
@@ -62,9 +58,7 @@ export const accuracyScore = async (btn, month, year, router) => {
     );
     return response.data;
   } catch (err) {
-    if (err?.response?.status === 401) {
-      router.push("/login");
-    }
+    console.log(err)
   }
 };
 
@@ -87,9 +81,7 @@ export const CompletedScore = async (btn, date, month, year, router) => {
     );
     return response.data;
   } catch (err) {
-    if (err?.response?.status === 401) {
-      router.push("/login");
-    }
+    console.log(err)
   }
 };
 
@@ -107,9 +99,7 @@ export const HoldStatus = async (router) => {
     );
     return response.data;
   } catch (err) {
-    if (err.response.status === 401) {
-      router.push("/login");
-    }
+   console.log(err)
   }
 };
 
@@ -150,9 +140,7 @@ export const CompletedScoreNew = async (btn, date, month, year, router) => {
     );
     return response.data;
   } catch (err) {
-    if (err?.response?.status === 401) {
-      router.push("/login");
-    }
+    console.log(err)
   }
 };
 
@@ -217,9 +205,7 @@ export const UserByIndividual = async (router) => {
     );
     return response.data;
   } catch (err) {
-    if (err.response.status === 401) {
-      router.push("/login");
-    }
+    console.log(err)
   }
 };
 
@@ -242,8 +228,6 @@ export const DeliveryScore = async (btn, date, month, year, router) => {
     );
     return response.data;
   } catch (err) {
-    if (err?.response?.status === 401) {
-      router.push("/login");
-    }
+    console.log(err)
   }
 };

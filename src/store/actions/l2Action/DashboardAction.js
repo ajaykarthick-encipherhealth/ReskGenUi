@@ -50,7 +50,7 @@ export const getWorkFlow = (startDate, endDate, router) => {
         });
       });
     } catch (err) {
-      console.log("dasff", err);
+      console.log(err);
     }
   };
 };

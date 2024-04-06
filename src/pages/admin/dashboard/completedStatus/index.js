@@ -21,6 +21,7 @@ import spinSTYles from "../../../../styles/auth.module.css";
 const CompletedStatus = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const managersList=useSelector(state=>state?.AdminDashboardReducers?.selectedUsers)
   const completedDatas = useSelector(
     (state) => state?.AdminDashboardReducers?.completedStatus
   );
@@ -185,7 +186,6 @@ const CompletedStatus = () => {
     setSelectUser([e]);
   };
 
-  const optionsUser = [];
 
   useEffect(() => {
     dispatch(getSelectUserList(selectMemberType));
@@ -204,6 +204,9 @@ const CompletedStatus = () => {
       )
     );
   }, [currentBtn, selectedMonth, selectedYear, selectUser]);
+  const optionsUser = managersList?.data?.response?.map(item=>(
+    {value:item?.managerId,label:`${item?.firstName}  ${item?.lastName}`}
+  ));
 
   return (
     <>

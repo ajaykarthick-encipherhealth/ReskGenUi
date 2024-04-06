@@ -368,11 +368,14 @@ const VisitData = ({}) => {
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
     var splitPoint = actualDescription.substring(" ", 20);
+    var data = {
+      fileId:fileId,
+      header: disDescription,
+      dos:encounterDatesHeader,
+      stringFileWord:splitPoint      
+    }
     try {
-      const response = await axios.get(
-        ENDPOINTS.apiEndoint +
-          `dbservice/pageNumber?header=${disDescription}&fileId=${fileId}&dos=${encounterDatesHeader}&stringFileWord=${splitPoint}`
-      );
+      const response = await axios.post(ENDPOINTS.apiEndoint +`dbservice/pageNumber`,data);
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
         setFileInitialPage(pageNumber);
@@ -429,10 +432,13 @@ const VisitData = ({}) => {
       var pageNumber = null;
       setIsModalOpenCaptureSection(true);
       var splitPoint = actualDescription.substring(" ", 10);
-      const response = await axios.get(
-        ENDPOINTS.apiEndoint +
-          `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}&stringFileWord=${splitPoint}`
-      );
+      var data = {
+        fileId:fileId,
+        header: disDescription,
+        dos:encounterDatesHeader,
+        stringFileWord:splitPoint      
+      }
+      const response = await axios.post(ENDPOINTS.apiEndoint +`dbservice/pageNumber`,data);
       var result = response.data.response;
 
       if (response?.data?.status == "SUCCESS") {

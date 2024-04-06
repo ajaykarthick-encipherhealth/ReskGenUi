@@ -27,7 +27,7 @@ export const eventStreming = (
   const id = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
   const sse = new EventSource(
-    `${ENDPOINTS?.apiEndoint}communication/fileprocessing/stages/${id}?token=${token}`
+    `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}`
   );
 
   const fileStatusEventListener = (event) => {
@@ -163,7 +163,7 @@ function FileProcessingTable({ patinetListAll, loading }) {
     const token = localStorage.getItem("token");
     let isFinished = false;
     const sse = new EventSource(
-      `${ENDPOINTS?.apiEndoint}communication/fileprocessing/stages/${id}?token=${token}`
+      `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}`
     );
 
     const fileStatusEventListener = (event) => {

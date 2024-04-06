@@ -282,7 +282,7 @@ function SentReportTable({
       <div className="pagination-container">
         <Paginator
           first={paginationFirst}
-          rows={1}
+          rows={15}
           totalRecords={details?.totalElements}
           onPageChange={onSentPageChange}
         />

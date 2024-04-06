@@ -6,7 +6,7 @@ import Image from "next/image";
 import dayjs from "dayjs";
 import { useDispatch } from "react-redux";
 import styles from "../../pages/reviewer/report/report.module.css";
-import allocateStyle from "../../pages/admin/allocatedusers/allocate/style.module.css";
+import allocateStyle from "../../pages/admin/allocateduser/allocate/style.module.css";
 import Export from "../../images/svg/Export";
 import Legends from "../legends";
 import DateRangePicker from "../rangepicker";

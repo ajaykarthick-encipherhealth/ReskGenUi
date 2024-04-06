@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../utility/axiosConfig";
 import ENDPOINTS from "../../utility/enpoints";
 
 export const l2Users = async (page, search) => {
@@ -57,9 +57,6 @@ export const CurrentUserInfo = async (userId, router) => {
     );
     return response;
   } catch (err) {
-    if (err?.response?.status === 401) {
-      router.push("/login");
-    }
     console.log(err);
   }
 };
