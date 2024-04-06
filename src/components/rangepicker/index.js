@@ -43,10 +43,6 @@ const DateRangePicker = ({
               setCoderEndDate,
             })
           }
-          disabledDate={(current) => disableFutureDate(current)}
-          onCalendarClose={() => {
-            setSelectedDates([]);
-          }}
           defaultValue={
             defaultEndDate && defaultStartDate
               ? [
@@ -55,6 +51,10 @@ const DateRangePicker = ({
                 ]
               : []
           }
+          disabledDate={(current) => !disabled && disableFutureDate(current)}
+          onCalendarClose={() => {
+            setSelectedDates([]);
+          }}
         />
       </div>
     </div>

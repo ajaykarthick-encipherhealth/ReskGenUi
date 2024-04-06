@@ -248,7 +248,7 @@ const DailyTask = ({ dailyStatusData, DailyStatusData }) => {
                         onClick={() => {
                           dispatch(
                             getFilteredList({
-                              dayDate: data?.dateString,
+                              dayDate: data?.date,
                             })
                           );
                           router?.push("/reviewer/patients");

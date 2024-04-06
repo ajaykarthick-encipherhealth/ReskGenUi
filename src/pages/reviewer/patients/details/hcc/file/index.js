@@ -723,7 +723,6 @@ const File = ({}) => {
               res?.provider?.map((res, index) => {
                 providerList.push(res.providerName);
               });
-              if (res.isHccValid == true) {
                 suggestListAll.push({
                   actualDescription: res.actualDescription,
                   diagnosisCodeFinding: res.diagnosisCode,
@@ -738,28 +737,7 @@ const File = ({}) => {
                   children: res.children ? res.children : [],
                   isMostSpecific: res.isMostSpecific,
                 });
-              } else {
-                // suggestListAll.push({
-                //   actualDescription: res.actualDescription,
-                //   diagnosisCodeFinding: res.diagnosisCodeFinding,
-                //   isHccValid: res.isHccValid,
-                //   capturedSections: res.capturedSections,
-                //   diagnosisCode: res.diagnosisCodeFinding,
-                //   encounterDate: res.encounterDate,
-                //   getPlace: "Hcc",
-                // });
-                suggestListAllNonHcc.push({
-                  actualDescription: res.actualDescription,
-                  diagnosisCodeFinding: res.diagnosisCode,
-                  isHccValid: res.isHccValid,
-                  capturedSections: res.capturedSections,
-                  diagnosisCode: res.diagnosisCode,
-                  encounterDate: res.encounterDate,
-                  encounterDateSplit: encounterDatearray,
-                  getPlace: "Hcc",
-                  providerName: providerList,
-                });
-              }
+             
             }
           });
         }
@@ -1678,11 +1656,14 @@ const File = ({}) => {
     const encounterDatesHeader = encounterDatesValue[0];
     var splitPoint = actualDescription.substring(" ", 20);
     var pageNumber = null;
+    var data = {
+      fileId:fileId,
+      header: headerNames,
+      dos:encounterDatesHeader,
+      stringFileWord:splitPoint      
+    }
     try {
-      const response = await axios.get(
-        ENDPOINTS.apiEndoint +
-          `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}&stringFileWord=${splitPoint}`
-      );
+      const response = await axios.post(ENDPOINTS.apiEndoint +`dbservice/pageNumber`,data);
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
         pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
@@ -2570,7 +2551,7 @@ const File = ({}) => {
     return value?.map((res) => {
       const result = encounterDateMatching.filter((res2) => res2.name == res);
       var backColor = result[0]?.colors;
-      var sectionMapArr = (
+      var sectionMapArr = res ? (
         <span
           onClick={() => getEncounterDetails(res)}
           className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
@@ -2580,7 +2561,7 @@ const File = ({}) => {
           </i>
           {moment(res).format("MMM DD")}
         </span>
-      );
+      ):""
       return sectionMapArr;
     });
   };
@@ -3827,7 +3808,6 @@ const File = ({}) => {
                     {suggestedHccList?.map((data) => {
                       return (
                         <>
-                          {data.isHccValid == true ? (
                             <li>
                               <div
                                 className={`hccActiveCard ${visitStyles.hcc_card}`}
@@ -4055,7 +4035,6 @@ const File = ({}) => {
                                 </div>
                               </div>
                             </li>
-                          ) : null}
                         </>
                       );
                     })}

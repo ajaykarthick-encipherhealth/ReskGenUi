@@ -1,3 +1,4 @@
+
 const defaultHeaders = {
   "Content-Type": "application/json",
 };
@@ -19,7 +20,6 @@ export async function checkStatus(response) {
     };
     throw error;
   }
-
   return data;
 }
 
