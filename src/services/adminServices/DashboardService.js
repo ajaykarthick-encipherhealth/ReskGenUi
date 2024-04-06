@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from '../../utility/axiosConfig'
 import ENDPOINTS from "../../utility/enpoints";
 
 export const TEAM_CHART = "TEAM_CHART";
@@ -21,9 +21,7 @@ export async function workStatusApiAdmin(startDate = "", endDate = "", router) {
     );
     return response.data;
   } catch (err) {
-    if (err?.response?.status === 401) {
-      router.push("/login");
-    }
+    console.log(err)
   }
 }
 
@@ -68,9 +66,7 @@ export const accuracyScore = async (btn, month, year, router) => {
     );
     return response.data;
   } catch (err) {
-    if (err?.response?.status === 401) {
-      router.push("/login");
-    }
+    console.log(err)
   }
 };
 
@@ -93,9 +89,7 @@ export const CompletedScore = async (btn, date, month, year, router) => {
     );
     return response.data;
   } catch (err) {
-    if (err?.response?.status === 401) {
-      router.push("/login");
-    }
+    console.log(err)
   }
 };
 
@@ -113,9 +107,7 @@ export const HoldStatus = async (router) => {
     );
     return response.data;
   } catch (err) {
-    if (err.response.status === 401) {
-      router.push("/login");
-    }
+   console.log(err)
   }
 };
 
@@ -156,9 +148,7 @@ export const CompletedScoreNew = async (btn, date, month, year, router) => {
     );
     return response.data;
   } catch (err) {
-    if (err?.response?.status === 401) {
-      router.push("/login");
-    }
+    console.log(err)
   }
 };
 
@@ -223,9 +213,7 @@ export const UserByIndividual = async (router) => {
     );
     return response.data;
   } catch (err) {
-    if (err.response.status === 401) {
-      router.push("/login");
-    }
+   console.log(err)
   }
 };
 
@@ -458,9 +446,7 @@ export const CompletedStatus = async (
     );
     return response.data;
   } catch (err) {
-    if (err?.response?.status === 401) {
-      router.push("/login");
-    }
+    console.log(err)
   }
 };
 
@@ -478,9 +464,7 @@ export const GetUserCount = async (role) => {
     );
     return response.data;
   } catch (err) {
-    if (err?.response?.status === 401) {
-      router.push("/login");
-    }
+    console.log(err)
   }
 };
 
@@ -498,8 +482,6 @@ export const SelectUserList = async (role) => {
     );
     return response.data;
   } catch (err) {
-    if (err?.response?.status === 401) {
-      router.push("/login");
-    }
+    console.log(err)
   }
 };

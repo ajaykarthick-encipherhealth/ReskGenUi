@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../utility/axiosConfig";
 import ENDPOINTS from "../../utility/enpoints";
 
 export async function FihrServices(router) {
@@ -11,8 +11,6 @@ export async function FihrServices(router) {
     });
     return response.data;
   } catch (err) {
-    if (err?.response?.status === 401) {
-      router.push("/login");
-    }
+    console.log(err)
   }
 }

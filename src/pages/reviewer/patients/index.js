@@ -331,27 +331,9 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
         moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
       setProcessedStart(convertStartDate);
       setProcessedEnd(convertEndDate);
-      getFilteApi(
-        0,
-        pageSize,
-        statusSelectedValue,
-        dueDateStart,
-        dueDateEnd,
-        convertStartDate,
-        convertEndDate
-      );
     } else {
       setProcessedStart("");
       setProcessedEnd("");
-      getFilteApi(
-        0,
-        pageSize,
-        statusSelectedValue,
-        dueDateStart,
-        dueDateEnd,
-        "",
-        ""
-      );
     }
   };
   const processstatusBodyTemplate = (rowData) => {

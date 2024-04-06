@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../utility/axiosConfig";
 import ENDPOINTS from "../utility/enpoints";
 
 export async function workStatusApi(startDate, endDate, router) {
@@ -14,9 +14,7 @@ export async function workStatusApi(startDate, endDate, router) {
     );
     return response.data;
   } catch (err) {
-    if (err?.response?.status === 401) {
-      router.push("/login");
-    }
+    console.log(err)
   }
 }
 
@@ -70,9 +68,7 @@ export const accuracyScore = async (
     );
     return response.data;
   } catch (err) {
-    if (err?.response?.status === 401) {
-      router.push("/login");
-    }
+    console.log(err)
   }
 };
 
@@ -90,9 +86,7 @@ export const CompletedScore = async (btn, date, month, year, router) => {
     );
     return response.data;
   } catch (err) {
-    if (err?.response?.status === 401) {
-      router.push("/login");
-    }
+    console.log(err)
   }
 };
 
@@ -109,9 +103,7 @@ export const HoldStatus = async (router) => {
     );
     return response.data;
   } catch (err) {
-    if (err.response?.status === 401) {
-      router.push("/login");
-    }
+    console.log(err)
   }
 };
 

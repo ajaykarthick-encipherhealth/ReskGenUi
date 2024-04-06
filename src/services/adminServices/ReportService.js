@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../utility/axiosConfig";
 import ENDPOINTS from "../../utility/enpoints";
 import { getSentDetails } from "../../store/actions/adminAction/ReportActions";
 
@@ -143,9 +143,7 @@ export const SelectUserList = async (role) => {
     );
     return response.data;
   } catch (err) {
-    if (err?.response?.status === 401) {
-      router.push("/login");
-    }
+    console.log(err)
   }
 };
 

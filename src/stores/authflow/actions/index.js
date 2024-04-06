@@ -1,5 +1,5 @@
 import { notification } from "antd";
-import axios from "axios";
+import axiosConfig from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import axiosConfig from "../../../utility/axiosConfig";
 export const ENABLEMFA = "ENABLEMFA";
@@ -222,7 +222,7 @@ export const refreshToken = () => async (dispatch) => {
   const refreshToken = localStorage.getItem("refreshToken");
   const token = localStorage.getItem("token");
   try {
-    const response = await axios.post(
+    const response = await axiosConfig.post(
       `${ENDPOINTS.apiEndoint}securityservice/token/refreshtoken`,
       { refreshToken: refreshToken },
       {
@@ -267,7 +267,7 @@ export const submitLogin = async (email, password) => {
 export const getAccuracy = () => async (dispatch) => {
   const token = localStorage.getItem("token");
   try {
-    const response = await axios.get(
+    const response = await axiosConfig.get(
       `${ENDPOINTS?.apiEndoint}dbservice/l2dashboard/loggedinuseraccuracy`,
       {
         headers: {
@@ -318,7 +318,7 @@ export const preSendURl = (type, file) => async (dispatch) => {
   });
   if (type) {
     try {
-      let response = await axios.get(
+      let response = await axiosConfig.get(
         `${ENDPOINTS?.apiEndoint}dbservice/user/getuploadurl?filetype=${type}&filelocation=PROFILE_IMAGE`,
         {
           headers: {
@@ -368,7 +368,7 @@ export const updateImage = (url) => async (dispatch) => {
 
   if (url) {
     try {
-      const response = await axios.put(
+      const response = await axiosConfig.put(
         `${ENDPOINTS?.apiEndoint}dbservice/user/profileimage`,
         { profileImageUrl: splitUrl },
         {
@@ -410,7 +410,7 @@ export const getFilters = (field, username, pageQueue) => async (dispatch) => {
     },
   });
   try {
-    const response = await axios.get(`${ENDPOINTS?.apiEndoint}${url}`, {
+    const response = await axiosConfig.get(`${ENDPOINTS?.apiEndoint}${url}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -436,7 +436,7 @@ export const getCoderDetails =
     const token = localStorage.getItem("token");
     const codeName = name === "icd-10" ? "icd" : name;
     try {
-      const response = await axios.get(
+      const response = await axiosConfig.get(
         `${
           ENDPOINTS?.apiEndoint
         }dbservice/disease/${codeName}?disease=${search}&filter=${
@@ -455,9 +455,7 @@ export const getCoderDetails =
         });
       }
     } catch (err) {
-      if (err?.response?.status === 401) {
-        router?.push("/login");
-      }
+    console.log(err)
     }
   };
 
