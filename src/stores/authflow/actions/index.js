@@ -456,9 +456,7 @@ export const getCoderDetails =
         });
       }
     } catch (err) {
-      if (err?.response?.status === 401) {
-        router?.push("/login");
-      }
+    console.log(err)
     }
   };
 

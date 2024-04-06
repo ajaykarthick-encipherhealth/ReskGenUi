@@ -34,9 +34,7 @@ export const DailyTaskApi = async (date, router) => {
     );
     return response.data;
   } catch (err) {
-    if (err?.response?.status === 401) {
-      router?.push("/login");
-    }
+   console.log(err)
   }
 };
 
