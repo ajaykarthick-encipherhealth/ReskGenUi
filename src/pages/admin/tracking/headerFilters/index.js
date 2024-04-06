@@ -435,14 +435,14 @@ const HeaderFilters = ({
             ) : null}
 
             {isSearch && (
-              <div className={defaultSize}>
+              <div className={defaultSize} onClick={()=> setClear(false)}>
                 {" "}
                 <label style={{ marginLeft: "8px" }}>{searchlabel}</label>
                 <div class="form-group has-search">
                   <InputField
                    isSearch={true}
                    placeholder="Search"
-                   inputValue={clear ? "" : searchValue}
+                   inputValue={search}
                    setInputValue={setSearch}
                    delay={1000}
                    type="text"
@@ -490,6 +490,15 @@ const HeaderFilters = ({
                 style={{ margin: "-35px 0px 0 40px", cursor: "pointer" }}
                 onClick={() => {
                   setClear(true);
+                  setStartDate([]);
+                  setEndDate([]);
+                  setStartDate4([]);
+                  setEndDate4([]);
+                  setStartDate5([]);
+                  setEndDate5([]);
+                  setStartDate6([]);
+                  setEndDate6([]);
+                  setSearch("");
                   setSelectedDates([]);
                   setSelectedDates2([]);
                   setSelectedDates3([]);
