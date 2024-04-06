@@ -31,16 +31,12 @@ const bullets = [
     name: "AUDITED",
   },
   {
-    color: "#E28213",
+    color: "#c33772",
     name: "AUDIT PENDING",
   },
   {
     color: "#964B00",
     name: "RE AUDIT",
-  },
-  {
-    color: "red",
-    name: "DECLINED",
   },
   {
     color: "#CE9900",

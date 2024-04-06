@@ -53,7 +53,6 @@ const bullets = [
         color: "#00BC13",
         name: "COMPLETED",
       },
-     
     ],
   },
   {
@@ -70,10 +69,6 @@ const bullets = [
       {
         color: "#964B00",
         name: "RE AUDIT",
-      },
-      {
-        color: "#EB5252",
-        name: "DECLINED",
       },
       {
         color: "#EBAE00",
@@ -164,8 +159,6 @@ export default function Patient() {
   // new changes
 
   const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
-
-
 
   useEffect(() => {
     const datas = {
@@ -415,15 +408,6 @@ export default function Patient() {
               />
             </div>
           </Popover>
-        );
-
-      case "DECLINED":
-        return (
-          <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>
-              Declined
-            </span>
-          </div>
         );
 
       case "AUDITHOLD":
