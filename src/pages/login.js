@@ -18,11 +18,11 @@ import { getMFAValidation } from "../stores/authflow/actions";
 export default function Login() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [enteredEmail, setEmail] = useState("henry@encipherhealth.onmicrosoft.com");
+  const [enteredEmail, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   let errorsObj = { email: "", password: "" };
   const [errors, setErrors] = useState(errorsObj);
-  const [password, setPassword] = useState("@Asdf123");
+  const [password, setPassword] = useState("");
   const [emailErro, setEmailError] = useState("");
 
   const validateEmail = (enteredEmail) => {
