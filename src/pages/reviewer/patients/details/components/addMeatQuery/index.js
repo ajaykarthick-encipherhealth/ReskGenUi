@@ -27,12 +27,9 @@ const AddMeatQuery = ({
   save
 }) => {
   const dispatch = useDispatch();
-
-  console.log(meatEditQueryRes);
   const patientDetailsResult = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
   );
-  console.log(patientDetailsResult);
   const [validated, setValidated] = useState(false);
   const [meatQueryResult, setMeatQueryResult] = useState([]);
   const [meatQueryUpdate, setMeatQueryUpdate] = useState(false);
@@ -111,7 +108,6 @@ const AddMeatQuery = ({
   ];
 
   const handleSubmitMeatQuery = async (event) => {
-    console.log("test")
     setValidated(true);
     const form = event.currentTarget;
     event.preventDefault();
