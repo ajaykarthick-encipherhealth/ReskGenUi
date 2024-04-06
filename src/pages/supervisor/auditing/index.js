@@ -44,17 +44,14 @@ const bullets = [
     name: "AUDITED",
   },
   {
-    color: "#E28213",
+    color: "#c33772",
     name: "AUDIT PENDING",
   },
   {
     color: "#964B00",
     name: "RE AUDIT",
   },
-  {
-    color: "red",
-    name: "DECLINED",
-  },
+
   {
     color: "#CE9900",
     name: "AUDIT HOLD",
@@ -153,12 +150,12 @@ export default function Patient() {
   useEffect(() => {
     if (window !== "undefined") {
       if (navigate.query.pageNo) {
-        setIsLoading(true)
-        setPageNo(navigate?.query?.pageNo)
-        setPaginationFirst(navigate?.query?.paginationFirst)
+        setIsLoading(true);
+        setPageNo(navigate?.query?.pageNo);
+        setPaginationFirst(navigate?.query?.paginationFirst);
       }
     }
-  }, [navigate])
+  }, [navigate]);
 
   useEffect(() => {
     if (response?.response?.content) {
@@ -259,15 +256,6 @@ export default function Patient() {
               />
             </div>
           </Popover>
-        );
-
-      case "DECLINED":
-        return (
-          <div className="patient-status" style={{ textAlign: "center" }}>
-            <span className={`badge failed-text`} style={{ color: "red" }}>
-              Declined
-            </span>
-          </div>
         );
 
       case "AUDITHOLD":
@@ -425,7 +413,7 @@ export default function Patient() {
                             patientDetails={patientDetails}
                             sort={sort}
                             setSort={setSort}
-                            page={{pageNo, paginationFirst}}
+                            page={{ pageNo, paginationFirst }}
                           />
                           <div>
                             <div className="pagination-container">

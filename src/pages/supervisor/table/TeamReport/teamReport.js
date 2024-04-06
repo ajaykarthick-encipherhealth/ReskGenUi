@@ -63,15 +63,6 @@ function TeamReport({
           </Popover>
         );
 
-      case "DECLINED":
-        return (
-          <div className="patient-status">
-            <span className={`badge failed-text`} style={{ color: "red" }}>
-              DeclinedPopover
-            </span>
-          </div>
-        );
-
       case "AUDITHOLD":
         return (
           <Popover placement="bottom" title=" Status: AUDIT HOLD">
