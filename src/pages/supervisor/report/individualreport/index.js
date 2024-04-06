@@ -228,7 +228,8 @@ const IndividualReceiverReport = () => {
                           }}
                         >
                           <div className={styles.user}>
-                            <div>{item?.reportName}</div>
+                          <div style={{ color: reportInfo?.reportName === item?.reportName ? "#04306f" : "black", fontWeight: reportInfo?.reportName === item?.reportName ? "bold" : "normal" }}>{item?.reportName}</div>
+
                             {item?.type && (
                               <div
                                 style={{ margin: "5px 0 0 5px" }}
