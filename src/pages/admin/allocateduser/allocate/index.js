@@ -144,6 +144,7 @@ const AllocateModal = ({
                     setActiveCard(item.id);
                     setActiveEmail(item.email);
                     getAllCheckList(item.email);
+                    setAllocateDate("")
                   }
                 }}
               >

@@ -12362,7 +12362,7 @@ tbody > tr {
   height: 42px !important;
   flex-shrink: 0;
   border: none !important;
-  z-index: 11;
+  /* z-index: 11; */
   width: 100% !important;
 }
 
@@ -14379,5 +14379,3 @@ input[type="number"] {
 .dateRangeSize .ant-picker .ant-picker-input input {
   font-size: 10px !important;
 }
-
-

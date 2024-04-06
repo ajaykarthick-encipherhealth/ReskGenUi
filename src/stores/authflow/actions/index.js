@@ -1,7 +1,7 @@
 import { notification } from "antd";
 import axiosConfig from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
-import axiosConfig from "../../../utility/axiosConfig";
+
 export const ENABLEMFA = "ENABLEMFA";
 export const VALIDATE_CODE = "VALIDATE_CODE";
 export const VERIFYCODE = "VERIFYCODE";

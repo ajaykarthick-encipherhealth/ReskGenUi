@@ -11,11 +11,13 @@ import File from "./file";
 const Hcc = () => {
   const [activeTabHead, setActiveTabHead] = useState("file");
   const [flagTagActive, setFlagTagActive] = useState(false);
+  const [popoverVisible, setPopoverVisible] = useState(false);
   const selectTab = (num) => {
     setFlagTagActive(false);
     if(num == 1){
       setFlagTagActive(true)
     }
+    setPopoverVisible(false)
   };
   return (
     <>
@@ -127,7 +129,7 @@ const Hcc = () => {
                   <RafScore />
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey="file">
-                  <File />
+                  <File popoverVisible={popoverVisible} setPopoverVisible={setPopoverVisible}/>
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey="query">
                   <MeatQuery />
