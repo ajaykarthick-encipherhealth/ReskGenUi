@@ -87,7 +87,7 @@ const addOnCodeColor = [
   "geekblue",
   "purple",
 ];
-const File = ({}) => {
+const File = ({popoverVisible, setPopoverVisible}) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
   let searchKeywords = [];
@@ -313,7 +313,7 @@ const File = ({}) => {
   const [providerNameEcnounterList, setProviderNameEcnounterList] = useState(
     []
   );
-  const [popoverVisible, setPopoverVisible] = useState(false);
+  
   const [hccVersionDetails, setHccVersionDetails] = useState(null);
   const [selectProviderInfo, setSelectProviderInfo] = useState(null);
   const [hccFormTab, setHccFormTab] = useState("HCCFORM");
