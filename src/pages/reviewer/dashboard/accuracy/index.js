@@ -6,7 +6,7 @@ import Image from "next/image";
 import Card from "../../../../components/card/index";
 import styles from "./styles.module.css";
 import HeadTitle from "../../../../components/headtitle";
-import {connect } from "react-redux";
+import { connect } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
 import { Empty, Spin } from "antd";
 import spinSTYles from "../../../../styles/auth.module.css";
@@ -59,7 +59,7 @@ export const monthNames = [
   "DEC",
 ];
 
-const Accuracy = ({accuracyDatas,getAccuracyScore}) => {
+const Accuracy = ({ accuracyDatas, getAccuracyScore }) => {
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const currentDate = new Date();
@@ -80,7 +80,11 @@ const Accuracy = ({accuracyDatas,getAccuracyScore}) => {
   );
 
   useEffect(() => {
-    getAccuracyScore({btn:currentBtn, month:selectedMonth, year:selectedYear});
+    getAccuracyScore({
+      btn: currentBtn,
+      month: selectedMonth,
+      year: selectedYear,
+    });
   }, [currentBtn, selectedMonth, selectedYear]);
 
   const handleButtonClick = (index, btn) => {
@@ -91,35 +95,45 @@ const Accuracy = ({accuracyDatas,getAccuracyScore}) => {
   const chartBlockedDates = (year, month, param, val, currentBtn) => {
     year = Number(year);
     month = Number(month);
-    if (year < currentDate.getFullYear()) {
-      return param?.data?.response?.length>0 && param?.data?.response.map((item) => item[val]);
+    if (year < currentDate.getFullYear() && param?.data?.response?.length > 0) {
+      return param?.data?.response?.map((item) => item[val]);
     } else if (
       year == currentDate.getFullYear() &&
-      month < currentDate.getMonth() + 1
+      month < currentDate.getMonth() + 1 &&
+      param?.data?.response?.length > 0
     ) {
-      return param?.data?.response?.length>0 && param?.data?.response.map((item) => item[val]);
+      return param?.data?.response?.map((item) => item[val]);
     } else if (
       year == currentDate.getFullYear() &&
       month == currentDate.getMonth() + 1 &&
-      currentBtn !== "Monthly"
+      currentBtn !== "Monthly" &&
+      param?.data?.response?.length > 0
     ) {
-      if (currentBtn == "Daily") {
-        return param?.data?.response?.length>0 && param?.data?.response.map(
+      if (currentBtn == "Daily" && param?.data?.response?.length > 0) {
+        return param?.data?.response?.map(
           (item, index) => index < new Date().getDate() && item[val]
         );
-      } else if (currentBtn == "Weekly") {
-        return param?.data?.response?.length>0 && param?.data?.response.map(
+      } else if (currentBtn == "Weekly" && param?.data?.response?.length > 0) {
+        return param?.data?.response?.map(
           (item, index) => index < getDateWeek(currentDate) && item[val]
         );
-      } else if (currentBtn == "Monthly") {
-        return param?.data?.response?.length>0 && param?.data?.response.map(
+      } else if (currentBtn == "Monthly" && param?.data?.response?.length > 0) {
+        return param?.data?.response?.map(
           (item, index) => index < new Date().getMonth() + 1 && item[val]
         );
       }
-    } else if (year == currentDate.getFullYear() && currentBtn == "Monthly") {
-      return param?.data?.response?.length>0 && param?.data?.response.map(
-        (item, index) => index < new Date().getMonth() + 1 && item[val]
-      );
+    } else if (
+      year == currentDate.getFullYear() &&
+      currentBtn == "Monthly" &&
+      param?.data?.response?.length > 0
+    ) {
+      if (month > currentDate?.getMonth() + 1) {
+        return false;
+      } else {
+        return param?.data?.response?.map(
+          (item, index) => index < new Date().getMonth() + 1 && item[val]
+        );
+      }
     } else {
       return false;
     }
@@ -246,13 +260,17 @@ const Accuracy = ({accuracyDatas,getAccuracyScore}) => {
             (month) => month === this.point.category
           );
 
-          finalData = accuracyDatas?.data?.response?.length>0 && accuracyDatas?.data?.response?.find(
-            (item) => item?.monthOfYear === hoveredMonthIndex + 1
-          );
+          finalData =
+            accuracyDatas?.data?.response?.length > 0 &&
+            accuracyDatas?.data?.response?.find(
+              (item) => item?.monthOfYear === hoveredMonthIndex + 1
+            );
         } else {
-          finalData = accuracyDatas?.data?.response?.length>0 && accuracyDatas?.data?.response?.find(
-            (item) => item?.dayOfMonth === this.x
-          );
+          finalData =
+            accuracyDatas?.data?.response?.length > 0 &&
+            accuracyDatas?.data?.response?.find(
+              (item) => item?.dayOfMonth === this.x
+            );
         }
 
         if (finalData) {
@@ -284,37 +302,41 @@ const Accuracy = ({accuracyDatas,getAccuracyScore}) => {
       },
     },
     series: [
-      // {
-      //   name: "averageScore",
-      //   data: accuracyDatas?.data?.response.map((item) => item.averageScore),
-      //   color: "#cc0000",
-      // },
       {
         name: "totalCorrectCount",
-        data: accuracyDatas?.data?.response?.length>0 && accuracyDatas?.data?.response?.map(
-          (item) => item?.totalCorrectCount
-        ),
+        data:
+          selectedMonth <= currentDate?.getMonth() + 1
+            ? accuracyDatas?.data?.response?.map(
+                (item) => item?.totalCorrectCount
+              )
+            : [],
         color: "#0b59f1",
         yAxis: 1,
       },
       {
         name: "totalWrongCount",
-        data: accuracyDatas?.data?.response?.length>0 && accuracyDatas?.data?.response?.map(
-          (item) => item.totalWrongCount
-        ),
+        data:
+          selectedMonth <= currentDate?.getMonth() + 1
+            ? accuracyDatas?.data?.response?.map(
+                (item) => item?.totalWrongCount
+              )
+            : [],
         color: "red",
         yAxis: 1,
       },
       {
         name: "Temperature",
         type: "spline",
-        data: chartBlockedDates(
-          selectedYear,
-          selectedMonth,
-          accuracyDatas,
-          "averageScore",
-          currentBtn
-        ),
+        data:
+          selectedMonth <= currentDate?.getMonth() + 1
+            ? chartBlockedDates(
+                selectedYear,
+                selectedMonth,
+                accuracyDatas,
+                "averageScore",
+                currentBtn
+              )
+            : [],
         tooltip: {
           valueSuffix: "",
         },
@@ -373,9 +395,7 @@ const Accuracy = ({accuracyDatas,getAccuracyScore}) => {
                   </div>
                 )
               ) : (
-                <div className={spinSTYles.spinStyle}>
-                  {/* <Empty /> */}
-                </div>
+                <div className={spinSTYles.spinStyle}>{/* <Empty /> */}</div>
               )}
             </div>
             <div className={styles.accuracy}>
@@ -383,11 +403,13 @@ const Accuracy = ({accuracyDatas,getAccuracyScore}) => {
                 <Image src={accuracy} className={styles.Img} />
                 <div className={styles.heading}>Average Quality</div>
               </div>
+
               <div className={styles.month}>
                 {currentBtn === "Daily" && `Day ${currentDate.getDate()}`}
                 {currentBtn === "Monthly" &&
                   `Month ${monthNames[currentDate.getMonth()]}`}
                 {currentBtn === "Weekly" && `Week ${getDateWeek(currentDate)}`}
+                {currentBtn !== "Monthly" &&<span className={styles.subTitle}>(Current Month)</span>}
               </div>
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
@@ -409,10 +431,10 @@ const Accuracy = ({accuracyDatas,getAccuracyScore}) => {
 
 const enhancer = connect(
   (state) => ({
-    accuracyDatas: state?.reviewer?.dashboard?.accuracy
+    accuracyDatas: state?.reviewer?.dashboard?.accuracy,
   }),
   {
-    getAccuracyScore:dashbaordActions.accuracyAction
+    getAccuracyScore: dashbaordActions.accuracyAction,
   }
 );
 export default enhancer(Accuracy);

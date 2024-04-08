@@ -69,3 +69,8 @@
   width: 98% !important;
   height: 280px !important;
 }
+.subTitle{
+  font-size:14px;
+  color:#808080;
+  margin-left:5px;
+}

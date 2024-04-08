@@ -125,18 +125,29 @@ const Accuracy = () => {
   let highlightIndex = -1;
 
   if (currentBtn === "Monthly") {
-    if (parseInt(selectedYear) === new Date().getFullYear()) {
+    if (
+      parseInt(selectedYear) === new Date().getFullYear() &&
+      selectedMonth === new Date().getMonth() + 1
+    ) {
       highlightIndex = currentDate.getMonth();
+    } else if (
+      parseInt(selectedYear) === new Date().getFullYear() &&
+      selectedMonth < new Date().getMonth() + 1
+    ) {
+      highlightIndex = selectedMonth - 1;
     }
   } else if (currentBtn === "Daily") {
     if (
       parseInt(selectedYear) === new Date().getFullYear() &&
-      selectedMonth === new Date().getMonth()+1
-      ) {
+      selectedMonth === new Date().getMonth() + 1
+    ) {
       highlightIndex = currentDate.getDate() - 1;
     }
   } else if (currentBtn === "Weekly") {
-    if (parseInt(selectedYear) === new Date().getFullYear()) {
+    if (
+      parseInt(selectedYear) === new Date().getFullYear() &&
+      selectedMonth === new Date().getMonth() + 1
+    ) {
       const currentWeek = getDateWeek(currentDate);
       highlightIndex = currentWeek - 1;
     }
@@ -176,9 +187,13 @@ const Accuracy = () => {
         );
       }
     } else if (year == currentDate.getFullYear() && currentBtn == "Monthly") {
-      return param?.data?.response.map(
-        (item, index) => index < new Date().getMonth() + 1 && item[val]
-      );
+      if (month > currentDate?.getMonth() + 1) {
+        return false;
+      } else {
+        return param?.data?.response.map(
+          (item, index) => index < new Date().getMonth() + 1 && item[val]
+        );
+      }
     } else {
       return false;
     }
@@ -193,7 +208,17 @@ const Accuracy = () => {
       year == currentDate.getFullYear() &&
       month < currentDate.getMonth() + 1
     ) {
-      return param.map((item) => item);
+      if (
+        year == currentDate.getFullYear() &&
+        month < currentDate.getMonth() + 1 &&
+        currentBtn === "Monthly"
+      ) {
+        return param.map(
+          (item, index) => index < new Date().getMonth() + 1 && item
+        );
+      } else {
+        return param.map((item) => item);
+      }
     } else if (
       year == currentDate.getFullYear() &&
       month == currentDate.getMonth() + 1 &&
@@ -211,9 +236,13 @@ const Accuracy = () => {
         );
       }
     } else if (year == currentDate.getFullYear() && currentBtn == "Monthly") {
-      return param.map(
-        (item, index) => index < new Date().getMonth() + 1 && item
-      );
+      if (month > currentDate?.getMonth() + 1) {
+        return false;
+      } else {
+        return param.map(
+          (item, index) => index < new Date().getMonth() + 1 && item
+        );
+      }
     } else {
       return false;
     }
@@ -305,7 +334,7 @@ const Accuracy = () => {
         opposite: false,
         min: 0,
         max: 100,
-        gridLineWidth: 0
+        gridLineWidth: 0,
       },
       {
         // Secondary yAxis (right)
@@ -399,17 +428,21 @@ const Accuracy = () => {
       // },
       {
         name: "totalCorrectCount",
-        data: QualityAccuracyDatas?.data?.response?.map(
-          (item) => item?.totalCorrectCount
-        ),
+        data:
+          selectedMonth <= currentDate?.getMonth() + 1 &&
+          QualityAccuracyDatas?.data?.response?.map(
+            (item) => item?.totalCorrectCount
+          ),
         color: "#0b59f1",
         yAxis: 1,
       },
       {
         name: "totalWrongCount",
-        data: QualityAccuracyDatas?.data?.response?.map(
-          (item) => item.totalWrongCount
-        ),
+        data:
+          selectedMonth <= currentDate?.getMonth() + 1 &&
+          QualityAccuracyDatas?.data?.response?.map(
+            (item) => item.totalWrongCount
+          ),
         color: "red",
         yAxis: 1,
       },
@@ -433,6 +466,7 @@ const Accuracy = () => {
       },
     ],
   };
+
   useEffect(() => {
     if (currentTabBtn === "CogentAI Accuracy") {
       if (currentBtn === "Daily") {
@@ -457,7 +491,7 @@ const Accuracy = () => {
       );
     }
   }, [currentBtn, selectedMonth, selectedYear, router, currentTabBtn]);
- 
+
   return (
     <>
       <HeadTitle header="Accuracy and Quality Insights" />
@@ -558,6 +592,9 @@ const Accuracy = () => {
                   : currentBtn === "Monthly"
                   ? `Month ${monthNames[currentDate.getMonth()]}`
                   : `Week ${getDateWeek(currentDate)}`}
+                {currentBtn !== "Monthly" && (
+                  <span className={styles.subTitle}>(Current Month)</span>
+                )}
               </div>
 
               <div className={styles.percentage}>
