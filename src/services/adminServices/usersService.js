@@ -33,7 +33,7 @@ export const UsersList = async ({
   }
 };
 
-export const AddUser = async (data, setErrors) => {
+export const AddUser = async (data,setFormData) => {
   const token = localStorage.getItem("token");
   delete data?.confirmPassword;
   try {
@@ -49,34 +49,49 @@ export const AddUser = async (data, setErrors) => {
     );
     if (response) {
       if (response?.data?.status === "SUCCESS") {
-        setErrors({
-          email: "",
-          password: "",
-          confirmPass: "",
-        });
         notification.success({
           message: response?.data?.message,
           duration: 1,
         });
-      } else {
-        setErrors({
-          email: "",
+        setFormData({
+          firstName: "",
+          lastName: "",
+          emailId: "",
           password: "",
-          confirmPass: "",
-        });
+          role: "",
+          userName: "",
+          mobileNumber: "",
+          confirmPassword: "",
+        })
+      } else {
         notification.warning({
           message: response?.data?.message,
           duration: 1,
         });
+        setFormData({
+          firstName: "",
+          lastName: "",
+          emailId: "",
+          password: "",
+          role: "",
+          userName: "",
+          mobileNumber: "",
+          confirmPassword: "",
+        })
       }
       return response;
     }
   } catch (err) {
-    setErrors({
-      email: "",
+    setFormData({
+      firstName: "",
+      lastName: "",
+      emailId: "",
       password: "",
-      confirmPass: "",
-    });
+      role: "",
+      userName: "",
+      mobileNumber: "",
+      confirmPassword: "",
+    })
     notification.error({ description: err?.response?.data?.message });
   }
 };

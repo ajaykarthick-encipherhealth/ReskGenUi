@@ -20,11 +20,7 @@ import { AddUser } from "../../../services/adminServices/usersService";
 import { Paginator } from "primereact/paginator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import {
-  getValidatePassword,
-  handleTogglePasswordVisibility,
-  validateConfirmPassword,
-} from "../../../components/headerFilters/functions";
+import { handleTogglePasswordVisibility } from "../../../components/headerFilters/functions";
 
 const options3 = [
   { value: "ALL", label: "ALL" },
@@ -81,9 +77,7 @@ const UserList = () => {
     patientId: "",
     patientName: "",
   });
-  let errorsObj = { email: "", password: "", confirmPass: "" };
-  const [errors, setErrors] = useState(errorsObj);
-  const [isLoading, setIsLoading] = useState(false);
+
   const addUserForm = () => {
     setValidated(false);
     setAddUser(true);
@@ -102,58 +96,26 @@ const UserList = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
-
-    if (formData.userName.includes("@")) {
-      setErrors({
-        ...errors,
-        email: "Username cannot be an email address",
-      });
-      return;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      setErrors({
-        ...errors,
-        confirmPass: "Passwords do not match",
-      });
-      return;
-    }
-
     if (form.checkValidity() === true) {
-      const passValidation = getValidatePassword(
-        formData?.password,
-        setErrors,
-        setIsLoading
-      );
-      const isConfirmPasswordValid = validateConfirmPassword(
-        formData.password,
-        formData.confirmPassword,
-        setErrors,
-        setIsLoading
-      );
+      formData.tenantId = localTenantId;
+      formData.organizationId = localOrgId;
+      formData.role = roleValue ? roleValue : [role.toUpperCase()];
+      const response = await AddUser(formData, setFormData);
+      if (response?.data?.status === "SUCCESS") {
+        setAddUser(false);
+        setUseAdd(true);
+        setFormData({
+          firstName: "",
+          lastName: "",
+          emailId: "",
+          password: "",
+          role: "",
+          userName: "",
+          mobileNumber: "",
+          confirmPassword: "",
+        });
 
-      if (passValidation && isConfirmPasswordValid) {
-        formData.tenantId = localTenantId;
-        formData.organizationId = localOrgId;
-        formData.role = roleValue ? roleValue : [role.toUpperCase()];
-
-        const response = await AddUser(formData, setErrors);
-
-        if (response?.data?.status === "SUCCESS") {
-          setAddUser(false);
-          setUseAdd(true);
-          setFormData({
-            ...intialValues,
-            userName: "",
-            confirmPassword: "",
-          });
-          setErrors({
-            email: "",
-            password: "",
-            confirmPass: "",
-          });
-          setIsLoadingBtn(false);
-        }
+        setIsLoadingBtn(false);
       }
     }
 
@@ -260,6 +222,25 @@ const UserList = () => {
       setFormData(intialValues);
     }, 650);
   }, [addUser]);
+  const getValidatePassword = (formData) => {
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+
+    if (formData?.password?.length === 0) return "Please enter password";
+    if (formData?.password?.length < 8)
+      return "Password should be greater than 8 characters";
+    if (formData?.password?.length > 14)
+      return "Password should be less than 14 characters";
+    if (
+      formData?.password?.length > 0 &&
+      !passwordRegex.test(formData?.password)
+    )
+      return "Password must contain at least 1 capital letter, 1 small letter, 1 number, and 1 special character";
+    else {
+      return "";
+    }
+  };
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -415,11 +396,6 @@ const UserList = () => {
           onHide={() => {
             setAddUser(false);
             setFormData(intialValues);
-            setErrors({
-              email: "",
-              password: "",
-              confirmPass: "",
-            });
           }}
           className="offcanvas-end  offcanvas-md-size"
           placement="end"
@@ -434,11 +410,6 @@ const UserList = () => {
               onClick={() => {
                 setAddUser(false);
                 setFormData();
-                setErrors({
-                  email: "",
-                  password: "",
-                  confirmPass: "",
-                });
               }}
             >
               <i className="fa-solid fa-xmark"></i>
@@ -464,6 +435,15 @@ const UserList = () => {
                       onChange={handleChange}
                       placeholder="Enter First Name"
                     />
+                    {validated ? (
+                      <div className="text-danger fs-12">
+                        {formData?.firstName?.length === 0
+                          ? "Please enter the firstname"
+                          : ""}
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <div className="col-xl-6 mb-3">
                     <Form.Label>
@@ -476,6 +456,15 @@ const UserList = () => {
                       onChange={handleChange}
                       placeholder="Enter Last Name"
                     />
+                    {validated ? (
+                      <div className="text-danger fs-12">
+                        {formData?.lastName?.length === 0
+                          ? "Please enter the lastname"
+                          : ""}
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <div className="col-xl-6 mb-3">
                     <Form.Label>
@@ -488,6 +477,17 @@ const UserList = () => {
                       onChange={handleChange}
                       placeholder="Enter Email"
                     />
+                    {validated ? (
+                      <div className="text-danger fs-12">
+                        {formData?.emailId?.length === 0
+                          ? "Please enter the email"
+                          : !formData?.emailId?.includes("@")
+                          ? "Please enter valid email"
+                          : ""}
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <div className="col-xl-6 mb-3">
                     <Form.Label>
@@ -504,8 +504,14 @@ const UserList = () => {
                         value={formData?.userName}
                       />
                     </div>
-                    {errors?.email ? (
-                      <div className="text-danger fs-12">{errors?.email}</div>
+                    {validated ? (
+                      <div className="text-danger fs-12">
+                        {formData?.userName?.length === 0
+                          ? "Please enter the username"
+                          : formData?.userName?.includes("@")
+                          ? "Username shopuld not contain @ symbol"
+                          : ""}
+                      </div>
                     ) : (
                       ""
                     )}
@@ -522,31 +528,65 @@ const UserList = () => {
                       placeholder="Enter Mobile Number"
                       value={formData?.mobileNumber}
                     />
+                    {validated ? (
+                      <div className="text-danger fs-12">
+                        {formData?.mobileNumber?.length === 0
+                          ? "Please enter the mobileNumber"
+                          : formData?.mobileNumber?.length > 10 ||
+                            formData?.mobileNumber?.length < 10
+                          ? "Please enter valid mobileNumber"
+                          : ""}
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <div className="col-xl-6 mb-3">
                     <Form.Label>
                       Role <span className="text-danger">*</span>{" "}
                     </Form.Label>
-                    <Select
-                      styles={{ border: "1px solid #e6e6e6 !important" }}
-                      name="role"
-                      options={[
-                        { value: "ADMIN", label: "ADMIN" },
-                        { value: "REVIEWER", label: "REVIEWER" },
-                        { value: "SUPERVISOR", label: "SUPERVISOR" },
-                        {
-                          value: "ADMIN_TECHNICAL_SUPPORT",
-                          label: "ADMIN TECHNICAL SUPPORT",
-                        },
-                        { value: "L2AUDITOR", label: "ADMIN MEDICAL CODER" },
-                      ]}
-                      onChange={(selectedOption) =>
-                        handleChange({
-                          target: { name: "role", value: selectedOption.value },
-                        })
-                      }
-                      required
-                    />
+                    <div
+                      style={{
+                        border:
+                          validated &&
+                          formData?.role?.length === 0 &&
+                          "1px solid red",
+                        borderRadius: "8px",
+                      }}
+                    >
+                      <Select
+                        className="addUserSelector"
+                        name="role"
+                        options={[
+                          { value: "ADMIN", label: "ADMIN" },
+                          { value: "REVIEWER", label: "REVIEWER" },
+                          { value: "SUPERVISOR", label: "SUPERVISOR" },
+                          {
+                            value: "ADMIN_TECHNICAL_SUPPORT",
+                            label: "ADMIN TECHNICAL SUPPORT",
+                          },
+                          { value: "L2AUDITOR", label: "ADMIN MEDICAL CODER" },
+                        ]}
+                        onChange={(selectedOption) =>
+                          handleChange({
+                            target: {
+                              name: "role",
+                              value: selectedOption?.value,
+                            },
+                          })
+                        }
+                        required
+                      />
+                    </div>
+                    {validated ? (
+                      <div className="text-danger fs-12">
+                        {formData?.role?.length === 0
+                          ? "Please select role"
+                          : ""}
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
 
                   <div className="col-xl-6 mb-3">
@@ -556,7 +596,12 @@ const UserList = () => {
 
                     <div
                       className={styles.passCOntainer}
-                      style={{ border: errors?.password && "1px solid red" }}
+                      style={{
+                        border:
+                          validated &&
+                          formData?.password?.length === 0 &&
+                          "1px solid red",
+                      }}
                     >
                       <div style={{ width: "100%" }}>
                         <Form.Control
@@ -584,9 +629,9 @@ const UserList = () => {
                       </div>
                     </div>
 
-                    {errors?.password ? (
+                    {validated ? (
                       <div className="text-danger fs-12">
-                        {errors?.password}
+                        {getValidatePassword(formData)}
                       </div>
                     ) : (
                       <small id="emailHelp" class="form-text text-muted">
@@ -602,7 +647,12 @@ const UserList = () => {
                     </Form.Label>
                     <div
                       className={styles.passCOntainer}
-                      style={{ border: errors?.password && "1px solid red" }}
+                      style={{
+                        border:
+                          validated &&
+                          formData?.confirmPassword?.length === 0 &&
+                          "1px solid red",
+                      }}
                     >
                       <div style={{ width: "95%" }}>
                         <Form.Control
@@ -628,9 +678,13 @@ const UserList = () => {
                         </span>
                       </div>
                     </div>
-                    {errors?.confirmPass ? (
+                    {validated ? (
                       <div className="text-danger fs-12">
-                        {errors?.confirmPass}
+                        {formData?.confirmPassword?.length === 0
+                          ? "Please enter confirm password"
+                          : formData?.password !== formData?.confirmPassword
+                          ? "Password is not matched"
+                          : ""}
                       </div>
                     ) : (
                       ""
@@ -644,11 +698,6 @@ const UserList = () => {
                   <Button
                     onClick={() => {
                       setAddUser(false);
-                      setErrors({
-                        email: "",
-                        password: "",
-                        confirmPass: "",
-                      });
                     }}
                     className="btn btn-danger btn-sm light ms-1"
                   >
