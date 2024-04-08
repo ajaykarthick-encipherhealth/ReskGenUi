@@ -77,8 +77,7 @@ const UserList = () => {
     patientId: "",
     patientName: "",
   });
-  let errorsObj = { email: "", password: "", confirmPass: "" };
-  const [errors, setErrors] = useState(errorsObj);
+
   const addUserForm = () => {
     setValidated(false);
     setAddUser(true);
@@ -101,20 +100,21 @@ const UserList = () => {
       formData.tenantId = localTenantId;
       formData.organizationId = localOrgId;
       formData.role = roleValue ? roleValue : [role.toUpperCase()];
-      const response = await AddUser(formData, setErrors);
+      const response = await AddUser(formData, setFormData);
       if (response?.data?.status === "SUCCESS") {
         setAddUser(false);
         setUseAdd(true);
         setFormData({
-          ...intialValues,
+          firstName: "",
+          lastName: "",
+          emailId: "",
+          password: "",
+          role: "",
           userName: "",
+          mobileNumber: "",
           confirmPassword: "",
         });
-        setErrors({
-          email: "",
-          password: "",
-          confirmPass: "",
-        });
+
         setIsLoadingBtn(false);
       }
     }
@@ -396,11 +396,6 @@ const UserList = () => {
           onHide={() => {
             setAddUser(false);
             setFormData(intialValues);
-            setErrors({
-              email: "",
-              password: "",
-              confirmPass: "",
-            });
           }}
           className="offcanvas-end  offcanvas-md-size"
           placement="end"
@@ -415,11 +410,6 @@ const UserList = () => {
               onClick={() => {
                 setAddUser(false);
                 setFormData();
-                setErrors({
-                  email: "",
-                  password: "",
-                  confirmPass: "",
-                });
               }}
             >
               <i className="fa-solid fa-xmark"></i>
@@ -708,11 +698,6 @@ const UserList = () => {
                   <Button
                     onClick={() => {
                       setAddUser(false);
-                      setErrors({
-                        email: "",
-                        password: "",
-                        confirmPass: "",
-                      });
                     }}
                     className="btn btn-danger btn-sm light ms-1"
                   >
