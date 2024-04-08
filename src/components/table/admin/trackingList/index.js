@@ -268,10 +268,9 @@ function TrackingTable({
               AUDIT ALLOCATED DATE
               <span
                 style={{
-                  padding: "10px",
                   cursor: "pointer",
+                  paddingLeft: "3px",
                   textAlign: "center",
-                  paddingLeft: "15px",
                 }}
               >
                 {sortAuditOrder === "ASC" ? (
@@ -296,10 +295,9 @@ function TrackingTable({
               AUDIT DUE DATE
               <span
                 style={{
-                  padding: "10px",
                   cursor: "pointer",
+                  paddingLeft: "3px",
                   textAlign: "center",
-                  paddingLeft: "15px",
                 }}
               >
                 {sortAuditDueOrder === "ASC" ? (
@@ -320,10 +318,9 @@ function TrackingTable({
               DUE DATE
               <span
                 style={{
-                  padding: "10px",
                   cursor: "pointer",
+                  paddingLeft: "3px",
                   textAlign: "center",
-                  paddingLeft: "15px",
                 }}
               >
                 {sortDueOrder === "ASC" ? (
