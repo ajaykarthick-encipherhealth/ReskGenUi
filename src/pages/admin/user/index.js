@@ -623,7 +623,7 @@ const UserList = () => {
                                 setShowConfirmPassword
                               );
                             }}
-                            icon={showPassword ? faEye : faEyeSlash}
+                            icon={showConfirmPassword ? faEye : faEyeSlash}
                           />
                         </span>
                       </div>
