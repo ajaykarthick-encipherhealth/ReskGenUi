@@ -14158,6 +14158,18 @@ overflow: scroll;
   border: 1px solid #e6e6e6;
   border-radius: 5px !important;
 }
+.addUserSelector{
+  border: 1px solid #e6e6e6 !important;
+  border-radius: 8px !important;
+  height:42px !important;
+}
+.addUserSelector:active,
+.addUserSelector:focus{
+  border: 1px solid #e6e6e6 !important;
+box-shadow: none !important;
+}
+
+  
 .table-responsive {
   overflow-x: hidden !important;
 }

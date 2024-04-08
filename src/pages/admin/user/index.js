@@ -20,11 +20,7 @@ import { AddUser } from "../../../services/adminServices/usersService";
 import { Paginator } from "primereact/paginator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import {
-  getValidatePassword,
-  handleTogglePasswordVisibility,
-  validateConfirmPassword,
-} from "../../../components/headerFilters/functions";
+import { handleTogglePasswordVisibility } from "../../../components/headerFilters/functions";
 
 const options3 = [
   { value: "ALL", label: "ALL" },
@@ -83,7 +79,6 @@ const UserList = () => {
   });
   let errorsObj = { email: "", password: "", confirmPass: "" };
   const [errors, setErrors] = useState(errorsObj);
-  const [isLoading, setIsLoading] = useState(false);
   const addUserForm = () => {
     setValidated(false);
     setAddUser(true);
@@ -102,41 +97,26 @@ const UserList = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.currentTarget;
-
-    // const passValidation = getValidatePassword(
-    //   formData?.password,
-    //   setErrors,
-    //   setIsLoading
-    // );
-    // const isConfirmPasswordValid = validateConfirmPassword(
-    //   formData.password,
-    //   formData.confirmPassword,
-    //   setErrors,
-    //   setIsLoading
-    // );
     if (form.checkValidity() === true) {
       formData.tenantId = localTenantId;
       formData.organizationId = localOrgId;
       formData.role = roleValue ? roleValue : [role.toUpperCase()];
-
-      // const response = await AddUser(formData, setErrors);
-
-      // if (response?.data?.status === "SUCCESS") {
-      //   setAddUser(false);
-      //   setUseAdd(true);
-      //   setFormData({
-      //     ...intialValues,
-      //     userName: "",
-      //     confirmPassword: "",
-      //   });
-      //   setErrors({
-      //     email: "",
-      //     password: "",
-      //     confirmPass: "",
-      //   });
-      //   setIsLoadingBtn(false);
-      // }
-      console.log(formData);
+      const response = await AddUser(formData, setErrors);
+      if (response?.data?.status === "SUCCESS") {
+        setAddUser(false);
+        setUseAdd(true);
+        setFormData({
+          ...intialValues,
+          userName: "",
+          confirmPassword: "",
+        });
+        setErrors({
+          email: "",
+          password: "",
+          confirmPass: "",
+        });
+        setIsLoadingBtn(false);
+      }
     }
 
     setValidated(true);
@@ -575,26 +555,39 @@ const UserList = () => {
                     <Form.Label>
                       Role <span className="text-danger">*</span>{" "}
                     </Form.Label>
-                    <Select
-                      styles={{ border: "1px solid #e6e6e6 !important" }}
-                      name="role"
-                      options={[
-                        { value: "ADMIN", label: "ADMIN" },
-                        { value: "REVIEWER", label: "REVIEWER" },
-                        { value: "SUPERVISOR", label: "SUPERVISOR" },
-                        {
-                          value: "ADMIN_TECHNICAL_SUPPORT",
-                          label: "ADMIN TECHNICAL SUPPORT",
-                        },
-                        { value: "L2AUDITOR", label: "ADMIN MEDICAL CODER" },
-                      ]}
-                      onChange={(selectedOption) =>
-                        handleChange({
-                          target: { name: "role", value: selectedOption.value },
-                        })
-                      }
-                      required
-                    />
+                    <div
+                      style={{
+                        border:
+                          validated &&
+                          formData?.role?.length === 0 &&
+                          "1px solid red",
+                        borderRadius: "8px",
+                      }}
+                    >
+                      <Select
+                        className="addUserSelector"
+                        name="role"
+                        options={[
+                          { value: "ADMIN", label: "ADMIN" },
+                          { value: "REVIEWER", label: "REVIEWER" },
+                          { value: "SUPERVISOR", label: "SUPERVISOR" },
+                          {
+                            value: "ADMIN_TECHNICAL_SUPPORT",
+                            label: "ADMIN TECHNICAL SUPPORT",
+                          },
+                          { value: "L2AUDITOR", label: "ADMIN MEDICAL CODER" },
+                        ]}
+                        onChange={(selectedOption) =>
+                          handleChange({
+                            target: {
+                              name: "role",
+                              value: selectedOption.value,
+                            },
+                          })
+                        }
+                        required
+                      />
+                    </div>
                     {validated ? (
                       <div className="text-danger fs-12">
                         {formData?.role?.length === 0
