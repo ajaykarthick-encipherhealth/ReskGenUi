@@ -474,7 +474,9 @@ export default function Patient() {
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption  align-items-center">
                         <div className="row filter-contain">
-                          <div className={`${isPatientList && 'd-flex'} col-xl-2`}>
+                          <div
+                            className={`${isPatientList && "d-flex"} col-xl-2`}
+                          >
                             {isPatientList && (
                               <div className={reportStyles.backDiv}>
                                 <button
@@ -488,7 +490,11 @@ export default function Patient() {
                             )}
 
                             <div>
-                              <label>Search by Name or ID</label>
+                              <label>
+                                {!isPatientList && activeTab == 2
+                                  ? "Search by Name"
+                                  : "Search by Name or ID"}
+                              </label>
                               <div class="form-group has-search">
                                 <FontAwesomeIcon
                                   className="fa fa-search form-control-feedback"
@@ -553,7 +559,7 @@ export default function Patient() {
                                     value={batchCount}
                                     className="form-control new-form-controls"
                                     placeholder="Batch Count"
-                                    style={{ width: "60%"}}
+                                    style={{ width: "60%" }}
                                   />
                                   <button
                                     onClick={() => setFilterBatchCount(true)}
@@ -594,10 +600,13 @@ export default function Patient() {
                               </div>
                             </>
                           )}
-                          <div className={
-                      isPatientList && activeTab == 2
-                        ? `col-xl-6 mt-4 ${TableStyle.allocateBtn}`
-                        : `col-xl-4 mt-4 ${TableStyle.allocateBtn}`}>
+                          <div
+                            className={
+                              isPatientList && activeTab == 2
+                                ? `col-xl-6 mt-4 ${TableStyle.allocateBtn}`
+                                : `col-xl-4 mt-4 ${TableStyle.allocateBtn}`
+                            }
+                          >
                             {isPatientList || activeTab === 1 ? (
                               <>
                                 <button
