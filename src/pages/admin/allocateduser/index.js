@@ -296,7 +296,7 @@ export default function Patient() {
             getL2PatientList(data, pageNoL2Patient, sort, "");
           }}
         >
-          <td className={TableStyle.childBorder} style={{ textAlign: "left" }}>
+          <td className={TableStyle.childBorder} style={{ textAlign: "center" }}>
             {data.firstName || data.lastName || data?.profileImageUrl ? (
               <div style={{ display: "flex", alignItems: "center" }}>
                 {" "}
@@ -319,22 +319,22 @@ export default function Patient() {
               <div style={{ textAlign: "center" }}>---</div>
             )}
           </td>
-          <td className={TableStyle.childBorder}>
+          <td className={TableStyle.childBorder} style={{ textAlign: "center" }}>
             {data.totalFileAuditAllocated
               ? data.totalFileAuditAllocated
               : "---"}
           </td>
-          <td className={TableStyle.childBorder}>
+          <td className={TableStyle.childBorder} style={{ textAlign: "center" }}>
             {data.totalFileAudited ? data.totalFileAudited : "---"}
           </td>
 
-          <td className={TableStyle.childBorder}>
+          <td className={TableStyle.childBorder} style={{ textAlign: "center" }}>
             {data.totalFileAuditPending ? data.totalFileAuditPending : "---"}
           </td>
-          <td className={TableStyle.childBorder}>
+          <td className={TableStyle.childBorder} style={{ textAlign: "center" }}>
             {data.totalFileAuditHold ? data.totalFileAuditHold : "---"}
           </td>
-          <td className={TableStyle.childBorder}>
+          <td className={TableStyle.childBorder} style={{ textAlign: "center" }}>
             {data.totalFileAuditDeclined ? data.totalFileAuditDeclined : "---"}
           </td>
         </tr>
@@ -721,13 +721,13 @@ export default function Patient() {
                                                 }
                                               >
                                                 <tr>
-                                                  <th>NAME</th>
-                                                  <th>AUDIT ALLOCATED</th>
-                                                  <th>AUDIT PROCESSED</th>
+                                                  <th style={{textAlign:"center"}}>NAME</th>
+                                                  <th style={{textAlign:"center"}}>AUDIT ALLOCATED</th>
+                                                  <th style={{textAlign:"center"}}>AUDIT PROCESSED</th>
 
-                                                  <th>AUDIT PENDING</th>
-                                                  <th>AUDIT HOLD</th>
-                                                  <th>AUDIT INVALID</th>
+                                                  <th style={{textAlign:"center"}}>AUDIT PENDING</th>
+                                                  <th style={{textAlign:"center"}}>AUDIT HOLD</th>
+                                                  <th style={{textAlign:"center"}}>AUDIT INVALID</th>
                                                 </tr>
                                               </thead>
 
