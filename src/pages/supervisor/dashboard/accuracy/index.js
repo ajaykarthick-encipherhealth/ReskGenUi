@@ -126,9 +126,13 @@ const Accuracy = () => {
       currentBtn == "Monthly" &&
       param?.data?.response?.mapAccuracy?.length > 0
     ) {
-      return param?.data?.response?.mapAccuracy?.map(
-        (item, index) => index < new Date().getMonth() + 1 && item[val]
-      );
+      if (month > currentDate?.getMonth() + 1) {
+        return false;
+      } else {
+        return param?.data?.response?.mapAccuracy?.map(
+          (item, index) => index < new Date().getMonth() + 1 && item[val]
+        );
+      }
     } else {
       return false;
     }
@@ -307,6 +311,9 @@ const Accuracy = () => {
             finalData.averageScore +
             "<br/>" +
             "Total Correct: " +
+            finalData.totalCorrectCount +
+            "<br/>" +
+            "Total Correct: " +
             finalData.totalCorrectCount
           );
         } else {
@@ -329,13 +336,24 @@ const Accuracy = () => {
     series: [
       {
         name: "totalCorrectCount",
-        data: accuracyDatas?.data?.response?.mapAccuracy?.map(
-          (item) => item?.totalCorrectCount
-        ),
+        data:
+          parseInt(selectedMonth) <= currentDate?.getMonth() + 1 &&
+          accuracyDatas?.data?.response?.mapAccuracy?.map(
+            (item) => item?.totalCorrectCount
+          ),
         color: "#0b59f1",
         yAxis: 1,
       },
-
+      {
+        name: "totalWrongCount",
+        data:
+          parseInt(selectedMonth) <= currentDate?.getMonth() + 1 &&
+          accuracyDatas?.data?.response?.mapAccuracy?.map(
+            (item) => item?.totalWrongCount
+          ),
+        color: "red",
+        yAxis: 1,
+      },
       {
         name: "Temperature",
         type: "spline",
@@ -343,7 +361,8 @@ const Accuracy = () => {
           selectedYear,
           selectedMonth,
           accuracyDatas,
-          "averageScore"
+          "averageScore",
+          currentBtn
         ),
         tooltip: {
           valueSuffix: "",
@@ -443,6 +462,9 @@ const Accuracy = () => {
                   : currentBtn === "Monthly"
                   ? `Month ${monthNames[currentDate.getMonth()]}`
                   : `Week ${getDateWeek(currentDate)}`}
+                {currentBtn !== "Monthly" && (
+                  <span className={styles.subTitle}>(Current Month)</span>
+                )}
               </div>
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
