@@ -12,9 +12,6 @@ import spinSTYles from "../../../../styles/auth.module.css";
 
 const Notifications = ({notificationResponse}) => {
   const [openNotifications, setOpenNotification] = useState(false);
-  // const notificationResponse = useSelector(
-  //   (state) => state?.notificationDatas?.notificationList
-  // );
   const handleOpen = () => {
     setOpenNotification(!openNotifications);
   };
