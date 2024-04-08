@@ -86,10 +86,10 @@ const AuditOptions = [
 const Index = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const usersData = useSelector((state) => state.l2User?.userData);
-  const sideMenu = useSelector((state) => state.sideMenu);
-  const filteredList = useSelector((state) => state.auth.filterList);
-  const currentUser = useSelector((state) => state.l2User.currentUserDetails);
+  const usersData = useSelector((state) => state?.l2User?.userData);
+  const sideMenu = useSelector((state) => state?.sideMenu);
+  const filteredList = useSelector((state) => state?.auth?.filterList);
+  const currentUser = useSelector((state) => state?.l2User?.currentUserDetails);
   const [pageNo, setPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [userListAll, setUserListAll] = useState([]);

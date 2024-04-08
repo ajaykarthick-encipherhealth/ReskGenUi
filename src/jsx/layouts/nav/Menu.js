@@ -22,7 +22,6 @@ export const MenuList = [
     to: "/admin/file-view",
   },
 ];
-
 export const PhysicanMenuList = [
   {
     title: "Dashboard",
@@ -120,7 +119,6 @@ export const L2AuditMenuList = [
     iconStyle: SVGICON.Usermanagement,
     to: "/coder/auditing",
   },
-
 ];
 export const L2AuditorMenuList = [
   {
@@ -132,8 +130,7 @@ export const L2AuditorMenuList = [
     title: "User Queue",
     iconStyle: SVGICON.adminUser,
     to: "/supervisor/user",
-    childRoute: "/supervisor/user/userqueue",
-    childRoute2: "/supervisor/user/details",
+    childRoute: "/supervisor/user/userQueue",
   },
   {
     title: "Audited Queue",
@@ -158,7 +155,6 @@ export const L2AuditorMenuList = [
     childRoute: "/supervisor/report/individualreport",
   },
 ];
-
 export const ProviderMenuList = [
   {
     title: "Patients Sync",
@@ -172,7 +168,6 @@ export const ProviderMenuList = [
   //   to: "/tenantAdmin/settings",
   // },
 ];
-
 export const EHRMenuList = [
   {
     title: "Patients",
@@ -181,7 +176,6 @@ export const EHRMenuList = [
     childRoute: "/ehr/patients/details",
   },
 ];
-
 export const PhysicianMenuList = [
   {
     title: "Dashbaord",
@@ -192,7 +186,6 @@ export const PhysicianMenuList = [
     title: "Patients",
     iconStyle: SVGICON.physicianPatient,
     to: "/physician/patients",
-    childRoute:"/physician/comparison"
-
+    childRoute: "/physician/comparison",
   },
 ];
