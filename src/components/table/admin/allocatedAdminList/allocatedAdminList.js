@@ -142,7 +142,7 @@ function AllocatedAdminList({
                 )}
               </span>
             </th>
-            <th>PRIORITY</th>
+            <th style={{paddingLeft:"22px"}}>PRIORITY</th>
             <th>
               <div style={{ display: "flex", justifyContent: "space-around" }}>
                 <input
