@@ -481,7 +481,7 @@ const UserList = () => {
                       <div className="text-danger fs-12">
                         {formData?.emailId?.length === 0
                           ? "Please enter the email"
-                          : !formData.emailId.includes("@")
+                          : !formData?.emailId?.includes("@")
                           ? "Please enter valid email"
                           : ""}
                       </div>
@@ -508,7 +508,7 @@ const UserList = () => {
                       <div className="text-danger fs-12">
                         {formData?.userName?.length === 0
                           ? "Please enter the username"
-                          : formData.userName.includes("@")
+                          : formData?.userName?.includes("@")
                           ? "Username shopuld not contain @ symbol"
                           : ""}
                       </div>
@@ -571,7 +571,7 @@ const UserList = () => {
                           handleChange({
                             target: {
                               name: "role",
-                              value: selectedOption.value,
+                              value: selectedOption?.value,
                             },
                           })
                         }
