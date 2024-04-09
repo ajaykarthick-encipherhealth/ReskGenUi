@@ -1275,6 +1275,17 @@ const Details = () => {
           : "/admin/patients";
         navigate.push(url);
       }
+    } else if (user && user.toLowerCase() === "supervisor") {
+      const { user: _, ...queryWithoutUser } = navigate.query;
+      const queryString = new URLSearchParams(queryWithoutUser).toString();
+      if (navigate.query.isSupervisorAuited) {
+        const url = queryString
+          ? `/supervisor/auditing?${queryString}`
+          : "/supervisor/auditing";
+        navigate.push(url);
+      } else {
+        navigate.back();
+      }
     } else {
       navigate.back();
     }

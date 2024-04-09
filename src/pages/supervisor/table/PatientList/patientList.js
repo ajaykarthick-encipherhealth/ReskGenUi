@@ -82,7 +82,7 @@ function PatientTable({
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
-      navigate.push({pathname:"/reviewer/patients/details", query: page});
+      navigate.push({pathname:"/reviewer/patients/details", query: {...page, isSupervisorAuited: true}});
     } else {
       notification.warning({
         message: data.patientId + " file not processed. Please wait.",
