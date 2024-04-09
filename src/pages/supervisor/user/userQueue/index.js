@@ -23,7 +23,7 @@ import leftArrow from "../../../../images/svg/leftArrow.svg";
 import AuditHeaderFilters from "../../../../components/headerFilters/auditHeaderFilters";
 import userStyles from "./styles.module.css";
 import { getFilters } from "../../../../stores/authflow/actions";
-import UserQueueTable from "../../table/adminList/userQueue";
+import UserQueueTable from "../../table/userqueue";
 
 const bullets = [
   {
@@ -278,7 +278,7 @@ const Index = () => {
         );
     }
   };
-  
+
   return (
     <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
       <Header />
