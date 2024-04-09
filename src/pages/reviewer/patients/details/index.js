@@ -52,15 +52,24 @@ import Timeline from "./timline";
 import ReviwerWorkList from "./components/reviwerWorklist";
 import SupervisorWorkList from "./components/supervisorWorklist";
 import AdminWorkList from "./components/adminWorklist";
-import { getPatientDetailsResult,getMeatQueryList,getAllSectionColor,getHccFileDetails ,getDosPageNumber} from "../../../../store/actions/ReviewerAction/PatientDetailsAction";
-
+import {
+  getPatientDetailsResult,
+  getMeatQueryList,
+  getAllSectionColor,
+  getHccFileDetails,
+  getDosPageNumber,
+} from "../../../../store/actions/ReviewerAction/PatientDetailsAction";
 
 const Details = () => {
   const navigate = useRouter();
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
-  const patientDetailsResult = useSelector((state) => state?.ReviewerReducers?.patientDetails);
-  const sectionColorList = useSelector((state) => state?.ReviewerReducers?.sectionColorList);
+  const patientDetailsResult = useSelector(
+    (state) => state?.ReviewerReducers?.patientDetails
+  );
+  const sectionColorList = useSelector(
+    (state) => state?.ReviewerReducers?.sectionColorList
+  );
   const patientAllResult = useSelector((state) => state?.ReviewerReducers);
   const [confirmNotesModalDecline, setConfirmNotesModalDecline] =
     useState(false);
@@ -268,9 +277,13 @@ const Details = () => {
   useEffect(() => {
     const patientId = localStorage.getItem("patientId");
     dispatch(getAllSectionColor());
-    dispatch(getPatientDetailsResult(selectPatientId ? selectPatientId?.patirntId : patientId));
+    dispatch(
+      getPatientDetailsResult(
+        selectPatientId ? selectPatientId?.patirntId : patientId
+      )
+    );
   }, []);
-  
+
   useEffect(() => {
     const orgId = localStorage.getItem("orgId");
     const tenId = localStorage.getItem("tenantId");
@@ -289,17 +302,16 @@ const Details = () => {
       orgId,
       tenId
     );
-
   }, [patientDetailsResult]);
 
- 
-
-
   useEffect(() => {
-    dispatch(getHccFileDetails(patientDetailsResult?.result?.response?.fileDetailDTO?.azureBlobPath));
+    dispatch(
+      getHccFileDetails(
+        patientDetailsResult?.result?.response?.fileDetailDTO?.azureBlobPath
+      )
+    );
     dispatch(getDosPageNumber(patientDetailsResult?.result?.response?.fileId));
   }, [patientDetailsResult?.result?.response?.fileDetailDTO?.azureBlobPath]);
-  
 
   const getPatientIdDetails = async (patientId, flagFirstData) => {
     const response = await axios.get(
@@ -590,13 +602,11 @@ const Details = () => {
   };
 
   const statuses = ["PENDING", "COMPLETED", "HOLD", "DECLINED"];
-  const getPatientDetails = async (
-    patientId,
-  ) => {
+  const getPatientDetails = async (patientId) => {
     setHccValidCount(0);
     if (patientDetailsResult?.result?.response) {
       var result = patientDetailsResult?.result?.response;
-      dispatch(getMeatQueryList(result?.dos,patientId));
+      dispatch(getMeatQueryList(result?.dos, patientId));
 
       setPatientDocumentResult(result);
       setPatientDetails(result);
@@ -643,10 +653,9 @@ const Details = () => {
     }
   };
   const getPatientDetailsYear = async (year) => {
-    console.log(year,localPatientId)
     setSelectedDosValue(year);
     setIsModalComments(false);
-    dispatch(getPatientDetailsResult(localPatientId,year));
+    dispatch(getPatientDetailsResult(localPatientId, year));
   };
 
   const handleCloseModal = () => {
@@ -920,7 +929,7 @@ const Details = () => {
       userId: localUserId,
     };
     var resultData = patientDetailsResult?.result?.response;
-    var postData = {...userData,...resultData};
+    var postData = { ...userData, ...resultData };
     try {
       const response = await axios.post(
         ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/complete`,
@@ -1251,12 +1260,21 @@ const Details = () => {
 
   const backToPatientData = () => {
     dispatch(getPatientID(null));
-    const user = localStorage.getItem('userRole')
+    const user = localStorage.getItem("userRole");
     if (user && user.toLowerCase() === "admin") {
       const { user: _, ...queryWithoutUser } = navigate.query;
       const queryString = new URLSearchParams(queryWithoutUser).toString();
-      const url = queryString ? `/admin/patients?${queryString}` : '/admin/patients';
-      navigate.push(url);
+      if (navigate.query.isAdminTracking) {
+        const url = queryString
+          ? `/admin/tracking?${queryString}`
+          : "/admin/tracking";
+        navigate.push(url);
+      } else {
+        const url = queryString
+          ? `/admin/patients?${queryString}`
+          : "/admin/patients";
+        navigate.push(url);
+      }
     } else {
       navigate.back();
     }
@@ -1676,7 +1694,10 @@ const Details = () => {
                               <div className="col-xl-3 col-sm-12">
                                 <FontAwesomeIcon icon={faIdCardClip} />
                                 <label>Patient ID</label>
-                                <h6 className="ageDtails" style={{paddingLeft:"25px"}}>
+                                <h6
+                                  className="ageDtails"
+                                  style={{ paddingLeft: "25px" }}
+                                >
                                   {patientDocumentResult.patientId}
                                 </h6>
                               </div>
@@ -1691,14 +1712,20 @@ const Details = () => {
                               <div className="col-xl-2 col-sm-12">
                                 <FontAwesomeIcon icon={faCalendarAlt} />
                                 <label>Age</label>
-                                <h6 className="ageDtails" style={{paddingLeft:"20px"}}>
+                                <h6
+                                  className="ageDtails"
+                                  style={{ paddingLeft: "20px" }}
+                                >
                                   {patientDocumentResult.age}
                                 </h6>
                               </div>
                               <div className="col-xl-2 col-sm-12">
                                 <FontAwesomeIcon icon={faVenusMars} />
                                 <label>Gender</label>
-                                <h6 className="ageDtails" style={{paddingLeft:"25px"}}>
+                                <h6
+                                  className="ageDtails"
+                                  style={{ paddingLeft: "25px" }}
+                                >
                                   {patientDocumentResult.gender}
                                 </h6>
                               </div>

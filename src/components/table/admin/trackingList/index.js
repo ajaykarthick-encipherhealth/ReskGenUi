@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { notification, Select as AntSelect, Empty } from "antd";
@@ -18,6 +18,7 @@ function TrackingTable({
   sortOrder,
   setSortOrder,
   setSort,
+  page
 }) {
   const [sortAuditOrder, setSortAuditOrder] = useState("DESC");
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
@@ -33,7 +34,7 @@ function TrackingTable({
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
-      navigate.push("/reviewer/patients/details");
+      navigate.push({pathname: "/reviewer/patients/details", query:{...page, isAdminTracking: true}})
     } else {
       notification.warning({
         message: data.patientId + " file not processed. Please wait.",
