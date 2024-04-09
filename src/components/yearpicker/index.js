@@ -14,7 +14,8 @@ const YearPicker = ({
   val1,
 }) => {
   const currentDate = dayjs().format("YYYY-MM-DD");
-
+  const currentYear = new Date().getFullYear();
+  const selectedYear = dayjs(val1).format("YYYY");
   return (
     <>
       <div className={styles.pickerBox}>
@@ -34,12 +35,17 @@ const YearPicker = ({
           <DatePicker
             onChange={onChangeMonth}
             picker={"month"}
-            value={dayjs(val ? val : currentDate, "mm")}
+            value={
+              currentYear === parseInt(selectedYear)
+                ? dayjs(currentDate, "mm")
+                : currentYear !== parseInt(selectedYear)
+                ? dayjs(val1, "mm")
+                : dayjs(val, "mm")
+            }
             format={"MM"}
             className={`${styles.picker} pickerChnages`}
             style={{ backgroundColor: bgColor }}
             suffixIcon={<Image src={arrow} />}
-            
           />
         </div>
       )}
