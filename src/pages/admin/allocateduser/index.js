@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Image from "next/image";
 import "react-facebook-loading/dist/react-facebook-loading.css";
-import { DatePicker, Empty } from "antd";
+import { DatePicker, Empty, Tooltip } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
@@ -16,6 +16,8 @@ import AllocatedAdminList from "../../../components/table/admin/allocatedAdminLi
 import AllocatedL2AdminList from "../../../components/table/admin/allocatedL2AdminList/allocatedL2AdminList";
 import allocateStyle from "./allocate/style.module.css";
 import L2AllocateModal from "./l2allocate";
+
+import styles from "../report/report.module.css";
 import reportStyles from "../../reviewer/report/report.module.css";
 import SpinnerDots from "../../../components/spinner";
 import TableStyle from "../../../components/table/table.module.css";
@@ -296,7 +298,10 @@ export default function Patient() {
             getL2PatientList(data, pageNoL2Patient, sort, "");
           }}
         >
-          <td className={TableStyle.childBorder} style={{ textAlign: "center" }}>
+          <td
+            className={TableStyle.childBorder}
+            style={{ textAlign: "center" }}
+          >
             {data.firstName || data.lastName || data?.profileImageUrl ? (
               <div style={{ display: "flex", alignItems: "center" }}>
                 {" "}
@@ -319,22 +324,37 @@ export default function Patient() {
               <div style={{ textAlign: "center" }}>---</div>
             )}
           </td>
-          <td className={TableStyle.childBorder} style={{ textAlign: "center" }}>
+          <td
+            className={TableStyle.childBorder}
+            style={{ textAlign: "center" }}
+          >
             {data.totalFileAuditAllocated
               ? data.totalFileAuditAllocated
               : "---"}
           </td>
-          <td className={TableStyle.childBorder} style={{ textAlign: "center" }}>
+          <td
+            className={TableStyle.childBorder}
+            style={{ textAlign: "center" }}
+          >
             {data.totalFileAudited ? data.totalFileAudited : "---"}
           </td>
 
-          <td className={TableStyle.childBorder} style={{ textAlign: "center" }}>
+          <td
+            className={TableStyle.childBorder}
+            style={{ textAlign: "center" }}
+          >
             {data.totalFileAuditPending ? data.totalFileAuditPending : "---"}
           </td>
-          <td className={TableStyle.childBorder} style={{ textAlign: "center" }}>
+          <td
+            className={TableStyle.childBorder}
+            style={{ textAlign: "center" }}
+          >
             {data.totalFileAuditHold ? data.totalFileAuditHold : "---"}
           </td>
-          <td className={TableStyle.childBorder} style={{ textAlign: "center" }}>
+          <td
+            className={TableStyle.childBorder}
+            style={{ textAlign: "center" }}
+          >
             {data.totalFileAuditDeclined ? data.totalFileAuditDeclined : "---"}
           </td>
         </tr>
@@ -609,13 +629,34 @@ export default function Patient() {
                           >
                             {isPatientList || activeTab === 1 ? (
                               <>
-                                <button
-                                  onClick={handleOpneModal}
-                                  className={`btn btn-primary btn-sm mx-4 ms-2 flr ${allocateStyle.modalBtn}`}
-                                  disabled={!selectedRowsId.length > 0}
+                                <Tooltip
+                                  title={
+                                    selectedRowsId?.length === 0
+                                      ? "Select patients to Allocate"
+                                      : ""
+                                  }
                                 >
-                                  Allocate
-                                </button>
+                                  {" "}
+                                  <button
+                                    onClick={handleOpneModal}
+                                    className={styles.export}
+                                    style={{
+                                      backgroundColor: "#133dd426",
+                                      cursor:
+                                        selectedRowsId?.length === 0
+                                          ? "not-allowed"
+                                          : "",
+                                    }}
+                                    disabled={
+                                      selectedRowsId?.length > 0 ||
+                                      selectedRowsId?.data?.length > 0
+                                        ? false
+                                        : true
+                                    }
+                                  >
+                                    Allocate
+                                  </button>
+                                </Tooltip>
                               </>
                             ) : null}
                           </div>
@@ -730,13 +771,49 @@ export default function Patient() {
                                                 }
                                               >
                                                 <tr>
-                                                  <th style={{textAlign:"center"}}>NAME</th>
-                                                  <th style={{textAlign:"center"}}>AUDIT ALLOCATED</th>
-                                                  <th style={{textAlign:"center"}}>AUDIT PROCESSED</th>
+                                                  <th
+                                                    style={{
+                                                      textAlign: "center",
+                                                    }}
+                                                  >
+                                                    NAME
+                                                  </th>
+                                                  <th
+                                                    style={{
+                                                      textAlign: "center",
+                                                    }}
+                                                  >
+                                                    AUDIT ALLOCATED
+                                                  </th>
+                                                  <th
+                                                    style={{
+                                                      textAlign: "center",
+                                                    }}
+                                                  >
+                                                    AUDIT PROCESSED
+                                                  </th>
 
-                                                  <th style={{textAlign:"center"}}>AUDIT PENDING</th>
-                                                  <th style={{textAlign:"center"}}>AUDIT HOLD</th>
-                                                  <th style={{textAlign:"center"}}>AUDIT INVALID</th>
+                                                  <th
+                                                    style={{
+                                                      textAlign: "center",
+                                                    }}
+                                                  >
+                                                    AUDIT PENDING
+                                                  </th>
+                                                  <th
+                                                    style={{
+                                                      textAlign: "center",
+                                                    }}
+                                                  >
+                                                    AUDIT HOLD
+                                                  </th>
+                                                  <th
+                                                    style={{
+                                                      textAlign: "center",
+                                                    }}
+                                                  >
+                                                    AUDIT INVALID
+                                                  </th>
                                                 </tr>
                                               </thead>
 
