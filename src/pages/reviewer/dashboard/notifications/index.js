@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import moment from "moment";
 import Image from "next/image";
 import { Modal, Spin } from "antd";
@@ -10,19 +10,19 @@ import HeadTitle from "../../../../components/headtitle";
 import { SVGICON } from "../../../../jsx/constant/theme";
 import NoNotification from "../../../../images/dashboard/no-notification.png";
 
-const Notifications = ({notificationResponse}) => {
-  const [openNotifications, setOpenNotification] = useState(false);
+const Notifications = ({ notificationResponse }) => {
+  const [openNotifications, setOpenNotifications] = useState(false);
   const handleOpen = () => {
-    setOpenNotification(!openNotifications);
+    setOpenNotifications(!openNotifications);
   };
   const handleOk = () => {
-    setOpenNotification(false);
+    setOpenNotifications(false);
   };
 
   const notificationData =
     notificationResponse?.data?.response?.content?.length > 0 ? (
       notificationResponse?.data?.response?.content?.map((info) => (
-        <div className={styles.msgDiv}>
+        <div className={styles.msgDiv} key={info?.id}>
           <div style={{ marginTop: "10px" }}>
             {" "}
             {SVGICON.dashboardNotification}
@@ -32,8 +32,12 @@ const Notifications = ({notificationResponse}) => {
             <div className={styles.time}>
               {moment(info?.createdDate).format("MM-DD-YYYY")}&nbsp;{" "}
               {moment(info?.createdDate).format("hh:mm:A")} &nbsp;{" "}
-              {`${info?.fromUserDetails?.firstName?info?.fromUserDetails?.firstName:""} (${
-                info?.fromUserDetails?.role?info?.fromUserDetails?.role:""
+              {`${
+                info?.fromUserDetails?.firstName
+                  ? info?.fromUserDetails?.firstName
+                  : ""
+              } (${
+                info?.fromUserDetails?.role ? info?.fromUserDetails?.role : ""
               })`}
             </div>
           </div>
@@ -41,9 +45,10 @@ const Notifications = ({notificationResponse}) => {
       ))
     ) : (
       <div className={styles.no_notificarion_container}>
-
-         {!notificationResponse?.loading && notificationResponse?.data?.content?.length===0 &&<Image src={NoNotification} alt="" />}
-
+        {!notificationResponse?.loading &&
+          notificationResponse?.data?.content?.length === 0 && (
+            <Image src={NoNotification} alt="" />
+          )}
       </div>
     );
 
@@ -96,10 +101,7 @@ const Notifications = ({notificationResponse}) => {
     </>
   );
 };
-const enhancer = connect(
-  (state) => ({
-    notificationResponse: state?.reviewer?.dashboard?.notification
-  }),
-  
-);
+const enhancer = connect((state) => ({
+  notificationResponse: state?.reviewer?.dashboard?.notification,
+}));
 export default enhancer(Notifications);

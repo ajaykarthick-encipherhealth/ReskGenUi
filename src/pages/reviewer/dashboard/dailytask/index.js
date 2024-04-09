@@ -236,12 +236,7 @@ const DailyTask = ({ dailyStatusData, DailyStatusData }) => {
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   {uniqueData?.slice(0, 3)?.map((data, index) => (
-                    <Col
-                      key={index}
-                      span={7}
-                      className={styles.sliderdiv}
-                      // onClick={() => setSelectedDate(currentWeek[index])}
-                    >
+                    <Col key={data?.id} span={7} className={styles.sliderdiv}>
                       <h4
                         className={styles.headerTitle}
                         style={{ fontSize: "16px" }}
