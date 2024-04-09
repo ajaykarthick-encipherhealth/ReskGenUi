@@ -49,9 +49,9 @@ const HoldStatus = ({ getHoldStatusData, holdStatusData }) => {
       </thead>
       <tbody className={styles.body}>
         {processedData?.length > 0 ? (
-          processedData?.map((item, index) => (
+          processedData?.map((item) => (
             <tr
-              key={index}
+              key={item?.id}
               className={styles.tabelCell}
               onClick={() => {
                 dispatch(getPatientID({ patirntId: item.patientId }));
