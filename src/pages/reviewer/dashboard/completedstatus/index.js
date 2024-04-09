@@ -70,11 +70,7 @@ const CompletedStatus = ({getCOmpletedScore,completedDatas}) => {
   };
   const handleMonthChange = (date) => {
     setMonth(date);
-    const selectedDate = new Date(date);
-    const monthNumber = (selectedDate.getMonth() + 1)
-      .toString()
-      .padStart(2, "0");
-    setSelectedMonth(monthNumber);
+    setSelectedMonth(date);
   };
 
   let xAxisData = [];

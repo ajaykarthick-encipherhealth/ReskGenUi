@@ -1,9 +1,10 @@
-import { DatePicker } from "antd";
+import { DatePicker, Select } from "antd";
 import React from "react";
 import styles from "./style.module.css";
 import Image from "next/image";
 import arrow from "../../images/workingstatus/downArrow.png";
 import dayjs from "dayjs";
+import { monthNames } from "../../pages/admin/dashboard/accuracy";
 
 const YearPicker = ({
   onChangeMonth,
@@ -13,16 +14,15 @@ const YearPicker = ({
   val,
   val1,
 }) => {
-  const currentDate = dayjs().format("YYYY-MM-DD");
-  const currentYear = new Date().getFullYear();
-  const selectedYear = dayjs(val1).format("YYYY");
+  const currentDate = dayjs().format("MM");
+  const currentYearDate = dayjs().format("DD/MM/YYYY");
   return (
     <>
       <div className={styles.pickerBox}>
         <DatePicker
           onChange={onChangeYear}
           picker={"year"}
-          value={dayjs(val1 ? val1 : currentDate, "YYYY")}
+          value={dayjs(val1 ? val1 : currentYearDate, "YYYY")}
           format={"YYYY"}
           className={`${styles.picker} pickerChnages`}
           style={{ backgroundColor: bgColor }}
@@ -31,21 +31,20 @@ const YearPicker = ({
       </div>
 
       {type !== "Monthly" && (
-        <div className={styles.pickerBox}>
-          <DatePicker
-            onChange={onChangeMonth}
-            picker={"month"}
+        <div style={{ marginRight: "10px" }}>
+          <Select
             value={
-              currentYear === parseInt(selectedYear)
-                ? dayjs(currentDate, "mm")
-                : currentYear !== parseInt(selectedYear)
-                ? dayjs(val1, "mm")
-                : dayjs(val, "mm")
+              val
+                ? { label: val?.toString()?.length < 10 ? `0${val}` : val, value: val }
+                : { label: currentDate, value: currentDate }
             }
-            format={"MM"}
-            className={`${styles.picker} pickerChnages`}
-            style={{ backgroundColor: bgColor }}
-            suffixIcon={<Image src={arrow} />}
+            onChange={(e) => onChangeMonth(e)}
+            className={`${bgColor === '#F3F3FF'?'custom_MonthSelect2':'custom_MonthSelect'} ${styles.monthSelect}`}
+            options={monthNames?.map((item, index) => ({
+              label: item,
+              value: index + 1,
+            }))}
+            style={{ borderRadius: "10px", height: "35px" }}
           />
         </div>
       )}
