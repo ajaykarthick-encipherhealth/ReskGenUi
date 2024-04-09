@@ -77,3 +77,14 @@ export const notification=async()=>{
   );
   return data;
 }
+
+export const tenentLogo = async() => {
+  const orgId= localStorage.getItem("orgId");
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(`dbservice/comapnayLogo/getComapanyLogoLink?orgId=${orgId}`,
+    options
+  );
+  return data;
+}

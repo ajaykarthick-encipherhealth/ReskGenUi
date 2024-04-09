@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch,connect } from "react-redux";
+import { useSelector, useDispatch, connect } from "react-redux";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -22,8 +22,7 @@ import {
   LoadingOutlined,
   CloseCircleOutlined,
   DownOutlined,
-  SettingOutlined
-
+  SettingOutlined,
 } from "@ant-design/icons";
 import styles from "../../../styles/file-managemnt.module.css";
 import { IMAGES } from "../../constant/theme";
@@ -54,8 +53,13 @@ import ImageUploader from "../../../components/imageUploading/ImageUploader";
 import editImg from "../../../images/svg/edit.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMessage, faBell } from "@fortawesome/free-regular-svg-icons";
-import { getAccuracy, getCoderDetails, getCurrentUser, logoutAllDevice } from "../../../stores/authflow/actions";
-import {actions as dashbaordActions} from '../../../stores/reviewer/dashboard'
+import {
+  getAccuracy,
+  getCoderDetails,
+  getCurrentUser,
+  logoutAllDevice,
+} from "../../../stores/authflow/actions";
+import { actions as dashbaordActions } from "../../../stores/reviewer/dashboard";
 
 const btnItems = [
   {
@@ -83,7 +87,12 @@ const Options = [
   },
 ];
 
-const Header = ({notificationResponse,getNotificationList}) => {
+const Header = ({
+  notificationResponse,
+  getNotificationList,
+  getTenentLogo,
+  tenent,
+}) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const notificationAlertData = useSelector(
@@ -177,7 +186,7 @@ const Header = ({notificationResponse,getNotificationList}) => {
     let userId = currentUserInfo?.data?.response?.id;
     const userName = currentUserInfo?.data?.response?.userName;
 
-    getNotificationList(userId)
+    getNotificationList(userId);
     const sse = new EventSource(
       `${ENDPOINTS?.apiEndoint}communication/push-notifications/${userName}?token=${token}`
     );
@@ -185,7 +194,7 @@ const Header = ({notificationResponse,getNotificationList}) => {
       const data = JSON.parse(event.data);
       if (data.length != 0) {
         dispatch(getNotificationAlert(data));
-       getNotificationList(userId)
+        getNotificationList(userId);
       }
     });
     sse.onerror = () => {
@@ -209,7 +218,7 @@ const Header = ({notificationResponse,getNotificationList}) => {
           <div>
             {btnItems?.map((data) => (
               <button
-              key={data?.id}
+                key={data?.id}
                 onClick={() => {
                   setSelectedBtn(data?.name);
                 }}
@@ -388,14 +397,39 @@ const Header = ({notificationResponse,getNotificationList}) => {
     }
   }, [msgReply, selectedbtn, search, selectedOption, currentUserInfo]);
 
+  useEffect(() => {
+    getTenentLogo();
+  }, []);
+
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
         <nav className="navbar navbar-expand">
           <div className="collapse navbar-collapse justify-content-between">
-            <div className="header-logo">
-              <Image src={IMAGES.headerLogo} />
+            <div className="d-flex">
+              <div className="header-logo ">
+                <Image src={IMAGES.headerLogo} />
+              </div>
+              {tenent?.data?.response?.companyLogoLink && (
+                <div className="d-flex justify-content-center align-items-center">
+                  <span
+                    className="mx-2"
+                    style={{
+                      borderLeft: "2px solid #000",
+                      width: "2px",
+                      height: "30px",
+                    }}
+                  ></span>
+                  <img
+                    src={tenent?.data?.response?.companyLogoLink}
+                    alt="tenetLog"
+                    width={100}
+                    height={70}
+                  />
+                </div>
+              )}
             </div>
+
             {stateActive != "/reviewer/home" ? (
               <div>
                 <ul className="metismenu header-menu d-flex" id="menu">
@@ -726,7 +760,9 @@ const Header = ({notificationResponse,getNotificationList}) => {
         open={open}
       >
         {!openMsg ? (
-          <Notification notificationResponse={notificationResponse?.data?.response} />
+          <Notification
+            notificationResponse={notificationResponse?.data?.response}
+          />
         ) : null}
       </Drawer>
 
@@ -753,10 +789,12 @@ const Header = ({notificationResponse,getNotificationList}) => {
 };
 const enhancer = connect(
   (state) => ({
-    notificationResponse: state?.reviewer?.dashboard?.notification
+    notificationResponse: state?.reviewer?.dashboard?.notification,
+    tenent: state?.reviewer?.dashboard?.tenentLogo,
   }),
   {
-    getNotificationList:dashbaordActions.notificationAction
+    getNotificationList: dashbaordActions.notificationAction,
+    getTenentLogo: dashbaordActions.tenentLogoAction,
   }
 );
 export default enhancer(Header);

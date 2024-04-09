@@ -27,7 +27,7 @@
 
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { workFlowAction, dailyTaskAction, accuracyAction,completedScoreAction, holdStatusAction, notificationAction } from "./actions";
+import { workFlowAction, dailyTaskAction, accuracyAction,completedScoreAction, holdStatusAction, notificationAction, tenentLogoAction } from "./actions";
 
 const initialState = {
   loading: true,
@@ -64,7 +64,8 @@ const dashbaordReducer = combineReducers({
   accuracy: createReducer(accuracyAction),
   completedScore:createReducer(completedScoreAction),
   holdStatus:createReducer(holdStatusAction),
-  notification:createReducer(notificationAction)
+  notification:createReducer(notificationAction),
+  tenentLogo:createReducer(tenentLogoAction)
 });
 
 export default dashbaordReducer;

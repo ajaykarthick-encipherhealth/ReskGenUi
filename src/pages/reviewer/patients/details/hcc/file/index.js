@@ -2969,7 +2969,8 @@ const File = ({popoverVisible, setPopoverVisible}) => {
         //   placement="bottom"
         //   onClick={() => getEncounterProviderDetails(res)}
         // >
-        <span
+        <Tooltip title={res} >
+           <span
           className={`mt-2 text-start ${visitStyles.provider_name}`}
           style={{ backgroundColor: backColor, color: textColor }}
         >
@@ -2985,6 +2986,8 @@ const File = ({popoverVisible, setPopoverVisible}) => {
           </i>
           {res}
         </span>
+        </Tooltip>
+       
         // </Popover>
       );
       return sectionMapArr;
@@ -3346,7 +3349,7 @@ const File = ({popoverVisible, setPopoverVisible}) => {
                         <div className="d-flex justify-content-between">
                           <div className={`${visitStyles.hoverActiveHcc}`}>
                             <div
-                              className={`${visitStyles.encounterAndSectionHeader}`}
+                              className={`${visitStyles.encounterAndSectionHeader} ${visitStyles.elipse}`}
                             >
                               {getProviderNameList(data?.providerName)}
                             </div>

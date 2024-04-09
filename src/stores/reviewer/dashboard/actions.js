@@ -28,3 +28,8 @@ export const notificationAction = createActionThunk(
   "NOTIFICATION",
   network.notification
 );
+
+export const tenentLogoAction = createActionThunk(
+  "TENENTLOGO",
+  network.tenentLogo
+);
