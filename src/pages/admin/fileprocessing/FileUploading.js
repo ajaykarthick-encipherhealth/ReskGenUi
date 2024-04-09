@@ -94,11 +94,12 @@ const FileUploading = ({
                 <div className="text-danger fs-12">{errors?.year}</div>
               )}
             </div>
-
             <div>
+              {!isLoadingBtn ? 
               <Button type="submit" className="btn btn-primary btn-sm me-1">
                 {"Submit"}
-              </Button>
+              </Button> :
+              <button className="btns btns-primary" disabled>Loading...</button>}
               <Button
                 className="btn btn-danger btn-sm light ms-1"
                 onClick={() => setAddPatient(false)}

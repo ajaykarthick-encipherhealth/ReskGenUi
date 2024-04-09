@@ -56,7 +56,7 @@ export default function Patient() {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const response = useSelector((state) => state.adminList.patients);
-  const filteredList = useSelector((state) => state.auth.filterList);
+  const filteredList = useSelector((state) => state.auth?.filterList);
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(true);
