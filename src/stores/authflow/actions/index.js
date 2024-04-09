@@ -61,7 +61,7 @@ export const getMFAValidation =
       }
     } catch (err) {
       notification.error({
-        message: err?.data?.message,
+        message: err?.response?.data?.message,
         duration: 1,
       });
     }
@@ -93,9 +93,9 @@ export const getValidateCode =
           route?.push(`/login`);
         }
       }
-    } catch {
+    } catch(err) {
       notification.error({
-        description: "Entered pin is wrong.Re-verify the pin",
+        description: err?.response?.data?.message,
       });
     }
   };
@@ -158,9 +158,9 @@ export const loginAction =
           });
         }
       }
-    } catch {
+    } catch(err) {
       notification.error({
-        message: err?.data?.message,
+        message: err?.response?.data?.message,
         duration: 1,
       });
     }
@@ -177,9 +177,9 @@ export const getQrCode = (username) => async (dispatch) => {
         payload: response?.data?.response?.secretImageUri,
       });
     }
-  } catch {
+  } catch(err) {
     notification.error({
-      description: "Entered pin is wrong.Re-verify the pin",
+      description: err?.response?.data?.message,
     });
   }
 };
@@ -197,7 +197,9 @@ export const checkDeviceLogin = async () => {
     );
     return response;
   } catch (err) {
-    console.log(err);
+    notification.error({
+      description: err?.response?.data?.message,
+    });
   }
 };
 

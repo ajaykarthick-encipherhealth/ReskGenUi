@@ -271,28 +271,32 @@ function AllocatedL2AdminList({
             <th style={{ textAlign: "center" }}>STATUS</th>
             {/* <th>Upload</th> */}
             <th>
-              <div style={{ display: "flex", justifyContent: "space-around" }}>
-                <input
-                  type="checkbox"
-                  onClick={() => setSelectAllChecked(!selectAllChecked)}
-                  style={{
-                    width: "20px",
-                    height: "20px",
-                    flexhrink: "0",
-                    borderRadius: "4px",
-                  }}
-                  checked={
-                    selectAllChecked &&
-                    selectedRowsId.length == selectedChart.length
-                  }
-                  className={
-                    selectAllChecked &&
-                    selectedRowsId.length == selectedChart.length
-                      ? TableStyle.customChecked2
-                      : ""
-                  }
-                />
-              </div>
+              {patinetListAll && patinetListAll.length > 0 && (
+                <div
+                  style={{ display: "flex", justifyContent: "space-around" }}
+                >
+                  <input
+                    type="checkbox"
+                    onClick={() => setSelectAllChecked(!selectAllChecked)}
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      flexhrink: "0",
+                      borderRadius: "4px",
+                    }}
+                    checked={
+                      selectAllChecked &&
+                      selectedRowsId.length == selectedChart.length
+                    }
+                    className={
+                      selectAllChecked &&
+                      selectedRowsId.length == selectedChart.length
+                        ? TableStyle.customChecked2
+                        : ""
+                    }
+                  />
+                </div>
+              )}
             </th>
           </tr>
         </thead>
