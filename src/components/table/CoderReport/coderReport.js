@@ -297,23 +297,28 @@ function CoderReport({
                 <th>FLAG </th>
                 <th style={{ paddingLeft: "22px" }}>STATUS</th>
                 <th>
-                  <div
-                    style={{ display: "flex", justifyContent: "space-around" }}
-                  >
-                    <input
-                      type="checkbox"
-                      onChange={handleHeaderCheckboxChange}
-                      className={selectAll ? TableStyle.customChecked2 : ""}
+                  {reportListAll?.data?.length > 0 && (
+                    <div
                       style={{
-                        width: "22px",
-                        height: "22px",
-                        flexhrink: "0",
-                        borderRadius: "4px",
-                        cursor: "pointer",
+                        display: "flex",
+                        justifyContent: "space-around",
                       }}
-                      checked={selectAll}
-                    />
-                  </div>
+                    >
+                      <input
+                        type="checkbox"
+                        onChange={handleHeaderCheckboxChange}
+                        className={selectAll ? TableStyle.customChecked2 : ""}
+                        style={{
+                          width: "22px",
+                          height: "22px",
+                          flexhrink: "0",
+                          borderRadius: "4px",
+                          cursor: "pointer",
+                        }}
+                        checked={selectAll}
+                      />
+                    </div>
+                  )}
                 </th>
               </>
             </tr>
