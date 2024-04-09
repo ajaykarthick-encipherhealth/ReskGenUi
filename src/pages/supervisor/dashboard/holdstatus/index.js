@@ -17,7 +17,7 @@ const HoldStatus = () => {
   useEffect(() => {
     dispatch(getHoldStatusData(router));
   }, []);
-  const holdStatusData = useSelector((state) => state.l2Dashboard.holdStatus);
+  const holdStatusData = useSelector((state) => state?.l2Dashboard?.holdStatus);
 
   const handleOpen = () => {
     setOpenHoldStatus(!openHoldStatus);

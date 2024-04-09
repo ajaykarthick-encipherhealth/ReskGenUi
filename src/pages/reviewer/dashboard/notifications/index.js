@@ -12,9 +12,6 @@ import NoNotification from "../../../../images/dashboard/no-notification.png";
 
 const Notifications = ({notificationResponse}) => {
   const [openNotifications, setOpenNotification] = useState(false);
-  // const notificationResponse = useSelector(
-  //   (state) => state?.notificationDatas?.notificationList
-  // );
   const handleOpen = () => {
     setOpenNotification(!openNotifications);
   };
