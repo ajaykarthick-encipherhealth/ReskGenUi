@@ -13,6 +13,7 @@ import spinSTYles from "../../../../styles/auth.module.css";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 import { actions as dashbaordActions } from "../../../../stores/reviewer/dashboard";
+import { getHighlightedIndex } from "../../../admin/dashboard/accuracy";
 
 export const getISOWeekNumber = (date) => {
   const currentDate = new Date(date);
@@ -61,6 +62,7 @@ export const monthNames = [
 
 const Accuracy = ({ accuracyDatas, getAccuracyScore }) => {
   const [activeButton, setActiveButton] = useState(0);
+  const [initialAccuracyData, setInitialAccuracyData] = useState(null);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const currentDate = new Date();
   const [selectedMonth, setSelectedMonth] = useState(
@@ -163,17 +165,6 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore }) => {
   } else if (currentBtn === "Weekly") {
     xAxisData = weekNames;
   }
-
-  let highlightIndex = -1;
-  if (currentBtn === "Monthly") {
-    highlightIndex = currentDate.getMonth();
-  } else if (currentBtn === "Daily") {
-    highlightIndex = currentDate.getDate() - 1;
-  } else if (currentBtn === "Weekly") {
-    const currentWeek = getDateWeek(currentDate);
-    highlightIndex = currentWeek - 1;
-  }
-
   const options = {
     chart: {
       type: "column",
@@ -344,7 +335,17 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore }) => {
       },
     ],
   };
+  useEffect(() => {
+    if (
+      accuracyDatas?.data?.response &&
+      !month &&
+      !year &&
+      !initialAccuracyData
+    ) {
+      setInitialAccuracyData(accuracyDatas?.data?.response);
+    }
 
+  }, [accuracyDatas]);
   return (
     <>
       <HeadTitle header="Reviewer Quality Score" />
@@ -415,7 +416,7 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore }) => {
                 <span className={styles.insideTitle}>
                   {accuracyDatas?.data?.response
                     ? `${Math.round(
-                        accuracyDatas?.data?.response[highlightIndex]
+                        accuracyDatas?.data?.response[ getHighlightedIndex(currentBtn, selectedYear, selectedMonth, currentDate)]
                           ?.averageScore
                       )}%`
                     : "0%"}
