@@ -1283,6 +1283,11 @@ const Details = () => {
           ? `/supervisor/auditing?${queryString}`
           : "/supervisor/auditing";
         navigate.push(url);
+      }else if (navigate.query.isSupervisorUser) {
+        const url = queryString
+        ? `/supervisor/user/userQueue?${queryString}`
+        : "/supervisor/user/userQueue";
+      navigate.push(url);
       } else {
         navigate.back();
       }
