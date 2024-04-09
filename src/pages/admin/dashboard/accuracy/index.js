@@ -58,9 +58,33 @@ export const monthNames = [
   "NOV",
   "DEC",
 ];
+export function getHighlightedIndex(currentBtn, selectedYear, selectedMonth, currentDate) {
+  let constHighlitedIndex = -1;
+
+  if (currentBtn === "Monthly") {
+    if (parseInt(selectedYear) === new Date().getFullYear()) {
+      constHighlitedIndex = currentDate.getMonth();
+    } else {
+      constHighlitedIndex = selectedMonth - 1;
+    }
+  } else if (currentBtn === "Daily") {
+    if (parseInt(selectedYear) === new Date().getFullYear()) {
+      constHighlitedIndex = currentDate.getDate() - 1;
+    }
+  } else if (currentBtn === "Weekly") {
+    if (parseInt(selectedYear) === new Date().getFullYear()) {
+      const currentWeek = getDateWeek(currentDate);
+      constHighlitedIndex = currentWeek - 1;
+    }
+  }
+
+  return constHighlitedIndex;
+}
 
 const Accuracy = () => {
   const [activeButton, setActiveButton] = useState(0);
+  const [initialAccuracyData, setInitialAccuracyData] = useState(null);
+  const [initialQualityData, setInitialQualityData] = useState(null);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const [activeTabButton, setActiveTabButton] = useState(0);
   const [currentTabBtn, setCurrentTabBtn] = useState("CogentAI Accuracy");
@@ -121,6 +145,8 @@ const Accuracy = () => {
   } else if (currentBtn === "Weekly") {
     xAxisData = weekNames;
   }
+
+
 
   let highlightIndex = -1;
 
@@ -491,6 +517,24 @@ const Accuracy = () => {
       );
     }
   }, [currentBtn, selectedMonth, selectedYear, router, currentTabBtn]);
+  useEffect(() => {
+    if (
+      accuracyDatas?.data?.response &&
+      !month &&
+      !year &&
+      !initialAccuracyData
+    ) {
+      setInitialAccuracyData(accuracyDatas?.data?.response);
+    }
+    if (
+      QualityAccuracyDatas?.data?.response &&
+      !month &&
+      !year &&
+      !initialQualityData
+    ) {
+      setInitialQualityData(QualityAccuracyDatas?.data?.response);
+    }
+  }, [accuracyDatas, QualityAccuracyDatas]);
 
   return (
     <>
@@ -600,17 +644,16 @@ const Accuracy = () => {
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
                   {currentTabBtn === "CogentAI Accuracy"
-                    ? accuracyDatas?.data?.response &&
-                      accuracyDatas?.data?.response[highlightIndex + 1]
+                    ? initialAccuracyData &&
+                      initialAccuracyData[getHighlightedIndex(currentBtn, selectedYear, selectedMonth, currentDate) + 1]
                       ? `${Math.round(
-                          accuracyDatas?.data?.response[highlightIndex + 1]
+                          initialAccuracyData[getHighlightedIndex(currentBtn, selectedYear, selectedMonth, currentDate) + 1]
                         )}%`
                       : "0%"
-                    : QualityAccuracyDatas?.data?.response &&
-                      QualityAccuracyDatas?.data?.response[highlightIndex]
+                    : initialQualityData &&
+                      initialQualityData[getHighlightedIndex(currentBtn, selectedYear, selectedMonth, currentDate)]
                     ? `${Math.round(
-                        QualityAccuracyDatas?.data?.response[highlightIndex]
-                          ?.averageScore
+                        initialQualityData[getHighlightedIndex(currentBtn, selectedYear, selectedMonth, currentDate)]?.averageScore
                       )}%`
                     : "0%"}
                 </span>

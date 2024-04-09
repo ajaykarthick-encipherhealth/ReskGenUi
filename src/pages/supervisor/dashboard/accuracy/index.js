@@ -17,6 +17,7 @@ import {
   getUserByIndividual,
 } from "../../../../store/actions/l2Action/DashboardAction";
 import spinSTYles from "../../../../styles/auth.module.css";
+import { getHighlightedIndex } from "../../../admin/dashboard/accuracy";
 
 export const getDateWeek = (date) => {
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
@@ -49,6 +50,7 @@ export const monthNames = [
 const Accuracy = () => {
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
+  const [initialAccuracyData, setInitialAccuracyData] = useState(null);
   const currentDate = new Date();
   const [selectedMonth, setSelectedMonth] = useState(
     currentDate.getMonth() + 1
@@ -197,17 +199,6 @@ const Accuracy = () => {
     );
   } else if (currentBtn === "Weekly") {
     xAxisData = weekNames;
-  }
-
-  let highlightIndex = -1;
-  if (currentBtn === "Monthly") {
-    highlightIndex = currentDate.getMonth();
-  } else if (currentBtn === "Daily") {
-    highlightIndex = currentDate.getDate() - 1;
-  } else if (currentBtn === "Weekly") {
-    const currentWeek = getDateWeek(currentDate);
-
-    highlightIndex = currentWeek - 1;
   }
 
   const option = {
@@ -371,7 +362,16 @@ const Accuracy = () => {
       },
     ],
   };
-
+  useEffect(() => {
+    if (
+      accuracyDatas?.data?.response?.mapAccuracy &&
+      !month &&
+      !year &&
+      !initialAccuracyData
+    ) {
+      setInitialAccuracyData(accuracyDatas?.data?.response?.mapAccuracy);
+    }
+  }, [accuracyDatas]);
   return (
     <>
       <HeadTitle header="Team Quality Score" />
@@ -468,11 +468,23 @@ const Accuracy = () => {
               </div>
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
-                  {accuracyDatas?.data?.response?.mapAccuracy &&
-                  accuracyDatas?.data?.response?.mapAccuracy[highlightIndex - 1]
+                  {initialAccuracyData &&
+                  initialAccuracyData[
+                    getHighlightedIndex(
+                      currentBtn,
+                      selectedYear,
+                      selectedMonth,
+                      currentDate
+                    ) - 1
+                  ]
                     ? `${Math.round(
-                        accuracyDatas?.data?.response?.mapAccuracy[
-                          highlightIndex
+                        initialAccuracyData[
+                          getHighlightedIndex(
+                            currentBtn,
+                            selectedYear,
+                            selectedMonth,
+                            currentDate
+                          )
                         ]?.averageScore
                       )}%`
                     : "0%"}
