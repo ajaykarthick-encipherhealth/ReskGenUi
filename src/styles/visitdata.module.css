@@ -1615,3 +1615,9 @@
   display: flex;
   justify-content: center;
 }
+
+.elipse {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
