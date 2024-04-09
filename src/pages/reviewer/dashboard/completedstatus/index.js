@@ -191,7 +191,7 @@ const CompletedStatus = ({getCOmpletedScore,completedDatas}) => {
             <>
               <ReactECharts
                 option={option}
-                style={{ width: "100%", height: "300px", marginTop: "-15px" }}
+                style={{ width: "100%", height: "300px", marginTop: "-10px" }}
               />
               <div className={styles.bulletContainer}>
                 <Legends bullets={bullets} />
