@@ -1291,6 +1291,17 @@ const Details = () => {
       } else {
         navigate.back();
       }
+    } else if (user && user.toLowerCase() === "reviewer") {
+      const { user: _, ...queryWithoutUser } = navigate.query;
+      const queryString = new URLSearchParams(queryWithoutUser).toString();
+      if (navigate.query) {
+        const url = queryString
+          ? `/reviewer/patients?${queryString}`
+          : "/reviewer/patients";
+        navigate.push(url);
+      } else {
+        navigate.back();
+      }
     } else {
       navigate.back();
     }
