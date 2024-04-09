@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
 import { useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import styles from "../../../pages/supervisor/dashboard/styles.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
@@ -161,6 +161,18 @@ export default function Patient() {
   const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
 
   useEffect(() => {
+   
+    if (window !== "undefined") {
+      setIsLoading(true)
+      if (navigate) {
+        setPageNo(navigate?.query?.pageNo?navigate?.query?.pageNo:0)
+        setPaginationFirst(navigate?.query?.paginationFirst?navigate?.query?.paginationFirst:0)
+      }
+    }
+    setIsLoading(false)
+  }, [navigate])
+
+  useEffect(() => {
     const datas = {
       pageNo,
       dueDateStart: clear ? "" : dueDateStart,
@@ -194,8 +206,9 @@ export default function Patient() {
         : "",
       sort,
     };
-
+    setIsLoading(true)
     dispatch(getTrackingList(datas));
+    setIsLoading(false)
   }, [
     pageNo,
     dueDateStart,
@@ -221,7 +234,9 @@ export default function Patient() {
 
   useEffect(() => {
     if (response?.response) {
+      setIsLoading(true)
       getAllList(response?.response);
+      setIsLoading(false)
     }
   }, [parsedData, response, pageNo, pageSize]);
 
@@ -274,7 +289,6 @@ export default function Patient() {
       setTableLoading(false);
     }
   };
-
   const addPatientFile = (data) => {
     inputValue.patientId = data.patientId;
     inputValue.name = data.patientName;
@@ -503,7 +517,6 @@ export default function Patient() {
     setTableLoading(true);
     getAllList(response?.response);
   };
-  console.log(filteredList);
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -636,6 +649,7 @@ export default function Patient() {
                               setSortOrder={setAllocatedSortOrder}
                               sortOrder={allocatedSortOrder}
                               setSort={setSort}
+                              page={{pageNo, paginationFirst}}
                             />
                             <div>
                               <div className="pagination-container">
