@@ -14,7 +14,7 @@ import {
 } from "../../../../components/headerFilters/functions";
 import { getPriorityChange } from "../../../../store/actions/l2Action/AuditorAction";
 
-const UserQueue = ({ userList, setSort, auditBodyTemplate }) => {
+const UserQueueTable = ({ userList, setSort, auditBodyTemplate, page }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [processSort, setProcessSort] = useState("DESC");
@@ -73,7 +73,8 @@ const UserQueue = ({ userList, setSort, auditBodyTemplate }) => {
     const targetTd = e.target.closest("td");
     if (targetTd) {
       localStorage.setItem("patientId", id);
-      router?.push("details");
+      // router?.push(`/supervisor/user/details?page=${page}`);
+      router.push({pathname:"/supervisor/user/details", query: {...page, isSupervisorUser: true}})
     }
   };
 
@@ -390,4 +391,4 @@ const UserQueue = ({ userList, setSort, auditBodyTemplate }) => {
   );
 };
 
-export default UserQueue;
+export default UserQueueTable;

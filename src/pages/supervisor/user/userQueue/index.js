@@ -7,7 +7,6 @@ import { Popover } from "antd";
 import styles from "../../../reviewer/report/report.module.css";
 import Header from "../../../../jsx/layouts/nav/Header";
 import SpinnerDots from "../../../../components/spinner";
-import UserQueue from "../../table/adminList/userQueue";
 import Completed from "../../../../../src/images/trackingImages/CompletedTrack.png";
 import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
 import { extractLatestData } from "../../auditing";
@@ -24,6 +23,7 @@ import leftArrow from "../../../../images/svg/leftArrow.svg";
 import AuditHeaderFilters from "../../../../components/headerFilters/auditHeaderFilters";
 import userStyles from "./styles.module.css";
 import { getFilters } from "../../../../stores/authflow/actions";
+import UserQueueTable from "../../table/adminList/userQueue";
 
 const bullets = [
   {
@@ -132,6 +132,14 @@ const Index = () => {
       setTotalElements(usersData?.data?.response?.totalElements);
     }
   }, [usersData]);
+  useEffect(() => {
+    if (window !== "undefined") {
+      if (router.query.pageNo) {
+        setPageNo(router?.query?.pageNo);
+        setPaginationFirst(router?.query?.paginationFirst);
+      }
+    }
+  }, [router]);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -270,7 +278,7 @@ const Index = () => {
         );
     }
   };
-
+  
   return (
     <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
       <Header />
@@ -411,11 +419,12 @@ const Index = () => {
                     {!userListAll?.content ? (
                       <SpinnerDots />
                     ) : (
-                      <UserQueue
+                      <UserQueueTable
                         userList={userListAll?.content}
                         sort={sort}
                         setSort={setSort}
                         auditBodyTemplate={auditstatusBodyTemplate}
+                        page={{ ...router.query, pageNo, paginationFirst}}
                       />
                     )}
                     <div>
