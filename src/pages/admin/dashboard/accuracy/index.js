@@ -64,6 +64,12 @@ export function getHighlightedIndex(currentBtn, selectedYear, selectedMonth, cur
   if (currentBtn === "Monthly") {
     if (parseInt(selectedYear) === new Date().getFullYear()) {
       constHighlitedIndex = currentDate.getMonth();
+    } 
+    if (parseInt(selectedYear) < new Date().getFullYear()) {
+      constHighlitedIndex = currentDate.getMonth();
+    } 
+    if (parseInt(selectedYear) > new Date().getFullYear()) {
+      constHighlitedIndex = currentDate.getMonth();
     } else {
       constHighlitedIndex = selectedMonth - 1;
     }
@@ -71,10 +77,25 @@ export function getHighlightedIndex(currentBtn, selectedYear, selectedMonth, cur
     if (parseInt(selectedYear) === new Date().getFullYear()) {
       constHighlitedIndex = currentDate.getDate() - 1;
     }
+    if (parseInt(selectedYear) < new Date().getFullYear()) {
+      constHighlitedIndex = currentDate.getMonth();
+    } 
+    if (parseInt(selectedYear) > new Date().getFullYear()) {
+      constHighlitedIndex = currentDate.getMonth();
+    }else {
+      constHighlitedIndex = selectedMonth - 1;
+    }
   } else if (currentBtn === "Weekly") {
     if (parseInt(selectedYear) === new Date().getFullYear()) {
       const currentWeek = getDateWeek(currentDate);
       constHighlitedIndex = currentWeek - 1;
+    } if (parseInt(selectedYear) < new Date().getFullYear()) {
+      constHighlitedIndex = currentDate.getMonth();
+    } 
+    if (parseInt(selectedYear) > new Date().getFullYear()) {
+      constHighlitedIndex = currentDate.getMonth();
+    }else {
+      constHighlitedIndex = selectedMonth - 1;
     }
   }
 
@@ -128,10 +149,8 @@ const Accuracy = () => {
     setYear(date);
   };
   const handleMonthChange = (date) => {
-    const selectedDate = new Date(date);
     setMonth(date);
-    const monthNumber = parseInt(selectedDate.getMonth()) + 1;
-    setSelectedMonth(monthNumber);
+    setSelectedMonth(date);
   };
 
   let xAxisData = [];

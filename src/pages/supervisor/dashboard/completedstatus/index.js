@@ -58,12 +58,8 @@ const CompletedStatus = () => {
     setYear(date);
   };
   const handleMonthChange = (date) => {
-    const selectedDate = new Date(date);
     setMonth(date);
-    const monthNumber = (selectedDate.getMonth() + 1)
-      .toString()
-      .padStart(2, "0");
-    setSelectedMonth(monthNumber);
+    setSelectedMonth(date);
   };
 
   // Inside your component function

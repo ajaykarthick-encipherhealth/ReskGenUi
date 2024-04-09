@@ -14158,18 +14158,17 @@ overflow: scroll;
   border: 1px solid #e6e6e6;
   border-radius: 5px !important;
 }
-.addUserSelector{
+.addUserSelector {
   border: 1px solid #e6e6e6 !important;
   border-radius: 8px !important;
-  height:42px !important;
+  height: 42px !important;
 }
 .addUserSelector:active,
-.addUserSelector:focus{
+.addUserSelector:focus {
   border: 1px solid #e6e6e6 !important;
-box-shadow: none !important;
+  box-shadow: none !important;
 }
 
-  
 .table-responsive {
   overflow-x: hidden !important;
 }
@@ -14302,6 +14301,18 @@ input[type="number"] {
 }
 .pickerChnages > .ant-picker-input:hover > .ant-picker-clear {
   display: none !important;
+}
+.monthPickerChnages > .ant-picker-dropdown .ant-picker-header-view {
+  display: none !important;
+}
+
+.custom_MonthSelect > .ant-select-selector {
+  background: #e6eeff !important;
+  border: none !important;
+}
+.custom_MonthSelect2 > .ant-select-selector {
+  background: #f3f3ff !important;
+  border: none !important;
 }
 .calendarBox,
 .calendarBox:hover,
