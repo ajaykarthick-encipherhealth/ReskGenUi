@@ -27,24 +27,12 @@ import UserQueueTable from "../../table/userqueue";
 
 const bullets = [
   {
-    color: "#377880",
-    name: "AUDITED",
+    color: "#EB5252",
+    name: "Declined",
   },
   {
-    color: "#c33772",
-    name: "AUDIT PENDING",
-  },
-  {
-    color: "#964B00",
-    name: "RE AUDIT",
-  },
-  {
-    color: "#CE9900",
-    name: "AUDIT HOLD",
-  },
-  {
-    color: "#C21807",
-    name: "AUDIT DECLINED",
+    color: "#B4EFBA",
+    name: "Completed",
   },
 ];
 const badges = [
