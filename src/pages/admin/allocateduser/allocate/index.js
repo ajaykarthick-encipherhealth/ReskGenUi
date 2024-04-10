@@ -39,7 +39,8 @@ const AllocateModal = ({
   };
 
   const getUserList = async (search) => {
-    let resoureUrl = `dbservice/user/getL1UsersByOrgIdAndTenantId?orgid=daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5&searchString=${search}`;
+    const orgId = localStorage.getItem('orgId')
+    let resoureUrl = `dbservice/user/getL1UsersByOrgIdAndTenantId?orgid=${orgId}&searchString=${search}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       let result = response?.data?.response;
