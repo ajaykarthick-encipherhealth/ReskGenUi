@@ -45,7 +45,7 @@ const UserQueueTable = ({ userList, setSort, auditBodyTemplate, page }) => {
           text="Audit Hold"
           color="#964B00"
           placement="start"
-          style={{ fontSize: "10px" }}
+          style={{ fontSize: "9px" }}
         ></Badge.Ribbon>
       );
     } else if (data.auditedStatus === "AUDIT_PENDING") {
@@ -54,7 +54,7 @@ const UserQueueTable = ({ userList, setSort, auditBodyTemplate, page }) => {
           text="Audit Pending"
           color="#F28585"
           placement="start"
-          style={{ fontSize: "10px" }}
+          style={{ fontSize: "9px" }}
         ></Badge.Ribbon>
       );
     } else if (data.auditedStatus === "AUDIT_DECLINED") {
@@ -63,7 +63,7 @@ const UserQueueTable = ({ userList, setSort, auditBodyTemplate, page }) => {
           text="Audit Declined"
           color="#D40B0B"
           placement="start"
-          style={{ fontSize: "10px" }}
+          style={{ fontSize: "9px" }}
         ></Badge.Ribbon>
       );
     } else return null;
@@ -89,7 +89,7 @@ const UserQueueTable = ({ userList, setSort, auditBodyTemplate, page }) => {
             onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
             {data?.auditedStatus ? (
-              <span style={{ position: "relative", left: "0px", top: "10px" }}>
+              <span style={{ position: "relative", left: "0px", top: "9px" }}>
                 {badgeDisplay(data)}
               </span>
             ) : null}
@@ -198,7 +198,7 @@ const UserQueueTable = ({ userList, setSort, auditBodyTemplate, page }) => {
                 onClick={(e) => handleTableRowClick(e, data?.patientId)}
               >
                 {" "}
-                <span style={{ marginRight: "10px" }}>
+                <span style={{ marginRight: "9px" }}>
                   {" "}
                   {renderUserPrfoileAvatar(
                     data.auditAllocatedByFirstName,
