@@ -58,9 +58,19 @@ const createReducer = (actionType) =>
     initialState
   );
 
+
+  const getUsersDetailsLoading = handleActions(
+  {
+    [accuracyAction.START]: () => true,
+    [accuracyAction.SUCCEEDED]: () => false,
+    [accuracyAction.FAILED]: () => false,
+  },
+  false
+);
 const dashbaordReducer = combineReducers({
   workFlow: createReducer(workFlowAction),
   dailyTask: createReducer(dailyTaskAction),
+  accuracyLoading: getUsersDetailsLoading,
   accuracy: createReducer(accuracyAction),
   completedScore:createReducer(completedScoreAction),
   holdStatus:createReducer(holdStatusAction),
