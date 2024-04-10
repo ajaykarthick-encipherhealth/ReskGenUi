@@ -278,7 +278,7 @@ const AllocateModal = ({
                     <div className={`col-7 ${modalStyle.activeRow1}`}>
                       <span className={`${modalStyle.title} text-danger`}>
                         {selectedChart.length + chart.hold + chart.pending >
-                          20 && "Maximum upto 20 charts to pending"}
+                          100 && "Maximum upto 100 charts to pending"}
                       </span>
                       <p>Selected Charts</p>
 
@@ -322,7 +322,7 @@ const AllocateModal = ({
                       disabled={
                         !selectedChart.length > 0 ||
                         allocateDate == "" ||
-                        selectedChart.length + chart.hold + chart.pending > 20
+                        selectedChart.length + chart.hold + chart.pending > 10
                       }
                       onClick={setAllocate}
                     >
