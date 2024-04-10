@@ -2,6 +2,7 @@ import { notification } from "antd";
 import axios from "axios";
 import axiosConfig from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
+import { getResponePopup } from "../../../utils/reusable";
 
 export const ENABLEMFA = "ENABLEMFA";
 export const VALIDATE_CODE = "VALIDATE_CODE";
@@ -40,6 +41,9 @@ export const getMFAValidation =
       );
       const skip = response?.data?.response?.skipEntryAvailable;
       const mfa = response?.data?.response?.mfaIsEnabled;
+      if (response.data.status != "SUCCESS") {
+        getResponePopup(response)
+      }
       if (response?.data?.response) {
         dispatch({
           type: ENABLEMFA,
