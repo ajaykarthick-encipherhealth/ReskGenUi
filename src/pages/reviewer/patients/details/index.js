@@ -659,6 +659,7 @@ const Details = () => {
         setSelectedDosValue(highestDosValue[0].value);
         setDosYear(dosYearArr);
         setIsLoadingDos(false);
+        setPatientResultReload(true);
       } else {
         setPatientResultReload(true);
         setIsLoading(false);
