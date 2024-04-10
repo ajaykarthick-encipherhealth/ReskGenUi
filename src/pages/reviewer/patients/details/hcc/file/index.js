@@ -2971,7 +2971,7 @@ const File = ({popoverVisible, setPopoverVisible}) => {
         // >
         <Tooltip title={res} >
            <span
-          className={`mt-2 text-start ${visitStyles.provider_name}`}
+          className={`mt-2 text-start ${visitStyles.provider_name} ${visitStyles.elipse}`}
           style={{ backgroundColor: backColor, color: textColor }}
         >
           <i>
@@ -3349,7 +3349,7 @@ const File = ({popoverVisible, setPopoverVisible}) => {
                         <div className="d-flex justify-content-between">
                           <div className={`${visitStyles.hoverActiveHcc}`}>
                             <div
-                              className={`${visitStyles.encounterAndSectionHeader} ${visitStyles.elipse}`}
+                              className={`${visitStyles.encounterAndSectionHeader}`}
                             >
                               {getProviderNameList(data?.providerName)}
                             </div>

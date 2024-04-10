@@ -646,6 +646,13 @@ const Details = () => {
         getFlagListLastDetails(patientId, highestDosValue[0].value);
         setIsLoading(false);
         setPatientResultReload(true);
+      } else if (result.encounterYears.length > 0) {
+        var dosYearArr = [];
+        result.encounterYears.map((res) => {
+          dosYearArr.push({ value: res, label: res });
+        });
+        setDosYear(dosYearArr);
+        setIsLoadingDos(false);
       } else {
         setPatientResultReload(true);
         setIsLoading(false);
