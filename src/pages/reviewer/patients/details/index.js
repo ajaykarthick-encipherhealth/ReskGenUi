@@ -651,6 +651,12 @@ const Details = () => {
         result.encounterYears.map((res) => {
           dosYearArr.push({ value: res, label: res });
         });
+        const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
+        const highestDosValue = dosYearArr.filter(
+          (i) => parseInt(i.value) === highestDOS
+        );
+        setDosYearDefalutSelect(highestDosValue[0]);
+        setSelectedDosValue(highestDosValue[0].value);
         setDosYear(dosYearArr);
         setIsLoadingDos(false);
       } else {
