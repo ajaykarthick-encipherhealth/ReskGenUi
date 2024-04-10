@@ -322,7 +322,7 @@ const AllocateModal = ({
                       disabled={
                         !selectedChart.length > 0 ||
                         allocateDate == "" ||
-                        selectedChart.length + chart.hold + chart.pending > 10
+                        selectedChart.length + chart.hold + chart.pending > 100
                       }
                       onClick={setAllocate}
                     >
