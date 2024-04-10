@@ -2917,6 +2917,7 @@ const Details = () => {
                             <div className="row">
                               <div className="col-xl-12">
                                 <textarea
+                                style={{cursor:"default"}}
                                   className={visitStyles.commentsFormControl}
                                   rows="5"
                                   required
