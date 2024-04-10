@@ -60,7 +60,7 @@ export const monthNames = [
   "DEC",
 ];
 
-const Accuracy = ({ accuracyDatas, getAccuracyScore }) => {
+const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
   const [activeButton, setActiveButton] = useState(0);
   const [initialAccuracyData, setInitialAccuracyData] = useState(null);
   const [currentBtn, setCurrentBtn] = useState("Daily");
@@ -80,7 +80,7 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore }) => {
     { length: numberOfWeeks },
     (_, index) => `Week ${index + 1}`
   );
-
+  console.log(accuracyLoading, "accuracyLoading");
   useEffect(() => {
     getAccuracyScore({
       btn: currentBtn,
@@ -340,7 +340,6 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore }) => {
     ) {
       setInitialAccuracyData(accuracyDatas?.data?.response);
     }
-
   }, [accuracyDatas]);
   return (
     <>
@@ -376,12 +375,14 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore }) => {
           </div>
           <div className={styles.header}>
             <div style={{ width: "85%", overflowX: "scroll" }}>
-              {accuracyDatas?.loading && (
+              {accuracyDatas?.loading && accuracyLoading && (
                 <div className={spinSTYles.spinStyle}>
-                  <Spin loading={accuracyDatas?.loading} />
+                  <Spin />
                 </div>
               )}
-              {!accuracyDatas?.loading && accuracyDatas?.data?.response ? (
+              {!accuracyDatas?.loading &&
+              !accuracyLoading &&
+              accuracyDatas?.data?.response ? (
                 options && (
                   <div className={styles.highchartStyle}>
                     <HighchartsReact
@@ -391,8 +392,12 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore }) => {
                     />
                   </div>
                 )
+              ) : accuracyLoading ? (
+                <div className={spinSTYles.spinStyle}>
+                  <Spin />
+                </div>
               ) : (
-                <div className={spinSTYles.spinStyle}>{/* <Empty /> */}</div>
+                <div className={spinSTYles.spinStyle}>{<Empty />}</div>
               )}
             </div>
             <div className={styles.accuracy}>
@@ -406,14 +411,22 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore }) => {
                 {currentBtn === "Monthly" &&
                   `Month ${monthNames[currentDate.getMonth()]}`}
                 {currentBtn === "Weekly" && `Week ${getDateWeek(currentDate)}`}
-                {currentBtn !== "Monthly" &&<span className={styles.subTitle}>(Current Month)</span>}
+                {currentBtn !== "Monthly" && (
+                  <span className={styles.subTitle}>(Current Month)</span>
+                )}
               </div>
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
                   {accuracyDatas?.data?.response
                     ? `${Math.round(
-                        accuracyDatas?.data?.response[ getHighlightedIndex(currentBtn, selectedYear, selectedMonth, currentDate)]
-                          ?.averageScore
+                        accuracyDatas?.data?.response[
+                          getHighlightedIndex(
+                            currentBtn,
+                            selectedYear,
+                            selectedMonth,
+                            currentDate
+                          )
+                        ]?.averageScore
                       )}%`
                     : "0%"}
                 </span>
@@ -429,6 +442,7 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore }) => {
 const enhancer = connect(
   (state) => ({
     accuracyDatas: state?.reviewer?.dashboard?.accuracy,
+    accuracyLoading: state?.reviewer?.dashboard?.accuracyLoading,
   }),
   {
     getAccuracyScore: dashbaordActions.accuracyAction,
