@@ -159,7 +159,7 @@ function PatientTable({
         <thead className={TableStyle.classThead}>
           <tr>
             <th>PATIENT ID</th>
-            <th>PATIENT NAME</th>
+            <th>FILE NAME</th>
             <th>HCC COUNT</th>
             <th
               onClick={() => {
