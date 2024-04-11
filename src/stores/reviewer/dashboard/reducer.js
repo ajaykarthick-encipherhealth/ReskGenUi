@@ -59,20 +59,21 @@ const createReducer = (actionType) =>
   );
 
 
-  const getUsersDetailsLoading = handleActions(
+  const getUsersDetailsLoading=(type) => handleActions(
   {
-    [accuracyAction.START]: () => true,
-    [accuracyAction.SUCCEEDED]: () => false,
-    [accuracyAction.FAILED]: () => false,
+    [type.START]: () => true,
+    [type.SUCCEEDED]: () => false,
+    [type.FAILED]: () => false,
   },
   false
 );
 const dashbaordReducer = combineReducers({
   workFlow: createReducer(workFlowAction),
   dailyTask: createReducer(dailyTaskAction),
-  accuracyLoading: getUsersDetailsLoading,
+  accuracyLoading: getUsersDetailsLoading(accuracyAction),
   accuracy: createReducer(accuracyAction),
   completedScore:createReducer(completedScoreAction),
+  completedScoreLoading: getUsersDetailsLoading(completedScoreAction),
   holdStatus:createReducer(holdStatusAction),
   notification:createReducer(notificationAction),
   tenentLogo:createReducer(tenentLogoAction)

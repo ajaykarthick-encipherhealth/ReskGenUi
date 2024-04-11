@@ -14,7 +14,7 @@ import { actions as dashbaordActions } from "../../../../stores/reviewer/dashboa
 import spinSTYles from "../../../../styles/auth.module.css";
 import { Empty, Spin } from "antd";
 
-const CompletedStatus = ({getCOmpletedScore,completedDatas}) => {
+const CompletedStatus = ({getCOmpletedScore,completedDatas, completedScoreLoading }) => {
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const currentDate = new Date();
@@ -177,9 +177,9 @@ const CompletedStatus = ({getCOmpletedScore,completedDatas}) => {
             </div>
           </div>
 
-          {completedDatas?.loading && (
+          {completedScoreLoading && (
             <div className={spinSTYles.spinStyle}>
-              <Spin loading={completedDatas?.loading} />
+              <Spin loading={completedScoreLoading} />
             </div>
           )}
 
@@ -207,7 +207,9 @@ const CompletedStatus = ({getCOmpletedScore,completedDatas}) => {
 };
 const enhancer = connect(
   (state) => ({
-    completedDatas: state?.reviewer?.dashboard?.completedScore
+    completedDatas: state?.reviewer?.dashboard?.completedScore,
+    completedScoreLoading: state?.reviewer?.dashboard?.completedScoreLoading,
+
   }),
   {
     getCOmpletedScore:dashbaordActions.completedScoreAction
