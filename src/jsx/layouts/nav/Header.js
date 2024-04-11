@@ -60,6 +60,7 @@ import {
   logoutAllDevice,
 } from "../../../stores/authflow/actions";
 import { actions as dashbaordActions } from "../../../stores/reviewer/dashboard";
+import { MenuItem } from "@react-pdf-viewer/core";
 
 const btnItems = [
   {
@@ -108,7 +109,7 @@ const Header = ({
   const [headerFix, setheaderFix] = useState(false);
   const [userName, setUserName] = useState("");
   const [userRole, setUserRole] = useState(null);
-  const [tenentId, setTenentId] = useState(null)
+  const [tenentId, setTenentId] = useState(null);
   const [menuList, setMenuList] = useState([]);
   const [userIdDetails, setUserIdDetails] = useState(null);
   const [open, setOpen] = useState(false);
@@ -345,12 +346,12 @@ const Header = ({
     const userRoleLocal = localStorage.getItem("userRole");
     const userId = localStorage.getItem("userId");
     const userRole = localStorage.getItem("role");
-    const tenentId = localStorage.getItem('tenantId')
+    const tenentId = localStorage.getItem("tenantId");
 
     dispatch(getCurrentUser(userId, router));
     setUserRole(userRoleLocal);
     setCurrentRole(userRole);
-    setTenentId(tenentId)
+    setTenentId(tenentId);
     setMenuList(getMenuListByRole(userRoleLocal));
 
     if (loginCheck !== "true") {
@@ -432,16 +433,21 @@ const Header = ({
                 </div>
               )}
             </div>
-
             {stateActive != "/reviewer/home" ? (
               <div>
                 <ul className="metismenu header-menu d-flex" id="menu">
                   {menuList.map((data, index) => {
+                    const queryString = window.location.search;
+                    const urlParams = new URLSearchParams(queryString);
+                    const encodedParams = urlParams.get("isAdminTracking");
+
                     return (
                       <li
                         className={` ${
                           stateActive === data.to ||
-                          stateActive === data.childRoute ||
+                          (currentRole === "admin" && encodedParams
+                            ? stateActive === data.childRoute3
+                            : stateActive === data.childRoute) ||
                           stateActive === data.childRoute2
                             ? "header-active"
                             : ""
@@ -542,27 +548,28 @@ const Header = ({
                           </div>
                         )}
 
-                        {tenentId != "7f41538e-2329-4ecc-890f-03c93cccb934" &&   <div
-                          className="chatheaderIcon"
-                          onClick={() => gotoChat()}
-                        >
-                          <div style={{ color: "#04306f" }}>
+                        {tenentId != "7f41538e-2329-4ecc-890f-03c93cccb934" && (
+                          <div
+                            className="chatheaderIcon"
+                            onClick={() => gotoChat()}
+                          >
                             <div style={{ color: "#04306f" }}>
-                              <FontAwesomeIcon
-                                icon={faMessage}
-                                className={styles.bellIcon}
-                                style={{
-                                  width: "20px",
-                                  height: "20px",
-                                  marginTop: "8px",
-                                  fontWeight: "700",
-                                  marginRight: "10px",
-                                }}
-                              />
+                              <div style={{ color: "#04306f" }}>
+                                <FontAwesomeIcon
+                                  icon={faMessage}
+                                  className={styles.bellIcon}
+                                  style={{
+                                    width: "20px",
+                                    height: "20px",
+                                    marginTop: "8px",
+                                    fontWeight: "700",
+                                    marginRight: "10px",
+                                  }}
+                                />
+                              </div>
                             </div>
                           </div>
-                        </div>}
-                      
+                        )}
 
                         <div
                           className="notificationIcon"
