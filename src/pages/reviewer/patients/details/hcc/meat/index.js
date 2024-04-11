@@ -2553,8 +2553,9 @@ const Meat = ({}) => {
         >
           <div className="section-container">
             <div className="row">
-              <div className="col-xl-4">
-                <div className={visitStyles.meat_title_card2}>
+              <div className="col-xl-4" >
+               <div style={{height:"90%",overflowY:"scroll"}}>
+               <div className={visitStyles.meat_title_card2}>
                   <div className="row">
                     <div className="col-xl-6">
                       <label>Codes</label>
@@ -2788,6 +2789,7 @@ const Meat = ({}) => {
                     </div>
                   </div>
                 </div>
+               </div>
               </div>
               <div className="col-xl-8">
                 <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
