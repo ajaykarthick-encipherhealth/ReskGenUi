@@ -3153,65 +3153,131 @@ const VisitData = ({}) => {
                                     </div>
                                   )}
                                 </div>
-                                <div
-                                  className={`${visitStyles.hoverActiveHcc}`}
-                                >
-                                  <div className="">
-                                    <div
-                                      className={`${visitStyles.encounterAndSectionHeader}`}
-                                    >
-                                      {getProviderNameList(data?.providerName)}
-                                      {data.getPlace == "Lab" ? (
-                                        <Tooltip title="LAB">
-                                          <span
-                                            className={` mt-2 ${visitStyles.labStatus}`}
-                                            bg={`  mt-2 bg-bg-seven `}
-                                          >
-                                            Lab
-                                          </span>
-                                        </Tooltip>
-                                      ) : data.getPlace == "Radio" ? (
-                                        <Tooltip title="RADIOLOGY">
-                                          <span
-                                            className={` mt-2 ${visitStyles.radiologyStatus}`}
-                                            bg={`  mt-2 bg-bg-eight `}
-                                          >
-                                            Radiology
-                                          </span>
-                                        </Tooltip>
-                                      ) : data.getPlace == "Radio-combo" ? (
-                                        <Tooltip title="RADIOLOGY COMBO CODES">
-                                          <span
-                                            className={` mt-2 ${visitStyles.radiologyStatus}`}
-                                            bg={`  mt-2 bg-bg-eight `}
-                                          >
-                                            Radiology - Combo Codes
-                                          </span>
-                                        </Tooltip>
-                                      ) : null}
-                                    </div>
-                                    <div
-                                      className={`${visitStyles.encounterAndSectionHeader}`}
-                                    >
-                                      {getEncounterDateBackgroundHcc(
-                                        data.encounterDateSplit,
-                                        data.diagnosisCode
-                                      )}
-                                    </div>
+                                <div className={`${visitStyles.hoverActiveHcc} d-flex justify-content-between`}>
+                                <div>
+                                <div className="">
+                                  <div
+                                    className={`${visitStyles.encounterAndSectionHeader}`}
+                                  >
+                                    {getProviderNameList(data?.providerName)}
                                   </div>
+                                  <div
+                                    className={`${visitStyles.encounterAndSectionHeader}`}
+                                  >
+                                    {getEncounterDateBackground(
+                                      data.encounterDateSplit
+                                    )}
+                                  </div>
+                                  {data.getPlace == "Lab" ? (
+                                    <Tooltip title="LAB">
+                                      <span
+                                        className={` mt-2 ${visitStyles.labStatus}`}
+                                        bg={`  mt-2 bg-bg-seven `}
+                                      >
+                                        Lab
+                                      </span>
+                                    </Tooltip>
+                                  ) : data.getPlace == "Radio" ? (
+                                    <Tooltip title="RADIOLOGY">
+                                      <span
+                                        className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                        bg={`  mt-2 bg-bg-eight `}
+                                      >
+                                        Radiology
+                                      </span>
+                                    </Tooltip>
+                                  ) : null}
+                                </div>
+
+                                {data.getPlace == "Lab" ? (
                                   <div
                                     className={`${visitStyles.encounterAndSectionHeader}`}
                                   >
                                     {getCaptureSectionBackground(
                                       data.capturedSections,
-                                      data.getPlace,
+                                      "Lab",
                                       data.encounterDate,
-                                      data.actualDescription,
-                                      "Suggested",
-                                      data.diagnosisCode
+                                      data.actualDescription
                                     )}
                                   </div>
-                                </div>
+                                ) : data.getPlace == "Radio" ||
+                                  data.getPlace == "Radio-combo" ? (
+                                  <div
+                                    className={`${visitStyles.encounterAndSectionHeader}`}
+                                  >
+                                    {getCaptureSectionBackground(
+                                      data.capturedSections,
+                                      "Radio",
+                                      data.encounterDate,
+                                      data.actualDescription
+                                    )}
+                                  </div>
+                                ) : (
+                                  <div
+                                    className={`${visitStyles.encounterAndSectionHeader}`}
+                                  >
+                                    {getCaptureSectionBackgroundFile(
+                                      data?.capturedSections,
+                                      data?.encounterDate,
+                                      data?.actualDescription
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                              <div
+                            className={`${visitStyles.encounterAndSectionHeader}`}
+                          >
+                            <div className={styles.meatFoundContainer}>
+                              <div>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "M"
+                                )}
+                              </div>
+                              <div>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "E"
+                                )}
+                              </div>
+                              <div>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "A"
+                                )}
+                              </div>
+                              <div>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "T"
+                                )}
+                              </div>
+                            </div>
+                            <div
+                              className={`${visitStyles.encounterAndSectionHeader}`}
+                            >
+                              {data.isManuallyAdded == true ? (
+                                <Badge
+                                  className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                >
+                                  Manually Added
+                                </Badge>
+                              ) : null}
+                            </div>
+                            {data.getPlace == "Insulin" ? (
+                              <span
+                                className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                bg={`  mt-2 bg-bg-eight `}
+                              >
+                                Insulin
+                              </span>
+                            ) : null}
+                          </div>
+                          </div>
                               </div>
                             </li>
                          
