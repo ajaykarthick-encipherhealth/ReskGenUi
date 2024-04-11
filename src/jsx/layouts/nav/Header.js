@@ -108,6 +108,7 @@ const Header = ({
   const [headerFix, setheaderFix] = useState(false);
   const [userName, setUserName] = useState("");
   const [userRole, setUserRole] = useState(null);
+  const [tenentId, setTenentId] = useState(null)
   const [menuList, setMenuList] = useState([]);
   const [userIdDetails, setUserIdDetails] = useState(null);
   const [open, setOpen] = useState(false);
@@ -344,10 +345,12 @@ const Header = ({
     const userRoleLocal = localStorage.getItem("userRole");
     const userId = localStorage.getItem("userId");
     const userRole = localStorage.getItem("role");
+    const tenentId = localStorage.getItem('tenantId')
 
     dispatch(getCurrentUser(userId, router));
     setUserRole(userRoleLocal);
     setCurrentRole(userRole);
+    setTenentId(tenentId)
     setMenuList(getMenuListByRole(userRoleLocal));
 
     if (loginCheck !== "true") {
@@ -538,7 +541,8 @@ const Header = ({
                             />
                           </div>
                         )}
-                        <div
+
+                        {tenentId != "7f41538e-2329-4ecc-890f-03c93cccb934" &&   <div
                           className="chatheaderIcon"
                           onClick={() => gotoChat()}
                         >
@@ -557,7 +561,8 @@ const Header = ({
                               />
                             </div>
                           </div>
-                        </div>
+                        </div>}
+                      
 
                         <div
                           className="notificationIcon"
