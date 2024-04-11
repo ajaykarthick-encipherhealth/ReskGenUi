@@ -2943,8 +2943,8 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
       const result = captureSectionMatching.filter(
         (res2) => res2.sectionName == res
       );
-      var backColor = result[0]?.backgroundColor;
-      var textColor = result[0]?.sectionColor;
+      var backColor = result[0]?.backgroundColor == "#efeff033" ? "#54548d33" : result[0]?.backgroundColor ;
+      var textColor = result[0]?.sectionColor == "#efeff0" ? "#000" : result[0]?.sectionColor;
       var value = ["09/19/2023"];
       var sectionMapArr = (
         // <Popover

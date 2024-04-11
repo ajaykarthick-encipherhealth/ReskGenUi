@@ -403,8 +403,8 @@ const File = ({}) => {
       const result = captureSectionMatching.filter(
         (res2) => res2.sectionName == res
       );
-      var backColor = result[0]?.backgroundColor;
-      var textColor = result[0]?.sectionColor;
+      var backColor = result[0]?.backgroundColor == "#efeff033" ? "#54548d33" : result[0]?.backgroundColor ;
+      var textColor = result[0]?.sectionColor == "#efeff0" ? "#000" : result[0]?.sectionColor;
       var sectionMapArr = (
         <span
           className={`mt-2 text-start ${visitStyles.provider_name}`}
