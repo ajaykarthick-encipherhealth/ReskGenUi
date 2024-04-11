@@ -745,7 +745,7 @@ const File = ({popoverVisible, setPopoverVisible}) => {
           result?.suggestLabInReport?.map((res, index) => {
             var providerList = [];
             res?.provider?.map((res2, index) => {
-              providerList.push(res2.providerName);
+              providerList.push(res2?.providerName);
             });
             const encounterDatearray = res?.encounterDate?.split(",");
             suggestListAll.push({
