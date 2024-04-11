@@ -79,6 +79,7 @@ export const AdminMenuList = [
     title: "Tracking",
     iconStyle: SVGICON.Tracking,
     to: "/admin/tracking",
+    childRoute3: "/reviewer/patients/details",
   },
   {
     title: "Report",
