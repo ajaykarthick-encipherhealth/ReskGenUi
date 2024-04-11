@@ -15,8 +15,7 @@ const ImageUploader = ({ setOpenUploader, setOpenContent }) => {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        const img = new Image();
-        img.src = e.target.result;
+        const img = document.createElement("img");
         img.onload = () => {
           const canvas = document.createElement("canvas");
           const ctx = canvas.getContext("2d");
@@ -24,13 +23,18 @@ const ImageUploader = ({ setOpenUploader, setOpenContent }) => {
           canvas.height = 600;
           ctx.drawImage(img, 0, 0, 600, 600);
           canvas.toBlob((blob) => {
-            const croppedFile = new File([blob], `cropped.${type}`, {
-              type: file.type,
-            });
+            const croppedFile = new File(
+              [blob],
+              `cropped.${file.type.split("/")[1]}`,
+              {
+                type: file.type,
+              }
+            );
             dispatch(preSendURl(type, croppedFile));
             setOpenUploader(false);
           }, file.type);
         };
+        img.src = e.target.result;
       };
       reader.readAsDataURL(file);
     }
