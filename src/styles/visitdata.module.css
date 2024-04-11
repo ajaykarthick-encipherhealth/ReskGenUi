@@ -1619,6 +1619,8 @@
 }
 
 .elipse {
+  max-width: 240px;
+  justify-content: left;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
