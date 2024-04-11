@@ -10525,9 +10525,13 @@ p,
   display: flex !important;
 }
 
-/* .ageDtails {
-  margin-left: 36px;
-} */
+.ageDtails {
+  max-width: 240px;
+  justify-content: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 .user-details {
   margin-top: 8px;
