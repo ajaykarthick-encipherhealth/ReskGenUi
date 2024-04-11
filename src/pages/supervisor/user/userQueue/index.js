@@ -15,6 +15,7 @@ import audited from "../../../../images/svg/audited.svg";
 import reAudit from "../../../../images/svg/reAudit.svg";
 import auditHold from "../../../../images/svg/auditHold.svg";
 import auditPending from "../../../../images/svg/auditPending.svg";
+import auditDeclined from "../../../../images/svg/auditDeclined.svg";
 import {
   getCurrentUserDetails,
   getL2IndividualUser,
@@ -55,6 +56,11 @@ const badges = [
     color: "#F28585",
     name: "Audit Pending",
     src: auditPending,
+  },
+  {
+    color: "red",
+    name: "Audit Declined",
+    src: auditDeclined,
   },
 ];
 
