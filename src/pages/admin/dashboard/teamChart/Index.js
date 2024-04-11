@@ -275,7 +275,7 @@ const BarChart = () => {
                     />
                   )
                 ) : (
-                  <div className={spinSTYles.spinStyle}>
+                  <div className={spinSTYles.spinStyle} style={{height:"600px",alignItems:"center"}}>
                     <Empty />
                   </div>
                 )}

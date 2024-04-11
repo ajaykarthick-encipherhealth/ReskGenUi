@@ -793,8 +793,8 @@ const Details = () => {
 
   const navigetPageDetails = async (pageTitle) => {
     setSideNavLabelActiveKey(pageTitle);
-    if (pageTitle == "HCC") {
-      var patientId = localStorage.getItem("patientId");
+    var patientId = localStorage.getItem("patientId");
+    if (pageTitle == "HCC" && patientId) {
       const response = await axios.get(
         ENDPOINTS.apiEndoint +
           `dbservice/patient/compute/get?patientid=${patientId}&orgid=${localOrgId}`
