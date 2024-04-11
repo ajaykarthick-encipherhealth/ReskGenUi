@@ -16,6 +16,7 @@ import {
   faClock,
   faAngleDoubleRight,
   faAngleDoubleLeft,
+  faFile
 } from "@fortawesome/free-solid-svg-icons";
 import {
   Popover,
@@ -1742,15 +1743,23 @@ const Details = () => {
                                   {patientDocumentResult.patientId}
                                 </h6>
                               </div>
-                              <div className="col-xl-3 col-sm-12">
+                              <div className="col-xl-2 col-sm-12">
                                 <FontAwesomeIcon icon={faUserCircle} />
 
-                                <label>Name</label>
+                                <label>Patient Name</label>
                                 <h6 className="ageDtails">
                                   {patientDocumentResult.patientName}
                                 </h6>
                               </div>
                               <div className="col-xl-2 col-sm-12">
+                                <FontAwesomeIcon icon={faFile} />
+
+                                <label>File Name</label>
+                                <h6 className="ageDtails">
+                                  {patientDocumentResult?.fileDetailDTO?.fileName}
+                                </h6>
+                              </div>
+                              <div className="col-xl-1 col-sm-12">
                                 <FontAwesomeIcon icon={faCalendarAlt} />
                                 <label>Age</label>
                                 <h6
