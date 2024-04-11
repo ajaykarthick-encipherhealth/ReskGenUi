@@ -60,6 +60,21 @@ export const monthNames = [
   "DEC",
 ];
 
+export const getData = (currentDate, selectedMonth, selectedYear) => {
+  if (selectedMonth < currentDate?.getMonth() + 1) {
+    return true;
+  }
+  else if (selectedMonth > currentDate?.getMonth() + 1 && parseInt(selectedYear) < currentDate?.getFullYear() ) {
+    return true;
+  } 
+  else if (selectedMonth <= currentDate?.getMonth() + 1 && parseInt(selectedYear) <= currentDate?.getFullYear() ) {
+    return true;
+  } 
+  else {
+    return false;
+  }
+};
+
 const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
   const [activeButton, setActiveButton] = useState(0);
   const [initialAccuracyData, setInitialAccuracyData] = useState(null);
@@ -80,7 +95,7 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
     { length: numberOfWeeks },
     (_, index) => `Week ${index + 1}`
   );
-  console.log(accuracyLoading, "accuracyLoading");
+
   useEffect(() => {
     getAccuracyScore({
       btn: currentBtn,
@@ -161,6 +176,8 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
   } else if (currentBtn === "Weekly") {
     xAxisData = weekNames;
   }
+
+ 
   const options = {
     chart: {
       type: "column",
@@ -292,7 +309,7 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
       {
         name: "totalCorrectCount",
         data:
-          selectedMonth <= currentDate?.getMonth() + 1
+        getData(currentDate, selectedMonth, selectedYear)
             ? accuracyDatas?.data?.response?.map(
                 (item) => item?.totalCorrectCount
               )
@@ -303,7 +320,7 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
       {
         name: "totalWrongCount",
         data:
-          selectedMonth <= currentDate?.getMonth() + 1
+        getData(currentDate, selectedMonth, selectedYear)
             ? accuracyDatas?.data?.response?.map(
                 (item) => item?.totalWrongCount
               )
@@ -315,7 +332,7 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
         name: "Temperature",
         type: "spline",
         data:
-          selectedMonth <= currentDate?.getMonth() + 1
+        getData(currentDate, selectedMonth, selectedYear)
             ? chartBlockedDates(
                 selectedYear,
                 selectedMonth,
@@ -341,6 +358,7 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
       setInitialAccuracyData(accuracyDatas?.data?.response);
     }
   }, [accuracyDatas]);
+
   return (
     <>
       <HeadTitle header="Reviewer Quality Score" />

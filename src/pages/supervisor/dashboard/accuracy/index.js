@@ -18,6 +18,7 @@ import {
 } from "../../../../store/actions/l2Action/DashboardAction";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { getHighlightedIndex } from "../../../admin/dashboard/accuracy";
+import { getData } from "../../../reviewer/dashboard/accuracy";
 
 export const getDateWeek = (date) => {
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
@@ -324,7 +325,7 @@ const Accuracy = () => {
       {
         name: "totalCorrectCount",
         data:
-          parseInt(selectedMonth) <= currentDate?.getMonth() + 1 &&
+          getData(currentDate, selectedMonth, selectedYear) &&
           accuracyDatas?.data?.response?.mapAccuracy?.map(
             (item) => item?.totalCorrectCount
           ),
@@ -334,7 +335,7 @@ const Accuracy = () => {
       {
         name: "totalWrongCount",
         data:
-          parseInt(selectedMonth) <= currentDate?.getMonth() + 1 &&
+          getData(currentDate, selectedMonth, selectedYear) &&
           accuracyDatas?.data?.response?.mapAccuracy?.map(
             (item) => item?.totalWrongCount
           ),
@@ -344,13 +345,15 @@ const Accuracy = () => {
       {
         name: "Temperature",
         type: "spline",
-        data: chartBlockedDates(
-          selectedYear,
-          selectedMonth,
-          accuracyDatas,
-          "averageScore",
-          currentBtn
-        ),
+        data:
+          getData(currentDate, selectedMonth, selectedYear) &&
+          chartBlockedDates(
+            selectedYear,
+            selectedMonth,
+            accuracyDatas,
+            "averageScore",
+            currentBtn
+          ),
         tooltip: {
           valueSuffix: "",
         },
