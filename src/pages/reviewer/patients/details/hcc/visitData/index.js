@@ -2810,7 +2810,7 @@ const VisitData = ({}) => {
                               trigger="click"
                             >
                               <Tooltip
-                                title="HCC Veriosn Details"
+                                title="HCC Version Details"
                                 placement="bottom"
                               >
                                 <i className="cr-pointer">{SVGICON.infoIcon}</i>
@@ -3349,7 +3349,7 @@ const VisitData = ({}) => {
                               trigger="click"
                             >
                               <Tooltip
-                                title="HCC Veriosn Details"
+                                title="HCC Version Details"
                                 placement="bottom"
                               >
                                 <i>{SVGICON.infoIcon}</i>
@@ -3799,7 +3799,7 @@ const VisitData = ({}) => {
                                   trigger="click"
                                 >
                                   <Tooltip
-                                    title="HCC Veriosn Details"
+                                    title="HCC Version Details"
                                     placement="bottom"
                                   >
                                     <i className="cr-pointer">
@@ -4388,7 +4388,7 @@ const VisitData = ({}) => {
                                     trigger="click"
                                   >
                                     <Tooltip
-                                      title="HCC Veriosn Details"
+                                      title="HCC Version Details"
                                       placement="bottom"
                                     >
                                       <i>{SVGICON.infoIcon}</i>
