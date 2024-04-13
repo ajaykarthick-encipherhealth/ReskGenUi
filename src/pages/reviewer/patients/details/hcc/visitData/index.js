@@ -1275,7 +1275,7 @@ const VisitData = ({}) => {
     }
   };
 
-  const findValueDocument = async (
+  const findValueDocuments = async (
     value,
     disDescription,
     headerNames,
@@ -1289,13 +1289,16 @@ const VisitData = ({}) => {
     var splitPoint = actualDescription.substring(" ", 20);
     var pageNumber = null;
     var data = {
-      fileId:fileId,
+      fileId: fileId,
       header: headerNames,
-      dos:encounterDatesHeader,
-      stringFileWord:splitPoint      
-    }
+      dos: encounterDatesHeader,
+      stringFileWord: splitPoint,
+    };
     try {
-      const response = await axios.post(ENDPOINTS.apiEndoint +`dbservice/pageNumber`,data);
+      const response = await axios.post(
+        ENDPOINTS.apiEndoint + `dbservice/pageNumber`,
+        data
+      );
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
         pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
@@ -1323,6 +1326,78 @@ const VisitData = ({}) => {
           targetPage.pageIndex === pageNumber + 1 ||
           targetPage.pageIndex === pageNumber + 2
       );
+      setFindFileKeyword(splitPoint);
+      if (findFileKeyword == splitPoint) {
+        setFileLoading(false);
+      }
+    } catch (error) {
+      splitPoint = headerNames;
+      if (findFileKeyword == headerNames) {
+        setFileLoading(false);
+      }
+      setFindFileKeyword(splitPoint);
+      setFileInitialPage(null);
+      setFileDosPageNumber(null);
+    }
+  };
+
+  const findValueDocument = async (
+    value,
+    disDescription,
+    headerNames,
+    encounterDate,
+    actualDescription,
+    diagnosisCode
+  ) => {
+    setFileLoading(true);
+    var fileId = patientFileDTO.fileId;
+    const encounterDatesValue = encounterDate.split(",");
+    const encounterDatesHeader = encounterDatesValue[0];
+    var splitPoint;
+    var pageNumber = null;
+    var data = {
+      fileId: fileId,
+      header: headerNames,
+      dos: encounterDatesHeader,
+      stringFileWord: actualDescription.substring(" ", 20),
+      diagnosisCode: diagnosisCode,
+    };
+    try {
+      const response = await axios.post(
+        ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
+        data
+      );
+      var result = response.data.response;
+      if (response?.data?.status == "SUCCESS") {
+        pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
+        splitPoint = result?.searchString
+        if (result == null) {
+           return findValueDocuments(
+            value,
+            disDescription,
+            headerNames,
+            encounterDate,
+            actualDescription
+          );
+        }
+        if (pageNumber == fileInitialPage) {
+          setFileLoading(false);
+          notification.warning({
+            message: "This detail also same page",
+            placement: "top",
+            duration: 1,
+          });
+        }
+        setFileInitialPage(pageNumber);
+        setFileDosPageNumber(pageNumber);
+      } else {
+        splitPoint = headerNames;
+        setFileInitialPage(null);
+        setFileDosPageNumber(null);
+      }
+      setTargetPages((targetPage) => {
+        targetPage.pageIndex === pageNumber;
+      });
       setFindFileKeyword(splitPoint);
       if (findFileKeyword == splitPoint) {
         setFileLoading(false);
@@ -2049,7 +2124,8 @@ const VisitData = ({}) => {
   const getCaptureSectionBackgroundFile = (
     value,
     encounterDate,
-    actualDescription
+    actualDescription,
+    diagnosisCode
   ) => {
     // getSectionTagColor(value);
     var dublicateCaptureDelete = removeDuplicates(value);
@@ -2069,7 +2145,8 @@ const VisitData = ({}) => {
               res,
               headerNames,
               encounterDate,
-              actualDescription
+              actualDescription,
+              diagnosisCode
             )
           }
           style={{ backgroundColor: backColor, color: textColor }}
@@ -3216,11 +3293,14 @@ const VisitData = ({}) => {
                                   <div
                                     className={`${visitStyles.encounterAndSectionHeader}`}
                                   >
-                                    {getCaptureSectionBackgroundFile(
-                                      data?.capturedSections,
-                                      data?.encounterDate,
-                                      data?.actualDescription
-                                    )}
+                                     {getCaptureSectionBackground(
+                                  data.capturedSections,
+                                  null,
+                                  data.encounterDate,
+                                  data.actualDescription,
+                                  null,
+                                  data.diagnosisCode
+                                )}
                                   </div>
                                 )}
                               </div>
@@ -3876,7 +3956,8 @@ const VisitData = ({}) => {
                                   {getCaptureSectionBackgroundFile(
                                     data?.capturedSections,
                                     data?.encounterDate,
-                                    data?.actualDescription
+                                    data?.actualDescription,
+                                    data?.diagnosisCode
                                   )}
                                 </div>
                                 {/* {data?.isMostSpecific == true ? (
@@ -4308,7 +4389,8 @@ const VisitData = ({}) => {
                                             {getCaptureSectionBackgroundFile(
                                               data?.capturedSections,
                                               data?.encounterDate,
-                                              data?.actualDescription
+                                              data?.actualDescription,
+                                              data?.diagnosisCode
                                             )}
                                           </div>
                                         )}
@@ -4457,7 +4539,8 @@ const VisitData = ({}) => {
                                     {getCaptureSectionBackgroundFile(
                                       data?.capturedSections,
                                       data?.encounterDate,
-                                      data?.actualDescription
+                                      data?.actualDescription,
+                                      data?.diagnosisCode
                                     )}
                                   </div>
                                 </div>

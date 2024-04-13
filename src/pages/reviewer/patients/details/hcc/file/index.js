@@ -1713,12 +1713,6 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
     actualDescription,
     diagnosisCode
   ) => {
-    // const datas = {
-    //   fileId: "985d13d8-4955-4d5d-9246-32cb0890f0de",
-    //   header: "problem list",
-    //   dos: "06/23/2016",
-    //   stringFileWord: "Coronary atheroscler",
-    // };
     setFileLoading(true);
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
@@ -4098,7 +4092,8 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                                         data.capturedSections,
                                         "Lab",
                                         data.encounterDate,
-                                        data.actualDescription
+                                        data.actualDescription,
+                                        data.diagnosisCode
                                       )}
                                     </div>
                                   ) : data.getPlace == "Radio" ||
@@ -4110,7 +4105,8 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                                         data.capturedSections,
                                         "Radio",
                                         data.encounterDate,
-                                        data.actualDescription
+                                        data.actualDescription,
+                                        data.AvatardiagnosisCode
                                       )}
                                     </div>
                                   ) : (
@@ -4120,7 +4116,8 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                                       {getCaptureSectionBackgroundFile(
                                         data?.capturedSections,
                                         data?.encounterDate,
-                                        data?.actualDescription
+                                        data?.actualDescription,
+                                        data?.diagnosisCode
                                       )}
                                     </div>
                                   )}
@@ -4312,7 +4309,8 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                               {getCaptureSectionBackgroundFile(
                                 data?.capturedSections,
                                 data?.encounterDate,
-                                data?.actualDescription
+                                data?.actualDescription,
+                                data?.diagnosisCode
                               )}
                             </div>
                           </div>
@@ -4772,7 +4770,8 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                                   {getCaptureSectionBackgroundFile(
                                     data?.capturedSections,
                                     data?.encounterDate,
-                                    data?.actualDescription
+                                    data?.actualDescription,
+                                    data?.diagnosisCode
                                   )}
                                 </div>
                                 {/* {data?.isMostSpecific == true ? (
@@ -5183,7 +5182,8 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                                               data.capturedSections,
                                               "Lab",
                                               data.encounterDate,
-                                              data.actualDescription
+                                              data.actualDescription,
+                                              data.diagnosisCode
                                             )}
                                           </div>
                                         ) : data.getPlace == "Radio" ? (
@@ -5194,7 +5194,8 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                                               data.capturedSections,
                                               "Radio",
                                               data.encounterDate,
-                                              data.actualDescription
+                                              data.actualDescription,
+                                              data.diagnosisCode
                                             )}
                                           </div>
                                         ) : (
@@ -5204,7 +5205,8 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                                             {getCaptureSectionBackgroundFile(
                                               data?.capturedSections,
                                               data?.encounterDate,
-                                              data?.actualDescription
+                                              data?.actualDescription,
+                                              data?.diagnosisCode
                                             )}
                                           </div>
                                         )}
@@ -5353,7 +5355,8 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                                     {getCaptureSectionBackgroundFile(
                                       data?.capturedSections,
                                       data?.encounterDate,
-                                      data?.actualDescription
+                                      data?.actualDescription,
+                                      data?.diagnosisCode
                                     )}
                                   </div>
                                 </div>
