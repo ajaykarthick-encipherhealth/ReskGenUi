@@ -1741,6 +1741,7 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
         pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
+        console.log(result, "testing");
         if (result == null) {
           splitPoint = splitPoint;
         }
@@ -1760,9 +1761,12 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
         setFileDosPageNumber(null);
       }
       setTargetPages(
-        (targetPage) =>
+        (targetPage) => {
           targetPage.pageIndex === pageNumber 
+        }
+          
       );
+      console.log(pageNumber, "testing");
       setFindFileKeyword(splitPoint);
       if (findFileKeyword == splitPoint) {
         setFileLoading(false);
