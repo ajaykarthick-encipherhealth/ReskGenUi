@@ -30,6 +30,8 @@ import {
 import Selector from "../../../components/selector";
 import { getFilters } from "../../../stores/authflow/actions";
 import AllocateModal from "./allocate";
+import { debounce } from "../../../components/input";
+import { useCallback } from "react";
 
 const { RangePicker } = DatePicker;
 const statusOption = [
@@ -187,8 +189,7 @@ export default function Patient() {
     setTableLoading(true);
   };
 
-  const getNameSearch = (search) => {
-    setSearchString(search);
+  const searchFunction = (search) => {
     if (activeTab == 1) {
       getAllList(
         pageNo,
@@ -207,6 +208,14 @@ export default function Patient() {
         getL2PatientList(l2selectUser, pageNoL2Patient, sort, search);
       }
     }
+  };
+  const debounceFunc = useCallback(
+    debounce((text) => searchFunction(text), 900),
+    []
+  );
+  const getNameSearch = (search) => {
+    setSearchString(search);
+    debounceFunc(search);
   };
 
   const handleOpneModal = () => {

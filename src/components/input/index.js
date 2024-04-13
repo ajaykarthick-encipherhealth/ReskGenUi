@@ -1,23 +1,38 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
+export const debounce = (func, delay) => {
+  let timeoutId;
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+};
+
 const InputField = ({
   isSearch,
   placeholder,
-  inputValue,
   setInputValue,
-  delay,
   type,
   isDisabled,
   isInputFiled,
 }) => {
+  const [inputStr, setInputStr] = useState("");
 
-const handleChange = (e) => {
-  const value = e.target.value;
-    setInputValue(value);
-};
+  const debounceFunc = useCallback(
+    debounce((text) => setInputValue(text), 900),
+    []
+  );
+
+  const handleChange = (event) => {
+    const text = event.target.value;
+    setInputStr(text);
+    debounceFunc(text);
+  };
   return (
     <div className="form-group has-search">
       {isSearch && (
@@ -28,12 +43,16 @@ const handleChange = (e) => {
       )}
       <InputText
         type={type}
-        value={inputValue}
+        value={inputStr}
         onChange={handleChange}
-        className={isInputFiled?"form-control new-inputform-control":"form-control new-form-control"}
+        className={
+          isInputFiled
+            ? "form-control new-inputform-control"
+            : "form-control new-form-control"
+        }
         placeholder={placeholder}
         maxLength={25}
-        disabled={isDisabled?true:false}
+        disabled={isDisabled ? true : false}
       />
     </div>
   );

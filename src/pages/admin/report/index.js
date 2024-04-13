@@ -36,7 +36,7 @@ const statusOptions = [
 
 const index = () => {
   const dispatch = useDispatch();
-  const route = useRouter()
+  const route = useRouter();
   const ExportResponse = useSelector((state) => state.adminReport?.exportRes);
 
   const ReportPatientDetails = useSelector(
@@ -255,22 +255,20 @@ const index = () => {
     const page = new URLSearchParams(window.location.search).get("page");
     const limit = new URLSearchParams(window.location.search).get("limit");
     if (reportActiveTab === "ReceivedReport" && page) {
-      setReceivedPageNo(page)
-      setPaginationReceivedFirst(limit)
+      setReceivedPageNo(page);
+      setPaginationReceivedFirst(limit);
     } else if (reportActiveTab === "SentReport" && page) {
-      setSentPageNo(page)
-      setPaginationSentFirst(limit)
-    } 
-  }, [reportActiveTab])
-
+      setSentPageNo(page);
+      setPaginationSentFirst(limit);
+    }
+  }, [reportActiveTab]);
 
   const backRender = () => {
-    const user = localStorage.getItem('userRole')
-    if (user == 'admin') {
-      route.push('/admin/report?page=0&limit=0')
+    const user = localStorage.getItem("userRole");
+    if (user == "admin") {
+      route.push("/admin/report?page=0&limit=0");
     }
-  }
-
+  };
   return (
     <>
       <Header />
@@ -320,7 +318,10 @@ const index = () => {
                             defaultSelectValue2={selectedCoderOptReport}
                             // selector3
                             isSelector3={
-                              selectUserList?.data?.response?.length
+                              (!reportActiveTab ||
+                                reportActiveTab === "CoderReport") &&
+                              selectUserList?.data?.response?.length &&
+                              selectedCoderOptReport?.label !== "All"
                                 ? true
                                 : false
                             }
@@ -391,7 +392,7 @@ const index = () => {
                                     className="nav-item"
                                     onClick={() => {
                                       handleTabs("CoderReport");
-                                      backRender()
+                                      backRender();
                                     }}
                                   >
                                     <Nav.Link
@@ -406,7 +407,7 @@ const index = () => {
                                     className="nav-item"
                                     onClick={() => {
                                       handleTabs("SentReport");
-                                      backRender()
+                                      backRender();
                                     }}
                                   >
                                     <Nav.Link
@@ -421,7 +422,7 @@ const index = () => {
                                     className="nav-item"
                                     onClick={() => {
                                       handleTabs("ReceivedReport");
-                                      backRender()
+                                      backRender();
                                     }}
                                   >
                                     <Nav.Link

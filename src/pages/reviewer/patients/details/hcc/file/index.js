@@ -3362,7 +3362,7 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                               trigger="click"
                             >
                               <Tooltip
-                                title="HCC Veriosn Details"
+                                title="HCC Version Details"
                                 placement="bottom"
                               >
                                 <i className="cr-pointer">{SVGICON.infoIcon}</i>
@@ -4246,7 +4246,7 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                               trigger="click"
                             >
                               <Tooltip
-                                title="HCC Veriosn Details"
+                                title="HCC Version Details"
                                 placement="bottom"
                               >
                                 <i>{SVGICON.infoIcon}</i>
@@ -4693,7 +4693,7 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                                   trigger="click"
                                 >
                                   <Tooltip
-                                    title="HCC Veriosn Details"
+                                    title="HCC Version Details"
                                     placement="bottom"
                                   >
                                     <i className="cr-pointer">
@@ -5286,7 +5286,7 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                                     trigger="click"
                                   >
                                     <Tooltip
-                                      title="HCC Veriosn Details"
+                                      title="HCC Version Details"
                                       placement="bottom"
                                     >
                                       <i>{SVGICON.infoIcon}</i>
