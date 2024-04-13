@@ -1639,35 +1639,110 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
     }
   };
 
+  // const findValueDocument = async (
+  //   value,
+  //   disDescription,
+  //   headerNames,
+  //   encounterDate,
+  //   actualDescription
+  // ) => {
+  //   setFileLoading(true);
+  //   var fileId = patientFileDTO.fileId;
+  //   const encounterDatesValue = encounterDate.split(",");
+  //   const encounterDatesHeader = encounterDatesValue[0];
+  //   var splitPoint = actualDescription.substring(" ", 20);
+  //   var pageNumber = null;
+  //   var data = {
+  //     fileId: fileId,
+  //     header: headerNames,
+  //     dos: encounterDatesHeader,
+  //     stringFileWord: splitPoint,
+  //   };
+  //   try {
+  //     const response = await axios.post(
+  //       ENDPOINTS.apiEndoint + `dbservice/pageNumber`,
+  //       data
+  //     );
+  //     var result = response.data.response;
+  //     if (response?.data?.status == "SUCCESS") {
+  //       pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
+  //       if (result?.first == false) {
+  //         splitPoint = headerNames;
+  //       }
+  //       if (pageNumber == fileInitialPage) {
+  //         setFileLoading(false);
+  //         notification.warning({
+  //           message: "This detail also same page",
+  //           placement: "top",
+  //           duration: 1,
+  //         });
+  //       }
+  //       setFileInitialPage(pageNumber);
+  //       setFileDosPageNumber(pageNumber);
+  //     } else {
+  //       splitPoint = headerNames;
+  //       setFileInitialPage(null);
+  //       setFileDosPageNumber(null);
+  //     }
+  //     setTargetPages(
+  //       (targetPage) =>
+  //         targetPage.pageIndex === pageNumber ||
+  //         targetPage.pageIndex === pageNumber + 1 ||
+  //         targetPage.pageIndex === pageNumber + 2
+  //     );
+  //     setFindFileKeyword(splitPoint);
+  //     if (findFileKeyword == splitPoint) {
+  //       setFileLoading(false);
+  //     }
+  //   } catch (error) {
+  //     splitPoint = headerNames;
+  //     if (findFileKeyword == headerNames) {
+  //       setFileLoading(false);
+  //     }
+  //     setFindFileKeyword(splitPoint);
+  //     setFileInitialPage(null);
+  //     setFileDosPageNumber(null);
+  //   }
+  // };
+
   const findValueDocument = async (
     value,
     disDescription,
     headerNames,
     encounterDate,
-    actualDescription
+    actualDescription,
+    diagnosisCode
   ) => {
+    // const datas = {
+    //   fileId: "985d13d8-4955-4d5d-9246-32cb0890f0de",
+    //   header: "problem list",
+    //   dos: "06/23/2016",
+    //   stringFileWord: "Coronary atheroscler",
+    // };
     setFileLoading(true);
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
     var splitPoint = actualDescription.substring(" ", 20);
+    console.log(patientFileDTO, diagnosisCode);
     var pageNumber = null;
     var data = {
       fileId: fileId,
       header: headerNames,
       dos: encounterDatesHeader,
       stringFileWord: splitPoint,
+      diagnosisCode: diagnosisCode
     };
     try {
       const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/pageNumber`,
+        ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
         data
       );
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
-        pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
-        if (result?.first == false) {
-          splitPoint = headerNames;
+        pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
+        if (result == null) {
+          splitPoint = splitPoint;
         }
         if (pageNumber == fileInitialPage) {
           setFileLoading(false);
@@ -1686,9 +1761,7 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
       }
       setTargetPages(
         (targetPage) =>
-          targetPage.pageIndex === pageNumber ||
-          targetPage.pageIndex === pageNumber + 1 ||
-          targetPage.pageIndex === pageNumber + 2
+          targetPage.pageIndex === pageNumber 
       );
       setFindFileKeyword(splitPoint);
       if (findFileKeyword == splitPoint) {
@@ -1704,6 +1777,7 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
       setFileDosPageNumber(null);
     }
   };
+
   const handleOpenModalCombinationCode = async (
     value,
     disDescription,
@@ -2413,7 +2487,8 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
   const getCaptureSectionBackgroundFile = (
     value,
     encounterDate,
-    actualDescription
+    actualDescription,
+    diagnosisCode
   ) => {
     // getSectionTagColor(value);
     var dublicateCaptureDelete = removeDuplicates(value);
@@ -2433,7 +2508,8 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
               res,
               headerNames,
               encounterDate,
-              actualDescription
+              actualDescription,
+              diagnosisCode
             )
           }
           style={{ backgroundColor: backColor, color: textColor }}
@@ -2943,8 +3019,12 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
       const result = captureSectionMatching.filter(
         (res2) => res2.sectionName == res
       );
-      var backColor = result[0]?.backgroundColor == "#efeff033" ? "#54548d33" : result[0]?.backgroundColor ;
-      var textColor = result[0]?.sectionColor == "#efeff0" ? "#000" : result[0]?.sectionColor;
+      var backColor =
+        result[0]?.backgroundColor == "#efeff033"
+          ? "#54548d33"
+          : result[0]?.backgroundColor;
+      var textColor =
+        result[0]?.sectionColor == "#efeff0" ? "#000" : result[0]?.sectionColor;
       var value = ["09/19/2023"];
       var sectionMapArr = (
         // <Popover
@@ -3368,7 +3448,8 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                               {getCaptureSectionBackgroundFile(
                                 data?.capturedSections,
                                 data?.encounterDate,
-                                data?.actualDescription
+                                data?.actualDescription,
+                                data?.diagnosisCode
                               )}
                             </div>
                             {/* {data?.isMostSpecific == true ? (
@@ -3816,7 +3897,7 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                           <li>
                             <div
                               className={`hccActiveCard ${visitStyles.hcc_card}`}
-                            > 
+                            >
                               <div
                                 className={`${visitStyles.hcc_card_nameHead}`}
                               >
@@ -3966,134 +4047,134 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                                   </div>
                                 )}
                               </div>
-                              <div className={`${visitStyles.hoverActiveHcc} d-flex justify-content-between`}>
+                              <div
+                                className={`${visitStyles.hoverActiveHcc} d-flex justify-content-between`}
+                              >
                                 <div>
-                                <div className="">
-                                  <div
-                                    className={`${visitStyles.encounterAndSectionHeader}`}
-                                  >
-                                    {getProviderNameList(data?.providerName)}
+                                  <div className="">
+                                    <div
+                                      className={`${visitStyles.encounterAndSectionHeader}`}
+                                    >
+                                      {getProviderNameList(data?.providerName)}
+                                    </div>
+                                    <div
+                                      className={`${visitStyles.encounterAndSectionHeader}`}
+                                    >
+                                      {getEncounterDateBackground(
+                                        data.encounterDateSplit
+                                      )}
+                                    </div>
+                                    {data.getPlace == "Lab" ? (
+                                      <Tooltip title="LAB">
+                                        <span
+                                          className={` mt-2 ${visitStyles.labStatus}`}
+                                          bg={`  mt-2 bg-bg-seven `}
+                                        >
+                                          Lab
+                                        </span>
+                                      </Tooltip>
+                                    ) : data.getPlace == "Radio" ? (
+                                      <Tooltip title="RADIOLOGY">
+                                        <span
+                                          className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                          bg={`  mt-2 bg-bg-eight `}
+                                        >
+                                          Radiology
+                                        </span>
+                                      </Tooltip>
+                                    ) : null}
                                   </div>
-                                  <div
-                                    className={`${visitStyles.encounterAndSectionHeader}`}
-                                  >
-                                    {getEncounterDateBackground(
-                                      data.encounterDateSplit
-                                    )}
-                                  </div>
+
                                   {data.getPlace == "Lab" ? (
-                                    <Tooltip title="LAB">
-                                      <span
-                                        className={` mt-2 ${visitStyles.labStatus}`}
-                                        bg={`  mt-2 bg-bg-seven `}
+                                    <div
+                                      className={`${visitStyles.encounterAndSectionHeader}`}
+                                    >
+                                      {getCaptureSectionBackground(
+                                        data.capturedSections,
+                                        "Lab",
+                                        data.encounterDate,
+                                        data.actualDescription
+                                      )}
+                                    </div>
+                                  ) : data.getPlace == "Radio" ||
+                                    data.getPlace == "Radio-combo" ? (
+                                    <div
+                                      className={`${visitStyles.encounterAndSectionHeader}`}
+                                    >
+                                      {getCaptureSectionBackground(
+                                        data.capturedSections,
+                                        "Radio",
+                                        data.encounterDate,
+                                        data.actualDescription
+                                      )}
+                                    </div>
+                                  ) : (
+                                    <div
+                                      className={`${visitStyles.encounterAndSectionHeader}`}
+                                    >
+                                      {getCaptureSectionBackgroundFile(
+                                        data?.capturedSections,
+                                        data?.encounterDate,
+                                        data?.actualDescription
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                                <div
+                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                >
+                                  <div className={styles.meatFoundContainer}>
+                                    <div>
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "M"
+                                      )}
+                                    </div>
+                                    <div>
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "E"
+                                      )}
+                                    </div>
+                                    <div>
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "A"
+                                      )}
+                                    </div>
+                                    <div>
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "T"
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div
+                                    className={`${visitStyles.encounterAndSectionHeader}`}
+                                  >
+                                    {data.isManuallyAdded == true ? (
+                                      <Badge
+                                        className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
                                       >
-                                        Lab
-                                      </span>
-                                    </Tooltip>
-                                  ) : data.getPlace == "Radio" ? (
-                                    <Tooltip title="RADIOLOGY">
-                                      <span
-                                        className={` mt-2 ${visitStyles.radiologyStatus}`}
-                                        bg={`  mt-2 bg-bg-eight `}
-                                      >
-                                        Radiology
-                                      </span>
-                                    </Tooltip>
+                                        Manually Added
+                                      </Badge>
+                                    ) : null}
+                                  </div>
+                                  {data.getPlace == "Insulin" ? (
+                                    <span
+                                      className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                      bg={`  mt-2 bg-bg-eight `}
+                                    >
+                                      Insulin
+                                    </span>
                                   ) : null}
                                 </div>
-
-                                {data.getPlace == "Lab" ? (
-                                  <div
-                                    className={`${visitStyles.encounterAndSectionHeader}`}
-                                  >
-                                    {getCaptureSectionBackground(
-                                      data.capturedSections,
-                                      "Lab",
-                                      data.encounterDate,
-                                      data.actualDescription
-                                    )}
-                                  </div>
-                                ) : data.getPlace == "Radio" ||
-                                  data.getPlace == "Radio-combo" ? (
-                                  <div
-                                    className={`${visitStyles.encounterAndSectionHeader}`}
-                                  >
-                                    {getCaptureSectionBackground(
-                                      data.capturedSections,
-                                      "Radio",
-                                      data.encounterDate,
-                                      data.actualDescription
-                                    )}
-                                  </div>
-                                ) : (
-                                  <div
-                                    className={`${visitStyles.encounterAndSectionHeader}`}
-                                  >
-                                    {getCaptureSectionBackgroundFile(
-                                      data?.capturedSections,
-                                      data?.encounterDate,
-                                      data?.actualDescription
-                                    )}
-                                  </div>
-                                )}
-                              </div>
-                              <div
-                            className={`${visitStyles.encounterAndSectionHeader}`}
-                          >
-                            <div className={styles.meatFoundContainer}>
-                              <div>
-                                {getMeatFound(
-                                  data?.diagnosisCode,
-                                  meatCriteriaList,
-                                  "M"
-                                )}
-                              </div>
-                              <div>
-                                {getMeatFound(
-                                  data?.diagnosisCode,
-                                  meatCriteriaList,
-                                  "E"
-                                )}
-                              </div>
-                              <div>
-                                {getMeatFound(
-                                  data?.diagnosisCode,
-                                  meatCriteriaList,
-                                  "A"
-                                )}
-                              </div>
-                              <div>
-                                {getMeatFound(
-                                  data?.diagnosisCode,
-                                  meatCriteriaList,
-                                  "T"
-                                )}
                               </div>
                             </div>
-                            <div
-                              className={`${visitStyles.encounterAndSectionHeader}`}
-                            >
-                              {data.isManuallyAdded == true ? (
-                                <Badge
-                                  className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
-                                >
-                                  Manually Added
-                                </Badge>
-                              ) : null}
-                            </div>
-                            {data.getPlace == "Insulin" ? (
-                              <span
-                                className={` mt-2 ${visitStyles.radiologyStatus}`}
-                                bg={`  mt-2 bg-bg-eight `}
-                              >
-                                Insulin
-                              </span>
-                            ) : null}
-                          </div>
-                              </div>
-                            
-                            </div>
-                            
                           </li>
                         </>
                       );
@@ -5123,7 +5204,6 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                                           </div>
                                         )}
                                       </div>
-                                     
                                     </div>
                                   </li>
                                 ) : null}
