@@ -1723,14 +1723,13 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
-    var splitPoint = actualDescription.substring(" ", 20);
-    console.log(patientFileDTO, diagnosisCode);
+    var splitPoint;
     var pageNumber = null;
     var data = {
       fileId: fileId,
       header: headerNames,
       dos: encounterDatesHeader,
-      stringFileWord: splitPoint,
+      stringFileWord: actualDescription.substring(" ", 20),
       diagnosisCode: diagnosisCode,
     };
     try {
@@ -1741,7 +1740,7 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
         pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
-        console.log(result, "testing");
+        splitPoint = result?.searchString
         if (result == null) {
            return findValueDocuments(
             value,
@@ -1769,7 +1768,6 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
       setTargetPages((targetPage) => {
         targetPage.pageIndex === pageNumber;
       });
-      console.log(pageNumber, "testing");
       setFindFileKeyword(splitPoint);
       if (findFileKeyword == splitPoint) {
         setFileLoading(false);
