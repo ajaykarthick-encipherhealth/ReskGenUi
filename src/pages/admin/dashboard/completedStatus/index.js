@@ -219,14 +219,15 @@ const CompletedStatus = () => {
                   value={
                     selectMemberType?.length === 0 ? "All" : selectMemberType
                   }
-                  // placeholder="Select User Type"
                   onChange={(e) => memberTypeChanges(e)}
                   className={`custom_select_type ${styles.custom_select_type}`}
                   options={options}
                   style={{ backgroundColor: "#F3F3FF", width: "140px" }}
                 />
               </div>
-              {isindividual ? (
+              {isindividual && selectMemberType?.length === 0 ? (
+                ""
+              ) : selectMemberType ? (
                 <div className={styles.select}>
                   <Select
                     showSearch
@@ -239,6 +240,7 @@ const CompletedStatus = () => {
                 </div>
               ) : null}
             </div>
+
             <div className={styles.picker}>
               <YearPicker
                 onChangeYear={handleYearChange}
