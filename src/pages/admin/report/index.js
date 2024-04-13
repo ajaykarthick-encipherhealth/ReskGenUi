@@ -269,7 +269,6 @@ const index = () => {
       route.push("/admin/report?page=0&limit=0");
     }
   };
-
   return (
     <>
       <Header />
@@ -319,8 +318,10 @@ const index = () => {
                             defaultSelectValue2={selectedCoderOptReport}
                             // selector3
                             isSelector3={
-                              reportActiveTab === "CoderReport" &&
-                              selectUserList?.data?.response?.length
+                              (!reportActiveTab ||
+                                reportActiveTab === "CoderReport") &&
+                              selectUserList?.data?.response?.length &&
+                              selectedCoderOptReport?.label !== "All"
                                 ? true
                                 : false
                             }
