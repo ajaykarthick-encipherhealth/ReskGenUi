@@ -14407,3 +14407,6 @@ input[type="number"] {
   font-size: 10px !important;
 }
 
+.visitdata-modalCentent .ant-modal-content{
+width:700px !important;
+}
