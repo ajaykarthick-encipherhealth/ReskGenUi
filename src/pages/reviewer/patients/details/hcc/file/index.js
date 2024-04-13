@@ -1639,71 +1639,71 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
     }
   };
 
-  // const findValueDocument = async (
-  //   value,
-  //   disDescription,
-  //   headerNames,
-  //   encounterDate,
-  //   actualDescription
-  // ) => {
-  //   setFileLoading(true);
-  //   var fileId = patientFileDTO.fileId;
-  //   const encounterDatesValue = encounterDate.split(",");
-  //   const encounterDatesHeader = encounterDatesValue[0];
-  //   var splitPoint = actualDescription.substring(" ", 20);
-  //   var pageNumber = null;
-  //   var data = {
-  //     fileId: fileId,
-  //     header: headerNames,
-  //     dos: encounterDatesHeader,
-  //     stringFileWord: splitPoint,
-  //   };
-  //   try {
-  //     const response = await axios.post(
-  //       ENDPOINTS.apiEndoint + `dbservice/pageNumber`,
-  //       data
-  //     );
-  //     var result = response.data.response;
-  //     if (response?.data?.status == "SUCCESS") {
-  //       pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
-  //       if (result?.first == false) {
-  //         splitPoint = headerNames;
-  //       }
-  //       if (pageNumber == fileInitialPage) {
-  //         setFileLoading(false);
-  //         notification.warning({
-  //           message: "This detail also same page",
-  //           placement: "top",
-  //           duration: 1,
-  //         });
-  //       }
-  //       setFileInitialPage(pageNumber);
-  //       setFileDosPageNumber(pageNumber);
-  //     } else {
-  //       splitPoint = headerNames;
-  //       setFileInitialPage(null);
-  //       setFileDosPageNumber(null);
-  //     }
-  //     setTargetPages(
-  //       (targetPage) =>
-  //         targetPage.pageIndex === pageNumber ||
-  //         targetPage.pageIndex === pageNumber + 1 ||
-  //         targetPage.pageIndex === pageNumber + 2
-  //     );
-  //     setFindFileKeyword(splitPoint);
-  //     if (findFileKeyword == splitPoint) {
-  //       setFileLoading(false);
-  //     }
-  //   } catch (error) {
-  //     splitPoint = headerNames;
-  //     if (findFileKeyword == headerNames) {
-  //       setFileLoading(false);
-  //     }
-  //     setFindFileKeyword(splitPoint);
-  //     setFileInitialPage(null);
-  //     setFileDosPageNumber(null);
-  //   }
-  // };
+  const findValueDocuments = async (
+    value,
+    disDescription,
+    headerNames,
+    encounterDate,
+    actualDescription
+  ) => {
+    setFileLoading(true);
+    var fileId = patientFileDTO.fileId;
+    const encounterDatesValue = encounterDate.split(",");
+    const encounterDatesHeader = encounterDatesValue[0];
+    var splitPoint = actualDescription.substring(" ", 20);
+    var pageNumber = null;
+    var data = {
+      fileId: fileId,
+      header: headerNames,
+      dos: encounterDatesHeader,
+      stringFileWord: splitPoint,
+    };
+    try {
+      const response = await axios.post(
+        ENDPOINTS.apiEndoint + `dbservice/pageNumber`,
+        data
+      );
+      var result = response.data.response;
+      if (response?.data?.status == "SUCCESS") {
+        pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
+        if (result?.first == false) {
+          splitPoint = headerNames;
+        }
+        if (pageNumber == fileInitialPage) {
+          setFileLoading(false);
+          notification.warning({
+            message: "This detail also same page",
+            placement: "top",
+            duration: 1,
+          });
+        }
+        setFileInitialPage(pageNumber);
+        setFileDosPageNumber(pageNumber);
+      } else {
+        splitPoint = headerNames;
+        setFileInitialPage(null);
+        setFileDosPageNumber(null);
+      }
+      setTargetPages(
+        (targetPage) =>
+          targetPage.pageIndex === pageNumber ||
+          targetPage.pageIndex === pageNumber + 1 ||
+          targetPage.pageIndex === pageNumber + 2
+      );
+      setFindFileKeyword(splitPoint);
+      if (findFileKeyword == splitPoint) {
+        setFileLoading(false);
+      }
+    } catch (error) {
+      splitPoint = headerNames;
+      if (findFileKeyword == headerNames) {
+        setFileLoading(false);
+      }
+      setFindFileKeyword(splitPoint);
+      setFileInitialPage(null);
+      setFileDosPageNumber(null);
+    }
+  };
 
   const findValueDocument = async (
     value,
@@ -1731,7 +1731,7 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
       header: headerNames,
       dos: encounterDatesHeader,
       stringFileWord: splitPoint,
-      diagnosisCode: diagnosisCode
+      diagnosisCode: diagnosisCode,
     };
     try {
       const response = await axios.post(
@@ -1743,7 +1743,13 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
         pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
         console.log(result, "testing");
         if (result == null) {
-          splitPoint = splitPoint;
+           return findValueDocuments(
+            value,
+            disDescription,
+            headerNames,
+            encounterDate,
+            actualDescription
+          );
         }
         if (pageNumber == fileInitialPage) {
           setFileLoading(false);
@@ -1760,12 +1766,9 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
         setFileInitialPage(null);
         setFileDosPageNumber(null);
       }
-      setTargetPages(
-        (targetPage) => {
-          targetPage.pageIndex === pageNumber 
-        }
-          
-      );
+      setTargetPages((targetPage) => {
+        targetPage.pageIndex === pageNumber;
+      });
       console.log(pageNumber, "testing");
       setFindFileKeyword(splitPoint);
       if (findFileKeyword == splitPoint) {
