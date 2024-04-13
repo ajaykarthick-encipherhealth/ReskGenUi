@@ -450,7 +450,7 @@ const AddMeatQuery = ({
         onOk={handleCloseModal}
         onCancel={()=>setMeatQueriedDetailsModal(false)}
         footer={null}
-        className="meat-queriedmodal"
+        className="meat-queriedmodal visitdata-modalCentent"
       >
         <div className="offcanvas-body">
           <div className="container-fluid">

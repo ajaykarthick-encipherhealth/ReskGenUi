@@ -796,9 +796,10 @@ const MeatQuery = ({}) => {
         onOk={handleCloseModal}
         onCancel={handleCloseModal}
         footer={null}
-        className="meat-queriedmodal"
+        className="meat-queriedmodal visitdata-modalCentent"
+       
       >
-        <div className="offcanvas-body">
+        <div className="offcanvas-body"  style={{width:"auto"}}>
           <div className="container-fluid">
             <div className={styles.meatCommentCard}>
               <div className={styles.meatCommentCard2}>
