@@ -3,6 +3,16 @@ import { InputText } from "primereact/inputtext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
+export const debounce = (func, delay) => {
+  let timeoutId;
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+};
+
 const InputField = ({
   isSearch,
   placeholder,
@@ -11,17 +21,8 @@ const InputField = ({
   isDisabled,
   isInputFiled,
 }) => {
-   const [inputStr,setInputStr]=useState("")
-  const debounce = (func, delay) => {
-    let timeoutId;
-    return function(...args) {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        func.apply(this, args);
-      }, delay);
-    };
-  };
-  
+  const [inputStr, setInputStr] = useState("");
+
   const debounceFunc = useCallback(
     debounce((text) => setInputValue(text), 900),
     []
@@ -29,7 +30,7 @@ const InputField = ({
 
   const handleChange = (event) => {
     const text = event.target.value;
-    setInputStr(text)
+    setInputStr(text);
     debounceFunc(text);
   };
   return (

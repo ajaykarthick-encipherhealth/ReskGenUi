@@ -94,11 +94,12 @@ export const checkBoxData = [
 ];
 
 export const debounce = (func, delay) => {
-  let timer;
+  let timeoutId;
   return function (...args) {
-    const context = this;
-    clearTimeout(timer);
-    timer = setTimeout(() => func.apply(context, args), delay);
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
   };
 };
 const Export = ({
@@ -273,11 +274,7 @@ const Export = ({
     >
       <Form form={form} name="basic" onFinish={onFinish}>
         <Form.Item
-          label={
-            <div className={styles.fields}>
-              Report Name
-            </div>
-          }
+          label={<div className={styles.fields}>Report Name</div>}
           name="ReportName"
           rules={[
             {
@@ -300,11 +297,7 @@ const Export = ({
         {!isSent && (
           <>
             <Form.Item
-              label={
-                <div className={styles.fields}>
-                  Report Type
-                </div>
-              }
+              label={<div className={styles.fields}>Report Type</div>}
               name="ReportTYpe"
               rules={[
                 {
@@ -324,11 +317,7 @@ const Export = ({
             </Form.Item>
 
             <Form.Item
-              label={
-                <div className={styles.fields}>
-                  Report Fields
-                </div>
-              }
+              label={<div className={styles.fields}>Report Fields</div>}
               name="ReportFields"
               rules={[
                 {
@@ -390,11 +379,7 @@ const Export = ({
         <div style={{ display: "flex", marginBottom: "20px" }}>
           <div style={{ width: "100%" }}>
             <Form.Item
-              label={
-                <div className={styles.fields}>
-                  Send To
-                </div>
-              }
+              label={<div className={styles.fields}>Send To</div>}
               name="User"
               required
               rules={[

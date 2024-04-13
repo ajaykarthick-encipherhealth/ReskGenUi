@@ -2,7 +2,7 @@ import styles from "./report.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { Tab, Nav } from "react-bootstrap";
 import Select from "react-select";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Modal, DatePicker, Tooltip } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -101,7 +101,10 @@ const Index = () => {
       setCoderSearch(value);
     }
   };
-  const debouncedSearch = debounce(performanceSearch, 500);
+  const debouncedSearch = useCallback(
+    debounce((text) => performanceSearch(text), 900),
+    []
+  );
 
   const filterChangePatientId = (event) => {
     const value = event.target.value;
