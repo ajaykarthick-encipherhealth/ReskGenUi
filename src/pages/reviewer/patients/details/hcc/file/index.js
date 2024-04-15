@@ -6,7 +6,6 @@ import visitStyles from "../../../../../../styles/visitdata.module.css";
 import { InputText } from "primereact/inputtext";
 import { Viewer, Worker, ProgressBar } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
-import { searchPlugin } from "@react-pdf-viewer/search";
 import moment, { months } from "moment";
 import "react-vertical-timeline-component/style.min.css";
 import { highlightPlugin } from "@react-pdf-viewer/highlight";
@@ -105,9 +104,8 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
     (state) => state?.ReviewerReducers.dosPageNumberList
   );
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
-  // const { toolbarPluginInstance } = defaultLayoutPluginInstance;
-  const searchPluginInstance = searchPlugin();
-  // const { searchPluginInstance } = toolbarPluginInstance;
+  const { toolbarPluginInstance } = defaultLayoutPluginInstance;
+  const { searchPluginInstance } = toolbarPluginInstance;
   const { highlight } = searchPluginInstance;
   const { setTargetPages } = searchPluginInstance;
 
@@ -479,7 +477,6 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
 
   useEffect(() => {
     setDocumentLoaded(true);
-    console.log(fileInitialPage)
     if (findFileKeyword) {
       setTimeout(() => {
         setFileModalHeader(fileModalTitle);
@@ -3577,16 +3574,14 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                   <Viewer
                     fileUrl={selectFileURL}
                     initialPage={fileInitialPage}
-                    plugins={[defaultLayoutPluginInstance,searchPluginInstance]}
+                    plugins={[defaultLayoutPluginInstance]}
                     onDocumentLoad={handleDocumentLoadFile}
                     renderLoader={(percentages) => (
                       <div style={{ width: "240px" }}>
                         <ProgressBar progress={Math.round(percentages)} />
                       </div>
                     )}
-                    renderMode="canvas"
-                    />
-                   
+                  />
                 </div>
               </Worker>
             ) : null}
