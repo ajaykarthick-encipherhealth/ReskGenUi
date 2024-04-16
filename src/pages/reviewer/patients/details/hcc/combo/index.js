@@ -492,7 +492,7 @@ const Combo = ({}) => {
     var data = {
       fileId: fileId,
       header: headerNames,
-      dos: encounterDatesHeader,
+      dos: encounterDatesValue,
       stringFileWord: actualDescription.substring(" ", 20),
       diagnosisCode: diagnosisCode,
     };

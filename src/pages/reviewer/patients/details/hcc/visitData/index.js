@@ -1291,7 +1291,7 @@ const VisitData = ({}) => {
     var data = {
       fileId: fileId,
       header: headerNames,
-      dos: encounterDatesHeader,
+      dos: encounterDatesValue,
       stringFileWord: splitPoint,
     };
     try {
@@ -1358,7 +1358,7 @@ const VisitData = ({}) => {
     var data = {
       fileId: fileId,
       header: headerNames,
-      dos: encounterDatesHeader,
+      dos: encounterDatesValue,
       stringFileWord: actualDescription.substring(" ", 20),
       diagnosisCode: diagnosisCode,
     };
@@ -1481,7 +1481,7 @@ const VisitData = ({}) => {
         var data = {
           fileId:fileId,
           header: headerNames,
-          dos:encounterDatesHeader,
+          dos:encounterDatesValue,
           stringFileWord:splitPoint      
         }
         try {
@@ -1652,7 +1652,7 @@ const VisitData = ({}) => {
         var data = {
           fileId: fileId,
           header: headerNames,
-          dos: encounterDatesHeader,
+          dos: encounterDatesValue,
           stringFileWord: actualDescription.substring(" ", 20),
           diagnosisCode: value,
         };
