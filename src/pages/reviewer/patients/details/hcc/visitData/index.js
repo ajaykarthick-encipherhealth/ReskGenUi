@@ -3053,15 +3053,13 @@ const VisitData = ({}) => {
                                   {data.diagnosisCode}
                                 </span>{" "}
                                 <Popover
-                                  content={data.actualDescription}
+                                  content={data.dbDescription ? data.dbDescription : data.actualDescription}
                                   title=""
                                   trigger="hover"
                                 >
-                                  {data?.isMostSpecific != true ? (
-                                    <>- {data.actualDescription} </>
-                                  ) : (
-                                    <> - {data.dbDescription}</>
-                                  )}
+                                
+                                    <> - {data.dbDescription ? data.dbDescription : data.actualDescription}</>
+                                 
                                 </Popover>
                               </span>
                             </div>
@@ -3291,11 +3289,11 @@ const VisitData = ({}) => {
                                         {data.diagnosisCode}
                                       </span>{" "}
                                       <Popover
-                                        content={data.actualDescription}
+                                        content={data.dbDescription ? data.dbDescription : data.actualDescription}
                                         title=""
                                         trigger="hover"
                                       >
-                                        - {data.actualDescription}
+                                        - {data.dbDescription ? data.dbDescription : data.actualDescription}
                                       </Popover>
                                     </span>
                                   </div>
@@ -4045,15 +4043,13 @@ const VisitData = ({}) => {
                                       {data.diagnosisCode}
                                     </span>{" "}
                                     <Popover
-                                      content={data.actualDescription}
+                                      content={data.dbDescription ? data.dbDescription : data.actualDescription}
                                       title=""
                                       trigger="hover"
                                     >
-                                      {data?.isMostSpecific != true ? (
-                                        <>- {data.actualDescription} </>
-                                      ) : (
-                                        <> - {data.dbDescription}</>
-                                      )}
+                                    
+                                        <> - {data.dbDescription ? data.dbDescription : data.actualDescription}</>
+                                   
                                     </Popover>
                                   </span>
                                 </div>
@@ -4400,11 +4396,11 @@ const VisitData = ({}) => {
                                               {data.diagnosisCode}
                                             </span>{" "}
                                             <Popover
-                                              content={data.actualDescription}
+                                              content={data.dbDescription ? data.dbDescription : data.actualDescription}
                                               title=""
                                               trigger="hover"
                                             >
-                                              - {data.actualDescription}
+                                              - {data.dbDescription ? data.dbDescription : data.actualDescriptionn}
                                             </Popover>
                                           </span>
                                         </div>
@@ -4645,11 +4641,11 @@ const VisitData = ({}) => {
                                         {data.diagnosisCode}
                                       </span>{" "}
                                       <Popover
-                                        content={data.actualDescription}
+                                        content={data.dbDescription ? data.dbDescription : data.actualDescription}
                                         title=""
                                         trigger="hover"
                                       >
-                                        - {data.actualDescription}
+                                        - {data.dbDescription ? data.dbDescription : data.actualDescription}
                                       </Popover>
                                     </span>
                                   </div>
