@@ -545,7 +545,7 @@ const Combo = ({}) => {
       setFileInitialPage(null);
     }
   };
-  const handleOpenModalCombinationCode = async (
+  const handleOpenModalCombinationCodeOld = async (
     value,
     disDescription,
     check,
@@ -610,6 +610,101 @@ const Combo = ({}) => {
         dataset;
       setFileModalTitle(headerName);
       setDocumentLoaded(true);
+    } catch (error) {
+      splitPoint = headerNames;
+      if (findFileKeyword == headerNames) {
+        setFileLoading(false);
+      }
+      setFindFileKeyword(splitPoint);
+      setFileInitialPage(null);
+    }
+  };
+  const handleOpenModalCombinationCode = async (
+    value,
+    disDescription,
+    check,
+    whereCome,
+    documentPlace,
+    encounterDate,
+    headerNames,
+    actualDescription,
+    testModal
+  ) => {
+    setFileLoading(true);
+    setDocumentLoaded(false);
+    var dataset = value + " - (" + disDescription + ")";
+    setSelectMeatName(dataset + " -  " + "Loading...");
+    var dotLoading = (
+      <div className={visitStyles.loadingFileHeader}>
+        <Spinner />
+      </div>
+    );
+    var headerName = dotLoading;
+    setFileModalHeader(headerName);
+    setIsModalOpenCaptureSection(true);
+    var fileId = patientFileDTO.fileId;
+    const encounterDatesValue = encounterDate.split(",");
+    const encounterDatesHeader = encounterDatesValue[0];
+    var splitPoint = "";
+    var pageNumber = null;
+    splitPoint = actualDescription.substring(" ", 20);
+    var data = {
+      fileId: fileId,
+      header: headerNames,
+      dos: encounterDatesHeader,
+      stringFileWord: actualDescription.substring(" ", 20),
+      diagnosisCode: value,
+    };
+    try {
+      const response = await axios.post(
+        ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
+        data
+      );
+      var result = response.data.response;
+      if (response?.data?.status == "SUCCESS") {
+        pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
+        splitPoint = result?.searchString
+        if (result == null) {
+           return handleOpenModalCombinationCodeOld(
+            value,
+            disDescription,
+            check,
+            whereCome,
+            documentPlace,
+            encounterDate,
+            headerNames,
+            actualDescription,
+            testModal
+          );
+        }
+        if (pageNumber == fileInitialPage) {
+          setFileLoading(false);
+          notification.warning({
+            message: "This detail also same page",
+            placement: "top",
+            duration: 1,
+          });
+        }
+        setFileInitialPage(pageNumber);
+      var headerName =
+        patientDocumentResult.patientId +
+        " / " +
+        patientDocumentResult.patientName +
+        " / " +
+        dataset;
+        // setFileModalHeader(headerName);
+        setFileModalTitle(headerName);
+      } else {
+        splitPoint = headerNames;
+        setFileInitialPage(null);
+      }
+      setTargetPages((targetPage) => {
+        targetPage.pageIndex === pageNumber;
+      });
+      setFindFileKeyword(splitPoint);
+      if (findFileKeyword == splitPoint) {
+        setFileLoading(false);
+      }
     } catch (error) {
       splitPoint = headerNames;
       if (findFileKeyword == headerNames) {
