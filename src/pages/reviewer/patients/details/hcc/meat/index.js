@@ -105,7 +105,6 @@ const Meat = ({}) => {
     (state) => state?.ReviewerReducers.dosPageNumberList
   );
 
-
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const { toolbarPluginInstance } = defaultLayoutPluginInstance;
   const { searchPluginInstance } = toolbarPluginInstance;
@@ -384,9 +383,9 @@ const Meat = ({}) => {
   }, [patientDetailsResult]);
 
   useEffect(() => {
-    if(hccFileDetails?.result?.response){
-    setSelectFileURL(hccFileDetails?.result?.response)
-    }  
+    if (hccFileDetails?.result?.response) {
+      setSelectFileURL(hccFileDetails?.result?.response);
+    }
   }, [hccFileDetails]);
 
   useEffect(() => {
@@ -859,7 +858,7 @@ const Meat = ({}) => {
           });
         });
 
-        var sectionColorResult = sectionColorList.result?.response;;
+        var sectionColorResult = sectionColorList.result?.response;
 
         let sectionColorResultMatch = sectionColorResult?.filter((o1) =>
           dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
@@ -1382,7 +1381,7 @@ const Meat = ({}) => {
     setActiveTabNumber(activeTabNumber == null ? 0 : null);
   };
 
-  const handleOpenModal = async (
+  const handleOpenModals = async (
     value,
     disDescription,
     encounterDate,
@@ -1402,17 +1401,93 @@ const Meat = ({}) => {
     const encounterDatesHeader = encounterDatesValue[0];
     var pageNumber = null;
     var data = {
-      fileId:fileId,
+      fileId: fileId,
       header: value,
-      dos:encounterDatesHeader,
-      stringFileWord:splitPoint      
-    }
+      dos: encounterDatesValue,
+      stringFileWord: splitPoint,
+    };
     try {
-      const response = await axios.post(ENDPOINTS.apiEndoint +`dbservice/pageNumber`,data);
+      const response = await axios.post(
+        ENDPOINTS.apiEndoint + `dbservice/pageNumber`,
+        data
+      );
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
         if (result?.first == false) {
           splitPoint = value;
+        }
+        pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
+        setFileInitialPage(pageNumber);
+        setFileDosPageNumber(pageNumber);
+      } else {
+        setFileInitialPage(null);
+        setFileDosPageNumber(null);
+      }
+      setMeatModalTitle(dotLoading);
+      setIsLoadingSection(true);
+      if (findFileKeyword == splitPoint) {
+        setFileLoading(false);
+        var dataset = value + " / (" + disDescription + ")";
+        setMeatModalTitle(dataset);
+      }
+      setFindFileKeyword(splitPoint);
+
+      var dataset = value + " / (" + disDescription + ")";
+      setSelectMeatName(dataset);
+    } catch (error) {
+      var dataset = value + " / (" + disDescription + ")";
+      setSelectMeatName(dataset);
+      splitPoint = value;
+      if (findFileKeyword == value) {
+        setFileLoading(false);
+      }
+      setFindFileKeyword(splitPoint);
+      setFileInitialPage(null);
+      setFileDosPageNumber(null);
+    }
+  };
+
+  const handleOpenModal = async (
+    value,
+    disDescription,
+    encounterDate,
+    meatresult,
+    diagnosisCode
+  ) => {
+    setSelectMeatResult(meatresult);
+    setFileLoading(true);
+    setIsModalOpen(true);
+    var splitPoint = disDescription.substring(" ", 20);
+    var dotLoading = (
+      <div className={visitStyles.loadingFileHeader}>
+        <Spinner />
+      </div>
+    );
+    var fileId = patientFileDTO.fileId;
+    const encounterDatesValue = encounterDate.split(",");
+    const encounterDatesHeader = encounterDatesValue[0];
+    var pageNumber = null;
+    var data = {
+      fileId: fileId,
+      header: value,
+      diagnosisCode: meatresult.diagnosisCode,
+      dos: encounterDatesValue,
+      stringFileWord: splitPoint,
+    };
+    try {
+      const response = await axios.post(
+        ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
+        data
+      );
+      var result = response.data.response;
+      if (response?.data?.status == "SUCCESS") {
+        if (result == null) {
+          return handleOpenModals(
+            value,
+            disDescription,
+            encounterDate,
+            meatresult
+          );
         }
         pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
         setFileInitialPage(pageNumber);
@@ -1873,7 +1948,8 @@ const Meat = ({}) => {
     value,
     dis,
     encounterDate,
-    meatresult
+    meatresult,
+    diagnosisCode
   ) => {
     if (value) {
       var igonreCase = value.toLowerCase();
@@ -1888,7 +1964,7 @@ const Meat = ({}) => {
 
       var sectionMapArr = (
         <span
-          onClick={() => handleOpenModal(value, dis, encounterDate, meatresult)}
+          onClick={() => handleOpenModal(value, dis, encounterDate, meatresult, diagnosisCode)}
           style={{ backgroundColor: backColor, color: textColor }}
           className={`cr-pointer mt-2 text-start ${visitStyles.captureheaderMeatView}`}
         >
@@ -2099,8 +2175,12 @@ const Meat = ({}) => {
       const result = captureSectionMatching.filter(
         (res2) => res2.sectionName == res
       );
-      var backColor = result[0]?.backgroundColor == "#efeff033" ? "#54548d33" : result[0]?.backgroundColor ;
-      var textColor = result[0]?.sectionColor == "#efeff0" ? "#000" : result[0]?.sectionColor;
+      var backColor =
+        result[0]?.backgroundColor == "#efeff033"
+          ? "#54548d33"
+          : result[0]?.backgroundColor;
+      var textColor =
+        result[0]?.sectionColor == "#efeff0" ? "#000" : result[0]?.sectionColor;
       var value = ["09/19/2023"];
       var sectionMapArr = (
         <span
@@ -2125,7 +2205,6 @@ const Meat = ({}) => {
     });
   };
 
-
   const showErrorMessage = () => {
     setOpens(false);
     notification.destroy();
@@ -2133,25 +2212,24 @@ const Meat = ({}) => {
   };
 
   useEffect(() => {
-    if(validated == true){
-    let errors = {
-      providername:
-        inputValue?.providerName === "" ? "Please enter provider name" : "",
-      quickQuery:
-        inputValue?.headerName === "" ? "Please select quick query" : "",
-      imagingQuery:
-        inputValue?.imagingTestHeader === ""
-          ? "Please select imaging query"
-          : "",
-      queryReason:
-        inputValue?.queryReason === "" ? "Please select quick reason" : "",
-      description:
-        inputValue?.description === "" ? "Please enter description" : "",
-    };
-    setFormErr(errors)
-  }
+    if (validated == true) {
+      let errors = {
+        providername:
+          inputValue?.providerName === "" ? "Please enter provider name" : "",
+        quickQuery:
+          inputValue?.headerName === "" ? "Please select quick query" : "",
+        imagingQuery:
+          inputValue?.imagingTestHeader === ""
+            ? "Please select imaging query"
+            : "",
+        queryReason:
+          inputValue?.queryReason === "" ? "Please select quick reason" : "",
+        description:
+          inputValue?.description === "" ? "Please enter description" : "",
+      };
+      setFormErr(errors);
+    }
   }, [inputValue]);
-
 
   return (
     <>
@@ -2553,243 +2631,247 @@ const Meat = ({}) => {
         >
           <div className="section-container">
             <div className="row">
-              <div className="col-xl-4" >
-               <div style={{height:"90%",overflowY:"scroll"}}>
-               <div className={visitStyles.meat_title_card2}>
-                  <div className="row">
-                    <div className="col-xl-6">
-                      <label>Codes</label>
-                    </div>
-                    <div className="col-xl-6">
-                      <label>Description</label>
+              <div className="col-xl-4">
+                <div style={{ height: "90%", overflowY: "scroll" }}>
+                  <div className={visitStyles.meat_title_card2}>
+                    <div className="row">
+                      <div className="col-xl-6">
+                        <label>Codes</label>
+                      </div>
+                      <div className="col-xl-6">
+                        <label>Description</label>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div
-                  className={
-                    selectMeatResult?.isMeatCriteriaPresent === true
-                      ? `${visitStyles.meat_details_card2}`
-                      : `${visitStyles.meat_details_card_false}`
-                  }
-                >
-                  <div className="row">
-                    <div className="col-xl-6 d-grid">
-                      <span className="font-bold">
-                        {selectMeatResult?.diagnosisCode}
-                      </span>
-                      {selectMeatResult?.category == "Valid" ? (
-                        <Badge
-                          className="valid-meat badge-circle mt-2"
-                          bg={` badge-circle mt-2 bg-validmeat`}
+                  <div
+                    className={
+                      selectMeatResult?.isMeatCriteriaPresent === true
+                        ? `${visitStyles.meat_details_card2}`
+                        : `${visitStyles.meat_details_card_false}`
+                    }
+                  >
+                    <div className="row">
+                      <div className="col-xl-6 d-grid">
+                        <span className="font-bold">
+                          {selectMeatResult?.diagnosisCode}
+                        </span>
+                        {selectMeatResult?.category == "Valid" ? (
+                          <Badge
+                            className="valid-meat badge-circle mt-2"
+                            bg={` badge-circle mt-2 bg-validmeat`}
+                          >
+                            {selectMeatResult?.category}
+                          </Badge>
+                        ) : (
+                          <Badge
+                            className="valid-meat badge-circle mt-2"
+                            bg={` badge-circle mt-2 bg-validUnmatch`}
+                          >
+                            {selectMeatResult?.category}
+                          </Badge>
+                        )}
+                      </div>
+                      <div className="col-xl-6 d-grid">
+                        <Popover
+                          placement="topLeft"
+                          title="Description"
+                          content={selectMeatResult?.diseaseName}
                         >
-                          {selectMeatResult?.category}
-                        </Badge>
-                      ) : (
-                        <Badge
-                          className="valid-meat badge-circle mt-2"
-                          bg={` badge-circle mt-2 bg-validUnmatch`}
-                        >
-                          {selectMeatResult?.category}
-                        </Badge>
-                      )}
-                    </div>
-                    <div className="col-xl-6 d-grid">
-                      <Popover
-                        placement="topLeft"
-                        title="Description"
-                        content={selectMeatResult?.diseaseName}
+                          <span className="meat-name-details2">
+                            {selectMeatResult?.diseaseName}
+                          </span>
+                        </Popover>
+                      </div>
+                      <div
+                        className={`${visitStyles.encounterAndSectionHeader}`}
                       >
-                        <span className="meat-name-details2">
-                          {selectMeatResult?.diseaseName}
-                        </span>
-                      </Popover>
-                    </div>
-                    <div className={`${visitStyles.encounterAndSectionHeader}`}>
-                      {getProviderNameList(selectMeatResult?.providerName)}
-                    </div>
-                    <div className={`${visitStyles.encounterAndSectionHeader}`}>
-                      {getEncounterDateBackgroundHcc(
-                        selectMeatResult?.encounterDateSplit,
-                        selectMeatResult?.diagnosisCode,
-                        "MEAT",
-                        selectMeatResult
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <div className={visitStyles.meat_title_card2}>
-                  <div className="row">
-                    <div className="col-xl-12">
-                      <label>Monitor</label>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  className={
-                    selectMeatResult?.isMeatCriteriaPresent === true
-                      ? `${visitStyles.meat_details_card2}`
-                      : `${visitStyles.meat_details_card_false}`
-                  }
-                >
-                  <div className="row">
-                    <div className="col-xl-12 d-grid">
-                      {selectMeatResult?.monitor != "" ? (
-                        <Popover
-                          placement="topLeft"
-                          title="Monitor"
-                          content={selectMeatResult?.monitor}
-                        >
-                          <span className="meat-name-details2">
-                            {selectMeatResult?.monitor}
-                          </span>
-                        </Popover>
-                      ) : (
-                        <span className="meat-name-details2 text-center font-bold">
-                          -
-                        </span>
-                      )}
-                      <div>
-                        {getCaptureSectionBackgroundMeatFile(
-                          selectMeatResult?.monitorCapturedFromHeader,
-                          selectMeatResult?.monitor,
-                          selectMeatResult?.encounterDate,
+                        {getProviderNameList(selectMeatResult?.providerName)}
+                      </div>
+                      <div
+                        className={`${visitStyles.encounterAndSectionHeader}`}
+                      >
+                        {getEncounterDateBackgroundHcc(
+                          selectMeatResult?.encounterDateSplit,
+                          selectMeatResult?.diagnosisCode,
+                          "MEAT",
                           selectMeatResult
                         )}
                       </div>
                     </div>
                   </div>
-                </div>
+                  <div className={visitStyles.meat_title_card2}>
+                    <div className="row">
+                      <div className="col-xl-12">
+                        <label>Monitor</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    className={
+                      selectMeatResult?.isMeatCriteriaPresent === true
+                        ? `${visitStyles.meat_details_card2}`
+                        : `${visitStyles.meat_details_card_false}`
+                    }
+                  >
+                    <div className="row">
+                      <div className="col-xl-12 d-grid">
+                        {selectMeatResult?.monitor != "" ? (
+                          <Popover
+                            placement="topLeft"
+                            title="Monitor"
+                            content={selectMeatResult?.monitor}
+                          >
+                            <span className="meat-name-details2">
+                              {selectMeatResult?.monitor}
+                            </span>
+                          </Popover>
+                        ) : (
+                          <span className="meat-name-details2 text-center font-bold">
+                            -
+                          </span>
+                        )}
+                        <div>
+                          {getCaptureSectionBackgroundMeatFile(
+                            selectMeatResult?.monitorCapturedFromHeader,
+                            selectMeatResult?.monitor,
+                            selectMeatResult?.encounterDate,
+                            selectMeatResult
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-                <div className={visitStyles.meat_title_card2}>
-                  <div className="row">
-                    <div className="col-xl-12">
-                      <label>Evaluation</label>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  className={
-                    selectMeatResult?.isMeatCriteriaPresent === true
-                      ? `${visitStyles.meat_details_card2}`
-                      : `${visitStyles.meat_details_card_false}`
-                  }
-                >
-                  <div className="row">
-                    <div className="col-xl-12 d-grid">
-                      {selectMeatResult?.evaluate != "" ? (
-                        <Popover
-                          placement="topLeft"
-                          title="Evaluation"
-                          content={selectMeatResult?.evaluate}
-                        >
-                          <span className="meat-name-details2">
-                            {selectMeatResult?.evaluate}
-                          </span>
-                        </Popover>
-                      ) : (
-                        <span className="meat-name-details2 text-center font-bold">
-                          -
-                        </span>
-                      )}
-                      <div>
-                        {getCaptureSectionBackgroundMeatFile(
-                          selectMeatResult?.evaluateCapturedFromHeader,
-                          selectMeatResult?.evaluate,
-                          selectMeatResult?.encounterDate,
-                          selectMeatResult
-                        )}
+                  <div className={visitStyles.meat_title_card2}>
+                    <div className="row">
+                      <div className="col-xl-12">
+                        <label>Evaluation</label>
                       </div>
                     </div>
                   </div>
-                </div>
+                  <div
+                    className={
+                      selectMeatResult?.isMeatCriteriaPresent === true
+                        ? `${visitStyles.meat_details_card2}`
+                        : `${visitStyles.meat_details_card_false}`
+                    }
+                  >
+                    <div className="row">
+                      <div className="col-xl-12 d-grid">
+                        {selectMeatResult?.evaluate != "" ? (
+                          <Popover
+                            placement="topLeft"
+                            title="Evaluation"
+                            content={selectMeatResult?.evaluate}
+                          >
+                            <span className="meat-name-details2">
+                              {selectMeatResult?.evaluate}
+                            </span>
+                          </Popover>
+                        ) : (
+                          <span className="meat-name-details2 text-center font-bold">
+                            -
+                          </span>
+                        )}
+                        <div>
+                          {getCaptureSectionBackgroundMeatFile(
+                            selectMeatResult?.evaluateCapturedFromHeader,
+                            selectMeatResult?.evaluate,
+                            selectMeatResult?.encounterDate,
+                            selectMeatResult
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-                <div className={visitStyles.meat_title_card2}>
-                  <div className="row">
-                    <div className="col-xl-12">
-                      <label>Assessment</label>
+                  <div className={visitStyles.meat_title_card2}>
+                    <div className="row">
+                      <div className="col-xl-12">
+                        <label>Assessment</label>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div
-                  className={
-                    selectMeatResult?.isMeatCriteriaPresent === true
-                      ? `${visitStyles.meat_details_card2}`
-                      : `${visitStyles.meat_details_card_false}`
-                  }
-                >
-                  <div className="row">
-                    <div className="col-xl-12 d-grid">
-                      {selectMeatResult?.assessment != "" ? (
-                        <Popover
-                          placement="topLeft"
-                          title="Assessment"
-                          content={selectMeatResult?.assessment}
-                        >
-                          <span className="meat-name-details2">
-                            {selectMeatResult?.assessment}
+                  <div
+                    className={
+                      selectMeatResult?.isMeatCriteriaPresent === true
+                        ? `${visitStyles.meat_details_card2}`
+                        : `${visitStyles.meat_details_card_false}`
+                    }
+                  >
+                    <div className="row">
+                      <div className="col-xl-12 d-grid">
+                        {selectMeatResult?.assessment != "" ? (
+                          <Popover
+                            placement="topLeft"
+                            title="Assessment"
+                            content={selectMeatResult?.assessment}
+                          >
+                            <span className="meat-name-details2">
+                              {selectMeatResult?.assessment}
+                            </span>
+                          </Popover>
+                        ) : (
+                          <span className="meat-name-details2 text-center font-bold">
+                            -
                           </span>
-                        </Popover>
-                      ) : (
-                        <span className="meat-name-details2 text-center font-bold">
-                          -
-                        </span>
-                      )}
+                        )}
 
-                      <div>
-                        {getCaptureSectionBackgroundMeatFile(
-                          selectMeatResult?.assessmentCapturedFromHeader,
-                          selectMeatResult?.assessment,
-                          selectMeatResult?.encounterDate,
-                          selectMeatResult
-                        )}
+                        <div>
+                          {getCaptureSectionBackgroundMeatFile(
+                            selectMeatResult?.assessmentCapturedFromHeader,
+                            selectMeatResult?.assessment,
+                            selectMeatResult?.encounterDate,
+                            selectMeatResult
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className={visitStyles.meat_title_card2}>
-                  <div className="row">
-                    <div className="col-xl-12">
-                      <label>Treatment</label>
+                  <div className={visitStyles.meat_title_card2}>
+                    <div className="row">
+                      <div className="col-xl-12">
+                        <label>Treatment</label>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div
-                  className={
-                    selectMeatResult?.isMeatCriteriaPresent === true
-                      ? `${visitStyles.meat_details_card2}`
-                      : `${visitStyles.meat_details_card_false}`
-                  }
-                >
-                  <div className="row">
-                    <div className="col-xl-12 d-grid">
-                      {selectMeatResult?.treatment != "" ? (
-                        <Popover
-                          placement="topLeft"
-                          title="Treatment"
-                          content={selectMeatResult?.treatment}
-                        >
-                          <span className="meat-name-details2">
-                            {selectMeatResult?.treatment}
+                  <div
+                    className={
+                      selectMeatResult?.isMeatCriteriaPresent === true
+                        ? `${visitStyles.meat_details_card2}`
+                        : `${visitStyles.meat_details_card_false}`
+                    }
+                  >
+                    <div className="row">
+                      <div className="col-xl-12 d-grid">
+                        {selectMeatResult?.treatment != "" ? (
+                          <Popover
+                            placement="topLeft"
+                            title="Treatment"
+                            content={selectMeatResult?.treatment}
+                          >
+                            <span className="meat-name-details2">
+                              {selectMeatResult?.treatment}
+                            </span>
+                          </Popover>
+                        ) : (
+                          <span className="meat-name-details2 text-center font-bold">
+                            -
                           </span>
-                        </Popover>
-                      ) : (
-                        <span className="meat-name-details2 text-center font-bold">
-                          -
-                        </span>
-                      )}
-                      <div>
-                        {getCaptureSectionBackgroundMeatFile(
-                          selectMeatResult?.treatmentCapturedFromHeader,
-                          selectMeatResult?.treatment,
-                          selectMeatResult?.encounterDate,
-                          selectMeatResult
                         )}
+                        <div>
+                          {getCaptureSectionBackgroundMeatFile(
+                            selectMeatResult?.treatmentCapturedFromHeader,
+                            selectMeatResult?.treatment,
+                            selectMeatResult?.encounterDate,
+                            selectMeatResult
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-               </div>
               </div>
               <div className="col-xl-8">
                 <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
