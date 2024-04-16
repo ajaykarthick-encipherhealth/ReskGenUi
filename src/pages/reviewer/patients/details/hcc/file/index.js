@@ -74,6 +74,7 @@ import {
 } from "../../../../../../services/PatientsListSevice";
 import { getPatientDetailsResult } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import CamboTree from "../org";
+import PdfViewer from "../../PdfViewerComponent";
 
 const { Option } = Select;
 const addOnCodeColor = [
@@ -317,6 +318,7 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
   const [hccVersionDetails, setHccVersionDetails] = useState(null);
   const [selectProviderInfo, setSelectProviderInfo] = useState(null);
   const [hccFormTab, setHccFormTab] = useState("HCCFORM");
+  const [search,setSearch]=useState(false)
   const [hyperlinkSeacrh, setHyperlinkSearch] = useState(false);
 
   const getMeatFound = (code, data, value) => {
@@ -1678,6 +1680,10 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
             duration: 1,
           });
         }
+        setSearch({
+          value:splitPoint,
+          page:result?.pageNumber
+        })
         setFileInitialPage(pageNumber);
         setFileDosPageNumber(pageNumber);
       } else {
@@ -1754,6 +1760,10 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
             duration: 1,
           });
         }
+        setSearch({
+          value:splitPoint,
+          page:result?.pageNumber
+        })
         setFileInitialPage(pageNumber);
         setFileDosPageNumber(pageNumber);
       } else {
@@ -3575,29 +3585,38 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
           </Popover>
           <div className="card-body p-0">
             {hccFileDetails?.loading != true ? (
-              <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
-                <div
-                  style={{
-                    height: "71vh",
-                    maxWidth: "1000px",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                  }}
-                >
-                  {" "}
-                  <Viewer
-                    fileUrl={selectFileURL}
-                    initialPage={fileInitialPage}
-                    plugins={[defaultLayoutPluginInstance]}
-                    onDocumentLoad={handleDocumentLoadFile}
-                    renderLoader={(percentages) => (
-                      <div style={{ width: "240px" }}>
-                        <ProgressBar progress={Math.round(percentages)} />
-                      </div>
-                    )}
-                  />
-                </div>
-              </Worker>
+              // <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+              //   <div
+              //     style={{
+              //       height: "71vh",
+              //       maxWidth: "1000px",
+              //       marginLeft: "auto",
+              //       marginRight: "auto",
+              //     }}
+              //   >
+              //     {" "}
+              //     <Viewer
+              //       fileUrl={selectFileURL}
+              //       initialPage={fileInitialPage}
+              //       plugins={[defaultLayoutPluginInstance,searchPluginInstance]}
+              //       onDocumentLoad={handleDocumentLoadFile}
+              //       renderLoader={(percentages) => (
+              //         <div style={{ width: "240px" }}>
+              //           <ProgressBar progress={Math.round(percentages)} />
+              //         </div>
+              //       )}
+              //       renderMode="canvas"
+              //       />
+                   
+              //   </div>
+              // </Worker>
+              // selectFileURL
+          
+          
+            <>
+         
+            { selectFileURL &&  <PdfViewer src={selectFileURL} searchQuery={search?.value?search?.value:""} pageNumber={search?.page?search?.page:1}/>}</>
+             
             ) : null}
           </div>
         </div>
