@@ -317,6 +317,7 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
   const [hccVersionDetails, setHccVersionDetails] = useState(null);
   const [selectProviderInfo, setSelectProviderInfo] = useState(null);
   const [hccFormTab, setHccFormTab] = useState("HCCFORM");
+  const [hyperlinkSeacrh, setHyperlinkSearch] = useState(false);
 
   const getMeatFound = (code, data, value) => {
     const result = data?.filter(
@@ -1714,6 +1715,7 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
     diagnosisCode
   ) => {
     setFileLoading(true);
+    setHyperlinkSearch(true);
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
@@ -1734,9 +1736,9 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
         pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
-        splitPoint = result?.searchString
+        splitPoint = result?.searchString;
         if (result == null) {
-           return findValueDocuments(
+          return findValueDocuments(
             value,
             disDescription,
             headerNames,
@@ -3274,6 +3276,18 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
     setInputValueFileDate("");
     setSelectProviderInfo(null);
   };
+
+  var pdfElement = document.getElementsByClassName("rpv-toolbar__item");
+  if (pdfElement.length != 0) {
+    for (let i = 0; i < pdfElement.length; i++) {
+      pdfElement[i].addEventListener("click", function (e) {
+        if (hyperlinkSeacrh == false) {
+          setFileInitialPage(null);
+          setFindFileKeyword(null);
+        }
+      });
+    }
+  }
 
   return (
     <>
