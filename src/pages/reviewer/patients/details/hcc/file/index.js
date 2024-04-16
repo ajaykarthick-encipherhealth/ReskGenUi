@@ -2660,7 +2660,7 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
       setFileLoading(true);
       var date = findPageNumber[0].date;
       if (findPageNumber[0].startPage.length != 0) {
-        var pageNumber = findPageNumber[0].startPage[0].pageNumber - 1;
+        var pageNumber = findPageNumber[0].startPage[0].pageNumber;
         if (pageNumber == fileInitialPage) {
           setFileLoading(false);
           notification.warning({
@@ -2674,6 +2674,10 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
         var splitPoint = date.substring(" ", 5);
         setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
         setFindFileKeyword(splitPoint);
+        setSearch({
+          value:splitPoint,
+          page:pageNumber
+        })
       }
     }
     // var dotLoading = (
@@ -2999,6 +3003,10 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
         targetPage.pageIndex === pageNumber + 2
     );
     setFindFileKeyword(findData);
+    setSearch({
+      value:"",
+      page:pageNumber
+    })
   };
 
   const getPreviousData = (code, action) => {
@@ -3286,6 +3294,18 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
     setInputValueFileDate("");
     setSelectProviderInfo(null);
   };
+
+  // var pdfElement = document.getElementsByClassName("rpv-toolbar__item");
+  // if (pdfElement.length != 0) {
+  //   for (let i = 0; i < pdfElement.length; i++) {
+  //     pdfElement[i].addEventListener("click", function (e) {
+  //       if (hyperlinkSeacrh == false) {
+  //         setFileInitialPage(null);
+  //         setFindFileKeyword(null);
+  //       }
+  //     });
+  //   }
+  // }
 
   return (
     <>
