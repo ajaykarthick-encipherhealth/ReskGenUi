@@ -318,7 +318,7 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
   const [hccVersionDetails, setHccVersionDetails] = useState(null);
   const [selectProviderInfo, setSelectProviderInfo] = useState(null);
   const [hccFormTab, setHccFormTab] = useState("HCCFORM");
-  const [search,setSearch]=useState(false)
+  const [search, setSearch] = useState(false);
   const [hyperlinkSeacrh, setHyperlinkSearch] = useState(false);
 
   const getMeatFound = (code, data, value) => {
@@ -588,6 +588,7 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
               isMostSpecific: res.isMostSpecific,
               children: res.children,
               getPlace: "Hcc",
+              dbDescription: res.dbDescription,
             });
           }
         });
@@ -603,6 +604,7 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
             getPlace: "Insulin",
             isHccValid: true,
             defaultPosition: null,
+            dbDescription: result?.insulinDisease?.dbDescription,
           });
         }
 
@@ -1688,9 +1690,9 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
           });
         }
         setSearch({
-          value:splitPoint,
-          page:result?.pageNumber
-        })
+          value: splitPoint,
+          page: result?.pageNumber,
+        });
         setFileInitialPage(pageNumber);
         setFileDosPageNumber(pageNumber);
       } else {
@@ -1768,9 +1770,9 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
           });
         }
         setSearch({
-          value:splitPoint,
-          page:result?.pageNumber
-        })
+          value: splitPoint,
+          page: result?.pageNumber,
+        });
         setFileInitialPage(pageNumber);
         setFileDosPageNumber(pageNumber);
       } else {
@@ -2682,9 +2684,9 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
         setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
         setFindFileKeyword(splitPoint);
         setSearch({
-          value:splitPoint,
-          page:pageNumber
-        })
+          value: splitPoint,
+          page: pageNumber,
+        });
       }
     }
     // var dotLoading = (
@@ -3011,9 +3013,9 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
     );
     setFindFileKeyword(findData);
     setSearch({
-      value:"",
-      page:pageNumber
-    })
+      value: "",
+      page: pageNumber,
+    });
   };
 
   const getPreviousData = (code, action) => {
@@ -3359,15 +3361,21 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                                 {data.diagnosisCode}
                               </span>{" "}
                               <Popover
-                                content={data.actualDescription}
+                                content={
+                                  data.dbDescription
+                                    ? data.dbDescription
+                                    : data.actualDescription
+                                }
                                 title=""
                                 trigger="hover"
                               >
-                                {data?.isMostSpecific != true ? (
-                                  <>- {data.actualDescription} </>
-                                ) : (
-                                  <> - {data.dbDescription}</>
-                                )}
+                                <>
+                                  {" "}
+                                  -{" "}
+                                  {data.dbDescription
+                                    ? data.dbDescription
+                                    : data.actualDescription}
+                                </>
                               </Popover>
                             </span>
                           </div>
@@ -3487,7 +3495,8 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                                 data?.capturedSections,
                                 data?.encounterDate,
                                 data?.actualDescription,
-                                data?.diagnosisCode
+                                data?.diagnosisCode,
+                                data?.dbDescription
                               )}
                             </div>
                             {/* {data?.isMostSpecific == true ? (
@@ -3622,16 +3631,20 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
               //       )}
               //       renderMode="canvas"
               //       />
-                   
+
               //   </div>
               // </Worker>
               // selectFileURL
-          
-          
-            <>
-         
-            { selectFileURL &&  <PdfViewer src={selectFileURL} searchQuery={search?.value?search?.value:""} pageNumber={search?.page?search?.page:1}/>}</>
-             
+
+              <>
+                {selectFileURL && (
+                  <PdfViewer
+                    src={selectFileURL}
+                    searchQuery={search?.value ? search?.value : ""}
+                    pageNumber={search?.page ? search?.page : 1}
+                  />
+                )}
+              </>
             ) : null}
           </div>
         </div>
@@ -3954,11 +3967,18 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                                       {data.diagnosisCode}
                                     </span>{" "}
                                     <Popover
-                                      content={data.actualDescription}
+                                      content={
+                                        data.dbDescription
+                                          ? data.dbDescription
+                                          : data.actualDescription
+                                      }
                                       title=""
                                       trigger="hover"
                                     >
-                                      - {data.actualDescription}
+                                      -{" "}
+                                      {data.dbDescription
+                                        ? data.dbDescription
+                                        : data.actualDescription}
                                     </Popover>
                                   </span>
                                 </div>
@@ -4262,11 +4282,18 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                                   {data.diagnosisCode}
                                 </span>{" "}
                                 <Popover
-                                  content={data.actualDescription}
+                                  content={
+                                    data.dbDescription
+                                      ? data.dbDescription
+                                      : data.actualDescription
+                                  }
                                   title=""
                                   trigger="hover"
                                 >
-                                  - {data.actualDescription}
+                                  -{" "}
+                                  {data.dbDescription
+                                    ? data.dbDescription
+                                    : data.actualDescription}
                                 </Popover>
                               </span>
                             </div>
@@ -4700,15 +4727,20 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                                       {data.diagnosisCode}
                                     </span>{" "}
                                     <Popover
-                                      content={data.actualDescription}
+                                      content={
+                                        data.dbDescription
+                                          ? data.dbDescription
+                                          : data.actualDescription
+                                      }
                                       title=""
                                       trigger="hover"
                                     >
-                                      {data?.isMostSpecific != true ? (
-                                        <>- {data.actualDescription} </>
-                                      ) : (
-                                        <> - {data.dbDescription}</>
-                                      )}
+                                      <>
+                                        -
+                                        {data.dbDescription
+                                          ? data.dbDescription
+                                          : data.actualDescription}
+                                      </>
                                     </Popover>
                                   </span>
                                 </div>
@@ -5055,11 +5087,11 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                                               {data.diagnosisCode}
                                             </span>{" "}
                                             <Popover
-                                              content={data.actualDescription}
+                                              content={data.dbDescription ? data.dbDescription : data.actualDescription}
                                               title=""
                                               trigger="hover"
                                             >
-                                              - {data.actualDescription}
+                                              - {data.dbDescription ? data.dbDescription : data.actualDescription}
                                             </Popover>
                                           </span>
                                         </div>
@@ -5302,11 +5334,11 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                                         {data.diagnosisCode}
                                       </span>{" "}
                                       <Popover
-                                        content={data.actualDescription}
+                                        content={data.dbDescription ? data.dbDescription : data.actualDescription}
                                         title=""
                                         trigger="hover"
                                       >
-                                        - {data.actualDescription}
+                                        - {data.dbDescription ? data.dbDescription : data.actualDescription}
                                       </Popover>
                                     </span>
                                   </div>
