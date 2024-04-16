@@ -3287,18 +3287,6 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
     setSelectProviderInfo(null);
   };
 
-  var pdfElement = document.getElementsByClassName("rpv-toolbar__item");
-  if (pdfElement.length != 0) {
-    for (let i = 0; i < pdfElement.length; i++) {
-      pdfElement[i].addEventListener("click", function (e) {
-        if (hyperlinkSeacrh == false) {
-          setFileInitialPage(null);
-          setFindFileKeyword(null);
-        }
-      });
-    }
-  }
-
   return (
     <>
       {fileLoading ? (
