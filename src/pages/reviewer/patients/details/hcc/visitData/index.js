@@ -852,6 +852,13 @@ const VisitData = ({}) => {
           });
         });
 
+        if (result?.insulinDisease) {
+          capturedSectionsArr?.push({
+            name: result?.insulinDisease?.section,
+            diagnosisCode: result?.insulinDisease?.code,
+          });
+        }
+
         var dublicateSectionArr = getUniqueListBy(capturedSectionsArr, "name");
 
         dublicateSectionArr.map((res, index) => {
