@@ -236,6 +236,7 @@ const Combo = ({}) => {
             });
           });
         }
+        setPatientFileDTO(result?.fileDetailDTO);
         setComboDiseaseCodesList(combiDisArray);
         const COLORS3 = [
           "encounterDateTag1",
@@ -431,7 +432,7 @@ const Combo = ({}) => {
     var data = {
       fileId:fileId,
       header: headerNames,
-      dos:encounterDatesHeader,
+      dos:encounterDatesValue,
       stringFileWord:splitPoint      
     }
     try {
