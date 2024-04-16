@@ -1412,7 +1412,7 @@ const VisitData = ({}) => {
       setFileDosPageNumber(null);
     }
   };
-  const handleOpenModalCombinationCode = async (
+  const handleOpenModalCombinationCodeOld = async (
     value,
     disDescription,
     check,
@@ -1516,6 +1516,206 @@ const VisitData = ({}) => {
             dataset;
           setFileModalTitle(headerName);
           setDocumentLoaded(true);
+        } catch (error) {
+          splitPoint = headerNames;
+          if (findFileKeyword == headerNames) {
+            setFileLoading(false);
+          }
+          setFindFileKeyword(splitPoint);
+          setFileInitialPage(null);
+          setFileDosPageNumber(null);
+        }
+      } else if (check == "valid2") {
+        setSelectActiveCode(value);
+        var splitPoint = "";
+        splitPoint = disDescription;
+        setTimeout(() => {
+          highlight({
+            keyword: splitPoint,
+            matchCase: true,
+          });
+          var dataset = value + " - (" + disDescription + ")";
+          setSelectMeatName(dataset);
+          var headerName =
+            patientDocumentResult.patientId +
+            " / " +
+            patientDocumentResult.patientName +
+            " / " +
+            dataset;
+          setFileModalHeader(headerName);
+        }, 2000);
+        setDocumentLoaded(true);
+        var dataset = value + " - (" + disDescription + ")";
+        setSelectMeatName(dataset + " -  " + "Loading...");
+        var headerName =
+          patientDocumentResult.patientId +
+          " / " +
+          patientDocumentResult.patientName +
+          " / " +
+          dataset +
+          " -  " +
+          "Loading...";
+        setFileModalHeader(headerName);
+
+        setIsLoadingSection(true);
+        setIsModalOpenValidCodes(true);
+      } else {
+        setSelectActiveCode(value);
+        var splitPoint = "";
+        splitPoint = disDescription.substring(" ", 20);
+        setTimeout(() => {
+          highlight({
+            keyword: splitPoint,
+            matchCase: true,
+            // wholeWords:true
+          });
+          var dataset = value + " - (" + disDescription + ")";
+          setSelectMeatName(dataset);
+        }, 2000);
+        setDocumentLoaded(true);
+        var dataset = value + " - (" + disDescription + ")";
+        setSelectMeatName(dataset + " -  " + "Loading...");
+        setIsLoadingSection(true);
+        setIsModalOpen(true);
+      }
+    }
+
+    // setIsModalOpenValid(true)
+    // getSectionResult(value.toLowerCase());
+  };
+  const handleOpenModalCombinationCode = async (
+    value,
+    disDescription,
+    check,
+    whereCome,
+    documentPlace,
+    encounterDate,
+    headerNames,
+    actualDescription,
+    testModal
+  ) => {
+    setFileLoading(true);
+    setDocumentLoaded(false);
+    if (
+      documentPlace == "Radio" ||
+      whereCome == "Radio" ||
+      documentPlace == "Radio-combo"
+    ) {
+      handleOpenModalRadiology(value, disDescription, true);
+    } else if (documentPlace == "Lab" || whereCome == "Lab") {
+      setFileInitialPage(null);
+      setFileDosPageNumber(null);
+      var splitPoint = disDescription.substring(" ", 40);
+      setFindFileKeyword(splitPoint);
+      setTimeout(() => {
+        var dataset = "Lab" + " - (" + disDescription + ")";
+        setSelectMeatName(dataset);
+      }, 2000);
+      setDocumentLoaded(true);
+      var dataset = "Lab" + " - (" + disDescription + ")";
+      setSelectMeatName(dataset + " -  " + "Loading...");
+      setIsLoadingSection(true);
+      setIsModalOpenLab(true);
+    } else {
+      if (whereCome == "nonHcc") {
+        setNonHccActiveCodes(true);
+      } else {
+        setNonHccActiveCodes(false);
+      }
+      if (check === "valid") {
+        var dataset = value + " - (" + disDescription + ")";
+        setSelectMeatName(dataset + " -  " + "Loading...");
+        var dotLoading = (
+          <div className={visitStyles.loadingFileHeader}>
+            <Spinner />
+          </div>
+        );
+        setIsLoadingSection(true);
+        var headerName = dotLoading;
+        setFileModalHeader(headerName);
+        if (documentPlace == "COMBO") {
+          setIsModalOpenCaptureSection(true);
+        } else {
+          if (testModal == "Suggested") {
+            setIsModalOpenValidCodes(true);
+          } else {
+            setIsModalOpenValidCodes(true);
+          }
+        }
+
+        var fileId = patientFileDTO.fileId;
+        const encounterDatesValue = encounterDate.split(",");
+        const encounterDatesHeader = encounterDatesValue[0];
+        var splitPoint = "";
+        var pageNumber = null;
+        splitPoint = actualDescription.substring(" ", 20);
+        var data = {
+          fileId: fileId,
+          header: headerNames,
+          dos: encounterDatesHeader,
+          stringFileWord: actualDescription.substring(" ", 20),
+          diagnosisCode: value,
+        };
+        try {
+          const response = await axios.post(
+            ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
+            data
+          );
+          var result = response.data.response;
+          if (response?.data?.status == "SUCCESS") {
+            pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
+            splitPoint = result?.searchString
+            if (result == null) {
+               return handleOpenModalCombinationCodeOld(
+                value,
+                disDescription,
+                check,
+                whereCome,
+                documentPlace,
+                encounterDate,
+                headerNames,
+                actualDescription,
+                testModal
+              );
+            }
+            if (pageNumber == fileInitialPage) {
+              setFileLoading(false);
+              notification.warning({
+                message: "This detail also same page",
+                placement: "top",
+                duration: 1,
+              });
+            }
+            setFileInitialPage(pageNumber);
+            setFileDosPageNumber(pageNumber);
+            var dataset =
+            value +
+            " - (" +
+            disDescription +
+            ")" +
+            " / (" +
+            actualDescription +
+            ")";
+          setSelectMeatName(dataset);
+          var headerName =
+            patientDocumentResult.patientId +
+            " / " +
+            patientDocumentResult.patientName +
+            " / " +
+            dataset;
+          setFileModalTitle(headerName);
+          } else {
+            splitPoint = headerNames;
+            setFileInitialPage(null);
+            setFileDosPageNumber(null);
+          }
+          setTargetPages((targetPage) => {
+            targetPage.pageIndex === pageNumber;
+          });
+          setFindFileKeyword(splitPoint);
+          if (findFileKeyword == splitPoint) {
+            setFileLoading(false);
+          }
         } catch (error) {
           splitPoint = headerNames;
           if (findFileKeyword == headerNames) {
