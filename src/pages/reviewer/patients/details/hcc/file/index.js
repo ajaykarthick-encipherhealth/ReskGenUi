@@ -35,6 +35,8 @@ import {
   faCircleUser,
   faTrash,
   faAngleDown,
+  faPen,
+  faSave,
 } from "@fortawesome/free-solid-svg-icons";
 import { CalendarOutlined } from "@ant-design/icons";
 import {
@@ -320,6 +322,7 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
   const [hccFormTab, setHccFormTab] = useState("HCCFORM");
   const [search, setSearch] = useState(false);
   const [hyperlinkSeacrh, setHyperlinkSearch] = useState(false);
+  const [editCode, setEditCode] = useState(false);
 
   const getMeatFound = (code, data, value) => {
     const result = data?.filter(
@@ -3315,7 +3318,32 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
   //     });
   //   }
   // }
-
+  const updateCode = (value) => {
+    return (
+      <>
+        <div class="input-group mb-3">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Recipient's username"
+            value={value}
+            disabled={!editCode}
+          />
+          
+            {editCode ? (
+              <span class="input-group-text" id="basic-addon2">
+              <FontAwesomeIcon icon={faSave} onClick={() => setEditCode(false)} style={{cursor: "pointer"}}/>
+              </span>
+            ) : (
+              <span class="input-group-text" id="basic-addon2">
+              <FontAwesomeIcon icon={faPen} onClick={() => setEditCode(true)} style={{cursor: "pointer"}}/>
+              </span>
+            )}
+         
+        </div>
+      </>
+    );
+  };
   return (
     <>
       {fileLoading ? (
@@ -3360,6 +3388,15 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                               <span className="valid-dis-name">
                                 {data.diagnosisCode}
                               </span>{" "}
+                              <span className="">
+                                <Popover
+                                  content={updateCode(data.diagnosisCode)}
+                                  title=""
+                                  trigger="click"
+                                >
+                                  <FontAwesomeIcon icon={faPen} />
+                                </Popover>
+                              </span>
                               <Popover
                                 content={
                                   data.dbDescription
@@ -5087,11 +5124,18 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                                               {data.diagnosisCode}
                                             </span>{" "}
                                             <Popover
-                                              content={data.dbDescription ? data.dbDescription : data.actualDescription}
+                                              content={
+                                                data.dbDescription
+                                                  ? data.dbDescription
+                                                  : data.actualDescription
+                                              }
                                               title=""
                                               trigger="hover"
                                             >
-                                              - {data.dbDescription ? data.dbDescription : data.actualDescription}
+                                              -{" "}
+                                              {data.dbDescription
+                                                ? data.dbDescription
+                                                : data.actualDescription}
                                             </Popover>
                                           </span>
                                         </div>
@@ -5334,11 +5378,18 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                                         {data.diagnosisCode}
                                       </span>{" "}
                                       <Popover
-                                        content={data.dbDescription ? data.dbDescription : data.actualDescription}
+                                        content={
+                                          data.dbDescription
+                                            ? data.dbDescription
+                                            : data.actualDescription
+                                        }
                                         title=""
                                         trigger="hover"
                                       >
-                                        - {data.dbDescription ? data.dbDescription : data.actualDescription}
+                                        -{" "}
+                                        {data.dbDescription
+                                          ? data.dbDescription
+                                          : data.actualDescription}
                                       </Popover>
                                     </span>
                                   </div>
