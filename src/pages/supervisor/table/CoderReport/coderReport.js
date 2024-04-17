@@ -329,7 +329,7 @@ function CoderReport({
                     <td className={TableStyle.firstTdBorder}>
                       <Badge.Ribbon
                         text="Audited"
-                        color="#58bad7"
+                        color="#377880"
                         placement="start"
                       ></Badge.Ribbon>
                     </td>
