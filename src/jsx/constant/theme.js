@@ -2910,6 +2910,20 @@ export const SVGICON = {
       />
     </svg>
   ),
+rafFlagSmall: (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="23"
+      height="23"
+      viewBox="0 0 800 800"
+      fill="none"
+    >
+      <path
+        d="M225 100H700L575 300L700 500H225V750H150V50H225V100Z"
+        fill="#755DFF"
+      />
+    </svg>
+  ),
 
   emptyFlag: (
     <svg
