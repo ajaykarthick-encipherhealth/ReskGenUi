@@ -198,28 +198,28 @@ const ReviewerReport = () => {
       icon: reeAuditIcon,
       title: "Re Audit",
 
-      bg: "#FBE7D0",
+      bg: "#FFDBB8",
     },
     {
       id: 8,
       icon: reAuditIcon,
       title: "Audit pending",
 
-      bg: "#FFDBB8",
+      bg: "#F3D8E5",
     },
     {
       id: 9,
       icon: auditHoldIcon,
       title: "Audit hold",
 
-      bg: "#FFDBB8",
+      bg: "#FFF2CC",
     },
     {
       id: 10,
       icon: auditDeclined,
       title: "Audit decline",
 
-      bg: "#FBE7D0",
+      bg: "#FDD2CE",
     },
   ];
 
