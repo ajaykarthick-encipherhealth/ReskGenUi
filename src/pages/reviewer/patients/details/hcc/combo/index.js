@@ -28,6 +28,7 @@ import styles from "../styles.module.css";
 import { manuallyAddComboCode } from "../../../../../../services/PatientsListSevice";
 import { getPatientDetailsResult } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import CamboTree from "../org";
+import PdfViewer from "../../PdfViewerComponent";
 const addOnCodeColor = [
   "magenta",
   "red",
@@ -111,6 +112,7 @@ const Combo = ({}) => {
   const [listPageNumber, setListPageNumber] = useState([]);
   const [activeTabNumber, setActiveTabNumber] = useState(0);
   const [fileLoading, setFileLoading] = useState(false);
+  const [search, setSearch] = useState(false);
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -430,13 +432,16 @@ const Combo = ({}) => {
     var splitPoint = actualDescription.substring(" ", 20);
     var pageNumber = null;
     var data = {
-      fileId:fileId,
+      fileId: fileId,
       header: headerNames,
-      dos:encounterDatesValue,
-      stringFileWord:splitPoint      
-    }
+      dos: encounterDatesValue,
+      stringFileWord: splitPoint,
+    };
     try {
-      const response = await axios.post(ENDPOINTS.apiEndoint +`dbservice/pageNumber`,data);
+      const response = await axios.post(
+        ENDPOINTS.apiEndoint + `dbservice/pageNumber`,
+        data
+      );
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
         pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
@@ -451,6 +456,10 @@ const Combo = ({}) => {
             duration: 1,
           });
         }
+        setSearch({
+          value: splitPoint,
+          page: result?.pageNumber,
+        });
         setFileInitialPage(pageNumber);
       } else {
         splitPoint = headerNames;
@@ -505,9 +514,9 @@ const Combo = ({}) => {
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
         pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
-        splitPoint = result?.searchString
+        splitPoint = result?.searchString;
         if (result == null) {
-           return findValueDocuments(
+          return findValueDocuments(
             value,
             disDescription,
             headerNames,
@@ -523,12 +532,14 @@ const Combo = ({}) => {
             duration: 1,
           });
         }
+        setSearch({
+          value: splitPoint,
+          page: result?.pageNumber,
+        });
         setFileInitialPage(pageNumber);
-        
       } else {
         splitPoint = headerNames;
         setFileInitialPage(null);
-   
       }
       setTargetPages((targetPage) => {
         targetPage.pageIndex === pageNumber;
@@ -576,13 +587,16 @@ const Combo = ({}) => {
     var pageNumber = null;
     splitPoint = actualDescription.substring(" ", 20);
     var data = {
-      fileId:fileId,
+      fileId: fileId,
       header: headerNames,
-      dos:encounterDatesValue,
-      stringFileWord:splitPoint      
-     }
-     try {
-      const response = await axios.post(ENDPOINTS.apiEndoint +`dbservice/pageNumber`,data);
+      dos: encounterDatesValue,
+      stringFileWord: splitPoint,
+    };
+    try {
+      const response = await axios.post(
+        ENDPOINTS.apiEndoint + `dbservice/pageNumber`,
+        data
+      );
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
         if (result?.first == false) {
@@ -664,9 +678,9 @@ const Combo = ({}) => {
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
         pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
-        splitPoint = result?.searchString
+        splitPoint = result?.searchString;
         if (result == null) {
-           return handleOpenModalCombinationCodeOld(
+          return handleOpenModalCombinationCodeOld(
             value,
             disDescription,
             check,
@@ -687,12 +701,12 @@ const Combo = ({}) => {
           });
         }
         setFileInitialPage(pageNumber);
-      var headerName =
-        patientDocumentResult.patientId +
-        " / " +
-        patientDocumentResult.patientName +
-        " / " +
-        dataset;
+        var headerName =
+          patientDocumentResult.patientId +
+          " / " +
+          patientDocumentResult.patientName +
+          " / " +
+          dataset;
         // setFileModalHeader(headerName);
         setFileModalTitle(headerName);
       } else {
@@ -1469,7 +1483,7 @@ const Combo = ({}) => {
                 </div>
               </div>
               <div className="col-xl-7">
-                <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                {/* <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                   <div
                     style={{
                       height: "80vh",
@@ -1478,7 +1492,6 @@ const Combo = ({}) => {
                       marginRight: "auto",
                     }}
                   >
-                    {" "}
                     <Viewer
                       fileUrl={selectFileURL}
                       plugins={[defaultLayoutPluginInstance]}
@@ -1491,7 +1504,15 @@ const Combo = ({}) => {
                       )}
                     />
                   </div>
-                </Worker>
+                </Worker> */}
+
+                {selectFileURL && (
+                  <PdfViewer
+                    src={selectFileURL}
+                    searchQuery={search?.value ? search?.value : ""}
+                    pageNumber={search?.page ? search?.page : 1}
+                  />
+                )}
               </div>
             </div>
           </div>
