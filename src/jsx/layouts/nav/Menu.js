@@ -41,12 +41,12 @@ export const PhysicanMenuList = [
     to: "/reviewer/report",
     childRoute: "/reviewer/report/individualreport",
   },
-  {
-    title: "Report",
-    iconStyle: SVGICON.ReportIcon,
-    to: "/reviewer/reports",
-    childRoute: "/reviewer/report/individualreport",
-  },
+  // {
+  //   title: "Report",
+  //   iconStyle: SVGICON.ReportIcon,
+  //   to: "/reviewer/reports",
+  //   childRoute: "/reviewer/report/individualreport",
+  // },
   // {
   //   title: "FeedBack",
   //   iconStyle: SVGICON.ReportIcon,

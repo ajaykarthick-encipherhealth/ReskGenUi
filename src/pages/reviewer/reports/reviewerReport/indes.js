@@ -17,6 +17,10 @@ import declineIcon from "../../.../../../../images/trackingImages/DeclineTrack.p
 import reAuditIcon from "../../.../../../../images/trackingImages/AuditPending.png";
 import auditHoldIcon from "../../.../../../../images/trackingImages/AuditHoldTrack.png";
 import auditedIcon from "../../.../../../../images/trackingImages/AuditedTrack.png";
+import reeAuditIcon from "../../.../../../../images/trackingImages/reAuditTrack.png";
+import notAudited from "../../.../../../../images/trackingImages/NotAuditedTrack.png";
+import auditDeclined from "../../.../../../../images/trackingImages/AuditDeclined.png";
+
 import Image from "next/image";
 import { SVGICON } from "../../../../jsx/constant/theme";
 import { renderUserPrfoileAvatar } from "../../../../components/headerFilters/functions";
@@ -180,40 +184,39 @@ const ReviewerReport = () => {
       id: 5,
       icon: auditedIcon,
       title: "Audited",
-
       bg: "#DBEEF0",
     },
     {
       id: 6,
-      icon: reAuditIcon,
-      title: "Re Audit",
+      icon: notAudited,
+      title: "Not Audited",
 
       bg: "#FBE7D0",
     },
     {
       id: 7,
-      icon: reAuditIcon,
-      title: "Audit pending",
+      icon: reeAuditIcon,
+      title: "Re Audit",
 
       bg: "#FBE7D0",
     },
     {
       id: 8,
-      icon: declineIcon,
-      title: "Audit hold",
+      icon: reAuditIcon,
+      title: "Audit pending",
 
       bg: "#FFDBB8",
     },
     {
       id: 9,
-      icon: declineIcon,
+      icon: auditHoldIcon,
       title: "Audit hold",
 
       bg: "#FFDBB8",
     },
     {
       id: 10,
-      icon: auditHoldIcon,
+      icon: auditDeclined,
       title: "Audit decline",
 
       bg: "#FBE7D0",
@@ -332,7 +335,6 @@ const ReviewerReport = () => {
       count: "10",
     },
   ];
-  
 
   const getFlag = (flagName) => {
     switch (flagName) {
@@ -924,7 +926,7 @@ const ReviewerReport = () => {
                           <div className={`col-xl-2 ${styles.subCard}`}>
                             <div>
                               <div>No of charts</div>
-                              <h5>60</h5>
+                              <h4>60</h4>
                             </div>
                           </div>
                           <div className={`col-xl-2 ${styles.subCard}`}>
@@ -944,19 +946,21 @@ const ReviewerReport = () => {
                             {" "}
                             <div>
                               <div>Avg RAF score</div>
-                              <h5>1.025</h5>
+                              <h4>1.025</h4>
                             </div>
                           </div>
                           <div className={`col-xl-2 ${styles.subCard}`}>
                             {" "}
                             <div>
                               <div>HCC Count</div>
-                              <h5>175</h5>
+                              <h4>175</h4>
                             </div>
                           </div>
                         </div>
-                        <div className={styles.summaryText}>Summary</div>
-                        <div className="col-xl-12  d-flex mt-4">
+                        <div className={` pt-2 ${styles.summaryText}`}>
+                          Status
+                        </div>
+                        <div className="col-xl-12  d-flex mt-2">
                           <Row
                             className={styles.carddiv}
                             style={{ height: "80%" }}
@@ -979,14 +983,14 @@ const ReviewerReport = () => {
                                   <Image
                                     src={data?.icon}
                                     className={styles.Img}
-                                    style={{ height: "28px", width: "28px" }}
+                                    style={{ height: "25px", width: "25px" }}
                                   />
                                   <div className={styles.heading}>
                                     {data.title}
                                   </div>
                                 </div>
 
-                                <div>40</div>
+                                <h4>40</h4>
                               </Col>
                             ))}
                           </Row>
@@ -1036,13 +1040,14 @@ const ReviewerReport = () => {
                             </div>
                           </div>
                           <div className={`col-xl-4 ${styles.flags}`}>
-                            <div className={styles.cardHead}>Reviewer
-                            {reviewer.map((item) => (
+                            <div className={styles.cardHead}>
+                              Reviewer
+                              {reviewer.map((item) => (
                                 <div
                                   className={styles.contentAuditor}
                                   key={item.id}
                                 >
-                                  <div className={`col-xl-4 ${styles.avatar}`} >
+                                  <div className={`col-xl-4 ${styles.avatar}`}>
                                     <span style={{ marginRight: "10px" }}>
                                       {renderUserPrfoileAvatar(
                                         item.firstName,
@@ -1060,7 +1065,8 @@ const ReviewerReport = () => {
                                     {item.count}
                                   </div>
                                 </div>
-                              ))}</div>
+                              ))}
+                            </div>
                           </div>
                         </div>
                       </div>

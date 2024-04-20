@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "../report.module.css";
-import { Checkbox, Popover } from "antd";
+import { Popover } from "antd";
 import { extractLatestData } from "../../../supervisor/auditing";
 import AuditedTrack from "../../../../../src/images/trackingImages/AuditedTrack.png";
 import NotAudited from "../../../../../src/images/trackingImages/NotAuditedTrack.png";
@@ -9,7 +9,6 @@ import ReAudit from "../../../../../src/images/trackingImages/reAuditTrack.png";
 import AuditPending from "../../../../../src/images/trackingImages/AuditPending.png";
 import Hold from "../../../../../src/images/trackingImages/HoldTrack.png";
 import Pending from "../../../../../src/images/trackingImages/PendingTrack.png";
-
 import Completed from "../../../../../src/images/trackingImages/CompletedTrack.png";
 import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
 import AuditedDeclineTrack from "../../../../../src/images/trackingImages/AuditDeclined.png";
@@ -506,11 +505,11 @@ const SentReport = () => {
                           ))}
                         </div>
                         <div className="d-flex mt-20">
-                          <div className="p-1" >
+                          <div className="p-1">
                             By clicking on the sheet, users can view the
                             detailed report that was sent to them
                           </div>
-                          <div  className="p-1">{SVGICON?.Sheet}</div>
+                          <div className="p-1">{SVGICON?.Sheet}</div>
                         </div>
                       </div>
                     </div>
