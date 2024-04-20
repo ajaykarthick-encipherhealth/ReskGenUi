@@ -241,6 +241,30 @@ export const SVGICON = {
       </defs>
     </svg>
   ),
+  Sheet:(
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <path d="M18.75 1.25H6.25C5.55964 1.25 5 1.80964 5 2.5V17.5C5 18.1904 5.55964 18.75 6.25 18.75H18.75C19.4404 18.75 20 18.1904 20 17.5V2.5C20 1.80964 19.4404 1.25 18.75 1.25Z" fill="#2FB776"/>
+    <path d="M5 14.375H20V17.5C20 18.1904 19.4404 18.75 18.75 18.75H6.25C5.55964 18.75 5 18.1904 5 17.5V14.375Z" fill="url(#paint0_linear_3929_10605)"/>
+    <path d="M20 10H12.5V14.375H20V10Z" fill="#229C5B"/>
+    <path d="M20 5.625H12.5V10H20V5.625Z" fill="#27AE68"/>
+    <path d="M5 2.5C5 1.80964 5.55964 1.25 6.25 1.25H12.5V5.625H5V2.5Z" fill="#1D854F"/>
+    <path d="M12.5 5.625H5V10H12.5V5.625Z" fill="#197B43"/>
+    <path d="M12.5 10H5V14.375H12.5V10Z" fill="#1B5B38"/>
+    <path d="M5 7.5C5 6.46444 5.83947 5.625 6.875 5.625H10.625C11.6606 5.625 12.5 6.46444 12.5 7.5V15C12.5 16.0356 11.6606 16.875 10.625 16.875H5V7.5Z" fill="black" fill-opacity="0.3"/>
+    <path d="M10 4.375H1.25C0.559644 4.375 0 4.93464 0 5.625V14.375C0 15.0654 0.559644 15.625 1.25 15.625H10C10.6904 15.625 11.25 15.0654 11.25 14.375V5.625C11.25 4.93464 10.6904 4.375 10 4.375Z" fill="url(#paint1_linear_3929_10605)"/>
+    <path d="M8.125 13.125L6.36381 9.9375L8.04769 6.875H6.67313L5.63359 8.83038L4.61126 6.875H3.19373L4.88617 9.9375L3.125 13.125H4.49957L5.60782 11.0536L6.7075 13.125H8.125Z" fill="white"/>
+    <defs>
+    <linearGradient id="paint0_linear_3929_10605" x1="5" y1="16.5625" x2="20" y2="16.5625" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#163C27"/>
+    <stop offset="1" stop-color="#2A6043"/>
+    </linearGradient>
+    <linearGradient id="paint1_linear_3929_10605" x1="0" y1="10" x2="11.25" y2="10" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#185A30"/>
+    <stop offset="1" stop-color="#176F3D"/>
+    </linearGradient>
+    </defs>
+    </svg>
+  ),
   Notification: (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -2913,8 +2937,8 @@ export const SVGICON = {
 rafFlagSmall: (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="23"
-      height="23"
+      width="22"
+      height="22"
       viewBox="0 0 800 800"
       fill="none"
     >

@@ -13,6 +13,7 @@
   cursor: pointer;
   transition: box-shadow 0.3s ease;
 }
+
 .buttonContainer {
   border: 1px solid #04306f;
   padding: 5px;
@@ -41,11 +42,16 @@
 .cardContainer {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
 }
-
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 15px 10px 10px;
+  color: #000000;
+}
 .card {
-  padding: 20px;
+  padding: 10px;
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
@@ -106,13 +112,16 @@
   height: 28px;
   background-color: #cee1fd;
   padding: 2px;
+  margin-right: 10px;
   border-radius: 3px;
   text-align: center;
 }
 .dataContainer {
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-end;
   align-items: center;
+  position: relative;
+  right: 45px;
 }
 .headText {
   font-size: 12px;
@@ -120,7 +129,7 @@
   font-family: Manrope;
 }
 .text {
-  font-size: 12px;
+  font-size: 14px;
 }
 .pName {
   font-size: 16px;
@@ -131,7 +140,7 @@
   background-color: #ebd4f7;
   color: #a63ed9;
   width: 1000px;
-  padding: 8px;
+  padding: 5px;
   font-size: 14px;
   border-radius: 4px;
 }
@@ -139,7 +148,97 @@
   background-color: #ccebff;
   color: #0174be;
   width: 1000px;
-  padding: 8px;
+  padding: 5px;
   font-size: 14px;
   border-radius: 4px;
+}
+.summaryText {
+  font-size: 24px;
+  font-weight: 600;
+  font-family: manrope;
+  color: black;
+}
+.subCard {
+  height: 75px;
+  padding: 10px;
+  text-align: center;
+  background-color: #e1edfe;
+  border-radius: 10px;
+  margin-right: 10px;
+  width: 175px;
+}
+.bullet {
+  height: 8px;
+  width: 8px;
+  background-color: #04306f;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.dateContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* .dateContainer::before {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 2px;
+  background-color: #04306f;
+  left: 22%;
+  transform: translateX(-50%);
+} */
+.flags {
+  width: 243p;
+  height: 250px;
+  border-radius: 10px;
+  background-color: #e1edfe;
+  margin-right: 5px;
+  padding: 10px;
+}
+.flag {
+  width: 209px;
+  height: 250px;
+  border-radius: 10px;
+  background-color: #e1edfe;
+}
+.cardHead {
+  text-align: center;
+  font-weight: 500px;
+}
+.count {
+  background-color: #04306f;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  color: white;
+  text-align: center;
+  padding: 3px;
+  margin-right: 10px;
+}
+.contentGroups {
+  display: flex;
+  padding: 5px;
+  overflow-y: scroll;
+}
+.contentAuditor {
+  display: flex;
+  justify-content: space-between;
+}
+.avatar {
+  display: flex;
+  padding: 5px;
+  font-size: 11px;
+  align-items: center;
+}
+.details {
+  width: 243p;
+  height: 101px;
+  border-radius: 10px;
+  background-color: #e1edfe;
+  margin-right: 5px;
+  padding: 20px;
 }

@@ -19,6 +19,7 @@ import Image from "next/image";
 import { SVGICON } from "../../../../jsx/constant/theme";
 import { renderUserPrfoileAvatar } from "../../../../components/headerFilters/functions";
 import EditButton from "../../../../images/adminUsers/EditButton";
+import { IMAGES } from "src/jsx/constant/theme.js";
 
 const SentReport = () => {
   const [activeTab, setActiveTab] = useState("Reviewer");
@@ -67,6 +68,62 @@ const SentReport = () => {
       edit: "",
       patientId: "2341cdbe-aa40-4efd-96ca-a91dd6c99424",
       date: "03-21-2024",
+      profileImageUrl:
+        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
+    },
+    {
+      id: 6,
+      report: "Monthly Report",
+      edit: "",
+      patientId: "2341cdbe-aa40-4efd-96ca-a91dd6c99424",
+      date: "03-21-2024",
+      profileImageUrl:
+        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
+    },
+    {
+      id: 7,
+      report: "Monthly Report",
+      edit: "",
+      patientId: "2341cdbe-aa40-4efd-96ca-a91dd6c99424",
+      date: "03-21-2024",
+      profileImageUrl:
+        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
+    },
+  ];
+  const userList = [
+    {
+      id: 1,
+      firstName: "Benjamin",
+      lastName: "Mitchell",
+      profileImageUrl:
+        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
+    },
+    {
+      id: 2,
+      firstName: "Benjamin",
+      lastName: "Mitchell",
+      profileImageUrl:
+        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
+    },
+    {
+      id: 3,
+      firstName: "Benjamin",
+      lastName: "Mitchell",
+      profileImageUrl:
+        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
+    },
+
+    {
+      id: 4,
+      firstName: "Benjamin",
+      lastName: "Mitchell",
+      profileImageUrl:
+        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
+    },
+    {
+      id: 5,
+      firstName: "Benjamin",
+      lastName: "Mitchell",
       profileImageUrl:
         "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
     },
@@ -289,7 +346,7 @@ const SentReport = () => {
                                   display: "flex",
                                   justifyContent: "space-between",
                                   alignItems: "center",
-                                  paddingBottom: "10px",
+                                  paddingBottom: "5px",
                                 }}
                               >
                                 <div className={`col-xl-6 ${styles.pName}`}>
@@ -306,7 +363,7 @@ const SentReport = () => {
 
                               <div
                                 style={{
-                                  paddingBottom: "10px",
+                                  paddingBottom: "5px",
                                 }}
                               >
                                 <div className={`col-xl-12 ${styles.headText}`}>
@@ -318,7 +375,6 @@ const SentReport = () => {
                                   display: "flex",
                                   justifyContent: "space-between",
                                   alignItems: "center",
-                                  paddingBottom: "10px",
                                 }}
                               >
                                 <div className={`col-xl-2 ${styles.text}`}>
@@ -378,7 +434,85 @@ const SentReport = () => {
                   </div>
                   <div className="col-xl-8" style={{ marginLeft: "10px" }}>
                     <div className={styles.cardContainer}>
-                      <div className={styles.card1}>hj</div>
+                      <div className={styles.card1}>
+                        <div className="header-logo ">
+                          <Image src={IMAGES.headerLogo} />
+                        </div>
+                        <div className="col-xl-12 d-flex mt-4">
+                          <div className={`col-xl-6 ${styles.details}`}>
+                            <div
+                              className={styles.pName}
+                              style={{ padding: "5px" }}
+                            >
+                              Monthly Report
+                            </div>
+                            <div
+                              className={styles.headText}
+                              style={{ padding: "5px" }}
+                            >
+                              2341cdbe-aa40-4efd-96ca-a91dd6c99424
+                            </div>
+                          </div>
+                          <div className={`col-xl-3 ${styles.details}`}>
+                            <div
+                              className={styles.pName}
+                              style={{ padding: "5px" }}
+                            >
+                              DATE
+                            </div>
+                            <div
+                              className={styles.headText}
+                              style={{ padding: "5px" }}
+                            >
+                              03-21-2024
+                            </div>
+                          </div>
+                          <div className={`col-xl-3 ${styles.details}`}>
+                            <div
+                              className={styles.pName}
+                              style={{ padding: "5px" }}
+                            >
+                              NO OF USERS
+                            </div>
+                            <div
+                              className={styles.headText}
+                              style={{ padding: "5px" }}
+                            >
+                              05
+                            </div>
+                          </div>
+                        </div>
+                        <div>
+                          <div
+                            className={styles.pName}
+                            style={{ padding: "10px" }}
+                          >
+                            User List
+                          </div>
+                          {userList.map((item) => (
+                            <div key={item.id} style={{ padding: "10px" }}>
+                              <span style={{ marginRight: "5px" }}>
+                                {renderUserPrfoileAvatar(
+                                  item.firstName,
+                                  item.lastName,
+                                  item?.profileImageUrl,
+                                  "header"
+                                )}
+                              </span>
+                              <span>
+                                {item.firstName} {item.lastName}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="d-flex mt-20">
+                          <div className="p-1" >
+                            By clicking on the sheet, users can view the
+                            detailed report that was sent to them
+                          </div>
+                          <div  className="p-1">{SVGICON?.Sheet}</div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
