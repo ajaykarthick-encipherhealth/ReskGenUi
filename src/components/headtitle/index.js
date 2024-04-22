@@ -37,7 +37,7 @@ const HeadTitle = ({
 
   const last30thDate = currentDate.subtract(30, "day");
   const lastDateWithTime = currentDate.endOf("day").toISOString();
-  console.log(selectedDates);
+
   return (
     <div className={styles.header} style={{ display: anchorTag && "flex" }}>
       <div
