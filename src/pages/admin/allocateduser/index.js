@@ -190,7 +190,7 @@ export default function Patient() {
   };
 
   const searchFunction = (search) => {
-    if (activeTab == 1) {
+    if (activeTab === 1) {
       getAllList(
         pageNo,
         pageSize,
@@ -393,6 +393,7 @@ export default function Patient() {
   ) => {
     setTableLoading(true);
     setIsLoading(true);
+    console.log("2nd spi")
     let dataMap = {
       firstName: data?.firstName,
       lastName: data?.lastName,
@@ -412,6 +413,7 @@ export default function Patient() {
     if (response.data) {
       let resultMap = [];
       let result = response?.data?.response?.content;
+      console.log(result)
       setTotalElementsPatient(response?.data?.response?.totalElements);
       result?.map((res) => {
         resultMap.push({
@@ -691,6 +693,7 @@ export default function Patient() {
                                     setSortCompleteOrder("DESC");
                                     setSortDueOrder("DESC");
                                     selectTabClick(1);
+                                    setActiveTab(1);
                                   }}
                                 >
                                   <Nav.Link
@@ -708,6 +711,7 @@ export default function Patient() {
                                     setSortCompleteOrder("DESC");
                                     setSortDueOrder("DESC");
                                     selectTabClick(2);
+                                    setActiveTab(2);
                                   }}
                                 >
                                   <Nav.Link
@@ -715,6 +719,7 @@ export default function Patient() {
                                     eventKey="team"
                                     onClick={() => {
                                       setTableLoading(true);
+                                      setActiveTab(2);
                                     }}
                                   >
                                     Supervisor Allocation
