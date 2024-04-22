@@ -975,10 +975,14 @@
 .invalidHccCodeError {
   font-size: 13px;
   color: red !important;
+  position: relative;
+  bottom: 10px;
 }
 .validHccCodeError {
   font-size: 13px;
   color: green !important;
+  position: relative;
+  bottom: 10px;
 }
 .provider_name_style {
   width: 25px !important;
