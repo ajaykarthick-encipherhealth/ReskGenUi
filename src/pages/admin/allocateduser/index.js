@@ -188,8 +188,25 @@ export default function Patient() {
     getL2PatientList(l2selectUser, e.page, sort, "");
     setTableLoading(true);
   };
-
-  const searchFunction = (search) => {
+  const selectTabClick = (number) => {
+    setSearchString("");
+    setPaginationFirst(0);
+    setIsLoading(true);
+    setActiveTab(number);
+    setSelectedRowsId([]);
+    setAllocateClicked(false);
+    setSelectedRowsId([]);
+    setSelectAllChecked(false);
+    setSelectAllCheckedL2(false);
+    if (number == 2) {
+      getAuditL2List(pageNoL2User, "");
+    } else {
+      setIsPatientList(false);
+      setPageNo(0);
+      getAllList(0, pageSize, "", "", true, 2, "", sort);
+    }
+  };
+  const searchFunction = (search,activeTab) => {
     if (activeTab === 1) {
       getAllList(
         pageNo,
@@ -210,12 +227,12 @@ export default function Patient() {
     }
   };
   const debounceFunc = useCallback(
-    debounce((text) => searchFunction(text), 900),
+    debounce((text,activeTab) => searchFunction(text,activeTab), 900),
     []
   );
   const getNameSearch = (search) => {
     setSearchString(search);
-    debounceFunc(search);
+    debounceFunc(search,activeTab);
   };
 
   const handleOpneModal = () => {
@@ -227,24 +244,7 @@ export default function Patient() {
       setAllocateModal(true);
     }
   };
-  const selectTabClick = (number) => {
-    setSearchString("");
-    setPaginationFirst(0);
-    setIsLoading(true);
-    setActiveTab(number);
-    setSelectedRowsId([]);
-    setAllocateClicked(false);
-    setSelectedRowsId([]);
-    setSelectAllChecked(false);
-    setSelectAllCheckedL2(false);
-    if (number == 2) {
-      getAuditL2List(pageNoL2User, "");
-    } else {
-      setIsPatientList(false);
-      setPageNo(0);
-      getAllList(0, pageSize, "", "", true, 2, "", sort);
-    }
-  };
+
   const getAuditL2List = async (pageNo, searchString) => {
     let orgId = localStorage.getItem("orgId");
     let tenantid = localStorage.getItem("tenantId");
@@ -393,7 +393,6 @@ export default function Patient() {
   ) => {
     setTableLoading(true);
     setIsLoading(true);
-    console.log("2nd spi");
     let dataMap = {
       firstName: data?.firstName,
       lastName: data?.lastName,
@@ -413,7 +412,6 @@ export default function Patient() {
     if (response.data) {
       let resultMap = [];
       let result = response?.data?.response?.content;
-      console.log(result);
       setTotalElementsPatient(response?.data?.response?.totalElements);
       result?.map((res) => {
         resultMap.push({
@@ -699,9 +697,6 @@ export default function Patient() {
                                   <Nav.Link
                                     to="#my-posts"
                                     eventKey="validDiseases"
-                                    onClick={() => {
-                                      setActiveTab(1);
-                                    }}
                                   >
                                     Reviewer Allocation
                                   </Nav.Link>
@@ -722,7 +717,6 @@ export default function Patient() {
                                     eventKey="team"
                                     onClick={() => {
                                       setTableLoading(true);
-                                      setActiveTab(2);
                                     }}
                                   >
                                     Supervisor Allocation
