@@ -275,6 +275,7 @@ const CompletedStatus = () => {
               <ReactECharts
                 option={option}
                 style={{ width: "100%", height: "300px", marginTop: "-10px" }}
+                className="adminCompleted"
               />
               <div className={styles.bulletContainer}>
                 <Legends bullets={bullets} />

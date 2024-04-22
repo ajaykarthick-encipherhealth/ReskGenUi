@@ -1,11 +1,19 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
+import Image from "next/image";
 import { Empty, Select, Badge, Popover } from "antd";
 import moment from "moment";
 import dayjs from "dayjs";
 import { ArrowUpOutlined, ArrowDownOutlined } from "@ant-design/icons";
 import TableStyle from "../../../../components/table/table.module.css";
+import AuditedTrack from "../../../../../src/images/trackingImages/AuditedTrack.png";
+
+import NotAudited from "../../../../../src/images/trackingImages/NotAuditedTrack.png";
+import AuditHold from "../../../../../src/images/trackingImages/AuditHoldTrack.png";
+import ReAudit from "../../../../../src/images/trackingImages/reAuditTrack.png";
+import AuditPending from "../../../../../src/images/trackingImages/AuditPending.png";
+import AuditedDeclineTrack from "../../../../../src/images/trackingImages/AuditDeclined.png";
 import {
   priorityOptions,
   renderUserPrfoile,
@@ -13,6 +21,7 @@ import {
   sortFunction,
 } from "../../../../components/headerFilters/functions";
 import { getPriorityChange } from "../../../../store/actions/l2Action/AuditorAction";
+import { extractLatestData } from "../../auditing";
 
 const UserQueueTable = ({ userList, setSort, auditBodyTemplate, page }) => {
   const dispatch = useDispatch();
@@ -21,52 +30,100 @@ const UserQueueTable = ({ userList, setSort, auditBodyTemplate, page }) => {
   const [auditAllocatedSort, setAuditAllocatedSort] = useState("DESC");
   const [audirDateSort, setAuditDateSort] = useState("DESC");
   const [auditDueSort, setAuditDueSort] = useState("DESC");
-  const badgeDisplay = (data) => {
-    if (data?.auditedStatus === "AUDITED") {
-      return (
-        <Badge.Ribbon
-          text="Audited"
-          color="#377880"
-          placement="start"
-        ></Badge.Ribbon>
-      );
-    } else if (data.auditedStatus === "REAUDIT") {
-      return (
-        <Badge.Ribbon
-          text="Re Audit"
-          color="#FFBE00"
-          placement="start"
-          height={10}
-        ></Badge.Ribbon>
-      );
-    } else if (data.auditedStatus === "AUDITHOLD") {
-      return (
-        <Badge.Ribbon
-          text="Audit Hold"
-          color="#964B00"
-          placement="start"
-          style={{ fontSize: "9px" }}
-        ></Badge.Ribbon>
-      );
-    } else if (data.auditedStatus === "AUDIT_PENDING") {
-      return (
-        <Badge.Ribbon
-          text="Audit Pending"
-          color="#F28585"
-          placement="start"
-          style={{ fontSize: "9px" }}
-        ></Badge.Ribbon>
-      );
-    } else if (data.auditedStatus === "AUDIT_DECLINED") {
-      return (
-        <Badge.Ribbon
-          text="Audit Declined"
-          color="#D40B0B"
-          placement="start"
-          style={{ fontSize: "9px" }}
-        ></Badge.Ribbon>
-      );
-    } else return null;
+
+  const auditstatusBodyTemplate = (rowData) => {
+    const declinedDataFromAudit = extractLatestData(
+      rowData?.auditDeclinedNotes
+    );
+
+    const declinedDataFromDeclined = extractLatestData(
+      rowData?.auditDeclinedNotes
+    );
+
+    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
+    switch (rowData.auditedStatus) {
+      case "AUDIT_PENDING":
+        return (
+          <Popover placement="bottom" title="Status: AUDIT PENDING">
+            <div className="patient-status">
+              <Image
+                src={AuditPending}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
+        );
+
+      case "AUDITHOLD":
+        return (
+          <Popover placement="bottom" title=" Status: AUDIT HOLD">
+            <div className="patient-status">
+              <Image
+                src={AuditHold}
+                // className={styles.ImgTrck}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
+        );
+      case "REAUDIT":
+        return (
+          <Popover placement="bottom" title=" Status: REAUDIT">
+            <div className="patient-status">
+              <Image src={ReAudit} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
+        );
+      case "AUDITED":
+        return (
+          <Popover placement="bottom" title=" Status: AUDITED">
+            <div className="patient-status">
+              <Image
+                src={AuditedTrack}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
+        );
+      case "AUDITED":
+        return (
+          <div className="patient-status">
+            <Image
+              src={AuditedTrack}
+              style={{ height: "30px", width: "30px" }}
+            />
+          </div>
+        );
+
+      case "NOT_AUDIT":
+        return (
+          <Popover placement="bottom" title=" Status: NOT AUDIT">
+            <div className="patient-status">
+              <Image
+                src={NotAudited}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
+        );
+      case "AUDIT_DECLINED":
+        return (
+          <Popover
+            placement="bottom"
+            title=" Status: AUDIT DECLINED"
+            content={`Reason: ${declinedData ? declinedData : "---"}`}
+          >
+            <div className="patient-status">
+              <Image
+                src={AuditedDeclineTrack}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
+        );
+      case null:
+        return <div className="patient-status">---</div>;
+    }
   };
 
   const handleTableRowClick = (e, id) => {
@@ -74,7 +131,10 @@ const UserQueueTable = ({ userList, setSort, auditBodyTemplate, page }) => {
     if (targetTd) {
       localStorage.setItem("patientId", id);
       // router?.push(`/supervisor/user/details?page=${page}`);
-      router.push({pathname:"/supervisor/user/details", query: {...page, isSupervisorUser: true}})
+      router.push({
+        pathname: "/supervisor/user/details",
+        query: { ...page, isSupervisorUser: true },
+      });
     }
   };
 
@@ -88,18 +148,7 @@ const UserQueueTable = ({ userList, setSort, auditBodyTemplate, page }) => {
             className={TableStyle.firstTdBorder}
             onClick={(e) => handleTableRowClick(e, data?.patientId)}
           >
-            {data?.auditedStatus ? (
-              <span style={{ position: "relative", left: "0px", top: "9px" }}>
-                {badgeDisplay(data)}
-              </span>
-            ) : null}
-            <span
-              style={{
-                paddingLeft: "70px",
-              }}
-            >
-              {data?.patientId}
-            </span>
+            <span>{data?.patientId}</span>
           </td>
           <td
             className={TableStyle.childBorder}
@@ -280,6 +329,13 @@ const UserQueueTable = ({ userList, setSort, auditBodyTemplate, page }) => {
           >
             {auditBodyTemplate(data)}
           </td>
+          <td
+            className={TableStyle.lastBorder}
+            onClick={handleTableRowClick}
+            style={{ textAlign: "center" }}
+          >
+            {auditstatusBodyTemplate(data)}
+          </td>
         </tr>
       ))
     );
@@ -290,7 +346,7 @@ const UserQueueTable = ({ userList, setSort, auditBodyTemplate, page }) => {
       <table className={TableStyle.classTable}>
         <thead className={TableStyle.classThead}>
           <tr>
-            <th style={{ paddingLeft: "80px" }}>PATIENT ID</th>
+            <th>PATIENT ID</th>
             <th>PATIENT NAME</th>
             <th
               onClick={() => {
@@ -372,6 +428,7 @@ const UserQueueTable = ({ userList, setSort, auditBodyTemplate, page }) => {
             {/* <th>ALLOCATED BY</th> */}
             <th style={{ paddingLeft: "30px" }}>PRIORITY</th>
             <th style={{ textAlign: "center" }}>REVIEWED STATUS</th>
+            <th style={{ textAlign: "center" }}>AUDITED STATUS</th>
           </tr>
         </thead>
 

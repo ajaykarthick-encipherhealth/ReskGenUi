@@ -85,9 +85,11 @@ const HeadTitle = ({
         onOk={() => {
           dispatch(getDateRange(dateValues));
           setOpenPicker(false);
+          setSelectedDates([]);
         }}
         onCancel={() => {
           setOpenPicker(false);
+          setSelectedDates([]);
         }}
       >
         <div className={styles.modalDetails}>
