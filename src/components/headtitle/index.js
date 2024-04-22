@@ -21,6 +21,7 @@ const HeadTitle = ({
 }) => {
   const dispatch = useDispatch();
   const [selectedDates, setSelectedDates] = useState([]);
+  const [typedDate, setTypedDate] = useState("");
   const [dateValues, setDates] = useState();
   const currentDate = dayjs();
   const startOfMonth = currentDate.startOf("month");
@@ -105,6 +106,7 @@ const HeadTitle = ({
             suffixIcon={false}
             className={styles.datepicker}
             disabledDate={(current) => disableFutureDate(current)}
+            inputReadOnly={true}
           />
           <div
             style={{
