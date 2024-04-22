@@ -393,7 +393,7 @@ export default function Patient() {
   ) => {
     setTableLoading(true);
     setIsLoading(true);
-    console.log("2nd spi")
+    console.log("2nd spi");
     let dataMap = {
       firstName: data?.firstName,
       lastName: data?.lastName,
@@ -413,7 +413,7 @@ export default function Patient() {
     if (response.data) {
       let resultMap = [];
       let result = response?.data?.response?.content;
-      console.log(result)
+      console.log(result);
       setTotalElementsPatient(response?.data?.response?.totalElements);
       result?.map((res) => {
         resultMap.push({
@@ -699,6 +699,9 @@ export default function Patient() {
                                   <Nav.Link
                                     to="#my-posts"
                                     eventKey="validDiseases"
+                                    onClick={() => {
+                                      setActiveTab(1);
+                                    }}
                                   >
                                     Reviewer Allocation
                                   </Nav.Link>
