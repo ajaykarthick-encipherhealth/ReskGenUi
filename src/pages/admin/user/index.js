@@ -1,27 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { Offcanvas } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { notification } from "antd";
-import Form from "react-bootstrap/Form";
+import { Form, Input, Button, Select, Row, Col, notification } from "antd";
 import styles from "../../../styles/auth.module.css";
 import ENDPOINTS from "../../../utility/enpoints";
 import axios from "../../../utility/axiosConfig";
 import AdminList from "../../../components/table/admin/adminList/adminList";
 import Header from "../../../jsx/layouts/nav/Header";
 import HeaderFilters from "../../../components/headerFilters";
-import Select from "react-select";
-import {
-  getAddUser,
-  getUsers,
-} from "../../../store/actions/adminAction/usersAction";
+import { getUsers } from "../../../store/actions/adminAction/usersAction";
 import { AddUser } from "../../../services/adminServices/usersService";
 import { Paginator } from "primereact/paginator";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { handleTogglePasswordVisibility } from "../../../components/headerFilters/functions";
-
+const { Option } = Select;
 const options3 = [
   { value: "ALL", label: "ALL" },
   { value: "true", label: "Enabled" },
@@ -56,7 +47,7 @@ const UserList = () => {
   const [userListAll, setUserListAll] = useState([]);
   const [addUser, setAddUser] = useState(false);
   const [isStatus, setStatus] = useState(false);
-  const [roleValue, setRoleValue] = useState("");
+  const [roleValue, setRoleValue] = useState([]);
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
   const [totalElements, setTotalElements] = useState(10);
   const [sortOrder, setSortOrder] = useState("DESC");
@@ -84,41 +75,20 @@ const UserList = () => {
   };
   const [clear, setClear] = useState(false);
 
-  const handleChange = async (e) => {
-    const key = e.target.name;
-    const value = e.target.value;
-    setFormData({ ...formData, [key]: value });
-    if (key == "role") {
-      setRoleValue([value]);
+  const [form] = Form.useForm();
+
+  const handleSubmit = async (userFormData) => {
+    userFormData.tenantId = localTenantId;
+    userFormData.organizationId = localOrgId;
+    userFormData.role = [userFormData?.role];
+    const response = await AddUser(userFormData, setFormData);
+    if (response?.data?.status === "SUCCESS") {
+      setAddUser(false);
+      setUseAdd(true);
+
+      setIsLoadingBtn(false);
     }
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    if (form.checkValidity() === true) {
-      formData.tenantId = localTenantId;
-      formData.organizationId = localOrgId;
-      formData.role = roleValue ? roleValue : [role.toUpperCase()];
-      const response = await AddUser(formData, setFormData);
-      if (response?.data?.status === "SUCCESS") {
-        setAddUser(false);
-        setUseAdd(true);
-        setFormData({
-          firstName: "",
-          lastName: "",
-          emailId: "",
-          password: "",
-          role: "",
-          userName: "",
-          mobileNumber: "",
-          confirmPassword: "",
-        });
-
-        setIsLoadingBtn(false);
-      }
-    }
-
+    setRoleValue([]);
     setValidated(true);
   };
 
@@ -220,25 +190,16 @@ const UserList = () => {
   useEffect(() => {
     setTimeout(() => {
       setFormData(intialValues);
-    }, 650);
+    }, 750);
   }, [addUser]);
-  const getValidatePassword = (formData) => {
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
 
-    if (formData?.password?.length === 0) return "Please enter password";
-    if (formData?.password?.length < 8)
-      return "Password should be greater than 8 characters";
-    if (formData?.password?.length > 14)
-      return "Password should be less than 14 characters";
-    if (
-      formData?.password?.length > 0 &&
-      !passwordRegex.test(formData?.password)
-    )
-      return "Password must contain at least 1 capital letter, 1 small letter, 1 number, and 1 special character";
-    else {
-      return "";
-    }
+  const onRoleChange = (value) => {
+    console.log(value);
+  };
+  const onFinish = (values) => {
+    console.log(values);
+    handleSubmit(values);
+    form.resetFields();
   };
 
   return (
@@ -391,13 +352,14 @@ const UserList = () => {
             </div>
           </div>
         </Offcanvas>
+
         <Offcanvas
           show={addUser}
           onHide={() => {
             setAddUser(false);
-            setFormData(intialValues);
+            setRoleValue([]);
           }}
-          className="offcanvas-end  offcanvas-md-size"
+          className="offcanvas-end offcanvas-md-size"
           placement="end"
         >
           <div className="offcanvas-header">
@@ -409,7 +371,6 @@ const UserList = () => {
               className="btn-close"
               onClick={() => {
                 setAddUser(false);
-                setFormData();
               }}
             >
               <i className="fa-solid fa-xmark"></i>
@@ -418,301 +379,232 @@ const UserList = () => {
           <div className="offcanvas-body">
             <div className={`container-fluid ${styles.formAnimation}`}>
               <Form
-                noValidate
-                validated={validated}
-                onSubmit={handleSubmit}
-                autoComplete="off"
+                form={form}
+                name="control-hooks"
+                onFinish={onFinish}
+                labelCol={{ span: 24 }}
+                wrapperCol={{ span: 24 }}
               >
-                <div className="row">
-                  <div className="col-xl-6 mb-3">
-                    <Form.Label>
-                      First Name <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
+                {" "}
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <Form.Item
+                      label="First Name"
                       name="firstName"
-                      required
-                      type="text"
-                      onChange={handleChange}
-                      placeholder="Enter First Name"
-                    />
-                    {validated ? (
-                      <div className="text-danger fs-12">
-                        {formData?.firstName?.length === 0
-                          ? "Please enter the firstname"
-                          : ""}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter your first name!",
+                        },
+                      ]}
+                    >
+                      <div>
+                        {" "}
+                        <Input />
                       </div>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  <div className="col-xl-6 mb-3">
-                    <Form.Label>
-                      Last Name <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Last Name"
                       name="lastName"
-                      required
-                      type="text"
-                      onChange={handleChange}
-                      placeholder="Enter Last Name"
-                    />
-                    {validated ? (
-                      <div className="text-danger fs-12">
-                        {formData?.lastName?.length === 0
-                          ? "Please enter the lastname"
-                          : ""}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter your last name!",
+                        },
+                      ]}
+                    >
+                      <div>
+                        {" "}
+                        <Input />
                       </div>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  <div className="col-xl-6 mb-3">
-                    <Form.Label>
-                      Email <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Email"
                       name="emailId"
-                      required
-                      type="email"
-                      onChange={handleChange}
-                      placeholder="Enter Email"
-                    />
-                    {validated ? (
-                      <div className="text-danger fs-12">
-                        {formData?.emailId?.length === 0
-                          ? "Please enter the email"
-                          : !formData?.emailId?.includes("@")
-                          ? "Please enter valid email"
-                          : ""}
+                      rules={[
+                        { required: true, message: "Please enter your email!" },
+                        {
+                          type: "email",
+                          message: "Please enter a valid email!",
+                        },
+                      ]}
+                    >
+                      <div>
+                        {" "}
+                        <Input />
                       </div>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  <div className="col-xl-6 mb-3">
-                    <Form.Label>
-                      User Name <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <div className="input-group mb-3">
-                      <Form.Control
-                        name="userName"
-                        required
-                        type="text"
-                        onChange={handleChange}
-                        placeholder="Enter User Name"
-                        autoComplete="none"
-                        value={formData?.userName}
-                      />
-                    </div>
-                    {validated ? (
-                      <div className="text-danger fs-12">
-                        {formData?.userName?.length === 0
-                          ? "Please enter the username"
-                          : formData?.userName?.includes("@")
-                          ? "Username shopuld not contain @ symbol"
-                          : ""}
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="User Name"
+                      name="userName"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter your username!",
+                        },
+                        {
+                          validator: (_, value) => {
+                            if (value && value.includes("@")) {
+                              return Promise.reject(
+                                "Username should not contain @ symbol"
+                              );
+                            }
+                            return Promise.resolve();
+                          },
+                        },
+                      ]}
+                    >
+                      <div>
+                        {" "}
+                        <Input />
                       </div>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  <div className="col-xl-6 mb-3">
-                    <Form.Label>
-                      Mobile Number <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <Form.Control
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Mobile Number"
                       name="mobileNumber"
-                      required
-                      type="number"
-                      onChange={handleChange}
-                      placeholder="Enter Mobile Number"
-                      value={formData?.mobileNumber}
-                    />
-                    {validated ? (
-                      <div className="text-danger fs-12">
-                        {formData?.mobileNumber?.length === 0
-                          ? "Please enter the mobileNumber"
-                          : formData?.mobileNumber?.length > 10 ||
-                            formData?.mobileNumber?.length < 10
-                          ? "Please enter valid mobileNumber"
-                          : ""}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter your mobile number!",
+                        },
+                        {
+                          len: 10,
+                          message:
+                            "Please enter a valid 10-digit mobile number!",
+                        },
+                      ]}
+                    >
+                      <div>
+                        {" "}
+                        <Input type="number" />
                       </div>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  <div className="col-xl-6 mb-3">
-                    <Form.Label>
-                      Role <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <div
-                      style={{
-                        border:
-                          validated &&
-                          formData?.role?.length === 0 &&
-                          "1px solid red",
-                        borderRadius: "8px",
-                      }}
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      name="role"
+                      label="Role"
+                      rules={[
+                        {
+                          required: true,
+                        },
+                      ]}
                     >
                       <Select
-                        className="addUserSelector"
-                        name="role"
-                        options={[
-                          { value: "ADMIN", label: "ADMIN" },
-                          { value: "REVIEWER", label: "REVIEWER" },
-                          { value: "SUPERVISOR", label: "SUPERVISOR" },
-                          {
-                            value: "ADMIN_TECHNICAL_SUPPORT",
-                            label: "ADMIN TECHNICAL SUPPORT",
+                        placeholder="Select role"
+                        onChange={onRoleChange}
+                        allowClear
+                      >
+                        <Select.Option value="ADMIN">ADMIN</Select.Option>
+                        <Select.Option value="REVIEWER">REVIEWER</Select.Option>
+                        <Select.Option value="SUPERVISOR">
+                          SUPERVISOR
+                        </Select.Option>
+                        <Select.Option value="ADMIN_TECHNICAL_SUPPORT">
+                          ADMIN TECHNICAL SUPPORT
+                        </Select.Option>
+                        <Select.Option value="L2AUDITOR">
+                          ADMIN MEDICAL CODER
+                        </Select.Option>
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Password"
+                      name="password"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter your password!",
+                        },
+                        {
+                          validator: (_, value) => {
+                            if (
+                              value?.length === 0 ||
+                              !/[a-z]/.test(value) ||
+                              !/[A-Z]/.test(value)
+                            ) {
+                              return Promise.reject(
+                                "Please enter a password with both lowercase and uppercase characters."
+                              );
+                            }
+                            return Promise.resolve();
                           },
-                          { value: "L2AUDITOR", label: "ADMIN MEDICAL CODER" },
-                        ]}
-                        onChange={(selectedOption) =>
-                          handleChange({
-                            target: {
-                              name: "role",
-                              value: selectedOption?.value,
-                            },
-                          })
-                        }
-                        required
-                      />
-                    </div>
-                    {validated ? (
-                      <div className="text-danger fs-12">
-                        {formData?.role?.length === 0
-                          ? "Please select role"
-                          : ""}
+                        },
+                      ]}
+                    >
+                      <div>
+                        <Input.Password />
                       </div>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-
-                  <div className="col-xl-6 mb-3">
-                    <Form.Label>
-                      Password <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-
-                    <div
-                      className={styles.passCOntainer}
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Confirm Password"
+                      name="confirmPassword"
+                      dependencies={["password"]}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please confirm your password!",
+                        },
+                        ({ getFieldValue }) => ({
+                          validator(_, value) {
+                            if (!value || getFieldValue("password") === value) {
+                              return Promise.resolve();
+                            }
+                            return Promise.reject(
+                              "The two passwords do not match!"
+                            );
+                          },
+                        }),
+                      ]}
+                    >
+                      <div>
+                        {" "}
+                        <Input.Password />
+                      </div>
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <div style={{ display: "flex", gap: "8px" }}>
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                      Submit
+                    </Button>
+                  </Form.Item>
+                  <Form.Item>
+                    <Button
                       style={{
-                        border:
-                          validated &&
-                          formData?.password?.length === 0 &&
-                          "1px solid red",
+                        backgroundColor: "#ffdede",
+                        color: "#ff5e5e",
+                        borderColor: "#ffdede",
+                      }}
+                      onClick={() => {
+                        setAddUser(false);
+                        setRoleValue([]);
                       }}
                     >
-                      <div style={{ width: "100%" }}>
-                        <Form.Control
-                          name="password"
-                          required
-                          type={showPassword ? "text" : "password"}
-                          onChange={handleChange}
-                          className={styles.passField}
-                          placeholder="Enter Password"
-                          value={formData?.password}
-                        />
-                      </div>
-                      <div className={styles.passwordBox2}>
-                        <span>
-                          <FontAwesomeIcon
-                            onClick={() => {
-                              handleTogglePasswordVisibility(
-                                showPassword,
-                                setShowPassword
-                              );
-                            }}
-                            icon={showPassword ? faEye : faEyeSlash}
-                          />
-                        </span>
-                      </div>
-                    </div>
-
-                    {validated ? (
-                      <div className="text-danger fs-12">
-                        {getValidatePassword(formData)}
-                      </div>
-                    ) : (
-                      <small id="emailHelp" class="form-text text-muted">
-                        Please enter an number with both lowercase and uppercase
-                        characters.
-                      </small>
-                    )}
-                  </div>
-
-                  <div className="col-xl-6 mb-3">
-                    <Form.Label>
-                      Confirm Password <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <div
-                      className={styles.passCOntainer}
-                      style={{
-                        border:
-                          validated &&
-                          formData?.confirmPassword?.length === 0 &&
-                          "1px solid red",
-                      }}
-                    >
-                      <div style={{ width: "95%" }}>
-                        <Form.Control
-                          name="confirmPassword"
-                          required
-                          type={showConfirmPassword ? "text" : "password"}
-                          onChange={handleChange}
-                          className={styles.passField}
-                          placeholder="Confirm Password"
-                        />
-                      </div>
-                      <div className={styles.passwordBox2}>
-                        <span>
-                          <FontAwesomeIcon
-                            onClick={() => {
-                              handleTogglePasswordVisibility(
-                                showConfirmPassword,
-                                setShowConfirmPassword
-                              );
-                            }}
-                            icon={showConfirmPassword ? faEye : faEyeSlash}
-                          />
-                        </span>
-                      </div>
-                    </div>
-                    {validated ? (
-                      <div className="text-danger fs-12">
-                        {formData?.confirmPassword?.length === 0
-                          ? "Please enter confirm password"
-                          : formData?.password !== formData?.confirmPassword
-                          ? "Password is not matched"
-                          : ""}
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                </div>
-                <div>
-                  <Button type="submit" className="btn btn-primary btn-sm me-1">
-                    Submit
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      setAddUser(false);
-                    }}
-                    className="btn btn-danger btn-sm light ms-1"
-                  >
-                    Cancel
-                  </Button>
+                      Cancel
+                    </Button>
+                  </Form.Item>
                 </div>
               </Form>
-              {/* <div>
-                <label>User Name</label>
-                <input name="user name" type="text" autoComplete="off" value={""} />
-              </div>
-              <div>
-                <label>Password</label>
-                <input name="password" type="password" autoComplete="off"  value={""}/>
-              </div> */}
             </div>
           </div>
         </Offcanvas>
