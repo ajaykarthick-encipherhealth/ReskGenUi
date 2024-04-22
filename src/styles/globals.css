@@ -12231,7 +12231,12 @@ tbody > tr {
   margin-top: -20px;
   margin-left: 1px;
 }
-
+.filter-container {
+  margin-bottom: -20px;
+  margin-top: -20px;
+  margin-left: 1px;
+  margin-top: 10px;
+}
 .new-form-control {
   border-radius: 8px !important;
   background: #fff !important;
@@ -14407,6 +14412,17 @@ input[type="number"] {
   font-size: 10px !important;
 }
 
-.visitdata-modalCentent .ant-modal-content{
-width:700px !important;
+.visitdata-modalCentent .ant-modal-content {
+  width: 700px !important;
+}
+.labelStyle {
+  margin-left: 10px;
+  background-color: #cee1fd; /* Background color for label */
+  padding: 10px; /* Adjust padding as needed */
+  color: #04306f;
+  margin-bottom: 0;
+  width: 68px;
+  text-align: center;
+  border-radius: 5px 0px 0px 5px !important;
+  height: 43px;
 }

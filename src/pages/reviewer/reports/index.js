@@ -4,6 +4,7 @@ import styles from "./report.module.css";
 import ReviewerReport from "./reviewerReport/indes";
 import SentRewiewer from "./sentReport";
 import ReceivedReport from "./receivedReport";
+import HeaderFilters from "../../../components/headerFilter";
 
 const Reports = () => {
   const [activeTab, setActiveTab] = useState("Reviewer");
@@ -24,25 +25,61 @@ const Reports = () => {
                   <div className={styles.buttonContainer}>
                     <div className={styles.group}>
                       <button
-                        className={activeTab === "Reviewer" ? `${styles.active}` : ""}
+                        className={
+                          activeTab === "Reviewer" ? `${styles.active}` : ""
+                        }
                         onClick={() => handleTabClick("Reviewer")}
                       >
                         Reviewer
                       </button>
                       <button
-                        className={activeTab === "Sent" ? `${styles.active}` : ""}
+                        className={
+                          activeTab === "Sent" ? `${styles.active}` : ""
+                        }
                         onClick={() => handleTabClick("Sent")}
                       >
                         Sent
                       </button>
                       <button
-                        className={activeTab === "Received" ? `${styles.active}` : ""}
+                        className={
+                          activeTab === "Received" ? `${styles.active}` : ""
+                        }
                         onClick={() => handleTabClick("Received")}
                       >
                         Received
                       </button>
                     </div>
                   </div>
+
+                  <div className="tbl-caption  align-items-center">
+                          <HeaderFilters
+                            // search
+                            // setSentSearch={setSentSearch}
+                            // setReceivedSearch={setReceivedSearch}
+                            // setCoderSearch={setCoderSearch}
+                            isSearch={true}
+                            // coderSearch={coderSearch}
+                            // receivedSearch={receivedSearch}
+                            // // sentSearch={sentSearch}
+                            // searchlabel="Search by Name"
+                            // selector
+                            selectlabel=" Status"
+                            isSelector={
+                              !activeTab ||
+                              activeTab === "Reviewer"
+                                ? true
+                                : false
+                            }
+                            isRangePicker={true}
+                            pickerlabel="Date"
+                            // setSelectedOption={setSelectedCoderOpt}
+                            // selectOptions={statusOptions}
+                            // defaultSelectValue1={""}
+                            // selector
+
+                           
+                          />
+                        </div>
 
                   <div>
                     {activeTab === "Reviewer" && (

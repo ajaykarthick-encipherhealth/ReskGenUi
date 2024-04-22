@@ -113,7 +113,7 @@ const AuditHeaderFilters = ({
   return (
     <>
       <div style={{ display: "flex" }}>
-        <div className="row filter-containainer" style={{ width: "100%" }}>
+        <div className="row filter-contain" style={{ width: "100%" }}>
           {isSearch && (
             <div className="col-xl-2">
               {" "}
