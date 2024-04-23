@@ -5,7 +5,7 @@ export async function icdCodes(search) {
     method: "GET",
   };
   const data = await requestPortal(
-    `management/getAllIcdcodes?q=${search}
+    `management/getAllIcdCodes?q=${search}
   `,
     options
   );
