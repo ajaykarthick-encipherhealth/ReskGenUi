@@ -304,7 +304,7 @@ img.auth_ehrLogo3 {
   background-color: transparent;
   position: relative;
   animation-name: form;
-  animation-duration: 5s;
+  animation-duration: 10s;
   animation-fill-mode: forwards;
 }
 
@@ -322,4 +322,8 @@ img.auth_ehrLogo3 {
 }
 .enableMfaBtn {
   margin-bottom: 10px;
+}
+:where(.css-dev-only-do-not-override-djtmh8).ant-input-affix-wrapper
+  > input.ant-input:focus {
+  background-color: none !important;
 }
