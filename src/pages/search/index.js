@@ -7,6 +7,7 @@ import Semantic from "./semantic.json";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import { actions as searchActions } from "../../stores/search";
+import { getResponePopup } from "../../utils/reusable";
 
 const Searches = ({
   getAllICDCodes,
@@ -14,13 +15,17 @@ const Searches = ({
   getSimpleSearch,
   getSemanticSearch,
   updateSemantic,
+  getAllICDCodesData,
 }) => {
+  const size = 15;
   const [search, serSearch] = useState("");
   const [list, setList] = useState([]);
   const [modalOpen, setModalOpen] = useState("");
   const [updateDetails, setUpdateDetails] = useState();
   const [searchType, setSearchType] = useState("Rule-engine-search");
-  const totalElements = 100;
+  const totalElements = getAllICDCodesData?.data?.response?.totalElements
+    ? getAllICDCodesData?.data?.response?.totalElements
+    : 0;
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [page, setPage] = useState(0);
   const [action, setAction] = useState("");
@@ -50,6 +55,8 @@ const Searches = ({
       isAction: true,
     },
   ];
+
+  console.log(getAllICDCodesData);
 
   const semaniticColumn = [
     { name: "code", value: "code" },
@@ -100,42 +107,51 @@ const Searches = ({
   };
 
   const createdICDCodes = (type) => {
-    if ((type = "edit")) {
+    if ((type !== "edit")) {
       createICDCode({
         id: action.id,
         code: updateDetails.codes,
         description: updateDetails.description,
-        years: years,
+        years: years.map((date) => date.value),
       });
     } else {
       createICDCode({
         code: updateDetails.codes,
         description: updateDetails.description,
-        years: years,
+        years: years.map((date) => date.value),
       });
       setUpdateDetails({});
+      years(null);
     }
   };
   useEffect(() => {
     if (action.type == "edit") {
       setModalOpen(action.type);
+      const editData = getAllICDCodesData?.data?.response.content.find(
+        (item) => item.id == action.id
+      );
+      console.log(editData);
+      const year = editData?.years?.map((item) => ({
+        label: item,
+        value: item,
+      }));
       setUpdateDetails({
         ...updateDetails,
-        codes: "test",
-        description: "test",
+        codes: editData.code,
+        description: editData.description,
       });
-      setYears([{ value: "2016", label: "2016" }]);
+      setYears(year);
     }
   }, [action]);
   useEffect(() => {
     if (searchType == "Rule-engine-search") {
-      getAllICDCodes(search);
+      getAllICDCodes(search, page, size);
     } else if (searchType == "SimpleHybridSearch") {
       getSimpleSearch(search);
     } else if (searchType == "SemanticHybridSearch") {
       getSemanticSearch(search);
     }
-  }, [search, searchType]);
+  }, [search, searchType, page]);
 
   console.log(updateDetails, searchType, years, keyword, "updateDetails");
   return (
@@ -206,15 +222,17 @@ const Searches = ({
       <div className="d-flex justify-content-center">
         <div style={{ width: "90%" }}>
           <div className="d-flex justify-content-end">
-            {searchType == "Rule-engine-search" &&  <button
-              class="btns-primary btn-app-primary mx-3 px-4"
-              type="button"
-              id="button-addon2"
-              onClick={() => setModalOpen("Add")}
-            >
-              Add
-            </button> }
-           
+            {searchType == "Rule-engine-search" && (
+              <button
+                class="btns-primary btn-app-primary mx-3 px-4"
+                type="button"
+                id="button-addon2"
+                onClick={() => setModalOpen("Add")}
+              >
+                Add
+              </button>
+            )}
+
             {/* <button
               class="btns-primary btn-app-primary mx-2"
               type="button"
@@ -226,7 +244,11 @@ const Searches = ({
           </div>
           {searchType == "Rule-engine-search" ? (
             <AppTable
-              data={Data}
+              data={
+                getAllICDCodesData?.data?.response?.content
+                  ? getAllICDCodesData?.data?.response?.content
+                  : []
+              }
               column={column}
               // status={getButtonStatus}
               onPageChange={onPageChange}
@@ -447,7 +469,7 @@ const Searches = ({
 
 const enhancer = connect(
   (state) => ({
-    WorlFlow: state,
+    getAllICDCodesData: state.search.icdCodes,
   }),
   {
     getAllICDCodes: searchActions.getAllICDCodes,

@@ -1,18 +1,18 @@
 import { requestPortal } from "../../utils/network";
 
-export async function icdCodes(search) {
+export async function icdCodes(search, page,size = 15) {
   const options = {
     method: "GET",
   };
   const data = await requestPortal(
-    `management/getAllIcdCodes?q=${search}
+    `management/getAllIcdCodes?q=${search}&page=${page}&size=${size}
   `,
     options
   );
   return data;
 }
 
-export async function createIcdCode({obj}) {
+export async function createIcdCode(obj) {
   const options = {
     method: "POST",
     body: JSON.stringify(obj)
