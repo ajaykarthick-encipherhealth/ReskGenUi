@@ -567,6 +567,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
                               statusBodyTemplate={processstatusBodyTemplate}
                               gotoPatientDetails={gotoPatientDetails}
                               patientDetails={patientDetails}
+                              setSelectedPriority={setSelectedPriority}
                               sort={sort}
                               setSort={setSort}
                               getFilteApi={getFilteApi}
