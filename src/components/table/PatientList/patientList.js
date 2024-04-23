@@ -19,7 +19,8 @@ function PatientTable({
   patientDetails,
   setSort,
   getFilteApi,
-  page
+  page,
+  setSelectedPriority
 }) {
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
