@@ -1309,7 +1309,7 @@ const Details = () => {
     } else if (user && user.toLowerCase() === "reviewer") {
       const { user: _, ...queryWithoutUser } = navigate.query;
       const queryString = new URLSearchParams(queryWithoutUser).toString();
-      if (navigate.query) {
+      if (navigate.query && queryString) {
         const url = queryString
           ? `/reviewer/patients?${queryString}`
           : "/reviewer/patients";
