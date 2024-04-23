@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Select from "react-select";
 import { DatePicker, Popover } from "antd";
 import Image from "next/image";
@@ -129,6 +129,7 @@ const HeaderFilters = ({
   auditallocatedToOptoons,
 }) => {
   const dispatch = useDispatch();
+  const [trackInput, setTrackInput] = useState("");
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -213,7 +214,7 @@ const HeaderFilters = ({
               <div className={defaultSize}>
                 <label className={styles.label}>{pickerlabe5}</label>
                 <div className="dateRangeSize">
-                  <RangePicker 
+                  <RangePicker
                     value={clear ? ["", ""] : selectedDates2}
                     format="YYYY-MM-DD"
                     onCalendarChange={(val) => setSelectedDates2(val)}
@@ -293,7 +294,6 @@ const HeaderFilters = ({
                   isSearchable={false}
                 />
               </div>
-            
             </div>
           ) : null}
 
@@ -313,7 +313,6 @@ const HeaderFilters = ({
                   isSearchable={false}
                 />
               </div>
-              
             </div>
           ) : null}
         </div>
@@ -364,7 +363,7 @@ const HeaderFilters = ({
                   <label className={styles.label}>
                     {"Supervisor Due Date"}
                   </label>
-                  <div  className="dateRangeSize">
+                  <div className="dateRangeSize">
                     <RangePicker
                       value={clear ? ["", ""] : selectedDates5}
                       format="YYYY-MM-DD"
@@ -435,22 +434,23 @@ const HeaderFilters = ({
             ) : null}
 
             {isSearch && (
-              <div className={defaultSize} onClick={()=> setClear(false)}>
+              <div className={defaultSize} onClick={() => setClear(false)}>
                 {" "}
                 <label style={{ marginLeft: "8px" }}>{searchlabel}</label>
                 <div class="form-group has-search">
                   <InputField
-                   isSearch={true}
-                   placeholder="Search"
-                   inputValue={search}
-                   setInputValue={setSearch}
-                   delay={1000}
-                   type="text"
-                   isDisabled={false}
-                   isInputFiled={false}
+                    isSearch={true}
+                    placeholder="Search"
+                    inputValue={search}
+                    setInputValue={setSearch}
+                    delay={1000}
+                    type="text"
+                    isDisabled={false}
+                    isInputFiled={false}
+                    isTracking={true}
+                    trackInput={trackInput}
+                    setTrackInput={setTrackInput}
                   />
-
-                
                 </div>
               </div>
             )}
@@ -510,6 +510,7 @@ const HeaderFilters = ({
                   setAuditSelectedOption("");
                   setSelAllocatedBy("");
                   setSelAuditAllocatedBy("");
+                  setTrackInput("");
                 }}
               >
                 <button className={`${styles.filterBtn} mx-3`}>Clear</button>

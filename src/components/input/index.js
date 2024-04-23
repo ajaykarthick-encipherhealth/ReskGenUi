@@ -20,6 +20,9 @@ const InputField = ({
   type,
   isDisabled,
   isInputFiled,
+  isTracking,
+  trackInput,
+  setTrackInput,
 }) => {
   const [inputStr, setInputStr] = useState("");
 
@@ -30,7 +33,11 @@ const InputField = ({
 
   const handleChange = (event) => {
     const text = event.target.value;
-    setInputStr(text);
+    if (isTracking) {
+      setTrackInput(text);
+    } else {
+      setInputStr(text);
+    }
     debounceFunc(text);
   };
   return (
@@ -43,7 +50,7 @@ const InputField = ({
       )}
       <InputText
         type={type}
-        value={inputStr}
+        value={isTracking?trackInput:inputStr}
         onChange={handleChange}
         className={
           isInputFiled
