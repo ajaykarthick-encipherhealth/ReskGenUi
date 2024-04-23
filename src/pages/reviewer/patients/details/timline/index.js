@@ -10,13 +10,11 @@ const Timeline = ({
   userDetails,
   renderUserDetails,
 }) => {
-
-  
   const underScoreRemove = (value) => {
-    if(value){
-    var str = value;
-    var newStr = str.replace(/_/g, " ");
-    return newStr;
+    if (value) {
+      var str = value;
+      var newStr = str.replace(/_/g, " ");
+      return newStr;
     }
   };
   return (
@@ -261,11 +259,13 @@ const Timeline = ({
                             padding: "0 5px 0 5px",
                             color:
                               item?.previousProcessedState === "COMPLETED"
-                                ? "#5da934"
+                                ? "#00BC13"
                                 : item?.previousProcessedState === "PENDING"
-                                ? "#3a9b94"
+                                ? "#0078D4"
                                 : item?.previousProcessedState === "HOLD"
-                                ? "#ad94fa"
+                                ? "#3C0AD2"
+                                : item?.previousProcessedState === "DECLINED"
+                                ? "#EB5252"
                                 : "",
                             fontWeight: "700",
                           }}
@@ -275,7 +275,7 @@ const Timeline = ({
                         {` to`}
                         <span
                           style={{
-                            color: "#5da934",
+                            color: "#00BC13",
                             fontWeight: "700",
                             paddingLeft: "5px",
                           }}
@@ -305,11 +305,11 @@ const Timeline = ({
                       <span className={visitStyles.timelineheading}>
                         {item.diagnosisCode} - Encounter file added
                       </span>
-                    ): item.action == "MEAT_ADDED" ? (
+                    ) : item.action == "MEAT_ADDED" ? (
                       <span className={visitStyles.timelineheading}>
                         {item.diagnosisCode} - Meat added
                       </span>
-                    )  : item.action == "HOLD" ? (
+                    ) : item.action == "HOLD" ? (
                       <span
                         className={visitStyles.timelineheading}
                         style={{ display: "flex" }}
@@ -320,11 +320,13 @@ const Timeline = ({
                             padding: "0 5px 0 5px",
                             color:
                               item?.previousProcessedState === "COMPLETED"
-                                ? "#5da934"
+                                ? "#00BC13"
                                 : item?.previousProcessedState === "PENDING"
-                                ? "#3a9b94"
+                                ? "#0078D4"
                                 : item?.previousProcessedState === "HOLD"
-                                ? "#ad94fa"
+                                ? "#3C0AD2"
+                                : item?.previousProcessedState === "DECLINED"
+                                ? "#EB5252"
                                 : "",
                             fontWeight: "700",
                           }}
@@ -334,7 +336,7 @@ const Timeline = ({
                         {` to`}
                         <span
                           style={{
-                            color: "#ad94fa",
+                            color: "#3C0AD2",
                             fontWeight: "700",
                             paddingLeft: "5px",
                           }}
@@ -354,11 +356,13 @@ const Timeline = ({
                             fontWeight: "700",
                             color:
                               item?.previousProcessedState === "COMPLETED"
-                                ? "#5da934"
+                                ? "#00BC13"
                                 : item?.previousProcessedState === "PENDING"
-                                ? "#3a9b94"
+                                ? "#0078D4"
                                 : item?.previousProcessedState === "HOLD"
-                                ? "#ad94fa"
+                                ? "#3C0AD2"
+                                : item?.previousProcessedState === "DECLINED"
+                                ? "#EB5252"
                                 : "",
                           }}
                         >
@@ -367,7 +371,7 @@ const Timeline = ({
                         {` to`}
                         <span
                           style={{
-                            color: "red",
+                            color: "#EB5252",
                             fontWeight: "700",
                             paddingLeft: "5px",
                           }}
@@ -390,11 +394,13 @@ const Timeline = ({
                             fontWeight: "700",
                             color:
                               item?.previousProcessedState === "COMPLETED"
-                                ? "#5da934"
+                                ? "#00BC13"
                                 : item?.previousProcessedState === "PENDING"
-                                ? "#3a9b94"
+                                ? "#0078D4"
                                 : item?.previousProcessedState === "HOLD"
-                                ? "#ad94fa"
+                                ? "#3C0AD2"
+                                : item?.previousProcessedState === "DECLINED"
+                                ? "#EB5252"
                                 : "",
                           }}
                         >
@@ -403,7 +409,7 @@ const Timeline = ({
                         {` to`}
                         <span
                           style={{
-                            color: "#3a9b94",
+                            color: "#0078D4",
                             fontWeight: "700",
                             paddingLeft: "5px",
                           }}
@@ -413,10 +419,13 @@ const Timeline = ({
                         {/* Changed from
                         {item.previousProcessedState} to DECLINED */}
                       </span>
-                    ) : <span className={visitStyles.timelineheading}>
-                    Changed from {""}
-                    {item.previousProcessedState} to {underScoreRemove(item.action)}
-                  </span>}
+                    ) : (
+                      <span className={visitStyles.timelineheading}>
+                        Changed from {""}
+                        {item.previousProcessedState} to{" "}
+                        {underScoreRemove(item.action)}
+                      </span>
+                    )}
                     <span className={visitStyles.timelineDate}>
                       {moment(item.createdDate).format("MM-DD-YYYY hh:mm:A")}
                     </span>
