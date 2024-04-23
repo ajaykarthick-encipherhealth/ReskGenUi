@@ -5,7 +5,7 @@ const PdfViewer = ({ src, searchQuery, pageNumber }) => {
   useEffect(() => {
     if (src) {
       const pdfUrl = encodeURIComponent(src);
-      let searchUrl = `https://mozilla.github.io/pdf.js/web/viewer.html?file=${pdfUrl}`;
+      let searchUrl = `https://pdffile.javagcai.com/web/viewer.html?file=${pdfUrl}`;
       // let searchUrl = `https://pdffile.javagcai.com/web/viewer.html?file=${pdfUrl}`;
       if (searchQuery || pageNumber) {
         const queryParams = [];
