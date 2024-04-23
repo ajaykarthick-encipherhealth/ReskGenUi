@@ -57,6 +57,8 @@ const HeaderFilters = ({
   activeTab,
   selectedDates,
   setSelectedDates,
+  selectedDates2,
+  setSelectedDates2,
   defaultStartDate,
   defaultEndDate,
   setStartDate,
@@ -343,33 +345,16 @@ const HeaderFilters = ({
           {isAnotherPicker && (
             <>
               <div className={defaultSize}>
-                <label className={styles.label}>{pickerlabe2}</label>
-                <div>
-                  <RangePicker
-                    format="YYYY-MM-DD"
-                    // value={dayjs(selectedDates2).format('MM-DD-YYYY')}
-                    onChange={(date, dateString) =>
-                      handleRnagePicker2({
-                        date,
-                        dateString,
-                        setStartDate2,
-                        setEndDate2,
-                      })
-                    }
-                    defaultValue={
-                      defaultEndDate2 && defaultStartDate2
-                        ? [
-                            dayjs(defaultStartDate2, "YYYY-MM-DD"),
-                            dayjs(defaultEndDate2, "YYYY-MM-DD"),
-                          ]
-                        : []
-                    }
-                    disabledDate={(current) => disableFutureDate(current)}
-                    onCalendarClose={() => {
-                      setSelectedDates(null);
-                    }}
-                  />
-                </div>
+                <DateRangePicker
+                  selectedDates={selectedDates2}
+                  pickerlabel={pickerlabe2}
+                  defaultStartDate={defaultStartDate}
+                  defaultEndDate={defaultEndDate}
+                  setStartDate={setStartDate2}
+                  setEndDate={setEndDate2}
+                  disabled={false}
+                  setSelectedDates={setSelectedDates2}
+                />
               </div>
             </>
           )}
