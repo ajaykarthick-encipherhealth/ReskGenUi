@@ -3876,26 +3876,7 @@ const File = ({ popoverVisible, setPopoverVisible, year }) => {
                                       {getEncounterDateBackground(
                                         data.encounterDateSplit
                                       )}
-                                    </div>
-                                    {data.getPlace == "Lab" ? (
-                                      <Tooltip title="LAB">
-                                        <span
-                                          className={` mt-2 ${visitStyles.labStatus}`}
-                                          bg={`  mt-2 bg-bg-seven `}
-                                        >
-                                          Lab
-                                        </span>
-                                      </Tooltip>
-                                    ) : data.getPlace == "Radio" ? (
-                                      <Tooltip title="RADIOLOGY">
-                                        <span
-                                          className={` mt-2 ${visitStyles.radiologyStatus}`}
-                                          bg={`  mt-2 bg-bg-eight `}
-                                        >
-                                          Radiology
-                                        </span>
-                                      </Tooltip>
-                                    ) : null}
+                                    </div>                                   
                                   </div>
 
                                   {data.getPlace == "Lab" ? (
@@ -3988,6 +3969,25 @@ const File = ({ popoverVisible, setPopoverVisible, year }) => {
                                       Insulin
                                     </span>
                                   ) : null}
+                                   {data.getPlace == "Lab" ? (
+                                      <Tooltip title="LAB">
+                                        <span
+                                          className={` mt-2 ${visitStyles.labStatus}`}
+                                          bg={`  mt-2 bg-bg-seven `}
+                                        >
+                                          Lab
+                                        </span>
+                                      </Tooltip>
+                                    ) : data.getPlace == "Radio" ? (
+                                      <Tooltip title="RADIOLOGY">
+                                        <span
+                                          className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                          bg={`  mt-2 bg-bg-eight `}
+                                        >
+                                          Radiology
+                                        </span>
+                                      </Tooltip>
+                                    ) : null}
                                 </div>
                               </div>
                             </div>
