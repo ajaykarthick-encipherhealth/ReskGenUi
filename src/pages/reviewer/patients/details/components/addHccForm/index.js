@@ -190,7 +190,7 @@ const AddHccForm = ({
                 },
               ]}
             >
-              <Input name="encounterDate" className={styles.formControl} />
+              <DatePicker name="encounterDate" format="MM/DD/YYYY" className={styles.formControl} />
             </Form.Item>
             <Form.Item label="Description" name="actualDescription">
               <TextArea
