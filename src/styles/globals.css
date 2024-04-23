@@ -14425,8 +14425,16 @@ input[type="number"] {
     .ant-form-item-required-mark-optional
   )::before {
   display: none;
-  }
+}
 .adminCompleted > div {
   height: 250px !important;
   margin-top: 10px !important;
+}
+.form-datepicker {
+  box-shadow: none !important;
+  border: 1px solid #d9d9d9 !important;
+}
+.form-datepicker:hover {
+  box-shadow: none !important;
+  border: 1px solid #d9d9d9 !important;
 }
