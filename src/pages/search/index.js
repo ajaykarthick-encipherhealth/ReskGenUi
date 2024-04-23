@@ -1,12 +1,79 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../utility/axiosConfig";
-import { Modal } from "antd";
+import { Modal, Select } from "antd";
+import AppTable from "../../components/tables";
+import Data from "./data.json";
+import Semantic from "./semantic.json";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { connect } from "react-redux";
+import { actions as searchActions } from "../../stores/search";
 
-const Searches = () => {
+const Searches = ({
+  getAllICDCodes,
+  createICDCode,
+  getSimpleSearch,
+  getSemanticSearch,
+  updateSemantic,
+}) => {
   const [search, serSearch] = useState("");
   const [list, setList] = useState([]);
   const [modalOpen, setModalOpen] = useState("");
   const [updateDetails, setUpdateDetails] = useState();
+  const [searchType, setSearchType] = useState("Rule-engine-search");
+  const totalElements = 100;
+  const [paginationFirst, setPaginationFirst] = useState(0);
+  const [page, setPage] = useState(0);
+  const [action, setAction] = useState("");
+  const [years, setYears] = useState(null);
+  const [keyword, setKeyword] = useState(null);
+
+  const getYear = () => {
+    let years = [];
+    for (let year = 2016; year <= new Date().getFullYear(); year++) {
+      years.push({ value: year, label: year });
+    }
+    return years;
+  };
+
+  const column = [
+    { name: "code", value: "code" },
+    { name: "description", value: "description" },
+    { name: "years", value: "years", isarray: true },
+    {
+      name: "active",
+      value: {
+        action: [
+          { icon: faEdit, type: "edit" },
+          { icon: faTrash, type: "delete" },
+        ],
+      },
+      isAction: true,
+    },
+  ];
+
+  const semaniticColumn = [
+    { name: "code", value: "code" },
+    { name: "disease name", value: "diseaseName" },
+    { name: "keywords", value: "keywords", isarray: true },
+    {
+      name: "active",
+      value: {
+        action: [
+          { icon: faEdit, type: "edit" },
+          { icon: faTrash, type: "delete" },
+        ],
+      },
+      isAction: true,
+    },
+  ];
+
+  const onPageChange = (e) => {
+    setPaginationFirst(e.first);
+    setPage(e.page);
+  };
+
+  console.log(action);
+
   const getSearch = async () => {
     const token = localStorage.getItem("token");
     try {
@@ -32,28 +99,89 @@ const Searches = () => {
     }));
   };
 
-  console.log(updateDetails, "updateDetails");
+  const createdICDCodes = (type) => {
+    if ((type = "edit")) {
+      createICDCode({
+        id: action.id,
+        code: updateDetails.codes,
+        description: updateDetails.description,
+        years: years,
+      });
+    } else {
+      createICDCode({
+        code: updateDetails.codes,
+        description: updateDetails.description,
+        years: years,
+      });
+      setUpdateDetails({});
+    }
+  };
+  useEffect(() => {
+    if (action.type == "edit") {
+      setModalOpen(action.type);
+      setUpdateDetails({
+        ...updateDetails,
+        codes: "test",
+        description: "test",
+      });
+      setYears([{ value: "2016", label: "2016" }]);
+    }
+  }, [action]);
+  useEffect(() => {
+    if (searchType == "Rule-engine-search") {
+      getAllICDCodes(search);
+    } else if (searchType == "SimpleHybridSearch") {
+      getSimpleSearch(search);
+    } else if (searchType == "SemanticHybridSearch") {
+      getSemanticSearch(search);
+    }
+  }, [search, searchType]);
+
+  console.log(updateDetails, searchType, years, keyword, "updateDetails");
   return (
     <>
       <div className="d-flex justify-content-center align-item-center">
         <div style={{ width: "600px" }}>
           <div className="d-flex justify-content-center mt-5">
-            <button
-              class="btns-primary btn-app-primary mx-2"
-              type="button"
-              id="button-addon2"
-              onClick={() => setModalOpen("Add")}
-            >
-              Add
-            </button>
-            <button
-              class="btns-primary btn-app-primary mx-2"
-              type="button"
-              id="button-addon2"
-              onClick={() => setModalOpen("Edit")}
-            >
-              Edit
-            </button>
+            <div class="form-check mx-2">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="Rule-engine-search"
+                id="flexRadioDefault1"
+                onClick={(e) => setSearchType(e.target.name)}
+                checked={searchType == "Rule-engine-search"}
+              />
+              <label class="form-check-label" for="flexRadioDefault1">
+                Rule Engine Search
+              </label>
+            </div>
+            <div class="form-check mx-2">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="SimpleHybridSearch"
+                id="flexRadioDefault2"
+                checked={searchType == "SimpleHybridSearch"}
+                onClick={(e) => setSearchType(e.target.name)}
+              />
+              <label class="form-check-label" for="flexRadioDefault2">
+                Simple Hybrid Search
+              </label>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="SemanticHybridSearch"
+                id="flexRadioDefault2"
+                checked={searchType == "SemanticHybridSearch"}
+                onClick={(e) => setSearchType(e.target.name)}
+              />
+              <label class="form-check-label" for="flexRadioDefault2">
+                Semantic Hybrid Search
+              </label>
+            </div>
           </div>
           <div class="d-flex my-5">
             <input
@@ -63,105 +191,270 @@ const Searches = () => {
               // value={search}
               onChange={(e) => serSearch(e.target.value)}
             />
-            <button
+            {/* <button
               class="btns-primary btn-app-primary"
               type="button"
               id="button-addon2"
               onClick={getSearch}
             >
               search
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
-      <div>
-        <>{list}</>
-        <ul>
-          {list.map((item) => (
-            <li>{item}</li>
-          ))}
-        </ul>
+
+      <div className="d-flex justify-content-center">
+        <div style={{ width: "90%" }}>
+          <div className="d-flex justify-content-end">
+            {searchType == "Rule-engine-search" &&  <button
+              class="btns-primary btn-app-primary mx-3 px-4"
+              type="button"
+              id="button-addon2"
+              onClick={() => setModalOpen("Add")}
+            >
+              Add
+            </button> }
+           
+            {/* <button
+              class="btns-primary btn-app-primary mx-2"
+              type="button"
+              id="button-addon2"
+              onClick={() => setModalOpen("Edit")}
+            >
+              Edit
+            </button> */}
+          </div>
+          {searchType == "Rule-engine-search" ? (
+            <AppTable
+              data={Data}
+              column={column}
+              // status={getButtonStatus}
+              onPageChange={onPageChange}
+              totalElements={totalElements}
+              paginationFirst={paginationFirst}
+              setAction={setAction}
+            />
+          ) : searchType == "SemanticHybridSearch" ? (
+            <AppTable
+              data={Semantic}
+              column={semaniticColumn}
+              // status={getButtonStatus}
+              onPageChange={onPageChange}
+              totalElements={totalElements}
+              paginationFirst={paginationFirst}
+              setAction={setAction}
+            />
+          ) : (
+            <AppTable
+              data={[]}
+              column={semaniticColumn}
+              // status={getButtonStatus}
+              onPageChange={onPageChange}
+              totalElements={totalElements}
+              paginationFirst={paginationFirst}
+              setAction={setAction}
+            />
+          )}
+        </div>
       </div>
       <Modal
-        title=''
+        title=""
         open={modalOpen}
         onCancel={() => {
-          setModalOpen("")
-          setUpdateDetails({})
+          setModalOpen("");
+          setUpdateDetails({});
+          setKeyword(null);
         }}
         footer={null}
       >
         <div>
-          {modalOpen.toLowerCase() == "add" && (
-            <div className="p-4 text-center">
-              <input
-                type="text"
-                class="form-control mb-2"
-                placeholder="Description..."
-                value={updateDetails?.description ? updateDetails?.description : ""}
-                name="description"
-                onChange={handleChange}
-              />
-              <input
-                type="text"
-                class="form-control mb-2"
-                placeholder="Code..."
-                value={updateDetails?.codes ? updateDetails?.codes : ""}
-                name="codes"
-                onChange={handleChange}
-              />
-              <input
-                type="text"
-                class="form-control mb-2"
-                placeholder="Keywords..."
-                value={updateDetails?.keywords ? updateDetails?.keywords :""}
-                name="keywords"
-                onChange={handleChange}
-              />
-              <button
-                class="btns-primary btn-app-primary"
-                type="button"
-                id="button-addon2"
-                // onClick={getSearch}
-                style={{ width: "100px" }}
-              >
-                Add
-              </button>
-            </div>
-          )}
-          {modalOpen.toLowerCase() == "edit" && (
-            <div className="p-4 text-center">
-              <input
-                type="text"
-                class="form-control mb-2"
-                placeholder="Code..."
-                value={updateDetails?.editcode ? updateDetails?.editcode : ""}
-                name="editcode"
-                onChange={handleChange}
-              />
-              <input
-                type="text"
-                class="form-control mb-2"
-                placeholder="Keywords..."
-                value={updateDetails?.editkeywords ? updateDetails?.editkeywords : ""}
-                name="editkeywords"
-                onChange={handleChange}
-              />
-              <button
-                class="btns-primary btn-app-primary"
-                type="button"
-                id="button-addon2"
-                // onClick={getSearch}
-                style={{ width: "100px" }}
-              >
-                Edit
-              </button>
-            </div>
-          )}
+          {searchType != "Rule-engine-search" &&
+            modalOpen.toLowerCase() == "add" && (
+              <div className="p-4 text-center">
+                <input
+                  type="text"
+                  class="form-control mb-2"
+                  placeholder="Code..."
+                  value={updateDetails?.codes ? updateDetails?.codes : ""}
+                  name="codes"
+                  onChange={handleChange}
+                />
+                <input
+                  type="text"
+                  class="form-control mb-2"
+                  placeholder="Description..."
+                  value={
+                    updateDetails?.description ? updateDetails?.description : ""
+                  }
+                  name="description"
+                  onChange={handleChange}
+                />
+                <div className="mb-3">
+                  <Select
+                    mode="tags"
+                    style={{ width: "100%", textAlign: "left" }}
+                    onChange={(string) => setKeyword(string)}
+                    tokenSeparators={[","]}
+                    value={keyword}
+                    options={null}
+                    placeholder="Please search and select"
+                  />
+                </div>
+                <button
+                  class="btns-primary btn-app-primary"
+                  type="button"
+                  id="button-addon2"
+                  // onClick={getSearch}
+                  style={{ width: "100px" }}
+                >
+                  Add
+                </button>
+              </div>
+            )}
+          {searchType != "Rule-engine-search" &&
+            modalOpen.toLowerCase() == "edit" && (
+              <div className="p-4 text-center">
+                <input
+                  type="text"
+                  class="form-control mb-2"
+                  placeholder="Code..."
+                  value={updateDetails?.editcode ? updateDetails?.editcode : ""}
+                  name="editcode"
+                  onChange={handleChange}
+                />
+                <div className="mb-3">
+                  <Select
+                    mode="tags"
+                    style={{ width: "100%", textAlign: "left" }}
+                    onChange={(string) => setKeyword(string)}
+                    tokenSeparators={[","]}
+                    value={keyword}
+                    options={null}
+                    placeholder="Please search and select"
+                  />
+                </div>
+                <button
+                  class="btns-primary btn-app-primary"
+                  type="button"
+                  id="button-addon2"
+                  // onClick={getSearch}
+                  style={{ width: "100px" }}
+                >
+                  Edit
+                </button>
+              </div>
+            )}
+
+          {searchType == "Rule-engine-search" &&
+            modalOpen.toLowerCase() == "add" && (
+              <>
+                <div className="p-4 text-center">
+                  <input
+                    type="text"
+                    class="form-control mb-2"
+                    placeholder="Code..."
+                    value={updateDetails?.codes ? updateDetails?.codes : ""}
+                    name="codes"
+                    onChange={handleChange}
+                  />
+                  <input
+                    type="text"
+                    class="form-control mb-2"
+                    placeholder="Description..."
+                    value={
+                      updateDetails?.description
+                        ? updateDetails?.description
+                        : ""
+                    }
+                    name="description"
+                    onChange={handleChange}
+                  />
+                  <div className="mb-3">
+                    <Select
+                      mode="multiple"
+                      allowClear
+                      style={{ width: "100%", textAlign: "left" }}
+                      value={years}
+                      placeholder="Please select"
+                      onChange={(e, select) => setYears(select)}
+                      options={getYear()}
+                    />
+                  </div>
+                  <button
+                    class="btns-primary btn-app-primary"
+                    type="button"
+                    id="button-addon2"
+                    style={{ width: "100px" }}
+                    onClick={createdICDCodes}
+                  >
+                    Add
+                  </button>
+                </div>
+              </>
+            )}
+          {searchType == "Rule-engine-search" &&
+            modalOpen.toLowerCase() == "edit" && (
+              <>
+                <div className="p-4 text-center">
+                  <input
+                    type="text"
+                    class="form-control mb-2"
+                    placeholder="Code..."
+                    value={updateDetails?.codes ? updateDetails?.codes : ""}
+                    name="codes"
+                    onChange={handleChange}
+                  />
+                  <input
+                    type="text"
+                    class="form-control mb-2"
+                    placeholder="Description..."
+                    value={
+                      updateDetails?.description
+                        ? updateDetails?.description
+                        : ""
+                    }
+                    name="description"
+                    onChange={handleChange}
+                  />
+                  <div className="mb-3">
+                    <Select
+                      mode="multiple"
+                      allowClear
+                      style={{ width: "100%", textAlign: "left" }}
+                      value={years}
+                      placeholder="Please select"
+                      onChange={(e, select) => setYears(select)}
+                      options={getYear()}
+                    />
+                  </div>
+                  <button
+                    class="btns-primary btn-app-primary"
+                    type="button"
+                    id="button-addon2"
+                    style={{ width: "100px" }}
+                    onClick={() => createdICDCodes("edit")}
+                  >
+                    Edit
+                  </button>
+                </div>
+              </>
+            )}
         </div>
       </Modal>
     </>
   );
 };
 
-export default Searches;
+const enhancer = connect(
+  (state) => ({
+    WorlFlow: state,
+  }),
+  {
+    getAllICDCodes: searchActions.getAllICDCodes,
+    createICDCode: searchActions.createICDCodes,
+    getSimpleSearch: searchActions.getSimpleSearch,
+    getSemanticSearch: searchActions.getSemanticSearch,
+    updateSemantic: searchActions.updateSemantic,
+  }
+);
+export default enhancer(Searches);
