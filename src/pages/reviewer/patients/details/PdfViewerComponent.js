@@ -6,6 +6,7 @@ const PdfViewer = ({ src, searchQuery, pageNumber }) => {
     if (src) {
       const pdfUrl = encodeURIComponent(src);
       let searchUrl = `https://mozilla.github.io/pdf.js/web/viewer.html?file=${pdfUrl}`;
+      // let searchUrl = `https://pdffile.javagcai.com/web/viewer.html?file=${pdfUrl}`;
       if (searchQuery || pageNumber) {
         const queryParams = [];
         if (searchQuery) {
@@ -25,25 +26,13 @@ const PdfViewer = ({ src, searchQuery, pageNumber }) => {
   }, [src, searchQuery, pageNumber]);
   return (
     <>
-      <div
-        style={{
-          width: "40px",
-          height: "30px",
-          position: "relative",
-          left: "710px",
-          right: "0px",
-          top: "0px",
-          background: "rgba(249,249,249,250)",
-        }}
-      ></div>
       <iframe
         id="pdfViewer"
         title="PDF Viewer"
         frameBorder="0"
-        width="750"
+        width="100%"
         height="700"
         src={iframeSrc}
-        style={{ marginTop: "-30px" }}
       />
     </>
   );
