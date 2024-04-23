@@ -8,7 +8,7 @@ import Meat from "./meat";
 import RafScore from "./raf";
 import MeatQuery from "./meatQuery";
 import File from "./file";
-const Hcc = () => {
+const Hcc = ({year}) => {
   const [activeTabHead, setActiveTabHead] = useState("file");
   const [flagTagActive, setFlagTagActive] = useState(false);
   const [popoverVisible, setPopoverVisible] = useState(false);
@@ -129,7 +129,7 @@ const Hcc = () => {
                   <RafScore />
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey="file">
-                  <File popoverVisible={popoverVisible} setPopoverVisible={setPopoverVisible}/>
+                  <File popoverVisible={popoverVisible} setPopoverVisible={setPopoverVisible} year={year}/>
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey="query">
                   <MeatQuery />

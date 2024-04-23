@@ -91,7 +91,7 @@ const addOnCodeColor = [
   "geekblue",
   "purple",
 ];
-const File = ({ popoverVisible, setPopoverVisible }) => {
+const File = ({ popoverVisible, setPopoverVisible, year }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
   let searchKeywords = [];
@@ -225,7 +225,7 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
     reason: "",
     actualDescription: "",
   });
-
+  const [editDiagnosisCode, setEditDiagnosisCode] = useState("");
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
   const [selectLabReportFile, setSelectLabReportFile] = useState(null);
 
@@ -325,7 +325,6 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
   const [hyperlinkSeacrh, setHyperlinkSearch] = useState(false);
   const [editCode, setEditCode] = useState(false);
   const [isAddHccForm, setIsAddHccForm] = useState(false);
-
 
   const getMeatFound = (code, data, value) => {
     const result = data?.filter(
@@ -3273,28 +3272,58 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
   //     });
   //   }
   // }
+
+  const updateCall = async (data) => {
+    const orgId = localStorage.getItem('orgId')
+    const response = await axios.put(
+      ENDPOINTS.apiEndoint + `aiservice/patient/update`,
+      {
+        patientId: localPatientId,
+        orgId: orgId,
+        previousDiagnosisCode: data.diagnosisCode,
+        newPreviousDiagnosisCode: editDiagnosisCode,
+        year: year.value
+      }
+    );
+    setEditCode(true)
+    setEditDiagnosisCode("");
+  };
+
   const updateCode = (value) => {
     return (
       <>
-        <div class="input-group mb-3">
+        <div className="input-group mb-3">
           <input
             type="text"
-            class="form-control"
+            className={`form-control ${editCode && "border border-primary"}`}
             placeholder="Recipient's username"
-            value={value}
+            value={editDiagnosisCode ? editDiagnosisCode : value.diagnosisCode}
+            onChange={(e) => setEditDiagnosisCode(e.target.value)}
             disabled={!editCode}
           />
-          
-            {editCode ? (
-              <span class="input-group-text" id="basic-addon2">
-              <FontAwesomeIcon icon={faSave} onClick={() => setEditCode(false)} style={{cursor: "pointer"}}/>
-              </span>
-            ) : (
-              <span class="input-group-text" id="basic-addon2">
-              <FontAwesomeIcon icon={faPen} onClick={() => setEditCode(true)} style={{cursor: "pointer"}}/>
-              </span>
-            )}
-         
+
+          {editCode ? (
+            <span
+              className="input-group-text"
+              style={{ cursor: "pointer" }}
+              id="basic-addon2"
+              onClick={() => updateCall(value)}
+            >
+              <FontAwesomeIcon icon={faSave} />
+            </span>
+          ) : (
+            <span
+              className="input-group-text"
+              style={{ cursor: "pointer" }}
+              id="basic-addon2"
+              onClick={() => {
+                setEditCode(true);
+                setEditDiagnosisCode(value.diagnosisCode);
+              }}
+            >
+              <FontAwesomeIcon icon={faPen} />
+            </span>
+          )}
         </div>
       </>
     );
@@ -3345,7 +3374,7 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
                               </span>{" "}
                               <span className="">
                                 <Popover
-                                  content={updateCode(data.diagnosisCode)}
+                                  content={updateCode(data)}
                                   title=""
                                   trigger="click"
                                 >
@@ -3641,11 +3670,14 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
           </div>
         </div>
         {isFileFormShow ? (
-           <div className="col-xl-4">
-        <AddHccForm diagnosisCode={inputValue.diagnosisCode} handleCloseModal={handleCloseModal} isAddHccForm={isAddHccForm} setIsAddHccForm={setIsAddHccForm}/>
-         </div>
-
-  
+          <div className="col-xl-4">
+            <AddHccForm
+              diagnosisCode={inputValue.diagnosisCode}
+              handleCloseModal={handleCloseModal}
+              isAddHccForm={isAddHccForm}
+              setIsAddHccForm={setIsAddHccForm}
+            />
+          </div>
         ) : null}
         {!isFileFormShow ? (
           <div className="col-xl-3">
