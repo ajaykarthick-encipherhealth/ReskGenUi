@@ -14410,6 +14410,21 @@ input[type="number"] {
 .visitdata-modalCentent .ant-modal-content {
   width: 700px !important;
 }
+.ant-input {
+  height: 42px !important;
+}
+.form-textarea {
+  height: 100px !important;
+}
+.ant-input-outlined.ant-input-status-error {
+  border-color: #d9d9d9 !important;
+}
+.ant-form-item
+  .ant-form-item-label
+  > label.ant-form-item-required:not(
+    .ant-form-item-required-mark-optional
+  )::before {
+  display: none;
 .adminCompleted > div {
   height: 250px !important;
   margin-top: 10px !important;
