@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+
 import styles from "../report.module.css";
 import { Checkbox, Popover, Col, Row, Tooltip, Empty } from "antd";
 import { extractLatestData } from "../../../supervisor/auditing";
@@ -22,6 +24,7 @@ import notAudited from "../../.../../../../images/trackingImages/NotAuditedTrack
 import auditDeclined from "../../.../../../../images/trackingImages/AuditDeclined.png";
 import { Paginator } from "primereact/paginator";
 import TableStyle from "../../../../components/table/table.module.css";
+import { useSelector } from "react-redux";
 
 import Image from "next/image";
 import { SVGICON } from "../../../../jsx/constant/theme";
@@ -33,6 +36,7 @@ import visitStyles from "../../../../styles/visitdata.module.css";
 import { selectedRow } from "../../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
 import dayjs from "dayjs";
+import { workStatusApiAdmin } from "../../../../services/adminServices/DashboardService";
 
 const ReviewerReport = ({
   setModal,
@@ -53,7 +57,32 @@ const ReviewerReport = ({
 }) => {
   const [activeTab, setActiveTab] = useState("Reviewer");
   const [selectedItems, setSelectedItems] = useState([]);
+  const router = useRouter();
   const dispatch = useDispatch();
+  const worlFlowData = useSelector(
+    (state) => state?.AdminDashboardReducers?.data
+  );
+  const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
+  const [dateRange, setDateRange] = useState({
+    processedStatus: {
+      PENDING: 0,
+      COMPLETED: 0,
+      HOLD: 0,
+      DECLINED:0,
+    },
+    auditedStatus: {
+      AUDIT_PENDING: 0,
+      DECLINED: 0,
+      AUDITED: 0,
+      AUDITHOLD: 0,
+    },
+  });
+  const [chartValue, setChartValue] = useState({
+    totalAuditedAssigned: 0,
+    totalPatients: 0,
+    totalPatientsAllocated: 0,
+  });
+
   const handleHeaderCheckboxChange = () => {
     setSelectAll(!selectAll);
     const updatedRows = selectAll ? [] : reportListAll?.data;
@@ -76,139 +105,24 @@ const ReviewerReport = ({
 
     setSelectedRows(updatedRows);
   };
-  const data = [
-    {
-      id: 1,
-      patientName: "HERZOG, Joan L",
-      patientId: "EH-@46",
-      flag: SVGICON?.rafFlagSmall,
-      rafScore: "2.232",
-      auditedStatus: "AUDIT_PENDING",
-      processedStatus: "PENDING",
-      date: "03-21-2024",
-      hcc: "44",
-      auditorName: "Benjamin Mitchell",
-      patientAllocatedTo: "Benjamin Mitchell",
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-    },
-    {
-      id: 2,
-      patientName: "HERZOG, Joan L",
-      patientId: "EH-@46",
-      flag: SVGICON?.rafFlagSmall,
-      rafScore: "2.232",
-      auditedStatus: "AUDITHOLD",
-      processedStatus: "COMPLETED",
-      date: "03-21-2024",
-      hcc: "44",
-      auditorName: "Benjamin Mitchell",
-      patientAllocatedTo: "Benjamin Mitchell",
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-    },
-    {
-      id: 3,
-      patientName: "HERZOG, Joan L",
-      patientId: "EH-@46",
-      flag: SVGICON?.rafFlagSmall,
-      rafScore: "2.232",
-      auditedStatus: "REAUDIT",
-      processedStatus: "DECLINED",
-      date: "03-21-2024",
-      hcc: "44",
-      auditorName: "Benjamin Mitchell",
-      patientAllocatedTo: "Benjamin Mitchell",
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-    },
-    {
-      id: 4,
-      patientName: "HERZOG, Joan L",
-      patientId: "EH-@46",
-      flag: SVGICON?.rafFlagSmall,
-      rafScore: "2.232",
-      auditedStatus: "NOT_AUDIT",
-      processedStatus: "HOLD",
-      date: "03-21-2024",
-      hcc: "44",
-      auditorName: "Benjamin Mitchell",
-      patientAllocatedTo: "Benjamin Mitchell",
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-    },
-    {
-      id: 5,
-      patientName: "HERZOG, Joan L",
-      patientId: "EH-@46",
-      flag: SVGICON?.rafFlagSmall,
-      rafScore: "2.232",
-      auditedStatus: "AUDIT_DECLINED",
-      processedStatus: "HOLD",
-      date: "03-21-2024",
-      hcc: "44",
-      auditorName: "Benjamin Mitchell",
-      patientAllocatedTo: "Benjamin Mitchell",
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-    },
-    {
-      id: 6,
-      patientName: "HERZOG, Joan L",
-      patientId: "EH-@46",
-      flag: SVGICON?.rafFlagSmall,
-      rafScore: "2.232",
-      auditedStatus: "NOT_AUDIT",
-      processedStatus: "HOLD",
-      date: "03-21-2024",
-      hcc: "44",
-      auditorName: "Benjamin Mitchell",
-      patientAllocatedTo: "Benjamin Mitchell",
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-    },
-    {
-      id: 7,
-      patientName: "HERZOG, Joan L",
-      patientId: "EH-@46",
-      flag: SVGICON?.rafFlagSmall,
-      rafScore: "2.232",
-      auditedStatus: "AUDIT_DECLINED",
-      processedStatus: "HOLD",
-      date: "03-21-2024",
-      hcc: "44",
-      auditorName: "Benjamin Mitchell",
-      patientAllocatedTo: "Benjamin Mitchell",
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-    },
-  ];
+
   const card1Data = [
     {
       id: 1,
       icon: Completed,
       title: "Completed",
-
+      charts: dateRange.processedStatus
+      ? dateRange.processedStatus.COMPLETED
+      : "0",
       bg: "#CCFFD1",
     },
     {
       id: 2,
       icon: Pending,
       title: "Pending",
+      charts: dateRange.processedStatus
+      ? dateRange.processedStatus.PENDING
+      : "0",
 
       bg: "#CCE9FF",
     },
@@ -216,6 +130,7 @@ const ReviewerReport = ({
       id: 3,
       icon: Hold,
       title: "Hold",
+      charts: dateRange.processedStatus ? dateRange.processedStatus.HOLD : "0",
 
       bg: "#DACEFD",
     },
@@ -223,19 +138,24 @@ const ReviewerReport = ({
       id: 4,
       icon: declineIcon,
       title: "Decline",
-
+      charts: dateRange.processedStatus
+      ? dateRange.processedStatus.DECLINED
+      : "0",
       bg: "#FAD1D1",
     },
     {
       id: 5,
       icon: auditedIcon,
       title: "Audited",
+      charts: dateRange.auditedStatus ? dateRange.auditedStatus.AUDITED : "0",
+
       bg: "#DBEEF0",
     },
     {
       id: 6,
       icon: notAudited,
       title: "Not Audited",
+      charts: dateRange.auditedStatus ? dateRange.auditedStatus.NOT_AUDIT : "0",
 
       bg: "#FBE7D0",
     },
@@ -243,6 +163,7 @@ const ReviewerReport = ({
       id: 7,
       icon: reeAuditIcon,
       title: "Re Audit",
+      charts: dateRange.auditedStatus ? dateRange.auditedStatus.REAUDIT : "0",
 
       bg: "#FFDBB8",
     },
@@ -250,6 +171,7 @@ const ReviewerReport = ({
       id: 8,
       icon: reAuditIcon,
       title: "Audit pending",
+      charts: dateRange.auditedStatus ? dateRange.auditedStatus.PENDING : "0",
 
       bg: "#F3D8E5",
     },
@@ -257,6 +179,7 @@ const ReviewerReport = ({
       id: 9,
       icon: auditHoldIcon,
       title: "Audit hold",
+      charts: dateRange.auditedStatus ? dateRange.auditedStatus.HOLD : "0",
 
       bg: "#FFF2CC",
     },
@@ -264,6 +187,7 @@ const ReviewerReport = ({
       id: 10,
       icon: auditDeclined,
       title: "Audit decline",
+      charts: dateRange.auditedStatus ? dateRange.auditedStatus.DECLINED : "0",
 
       bg: "#FDD2CE",
     },
@@ -273,7 +197,6 @@ const ReviewerReport = ({
     {
       id: 1,
       flags: "PATIENT_NAME_MISSED",
-
       count: "10",
     },
     {
@@ -486,7 +409,7 @@ const ReviewerReport = ({
     }
   };
   const getFlag = (data) => {
-    switch (data.flag) {
+    switch (data.flags) {
       case "PATIENT_NAME_MISSED":
         return (
           <div
@@ -939,6 +862,24 @@ const ReviewerReport = ({
       setSelectedItems(updatedSelectedItems);
     }
   };
+  const startDate = DateRanges?.startDate
+  ? new Date(DateRanges?.startDate).toISOString()
+  : "";
+const endDate = DateRanges?.endDate
+  ? new Date(DateRanges?.endDate).toISOString()
+  : "";
+  const getWorkFlow = async () => {
+    try {
+      const data = await workStatusApiAdmin(startDate, endDate, router);
+      setDateRange(data.response?.processedStatusCount);
+      setChartValue(data.response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getWorkFlow();
+  }, [startDate, endDate, router]);
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
   }, [selectedRows]);
@@ -1200,7 +1141,7 @@ const ReviewerReport = ({
                                   </div>
                                 </div>
 
-                                <h4>40</h4>
+                                <h4>{ data?.charts ? data?.charts :"0"}</h4>
                               </Col>
                             ))}
                           </Row>
@@ -1216,7 +1157,7 @@ const ReviewerReport = ({
                                 <div className={styles.count}>
                                   {flagItem.count}
                                 </div>
-                                <div>{getFlag(flagItem.flags)}</div>
+                                <div>{getFlag(flagItem)}</div>
                               </div>
                             ))}
                           </div>

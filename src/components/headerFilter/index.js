@@ -11,7 +11,7 @@ import Export from "../../images/svg/Export";
 import Legends from "../legends";
 import DateRangePicker from "../rangepickers";
 import Selector from "../selectors";
-import Search from "../search";
+import Search from "../searchField";
 import { disableFutureDate, handleRnagePicker2 } from "./functions";
 import filter from "../../images/svg/filter.svg";
 import warning from "../../images/svg/warning.svg";
@@ -164,7 +164,7 @@ const HeaderFilters = ({
       <div style={{ height: atCorner && "45px", display: "flex" }}>
         <div
           className="row filter-container"
-          style={{ width: atCorner ? "110%" : "100%" }}
+         
         >
           {isSelector && (
             <div className={defaultSize}>
@@ -199,6 +199,40 @@ const HeaderFilters = ({
             </div>
           )}
         </div>
+        {activeTab === "CoderReport" && !isSelector3 && (
+            <div className={defaultSize}></div>
+          )}
+          {activeTab === "CoderReport" && (
+            <div
+              className={`col-xl-${
+                !adminReport ? "4" : "2"
+              } d-flex justify-content-end`}
+            >
+              <div className="row flr">
+                <Tooltip
+                  title={
+                    rowsLength?.length === 0 ? "Select report to export" : ""
+                  }
+                >
+                  <button
+                    onClick={() => {
+                      setIsModalVisible(true);
+                    }}
+                    className={styles.export}
+                    disabled={
+                      rowsLength?.length > 0 || rowsLength?.data?.length > 0
+                        ? false
+                        : true
+                    }
+                    style={{ color: "#04306f" }}
+                  >
+                    <Export />
+                    Export
+                  </button>
+                </Tooltip>
+              </div>
+            </div>
+          )}
         <div>
           {isSearch && (
             <div style={{ display: "flex", flexDirection: "row" }}>
@@ -219,7 +253,29 @@ const HeaderFilters = ({
                   search={search}
                 />
               </div>
-              <div>Export</div>
+              <div className="row flr">
+                <Tooltip
+                  title={
+                    rowsLength?.length === 0 ? "Select report to export" : ""
+                  }
+                >
+                  <button
+                    onClick={() => {
+                      setIsModalVisible(true);
+                    }}
+                    className={styles.export}
+                    disabled={
+                      rowsLength?.length > 0 || rowsLength?.data?.length > 0
+                        ? false
+                        : true
+                    }
+                    style={{ color: "#04306f" }}
+                  >
+                    <Export />
+                    Export
+                  </button>
+                </Tooltip>
+              </div>
             </div>
           )}
         </div>
