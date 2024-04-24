@@ -22,6 +22,7 @@ const Export = ({
   isSent,
 }) => {
   const usersList = useSelector((state) => state.report?.usersList);
+  const selectedReportInfo = useSelector((state) => state.report?.reportInfo);
   const list = useSelector((state) => state.report.row);
   const [selectedUser, setSelectedUser] = useState();
   const [search, setSearch] = useState("");
@@ -169,8 +170,8 @@ const Export = ({
     }
   }, [selectedRows, isModalVisible]);
   form.setFieldsValue({
-    ReportName: selectedRows?.reportName
-      ? selectedRows?.reportName
+    ReportName: selectedReportInfo?.reportName
+      ? selectedReportInfo?.reportName
       : reportName,
   });
 
@@ -194,13 +195,13 @@ const Export = ({
           ]}
         >
           <InputField
-            inputValue={reportName ? reportName : selectedRows?.reportName}
+            ReportName={selectedReportInfo?.reportName ?selectedReportInfo?.reportName: reportName}
             setInputValue={setReportName}
             delay={1000}
             type="text"
             placeholder=""
             isSearch={false}
-            isDisabled={selectedRows?.reportName ? true : false}
+            isDisabled={selectedReportInfo?.reportName ? true : false}
             isInputFiled={true}
           />
         </Form.Item>

@@ -27,6 +27,7 @@ import TeamReport from "../table/TeamReport/teamReport";
 import { disableFutureDate } from "../../../components/headerFilters/functions";
 import { debounce } from "../../admin/report/Export";
 import { useRouter } from "next/router";
+import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -441,6 +442,7 @@ const Index = () => {
                                     onClick={() => {
                                       handleTabs("AuditReport");
                                       backRender()
+                                      dispatch(selectedReport(null))
                                     }}
                                   >
                                     <Nav.Link

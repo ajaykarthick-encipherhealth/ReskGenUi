@@ -19,6 +19,7 @@ import {
   getReceivedDetails,
   getReportDetails,
   getSentDetails,
+  selectedReport,
 } from "../../../store/actions/adminAction/ReportActions";
 import { getSelectUserList } from "../../../store/actions/adminAction/DashboardAction";
 import SpinnerDots from "../../../components/spinner";
@@ -393,6 +394,7 @@ const index = () => {
                                     onClick={() => {
                                       handleTabs("CoderReport");
                                       backRender();
+                                      dispatch(selectedReport(null))
                                     }}
                                   >
                                     <Nav.Link

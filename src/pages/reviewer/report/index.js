@@ -19,6 +19,7 @@ import SpinnerDots from "../../../components/spinner";
 import HeaderFilters from "../../../components/headerFilters";
 import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
 import { useRouter } from "next/router";
+import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -290,6 +291,7 @@ const index = () => {
                                     onClick={() => {
                                       handleTabs("CoderReport");
                                       backRender()
+                                      dispatch(selectedReport(null))
                                     }}
                                   >
                                     <Nav.Link

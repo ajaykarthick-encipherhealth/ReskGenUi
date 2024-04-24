@@ -23,6 +23,7 @@ const InputField = ({
   isTracking,
   trackInput,
   setTrackInput,
+  ReportName,
 }) => {
   const [inputStr, setInputStr] = useState("");
 
@@ -50,7 +51,7 @@ const InputField = ({
       )}
       <InputText
         type={type}
-        value={isTracking?trackInput:inputStr}
+        value={isTracking ? trackInput : ReportName ? ReportName : inputStr}
         onChange={handleChange}
         className={
           isInputFiled

@@ -259,6 +259,7 @@ function SentReportTable({
                         <div
                           onClick={() => {
                             setSelectedRows(row);
+                            dispatch(selectedReport(row))
                             setOpenEdit(true);
                           }}
                         >
