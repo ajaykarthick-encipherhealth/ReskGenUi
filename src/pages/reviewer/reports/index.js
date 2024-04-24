@@ -247,28 +247,18 @@ const Reports = () => {
                   </div>
 
                   <div className="tbl-caption  align-items-center">
-                    <HeaderFilters
-                      // search
-                      // setSentSearch={setSentSearch}
-                      // setReceivedSearch={setReceivedSearch}
-                      // setCoderSearch={setCoderSearch}
+                    {/* <HeaderFilters
+                  
                       isSearch={true}
-                      // coderSearch={coderSearch}
-                      // receivedSearch={receivedSearch}
-                      // // sentSearch={sentSearch}
-                      // searchlabel="Search by Name"
-                      // selector
+                      
                       selectlabel=" Status"
                       isSelector={
                         !reportActiveTab || reportActiveTab === "Reviewer" ? true : false
                       }
                       isRangePicker={true}
                       pickerlabel="Date"
-                      // setSelectedOption={setSelectedCoderOpt}
-                      // selectOptions={statusOptions}
-                      // defaultSelectValue1={""}
-                      // selector
-                    />
+                    
+                    /> */}
                   </div>
 
                   <div>
