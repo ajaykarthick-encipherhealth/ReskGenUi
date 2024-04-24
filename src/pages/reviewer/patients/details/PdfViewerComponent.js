@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
+import ENDPOINTS from "../../../../utility/enpoints";
 
 const PdfViewer = ({ src, searchQuery, pageNumber }) => {
   const [iframeSrc, setIframeSrc] = useState("");
   useEffect(() => {
     if (src) {
       const pdfUrl = encodeURIComponent(src);
-      let searchUrl = `https://pdffile.javagcai.com/web/viewer.html?file=${pdfUrl}`;
+      let searchUrl = `${ENDPOINTS.PdfViewer}?file=${pdfUrl}`;
       // let searchUrl = `https://pdffile.javagcai.com/web/viewer.html?file=${pdfUrl}`;
       if (searchQuery || pageNumber) {
         const queryParams = [];
         if (searchQuery) {
           const encodedSearchQuery = encodeURIComponent(`${searchQuery}`);
           queryParams.push(
-            `search=${encodedSearchQuery}&caseSensitive=true&phrase=true&wholeWord=true&entireWord=true`
+            `search=${encodedSearchQuery}&casesensitive=true&phrase=true&wholeword=true&entireword=true`
           );
         }
         if (pageNumber) {
