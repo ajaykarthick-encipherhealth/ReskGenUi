@@ -25,6 +25,18 @@ export async function createIcdCode(obj) {
   return data;
 }
 
+export async function deleteIcdCode(id) {
+  const options = {
+    method: "POST"
+  };
+  const data = await requestPortal(
+    `management/deleteIcdCodeWithYear?id=${id}
+  `,
+    options
+  );
+  return data;
+}
+
 export async function getSimple(search) {
   const options = {
     method: "GET",
