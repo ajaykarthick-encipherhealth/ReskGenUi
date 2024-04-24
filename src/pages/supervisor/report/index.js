@@ -38,7 +38,7 @@ const statusOptions = [
 ];
 const Index = () => {
   const dispatch = useDispatch();
-  const route = useRouter()
+  const route = useRouter();
   const TeamReportDetails = useSelector(
     (state) => state.AuditReport?.teamDetails
   );
@@ -64,6 +64,7 @@ const Index = () => {
   const [pageNo, setPageNo] = useState(0);
   const [sentPageNo, setSentPageNo] = useState(0);
   const [receivedPageNo, setReceivedPageNo] = useState(0);
+  const [teamPageNo, setTeamPageNo] = useState(0);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [paginationReceivedFirst, setPaginationReceivedFirst] = useState(0);
   const [paginationSentFirst, setPaginationSentFirst] = useState(0);
@@ -76,16 +77,21 @@ const Index = () => {
   const [receivedEndDate, setReceivedEndDate] = useState();
   const [coderStartDate, setCoderStartDate] = useState();
   const [coderEndDate, setCoderEndDate] = useState();
+  const [teamStartDate, setTeamStartDate] = useState();
+  const [teamEndDate, setTeamEndDate] = useState();
   const [selectedDates, setSelectedDates] = useState(null);
   const [selectedCoderOpt, setSelectedCoderOpt] = useState("");
+  const [selectedTeamOpt, setSelectedTeamOpt] = useState("");
   const [coderSearch, setCoderSearch] = useState("");
   const [sentSearch, setSentSearch] = useState("");
+  const [teamSearch, setTeamSearch] = useState("");
   const [receivedSearch, setReceivedSearch] = useState("");
   const [receivedSortOrder, setReceivedSortOrder] = useState("DESC");
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
   const [teamSortOrder, setTeamSortOrder] = useState("DESC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
+  const [search, setSearch] = useState();
 
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -93,17 +99,18 @@ const Index = () => {
     patientName: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
 
-  const performanceSearch = (value) => {
-    if (reportActiveTab === "SentReport") {
-      setSentSearch(value);
-    } else if (reportActiveTab === "ReceivedReport") {
-      setReceivedSearch(value);
-    } else {
-      setCoderSearch(value);
-    }
-  };
   const debouncedSearch = useCallback(
-    debounce((text) => performanceSearch(text), 900),
+    debounce((text, reportActiveTab) => {
+      if (reportActiveTab === "SentReport") {
+        setSentSearch(text);
+      } else if (reportActiveTab === "ReceivedReport") {
+        setReceivedSearch(text);
+      } else if (reportActiveTab === "TeamReport") {
+        setTeamSearch(text);
+      } else {
+        setCoderSearch(text);
+      }
+    }, 700),
     []
   );
 
@@ -112,7 +119,8 @@ const Index = () => {
     let _filters = { ...filters };
     _filters["patientId"].value = value;
     setFilters(_filters);
-    debouncedSearch(value);
+    setSearch(value);
+    debouncedSearch(value, reportActiveTab);
   };
 
   const ReceivedOptions = [];
@@ -149,9 +157,9 @@ const Index = () => {
     setPaginationSentFirst(e.first);
     setSentPageNo(e.page);
   };
-
-  const handleExport = () => {
-    setIsModalVisible(true);
+  const onTeamPageChange = (e) => {
+    setPaginationSentFirst(e.first);
+    setTeamPageNo(e.page);
   };
 
   const closeModal = () => {
@@ -185,6 +193,18 @@ const Index = () => {
     setReceivedEndDate(formattedDates[1]);
     setSelectedDates(date);
   };
+  const handleTeamPicker = (date, dateString) => {
+    const formattedDates = dateString?.map((date, index) => {
+      const formattedDate =
+        index === 1
+          ? date && `${date}T23:59:59.999Z`
+          : date && `${date}T00:00:00.000Z`;
+      return formattedDate;
+    });
+    setTeamStartDate(formattedDates[0]);
+    setTeamEndDate(formattedDates[1]);
+    setSelectedDates(date);
+  };
   const handleCoderPicker = (date, dateString) => {
     const formattedDates = dateString?.map((date, index) => {
       const formattedDate =
@@ -201,6 +221,11 @@ const Index = () => {
   const handleTabs = (name) => {
     setSelectedDates(null);
     dispatch(getActiveTab(name));
+    setSearch("");
+    setReceivedSearch("");
+    setSentSearch("");
+    setTeamSearch("");
+    setCoderSearch("");
   };
   useEffect(() => {
     setIsLoading(false);
@@ -238,11 +263,10 @@ const Index = () => {
     if (reportActiveTab === "TeamReport") {
       dispatch(
         getTeamReportDetails(
-          pageNo,
-          coderStartDate,
-          coderEndDate,
-          coderSearch,
-          selectedCoderOpt,
+          teamPageNo,
+          teamStartDate,
+          teamEndDate,
+          teamSearch,
           sort
         )
       );
@@ -270,32 +294,37 @@ const Index = () => {
     receivedSearch,
     reportActiveTab,
     sort,
+    teamSearch,
+    teamEndDate,
+    teamStartDate,
+    teamPageNo,
   ]);
 
   useEffect(() => {
     setFilteredCoder(ReportPatientDetails?.response);
   }, [ReportPatientDetails, reportActiveTab]);
 
-
   useEffect(() => {
     const page = new URLSearchParams(window.location.search).get("page");
     const limit = new URLSearchParams(window.location.search).get("limit");
     if (reportActiveTab === "ReceivedReport" && page) {
-      setReceivedPageNo(page)
-      setPaginationReceivedFirst(limit)
+      setReceivedPageNo(page);
+      setPaginationReceivedFirst(limit);
     } else if (reportActiveTab === "SentReport" && page) {
-      setSentPageNo(page)
-      setPaginationSentFirst(limit)
-    } 
-  }, [reportActiveTab])
-
+      setSentPageNo(page);
+      setPaginationSentFirst(limit);
+    } else if (reportActiveTab === "TeamReport" && page) {
+      setTeamPageNo(page);
+      setPaginationSentFirst(limit);
+    }
+  }, [reportActiveTab]);
 
   const backRender = () => {
-    const user = localStorage.getItem('userRole')
-    if (user == 'supervisor') {
-      route.push('/supervisor/report?page=0&limit=0')
+    const user = localStorage.getItem("userRole");
+    if (user == "supervisor") {
+      route.push("/supervisor/report?page=0&limit=0");
     }
-  }
+  };
 
   return (
     <>
@@ -326,6 +355,7 @@ const Index = () => {
                                   className="form-control new-form-control"
                                   placeholder="Search"
                                   maxLength={25}
+                                  value={search}
                                 />
                               </div>
                             </div>
@@ -374,6 +404,8 @@ const Index = () => {
                                       ? handleDatePickerChange
                                       : reportActiveTab === "ReceivedReport"
                                       ? handleReceivedDatePicker
+                                      : reportActiveTab === "TeamReport"
+                                      ? handleTeamPicker
                                       : handleCoderPicker
                                   }
                                   disabledDate={(current) =>
@@ -441,8 +473,8 @@ const Index = () => {
                                     className="nav-item"
                                     onClick={() => {
                                       handleTabs("AuditReport");
-                                      backRender()
-                                      dispatch(selectedReport(null))
+                                      backRender();
+                                      dispatch(selectedReport(null));
                                     }}
                                   >
                                     <Nav.Link
@@ -457,7 +489,7 @@ const Index = () => {
                                     className="nav-item"
                                     onClick={() => {
                                       handleTabs("TeamReport");
-                                      backRender()
+                                      backRender();
                                     }}
                                   >
                                     <Nav.Link to="#my-posts" eventKey="team">
@@ -469,7 +501,7 @@ const Index = () => {
                                     className="nav-item"
                                     onClick={() => {
                                       handleTabs("SentReport");
-                                      backRender()
+                                      backRender();
                                     }}
                                   >
                                     <Nav.Link
@@ -484,7 +516,7 @@ const Index = () => {
                                     className="nav-item"
                                     onClick={() => {
                                       handleTabs("ReceivedReport");
-                                      backRender()
+                                      backRender();
                                     }}
                                   >
                                     <Nav.Link
@@ -530,7 +562,7 @@ const Index = () => {
                                         ReportPatientDetails={
                                           TeamReportDetails?.response
                                         }
-                                        onPageChange={onPageChange}
+                                        onPageChange={onTeamPageChange}
                                         comments={comments}
                                         setComments={setComments}
                                         setSelectedRows={setSelectedRows}
@@ -589,7 +621,6 @@ const Index = () => {
                                         setSortOrder={setReceivedSortOrder}
                                         sortOrder={receivedSortOrder}
                                         setSort={setSort}
-
                                       />
                                     )}
                                   </Tab.Pane>
