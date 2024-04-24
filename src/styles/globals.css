@@ -5794,10 +5794,10 @@ textarea.form-control {
   width: 2.5rem;
 }
 
-.form-check-input:checked {
+/* .form-check-input:checked {
   background-color: var(--primary);
   border-color: var(--primary);
-}
+} */
 
 .form-check-input:focus {
   border-color: var(--primary);

@@ -3,6 +3,7 @@ import { renderUserPrfoileAvatar } from "../headerFilters/functions";
 import Style from "./table.module.css";
 import AppPagination from "./pagination";
 import { reusableElipses } from "../../pages/physician/comparison/content/ValidHcc";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const AppTable = ({
   data,
@@ -11,6 +12,7 @@ const AppTable = ({
   totalElements,
   paginationFirst,
   onPageChange,
+  setAction,
 }) => {
   return (
     <div className={Style.classContaineer}>
@@ -24,7 +26,12 @@ const AppTable = ({
         </thead>
         <tbody>
           {data.map((item, index) => (
-            <TableRow item={item} column={column} status={status} />
+            <TableRow
+              item={item}
+              column={column}
+              status={status}
+              setAction={setAction}
+            />
           ))}
         </tbody>
       </table>
@@ -38,7 +45,7 @@ const AppTable = ({
 };
 
 const TableHeadItem = ({ item }) => <th align="center">{item.name}</th>;
-const TableRow = ({ item, column, status }) => {
+const TableRow = ({ item, column, status, setAction }) => {
   return (
     <tr>
       {column.map((columnItem, index) => {
@@ -77,6 +84,31 @@ const TableRow = ({ item, column, status }) => {
           );
         }
 
+        if (columnItem.isarray) {
+          return (
+            <td
+              className={
+                index == 0
+                  ? Style.firstTdBorder
+                  : column.length - 1 == index
+                  ? Style.lastBorder
+                  : Style.childBorder
+              }
+            >
+              <span>
+                {item[`${columnItem.value}`].map((date, index) => (
+                  <>
+                    {date}
+                    <>
+                      {item[`${columnItem.value}`].length - 1 !== index && ","}
+                    </>
+                  </>
+                ))}
+              </span>
+            </td>
+          );
+        }
+
         if (columnItem.isSingleRow) {
           return (
             <td
@@ -90,6 +122,31 @@ const TableRow = ({ item, column, status }) => {
             >
               <div> {item[`${columnItem.value.id}`]} </div>
               <div> {item[`${columnItem.value.name}`]} </div>
+            </td>
+          );
+        }
+
+        if (columnItem.isAction) {
+          return (
+            <td
+              className={
+                index == 0
+                  ? Style.firstTdBorder
+                  : column.length - 1 == index
+                  ? Style.lastBorder
+                  : Style.childBorder
+              }
+            >
+              <span>
+                {columnItem.value.action?.map((data, index) => (
+                  <span className="px-1">
+                  <FontAwesomeIcon
+                    icon={data.icon}
+                    onClick={() => setAction({id: item.id, type: data.type})}
+                  />
+                  </span>
+                ))}
+              </span>
             </td>
           );
         }
