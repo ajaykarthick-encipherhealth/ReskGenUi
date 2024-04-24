@@ -5794,10 +5794,10 @@ textarea.form-control {
   width: 2.5rem;
 }
 
-.form-check-input:checked {
+/* .form-check-input:checked {
   background-color: var(--primary);
   border-color: var(--primary);
-}
+} */
 
 .form-check-input:focus {
   border-color: var(--primary);
@@ -13694,7 +13694,7 @@ overflow: scroll;
 .ant-select-selector:active,
 .ant-select-selector:focus {
   /* min-height: 42px !important; */
-  border: 1px solid #e6e6e6 !important;
+  /* border: 1px solid #e6e6e6 !important; */
   box-shadow: none !important;
 }
 
@@ -14415,6 +14415,7 @@ input[type="number"] {
 .visitdata-modalCentent .ant-modal-content {
   width: 700px !important;
 }
+
 .labelStyle {
   margin-left: 10px;
   background-color: #cee1fd; /* Background color for label */
@@ -14425,4 +14426,33 @@ input[type="number"] {
   text-align: center;
   border-radius: 5px 0px 0px 5px !important;
   height: 43px;
+
+.ant-input {
+  height: 42px !important;
+}
+.form-textarea {
+  height: 100px !important;
+}
+.ant-input-outlined.ant-input-status-error {
+  border-color: #d9d9d9 !important;
+}
+.ant-form-item
+  .ant-form-item-label
+  > label.ant-form-item-required:not(
+    .ant-form-item-required-mark-optional
+  )::before {
+  display: none;
+}
+.adminCompleted > div {
+  height: 250px !important;
+  margin-top: 10px !important;
+}
+.form-datepicker {
+  box-shadow: none !important;
+  border: 1px solid #d9d9d9 !important;
+}
+.form-datepicker:hover {
+  box-shadow: none !important;
+  border: 1px solid #d9d9d9 !important;
+
 }

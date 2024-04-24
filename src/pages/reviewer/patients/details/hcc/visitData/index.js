@@ -70,9 +70,10 @@ import {
 import { getPatientDetailsResult } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import CamboTree from "../org";
 import AddMeatQuery from "../../components/addMeatQuery";
+import AddHccForm from "../../components/addHccForm";
 
 const { Option } = Select;
-const VisitData = ({}) => {
+const VisitData = ({setActiveTabHead}) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
   let searchKeywords = [];
@@ -151,7 +152,6 @@ const VisitData = ({}) => {
   const [openPopover, setOpenPopover] = useState(false);
 
   const [activeTab, setActiveTab] = useState(1);
-  const [activeTabHead, setActiveTabHead] = useState("file");
   const [selectFileURLRadiology, setSelectFileURLRadiology] = useState([]);
   const [isModalOpenRadiology, setIsModalOpenRadiology] = useState(false);
   const [isModalOpenLab, setIsModalOpenLab] = useState(false);
@@ -852,6 +852,13 @@ const VisitData = ({}) => {
           });
         });
 
+        if (result?.insulinDisease) {
+          capturedSectionsArr?.push({
+            name: result?.insulinDisease?.section,
+            diagnosisCode: result?.insulinDisease?.code,
+          });
+        }
+
         var dublicateSectionArr = getUniqueListBy(capturedSectionsArr, "name");
 
         dublicateSectionArr.map((res, index) => {
@@ -1275,7 +1282,7 @@ const VisitData = ({}) => {
     }
   };
 
-  const findValueDocument = async (
+  const findValueDocuments = async (
     value,
     disDescription,
     headerNames,
@@ -1289,13 +1296,16 @@ const VisitData = ({}) => {
     var splitPoint = actualDescription.substring(" ", 20);
     var pageNumber = null;
     var data = {
-      fileId:fileId,
+      fileId: fileId,
       header: headerNames,
-      dos:encounterDatesHeader,
-      stringFileWord:splitPoint      
-    }
+      dos: encounterDatesValue,
+      stringFileWord: splitPoint,
+    };
     try {
-      const response = await axios.post(ENDPOINTS.apiEndoint +`dbservice/pageNumber`,data);
+      const response = await axios.post(
+        ENDPOINTS.apiEndoint + `dbservice/pageNumber`,
+        data
+      );
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
         pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
@@ -1337,7 +1347,79 @@ const VisitData = ({}) => {
       setFileDosPageNumber(null);
     }
   };
-  const handleOpenModalCombinationCode = async (
+
+  const findValueDocument = async (
+    value,
+    disDescription,
+    headerNames,
+    encounterDate,
+    actualDescription,
+    diagnosisCode
+  ) => {
+    setFileLoading(true);
+    var fileId = patientFileDTO.fileId;
+    const encounterDatesValue = encounterDate.split(",");
+    const encounterDatesHeader = encounterDatesValue[0];
+    var splitPoint;
+    var pageNumber = null;
+    var data = {
+      fileId: fileId,
+      header: headerNames,
+      dos: encounterDatesValue,
+      stringFileWord: actualDescription.substring(" ", 20),
+      diagnosisCode: diagnosisCode,
+    };
+    try {
+      const response = await axios.post(
+        ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
+        data
+      );
+      var result = response.data.response;
+      if (response?.data?.status == "SUCCESS") {
+        pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
+        splitPoint = result?.searchString
+        if (result == null) {
+           return findValueDocuments(
+            value,
+            disDescription,
+            headerNames,
+            encounterDate,
+            actualDescription
+          );
+        }
+        if (pageNumber == fileInitialPage) {
+          setFileLoading(false);
+          notification.warning({
+            message: "This detail also same page",
+            placement: "top",
+            duration: 1,
+          });
+        }
+        setFileInitialPage(pageNumber);
+        setFileDosPageNumber(pageNumber);
+      } else {
+        splitPoint = headerNames;
+        setFileInitialPage(null);
+        setFileDosPageNumber(null);
+      }
+      setTargetPages((targetPage) => {
+        targetPage.pageIndex === pageNumber;
+      });
+      setFindFileKeyword(splitPoint);
+      if (findFileKeyword == splitPoint) {
+        setFileLoading(false);
+      }
+    } catch (error) {
+      splitPoint = headerNames;
+      if (findFileKeyword == headerNames) {
+        setFileLoading(false);
+      }
+      setFindFileKeyword(splitPoint);
+      setFileInitialPage(null);
+      setFileDosPageNumber(null);
+    }
+  };
+  const handleOpenModalCombinationCodeOld = async (
     value,
     disDescription,
     check,
@@ -1406,7 +1488,7 @@ const VisitData = ({}) => {
         var data = {
           fileId:fileId,
           header: headerNames,
-          dos:encounterDatesHeader,
+          dos:encounterDatesValue,
           stringFileWord:splitPoint      
         }
         try {
@@ -1441,6 +1523,206 @@ const VisitData = ({}) => {
             dataset;
           setFileModalTitle(headerName);
           setDocumentLoaded(true);
+        } catch (error) {
+          splitPoint = headerNames;
+          if (findFileKeyword == headerNames) {
+            setFileLoading(false);
+          }
+          setFindFileKeyword(splitPoint);
+          setFileInitialPage(null);
+          setFileDosPageNumber(null);
+        }
+      } else if (check == "valid2") {
+        setSelectActiveCode(value);
+        var splitPoint = "";
+        splitPoint = disDescription;
+        setTimeout(() => {
+          highlight({
+            keyword: splitPoint,
+            matchCase: true,
+          });
+          var dataset = value + " - (" + disDescription + ")";
+          setSelectMeatName(dataset);
+          var headerName =
+            patientDocumentResult.patientId +
+            " / " +
+            patientDocumentResult.patientName +
+            " / " +
+            dataset;
+          setFileModalHeader(headerName);
+        }, 2000);
+        setDocumentLoaded(true);
+        var dataset = value + " - (" + disDescription + ")";
+        setSelectMeatName(dataset + " -  " + "Loading...");
+        var headerName =
+          patientDocumentResult.patientId +
+          " / " +
+          patientDocumentResult.patientName +
+          " / " +
+          dataset +
+          " -  " +
+          "Loading...";
+        setFileModalHeader(headerName);
+
+        setIsLoadingSection(true);
+        setIsModalOpenValidCodes(true);
+      } else {
+        setSelectActiveCode(value);
+        var splitPoint = "";
+        splitPoint = disDescription.substring(" ", 20);
+        setTimeout(() => {
+          highlight({
+            keyword: splitPoint,
+            matchCase: true,
+            // wholeWords:true
+          });
+          var dataset = value + " - (" + disDescription + ")";
+          setSelectMeatName(dataset);
+        }, 2000);
+        setDocumentLoaded(true);
+        var dataset = value + " - (" + disDescription + ")";
+        setSelectMeatName(dataset + " -  " + "Loading...");
+        setIsLoadingSection(true);
+        setIsModalOpen(true);
+      }
+    }
+
+    // setIsModalOpenValid(true)
+    // getSectionResult(value.toLowerCase());
+  };
+  const handleOpenModalCombinationCode = async (
+    value,
+    disDescription,
+    check,
+    whereCome,
+    documentPlace,
+    encounterDate,
+    headerNames,
+    actualDescription,
+    testModal
+  ) => {
+    setFileLoading(true);
+    setDocumentLoaded(false);
+    if (
+      documentPlace == "Radio" ||
+      whereCome == "Radio" ||
+      documentPlace == "Radio-combo"
+    ) {
+      handleOpenModalRadiology(value, disDescription, true);
+    } else if (documentPlace == "Lab" || whereCome == "Lab") {
+      setFileInitialPage(null);
+      setFileDosPageNumber(null);
+      var splitPoint = disDescription.substring(" ", 40);
+      setFindFileKeyword(splitPoint);
+      setTimeout(() => {
+        var dataset = "Lab" + " - (" + disDescription + ")";
+        setSelectMeatName(dataset);
+      }, 2000);
+      setDocumentLoaded(true);
+      var dataset = "Lab" + " - (" + disDescription + ")";
+      setSelectMeatName(dataset + " -  " + "Loading...");
+      setIsLoadingSection(true);
+      setIsModalOpenLab(true);
+    } else {
+      if (whereCome == "nonHcc") {
+        setNonHccActiveCodes(true);
+      } else {
+        setNonHccActiveCodes(false);
+      }
+      if (check === "valid") {
+        var dataset = value + " - (" + disDescription + ")";
+        setSelectMeatName(dataset + " -  " + "Loading...");
+        var dotLoading = (
+          <div className={visitStyles.loadingFileHeader}>
+            <Spinner />
+          </div>
+        );
+        setIsLoadingSection(true);
+        var headerName = dotLoading;
+        setFileModalHeader(headerName);
+        if (documentPlace == "COMBO") {
+          setIsModalOpenCaptureSection(true);
+        } else {
+          if (testModal == "Suggested") {
+            setIsModalOpenValidCodes(true);
+          } else {
+            setIsModalOpenValidCodes(true);
+          }
+        }
+
+        var fileId = patientFileDTO.fileId;
+        const encounterDatesValue = encounterDate.split(",");
+        const encounterDatesHeader = encounterDatesValue[0];
+        var splitPoint = "";
+        var pageNumber = null;
+        splitPoint = actualDescription.substring(" ", 20);
+        var data = {
+          fileId: fileId,
+          header: headerNames,
+          dos: encounterDatesValue,
+          stringFileWord: actualDescription.substring(" ", 20),
+          diagnosisCode: value,
+        };
+        try {
+          const response = await axios.post(
+            ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
+            data
+          );
+          var result = response.data.response;
+          if (response?.data?.status == "SUCCESS") {
+            pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
+            splitPoint = result?.searchString
+            if (result == null) {
+               return handleOpenModalCombinationCodeOld(
+                value,
+                disDescription,
+                check,
+                whereCome,
+                documentPlace,
+                encounterDate,
+                headerNames,
+                actualDescription,
+                testModal
+              );
+            }
+            if (pageNumber == fileInitialPage) {
+              setFileLoading(false);
+              notification.warning({
+                message: "This detail also same page",
+                placement: "top",
+                duration: 1,
+              });
+            }
+            setFileInitialPage(pageNumber);
+            setFileDosPageNumber(pageNumber);
+            var dataset =
+            value +
+            " - (" +
+            disDescription +
+            ")" +
+            " / (" +
+            actualDescription +
+            ")";
+          setSelectMeatName(dataset);
+          var headerName =
+            patientDocumentResult.patientId +
+            " / " +
+            patientDocumentResult.patientName +
+            " / " +
+            dataset;
+          setFileModalTitle(headerName);
+          } else {
+            splitPoint = headerNames;
+            setFileInitialPage(null);
+            setFileDosPageNumber(null);
+          }
+          setTargetPages((targetPage) => {
+            targetPage.pageIndex === pageNumber;
+          });
+          setFindFileKeyword(splitPoint);
+          if (findFileKeyword == splitPoint) {
+            setFileLoading(false);
+          }
         } catch (error) {
           splitPoint = headerNames;
           if (findFileKeyword == headerNames) {
@@ -2049,7 +2331,8 @@ const VisitData = ({}) => {
   const getCaptureSectionBackgroundFile = (
     value,
     encounterDate,
-    actualDescription
+    actualDescription,
+    diagnosisCode
   ) => {
     // getSectionTagColor(value);
     var dublicateCaptureDelete = removeDuplicates(value);
@@ -2069,7 +2352,8 @@ const VisitData = ({}) => {
               res,
               headerNames,
               encounterDate,
-              actualDescription
+              actualDescription,
+              diagnosisCode
             )
           }
           style={{ backgroundColor: backColor, color: textColor }}
@@ -2769,15 +3053,13 @@ const VisitData = ({}) => {
                                   {data.diagnosisCode}
                                 </span>{" "}
                                 <Popover
-                                  content={data.actualDescription}
+                                  content={data.dbDescription ? data.dbDescription : data.actualDescription}
                                   title=""
                                   trigger="hover"
                                 >
-                                  {data?.isMostSpecific != true ? (
-                                    <>- {data.actualDescription} </>
-                                  ) : (
-                                    <> - {data.dbDescription}</>
-                                  )}
+                                
+                                    <> - {data.dbDescription ? data.dbDescription : data.actualDescription}</>
+                                 
                                 </Popover>
                               </span>
                             </div>
@@ -2917,36 +3199,36 @@ const VisitData = ({}) => {
                             <div
                               className={`${visitStyles.encounterAndSectionHeader}`}
                             >
-                              <div className={styles.meatFoundContainer}>
-                                <div>
-                                  {getMeatFound(
-                                    data?.diagnosisCode,
-                                    meatCriteriaList,
-                                    "M"
-                                  )}
-                                </div>
-                                <div>
-                                  {getMeatFound(
-                                    data?.diagnosisCode,
-                                    meatCriteriaList,
-                                    "E"
-                                  )}
-                                </div>
-                                <div>
-                                  {getMeatFound(
-                                    data?.diagnosisCode,
-                                    meatCriteriaList,
-                                    "A"
-                                  )}
-                                </div>
-                                <div>
-                                  {getMeatFound(
-                                    data?.diagnosisCode,
-                                    meatCriteriaList,
-                                    "T"
-                                  )}
-                                </div>
+                              <div className={`cr-pointer ${styles.meatFoundContainer}`}>
+                              <div onClick={()=> setActiveTabHead(4)}>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "M"
+                                )}
                               </div>
+                              <div onClick={()=> setActiveTabHead(4)}>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "E"
+                                )}
+                              </div>
+                              <div onClick={()=>setActiveTabHead(4)}>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "A"
+                                )}
+                              </div>
+                              <div onClick={()=>setActiveTabHead(4)}>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "T"
+                                )}
+                              </div>
+                            </div>
                               <div
                                 className={`${visitStyles.encounterAndSectionHeader}`}
                               >
@@ -3007,11 +3289,11 @@ const VisitData = ({}) => {
                                         {data.diagnosisCode}
                                       </span>{" "}
                                       <Popover
-                                        content={data.actualDescription}
+                                        content={data.dbDescription ? data.dbDescription : data.actualDescription}
                                         title=""
                                         trigger="hover"
                                       >
-                                        - {data.actualDescription}
+                                        - {data.dbDescription ? data.dbDescription : data.actualDescription}
                                       </Popover>
                                     </span>
                                   </div>
@@ -3167,26 +3449,7 @@ const VisitData = ({}) => {
                                     {getEncounterDateBackground(
                                       data.encounterDateSplit
                                     )}
-                                  </div>
-                                  {data.getPlace == "Lab" ? (
-                                    <Tooltip title="LAB">
-                                      <span
-                                        className={` mt-2 ${visitStyles.labStatus}`}
-                                        bg={`  mt-2 bg-bg-seven `}
-                                      >
-                                        Lab
-                                      </span>
-                                    </Tooltip>
-                                  ) : data.getPlace == "Radio" ? (
-                                    <Tooltip title="RADIOLOGY">
-                                      <span
-                                        className={` mt-2 ${visitStyles.radiologyStatus}`}
-                                        bg={`  mt-2 bg-bg-eight `}
-                                      >
-                                        Radiology
-                                      </span>
-                                    </Tooltip>
-                                  ) : null}
+                                  </div>                                
                                 </div>
 
                                 {data.getPlace == "Lab" ? (
@@ -3216,40 +3479,43 @@ const VisitData = ({}) => {
                                   <div
                                     className={`${visitStyles.encounterAndSectionHeader}`}
                                   >
-                                    {getCaptureSectionBackgroundFile(
-                                      data?.capturedSections,
-                                      data?.encounterDate,
-                                      data?.actualDescription
-                                    )}
+                                     {getCaptureSectionBackground(
+                                  data.capturedSections,
+                                  null,
+                                  data.encounterDate,
+                                  data.actualDescription,
+                                  null,
+                                  data.diagnosisCode
+                                )}
                                   </div>
                                 )}
                               </div>
                               <div
                             className={`${visitStyles.encounterAndSectionHeader}`}
                           >
-                            <div className={styles.meatFoundContainer}>
-                              <div>
+                             <div className={`cr-pointer ${styles.meatFoundContainer}`}>
+                              <div onClick={()=>setActiveTabHead(4)}>
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
                                   "M"
                                 )}
                               </div>
-                              <div>
+                              <div onClick={()=>setActiveTabHead(4)}>
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
                                   "E"
                                 )}
                               </div>
-                              <div>
+                              <div onClick={()=>setActiveTabHead(4)}>
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
                                   "A"
                                 )}
                               </div>
-                              <div>
+                              <div onClick={()=>setActiveTabHead(4)}>
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
@@ -3276,6 +3542,25 @@ const VisitData = ({}) => {
                                 Insulin
                               </span>
                             ) : null}
+                              {data.getPlace == "Lab" ? (
+                                    <Tooltip title="LAB">
+                                      <span
+                                        className={` mt-2 ${visitStyles.labStatus}`}
+                                        bg={`  mt-2 bg-bg-seven `}
+                                      >
+                                        Lab
+                                      </span>
+                                    </Tooltip>
+                                  ) : data.getPlace == "Radio" ? (
+                                    <Tooltip title="RADIOLOGY">
+                                      <span
+                                        className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                        bg={`  mt-2 bg-bg-eight `}
+                                      >
+                                        Radiology
+                                      </span>
+                                    </Tooltip>
+                                  ) : null}
                           </div>
                           </div>
                               </div>
@@ -3724,7 +4009,7 @@ const VisitData = ({}) => {
           <div className="section-container">
             <div className="my-post-content row pt-3">
               {!isFileFormShow ? (
-                <div className="col-xl-2">
+                <div className="col-xl-3">
                   <ul className="timeline">
                     <div
                       className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
@@ -3758,15 +4043,13 @@ const VisitData = ({}) => {
                                       {data.diagnosisCode}
                                     </span>{" "}
                                     <Popover
-                                      content={data.actualDescription}
+                                      content={data.dbDescription ? data.dbDescription : data.actualDescription}
                                       title=""
                                       trigger="hover"
                                     >
-                                      {data?.isMostSpecific != true ? (
-                                        <>- {data.actualDescription} </>
-                                      ) : (
-                                        <> - {data.dbDescription}</>
-                                      )}
+                                    
+                                        <> - {data.dbDescription ? data.dbDescription : data.actualDescription}</>
+                                   
                                     </Popover>
                                   </span>
                                 </div>
@@ -3876,7 +4159,8 @@ const VisitData = ({}) => {
                                   {getCaptureSectionBackgroundFile(
                                     data?.capturedSections,
                                     data?.encounterDate,
-                                    data?.actualDescription
+                                    data?.actualDescription,
+                                    data?.diagnosisCode
                                   )}
                                 </div>
                                 {/* {data?.isMostSpecific == true ? (
@@ -3899,7 +4183,7 @@ const VisitData = ({}) => {
                   </ul>
                 </div>
               ) : null}
-              <div className="col-xl-8">
+              <div className={isFileFormShow ? "col-xl-8" : "col-xl-6"}>
                 <div className="card-body p-0">
                   <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                     <div
@@ -3926,157 +4210,12 @@ const VisitData = ({}) => {
                 </div>
               </div>
               {isFileFormShow ? (
-                <div className="col-xl-4">
-                  <div className="offcanvas-body">
-                    <div className={visitStyles.fileFormContianer}>
-                      <Form
-                        noValidate
-                        validated={validated}
-                        onSubmit={handleFormSubmit}
-                      >
-                        <div className="row">
-                          <div className="col-xl-12">
-                            <Form.Label>
-                              Code <span className="text-danger">*</span>{" "}
-                            </Form.Label>
-                            <Form.Control
-                              required
-                              type="text"
-                              id="diagnosisCode"
-                              name="diagnosisCode"
-                              onChange={handleChange}
-                            />
-                            {addValidCodeCheck == false ? (
-                              <span className={visitStyles.invalidHccCodeError}>
-                                Invalid Hcc Code
-                              </span>
-                            ) : addValidCodeCheck == true ? (
-                              <span className={visitStyles.validHccCodeError}>
-                                Valid Hcc Code
-                              </span>
-                            ) : null}
-                          </div>
-                          <div className="col-xl-12">
-                            <Form.Label>Provider name</Form.Label>
-                            <Form.Control
-                              type="text"
-                              id="providerName"
-                              name="providerName"
-                              onChange={handleChange}
-                            />
-                          </div>
-                          <div className="col-xl-12">
-                            <Form.Label>
-                              Section <span className="text-danger">*</span>{" "}
-                            </Form.Label>
-                            <Form.Control
-                              required
-                              type="text"
-                              id="capturedSections"
-                              name="capturedSections"
-                              onChange={handleChange}
-                            />
-                          </div>
-                          <div className={`col-xl-12`}>
-                            <Form.Label>
-                              Encoded date{" "}
-                              <span className="text-danger">*</span>{" "}
-                            </Form.Label>
-
-                            {/* <Form.Control
-                                                        required
-                                                        type="date"
-                                                        id="encodedDate"
-                                                        name="encodedDate"
-                                                        onChange={handleChange}                                                      
-                                                      /> */}
-                            <div className={visitStyles.fileFormDate}>
-                              <Form.Control
-                                required
-                                type="text"
-                                id="encodedDate"
-                                name="encodedDate"
-                                onChange={handleChange}
-                                value={inputValueFileDate}
-                              />
-                              {!dragFileDate ? (
-                                <span onClick={() => setdragFileDate(true)}>
-                                  {" "}
-                                  <FontAwesomeIcon
-                                    icon={faCalendar}
-                                    style={{
-                                      color: "#918585",
-                                    }}
-                                  />
-                                </span>
-                              ) : (
-                                <span onClick={() => setdragFileDate(false)}>
-                                  {" "}
-                                  <FontAwesomeIcon
-                                    icon={faClose}
-                                    style={{
-                                      color: "#918585",
-                                    }}
-                                  />
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                          <DatePicker
-                            format="MM-DD-YYYY"
-                            onChange={(dates, dateStrings) => {
-                              handleDatePickerChangeFile(dates, dateStrings);
-                            }}
-                            open={dragFileDate}
-                            showNow={false}
-                            style={{
-                              visibility: "hidden",
-                              boxShadow: "none",
-                              marginBottom: "-45px",
-                            }}
-                            placeholder="MM-DD-YYYY"
-                            className="form-control"
-                          />
-                          {/* <DatePicker/> */}
-
-                          <div className="col-xl-12 mb-3">
-                            <Form.Label>
-                              Description <span className="text-danger">*</span>{" "}
-                            </Form.Label>
-                            <textarea
-                              className="form-control"
-                              id="actualDescription"
-                              name="actualDescription"
-                              onChange={handleChangeSuggested}
-                              // value={inputValue.actualDescription}
-                              rows="5"
-                              required
-                            ></textarea>
-                          </div>
-                        </div>
-
-                        <div>
-                          <Button
-                            type="submit"
-                            className="btn btn-primary btn-sm me-1"
-                          >
-                            Submit
-                          </Button>
-                          <Button
-                            type="reset"
-                            onClick={() => setIsFileFormShow(false)}
-                            className="btn btn-danger btn-sm light ms-1"
-                          >
-                            Cancel
-                          </Button>
-                        </div>
-                      </Form>
-                    </div>
-                  </div>
+                <div className={`col-xl-4 ${styles.hccFormContainer}`}>
+                  <AddHccForm diagnosisCode={inputValue.diagnosisCode} handleCloseModal={handleCloseModal}/>
                 </div>
               ) : null}
               {!isFileFormShow ? (
-                <div className="col-xl-2">
+                <div className="col-xl-3">
                   <div className="">
                     <ul className="timeline">
                       <div
@@ -4112,11 +4251,11 @@ const VisitData = ({}) => {
                                               {data.diagnosisCode}
                                             </span>{" "}
                                             <Popover
-                                              content={data.actualDescription}
+                                              content={data.dbDescription ? data.dbDescription : data.actualDescription}
                                               title=""
                                               trigger="hover"
                                             >
-                                              - {data.actualDescription}
+                                              - {data.dbDescription ? data.dbDescription : data.actualDescriptionn}
                                             </Popover>
                                           </span>
                                         </div>
@@ -4308,7 +4447,8 @@ const VisitData = ({}) => {
                                             {getCaptureSectionBackgroundFile(
                                               data?.capturedSections,
                                               data?.encounterDate,
-                                              data?.actualDescription
+                                              data?.actualDescription,
+                                              data?.diagnosisCode
                                             )}
                                           </div>
                                         )}
@@ -4356,11 +4496,11 @@ const VisitData = ({}) => {
                                         {data.diagnosisCode}
                                       </span>{" "}
                                       <Popover
-                                        content={data.actualDescription}
+                                        content={data.dbDescription ? data.dbDescription : data.actualDescription}
                                         title=""
                                         trigger="hover"
                                       >
-                                        - {data.actualDescription}
+                                        - {data.dbDescription ? data.dbDescription : data.actualDescription}
                                       </Popover>
                                     </span>
                                   </div>
@@ -4457,7 +4597,8 @@ const VisitData = ({}) => {
                                     {getCaptureSectionBackgroundFile(
                                       data?.capturedSections,
                                       data?.encounterDate,
-                                      data?.actualDescription
+                                      data?.actualDescription,
+                                      data?.diagnosisCode
                                     )}
                                   </div>
                                 </div>
@@ -4925,251 +5066,7 @@ const VisitData = ({}) => {
         <div className="offcanvas-body">
           <div className="container-fluid">
             <div className={`className="col-xl-12`}>
-              {hccFormTab == "HCCFORM" ? (
-                <div>
-                  <div className={styles.formTitleContaniner}>
-                    <h6 className={styles.formTitle}>HCC</h6>
-                  </div>
-                  <Form
-                    noValidate
-                    validated={validated}
-                    onSubmit={handleFormSubmit}
-                  >
-                    <div className="row">
-                      <div className="col-xl-12">
-                        <Form.Label>
-                          Code <span className="text-danger">*</span>{" "}
-                        </Form.Label>
-                        <Form.Control
-                          required
-                          type="text"
-                          id="diagnosisCode"
-                          name="diagnosisCode"
-                          onChange={handleChange}
-                          value={inputValue.diagnosisCode}
-                        />
-                        {addValidCodeCheck == false ? (
-                          <span className={visitStyles.invalidHccCodeError}>
-                            Invalid Hcc Code
-                          </span>
-                        ) : addValidCodeCheck == true ? (
-                          <span className={visitStyles.validHccCodeError}>
-                            Valid Hcc Code
-                          </span>
-                        ) : null}
-                      </div>
-                      <div className="col-xl-12">
-                        <Form.Label>Provider name</Form.Label>
-                        <Form.Control
-                          type="text"
-                          id="providerName"
-                          name="providerName"
-                          onChange={handleChange}
-                          value={inputValue.providerName}
-                        />
-                      </div>
-                      <div className="col-xl-12 ">
-                        <Form.Label>Provider Info</Form.Label>
-                        <Select
-                          className={`ant_select_form hcc_form mb-2`}
-                          onChange={(value) => handleSelectProvider(value)}
-                          value={selectProviderInfo}
-                        >
-                          {providerInfoList?.map((data) => (
-                            <Option key={data?.value} value={data?.value}>
-                              {data?.label}
-                            </Option>
-                          ))}
-                        </Select>
-                      </div>
-                      <div className="col-xl-12">
-                        <Form.Label>
-                          Section <span className="text-danger">*</span>{" "}
-                        </Form.Label>
-                        <Form.Control
-                          required
-                          type="text"
-                          id="capturedSections"
-                          name="capturedSections"
-                          onChange={handleChange}
-                          value={inputValue.capturedSections}
-                        />
-                      </div>
-                      <div className={`col-xl-12`}>
-                        <Form.Label>
-                          Encoded date <span className="text-danger">*</span>{" "}
-                        </Form.Label>
-
-                        <Form.Control
-                          required
-                          type="date"
-                          id="encodedDate"
-                          name="encodedDate"
-                          onChange={handleChange}
-                          placeholder="MM/DD/YYYY"
-                        />
-                      </div>
-                      <DatePicker
-                        format="MM-DD-YYYY"
-                        onChange={(dates, dateStrings) => {
-                          handleDatePickerChangeFile(dates, dateStrings);
-                        }}
-                        open={dragFileDate}
-                        showNow={false}
-                        style={{
-                          visibility: "hidden",
-                          boxShadow: "none",
-                          marginBottom: "-45px",
-                        }}
-                        placeholder="MM-DD-YYYY"
-                        className="form-control"
-                      />
-                      {/* <DatePicker/> */}
-
-                      <div className="col-xl-12 mb-3">
-                        <Form.Label>
-                          Description <span className="text-danger">*</span>{" "}
-                        </Form.Label>
-                        <textarea
-                          className={`${styles.hccTextArea}`}
-                          id="actualDescription"
-                          name="actualDescription"
-                          onChange={handleChangeSuggested}
-                          // value={inputValue.actualDescription}
-                          rows="5"
-                          required
-                          value={inputValue.actualDescription}
-                        ></textarea>
-                      </div>
-                    </div>
-
-                    <div>
-                      <Button
-                        type="submit"
-                        className="btn btn-primary btn-sm me-1"
-                      >
-                        Next
-                      </Button>
-                      <Button
-                        type="reset"
-                        onClick={() => handleFormClear()}
-                        className="btn btn-danger btn-sm light ms-1"
-                      >
-                        Cancel
-                      </Button>
-                    </div>
-                  </Form>
-                </div>
-              ) : (
-                <div>
-                  <div className={styles.formTitleContaniner}>
-                    <h6 className={styles.formTitle}>MEAT</h6>
-                  </div>
-                  <Form
-                    noValidate
-                    validated={validated}
-                    onSubmit={handleFormSubmitMeat}
-                  >
-                    <div className="row">
-                      <div className="col-xl-12">
-                        <Form.Label>Monitor Header</Form.Label>
-                        <Form.Control
-                          type="text"
-                          id="monitorCapturedFromHeader"
-                          name="monitorCapturedFromHeader"
-                          onChange={handleChangeMeat}
-                          value={inputValueMeat.monitorCapturedFromHeader}
-                        />
-                      </div>
-                      <div className="col-xl-12">
-                        <Form.Label>Monitor</Form.Label>
-                        <Form.Control
-                          type="text"
-                          id="monitor"
-                          name="monitor"
-                          onChange={handleChangeMeat}
-                          value={inputValueMeat.monitor}
-                        />
-                      </div>
-                      <div className="col-xl-12">
-                        <Form.Label>Evaluate Header</Form.Label>
-                        <Form.Control
-                          type="text"
-                          id="evaluateCapturedFromHeader"
-                          name="evaluateCapturedFromHeader"
-                          onChange={handleChangeMeat}
-                          value={inputValueMeat.evaluateCapturedFromHeader}
-                        />
-                      </div>
-                      <div className="col-xl-12">
-                        <Form.Label>Evaluate</Form.Label>
-                        <Form.Control
-                          type="text"
-                          id="evaluate"
-                          name="evaluate"
-                          onChange={handleChangeMeat}
-                          value={inputValueMeat.evaluate}
-                        />
-                      </div>
-                      <div className="col-xl-12">
-                        <Form.Label>Assessment Header</Form.Label>
-                        <Form.Control
-                          type="text"
-                          id="assessmentCapturedFromHeader"
-                          name="assessmentCapturedFromHeader"
-                          onChange={handleChangeMeat}
-                          value={inputValueMeat.assessmentCapturedFromHeader}
-                        />
-                      </div>
-                      <div className="col-xl-12">
-                        <Form.Label>Assessment</Form.Label>
-                        <Form.Control
-                          type="text"
-                          id="assessment"
-                          name="assessment"
-                          onChange={handleChangeMeat}
-                          value={inputValueMeat.assessment}
-                        />
-                      </div>
-                      <div className="col-xl-12">
-                        <Form.Label>Treatment Header</Form.Label>
-                        <Form.Control
-                          type="text"
-                          id="treatmentCapturedFromHeader"
-                          name="treatmentCapturedFromHeader"
-                          onChange={handleChangeMeat}
-                          value={inputValueMeat.treatmentCapturedFromHeader}
-                        />
-                      </div>
-                      <div className="col-xl-12 mb-4">
-                        <Form.Label>Treatment</Form.Label>
-                        <Form.Control
-                          type="text"
-                          id="treatment"
-                          name="treatment"
-                          onChange={handleChangeMeat}
-                          value={inputValueMeat.treatment}
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <Button
-                        type="submit"
-                        className="btn btn-primary btn-sm me-1"
-                      >
-                        Submit
-                      </Button>
-                      <Button
-                        onClick={() => setHccFormTab("HCCFORM")}
-                        className="btn btn-danger btn-sm light ms-1"
-                      >
-                        Back
-                      </Button>
-                    </div>
-                  </Form>
-                </div>
-              )}
+            <AddHccForm diagnosisCode={inputValue.diagnosisCode} handleCloseModal={handleCloseModal}/>
             </div>
           </div>
         </div>

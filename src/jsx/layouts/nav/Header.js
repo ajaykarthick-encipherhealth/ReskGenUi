@@ -427,8 +427,9 @@ const Header = ({
                   <img
                     src={tenent?.data?.response?.companyLogoLink}
                     alt="tenetLog"
-                    width={100}
-                    height={70}
+                    width={70}
+                    height={40}
+                    style={{objectFit: 'cover'}}
                   />
                 </div>
               )}

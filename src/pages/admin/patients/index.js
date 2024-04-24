@@ -577,7 +577,7 @@ export default function Patient() {
                             setEndDate2={setCompletedEndDate}
                             isAnotherPicker={true}
                             selectedDates2={selecteddates2}
-                            setSelectedDates2={setSelectedDates}
+                            setSelectedDates2={setSelectedDate2s}
                             // defaultAllocateTo={"All"}
                             // allocated by
                             isAllocatedBySelector={true}

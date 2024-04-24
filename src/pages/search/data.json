@@ -1,0 +1,73 @@
+[
+    {
+        "id": 5,
+        "code": "A00",
+        "description": "Cholera",
+        "years": [
+            2017,
+            2018,
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024
+        ]
+    },
+    {"id": 1,
+        "code": "A00.0",
+        "description": "Cholera due to Vibrio cholerae 01, biovar cholerae",
+        "years": [
+            2017,
+            2018,
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024
+        ]
+    },
+    {"id": 2,
+        "code": "A00.1",
+        "description": "Cholera due to Vibrio cholerae 01, biovar eltor",
+        "years": [
+            2017,
+            2018,
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024
+        ]
+    },
+    {"id": 3,
+        "code": "A00.9",
+        "description": "Cholera, unspecified",
+        "years": [
+            2017,
+            2018,
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024
+        ]
+    },
+    {"id": 4,
+        "code": "A01",
+        "description": "Typhoid and paratyphoid fevers",
+        "years": [
+            2017,
+            2018,
+            2019,
+            2020,
+            2021,
+            2022,
+            2023,
+            2024
+        ]
+    }
+]

@@ -1309,7 +1309,7 @@ const Details = () => {
     } else if (user && user.toLowerCase() === "reviewer") {
       const { user: _, ...queryWithoutUser } = navigate.query;
       const queryString = new URLSearchParams(queryWithoutUser).toString();
-      if (navigate.query) {
+      if (navigate.query && queryString) {
         const url = queryString
           ? `/reviewer/patients?${queryString}`
           : "/reviewer/patients";
@@ -1697,7 +1697,7 @@ const Details = () => {
       getPatientListToDetails(workListPatientId, localOrgId, localTenantId);
     }
   }, [workListPatientId]);
-
+  
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -2324,7 +2324,7 @@ const Details = () => {
                           {patientResultReload ? (
                             <>
                               {activeTab == 1 ? (
-                                <Hcc patientHccResult={patientDocumentResult} />
+                                <Hcc patientHccResult={patientDocumentResult} year={dosYearDefalutSelect}/>
                               ) : activeTab == 2 ? (
                                 <NonHcc
                                   patientNonHccResult={patientDocumentResult}

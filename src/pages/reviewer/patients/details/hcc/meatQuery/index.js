@@ -685,7 +685,7 @@ const MeatQuery = ({}) => {
                         <div className="col-xl-2 d-grid">
                           <span className="meat-name-details">
                             {moment(item.createdAt).format(
-                              "MM-DD-YYYY & HH:MM:SS"
+                              "MM-DD-YYYY & HH:MM"
                             )}
                           </span>
                         </div>

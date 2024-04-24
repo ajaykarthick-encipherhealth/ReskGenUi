@@ -24,12 +24,6 @@ const HeadTitle = ({
   const [dateValues, setDates] = useState();
   const currentDate = dayjs();
   const startOfMonth = currentDate.startOf("month");
-  useEffect(() => {
-    setSelectedDates([
-      dayjs(currentDate).format("YYYY-MM-DD"),
-      dayjs(startOfMonth).format("YYYY-MM-DD"),
-    ]);
-  }, []);
 
   const handleDatePickerChange = (date) => {
     if (date) {
@@ -62,9 +56,9 @@ const HeadTitle = ({
               alt="Calendar Icon"
               onClick={() => {
                 setOpenPicker(!openPicker);
-                if (!openPicker) {
-                  setSelectedDates([]);
-                }
+                // if (!openPicker) {
+                //   setSelectedDates([]);
+                // }
               }}
               className={styles.IMG}
             />
@@ -88,6 +82,7 @@ const HeadTitle = ({
         }}
         onCancel={() => {
           setOpenPicker(false);
+          setSelectedDates([]);
         }}
       >
         <div className={styles.modalDetails}>
@@ -102,7 +97,7 @@ const HeadTitle = ({
               dayjs(startOfMonth).format("YYYY-MM-DD"),
             ]}
             open={openPicker}
-            value={selectedDates}
+            value={selectedDates?.length > 0 ? selectedDates : ""}
             onChange={(dates, dateStrings) => {
               setSelectedDates(dates);
               handleDatePickerChange(dateStrings);
@@ -110,6 +105,7 @@ const HeadTitle = ({
             suffixIcon={false}
             className={styles.datepicker}
             disabledDate={(current) => disableFutureDate(current)}
+            inputReadOnly={true}
           />
           <div
             style={{
@@ -135,7 +131,7 @@ const HeadTitle = ({
               }
 
               dispatch(getDateRange(dates));
-              setOpenPicker(false);
+              // setOpenPicker(false);
               setSelectedDates([]);
             }}
           >

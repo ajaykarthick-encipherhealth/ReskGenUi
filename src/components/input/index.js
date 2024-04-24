@@ -20,19 +20,47 @@ const InputField = ({
   type,
   isDisabled,
   isInputFiled,
+  isTracking,
+  trackInput,
+  setTrackInput,
+  ReportName,
+  setSentSearch,
+  setReceivedSearch,
+  setCoderSearch,
+  activeTab,
+  setSearchVal,
+  searchVal,
 }) => {
   const [inputStr, setInputStr] = useState("");
-
   const debounceFunc = useCallback(
-    debounce((text) => setInputValue(text), 900),
+    debounce((text, activeTab) => {
+      if (activeTab === "SentReport") {
+        setSentSearch(text);
+      } else if (activeTab === "ReceivedReport") {
+        setReceivedSearch(text);
+      } else if (activeTab === "CoderReport") {
+        setCoderSearch(text);
+      } else {
+        setInputValue(text);
+      }
+    }, 700),
     []
   );
 
   const handleChange = (event) => {
     const text = event.target.value;
-    setInputStr(text);
-    debounceFunc(text);
+    if (isTracking) {
+      setTrackInput(text);
+    } else {
+      if (activeTab) {
+        setSearchVal(text);
+      } else {
+        setInputStr(text);
+      }
+    }
+    debounceFunc(text, activeTab);
   };
+ 
   return (
     <div className="form-group has-search">
       {isSearch && (
@@ -43,7 +71,15 @@ const InputField = ({
       )}
       <InputText
         type={type}
-        value={inputStr}
+        value={
+          isTracking
+            ? trackInput
+            : ReportName
+            ? ReportName
+            : activeTab
+            ? searchVal
+            : inputStr
+        }
         onChange={handleChange}
         className={
           isInputFiled

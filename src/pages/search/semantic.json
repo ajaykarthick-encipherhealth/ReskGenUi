@@ -1,0 +1,31 @@
+[
+  {
+    "id": "12719",
+    "code": "J44",
+    "diseaseName": "Other chronic obstructive pulmonary disease",
+    "keywords": [
+      "Decompensated COPD",
+      "Decompensated COPD with (acute) exacerbation",
+      "Chronic obstructive airway disease NOS",
+      "Chronic obstructive lung disease NOS"
+    ]
+  },
+  {
+    "id": "12721",
+    "code": "J44.1",
+    "diseaseName": "Chronic obstructive pulmonary disease with (acute) exacerbation",
+    "keywords": [
+      "Decompensated COPD",
+      "Decompensated COPD with (acute) exacerbation"
+    ]
+  },
+  {
+    "id": "12722",
+    "code": "J44.9",
+    "diseaseName": "Chronic obstructive pulmonary disease, unspecified",
+    "keywords": [
+      "Chronic obstructive airway disease NOS",
+      "Chronic obstructive lung disease NOS"
+    ]
+  }
+]
