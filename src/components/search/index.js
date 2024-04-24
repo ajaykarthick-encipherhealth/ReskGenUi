@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import InputField from "../input";
 
 const Search = ({
@@ -8,44 +8,24 @@ const Search = ({
   setReceivedSearch,
   setCoderSearch,
   activeTab,
-  coderSearch,
-  receivedSearch,
-  sentSearch,
-  search,
+  searchVal, 
+  setSearchVal
 }) => {
-  useEffect(() => {
-    if (activeTab) {
-      setCoderSearch("");
-      setReceivedSearch("");
-      setSentSearch("");
-    }
-  }, [activeTab]);
   return (
     <div>
       <label style={{ marginLeft: "8px" }}>{searchlabel}</label>
       <InputField
-        inputValue={
-          activeTab === "CoderReport"
-            ? coderSearch
-            : activeTab === "ReceivedReport"
-            ? receivedSearch
-            : activeTab === "SentReport"
-            ? sentSearch
-            : search
-        }
-        setInputValue={
-          activeTab === "CoderReport"
-            ? setCoderSearch
-            : activeTab === "ReceivedReport"
-            ? setReceivedSearch
-            : activeTab === "SentReport"
-            ? setSentSearch
-            : setSearch
-        }
         delay={1000}
         type="text"
         placeholder="Search"
         isSearch={true}
+        activeTab={activeTab}
+        setSentSearch={setSentSearch}
+        setReceivedSearch={setReceivedSearch}
+        setCoderSearch={setCoderSearch}
+        searchVal={searchVal}
+        setSearchVal={setSearchVal}
+        setInputValue={setSearch}
       />
     </div>
   );

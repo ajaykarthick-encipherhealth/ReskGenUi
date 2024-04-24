@@ -29,9 +29,9 @@ const statusOptions = [
   { label: "Hold", value: "HOLD" },
 ];
 
-const index = () => {
+const Index = () => {
   const dispatch = useDispatch();
-  const route = useRouter()
+  const route = useRouter();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
   const ReportPatientDetails = useSelector((state) => state.report?.details);
   const SentReportDetails = useSelector((state) => state.report?.sentDetails);
@@ -41,9 +41,7 @@ const index = () => {
   const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState(
-    reportActiveTab ? reportActiveTab : "CoderReport"
-  );
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
   const [comments, setComments] = useState();
@@ -74,6 +72,7 @@ const index = () => {
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
+  const [searchVal,setSearchVal]=useState("")
 
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
@@ -115,6 +114,10 @@ const index = () => {
     setSelectedDates(null);
     // setActiveTab(name);
     dispatch(getActiveTab(name));
+    setSearchVal("")
+    setCoderSearch("")
+    setReceivedSearch("")
+    setSentSearch("")
   };
   useEffect(() => {
     setIsLoading(false);
@@ -180,21 +183,20 @@ const index = () => {
     const page = new URLSearchParams(window.location.search).get("page");
     const limit = new URLSearchParams(window.location.search).get("limit");
     if (reportActiveTab === "ReceivedReport" && page) {
-      setReceivedPageNo(page)
-      setPaginationReceivedFirst(limit)
+      setReceivedPageNo(page);
+      setPaginationReceivedFirst(limit);
     } else if (reportActiveTab === "SentReport" && page) {
-      setSentPageNo(page)
-      setPaginationSentFirst(limit)
-    } 
-  }, [reportActiveTab])
-
+      setSentPageNo(page);
+      setPaginationSentFirst(limit);
+    }
+  }, [reportActiveTab]);
 
   const backRender = () => {
-    const user = localStorage.getItem('userRole')
-    if (user == 'reviewer') {
-      route.push('/reviewer/report?page=0&limit=0')
+    const user = localStorage.getItem("userRole");
+    if (user == "reviewer") {
+      route.push("/reviewer/report?page=0&limit=0");
     }
-  }
+  };
 
   return (
     <>
@@ -217,6 +219,8 @@ const index = () => {
                             setReceivedSearch={setReceivedSearch}
                             setCoderSearch={setCoderSearch}
                             isSearch={true}
+                            setSearchVal={setSearchVal}
+                            searchVal={searchVal}
                             searchlabel="Search by Name"
                             coderSearch={coderSearch}
                             receivedSearch={receivedSearch}
@@ -290,8 +294,8 @@ const index = () => {
                                     className="nav-item"
                                     onClick={() => {
                                       handleTabs("CoderReport");
-                                      backRender()
-                                      dispatch(selectedReport(null))
+                                      backRender();
+                                      dispatch(selectedReport(null));
                                     }}
                                   >
                                     <Nav.Link
@@ -306,7 +310,7 @@ const index = () => {
                                     className="nav-item"
                                     onClick={() => {
                                       handleTabs("SentReport");
-                                      backRender()
+                                      backRender();
                                     }}
                                   >
                                     <Nav.Link
@@ -321,7 +325,7 @@ const index = () => {
                                     className="nav-item"
                                     onClick={() => {
                                       handleTabs("ReceivedReport");
-                                      backRender()
+                                      backRender();
                                     }}
                                   >
                                     <Nav.Link
@@ -533,4 +537,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;
