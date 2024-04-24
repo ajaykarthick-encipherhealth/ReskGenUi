@@ -29,7 +29,6 @@ const ReceivedReport = ({
   const [activeTab, setActiveTab] = useState("Reviewer");
   const [selectedItems, setSelectedItems] = useState([]);
   const [detailsContent, setDetailsContent] = useState(details?.content);
-  console.log(detailsContent, "conte");
   const dispatch = useDispatch();
   useEffect(() => {
     setDetailsContent(details?.content);

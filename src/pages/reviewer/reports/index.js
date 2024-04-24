@@ -35,7 +35,6 @@ const Reports = () => {
   const ReceivedReportDetails = useSelector(
     (state) => state.report?.receivedDetails
   );
-  console.log(SentReportDetails, "sent");
   const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
   const [isLoading, setIsLoading] = useState(true);
@@ -43,7 +42,6 @@ const Reports = () => {
     reportActiveTab ? reportActiveTab : "Reviewer"
   );
 
-  console.log(reportActiveTab,"testTab");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
   const [comments, setComments] = useState();
@@ -116,10 +114,8 @@ const Reports = () => {
     // setActiveTab(name);
     dispatch(getActiveTab(name));
   };
-  console.log(reportActiveTab, "tabs");
   useEffect(() => {
     setIsLoading(false);
-    console.log(reportActiveTab);
     if (reportActiveTab === "Sent") {
       dispatch(
         getSentDetails(sentPageNo, startDate, endDate, sentSearch, sort)
@@ -197,8 +193,6 @@ const Reports = () => {
     }
   };
 
-  
-
   return (
     <>
       <div>
@@ -212,11 +206,12 @@ const Reports = () => {
                     <div className={styles.group}>
                       <button
                         className={
-                          reportActiveTab === "Reviewer" ? `${styles.active}` : ""
+                          reportActiveTab === "Reviewer"
+                            ? `${styles.active}`
+                            : ""
                         }
                         onClick={() => {
                           handleTabs("Reviewer");
-                    
                         }}
                       >
                         Reviewer
@@ -227,18 +222,18 @@ const Reports = () => {
                         }
                         onClick={() => {
                           handleTabs("Sent");
-                    
                         }}
                       >
                         Sent
                       </button>
                       <button
                         className={
-                          reportActiveTab === "Received" ? `${styles.active}` : ""
+                          reportActiveTab === "Received"
+                            ? `${styles.active}`
+                            : ""
                         }
                         onClick={() => {
                           handleTabs("Received");
-                    
                         }}
                       >
                         Received
@@ -263,9 +258,7 @@ const Reports = () => {
 
                   <div>
                     {reportActiveTab === "Reviewer" && (
-                      <div
-                        
-                      >
+                      <div>
                         <ReviewerReport
                           setModal={setModal}
                           modal={modal}
@@ -286,44 +279,38 @@ const Reports = () => {
                       </div>
                     )}
                     {reportActiveTab === "Sent" && (
-                      <div
-                      
-                      >
-{                       
-}                        <SentReport
-                         paginationFirst={paginationSentFirst}
-                         details={
-                           SentReportDetails?.data?.response
-                         }
-                         onSentPageChange={onSentPageChange}
-                         loading={SentReportDetails?.loading}
-                         setSortOrder={setSentSortOrder}
-                         sortOrder={sentSortOrder}
-                         setSort={setSort}
-                         receivedPageNo={sentPageNo}
-                         receivedStartDate={startDate}
-                         receivedEndDate={endDate}
-                         isPhysician={true}
+                      <div>
+                        {}{" "}
+                        <SentReport
+                          paginationFirst={paginationSentFirst}
+                          details={SentReportDetails?.data?.response}
+                          onSentPageChange={onSentPageChange}
+                          loading={SentReportDetails?.loading}
+                          setSortOrder={setSentSortOrder}
+                          sortOrder={sentSortOrder}
+                          setSort={setSort}
+                          receivedPageNo={sentPageNo}
+                          receivedStartDate={startDate}
+                          receivedEndDate={endDate}
+                          isPhysician={true}
                         />
                       </div>
                     )}
                     {reportActiveTab === "Received" && (
                       <div>
-                        <ReceivedReport   paginationFirst={
-                                          paginationReceivedFirst
-                                        }
-                                        details={
-                                          ReceivedReportDetails?.data?.response
-                                        }
-                                        onPageChange={onReceivedPageChange}
-                                        receivedPageNo={receivedPageNo}
-                                        receivedStartDate={receivedStartDate}
-                                        receivedEndDate={receivedEndDate}
-                                        loading={ReceivedReportDetails?.loading}
-                                        setSortOrder={setReceivedSortOrder}
-                                        sortOrder={receivedSortOrder}
-                                        setSort={setSort}
-                                        isPhysician={true}/>
+                        <ReceivedReport
+                          paginationFirst={paginationReceivedFirst}
+                          details={ReceivedReportDetails?.data?.response}
+                          onPageChange={onReceivedPageChange}
+                          receivedPageNo={receivedPageNo}
+                          receivedStartDate={receivedStartDate}
+                          receivedEndDate={receivedEndDate}
+                          loading={ReceivedReportDetails?.loading}
+                          setSortOrder={setReceivedSortOrder}
+                          sortOrder={receivedSortOrder}
+                          setSort={setSort}
+                          isPhysician={true}
+                        />
                       </div>
                     )}
                   </div>
