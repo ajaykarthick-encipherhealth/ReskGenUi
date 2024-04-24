@@ -73,7 +73,7 @@ import AddMeatQuery from "../../components/addMeatQuery";
 import AddHccForm from "../../components/addHccForm";
 
 const { Option } = Select;
-const VisitData = ({}) => {
+const VisitData = ({setActiveTabHead}) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
   let searchKeywords = [];
@@ -152,7 +152,6 @@ const VisitData = ({}) => {
   const [openPopover, setOpenPopover] = useState(false);
 
   const [activeTab, setActiveTab] = useState(1);
-  const [activeTabHead, setActiveTabHead] = useState("file");
   const [selectFileURLRadiology, setSelectFileURLRadiology] = useState([]);
   const [isModalOpenRadiology, setIsModalOpenRadiology] = useState(false);
   const [isModalOpenLab, setIsModalOpenLab] = useState(false);
@@ -3200,36 +3199,36 @@ const VisitData = ({}) => {
                             <div
                               className={`${visitStyles.encounterAndSectionHeader}`}
                             >
-                              <div className={styles.meatFoundContainer}>
-                                <div>
-                                  {getMeatFound(
-                                    data?.diagnosisCode,
-                                    meatCriteriaList,
-                                    "M"
-                                  )}
-                                </div>
-                                <div>
-                                  {getMeatFound(
-                                    data?.diagnosisCode,
-                                    meatCriteriaList,
-                                    "E"
-                                  )}
-                                </div>
-                                <div>
-                                  {getMeatFound(
-                                    data?.diagnosisCode,
-                                    meatCriteriaList,
-                                    "A"
-                                  )}
-                                </div>
-                                <div>
-                                  {getMeatFound(
-                                    data?.diagnosisCode,
-                                    meatCriteriaList,
-                                    "T"
-                                  )}
-                                </div>
+                              <div className={`cr-pointer ${styles.meatFoundContainer}`}>
+                              <div onClick={()=> setActiveTabHead(4)}>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "M"
+                                )}
                               </div>
+                              <div onClick={()=> setActiveTabHead(4)}>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "E"
+                                )}
+                              </div>
+                              <div onClick={()=>setActiveTabHead(4)}>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "A"
+                                )}
+                              </div>
+                              <div onClick={()=>setActiveTabHead(4)}>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "T"
+                                )}
+                              </div>
+                            </div>
                               <div
                                 className={`${visitStyles.encounterAndSectionHeader}`}
                               >
@@ -3494,29 +3493,29 @@ const VisitData = ({}) => {
                               <div
                             className={`${visitStyles.encounterAndSectionHeader}`}
                           >
-                            <div className={styles.meatFoundContainer}>
-                              <div>
+                             <div className={`cr-pointer ${styles.meatFoundContainer}`}>
+                              <div onClick={()=>setActiveTabHead(4)}>
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
                                   "M"
                                 )}
                               </div>
-                              <div>
+                              <div onClick={()=>setActiveTabHead(4)}>
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
                                   "E"
                                 )}
                               </div>
-                              <div>
+                              <div onClick={()=>setActiveTabHead(4)}>
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
                                   "A"
                                 )}
                               </div>
-                              <div>
+                              <div onClick={()=>setActiveTabHead(4)}>
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,

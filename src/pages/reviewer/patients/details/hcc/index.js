@@ -1,39 +1,40 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Tab, Nav } from "react-bootstrap";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import styles from "./styles.module.css";
 import VisitData from "./visitData";
 import Combo from "./combo";
 import Meat from "./meat";
 import RafScore from "./raf";
 import MeatQuery from "./meatQuery";
 import File from "./file";
-const Hcc = ({year}) => {
-  const [activeTabHead, setActiveTabHead] = useState("file");
+const Hcc = ({ year }) => {
+  const [activeTabHead, setActiveTabHead] = useState(1);
   const [flagTagActive, setFlagTagActive] = useState(false);
   const [popoverVisible, setPopoverVisible] = useState(false);
   const selectTab = (num) => {
     setFlagTagActive(false);
-    if(num == 1){
-      setFlagTagActive(true)
+    setActiveTabHead(num)
+    if (num == 2) {
+      setFlagTagActive(true);
     }
-    setPopoverVisible(false)
+    setPopoverVisible(false);
   };
+
   return (
     <>
       <div className={visitStyles.visitdata_tab_body}>
         <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
           <div className="custom-tab-1 ">
-            <Tab.Container defaultActiveKey={activeTabHead}>
+            <Tab.Container activeKey={activeTabHead}>
               <div className="row">
                 <div className="col-xl-8">
                   <Nav as="ul" className="nav nav-tabs">
                     <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
-                        eventKey="file"
+                        eventKey={1}
                         className={visitStyles.navColor}
-                        onClick={() => selectTab(5)}
+                        onClick={() => selectTab(1)}
                       >
                         File
                       </Nav.Link>
@@ -41,10 +42,10 @@ const Hcc = ({year}) => {
                     <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
-                        eventKey="validDiseases"
+                        eventKey={2}
                         className={visitStyles.navColor}
                         activeClassName={visitStyles.activeLink}
-                        onClick={() => selectTab(1)}
+                        onClick={() =>selectTab(2)}
                       >
                         Visit Data
                       </Nav.Link>
@@ -52,9 +53,9 @@ const Hcc = ({year}) => {
                     <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
-                        eventKey="comboDiseases"
+                        eventKey={3}
                         className={visitStyles.navColor}
-                        onClick={() => selectTab(2)}
+                        onClick={() =>selectTab(3)}
                       >
                         Combination Codes
                       </Nav.Link>
@@ -62,9 +63,9 @@ const Hcc = ({year}) => {
                     <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
-                        eventKey="meatCriteria"
+                        eventKey={4}
                         className={visitStyles.navColor}
-                        onClick={() => selectTab(3)}
+                        onClick={() => selectTab(4)}
                       >
                         MEAT Criteria
                       </Nav.Link>
@@ -72,9 +73,9 @@ const Hcc = ({year}) => {
                     <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
-                        eventKey="RafScore"
+                        eventKey={5}
                         className={visitStyles.navColor}
-                        onClick={() => selectTab(4)}
+                        onClick={() => selectTab(5)}
                       >
                         RAF Score
                       </Nav.Link>
@@ -82,9 +83,9 @@ const Hcc = ({year}) => {
                     <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
-                        eventKey="query"
+                        eventKey={6}
                         className={visitStyles.navColor}
-                        onClick={() => selectTab(6)}
+                        onClick={() =>selectTab(6)}
                       >
                         Query
                       </Nav.Link>
@@ -116,22 +117,27 @@ const Hcc = ({year}) => {
               </div>
 
               <Tab.Content>
-                <Tab.Pane id="my-posts" eventKey="validDiseases">
-                  <VisitData />
+              <Tab.Pane id="my-posts" eventKey={1}>
+                  <File
+                    popoverVisible={popoverVisible}
+                    setPopoverVisible={setPopoverVisible}
+                    year={year}
+                    setActiveTabHead={setActiveTabHead}
+                  />
                 </Tab.Pane>
-                <Tab.Pane id="my-posts" eventKey="comboDiseases">
+                <Tab.Pane id="my-posts" eventKey={2}>
+                  <VisitData setActiveTabHead={setActiveTabHead}/>
+                </Tab.Pane>
+                <Tab.Pane id="my-posts" eventKey={3}>
                   <Combo />
                 </Tab.Pane>
-                <Tab.Pane id="my-posts" eventKey="meatCriteria">
+                <Tab.Pane id="my-posts" eventKey={4}>
                   <Meat />
                 </Tab.Pane>
-                <Tab.Pane id="my-posts" eventKey="RafScore">
+                <Tab.Pane id="my-posts" eventKey={5}>
                   <RafScore />
                 </Tab.Pane>
-                <Tab.Pane id="my-posts" eventKey="file">
-                  <File popoverVisible={popoverVisible} setPopoverVisible={setPopoverVisible} year={year}/>
-                </Tab.Pane>
-                <Tab.Pane id="my-posts" eventKey="query">
+                <Tab.Pane id="my-posts" eventKey={6}>
                   <MeatQuery />
                 </Tab.Pane>
               </Tab.Content>
