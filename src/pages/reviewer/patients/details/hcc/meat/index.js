@@ -74,6 +74,7 @@ import {
 } from "../../../../../../services/PatientsListSevice";
 import { getPatientDetailsResult } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import CamboTree from "../org";
+import PdfViewer from "../../PdfViewerComponent";
 
 const { Option } = Select;
 const addOnCodeColor = [
@@ -319,6 +320,7 @@ const Meat = ({}) => {
   const [hccVersionDetails, setHccVersionDetails] = useState(null);
   const [selectProviderInfo, setSelectProviderInfo] = useState(null);
   const [hccFormTab, setHccFormTab] = useState("HCCFORM");
+  const [search, setSearch] = useState(false);
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -1417,6 +1419,10 @@ const Meat = ({}) => {
           splitPoint = value;
         }
         pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
+        setSearch({
+          value: splitPoint,
+          page: result?.pageNumber,
+        });
         setFileInitialPage(pageNumber);
         setFileDosPageNumber(pageNumber);
       } else {
@@ -1490,6 +1496,10 @@ const Meat = ({}) => {
           );
         }
         pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
+        setSearch({
+          value: splitPoint,
+          page: result?.pageNumber,
+        });
         setFileInitialPage(pageNumber);
         setFileDosPageNumber(pageNumber);
       } else {
@@ -2874,7 +2884,7 @@ const Meat = ({}) => {
                 </div>
               </div>
               <div className="col-xl-8">
-                <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                {/* <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                   <div
                     style={{
                       height: "80vh",
@@ -2895,7 +2905,16 @@ const Meat = ({}) => {
                       )}
                     />
                   </div>
-                </Worker>
+                </Worker> */}
+                <>
+                {selectFileURL && (
+                  <PdfViewer
+                    src={selectFileURL}
+                    searchQuery={search?.value ? search?.value : ""}
+                    pageNumber={search?.page ? search?.page : 1}
+                  />
+                )}
+              </>
               </div>
             </div>
           </div>
