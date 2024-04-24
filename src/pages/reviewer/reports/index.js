@@ -4,7 +4,6 @@ import styles from "./report.module.css";
 import ReviewerReport from "./reviewerReport";
 import SentRewiewer from "./sentReport";
 import ReceivedReport from "./receivedReport";
-import HeaderFilters from "../../../components/headerFilter";
 import { Modal, DatePicker } from "antd";
 import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
 
