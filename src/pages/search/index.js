@@ -12,10 +12,13 @@ import { getResponePopup } from "../../utils/reusable";
 const Searches = ({
   getAllICDCodes,
   createICDCode,
+  deleteICDCodes,
   getSimpleSearch,
   getSemanticSearch,
   updateSemantic,
   getAllICDCodesData,
+  getICDStatus,
+  getdeleteICDStatus,
 }) => {
   const size = 15;
   const [search, serSearch] = useState("");
@@ -31,6 +34,7 @@ const Searches = ({
   const [action, setAction] = useState("");
   const [years, setYears] = useState(null);
   const [keyword, setKeyword] = useState(null);
+  const [deleteModal, setDeleteModal] = useState(false);
 
   const getYear = () => {
     let years = [];
@@ -107,30 +111,56 @@ const Searches = ({
   };
 
   const createdICDCodes = (type) => {
-    if ((type !== "edit")) {
+    if (type == "edit") {
       createICDCode({
         id: action.id,
         code: updateDetails.codes,
         description: updateDetails.description,
         years: years.map((date) => date.value),
       });
+      if (getICDStatus?.data?.status == "SUCCESS") {
+        getResponePopup(getICDStatus);
+        setModalOpen("");
+        getAllICDCodes(search, page, size);
+      }
+      setUpdateDetails({});
+      setYears(null);
     } else {
       createICDCode({
         code: updateDetails.codes,
         description: updateDetails.description,
         years: years.map((date) => date.value),
       });
+      if (getICDStatus?.data?.status == "SUCCESS") {
+        getResponePopup(getICDStatus);
+        setModalOpen("");
+        setPaginationFirst(0)
+        setPage(0)
+      }
       setUpdateDetails({});
-      years(null);
+      setYears(null);
     }
   };
+
+  const handleDelete = () => {
+    deleteICDCodes(action.id);
+    if (getdeleteICDStatus?.data?.status == "SUCCESS") {
+      getResponePopup(getdeleteICDStatus);
+      setDeleteModal(false);
+      setPaginationFirst(0)
+      setPage(0)
+    } else if (getdeleteICDStatus?.data?.status == "FAILED") {
+      getResponePopup(getdeleteICDStatus);
+      setDeleteModal(false);
+    }
+  };
+
   useEffect(() => {
     if (action.type == "edit") {
       setModalOpen(action.type);
       const editData = getAllICDCodesData?.data?.response.content.find(
         (item) => item.id == action.id
       );
-      console.log(editData);
       const year = editData?.years?.map((item) => ({
         label: item,
         value: item,
@@ -141,6 +171,8 @@ const Searches = ({
         description: editData.description,
       });
       setYears(year);
+    } else if (action.type == "delete") {
+      setDeleteModal(true);
     }
   }, [action]);
   useEffect(() => {
@@ -286,6 +318,7 @@ const Searches = ({
           setModalOpen("");
           setUpdateDetails({});
           setKeyword(null);
+          setYears(null)
         }}
         footer={null}
       >
@@ -463,6 +496,14 @@ const Searches = ({
             )}
         </div>
       </Modal>
+
+      <Modal
+        title="Are you sure, you want to delete this ICD Code"
+        open={deleteModal}
+        onOk={() => handleDelete()}
+        // confirmLoading={confirmLoading}
+        onCancel={() => setDeleteModal(false)}
+      ></Modal>
     </>
   );
 };
@@ -470,10 +511,13 @@ const Searches = ({
 const enhancer = connect(
   (state) => ({
     getAllICDCodesData: state.search.icdCodes,
+    getICDStatus: state.search.createIcdCode,
+    getdeleteICDStatus: state.search.deleteICDCodes,
   }),
   {
     getAllICDCodes: searchActions.getAllICDCodes,
     createICDCode: searchActions.createICDCodes,
+    deleteICDCodes: searchActions.deleteICDCodes,
     getSimpleSearch: searchActions.getSimpleSearch,
     getSemanticSearch: searchActions.getSemanticSearch,
     updateSemantic: searchActions.updateSemantic,

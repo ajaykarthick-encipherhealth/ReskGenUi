@@ -5,7 +5,8 @@ import {
   createICDCodes,
   getSimpleSearch,
   getSemanticSearch,
-  updateSemantic
+  updateSemantic,
+  deleteICDCodes
 } from "./actions";
 
 const initialState = {
@@ -40,6 +41,7 @@ const createReducer = (actionType) =>
 const searchReducer = combineReducers({
   icdCodes: createReducer(getAllICDCodes),
   createIcdCode: createReducer(createICDCodes),
+  deleteICDCodes: createReducer(deleteICDCodes),
   getSimpleSearch: createReducer(getSimpleSearch),
   getSemanticSearch: createReducer(getSemanticSearch),
   updateSemantic: createReducer(updateSemantic)

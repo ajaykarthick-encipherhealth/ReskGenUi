@@ -11,6 +11,11 @@ export const createICDCodes = createActionThunk(
   network.createIcdCode
 );
 
+export const deleteICDCodes = createActionThunk(
+  "DELETE_ICD_CODES",
+  network.deleteIcdCode
+);
+
 export const getSimpleSearch = createActionThunk(
   "GET_SIMPLE_SEARCH",
   network.getSimple
