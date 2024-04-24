@@ -457,8 +457,8 @@ const Combo = ({}) => {
           });
         }
         setSearch({
-          value: splitPoint,
-          page: result?.pageNumber,
+          value: "Type 2",
+          page: pageNumber,
         });
         setFileInitialPage(pageNumber);
       } else {

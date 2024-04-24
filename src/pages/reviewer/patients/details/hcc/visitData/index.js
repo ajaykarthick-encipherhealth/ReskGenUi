@@ -1323,7 +1323,7 @@ const VisitData = ({}) => {
         }
         setSearch({
           value: splitPoint,
-          page: result?.pageNumber,
+          page: pageNumber,
         });
         setFileInitialPage(pageNumber);
         setFileDosPageNumber(pageNumber);

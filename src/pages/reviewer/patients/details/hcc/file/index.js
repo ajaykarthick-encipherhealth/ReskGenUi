@@ -1694,7 +1694,7 @@ const File = ({ popoverVisible, setPopoverVisible }) => {
         }
         setSearch({
           value: splitPoint,
-          page: result?.pageNumber,
+          page: pageNumber,
         });
         setFileInitialPage(pageNumber);
         setFileDosPageNumber(pageNumber);

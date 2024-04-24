@@ -1421,7 +1421,7 @@ const Meat = ({}) => {
         pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
         setSearch({
           value: splitPoint,
-          page: result?.pageNumber,
+          page: pageNumber,
         });
         setFileInitialPage(pageNumber);
         setFileDosPageNumber(pageNumber);
