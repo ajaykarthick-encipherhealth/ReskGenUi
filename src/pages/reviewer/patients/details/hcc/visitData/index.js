@@ -67,7 +67,7 @@ import {
   submitMeatQuery,
   updateMeatQuery,
 } from "../../../../../../services/PatientsListSevice";
-import { getPatientDetailsResult,getTabDetails } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
+import { getPatientDetailsResult } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import CamboTree from "../org";
 import AddMeatQuery from "../../components/addMeatQuery";
 import AddHccForm from "../../components/addHccForm";

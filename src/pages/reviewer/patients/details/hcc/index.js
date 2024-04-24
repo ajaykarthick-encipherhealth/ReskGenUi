@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Tab, Nav } from "react-bootstrap";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { getTabDetails } from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import VisitData from "./visitData";
 import Combo from "./combo";
 import Meat from "./meat";
