@@ -1,14 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../report.module.css";
 import Image from "next/image";
 import { SVGICON } from "../../../../jsx/constant/theme";
-import { renderUserPrfoileAvatar } from "../../../../components/headerFilters/functions";
 import { IMAGES } from "src/jsx/constant/theme.js";
-
-const ReceivedReport = () => {
+import { Paginator } from "primereact/paginator";
+import { Empty } from "antd";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
+import dayjs from "dayjs";
+import {
+  dateFormate,
+  getBackgroundColor,
+  renderUserPrfoileAvatar,
+  sortFunction,
+} from "../../../../components/headerFilters/functions";
+const ReceivedReport = ({
+  details,
+  onPageChange,
+  receivedPageNo,
+  receivedStartDate,
+  receivedEndDate,
+  paginationFirst,
+  sortOrder,
+  setSortOrder,
+  setSort,
+  isPhysician,
+}) => {
   const [activeTab, setActiveTab] = useState("Reviewer");
   const [selectedItems, setSelectedItems] = useState([]);
+  const [detailsContent, setDetailsContent] = useState(details?.content);
+  console.log(detailsContent, "conte");
+  const dispatch = useDispatch();
+  useEffect(() => {
+    setDetailsContent(details?.content);
+  }, [details]);
 
+  const router = useRouter();
+  const handleReceiverReport = (row) => {
+    const info = {
+      reportUser: row,
+      receivedPageNo: receivedPageNo,
+      receivedStartDate: receivedStartDate,
+      receivedEndDate: receivedEndDate,
+    };
+    dispatch(selectedReport(info));
+    if (isPhysician) {
+      router?.push(
+        `/reviewer/report/individualreport?reportId=${info?.reportUser?.reportId}&page=${receivedPageNo}&limit=${paginationFirst}`
+      );
+    } else {
+      router?.push(
+        `/reviewer/report/individualreport?reportId=${
+          info?.reportUser?.reportId
+        }&isAdminPage=${true}&page=${receivedPageNo}&limit=${paginationFirst}`
+      );
+    }
+  };
   const data = [
     {
       id: 1,
@@ -96,12 +143,12 @@ const ReceivedReport = () => {
     },
   ];
 
-  const accessTemplate = (rowData) => {
-    switch (rowData?.access) {
-      case "Read":
+  const accessTemplate = (item) => {
+    switch (item?.role) {
+      case "READ":
         return <span className={styles.readStyle}>Read</span>;
 
-      case "Download":
+      case "DOWNLOAD":
         return <span className={styles.downloadStyle}>Download</span>;
 
       default:
@@ -134,74 +181,105 @@ const ReceivedReport = () => {
                 <div className=" col-xl-12 d-flex">
                   <div className="col-xl-4">
                     <div className={styles.cardContainer}>
-                      {data.map((item) => (
-                        <div key={item.id} className={styles.card}>
-                          <div className={styles.contentGroup}>
-                            <div className="col-xl-12">
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                  alignItems: "center",
-                                  paddingBottom: "5px",
-                                }}
-                              >
-                                <div className={`col-xl-6 ${styles.pName}`}>
-                                  {item.report}
-                                </div>
-                                <div className={`col-xl-2 `}>
-                                  <span>{accessTemplate(item)}</span>
-                                </div>
-                              </div>
-
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                  alignItems: "center",
-                                  paddingBottom: "5px",
-                                }}
-                              >
-                                <div className={`col-xl-8 ${styles.headText}`}>
-                                  {item.patientId}
-                                </div>
-                                <div className={`col-xl-4 ${styles.headText}`}>
-                                  {item.repotee}
-                                </div>
-                              </div>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <div className={`col-xl-2 ${styles.text}`}>
-                                  {item.date}
-                                </div>
-                                <div className={`col-xl-4 ${styles.text}`}>
-                                  <span
+                      <div className={styles.cardContainer}>
+                        {detailsContent?.map((item, index) => {
+                          const formattedDate = dateFormate(
+                            dayjs,
+                            item?.receiveDate
+                          );
+                          return (
+                            <div key={index} className={styles.card}>
+                              <div className={styles.contentGroup}>
+                                <div className="col-xl-12">
+                                  <div
                                     style={{
-                                      marginRight: "10px",
+                                      display: "flex",
+                                      justifyContent: "space-between",
+                                      alignItems: "center",
+                                      paddingBottom: "5px",
                                     }}
                                   >
-                                    {renderUserPrfoileAvatar(
-                                      item.firstName,
-                                      item.lastName,
-                                      item?.profileImageUrl,
-                                      "header"
-                                    )}
-                                  </span>
+                                    <div className={`col-xl-6 ${styles.pName}`}>
+                                      {item.reportName}
+                                    </div>
 
-                                  <span>
-                                    {item.firstName} {item.lastName}
-                                  </span>
+                                    <div className={`col-xl-2 `}>
+                                      {accessTemplate(item)}
+                                    </div>
+                                  </div>
+
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "space-between",
+                                      alignItems: "center",
+                                      paddingBottom: "5px",
+                                    }}
+                                  >
+                                    <div
+                                      className={`col-xl-8 ${styles.headText}`}
+                                    >
+                                      {item.id}
+                                    </div>
+                                    <div
+                                      className={`col-xl-4 ${styles.headText}`}
+                                    >
+                                      {item.repotee}
+                                    </div>
+                                  </div>
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "space-between",
+                                      alignItems: "center",
+                                    }}
+                                  >
+                                    <div className={`col-xl-2 ${styles.text}`}>
+                                      {formattedDate}
+                                    </div>
+                                    <div className={`col-xl-4 ${styles.text}`}>
+                                      {item.senderDetails?.firstName ||
+                                      item.senderDetails?.lastName ||
+                                      item?.senderDetails?.profileImageUrl ? (
+                                        <div
+                                          style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                          }}
+                                        >
+                                          {" "}
+                                          <span style={{ marginRight: "10px" }}>
+                                            {" "}
+                                            {renderUserPrfoileAvatar(
+                                              item.senderDetails?.firstName,
+                                              item.senderDetails?.lastName,
+                                              item?.senderDetails
+                                                ?.profileImageUrl,
+                                              "header"
+                                            )}
+                                          </span>
+                                          <span>
+                                            {item.senderDetails?.firstName}{" "}
+                                            {item.senderDetails?.lastName}
+                                          </span>
+                                        </div>
+                                      ) : (
+                                        <div style={{ textAlign: "center" }}>
+                                          ---
+                                        </div>
+                                      )}
+
+                                      <span>
+                                        {item.firstName} {item.lastName}
+                                      </span>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                      ))}
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                   <div className="col-xl-8" style={{ marginLeft: "10px" }}>
@@ -276,6 +354,17 @@ const ReceivedReport = () => {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div className="pagination-container">
+        <Paginator
+          first={paginationFirst}
+          rows={15}
+          totalRecords={details?.totalElements}
+          onPageChange={onPageChange}
+        />
+        <div className="total-pages">
+          Total count: {details?.totalElements > 0 ? details?.totalElements : 0}
         </div>
       </div>
     </>

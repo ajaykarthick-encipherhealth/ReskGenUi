@@ -30,7 +30,7 @@ function SentReportTable({
   receivedStartDate,
   receivedEndDate,
   isPhysician,
-  isAdmin
+  isAdmin,
 }) {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -181,7 +181,7 @@ function SentReportTable({
                           borderTop: "  0.2px solid #e1e1e1",
 
                           borderBottom: "  0.2px solid #e1e1e1",
-                          paddingLeft:"8px"
+                          paddingLeft: "8px",
                         }}
                         className={TableStyle.childBorder}
                         onClick={() => handleReceiverReport(row)}
@@ -194,7 +194,7 @@ function SentReportTable({
                           borderTop: "  0.2px solid #e1e1e1",
                           cursor: "pointer",
                           borderBottom: "  0.2px solid #e1e1e1",
-                          paddingLeft:'8px'
+                          paddingLeft: "8px",
                         }}
                         className={TableStyle.childBorder}
                         onClick={() => handleReceiverReport(row)}

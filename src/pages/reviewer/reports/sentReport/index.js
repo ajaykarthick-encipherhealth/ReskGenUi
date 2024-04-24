@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import styles from "../report.module.css";
+import { Paginator } from "primereact/paginator";
+import dayjs from "dayjs";
+
 import { Popover } from "antd";
 import { extractLatestData } from "../../../supervisor/auditing";
 import AuditedTrack from "../../../../../src/images/trackingImages/AuditedTrack.png";
@@ -13,82 +16,136 @@ import Completed from "../../../../../src/images/trackingImages/CompletedTrack.p
 import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
 import AuditedDeclineTrack from "../../../../../src/images/trackingImages/AuditDeclined.png";
 import Abort from "../../../../../src/images/trackingImages/Abort.png";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
 import { Avatar } from "antd";
 import Image from "next/image";
 import { SVGICON } from "../../../../jsx/constant/theme";
-import { renderUserPrfoileAvatar } from "../../../../components/headerFilters/functions";
+import {
+  dateFormate,
+  getBackgroundColor,
+  renderUserPrfoileAvatar,
+  sortFunction,
+} from "../../../../components/headerFilters/functions";
 import EditButton from "../../../../images/adminUsers/EditButton";
 import { IMAGES } from "src/jsx/constant/theme.js";
+import SpinnerDots from "../../../../components/spinner";
+import Export from "../../../admin/report/Export";
+import TableStyle from "../../../../components/table/table.module.css";
 
-const SentReport = () => {
+const SentReport = ({
+  details,
+  onSentPageChange,
+  paginationFirst,
+  loading,
+  sortOrder,
+  setSortOrder,
+  setSort,
+  receivedPageNo,
+  receivedStartDate,
+  receivedEndDate,
+  isPhysician,
+  isAdmin,
+}) => {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("Reviewer");
   const [selectedItems, setSelectedItems] = useState([]);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const displayReceivedUsers = (list) => {
+    setSelectedUsers(list);
+  };
+  console.log(details, "data");
+  const hashes = selectedUsers.map((user) => {
+    const hash = (user?.userDetails?.firstName.charCodeAt(0) % 6) + 1;
+    return hash;
+  });
+  const mostCommonHash = getBackgroundColor(hashes);
+  const backgroundColor = getBackgroundColor(mostCommonHash);
 
-  const data = [
-    {
-      id: 1,
-      report: "Monthly Report",
-      edit: "",
-      patientId: "2341cdbe-aa40-4efd-96ca-a91dd6c99424",
-      date: "03-21-2024",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-    },
-    {
-      id: 2,
-      report: "Monthly Report",
-      edit: "",
-      patientId: "2341cdbe-aa40-4efd-96ca-a91dd6c99424",
-      date: "03-21-2024",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-    },
-    {
-      id: 3,
-      report: "Monthly Report",
-      edit: "",
-      patientId: "2341cdbe-aa40-4efd-96ca-a91dd6c99424",
-      date: "03-21-2024",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-    },
-    {
-      id: 4,
-      report: "Monthly Report",
-      edit: "",
-      patientId: "2341cdbe-aa40-4efd-96ca-a91dd6c99424",
-      date: "03-21-2024",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-    },
-    {
-      id: 5,
-      report: "Monthly Report",
-      edit: "",
-      patientId: "2341cdbe-aa40-4efd-96ca-a91dd6c99424",
-      date: "03-21-2024",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-    },
-    {
-      id: 6,
-      report: "Monthly Report",
-      edit: "",
-      patientId: "2341cdbe-aa40-4efd-96ca-a91dd6c99424",
-      date: "03-21-2024",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-    },
-    {
-      id: 7,
-      report: "Monthly Report",
-      edit: "",
-      patientId: "2341cdbe-aa40-4efd-96ca-a91dd6c99424",
-      date: "03-21-2024",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-    },
-  ];
+  const popCOntent = (
+    <div style={{ width: "100%" }}>
+      <table className={TableStyle.classTable}>
+        <thead style={{ padding: "10px", height: "30px", color: "white" }}>
+          <tr>
+            <th style={{ padding: "10px" }}>USER</th>
+            <th>ROLE</th>
+          </tr>
+        </thead>
+        <tbody>
+          {selectedUsers?.map((row, index) => {
+            return (
+              <tr key={index}>
+                <td
+                  className={TableStyle.childBorder}
+                  style={{ textAlign: "center" }}
+                >
+                  {row?.userDetails?.firstName ||
+                  row?.userDetails?.lastName ||
+                  row?.userDetails?.profileImageUrl ? (
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      {" "}
+                      <span style={{ marginRight: "10px" }}>
+                        {" "}
+                        {renderUserPrfoileAvatar(
+                          row?.userDetails?.firstName,
+                          row?.userDetails?.lastName,
+                          row?.userDetails?.profileImageUrl,
+                          "header"
+                        )}
+                      </span>
+                      <span>
+                        {row?.userDetails?.firstName}{" "}
+                        {row?.userDetails?.lastName}
+                      </span>
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: "center" }}>---</div>
+                  )}
+                </td>
+                <td
+                  style={{
+                    borderTop: "  0.2px solid #e1e1e1",
+                    borderBottom: "  0.2px solid #e1e1e1",
+                  }}
+                >
+                  {row.role}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+
+  const handleReceiverReport = (row) => {
+    const info = {
+      reportUser: row,
+      receivedPageNo: receivedPageNo,
+      receivedStartDate: receivedStartDate,
+      receivedEndDate: receivedEndDate,
+    };
+    dispatch(selectedReport(info));
+    isPhysician
+      ? router?.push(
+          `/reviewer/report/individualreport?reportId=${
+            row?._id
+          }&sentreport=${true}&page=${receivedPageNo}&limit=${paginationFirst}`
+        )
+      : router?.push(
+          `/admin/report/individualreport?reportId=${
+            row?._id
+          }&sentreport=${true}&isAdmin=${isAdmin}&page=${receivedPageNo}&limit=${paginationFirst}`
+        );
+  };
+  const closeModal = () => {
+    setOpenEdit(false);
+  };
+
   const userList = [
     {
       id: 1,
@@ -127,205 +184,7 @@ const SentReport = () => {
         "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
     },
   ];
-  const auditstatusBodyTemplate = (rowData) => {
-    const declinedDataFromAudit = extractLatestData(
-      rowData?.auditDeclinedNotes
-    );
-
-    const declinedDataFromDeclined = extractLatestData(
-      rowData?.auditDeclinedNotes
-    );
-
-    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
-    switch (rowData.auditedStatus) {
-      case "AUDIT_PENDING":
-        return (
-          <Popover placement="bottom" title="Status: AUDIT PENDING">
-            <span className="patient-status">
-              <Image
-                src={AuditPending}
-                style={{ height: "30px", width: "30px" }}
-              />
-            </span>
-          </Popover>
-        );
-
-      case "AUDITHOLD":
-        return (
-          <Popover placement="bottom" title=" Status: AUDIT HOLD">
-            <span className="patient-status">
-              <Image
-                src={AuditHold}
-                // className={styles.ImgTrck}
-                style={{ height: "30px", width: "30px" }}
-              />
-            </span>
-          </Popover>
-        );
-      case "REAUDIT":
-        return (
-          <Popover placement="bottom" title=" Status: REAUDIT">
-            <span className="patient-status">
-              <Image src={ReAudit} style={{ height: "30px", width: "30px" }} />
-            </span>
-          </Popover>
-        );
-      case "AUDITED":
-        return (
-          <Popover placement="bottom" title=" Status: AUDITED">
-            <span className="patient-status">
-              <Image
-                src={AuditedTrack}
-                style={{ height: "30px", width: "30px" }}
-              />
-            </span>
-          </Popover>
-        );
-      case "AUDITED":
-        return (
-          <span className="patient-status">
-            <Image
-              src={AuditedTrack}
-              style={{ height: "30px", width: "30px" }}
-            />
-          </span>
-        );
-
-      case "NOT_AUDIT":
-        return (
-          <Popover placement="bottom" title=" Status: NOT AUDIT">
-            <span className="patient-status">
-              <Image
-                src={NotAudited}
-                style={{ height: "30px", width: "30px" }}
-              />
-            </span>
-          </Popover>
-        );
-      case "AUDIT_DECLINED":
-        return (
-          <Popover
-            placement="bottom"
-            title=" Status: AUDIT DECLINED"
-            content={`Reason: ${declinedData ? declinedData : "---"}`}
-          >
-            <span className="patient-status">
-              <Image
-                src={AuditedDeclineTrack}
-                style={{ height: "30px", width: "30px" }}
-              />
-            </span>
-          </Popover>
-        );
-      case null:
-        return <span className="patient-status">---</span>;
-    }
-  };
-  const processstatusBodyTemplate = (rowData) => {
-    const declinedDataFromAudit = extractLatestData(
-      rowData?.auditDeclinedNotes
-    );
-
-    const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
-
-    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
-    if (!rowData?.processedStatus) {
-      // Return a default component or null
-      return null; // You can return null or a default component here
-    }
-    switch (rowData?.processedStatus) {
-      case "COMPLETED":
-        return (
-          <Popover placement="bottom" title="Status: COMPLETED">
-            <span className="patient-status" style={{ textAlign: "center" }}>
-              <Image
-                src={Completed}
-                style={{ height: "30px", width: "30px" }}
-              />
-            </span>
-          </Popover>
-        );
-
-      case "PENDING":
-        return (
-          <Popover placement="bottom" title="Status: PENDING">
-            <span className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
-            </span>
-          </Popover>
-        );
-
-      case "DECLINED":
-        return (
-          <Popover
-            placement="bottom"
-            title="Status: DECLINED"
-            content={`Reason: ${declinedData ? declinedData : "---"}`}
-          >
-            <span className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Declined} style={{ height: "30px", width: "30px" }} />
-            </span>
-          </Popover>
-        );
-
-      case "NOTCOMPUTED":
-        return (
-          <Popover placement="bottom" title="Status: NOT COMPUTED">
-            <span className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
-            </span>
-          </Popover>
-        );
-      case "COMPUTED":
-        return (
-          <Popover placement="bottom" title="Status: PENDING">
-            <span className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
-            </span>
-          </Popover>
-        );
-      case "HOLD":
-        return (
-          <Popover placement="bottom" title="Status: HOLD">
-            <span className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Hold} style={{ height: "30px", width: "30px" }} />
-            </span>
-          </Popover>
-        );
-      case "ABORTED_BY_CRON":
-        return (
-          <Popover placement="bottom" title="Status: ABORTED BY CRON">
-            <span className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Abort} style={{ height: "30px", width: "30px" }} />
-            </span>
-          </Popover>
-        );
-      case null:
-        return (
-          <Popover placement="bottom" title="Status: PENDING">
-            <span className="patient-status" style={{ textAlign: "center" }}>
-              <Image src={Pending} style={{ height: "30px", width: "30px" }} />
-            </span>
-          </Popover>
-        );
-    }
-  };
-
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-  };
-
-  const handleCheckboxChange = (id) => {
-    const index = selectedItems.indexOf(id);
-    if (index === -1) {
-      setSelectedItems([...selectedItems, id]);
-    } else {
-      const updatedSelectedItems = [...selectedItems];
-      updatedSelectedItems.splice(index, 1);
-      setSelectedItems(updatedSelectedItems);
-    }
-  };
-
+  console.log(details?.data, "datsa");
   return (
     <>
       <div>
@@ -335,101 +194,110 @@ const SentReport = () => {
               <div>
                 <div className=" col-xl-12 d-flex">
                   <div className="col-xl-4">
-                    <div className={styles.cardContainer}>
-                      {data.map((item) => (
-                        <div key={item.id} className={styles.card}>
-                          <div className={styles.contentGroup}>
-                            <div className="col-xl-12">
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                  alignItems: "center",
-                                  paddingBottom: "5px",
-                                }}
-                              >
-                                <div className={`col-xl-6 ${styles.pName}`}>
-                                  {item.report}
-                                </div>
-                                <div
-                                  className={`col-xl-2 ${styles.dataContainer}`}
-                                >
-                                  <span>
-                                    <EditButton />
-                                  </span>
-                                </div>
-                              </div>
+                    {!details?.data ? (
+                      <SpinnerDots />
+                    ) : (
+                      <div className={styles.cardContainer}>
+                        {details?.data?.map((item, index) => {
+                          const formattedDate = dateFormate(
+                            dayjs,
+                            item?.sendDate
+                          );
+                          return (
+                            <div key={index} className={styles.card}>
+                              <div className={styles.contentGroup}>
+                                <div className="col-xl-12">
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "space-between",
+                                      alignItems: "center",
+                                      paddingBottom: "5px",
+                                    }}
+                                  >
+                                    <div className={`col-xl-6 ${styles.pName}`}>
+                                      {item.reportName}
+                                    </div>
+                                    <div
+                                      className={`col-xl-2 ${styles.dataContainer}`}
+                                    >
+                                      <div
+                                        onClick={() => {
+                                          setSelectedRows(item);
+                                          setOpenEdit(true);
+                                        }}
+                                      >
+                                        <EditButton />
+                                      </div>
+                                    </div>
+                                  </div>
 
-                              <div
-                                style={{
-                                  paddingBottom: "5px",
-                                }}
-                              >
-                                <div className={`col-xl-12 ${styles.headText}`}>
-                                  {item.patientId}
-                                </div>
-                              </div>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <div className={`col-xl-2 ${styles.text}`}>
-                                  {item.date}
-                                </div>
-                                <div className={`col-xl-4 ${styles.text}`}>
-                                  <Avatar.Group>
-                                    <Avatar
-                                      style={{
-                                        backgroundColor: "#f56a00",
-                                      }}
-                                      src={item.profileImageUrl}
-                                    />
-
-                                    <Avatar
-                                      style={{
-                                        backgroundColor: "#f56a00",
-                                      }}
-                                      src={item.profileImageUrl}
-                                    />
-
-                                    <Avatar
-                                      style={{
-                                        backgroundColor: "#f56a00",
-                                      }}
-                                      src={item.profileImageUrl}
-                                    />
-
-                                    <Avatar
-                                      style={{
-                                        backgroundColor: "#f56a00",
-                                      }}
-                                      src={item.profileImageUrl}
-                                    />
-
-                                    <Avatar
-                                      style={{
-                                        backgroundColor: "#f56a00",
-                                      }}
-                                      src={item.profileImageUrl}
-                                    />
-
-                                    <Avatar
-                                      style={{
-                                        backgroundColor: "#f56a00",
-                                      }}
-                                      src={item.profileImageUrl}
-                                    />
-                                  </Avatar.Group>
+                                  <div
+                                    style={{
+                                      paddingBottom: "5px",
+                                    }}
+                                  >
+                                    <div
+                                      className={`col-xl-12 ${styles.headText}`}
+                                    >
+                                      {item._id}
+                                    </div>
+                                  </div>
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "space-between",
+                                      alignItems: "center",
+                                    }}
+                                  >
+                                    <div className={`col-xl-2 ${styles.text}`}>
+                                      {formattedDate}
+                                    </div>
+                                    <div className={`col-xl-4 ${styles.text}`}>
+                                      <Avatar.Group maxCount={2}>
+                                        {item?.receivedUsers?.map(
+                                          (data, index) => (
+                                            <div key={index}>
+                                              {data?.userDetails
+                                                ?.profileImageUrl ? (
+                                                <Avatar
+                                                  style={{ objectFit: "unset" }}
+                                                  src={
+                                                    data.userDetails
+                                                      .profileImageUrl
+                                                  }
+                                                />
+                                              ) : (
+                                                <Avatar
+                                                  style={{
+                                                    backgroundColor:
+                                                      backgroundColor,
+                                                  }}
+                                                >
+                                                  {`${
+                                                    data?.userDetails?.firstName?.charAt(
+                                                      0
+                                                    ) || ""
+                                                  }${
+                                                    data?.userDetails?.lastName?.charAt(
+                                                      0
+                                                    ) || ""
+                                                  }`}
+                                                </Avatar>
+                                              )}
+                                            </div>
+                                          )
+                                        )}
+                                      </Avatar.Group>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                   <div className="col-xl-8" style={{ marginLeft: "10px" }}>
                     <div className={styles.cardContainer}>
@@ -520,6 +388,28 @@ const SentReport = () => {
           </div>
         </div>
       </div>
+      <div className="pagination-container">
+        <Paginator
+          first={paginationFirst}
+          rows={15}
+          totalRecords={details?.totalElements}
+          onPageChange={onSentPageChange}
+        />
+        <div className="total-pages">
+          Total count: {details?.totalElements > 0 ? details?.totalElements : 0}
+        </div>
+      </div>
+      {openEdit && (
+        <Export
+          isModalVisible={openEdit}
+          closeModal={closeModal}
+          setIsModalVisible={setOpenEdit}
+          setSelectedRows={setSelectedRows}
+          setSelectAll={setSelectAll}
+          selectedRows={selectedRows}
+          isSent={true}
+        />
+      )}
     </>
   );
 };
