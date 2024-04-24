@@ -208,7 +208,7 @@ const DailyTask = () => {
           data: [
             {
               value: allocated,
-              name: "AuditAlocated",
+              name: "AuditAllocated",
               itemStyle: {
                 color: "#fff",
               },
