@@ -423,7 +423,8 @@ const Combo = ({}) => {
     disDescription,
     headerNames,
     encounterDate,
-    actualDescription
+    actualDescription,
+    diagnosisCode,
   ) => {
     setFileLoading(true);
     var fileId = patientFileDTO.fileId;
@@ -436,6 +437,7 @@ const Combo = ({}) => {
       header: headerNames,
       dos: encounterDatesValue,
       stringFileWord: splitPoint,
+      diagnosisCode: diagnosisCode,
     };
     try {
       const response = await axios.post(
@@ -497,6 +499,7 @@ const Combo = ({}) => {
     actualDescription,
     diagnosisCode
   ) => {
+    console.log(diagnosisCode, "testing");
     setFileLoading(true);
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
@@ -525,7 +528,8 @@ const Combo = ({}) => {
             disDescription,
             headerNames,
             encounterDate,
-            actualDescription
+            actualDescription,
+            diagnosisCode,
           );
         }
         if (pageNumber == fileInitialPage) {
@@ -595,6 +599,7 @@ const Combo = ({}) => {
       header: headerNames,
       dos: encounterDatesValue,
       stringFileWord: splitPoint,
+      diagnosisCode: value,
     };
     try {
       const response = await axios.post(
@@ -806,7 +811,8 @@ const Combo = ({}) => {
           style={{ backgroundColor: backColor, color: textColor }}
           className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
         >
-          {res}
+              
+          {res}{console.log(diagnosisCode , "testing")}
         </span>
       );
       return sectionMapArr;
@@ -1492,7 +1498,7 @@ const Combo = ({}) => {
                                         item?.capturedSections,
                                         item?.encounterDate,
                                         item?.diseaseName,
-                                        item?.diagnosisCode
+                                        item?.diagnosisCodeCombo
                                       )}
                                     </div>
                                   </div>

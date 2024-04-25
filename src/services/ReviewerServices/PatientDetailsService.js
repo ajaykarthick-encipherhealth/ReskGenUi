@@ -94,7 +94,8 @@ export async function HccFileDeatils(fileId) {
   const token = localStorage.getItem("token");
   const tenId = localStorage.getItem("tenantId");
   try {
-    const response = await axios.get(
+    if (fileId) {
+       const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`,
       {
         headers: {
@@ -103,6 +104,8 @@ export async function HccFileDeatils(fileId) {
       }
     );
     return response.data;
+    }
+   
   } catch (err) {
   }
 }
