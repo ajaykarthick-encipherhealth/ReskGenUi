@@ -51,6 +51,7 @@ const ReviewerReport = ({
   setSelectedRows,
   selectAll,
   setSelectAll,
+  gotoPatientDetails,
   sortOrder,
   setSortOrder,
   setSort,
@@ -68,7 +69,7 @@ const ReviewerReport = ({
       PENDING: 0,
       COMPLETED: 0,
       HOLD: 0,
-      DECLINED:0,
+      DECLINED: 0,
     },
     auditedStatus: {
       AUDIT_PENDING: 0,
@@ -105,6 +106,14 @@ const ReviewerReport = ({
 
     setSelectedRows(updatedRows);
   };
+  // const handleCardRowClick = (e) => {
+  //   const targetTd = e.target.closest("div");
+  //   if (targetTd) {
+  //     const dataIndex = targetTd.parentElement.rowIndex - 1;
+  //     const clickedData = reportListAll[dataIndex];
+  //     gotoPatientDetails(clickedData);
+  //   }
+  // };
 
   const card1Data = [
     {
@@ -112,8 +121,8 @@ const ReviewerReport = ({
       icon: Completed,
       title: "Completed",
       charts: dateRange.processedStatus
-      ? dateRange.processedStatus.COMPLETED
-      : "0",
+        ? dateRange.processedStatus.COMPLETED
+        : "0",
       bg: "#CCFFD1",
     },
     {
@@ -121,8 +130,8 @@ const ReviewerReport = ({
       icon: Pending,
       title: "Pending",
       charts: dateRange.processedStatus
-      ? dateRange.processedStatus.PENDING
-      : "0",
+        ? dateRange.processedStatus.PENDING
+        : "0",
 
       bg: "#CCE9FF",
     },
@@ -139,8 +148,8 @@ const ReviewerReport = ({
       icon: declineIcon,
       title: "Decline",
       charts: dateRange.processedStatus
-      ? dateRange.processedStatus.DECLINED
-      : "0",
+        ? dateRange.processedStatus.DECLINED
+        : "0",
       bg: "#FAD1D1",
     },
     {
@@ -863,11 +872,11 @@ const ReviewerReport = ({
     }
   };
   const startDate = DateRanges?.startDate
-  ? new Date(DateRanges?.startDate).toISOString()
-  : "";
-const endDate = DateRanges?.endDate
-  ? new Date(DateRanges?.endDate).toISOString()
-  : "";
+    ? new Date(DateRanges?.startDate).toISOString()
+    : "";
+  const endDate = DateRanges?.endDate
+    ? new Date(DateRanges?.endDate).toISOString()
+    : "";
   const getWorkFlow = async () => {
     try {
       const data = await workStatusApiAdmin(startDate, endDate, router);
@@ -909,7 +918,11 @@ const endDate = DateRanges?.endDate
                         {reportListAll?.data?.map((item, id) => (
                           <div key={id} className={styles.card}>
                             {console.log(item, "item")}
-                            <div className={styles.contentGroup}>
+                            <div
+                              className={styles.contentGroup}
+                              // onClick={handleCardRowClick}
+                              style={{cursor:'pointer'}}
+                            >
                               <div className={styles.inputContainer}>
                                 <input
                                   type="checkbox"
@@ -1141,7 +1154,7 @@ const endDate = DateRanges?.endDate
                                   </div>
                                 </div>
 
-                                <h4>{ data?.charts ? data?.charts :"0"}</h4>
+                                <h4>{data?.charts ? data?.charts : "0"}</h4>
                               </Col>
                             ))}
                           </Row>

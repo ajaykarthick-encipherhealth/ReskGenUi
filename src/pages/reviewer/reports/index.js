@@ -1,11 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
 import styles from "./report.module.css";
 import ReviewerReport from "./reviewerReport";
 import SentRewiewer from "./sentReport";
 import ReceivedReport from "./receivedReport";
-import { Modal, DatePicker } from "antd";
 import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { InputText } from "primereact/inputtext";
+import { FilterMatchMode } from "primereact/api";
+import Select from "react-select";
+import { Modal, DatePicker, Tooltip } from "antd";
+import ExportImg from "../../../images/svg/Export";
+import { debounce } from "../../admin/report/Export";
+import { disableFutureDate } from "../../../components/headerFilters/functions";
+
 
 import {
   getReceivedDetails,
@@ -16,6 +25,7 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import SentReport from "./sentReport";
+import Export from "../report/Export";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -72,6 +82,15 @@ const Reports = () => {
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
 
+  const [search, setSearch] = useState();
+  const { RangePicker } = DatePicker;
+
+  const [filters, setFilters] = useState({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    patientId: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    patientName: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  });
+
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
     return ReceivedOptions?.push({ label: item.sender, value: item.sender });
@@ -92,6 +111,20 @@ const Reports = () => {
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
+  };
+
+ 
+  const handleCoderPicker = (date, dateString) => {
+    const formattedDates = dateString?.map((date, index) => {
+      const formattedDate =
+        index === 1
+          ? date && `${date}T23:59:59.999Z`
+          : date && `${date}T00:00:00.000Z`;
+      return formattedDate;
+    });
+    setSelectedDates(date);
+    setCoderStartDate(formattedDates[0]);
+    setCoderEndDate(formattedDates[1]);
   };
   const onReceivedPageChange = (e) => {
     setPaginationReceivedFirst(e.first);
@@ -184,13 +217,51 @@ const Reports = () => {
       setPaginationSentFirst(limit);
     }
   }, [reportActiveTab]);
-
+  // const gotoPatientDetails = (data) => {
+  //   dispatch(patientDetails(data));
+  //   if (data.computing == 2) {
+  //     const controller = new AbortController();
+  //     controller.abort();
+  //     localStorage.setItem("patientId", data.patientId);
+  //     navigate.push("/reviewer/patients/details");
+  //   } else {
+  //     notification.warning({
+  //       message: data.patientId + " file not processed Please wait",
+  //     });
+  //   }
+  // };
   const backRender = () => {
     const user = localStorage.getItem("userRole");
     if (user == "reviewer") {
       route.push("/reviewer/report?page=0&limit=0");
     }
   };
+  const dosOnChange = (selectedOption) => {
+    const selectedValue = selectedOption.value;
+    setSelectedCoderOpt(selectedValue);
+  };
+  const debouncedSearch = useCallback(
+    debounce((text, reportActiveTab) => {
+      if (reportActiveTab === "Sent") {
+        setSentSearch(text);
+      } else if (reportActiveTab === "Received") {
+        setReceivedSearch(text);
+      }  else {
+        setCoderSearch(text);
+      }
+    }, 700),
+    []
+  );
+
+  const filterChangePatientId = (event) => {
+    const value = event.target.value;
+    let _filters = { ...filters };
+    _filters["patientId"].value = value;
+    setFilters(_filters);
+    setSearch(value);
+    debouncedSearch(value, reportActiveTab);
+  };
+
 
   return (
     <>
@@ -241,18 +312,103 @@ const Reports = () => {
                   </div>
 
                   <div className="tbl-caption  align-items-center">
-                    {/* <HeaderFilters
-                  
-                      isSearch={true}
-                      
-                      selectlabel=" Status"
-                      isSelector={
-                        !reportActiveTab || reportActiveTab === "Reviewer" ? true : false
-                      }
-                      isRangePicker={true}
-                      pickerlabel="Date"
-                    
-                    /> */}
+                    <div className="tbl-caption  align-items-center">
+                      <div
+                        className="row filter-contain"
+                        style={{ marginTop: "15px" }}
+                      >
+                        <div className="col-xl-2" style={{ display: "flex" }}>
+                          <label className="labelStyle">Search </label>
+                          <div class="form-group has-search">
+                            <FontAwesomeIcon
+                              className="fa fa-search form-control-feedback"
+                              icon={faSearch}
+                            />
+                            <InputText
+                              style={{ borderRadius: "0 5px 5px 0" }}
+                              type="text"
+                              onChange={(e) => filterChangePatientId(e)}
+                              className="form-control new-form-control"
+                              placeholder="Search"
+                              maxLength={25}
+                              value={search}
+                            />
+                          </div>
+                        </div>
+                        {!reportActiveTab || reportActiveTab === "Reviewer" ? (
+                          <div className="col-xl-2" style={{ display: "flex" }}>
+                            <label className="labelStyle"> Status</label>
+                            <div class="form-group has-search">
+                            
+                              <Select
+                                style={{ borderRadius: "0 5px 5px 0" }}
+                                onChange={(selectedOption) => {
+                                  dosOnChange(selectedOption);
+                                }}
+                                options={statusOptions}
+                                className="custom-react-select"
+                                isSearchable={false}
+                              />
+                              {/* )} */}
+                            </div>
+                          </div>
+                        ) : null}
+
+                        <div className="col-xl-2" style={{ display: "flex" }}>
+                          <label className="labelStyle"> Date</label>
+                          <div>
+                            <RangePicker
+                              style={{ borderRadius: "0 5px 5px 0" , width:"120%"}}
+                              value={selectedDates}
+                              onChange={
+                                reportActiveTab === "SentReport"
+                                  ? handleDatePickerChange
+                                  : reportActiveTab === "ReceivedReport"
+                                  ? handleReceivedDatePicker
+                                  : reportActiveTab === "TeamReport"
+                                  ? handleTeamPicker
+                                  : handleCoderPicker
+                              }
+                              disabledDate={(current) =>
+                                disableFutureDate(current)
+                              }
+                            />
+                          </div>
+                        </div>
+
+                        {(!reportActiveTab ||
+                          reportActiveTab === "Reviewer") && (
+                          <div className="col-xl-6">
+                            <div className="row flr">
+                              <Tooltip
+                                title={
+                                  rowsLength?.length === 0
+                                    ? "Select report to export"
+                                    : ""
+                                }
+                              >
+                                <button
+                                  onClick={() => {
+                                    setIsModalVisible(true);
+                                  }}
+                                  className={styles.export}
+                                  disabled={
+                                    rowsLength?.length > 0 ||
+                                    rowsLength?.data?.length > 0
+                                      ? false
+                                      : true
+                                  }
+                                  style={{ color: "#04306f" }}
+                                >
+                                  <ExportImg />
+                                  Export
+                                </button>
+                              </Tooltip>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
 
                   <div>
@@ -274,6 +430,7 @@ const Reports = () => {
                           setSortOrder={setCoderSortOrder}
                           sortOrder={coderSortOrder}
                           setSort={setSort}
+                          // gotoPatientDetails={gotoPatientDetails}
                         />
                       </div>
                     )}
@@ -355,59 +512,20 @@ const Reports = () => {
                             ) : (
                               <p>Comments not found</p>
                             )}
-                            {/* <div className={styles.datas}>
-                                      Visit Data
-                                    </div>
-                                    <div className={styles.description}>
-                                      Lorem Ipsum is simply dummy text of the
-                                      printing and typesetting industry.
-                                    </div>
-                                  </div>
-                                  <div className={styles.data}>
-                                    <div className={styles.datas}>
-                                      Combination codes
-                                    </div>
-                                    <div className={styles.description}>
-                                      Lorem Ipsum is simply dummy text of the
-                                      printing and typesetting industry.
-                                    </div>
-                                  </div>
-                                  <div className={styles.data}>
-                                    <div className={styles.datas}>
-                                      M.E.A.T criteria
-                                    </div>
-                                    <div className={styles.description}>
-                                      Lorem Ipsum is simply dummy text of the
-                                      printing and typesetting industry.
-                                    </div>
-                                  </div>
-                                  <div className={styles.heads}>
-                                    <span className={styles.headText}>
-                                      Radiology{" "}
-                                    </span>
-                                  </div>
-                                  <div className={styles.data}>
-                                    <div className={styles.datas}>
-                                      Visit Data
-                                    </div>
-                                    <div className={styles.description}>
-                                      Lorem Ipsum is simply dummy text of the
-                                      printing and typesetting industry.
-                                    </div>
-                                  </div>
-                                  <div className={styles.data}>
-                                    <div className={styles.datas}>
-                                      Combination codes
-                                    </div>
-                                    <div className={styles.description}>
-                                      Lorem Ipsum is simply dummy text of the
-                                      printing and typesetting industry.
-                                    </div> */}
                           </div>
                         </div>
                       </div>
                     </Modal>
                   )}
+                  <Export
+                    isModalVisible={isModalVisible}
+                    closeModal={closeModal}
+                    rowsLength={rowsLength}
+                    setIsModalVisible={setIsModalVisible}
+                    setSelectedRows={setSelectedRows}
+                    selectedRows={selectedRows}
+                    setSelectAll={setSelectAll}
+                  />
                 </div>
               </div>
             </div>
