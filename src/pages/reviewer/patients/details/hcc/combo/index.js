@@ -429,7 +429,7 @@ const Combo = ({}) => {
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
-    var splitPoint = actualDescription.substring(" ", 20);
+    var splitPoint = actualDescription;
     var pageNumber = null;
     var data = {
       fileId: fileId,
@@ -444,7 +444,7 @@ const Combo = ({}) => {
       );
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
-        pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
+        pageNumber = result?.second[0]? result?.second[0] : null;
         if (result?.first == false) {
           splitPoint = headerNames;
         }
@@ -457,7 +457,7 @@ const Combo = ({}) => {
           });
         }
         setSearch({
-          value: "Type 2",
+          value: splitPoint,
           page: pageNumber,
         });
         setFileInitialPage(pageNumber);
@@ -480,6 +480,10 @@ const Combo = ({}) => {
       if (findFileKeyword == headerNames) {
         setFileLoading(false);
       }
+      setSearch({
+        value: splitPoint,
+        page: null,
+      });
       setFindFileKeyword(splitPoint);
       setFileInitialPage(null);
     }
@@ -503,7 +507,7 @@ const Combo = ({}) => {
       fileId: fileId,
       header: headerNames,
       dos: encounterDatesValue,
-      stringFileWord: actualDescription.substring(" ", 20),
+      stringFileWord: actualDescription,
       diagnosisCode: diagnosisCode,
     };
     try {
@@ -585,7 +589,7 @@ const Combo = ({}) => {
     const encounterDatesHeader = encounterDatesValue[0];
     var splitPoint = "";
     var pageNumber = null;
-    splitPoint = actualDescription.substring(" ", 20);
+    splitPoint = actualDescription;
     var data = {
       fileId: fileId,
       header: headerNames,
@@ -602,12 +606,16 @@ const Combo = ({}) => {
         if (result?.first == false) {
           splitPoint = headerNames;
         }
-        pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
+        pageNumber = result?.second[0] ? result?.second[0] : null;
         setFileInitialPage(pageNumber);
       } else {
         splitPoint = headerNames;
       }
       setFindFileKeyword(splitPoint);
+      setSearch({
+        value: splitPoint,
+        page: pageNumber,
+      });
       var dataset =
         value +
         " - (" +
@@ -630,6 +638,10 @@ const Combo = ({}) => {
       if (findFileKeyword == headerNames) {
         setFileLoading(false);
       }
+      setSearch({
+        value: splitPoint,
+        page: null,
+      });
       setFindFileKeyword(splitPoint);
       setFileInitialPage(null);
     }
@@ -692,6 +704,10 @@ const Combo = ({}) => {
             testModal
           );
         }
+        setSearch({
+          value: splitPoint,
+          page: pageNumber,
+        });
         if (pageNumber == fileInitialPage) {
           setFileLoading(false);
           notification.warning({
@@ -709,6 +725,10 @@ const Combo = ({}) => {
           dataset;
         // setFileModalHeader(headerName);
         setFileModalTitle(headerName);
+        setSearch({
+          value: splitPoint,
+          page: result?.pageNumber,
+        });
       } else {
         splitPoint = headerNames;
         setFileInitialPage(null);
@@ -879,13 +899,17 @@ const Combo = ({}) => {
       }
       var date = findPageNumber[0].date;
       if (findPageNumber[0].startPage.length != 0) {
-        var pageNumber = findPageNumber[0].startPage[0].pageNumber - 1;
+        var pageNumber = findPageNumber[0].startPage[0].pageNumber;
         setFileInitialPage(pageNumber);
         var splitPoint = date.substring(" ", 5);
         setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
         setFindFileKeyword(splitPoint);
         if (pageNumber == fileInitialPage) {
         }
+        setSearch({
+          value: splitPoint,
+          page: pageNumber,
+        });
       }
     }
   };

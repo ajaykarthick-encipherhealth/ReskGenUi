@@ -1274,6 +1274,10 @@ const VisitData = ({setActiveTabHead}) => {
       setSelectMeatName(dataset);
     } catch (error) {
       splitPoint = value;
+      setSearch({
+        value: splitPoint,
+        page: null,
+      });
       if (findFileKeyword == value) {
         setFileLoading(false);
       }
@@ -1294,7 +1298,7 @@ const VisitData = ({setActiveTabHead}) => {
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
-    var splitPoint = actualDescription.substring(" ", 20);
+    var splitPoint = actualDescription;
     var pageNumber = null;
     var data = {
       fileId: fileId,
@@ -1309,7 +1313,7 @@ const VisitData = ({setActiveTabHead}) => {
       );
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
-        pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
+        pageNumber = result?.second[0] ? result?.second[0] : null;
         if (result?.first == false) {
           splitPoint = headerNames;
         }
@@ -1344,6 +1348,10 @@ const VisitData = ({setActiveTabHead}) => {
       }
     } catch (error) {
       splitPoint = headerNames;
+      setSearch({
+        value: splitPoint,
+        page: null,
+      });
       if (findFileKeyword == headerNames) {
         setFileLoading(false);
       }
@@ -1371,7 +1379,7 @@ const VisitData = ({setActiveTabHead}) => {
       fileId: fileId,
       header: headerNames,
       dos: encounterDatesValue,
-      stringFileWord: actualDescription.substring(" ", 20),
+      stringFileWord: actualDescription,
       diagnosisCode: diagnosisCode,
     };
     try {
@@ -1493,7 +1501,7 @@ const VisitData = ({setActiveTabHead}) => {
         const encounterDatesHeader = encounterDatesValue[0];
         var splitPoint = "";
         var pageNumber = null;
-        splitPoint = actualDescription.substring(" ", 20);
+        splitPoint = actualDescription;
         var data = {
           fileId:fileId,
           header: headerNames,
@@ -1507,7 +1515,7 @@ const VisitData = ({setActiveTabHead}) => {
             if (result?.first == false) {
               splitPoint = headerNames;
             }
-            pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
+            pageNumber = result?.second[0] ? result?.second[0] : null;
             setFileInitialPage(pageNumber);
           } else {
             splitPoint = headerNames;
@@ -1532,8 +1540,16 @@ const VisitData = ({setActiveTabHead}) => {
             dataset;
           setFileModalTitle(headerName);
           setDocumentLoaded(true);
+          setSearch({
+            value: splitPoint,
+            page: pageNumber,
+          });
         } catch (error) {
           splitPoint = headerNames;
+          setSearch({
+            value: splitPoint,
+            page: null,
+          });
           if (findFileKeyword == headerNames) {
             setFileLoading(false);
           }
@@ -1664,12 +1680,12 @@ const VisitData = ({setActiveTabHead}) => {
         const encounterDatesHeader = encounterDatesValue[0];
         var splitPoint = "";
         var pageNumber = null;
-        splitPoint = actualDescription.substring(" ", 20);
+        splitPoint = actualDescription;
         var data = {
           fileId: fileId,
           header: headerNames,
           dos: encounterDatesValue,
-          stringFileWord: actualDescription.substring(" ", 20),
+          stringFileWord: actualDescription,
           diagnosisCode: value,
         };
         try {
@@ -1694,6 +1710,10 @@ const VisitData = ({setActiveTabHead}) => {
                 testModal
               );
             }
+            setSearch({
+              value: splitPoint,
+              page: result?.pageNumber,
+            });
             if (pageNumber == fileInitialPage) {
               setFileLoading(false);
               notification.warning({
@@ -2463,7 +2483,7 @@ const VisitData = ({setActiveTabHead}) => {
       }
       var date = findPageNumber[0].date;
       if (findPageNumber[0].startPage.length != 0) {
-        var pageNumber = findPageNumber[0].startPage[0].pageNumber - 1;
+        var pageNumber = findPageNumber[0].startPage[0].pageNumber;
         setFileInitialPage(pageNumber);
         setFileDosPageNumber(pageNumber);
         var splitPoint = date.substring(" ", 5);
@@ -2471,6 +2491,10 @@ const VisitData = ({setActiveTabHead}) => {
         setFindFileKeyword(splitPoint);
         if (pageNumber == fileInitialPage) {
         }
+        setSearch({
+          value: splitPoint,
+          page: pageNumber,
+        });
       }
     }
   };
@@ -2500,7 +2524,7 @@ const VisitData = ({setActiveTabHead}) => {
       setFileLoading(true);
       var date = findPageNumber[0].date;
       if (findPageNumber[0].startPage.length != 0) {
-        var pageNumber = findPageNumber[0].startPage[0].pageNumber - 1;
+        var pageNumber = findPageNumber[0].startPage[0].pageNumber;
         if (pageNumber == fileInitialPage) {
           setFileLoading(false);
           notification.warning({
@@ -2514,6 +2538,10 @@ const VisitData = ({setActiveTabHead}) => {
         var splitPoint = date.substring(" ", 5);
         setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
         setFindFileKeyword(splitPoint);
+        setSearch({
+          value: splitPoint,
+          page: pageNumber,
+        });
       }
     }
     // var dotLoading = (
@@ -3187,7 +3215,9 @@ const VisitData = ({setActiveTabHead}) => {
                                   data.capturedSections,
                                   null,
                                   data.encounterDate,
-                                  data.actualDescription,
+                                  data.dbDescription
+                                  ? data.dbDescription
+                                  : data.actualDescription,
                                   null,
                                   data.diagnosisCode
                                 )}
@@ -3492,7 +3522,9 @@ const VisitData = ({setActiveTabHead}) => {
                                   data.capturedSections,
                                   null,
                                   data.encounterDate,
-                                  data.actualDescription,
+                                  data.dbDescription
+                                        ? data.dbDescription
+                                        : data.actualDescription,
                                   null,
                                   data.diagnosisCode
                                 )}
@@ -3708,7 +3740,9 @@ const VisitData = ({setActiveTabHead}) => {
                                 data.capturedSections,
                                 null,
                                 data.encounterDate,
-                                data.actualDescription,
+                                data.dbDescription
+                                ? data.dbDescription
+                                : data.actualDescription,
                                 "Suggested",
                                 data.diagnosisCode
                               )}
@@ -4276,7 +4310,7 @@ const VisitData = ({setActiveTabHead}) => {
                                               title=""
                                               trigger="hover"
                                             >
-                                              - {data.dbDescription ? data.dbDescription : data.actualDescriptionn}
+                                              -  {data.dbDescription ? data.dbDescription : data.actualDescription}
                                             </Popover>
                                           </span>
                                         </div>
@@ -4468,7 +4502,9 @@ const VisitData = ({setActiveTabHead}) => {
                                             {getCaptureSectionBackgroundFile(
                                               data?.capturedSections,
                                               data?.encounterDate,
-                                              data?.actualDescription,
+                                              data.dbDescription
+                                              ? data.dbDescription
+                                              : data.actualDescription,
                                               data?.diagnosisCode
                                             )}
                                           </div>
