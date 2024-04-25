@@ -58,16 +58,20 @@ export const monthNames = [
   "NOV",
   "DEC",
 ];
-export function getHighlightedIndex(currentBtn, selectedYear, selectedMonth, currentDate) {
+export function getHighlightedIndex(
+  currentBtn,
+  selectedYear,
+  selectedMonth,
+  currentDate
+) {
   let constHighlitedIndex = -1;
-
   if (currentBtn === "Monthly") {
     if (parseInt(selectedYear) === new Date().getFullYear()) {
       constHighlitedIndex = currentDate.getMonth();
-    } 
+    }
     if (parseInt(selectedYear) < new Date().getFullYear()) {
       constHighlitedIndex = currentDate.getMonth();
-    } 
+    }
     if (parseInt(selectedYear) > new Date().getFullYear()) {
       constHighlitedIndex = currentDate.getMonth();
     } else {
@@ -79,22 +83,23 @@ export function getHighlightedIndex(currentBtn, selectedYear, selectedMonth, cur
     }
     if (parseInt(selectedYear) < new Date().getFullYear()) {
       constHighlitedIndex = currentDate.getMonth();
-    } 
+    }
     if (parseInt(selectedYear) > new Date().getFullYear()) {
       constHighlitedIndex = currentDate.getMonth();
-    }else {
+    } else {
       constHighlitedIndex = selectedMonth - 1;
     }
   } else if (currentBtn === "Weekly") {
     if (parseInt(selectedYear) === new Date().getFullYear()) {
       const currentWeek = getDateWeek(currentDate);
       constHighlitedIndex = currentWeek - 1;
-    } if (parseInt(selectedYear) < new Date().getFullYear()) {
+    }
+    if (parseInt(selectedYear) < new Date().getFullYear()) {
       constHighlitedIndex = currentDate.getMonth();
-    } 
+    }
     if (parseInt(selectedYear) > new Date().getFullYear()) {
       constHighlitedIndex = currentDate.getMonth();
-    }else {
+    } else {
       constHighlitedIndex = selectedMonth - 1;
     }
   }
@@ -164,8 +169,6 @@ const Accuracy = () => {
   } else if (currentBtn === "Weekly") {
     xAxisData = weekNames;
   }
-
-
 
   let highlightIndex = -1;
 
@@ -537,20 +540,10 @@ const Accuracy = () => {
     }
   }, [currentBtn, selectedMonth, selectedYear, router, currentTabBtn]);
   useEffect(() => {
-    if (
-      accuracyDatas?.data?.response &&
-      !month &&
-      !year &&
-      !initialAccuracyData
-    ) {
+    if (accuracyDatas?.data?.response) {
       setInitialAccuracyData(accuracyDatas?.data?.response);
     }
-    if (
-      QualityAccuracyDatas?.data?.response &&
-      !month &&
-      !year &&
-      !initialQualityData
-    ) {
+    if (QualityAccuracyDatas?.data?.response) {
       setInitialQualityData(QualityAccuracyDatas?.data?.response);
     }
   }, [accuracyDatas, QualityAccuracyDatas]);
@@ -663,16 +656,16 @@ const Accuracy = () => {
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
                   {currentTabBtn === "CogentAI Accuracy"
-                    ? initialAccuracyData &&
-                      initialAccuracyData[getHighlightedIndex(currentBtn, selectedYear, selectedMonth, currentDate) + 1]
+                    ? initialAccuracyData
                       ? `${Math.round(
-                          initialAccuracyData[getHighlightedIndex(currentBtn, selectedYear, selectedMonth, currentDate) + 1]
+                          initialAccuracyData[currentDate?.getMonth()]
                         )}%`
                       : "0%"
                     : initialQualityData &&
-                      initialQualityData[getHighlightedIndex(currentBtn, selectedYear, selectedMonth, currentDate)]
+                      initialQualityData[currentDate?.getMonth()]
                     ? `${Math.round(
-                        initialQualityData[getHighlightedIndex(currentBtn, selectedYear, selectedMonth, currentDate)]?.averageScore
+                        initialQualityData[currentDate?.getMonth()]
+                          ?.averageScore
                       )}%`
                     : "0%"}
                 </span>

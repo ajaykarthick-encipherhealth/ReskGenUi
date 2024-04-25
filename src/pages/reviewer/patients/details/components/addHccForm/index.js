@@ -37,7 +37,6 @@ const AddHccForm = ({
   ];
   const onFinishHcc = async (form) => {
     setIsMeatForm(true);
-    console.log(addValidCodeCheck);
     if (addValidCodeCheck == null || !addValidCodeCheck) {
       setAddValidCodeCheck(true);
     }
@@ -52,13 +51,12 @@ const AddHccForm = ({
       unSigned: form.selectProviderInfo == "unSigned" ? true : false,
       providerName: form.providerName,
     };
-
-    console.log(form);
     setHccFormDetails(form);
   };
   const onFinishMeat = async (form) => {
     var patientId = localStorage.getItem("patientId");
     form.encounterDate = hccFormDetails.encounterDate;
+    form.diagnosisCode= hccFormDetails.diagnosisCode;    
     form.radiology = false;
     form.lab = false;
     form.isManuallyAdded = true;
@@ -68,9 +66,6 @@ const AddHccForm = ({
       meatDetail: form,
       diseaseFormat: hccFormDetails,
     };
-    console.log(form);
-    console.log(hccFormDetails);
-    console.log(dataFormat);
 
     try {
       const response = await axios.post(
