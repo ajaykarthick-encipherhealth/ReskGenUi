@@ -400,7 +400,7 @@ const UserList = () => {
                     >
                       <div>
                         {" "}
-                        <Input />
+                        <Input placeholder="Enter first name" />
                       </div>
                     </Form.Item>
                   </Col>
@@ -417,7 +417,7 @@ const UserList = () => {
                     >
                       <div>
                         {" "}
-                        <Input />
+                        <Input placeholder="Enter last name" />
                       </div>
                     </Form.Item>
                   </Col>
@@ -437,7 +437,7 @@ const UserList = () => {
                     >
                       <div>
                         {" "}
-                        <Input />
+                        <Input placeholder="Enter email" />
                       </div>
                     </Form.Item>
                   </Col>
@@ -464,7 +464,7 @@ const UserList = () => {
                     >
                       <div>
                         {" "}
-                        <Input />
+                        <Input placeholder="Enter user name" />
                       </div>
                     </Form.Item>
                   </Col>
@@ -488,7 +488,10 @@ const UserList = () => {
                     >
                       <div>
                         {" "}
-                        <Input type="number" />
+                        <Input
+                          type="number"
+                          placeholder="Enter mobile number"
+                        />
                       </div>
                     </Form.Item>
                   </Col>
@@ -506,6 +509,7 @@ const UserList = () => {
                         placeholder="Select role"
                         onChange={onRoleChange}
                         allowClear
+                        style={{ height: "42px" }}
                       >
                         <Select.Option value="ADMIN">ADMIN</Select.Option>
                         <Select.Option value="REVIEWER">REVIEWER</Select.Option>
@@ -548,8 +552,11 @@ const UserList = () => {
                         },
                       ]}
                     >
-                      <div>
-                        <Input.Password />
+                      <div className="confirmPass">
+                        <Input.Password
+                          style={{ height: "42px" }}
+                          placeholder="Enter password"
+                        />
                       </div>
                     </Form.Item>
                   </Col>
@@ -575,9 +582,16 @@ const UserList = () => {
                         }),
                       ]}
                     >
-                      <div>
+                      <div className="confirmPass">
                         {" "}
-                        <Input.Password />
+                        <Input.Password
+                          style={{
+                            height: "42px",
+                  
+                          }}
+                          placeholder="Re enter the password"
+                          
+                        />
                       </div>
                     </Form.Item>
                   </Col>
