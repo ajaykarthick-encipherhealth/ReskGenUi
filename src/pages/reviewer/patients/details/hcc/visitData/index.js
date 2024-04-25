@@ -71,6 +71,7 @@ import { getPatientDetailsResult } from "../../../../../../store/actions/Reviewe
 import CamboTree from "../org";
 import AddMeatQuery from "../../components/addMeatQuery";
 import AddHccForm from "../../components/addHccForm";
+import PdfViewer from "../../PdfViewerComponent";
 
 const { Option } = Select;
 const VisitData = ({setActiveTabHead}) => {
@@ -206,7 +207,7 @@ const VisitData = ({setActiveTabHead}) => {
     reason: "",
     actualDescription: "",
   });
-
+  const [search, setSearch] = useState(false);
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
   const [selectLabReportFile, setSelectLabReportFile] = useState(null);
 
@@ -1320,6 +1321,10 @@ const VisitData = ({setActiveTabHead}) => {
             duration: 1,
           });
         }
+        setSearch({
+          value: splitPoint,
+          page: pageNumber,
+        });
         setFileInitialPage(pageNumber);
         setFileDosPageNumber(pageNumber);
       } else {
@@ -1395,6 +1400,10 @@ const VisitData = ({setActiveTabHead}) => {
             duration: 1,
           });
         }
+        setSearch({
+          value: splitPoint,
+          page: result?.pageNumber,
+        });
         setFileInitialPage(pageNumber);
         setFileDosPageNumber(pageNumber);
       } else {
@@ -3969,7 +3978,7 @@ const VisitData = ({setActiveTabHead}) => {
                 </div>
               </div>
               <div className="col-xl-8">
-                <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                {/* <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                   <div
                     style={{
                       height: "80vh",
@@ -3990,7 +3999,13 @@ const VisitData = ({setActiveTabHead}) => {
                       )}
                     />
                   </div>
-                </Worker>
+                </Worker> */}
+                 {selectFileURL && (
+                  <PdfViewer
+                    src={selectFileURL}
+                    searchQuery={search?.value ? search?.value : ""}
+                    pageNumber={search?.page ? search?.page : 1}
+                  />)}
               </div>
             </div>
           </div>
@@ -4185,7 +4200,7 @@ const VisitData = ({setActiveTabHead}) => {
               ) : null}
               <div className={isFileFormShow ? "col-xl-8" : "col-xl-6"}>
                 <div className="card-body p-0">
-                  <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+                  {/* <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                     <div
                       style={{
                         height: "80vh",
@@ -4206,7 +4221,13 @@ const VisitData = ({setActiveTabHead}) => {
                         )}
                       />
                     </div>
-                  </Worker>
+                  </Worker> */}
+                    {selectFileURL && (
+                  <PdfViewer
+                    src={selectFileURL}
+                    searchQuery={search?.value ? search?.value : ""}
+                    pageNumber={search?.page ? search?.page : 1}
+                  />)}
                 </div>
               </div>
               {isFileFormShow ? (
@@ -4871,7 +4892,7 @@ const VisitData = ({setActiveTabHead}) => {
           // height={400}
         >
           <div className="section-container">
-            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+            {/* <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
               <div
                 style={{
                   height: "80vh",
@@ -4892,7 +4913,13 @@ const VisitData = ({setActiveTabHead}) => {
                   )}
                 />
               </div>
-            </Worker>
+            </Worker> */}
+              {selectFileURL && (
+                  <PdfViewer
+                    src={selectFileURL}
+                    searchQuery={search?.value ? search?.value : ""}
+                    pageNumber={search?.page ? search?.page : 1}
+                  />)}
           </div>
         </Modal>
       )}
@@ -4909,7 +4936,7 @@ const VisitData = ({setActiveTabHead}) => {
           // height={400}
         >
           <div className="section-container">
-            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+            {/* <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
               <div
                 style={{
                   height: "80vh",
@@ -4930,7 +4957,13 @@ const VisitData = ({setActiveTabHead}) => {
                   )}
                 />
               </div>
-            </Worker>
+            </Worker> */}
+              {selectFileURL && (
+                  <PdfViewer
+                    src={selectFileURL}
+                    searchQuery={search?.value ? search?.value : ""}
+                    pageNumber={search?.page ? search?.page : 1}
+                  />)}
           </div>
         </Modal>
       )}

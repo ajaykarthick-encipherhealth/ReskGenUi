@@ -31,7 +31,7 @@ const PdfViewer = ({ src, searchQuery, pageNumber }) => {
         id="pdfViewer"
         title="PDF Viewer"
         frameBorder="0"
-        width="100%"
+        width={'100%'}
         height="700"
         src={iframeSrc}
       />
