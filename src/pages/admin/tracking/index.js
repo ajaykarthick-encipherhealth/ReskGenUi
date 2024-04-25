@@ -314,7 +314,7 @@ export default function Patient() {
     }
   };
 
-  const processstatusBodyTemplate = (rowData) => {
+   const processstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
       rowData?.auditDeclinedNotes
     );

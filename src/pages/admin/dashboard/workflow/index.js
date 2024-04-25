@@ -39,6 +39,7 @@ const WorkFlow = () => {
       PENDING: 0,
       COMPLETED: 0,
       HOLD: 0,
+      
     },
     auditedStatus: {
       AUDIT_PENDING: 0,

@@ -1,0 +1,262 @@
+.group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.group button {
+  padding: 10px 20px;
+  background-color: transparent;
+  color: black;
+  border: none;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+}
+
+.buttonContainer {
+  border: 1px solid #04306f;
+  padding: 5px;
+  border-radius: 10px;
+  justify-content: center;
+  margin: 0 660px;
+}
+.group button:active {
+  padding: 10px 20px;
+  background-color: white !important;
+  color: #04306f !important;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.group button:focus {
+  padding: 10px 20px;
+  background-color: white !important; /* Green background */
+  color: #04306f !important;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer; /* Darker background */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+.cardContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 15px 10px 10px;
+  color: #000000;
+}
+.card {
+  padding: 5px;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card h2 {
+  margin-top: 0;
+}
+
+.card p {
+  margin-bottom: 0;
+}
+.cardGroup {
+  display: flex;
+  justify-content: space-between;
+}
+.card1 {
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 844px;
+}
+.card1 h2 {
+  margin-top: 0;
+}
+
+.card1 p {
+  margin-bottom: 0;
+}
+.contentGroup {
+  display: flex;
+  align-items: center;
+}
+.inputContainer {
+  width: 30px;
+}
+.leftContainer {
+  width: 155px;
+}
+.rightInnerContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.rightInnerContainer div {
+  margin-bottom: 5px; /* Adjust as needed */
+}
+
+.rightInnerContainer label {
+  font-weight: bold;
+  margin-right: 5px; /* Adjust as needed */
+}
+.raf {
+  width: 73px;
+  height: 28px;
+  background-color: #cee1fd;
+  padding: 2px;
+  margin-right: 10px;
+  border-radius: 3px;
+  text-align: center;
+}
+.dataContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+  right: 45px;
+}
+.headText {
+  font-size: 12px;
+  color: #04306f;
+  font-family: Manrope;
+}
+.text {
+  font-size: 14px;
+}
+.pName {
+  font-size: 16px;
+  font-weight: 500px;
+  color: #04306f !important;
+}
+.readStyle {
+  background-color: #ebd4f7;
+  color: #a63ed9;
+  width: 1000px;
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 4px;
+}
+.downloadStyle {
+  background-color: #ccebff;
+  color: #0174be;
+  width: 1000px;
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 4px;
+}
+.summaryText {
+  font-size: 24px;
+  font-weight: 600;
+  font-family: manrope;
+  color: black;
+}
+.subCard {
+  height: 75px;
+  padding: 10px;
+  text-align: center;
+  background-color: #e1edfe;
+  border-radius: 10px;
+  margin-right: 10px;
+  width: 175px;
+}
+.bullet {
+  height: 8px;
+  width: 8px;
+  background-color: #04306f;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.dateContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* .dateContainer::before {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 2px;
+  background-color: #04306f;
+  left: 22%;
+  transform: translateX(-50%);
+} */
+.flags {
+  width: 243p;
+  height: 250px;
+  border-radius: 10px;
+  background-color: #e1edfe;
+  margin-right: 5px;
+  padding: 10px;
+}
+.flag {
+  width: 209px;
+  height: 250px;
+  border-radius: 10px;
+  background-color: #e1edfe;
+}
+.cardHead {
+  text-align: center;
+  font-weight: 500px;
+}
+.count {
+  background-color: #04306f;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  color: white;
+  text-align: center;
+  padding: 3px;
+  margin-right: 10px;
+}
+.contentGroups {
+  display: flex;
+  padding: 5px;
+  overflow-y: scroll;
+}
+.contentAuditor {
+  display: flex;
+  justify-content: space-between;
+}
+.avatar {
+  display: flex;
+  padding: 5px;
+  font-size: 11px;
+  align-items: center;
+}
+.details {
+  width: 243p;
+  height: 101px;
+  border-radius: 10px;
+  background-color: #e1edfe;
+  margin-right: 5px;
+  padding: 20px;
+}
+.export {
+  width: 100px;
+  height: 40px;
+  text-align: center;
+  background: rgba(19, 61, 212, 0.15);
+  border: 1px solid #04306f;
+  color: #04306f !important;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  margin-right: 10px;
+
+  border-radius: 8px;
+}
+
+.export:hover {
+  text-decoration: none !important;
+}

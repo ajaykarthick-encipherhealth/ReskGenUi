@@ -40,6 +40,7 @@ const Index = () => {
   );
   const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
+  console.log(reportActiveTab,"testtab")
   const [isLoading, setIsLoading] = useState(true);
 
   const [isModalVisible, setIsModalVisible] = useState(false);

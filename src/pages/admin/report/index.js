@@ -53,6 +53,7 @@ const Index = () => {
 
   const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
+  
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("CoderReport");
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -60,7 +61,6 @@ const Index = () => {
   const [comments, setComments] = useState();
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
-
   const [pageNo, setPageNo] = useState(0);
   const [sentPageNo, setSentPageNo] = useState(0);
   const [receivedPageNo, setReceivedPageNo] = useState(0);
@@ -248,6 +248,7 @@ const Index = () => {
     if (reportActiveTab) {
       dispatch(getActiveTab(reportActiveTab));
     }
+
   }, [reportActiveTab]);
 
   useEffect(() => {

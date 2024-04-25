@@ -32,3 +32,10 @@
   align-items: center;
   margin-top: 20px;
 }
+.Img {
+  background-color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+  height: 30px;
+  width: 30px;
+}
