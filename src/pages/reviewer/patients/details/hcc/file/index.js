@@ -1681,7 +1681,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
       );
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
-        pageNumber = result?.second[0] ? result?.second : null;
+        pageNumber = result?.second[0] ? result?.second[0] : null;
         if (result?.first == false) {
           splitPoint = headerNames;
         }
