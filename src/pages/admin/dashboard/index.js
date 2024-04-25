@@ -20,7 +20,7 @@ const Index = () => {
   );
 
   const startDate = DateRanges?.startDate
-    ? new Date(DateRanges?.startDate).toISOString()
+    ? new Date(DateRanges?.startDate)?.toISOString()
     : "";
   const endDate = DateRanges?.endDate
     ? new Date(DateRanges?.endDate).toISOString()

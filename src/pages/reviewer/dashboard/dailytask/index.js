@@ -189,7 +189,7 @@ const DailyTask = ({ dailyStatusData, DailyStatusData }) => {
           data: [
             {
               value: allocated,
-              name: "Alocated",
+              name: "Allocated",
               itemStyle: {
                 color: "#fff",
               },

@@ -13,7 +13,7 @@ import {
   sortFunction,
 } from "../../../../components/headerFilters/functions";
 import SpinnerDots from "../../../../components/spinner";
-import { selectedReport } from "../../../../store/actions/l2Action/AuditReportAction";
+import { selectedReport } from "../../../../store/actions/adminAction/ReportActions";
 import EditButton from "../../../../images/adminUsers/EditButton";
 import Export from "../../report/Export";
 
@@ -238,6 +238,7 @@ function SentReportTable({
                       <div
                         onClick={() => {
                           setSelectedRows(row);
+                          dispatch(selectedReport(row))
                           setOpenEdit(true);
                         }}
                       >

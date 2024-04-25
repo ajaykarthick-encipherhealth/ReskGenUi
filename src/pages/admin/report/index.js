@@ -19,6 +19,7 @@ import {
   getReceivedDetails,
   getReportDetails,
   getSentDetails,
+  selectedReport,
 } from "../../../store/actions/adminAction/ReportActions";
 import { getSelectUserList } from "../../../store/actions/adminAction/DashboardAction";
 import SpinnerDots from "../../../components/spinner";
@@ -34,7 +35,7 @@ const statusOptions = [
   { label: "Hold", value: "HOLD" },
 ];
 
-const index = () => {
+const Index = () => {
   const dispatch = useDispatch();
   const route = useRouter();
   const ExportResponse = useSelector((state) => state.adminReport?.exportRes);
@@ -90,6 +91,7 @@ const index = () => {
   const [selectUser, setSelectUser] = useState([]);
   const [selectManager, setSelectedManger] = useState("");
   const [select, setSelect] = useState(null);
+  const [searchVal, setSearchVal] = useState("");
 
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
@@ -97,16 +99,9 @@ const index = () => {
   });
   const SentOptions = [];
   const uniqueRoles = new Set();
-
-  const completedDatas = useSelector(
-    (state) => state?.AdminDashboardReducers?.completedStatus
-  );
   const selectUserList = useSelector(
     (state) => state?.AdminDashboardReducers?.selectedUsers
   );
-
-  const activeTabs = useSelector((state) => state?.adminReport?.activetab);
-
   SentReportDetails?.data?.response?.data?.forEach((data) => {
     data?.receivedUsers?.forEach((item) => {
       const role = item.role;
@@ -148,6 +143,10 @@ const index = () => {
     setSelectedDates(null);
     // setActiveTab(name);
     dispatch(getActiveTab(name));
+    setCoderSearch("");
+    setReceivedSearch("");
+    setSentSearch("");
+    setSearchVal("");
   };
   useEffect(() => {
     dispatch(getSelectUserList(selectMemberType));
@@ -290,10 +289,9 @@ const index = () => {
                             setReceivedSearch={setReceivedSearch}
                             setCoderSearch={setCoderSearch}
                             isSearch={true}
-                            coderSearch={coderSearch}
-                            receivedSearch={receivedSearch}
-                            sentSearch={sentSearch}
+                            setSearchVal={setSearchVal}
                             searchlabel="Search by Name"
+                            searchVal={searchVal}
                             // selector
                             selectlabel="Select Status"
                             isSelector={
@@ -393,6 +391,7 @@ const index = () => {
                                     onClick={() => {
                                       handleTabs("CoderReport");
                                       backRender();
+                                      dispatch(selectedReport(null));
                                     }}
                                   >
                                     <Nav.Link
@@ -634,4 +633,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;

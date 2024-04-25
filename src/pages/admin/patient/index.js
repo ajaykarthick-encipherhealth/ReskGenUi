@@ -162,7 +162,7 @@ export default function Patient() {
       setSelectFile(formData);
       console.log(formData);
       const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc +
+        ENDPOINTS.apiEndoint +
           `aiservice/ai/upload
         `,
         formData,

@@ -1833,7 +1833,7 @@ const Meat = ({}) => {
 
     try {
       const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/section/color/save`,
+        ENDPOINTS.apiEndoint + `dbservice/section/color/save`,
         postData
       );
       var result = response.data;

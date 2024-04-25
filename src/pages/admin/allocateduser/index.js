@@ -188,9 +188,26 @@ export default function Patient() {
     getL2PatientList(l2selectUser, e.page, sort, "");
     setTableLoading(true);
   };
-
-  const searchFunction = (search) => {
-    if (activeTab == 1) {
+  const selectTabClick = (number) => {
+    setSearchString("");
+    setPaginationFirst(0);
+    setIsLoading(true);
+    setActiveTab(number);
+    setSelectedRowsId([]);
+    setAllocateClicked(false);
+    setSelectedRowsId([]);
+    setSelectAllChecked(false);
+    setSelectAllCheckedL2(false);
+    if (number == 2) {
+      getAuditL2List(pageNoL2User, "");
+    } else {
+      setIsPatientList(false);
+      setPageNo(0);
+      getAllList(0, pageSize, "", "", true, 2, "", sort);
+    }
+  };
+  const searchFunction = (search,activeTab) => {
+    if (activeTab === 1) {
       getAllList(
         pageNo,
         pageSize,
@@ -210,12 +227,12 @@ export default function Patient() {
     }
   };
   const debounceFunc = useCallback(
-    debounce((text) => searchFunction(text), 900),
+    debounce((text,activeTab) => searchFunction(text,activeTab), 900),
     []
   );
   const getNameSearch = (search) => {
     setSearchString(search);
-    debounceFunc(search);
+    debounceFunc(search,activeTab);
   };
 
   const handleOpneModal = () => {
@@ -227,24 +244,7 @@ export default function Patient() {
       setAllocateModal(true);
     }
   };
-  const selectTabClick = (number) => {
-    setSearchString("");
-    setPaginationFirst(0);
-    setIsLoading(true);
-    setActiveTab(number);
-    setSelectedRowsId([]);
-    setAllocateClicked(false);
-    setSelectedRowsId([]);
-    setSelectAllChecked(false);
-    setSelectAllCheckedL2(false);
-    if (number == 2) {
-      getAuditL2List(pageNoL2User, "");
-    } else {
-      setIsPatientList(false);
-      setPageNo(0);
-      getAllList(0, pageSize, "", "", true, 2, "", sort);
-    }
-  };
+
   const getAuditL2List = async (pageNo, searchString) => {
     let orgId = localStorage.getItem("orgId");
     let tenantid = localStorage.getItem("tenantId");
@@ -691,6 +691,7 @@ export default function Patient() {
                                     setSortCompleteOrder("DESC");
                                     setSortDueOrder("DESC");
                                     selectTabClick(1);
+                                    setActiveTab(1);
                                   }}
                                 >
                                   <Nav.Link
@@ -708,6 +709,7 @@ export default function Patient() {
                                     setSortCompleteOrder("DESC");
                                     setSortDueOrder("DESC");
                                     selectTabClick(2);
+                                    setActiveTab(2);
                                   }}
                                 >
                                   <Nav.Link

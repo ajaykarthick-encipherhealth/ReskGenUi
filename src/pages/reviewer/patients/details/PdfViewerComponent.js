@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
+import ENDPOINTS from "../../../../utility/enpoints";
 
 const PdfViewer = ({ src, searchQuery, pageNumber }) => {
   const [iframeSrc, setIframeSrc] = useState("");
   useEffect(() => {
     if (src) {
       const pdfUrl = encodeURIComponent(src);
-      let searchUrl = `https://pdffile.javagcai.com/web/viewer.html?file=${pdfUrl}`;
+      let searchUrl = `${ENDPOINTS.PdfViewer}?file=${pdfUrl}`;
+      // let searchUrl = `https://pdffile.javagcai.com/web/viewer.html?file=${pdfUrl}`;
       if (searchQuery || pageNumber) {
         const queryParams = [];
         if (searchQuery) {
           const encodedSearchQuery = encodeURIComponent(`${searchQuery}`);
           queryParams.push(
-            `search=${encodedSearchQuery}&caseSensitive=true&phrase=true&wholeWord=true&entireWord=true`
+            `search=${encodedSearchQuery}&casesensitive=true&phrase=true&wholeword=true&entireword=true`
           );
         }
         if (pageNumber) {
@@ -25,17 +27,6 @@ const PdfViewer = ({ src, searchQuery, pageNumber }) => {
   }, [src, searchQuery, pageNumber]);
   return (
     <>
-      <div
-        style={{
-          width: "40px",
-          height: "30px",
-          position: "relative",
-          left: "710px",
-          right: "0px",
-          top: "0px",
-          background: "rgba(249,249,249,250)",
-        }}
-      ></div>
       <iframe
         id="pdfViewer"
         title="PDF Viewer"
@@ -43,7 +34,6 @@ const PdfViewer = ({ src, searchQuery, pageNumber }) => {
         width={'100%'}
         height="700"
         src={iframeSrc}
-        style={{ marginTop: "-30px" }}
       />
     </>
   );

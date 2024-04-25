@@ -14,7 +14,11 @@ import { actions as dashbaordActions } from "../../../../stores/reviewer/dashboa
 import spinSTYles from "../../../../styles/auth.module.css";
 import { Empty, Spin } from "antd";
 
-const CompletedStatus = ({getCOmpletedScore,completedDatas, completedScoreLoading }) => {
+const CompletedStatus = ({
+  getCOmpletedScore,
+  completedDatas,
+  completedScoreLoading,
+}) => {
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const currentDate = new Date();
@@ -25,15 +29,12 @@ const CompletedStatus = ({getCOmpletedScore,completedDatas, completedScoreLoadin
   const [month, setMonth] = useState();
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   useEffect(() => {
- 
-      getCOmpletedScore({
-        btn:currentBtn.toUpperCase(),
-        date:currentDate.getDate(),
-        month:selectedMonth,
-        year:selectedYear,
-      }
-      )
- 
+    getCOmpletedScore({
+      btn: currentBtn.toUpperCase(),
+      date: currentDate.getDate(),
+      month: selectedMonth,
+      year: selectedYear,
+    });
   }, [currentBtn, selectedMonth, selectedYear]);
   const CompletedSortedData =
     completedDatas?.data?.response?.completedData?.sort(
@@ -183,7 +184,7 @@ const CompletedStatus = ({getCOmpletedScore,completedDatas, completedScoreLoadin
             </div>
           )}
 
-          {completedDatas?.data?.response ? (
+          {completedDatas?.data?.response && !completedScoreLoading ? (
             <>
               <ReactECharts
                 option={option}
@@ -194,10 +195,10 @@ const CompletedStatus = ({getCOmpletedScore,completedDatas, completedScoreLoadin
               </div>
             </>
           ) : (
-            !completedDatas?.loading && (
+            !completedScoreLoading && (
               <div className={spinSTYles.spinStyle}>
-              <Empty />
-            </div>
+                <Empty />
+              </div>
             )
           )}
         </Card>
@@ -209,10 +210,9 @@ const enhancer = connect(
   (state) => ({
     completedDatas: state?.reviewer?.dashboard?.completedScore,
     completedScoreLoading: state?.reviewer?.dashboard?.completedScoreLoading,
-
   }),
   {
-    getCOmpletedScore:dashbaordActions.completedScoreAction
+    getCOmpletedScore: dashbaordActions.completedScoreAction,
   }
 );
 export default enhancer(CompletedStatus);

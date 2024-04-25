@@ -271,7 +271,7 @@ export default function Patient() {
       try {
         setIsLoadingBtn(true);
         const response = await axios.post(
-          ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient`,
+          ENDPOINTS.apiEndoint + `dbservice/patient`,
           inputValuePatientId
         );
         if (response?.status == 200) {
@@ -436,7 +436,7 @@ export default function Patient() {
     };
     setSelectFile(formData);
     const response = await axios.post(
-      ENDPOINTS.apiEndointFileUploadHcc +
+      ENDPOINTS.apiEndoint +
         `aiservice/ai/upload
       `,
       formData,
@@ -508,7 +508,7 @@ export default function Patient() {
     };
     setSelectFile(formData);
     const response = await axios.post(
-      ENDPOINTS.apiEndointFileUploadHcc +
+      ENDPOINTS.apiEndoint +
         `aiservice/ai/upload/radiology
     `,
       formData,
@@ -577,7 +577,7 @@ export default function Patient() {
                             setEndDate2={setCompletedEndDate}
                             isAnotherPicker={true}
                             selectedDates2={selecteddates2}
-                            setSelectedDates2={setSelectedDates}
+                            setSelectedDates2={setSelectedDate2s}
                             // defaultAllocateTo={"All"}
                             // allocated by
                             isAllocatedBySelector={true}
