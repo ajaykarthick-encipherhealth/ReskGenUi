@@ -1392,7 +1392,7 @@ const Meat = ({}) => {
     setSelectMeatResult(meatresult);
     setFileLoading(true);
     setIsModalOpen(true);
-    var splitPoint = disDescription.substring(" ", 20);
+    var splitPoint = disDescription;
     var dotLoading = (
       <div className={visitStyles.loadingFileHeader}>
         <Spinner />
@@ -1418,7 +1418,7 @@ const Meat = ({}) => {
         if (result?.first == false) {
           splitPoint = value;
         }
-        pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
+        pageNumber = result?.second[0] ? result?.second[0] : null;
         setSearch({
           value: splitPoint,
           page: pageNumber,
@@ -1444,6 +1444,10 @@ const Meat = ({}) => {
       var dataset = value + " / (" + disDescription + ")";
       setSelectMeatName(dataset);
       splitPoint = value;
+      setSearch({
+        value: splitPoint,
+        page: null,
+      });
       if (findFileKeyword == value) {
         setFileLoading(false);
       }
@@ -1463,7 +1467,7 @@ const Meat = ({}) => {
     setSelectMeatResult(meatresult);
     setFileLoading(true);
     setIsModalOpen(true);
-    var splitPoint = disDescription.substring(" ", 20);
+    var splitPoint = disDescription;
     var dotLoading = (
       <div className={visitStyles.loadingFileHeader}>
         <Spinner />
@@ -1888,7 +1892,7 @@ const Meat = ({}) => {
       }
       var date = findPageNumber[0].date;
       if (findPageNumber[0].startPage.length != 0) {
-        var pageNumber = findPageNumber[0].startPage[0].pageNumber - 1;
+        var pageNumber = findPageNumber[0].startPage[0].pageNumber;
         setFileInitialPage(pageNumber);
         setFileDosPageNumber(pageNumber);
         var splitPoint = date.substring(" ", 5);
@@ -1896,6 +1900,10 @@ const Meat = ({}) => {
         setFindFileKeyword(splitPoint);
         if (pageNumber == fileInitialPage) {
         }
+        setSearch({
+          value: splitPoint,
+          page: pageNumber,
+        });
       }
     }
   };
