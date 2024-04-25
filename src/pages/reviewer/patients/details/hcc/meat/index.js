@@ -1392,7 +1392,7 @@ const Meat = ({}) => {
     setSelectMeatResult(meatresult);
     setFileLoading(true);
     setIsModalOpen(true);
-    var splitPoint = disDescription;
+    var splitPoint = disDescription.substring(" ", 20);
     var dotLoading = (
       <div className={visitStyles.loadingFileHeader}>
         <Spinner />
@@ -1467,7 +1467,7 @@ const Meat = ({}) => {
     setSelectMeatResult(meatresult);
     setFileLoading(true);
     setIsModalOpen(true);
-    var splitPoint = disDescription;
+    var splitPoint = disDescription.substring(" ", 20);;
     var dotLoading = (
       <div className={visitStyles.loadingFileHeader}>
         <Spinner />
@@ -1499,7 +1499,8 @@ const Meat = ({}) => {
             meatresult
           );
         }
-        pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
+        // pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
+        splitPoint = result?.searchString;
         setSearch({
           value: splitPoint,
           page: result?.pageNumber,
