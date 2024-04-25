@@ -1666,7 +1666,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
-    var splitPoint = actualDescription;
+    var splitPoint = actualDescription.substring(" ", 20);
     var pageNumber = null;
     var data = {
       fileId: fileId,
@@ -1681,7 +1681,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
       );
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
-        pageNumber = result?.second[0] ? result?.second[0] : null;
+        pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
         if (result?.first == false) {
           splitPoint = headerNames;
         }
@@ -1744,7 +1744,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
       fileId: fileId,
       header: headerNames,
       dos: encounterDatesValue,
-      stringFileWord: actualDescription,
+      stringFileWord: actualDescription.substring(" ", 20),
       diagnosisCode: diagnosisCode,
     };
     try {
@@ -3514,9 +3514,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                               {getCaptureSectionBackgroundFile(
                                 data?.capturedSections,
                                 data?.encounterDate,
-                                data.dbDescription
-                                ? data.dbDescription
-                                : data.actualDescription,
+                                data?.actualDescription,
                                 data?.diagnosisCode,
                                 data?.dbDescription
                               )}
@@ -3912,9 +3910,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                                       {getCaptureSectionBackgroundFile(
                                         data?.capturedSections,
                                         data?.encounterDate,
-                                        data.dbDescription
-                                        ? data.dbDescription
-                                        : data.actualDescription,
+                                        data?.actualDescription,
                                         data?.diagnosisCode
                                       )}
                                     </div>
@@ -4133,9 +4129,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                               {getCaptureSectionBackgroundFile(
                                 data?.capturedSections,
                                 data?.encounterDate,
-                                data.dbDescription
-                                ? data.dbDescription
-                                : data.actualDescription,
+                                data?.actualDescription,
                                 data?.diagnosisCode
                               )}
                             </div>
