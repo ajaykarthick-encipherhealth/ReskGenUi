@@ -1481,7 +1481,7 @@ const Combo = ({}) => {
                                     >
                                       {getEncounterDateBackgroundHcc(
                                         item.encounterDateSplit,
-                                        item.diagnosisCode,
+                                        item?.diagnosisCodeCombo,
                                         "COMBO"
                                       )}
                                     </div>
@@ -1492,7 +1492,7 @@ const Combo = ({}) => {
                                         item?.capturedSections,
                                         item?.encounterDate,
                                         item?.diseaseName,
-                                        item?.diagnosisCode
+                                        item?.diagnosisCodeCombo
                                       )}
                                     </div>
                                   </div>
