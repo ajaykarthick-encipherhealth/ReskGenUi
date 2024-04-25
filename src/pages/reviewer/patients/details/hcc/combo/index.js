@@ -499,7 +499,6 @@ const Combo = ({}) => {
     actualDescription,
     diagnosisCode
   ) => {
-    console.log(diagnosisCode, "testing");
     setFileLoading(true);
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
