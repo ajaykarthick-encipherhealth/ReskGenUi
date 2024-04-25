@@ -63,14 +63,17 @@ export const monthNames = [
 export const getData = (currentDate, selectedMonth, selectedYear) => {
   if (selectedMonth < currentDate?.getMonth() + 1) {
     return true;
-  }
-  else if (selectedMonth > currentDate?.getMonth() + 1 && parseInt(selectedYear) < currentDate?.getFullYear() ) {
+  } else if (
+    selectedMonth > currentDate?.getMonth() + 1 &&
+    parseInt(selectedYear) < currentDate?.getFullYear()
+  ) {
     return true;
-  } 
-  else if (selectedMonth <= currentDate?.getMonth() + 1 && parseInt(selectedYear) <= currentDate?.getFullYear() ) {
+  } else if (
+    selectedMonth <= currentDate?.getMonth() + 1 &&
+    parseInt(selectedYear) <= currentDate?.getFullYear()
+  ) {
     return true;
-  } 
-  else {
+  } else {
     return false;
   }
 };
@@ -177,7 +180,6 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
     xAxisData = weekNames;
   }
 
- 
   const options = {
     chart: {
       type: "column",
@@ -308,39 +310,34 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
     series: [
       {
         name: "totalCorrectCount",
-        data:
-        getData(currentDate, selectedMonth, selectedYear)
-            ? accuracyDatas?.data?.response?.map(
-                (item) => item?.totalCorrectCount
-              )
-            : [],
+        data: getData(currentDate, selectedMonth, selectedYear)
+          ? accuracyDatas?.data?.response?.map(
+              (item) => item?.totalCorrectCount
+            )
+          : [],
         color: "#0b59f1",
         yAxis: 1,
       },
       {
         name: "totalWrongCount",
-        data:
-        getData(currentDate, selectedMonth, selectedYear)
-            ? accuracyDatas?.data?.response?.map(
-                (item) => item?.totalWrongCount
-              )
-            : [],
+        data: getData(currentDate, selectedMonth, selectedYear)
+          ? accuracyDatas?.data?.response?.map((item) => item?.totalWrongCount)
+          : [],
         color: "red",
         yAxis: 1,
       },
       {
         name: "Temperature",
         type: "spline",
-        data:
-        getData(currentDate, selectedMonth, selectedYear)
-            ? chartBlockedDates(
-                selectedYear,
-                selectedMonth,
-                accuracyDatas,
-                "averageScore",
-                currentBtn
-              )
-            : [],
+        data: getData(currentDate, selectedMonth, selectedYear)
+          ? chartBlockedDates(
+              selectedYear,
+              selectedMonth,
+              accuracyDatas,
+              "averageScore",
+              currentBtn
+            )
+          : [],
         tooltip: {
           valueSuffix: "",
         },
@@ -349,12 +346,7 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
     ],
   };
   useEffect(() => {
-    if (
-      accuracyDatas?.data?.response &&
-      !month &&
-      !year &&
-      !initialAccuracyData
-    ) {
+    if (accuracyDatas?.data?.response) {
       setInitialAccuracyData(accuracyDatas?.data?.response);
     }
   }, [accuracyDatas]);
@@ -435,16 +427,10 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
               </div>
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
-                  {accuracyDatas?.data?.response
+                  {initialAccuracyData
                     ? `${Math.round(
-                        accuracyDatas?.data?.response[
-                          getHighlightedIndex(
-                            currentBtn,
-                            selectedYear,
-                            selectedMonth,
-                            currentDate
-                          )
-                        ]?.averageScore
+                        initialAccuracyData[currentDate?.getMonth()]
+                          ?.averageScore
                       )}%`
                     : "0%"}
                 </span>
