@@ -514,7 +514,7 @@ const VisitData = ({}) => {
       capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndointFileUploadHcc +
+      ENDPOINTS.apiEndoint +
         `dbservice/update/move/suggestedtovalid`,
       dataFormatSuggested
     );
@@ -543,7 +543,7 @@ const VisitData = ({}) => {
       capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndointFileUploadHcc +
+      ENDPOINTS.apiEndoint +
         `dbservice/update/move/invalidtovalid`,
       dataFormatSuggested
     );

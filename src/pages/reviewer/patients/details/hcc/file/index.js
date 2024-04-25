@@ -2096,7 +2096,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
       capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndointFileUploadHcc +
+      ENDPOINTS.apiEndoint +
         `dbservice/update/move/validtosuggested`,
       dataFormatSuggested
     );
@@ -2125,7 +2125,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
       capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndointFileUploadHcc +
+      ENDPOINTS.apiEndoint +
         `dbservice/update/move/validtodeleted`,
       dataFormatSuggested
     );
@@ -2154,7 +2154,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
       capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndointFileUploadHcc +
+      ENDPOINTS.apiEndoint +
         `dbservice/update/move/suggestedtodeleted`,
       dataFormatSuggested
     );
@@ -2183,7 +2183,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
       capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndointFileUploadHcc +
+      ENDPOINTS.apiEndoint +
         `dbservice/update/move/suggestedtovalid`,
       dataFormatSuggested
     );
@@ -2212,7 +2212,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
       capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndointFileUploadHcc +
+      ENDPOINTS.apiEndoint +
         `dbservice/update/move/deletedtovalid`,
       dataFormatSuggested
     );
@@ -2240,7 +2240,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
       capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndointFileUploadHcc +
+      ENDPOINTS.apiEndoint +
         `dbservice/update/move/deletedtoSuggested`,
       dataFormatSuggested
     );
@@ -2269,7 +2269,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
       capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndointFileUploadHcc +
+      ENDPOINTS.apiEndoint +
         `dbservice/update/move/invalidtovalid`,
       dataFormatSuggested
     );
@@ -2335,7 +2335,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
         // };
         // try {
         //   const response = await axios.post(
-        //     ENDPOINTS.apiEndointFileUploadHcc +
+        //     ENDPOINTS.apiEndoint +
         //       `aiservice/patient/addvaliddisease`,
         //     dataFormatSuggested
         //   );
@@ -2414,7 +2414,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
 
       try {
         const response = await axios.post(
-          ENDPOINTS.apiEndointFileUploadHcc +
+          ENDPOINTS.apiEndoint +
             `dbservice/patient/compute/addvaliddisease`,
           dataFormatSuggested
         );
@@ -2498,7 +2498,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
 
     try {
       const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/section/color/save`,
+        ENDPOINTS.apiEndoint + `dbservice/section/color/save`,
         postData
       );
       var result = response.data;

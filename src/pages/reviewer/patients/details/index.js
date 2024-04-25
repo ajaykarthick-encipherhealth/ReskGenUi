@@ -881,7 +881,7 @@ const Details = () => {
       },
     };
     const response = await axios.post(
-      ENDPOINTS.apiEndointFileUploadHcc +
+      ENDPOINTS.apiEndoint +
         `aiservice/ai/upload/radiology
       `,
       formData,
@@ -917,7 +917,7 @@ const Details = () => {
       },
     };
     const response = await axios.post(
-      ENDPOINTS.apiEndointFileUploadHcc +
+      ENDPOINTS.apiEndoint +
         `aiservice/ai/upload/lab
       `,
       formData,
@@ -947,7 +947,7 @@ const Details = () => {
     var postData = { ...userData, ...resultData };
     try {
       const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/complete`,
+        ENDPOINTS.apiEndoint + `dbservice/patient/status/complete`,
         postData
       );
       var result = response.data;
@@ -974,7 +974,7 @@ const Details = () => {
     };
     try {
       const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/decline`,
+        ENDPOINTS.apiEndoint + `dbservice/patient/status/decline`,
         postData
       );
       var result = response.data;
@@ -1000,7 +1000,7 @@ const Details = () => {
     };
     try {
       const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/pending`,
+        ENDPOINTS.apiEndoint + `dbservice/patient/status/pending`,
         postData
       );
       var result = response.data;
@@ -1027,7 +1027,7 @@ const Details = () => {
     };
     try {
       const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient/status/hold`,
+        ENDPOINTS.apiEndoint + `dbservice/patient/status/hold`,
         postData
       );
       var result = response.data;
@@ -1127,7 +1127,7 @@ const Details = () => {
         flag: inputValue.flag,
       };
       const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/flagdetails`,
+        ENDPOINTS.apiEndoint + `dbservice/flagdetails`,
         [dataFormatSuggested]
       );
       var result = response.data;
@@ -1158,7 +1158,7 @@ const Details = () => {
         year: selectedDosValue,
       };
       const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/notes`,
+        ENDPOINTS.apiEndoint + `dbservice/notes`,
         [dataFormatSuggested]
       );
       var result = response.data;
@@ -1190,7 +1190,7 @@ const Details = () => {
         year: selectedDosValue,
       };
       const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/comment`,
+        ENDPOINTS.apiEndoint + `dbservice/comment`,
         [dataFormatSuggested]
       );
       var result = response.data;
@@ -1219,7 +1219,7 @@ const Details = () => {
           year: selectedDosValue,
         };
         const response = await axios.post(
-          ENDPOINTS.apiEndointFileUploadHcc + `dbservice/comment`,
+          ENDPOINTS.apiEndoint + `dbservice/comment`,
           [dataFormatSuggested]
         );
         var result = response.data;
@@ -1247,7 +1247,7 @@ const Details = () => {
           year: selectedDosValue,
         };
         const response = await axios.post(
-          ENDPOINTS.apiEndointFileUploadHcc + `dbservice/notes`,
+          ENDPOINTS.apiEndoint + `dbservice/notes`,
           [dataFormatSuggested]
         );
         var result = response.data;

@@ -140,7 +140,7 @@ export default function Patient() {
     if (form.checkValidity() === true) {
       setIsLoadingBtn(true);
       const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient`,
+        ENDPOINTS.apiEndoint + `dbservice/patient`,
         inputValuePatientId
       );
       if (response?.status === 200) {
@@ -266,7 +266,7 @@ export default function Patient() {
 
     setSelectFile(formData);
     const response = await axios.post(
-      ENDPOINTS.apiEndointFileUploadHcc +
+      ENDPOINTS.apiEndoint +
         `aiservice/ai/upload
       `,
       formData,
@@ -301,7 +301,7 @@ export default function Patient() {
     };
     setSelectFile(formData);
     const response = await axios.post(
-      ENDPOINTS.apiEndointFileUploadHcc +
+      ENDPOINTS.apiEndoint +
         `aiservice/ai/upload/radiology
     `,
       formData,

@@ -111,7 +111,7 @@ const UserList = () => {
     if (form.checkValidity() === true) {
       setIsLoadingBtn(true);
       const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient`,
+        ENDPOINTS.apiEndoint + `dbservice/patient`,
         inputValuePatientId
       );
       if (response?.status == 200) {

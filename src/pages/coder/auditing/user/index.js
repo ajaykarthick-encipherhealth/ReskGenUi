@@ -258,7 +258,7 @@ export default function Patient() {
       // };
       // setSelectFile(formData);
       // const response = await axios.post(
-      //   ENDPOINTS.apiEndointFileUploadHcc + `aiservice/ai/upload
+      //   ENDPOINTS.apiEndoint + `aiservice/ai/upload
       //   `,
       //   formData,
       //   headers
@@ -288,7 +288,7 @@ export default function Patient() {
     if (form.checkValidity() === true) {
       setIsLoadingBtn(true);
       const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc + `dbservice/patient`, inputValuePatientId,
+        ENDPOINTS.apiEndoint + `dbservice/patient`, inputValuePatientId,
       );
       if (response?.status == 200) {
         notification.success({
@@ -582,7 +582,7 @@ export default function Patient() {
     };
     setSelectFile(formData);
     const response = await axios.post(
-      ENDPOINTS.apiEndointFileUploadHcc + `aiservice/ai/upload
+      ENDPOINTS.apiEndoint + `aiservice/ai/upload
       `,
       formData,
       headers
@@ -623,7 +623,7 @@ export default function Patient() {
     };
     setSelectFile(formData);
     const response = await axios.post(
-      ENDPOINTS.apiEndointFileUploadHcc + `aiservice/ai/upload/radiology
+      ENDPOINTS.apiEndoint + `aiservice/ai/upload/radiology
     `,
       formData,
       headers

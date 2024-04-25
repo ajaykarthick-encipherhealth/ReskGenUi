@@ -74,7 +74,7 @@ const AddHccForm = ({
 
     try {
       const response = await axios.post(
-        ENDPOINTS.apiEndointFileUploadHcc +
+        ENDPOINTS.apiEndoint +
           `dbservice/patient/compute/addvaliddisease`,
         dataFormat
       );
