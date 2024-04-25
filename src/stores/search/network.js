@@ -42,7 +42,7 @@ export async function getSimple(search) {
     method: "GET",
   };
   const data = await requestPortal(
-    `management/getAllIcdcodes?q=${search}
+    `management/hy?q=${search}
   `,
     options
   );
@@ -54,7 +54,7 @@ export async function getSemantic(search) {
     method: "GET",
   };
   const data = await requestPortal(
-    `management/getAllIcdcodes?q=${search}
+    `management/res?q=${search}
   `,
     options
   );

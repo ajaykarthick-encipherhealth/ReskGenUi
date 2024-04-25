@@ -13,6 +13,8 @@ const AppTable = ({
   paginationFirst,
   onPageChange,
   setAction,
+  count = 30,
+  isPagination = true
 }) => {
   return (
     <div className={Style.classContaineer}>
@@ -31,21 +33,23 @@ const AppTable = ({
               column={column}
               status={status}
               setAction={setAction}
+              count={count}
             />
           ))}
         </tbody>
       </table>
-      <AppPagination
+      {isPagination && <AppPagination
         paginationFirst={paginationFirst}
         totalElements={totalElements}
         onPageChange={onPageChange}
-      />
+      />}
+      
     </div>
   );
 };
 
 const TableHeadItem = ({ item }) => <th align="center">{item.name}</th>;
-const TableRow = ({ item, column, status, setAction }) => {
+const TableRow = ({ item, column, status, setAction, count }) => {
   return (
     <tr>
       {column.map((columnItem, index) => {
@@ -191,7 +195,7 @@ const TableRow = ({ item, column, status, setAction }) => {
                 : Style.childBorder
             }
           >
-            {reusableElipses(item[`${columnItem.value}`], 30)}
+            {reusableElipses(item[`${columnItem.value}`], count)}
             {/* {item[`${columnItem.value}`]} */}
           </td>
         );

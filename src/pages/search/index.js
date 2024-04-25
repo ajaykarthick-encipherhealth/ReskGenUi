@@ -8,6 +8,9 @@ import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import { actions as searchActions } from "../../stores/search";
 import { getResponePopup } from "../../utils/reusable";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
+import { getCurrentUser } from "../../stores/authflow/actions";
 
 const Searches = ({
   getAllICDCodes,
@@ -19,7 +22,12 @@ const Searches = ({
   getAllICDCodesData,
   getICDStatus,
   getdeleteICDStatus,
+  getSimpleSearchData,
+  getSemanticData,
+  getUpdateSemanticStatus,
 }) => {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const size = 15;
   const [search, serSearch] = useState("");
   const [list, setList] = useState([]);
@@ -60,9 +68,8 @@ const Searches = ({
     },
   ];
 
-  console.log(getAllICDCodesData);
-
   const semaniticColumn = [
+    { name: "id", value: "id" },
     { name: "code", value: "code" },
     { name: "disease name", value: "diseaseName" },
     { name: "keywords", value: "keywords", isarray: true },
@@ -71,11 +78,28 @@ const Searches = ({
       value: {
         action: [
           { icon: faEdit, type: "edit" },
-          { icon: faTrash, type: "delete" },
+          // { icon: faTrash, type: "delete" },
         ],
       },
       isAction: true,
     },
+  ];
+
+  const simpleColumn = [
+    { name: "id", value: "id" },
+    { name: "code", value: "code" },
+    { name: "disease name", value: "diseaseName" },
+
+    // {
+    //   name: "active",
+    //   value: {
+    //     action: [
+    //       { icon: faEdit, type: "edit" },
+    //       { icon: faTrash, type: "delete" },
+    //     ],
+    //   },
+    //   isAction: true,
+    // },
   ];
 
   const onPageChange = (e) => {
@@ -134,12 +158,26 @@ const Searches = ({
       if (getICDStatus?.data?.status == "SUCCESS") {
         getResponePopup(getICDStatus);
         setModalOpen("");
-        setPaginationFirst(0)
-        setPage(0)
+        setPaginationFirst(0);
+        setPage(0);
       }
       setUpdateDetails({});
       setYears(null);
     }
+  };
+
+  const editSemantic = () => {
+    updateSemantic({
+      id: action.id,
+      years: keyword.map((date) => date.value),
+    });
+    if (getUpdateSemanticStatus) {
+      getResponePopup({ data: { status: "Success" } });
+      setModalOpen("");
+      setKeyword(null);
+    }
+    setUpdateDetails({});
+    setYears(null);
   };
 
   const handleDelete = () => {
@@ -147,8 +185,8 @@ const Searches = ({
     if (getdeleteICDStatus?.data?.status == "SUCCESS") {
       getResponePopup(getdeleteICDStatus);
       setDeleteModal(false);
-      setPaginationFirst(0)
-      setPage(0)
+      setPaginationFirst(0);
+      setPage(0);
     } else if (getdeleteICDStatus?.data?.status == "FAILED") {
       getResponePopup(getdeleteICDStatus);
       setDeleteModal(false);
@@ -156,23 +194,33 @@ const Searches = ({
   };
 
   useEffect(() => {
-    if (action.type == "edit") {
+    if (searchType == "Rule-engine-search") {
+      if (action.type == "edit") {
+        setModalOpen(action.type);
+        const editData = getAllICDCodesData?.data?.response.content.find(
+          (item) => item.id == action.id
+        );
+        const year = editData?.years?.map((item) => ({
+          label: item,
+          value: item,
+        }));
+        setUpdateDetails({
+          ...updateDetails,
+          codes: editData.code,
+          description: editData.description,
+        });
+        setYears(year);
+      } else if (action.type == "delete") {
+        setDeleteModal(true);
+      }
+    } else if (searchType == "SemanticHybridSearch") {
       setModalOpen(action.type);
-      const editData = getAllICDCodesData?.data?.response.content.find(
-        (item) => item.id == action.id
-      );
-      const year = editData?.years?.map((item) => ({
+      const editData = getSemanticData?.data.find((item) => item.id == action.id);
+      const keyWord = editData?.keywords?.map((item) => ({
         label: item,
         value: item,
       }));
-      setUpdateDetails({
-        ...updateDetails,
-        codes: editData.code,
-        description: editData.description,
-      });
-      setYears(year);
-    } else if (action.type == "delete") {
-      setDeleteModal(true);
+      setKeyword(keyWord);
     }
   }, [action]);
   useEffect(() => {
@@ -185,7 +233,13 @@ const Searches = ({
     }
   }, [search, searchType, page]);
 
-  console.log(updateDetails, searchType, years, keyword, "updateDetails");
+  const selectTab = (e) => {
+    const userId = localStorage.getItem("userId");
+    setSearchType(e.target.name);
+    serSearch("");
+    dispatch(getCurrentUser(userId, router));
+  };
+
   return (
     <>
       <div className="d-flex justify-content-center align-item-center">
@@ -197,7 +251,7 @@ const Searches = ({
                 type="radio"
                 name="Rule-engine-search"
                 id="flexRadioDefault1"
-                onClick={(e) => setSearchType(e.target.name)}
+                onClick={selectTab}
                 checked={searchType == "Rule-engine-search"}
               />
               <label class="form-check-label" for="flexRadioDefault1">
@@ -211,7 +265,7 @@ const Searches = ({
                 name="SimpleHybridSearch"
                 id="flexRadioDefault2"
                 checked={searchType == "SimpleHybridSearch"}
-                onClick={(e) => setSearchType(e.target.name)}
+                onClick={selectTab}
               />
               <label class="form-check-label" for="flexRadioDefault2">
                 Simple Hybrid Search
@@ -224,7 +278,7 @@ const Searches = ({
                 name="SemanticHybridSearch"
                 id="flexRadioDefault2"
                 checked={searchType == "SemanticHybridSearch"}
-                onClick={(e) => setSearchType(e.target.name)}
+                onClick={selectTab}
               />
               <label class="form-check-label" for="flexRadioDefault2">
                 Semantic Hybrid Search
@@ -287,26 +341,31 @@ const Searches = ({
               totalElements={totalElements}
               paginationFirst={paginationFirst}
               setAction={setAction}
+              count={1000}
             />
           ) : searchType == "SemanticHybridSearch" ? (
             <AppTable
-              data={Semantic}
+              data={getSemanticData.data ? getSemanticData?.data : []}
               column={semaniticColumn}
               // status={getButtonStatus}
               onPageChange={onPageChange}
               totalElements={totalElements}
               paginationFirst={paginationFirst}
               setAction={setAction}
+              count={1000}
+              isPagination={false}
             />
           ) : (
             <AppTable
-              data={[]}
-              column={semaniticColumn}
+              data={getSimpleSearchData?.data ? getSimpleSearchData?.data : []}
+              column={simpleColumn}
               // status={getButtonStatus}
               onPageChange={onPageChange}
               totalElements={totalElements}
               paginationFirst={paginationFirst}
               setAction={setAction}
+              count={1000}
+              isPagination={false}
             />
           )}
         </div>
@@ -318,7 +377,7 @@ const Searches = ({
           setModalOpen("");
           setUpdateDetails({});
           setKeyword(null);
-          setYears(null)
+          setYears(null);
         }}
         footer={null}
       >
@@ -369,14 +428,6 @@ const Searches = ({
           {searchType != "Rule-engine-search" &&
             modalOpen.toLowerCase() == "edit" && (
               <div className="p-4 text-center">
-                <input
-                  type="text"
-                  class="form-control mb-2"
-                  placeholder="Code..."
-                  value={updateDetails?.editcode ? updateDetails?.editcode : ""}
-                  name="editcode"
-                  onChange={handleChange}
-                />
                 <div className="mb-3">
                   <Select
                     mode="tags"
@@ -392,7 +443,7 @@ const Searches = ({
                   class="btns-primary btn-app-primary"
                   type="button"
                   id="button-addon2"
-                  // onClick={getSearch}
+                  onClick={editSemantic}
                   style={{ width: "100px" }}
                 >
                   Edit
@@ -513,6 +564,9 @@ const enhancer = connect(
     getAllICDCodesData: state.search.icdCodes,
     getICDStatus: state.search.createIcdCode,
     getdeleteICDStatus: state.search.deleteICDCodes,
+    getSimpleSearchData: state.search.getSimpleSearch,
+    getSemanticData: state.search.getSemanticSearch,
+    getUpdateSemanticStatus: state.search.updateSemantic,
   }),
   {
     getAllICDCodes: searchActions.getAllICDCodes,
