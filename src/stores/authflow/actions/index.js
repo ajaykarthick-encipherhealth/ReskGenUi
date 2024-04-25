@@ -42,7 +42,7 @@ export const getMFAValidation =
       const skip = response?.data?.response?.skipEntryAvailable;
       const mfa = response?.data?.response?.mfaIsEnabled;
       if (response.data.status != "SUCCESS") {
-        getResponePopup(response)
+        getResponePopup(response);
       }
       if (response?.data?.response) {
         dispatch({
@@ -97,7 +97,7 @@ export const getValidateCode =
           route?.push(`/login`);
         }
       }
-    } catch(err) {
+    } catch (err) {
       notification.error({
         description: err?.response?.data?.message,
       });
@@ -129,7 +129,7 @@ export const loginAction =
         datas
       );
       if (response?.data) {
-        var result = response?.data?.response;
+        let result = response?.data?.response;
         let emailSplit = email?.split("@");
         if (response?.data?.status === "SUCCESS") {
           localStorage.setItem("roles", JSON.stringify(result?.roles));
@@ -152,9 +152,7 @@ export const loginAction =
             pathname: `/twofactorAuthentication/SelectRole`,
             search: `params=${encodedParams}`,
           });
-          setTimeout(() => {
-            dispatch(refreshToken());
-          }, 30 * 60 * 1000);
+          localStorage.setItem("loginTime", Date.now());
         }
         if (response.data?.response === null) {
           notification.error({
@@ -162,7 +160,7 @@ export const loginAction =
           });
         }
       }
-    } catch(err) {
+    } catch (err) {
       notification.error({
         message: err?.response?.data?.message,
         duration: 1,
@@ -181,7 +179,7 @@ export const getQrCode = (username) => async (dispatch) => {
         payload: response?.data?.response?.secretImageUri,
       });
     }
-  } catch(err) {
+  } catch (err) {
     notification.error({
       description: err?.response?.data?.message,
     });
@@ -247,7 +245,9 @@ export const refreshToken = () => async (dispatch) => {
         },
       });
       localStorage.setItem("refreshTokenTime", Date.now());
-      localStorage.setItem("token", response?.data?.response);
+      const newtoken = response?.data?.response;
+      localStorage.setItem("token", newtoken);
+      localStorage.setItem("loginTime",Date.now())
     }
   } catch (err) {
     console.log(err);
@@ -462,7 +462,7 @@ export const getCoderDetails =
         });
       }
     } catch (err) {
-    console.log(err)
+      console.log(err);
     }
   };
 
@@ -491,7 +491,6 @@ export function checkAutoLogin(dispatch, navigate) {
 
 export function isLogin() {
   const tokenDetailsString = localStorage.getItem("userDetails");
-
   if (tokenDetailsString) {
     return true;
   } else {
