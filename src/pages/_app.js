@@ -78,15 +78,15 @@ function MyApp({ Component, pageProps }) {
       if (document.visibilityState === "visible") {
         // If tab becomes visible, calculate remaining time and start the timer
         if (showTerminal) {
-          const remainingTime = 60 * 1000 - (Date.now() - pauseTime);
+          const remainingTime = 30 * 60 * 1000 - (Date.now() - pauseTime);
           if (remainingTime > 0) {
             setTimeout(() => {
               checkLoginTime();
-              intervalId = setInterval(checkLoginTime, 60 * 1000);
+              intervalId = setInterval(checkLoginTime, 30 * 60 * 1000);
             }, remainingTime);
           } else {
             checkLoginTime();
-            intervalId = setInterval(checkLoginTime, 60 * 1000);
+            intervalId = setInterval(checkLoginTime, 30 * 60 * 1000);
           }
         }
       } else {
