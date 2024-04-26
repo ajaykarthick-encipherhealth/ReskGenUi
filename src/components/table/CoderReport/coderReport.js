@@ -18,6 +18,13 @@ import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
 import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
 import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
 import Abort from "../../../../src/images/trackingImages/Abort.png";
+import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
+
+import NotAudited from "../../../../src/images/trackingImages/NotAuditedTrack.png";
+import AuditHold from "../../../../src/images/trackingImages/AuditHoldTrack.png";
+import ReAudit from "../../../../src/images/trackingImages/reAuditTrack.png";
+import AuditPending from "../../../../src/images/trackingImages/AuditPending.png";
+import AuditedDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
 import { extractLatestData } from "../../../pages/supervisor/auditing";
 import Image from "next/image";
 
@@ -61,7 +68,100 @@ function CoderReport({
 
     setSelectedRows(updatedRows);
   };
-  
+  const auditstatusBodyTemplate = (rowData) => {
+    const declinedDataFromAudit = extractLatestData(
+      rowData?.auditDeclinedNotes
+    );
+
+    const declinedDataFromDeclined = extractLatestData(
+      rowData?.auditDeclinedNotes
+    );
+
+    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
+    switch (rowData.auditedStatus) {
+      case "AUDIT_PENDING":
+        return (
+          <Popover placement="bottom" title="Status: AUDIT PENDING">
+            <div className="patient-status">
+              <Image
+                src={AuditPending}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
+        );
+
+      case "AUDITHOLD":
+        return (
+          <Popover placement="bottom" title=" Status: AUDIT HOLD">
+            <div className="patient-status">
+              <Image
+                src={AuditHold}
+                // className={styles.ImgTrck}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
+        );
+      case "REAUDIT":
+        return (
+          <Popover placement="bottom" title=" Status: REAUDIT">
+            <div className="patient-status">
+              <Image src={ReAudit} style={{ height: "30px", width: "30px" }} />
+            </div>
+          </Popover>
+        );
+      case "AUDITED":
+        return (
+          <Popover placement="bottom" title=" Status: AUDITED">
+            <div className="patient-status">
+              <Image
+                src={AuditedTrack}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
+        );
+      case "AUDITED":
+        return (
+          <div className="patient-status">
+            <Image
+              src={AuditedTrack}
+              style={{ height: "30px", width: "30px" }}
+            />
+          </div>
+        );
+
+      case "NOT_AUDIT":
+        return (
+          <Popover placement="bottom" title=" Status: NOT AUDIT">
+            <div className="patient-status">
+              <Image
+                src={NotAudited}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
+        );
+      case "AUDIT_DECLINED":
+        return (
+          <Popover
+            placement="bottom"
+            title=" Status: AUDIT DECLINED"
+            content={`Reason: ${declinedData ? declinedData : "---"}`}
+          >
+            <div className="patient-status">
+              <Image
+                src={AuditedDeclineTrack}
+                style={{ height: "30px", width: "30px" }}
+              />
+            </div>
+          </Popover>
+        );
+      case null:
+        return <div className="patient-status">---</div>;
+    }
+  };
 
   const processstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
@@ -267,7 +367,6 @@ function CoderReport({
           <thead className={TableStyle.classTTotalhead}>
             <tr>
               <>
-                <th></th>
                 <th className={TableStyle.rowStyle2}>PATIENT ID</th>
                 <th>PATIENT NAME</th>
                 <th
@@ -293,10 +392,13 @@ function CoderReport({
                 <th className={TableStyle.rowAuditedAdmin}>
                   PATIENT ALLOCATE TO
                 </th>
+
                 <th>RAF SCORE </th>
                 <th>HCC </th>
                 <th>FLAG </th>
                 <th style={{ paddingLeft: "22px" }}>STATUS</th>
+                <th style={{ paddingLeft: "22px" }}>AUDIT STATUS</th>
+
                 <th>
                   {reportListAll?.data?.length > 0 && (
                     <div
@@ -329,271 +431,129 @@ function CoderReport({
             {reportListAll?.data?.length > 0 ? (
               reportListAll?.data?.map((row, index) => (
                 <tr key={index}>
-                  {row?.auditedBy && (
-                    <td className={TableStyle.firstTdBorder}>
-                      <Badge.Ribbon
-                        text="Audited"
-                        color="#377880"
-                        placement="start"
-                      ></Badge.Ribbon>
+                  <>
+                    <td
+                      style={{
+                        borderTop: "0.2px solid #e1e1e1",
+                        borderBottom: "  0.2px solid #e1e1e1",
+                        paddingLeft: "60px",
+                      }}
+                      className={TableStyle.childBorder}
+                    >
+                      {row?.patientId ? row?.patientId : "---"}
                     </td>
-                  )}
-                  {row?.auditedBy ? (
-                    <>
-                      <td
-                        style={{
-                          borderTop: "0.2px solid #e1e1e1",
-                          borderBottom: "  0.2px solid #e1e1e1",
-                          paddingLeft: "60px",
+                    <td className={TableStyle.childBorder}>
+                      {row?.patientName ? row?.patientName : "---"}
+                    </td>
+
+                    <td className={TableStyle.childBorder}>
+                      {dateFormate(dayjs, row?.processedDate)}
+                    </td>
+                    <td className={TableStyle.childBorder}>
+                      <div
+                        disabled={row?.comment ? false : true}
+                        onClick={() => {
+                          if (row?.comment) {
+                            setComments(row?.comment);
+                            setModal(!modal);
+                          }
                         }}
-                        className={TableStyle.childBorder}
                       >
-                        {row?.patientId ? row?.patientId : "---"}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.patientName ? row?.patientName : "---"}
-                      </td>
-
-                      <td className={TableStyle.childBorder}>
-                        {dateFormate(dayjs, row?.processedDate)}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        <div
-                          disabled={row?.comment ? false : true}
-                          onClick={() => {
-                            if (row?.comment) {
-                              setComments(row?.comment);
-                              setModal(!modal);
-                            }
-                          }}
-                          disbaled={true}
-                        >
-                          {row?.comment
-                            ? SVGICON.comment
-                            : SVGICON.emptyComments}
+                        {row?.comment ? SVGICON.comment : SVGICON.emptyComments}
+                      </div>
+                    </td>
+                    <td
+                      className={TableStyle.childBorder}
+                      style={{ textAlign: "left", paddingLeft: "50px" }}
+                    >
+                      {row.auditedByFirstName ||
+                      row.auditedByLastName ||
+                      row.auditedByProfileImage ? (
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          {" "}
+                          <span style={{ marginRight: "10px" }}>
+                            {" "}
+                            {renderUserPrfoileAvatar(
+                              row.auditedByFirstName,
+                              row.auditedByLastName,
+                              row.auditedByProfileImage,
+                              "header"
+                            )}
+                          </span>
+                          <span>
+                            {row.auditedByFirstName} {row.auditedByLastName}
+                          </span>
                         </div>
-                      </td>
-                      <td
-                        className={TableStyle.childBorder}
-                        style={{ textAlign: "left", paddingLeft: "50px" }}
-                      >
-                        {row.auditedByFirstName ||
-                        row.auditedByLastName ||
-                        row.auditedByProfileImage ? (
-                          <div
-                            style={{ display: "flex", alignItems: "center" }}
-                          >
+                      ) : (
+                        <div style={{ paddingLeft: "70px" }}>---</div>
+                      )}
+                    </td>
+                    <td
+                      className={TableStyle.childBorder}
+                      style={{ textAlign: "left", paddingLeft: "50px" }}
+                    >
+                      {row.patientAllocatedFirstName ||
+                      row.patientAllocatedLastName ||
+                      row.patientAllocatedProfileImage ? (
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          {" "}
+                          <span style={{ marginRight: "10px" }}>
                             {" "}
-                            <span style={{ marginRight: "10px" }}>
-                              {" "}
-                              {renderUserPrfoileAvatar(
-                                row.auditedByFirstName,
-                                row.auditedByLastName,
-                                row.auditedByProfileImage,
-                                "header"
-                              )}
-                            </span>
-                            <span>
-                              {row.auditedByFirstName} {row.auditedByLastName}
-                            </span>
-                          </div>
-                        ) : (
-                          <div style={{ textAlign: "center" }}>---</div>
-                        )}
-                      </td>
-                      <td
-                        className={TableStyle.childBorder}
-                        style={{ textAlign: "left", paddingLeft: "50px" }}
-                      >
-                        {row.patientAllocatedFirstName ||
-                        row.patientAllocatedLastName ||
-                        row.patientAllocatedProfileImage ? (
-                          <div
-                            style={{ display: "flex", alignItems: "center" }}
-                          >
-                            {" "}
-                            <span style={{ marginRight: "10px" }}>
-                              {" "}
-                              {renderUserPrfoileAvatar(
-                                row.patientAllocatedFirstName,
-                                row.patientAllocatedLastName,
-                                row.patientAllocatedProfileImage,
-                                "header"
-                              )}
-                            </span>
-                            <span>
-                              {row.patientAllocatedFirstName}{" "}
-                              {row.patientAllocatedLastName}
-                            </span>
-                          </div>
-                        ) : (
-                          <div style={{ textAlign: "center" }}>---</div>
-                        )}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.rafSum ? row?.rafSum : "000"}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.validDiseaseCount
-                          ? row?.validDiseaseCount
-                          : "000"}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.flag ? (
-                          getFlag(row?.flag)
-                        ) : (
-                          <div>{SVGICON?.emptyFlag}</div>
-                        )}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {processstatusBodyTemplate(row)}
-                      </td>
-
-                      <td
-                        className={TableStyle.lastBorder}
-                        style={{ textAlign: "center" }}
-                      >
-                        <input
-                          type="checkbox"
-                          onChange={() => {
-                            handleRowCheckboxChange(row);
-                          }}
-                          checked={selectedRows?.some(
-                            (selectedRow) =>
-                              selectedRow.patientId === row.patientId
-                          )}
-                          className={TableStyle.customChecked}
-                        />
-                      </td>
-                    </>
-                  ) : (
-                    <>
-                      <td className={TableStyle.firstTdBorder}></td>
-                      <td
-                        style={{
-                          borderTop: "0.2px solid #e1e1e1",
-                          borderBottom: "  0.2px solid #e1e1e1",
-                          paddingLeft: "60px",
+                            {renderUserPrfoileAvatar(
+                              row.patientAllocatedFirstName,
+                              row.patientAllocatedLastName,
+                              row.patientAllocatedProfileImage,
+                              "header"
+                            )}
+                          </span>
+                          <span>
+                            {row.patientAllocatedFirstName}{" "}
+                            {row.patientAllocatedLastName}
+                          </span>
+                        </div>
+                      ) : (
+                        <div style={{ paddingLeft: "70px" }}>---</div>
+                      )}
+                    </td>
+                    <td className={TableStyle.childBorder}>
+                      {row?.rafSum ? row?.rafSum : "000"}{" "}
+                    </td>
+                    <td className={TableStyle.childBorder}>
+                      {row?.validDiseaseCount ? row?.validDiseaseCount : "000"}
+                    </td>
+                    <td className={TableStyle.childBorder}>
+                      {row?.flag ? (
+                        getFlag(row?.flag)
+                      ) : (
+                        <div>{SVGICON?.emptyFlag}</div>
+                      )}
+                    </td>
+                    <td className={TableStyle.childBorder}>
+                      {processstatusBodyTemplate(row)}{" "}
+                    </td>
+                    <td
+                      className={TableStyle.lastBorder}
+                      style={{ textAlign: "center" }}
+                    >
+                      {auditstatusBodyTemplate(row)}
+                    </td>
+                    <td
+                      className={TableStyle.lastBorder}
+                      style={{ textAlign: "center" }}
+                    >
+                      <input
+                        type="checkbox"
+                        onChange={() => {
+                          handleRowCheckboxChange(row);
                         }}
-                        className={TableStyle.childBorder}
-                      >
-                        {row?.patientId ? row?.patientId : "---"}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.patientName ? row?.patientName : "---"}
-                      </td>
-
-                      <td className={TableStyle.childBorder}>
-                        {dateFormate(dayjs, row?.processedDate)}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        <div
-                          disabled={row?.comment ? false : true}
-                          onClick={() => {
-                            if (row?.comment) {
-                              setComments(row?.comment);
-                              setModal(!modal);
-                            }
-                          }}
-                        >
-                          {row?.comment
-                            ? SVGICON.comment
-                            : SVGICON.emptyComments}
-                        </div>
-                      </td>
-                      <td
-                        className={TableStyle.childBorder}
-                        style={{ textAlign: "left", paddingLeft: "50px" }}
-                      >
-                        {row.auditedByFirstName ||
-                        row.auditedByLastName ||
-                        row.auditedByProfileImage ? (
-                          <div
-                            style={{ display: "flex", alignItems: "center" }}
-                          >
-                            {" "}
-                            <span style={{ marginRight: "10px" }}>
-                              {" "}
-                              {renderUserPrfoileAvatar(
-                                row.auditedByFirstName,
-                                row.auditedByLastName,
-                                row.auditedByProfileImage,
-                                "header"
-                              )}
-                            </span>
-                            <span>
-                              {row.auditedByFirstName} {row.auditedByLastName}
-                            </span>
-                          </div>
-                        ) : (
-                          <div style={{ paddingLeft: "70px" }}>---</div>
+                        className={TableStyle.customChecked}
+                        checked={selectedRows?.some(
+                          (selectedRow) =>
+                            selectedRow.patientId === row.patientId
                         )}
-                      </td>
-                      <td
-                        className={TableStyle.childBorder}
-                        style={{ textAlign: "left", paddingLeft: "50px" }}
-                      >
-                        {row.patientAllocatedFirstName ||
-                        row.patientAllocatedLastName ||
-                        row.patientAllocatedProfileImage ? (
-                          <div
-                            style={{ display: "flex", alignItems: "center" }}
-                          >
-                            {" "}
-                            <span style={{ marginRight: "10px" }}>
-                              {" "}
-                              {renderUserPrfoileAvatar(
-                                row.patientAllocatedFirstName,
-                                row.patientAllocatedLastName,
-                                row.patientAllocatedProfileImage,
-                                "header"
-                              )}
-                            </span>
-                            <span>
-                              {row.patientAllocatedFirstName}{" "}
-                              {row.patientAllocatedLastName}
-                            </span>
-                          </div>
-                        ) : (
-                          <div style={{ paddingLeft: "70px" }}>---</div>
-                        )}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.rafSum ? row?.rafSum : "000"}{" "}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.validDiseaseCount
-                          ? row?.validDiseaseCount
-                          : "000"}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {row?.flag ? (
-                          getFlag(row?.flag)
-                        ) : (
-                          <div>{SVGICON?.emptyFlag}</div>
-                        )}
-                      </td>
-                      <td className={TableStyle.childBorder}>
-                        {processstatusBodyTemplate(row)}{" "}
-                      </td>
-                      <td
-                        className={TableStyle.lastBorder}
-                        style={{ textAlign: "center" }}
-                      >
-                        <input
-                          type="checkbox"
-                          onChange={() => {
-                            handleRowCheckboxChange(row);
-                          }}
-                          className={TableStyle.customChecked}
-                          checked={selectedRows?.some(
-                            (selectedRow) =>
-                              selectedRow.patientId === row.patientId
-                          )}
-                        />
-                      </td>
-                    </>
-                  )}
+                      />
+                    </td>
+                  </>
                 </tr>
               ))
             ) : (
