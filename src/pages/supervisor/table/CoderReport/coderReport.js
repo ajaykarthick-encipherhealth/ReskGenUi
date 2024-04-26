@@ -151,109 +151,112 @@ function CoderReport({
   };
 
   const getFlag = (data) => {
-    switch (data["2023"][data["2023"].length - 1]?.flag) {
-      case "PATIENT_NAME_MISSED":
-        return (
-          <Tooltip title="PATIENT_NAME_MISSED" placement="bottom">
-            <i className={visitStyles.name_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </i>
-          </Tooltip>
-        );
-      case "PATIENT_DOB_MISSED":
-        return (
-          <Tooltip title="PATIENT_DOB_MISSED" placement="bottom">
-            <i className={visitStyles.dob_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </i>
-          </Tooltip>
-        );
-      case "MRN_ID_MISMATCH":
-        return (
-          <Tooltip title="MRN_ID_MISMATCH" placement="bottom">
-            <i className={visitStyles.id_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </i>
-          </Tooltip>
-        );
-      case "PROVIDER_SIGN_MISSED":
-        return (
-          <Tooltip title="PROVIDER_SIGN_MISSED" placement="bottom">
-            <i className={visitStyles.sign_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </i>
-          </Tooltip>
-        );
-      case "PROVIDER_SIGNATURE_MISSED":
-        return (
-          <Tooltip title="PROVIDER_SIGNATURE_MISSED" placement="bottom">
-            <i className={visitStyles.signature_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </i>
-          </Tooltip>
-        );
-      case "PROVIDER_CREDENTIAL_MISSED":
-        return (
-          <Tooltip title="PROVIDER_CREDENTIAL_MISSED" placement="bottom">
-            <i className={visitStyles.cred_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </i>
-          </Tooltip>
-        );
-
-      case "PROVIDER_SIGN_STATUS_PENDING":
-        return (
-          <Tooltip title="PROVIDER_SIGN_STATUS_PENDING" placement="bottom">
-            <i className={visitStyles.sign_status}>
-              {SVGICON.emptyFlagSmallLarge}
-            </i>
-          </Tooltip>
-        );
-
-      case "NO_HCC_FOUND":
-        return (
-          <Tooltip title="NO_HCC_FOUND" placement="bottom">
-            <i className={visitStyles.no_hcc_found}>
-              {SVGICON.emptyFlagSmallLarge}
-            </i>
-          </Tooltip>
-        );
-
-      case "NO_VALID_DOCUMENT_FOUND":
-        return (
-          <Tooltip title="NO_VALID_DOCUMENT_FOUND" placement="bottom">
-            <i className={visitStyles.no_doc_found}>
-              {SVGICON.emptyFlagSmallLarge}
-            </i>
-          </Tooltip>
-        );
-
-      case "PATIENT_DISEASED":
-        return (
-          <Tooltip title="PATIENT_DISEASED" placement="bottom">
-            <i className={visitStyles.patient_diseased}>
-              {SVGICON.emptyFlagSmallLarge}
-            </i>
-          </Tooltip>
-        );
-
-      case "PATIENT_INACTIVE":
-        return (
-          <Tooltip title="PATIENT_INACTIVE" placement="bottom">
-            <i className={visitStyles.patient_inactive}>
-              {SVGICON.emptyFlagSmallLarge}
-            </i>
-          </Tooltip>
-        );
-      case "":
-        return (
-          <Tooltip title="" placement="bottom">
-            <i className={visitStyles.patient_inactive}>{SVGICON.emptyFlag}</i>
-          </Tooltip>
-        );
-    }
-  };
-
+    if (data && data["2023"] && Array.isArray(data["2023"]) && data["2023"].length > 0) {
+      switch (data["2023"][data["2023"].length - 1]?.flag) {
+        case "PATIENT_NAME_MISSED":
+          return (
+            <Tooltip title="PATIENT_NAME_MISSED" placement="bottom">
+              <i className={visitStyles.name_missed}>
+                {SVGICON.emptyFlagSmallLarge}
+              </i>
+            </Tooltip>
+          );
+        case "PATIENT_DOB_MISSED":
+          return (
+            <Tooltip title="PATIENT_DOB_MISSED" placement="bottom">
+              <i className={visitStyles.dob_missed}>
+                {SVGICON.emptyFlagSmallLarge}
+              </i>
+            </Tooltip>
+          );
+        case "MRN_ID_MISMATCH":
+          return (
+            <Tooltip title="MRN_ID_MISMATCH" placement="bottom">
+              <i className={visitStyles.id_missed}>
+                {SVGICON.emptyFlagSmallLarge}
+              </i>
+            </Tooltip>
+          );
+        case "PROVIDER_SIGN_MISSED":
+          return (
+            <Tooltip title="PROVIDER_SIGN_MISSED" placement="bottom">
+              <i className={visitStyles.sign_missed}>
+                {SVGICON.emptyFlagSmallLarge}
+              </i>
+            </Tooltip>
+          );
+        case "PROVIDER_SIGNATURE_MISSED":
+          return (
+            <Tooltip title="PROVIDER_SIGNATURE_MISSED" placement="bottom">
+              <i className={visitStyles.signature_missed}>
+                {SVGICON.emptyFlagSmallLarge}
+              </i>
+            </Tooltip>
+          );
+        case "PROVIDER_CREDENTIAL_MISSED":
+          return (
+            <Tooltip title="PROVIDER_CREDENTIAL_MISSED" placement="bottom">
+              <i className={visitStyles.cred_missed}>
+                {SVGICON.emptyFlagSmallLarge}
+              </i>
+            </Tooltip>
+          );
+        case "PROVIDER_SIGN_STATUS_PENDING":
+          return (
+            <Tooltip title="PROVIDER_SIGN_STATUS_PENDING" placement="bottom">
+              <i className={visitStyles.sign_status}>
+                {SVGICON.emptyFlagSmallLarge}
+              </i>
+            </Tooltip>
+          );
+        case "NO_HCC_FOUND":
+          return (
+            <Tooltip title="NO_HCC_FOUND" placement="bottom">
+              <i className={visitStyles.no_hcc_found}>
+                {SVGICON.emptyFlagSmallLarge}
+              </i>
+            </Tooltip>
+          );
+        case "NO_VALID_DOCUMENT_FOUND":
+          return (
+            <Tooltip title="NO_VALID_DOCUMENT_FOUND" placement="bottom">
+              <i className={visitStyles.no_doc_found}>
+                {SVGICON.emptyFlagSmallLarge}
+              </i>
+            </Tooltip>
+          );
+        case "PATIENT_DISEASED":
+          return (
+            <Tooltip title="PATIENT_DISEASED" placement="bottom">
+              <i className={visitStyles.patient_diseased}>
+                {SVGICON.emptyFlagSmallLarge}
+              </i>
+            </Tooltip>
+          );
+        case "PATIENT_INACTIVE":
+          return (
+            <Tooltip title="PATIENT_INACTIVE" placement="bottom">
+              <i className={visitStyles.patient_inactive}>
+                {SVGICON.emptyFlagSmallLarge}
+              </i>
+            </Tooltip>
+          );
+        default:
+          // Handle the case where flag is not matched
+          return (
+            <Tooltip title="" placement="bottom">
+              <i className={visitStyles.patient_inactive}>{SVGICON.emptyFlag}</i>
+            </Tooltip>
+          );
+      }
+    } else {
+      // Handle the case where data["2023"] doesn't exist or is not an array
+      return (
+        <Tooltip title="" placement="bottom">
+          <i className={visitStyles.patient_inactive}>{SVGICON.emptyFlag}</i>
+        </Tooltip>
+      );
+    }   };
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
   }, [selectedRows]);
