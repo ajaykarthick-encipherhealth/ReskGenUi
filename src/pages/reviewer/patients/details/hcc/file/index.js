@@ -3398,8 +3398,9 @@ const File = ({
                             <span className="disease-name d-flex mb-1">
                               <span className="valid-dis-name">
                                 {data.diagnosisCode}
-                              </span>{" "}
-                              <span className="">
+                              </span>
+                              {/* removed reason for demo */}
+                              {/* <span className="">
                                 <Popover
                                   content={updateCode(data)}
                                   title=""
@@ -3407,7 +3408,7 @@ const File = ({
                                 >
                                   <FontAwesomeIcon icon={faPen} />
                                 </Popover>
-                              </span>
+                              </span> */}
                               <Popover
                                 content={
                                   data.dbDescription
