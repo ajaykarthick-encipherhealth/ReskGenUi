@@ -593,6 +593,8 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
               children: res.children,
               getPlace: "Hcc",
               dbDescription: res.dbDescription,
+              isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
             });
           }
         });
@@ -644,6 +646,8 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                 isHccValid: res.isHccValid,
                 defaultPosition: res.defaultPosition,
                 providerName: providerList,
+                isCmsHcc: res.isCmsHcc,
+                isRxHcc: res.isRxHcc
               });
             }
           });
@@ -673,6 +677,8 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
               providerName: providerList,
               children: res.children ? res.children : [],
               isMostSpecific: res.isMostSpecific,
+              isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
             });
           });
 
@@ -692,6 +698,8 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                 getPlace: "Radio-combo",
                 isHccValid: true,
                 providerName: providerList,
+                isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
                 // defaultPosition:res.defaultPosition
               });
             });
@@ -717,6 +725,8 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
               isHccValid: true,
               defaultPosition: res.defaultPosition,
               providerName: providerList,
+              isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
             });
           });
         }
@@ -742,6 +752,8 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                 providerName: providerList,
                 children: res.children ? res.children : [],
                 isMostSpecific: res.isMostSpecific,
+                isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
               });
             }
           });
@@ -763,6 +775,8 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
               isHccValid: true,
               defaultPosition: res.defaultPosition,
               providerName: providerList,
+              isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
             });
           });
         }
@@ -783,6 +797,8 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
               isHccValid: true,
               defaultPosition: res.defaultPosition,
               providerName: providerList,
+              isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
             });
           });
         }
@@ -3534,6 +3550,10 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                           <div
                             className={`${visitStyles.encounterAndSectionHeader}`}
                           >
+                            <div className="d-flex justify-content-end mt-2">
+                              {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
+                            {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
+                            </div>
                             <div className={`cr-pointer ${styles.meatFoundContainer}`}>
                               <div onClick={()=>setActiveTabHead(4)}>
                                 {getMeatFound(
@@ -3862,6 +3882,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                               <div
                                 className={`${visitStyles.hoverActiveHcc} d-flex justify-content-between`}
                               >
+                            
                                 <div>
                                   <div className="">
                                     <div
@@ -3919,6 +3940,10 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
+                                   <div className="d-flex justify-content-end mt-2">
+                              {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
+                            {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
+                            </div>
                                      <div className={`cr-pointer ${styles.meatFoundContainer}`}>
                               <div onClick={()=>setActiveTabHead(4)}>
                                 {getMeatFound(
@@ -4108,7 +4133,8 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                               </div>
                             </Popconfirm>
                           </div>
-                          <div className={`${visitStyles.hoverActiveHcc}`}>
+                          <div className={`${visitStyles.hoverActiveHcc} d-flex justify-content-between` }>
+                            <div>
                             <div className="">
                               <div
                                 className={`${visitStyles.encounterAndSectionHeader}`}
@@ -4133,6 +4159,15 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                                 data?.diagnosisCode
                               )}
                             </div>
+                            </div>
+                            <div
+                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                >
+                                   <div className="d-flex justify-content-end mt-2">
+                              {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
+                            {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
+                            </div>
+                              </div>
                           </div>
                         </div>
                       </li>
