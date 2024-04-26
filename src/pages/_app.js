@@ -55,7 +55,7 @@ function MyApp({ Component, pageProps }) {
 
       if (!isNaN(loginTime)) {
         const timeElapsed = Date.now() - loginTime;
-        if (timeElapsed > 30 * 1000) {
+        if (timeElapsed > 30 * 60 * 1000) {
           dispatch(refreshToken());
         }
       }
