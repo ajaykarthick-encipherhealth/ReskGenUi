@@ -1422,6 +1422,7 @@ const Meat = ({}) => {
         setSearch({
           value: splitPoint,
           page: pageNumber,
+          headers: result?.first,
         });
         setFileInitialPage(pageNumber);
         setFileDosPageNumber(pageNumber);
@@ -1446,7 +1447,7 @@ const Meat = ({}) => {
       splitPoint = value;
       setSearch({
         value: splitPoint,
-        page: null,
+        headers: true,
       });
       if (findFileKeyword == value) {
         setFileLoading(false);
@@ -2921,6 +2922,7 @@ const Meat = ({}) => {
                     src={selectFileURL}
                     searchQuery={search?.value ? search?.value : ""}
                     pageNumber={search?.page ? search?.page : 1}
+                    headers={search?.headers}
                   />
                 )}
               </>
