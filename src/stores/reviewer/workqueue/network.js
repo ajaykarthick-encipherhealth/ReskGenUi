@@ -1,6 +1,6 @@
 import { requestPortal } from "../../../utils/network";
 
-export async function patientsList({url }) {
+export async function patientsList({ url }) {
   const options = {
     method: "GET",
   };
@@ -13,3 +13,14 @@ export async function patientsList({url }) {
   );
   return data;
 }
+export const flagsList = async () => {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/flag/getAllFlag
+  `,
+    options
+  );
+  return data;
+};
