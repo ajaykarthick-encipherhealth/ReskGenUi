@@ -366,7 +366,7 @@ const HeaderFilters = ({
           {isNextRow && (
             <div
               className={"col-xl-1"}
-              style={{ margin: "30px 0 0 10px", cursor: "pointer" }}
+              style={{ margin: "30px 0 0 10px", cursor: "pointer",width:"120px" }}
               onClick={() => setShowFilters(!showFilters)}
             >
               <button className={styles.filterBtn}>
@@ -377,7 +377,7 @@ const HeaderFilters = ({
           {bullets && (
             <div
               className={`${bullets ? "col-xl-1" : "col-xl-4"}`}
-              style={{ margin: "30px 0 0 0px"}}
+              style={{ margin: "30px 0 0 0px", marginLeft:'39px'}}
             >
               <Popover
                 content={
