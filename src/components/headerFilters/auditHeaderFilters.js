@@ -190,7 +190,7 @@ const AuditHeaderFilters = ({
           {isNextRow && (
             <div
               className={"col-xl-1"}
-              style={{ margin: "30px 0 0 0px", cursor: "pointer" }}
+              style={{ margin: "30px 0 0 0px", cursor: "pointer", width:"107px" }}
               onClick={() => setShowFilters(!showFilters)}
             >
               <button className={styles.filterBtn}>
