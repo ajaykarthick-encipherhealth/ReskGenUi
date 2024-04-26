@@ -151,6 +151,7 @@ const Details = () => {
   const [allocateClicked, setAllocateClicked] = useState(false);
   const [error, setError] = useState({ year: "" });
   const [hccValidCount, setHccValidCount] = useState(0);
+  const [hccCounts, setHccCounts] = useState({isCmsHcc: 0, isRxHcc: 0})
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [workListPatientId, setWorkListPatientId] = useState(null);
 
@@ -634,10 +635,20 @@ const Details = () => {
               isManuallyAdded: res.isManuallyAdded,
               isHccValid: res.isHccValid,
               defaultPosition: res.defaultPosition,
+              isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
             });
           }
         });
         setHccValidCount(validDisArray.length);
+
+
+        const rxHcc = validDisArray.filter((rx) => rx.isRxHcc == true)
+        const cmsHcc = validDisArray.filter((rx) => rx.isCmsHcc == true)
+        setHccCounts({
+          isCmsHcc: cmsHcc.length > 0 ? cmsHcc.length : 0,
+          isRxHcc: rxHcc.length > 0 ? rxHcc.length : 0,
+        })
 
         setNewValidDiseaseList(validDisArray);
         setDosYearDefalutSelect(highestDosValue[0]);
@@ -1733,7 +1744,7 @@ const Details = () => {
                         <div className={`${visitStyles.patient_info_details}`}>
                           <div className="card-body">
                             <div className="row">
-                              <div className="col-xl-3 col-sm-12">
+                              <div className="col-xl-2 col-sm-12">
                                 <FontAwesomeIcon icon={faIdCardClip} />
                                 <label>Patient ID</label>
                                 <h6
@@ -1788,12 +1799,8 @@ const Details = () => {
                                   {patientDocumentResult.dob}
                                 </h6>
                               </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-xl-1 col-sm-12">
-                        <div className={visitStyles.priorityStatus}>
+                              <div className="col-xl-1 col-sm-12">
+                        <div className={`${visitStyles.priorityStatus} p-0`}>
                           {patienIdDetails?.priority == "URGENT" ? (
                             <div className={visitStyles.priorityStatusIcon}>
                               <i>{SVGICON.alert}</i>
@@ -1853,15 +1860,35 @@ const Details = () => {
                               </span>
                             </div>
                           )}
-
-                          <div className={`${visitStyles.hccCountHeader} `}>
-                            <label>HCC</label>
-
-                            <h6 className="ageDtails">{hccValidCount}</h6>
+                         
+                        </div>
+                      </div>
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div className="col-xl-1 col-sm-12 d-flex">
+                      <div className="col-xl-1 col-sm-12">
+                        <div className={visitStyles.priorityStatus}>
+                         
+                          <div className={`${visitStyles.hccCountHeader} `}>
+                            <label>CMS</label>
+
+                            <h6 className="ageDtails">{hccCounts.isCmsHcc}</h6>
+                          </div>
+                          <div className={`${visitStyles.hccCountHeader} `}>
+                            <label>RX</label>
+
+                            <h6 className="ageDtails">{hccCounts.isRxHcc}</h6>
+                          </div>
+                          <div className={`${visitStyles.hccCountHeader} `}>
+                            <label>TOTAL</label>
+
+                            <h6 className="ageDtails">{hccValidCount}</h6>
+                          </div>
+                         
+                        </div>
+                      </div>
+                      <div className="col-xl-1 col-sm-12 px-4 d-flex">
                         <div className={`${visitStyles.rafscoreheader} `}>
                           <label>Score</label>
                           {patientDetails?.rafScore != null ? (

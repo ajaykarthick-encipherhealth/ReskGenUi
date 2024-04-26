@@ -599,6 +599,8 @@ const File = ({
               children: res.children,
               getPlace: "Hcc",
               dbDescription: res.dbDescription,
+              isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
             });
           }
         });
@@ -650,6 +652,8 @@ const File = ({
                 isHccValid: res.isHccValid,
                 defaultPosition: res.defaultPosition,
                 providerName: providerList,
+                isCmsHcc: res.isCmsHcc,
+                isRxHcc: res.isRxHcc
               });
             }
           });
@@ -679,6 +683,8 @@ const File = ({
               providerName: providerList,
               children: res.children ? res.children : [],
               isMostSpecific: res.isMostSpecific,
+              isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
             });
           });
 
@@ -698,6 +704,8 @@ const File = ({
                 getPlace: "Radio-combo",
                 isHccValid: true,
                 providerName: providerList,
+                isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
                 // defaultPosition:res.defaultPosition
               });
             });
@@ -723,6 +731,8 @@ const File = ({
               isHccValid: true,
               defaultPosition: res.defaultPosition,
               providerName: providerList,
+              isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
             });
           });
         }
@@ -748,6 +758,8 @@ const File = ({
                 providerName: providerList,
                 children: res.children ? res.children : [],
                 isMostSpecific: res.isMostSpecific,
+                isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
               });
             }
           });
@@ -769,6 +781,8 @@ const File = ({
               isHccValid: true,
               defaultPosition: res.defaultPosition,
               providerName: providerList,
+              isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
             });
           });
         }
@@ -789,6 +803,8 @@ const File = ({
               isHccValid: true,
               defaultPosition: res.defaultPosition,
               providerName: providerList,
+              isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
             });
           });
         }
@@ -3546,18 +3562,12 @@ const File = ({
                           <div
                             className={`${visitStyles.encounterAndSectionHeader}`}
                           >
-                            <div
-                              className={`cr-pointer ${styles.meatFoundContainer}`}
-                            >
-                              <div
-                                onClick={() => {
-                                  setActiveTabHead(4);
-                                  setActiveMeatTitle({
-                                    header: "M",
-                                    diagnosisCode: data?.diagnosisCode,
-                                  });
-                                }}
-                              >
+                            <div className="d-flex justify-content-end mt-2">
+                              {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
+                            {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
+                            </div>
+                            <div className={`cr-pointer ${styles.meatFoundContainer}`}>
+                              <div onClick={()=>setActiveTabHead(4)}>
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
@@ -3909,6 +3919,7 @@ const File = ({
                               <div
                                 className={`${visitStyles.hoverActiveHcc} d-flex justify-content-between`}
                               >
+                            
                                 <div>
                                   <div className="">
                                     <div
@@ -3966,70 +3977,40 @@ const File = ({
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
-                                  <div
-                                    className={`cr-pointer ${styles.meatFoundContainer}`}
-                                  >
-                                    <div
-                                      onClick={() => {
-                                        setActiveTabHead(4);
-                                        setActiveMeatTitle({
-                                          header: "M",
-                                          diagnosisCode: data?.diagnosisCode,
-                                        });
-                                      }}
-                                    >
-                                      {getMeatFound(
-                                        data?.diagnosisCode,
-                                        meatCriteriaList,
-                                        "M"
-                                      )}
-                                    </div>
-                                    <div
-                                      onClick={() => {
-                                        setActiveTabHead(4);
-                                        setActiveMeatTitle({
-                                          header: "E",
-                                          diagnosisCode: data?.diagnosisCode,
-                                        });
-                                      }}
-                                    >
-                                      {getMeatFound(
-                                        data?.diagnosisCode,
-                                        meatCriteriaList,
-                                        "E"
-                                      )}
-                                    </div>
-                                    <div
-                                      onClick={() => {
-                                        setActiveTabHead(4);
-                                        setActiveMeatTitle({
-                                          header: "A",
-                                          diagnosisCode: data?.diagnosisCode,
-                                        });
-                                      }}
-                                    >
-                                      {getMeatFound(
-                                        data?.diagnosisCode,
-                                        meatCriteriaList,
-                                        "A"
-                                      )}
-                                    </div>
-                                    <div
-                                      onClick={() => {
-                                        setActiveTabHead(4);
-                                        setActiveMeatTitle({
-                                          header: "T",
-                                          diagnosisCode: data?.diagnosisCode,
-                                        });
-                                      }}
-                                    >
-                                      {getMeatFound(
-                                        data?.diagnosisCode,
-                                        meatCriteriaList,
-                                        "T"
-                                      )}
-                                    </div>
-                                  </div>
+                                   <div className="d-flex justify-content-end mt-2">
+                              {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
+                            {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
+                            </div>
+                                     <div className={`cr-pointer ${styles.meatFoundContainer}`}>
+                              <div onClick={()=>setActiveTabHead(4)}>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "M"
+                                )}
+                              </div>
+                              <div onClick={()=>setActiveTabHead(4)}>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "E"
+                                )}
+                              </div>
+                              <div onClick={()=>setActiveTabHead(4)}>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "A"
+                                )}
+                              </div>
+                              <div onClick={()=>setActiveTabHead(4)}>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "T"
+                                )}
+                              </div>
+                            </div>
                                   <div
                                     className={`${visitStyles.encounterAndSectionHeader}`}
                                   >
@@ -4189,7 +4170,8 @@ const File = ({
                               </div>
                             </Popconfirm>
                           </div>
-                          <div className={`${visitStyles.hoverActiveHcc}`}>
+                          <div className={`${visitStyles.hoverActiveHcc} d-flex justify-content-between` }>
+                            <div>
                             <div className="">
                               <div
                                 className={`${visitStyles.encounterAndSectionHeader}`}
@@ -4214,6 +4196,15 @@ const File = ({
                                 data?.diagnosisCode
                               )}
                             </div>
+                            </div>
+                            <div
+                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                >
+                                   <div className="d-flex justify-content-end mt-2">
+                              {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
+                            {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
+                            </div>
+                              </div>
                           </div>
                         </div>
                       </li>

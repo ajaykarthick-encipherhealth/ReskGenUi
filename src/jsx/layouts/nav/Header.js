@@ -484,7 +484,9 @@ const Header = ({
                   <div className="header-profile2 cr-pointer">
                     <div className="nav-link i-false" as="div">
                       <div className="header-info2 d-flex align-items-center">
-                        {userRole !== "admin" && userRole !== "tenant" && (
+
+                        {/* NOTE i remove userRole !== "admin" logic because PRAVIN told me to show admin also, so if Logesh ask anything to this please tell him like this*/}
+                        {userRole !== "tenant" && (
                           <Popover
                             content={PopContent}
                             placement="bottom"
