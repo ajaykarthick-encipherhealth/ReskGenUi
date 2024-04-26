@@ -309,17 +309,7 @@ function TeamReport({
               ReportPatientDetails?.data?.map((row, index) => (
                 <tr key={index}>
                   <td className={TableStyle.firstTdBorder}>
-                    {row?.auditedStatus ? (
-                      <span
-                        style={{
-                          position: "relative",
-                          left: "0px",
-                          top: "10px",
-                        }}
-                      >
-                        {badgeDisplay(row)}
-                      </span>
-                    ) : null}
+                 
                     <span
                       style={{
                         paddingLeft: "70px",
