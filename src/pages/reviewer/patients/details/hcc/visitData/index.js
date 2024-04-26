@@ -1298,7 +1298,7 @@ const VisitData = ({setActiveTabHead}) => {
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
-    var splitPoint = actualDescription;
+    var splitPoint = actualDescription.substring(" ", 20);
     var pageNumber = null;
     var data = {
       fileId: fileId,
@@ -1379,7 +1379,7 @@ const VisitData = ({setActiveTabHead}) => {
       fileId: fileId,
       header: headerNames,
       dos: encounterDatesValue,
-      stringFileWord: actualDescription,
+      stringFileWord: actualDescription.substring(" ", 20),
       diagnosisCode: diagnosisCode,
     };
     try {
@@ -1389,7 +1389,7 @@ const VisitData = ({setActiveTabHead}) => {
       );
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
-        pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
+        // pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
         splitPoint = result?.searchString
         if (result == null) {
            return findValueDocuments(
@@ -1501,13 +1501,13 @@ const VisitData = ({setActiveTabHead}) => {
         const encounterDatesHeader = encounterDatesValue[0];
         var splitPoint = "";
         var pageNumber = null;
-        splitPoint = actualDescription;
+        splitPoint = actualDescription.substring(" ", 20);
         var data = {
-          fileId:fileId,
+          fileId: fileId,
           header: headerNames,
-          dos:encounterDatesValue,
-          stringFileWord:splitPoint      
-        }
+          dos: encounterDatesValue,
+          stringFileWord: splitPoint,
+        };
         try {
           const response = await axios.post(ENDPOINTS.apiEndoint +`dbservice/pageNumber`,data);
           var result = response.data.response;
@@ -1680,12 +1680,12 @@ const VisitData = ({setActiveTabHead}) => {
         const encounterDatesHeader = encounterDatesValue[0];
         var splitPoint = "";
         var pageNumber = null;
-        splitPoint = actualDescription;
+        splitPoint = actualDescription.substring(" ", 20);
         var data = {
           fileId: fileId,
           header: headerNames,
           dos: encounterDatesValue,
-          stringFileWord: actualDescription,
+          stringFileWord: actualDescription.substring(" ", 20),
           diagnosisCode: value,
         };
         try {
@@ -3215,9 +3215,7 @@ const VisitData = ({setActiveTabHead}) => {
                                   data.capturedSections,
                                   null,
                                   data.encounterDate,
-                                  data.dbDescription
-                                  ? data.dbDescription
-                                  : data.actualDescription,
+                                  data.actualDescription,
                                   null,
                                   data.diagnosisCode
                                 )}
@@ -3522,9 +3520,7 @@ const VisitData = ({setActiveTabHead}) => {
                                   data.capturedSections,
                                   null,
                                   data.encounterDate,
-                                  data.dbDescription
-                                        ? data.dbDescription
-                                        : data.actualDescription,
+                                  data.actualDescription,
                                   null,
                                   data.diagnosisCode
                                 )}
@@ -3740,9 +3736,7 @@ const VisitData = ({setActiveTabHead}) => {
                                 data.capturedSections,
                                 null,
                                 data.encounterDate,
-                                data.dbDescription
-                                ? data.dbDescription
-                                : data.actualDescription,
+                                data.actualDescription,
                                 "Suggested",
                                 data.diagnosisCode
                               )}
