@@ -138,7 +138,7 @@ const Hcc = ({ year }) => {
                   />
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey={2}>
-                  <VisitData setActiveTabHead={setActiveTabHead}/>
+                  <VisitData setActiveTabHead={setActiveTabHead}  setActiveMeatTitle={setActiveMeatTitle}/>
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey={3}>
                   <Combo />
