@@ -1641,6 +1641,10 @@ const VisitData = ({setActiveTabHead}) => {
       setFileDosPageNumber(null);
       var splitPoint = disDescription.substring(" ", 40);
       setFindFileKeyword(splitPoint);
+      setSearch({
+        value: splitPoint,
+        headers: true,
+      });
       setTimeout(() => {
         var dataset = "Lab" + " - (" + disDescription + ")";
         setSelectMeatName(dataset);
@@ -1827,6 +1831,10 @@ const VisitData = ({setActiveTabHead}) => {
     if (radiologyCheck == true) {
       var splitPoint = disDescription.substring(" ", 40);
       setFindFileKeyword(splitPoint);
+      setSearch({
+        value: splitPoint,
+        headers: true,
+      });
       setTimeout(() => {
         var dataset = "Radiology" + " - (" + disDescription + ")";
         setSelectMeatName(dataset);
@@ -4969,6 +4977,7 @@ const VisitData = ({setActiveTabHead}) => {
           onOk={handleCloseModal}
           onCancel={handleCloseModal}
           width="70%"
+          footer={false}
           // height={400}
         >
           <div className="section-container">
