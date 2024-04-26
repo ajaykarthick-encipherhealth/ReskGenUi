@@ -377,7 +377,7 @@ const HeaderFilters = ({
           {bullets && (
             <div
               className={`${bullets ? "col-xl-1" : "col-xl-4"}`}
-              style={{ margin: "30px 0 0 10px", cursor: "pointer" }}
+              style={{ margin: "30px 0 0 0px"}}
             >
               <Popover
                 content={
@@ -401,7 +401,7 @@ const HeaderFilters = ({
                 trigger={["click"]}
                 placement="bottom"
               >
-                <Image src={warning} className="mt-[10px]" />
+                <Image src={warning} className="mt-[10px]"style={{cursor:"pointer"}} />
               </Popover>
             </div>
           )}
