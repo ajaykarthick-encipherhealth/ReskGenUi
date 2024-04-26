@@ -461,6 +461,7 @@ const Combo = ({}) => {
         setSearch({
           value: splitPoint,
           page: pageNumber,
+          headers: result?.first,
         });
         setFileInitialPage(pageNumber);
       } else {
@@ -484,7 +485,7 @@ const Combo = ({}) => {
       }
       setSearch({
         value: splitPoint,
-        page: null,
+        headers: true,
       });
       setFindFileKeyword(splitPoint);
       setFileInitialPage(null);
@@ -619,6 +620,7 @@ const Combo = ({}) => {
       setSearch({
         value: splitPoint,
         page: pageNumber,
+        headers: result?.first,
       });
       var dataset =
         value +
@@ -644,7 +646,7 @@ const Combo = ({}) => {
       }
       setSearch({
         value: splitPoint,
-        page: null,
+        headers:true,
       });
       setFindFileKeyword(splitPoint);
       setFileInitialPage(null);
@@ -1540,6 +1542,7 @@ const Combo = ({}) => {
                     src={selectFileURL}
                     searchQuery={search?.value ? search?.value : ""}
                     pageNumber={search?.page ? search?.page : 1}
+                    headers={search?.headers}
                   />
                 )}
               </div>

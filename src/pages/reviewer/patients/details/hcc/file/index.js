@@ -1837,6 +1837,10 @@ const File = ({
       setFileDosPageNumber(null);
       var splitPoint = disDescription.substring(" ", 40);
       setFindFileKeyword(splitPoint);
+      setSearch({
+        value: splitPoint,
+        headers: true,
+      });
       setTimeout(() => {
         var dataset = "Lab" + " - (" + disDescription + ")";
         setSelectMeatName(dataset);
@@ -1987,6 +1991,10 @@ const File = ({
     if (radiologyCheck == true) {
       var splitPoint = disDescription.substring(" ", 40);
       setFindFileKeyword(splitPoint);
+      setSearch({
+        value: splitPoint,
+        headers: true,
+      });
       setTimeout(() => {
         var dataset = "Radiology" + " - (" + disDescription + ")";
         setSelectMeatName(dataset);
@@ -1996,6 +2004,7 @@ const File = ({
       setSelectMeatName(dataset + " -  " + "Loading...");
       setIsLoadingSection(true);
       setIsModalOpenRadiology(true);
+
     } else {
       handleOpenModal(value, disDescription);
     }
@@ -4166,7 +4175,7 @@ const File = ({
           // height={400}
         >
           <div className="section-container">
-            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+            {/* <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
               <div
                 style={{
                   height: "80vh",
@@ -4187,7 +4196,15 @@ const File = ({
                   )}
                 />
               </div>
-            </Worker>
+            </Worker> */}
+            {selectFileURLRadiology && (
+                  <PdfViewer
+                    src={selectFileURLRadiology}
+                    searchQuery={search?.value ? search?.value : ""}
+                    pageNumber={search?.page ? search?.page : 1}
+                    headers={search?.headers}
+                  />
+                )}
           </div>
         </Modal>
       )}
@@ -4204,7 +4221,7 @@ const File = ({
           // height={400}
         >
           <div className="section-container">
-            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+            {/* <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
               <div
                 style={{
                   height: "80vh",
@@ -4225,7 +4242,15 @@ const File = ({
                   )}
                 />
               </div>
-            </Worker>
+            </Worker> */}
+             {labReportFile && (
+                  <PdfViewer
+                    src={labReportFile}
+                    searchQuery={search?.value ? search?.value : ""}
+                    pageNumber={search?.page ? search?.page : 1}
+                    headers={search?.headers}
+                  />
+                )}
           </div>
         </Modal>
       )}
