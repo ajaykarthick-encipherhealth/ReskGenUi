@@ -4,6 +4,6 @@ const ENDPOINTS = {
   apiEndointFileUploadHcc: "https://local.hcc.encipherhealth.com/secure/",
   apiLocal: "http://localhost:3003/",
   isShow: false,
-  PdfViewer: "https://pdffile.javagcai.com/web/viewer.html"
+  PdfViewer: "http://localhost:8888/web/viewer.html"
 };
 export default ENDPOINTS;
