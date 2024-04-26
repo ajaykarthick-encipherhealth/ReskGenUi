@@ -3567,8 +3567,18 @@ const File = ({
                               {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
                             {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
                             </div>
-                            <div className={`cr-pointer ${styles.meatFoundContainer}`}>
-                              <div onClick={()=>setActiveTabHead(4)}>
+                            <div
+                              className={`cr-pointer ${styles.meatFoundContainer}`}
+                            >
+                              <div
+                                onClick={() => {
+                                  setActiveTabHead(4);
+                                  setActiveMeatTitle({
+                                    header: "M",
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}
+                              >
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
@@ -3982,29 +3992,63 @@ const File = ({
                               {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
                             {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
                             </div>
-                                     <div className={`cr-pointer ${styles.meatFoundContainer}`}>
-                              <div onClick={()=>setActiveTabHead(4)}>
+                            <div
+                              className={`cr-pointer ${styles.meatFoundContainer}`}
+                            >
+                              <div
+                                onClick={() => {
+                                  setActiveTabHead(4);
+                                  setActiveMeatTitle({
+                                    header: "M",
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}
+                              >
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
                                   "M"
                                 )}
                               </div>
-                              <div onClick={()=>setActiveTabHead(4)}>
+                              <div
+                                onClick={() => {
+                                  setActiveTabHead(4);
+                                  setActiveMeatTitle({
+                                    header: "E",
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}
+                              >
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
                                   "E"
                                 )}
                               </div>
-                              <div onClick={()=>setActiveTabHead(4)}>
+                              <div
+                                onClick={() => {
+                                  setActiveTabHead(4);
+                                  setActiveMeatTitle({
+                                    header: "A",
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}
+                              >
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
                                   "A"
                                 )}
                               </div>
-                              <div onClick={()=>setActiveTabHead(4)}>
+                              <div
+                                onClick={() => {
+                                  setActiveTabHead(4);
+                                  setActiveMeatTitle({
+                                    header: "T",
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}
+                              >
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
