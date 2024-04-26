@@ -11,14 +11,25 @@ const Hcc = ({ year }) => {
   const [activeTabHead, setActiveTabHead] = useState(1);
   const [flagTagActive, setFlagTagActive] = useState(false);
   const [popoverVisible, setPopoverVisible] = useState(false);
+  const [activeMeatTitle, setActiveMeatTitle] = useState(null);
+
   const selectTab = (num) => {
     setFlagTagActive(false);
     setActiveTabHead(num)
     if (num == 2) {
       setFlagTagActive(true);
     }
+    if(num == 4){
+      setActiveMeatTitle(null);
+    }
     setPopoverVisible(false);
   };
+  
+  useEffect(() => {
+    setTimeout(() => {
+      setActiveMeatTitle (null);
+    }, 10000);
+  }, [activeMeatTitle]);
 
   return (
     <>
@@ -123,6 +134,7 @@ const Hcc = ({ year }) => {
                     setPopoverVisible={setPopoverVisible}
                     year={year}
                     setActiveTabHead={setActiveTabHead}
+                    setActiveMeatTitle={setActiveMeatTitle}
                   />
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey={2}>
@@ -132,7 +144,7 @@ const Hcc = ({ year }) => {
                   <Combo />
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey={4}>
-                  <Meat />
+                  <Meat activeMeatTitle={activeMeatTitle}/>
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey={5}>
                   <RafScore />
