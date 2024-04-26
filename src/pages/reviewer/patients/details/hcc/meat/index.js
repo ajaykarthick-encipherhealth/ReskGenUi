@@ -88,7 +88,7 @@ const addOnCodeColor = [
   "geekblue",
   "purple",
 ];
-const Meat = ({}) => {
+const Meat = ({activeMeatTitle}) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
   let searchKeywords = [];
@@ -169,7 +169,6 @@ const Meat = ({}) => {
   const [openPopover, setOpenPopover] = useState(false);
 
   const [activeTab, setActiveTab] = useState(1);
-  const [activeTabHead, setActiveTabHead] = useState("file");
   const [selectFileURLRadiology, setSelectFileURLRadiology] = useState([]);
   const [isModalOpenRadiology, setIsModalOpenRadiology] = useState(false);
   const [isModalOpenLab, setIsModalOpenLab] = useState(false);
@@ -428,7 +427,7 @@ const Meat = ({}) => {
     }
   }, [fileInitialPage, findFileKeyword, fileModalTitle]);
 
-  const getPatientDetails = async (
+   const getPatientDetails = async (
     patientId,
     orgId,
     tenId,
@@ -2352,7 +2351,11 @@ const Meat = ({}) => {
                         </div>
                       </div>
 
-                      <div className="col-xl-2 d-grid">
+                      <div className={
+                          activeMeatTitle?.header === "M" && activeMeatTitle?.diagnosisCode?.replace(".", "") ==  item?.diagnosisCode?.replace(".", "")
+                           ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                           : `col-xl-2 d-grid`
+                        }>
                         {item.monitor != "" ? (
                           <Popover
                             placement="topLeft"
@@ -2377,7 +2380,11 @@ const Meat = ({}) => {
                           )}
                         </div>
                       </div>
-                      <div className="col-xl-2 d-grid">
+                      <div className={
+                          activeMeatTitle?.header === "E" && activeMeatTitle?.diagnosisCode?.replace(".", "") ==  item?.diagnosisCode?.replace(".", "")
+                           ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                           : `col-xl-2 d-grid`
+                        }>
                         {item.evaluate != "" ? (
                           <Popover
                             placement="topLeft"
@@ -2402,7 +2409,11 @@ const Meat = ({}) => {
                           )}
                         </div>
                       </div>
-                      <div className="col-xl-2 d-grid">
+                      <div className={
+                          activeMeatTitle?.header === "A" && activeMeatTitle?.diagnosisCode?.replace(".", "") ==  item?.diagnosisCode?.replace(".", "")
+                           ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                           : `col-xl-2 d-grid`
+                        }>
                         {item.assessment != "" ? (
                           <Popover
                             placement="topLeft"
@@ -2428,7 +2439,11 @@ const Meat = ({}) => {
                           )}
                         </div>
                       </div>
-                      <div className="col-xl-2 d-grid">
+                      <div className={
+                          activeMeatTitle?.header === "T" && activeMeatTitle?.diagnosisCode?.replace(".", "") ==  item?.diagnosisCode?.replace(".", "")
+                           ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                           : `col-xl-2 d-grid`
+                        }>
                         {item.treatment != "" ? (
                           <Popover
                             placement="topLeft"
