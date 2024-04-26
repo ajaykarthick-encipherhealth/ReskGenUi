@@ -7,7 +7,7 @@ import moment from "moment";
 import axios from "../../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../../utility/enpoints";
 import styles from "../../hcc/styles.module.css";
-import { getMeatQueryList } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
+import { getMeatQueryList, getPatientDetailsResult } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import RegularButton from "../../../../../../components/button";
 import visitStyles from "../../../../../../styles/visitdata.module.css";
 
@@ -44,14 +44,14 @@ const AddHccForm = ({
     var authorizedProvider = form.selectProviderInfo;
     form.encounterDate = moment(form.encounterDate).format("MM-DD-YYYY");
     form.capturedSections = [form.capturedSections];
-    form.providerInfo = {
+    form.provider = [{
       provider: form.selectProviderInfo == "authorizedProvider" ? true : false,
       noCredential: form.selectProviderInfo == "noCredential" ? true : false,
       unAuthorizeProvider:
         form.selectProviderInfo == "unAuthorizeProvider" ? true : false,
       unSigned: form.selectProviderInfo == "unSigned" ? true : false,
       providerName: form.providerName,
-    };
+    }];
 
     console.log(form);
     setHccFormDetails(form);
@@ -62,15 +62,15 @@ const AddHccForm = ({
     form.radiology = false;
     form.lab = false;
     form.isManuallyAdded = true;
+    form.diagnosisCode = hccFormDetails.diagnosisCode;
+    form.diseaseName = hccFormDetails.actualDescription;
+    form.isMeatCriteriaPresent = true;
     var dataFormat = {
       patientId: patientId,
-      dos: patientDetailsResult?.result?.response?.dos,
+      year: patientDetailsResult?.result?.response?.dos,
       meatDetail: form,
       diseaseFormat: hccFormDetails,
     };
-    console.log(form);
-    console.log(hccFormDetails);
-    console.log(dataFormat);
 
     // if (
     //   (form.assessment && form.assessmentCapturedFromHeader) ||
@@ -91,6 +91,7 @@ const AddHccForm = ({
             placement: "top",
             duration: 1,
           });
+          dispatch(getPatientDetailsResult(patientId));
           dispatch(
             getMeatQueryList(
               patientDetailsResult?.result?.response?.dos,
@@ -296,13 +297,13 @@ const AddHccForm = ({
                 label={
                   <label>
                     Assessment Header&nbsp;
-                    <span style={{ color: "red" }}>*</span>
+                    {/* <span style={{ color: "red" }}>*</span> */}
                   </label>
                 }
                 name="assessmentCapturedFromHeader"
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: "Please Enter Assessment Header.",
                   },
                 ]}
@@ -316,13 +317,13 @@ const AddHccForm = ({
                 label={
                   <label>
                     Assessment&nbsp;
-                    <span style={{ color: "red" }}>*</span>
+                    {/* <span style={{ color: "red" }}>*</span> */}
                   </label>
                 }
                 name="assessment"
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: "Please Enter Assessment.",
                   },
                 ]}
