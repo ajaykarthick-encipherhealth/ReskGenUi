@@ -35,6 +35,7 @@ import {
   faCircleUser,
   faTrash,
   faAngleDown,
+  faPen
 } from "@fortawesome/free-solid-svg-icons";
 import { CalendarOutlined } from "@ant-design/icons";
 import {
@@ -72,6 +73,7 @@ import CamboTree from "../org";
 import AddMeatQuery from "../../components/addMeatQuery";
 import AddHccForm from "../../components/addHccForm";
 import PdfViewer from "../../PdfViewerComponent";
+import EditHccForm from "../../components/editHccForm";
 
 const { Option } = Select;
 const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
@@ -303,6 +305,9 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
   const [hccVersionDetails, setHccVersionDetails] = useState(null);
   const [selectProviderInfo, setSelectProviderInfo] = useState(null);
   const [hccFormTab, setHccFormTab] = useState("HCCFORM");
+  const [isEditHccForm, setIsEditHccForm] = useState(false);
+  const [formValues, setFormValues] = useState(false);
+  const [formEditPlace, setFormEditPlace] = useState("");
 
   const getMeatFound = (code, data, value) => {
     const result = data?.filter(
@@ -553,8 +558,10 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
         validDiseaseNewRes?.map((res, index) => {
           const encounterDatearray = res?.encounterDate?.split(",");
           var providerList = [];
+          var providerDeatils = null;
           res.provider?.map((res, index) => {
             providerList.push(res.providerName);
+            providerDeatils =  res;
           });
 
           if (res.isShow != false) {
@@ -574,7 +581,8 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
               getPlace: "Hcc",
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
-              isComboCode: res.isComboCode
+              isComboCode: res.isComboCode,
+              providerDeatils:providerDeatils,
             });
           }
         });
@@ -642,8 +650,10 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
           suggestRadiologyList.map((res, index) => {
             const encounterDatearray = res?.encounterDate?.split(",");
             var providerList = [];
+            var providerDeatils = null;
             res?.provider?.map((res2, index) => {
               providerList.push(res2.providerName);
+              providerDeatils =  res;
             });
             suggestListAll.push({
               actualDescription: res.actualDescription,
@@ -659,15 +669,18 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
               isMostSpecific: res.isMostSpecific,
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
-              isComboCode: res.isComboCode
+              isComboCode: res.isComboCode,
+              providerDeatils:providerDeatils,
             });
           });
 
           if (result.suggestRadiologyCombo != null) {
             result.suggestRadiologyCombo.map((res, index) => {
               var providerList = [];
+              var providerDeatils = null;
               res.providers?.map((res2, index) => {
                 providerList.push(res2.providerName);
+                providerDeatils =  res;
               });
               const encounterDatearray = res?.encounterDate?.split(",");
               suggestListAll.push({
@@ -681,7 +694,8 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
                 providerName: providerList,
                 isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
-              isComboCode: res.isComboCode
+              isComboCode: res.isComboCode,
+              providerDeatils:providerDeatils,
                 // defaultPosition:res.defaultPosition
               });
             });
@@ -693,8 +707,10 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
           suggestLabList = result.suggestLab;
           suggestLabList.map((res, index) => {
             var providerList = [];
+            var providerDeatils = null;
             res?.provider?.map((res2, index) => {
               providerList.push(res2.providerName);
+              providerDeatils =  res;
             });
             const encounterDatearray = res?.encounterDate?.split(",");
             suggestListAll.push({
@@ -709,7 +725,8 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
               providerName: providerList,
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
-              isComboCode: res.isComboCode
+              isComboCode: res.isComboCode,
+              providerDeatils:providerDeatils,
             });
           });
         }    
@@ -720,8 +737,10 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
             if (res.isShow != false) {
               const encounterDatearray = res?.encounterDate?.split(",");
               var providerList = [];
+              var providerDeatils = null;
               res?.provider?.map((res, index) => {
                 providerList.push(res.providerName);
+                providerDeatils =  res;
               });
                 suggestListAll.push({
                   actualDescription: res.actualDescription,
@@ -738,7 +757,8 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
                   isMostSpecific: res.isMostSpecific,
                   isCmsHcc: res.isCmsHcc,
                   isRxHcc: res.isRxHcc,
-                  isComboCode: res.isComboCode
+                  isComboCode: res.isComboCode,
+                  providerDeatils:providerDeatils,
                 });            
             }
           });
@@ -746,8 +766,10 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
         if (result?.suggestLabInReport) {
           result?.suggestLabInReport?.map((res, index) => {
             var providerList = [];
+            var providerDeatils = null;
             res?.provider?.map((res2, index) => {
               providerList.push(res2?.providerName);
+              providerDeatils =  res;
             });
             const encounterDatearray = res?.encounterDate?.split(",");
             suggestListAll.push({
@@ -762,15 +784,18 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
               providerName: providerList,
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
-              isComboCode: res.isComboCode
+              isComboCode: res.isComboCode,
+              providerDeatils:providerDeatils,
             });
           });
         }
         if (result?.suggestRadiologyInReport) {
           result?.suggestRadiologyInReport?.map((res, index) => {
             var providerList = [];
+            var providerDeatils = null;
             res?.provider?.map((res2, index) => {
               providerList.push(res2.providerName);
+              providerDeatils =  res;
             });
             const encounterDatearray = res?.encounterDate?.split(",");
             suggestListAll.push({
@@ -785,7 +810,8 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
               providerName: providerList,
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
-              isComboCode: res.isComboCode
+              isComboCode: res.isComboCode,
+              providerDeatils:providerDeatils,
             });
           });
         }
@@ -3122,7 +3148,8 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
                               <span className="disease-name d-flex mb-1">
                                 <span className="valid-dis-name">
                                   {data.diagnosisCode}
-                                </span>{" "}
+                                </span>
+                                <FontAwesomeIcon icon={faPen} style={{ cursor: "pointer" }}  onClick={() => {setFormValues(data),setIsEditHccForm(true),setFormEditPlace("VALID_DISEASE")}}/>
                                 <Popover
                                   content={data.dbDescription ? data.dbDescription : data.actualDescription}
                                   title=""
@@ -3393,7 +3420,8 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
                                     <span className="disease-name d-flex mb-1">
                                       <span className="valid-dis-name">
                                         {data.diagnosisCode}
-                                      </span>{" "}
+                                      </span>
+                                      <FontAwesomeIcon icon={faPen} style={{ cursor: "pointer" }}  onClick={() => {setFormValues(data),setIsEditHccForm(true),setFormEditPlace("SUGGESTED_DISEASE")}}/>
                                       <Popover
                                         content={data.dbDescription ? data.dbDescription : data.actualDescription}
                                         title=""
@@ -5430,6 +5458,12 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
       </Offcanvas>
 
       <AddMeatQuery diagnosisCode={inputValue.diagnosisCodeQuery} handleCloseModal={handleCloseModal} isMeatQueryModal={isMeatQueryModal} setIsMeatQueryModal={setIsMeatQueryModal}/>
+      <EditHccForm 
+        formValues={formValues}
+        isEditHccForm={isEditHccForm}
+        setIsEditHccForm={setIsEditHccForm}
+        formEditPlace={formEditPlace}
+      />
     </>
   );
 };
