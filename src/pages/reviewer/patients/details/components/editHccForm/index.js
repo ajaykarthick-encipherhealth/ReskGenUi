@@ -45,11 +45,6 @@ const EditHccForm = ({
   const [providerInfoSelectClose, setProviderInfoSelectClose] = useState(false);
   const [providerInfoAllDetails, setProviderInfoAllDetails] = useState([]);
 
-
-
-
-
-
   const providerInfoList = [
     { value: "authorizedProvider", label: "Authorized Provider" },
     { value: "noCredential", label: "No Credential" },
@@ -59,18 +54,18 @@ const EditHccForm = ({
   const onFinishHcc = async (form) => {
     var patientId = localStorage.getItem("patientId");
     var orgId = localStorage.getItem("orgId");
-    var dataFormat= {
+    var dataFormat = {
       patientId: patientId,
       orgId: orgId,
       previousDiagnosisCode: form.diagnosisCode,
       newPreviousDiagnosisCode: form.diagnosisCode,
-      year:patientDetailsResult?.result.response?.dos,
-      headers:form.sections,
-      providers:form.selectProviderInfo,
-      encounterDate:form.encounterDates,
-    }
+      year: patientDetailsResult?.result.response?.dos,
+      headers: form.sections,
+      providers: form.selectProviderInfo,
+      encounterDate: form.encounterDates,
+    };
     console.log(dataFormat);
-    console.log(providerInfoAllDetails)
+    console.log(providerInfoAllDetails);
     // try {
     //   const response = await axios.post(
     //     ENDPOINTS.apiEndoint +
@@ -120,35 +115,40 @@ const EditHccForm = ({
     }
   };
 
-  const onChangeProvider=(e)=>{
-    setProviderInfo(e)
-  }
-  const onChangeName=(e)=>{
-    setProviderName(e.target.value)
-  }
-  const onChangeEncounterDate=(e)=>{
-    setEncounterDate(e.target.value)
-  }
+  const onChangeProvider = (e) => {
+    setProviderInfo(e);
+  };
+  const onChangeName = (e) => {
+    setProviderName(e.target.value);
+  };
+  const onChangeEncounterDate = (e) => {
+    setEncounterDate(e.target.value);
+  };
 
-  const addProvider=()=>{
+  const addProvider = () => {
     var providers = [];
     var selectProviders = [];
     var providersAllDetails = [];
     providersAllDetails.push({ name: providerName, info: providerInfo });
     providers.push({ value: providerName, label: providerName });
     selectProviders.push(providerName);
-    setProviderNameList([...providers,...providerNameList]);
-    setProviderInfoAllDetails([...providersAllDetails,...providerInfoAllDetails]);
+    setProviderNameList([...providers, ...providerNameList]);
+    setProviderInfoAllDetails([
+      ...providersAllDetails,
+      ...providerInfoAllDetails,
+    ]);
     setProviderName(null);
-    setProviderInfo([])
-  }
-  const addEnconterDate=()=>{
+    setProviderInfo([]);
+  };
+  const addEnconterDate = () => {
     var dates = [];
-    dates.push({ value: moment(encounterDate).format("MM/DD/YYYY"), label: moment(encounterDate).format("MM/DD/YYYY") });
-    setEncounterList([...dates,...encounterList]);
-    setEncounterDate('');
-
-  }
+    dates.push({
+      value: moment(encounterDate).format("MM/DD/YYYY"),
+      label: moment(encounterDate).format("MM/DD/YYYY"),
+    });
+    setEncounterList([...dates, ...encounterList]);
+    setEncounterDate("");
+  };
 
   useEffect(() => {
     setIsFormShow(false);
@@ -242,14 +242,22 @@ const EditHccForm = ({
                     </span>
                   ) : null}
                 </div>
-                <div className="col-xl-6" >
-                  <Form.Item label="Provider Name"  name="selectProviderInfo">
+                <div className="col-xl-6">
+                  <Form.Item label="Provider Name" name="selectProviderInfo">
                     <Select
                       mode="tags"
                       maxTagCount="responsive"
                       className={`ant_select_form hcc_form mb-2`}
-                      open={providerInfoSelectClose == true ? false : providerInfoSelectOpen}
-                      onClick={() => providerInfoSelectClose == true ? setProviderInfoSelectClose(false) : setProviderInfoSelectOpen(true)}
+                      open={
+                        providerInfoSelectClose == true
+                          ? false
+                          : providerInfoSelectOpen
+                      }
+                      onClick={() =>
+                        providerInfoSelectClose == true
+                          ? setProviderInfoSelectClose(false)
+                          : setProviderInfoSelectOpen(true)
+                      }
                       dropdownRender={(menu) => (
                         <>
                           {menu}
@@ -257,7 +265,11 @@ const EditHccForm = ({
                             className={`col-xl-12 ${styles.provideraddheader}`}
                           >
                             <div className="col-xl-12 mt-1">
-                              <Input placeholder="Please enter name" value={providerName} onChange={onChangeName} />
+                              <Input
+                                placeholder="Please enter name"
+                                value={providerName}
+                                onChange={onChangeName}
+                              />
                             </div>
                             <div className="col-xl-12 mt-1">
                               <Select
@@ -274,10 +286,22 @@ const EditHccForm = ({
                               </Select>
                             </div>
                           </div>
-                          <RegularButton type="text" name="Save" width={100} onClick={() => addProvider()}>
+                          <RegularButton
+                            type="text"
+                            name="Save"
+                            width={100}
+                            onClick={() => addProvider()}
+                          >
                             Save
                           </RegularButton>
-                          <RegularButton type="outline" name="Close" width={100}  onClick={() => {setProviderInfoSelectClose(true)}}/>
+                          <RegularButton
+                            type="outline"
+                            name="Close"
+                            width={100}
+                            onClick={() => {
+                              setProviderInfoSelectClose(true);
+                            }}
+                          />
                         </>
                       )}
                     >
@@ -295,7 +319,6 @@ const EditHccForm = ({
                       mode="tags"
                       maxTagCount="responsive"
                       className={`ant_select_form hcc_form mb-2`}
-
                       dropdownRender={(menu) => (
                         <>
                           {menu}
@@ -304,11 +327,21 @@ const EditHccForm = ({
                           >
                             <div className="col-xl-12 mt-1">
                               {/* <DatePicker  type={"date"} format="MM/DD/YYYY"   placeholder="Please select date" value={encounterDate} onChange={onChangeEncounterDate} /> */}
-                             <Input  type={"date"} format="MM/DD/YYYY"   placeholder="Please select date" value={encounterDate} onChange={onChangeEncounterDate} />
-
+                              <Input
+                                type={"date"}
+                                format="MM/DD/YYYY"
+                                placeholder="Please select date"
+                                value={encounterDate}
+                                onChange={onChangeEncounterDate}
+                              />
                             </div>
                           </div>
-                          <RegularButton type="text" name="Save" width={100} onClick={() => addEnconterDate()}>
+                          <RegularButton
+                            type="text"
+                            name="Save"
+                            width={100}
+                            onClick={() => addEnconterDate()}
+                          >
                             Save
                           </RegularButton>
                         </>
