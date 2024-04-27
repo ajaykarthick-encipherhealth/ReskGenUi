@@ -147,6 +147,7 @@ const Index = () => {
     setReceivedSearch("");
     setSentSearch("");
     setSearchVal("");
+    setSelectedCoderOpt("")
   };
   useEffect(() => {
     dispatch(getSelectUserList(selectMemberType));
