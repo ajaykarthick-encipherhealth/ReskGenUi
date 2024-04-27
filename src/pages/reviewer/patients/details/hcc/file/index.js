@@ -78,6 +78,7 @@ import { getPatientDetailsResult } from "../../../../../../store/actions/Reviewe
 import CamboTree from "../org";
 import PdfViewer from "../../PdfViewerComponent";
 import AddHccForm from "../../components/addHccForm";
+import EditHccForm from "../../components/editHccForm";
 
 const { Option } = Select;
 const addOnCodeColor = [
@@ -330,6 +331,8 @@ const File = ({
   const [hyperlinkSeacrh, setHyperlinkSearch] = useState(false);
   const [editCode, setEditCode] = useState(false);
   const [isAddHccForm, setIsAddHccForm] = useState(false);
+  const [isEditHccForm, setIsEditHccForm] = useState(false);
+  const [formValues, setFormValues] = useState(false);
 
   const getMeatFound = (code, data, value) => {
     const result = data?.filter(
@@ -1617,6 +1620,7 @@ const File = ({
     setFindFileKeyword(null);
     setFileLoading(false);
     setActiveTabNumber(activeTabNumber == null ? 0 : null);
+    setIsEditHccForm(false);
   };
 
   const handleOpenModal = async (
@@ -3409,6 +3413,8 @@ const File = ({
                                   <FontAwesomeIcon icon={faPen} />
                                 </Popover>
                               </span> */}
+                               <FontAwesomeIcon icon={faPen} style={{ cursor: "pointer" }}  onClick={() => {setFormValues(data),setIsEditHccForm(true)}}/>
+                              
                               <Popover
                                 content={
                                   data.dbDescription
@@ -4464,6 +4470,13 @@ const File = ({
       ) : (
         opens && showErrorMessage()
       )}
+
+           <EditHccForm 
+              formValues={formValues}
+              isEditHccForm={isEditHccForm}
+              setIsEditHccForm={setIsEditHccForm}
+              handleCloseModal={handleCloseModal}
+            />
     </>
   );
 };
