@@ -14,6 +14,7 @@ import {
 import RegularButton from "../../../../../../components/button";
 import visitStyles from "../../../../../../styles/visitdata.module.css";
 import { PlusOutlined } from "@ant-design/icons";
+import { dateFormat } from "highcharts";
 
 const { TextArea } = Input;
 
@@ -30,7 +31,7 @@ const EditHccForm = ({
     (state) => state?.ReviewerReducers?.patientDetails
   );
   const [isMeatForm, setIsMeatForm] = useState(false);
-  const [addValidCodeCheck, setAddValidCodeCheck] = useState(null);
+  const [addValidCodeCheck, setAddValidCodeCheck] = useState(true);
   const [hccFormDetails, setHccFormDetails] = useState(null);
   const [providerNameList, setProviderNameList] = useState([]);
   const [selectProviderNameList, setSelectProviderNameList] = useState([]);
@@ -53,13 +54,16 @@ const EditHccForm = ({
     { value: "unSigned", label: "Un Signed" },
   ];
   const onFinishHcc = async (form) => {
-    if(addValidCodeCheck){
+    if(addValidCodeCheck == true || addValidCodeCheck == null){
     var patientId = localStorage.getItem("patientId");
     var orgId = localStorage.getItem("orgId");
     const dateList = form.encounterDates;
-    var providerGet = providerInfoAllDetails?.filter((o1) =>
+    var providerGet = [];
+    if(providerInfoAllDetails){
+     providerGet = providerInfoAllDetails?.filter((o1) =>
       form.selectProviderInfo.some((o2) => o1.providerName === o2)
     );
+  }
     var dataFormat = {
       patientId: patientId,
       oldDiagnosisCode: formValues.diagnosisCode,
@@ -77,7 +81,6 @@ const EditHccForm = ({
         dataFormat
       );
       if (response?.data?.status == "SUCCESS") {
-        dispatch(getPatientDetailsResult(patientId));
         setProviderInfoSelectClose(true);
         setTimeout(() => {
           setIsEditHccForm(false);
@@ -87,6 +90,7 @@ const EditHccForm = ({
           placement: "top",
           duration: 1,
         });
+        dispatch(getPatientDetailsResult(patientId));
       } else {
       }
     } catch (e) {}
@@ -218,7 +222,9 @@ const EditHccForm = ({
     setTimeout(() => {
       setIsFormShow(true);
     }, 1);
-    setProviderInfoAllDetails([formValues.providerDeatils]);
+    if(formValues?.providerDeatils){
+      setProviderInfoAllDetails([formValues.providerDeatils]);
+    }
   }, [formValues]);
 
   return (
