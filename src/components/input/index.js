@@ -60,7 +60,7 @@ const InputField = ({
     }
     debounceFunc(text, activeTab);
   };
- 
+
   return (
     <div className="form-group has-search">
       {isSearch && (
