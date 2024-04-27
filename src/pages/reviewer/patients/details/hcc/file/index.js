@@ -584,8 +584,10 @@ const File = ({
         validDiseaseNewRes?.map((res, index) => {
           const encounterDatearray = res?.encounterDate?.split(",");
           var providerList = [];
+          var providerDeatils = null;
           res.provider?.map((res, index) => {
             providerList.push(res.providerName);
+            providerDeatils =  res;
           });
 
           if (res.isShow != false) {
@@ -606,6 +608,7 @@ const File = ({
               dbDescription: res.dbDescription,
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
+              providerDeatils:providerDeatils,
               isComboCode: res.isComboCode
             });
           }
@@ -3423,7 +3426,7 @@ const File = ({
                                   <FontAwesomeIcon icon={faPen} />
                                 </Popover>
                               </span> */}
-                               <FontAwesomeIcon icon={faPen} style={{ cursor: "pointer" }}  onClick={() => {setFormValues(data),setIsEditHccForm(true),setFormEditPlace("HCC")}}/>
+                               <FontAwesomeIcon icon={faPen} style={{ cursor: "pointer" }}  onClick={() => {setFormValues(data),setIsEditHccForm(true),setFormEditPlace("VALID_DISEASE")}}/>
                               
                               <Popover
                                 content={

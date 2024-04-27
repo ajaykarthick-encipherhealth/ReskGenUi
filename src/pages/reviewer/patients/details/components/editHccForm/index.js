@@ -7,7 +7,10 @@ import moment from "moment";
 import axios from "../../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../../utility/enpoints";
 import styles from "../../hcc/styles.module.css";
-import { getMeatQueryList } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
+import {
+  getMeatQueryList,
+  getPatientDetailsResult,
+} from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import RegularButton from "../../../../../../components/button";
 import visitStyles from "../../../../../../styles/visitdata.module.css";
 import { PlusOutlined } from "@ant-design/icons";
@@ -26,7 +29,6 @@ const EditHccForm = ({
   const patientDetailsResult = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
   );
-  // console.log(patientDetailsResult?.result.response?.dos)
   const [isMeatForm, setIsMeatForm] = useState(false);
   const [addValidCodeCheck, setAddValidCodeCheck] = useState(null);
   const [hccFormDetails, setHccFormDetails] = useState(null);
@@ -51,48 +53,54 @@ const EditHccForm = ({
     { value: "unSigned", label: "Un Signed" },
   ];
   const onFinishHcc = async (form) => {
+    if(addValidCodeCheck){
     var patientId = localStorage.getItem("patientId");
     var orgId = localStorage.getItem("orgId");
+    const dateList = form.encounterDates;
+    var providerGet = providerInfoAllDetails?.filter((o1) =>
+      form.selectProviderInfo.some((o2) => o1.providerName === o2)
+    );
     var dataFormat = {
       patientId: patientId,
-      orgId: orgId,
-      previousDiagnosisCode: form.diagnosisCode,
-      newPreviousDiagnosisCode: form.diagnosisCode,
+      oldDiagnosisCode: formValues.diagnosisCode,
+      newDiagnosisCode: form.diagnosisCode,
       year: patientDetailsResult?.result.response?.dos,
-      headers: form.sections,
-      providers: form.selectProviderInfo,
-      encounterDate: form.encounterDates,
-      place:formEditPlace
+      capturedSections: form.sections,
+      provider: providerGet,
+      encounterDate: dateList.join(", "),
+      diseaseSource: formEditPlace,
+      description: form.actualDescription,
     };
-    console.log(dataFormat);
-    console.log(providerInfoAllDetails);
-    // try {
-    //   const response = await axios.post(
-    //     ENDPOINTS.apiEndoint +
-    //       `aiservice/patient/update`,
-    //     dataFormat
-    //   );
-    //   if (response?.status == 200) {
-    //     handleCloseModal();
-    //     notification.success({
-    //       message: "Updated Successfully!",
-    //       placement: "top",
-    //       duration: 1,
-    //     });
-    //     dispatch(
-    //       getMeatQueryList(
-    //         patientDetailsResult?.result?.response?.dos,
-    //         patientId
-    //       )
-    //     );
-    //   } else {
-    //   }
-    // } catch (e) {}
+    try {
+      const response = await axios.put(
+        ENDPOINTS.apiEndoint + `aiservice/disease/editdisease`,
+        dataFormat
+      );
+      if (response?.data?.status == "SUCCESS") {
+        dispatch(getPatientDetailsResult(patientId));
+        setProviderInfoSelectClose(true);
+        setTimeout(() => {
+          setIsEditHccForm(false);
+        }, 1);
+        notification.success({
+          message: "Updated Successfully!",
+          placement: "top",
+          duration: 1,
+        });
+      } else {
+      }
+    } catch (e) {}
+  }else{
+    notification.warning({
+      message: "Please enter valid diagnosis code ",
+      placement: "top",
+      duration: 1,
+    });
+  }
   };
 
   const onFinishFailed = (form) => {};
   const handleChangeCode = (e) => {
-    console.log(e.target.value);
     getFindValidDiagnosisCode(e.target.value);
   };
 
@@ -130,7 +138,15 @@ const EditHccForm = ({
       var providers = [];
       var selectProviders = [];
       var providersAllDetails = [];
-      providersAllDetails.push({ name: providerName, info: providerInfo });
+      var providersMap = {
+        providerName: providerName,
+        authorizedProvider: providerInfo == "authorizedProvider" ? true : false,
+        noCredential: providerInfo == "noCredential" ? true : false,
+        unAuthorizeProvider:
+          providerInfo == "unAuthorizeProvider" ? true : false,
+        unSigned: providerInfo == "unSigned" ? true : false,
+      };
+      providersAllDetails.push(providersMap);
       providers.push({ value: providerName, label: providerName });
       selectProviders.push(providerName);
       setProviderNameList([...providers, ...providerNameList]);
@@ -202,7 +218,8 @@ const EditHccForm = ({
     setTimeout(() => {
       setIsFormShow(true);
     }, 1);
-  }, [formValues?.providerName]);
+    setProviderInfoAllDetails([formValues.providerDeatils]);
+  }, [formValues]);
 
   return (
     <>
@@ -331,7 +348,7 @@ const EditHccForm = ({
                                 setProviderInfoSelectClose(true);
                               }}
                             >
-                              Cancel
+                              Close
                             </Button>
                           </div>
                         </>
