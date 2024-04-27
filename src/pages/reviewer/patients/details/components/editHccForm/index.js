@@ -161,12 +161,7 @@ const EditHccForm = ({
           duration: 1,
         });
       }
-    }else{ notification.warning({
-      message: "Please select date",
-      placement: "top",
-      duration: 1,
-    });
-  }
+    }
   };
 
   const closeModal = () => {
@@ -317,7 +312,11 @@ const EditHccForm = ({
                               className="save-sm-btn"
                               onClick={() => addProvider()}
                               style={{ width: "50px" }}
-                              disabled={providerName && providerInfo.length !=0 ? false : true}
+                              disabled={
+                                providerName && providerInfo.length != 0
+                                  ? false
+                                  : true
+                              }
                             >
                               Add
                             </Button>
