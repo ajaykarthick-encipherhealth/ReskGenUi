@@ -587,7 +587,6 @@ const File = ({
           var providerDeatils = null;
           res.provider?.map((res, index) => {
             providerList.push(res.providerName);
-            providerDeatils =  res;
           });
 
           if (res.isShow != false) {
@@ -608,7 +607,7 @@ const File = ({
               dbDescription: res.dbDescription,
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
-              providerDeatils:providerDeatils,
+              providerDeatils:res.provider,
               isComboCode: res.isComboCode
             });
           }
@@ -681,7 +680,6 @@ const File = ({
             var providerDeatils = null;
             res?.provider?.map((res2, index) => {
               providerList.push(res2.providerName);
-              providerDeatils =  res;
             });
             suggestListAll.push({
               actualDescription: res.actualDescription,
@@ -698,7 +696,7 @@ const File = ({
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
-              providerDeatils:providerDeatils,
+              providerDeatils:res.provider,
             });
           });
 
@@ -708,7 +706,6 @@ const File = ({
               var providerDeatils = null;
               res.providers?.map((res2, index) => {
                 providerList.push(res2.providerName);
-                providerDeatils =  res;
               });
               const encounterDatearray = res?.encounterDate?.split(",");
               suggestListAll.push({
@@ -723,7 +720,7 @@ const File = ({
                 isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
-              providerDeatils:providerDeatils,
+              providerDeatils:res.provider,
                 // defaultPosition:res.defaultPosition
               });
             });
@@ -738,7 +735,6 @@ const File = ({
             var providerDeatils = null;
             res?.provider?.map((res2, index) => {
               providerList.push(res2.providerName);
-              providerDeatils =  res;
             });
             const encounterDatearray = res?.encounterDate?.split(",");
             suggestListAll.push({
@@ -754,7 +750,7 @@ const File = ({
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
-              providerDeatils:providerDeatils,
+              providerDeatils:res.provider,
             });
           });
         }
@@ -767,7 +763,6 @@ const File = ({
               var providerDeatils = null;
               res?.provider?.map((res, index) => {
                 providerList.push(res.providerName);
-                providerDeatils =  res;
               });
               suggestListAll.push({
                 actualDescription: res.actualDescription,
@@ -785,7 +780,7 @@ const File = ({
                 isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
-              providerDeatils:providerDeatils,
+              providerDeatils:res.provider,
               });
             }
           });
@@ -796,7 +791,6 @@ const File = ({
             var providerDeatils = null;
             res?.provider?.map((res2, index) => {
               providerList.push(res2?.providerName);
-              providerDeatils =  res;
             });
             const encounterDatearray = res?.encounterDate?.split(",");
             suggestListAll.push({
@@ -812,7 +806,7 @@ const File = ({
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
-              providerDeatils:providerDeatils,
+              providerDeatils:res.provider,
             });
           });
         }
@@ -822,7 +816,6 @@ const File = ({
             var providerDeatils = null;
             res?.provider?.map((res2, index) => {
               providerList.push(res2.providerName);
-              providerDeatils =  res;
             });
             const encounterDatearray = res?.encounterDate?.split(",");
             suggestListAll.push({
@@ -838,7 +831,7 @@ const File = ({
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
-              providerDeatils:providerDeatils,
+              providerDeatils:res.provider,
             });
           });
         }

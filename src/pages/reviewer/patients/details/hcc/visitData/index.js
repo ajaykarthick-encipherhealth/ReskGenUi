@@ -561,7 +561,6 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
           var providerDeatils = null;
           res.provider?.map((res, index) => {
             providerList.push(res.providerName);
-            providerDeatils =  res;
           });
 
           if (res.isShow != false) {
@@ -582,7 +581,7 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
-              providerDeatils:providerDeatils,
+              providerDeatils:res.provider,
             });
           }
         });
@@ -653,7 +652,6 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
             var providerDeatils = null;
             res?.provider?.map((res2, index) => {
               providerList.push(res2.providerName);
-              providerDeatils =  res;
             });
             suggestListAll.push({
               actualDescription: res.actualDescription,
@@ -670,7 +668,7 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
-              providerDeatils:providerDeatils,
+              providerDeatils:res.provider,
             });
           });
 
@@ -680,7 +678,6 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
               var providerDeatils = null;
               res.providers?.map((res2, index) => {
                 providerList.push(res2.providerName);
-                providerDeatils =  res;
               });
               const encounterDatearray = res?.encounterDate?.split(",");
               suggestListAll.push({
@@ -695,7 +692,7 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
                 isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
-              providerDeatils:providerDeatils,
+              providerDeatils:res.provider,
                 // defaultPosition:res.defaultPosition
               });
             });
@@ -710,7 +707,6 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
             var providerDeatils = null;
             res?.provider?.map((res2, index) => {
               providerList.push(res2.providerName);
-              providerDeatils =  res;
             });
             const encounterDatearray = res?.encounterDate?.split(",");
             suggestListAll.push({
@@ -726,7 +722,7 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
-              providerDeatils:providerDeatils,
+              providerDeatils:res.provider,
             });
           });
         }    
@@ -740,7 +736,6 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
               var providerDeatils = null;
               res?.provider?.map((res, index) => {
                 providerList.push(res.providerName);
-                providerDeatils =  res;
               });
                 suggestListAll.push({
                   actualDescription: res.actualDescription,
@@ -758,7 +753,7 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
                   isCmsHcc: res.isCmsHcc,
                   isRxHcc: res.isRxHcc,
                   isComboCode: res.isComboCode,
-                  providerDeatils:providerDeatils,
+                  providerDeatils:res.provider,
                 });            
             }
           });
@@ -769,7 +764,6 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
             var providerDeatils = null;
             res?.provider?.map((res2, index) => {
               providerList.push(res2?.providerName);
-              providerDeatils =  res;
             });
             const encounterDatearray = res?.encounterDate?.split(",");
             suggestListAll.push({
@@ -785,7 +779,7 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
-              providerDeatils:providerDeatils,
+              providerDeatils:res.provider,
             });
           });
         }
@@ -795,7 +789,6 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
             var providerDeatils = null;
             res?.provider?.map((res2, index) => {
               providerList.push(res2.providerName);
-              providerDeatils =  res;
             });
             const encounterDatearray = res?.encounterDate?.split(",");
             suggestListAll.push({
@@ -811,7 +804,7 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
-              providerDeatils:providerDeatils,
+              providerDeatils:res.provider,
             });
           });
         }

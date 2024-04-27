@@ -21,6 +21,7 @@ const EditHccForm = ({
   setIsEditHccForm,
   formEditPlace,
 }) => {
+  const [form] = Form.useForm()
   const dispatch = useDispatch();
   const patientDetailsResult = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -53,6 +54,8 @@ const EditHccForm = ({
       var patientId = localStorage.getItem("patientId");
       const dateList = form.encounterDates;
       var providerGet = [];
+      console.log(providerInfoAllDetails,form.selectProviderInfo,formValues)
+
       if (providerInfoAllDetails) {
         providerGet = providerInfoAllDetails?.filter((o1) =>
           form.selectProviderInfo.some((o2) => o1.providerName === o2)
@@ -156,6 +159,7 @@ const EditHccForm = ({
         ...providersAllDetails,
         ...providerInfoAllDetails,
       ]);
+      console.log(providerInfoAllDetails)
       setProviderName(null);
       setProviderInfo([]);
     }
@@ -193,8 +197,6 @@ const EditHccForm = ({
   };
 
   useEffect(() => {
-    setIsCHeck(false);
-    setIsFormShow(false);
     var initalForm = {
       diagnosisCode: formValues?.diagnosisCode,
       actualDescription: formValues?.dbDescription,
@@ -202,13 +204,10 @@ const EditHccForm = ({
       encounterDates: selectEncounterList,
       sections: selectSectionList,
     };
-    console.log(initalForm);
     setFormInitialValues(initalForm);
-    setTimeout(() => {
-      setIsCHeck(true);
-      setIsFormShow(true);
-    }, 0);
-  }, [selectEncounterList, selectProviderNameList]);
+    console.log(initalForm)
+    form.setFieldsValue(initalForm)
+  }, [selectEncounterList, selectProviderNameList,form]);
 
   useEffect(() => {
     setIsFormShow(false);
@@ -238,8 +237,9 @@ const EditHccForm = ({
     setSelectEncounterList(selectDates);
     setSectionList(section);
     setSelectSectionList(selectSection);
+    console.log(formValues.providerDeatils)
     if (formValues?.providerDeatils) {
-      setProviderInfoAllDetails([formValues.providerDeatils]);
+      setProviderInfoAllDetails(formValues.providerDeatils);
     }
     var initalForm = {
       diagnosisCode: formValues?.diagnosisCode,
@@ -272,6 +272,7 @@ const EditHccForm = ({
         {isFormShow ? (
           <>
             <Form
+               form={form}
               name="validateOnly"
               layout="vertical"
               autoComplete="off"
