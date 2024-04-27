@@ -2519,7 +2519,7 @@ const File = ({
 
   const stringToColour = (str) => {
     let hash = 0;
-    str.split("").forEach((char) => {
+    str?.split("").forEach((char) => {
       hash = char.charCodeAt(0) + ((hash << 5) - hash);
     });
     let colour = "#";
