@@ -226,6 +226,7 @@ const Index = () => {
     setSentSearch("");
     setTeamSearch("");
     setCoderSearch("");
+    setSelectedCoderOpt("")
   };
   useEffect(() => {
     setIsLoading(false);
