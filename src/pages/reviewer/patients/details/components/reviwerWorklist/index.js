@@ -164,6 +164,13 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
               onChange={(e) => filterChangePatientId(e)}
               className="form-control new-form-control"
               placeholder="Search"
+              maxLength={25}
+              onKeyDown={(e) => {
+                // Prevent input of backslash ("\")
+                if (e.key === "\\") {
+                  e.preventDefault();
+                }
+              }}
             />
             <RangePicker
               open={openPicker}
