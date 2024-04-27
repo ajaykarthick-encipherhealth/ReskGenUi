@@ -411,3 +411,9 @@
 .provideraddheader {
   margin: 10px 0 10px 0px;
 }
+.editAction {
+  float: right;
+}
+.editAction > button {
+  padding: 5px !important;
+}
