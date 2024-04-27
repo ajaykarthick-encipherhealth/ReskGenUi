@@ -57,11 +57,6 @@ const EditHccForm = ({
     { value: "unSigned", label: "Un Signed" },
   ];
   const onFinishHcc = async (form) => {
-    setIsMeatForm(true);
-    if (addValidCodeCheck == null || !addValidCodeCheck) {
-      setAddValidCodeCheck(true);
-    }
-    console.log(form);
     var patientId = localStorage.getItem("patientId");
     var orgId = localStorage.getItem("orgId");
     var dataFormat= {
