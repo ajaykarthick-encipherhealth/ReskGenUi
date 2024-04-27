@@ -589,8 +589,6 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
             getPlace: "Insulin",
             isHccValid: true,
             defaultPosition: null,
-            isCmsHcc: res.isCmsHcc,
-            isRxHcc: res.isRxHcc
           });
         }
 
@@ -4159,10 +4157,10 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
                     >
                       <span className={`${visitStyles.hcc_title_name}`}>
                         HCC
-                        <FontAwesomeIcon
+                        {/* <FontAwesomeIcon
                           onClick={() => addValidCodeFile()}
                           icon={faPlus}
-                        />
+                        /> */}
                       </span>
                       <div className="d-flex justify-content-center">
                         <span className={`${visitStyles.hcc_title_badge}`}>

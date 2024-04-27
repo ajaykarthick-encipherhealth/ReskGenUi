@@ -7,7 +7,7 @@ import moment from "moment";
 import axios from "../../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../../utility/enpoints";
 import styles from "../../hcc/styles.module.css";
-import { getMeatQueryList } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
+import { getMeatQueryList, getPatientDetailsResult } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import RegularButton from "../../../../../../components/button";
 import visitStyles from "../../../../../../styles/visitdata.module.css";
 
@@ -28,7 +28,7 @@ const AddHccForm = ({
   const [isMeatForm, setIsMeatForm] = useState(false);
   const [addValidCodeCheck, setAddValidCodeCheck] = useState(null);
   const [hccFormDetails, setHccFormDetails] = useState(null);
-
+  const [meatDetail, setMeatDetail] = useState(false);
   const providerInfoList = [
     { value: "authorizedProvider", label: "Authorized Provider" },
     { value: "noCredential", label: "No Credential" },
@@ -43,14 +43,15 @@ const AddHccForm = ({
     var authorizedProvider = form.selectProviderInfo;
     form.encounterDate = moment(form.encounterDate).format("MM-DD-YYYY");
     form.capturedSections = [form.capturedSections];
-    form.providerInfo = {
+    form.provider = [{
       provider: form.selectProviderInfo == "authorizedProvider" ? true : false,
       noCredential: form.selectProviderInfo == "noCredential" ? true : false,
       unAuthorizeProvider:
         form.selectProviderInfo == "unAuthorizeProvider" ? true : false,
       unSigned: form.selectProviderInfo == "unSigned" ? true : false,
       providerName: form.providerName,
-    };
+    }];
+
     setHccFormDetails(form);
   };
   const onFinishMeat = async (form) => {
@@ -60,35 +61,48 @@ const AddHccForm = ({
     form.radiology = false;
     form.lab = false;
     form.isManuallyAdded = true;
+    form.diagnosisCode = hccFormDetails.diagnosisCode;
+    form.diseaseName = hccFormDetails.actualDescription;
+    form.isMeatCriteriaPresent = true;
     var dataFormat = {
       patientId: patientId,
-      dos: patientDetailsResult?.result?.response?.dos,
+      year: patientDetailsResult?.result?.response?.dos,
       meatDetail: form,
       diseaseFormat: hccFormDetails,
     };
 
-    try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint +
-          `dbservice/patient/compute/addvaliddisease`,
-        dataFormat
-      );
-      if (response?.status == 200) {
-        handleCloseModal();
-        notification.success({
-          message: "Saved Successfully!",
-          placement: "top",
-          duration: 1,
-        });
-        dispatch(
-          getMeatQueryList(
-            patientDetailsResult?.result?.response?.dos,
-            patientId
-          )
+    // if (
+    //   (form.assessment && form.assessmentCapturedFromHeader) ||
+    //   (form.evaluate && form.evaluateCapturedFromHeader) ||
+    //   (form.monitor && form.monitorCapturedFromHeader) ||
+    //   (treatment && treatmentCapturedFromHeader)
+    // ) {
+      try {
+        const response = await axios.post(
+          ENDPOINTS.apiEndoint +
+            `dbservice/patient/compute/addvaliddisease`,
+          dataFormat
         );
-      } else {
-      }
-    } catch (e) {}
+        if (response?.status == 200) {
+          handleCloseModal();
+          notification.success({
+            message: "Saved Successfully!",
+            placement: "top",
+            duration: 1,
+          });
+          dispatch(getPatientDetailsResult(patientId));
+          dispatch(
+            getMeatQueryList(
+              patientDetailsResult?.result?.response?.dos,
+              patientId
+            )
+          );
+        } else {
+        }
+      } catch (e) {}
+    // } else {
+    //   setMeatDetail(true);
+    // }
   };
   const onFinishFailed = (form) => {};
   const [validated, setValidated] = useState(false);
@@ -134,7 +148,11 @@ const AddHccForm = ({
             onFinishFailed={onFinishFailed}
           >
             <Form.Item
-              label="Code *"
+              label={
+                <label>
+                  Code <span style={{ color: "red" }}>*</span>
+                </label>
+              }
               name="diagnosisCode"
               rules={[
                 {
@@ -158,6 +176,22 @@ const AddHccForm = ({
                 Valid Hcc Code
               </span>
             ) : null}
+            <Form.Item
+              label={
+                <label>
+                  Description <span style={{ color: "red" }}>*</span>
+                </label>
+              }
+              name="actualDescription"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter description",
+                },
+              ]}
+            >
+              <Input name="actualDescription" className={styles.formControl} />
+            </Form.Item>
             <Form.Item label="Provider name" name="providerName">
               <Input name="providerName" className={styles.formControl} />
             </Form.Item>
@@ -171,12 +205,28 @@ const AddHccForm = ({
               </Select>
             </Form.Item>
 
-
-            <Form.Item label="Section" name="capturedSections">
+            <Form.Item
+              label={
+                <label>
+                  Section<span style={{ color: "red" }}>*</span>
+                </label>
+              }
+              name="capturedSections"
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter section code",
+                },
+              ]}
+            >
               <Input name="capturedSections" className={styles.formControl} />
             </Form.Item>
             <Form.Item
-              label="Encounter date *"
+              label={
+                <label>
+                  Encounter date <span style={{ color: "red" }}>*</span>
+                </label>
+              }
               name="encounterDate"
               rules={[
                 {
@@ -185,16 +235,13 @@ const AddHccForm = ({
                 },
               ]}
             >
-              <DatePicker name="encounterDate" format="MM/DD/YYYY"  className="form-datepicker" />
-            </Form.Item>
-            <Form.Item label="Description" name="actualDescription">
-              <TextArea
-                name="actualDescription"
-                className="form-textarea"
-                autoSize={{ minRows: 3, maxRows: 5 }}
+              <DatePicker
+                name="encounterDate"
+                format="MM/DD/YYYY"
+                className="form-datepicker"
               />
             </Form.Item>
-          
+
             <Form.Item>
               <Space>
                 <RegularButton type="submit" name="Next" width={100} />
@@ -246,15 +293,40 @@ const AddHccForm = ({
                 <Input name="evaluate" className={styles.formControl} />
               </Form.Item>
               <Form.Item
-                label="Assessment Header"
+                label={
+                  <label>
+                    Assessment Header&nbsp;
+                    {/* <span style={{ color: "red" }}>*</span> */}
+                  </label>
+                }
                 name="assessmentCapturedFromHeader"
+                rules={[
+                  {
+                    required: false,
+                    message: "Please Enter Assessment Header.",
+                  },
+                ]}
               >
                 <Input
                   name="assessmentCapturedFromHeader"
                   className={styles.formControl}
                 />
               </Form.Item>
-              <Form.Item label="Assessment" name="assessment">
+              <Form.Item
+                label={
+                  <label>
+                    Assessment&nbsp;
+                    {/* <span style={{ color: "red" }}>*</span> */}
+                  </label>
+                }
+                name="assessment"
+                rules={[
+                  {
+                    required: false,
+                    message: "Please Enter Assessment.",
+                  },
+                ]}
+              >
                 <Input name="assessment" className={styles.formControl} />
               </Form.Item>
               <Form.Item
@@ -269,6 +341,8 @@ const AddHccForm = ({
               <Form.Item label="Treatment" name="treatment">
                 <Input name="treatment" className={styles.formControl} />
               </Form.Item>
+
+              {meatDetail && <label className="my-3">Please enter</label>}
               <Form.Item>
                 <Space>
                   <RegularButton type="submit" name="Save" width={100} />
