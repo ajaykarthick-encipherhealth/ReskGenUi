@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { patientsAction } from "./actions";
+import { patientsAction,flagsAction } from "./actions";
 
 const initialState = {
   loading: true,
@@ -32,7 +32,7 @@ const createReducer = (actionType) =>
 
 const dashbaordReducer = combineReducers({
   patients: createReducer(patientsAction),
-
+  flags:createReducer(flagsAction)
 });
 
 export default dashbaordReducer;

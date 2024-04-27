@@ -1629,3 +1629,25 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.cmsStatus {
+  background-color: rgba(209, 218, 250, 1);
+  color: rgba(22, 64, 214, 1);
+  padding: 2px 0px;
+  width: 45px !important;
+  height: 20px;
+  text-align: center;
+  font-size: 12px;
+  border-radius: 5px;
+}
+
+.rxStatus {
+  background-color: rgba(212, 247, 245, 1);
+  color: rgba(34, 170, 166, 1);
+  padding: 2px 0px;
+  width: 45px;
+  height: 20px;
+  text-align: center;
+  font-size: 12px;
+  border-radius: 5px;
+}

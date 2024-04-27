@@ -124,6 +124,7 @@ const Header = ({
   const [openUploader, setOpenUploader] = useState();
   const [openContent, setOpenContent] = useState(false);
   const [popoverVisible, setPopoverVisible] = useState(false);
+  const [searchVal, setSearchVal] = useState("");
 
   const getStatus = (data) => {
     const isCMS = data?.cmsHcc_model_category_V24_for_2023_payment_year;
@@ -223,6 +224,8 @@ const Header = ({
                 key={data?.id}
                 onClick={() => {
                   setSelectedBtn(data?.name);
+                  setSearchVal("");
+                  setSearch("");
                 }}
                 className={
                   selectedbtn === data?.name
@@ -254,7 +257,13 @@ const Header = ({
       </div>
       <div className={styles.codesContainer}>
         <div className={styles.codesContainer2}>
-          <Search searchlabel={""} setSearch={setSearch} />
+          <Search
+            searchlabel={""}
+            setSearch={setSearch}
+            searchVal={searchVal}
+            setSearchVal={setSearchVal}
+            activeTab={"codes"}
+          />
         </div>
       </div>
       <div className={styles.displayDiv}>
@@ -385,12 +394,11 @@ const Header = ({
   };
   useEffect(() => {
     const userRoleLocal = localStorage.getItem("userRole");
-
-    if (selectedbtn && userRoleLocal !== "admin") {
+    if (selectedbtn) {
       dispatch(
         getCoderDetails({
           name: selectedbtn?.toLowerCase(),
-          search: search.toUpperCase(),
+          search: search?.toUpperCase(),
           selectedOption: selectedOption.toLowerCase(),
           router,
         })
@@ -429,7 +437,7 @@ const Header = ({
                     alt="tenetLog"
                     width={70}
                     height={40}
-                    style={{objectFit: 'cover'}}
+                    style={{ objectFit: "cover" }}
                   />
                 </div>
               )}
@@ -484,7 +492,8 @@ const Header = ({
                   <div className="header-profile2 cr-pointer">
                     <div className="nav-link i-false" as="div">
                       <div className="header-info2 d-flex align-items-center">
-                        {userRole !== "admin" && userRole !== "tenant" && (
+                        {/* NOTE i remove userRole !== "admin" logic because PRAVIN told me to show admin also, so if Logesh ask anything to this please tell him like this*/}
+                        {userRole !== "tenant" && (
                           <Popover
                             content={PopContent}
                             placement="bottom"

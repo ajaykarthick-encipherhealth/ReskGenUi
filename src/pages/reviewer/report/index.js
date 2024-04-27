@@ -119,6 +119,7 @@ const Index = () => {
     setCoderSearch("")
     setReceivedSearch("")
     setSentSearch("")
+    setSelectedCoderOpt("")
   };
   useEffect(() => {
     setIsLoading(false);

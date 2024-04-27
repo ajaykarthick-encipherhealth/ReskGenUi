@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "../../../../jsx/layouts/nav/Header";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, connect } from "react-redux";
 import axios from "../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../utility/enpoints";
 import visitStyles from "../../../../styles/visitdata.module.css";
@@ -16,7 +16,7 @@ import {
   faClock,
   faAngleDoubleRight,
   faAngleDoubleLeft,
-  faFile
+  faFile,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   Popover,
@@ -60,8 +60,9 @@ import {
   getHccFileDetails,
   getDosPageNumber,
 } from "../../../../store/actions/ReviewerAction/PatientDetailsAction";
+import { actions as workflowActions } from "../../../../stores/reviewer/workqueue";
 
-const Details = () => {
+const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -111,7 +112,6 @@ const Details = () => {
 
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
   const [selectLabReportFile, setSelectLabReportFile] = useState(null);
-
   const [localUserId, setLocalUserId] = useState("");
   const [localPatientId, setLocalPatientId] = useState("");
   const [isLoadingDos, setIsLoadingDos] = useState(true);
@@ -139,7 +139,6 @@ const Details = () => {
   const [commentsTrigger, setCommentsTrigger] = useState(false);
   const [flagFirstData, setFlagFirstData] = useState([]);
   const [filterDataLoading, setFilterDataLoading] = useState(true);
-
   const [patientResultReload, setPatientResultReload] = useState(false);
   const [selectModalName, setSelectModalName] = useState(false);
   const selectPatientId = useSelector((state) => state.patients?.patiendId);
@@ -151,107 +150,32 @@ const Details = () => {
   const [allocateClicked, setAllocateClicked] = useState(false);
   const [error, setError] = useState({ year: "" });
   const [hccValidCount, setHccValidCount] = useState(0);
+  const [hccCounts, setHccCounts] = useState({isCmsHcc: 0, isRxHcc: 0})
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [workListPatientId, setWorkListPatientId] = useState(null);
 
-  const flagPostList = [
-    {
-      value: "PATIENT_NAME_MISSED",
-      label: (
-        <>
-          PATIENT_NAME_MISSED
-          <i className={visitStyles.name_missed}>{SVGICON.emptyFlagSmall}</i>
-        </>
-      ),
-    },
-    {
-      value: "PATIENT_DOB_MISSED",
-      label: (
-        <>
-          PATIENT_DOB_MISSED
-          <i className={visitStyles.dob_missed}>{SVGICON.emptyFlagSmall}</i>
-        </>
-      ),
-    },
-    {
-      value: "MRN_ID_MISMATCH",
-      label: (
-        <>
-          MRN_ID_MISMATCH
-          <i className={visitStyles.id_missed}>{SVGICON.emptyFlagSmall}</i>
-        </>
-      ),
-    },
-    {
-      value: "PROVIDER_SIGNATURE_MISSED",
-      label: (
-        <>
-          PROVIDER_SIGNATURE_MISSED
-          <i className={visitStyles.signature_missed}>
-            {SVGICON.emptyFlagSmall}
-          </i>
-        </>
-      ),
-    },
-    {
-      value: "PROVIDER_CREDENTIAL_MISSED",
-      label: (
-        <>
-          PROVIDER_CREDENTIAL_MISSED
-          <i className={visitStyles.cred_missed}>{SVGICON.emptyFlagSmall}</i>
-        </>
-      ),
-    },
-    {
-      value: "PROVIDER_SIGN_STATUS_PENDING",
-      label: (
-        <>
-          PROVIDER_SIGN_STATUS_PENDING
-          <i className={visitStyles.sign_status}>{SVGICON.emptyFlagSmall}</i>
-        </>
-      ),
-    },
-    {
-      value: "NO_HCC_FOUND",
-      label: (
-        <>
-          NO_HCC_FOUND
-          <i className={visitStyles.no_hcc_found}>{SVGICON.emptyFlagSmall}</i>
-        </>
-      ),
-    },
-    {
-      value: "NO_VALID_DOCUMENT_FOUND",
-      label: (
-        <>
-          NO_VALID_DOCUMENT_FOUND
-          <i className={visitStyles.no_doc_found}>{SVGICON.emptyFlagSmall}</i>
-        </>
-      ),
-    },
-    {
-      value: "PATIENT_DECEASED",
-      label: (
-        <>
-          PATIENT_DECEASED
-          <i className={visitStyles.patient_diseased}>
-            {SVGICON.emptyFlagSmall}
-          </i>
-        </>
-      ),
-    },
-    {
-      value: "PATIENT_INACTIVE",
-      label: (
-        <>
-          PATIENT_INACTIVE
-          <i className={visitStyles.patient_inactive}>
-            {SVGICON.emptyFlagSmall}
-          </i>
-        </>
-      ),
-    },
-  ];
+  const flagPostList = getFlagsData?.response?.map((item) => ({
+    value: item?.id,
+    label: (
+      <>
+        {item?.flagName}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="23"
+          height="23"
+          viewBox="0 0 800 800"
+          fill={item?.flagColour}
+        >
+          <path
+            d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
+            stroke="#000"
+            stroke-width="10"
+          />
+        </svg>
+      </>
+    ),
+    name: item?.flagName,
+  }));
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -634,10 +558,20 @@ const Details = () => {
               isManuallyAdded: res.isManuallyAdded,
               isHccValid: res.isHccValid,
               defaultPosition: res.defaultPosition,
+              isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
             });
           }
         });
         setHccValidCount(validDisArray.length);
+
+
+        const rxHcc = validDisArray.filter((rx) => rx.isRxHcc == true)
+        const cmsHcc = validDisArray.filter((rx) => rx.isCmsHcc == true)
+        setHccCounts({
+          isCmsHcc: cmsHcc.length > 0 ? cmsHcc.length : 0,
+          isRxHcc: rxHcc.length > 0 ? rxHcc.length : 0,
+        })
 
         setNewValidDiseaseList(validDisArray);
         setDosYearDefalutSelect(highestDosValue[0]);
@@ -774,7 +708,7 @@ const Details = () => {
   };
 
   const handleChangeFlag = async (e) => {
-    setInputValue({ ...inputValue, ["flag"]: e.value });
+    setInputValue({ ...inputValue, ["flagId"]: e.value, ["flag"]: e.name });
   };
 
   const tabList = [
@@ -1140,6 +1074,7 @@ const Details = () => {
         });
         getFlagList();
         setCommentsTrigger(false);
+        setIsModalComments(false);
       } else {
       }
     }
@@ -1298,11 +1233,11 @@ const Details = () => {
           ? `/supervisor/auditing?${queryString}`
           : "/supervisor/auditing";
         navigate.push(url);
-      }else if (navigate.query.isSupervisorUser) {
+      } else if (navigate.query.isSupervisorUser) {
         const url = queryString
-        ? `/supervisor/user/userQueue?${queryString}`
-        : "/supervisor/user/userQueue";
-      navigate.push(url);
+          ? `/supervisor/user/userQueue?${queryString}`
+          : "/supervisor/user/userQueue";
+        navigate.push(url);
       } else {
         navigate.back();
       }
@@ -1323,7 +1258,9 @@ const Details = () => {
   };
 
   const splitUserName = (name) => {
-    return name[0];
+    if (name) {
+      return name[0];
+    }
   };
 
   const getCommentsList = async () => {
@@ -1362,7 +1299,9 @@ const Details = () => {
       ENDPOINTS.apiEndoint +
         `dbservice/flagdetails?patientId=${
           localPatientId ? localPatientId : ""
-        }&year=${selectedDosValue ? selectedDosValue : ""}`
+        }&year=${selectedDosValue ? selectedDosValue : ""}&flagId=${
+          inputValue?.flagId
+        }`
     );
     setFlagResultList(response.data.response);
     if (response.data.response.length != 0) {
@@ -1420,8 +1359,8 @@ const Details = () => {
         data = (
           <div className={visitStyles.userDetailsCard}>
             <div className={visitStyles.avatarStyle}>
-              <Avatar size={60}>{splitUserName(result.userName)}</Avatar>
-              <span className={visitStyles.userRole}>{result.role[0]}</span>
+              <Avatar size={60}>{splitUserName(result?.userName)}</Avatar>
+              <span className={visitStyles.userRole}>{result?.role[0]}</span>
             </div>
             <div className={visitStyles.userNameDetails}>
               <FontAwesomeIcon icon={faUserCircle} />
@@ -1697,7 +1636,11 @@ const Details = () => {
       getPatientListToDetails(workListPatientId, localOrgId, localTenantId);
     }
   }, [workListPatientId]);
-  
+
+  useEffect(() => {
+    workFgetFlagsowData();
+  }, []);
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -1733,7 +1676,7 @@ const Details = () => {
                         <div className={`${visitStyles.patient_info_details}`}>
                           <div className="card-body">
                             <div className="row">
-                              <div className="col-xl-3 col-sm-12">
+                              <div className="col-xl-2 col-sm-12">
                                 <FontAwesomeIcon icon={faIdCardClip} />
                                 <label>Patient ID</label>
                                 <h6
@@ -1756,7 +1699,10 @@ const Details = () => {
 
                                 <label>File Name</label>
                                 <h6 className="ageDtails">
-                                  {patientDocumentResult?.fileDetailDTO?.fileName}
+                                  {
+                                    patientDocumentResult?.fileDetailDTO
+                                      ?.fileName
+                                  }
                                 </h6>
                               </div>
                               <div className="col-xl-1 col-sm-12">
@@ -1788,12 +1734,8 @@ const Details = () => {
                                   {patientDocumentResult.dob}
                                 </h6>
                               </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-xl-1 col-sm-12">
-                        <div className={visitStyles.priorityStatus}>
+                              <div className="col-xl-1 col-sm-12">
+                        <div className={`${visitStyles.priorityStatus} p-0`}>
                           {patienIdDetails?.priority == "URGENT" ? (
                             <div className={visitStyles.priorityStatusIcon}>
                               <i>{SVGICON.alert}</i>
@@ -1853,15 +1795,35 @@ const Details = () => {
                               </span>
                             </div>
                           )}
-
-                          <div className={`${visitStyles.hccCountHeader} `}>
-                            <label>HCC</label>
-
-                            <h6 className="ageDtails">{hccValidCount}</h6>
+                         
+                        </div>
+                      </div>
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div className="col-xl-1 col-sm-12 d-flex">
+                      <div className="col-xl-1 col-sm-12">
+                        <div className={visitStyles.priorityStatus}>
+                         
+                          <div className={`${visitStyles.hccCountHeader} `}>
+                            <label>CMS</label>
+
+                            <h6 className="ageDtails">{hccCounts.isCmsHcc}</h6>
+                          </div>
+                          <div className={`${visitStyles.hccCountHeader} `}>
+                            <label>RX</label>
+
+                            <h6 className="ageDtails">{hccCounts.isRxHcc}</h6>
+                          </div>
+                          <div className={`${visitStyles.hccCountHeader} `}>
+                            <label>TOTAL</label>
+
+                            <h6 className="ageDtails">{hccValidCount}</h6>
+                          </div>
+                         
+                        </div>
+                      </div>
+                      <div className="col-xl-1 col-sm-12 px-4 d-flex">
                         <div className={`${visitStyles.rafscoreheader} `}>
                           <label>Score</label>
                           {patientDetails?.rafScore != null ? (
@@ -2324,7 +2286,10 @@ const Details = () => {
                           {patientResultReload ? (
                             <>
                               {activeTab == 1 ? (
-                                <Hcc patientHccResult={patientDocumentResult} year={dosYearDefalutSelect}/>
+                                <Hcc
+                                  patientHccResult={patientDocumentResult}
+                                  year={dosYearDefalutSelect}
+                                />
                               ) : activeTab == 2 ? (
                                 <NonHcc
                                   patientNonHccResult={patientDocumentResult}
@@ -2903,7 +2868,7 @@ const Details = () => {
                                     <Avatar
                                       className={visitStyles.timeLineUsername}
                                     >
-                                      {splitUserName(data.commentCreatedBy)}
+                                      {splitUserName(data?.commentCreatedBy)}
                                     </Avatar>
                                   </Popover>
                                 </Tooltip>
@@ -2940,7 +2905,7 @@ const Details = () => {
                             <div className="row">
                               <div className="col-xl-12">
                                 <textarea
-                                style={{cursor:"default !important"}}
+                                  style={{ cursor: "default !important" }}
                                   className={visitStyles.commentsFormControl}
                                   rows="5"
                                   required
@@ -2985,7 +2950,7 @@ const Details = () => {
                                     <Avatar
                                       className={visitStyles.timeLineUsername}
                                     >
-                                      {splitUserName(data.commentCreatedBy)}
+                                      {splitUserName(data?.commentCreatedBy)}
                                     </Avatar>
                                   </Popover>
                                 </Tooltip>
@@ -3056,7 +3021,7 @@ const Details = () => {
                                     <Avatar
                                       className={visitStyles.timeLineUsername}
                                     >
-                                      {splitUserName(data.notesCreatedBy)}
+                                      {splitUserName(data?.notesCreatedBy)}
                                     </Avatar>
                                   </Popover>
                                 </Tooltip>
@@ -3115,4 +3080,12 @@ const Details = () => {
   );
 };
 
-export default Details;
+const enhancer = connect(
+  (state) => ({
+    getFlagsData: state?.reviewer?.workQueue?.flags?.data,
+  }),
+  {
+    workFgetFlagsowData: workflowActions.flagsAction,
+  }
+);
+export default enhancer(Details);

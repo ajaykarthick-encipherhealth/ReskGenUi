@@ -37,7 +37,6 @@ const AddHccForm = ({
   ];
   const onFinishHcc = async (form) => {
     setIsMeatForm(true);
-    console.log(addValidCodeCheck);
     if (addValidCodeCheck == null || !addValidCodeCheck) {
       setAddValidCodeCheck(true);
     }
@@ -53,12 +52,12 @@ const AddHccForm = ({
       providerName: form.providerName,
     }];
 
-    console.log(form);
     setHccFormDetails(form);
   };
   const onFinishMeat = async (form) => {
     var patientId = localStorage.getItem("patientId");
     form.encounterDate = hccFormDetails.encounterDate;
+    form.diagnosisCode= hccFormDetails.diagnosisCode;    
     form.radiology = false;
     form.lab = false;
     form.isManuallyAdded = true;

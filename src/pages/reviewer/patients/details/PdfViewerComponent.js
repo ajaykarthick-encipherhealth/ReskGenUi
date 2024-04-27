@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import ENDPOINTS from "../../../../utility/enpoints";
 
-const PdfViewer = ({ src, searchQuery, pageNumber }) => {
+const PdfViewer = ({ src, searchQuery, pageNumber, headers }) => {
   const [iframeSrc, setIframeSrc] = useState("");
+
   useEffect(() => {
     if (src) {
       const pdfUrl = encodeURIComponent(src);
@@ -13,7 +14,7 @@ const PdfViewer = ({ src, searchQuery, pageNumber }) => {
         if (searchQuery) {
           const encodedSearchQuery = encodeURIComponent(`${searchQuery}`);
           queryParams.push(
-            `search=${encodedSearchQuery}&casesensitive=true&phrase=true&wholeword=true&entireword=true`
+            `search=${encodedSearchQuery.toLocaleLowerCase()}&casesensitive=true&phrase=true&wholeword=true&entireword=true&headers=${headers}`
           );
         }
         if (pageNumber) {
@@ -31,7 +32,7 @@ const PdfViewer = ({ src, searchQuery, pageNumber }) => {
         id="pdfViewer"
         title="PDF Viewer"
         frameBorder="0"
-        width={'100%'}
+        width={"100%"}
         height="700"
         src={iframeSrc}
       />

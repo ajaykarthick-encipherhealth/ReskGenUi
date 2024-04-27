@@ -91,7 +91,13 @@ const addOnCodeColor = [
   "geekblue",
   "purple",
 ];
-const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
+const File = ({
+  popoverVisible,
+  setPopoverVisible,
+  year,
+  setActiveTabHead,
+  setActiveMeatTitle,
+}) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
   let searchKeywords = [];
@@ -593,6 +599,8 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
               children: res.children,
               getPlace: "Hcc",
               dbDescription: res.dbDescription,
+              isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
             });
           }
         });
@@ -644,6 +652,8 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                 isHccValid: res.isHccValid,
                 defaultPosition: res.defaultPosition,
                 providerName: providerList,
+                isCmsHcc: res.isCmsHcc,
+                isRxHcc: res.isRxHcc
               });
             }
           });
@@ -673,6 +683,8 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
               providerName: providerList,
               children: res.children ? res.children : [],
               isMostSpecific: res.isMostSpecific,
+              isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
             });
           });
 
@@ -692,6 +704,8 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                 getPlace: "Radio-combo",
                 isHccValid: true,
                 providerName: providerList,
+                isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
                 // defaultPosition:res.defaultPosition
               });
             });
@@ -717,6 +731,8 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
               isHccValid: true,
               defaultPosition: res.defaultPosition,
               providerName: providerList,
+              isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
             });
           });
         }
@@ -742,6 +758,8 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                 providerName: providerList,
                 children: res.children ? res.children : [],
                 isMostSpecific: res.isMostSpecific,
+                isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
               });
             }
           });
@@ -763,6 +781,8 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
               isHccValid: true,
               defaultPosition: res.defaultPosition,
               providerName: providerList,
+              isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
             });
           });
         }
@@ -783,6 +803,8 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
               isHccValid: true,
               defaultPosition: res.defaultPosition,
               providerName: providerList,
+              isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
             });
           });
         }
@@ -1666,7 +1688,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
-    var splitPoint = actualDescription;
+    var splitPoint = actualDescription.substring(" ", 20);
     var pageNumber = null;
     var data = {
       fileId: fileId,
@@ -1696,6 +1718,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
         setSearch({
           value: splitPoint,
           page: pageNumber,
+          headers: result?.first,
         });
         setFileInitialPage(pageNumber);
         setFileDosPageNumber(pageNumber);
@@ -1715,6 +1738,10 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
         setFileLoading(false);
       }
     } catch (error) {
+      setSearch({
+        value: headerNames,
+        headers: true,
+      });
       splitPoint = headerNames;
       if (findFileKeyword == headerNames) {
         setFileLoading(false);
@@ -1744,7 +1771,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
       fileId: fileId,
       header: headerNames,
       dos: encounterDatesValue,
-      stringFileWord: actualDescription,
+      stringFileWord: actualDescription.substring(" ", 20),
       diagnosisCode: diagnosisCode,
     };
     try {
@@ -1776,6 +1803,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
         setSearch({
           value: splitPoint,
           page: result?.pageNumber,
+          headers: false,
         });
         setFileInitialPage(pageNumber);
         setFileDosPageNumber(pageNumber);
@@ -1826,6 +1854,10 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
       setFileDosPageNumber(null);
       var splitPoint = disDescription.substring(" ", 40);
       setFindFileKeyword(splitPoint);
+      setSearch({
+        value: splitPoint,
+        headers: true,
+      });
       setTimeout(() => {
         var dataset = "Lab" + " - (" + disDescription + ")";
         setSelectMeatName(dataset);
@@ -1976,6 +2008,10 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
     if (radiologyCheck == true) {
       var splitPoint = disDescription.substring(" ", 40);
       setFindFileKeyword(splitPoint);
+      setSearch({
+        value: splitPoint,
+        headers: true,
+      });
       setTimeout(() => {
         var dataset = "Radiology" + " - (" + disDescription + ")";
         setSelectMeatName(dataset);
@@ -2096,8 +2132,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
       capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndoint +
-        `dbservice/update/move/validtosuggested`,
+      ENDPOINTS.apiEndoint + `dbservice/update/move/validtosuggested`,
       dataFormatSuggested
     );
     var result = response.data;
@@ -2125,8 +2160,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
       capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndoint +
-        `dbservice/update/move/validtodeleted`,
+      ENDPOINTS.apiEndoint + `dbservice/update/move/validtodeleted`,
       dataFormatSuggested
     );
     var result = response.data;
@@ -2154,8 +2188,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
       capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndoint +
-        `dbservice/update/move/suggestedtodeleted`,
+      ENDPOINTS.apiEndoint + `dbservice/update/move/suggestedtodeleted`,
       dataFormatSuggested
     );
     var result = response.data;
@@ -2183,8 +2216,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
       capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndoint +
-        `dbservice/update/move/suggestedtovalid`,
+      ENDPOINTS.apiEndoint + `dbservice/update/move/suggestedtovalid`,
       dataFormatSuggested
     );
     var result = response.data;
@@ -2212,8 +2244,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
       capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndoint +
-        `dbservice/update/move/deletedtovalid`,
+      ENDPOINTS.apiEndoint + `dbservice/update/move/deletedtovalid`,
       dataFormatSuggested
     );
     var result = response.data;
@@ -2240,8 +2271,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
       capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndoint +
-        `dbservice/update/move/deletedtoSuggested`,
+      ENDPOINTS.apiEndoint + `dbservice/update/move/deletedtoSuggested`,
       dataFormatSuggested
     );
     var result = response.data;
@@ -2269,8 +2299,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
       capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndoint +
-        `dbservice/update/move/invalidtovalid`,
+      ENDPOINTS.apiEndoint + `dbservice/update/move/invalidtovalid`,
       dataFormatSuggested
     );
     var result = response.data;
@@ -2414,8 +2443,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
 
       try {
         const response = await axios.post(
-          ENDPOINTS.apiEndoint +
-            `dbservice/patient/compute/addvaliddisease`,
+          ENDPOINTS.apiEndoint + `dbservice/patient/compute/addvaliddisease`,
           dataFormatSuggested
         );
         if (response?.status == 200) {
@@ -3273,7 +3301,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
   // }
 
   const updateCall = async (data) => {
-    const orgId = localStorage.getItem('orgId')
+    const orgId = localStorage.getItem("orgId");
     const response = await axios.put(
       ENDPOINTS.apiEndoint + `aiservice/patient/update`,
       {
@@ -3281,10 +3309,10 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
         orgId: orgId,
         previousDiagnosisCode: data.diagnosisCode,
         newPreviousDiagnosisCode: editDiagnosisCode,
-        year: year.value
+        year: year.value,
       }
     );
-    setEditCode(true)
+    setEditCode(true);
     setEditDiagnosisCode("");
   };
 
@@ -3370,8 +3398,9 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                             <span className="disease-name d-flex mb-1">
                               <span className="valid-dis-name">
                                 {data.diagnosisCode}
-                              </span>{" "}
-                              <span className="">
+                              </span>
+                              {/* removed reason for demo */}
+                              {/* <span className="">
                                 <Popover
                                   content={updateCode(data)}
                                   title=""
@@ -3379,7 +3408,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                                 >
                                   <FontAwesomeIcon icon={faPen} />
                                 </Popover>
-                              </span>
+                              </span> */}
                               <Popover
                                 content={
                                   data.dbDescription
@@ -3514,9 +3543,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                               {getCaptureSectionBackgroundFile(
                                 data?.capturedSections,
                                 data?.encounterDate,
-                                data.dbDescription
-                                ? data.dbDescription
-                                : data.actualDescription,
+                                data?.actualDescription,
                                 data?.diagnosisCode,
                                 data?.dbDescription
                               )}
@@ -3536,29 +3563,67 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                           <div
                             className={`${visitStyles.encounterAndSectionHeader}`}
                           >
-                            <div className={`cr-pointer ${styles.meatFoundContainer}`}>
-                              <div onClick={()=>setActiveTabHead(4)}>
+                            <div className="d-flex justify-content-end mt-2">
+                              {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
+                            {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
+                            </div>
+                            <div
+                              className={`cr-pointer ${styles.meatFoundContainer}`}
+                            >
+                              <div
+                                onClick={() => {
+                                  setActiveTabHead(4);
+                                  setActiveMeatTitle({
+                                    header: "M",
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}
+                              >
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
                                   "M"
                                 )}
                               </div>
-                              <div onClick={()=>setActiveTabHead(4)}>
+                              <div
+                                onClick={() => {
+                                  setActiveTabHead(4);
+                                  setActiveMeatTitle({
+                                    header: "E",
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}
+                              >
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
                                   "E"
                                 )}
                               </div>
-                              <div onClick={()=>setActiveTabHead(4)}>
+                              <div
+                                onClick={() => {
+                                  setActiveTabHead(4);
+                                  setActiveMeatTitle({
+                                    header: "A",
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}
+                              >
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
                                   "A"
                                 )}
                               </div>
-                              <div onClick={()=>setActiveTabHead(4)}>
+                              <div
+                                onClick={() => {
+                                  setActiveTabHead(4);
+                                  setActiveMeatTitle({
+                                    header: "T",
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}
+                              >
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
@@ -3664,6 +3729,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                     src={selectFileURL}
                     searchQuery={search?.value ? search?.value : ""}
                     pageNumber={search?.page ? search?.page : 1}
+                    headers={search?.headers}
                   />
                 )}
               </>
@@ -3864,6 +3930,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                               <div
                                 className={`${visitStyles.hoverActiveHcc} d-flex justify-content-between`}
                               >
+                            
                                 <div>
                                   <div className="">
                                     <div
@@ -3877,7 +3944,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                                       {getEncounterDateBackground(
                                         data.encounterDateSplit
                                       )}
-                                    </div>                                   
+                                    </div>
                                   </div>
 
                                   {data.getPlace == "Lab" ? (
@@ -3912,9 +3979,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                                       {getCaptureSectionBackgroundFile(
                                         data?.capturedSections,
                                         data?.encounterDate,
-                                        data.dbDescription
-                                        ? data.dbDescription
-                                        : data.actualDescription,
+                                        data?.actualDescription,
                                         data?.diagnosisCode
                                       )}
                                     </div>
@@ -3923,29 +3988,67 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
-                                     <div className={`cr-pointer ${styles.meatFoundContainer}`}>
-                              <div onClick={()=>setActiveTabHead(4)}>
+                                   <div className="d-flex justify-content-end mt-2">
+                              {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
+                            {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
+                            </div>
+                            <div
+                              className={`cr-pointer ${styles.meatFoundContainer}`}
+                            >
+                              <div
+                                onClick={() => {
+                                  setActiveTabHead(4);
+                                  setActiveMeatTitle({
+                                    header: "M",
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}
+                              >
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
                                   "M"
                                 )}
                               </div>
-                              <div onClick={()=>setActiveTabHead(4)}>
+                              <div
+                                onClick={() => {
+                                  setActiveTabHead(4);
+                                  setActiveMeatTitle({
+                                    header: "E",
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}
+                              >
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
                                   "E"
                                 )}
                               </div>
-                              <div onClick={()=>setActiveTabHead(4)}>
+                              <div
+                                onClick={() => {
+                                  setActiveTabHead(4);
+                                  setActiveMeatTitle({
+                                    header: "A",
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}
+                              >
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
                                   "A"
                                 )}
                               </div>
-                              <div onClick={()=>setActiveTabHead(4)}>
+                              <div
+                                onClick={() => {
+                                  setActiveTabHead(4);
+                                  setActiveMeatTitle({
+                                    header: "T",
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}
+                              >
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
@@ -3972,25 +4075,25 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                                       Insulin
                                     </span>
                                   ) : null}
-                                   {data.getPlace == "Lab" ? (
-                                      <Tooltip title="LAB">
-                                        <span
-                                          className={` mt-2 ${visitStyles.labStatus}`}
-                                          bg={`  mt-2 bg-bg-seven `}
-                                        >
-                                          Lab
-                                        </span>
-                                      </Tooltip>
-                                    ) : data.getPlace == "Radio" ? (
-                                      <Tooltip title="RADIOLOGY">
-                                        <span
-                                          className={` mt-2 ${visitStyles.radiologyStatus}`}
-                                          bg={`  mt-2 bg-bg-eight `}
-                                        >
-                                          Radiology
-                                        </span>
-                                      </Tooltip>
-                                    ) : null}
+                                  {data.getPlace == "Lab" ? (
+                                    <Tooltip title="LAB">
+                                      <span
+                                        className={` mt-2 ${visitStyles.labStatus}`}
+                                        bg={`  mt-2 bg-bg-seven `}
+                                      >
+                                        Lab
+                                      </span>
+                                    </Tooltip>
+                                  ) : data.getPlace == "Radio" ? (
+                                    <Tooltip title="RADIOLOGY">
+                                      <span
+                                        className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                        bg={`  mt-2 bg-bg-eight `}
+                                      >
+                                        Radiology
+                                      </span>
+                                    </Tooltip>
+                                  ) : null}
                                 </div>
                               </div>
                             </div>
@@ -4112,7 +4215,8 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                               </div>
                             </Popconfirm>
                           </div>
-                          <div className={`${visitStyles.hoverActiveHcc}`}>
+                          <div className={`${visitStyles.hoverActiveHcc} d-flex justify-content-between` }>
+                            <div>
                             <div className="">
                               <div
                                 className={`${visitStyles.encounterAndSectionHeader}`}
@@ -4133,12 +4237,19 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                               {getCaptureSectionBackgroundFile(
                                 data?.capturedSections,
                                 data?.encounterDate,
-                                data.dbDescription
-                                ? data.dbDescription
-                                : data.actualDescription,
+                                data?.actualDescription,
                                 data?.diagnosisCode
                               )}
                             </div>
+                            </div>
+                            <div
+                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                >
+                                   <div className="d-flex justify-content-end mt-2">
+                              {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
+                            {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
+                            </div>
+                              </div>
                           </div>
                         </div>
                       </li>
@@ -4164,7 +4275,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
           // height={400}
         >
           <div className="section-container">
-            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+            {/* <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
               <div
                 style={{
                   height: "80vh",
@@ -4185,7 +4296,15 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                   )}
                 />
               </div>
-            </Worker>
+            </Worker> */}
+            {selectFileURLRadiology && (
+              <PdfViewer
+                src={selectFileURLRadiology}
+                searchQuery={search?.value ? search?.value : ""}
+                pageNumber={search?.page ? search?.page : 1}
+                headers={search?.headers}
+              />
+            )}
           </div>
         </Modal>
       )}
@@ -4202,7 +4321,7 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
           // height={400}
         >
           <div className="section-container">
-            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+            {/* <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
               <div
                 style={{
                   height: "80vh",
@@ -4223,7 +4342,15 @@ const File = ({ popoverVisible, setPopoverVisible, year,setActiveTabHead }) => {
                   )}
                 />
               </div>
-            </Worker>
+            </Worker> */}
+            {labReportFile && (
+              <PdfViewer
+                src={labReportFile}
+                searchQuery={search?.value ? search?.value : ""}
+                pageNumber={search?.page ? search?.page : 1}
+                headers={search?.headers}
+              />
+            )}
           </div>
         </Modal>
       )}

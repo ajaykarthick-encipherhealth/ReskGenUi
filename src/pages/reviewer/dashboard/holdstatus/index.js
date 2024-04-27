@@ -65,7 +65,7 @@ const HoldStatus = ({ getHoldStatusData, holdStatusData }) => {
         ) : (
           <tr>
             <td colSpan="2">
-              <Empty />
+              <Empty  style={{  paddingTop:"50px", textAlign:"center",height:"260px"}} />
             </td>
           </tr>
         )}

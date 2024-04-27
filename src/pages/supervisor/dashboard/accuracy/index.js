@@ -362,12 +362,7 @@ const Accuracy = () => {
     ],
   };
   useEffect(() => {
-    if (
-      accuracyDatas?.data?.response?.mapAccuracy &&
-      !month &&
-      !year &&
-      !initialAccuracyData
-    ) {
+    if (accuracyDatas?.data?.response?.mapAccuracy) {
       setInitialAccuracyData(accuracyDatas?.data?.response?.mapAccuracy);
     }
   }, [accuracyDatas]);
@@ -468,23 +463,10 @@ const Accuracy = () => {
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
                   {initialAccuracyData &&
-                  initialAccuracyData[
-                    getHighlightedIndex(
-                      currentBtn,
-                      selectedYear,
-                      selectedMonth,
-                      currentDate
-                    ) - 1
-                  ]
+                  initialAccuracyData[currentDate?.getMonth()]
                     ? `${Math.round(
-                        initialAccuracyData[
-                          getHighlightedIndex(
-                            currentBtn,
-                            selectedYear,
-                            selectedMonth,
-                            currentDate
-                          )
-                        ]?.averageScore
+                        initialAccuracyData[currentDate?.getMonth()]
+                          ?.averageScore
                       )}%`
                     : "0%"}
                 </span>
@@ -492,7 +474,7 @@ const Accuracy = () => {
             </div>
           </div>
         </Card>
-      </div>
+      </div> 
     </>
   );
 };

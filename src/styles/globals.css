@@ -14445,8 +14445,8 @@ input[type="number"] {
   display: none;
 }
 .adminCompleted > div {
-  height: 250px !important;
-  margin-top: 10px !important;
+  height: auto !important;
+  margin-top: 15px !important;
 }
 .form-datepicker {
   box-shadow: none !important;
@@ -14455,4 +14455,8 @@ input[type="number"] {
 .form-datepicker:hover {
   box-shadow: none !important;
   border: 1px solid #d9d9d9 !important;
+}
+.confirmPass>span>input{
+  border:1px solid red;
+  margin-top: -5px !important;
 }

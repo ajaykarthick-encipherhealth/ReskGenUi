@@ -88,7 +88,7 @@ const addOnCodeColor = [
   "geekblue",
   "purple",
 ];
-const Meat = ({}) => {
+const Meat = ({activeMeatTitle}) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
   let searchKeywords = [];
@@ -169,7 +169,6 @@ const Meat = ({}) => {
   const [openPopover, setOpenPopover] = useState(false);
 
   const [activeTab, setActiveTab] = useState(1);
-  const [activeTabHead, setActiveTabHead] = useState("file");
   const [selectFileURLRadiology, setSelectFileURLRadiology] = useState([]);
   const [isModalOpenRadiology, setIsModalOpenRadiology] = useState(false);
   const [isModalOpenLab, setIsModalOpenLab] = useState(false);
@@ -428,7 +427,7 @@ const Meat = ({}) => {
     }
   }, [fileInitialPage, findFileKeyword, fileModalTitle]);
 
-  const getPatientDetails = async (
+   const getPatientDetails = async (
     patientId,
     orgId,
     tenId,
@@ -1392,7 +1391,7 @@ const Meat = ({}) => {
     setSelectMeatResult(meatresult);
     setFileLoading(true);
     setIsModalOpen(true);
-    var splitPoint = disDescription;
+    var splitPoint = disDescription.substring(" ", 20);
     var dotLoading = (
       <div className={visitStyles.loadingFileHeader}>
         <Spinner />
@@ -1422,6 +1421,7 @@ const Meat = ({}) => {
         setSearch({
           value: splitPoint,
           page: pageNumber,
+          headers: result?.first,
         });
         setFileInitialPage(pageNumber);
         setFileDosPageNumber(pageNumber);
@@ -1446,7 +1446,7 @@ const Meat = ({}) => {
       splitPoint = value;
       setSearch({
         value: splitPoint,
-        page: null,
+        headers: true,
       });
       if (findFileKeyword == value) {
         setFileLoading(false);
@@ -1467,7 +1467,7 @@ const Meat = ({}) => {
     setSelectMeatResult(meatresult);
     setFileLoading(true);
     setIsModalOpen(true);
-    var splitPoint = disDescription;
+    var splitPoint = disDescription.substring(" ", 20);;
     var dotLoading = (
       <div className={visitStyles.loadingFileHeader}>
         <Spinner />
@@ -1499,7 +1499,8 @@ const Meat = ({}) => {
             meatresult
           );
         }
-        pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
+        // pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
+        splitPoint = result?.searchString;
         setSearch({
           value: splitPoint,
           page: result?.pageNumber,
@@ -2350,7 +2351,11 @@ const Meat = ({}) => {
                         </div>
                       </div>
 
-                      <div className="col-xl-2 d-grid">
+                      <div className={
+                          activeMeatTitle?.header === "M" && activeMeatTitle?.diagnosisCode?.replace(".", "") ==  item?.diagnosisCode?.replace(".", "")
+                           ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                           : `col-xl-2 d-grid`
+                        }>
                         {item.monitor != "" ? (
                           <Popover
                             placement="topLeft"
@@ -2375,7 +2380,11 @@ const Meat = ({}) => {
                           )}
                         </div>
                       </div>
-                      <div className="col-xl-2 d-grid">
+                      <div className={
+                          activeMeatTitle?.header === "E" && activeMeatTitle?.diagnosisCode?.replace(".", "") ==  item?.diagnosisCode?.replace(".", "")
+                           ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                           : `col-xl-2 d-grid`
+                        }>
                         {item.evaluate != "" ? (
                           <Popover
                             placement="topLeft"
@@ -2400,7 +2409,11 @@ const Meat = ({}) => {
                           )}
                         </div>
                       </div>
-                      <div className="col-xl-2 d-grid">
+                      <div className={
+                          activeMeatTitle?.header === "A" && activeMeatTitle?.diagnosisCode?.replace(".", "") ==  item?.diagnosisCode?.replace(".", "")
+                           ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                           : `col-xl-2 d-grid`
+                        }>
                         {item.assessment != "" ? (
                           <Popover
                             placement="topLeft"
@@ -2426,7 +2439,11 @@ const Meat = ({}) => {
                           )}
                         </div>
                       </div>
-                      <div className="col-xl-2 d-grid">
+                      <div className={
+                          activeMeatTitle?.header === "T" && activeMeatTitle?.diagnosisCode?.replace(".", "") ==  item?.diagnosisCode?.replace(".", "")
+                           ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                           : `col-xl-2 d-grid`
+                        }>
                         {item.treatment != "" ? (
                           <Popover
                             placement="topLeft"
@@ -2920,6 +2937,7 @@ const Meat = ({}) => {
                     src={selectFileURL}
                     searchQuery={search?.value ? search?.value : ""}
                     pageNumber={search?.page ? search?.page : 1}
+                    headers={search?.headers}
                   />
                 )}
               </>

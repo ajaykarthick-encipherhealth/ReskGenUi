@@ -74,7 +74,7 @@ import AddHccForm from "../../components/addHccForm";
 import PdfViewer from "../../PdfViewerComponent";
 
 const { Option } = Select;
-const VisitData = ({setActiveTabHead}) => {
+const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
   let searchKeywords = [];
@@ -572,6 +572,8 @@ const VisitData = ({setActiveTabHead}) => {
               isMostSpecific: res.isMostSpecific,
               children: res.children,
               getPlace: "Hcc",
+              isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
             });
           }
         });
@@ -587,6 +589,8 @@ const VisitData = ({setActiveTabHead}) => {
             getPlace: "Insulin",
             isHccValid: true,
             defaultPosition: null,
+            isCmsHcc: res.isCmsHcc,
+            isRxHcc: res.isRxHcc
           });
         }
 
@@ -622,6 +626,8 @@ const VisitData = ({setActiveTabHead}) => {
                 isHccValid: res.isHccValid,
                 defaultPosition: res.defaultPosition,
                 providerName: providerList,
+                isCmsHcc: res.isCmsHcc,
+                isRxHcc: res.isRxHcc
               });
             }
           });
@@ -651,6 +657,8 @@ const VisitData = ({setActiveTabHead}) => {
               providerName: providerList,
               children: res.children ? res.children : [],
               isMostSpecific: res.isMostSpecific,
+              isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
             });
           });
 
@@ -670,6 +678,8 @@ const VisitData = ({setActiveTabHead}) => {
                 getPlace: "Radio-combo",
                 isHccValid: true,
                 providerName: providerList,
+                isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
                 // defaultPosition:res.defaultPosition
               });
             });
@@ -695,6 +705,8 @@ const VisitData = ({setActiveTabHead}) => {
               isHccValid: true,
               defaultPosition: res.defaultPosition,
               providerName: providerList,
+              isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
             });
           });
         }    
@@ -721,6 +733,8 @@ const VisitData = ({setActiveTabHead}) => {
                   providerName: providerList,
                   children: res.children ? res.children : [],
                   isMostSpecific: res.isMostSpecific,
+                  isCmsHcc: res.isCmsHcc,
+                  isRxHcc: res.isRxHcc
                 });            
             }
           });
@@ -742,6 +756,8 @@ const VisitData = ({setActiveTabHead}) => {
               isHccValid: true,
               defaultPosition: res.defaultPosition,
               providerName: providerList,
+              isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
             });
           });
         }
@@ -762,6 +778,8 @@ const VisitData = ({setActiveTabHead}) => {
               isHccValid: true,
               defaultPosition: res.defaultPosition,
               providerName: providerList,
+              isCmsHcc: res.isCmsHcc,
+              isRxHcc: res.isRxHcc
             });
           });
         }
@@ -1298,7 +1316,7 @@ const VisitData = ({setActiveTabHead}) => {
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
-    var splitPoint = actualDescription;
+    var splitPoint = actualDescription.substring(" ", 20);
     var pageNumber = null;
     var data = {
       fileId: fileId,
@@ -1328,6 +1346,7 @@ const VisitData = ({setActiveTabHead}) => {
         setSearch({
           value: splitPoint,
           page: pageNumber,
+          headers: result?.first,
         });
         setFileInitialPage(pageNumber);
         setFileDosPageNumber(pageNumber);
@@ -1349,8 +1368,8 @@ const VisitData = ({setActiveTabHead}) => {
     } catch (error) {
       splitPoint = headerNames;
       setSearch({
-        value: splitPoint,
-        page: null,
+        value: headerNames,
+        headers: true,
       });
       if (findFileKeyword == headerNames) {
         setFileLoading(false);
@@ -1379,7 +1398,7 @@ const VisitData = ({setActiveTabHead}) => {
       fileId: fileId,
       header: headerNames,
       dos: encounterDatesValue,
-      stringFileWord: actualDescription,
+      stringFileWord: actualDescription.substring(" ", 20),
       diagnosisCode: diagnosisCode,
     };
     try {
@@ -1389,7 +1408,7 @@ const VisitData = ({setActiveTabHead}) => {
       );
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
-        pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
+        // pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
         splitPoint = result?.searchString
         if (result == null) {
            return findValueDocuments(
@@ -1501,13 +1520,13 @@ const VisitData = ({setActiveTabHead}) => {
         const encounterDatesHeader = encounterDatesValue[0];
         var splitPoint = "";
         var pageNumber = null;
-        splitPoint = actualDescription;
+        splitPoint = actualDescription.substring(" ", 20);
         var data = {
-          fileId:fileId,
+          fileId: fileId,
           header: headerNames,
-          dos:encounterDatesValue,
-          stringFileWord:splitPoint      
-        }
+          dos: encounterDatesValue,
+          stringFileWord: splitPoint,
+        };
         try {
           const response = await axios.post(ENDPOINTS.apiEndoint +`dbservice/pageNumber`,data);
           var result = response.data.response;
@@ -1543,12 +1562,13 @@ const VisitData = ({setActiveTabHead}) => {
           setSearch({
             value: splitPoint,
             page: pageNumber,
+            headers: result?.first,
           });
         } catch (error) {
           splitPoint = headerNames;
           setSearch({
             value: splitPoint,
-            page: null,
+            headers: true,
           });
           if (findFileKeyword == headerNames) {
             setFileLoading(false);
@@ -1639,6 +1659,10 @@ const VisitData = ({setActiveTabHead}) => {
       setFileDosPageNumber(null);
       var splitPoint = disDescription.substring(" ", 40);
       setFindFileKeyword(splitPoint);
+      setSearch({
+        value: splitPoint,
+        headers: true,
+      });
       setTimeout(() => {
         var dataset = "Lab" + " - (" + disDescription + ")";
         setSelectMeatName(dataset);
@@ -1680,12 +1704,12 @@ const VisitData = ({setActiveTabHead}) => {
         const encounterDatesHeader = encounterDatesValue[0];
         var splitPoint = "";
         var pageNumber = null;
-        splitPoint = actualDescription;
+        splitPoint = actualDescription.substring(" ", 20);
         var data = {
           fileId: fileId,
           header: headerNames,
           dos: encounterDatesValue,
-          stringFileWord: actualDescription,
+          stringFileWord: actualDescription.substring(" ", 20),
           diagnosisCode: value,
         };
         try {
@@ -1825,6 +1849,10 @@ const VisitData = ({setActiveTabHead}) => {
     if (radiologyCheck == true) {
       var splitPoint = disDescription.substring(" ", 40);
       setFindFileKeyword(splitPoint);
+      setSearch({
+        value: splitPoint,
+        headers: true,
+      });
       setTimeout(() => {
         var dataset = "Radiology" + " - (" + disDescription + ")";
         setSelectMeatName(dataset);
@@ -3215,9 +3243,7 @@ const VisitData = ({setActiveTabHead}) => {
                                   data.capturedSections,
                                   null,
                                   data.encounterDate,
-                                  data.dbDescription
-                                  ? data.dbDescription
-                                  : data.actualDescription,
+                                  data.actualDescription,
                                   null,
                                   data.diagnosisCode
                                 )}
@@ -3238,6 +3264,10 @@ const VisitData = ({setActiveTabHead}) => {
                             <div
                               className={`${visitStyles.encounterAndSectionHeader}`}
                             >
+                              <div className="d-flex justify-content-end mt-2">
+                              {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
+                            {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
+                            </div>
                               <div className={`cr-pointer ${styles.meatFoundContainer}`}>
                               <div onClick={()=> setActiveTabHead(4)}>
                                 {getMeatFound(
@@ -3246,21 +3276,45 @@ const VisitData = ({setActiveTabHead}) => {
                                   "M"
                                 )}
                               </div>
-                              <div onClick={()=> setActiveTabHead(4)}>
+                              <div
+                                onClick={() => {
+                                  setActiveTabHead(4);
+                                  setActiveMeatTitle({
+                                    header: "E",
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}
+                              >
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
                                   "E"
                                 )}
                               </div>
-                              <div onClick={()=>setActiveTabHead(4)}>
+                              <div
+                                onClick={() => {
+                                  setActiveTabHead(4);
+                                  setActiveMeatTitle({
+                                    header: "A",
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}
+                              >
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
                                   "A"
                                 )}
                               </div>
-                              <div onClick={()=>setActiveTabHead(4)}>
+                              <div
+                                onClick={() => {
+                                  setActiveTabHead(4);
+                                  setActiveMeatTitle({
+                                    header: "T",
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}
+                              >
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
@@ -3522,9 +3576,7 @@ const VisitData = ({setActiveTabHead}) => {
                                   data.capturedSections,
                                   null,
                                   data.encounterDate,
-                                  data.dbDescription
-                                        ? data.dbDescription
-                                        : data.actualDescription,
+                                  data.actualDescription,
                                   null,
                                   data.diagnosisCode
                                 )}
@@ -3534,29 +3586,63 @@ const VisitData = ({setActiveTabHead}) => {
                               <div
                             className={`${visitStyles.encounterAndSectionHeader}`}
                           >
+                            <div className="d-flex justify-content-end mt-2">
+                              {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
+                            {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
+                            </div>
                              <div className={`cr-pointer ${styles.meatFoundContainer}`}>
-                              <div onClick={()=>setActiveTabHead(4)}>
+                              <div onClick={()=>{
+                                  setActiveTabHead(4);
+                                  setActiveMeatTitle({
+                                    header: "M",
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}>
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
                                   "M"
                                 )}
                               </div>
-                              <div onClick={()=>setActiveTabHead(4)}>
+                              <div
+                                onClick={() => {
+                                  setActiveTabHead(4);
+                                  setActiveMeatTitle({
+                                    header: "E",
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}
+                              >
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
                                   "E"
                                 )}
                               </div>
-                              <div onClick={()=>setActiveTabHead(4)}>
+                              <div
+                                onClick={() => {
+                                  setActiveTabHead(4);
+                                  setActiveMeatTitle({
+                                    header: "A",
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}
+                              >
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
                                   "A"
                                 )}
                               </div>
-                              <div onClick={()=>setActiveTabHead(4)}>
+                              <div
+                                onClick={() => {
+                                  setActiveTabHead(4);
+                                  setActiveMeatTitle({
+                                    header: "T",
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}
+                              >
                                 {getMeatFound(
                                   data?.diagnosisCode,
                                   meatCriteriaList,
@@ -3717,7 +3803,8 @@ const VisitData = ({setActiveTabHead}) => {
                               </div>
                             </Popconfirm>
                           </div>
-                          <div className={`${visitStyles.hoverActiveHcc}`}>
+                          <div className={`${visitStyles.hoverActiveHcc} d-flex justify-content-between`}>
+                            <div>
                             <div className="">
                               <div
                                 className={`${visitStyles.encounterAndSectionHeader}`}
@@ -3740,13 +3827,19 @@ const VisitData = ({setActiveTabHead}) => {
                                 data.capturedSections,
                                 null,
                                 data.encounterDate,
-                                data.dbDescription
-                                ? data.dbDescription
-                                : data.actualDescription,
+                                data.actualDescription,
                                 "Suggested",
                                 data.diagnosisCode
                               )}
                             </div>
+                            </div> <div
+                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                >
+                                   <div className="d-flex justify-content-end mt-2">
+                              {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
+                            {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
+                            </div>
+                              </div>
                           </div>
                         </div>
                       </li>
@@ -4039,6 +4132,7 @@ const VisitData = ({setActiveTabHead}) => {
                     src={selectFileURL}
                     searchQuery={search?.value ? search?.value : ""}
                     pageNumber={search?.page ? search?.page : 1}
+                    headers={search?.headers}
                   />)}
               </div>
             </div>
@@ -4077,157 +4171,224 @@ const VisitData = ({setActiveTabHead}) => {
                       </div>
                     </div>
                     <div className={visitStyles.container}>
-                      <div className={visitStyles.hccStickey_head}>
-                        {newValidDiseaseList.map((data, i) => (
-                          <li>
-                            <div
-                              className={`hccActiveCard ${visitStyles.hcc_card}`}
-                            >
-                              <div
-                                className={`${visitStyles.hcc_card_nameHead}`}
-                              >
-                                <div>
-                                  <span className="disease-name d-flex mb-1">
-                                    <span className="valid-dis-name">
-                                      {data.diagnosisCode}
-                                    </span>{" "}
-                                    <Popover
-                                      content={data.dbDescription ? data.dbDescription : data.actualDescription}
-                                      title=""
-                                      trigger="hover"
-                                    >
-                                    
-                                        <> - {data.dbDescription ? data.dbDescription : data.actualDescription}</>
-                                   
-                                    </Popover>
-                                  </span>
-                                </div>
-
-                                {data.defaultPosition ==
-                                "VALID" ? null : data.defaultPosition ==
-                                  "INVALID" ? (
-                                  <span
-                                    className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
-                                  ></span>
-                                ) : data.defaultPosition == "SUGGESTED" ? (
-                                  <span
-                                    className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
-                                  ></span>
-                                ) : data.defaultPosition == "DELETED" ? (
-                                  <span
-                                    className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
-                                  ></span>
-                                ) : null}
+                    <div className={visitStyles.hccStickey_head}>
+                    {newValidDiseaseList.map((data, i) => (
+                      <li>
+                        <div
+                          className={`hccActiveCard ${visitStyles.hcc_card}`}
+                        >
+                          <div className={`${visitStyles.hcc_card_nameHead}`}>
+                            <div className="media-body">
+                              <span className="disease-name d-flex mb-1">
+                                <span className="valid-dis-name">
+                                  {data.diagnosisCode}
+                                </span>{" "}
                                 <Popover
-                                  onClick={() =>
-                                    getValidHccDetails(
-                                      data.actualDescription,
-                                      data.diagnosisCode
-                                    )
-                                  }
-                                  content={PopContentHccVersion}
-                                  title={data.diagnosisCode}
-                                  placement="bottom"
-                                  trigger="click"
+                                  content={data.dbDescription ? data.dbDescription : data.actualDescription}
+                                  title=""
+                                  trigger="hover"
                                 >
-                                  <Tooltip
-                                    title="HCC Version Details"
-                                    placement="bottom"
-                                  >
-                                    <i className="cr-pointer">
-                                      {SVGICON.infoIcon}
-                                    </i>
-                                  </Tooltip>
+                                
+                                    <> - {data.dbDescription ? data.dbDescription : data.actualDescription}</>
+                                 
                                 </Popover>
+                              </span>
+                            </div>
 
-                                <Popconfirm
-                                  title="Choose an action"
-                                  icon={
-                                    <QuestionCircleOutlined
-                                      style={{
-                                        color: "blue",
-                                      }}
-                                    />
-                                  }
-                                  okText="Move to Deleted"
-                                  cancelText="Move to Suggested"
-                                  onCancel={validToSuggested}
-                                  okButtonProps={{
-                                    type: buttonClicked ? "primary" : "default",
+                            {data.defaultPosition ==
+                            "VALID" ? null : data.defaultPosition ==
+                              "INVALID" ? (
+                              <span
+                                className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
+                              ></span>
+                            ) : data.defaultPosition == "SUGGESTED" ? (
+                              <span
+                                className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
+                              ></span>
+                            ) : data.defaultPosition == "DELETED" ? (
+                              <span
+                                className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
+                              ></span>
+                            ) : null}
+                            <Popover
+                              onClick={() =>
+                                getValidHccDetails(
+                                  data.actualDescription,
+                                  data.diagnosisCode
+                                )
+                              }
+                              content={PopContentHccVersion}
+                              title={data.diagnosisCode}
+                              placement="bottom"
+                              trigger="click"
+                            >
+                              <Tooltip
+                                title="HCC Version Details"
+                                placement="bottom"
+                              >
+                                <i className="cr-pointer">{SVGICON.infoIcon}</i>
+                              </Tooltip>
+                            </Popover>
+
+                            <Popconfirm
+                              title="Choose an action"
+                              icon={
+                                <QuestionCircleOutlined
+                                  style={{
+                                    color: "blue",
                                   }}
-                                  cancelButtonProps={{
-                                    type: buttonClicked ? "danger" : "default",
-                                  }}
-                                  description={data.diagnosisCode}
-                                  onConfirm={confirmvalid}
-                                  placement="leftTop"
-                                  onOpenChange={() =>
-                                    onchangeValid(data.diagnosisCode, data)
-                                  }
-                                >
-                                  <div className={visitStyles.close_icon}>
-                                    {
-                                      <FontAwesomeIcon
-                                        icon={faArrowsAlt}
-                                        style={{
-                                          size: 8,
-                                          color: "#a80404",
-                                        }}
-                                      />
-                                    }
-                                  </div>
-                                </Popconfirm>
+                                />
+                              }
+                              okText="Move to Deleted"
+                              cancelText="Move to Suggested"
+                              onCancel={validToSuggested}
+                              okButtonProps={{
+                                type: buttonClicked ? "primary" : "default",
+                              }}
+                              cancelButtonProps={{
+                                type: buttonClicked ? "danger" : "default",
+                              }}
+                              description={data.diagnosisCode}
+                              onConfirm={confirmvalid}
+                              placement="leftTop"
+                              onOpenChange={() =>
+                                onchangeValid(data.diagnosisCode, data)
+                              }
+                            >
+                              <div className={visitStyles.close_icon}>
+                                {
+                                  <FontAwesomeIcon
+                                    icon={faArrowsAlt}
+                                    style={{
+                                      size: 8,
+                                      color: "#a80404",
+                                    }}
+                                  />
+                                }
                               </div>
-                              <div className={`${visitStyles.hoverActiveHcc}`}>
-                                <div
-                                  className={`${visitStyles.encounterAndSectionHeader}`}
-                                >
-                                  {getProviderNameList(data?.providerName)}
-                                </div>
-                                <div
-                                  className={`${visitStyles.encounterAndSectionHeader}`}
-                                >
-                                  {getEncounterDateBackground(
-                                    data.encounterDateSplit
-                                  )}
-                                </div>
-                                <div
-                                  className={`${visitStyles.encounterAndSectionHeader}`}
-                                >
-                                  {data.isManuallyAdded == true ? (
-                                    <Badge
-                                      className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
-                                    >
-                                      Manually Added
-                                    </Badge>
-                                  ) : null}
-                                </div>
-                                <div
-                                  className={`${visitStyles.encounterAndSectionHeader}`}
-                                >
-                                  {getCaptureSectionBackgroundFile(
-                                    data?.capturedSections,
-                                    data?.encounterDate,
-                                    data?.actualDescription,
-                                    data?.diagnosisCode
-                                  )}
-                                </div>
-                                {/* {data?.isMostSpecific == true ? (
-                                  <div
-                                    className={`${visitStyles.encounterAndSectionHeader}`}
-                                  >
-                                    <span
-                                      className={`mt-2 text-start cr-pointer ${styles.mostSpecificTag}`}
-                                    >
-                                      IsMostSpecific
-                                    </span>
-                                  </div>
-                                ) : null} */}
+                            </Popconfirm>
+                            {data.isMostSpecific == true && (
+                              <div
+                                className={visitStyles.close_icon}
+                                style={{ background: "#c7f3c6" }}
+                                onClick={() => {
+                                  setOpens(true);
+                                  setCombiTree([{ ...data, expanded: true }]);
+                                }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faSitemap}
+                                  style={{
+                                    size: 8,
+                                    color: "#088f39",
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </div>
+                          <div className="d-flex justify-content-between">
+                            <div className={`${visitStyles.hoverActiveHcc}`}>
+                              <div
+                                className={`${visitStyles.encounterAndSectionHeader}`}
+                              >
+                                {getProviderNameList(data?.providerName)}
+                              </div>
+                              <div
+                                className={`${visitStyles.encounterAndSectionHeader}`}
+                              >
+                                {getEncounterDateBackgroundHcc(
+                                  data.encounterDateSplit,
+                                  data.diagnosisCode
+                                )}
+                              </div>
+
+                              <div
+                                className={`${visitStyles.encounterAndSectionHeader}`}
+                              >
+                                {getCaptureSectionBackground(
+                                  data.capturedSections,
+                                  null,
+                                  data.encounterDate,
+                                  data.actualDescription,
+                                  null,
+                                  data.diagnosisCode
+                                )}
+                              </div>
+
+                              {/* {data.isMostSpecific == true ? (
+                                          <div
+                                            className={`${visitStyles.encounterAndSectionHeader}`}
+                                          >
+                                            <span
+                                              className={`mt-2 text-start cr-pointer ${styles.mostSpecificTag}`}
+                                            >
+                                              IsMostSpecific
+                                            </span>
+                                          </div>
+                                        ) : null} */}
+                            </div>
+                            <div
+                              className={`${visitStyles.encounterAndSectionHeader}`}
+                            >
+                              <div className="d-flex justify-content-end mt-2">
+                              {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
+                            {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
+                            </div>
+                              <div className={`cr-pointer ${styles.meatFoundContainer}`}>
+                              <div onClick={()=> setActiveTabHead(4)}>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "M"
+                                )}
+                              </div>
+                              <div onClick={()=> setActiveTabHead(4)}>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "E"
+                                )}
+                              </div>
+                              <div onClick={()=>setActiveTabHead(4)}>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "A"
+                                )}
+                              </div>
+                              <div onClick={()=>setActiveTabHead(4)}>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "T"
+                                )}
                               </div>
                             </div>
-                          </li>
-                        ))}
-                      </div>
+                              <div
+                                className={`${visitStyles.encounterAndSectionHeader}`}
+                              >
+                                {data.isManuallyAdded == true ? (
+                                  <Badge
+                                    className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                  >
+                                    Manually Added
+                                  </Badge>
+                                ) : null}
+                              </div>
+                              {data.getPlace == "Insulin" ? (
+                                <span
+                                  className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                  bg={`  mt-2 bg-bg-eight `}
+                                >
+                                  Insulin
+                                </span>
+                              ) : null}
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    ))}
+                  </div>
                     </div>
                   </ul>
                 </div>
@@ -4261,6 +4422,7 @@ const VisitData = ({setActiveTabHead}) => {
                     src={selectFileURL}
                     searchQuery={search?.value ? search?.value : ""}
                     pageNumber={search?.page ? search?.page : 1}
+                    headers={search?.headers}
                   />)}
                 </div>
               </div>
@@ -4435,8 +4597,9 @@ const VisitData = ({setActiveTabHead}) => {
                                         )}
                                       </div>
                                       <div
-                                        className={`${visitStyles.hoverActiveHcc}`}
+                                        className={`${visitStyles.hoverActiveHcc}  d-flex justify-content-between`}
                                       >
+                                        <div>
                                         <div className="">
                                           <div
                                             className={`${visitStyles.encounterAndSectionHeader}`}
@@ -4509,6 +4672,83 @@ const VisitData = ({setActiveTabHead}) => {
                                             )}
                                           </div>
                                         )}
+                                        </div>
+                                        <div
+                            className={`${visitStyles.encounterAndSectionHeader}`}
+                          >
+                            <div className="d-flex justify-content-end mt-2">
+                              {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
+                            {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
+                            </div>
+                             <div className={`cr-pointer ${styles.meatFoundContainer}`}>
+                              <div onClick={()=>setActiveTabHead(4)}>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "M"
+                                )}
+                              </div>
+                              <div onClick={()=>setActiveTabHead(4)}>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "E"
+                                )}
+                              </div>
+                              <div onClick={()=>setActiveTabHead(4)}>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "A"
+                                )}
+                              </div>
+                              <div onClick={()=>setActiveTabHead(4)}>
+                                {getMeatFound(
+                                  data?.diagnosisCode,
+                                  meatCriteriaList,
+                                  "T"
+                                )}
+                              </div>
+                            </div>
+                            <div
+                              className={`${visitStyles.encounterAndSectionHeader}`}
+                            >
+                              {data.isManuallyAdded == true ? (
+                                <Badge
+                                  className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                >
+                                  Manually Added
+                                </Badge>
+                              ) : null}
+                            </div>
+                            {data.getPlace == "Insulin" ? (
+                              <span
+                                className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                bg={`  mt-2 bg-bg-eight `}
+                              >
+                                Insulin
+                              </span>
+                            ) : null}
+                              {data.getPlace == "Lab" ? (
+                                    <Tooltip title="LAB">
+                                      <span
+                                        className={` mt-2 ${visitStyles.labStatus}`}
+                                        bg={`  mt-2 bg-bg-seven `}
+                                      >
+                                        Lab
+                                      </span>
+                                    </Tooltip>
+                                  ) : data.getPlace == "Radio" ? (
+                                    <Tooltip title="RADIOLOGY">
+                                      <span
+                                        className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                        bg={`  mt-2 bg-bg-eight `}
+                                      >
+                                        Radiology
+                                      </span>
+                                    </Tooltip>
+                                  ) : null}
+                          </div>
                                       </div>
                                     </div>
                                   </li>
@@ -4632,8 +4872,9 @@ const VisitData = ({setActiveTabHead}) => {
                                   </Popconfirm>
                                 </div>
                                 <div
-                                  className={`${visitStyles.hoverActiveHcc}`}
+                                  className={`${visitStyles.hoverActiveHcc} d-flex justify-content-between`}
                                 >
+                                  <div>
                                   <div className="">
                                     <div
                                       className={`${visitStyles.encounterAndSectionHeader}`}
@@ -4657,7 +4898,15 @@ const VisitData = ({setActiveTabHead}) => {
                                       data?.actualDescription,
                                       data?.diagnosisCode
                                     )}
-                                  </div>
+                                  </div></div>
+                                  <div
+                                  className={`${visitStyles.encounterAndSectionHeader} `}
+                                >
+                                   <div className="d-flex justify-content-end mt-2">
+                              {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
+                            {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
+                            </div>
+                              </div>
                                 </div>
                               </div>
                             </li>
@@ -4950,12 +5199,14 @@ const VisitData = ({setActiveTabHead}) => {
                 />
               </div>
             </Worker> */}
-              {selectFileURL && (
+              {selectFileURLRadiology && (
                   <PdfViewer
-                    src={selectFileURL}
+                    src={selectFileURLRadiology}
                     searchQuery={search?.value ? search?.value : ""}
                     pageNumber={search?.page ? search?.page : 1}
-                  />)}
+                    headers={search?.headers}
+                  />
+                )}
           </div>
         </Modal>
       )}
@@ -4969,6 +5220,7 @@ const VisitData = ({setActiveTabHead}) => {
           onOk={handleCloseModal}
           onCancel={handleCloseModal}
           width="70%"
+          footer={false}
           // height={400}
         >
           <div className="section-container">
@@ -4994,12 +5246,14 @@ const VisitData = ({setActiveTabHead}) => {
                 />
               </div>
             </Worker> */}
-              {selectFileURL && (
+                {labReportFile && (
                   <PdfViewer
-                    src={selectFileURL}
+                    src={labReportFile}
                     searchQuery={search?.value ? search?.value : ""}
                     pageNumber={search?.page ? search?.page : 1}
-                  />)}
+                    headers={search?.headers}
+                  />
+                )}
           </div>
         </Modal>
       )}

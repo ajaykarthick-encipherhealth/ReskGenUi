@@ -510,6 +510,8 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
                               style={{
                                 margin: "30px 0 0 10px",
                                 cursor: "pointer",
+                                width:"100px"
+
                               }}
                               onClick={() => setShowFilters(!showFilters)}
                             >
