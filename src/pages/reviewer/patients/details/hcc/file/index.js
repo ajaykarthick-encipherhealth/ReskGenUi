@@ -605,7 +605,8 @@ const File = ({
               getPlace: "Hcc",
               dbDescription: res.dbDescription,
               isCmsHcc: res.isCmsHcc,
-              isRxHcc: res.isRxHcc
+              isRxHcc: res.isRxHcc,
+              isComboCode: res.isComboCode
             });
           }
         });
@@ -658,7 +659,8 @@ const File = ({
                 defaultPosition: res.defaultPosition,
                 providerName: providerList,
                 isCmsHcc: res.isCmsHcc,
-                isRxHcc: res.isRxHcc
+                isRxHcc: res.isRxHcc,
+                isComboCode: res.isComboCode
               });
             }
           });
@@ -689,7 +691,8 @@ const File = ({
               children: res.children ? res.children : [],
               isMostSpecific: res.isMostSpecific,
               isCmsHcc: res.isCmsHcc,
-              isRxHcc: res.isRxHcc
+              isRxHcc: res.isRxHcc,
+              isComboCode: res.isComboCode
             });
           });
 
@@ -710,7 +713,8 @@ const File = ({
                 isHccValid: true,
                 providerName: providerList,
                 isCmsHcc: res.isCmsHcc,
-              isRxHcc: res.isRxHcc
+              isRxHcc: res.isRxHcc,
+              isComboCode: res.isComboCode
                 // defaultPosition:res.defaultPosition
               });
             });
@@ -737,7 +741,8 @@ const File = ({
               defaultPosition: res.defaultPosition,
               providerName: providerList,
               isCmsHcc: res.isCmsHcc,
-              isRxHcc: res.isRxHcc
+              isRxHcc: res.isRxHcc,
+              isComboCode: res.isComboCode
             });
           });
         }
@@ -764,7 +769,8 @@ const File = ({
                 children: res.children ? res.children : [],
                 isMostSpecific: res.isMostSpecific,
                 isCmsHcc: res.isCmsHcc,
-              isRxHcc: res.isRxHcc
+              isRxHcc: res.isRxHcc,
+              isComboCode: res.isComboCode
               });
             }
           });
@@ -787,7 +793,8 @@ const File = ({
               defaultPosition: res.defaultPosition,
               providerName: providerList,
               isCmsHcc: res.isCmsHcc,
-              isRxHcc: res.isRxHcc
+              isRxHcc: res.isRxHcc,
+              isComboCode: res.isComboCode
             });
           });
         }
@@ -809,7 +816,8 @@ const File = ({
               defaultPosition: res.defaultPosition,
               providerName: providerList,
               isCmsHcc: res.isCmsHcc,
-              isRxHcc: res.isRxHcc
+              isRxHcc: res.isRxHcc,
+              isComboCode: res.isComboCode
             });
           });
         }
@@ -3650,6 +3658,14 @@ const File = ({
                                 </Badge>
                               ) : null}
                             </div>
+                                    {data.isComboCode == true ? (
+                                      <Badge
+                                        className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                      >
+                                        Combo
+                                      </Badge>
+                                    ) : null}
+                                  
                             {data.getPlace == "Insulin" ? (
                               <span
                                 className={` mt-2 ${visitStyles.radiologyStatus}`}
@@ -4075,6 +4091,13 @@ const File = ({
                                       </Badge>
                                     ) : null}
                                   </div>
+                                  {data.isComboCode == true ? (
+                                      <Badge
+                                        className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                      >
+                                        Combo
+                                      </Badge>
+                                    ) : null}
                                   {data.getPlace == "Insulin" ? (
                                     <span
                                       className={` mt-2 ${visitStyles.radiologyStatus}`}
@@ -4257,6 +4280,13 @@ const File = ({
                               {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
                             {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
                             </div>
+                            {data.isComboCode == true ? (
+                                      <Badge
+                                        className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                      >
+                                        Combo
+                                      </Badge>
+                                    ) : null}
                               </div>
                           </div>
                         </div>

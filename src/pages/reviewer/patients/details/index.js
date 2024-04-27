@@ -158,7 +158,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
     value: item?.id,
     label: (
       <>
-        {item?.flagName}
+        {item?.flagName ? item?.flagName.replaceAll("_"," ") : ""}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="23"
@@ -1679,20 +1679,24 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                               <div className="col-xl-2 col-sm-12">
                                 <FontAwesomeIcon icon={faIdCardClip} />
                                 <label>Patient ID</label>
+                                <Tooltip placement="bottom" title={patientDocumentResult.patientId}>
                                 <h6
                                   className="ageDtails"
                                   style={{ paddingLeft: "25px" }}
                                 >
                                   {patientDocumentResult.patientId}
                                 </h6>
+                                </Tooltip>
                               </div>
                               <div className="col-xl-2 col-sm-12">
                                 <FontAwesomeIcon icon={faUserCircle} />
 
                                 <label>Patient Name</label>
+                                <Tooltip placement="bottom" title={patientDocumentResult.patientId}>
                                 <h6 className="ageDtails">
                                   {patientDocumentResult.patientName}
                                 </h6>
+                                </Tooltip>
                               </div>
                               <div className="col-xl-2 col-sm-12">
                                 <FontAwesomeIcon icon={faFile} />

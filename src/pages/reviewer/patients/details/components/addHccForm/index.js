@@ -107,7 +107,6 @@ const AddHccForm = ({
   const onFinishFailed = (form) => {};
   const [validated, setValidated] = useState(false);
   const handleChangeCode = (e) => {
-    console.log(e.target.value);
     getFindValidDiagnosisCode(e.target.value);
   };
 
@@ -167,13 +166,13 @@ const AddHccForm = ({
                 className={styles.formControl}
               />
             </Form.Item>
-            {addValidCodeCheck == false ? (
+            {addValidCodeCheck == true ? (
+              <span className={visitStyles.validHccCodeError}>
+              Valid Hcc Code
+            </span>
+            ) : addValidCodeCheck == false ? (
               <span className={visitStyles.invalidHccCodeError}>
                 Invalid Hcc Code
-              </span>
-            ) : addValidCodeCheck == true ? (
-              <span className={visitStyles.validHccCodeError}>
-                Valid Hcc Code
               </span>
             ) : null}
             <Form.Item
@@ -247,9 +246,10 @@ const AddHccForm = ({
                 <RegularButton type="submit" name="Next" width={100} />
                 <RegularButton
                   type="outline"
-                  name="Cancel"
+                  name="Clear"
                   width={100}
                   method="reset"
+                  onClick={() => setAddValidCodeCheck(null)}
                 />
               </Space>
             </Form.Item>
