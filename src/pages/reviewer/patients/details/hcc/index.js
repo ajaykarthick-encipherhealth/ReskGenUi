@@ -144,7 +144,7 @@ const Hcc = ({ year }) => {
                   <Combo />
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey={4}>
-                  <Meat activeMeatTitle={activeMeatTitle}/>
+                  <Meat activeMeatTitle={activeMeatTitle} year={year}/>
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey={5}>
                   <RafScore />

@@ -88,7 +88,7 @@ const addOnCodeColor = [
   "geekblue",
   "purple",
 ];
-const Meat = ({activeMeatTitle}) => {
+const Meat = ({ activeMeatTitle, year }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
   let searchKeywords = [];
@@ -427,7 +427,7 @@ const Meat = ({activeMeatTitle}) => {
     }
   }, [fileInitialPage, findFileKeyword, fileModalTitle]);
 
-   const getPatientDetails = async (
+  const getPatientDetails = async (
     patientId,
     orgId,
     tenId,
@@ -1462,12 +1462,12 @@ const Meat = ({activeMeatTitle}) => {
     disDescription,
     encounterDate,
     meatresult,
-    diagnosisCode
+    type
   ) => {
     setSelectMeatResult(meatresult);
     setFileLoading(true);
     setIsModalOpen(true);
-    var splitPoint = disDescription.substring(" ", 20);;
+    var splitPoint = disDescription.substring(" ", 20);
     var dotLoading = (
       <div className={visitStyles.loadingFileHeader}>
         <Spinner />
@@ -1477,16 +1477,29 @@ const Meat = ({activeMeatTitle}) => {
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
     var pageNumber = null;
+    // var data = {
+    //   fileId: fileId,
+    //   header: value,
+    //   diagnosisCode: meatresult.diagnosisCode,
+    //   dos: encounterDatesValue,
+    //   stringFileWord: splitPoint,
+    // };
+    const patientId = localStorage.getItem('patientId')
     var data = {
-      fileId: fileId,
-      header: value,
+      patientId: patientId,
       diagnosisCode: meatresult.diagnosisCode,
+      year: year.value,
+      header: value,
       dos: encounterDatesValue,
-      stringFileWord: splitPoint,
+      meatType: type,
     };
     try {
+      // const response = await axios.post(
+      //   ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
+      //   data
+      // );
       const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
+        ENDPOINTS.apiEndoint + `dbservice/pageNumber/hyperlink`,
         data
       );
       var result = response.data.response;
@@ -1937,7 +1950,8 @@ const Meat = ({activeMeatTitle}) => {
     value,
     dis,
     encounterDate,
-    meatresult
+    meatresult,
+    type
   ) => {
     if (value) {
       var igonreCase = value.toLowerCase();
@@ -1952,7 +1966,7 @@ const Meat = ({activeMeatTitle}) => {
 
       var sectionMapArr = (
         <span
-          onClick={() => handleOpenModal(value, dis, encounterDate, meatresult)}
+          onClick={() => handleOpenModal(value, dis, encounterDate, meatresult, type)}
           style={{ backgroundColor: backColor, color: textColor }}
           className={`cr-pointer mt-2 text-start ${visitStyles.captureheaderMeat}`}
         >
@@ -1968,7 +1982,7 @@ const Meat = ({activeMeatTitle}) => {
     dis,
     encounterDate,
     meatresult,
-    diagnosisCode
+    type
   ) => {
     if (value) {
       var igonreCase = value.toLowerCase();
@@ -1983,7 +1997,15 @@ const Meat = ({activeMeatTitle}) => {
 
       var sectionMapArr = (
         <span
-          onClick={() => handleOpenModal(value, dis, encounterDate, meatresult, diagnosisCode)}
+          onClick={() =>
+            handleOpenModal(
+              value,
+              dis,
+              encounterDate,
+              meatresult,
+              type
+            )
+          }
           style={{ backgroundColor: backColor, color: textColor }}
           className={`cr-pointer mt-2 text-start ${visitStyles.captureheaderMeatView}`}
         >
@@ -2351,11 +2373,15 @@ const Meat = ({activeMeatTitle}) => {
                         </div>
                       </div>
 
-                      <div className={
-                          activeMeatTitle?.header === "M" && activeMeatTitle?.diagnosisCode?.replace(".", "") ==  item?.diagnosisCode?.replace(".", "")
-                           ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
-                           : `col-xl-2 d-grid`
-                        }>
+                      <div
+                        className={
+                          activeMeatTitle?.header === "M" &&
+                          activeMeatTitle?.diagnosisCode?.replace(".", "") ==
+                            item?.diagnosisCode?.replace(".", "")
+                            ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                            : `col-xl-2 d-grid`
+                        }
+                      >
                         {item.monitor != "" ? (
                           <Popover
                             placement="topLeft"
@@ -2376,15 +2402,20 @@ const Meat = ({activeMeatTitle}) => {
                             item.monitorCapturedFromHeader,
                             item.monitor,
                             item.encounterDate,
-                            item
+                            item,
+                            "MONITOR"
                           )}
                         </div>
                       </div>
-                      <div className={
-                          activeMeatTitle?.header === "E" && activeMeatTitle?.diagnosisCode?.replace(".", "") ==  item?.diagnosisCode?.replace(".", "")
-                           ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
-                           : `col-xl-2 d-grid`
-                        }>
+                      <div
+                        className={
+                          activeMeatTitle?.header === "E" &&
+                          activeMeatTitle?.diagnosisCode?.replace(".", "") ==
+                            item?.diagnosisCode?.replace(".", "")
+                            ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                            : `col-xl-2 d-grid`
+                        }
+                      >
                         {item.evaluate != "" ? (
                           <Popover
                             placement="topLeft"
@@ -2405,15 +2436,20 @@ const Meat = ({activeMeatTitle}) => {
                             item.evaluateCapturedFromHeader,
                             item.evaluate,
                             item.encounterDate,
-                            item
+                            item,
+                            'EVALUATION'
                           )}
                         </div>
                       </div>
-                      <div className={
-                          activeMeatTitle?.header === "A" && activeMeatTitle?.diagnosisCode?.replace(".", "") ==  item?.diagnosisCode?.replace(".", "")
-                           ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
-                           : `col-xl-2 d-grid`
-                        }>
+                      <div
+                        className={
+                          activeMeatTitle?.header === "A" &&
+                          activeMeatTitle?.diagnosisCode?.replace(".", "") ==
+                            item?.diagnosisCode?.replace(".", "")
+                            ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                            : `col-xl-2 d-grid`
+                        }
+                      >
                         {item.assessment != "" ? (
                           <Popover
                             placement="topLeft"
@@ -2435,15 +2471,20 @@ const Meat = ({activeMeatTitle}) => {
                             item.assessmentCapturedFromHeader,
                             item.assessment,
                             item.encounterDate,
-                            item
+                            item,
+                            "ASSESSMENT"
                           )}
                         </div>
                       </div>
-                      <div className={
-                          activeMeatTitle?.header === "T" && activeMeatTitle?.diagnosisCode?.replace(".", "") ==  item?.diagnosisCode?.replace(".", "")
-                           ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
-                           : `col-xl-2 d-grid`
-                        }>
+                      <div
+                        className={
+                          activeMeatTitle?.header === "T" &&
+                          activeMeatTitle?.diagnosisCode?.replace(".", "") ==
+                            item?.diagnosisCode?.replace(".", "")
+                            ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                            : `col-xl-2 d-grid`
+                        }
+                      >
                         {item.treatment != "" ? (
                           <Popover
                             placement="topLeft"
@@ -2464,7 +2505,8 @@ const Meat = ({activeMeatTitle}) => {
                             item.treatmentCapturedFromHeader,
                             item.treatment,
                             item.encounterDate,
-                            item
+                            item,
+                            "TREATMENT"
                           )}
                         </div>
                       </div>
@@ -2771,7 +2813,8 @@ const Meat = ({activeMeatTitle}) => {
                             selectMeatResult?.monitorCapturedFromHeader,
                             selectMeatResult?.monitor,
                             selectMeatResult?.encounterDate,
-                            selectMeatResult
+                            selectMeatResult,
+                            "MONITOR"
                           )}
                         </div>
                       </div>
@@ -2814,7 +2857,8 @@ const Meat = ({activeMeatTitle}) => {
                             selectMeatResult?.evaluateCapturedFromHeader,
                             selectMeatResult?.evaluate,
                             selectMeatResult?.encounterDate,
-                            selectMeatResult
+                            selectMeatResult,
+                            "EVALUATION"
                           )}
                         </div>
                       </div>
@@ -2858,7 +2902,8 @@ const Meat = ({activeMeatTitle}) => {
                             selectMeatResult?.assessmentCapturedFromHeader,
                             selectMeatResult?.assessment,
                             selectMeatResult?.encounterDate,
-                            selectMeatResult
+                            selectMeatResult,
+                            "ASSESSMENT"
                           )}
                         </div>
                       </div>
@@ -2900,7 +2945,8 @@ const Meat = ({activeMeatTitle}) => {
                             selectMeatResult?.treatmentCapturedFromHeader,
                             selectMeatResult?.treatment,
                             selectMeatResult?.encounterDate,
-                            selectMeatResult
+                            selectMeatResult,
+                            "TREATMENT"
                           )}
                         </div>
                       </div>
@@ -2932,15 +2978,15 @@ const Meat = ({activeMeatTitle}) => {
                   </div>
                 </Worker> */}
                 <>
-                {selectFileURL && (
-                  <PdfViewer
-                    src={selectFileURL}
-                    searchQuery={search?.value ? search?.value : ""}
-                    pageNumber={search?.page ? search?.page : 1}
-                    headers={search?.headers}
-                  />
-                )}
-              </>
+                  {selectFileURL && (
+                    <PdfViewer
+                      src={selectFileURL}
+                      searchQuery={search?.value ? search?.value : ""}
+                      pageNumber={search?.page ? search?.page : 1}
+                      headers={search?.headers}
+                    />
+                  )}
+                </>
               </div>
             </div>
           </div>
