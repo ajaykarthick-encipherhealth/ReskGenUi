@@ -60,7 +60,7 @@ const InputField = ({
     }
     debounceFunc(text, activeTab);
   };
- 
+
   return (
     <div className="form-group has-search">
       {isSearch && (
@@ -89,6 +89,12 @@ const InputField = ({
         placeholder={placeholder}
         maxLength={25}
         disabled={isDisabled ? true : false}
+        onKeyDown={(e) => {
+          // Prevent input of backslash ("\")
+          if (e.key === "\\") {
+            e.preventDefault();
+          }
+        }}
       />
     </div>
   );

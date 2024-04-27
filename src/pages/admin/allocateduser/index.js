@@ -538,6 +538,12 @@ export default function Patient() {
                                   className="form-control new-form-control"
                                   placeholder="Search"
                                   maxLength={25}
+                                  onKeyDown={(e) => {
+                                    // Prevent input of backslash ("\")
+                                    if (e.key === "\\") {
+                                      e.preventDefault();
+                                    }
+                                  }}
                                 />
                               </div>
                             </div>
@@ -589,6 +595,13 @@ export default function Patient() {
                                     className="form-control new-form-controls"
                                     placeholder="Batch Count"
                                     style={{ width: "60%" }}
+                                    maxLength={25}
+                                    onKeyDown={(e) => {
+                                      // Prevent input of backslash ("\")
+                                      if (e.key === "\\") {
+                                        e.preventDefault();
+                                      }
+                                    }}
                                   />
                                   <button
                                     onClick={() => setFilterBatchCount(true)}

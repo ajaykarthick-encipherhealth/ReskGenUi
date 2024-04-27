@@ -332,6 +332,12 @@ const Reports = () => {
                               placeholder="Search"
                               maxLength={25}
                               value={search}
+                              onKeyDown={(e) => {
+                                // Prevent input of backslash ("\")
+                                if (e.key === "\\") {
+                                  e.preventDefault();
+                                }
+                              }}
                             />
                           </div>
                         </div>

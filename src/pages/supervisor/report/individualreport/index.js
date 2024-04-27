@@ -189,6 +189,12 @@ const IndividualReceiverReport = () => {
                   placeholder="Search"
                   className={styles.search}
                   maxLength={25}
+                  onKeyDown={(e) => {
+                    // Prevent input of backslash ("\")
+                    if (e.key === "\\") {
+                      e.preventDefault();
+                    }
+                  }}
                 />
                 <Image src={search} alt="noimg" style={{ marginTop: "5px" }} />
               </div>

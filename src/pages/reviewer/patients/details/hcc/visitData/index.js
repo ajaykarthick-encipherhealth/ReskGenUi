@@ -573,7 +573,8 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
               children: res.children,
               getPlace: "Hcc",
               isCmsHcc: res.isCmsHcc,
-              isRxHcc: res.isRxHcc
+              isRxHcc: res.isRxHcc,
+              isComboCode: res.isComboCode
             });
           }
         });
@@ -589,8 +590,6 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
             getPlace: "Insulin",
             isHccValid: true,
             defaultPosition: null,
-            isCmsHcc: res.isCmsHcc,
-            isRxHcc: res.isRxHcc
           });
         }
 
@@ -627,7 +626,8 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
                 defaultPosition: res.defaultPosition,
                 providerName: providerList,
                 isCmsHcc: res.isCmsHcc,
-                isRxHcc: res.isRxHcc
+                isRxHcc: res.isRxHcc,
+                isComboCode: res.isComboCode
               });
             }
           });
@@ -658,7 +658,8 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
               children: res.children ? res.children : [],
               isMostSpecific: res.isMostSpecific,
               isCmsHcc: res.isCmsHcc,
-              isRxHcc: res.isRxHcc
+              isRxHcc: res.isRxHcc,
+              isComboCode: res.isComboCode
             });
           });
 
@@ -679,7 +680,8 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
                 isHccValid: true,
                 providerName: providerList,
                 isCmsHcc: res.isCmsHcc,
-              isRxHcc: res.isRxHcc
+              isRxHcc: res.isRxHcc,
+              isComboCode: res.isComboCode
                 // defaultPosition:res.defaultPosition
               });
             });
@@ -706,7 +708,8 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
               defaultPosition: res.defaultPosition,
               providerName: providerList,
               isCmsHcc: res.isCmsHcc,
-              isRxHcc: res.isRxHcc
+              isRxHcc: res.isRxHcc,
+              isComboCode: res.isComboCode
             });
           });
         }    
@@ -734,7 +737,8 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
                   children: res.children ? res.children : [],
                   isMostSpecific: res.isMostSpecific,
                   isCmsHcc: res.isCmsHcc,
-                  isRxHcc: res.isRxHcc
+                  isRxHcc: res.isRxHcc,
+                  isComboCode: res.isComboCode
                 });            
             }
           });
@@ -757,7 +761,8 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
               defaultPosition: res.defaultPosition,
               providerName: providerList,
               isCmsHcc: res.isCmsHcc,
-              isRxHcc: res.isRxHcc
+              isRxHcc: res.isRxHcc,
+              isComboCode: res.isComboCode
             });
           });
         }
@@ -779,7 +784,8 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
               defaultPosition: res.defaultPosition,
               providerName: providerList,
               isCmsHcc: res.isCmsHcc,
-              isRxHcc: res.isRxHcc
+              isRxHcc: res.isRxHcc,
+              isComboCode: res.isComboCode
             });
           });
         }
@@ -3333,6 +3339,13 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
                                   </Badge>
                                 ) : null}
                               </div>
+                              {data.isComboCode == true ? (
+                                      <Badge
+                                        className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                      >
+                                        Combo
+                                      </Badge>
+                                    ) : null}
                               {data.getPlace == "Insulin" ? (
                                 <span
                                   className={` mt-2 ${visitStyles.radiologyStatus}`}
@@ -3661,6 +3674,13 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
                                 </Badge>
                               ) : null}
                             </div>
+                            {data.isComboCode == true ? (
+                                      <Badge
+                                        className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                      >
+                                        Combo
+                                      </Badge>
+                                    ) : null}
                             {data.getPlace == "Insulin" ? (
                               <span
                                 className={` mt-2 ${visitStyles.radiologyStatus}`}
@@ -4159,10 +4179,10 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
                     >
                       <span className={`${visitStyles.hcc_title_name}`}>
                         HCC
-                        <FontAwesomeIcon
+                        {/* <FontAwesomeIcon
                           onClick={() => addValidCodeFile()}
                           icon={faPlus}
-                        />
+                        /> */}
                       </span>
                       <div className="d-flex justify-content-center">
                         <span className={`${visitStyles.hcc_title_badge}`}>
@@ -4374,6 +4394,13 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
                                     Manually Added
                                   </Badge>
                                 ) : null}
+                                 {data.isComboCode == true ? (
+                                      <Badge
+                                        className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                      >
+                                        Combo
+                                      </Badge>
+                                    ) : null}
                               </div>
                               {data.getPlace == "Insulin" ? (
                                 <span
@@ -4721,6 +4748,13 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
                                 </Badge>
                               ) : null}
                             </div>
+                            {data.isComboCode == true ? (
+                                      <Badge
+                                        className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                      >
+                                        Combo
+                                      </Badge>
+                                    ) : null}
                             {data.getPlace == "Insulin" ? (
                               <span
                                 className={` mt-2 ${visitStyles.radiologyStatus}`}
