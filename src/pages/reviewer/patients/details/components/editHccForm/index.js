@@ -8,13 +8,10 @@ import axios from "../../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../../utility/enpoints";
 import styles from "../../hcc/styles.module.css";
 import {
-  getMeatQueryList,
   getPatientDetailsResult,
 } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import RegularButton from "../../../../../../components/button";
 import visitStyles from "../../../../../../styles/visitdata.module.css";
-import { PlusOutlined } from "@ant-design/icons";
-import { dateFormat } from "highcharts";
 
 const { TextArea } = Input;
 
@@ -30,9 +27,7 @@ const EditHccForm = ({
   const patientDetailsResult = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
   );
-  const [isMeatForm, setIsMeatForm] = useState(false);
   const [addValidCodeCheck, setAddValidCodeCheck] = useState(true);
-  const [hccFormDetails, setHccFormDetails] = useState(null);
   const [providerNameList, setProviderNameList] = useState([]);
   const [selectProviderNameList, setSelectProviderNameList] = useState([]);
   const [encounterList, setEncounterList] = useState([]);
@@ -56,7 +51,6 @@ const EditHccForm = ({
   const onFinishHcc = async (form) => {
     if(addValidCodeCheck == true || addValidCodeCheck == null){
     var patientId = localStorage.getItem("patientId");
-    var orgId = localStorage.getItem("orgId");
     const dateList = form.encounterDates;
     var providerGet = [];
     if(providerInfoAllDetails){
