@@ -20,9 +20,8 @@ const EditHccForm = ({
   formValues,
   isEditHccForm,
   setIsEditHccForm,
-  handleCloseModal,
+  formEditPlace,
 }) => {
-  // console.log(formValues)
   const dispatch = useDispatch();
   const patientDetailsResult = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -63,6 +62,7 @@ const EditHccForm = ({
       headers: form.sections,
       providers: form.selectProviderInfo,
       encounterDate: form.encounterDates,
+      place:formEditPlace
     };
     console.log(dataFormat);
     console.log(providerInfoAllDetails);

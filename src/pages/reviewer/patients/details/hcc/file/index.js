@@ -333,6 +333,8 @@ const File = ({
   const [isAddHccForm, setIsAddHccForm] = useState(false);
   const [isEditHccForm, setIsEditHccForm] = useState(false);
   const [formValues, setFormValues] = useState(false);
+  const [formEditPlace, setFormEditPlace] = useState("");
+
 
   const getMeatFound = (code, data, value) => {
     const result = data?.filter(
@@ -3413,7 +3415,7 @@ const File = ({
                                   <FontAwesomeIcon icon={faPen} />
                                 </Popover>
                               </span> */}
-                               <FontAwesomeIcon icon={faPen} style={{ cursor: "pointer" }}  onClick={() => {setFormValues(data),setIsEditHccForm(true)}}/>
+                               <FontAwesomeIcon icon={faPen} style={{ cursor: "pointer" }}  onClick={() => {setFormValues(data),setIsEditHccForm(true),setFormEditPlace("HCC")}}/>
                               
                               <Popover
                                 content={
@@ -4475,7 +4477,7 @@ const File = ({
               formValues={formValues}
               isEditHccForm={isEditHccForm}
               setIsEditHccForm={setIsEditHccForm}
-              handleCloseModal={handleCloseModal}
+              formEditPlace={formEditPlace}
             />
     </>
   );
