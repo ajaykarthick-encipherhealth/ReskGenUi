@@ -1063,7 +1063,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
         orgId: localOrgId,
         comments: inputValue.comments,
         year: selectedDosValue,
-        flag: inputValue.flag,
+        // flag: inputValue.flag,
         flagDetailsId: inputValue.flagId,
       };
       const response = await axios.post(
@@ -2951,7 +2951,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                             >
                               <div className={`${visitStyles.commentNameHead}`}>
                                 <span className={visitStyles.commentsName}>
-                                  {data.flag && <>
+                                  {data?.flagDetails?.flagName && <>
                                     {data?.flagDetails?.flagName ? data?.flagDetails?.flagName.replaceAll("_", " ") : ''}
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
