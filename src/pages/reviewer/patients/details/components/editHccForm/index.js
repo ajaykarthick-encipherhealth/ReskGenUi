@@ -21,7 +21,7 @@ const EditHccForm = ({
   setIsEditHccForm,
   formEditPlace,
 }) => {
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
   const dispatch = useDispatch();
   const patientDetailsResult = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -54,8 +54,6 @@ const EditHccForm = ({
       var patientId = localStorage.getItem("patientId");
       const dateList = form.encounterDates;
       var providerGet = [];
-      console.log(providerInfoAllDetails,form.selectProviderInfo,formValues)
-
       if (providerInfoAllDetails) {
         providerGet = providerInfoAllDetails?.filter((o1) =>
           form.selectProviderInfo.some((o2) => o1.providerName === o2)
@@ -159,7 +157,6 @@ const EditHccForm = ({
         ...providersAllDetails,
         ...providerInfoAllDetails,
       ]);
-      console.log(providerInfoAllDetails)
       setProviderName(null);
       setProviderInfo([]);
     }
@@ -205,9 +202,8 @@ const EditHccForm = ({
       sections: selectSectionList,
     };
     setFormInitialValues(initalForm);
-    console.log(initalForm)
-    form.setFieldsValue(initalForm)
-  }, [selectEncounterList, selectProviderNameList,form]);
+    form.setFieldsValue(initalForm);
+  }, [selectEncounterList, selectProviderNameList, form]);
 
   useEffect(() => {
     setIsFormShow(false);
@@ -237,7 +233,6 @@ const EditHccForm = ({
     setSelectEncounterList(selectDates);
     setSectionList(section);
     setSelectSectionList(selectSection);
-    console.log(formValues.providerDeatils)
     if (formValues?.providerDeatils) {
       setProviderInfoAllDetails(formValues.providerDeatils);
     }
@@ -272,7 +267,7 @@ const EditHccForm = ({
         {isFormShow ? (
           <>
             <Form
-               form={form}
+              form={form}
               name="validateOnly"
               layout="vertical"
               autoComplete="off"
