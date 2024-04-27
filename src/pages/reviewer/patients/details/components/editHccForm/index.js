@@ -144,14 +144,36 @@ const EditHccForm = ({
   };
   const addEnconterDate = () => {
     if (encounterDate) {
-      var dates = [];
-      dates.push({
-        value: moment(encounterDate).format("MM/DD/YYYY"),
-        label: moment(encounterDate).format("MM/DD/YYYY"),
-      });
-      setEncounterList([...dates, ...encounterList]);
-      setEncounterDate("");
-    }
+      const checkUsername = (obj) =>
+        obj.value === moment(encounterDate).format("MM/DD/YYYY");
+      if (!encounterList.some(checkUsername)) {
+        var dates = [];
+        dates.push({
+          value: moment(encounterDate).format("MM/DD/YYYY"),
+          label: moment(encounterDate).format("MM/DD/YYYY"),
+        });
+        setEncounterList([...dates, ...encounterList]);
+        setEncounterDate("");
+      } else {
+        notification.warning({
+          message: "Already encounter date is present",
+          placement: "top",
+          duration: 1,
+        });
+      }
+    }else{ notification.warning({
+      message: "Please select date",
+      placement: "top",
+      duration: 1,
+    });
+  }
+  };
+
+  const closeModal = () => {
+    setProviderInfoSelectClose(true);
+    setTimeout(() => {
+      setIsEditHccForm(false);
+    }, 1);
   };
 
   useEffect(() => {
@@ -197,7 +219,7 @@ const EditHccForm = ({
           setIsEditHccForm(false);
         }}
         onCancel={() => {
-          setIsEditHccForm(false);
+          closeModal();
         }}
         width="50%"
         footer={false}
@@ -290,22 +312,29 @@ const EditHccForm = ({
                               </Select>
                             </div>
                           </div>
-                          <RegularButton
-                            type="text"
-                            name="Save"
-                            width={100}
-                            onClick={() => addProvider()}
-                          >
-                            Save
-                          </RegularButton>
-                          <RegularButton
-                            type="outline"
-                            name="Close"
-                            width={100}
-                            onClick={() => {
-                              setProviderInfoSelectClose(true);
-                            }}
-                          />
+                          <div className={styles.editAction}>
+                            <Button
+                              className="save-sm-btn"
+                              onClick={() => addProvider()}
+                              style={{ width: "50px" }}
+                              disabled={providerName && providerInfo.length !=0 ? false : true}
+                            >
+                              Add
+                            </Button>
+                            <Button
+                              className="cancel-sm-btn"
+                              style={{
+                                width: "50px",
+                                marginLeft: "5px",
+                                marginRight: "10px",
+                              }}
+                              onClick={() => {
+                                setProviderInfoSelectClose(true);
+                              }}
+                            >
+                              Cancel
+                            </Button>
+                          </div>
                         </>
                       )}
                     >
@@ -340,14 +369,16 @@ const EditHccForm = ({
                               />
                             </div>
                           </div>
-                          <RegularButton
-                            type="text"
-                            name="Save"
-                            width={100}
-                            onClick={() => addEnconterDate()}
-                          >
-                            Save
-                          </RegularButton>
+                          <div className={styles.editAction}>
+                            <Button
+                              className="save-sm-btn"
+                              style={{ width: "50px" }}
+                              onClick={() => addEnconterDate()}
+                              disabled={encounterDate ? false : true}
+                            >
+                              Add
+                            </Button>
+                          </div>
                         </>
                       )}
                     >
@@ -393,7 +424,7 @@ const EditHccForm = ({
                     width={100}
                     method="reset"
                     onClick={() => {
-                      setIsEditHccForm(false);
+                      closeModal();
                     }}
                   />
                 </Space>
