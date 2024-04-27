@@ -608,7 +608,7 @@ const File = ({
               dbDescription: res.dbDescription,
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
-              providerDeatils:providerDeatils
+              providerDeatils:providerDeatils,
               isComboCode: res.isComboCode
             });
           }
