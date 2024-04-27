@@ -13,7 +13,9 @@ const Addpatients = ({
 
   const handleValidation = (event) => {
     const patientId = event.target.value;
-    if (!/\d/.test(patientId)) {
+    if (/\s/.test(patientId)) {
+      setError("Patient ID cannot contain spaces.");
+    }else if (!/\d/.test(patientId)) {
       setError("Patient ID must contain at least one number.");
     } else {
       setError("");

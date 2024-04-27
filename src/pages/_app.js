@@ -32,7 +32,8 @@ function MyApp({ Component, pageProps }) {
             currentPath?.includes("/login") ||
             currentPath?.includes("/ehrlogin") ||
             currentPath?.includes("/twofactorAuthentication/") ||
-            currentPath?.includes("search")
+            currentPath?.includes("search") ||
+            currentPath?.includes('/reviewer/patients/details')
           ) {
             setShowTerminal(false);
           } else {

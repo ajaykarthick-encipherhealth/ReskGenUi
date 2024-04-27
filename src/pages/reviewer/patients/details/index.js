@@ -108,6 +108,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
     encodedDate: "",
     flag: "",
     comments: "",
+    flagId: "",
   });
 
   const [selectFileRadiology, setSelectFileRadiology] = useState(null);
@@ -150,7 +151,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const [allocateClicked, setAllocateClicked] = useState(false);
   const [error, setError] = useState({ year: "" });
   const [hccValidCount, setHccValidCount] = useState(0);
-  const [hccCounts, setHccCounts] = useState({isCmsHcc: 0, isRxHcc: 0})
+  const [hccCounts, setHccCounts] = useState({ isCmsHcc: 0, isRxHcc: 0 });
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [workListPatientId, setWorkListPatientId] = useState(null);
 
@@ -158,7 +159,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
     value: item?.id,
     label: (
       <>
-        {item?.flagName}
+        {item?.flagName ? item?.flagName.replaceAll("_"," ") : ""}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="23"
@@ -559,19 +560,18 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
               isHccValid: res.isHccValid,
               defaultPosition: res.defaultPosition,
               isCmsHcc: res.isCmsHcc,
-              isRxHcc: res.isRxHcc
+              isRxHcc: res.isRxHcc,
             });
           }
         });
         setHccValidCount(validDisArray.length);
 
-
-        const rxHcc = validDisArray.filter((rx) => rx.isRxHcc == true)
-        const cmsHcc = validDisArray.filter((rx) => rx.isCmsHcc == true)
+        const rxHcc = validDisArray.filter((rx) => rx.isRxHcc == true);
+        const cmsHcc = validDisArray.filter((rx) => rx.isCmsHcc == true);
         setHccCounts({
           isCmsHcc: cmsHcc.length > 0 ? cmsHcc.length : 0,
           isRxHcc: rxHcc.length > 0 ? rxHcc.length : 0,
-        })
+        });
 
         setNewValidDiseaseList(validDisArray);
         setDosYearDefalutSelect(highestDosValue[0]);
@@ -708,7 +708,12 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   };
 
   const handleChangeFlag = async (e) => {
-    setInputValue({ ...inputValue, ["flagId"]: e.value, ["flag"]: e.name });
+    setInputValue({
+      ...inputValue,
+      ["flagId"]: e.value,
+      ["flag"]: e.name,
+      flagId: e.value,
+    });
   };
 
   const tabList = [
@@ -1059,6 +1064,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
         comments: inputValue.comments,
         year: selectedDosValue,
         flag: inputValue.flag,
+        flagDetailsId: inputValue.flagId,
       };
       const response = await axios.post(
         ENDPOINTS.apiEndoint + `dbservice/flagdetails`,
@@ -1679,20 +1685,24 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                               <div className="col-xl-2 col-sm-12">
                                 <FontAwesomeIcon icon={faIdCardClip} />
                                 <label>Patient ID</label>
+                                <Tooltip placement="bottom" title={patientDocumentResult.patientId}>
                                 <h6
                                   className="ageDtails"
                                   style={{ paddingLeft: "25px" }}
                                 >
                                   {patientDocumentResult.patientId}
                                 </h6>
+                                </Tooltip>
                               </div>
                               <div className="col-xl-2 col-sm-12">
                                 <FontAwesomeIcon icon={faUserCircle} />
 
                                 <label>Patient Name</label>
+                                <Tooltip placement="bottom" title={patientDocumentResult.patientId}>
                                 <h6 className="ageDtails">
                                   {patientDocumentResult.patientName}
                                 </h6>
+                                </Tooltip>
                               </div>
                               <div className="col-xl-2 col-sm-12">
                                 <FontAwesomeIcon icon={faFile} />
@@ -1735,76 +1745,84 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                                 </h6>
                               </div>
                               <div className="col-xl-1 col-sm-12">
-                        <div className={`${visitStyles.priorityStatus} p-0`}>
-                          {patienIdDetails?.priority == "URGENT" ? (
-                            <div className={visitStyles.priorityStatusIcon}>
-                              <i>{SVGICON.alert}</i>
-                              <span
-                                style={{
-                                  fontSize: "13px",
-                                  fontWeight: 500,
-                                  color: "red",
-                                }}
-                              >
-                                Urgent
-                              </span>
-                            </div>
-                          ) : patienIdDetails?.priority == "HIGH" ? (
-                            <div className={visitStyles.priorityStatusIcon}>
-                              <i className={TableStyle.highFlag}>
-                                {SVGICON.alert}
-                              </i>
-                              <span
-                                style={{
-                                  fontSize: "13px",
-                                  fontWeight: 500,
-                                  color: "#cf940a",
-                                }}
-                              >
-                                High
-                              </span>
-                            </div>
-                          ) : patienIdDetails?.priority == "NORMAL" ? (
-                            <div className={visitStyles.priorityStatusIcon}>
-                              <i className={TableStyle.normalFlag}>
-                                {SVGICON.alert}
-                              </i>
-                              <span
-                                style={{
-                                  fontSize: "13px",
-                                  fontWeight: 500,
-                                  color: "#4466ff ",
-                                }}
-                              >
-                                Normal
-                              </span>
-                            </div>
-                          ) : (
-                            <div className={visitStyles.priorityStatusIcon}>
-                              <i className={TableStyle.lowFlag}>
-                                {SVGICON.alert}
-                              </i>
-                              <span
-                                style={{
-                                  fontSize: "13px",
-                                  fontWeight: 500,
-                                  color: "#87909e",
-                                }}
-                              >
-                                Low
-                              </span>
-                            </div>
-                          )}
-                         
-                        </div>
-                      </div>
+                                <div
+                                  className={`${visitStyles.priorityStatus} p-0`}
+                                >
+                                  {patienIdDetails?.priority == "URGENT" ? (
+                                    <div
+                                      className={visitStyles.priorityStatusIcon}
+                                    >
+                                      <i>{SVGICON.alert}</i>
+                                      <span
+                                        style={{
+                                          fontSize: "13px",
+                                          fontWeight: 500,
+                                          color: "red",
+                                        }}
+                                      >
+                                        Urgent
+                                      </span>
+                                    </div>
+                                  ) : patienIdDetails?.priority == "HIGH" ? (
+                                    <div
+                                      className={visitStyles.priorityStatusIcon}
+                                    >
+                                      <i className={TableStyle.highFlag}>
+                                        {SVGICON.alert}
+                                      </i>
+                                      <span
+                                        style={{
+                                          fontSize: "13px",
+                                          fontWeight: 500,
+                                          color: "#cf940a",
+                                        }}
+                                      >
+                                        High
+                                      </span>
+                                    </div>
+                                  ) : patienIdDetails?.priority == "NORMAL" ? (
+                                    <div
+                                      className={visitStyles.priorityStatusIcon}
+                                    >
+                                      <i className={TableStyle.normalFlag}>
+                                        {SVGICON.alert}
+                                      </i>
+                                      <span
+                                        style={{
+                                          fontSize: "13px",
+                                          fontWeight: 500,
+                                          color: "#4466ff ",
+                                        }}
+                                      >
+                                        Normal
+                                      </span>
+                                    </div>
+                                  ) : (
+                                    <div
+                                      className={visitStyles.priorityStatusIcon}
+                                    >
+                                      <i className={TableStyle.lowFlag}>
+                                        {SVGICON.alert}
+                                      </i>
+                                      <span
+                                        style={{
+                                          fontSize: "13px",
+                                          fontWeight: 500,
+                                          color: "#87909e",
+                                        }}
+                                      >
+                                        Low
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                       <div className="col-xl-1 col-sm-12">
                         <div className={visitStyles.priorityStatus}>
-                         
                           <div className={`${visitStyles.hccCountHeader} `}>
                             <label>CMS</label>
 
@@ -1820,7 +1838,6 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
 
                             <h6 className="ageDtails">{hccValidCount}</h6>
                           </div>
-                         
                         </div>
                       </div>
                       <div className="col-xl-1 col-sm-12 px-4 d-flex">
@@ -2934,7 +2951,22 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                             >
                               <div className={`${visitStyles.commentNameHead}`}>
                                 <span className={visitStyles.commentsName}>
-                                  {data.flag && renderFlagIcon(data.flag)}
+                                  {data.flag && <>
+                                    {data?.flagDetails?.flagName ? data?.flagDetails?.flagName.replaceAll("_", " ") : ''}
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="23"
+                                      height="23"
+                                      viewBox="0 0 800 800"
+                                      fill={data?.flagDetails?.flagColour}
+                                    >
+                                      <path
+                                        d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
+                                        stroke="#000"
+                                        stroke-width="10"
+                                      />
+                                    </svg>
+                                  </>}
                                 </span>
                                 <Tooltip
                                   placement="bottom"
@@ -2958,6 +2990,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                               <span className={visitStyles.commentsDesc}>
                                 {data.comments}
                               </span>
+                              {console.log(data, "time")}
                               <span className={visitStyles.commentsTime}>
                                 {moment(data.commentCreatedAt).format(
                                   "MM-DD-YYYY hh:mm:A"
