@@ -678,8 +678,10 @@ const File = ({
           suggestRadiologyList.map((res, index) => {
             const encounterDatearray = res?.encounterDate?.split(",");
             var providerList = [];
+            var providerDeatils = null;
             res?.provider?.map((res2, index) => {
               providerList.push(res2.providerName);
+              providerDeatils =  res;
             });
             suggestListAll.push({
               actualDescription: res.actualDescription,
@@ -695,15 +697,18 @@ const File = ({
               isMostSpecific: res.isMostSpecific,
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
-              isComboCode: res.isComboCode
+              isComboCode: res.isComboCode,
+              providerDeatils:providerDeatils,
             });
           });
 
           if (result.suggestRadiologyCombo != null) {
             result.suggestRadiologyCombo.map((res, index) => {
               var providerList = [];
+              var providerDeatils = null;
               res.providers?.map((res2, index) => {
                 providerList.push(res2.providerName);
+                providerDeatils =  res;
               });
               const encounterDatearray = res?.encounterDate?.split(",");
               suggestListAll.push({
@@ -717,7 +722,8 @@ const File = ({
                 providerName: providerList,
                 isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
-              isComboCode: res.isComboCode
+              isComboCode: res.isComboCode,
+              providerDeatils:providerDeatils,
                 // defaultPosition:res.defaultPosition
               });
             });
@@ -729,8 +735,10 @@ const File = ({
           suggestLabList = result.suggestLab;
           suggestLabList.map((res, index) => {
             var providerList = [];
+            var providerDeatils = null;
             res?.provider?.map((res2, index) => {
               providerList.push(res2.providerName);
+              providerDeatils =  res;
             });
             const encounterDatearray = res?.encounterDate?.split(",");
             suggestListAll.push({
@@ -745,7 +753,8 @@ const File = ({
               providerName: providerList,
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
-              isComboCode: res.isComboCode
+              isComboCode: res.isComboCode,
+              providerDeatils:providerDeatils,
             });
           });
         }
@@ -755,8 +764,10 @@ const File = ({
             if (res.isShow != false) {
               const encounterDatearray = res?.encounterDate?.split(",");
               var providerList = [];
+              var providerDeatils = null;
               res?.provider?.map((res, index) => {
                 providerList.push(res.providerName);
+                providerDeatils =  res;
               });
               suggestListAll.push({
                 actualDescription: res.actualDescription,
@@ -773,7 +784,8 @@ const File = ({
                 isMostSpecific: res.isMostSpecific,
                 isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
-              isComboCode: res.isComboCode
+              isComboCode: res.isComboCode,
+              providerDeatils:providerDeatils,
               });
             }
           });
@@ -781,8 +793,10 @@ const File = ({
         if (result?.suggestLabInReport) {
           result?.suggestLabInReport?.map((res, index) => {
             var providerList = [];
+            var providerDeatils = null;
             res?.provider?.map((res2, index) => {
               providerList.push(res2?.providerName);
+              providerDeatils =  res;
             });
             const encounterDatearray = res?.encounterDate?.split(",");
             suggestListAll.push({
@@ -797,15 +811,18 @@ const File = ({
               providerName: providerList,
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
-              isComboCode: res.isComboCode
+              isComboCode: res.isComboCode,
+              providerDeatils:providerDeatils,
             });
           });
         }
         if (result?.suggestRadiologyInReport) {
           result?.suggestRadiologyInReport?.map((res, index) => {
             var providerList = [];
+            var providerDeatils = null;
             res?.provider?.map((res2, index) => {
               providerList.push(res2.providerName);
+              providerDeatils =  res;
             });
             const encounterDatearray = res?.encounterDate?.split(",");
             suggestListAll.push({
@@ -820,7 +837,8 @@ const File = ({
               providerName: providerList,
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
-              isComboCode: res.isComboCode
+              isComboCode: res.isComboCode,
+              providerDeatils:providerDeatils,
             });
           });
         }
@@ -2713,7 +2731,7 @@ const File = ({
   };
 
   const getEncounterDetails = async (date) => {
-    const findPageNumber = listPageNumber.filter((i) => i.date === date);
+    const findPageNumber = listPageNumber.filter((i) =>  moment(i.date).format("MM/DD/YYYY") === moment(date).format("MM/DD/YYYY"));
     if (findPageNumber.length != 0) {
       setFileLoading(true);
       var date = findPageNumber[0].date;
@@ -3002,7 +3020,6 @@ const File = ({
     var pageNumber = str_array[0];
     var findData = str_array[1];
     setFindFileKeyword(null);
-    setFileLoading(true);
     var pageIndex = pageNumber - 1;
     setFileInitialPage(pageIndex);
     setFileDosPageNumber(pageIndex);
@@ -3805,7 +3822,8 @@ const File = ({
                                   <span className="disease-name d-flex mb-1">
                                     <span className="valid-dis-name">
                                       {data.diagnosisCode}
-                                    </span>{" "}
+                                    </span>
+                                    <FontAwesomeIcon icon={faPen} style={{ cursor: "pointer" }}  onClick={() => {setFormValues(data),setIsEditHccForm(true),setFormEditPlace("SUGGESTED_DISEASE")}}/>
                                     <Popover
                                       content={
                                         data.dbDescription
