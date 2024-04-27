@@ -104,6 +104,13 @@ export default function Patient() {
                                   onChange={(e) => filterChangePatientId(e)}
                                   className="form-control"
                                   placeholder="User Id"
+                                  maxLength={25}
+                                  onKeyDown={(e) => {
+                                    // Prevent input of backslash ("\")
+                                    if (e.key === "\\") {
+                                      e.preventDefault();
+                                    }
+                                  }}
                                 />
                               </div>
                             </div>
@@ -118,6 +125,13 @@ export default function Patient() {
                                   onChange={(e) => filterChangePatientName(e)}
                                   className="form-control"
                                   placeholder="User Name"
+                                  maxLength={25}
+                                  onKeyDown={(e) => {
+                                    // Prevent input of backslash ("\")
+                                    if (e.key === "\\") {
+                                      e.preventDefault();
+                                    }
+                                  }}
                                 />
                               </div>
                             </div>

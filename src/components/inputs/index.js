@@ -53,6 +53,12 @@ const InputField = ({
         placeholder={placeholder}
         maxLength={25}
         disabled={isDisabled ? true : false}
+        onKeyDown={(e) => {
+          // Prevent input of backslash ("\")
+          if (e.key === "\\") {
+            e.preventDefault();
+          }
+        }}
       />
       
     </div>
