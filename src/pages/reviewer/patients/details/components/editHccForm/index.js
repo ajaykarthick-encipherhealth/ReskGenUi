@@ -77,6 +77,7 @@ const EditHccForm = ({
         dataFormat
       );
       if (response?.data?.status == "SUCCESS") {
+        dispatch(getPatientDetailsResult(patientId));
         setProviderInfoSelectClose(true);
         setTimeout(() => {
           setIsEditHccForm(false);
@@ -86,7 +87,6 @@ const EditHccForm = ({
           placement: "top",
           duration: 1,
         });
-        dispatch(getPatientDetailsResult(patientId));
       } else {
       }
     } catch (e) {}
