@@ -126,28 +126,32 @@ const EditHccForm = ({
   };
 
   const addProvider = () => {
-    var providers = [];
-    var selectProviders = [];
-    var providersAllDetails = [];
-    providersAllDetails.push({ name: providerName, info: providerInfo });
-    providers.push({ value: providerName, label: providerName });
-    selectProviders.push(providerName);
-    setProviderNameList([...providers, ...providerNameList]);
-    setProviderInfoAllDetails([
-      ...providersAllDetails,
-      ...providerInfoAllDetails,
-    ]);
-    setProviderName(null);
-    setProviderInfo([]);
+    if (providerName) {
+      var providers = [];
+      var selectProviders = [];
+      var providersAllDetails = [];
+      providersAllDetails.push({ name: providerName, info: providerInfo });
+      providers.push({ value: providerName, label: providerName });
+      selectProviders.push(providerName);
+      setProviderNameList([...providers, ...providerNameList]);
+      setProviderInfoAllDetails([
+        ...providersAllDetails,
+        ...providerInfoAllDetails,
+      ]);
+      setProviderName(null);
+      setProviderInfo([]);
+    }
   };
   const addEnconterDate = () => {
-    var dates = [];
-    dates.push({
-      value: moment(encounterDate).format("MM/DD/YYYY"),
-      label: moment(encounterDate).format("MM/DD/YYYY"),
-    });
-    setEncounterList([...dates, ...encounterList]);
-    setEncounterDate("");
+    if (encounterDate) {
+      var dates = [];
+      dates.push({
+        value: moment(encounterDate).format("MM/DD/YYYY"),
+        label: moment(encounterDate).format("MM/DD/YYYY"),
+      });
+      setEncounterList([...dates, ...encounterList]);
+      setEncounterDate("");
+    }
   };
 
   useEffect(() => {
