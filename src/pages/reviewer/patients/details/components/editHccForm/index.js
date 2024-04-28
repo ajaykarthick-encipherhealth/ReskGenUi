@@ -7,9 +7,7 @@ import moment from "moment";
 import axios from "../../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../../utility/enpoints";
 import styles from "../../hcc/styles.module.css";
-import {
-  getPatientDetailsResult,
-} from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
+import { getPatientDetailsResult } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import RegularButton from "../../../../../../components/button";
 import visitStyles from "../../../../../../styles/visitdata.module.css";
 
@@ -23,6 +21,7 @@ const EditHccForm = ({
   setIsEditHccForm,
   formEditPlace,
 }) => {
+  const [form] = Form.useForm();
   const dispatch = useDispatch();
   const patientDetailsResult = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -41,6 +40,8 @@ const EditHccForm = ({
   const [providerInfoSelectOpen, setProviderInfoSelectOpen] = useState(false);
   const [providerInfoSelectClose, setProviderInfoSelectClose] = useState(false);
   const [providerInfoAllDetails, setProviderInfoAllDetails] = useState([]);
+  const [formInitialValues, setFormInitialValues] = useState(null);
+  const [isCheck, setIsCHeck] = useState(true);
 
   const providerInfoList = [
     { value: "authorizedProvider", label: "Authorized Provider" },
@@ -49,52 +50,52 @@ const EditHccForm = ({
     { value: "unSigned", label: "Un Signed" },
   ];
   const onFinishHcc = async (form) => {
-    if(addValidCodeCheck == true || addValidCodeCheck == null){
-    var patientId = localStorage.getItem("patientId");
-    const dateList = form.encounterDates;
-    var providerGet = [];
-    if(providerInfoAllDetails){
-     providerGet = providerInfoAllDetails?.filter((o1) =>
-      form.selectProviderInfo.some((o2) => o1.providerName === o2)
-    );
-  }
-    var dataFormat = {
-      patientId: patientId,
-      oldDiagnosisCode: formValues.diagnosisCode,
-      newDiagnosisCode: form.diagnosisCode,
-      year: patientDetailsResult?.result.response?.dos,
-      capturedSections: form.sections,
-      provider: providerGet,
-      encounterDate: dateList.join(", "),
-      diseaseSource: formEditPlace,
-      description: form.actualDescription,
-    };
-    try {
-      const response = await axios.put(
-        ENDPOINTS.apiEndoint + `aiservice/disease/editdisease`,
-        dataFormat
-      );
-      if (response?.data?.status == "SUCCESS") {
-        setProviderInfoSelectClose(true);
-        setTimeout(() => {
-          setIsEditHccForm(false);
-        }, 1);
-        notification.success({
-          message: "Updated Successfully!",
-          placement: "top",
-          duration: 1,
-        });
-        dispatch(getPatientDetailsResult(patientId));
-      } else {
+    if (addValidCodeCheck == true || addValidCodeCheck == null) {
+      var patientId = localStorage.getItem("patientId");
+      const dateList = form.encounterDates;
+      var providerGet = [];
+      if (providerInfoAllDetails) {
+        providerGet = providerInfoAllDetails?.filter((o1) =>
+          form.selectProviderInfo.some((o2) => o1.providerName === o2)
+        );
       }
-    } catch (e) {}
-  }else{
-    notification.warning({
-      message: "Please enter valid diagnosis code ",
-      placement: "top",
-      duration: 1,
-    });
-  }
+      var dataFormat = {
+        patientId: patientId,
+        oldDiagnosisCode: formValues.diagnosisCode,
+        newDiagnosisCode: form.diagnosisCode,
+        year: patientDetailsResult?.result.response?.dos,
+        capturedSections: form.sections,
+        provider: providerGet,
+        encounterDate: dateList.join(", "),
+        diseaseSource: formEditPlace,
+        description: form.actualDescription,
+      };
+      try {
+        const response = await axios.put(
+          ENDPOINTS.apiEndoint + `aiservice/disease/editdisease`,
+          dataFormat
+        );
+        if (response?.data?.status == "SUCCESS") {
+          setProviderInfoSelectClose(true);
+          setTimeout(() => {
+            setIsEditHccForm(false);
+          }, 1);
+          notification.success({
+            message: "Updated Successfully!",
+            placement: "top",
+            duration: 1,
+          });
+          dispatch(getPatientDetailsResult(patientId));
+        } else {
+        }
+      } catch (e) {}
+    } else {
+      notification.warning({
+        message: "Please enter valid diagnosis code ",
+        placement: "top",
+        duration: 1,
+      });
+    }
   };
 
   const onFinishFailed = (form) => {};
@@ -148,6 +149,10 @@ const EditHccForm = ({
       providers.push({ value: providerName, label: providerName });
       selectProviders.push(providerName);
       setProviderNameList([...providers, ...providerNameList]);
+      setSelectProviderNameList([
+        ...selectProviders,
+        ...selectProviderNameList,
+      ]);
       setProviderInfoAllDetails([
         ...providersAllDetails,
         ...providerInfoAllDetails,
@@ -162,11 +167,14 @@ const EditHccForm = ({
         obj.value === moment(encounterDate).format("MM/DD/YYYY");
       if (!encounterList.some(checkUsername)) {
         var dates = [];
+        var selectDates = [];
         dates.push({
           value: moment(encounterDate).format("MM/DD/YYYY"),
           label: moment(encounterDate).format("MM/DD/YYYY"),
         });
+        selectDates.push(moment(encounterDate).format("MM/DD/YYYY"));
         setEncounterList([...dates, ...encounterList]);
+        setSelectEncounterList([...selectDates, ...selectEncounterList]);
         setEncounterDate("");
       } else {
         notification.warning({
@@ -184,6 +192,18 @@ const EditHccForm = ({
       setIsEditHccForm(false);
     }, 1);
   };
+
+  useEffect(() => {
+    var initalForm = {
+      diagnosisCode: formValues?.diagnosisCode,
+      actualDescription: formValues?.dbDescription,
+      selectProviderInfo: selectProviderNameList,
+      encounterDates: selectEncounterList,
+      sections: selectSectionList,
+    };
+    setFormInitialValues(initalForm);
+    form.setFieldsValue(initalForm);
+  }, [selectEncounterList, selectProviderNameList, form]);
 
   useEffect(() => {
     setIsFormShow(false);
@@ -213,12 +233,20 @@ const EditHccForm = ({
     setSelectEncounterList(selectDates);
     setSectionList(section);
     setSelectSectionList(selectSection);
+    if (formValues?.providerDeatils) {
+      setProviderInfoAllDetails(formValues.providerDeatils);
+    }
+    var initalForm = {
+      diagnosisCode: formValues?.diagnosisCode,
+      actualDescription: formValues?.dbDescription,
+      selectProviderInfo: selectProviders,
+      encounterDates: selectDates,
+      sections: selectSection,
+    };
+    setFormInitialValues(initalForm);
     setTimeout(() => {
       setIsFormShow(true);
     }, 1);
-    if(formValues?.providerDeatils){
-      setProviderInfoAllDetails([formValues.providerDeatils]);
-    }
   }, [formValues]);
 
   return (
@@ -239,16 +267,11 @@ const EditHccForm = ({
         {isFormShow ? (
           <>
             <Form
+              form={form}
               name="validateOnly"
               layout="vertical"
               autoComplete="off"
-              initialValues={{
-                diagnosisCode: formValues?.diagnosisCode,
-                actualDescription: formValues?.dbDescription,
-                selectProviderInfo: selectProviderNameList,
-                encounterDates: selectEncounterList,
-                sections: selectSectionList,
-              }}
+              initialValues={formInitialValues}
               onFinish={onFinishHcc}
               onFinishFailed={onFinishFailed}
             >
@@ -362,6 +385,7 @@ const EditHccForm = ({
                     </Select>
                   </Form.Item>
                 </div>
+
                 <div className="col-xl-6">
                   <Form.Item label="Encounter Date" name="encounterDates">
                     <Select
