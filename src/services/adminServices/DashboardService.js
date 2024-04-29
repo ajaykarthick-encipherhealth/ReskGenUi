@@ -426,7 +426,6 @@ export const CompletedStatus = async (
   userName,
   selectMemberType
 ) => {
-  console.log(selectMemberType, userName);
   const isManage = selectMemberType == "SUPERVISOR";
   const token = localStorage.getItem("token");
   const url =
