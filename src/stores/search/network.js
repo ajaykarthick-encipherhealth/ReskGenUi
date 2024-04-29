@@ -1,11 +1,11 @@
 import { requestPortal } from "../../utils/network";
 
-export async function icdCodes(search, page,size = 15) {
+export async function icdCodes(search, page,size = 15, billable, source) {
   const options = {
     method: "GET",
   };
   const data = await requestPortal(
-    `management/getAllIcdCodes?q=${search}&page=${page}&size=${size}
+    `management/getAllIcdCodes?q=${search}&page=${page}&size=${size}&billable=${billable}&source=${source}
   `,
     options
   );

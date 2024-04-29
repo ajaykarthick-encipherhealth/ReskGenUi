@@ -4,6 +4,7 @@ import Style from "./table.module.css";
 import AppPagination from "./pagination";
 import { reusableElipses } from "../../pages/physician/comparison/content/ValidHcc";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Empty } from "antd";
 
 const AppTable = ({
   data,
@@ -27,7 +28,8 @@ const AppTable = ({
           </tr>
         </thead>
         <tbody>
-          {data.map((item, index) => (
+        {data.length > 0 ? 
+          data.map((item, index) => (
             <TableRow
               item={item}
               column={column}
@@ -35,7 +37,7 @@ const AppTable = ({
               setAction={setAction}
               count={count}
             />
-          ))}
+          )) : <tr> <td colSpan={column.length ?  column.length : 10}><Empty /></td></tr>}
         </tbody>
       </table>
       {isPagination && <AppPagination
