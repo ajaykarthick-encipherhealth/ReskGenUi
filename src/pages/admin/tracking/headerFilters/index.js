@@ -487,7 +487,11 @@ const HeaderFilters = ({
                 </div>
               )}
               <div
-                style={{ margin: "-35px 0px 0 40px", cursor: "pointer" }}
+                style={{
+                  margin: "-35px 0px 0 40px",
+                  cursor: "pointer",
+                  width: "100px",
+                }}
                 onClick={() => {
                   setClear(true);
                   setStartDate([]);
