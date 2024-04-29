@@ -942,7 +942,7 @@ useEffect(() => {
                           <div className={`col-xl-2 ${styles.subCard}`}>
                             <div>Completed date</div>
                             <div className={styles.dateContainer}>
-                              <div style={{ fontSize: "12px", padding: "5px" }}>
+                              <div style={{ fontSize: "10px", padding: "5px" }}>
                                 03/04/2024 - 03/04/2024
                               </div>
                             </div>
