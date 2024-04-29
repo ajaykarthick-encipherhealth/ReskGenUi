@@ -434,7 +434,7 @@ const HeaderFilters = ({
             ) : null}
 
             {isSearch && (
-              <div className={defaultSize} onClick={() => setClear(false)}>
+              <div className={defaultSize} onClick={() => setClear(false)} >
                 {" "}
                 <label style={{ marginLeft: "8px" }}>{searchlabel}</label>
                 <div class="form-group has-search">
@@ -454,7 +454,7 @@ const HeaderFilters = ({
                 </div>
               </div>
             )}
-            <div className={`${bullets ? "col-xl-2" : "col-xl-4"}`}>
+            <div className={`${bullets ? "col-xl-2" : "col-xl-4"}`} style={{display:"flex", alignItems:"center"}}>
               {bullets && (
                 <div
                   // className={`${bullets ? "col-xl-1" : "col-xl-4"}`}
@@ -486,8 +486,9 @@ const HeaderFilters = ({
                   </Popover>
                 </div>
               )}
-              <div
-                style={{ margin: "-35px 0px 0 40px", cursor: "pointer" }}
+              <div 
+              style={{marginTop:"30px", width:'100px'}}
+              className={`${bullets ? "col-xl-2" : "col-xl-4" }`}
                 onClick={() => {
                   setClear(true);
                   setStartDate([]);
