@@ -79,6 +79,7 @@ import CamboTree from "../org";
 import PdfViewer from "../../PdfViewerComponent";
 import AddHccForm from "../../components/addHccForm";
 import EditHccForm from "../../components/editHccForm";
+import { pdfUrl } from "../../../../../../stores/authflow/reducers";
 
 const { Option } = Select;
 const addOnCodeColor = [
@@ -478,6 +479,7 @@ const File = ({
 
   useEffect(() => {
     if (hccFileDetails?.result?.response) {
+      dispatch(pdfUrl(hccFileDetails?.result?.response))
       setSelectFileURL(hccFileDetails?.result?.response);
     }
   }, [hccFileDetails]);
