@@ -8,6 +8,7 @@ import twofactorImage from "../../images/svg/twofactorAuthentication.svg";
 import { encyptingPass } from "../../components/headerFilters/functions";
 import RegularButton from "../../components/button";
 import { getValidateCode, loginAction } from "../../stores/authflow/actions";
+import { useSelector } from "react-redux";
 
 export const codeLength = 6;
 export const generateCodeArray = () =>
@@ -16,6 +17,7 @@ export const generateCodeArray = () =>
 const Index = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const loginResponse=useSelector(state=>state.auth.authInfo)
   const [seconds, setSeconds] = useState(30);
   const [enableMFA, setEnableMFA] = useState(false);
   const [username, setUsername] = useState();
@@ -219,6 +221,7 @@ const Index = () => {
                   }}
                   name="SETUP LATER"
                   width="100%"
+                  loading={loginResponse?.loading}
                 />
               )}
             </>

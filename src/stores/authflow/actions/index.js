@@ -3,6 +3,7 @@ import axios from "axios";
 import axiosConfig from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { getResponePopup } from "../../../utils/reusable";
+import exp from "constants";
 
 export const ENABLEMFA = "ENABLEMFA";
 export const VALIDATE_CODE = "VALIDATE_CODE";
@@ -15,6 +16,8 @@ export const PROFILE_URL = "PROFILE_URL";
 export const FILTER = "FILTER";
 export const NAVTOGGLE = "NAVTOGGLE";
 export const PATIENT_DETAILS = "";
+export const AUTHENTICATION = "AUTHENTICATION";
+export const VERIFYMFA = "VERIFYMFA";
 
 export const navtoggle = () => {
   return {
@@ -30,6 +33,10 @@ export function patientDetails(data) {
 }
 export const getMFAValidation =
   (username, route, password) => async (dispatch) => {
+    dispatch({
+      type: ENABLEMFA,
+      payload: { data: null, loading: true },
+    });
     try {
       const response = await axios.post(
         `${ENDPOINTS?.apiEndoint}securityservice/auth/mfaValidation`,
@@ -47,7 +54,7 @@ export const getMFAValidation =
       if (response?.data?.response) {
         dispatch({
           type: ENABLEMFA,
-          payload: response.data,
+          payload: { data: response.data, loading: false },
         });
         const encodedParams = btoa(
           JSON.stringify({
@@ -64,6 +71,10 @@ export const getMFAValidation =
         });
       }
     } catch (err) {
+      dispatch({
+        type: ENABLEMFA,
+        payload: { data: null, loading: false },
+      });
       notification.error({
         message: err?.response?.data?.message,
         duration: 1,
@@ -81,12 +92,20 @@ export const getValidateCode =
       password: userpassword?.pass,
       passwordIv: userpassword?.iv,
     };
+    dispatch({
+      type: VERIFYMFA,
+      payload: { data: null, loading: true },
+    });
     try {
       const response = await axios.post(
         `${ENDPOINTS?.apiEndoint}securityservice/auth/verify/mfa`,
         datas
       );
       if (response?.data?.response) {
+        dispatch({
+          type: VERIFYMFA,
+          payload: { data: response?.data, loading: true },
+        });
         if (validate && userpassword) {
           dispatch(loginAction(username, route, code, userpassword));
         } else {
@@ -96,8 +115,23 @@ export const getValidateCode =
           });
           route?.push(`/login`);
         }
+      } else {
+        if (!response?.data?.response) {
+          dispatch({
+            type: VERIFYMFA,
+            payload: { data: null, loading: false },
+          });
+          notification.error({
+            description: response?.data?.message,
+          });
+        }
       }
     } catch (err) {
+      dispatch({
+        type: VERIFYMFA,
+        payload: { data: null, loading: false },
+      });
+
       notification.error({
         description: err?.response?.data?.message,
       });
@@ -123,6 +157,10 @@ export const loginAction =
             code: code?.pass,
             codeIv: code?.iv,
           };
+    dispatch({
+      type: AUTHENTICATION,
+      payload: { data: null, loading: true },
+    });
     try {
       const response = await axios.post(
         ENDPOINTS.apiEndoint + `securityservice/auth/login`,
@@ -131,6 +169,10 @@ export const loginAction =
       if (response?.data) {
         let result = response?.data?.response;
         let emailSplit = email?.split("@");
+        dispatch({
+          type: AUTHENTICATION,
+          payload: { data: result, loading: false },
+        });
         if (response?.data?.status === "SUCCESS") {
           localStorage.setItem("roles", JSON.stringify(result?.roles));
           localStorage.setItem("token", result.access_token);
@@ -155,12 +197,20 @@ export const loginAction =
           localStorage.setItem("loginTime", Date.now());
         }
         if (response.data?.response === null) {
+          dispatch({
+            type: AUTHENTICATION,
+            payload: { data: null, loading: false },
+          });
           notification.error({
             description: response?.data?.message,
           });
         }
       }
     } catch (err) {
+      dispatch({
+        type: AUTHENTICATION,
+        payload: { data: null, loading: false },
+      });
       notification.error({
         message: err?.response?.data?.message,
         duration: 1,
@@ -247,7 +297,7 @@ export const refreshToken = () => async (dispatch) => {
       localStorage.setItem("refreshTokenTime", Date.now());
       const newtoken = response?.data?.response;
       localStorage.setItem("token", newtoken);
-      localStorage.setItem("loginTime",Date.now())
+      localStorage.setItem("loginTime", Date.now());
     }
   } catch (err) {
     console.log(err);

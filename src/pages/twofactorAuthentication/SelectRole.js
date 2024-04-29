@@ -15,7 +15,7 @@ const SelectRole = () => {
   const [role, setRole] = useState();
   const [decodedParams, setDecodedParams] = useState();
   const [confirmModal, setConfirmModal] = useState(false);
-
+  const [loading,setLoading]=useState(false)
   const rolesList = role?.slice().reverse();
   const items = [
     ...(rolesList?.length > 0
@@ -62,6 +62,7 @@ const SelectRole = () => {
     if (selectedRoleInfo && !roleError) {
       localStorage.setItem("userRole", selectedRoleInfo?.userRole);
       localStorage.setItem("role", selectedRole);
+      setLoading(true)
       router?.push(selectedRoleInfo?.route);
     }
   };
@@ -153,7 +154,7 @@ const SelectRole = () => {
                     name="BACK"
                     width="240px"
                   />
-                  <RegularButton type="submit" name="NEXT" width="240px" />
+                  <RegularButton type="submit" name="NEXT" width="240px" loading={loading} />
                 </div>
               </form>
             </div>

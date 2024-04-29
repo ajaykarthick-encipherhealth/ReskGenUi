@@ -8,6 +8,8 @@ import {
   CURRENTUSER_INFO,
   ACCURACYSCRORE,
   PATIENT_DETAILS,
+  AUTHENTICATION,
+  VERIFYMFA
 } from "../actions";
 import { CHATBOT } from "../../../store/actions/DashboardActions";
 
@@ -19,6 +21,8 @@ const initialState = {
   url: false,
   userInfo: null,
   chatReply: null,
+  authInfo:null,
+  verifyMfa:null
 };
 const initialStatePatient = {
   patientDetails: {},
@@ -77,6 +81,18 @@ export function AuthReducer(state = initialState, action) {
       ...state,
       codeDetails: action.payload,
     };
+  }
+  if(action.type === AUTHENTICATION){
+    return{
+      ...state,
+      authInfo:action.payload
+    }
+  }
+  if(action.type === VERIFYMFA){
+    return{
+      ...state,
+      verifyMfa:action.payload
+    }
   }
   return state;
 }
