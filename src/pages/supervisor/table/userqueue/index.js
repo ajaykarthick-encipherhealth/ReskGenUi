@@ -435,7 +435,7 @@ const UserQueueTable = ({ userList, setSort, auditBodyTemplate, page }) => {
         <tbody>
           {userList?.length <= 0 ? (
             <tr>
-              <td colSpan="9">
+              <td colSpan="11">
                 <Empty />
               </td>
             </tr>
