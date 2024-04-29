@@ -40,7 +40,7 @@ const addOnCodeColor = [
   "geekblue",
   "purple",
 ];
-const Combo = ({}) => {
+const Combo = ({ activeComboTree }) => {
   const dispatch = useDispatch();
   const patientDetailsResult = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -424,7 +424,7 @@ const Combo = ({}) => {
     headerNames,
     encounterDate,
     actualDescription,
-    diagnosisCode,
+    diagnosisCode
   ) => {
     setFileLoading(true);
     var fileId = patientFileDTO.fileId;
@@ -446,7 +446,7 @@ const Combo = ({}) => {
       );
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
-        pageNumber = result?.second[0]? result?.second[0] : null;
+        pageNumber = result?.second[0] ? result?.second[0] : null;
         if (result?.first == false) {
           splitPoint = headerNames;
         }
@@ -529,7 +529,7 @@ const Combo = ({}) => {
             headerNames,
             encounterDate,
             actualDescription,
-            diagnosisCode,
+            diagnosisCode
           );
         }
         if (pageNumber == fileInitialPage) {
@@ -646,7 +646,7 @@ const Combo = ({}) => {
       }
       setSearch({
         value: splitPoint,
-        headers:true,
+        headers: true,
       });
       setFindFileKeyword(splitPoint);
       setFileInitialPage(null);
@@ -812,8 +812,7 @@ const Combo = ({}) => {
           style={{ backgroundColor: backColor, color: textColor }}
           className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
         >
-              
-          {res}{console.log(diagnosisCode , "testing")}
+          {res}
         </span>
       );
       return sectionMapArr;
@@ -1095,6 +1094,21 @@ const Combo = ({}) => {
     notification.destroy();
     notification.info({ message: "Tree Not Available", duration: 1 });
   };
+
+  useEffect(() => {
+    if (activeComboTree) {
+      // if (combiTree.diagnosisCodeCombo == activeComboTree.diagnosisCode) {
+      comboDiseaseCodesList?.map((item) => {
+        if (item.diagnosisCodeCombo.replace(".","") == activeComboTree.diagnosisCode.replace(".","")) {
+          setOpens(true);
+          setCombiTree([{ ...item, expanded: true }]);
+        }
+      });
+      // }
+    }
+  }, [activeComboTree]);
+
+  console.log(combiTree, "combiTree");
 
   return (
     <>

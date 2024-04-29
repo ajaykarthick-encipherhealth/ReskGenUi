@@ -35,6 +35,7 @@ import {
   faCircleUser,
   faTrash,
   faAngleDown,
+  faPen,
 } from "@fortawesome/free-solid-svg-icons";
 import { CalendarOutlined } from "@ant-design/icons";
 import {
@@ -51,11 +52,13 @@ import {
   Dropdown,
   Tag,
   message,
+  Input,
+  Space,
+  Form,
 } from "antd";
 import { IMAGES, SVGICON } from "../../../../../../jsx/constant/theme";
 import { Modal } from "antd";
 import { Button } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
 import { Offcanvas } from "react-bootstrap";
 import { notification } from "antd";
 import { useRouter } from "next/navigation";
@@ -75,6 +78,8 @@ import {
 import { getPatientDetailsResult } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import CamboTree from "../org";
 import PdfViewer from "../../PdfViewerComponent";
+import RegularButton from "../../../../../../components/button";
+import { getResponePopup } from "../../../../../../utils/reusable";
 
 const { Option } = Select;
 const addOnCodeColor = [
@@ -113,7 +118,7 @@ const Meat = ({ activeMeatTitle, year }) => {
   const { setTargetPages } = searchPluginInstance;
 
   // setTargetPages((targetPage) => targetPage.pageIndex === 0);
-
+  const [meatEdit, setMeatEdit] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [isModalOpenValid, setIsModalOpenValid] = useState(false);
@@ -320,6 +325,7 @@ const Meat = ({ activeMeatTitle, year }) => {
   const [selectProviderInfo, setSelectProviderInfo] = useState(null);
   const [hccFormTab, setHccFormTab] = useState("HCCFORM");
   const [search, setSearch] = useState(false);
+  const [editData, setEditData] = useState({});
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -1484,7 +1490,7 @@ const Meat = ({ activeMeatTitle, year }) => {
     //   dos: encounterDatesValue,
     //   stringFileWord: splitPoint,
     // };
-    const patientId = localStorage.getItem('patientId')
+    const patientId = localStorage.getItem("patientId");
     var data = {
       patientId: patientId,
       diagnosisCode: meatresult.diagnosisCode,
@@ -1966,7 +1972,9 @@ const Meat = ({ activeMeatTitle, year }) => {
 
       var sectionMapArr = (
         <span
-          onClick={() => handleOpenModal(value, dis, encounterDate, meatresult, type)}
+          onClick={() =>
+            handleOpenModal(value, dis, encounterDate, meatresult, type)
+          }
           style={{ backgroundColor: backColor, color: textColor }}
           className={`cr-pointer mt-2 text-start ${visitStyles.captureheaderMeat}`}
         >
@@ -1998,13 +2006,7 @@ const Meat = ({ activeMeatTitle, year }) => {
       var sectionMapArr = (
         <span
           onClick={() =>
-            handleOpenModal(
-              value,
-              dis,
-              encounterDate,
-              meatresult,
-              type
-            )
+            handleOpenModal(value, dis, encounterDate, meatresult, type)
           }
           style={{ backgroundColor: backColor, color: textColor }}
           className={`cr-pointer mt-2 text-start ${visitStyles.captureheaderMeatView}`}
@@ -2272,6 +2274,30 @@ const Meat = ({ activeMeatTitle, year }) => {
     }
   }, [inputValue]);
 
+  const onFinishMeat = async (form) => {
+    const patientId = localStorage.getItem("patientId");
+    const data = {
+      ...form,
+      patientId: patientId,
+      year: year.value,
+      diagnosisCode: editData.diagnosisCode,
+    };
+
+    try {
+      const res = await axios.put(ENDPOINTS.apiEndoint + "dbservice/patient/compute/editmeat", data);
+      console.log(res);
+      if (res.data?.status) {
+        getResponePopup(res);
+        setEditData(null);
+        setMeatEdit(false)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onFinishFailed = (form) => {};
+
   return (
     <>
       {fileLoading ? (
@@ -2437,7 +2463,7 @@ const Meat = ({ activeMeatTitle, year }) => {
                             item.evaluate,
                             item.encounterDate,
                             item,
-                            'EVALUATION'
+                            "EVALUATION"
                           )}
                         </div>
                       </div>
@@ -2529,6 +2555,20 @@ const Meat = ({ activeMeatTitle, year }) => {
                             />
                           </div>
                         </Popconfirm>
+                        <Tooltip title="Edit">
+                          <div
+                            className={visitStyles.edit_icon}
+                            onClick={() => {
+                              setMeatEdit(true);
+                              setEditData(item);
+                            }}
+                          >
+                            <FontAwesomeIcon
+                              icon={faPen}
+                              style={{ size: 8, color: "#706e70" }}
+                            />
+                          </div>
+                        </Tooltip>
                         {item.isMeatCriteriaPresent === false ? (
                           <div
                             onClick={() => addMeatQuery(item, "Add")}
@@ -3007,6 +3047,222 @@ const Meat = ({ activeMeatTitle, year }) => {
         </Modal>
       ) : (
         opens && showErrorMessage()
+      )}
+
+      {meatEdit && (
+        <Modal
+          title={"Edit MEAT"}
+          // title="Pdf Test"
+          centered
+          open={meatEdit}
+          // style={{ top: 5 }}
+          onOk={() => setMeatEdit(false)}
+          onCancel={() => setMeatEdit(false)}
+          width="50%"
+          footer={false}
+          // height={400}
+        >
+          <Form
+            name="validateOnly"
+            layout="vertical"
+            autoComplete="off"
+            initialValues={editData}
+            onFinish={onFinishMeat}
+            onFinishFailed={onFinishFailed}
+          >
+            <>
+            <div className="row">
+                <div className="col-xl-6">
+                  <Form.Item
+                    label="Diagnosis Code"
+                    name="diagnosisCode"
+                  >
+                    <Input
+                  name="diagnosisCode"
+                  className={styles.formControl}
+                  disabled
+                />
+                    {/* <Select
+                      mode="tags"
+                      maxTagCount="responsive"
+                      className={`ant_select_form hcc_form mb-2`}
+                    >
+                      {sectionList?.map((data) => (
+                        <Option key={data?.value} value={data?.value}>
+                          {data?.label}
+                        </Option>
+                      ))}
+                    </Select> */}
+                  </Form.Item>
+                </div>
+                <div className="col-xl-6">
+                  <Form.Item label="Description" name="diseaseName">
+                    <Input name="diseaseName" className={styles.formControl} disabled/>
+                  </Form.Item>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-xl-6">
+                  <Form.Item
+                    label="Monitor Header"
+                    name="monitorCapturedFromHeader"
+                  >
+                    <Input
+                  name="monitorCapturedFromHeader"
+                  className={styles.formControl}
+                />
+                    {/* <Select
+                      mode="tags"
+                      maxTagCount="responsive"
+                      className={`ant_select_form hcc_form mb-2`}
+                    >
+                      {sectionList?.map((data) => (
+                        <Option key={data?.value} value={data?.value}>
+                          {data?.label}
+                        </Option>
+                      ))}
+                    </Select> */}
+                  </Form.Item>
+                </div>
+                <div className="col-xl-6">
+                  <Form.Item label="Monitor" name="monitor">
+                    <Input name="monitor" className={styles.formControl} />
+                  </Form.Item>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-xl-6">
+                  <Form.Item
+                    label="Evaluate Header"
+                    name="evaluateCapturedFromHeader"
+                  >
+                    <Input
+                  name="evaluateCapturedFromHeader"
+                  className={styles.formControl}
+                />
+                    {/* <Select
+                      mode="tags"
+                      maxTagCount="responsive"
+                      className={`ant_select_form hcc_form mb-2`}
+                    >
+                      {sectionList?.map((data) => (
+                        <Option key={data?.value} value={data?.value}>
+                          {data?.label}
+                        </Option>
+                      ))}
+                    </Select> */}
+                  </Form.Item>
+                </div>
+                <div className="col-xl-6">
+                  <Form.Item label="Evaluate" name="evaluate">
+                    <Input name="evaluate" className={styles.formControl} />
+                  </Form.Item>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-xl-6">
+                  <Form.Item
+                    label={
+                      <label>
+                        Assessment Header&nbsp;
+                        {/* <span style={{ color: "red" }}>*</span> */}
+                      </label>
+                    }
+                    name="assessmentCapturedFromHeader"
+                    rules={[
+                      {
+                        required: false,
+                        message: "Please Enter Assessment Header.",
+                      },
+                    ]}
+                  >
+                    <Input
+                  name="assessmentCapturedFromHeader"
+                  className={styles.formControl}
+                />
+                    {/* <Select
+                      mode="tags"
+                      maxTagCount="responsive"
+                      className={`ant_select_form hcc_form mb-2`}
+                    >
+                      {sectionList?.map((data) => (
+                        <Option key={data?.value} value={data?.value}>
+                          {data?.label}
+                        </Option>
+                      ))}
+                    </Select> */}
+                  </Form.Item>
+                </div>
+                <div className="col-xl-6">
+                  <Form.Item
+                    label={
+                      <label>
+                        Assessment&nbsp;
+                        {/* <span style={{ color: "red" }}>*</span> */}
+                      </label>
+                    }
+                    name="assessment"
+                    rules={[
+                      {
+                        required: false,
+                        message: "Please Enter Assessment.",
+                      },
+                    ]}
+                  >
+                    <Input name="assessment" className={styles.formControl} />
+                  </Form.Item>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-xl-6">
+                  <Form.Item
+                    label="Treatment Header"
+                    name="treatmentCapturedFromHeader"
+                  >
+                    <Input
+                  name="treatmentCapturedFromHeader"
+                  className={styles.formControl}
+                />
+                    {/* <Select
+                      mode="tags"
+                      maxTagCount="responsive"
+                      className={`ant_select_form hcc_form mb-2`}
+                    >
+                      {sectionList?.map((data) => (
+                        <Option key={data?.value} value={data?.value}>
+                          {data?.label}
+                        </Option>
+                      ))}
+                    </Select> */}
+                  </Form.Item>
+                </div>
+                <div className="col-xl-6">
+                  <Form.Item label="Treatment" name="treatment">
+                    <Input name="treatment" className={styles.formControl} />
+                    {/* <Select
+                      mode="tags"
+                      maxTagCount="responsive"
+                      className={`ant_select_form hcc_form mb-2`}
+                    >
+                      {sectionList?.map((data) => (
+                        <Option key={data?.value} value={data?.value}>
+                          {data?.label}
+                        </Option>
+                      ))}
+                    </Select> */}
+                  </Form.Item>
+                </div>{" "}
+              </div>
+
+              {/* {meatDetail && <label className="my-3">Please enter</label>} */}
+              <Form.Item>
+                <Space>
+                  <RegularButton type="submit" name="Save" width={100} />
+                </Space>
+              </Form.Item>
+            </>
+          </Form>
+        </Modal>
       )}
 
       <Offcanvas
