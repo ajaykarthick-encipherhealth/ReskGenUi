@@ -16,6 +16,7 @@ const GetOTP = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const url = useSelector((state) => state.auth.qrcode);
+  const loginResponse=useSelector(state=>state.auth.verifyMfa)
   const inputRefs = Array.from({ length: codeLength + 1 }, () => useRef(null));
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
@@ -61,7 +62,7 @@ const GetOTP = () => {
       }
     }
   };
-
+console.log(loginResponse)
   return (
     <div className={styles.contentMainDIv}>
       <div className={styles.mfaMainDiv}>
@@ -139,6 +140,7 @@ const GetOTP = () => {
               type="submit"
               name="VALIDATE"
               width="280px"
+              loading={loginResponse?.loading}
               onClick={() => {
                 const codeString = code?.join("");
                 if (codeString?.length > 0) {

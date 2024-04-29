@@ -14,10 +14,12 @@ import {
 } from "../components/headerFilters/functions";
 import RegularButton from "../components/button";
 import { getMFAValidation } from "../stores/authflow/actions";
+import { useSelector } from "react-redux";
 
 export default function Login() {
   const router = useRouter();
   const dispatch = useDispatch();
+  const loginResponse=useSelector(state=>state.auth.mfa)
   const [enteredEmail, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   let errorsObj = { email: "", password: "" };
@@ -133,7 +135,7 @@ export default function Login() {
                   )}
                 </div>
                 <div className="text-center mb-4">
-                  <RegularButton type="submit" name="LOGIN" width="100%" />
+                  <RegularButton type="submit" name="LOGIN" width="100%" loading={loginResponse?.loading} />
                 </div>
               </form>
             </div>
