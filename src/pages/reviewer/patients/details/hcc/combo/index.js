@@ -1108,8 +1108,6 @@ const Combo = ({ activeComboTree }) => {
     }
   }, [activeComboTree]);
 
-  console.log(combiTree, "combiTree");
-
   return (
     <>
       {fileLoading ? (

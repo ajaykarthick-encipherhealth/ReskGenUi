@@ -2285,7 +2285,6 @@ const Meat = ({ activeMeatTitle, year }) => {
 
     try {
       const res = await axios.put(ENDPOINTS.apiEndoint + "dbservice/patient/compute/editmeat", data);
-      console.log(res);
       if (res.data?.status) {
         getResponePopup(res);
         setEditData(null);
