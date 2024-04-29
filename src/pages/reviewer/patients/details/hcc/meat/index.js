@@ -514,7 +514,7 @@ const Meat = ({ activeMeatTitle, year }) => {
           const encounterDatearray = res?.encounterDate?.split(",");
           var providerList = [];
           res.provider?.map((res, index) => {
-            providerList.push(res.providerName);
+            providerList.push(res?.providerName);
           });
 
           if (res.isShow != false) {
@@ -816,7 +816,7 @@ const Meat = ({ activeMeatTitle, year }) => {
         validDiseaseNewRes?.map((res) => {
           res.provider?.map((res2, index) => {
             capturedSectionsArr?.push({
-              name: res2.providerName,
+              name: res2?.providerName,
               diagnosisCode: res?.diagnosisCode,
             });
           });
@@ -1827,7 +1827,7 @@ const Meat = ({ activeMeatTitle, year }) => {
 
   const stringToColour = (str) => {
     let hash = 0;
-    str.split("").forEach((char) => {
+    str?.split("").forEach((char) => {
       hash = char.charCodeAt(0) + ((hash << 5) - hash);
     });
     let colour = "#";
