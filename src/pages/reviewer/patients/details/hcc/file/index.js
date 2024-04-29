@@ -98,6 +98,7 @@ const File = ({
   year,
   setActiveTabHead,
   setActiveMeatTitle,
+  setActiveComboTree
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -3674,6 +3675,10 @@ const File = ({
                                     {data.isComboCode == true ? (
                                       <Badge
                                         className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                        onClick={() => {
+                                          setActiveTabHead(3);
+                                          setActiveComboTree({diagnosisCode: data?.diagnosisCode,})
+                                        }}
                                       >
                                         Combo
                                       </Badge>
@@ -4108,6 +4113,10 @@ const File = ({
                                   {data.isComboCode == true ? (
                                       <Badge
                                         className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                        onClick={() => {
+                                          setActiveTabHead(3);
+                                          setActiveComboTree({diagnosisCode: data?.diagnosisCode,})
+                                        }}
                                       >
                                         Combo
                                       </Badge>
@@ -4297,6 +4306,10 @@ const File = ({
                             {data.isComboCode == true ? (
                                       <Badge
                                         className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                        onClick={() => {
+                                          setActiveTabHead(3);
+                                          setActiveComboTree({diagnosisCode: data?.diagnosisCode,})
+                                        }}
                                       >
                                         Combo
                                       </Badge>

@@ -76,7 +76,7 @@ import PdfViewer from "../../PdfViewerComponent";
 import EditHccForm from "../../components/editHccForm";
 
 const { Option } = Select;
-const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
+const VisitData = ({setActiveTabHead,setActiveMeatTitle, setActiveComboTree}) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
   let searchKeywords = [];
@@ -3362,6 +3362,11 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
                               {data.isComboCode == true ? (
                                       <Badge
                                         className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                        onClick={() => {
+                                          setActiveTabHead(3);
+                                          setActiveComboTree({diagnosisCode: data?.diagnosisCode,})
+                                          setIsModalOpenValidCodes(false)
+                                        }}
                                       >
                                         Combo
                                       </Badge>
@@ -3698,6 +3703,11 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
                             {data.isComboCode == true ? (
                                       <Badge
                                         className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                        onClick={() => {
+                                          setActiveTabHead(3);
+                                          setActiveComboTree({diagnosisCode: data?.diagnosisCode,})
+                                          setIsModalOpenValidCodes(false)
+                                        }}
                                       >
                                         Combo
                                       </Badge>
@@ -4418,6 +4428,11 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
                                  {data.isComboCode == true ? (
                                       <Badge
                                         className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                        onClick={() => {
+                                          setActiveTabHead(3);
+                                          setActiveComboTree({diagnosisCode: data?.diagnosisCode,})
+                                          setIsModalOpenValidCodes(false)
+                                        }}
                                       >
                                         Combo
                                       </Badge>
@@ -4772,6 +4787,11 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
                             {data.isComboCode == true ? (
                                       <Badge
                                         className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                        onClick={() => {
+                                          setActiveTabHead(3);
+                                          setActiveComboTree({diagnosisCode: data?.diagnosisCode,})
+                                          setIsModalOpenValidCodes(false)
+                                        }}
                                       >
                                         Combo
                                       </Badge>

@@ -12,6 +12,7 @@ const Hcc = ({ year }) => {
   const [flagTagActive, setFlagTagActive] = useState(false);
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [activeMeatTitle, setActiveMeatTitle] = useState(null);
+  const [activeComboTree, setActiveComboTree] = useState(null)
 
   const selectTab = (num) => {
     setFlagTagActive(false);
@@ -21,6 +22,9 @@ const Hcc = ({ year }) => {
     }
     if(num == 4){
       setActiveMeatTitle(null);
+    }
+    if (num == 3) {
+      setActiveComboTree(null)
     }
     setPopoverVisible(false);
   };
@@ -135,13 +139,14 @@ const Hcc = ({ year }) => {
                     year={year}
                     setActiveTabHead={setActiveTabHead}
                     setActiveMeatTitle={setActiveMeatTitle}
+                    setActiveComboTree={setActiveComboTree}
                   />
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey={2}>
-                  <VisitData setActiveTabHead={setActiveTabHead}  setActiveMeatTitle={setActiveMeatTitle}/>
+                  <VisitData setActiveTabHead={setActiveTabHead}  setActiveMeatTitle={setActiveMeatTitle} setActiveComboTree={setActiveComboTree}/>
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey={3}>
-                  <Combo />
+                  <Combo activeComboTree={activeComboTree} />
                 </Tab.Pane>
                 <Tab.Pane id="my-posts" eventKey={4}>
                   <Meat activeMeatTitle={activeMeatTitle} year={year}/>
