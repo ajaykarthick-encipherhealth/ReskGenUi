@@ -194,7 +194,6 @@ export const dateFormate = (dayjs, date) => {
 
 //sorting
 export const sortFunction = (sortDir, setSortDir, setSort, field) => {
-  console.log(sortDir, field, "test");
   setSortDir(sortDir === "ASC" ? "DESC" : "ASC");
   setSort({ sortDir: sortDir === "ASC" ? "DESC" : "ASC", sortField: field });
 };
