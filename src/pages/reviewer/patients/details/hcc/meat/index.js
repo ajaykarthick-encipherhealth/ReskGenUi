@@ -2288,7 +2288,8 @@ const Meat = ({ activeMeatTitle, year }) => {
       if (res.data?.status) {
         getResponePopup(res);
         setEditData(null);
-        setMeatEdit(false)
+        setMeatEdit(false);
+        dispatch(getPatientDetailsResult(patientId));
       }
     } catch (error) {
       console.log(error);
