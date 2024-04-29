@@ -24,6 +24,7 @@ import Form from "react-bootstrap/Form";
 import { notification } from "antd";
 import { Tooltip } from "antd";
 import { getPatientDetailsResult } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
+import PdfViewer from "../../PdfViewerComponent";
 
 const File = ({}) => {
   const dispatch = useDispatch();
@@ -78,6 +79,8 @@ const File = ({}) => {
   const [fileModalTitle, setFileModalTitle] = useState("");
   const [listPageNumber, setListPageNumber] = useState([]);
   const [isDocumentLoaded, setDocumentLoaded] = React.useState(false);
+  const [search, setSearch] = useState();
+
   const handleDocumentLoadFile = () => {
     setDocumentLoaded(true);
     if (findFileKeyword) {
@@ -199,7 +202,6 @@ const File = ({}) => {
               });
             }
           });
-        
         }
         invalidDis = result.invalidDisease;
         setInNewValidDiseaseList(invalidDiseaseNewRes);
@@ -369,13 +371,16 @@ const File = ({}) => {
     const encounterDatesHeader = encounterDatesValue[0];
     var splitPoint = actualDescription.substring(" ", 20);
     var data = {
-      fileId:fileId,
+      fileId: fileId,
       header: disDescription,
-      dos:encounterDatesHeader,
-      stringFileWord:splitPoint      
-    }
+      dos: encounterDatesHeader,
+      stringFileWord: splitPoint,
+    };
     try {
-      const response = await axios.post(ENDPOINTS.apiEndoint +`dbservice/pageNumber`,data);
+      const response = await axios.post(
+        ENDPOINTS.apiEndoint + `dbservice/pageNumber`,
+        data
+      );
       var result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
         setFileInitialPage(pageNumber);
@@ -391,6 +396,11 @@ const File = ({}) => {
             duration: 1,
           });
         }
+        setSearch({
+          value: splitPoint,
+          page: pageNumber,
+          headers: result?.first,
+        });
         setFileInitialPage(pageNumber);
       } else {
         setFileInitialPage(null);
@@ -506,8 +516,7 @@ const File = ({}) => {
       capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndoint +
-        `dbservice/update/move/suggestedtovalid`,
+      ENDPOINTS.apiEndoint + `dbservice/update/move/suggestedtovalid`,
       dataFormatSuggested
     );
     var result = response.data;
@@ -535,8 +544,7 @@ const File = ({}) => {
       capturedSections: selectInvalidDetails.capturedSections,
     };
     const response = await axios.put(
-      ENDPOINTS.apiEndoint +
-        `dbservice/update/move/invalidtovalid`,
+      ENDPOINTS.apiEndoint + `dbservice/update/move/invalidtovalid`,
       dataFormatSuggested
     );
     var result = response.data;
@@ -736,8 +744,12 @@ const File = ({}) => {
       const result = captureSectionMatching.filter(
         (res2) => res2.sectionName == res
       );
-      var backColor = result[0]?.backgroundColor == "#efeff033" ? "#54548d33" : result[0]?.backgroundColor ;
-      var textColor = result[0]?.sectionColor == "#efeff0" ? "#000" : result[0]?.sectionColor;
+      var backColor =
+        result[0]?.backgroundColor == "#efeff033"
+          ? "#54548d33"
+          : result[0]?.backgroundColor;
+      var textColor =
+        result[0]?.sectionColor == "#efeff0" ? "#000" : result[0]?.sectionColor;
       var sectionMapArr = (
         <span
           className={`mt-2 text-start ${visitStyles.provider_name}`}
@@ -853,7 +865,7 @@ const File = ({}) => {
           </div>
           <div className="col-xl-6">
             <div className="card-body p-0">
-              <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
+              {/* <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
                 <div
                   style={{
                     height: "80vh",
@@ -875,7 +887,13 @@ const File = ({}) => {
                     )}
                   />
                 </div>
-              </Worker>
+              </Worker> */}
+              <PdfViewer
+                src={selectFileURL}
+                searchQuery={search?.value ? search?.value : ""}
+                pageNumber={search?.page ? search?.page : 1}
+                headers={search?.headers}
+              />
             </div>
           </div>
           <div className="col-xl-3">

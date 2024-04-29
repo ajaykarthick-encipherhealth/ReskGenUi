@@ -12,7 +12,16 @@ import {
   VERIFYMFA
 } from "../actions";
 import { CHATBOT } from "../../../store/actions/DashboardActions";
+export const PDF_URL='PDF_URL'
 
+export const pdfUrl=(url)=>{
+  return(
+    {
+      type: PDF_URL,
+      payload: url,
+    }
+  )
+}
 const initialState = {
   codeDetails: null,
   qrcode: "",
@@ -21,6 +30,7 @@ const initialState = {
   url: false,
   userInfo: null,
   chatReply: null,
+  pdfUrl:null,
   authInfo:null,
   verifyMfa:null
 };
@@ -80,6 +90,12 @@ export function AuthReducer(state = initialState, action) {
     return {
       ...state,
       codeDetails: action.payload,
+    };
+  }
+  if (action.type === PDF_URL) {
+    return {
+      ...state,
+      pdfUrl: action.payload,
     };
   }
   if(action.type === AUTHENTICATION){
