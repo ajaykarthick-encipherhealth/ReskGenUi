@@ -67,7 +67,7 @@ export async function updateSemantic({obj}) {
     body: JSON.stringify(obj)
   };
   const data = await requestPortal(
-    `management/addOrUpdateIcdCodeWithYear
+    `management/update
   `,
     options
   );
