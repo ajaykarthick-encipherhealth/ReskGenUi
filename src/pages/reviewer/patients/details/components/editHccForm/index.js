@@ -455,10 +455,10 @@ const EditHccForm = ({
                   </Form.Item>
                 </div>
               </div>
-              <Form.Item>
+              <Form.Item style={{display:"flex",justifyContent:"end"}}>
                 <Space>
-                  <RegularButton type="submit" name="Update" width={100} />
-                  <RegularButton
+                  <RegularButton type="submit" name="Update" width={100}/>
+                  {/* <RegularButton
                     type="outline"
                     name="Cancel"
                     width={100}
@@ -466,7 +466,7 @@ const EditHccForm = ({
                     onClick={() => {
                       closeModal();
                     }}
-                  />
+                  /> */}
                 </Space>
               </Form.Item>
             </Form>
