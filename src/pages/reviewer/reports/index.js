@@ -15,7 +15,6 @@ import ExportImg from "../../../images/svg/Export";
 import { debounce } from "../../admin/report/Export";
 import { disableFutureDate } from "../../../components/headerFilters/functions";
 
-
 import {
   getReceivedDetails,
   getReportDetails,
@@ -46,10 +45,13 @@ const Reports = () => {
   );
   const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
+
+  console.log(reportActiveTab,"active")
+
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState(
-    reportActiveTab ? reportActiveTab : "Reviewer"
-  );
+  // const [activeTab, setActiveTab] = useState(
+  //   reportActiveTab ? reportActiveTab : "Reviewer"
+  // );
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
@@ -81,6 +83,7 @@ const Reports = () => {
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
+  const [searchVal, setSearchVal] = useState("");
 
   const [search, setSearch] = useState();
   const { RangePicker } = DatePicker;
@@ -113,7 +116,6 @@ const Reports = () => {
     setPageNo(e.page);
   };
 
- 
   const handleCoderPicker = (date, dateString) => {
     const formattedDates = dateString?.map((date, index) => {
       const formattedDate =
@@ -141,9 +143,15 @@ const Reports = () => {
     setSelectAll(false);
   };
 
+  // const handleTabs = (name) => {
+  //   setSelectedDates(null);
+
+  //   dispatch(getActiveTab(name));
+
+  // };
   const handleTabs = (name) => {
     setSelectedDates(null);
-    // setActiveTab(name);
+    localStorage.setItem("activeTab", name);
     dispatch(getActiveTab(name));
   };
   useEffect(() => {
@@ -187,6 +195,60 @@ const Reports = () => {
     reportActiveTab,
     // activeTab,
     ExportResponse,
+    selectedCoderOpt,
+    coderSearch,
+    coderStartDate,
+    coderEndDate,
+    startDate,
+    endDate,
+    sentSearch,
+    receivedPageNo,
+    receivedStartDate,
+    receivedEndDate,
+    receivedSearch,
+    receivedSortOrder,
+    sort,
+  ]);
+  useEffect(() => {
+    setIsLoading(false);
+    const activeTabFromStorage = localStorage.getItem("activeTab");
+    const activeTab = activeTabFromStorage ? activeTabFromStorage : "Reviewer";
+    dispatch(getActiveTab(activeTab));
+
+    if (activeTab === "Sent") {
+      dispatch(
+        getSentDetails(sentPageNo, startDate, endDate, sentSearch, sort)
+      );
+    } else if (activeTab === "Received") {
+      dispatch(
+        getReceivedDetails(
+          receivedPageNo,
+          receivedStartDate,
+          receivedEndDate,
+          receivedSearch,
+          sort
+        )
+      );
+    } else {
+      dispatch(
+        getReportDetails(
+          pageNo,
+          coderStartDate,
+          coderEndDate,
+          coderSearch,
+          selectedCoderOpt,
+          sort
+        )
+      );
+    }
+
+    if (ExportResponse) {
+      setIsModalVisible(false);
+    }
+  }, [
+    pageNo,
+    sentPageNo,
+    receivedPageNo,
     selectedCoderOpt,
     coderSearch,
     coderStartDate,
@@ -246,7 +308,7 @@ const Reports = () => {
         setSentSearch(text);
       } else if (reportActiveTab === "Received") {
         setReceivedSearch(text);
-      }  else {
+      } else {
         setCoderSearch(text);
       }
     }, 700),
@@ -261,7 +323,6 @@ const Reports = () => {
     setSearch(value);
     debouncedSearch(value, reportActiveTab);
   };
-
 
   return (
     <>
@@ -315,7 +376,7 @@ const Reports = () => {
                     <div className="tbl-caption  align-items-center">
                       <div
                         className="row filter-contain"
-                        style={{ marginTop: "15px" }}
+                        style={{ marginTop: "47px" }}
                       >
                         <div className="col-xl-2" style={{ display: "flex" }}>
                           <label className="labelStyle">Search </label>
@@ -342,17 +403,18 @@ const Reports = () => {
                           </div>
                         </div>
                         {!reportActiveTab || reportActiveTab === "Reviewer" ? (
-                          <div className="col-xl-2" style={{ display: "flex" }}>
+                          <div
+                            className="col-xl-2"
+                            style={{ display: "flex", width: "214px" }}
+                          >
                             <label className="labelStyle"> Status</label>
                             <div class="form-group has-search">
-                            
                               <Select
-                                style={{ borderRadius: "0 5px 5px 0" }}
                                 onChange={(selectedOption) => {
                                   dosOnChange(selectedOption);
                                 }}
                                 options={statusOptions}
-                                className="custom-react-select"
+                                className={`custom-react-select`}
                                 isSearchable={false}
                               />
                               {/* )} */}
@@ -364,7 +426,10 @@ const Reports = () => {
                           <label className="labelStyle"> Date</label>
                           <div>
                             <RangePicker
-                              style={{ borderRadius: "0 5px 5px 0" , width:"120%"}}
+                              style={{
+                                borderRadius: "0 5px 5px 0",
+                                width: "125%",
+                              }}
                               value={selectedDates}
                               onChange={
                                 reportActiveTab === "SentReport"

@@ -51,7 +51,7 @@
   color: #000000;
 }
 .card {
-  padding: 5px;
+  padding: 10px;
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
@@ -259,4 +259,11 @@
 
 .export:hover {
   text-decoration: none !important;
+}
+
+.custom-select-container {
+  width: 175px;
+}
+.selectedCard {
+  border: 1px solid #04306f; /* Adjust the border style as needed */
 }

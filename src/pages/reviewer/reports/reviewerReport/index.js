@@ -921,7 +921,7 @@ const ReviewerReport = ({
                             <div
                               className={styles.contentGroup}
                               // onClick={handleCardRowClick}
-                              style={{cursor:'pointer'}}
+                              style={{ cursor: "pointer" }}
                             >
                               <div className={styles.inputContainer}>
                                 <input
@@ -957,7 +957,13 @@ const ReviewerReport = ({
                                     className={`col-xl-6 ${styles.dataContainer}`}
                                   >
                                     <span className={styles.raf}>
-                                      {item.rafSum ? item.rafSum : "---"}
+                                      <Tooltip
+                                        title={"Raf Score"}
+                                        placement="bottom"
+                                      >
+                                        {" "}
+                                        {item.rafSum ? item.rafSum : "---"}
+                                      </Tooltip>
                                     </span>
                                     <span style={{ marginRight: "10px" }}>
                                       {item?.flag ? (
@@ -996,12 +1002,12 @@ const ReviewerReport = ({
                                   <div
                                     className={`col-xl-4 ${styles.headText}`}
                                   >
-                                    AUDITOR NAME
+                                    SUPERVISOR
                                   </div>
                                   <div
                                     className={`col-xl-4 ${styles.headText}`}
                                   >
-                                    PATIENT ALLOCATE TO
+                                    REVIEWER
                                   </div>
                                 </div>
                                 <div
@@ -1096,13 +1102,9 @@ const ReviewerReport = ({
                           <div className={`col-xl-2 ${styles.subCard}`}>
                             <div>Completed date</div>
                             <div className={styles.dateContainer}>
-                              <div className={styles.bullet}></div>
-                              <div style={{ fontSize: "10px" }}>03/04/2024</div>
-                            </div>
-
-                            <div className={styles.dateContainer}>
-                              <div className={styles.bullet}></div>
-                              <div style={{ fontSize: "10px" }}>03/04/2024</div>
+                              <div style={{ fontSize: "12px", padding: "5px" }}>
+                                03/04/2024 - 03/04/2024
+                              </div>
                             </div>
                           </div>
 
