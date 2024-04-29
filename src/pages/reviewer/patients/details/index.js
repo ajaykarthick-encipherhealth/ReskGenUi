@@ -2057,30 +2057,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                                 </span>
                               </Button>
                             </Dropdown>
-                            {/* <Dropdown.Button
-                              type="primary"
-                              className={
-                                patienIdDetails?.auditedStatus == "AUDITHOLD"
-                                  ? `auditHoldBtnHcc`
-                                  : patienIdDetails?.auditedStatus ==
-                                    "AUDIT_PENDING"
-                                  ? `auditPendingBtnHcc`
-                                  : patienIdDetails?.auditedStatus == "AUDITED"
-                                  ? `auditBtnHcc`
-                                  : patienIdDetails?.auditedStatus == "REAUDIT"
-                                  ? `reauditBtnHcc`
-                                  : patienIdDetails?.auditedStatus ==
-                                    "AUDIT_DECLINED"
-                                  ? `declineBtnHcc`
-                                  : `auditBtnHcc`
-                              }
-                              icon={<DownOutlined />}
-                              overlay={renderAuditMenu()}
-                            >
-                              {patienIdDetails?.auditedStatus != null
-                                ? patienIdDetails?.auditedStatus
-                                : "AUDIT"}
-                            </Dropdown.Button> */}
+                           
                           </div>
                         ) : (
                           <div className={`${visitStyles.actionbtnContainer}`}>
@@ -2132,20 +2109,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                                     </span>
                                   </Button>
                                 </Dropdown>
-                                {/* <Dropdown.Button 
-                                  type="primary"
-                                  className={`declinedBtnHcc ${visitStyles.declinedBtnHcc}`}
-                                  icon={<DownOutlined />}
-                                  overlay={
-                                    activeTab == 3
-                                      ? actionItems2
-                                      : activeTab == 4
-                                      ? actionItems3
-                                      : actionItems
-                                  }
-                                >
-                                  DECLINED
-                                </Dropdown.Button>*/}
+                     
                               </div>
                             ) : patienIdDetails?.processedStatus == "HOLD" ? (
                               <Dropdown
@@ -2170,85 +2134,31 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                                   </span>
                                 </Button>
                               </Dropdown>
-
-                            ) :
-                             patienIdDetails?.processedStatus == "PENDING" ? (
+                            ) : patienIdDetails?.processedStatus ==
+                              "PENDING" ? (
                               <Dropdown
-                                  overlay={
-                                    activeTab == 3
-                                      ? actionItems2
-                                      : activeTab == 4
-                                      ? actionItems3
-                                      : actionItems
-                                  }
-                                  onVisibleChange={(v) => setMenuIsOpen(v)}
-                                  visible={menuIsOpen}
+                                overlay={
+                                  activeTab == 3
+                                    ? actionItems2
+                                    : activeTab == 4
+                                    ? actionItems3
+                                    : actionItems
+                                }
+                                onVisibleChange={(v) => setMenuIsOpen(v)}
+                                visible={menuIsOpen}
+                                className={`pendingBtn ${visitStyles.pendingBtn}`}
+                              >
+                                <Button
+                                  type="primary"
                                   className={`pendingBtn ${visitStyles.pendingBtn}`}
                                 >
-                                  <Button
-                                    type="primary"
-                                    className={`pendingBtn ${visitStyles.pendingBtn}`}
-                                  >
-                                    <span>PENDING</span>
-                                    <span style={{ marginLeft: "10px" }}>
-                                      <DownOutlined />
-                                    </span>
-                                  </Button>
-                                </Dropdown>
-                              
-                            )// <Dropdown.Button
-                            //   type="primary"
-                            //   className={`holdBtnHcc ${visitStyles.holdBtnHcc}`}
-                            //   icon={<DownOutlined />}
-                            //   overlay={
-                            //     activeTab == 3
-                            //       ? actionItems2
-                            //       : activeTab == 4
-                            //       ? actionItems3
-                            //       : actionItems
-                            //   }
-                            // >
-                            //   HOLD
-                            // </Dropdown.Button>
-                            // <div className={`col-xl-12`}>
-                            //   <Dropdown
-                            //     overlay={
-                            //       activeTab == 3
-                            //         ? actionItems2
-                            //         : activeTab == 4
-                            //         ? actionItems3
-                            //         : actionItems
-                            //     }
-                            //     onVisibleChange={(v) => setMenuIsOpen(v)}
-                            //     visible={menuIsOpen}
-                            //     className={`pendingBtn ${visitStyles.pendingBtn}`}
-                            //   >
-                            //     <Button
-                            //       type="primary"
-                            //       className={`pendingBtn ${visitStyles.pendingBtn}`}
-                            //     >
-                            //       <span>---</span>
-                            //       <span style={{ marginLeft: "10px" }}>
-                            //         <DownOutlined />
-                            //       </span>
-                            //     </Button>
-                            //   </Dropdown>
-                            //   {/* <Dropdown.Button
-                            //     type="primary"
-                            //     className={`pendingBtn ${visitStyles.pendingBtn}`}
-                            //     icon={<DownOutlined />}
-                            //     overlay={
-                            //       activeTab == 3
-                            //         ? actionItems2
-                            //         : activeTab == 4
-                            //         ? actionItems3
-                            //         : actionItems
-                            //     }
-                            //   >
-                            //     PENDING
-                            //   </Dropdown.Button> */}
-                            // </div>
-                          :  null}
+                                  <span>PENDING</span>
+                                  <span style={{ marginLeft: "10px" }}>
+                                    <DownOutlined />
+                                  </span>
+                                </Button>
+                              </Dropdown>
+                            ) : null}
                           </div>
                         )}
                       </div>
