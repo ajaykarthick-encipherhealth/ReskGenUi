@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { notification } from "antd";
 import { Select } from "antd";
-import { Button, Form, Input, Space, DatePicker,Switch } from "antd";
+import { Button, Form, Input, Space, DatePicker, Switch } from "antd";
 import moment from "moment";
 import axios from "../../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../../utility/enpoints";
 import styles from "../../hcc/styles.module.css";
-import { getMeatQueryList, getPatientDetailsResult } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
+import {
+  getMeatQueryList,
+  getPatientDetailsResult,
+} from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import RegularButton from "../../../../../../components/button";
 import visitStyles from "../../../../../../styles/visitdata.module.css";
 
@@ -34,7 +37,6 @@ const AddHccForm = ({
   const [formInitialValues, setFormInitialValues] = useState(null);
   const [providerDetails, setProviderDetails] = useState(null);
 
-
   const providerInfoList = [
     { value: "authorizedProvider", label: "Authorized Provider" },
     { value: "noCredential", label: "No Credential" },
@@ -49,21 +51,24 @@ const AddHccForm = ({
     var authorizedProvider = form.selectProviderInfo;
     form.encounterDate = moment(form.encounterDate).format("MM-DD-YYYY");
     form.capturedSections = [form.capturedSections];
-    form.provider = [{
-      authorizedProvider: form.selectProviderInfo == "authorizedProvider" ? true : false,
-      noCredential: form.selectProviderInfo == "noCredential" ? true : false,
-      unAuthorizeProvider:
-        form.selectProviderInfo == "unAuthorizeProvider" ? true : false,
-      unSigned: form.selectProviderInfo == "unSigned" ? true : false,
-      providerName: form.providerName,
-    }];
+    form.provider = [
+      {
+        authorizedProvider:
+          form.selectProviderInfo == "authorizedProvider" ? true : false,
+        noCredential: form.selectProviderInfo == "noCredential" ? true : false,
+        unAuthorizeProvider:
+          form.selectProviderInfo == "unAuthorizeProvider" ? true : false,
+        unSigned: form.selectProviderInfo == "unSigned" ? true : false,
+        providerName: form.providerName,
+      },
+    ];
 
     setHccFormDetails(form);
   };
   const onFinishMeat = async (form) => {
     var patientId = localStorage.getItem("patientId");
     form.encounterDate = hccFormDetails.encounterDate;
-    form.diagnosisCode= hccFormDetails.diagnosisCode;    
+    form.diagnosisCode = hccFormDetails.diagnosisCode;
     form.radiology = false;
     form.lab = false;
     form.isManuallyAdded = true;
@@ -83,29 +88,28 @@ const AddHccForm = ({
     //   (form.monitor && form.monitorCapturedFromHeader) ||
     //   (treatment && treatmentCapturedFromHeader)
     // ) {
-      try {
-        const response = await axios.post(
-          ENDPOINTS.apiEndoint +
-            `dbservice/patient/compute/addvaliddisease`,
-          dataFormat
+    try {
+      const response = await axios.post(
+        ENDPOINTS.apiEndoint + `dbservice/patient/compute/addvaliddisease`,
+        dataFormat
+      );
+      if (response?.status == 200) {
+        handleCloseModal();
+        notification.success({
+          message: "Saved Successfully!",
+          placement: "top",
+          duration: 1,
+        });
+        dispatch(getPatientDetailsResult(patientId));
+        dispatch(
+          getMeatQueryList(
+            patientDetailsResult?.result?.response?.dos,
+            patientId
+          )
         );
-        if (response?.status == 200) {
-          handleCloseModal();
-          notification.success({
-            message: "Saved Successfully!",
-            placement: "top",
-            duration: 1,
-          });
-          dispatch(getPatientDetailsResult(patientId));
-          dispatch(
-            getMeatQueryList(
-              patientDetailsResult?.result?.response?.dos,
-              patientId
-            )
-          );
-        } else {
-        }
-      } catch (e) {}
+      } else {
+      }
+    } catch (e) {}
     // } else {
     //   setMeatDetail(true);
     // }
@@ -136,41 +140,41 @@ const AddHccForm = ({
   };
 
   const getFindNpiNumber = async (e) => {
-    if(e.target.value.length == 10){
+    if (e.target.value.length == 10) {
       notification.warning({
         message: "Please wait provider details fetch...",
         placement: "top",
         duration: 2,
       });
-    try {
-      const response = await axios.get(
-        ENDPOINTS.apiEndoint +
-          `management/provider/getProviderData?npiNumber=${e.target.value}`
-      );
-      if (response.data) {
-       var initalForm = {
-        providerName: response?.data?.response?.userName,
-        selectProviderInfo: ["Authorized Provider"],
-      };
-      setProviderDetails(initalForm);
+      try {
+        const response = await axios.get(
+          ENDPOINTS.apiEndoint +
+            `management/provider/getProviderData?npiNumber=${e.target.value}`
+        );
+        if (response.data) {
+          var initalForm = {
+            providerName: response?.data?.response?.userName + " " + response?.data?.response?.credential,
+            selectProviderInfo: ["Authorized Provider"],
+          };
+          setProviderDetails(initalForm);
+        }
+      } catch (e) {
+        setProviderDetails(null);
+        notification.error({
+          message: e.response.data.message,
+          placement: "top",
+          duration: 2,
+        });
       }
-    } catch (e) {
-      setProviderDetails(null);
-      notification.error({
-        message: e.response.data.message,
-        placement: "top",
-        duration: 2,
-      });
     }
-  }
   };
 
-  const onChangeSwitch =()=>{    
+  const onChangeSwitch = () => {
     setIsNpiNumber(isNpiNumber ? false : true);
-    if(isNpiNumber){
+    if (isNpiNumber) {
       setProviderDetails(null);
     }
-  }
+  };
 
   useEffect(() => {
     var initalForm = {
@@ -189,7 +193,7 @@ const AddHccForm = ({
       {!isMeatForm ? (
         <>
           <Form
-           form={form}
+            form={form}
             name="validateOnly"
             layout="vertical"
             autoComplete="off"
@@ -219,8 +223,8 @@ const AddHccForm = ({
             </Form.Item>
             {addValidCodeCheck == true ? (
               <span className={visitStyles.validHccCodeError}>
-              Valid Hcc Code
-            </span>
+                Valid Hcc Code
+              </span>
             ) : addValidCodeCheck == false ? (
               <span className={visitStyles.invalidHccCodeError}>
                 Invalid Hcc Code
@@ -242,37 +246,50 @@ const AddHccForm = ({
             >
               <Input name="actualDescription" className={styles.formControl} />
             </Form.Item>
-            <Switch
-            checkedChildren="Provider Name" unCheckedChildren="NPI Number"
-                    defaultChecked={isNpiNumber}
-                    onChange={() => {onChangeSwitch()
-                    }}
-                  />
-                {isNpiNumber && 
-                   <Form.Item label="NPI Number" name="npiNumber"  rules={[
-              {
-                required: true,
-                message: "Please enter npi number",
-              },
-              {
-                validator: (_, value) => {
-                  if (
-                    value?.length < 10
-                  ) {
-                    return Promise.reject(
-                      "Please enter 10 digit number"
-                    );
-                  }
-                  return Promise.resolve();
-                },
-              },
-            ]}>
-              <Input type="number" name="providerName"  onChange={getFindNpiNumber}  maxLength={10} className={styles.formControl} />
-            </Form.Item>}
+            <div style={{ display: "flex" ,marginBottom:"10px"}}>
+              <label>Provider NPI : </label>
+              <Switch style={{marginLeft:"15px"}}
+                checkedChildren="Yes"
+                unCheckedChildren="No"
+                defaultChecked={isNpiNumber}
+                onChange={() => {
+                  onChangeSwitch();
+                }}
+              />
+            </div>
+
+            {isNpiNumber && (
+              <Form.Item
+                label="NPI Number"
+                name="npiNumber"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter npi number",
+                  },
+                  {
+                    validator: (_, value) => {
+                      if (value?.length < 10) {
+                        return Promise.reject("Please enter 10 digit number");
+                      }
+                      return Promise.resolve();
+                    },
+                  },
+                ]}
+              >
+                <Input
+                  type="number"
+                  name="providerName"
+                  onChange={getFindNpiNumber}
+                  maxLength={10}
+                  className={styles.formControl}
+                />
+              </Form.Item>
+            )}
             <Form.Item label="Provider name" name="providerName">
               <Input name="providerName" className={styles.formControl} />
             </Form.Item>
-       
+
             <Form.Item label="Provider Info" name="selectProviderInfo">
               <Select className={`ant_select_form hcc_form mb-2`}>
                 {providerInfoList?.map((data) => (
