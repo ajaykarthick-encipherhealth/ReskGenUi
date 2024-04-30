@@ -103,7 +103,6 @@ const File = ({
     comboCode: "",
     additionalCode: "",
   });
-  const [editDiagnosisCode, setEditDiagnosisCode] = useState("");
   const [localUserId, setLocalUserId] = useState("");
   const [localPatientId, setLocalPatientId] = useState("");
   const [selectedDosValue, setSelectedDosValue] = useState("");
