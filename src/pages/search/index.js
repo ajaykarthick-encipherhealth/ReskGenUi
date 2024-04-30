@@ -305,11 +305,12 @@ const Searches = ({
                 options={[
                   {label: "ALL", value: ""},
                   {label: "BILLABLE", value: "BILLABLE"},
-                  {label: "NON_BILLABLE_NULL", value: "NON_BILLABLE_NULL"},
+                  {label: "NON_BILLABLE", value: "NON_BILLABLE"},
+                  {label: "NULL", value: "NULL"},
                 ]}
                 className="custom-react-select"
                 isSearchable={false}
-                placeholder={"Select Status"}
+                placeholder={"Select Billable"}
               />
             </div>
             <div style={{ width: "450px" }}>
@@ -318,11 +319,11 @@ const Searches = ({
                 options={[
                   {label: "BOTH", value: ""},
                   {label: "XML", value: "XML"},
-                  {label: "CMS_XML", value: "CMS_XML"},
+                  {label: "CMS_EXCEL", value: "CMS_EXCEL"},
                 ]}
                 className="custom-react-select"
                 isSearchable={false}
-                placeholder={"Select Status"}
+                placeholder={"Select Source"}
                 style={{ width: "100px" }}
               />
             </div></>}

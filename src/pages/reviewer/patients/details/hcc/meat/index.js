@@ -1081,7 +1081,8 @@ const Meat = ({ activeMeatTitle, year }) => {
               providerList.push(res.providerName);
             });
             const encounterDatearray = res?.encounterDate?.split(",");
-            if (res.isShow || res.isShow === null) {
+            // this code commanded reason demo
+            // if (res.isShow || res.isShow === null) {
               meatListArr.push({
                 diagnosisCode: res.diagnosisCode,
                 diseaseName: res.diseaseName,
@@ -1117,7 +1118,7 @@ const Meat = ({ activeMeatTitle, year }) => {
                 encounterDate: res.encounterDate,
                 encounterDateSplit: encounterDatearray,
               });
-            }
+            // }
           }
         });
 
