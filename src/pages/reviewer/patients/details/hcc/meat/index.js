@@ -2733,7 +2733,13 @@ const Meat = ({ activeMeatTitle, year }) => {
               ) : null}
             </div>
           </div>
-        ) : null}
+        ) : (
+          <div className="col-xl-12">
+            <div>
+              <span className="no-patient-data">NO DATA</span>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Modals */}
