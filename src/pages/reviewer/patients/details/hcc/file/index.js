@@ -1,79 +1,34 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Tab, Nav, Badge } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Badge } from "react-bootstrap";
 import axios from "../../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../../utility/enpoints";
 import visitStyles from "../../../../../../styles/visitdata.module.css";
-import { InputText } from "primereact/inputtext";
-import { Viewer, Worker, ProgressBar } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
-import moment, { months } from "moment";
+import moment from "moment";
 import "react-vertical-timeline-component/style.min.css";
-import { highlightPlugin } from "@react-pdf-viewer/highlight";
+
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faClose,
-  faCheck,
-  faAdd,
-  faInfo,
-  faUser,
-  faSearch,
-  faCheckCircle,
   faArrowLeft,
   faPlus,
-  faUserCircle,
-  faVenusMars,
-  faCalendarAlt,
-  faIdCardClip,
-  faCog,
-  faClock,
   faArrowsAlt,
-  faCalendar,
-  faCircle,
-  faCircleUp,
   faSitemap,
-  faCircleUser,
-  faTrash,
   faAngleDown,
   faPen,
-  faSave,
 } from "@fortawesome/free-solid-svg-icons";
 import { CalendarOutlined } from "@ant-design/icons";
-import {
-  QuestionCircleOutlined,
-  CheckCircleOutlined,
-  InfoCircleOutlined,
-} from "@ant-design/icons";
-import {
-  Popconfirm,
-  Select,
-  Popover,
-  Menu,
-  DatePicker,
-  Dropdown,
-  Tag,
-  message,
-} from "antd";
-import { IMAGES, SVGICON } from "../../../../../../jsx/constant/theme";
+import { QuestionCircleOutlined } from "@ant-design/icons";
+import { Popconfirm, Popover } from "antd";
+import { SVGICON } from "../../../../../../jsx/constant/theme";
 import { Modal } from "antd";
 import { Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import { Offcanvas } from "react-bootstrap";
 import { notification } from "antd";
-import { useRouter } from "next/navigation";
-import { Avatar, Tooltip } from "antd";
+import { Tooltip } from "antd";
 import Spinner from "../../../../../../components/loadingSpinner";
 import styles from "../styles.module.css";
-import {
-  getFilePageNumber,
-  getMeatQueryList,
-  submitMeatQuery,
-  updateMeatQuery,
-  getProviderDetails,
-  manuallyAddComboCode,
-  deleteMeatQuery,
-  getProviderEncounterDetails,
-} from "../../../../../../services/PatientsListSevice";
 import { getPatientDetailsResult } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import CamboTree from "../org";
 import PdfViewer from "../../PdfViewerComponent";
@@ -81,29 +36,16 @@ import AddHccForm from "../../components/addHccForm";
 import EditHccForm from "../../components/editHccForm";
 import { pdfUrl } from "../../../../../../stores/authflow/reducers";
 
-const { Option } = Select;
-const addOnCodeColor = [
-  "magenta",
-  "red",
-  "volcano",
-  "orange",
-  "gold",
-  "cyan",
-  "blue",
-  "geekblue",
-  "purple",
-];
 const File = ({
   popoverVisible,
   setPopoverVisible,
   year,
   setActiveTabHead,
   setActiveMeatTitle,
-  setActiveComboTree
+  setActiveComboTree,
 }) => {
-  const navigate = useRouter();
   const dispatch = useDispatch();
-  let searchKeywords = [];
+
   const patientDetailsResult = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
   );
@@ -121,76 +63,24 @@ const File = ({
   const { searchPluginInstance } = toolbarPluginInstance;
   const { highlight } = searchPluginInstance;
   const { setTargetPages } = searchPluginInstance;
-
-  // setTargetPages((targetPage) => targetPage.pageIndex === 0);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFileFormShow, setIsFileFormShow] = useState(false);
-  const [isModalOpenValid, setIsModalOpenValid] = useState(false);
-  const [isModalOpenValidCodes, setIsModalOpenValidCodes] = useState(false);
-  const [isModalOpenCaptureSection, setIsModalOpenCaptureSection] =
-    useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
   const [confirmNotesModalInValid, setConfirmNotesModalInValid] =
     useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingSection, setIsLoadingSection] = useState(true);
-  const [invalidDiseasesList, setInvalidDiseasesList] = useState([]);
-  const [invalidMoveDiseasesList, setInvalidMoveDiseasesList] = useState([]);
-  const [comboDiseaseCodesList, setComboDiseaseCodesList] = useState([]);
-  const [invalidComboDiseaseCodesList, setInvalidComboDiseaseCodesList] =
-    useState([]);
-
-  const [validDiseasesList, setValidDiseasesList] = useState([]);
   const [selectDiseasesName, setSelectDiseasesName] = useState("");
   const [meatCriteriaList, setMeatCriteriaList] = useState([]);
-  const [invalidMeatCriteriaList, setInvalidMeatCriteriaList] = useState([]);
-  const [selectCode, setSelectCode] = useState("");
-  const [dosYear, setDosYear] = useState("");
-  const [dosYearRadiology, setDosYearRadiology] = useState("");
-  const [dosYearDefalutSelect, setDosYearDefalutSelect] = useState("");
-  const [dosYearDefalutSelectRadiology, setDosYearDefalutSelectRadiology] =
-    useState("");
-  const [radiologyFileDetailCheck, setRadiologyFileDetailCheck] =
-    useState(false);
   const [localOrgId, setLocalOrgId] = useState("");
   const [localTenantId, setLocalTenantId] = useState("");
-  const [selectMeatFileId, setSelectMeatFileId] = useState("");
   const [selectMeatName, setSelectMeatName] = useState("");
-  const [sectionList, setSectionList] = useState([]);
   const [patientDocumentResult, setPatientDocumentResult] = useState([]);
   const [selectFileURL, setSelectFileURL] = useState([]);
-  const [selectFileURLValid, setSelectFileURLValid] = useState([]);
   const [validated, setValidated] = useState(false);
-  const [rafScore, setRAFScore] = useState([]);
-  const [patientDetails, setPatientDetails] = useState([]);
-  const [patientDetailsRadiology, setPatientDetailsRadiology] = useState([]);
   const [opens, setOpens] = useState(false);
-  const [rafHccList, setRafScoreHccList] = useState([]);
-  const [isMatchBtn, setIsMatchBtn] = useState(false);
-  const [matchHccList, setMatchHccList] = useState([]);
   const [newValidDiseaseList, setNewValidDiseaseList] = useState([]);
-  const [newInValidDiseaseList, setInNewValidDiseaseList] = useState([]);
-  const [unMatchResList, setNewUnMatchHccList] = useState([]);
-  const [meatColorCodeList, setMeatColorCodeList] = useState([]);
   const [combiTree, setCombiTree] = useState({});
-  const [dbDescriptionRes, setDbDescriptionRes] = useState([]);
-
-  const [openPopover, setOpenPopover] = useState(false);
-
-  const [activeTab, setActiveTab] = useState(1);
   const [selectFileURLRadiology, setSelectFileURLRadiology] = useState([]);
   const [isModalOpenRadiology, setIsModalOpenRadiology] = useState(false);
   const [isModalOpenLab, setIsModalOpenLab] = useState(false);
-
-  const [radiologyResCheck, setRadiologyResCheck] = useState(false);
-  const [radiologyFileProcessing, setRadiologyFileProcessing] = useState(
-    "Please wait file processing..."
-  );
-
-  const [isLoadingBtn, setIsLoadingBtn] = useState(false);
-  const [addPatient, setAddPatient] = useState(false);
-  const [labReportSlider, setLapReportSlider] = useState(false);
   const [inputValue, setInputValue] = useState({
     year: "",
     name: "",
@@ -213,130 +103,32 @@ const File = ({
     comboCode: "",
     additionalCode: "",
   });
-  const [inputValueMeat, setInputValueMeat] = useState({
-    year: "",
-    diseaseName: "",
-    diagnosisCode: "",
-    isMeatCriteriaPresent: true,
-    monitorCapturedFromHeader: "",
-    monitor: "",
-    evaluateCapturedFromHeader: "",
-    evaluate: "",
-    assessmentCapturedFromHeader: "",
-    assessment: "",
-    treatment: "",
-    treatmentCapturedFromHeader: "",
-    encounterDate: "",
-    radiology: false,
-    lab: false,
-    isManuallyAdded: true,
-    reason: "",
-    actualDescription: "",
-  });
   const [editDiagnosisCode, setEditDiagnosisCode] = useState("");
-  const [selectFileRadiology, setSelectFileRadiology] = useState(null);
-  const [selectLabReportFile, setSelectLabReportFile] = useState(null);
-
   const [localUserId, setLocalUserId] = useState("");
   const [localPatientId, setLocalPatientId] = useState("");
-
-  const [validHccDetails, setvalidHccDetails] = useState("");
-  const [validLocalFileDownloadAndView, setValidLocalFileDownloadAndView] =
-    useState([]);
-
-  const [unMatchListNonHcc, setUnmatchListNonHcc] = useState([]);
-  const [comboDiseaseCodesListNonHcc, setComboDiseaseCodesListNonHcc] =
-    useState([]);
-  const [meatCriteriaListNonHcc, setMeatCriteriaListNonHcc] = useState([]);
-  const [yearOfServiceList, setYearOfServiceList] = useState([]);
-  const [isLoadingDos, setIsLoadingDos] = useState(true);
-  const [suggestedModal, setSuggestedModal] = useState(false);
-  const [suggesteSelectValue, setSuggestedSelectValue] = useState("");
-  const [suggesteSelectCode, setSuggestedSelectCode] = useState("");
   const [selectedDosValue, setSelectedDosValue] = useState("");
-  const [suggestedBtnTitle, setSuggestedBtnTitle] = useState("Add");
   const [selectInvalidDetails, setSelectInvalidDetails] = useState(false);
-  const [selectActiveCode, setSelectActiveCode] = useState("");
-  const [labReportValidList, setLabReportValidList] = useState([]);
-  const [labReportMeatList, setLabReportMeatList] = useState([]);
   const [labReportFile, setLabReportFile] = useState([]);
   const [suggestedHccList, setSuggestedHccList] = useState([]);
-  const [suggestedNonHccList, setSuggestedNonHccList] = useState([]);
-  const [nonHccActiveCodes, setNonHccActiveCodes] = useState(false);
-  const [radiologyFileDateofServieList, setFileRadiologyDateofServiceList] =
-    useState([]);
-  const [radiologyFileDateDefaulteSelect, setRadiologyFileDateDefaulteSelect] =
-    useState("");
-  const [radiologyResult, setRadiologyResult] = useState("");
-  const [radiologyResultStatus, setRadiologyResultStatus] = useState(false);
-  const [labResultStatus, setLabResultStatus] = useState(false);
-  const [labFileDateofServieList, setFileLabDateofServiceList] = useState([]);
-  const [labFileDateDefaulteSelect, setLabFileDateDefaulteSelect] =
-    useState("");
-  const [saveBtnTitle, setSaveBtnTitle] = useState("Save");
-  const [completedBtnTitle, setCompleteBtnTitle] = useState("Complete");
-  const [declineBtnTitle, setDeclineBtnTitle] = useState("Decline");
-
-  const [buttonClicked, setButtonClicked] = useState(false);
-  const [isAddButtonClicked, setIsAddButtonClicked] = useState(false);
   const [isValidAction, setIsValidAction] = useState("");
   const [deletedHccList, setDeletedHccList] = useState([]);
-  const [isModalComments, setIsModalComments] = useState(false);
-  const [flagContainerActive, setFlagContainerActive] = useState("");
-  const [flagTagActive, setFlagTagActive] = useState(false);
-  const [addValidCodeCheck, setAddValidCodeCheck] = useState(null);
-  const [confirmCompleteModal, setConfirmCompleteModal] = useState(false);
-  const [userDetails, setUserDetails] = useState("");
   const [captureSectionMatching, setCaptureSectionMatching] = useState([]);
   const [encounterDateMatching, setEncounterDateMatching] = useState([]);
   const [fileModalHeader, setFileModalHeader] = useState("");
-  const [dragFileDate, setdragFileDate] = useState(false);
-  const [inputValueFileDate, setInputValueFileDate] = useState("");
   const [patientFileDTO, setPatientFileDTO] = useState("");
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [findFileKeyword, setFindFileKeyword] = useState("");
   const [fileModalTitle, setFileModalTitle] = useState("");
-  const [isMeatQueryModal, setIsMeatQueryModal] = useState(false);
-  const [meatQueriedDetailsModal, setMeatQueriedDetailsModal] = useState(false);
-  const [meatQueriedDetailsShow, setMeatQueriedDetailsShow] = useState(true);
-  const [isDosSelect, setIsDosSelect] = useState(true);
   const [pageNumberOptions, setPageNumberOptions] = useState([]);
-  const [fileDosPageNumber, setFileDosPageNumber] = useState(0);
-  const [selectPreviousCode, setSelectPreviousCode] = useState(null);
-  const [meatQueryList, setMeatQueryList] = useState([]);
-  const [meatQueryListPrevious, setMeatQueryListPrevious] = useState([]);
-  const [meatQueryResult, setMeatQueryResult] = useState([]);
-  const [meatQueryUpdate, setMeatQueryUpdate] = useState(false);
-  const [providerDetails, setProviderDetails] = useState("");
-  const [isAddComboCode, setIsAddComboCode] = useState(false);
-  const [comboCodeTree, setComboCodeTree] = useState(true);
   const [listPageNumber, setListPageNumber] = useState([]);
   const [activeTabNumber, setActiveTabNumber] = useState(0);
-  const [meatModalTitle, setMeatModalTitle] = useState("");
   const [fileLoading, setFileLoading] = useState(false);
-  const [selectMeatResult, setSelectMeatResult] = useState(null);
-  const [formErr, setFormErr] = useState({
-    providername: "",
-    quickQuery: "",
-    imagingQuery: "",
-    queryReason: "",
-    description: "",
-  });
-  const [providerNameEcnounterList, setProviderNameEcnounterList] = useState(
-    []
-  );
-
   const [hccVersionDetails, setHccVersionDetails] = useState(null);
-  const [selectProviderInfo, setSelectProviderInfo] = useState(null);
-  const [hccFormTab, setHccFormTab] = useState("HCCFORM");
   const [search, setSearch] = useState();
-  const [hyperlinkSeacrh, setHyperlinkSearch] = useState(false);
-  const [editCode, setEditCode] = useState(false);
   const [isAddHccForm, setIsAddHccForm] = useState(false);
   const [isEditHccForm, setIsEditHccForm] = useState(false);
   const [formValues, setFormValues] = useState(false);
   const [formEditPlace, setFormEditPlace] = useState("");
-
 
   const getMeatFound = (code, data, value) => {
     const result = data?.filter(
@@ -394,70 +186,6 @@ const File = ({
     );
   };
 
-  const handleAddButtonClick = () => {
-    setIsAddButtonClicked(true);
-  };
-
-  const handleChange = async (e) => {
-    const key = e.target.name;
-    if (key == "diagnosisCodeQuery") {
-      getFindValidDiagnosisCode(e.target.value);
-    }
-    if (key == "diagnosisCode") {
-      getFindValidDiagnosisCode(e.target.value);
-    }
-    if (key == "encodedDate") {
-      setInputValueFileDate(e.target.value);
-    }
-    const value = e.target.value;
-    setInputValue({ ...inputValue, [key]: value });
-  };
-
-  const handleChangeMeat = async (e) => {
-    const key = e.target.name;
-    if (key == "diagnosisCode") {
-      getFindValidDiagnosisCode(e.target.value);
-    }
-    if (key == "encodedDate") {
-      setInputValueFileDate(e.target.value);
-    }
-    const value = e.target.value;
-    setInputValueMeat({ ...inputValueMeat, [key]: value });
-  };
-
-  const handleDatePickerChangeFile = (dates, dateString) => {
-    let convertDate = moment(dateString).format("MM-DD-YYYY");
-    setdragFileDate(false);
-    setInputValueFileDate(convertDate);
-    setInputValue({ ...inputValue, ["encodedDate"]: convertDate });
-  };
-
-  const [isDocumentLoaded, setDocumentLoaded] = React.useState(false);
-  const handleDocumentLoad = () => {
-    setDocumentLoaded(true);
-  };
-  const handleDocumentLoadFile = () => {
-    setDocumentLoaded(true);
-    if (findFileKeyword) {
-      setTimeout(() => {
-        setFileModalHeader(fileModalTitle);
-        if (fileInitialPage) {
-          setTargetPages(
-            (targetPage) =>
-              targetPage.pageIndex === fileInitialPage ||
-              targetPage.pageIndex === fileInitialPage + 1 ||
-              targetPage.pageIndex === fileInitialPage + 2
-          );
-        }
-        highlight({
-          keyword: findFileKeyword,
-        });
-      }, 1000);
-    }
-  };
-
-  const pageClickPdfFile = (e) => {};
-
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
     var tenId = localStorage.getItem("tenantId");
@@ -474,13 +202,11 @@ const File = ({
         <Spinner />
       </div>
     );
-    setUserDetails(dotLoading);
-    setvalidHccDetails(dotLoading);
   }, [patientDetailsResult]);
 
   useEffect(() => {
     if (hccFileDetails?.result?.response) {
-      dispatch(pdfUrl(hccFileDetails?.result?.response))
+      dispatch(pdfUrl(hccFileDetails?.result?.response));
       setSelectFileURL(hccFileDetails?.result?.response);
     }
   }, [hccFileDetails]);
@@ -497,11 +223,10 @@ const File = ({
   }, [activeTabNumber]);
 
   useEffect(() => {
-    setDocumentLoaded(true);
     if (findFileKeyword) {
       setTimeout(() => {
         setFileModalHeader(fileModalTitle);
-        setMeatModalTitle(selectMeatName);
+
         if (fileInitialPage != null) {
           setTargetPages(
             (targetPage) =>
@@ -528,11 +253,9 @@ const File = ({
     tenId,
     fileloadCondition
   ) => {
-    setIsModalComments(false);
     if (patientDetailsResult?.result?.response) {
       var result = patientDetailsResult?.result?.response;
       setPatientDocumentResult(result);
-      setPatientDetails(result);
       if (result.validDisease != null) {
         var validDis = "";
         var invalidDis = "";
@@ -555,8 +278,6 @@ const File = ({
         var deleteHccList = [];
 
         if (fileloadCondition != "fileNotLoad") {
-          getPatientPdfFile(result?.fileDetailDTO?.azureBlobPath, tenId);
-          setSelectMeatFileId(patientDetailsResult?.result?.response?.fileId);
           setPatientFileDTO(result?.fileDetailDTO);
         }
         // setPatientDocumentResult(result);
@@ -570,7 +291,7 @@ const File = ({
         const highestDosValue = dosYearArr.filter(
           (i) => parseInt(i.value) === highestDOS
         );
-        setDosYearDefalutSelect(highestDosValue[0]);
+
         setSelectedDosValue(highestDosValue[0].value);
 
         if (result.rafScore != null) {
@@ -610,8 +331,8 @@ const File = ({
               dbDescription: res.dbDescription,
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
-              providerDeatils:res.provider,
-              isComboCode: res.isComboCode
+              providerDeatils: res.provider,
+              isComboCode: res.isComboCode,
             });
           }
         });
@@ -665,7 +386,7 @@ const File = ({
                 providerName: providerList,
                 isCmsHcc: res.isCmsHcc,
                 isRxHcc: res.isRxHcc,
-                isComboCode: res.isComboCode
+                isComboCode: res.isComboCode,
               });
             }
           });
@@ -699,7 +420,7 @@ const File = ({
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
-              providerDeatils:res.provider,
+              providerDeatils: res.provider,
             });
           });
 
@@ -721,9 +442,9 @@ const File = ({
                 isHccValid: true,
                 providerName: providerList,
                 isCmsHcc: res.isCmsHcc,
-              isRxHcc: res.isRxHcc,
-              isComboCode: res.isComboCode,
-              providerDeatils:res.provider,
+                isRxHcc: res.isRxHcc,
+                isComboCode: res.isComboCode,
+                providerDeatils: res.provider,
                 // defaultPosition:res.defaultPosition
               });
             });
@@ -753,7 +474,7 @@ const File = ({
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
-              providerDeatils:res.provider,
+              providerDeatils: res.provider,
             });
           });
         }
@@ -781,9 +502,9 @@ const File = ({
                 children: res.children ? res.children : [],
                 isMostSpecific: res.isMostSpecific,
                 isCmsHcc: res.isCmsHcc,
-              isRxHcc: res.isRxHcc,
-              isComboCode: res.isComboCode,
-              providerDeatils:res.provider,
+                isRxHcc: res.isRxHcc,
+                isComboCode: res.isComboCode,
+                providerDeatils: res.provider,
               });
             }
           });
@@ -809,7 +530,7 @@ const File = ({
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
-              providerDeatils:res.provider,
+              providerDeatils: res.provider,
             });
           });
         }
@@ -834,7 +555,7 @@ const File = ({
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
-              providerDeatils:res.provider,
+              providerDeatils: res.provider,
             });
           });
         }
@@ -884,14 +605,6 @@ const File = ({
         }
 
         setNewValidDiseaseList(validDisArray);
-        setInNewValidDiseaseList(invalidDiseaseNewRes);
-        setNewUnMatchHccList(suggestListAll);
-        setValidDiseasesList(validDiseasesArray);
-        setInvalidDiseasesList(invalidDiseasesArray);
-        setComboDiseaseCodesList(combiDisArray);
-        setDosYear(dosYearArr);
-        setRAFScore(rafScore);
-        setSuggestedNonHccList(suggestListAllNonHcc);
         setSuggestedHccList(suggestListAll);
         setDeletedHccList(deleteHccList);
 
@@ -1185,7 +898,6 @@ const File = ({
             allMeatHeadColor,
             "header"
           );
-          setMeatColorCodeList(dublicateRemoveSecondArr);
         });
 
         meatCri?.map((res, index) => {
@@ -1304,8 +1016,6 @@ const File = ({
         setCaptureSectionMatching(newArrayColorMatchs);
 
         setMeatCriteriaList(meatListArr);
-        setMeatCriteriaListNonHcc(nonHccMeatListArr);
-        setIsLoadingDos(false);
 
         if (result.suggestRadiology != null) {
           if (result.suggestRadiology.length != 0) {
@@ -1323,27 +1033,16 @@ const File = ({
             );
           }
         }
-      } else {
-        setIsLoading(false);
       }
     }
   };
-  const getPatientDetailsFileLoad = async (
-    patientId,
-    orgId,
-    tenId,
-    fileloadCondition
-  ) => {
+  const getPatientDetailsFileLoad = async () => {
     getFileDosPageNumber();
     if (patientDetailsResult?.result?.response) {
       var result = patientDetailsResult?.result?.response;
       setPatientDocumentResult(result);
-      setPatientDetails(result);
       if (result.validDisease != null) {
-        getPatientPdfFile(result?.fileDetailDTO?.azureBlobPath, tenId);
         setPatientFileDTO(result?.fileDetailDTO);
-      } else {
-        setIsLoading(false);
       }
     }
   };
@@ -1355,8 +1054,7 @@ const File = ({
     );
     if (response.data) {
       var result = response.data.response;
-      setPatientDetailsRadiology(result);
-      setRadiologyResult(result);
+
       if (result.radiologyFileDetail != null) {
         if (result.radiologyFileDetail.length != 0) {
           var dosYearArrFile = [];
@@ -1368,16 +1066,12 @@ const File = ({
               });
             }
           });
-          setFileRadiologyDateofServiceList(dosYearArrFile);
-          setRadiologyFileDateDefaulteSelect(dosYearArrFile[0]);
+
           getPatientPdfFileRadiology(
             result.radiologyFileDetail[0].azureBlobPath,
             tenId
           );
-          setRadiologyFileDetailCheck(true);
         }
-      } else {
-        setIsLoading(false);
       }
     }
   };
@@ -1402,8 +1096,7 @@ const File = ({
         for (var key in resultTest.labFileDetail[0].documentDos) {
           dosYearArrFile.push({ value: key, label: key });
         }
-        setFileLabDateofServiceList(dosYearArrFile);
-        setLabFileDateDefaulteSelect(dosYearArrFile[0]);
+
         var fileDetails = resultTest.labFileDetail;
         getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
       }
@@ -1423,20 +1116,6 @@ const File = ({
 
     return colorReturnValue;
   }
-
-  const getPatientPdfFile = async (fileId, tenId) => {
-    // const response = await axios.get(
-    //   ENDPOINTS.apiEndoint +
-    //     `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
-    // );
-    // if (response.data) {
-    //   var result = response.data.response;
-    //   setSelectFileURL(response.data.response);
-    //   setSelectFileURLValid(response.data.response);
-    //   setIsLoading(false);
-    //   setIsLoadingDos(false);
-    // }
-  };
 
   const getPatientPdfFileRadiology = async (fileId, tenId) => {
     const response = await axios.get(
@@ -1518,132 +1197,19 @@ const File = ({
       );
     });
 
-  const confirmInvalid = () =>
-    new Promise((resolve) => {
-      // invalidMoveConfirm();
-      setTimeout(() => resolve(setConfirmNotesModalInValid(true)), 1000);
-    });
-
-  const confirmComboInvalid = () =>
-    new Promise((resolve) => {
-      comboMoveInvalidConfirm();
-      setTimeout(() => resolve(null), 1000);
-    });
-
-  const confirmComboValid = () =>
-    new Promise((resolve) => {
-      comboMoveValidConfirm();
-      setTimeout(() => resolve(null), 1000);
-    });
-
-  const confirmInvalidMeat = () =>
-    new Promise((resolve) => {
-      meatMoveInvalidConfirm();
-      setTimeout(() => resolve(null), 1000);
-    });
-
-  const confirmValidMeat = () =>
-    new Promise((resolve) => {
-      meatMoveValidConfirm();
-      setTimeout(() => resolve(null), 1000);
-    });
-
   const onchangeValid = (code, data) => {
     var title = code + " - " + data.actualDescription;
     setSelectDiseasesName(title);
     setSelectInvalidDetails(data);
   };
 
-  const onchangeCombo = (data, code) => {
-    setSelectDiseasesName(data);
-    setSelectCode(code);
-  };
-  const onchangeMeat = (data, code) => {
-    setSelectDiseasesName(data);
-    setSelectCode(code);
-  };
-
-  const comboMoveInvalidConfirm = () => {
-    const result = comboDiseaseCodesList.filter(
-      (res) => res.diseaseName != selectDiseasesName
-    );
-    const result2 = comboDiseaseCodesList.filter(
-      (res) => res.diseaseName == selectDiseasesName
-    );
-    setComboDiseaseCodesList(result);
-    var namePush = [];
-    namePush.push({ name: selectCode + " - " + selectDiseasesName });
-    var newArray = [];
-    newArray = [...invalidComboDiseaseCodesList, ...result2];
-    setInvalidComboDiseaseCodesList(newArray);
-  };
-
-  const comboMoveValidConfirm = () => {
-    const result = invalidComboDiseaseCodesList.filter(
-      (res) => res.diseaseName != selectDiseasesName
-    );
-    setInvalidComboDiseaseCodesList(result);
-    const result2 = invalidComboDiseaseCodesList.filter(
-      (res) => res.diseaseName == selectDiseasesName
-    );
-    var newArray = [];
-    newArray = [...comboDiseaseCodesList, ...result2];
-    setComboDiseaseCodesList(newArray);
-  };
-
-  const meatMoveInvalidConfirm = () => {
-    const result = meatCriteriaList.filter(
-      (res) => res.diseaseName != selectDiseasesName
-    );
-    const result2 = meatCriteriaList.filter(
-      (res) => res.diseaseName == selectDiseasesName
-    );
-    setMeatCriteriaList(result);
-    var newArray = [];
-    newArray = [...invalidMeatCriteriaList, ...result2];
-    setInvalidMeatCriteriaList(newArray);
-  };
-
-  const meatMoveValidConfirm = () => {
-    const result = invalidMeatCriteriaList.filter(
-      (res) => res.diseaseName != selectDiseasesName
-    );
-    setInvalidMeatCriteriaList(result);
-    const result2 = invalidMeatCriteriaList.filter(
-      (res) => res.diseaseName == selectDiseasesName
-    );
-    var newArray = [];
-    newArray = [...meatCriteriaList, ...result2];
-    setMeatCriteriaList(newArray);
-  };
-
-  const handleCloseForm = () => {
-    setIsAddButtonClicked(false);
-    // Add any additional logic for closing the form if needed
-  };
-
   const handleCloseModal = () => {
-    setHccFormTab("HCCFORM");
-    setAddValidCodeCheck(null);
     setValidated(false);
-    setIsModalOpen(false);
-    setIsModalOpenValid(false);
     setConfirmNotesModalValid(false);
     setConfirmNotesModalInValid(false);
     setIsModalOpenRadiology(false);
-    setSuggestedModal(false);
-    setIsModalOpenValidCodes(false);
-    setIsModalOpenCaptureSection(false);
-    setIsAddButtonClicked(false);
-    setIsAddButtonClicked(false);
-    setIsModalComments(false);
-    setFlagContainerActive("");
-    setConfirmCompleteModal(false);
     setIsModalOpenLab(false);
     setIsFileFormShow(false);
-    setIsMeatQueryModal(false);
-    setMeatQueriedDetailsModal(false);
-    setIsAddComboCode(false);
     setFindFileKeyword(null);
     setFileLoading(false);
     setActiveTabNumber(activeTabNumber == null ? 0 : null);
@@ -1656,7 +1222,6 @@ const File = ({
     encounterDate,
     meatresult
   ) => {
-    setSelectMeatResult(meatresult);
     setFileLoading(true);
     var splitPoint = disDescription.substring(" ", 20);
     var dotLoading = (
@@ -1680,21 +1245,16 @@ const File = ({
         }
         pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
         setFileInitialPage(pageNumber);
-        setFileDosPageNumber(pageNumber);
       } else {
         setFileInitialPage(null);
-        setFileDosPageNumber(null);
       }
-      setMeatModalTitle(dotLoading);
-      setIsLoadingSection(true);
+
       if (findFileKeyword == splitPoint) {
         setFileLoading(false);
         var dataset = value + " / (" + disDescription + ")";
-        setMeatModalTitle(dataset);
       }
       setFindFileKeyword(splitPoint);
 
-      setIsModalOpen(true);
       var dataset = value + " / (" + disDescription + ")";
       setSelectMeatName(dataset);
     } catch (error) {
@@ -1704,7 +1264,6 @@ const File = ({
       }
       setFindFileKeyword(splitPoint);
       setFileInitialPage(null);
-      setFileDosPageNumber(null);
     }
   };
 
@@ -1752,11 +1311,9 @@ const File = ({
           headers: result?.first,
         });
         setFileInitialPage(pageNumber);
-        setFileDosPageNumber(pageNumber);
       } else {
         splitPoint = headerNames;
         setFileInitialPage(null);
-        setFileDosPageNumber(null);
       }
       setTargetPages(
         (targetPage) =>
@@ -1779,7 +1336,6 @@ const File = ({
       }
       setFindFileKeyword(splitPoint);
       setFileInitialPage(null);
-      setFileDosPageNumber(null);
     }
   };
 
@@ -1792,7 +1348,6 @@ const File = ({
     diagnosisCode
   ) => {
     setFileLoading(true);
-    setHyperlinkSearch(true);
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
@@ -1837,11 +1392,9 @@ const File = ({
           headers: false,
         });
         setFileInitialPage(pageNumber);
-        setFileDosPageNumber(pageNumber);
       } else {
         splitPoint = headerNames;
         setFileInitialPage(null);
-        setFileDosPageNumber(null);
       }
       setTargetPages((targetPage) => {
         targetPage.pageIndex === pageNumber;
@@ -1857,7 +1410,6 @@ const File = ({
       }
       setFindFileKeyword(splitPoint);
       setFileInitialPage(null);
-      setFileDosPageNumber(null);
     }
   };
 
@@ -1873,7 +1425,7 @@ const File = ({
     testModal
   ) => {
     setFileLoading(true);
-    setDocumentLoaded(false);
+
     if (
       documentPlace == "Radio" ||
       whereCome == "Radio" ||
@@ -1882,7 +1434,7 @@ const File = ({
       handleOpenModalRadiology(value, disDescription, true);
     } else if (documentPlace == "Lab" || whereCome == "Lab") {
       setFileInitialPage(null);
-      setFileDosPageNumber(null);
+
       var splitPoint = disDescription.substring(" ", 40);
       setFindFileKeyword(splitPoint);
       setSearch({
@@ -1893,17 +1445,12 @@ const File = ({
         var dataset = "Lab" + " - (" + disDescription + ")";
         setSelectMeatName(dataset);
       }, 2000);
-      setDocumentLoaded(true);
+
       var dataset = "Lab" + " - (" + disDescription + ")";
       setSelectMeatName(dataset + " -  " + "Loading...");
-      setIsLoadingSection(true);
+
       setIsModalOpenLab(true);
     } else {
-      if (whereCome == "nonHcc") {
-        setNonHccActiveCodes(true);
-      } else {
-        setNonHccActiveCodes(false);
-      }
       if (check === "valid") {
         var dataset = value + " - (" + disDescription + ")";
         setSelectMeatName(dataset + " -  " + "Loading...");
@@ -1912,18 +1459,9 @@ const File = ({
             <Spinner />
           </div>
         );
-        setIsLoadingSection(true);
+
         var headerName = dotLoading;
         setFileModalHeader(headerName);
-        if (documentPlace == "COMBO") {
-          setIsModalOpenCaptureSection(true);
-        } else {
-          if (testModal == "Suggested") {
-            setIsModalOpenValidCodes(true);
-          } else {
-            setIsModalOpenValidCodes(true);
-          }
-        }
 
         var fileId = patientFileDTO.fileId;
         const encounterDatesValue = encounterDate.split(",");
@@ -1946,7 +1484,6 @@ const File = ({
           } else {
             splitPoint = headerNames;
           }
-          setSelectActiveCode(value);
 
           setFindFileKeyword(splitPoint);
           var dataset =
@@ -1965,7 +1502,6 @@ const File = ({
             " / " +
             dataset;
           setFileModalTitle(headerName);
-          setDocumentLoaded(true);
         } catch (error) {
           splitPoint = headerNames;
           if (findFileKeyword == headerNames) {
@@ -1973,10 +1509,8 @@ const File = ({
           }
           setFindFileKeyword(splitPoint);
           setFileInitialPage(null);
-          setFileDosPageNumber(null);
         }
       } else if (check == "valid2") {
-        setSelectActiveCode(value);
         var splitPoint = "";
         splitPoint = disDescription;
         setTimeout(() => {
@@ -1994,7 +1528,7 @@ const File = ({
             dataset;
           setFileModalHeader(headerName);
         }, 2000);
-        setDocumentLoaded(true);
+
         var dataset = value + " - (" + disDescription + ")";
         setSelectMeatName(dataset + " -  " + "Loading...");
         var headerName =
@@ -2006,11 +1540,7 @@ const File = ({
           " -  " +
           "Loading...";
         setFileModalHeader(headerName);
-
-        setIsLoadingSection(true);
-        setIsModalOpenValidCodes(true);
       } else {
-        setSelectActiveCode(value);
         var splitPoint = "";
         splitPoint = disDescription.substring(" ", 20);
         setTimeout(() => {
@@ -2022,20 +1552,17 @@ const File = ({
           var dataset = value + " - (" + disDescription + ")";
           setSelectMeatName(dataset);
         }, 2000);
-        setDocumentLoaded(true);
+
         var dataset = value + " - (" + disDescription + ")";
         setSelectMeatName(dataset + " -  " + "Loading...");
-        setIsLoadingSection(true);
-        setIsModalOpen(true);
       }
     }
 
-    // setIsModalOpenValid(true)
     // getSectionResult(value.toLowerCase());
   };
   const handleOpenModalRadiology = (value, disDescription, radiologyCheck) => {
     setFileInitialPage(null);
-    setFileDosPageNumber(null);
+
     if (radiologyCheck == true) {
       var splitPoint = disDescription.substring(" ", 40);
       setFindFileKeyword(splitPoint);
@@ -2047,21 +1574,16 @@ const File = ({
         var dataset = "Radiology" + " - (" + disDescription + ")";
         setSelectMeatName(dataset);
       }, 2000);
-      setDocumentLoaded(true);
+
       var dataset = "Radiology" + " - (" + disDescription + ")";
       setSelectMeatName(dataset + " -  " + "Loading...");
-      setIsLoadingSection(true);
+
       setIsModalOpenRadiology(true);
     } else {
       handleOpenModal(value, disDescription);
     }
-    // setIsModalOpenValid(true)
-    // getSectionResult(value.toLowerCase());
-  };
 
-  const addValidDiseases = () => {
-    setIsModalOpenValid(true);
-    // setValidated(true);
+    // getSectionResult(value.toLowerCase());
   };
 
   const handleSubmitValidNotes = async (event) => {
@@ -2122,7 +1644,7 @@ const File = ({
         </div>
       </div>
     );
-    setvalidHccDetails(data);
+
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
         `dbservice/hccdisease/icd10mappingForDisease?year=${selectedDosValue}&diagnosisCode=${code}`
@@ -2146,8 +1668,6 @@ const File = ({
       }
       setHccVersionDetails(value);
     }
-
-    setvalidHccDetails(data);
   };
 
   const handleSubmitMoveValidToSuggested = async () => {
@@ -2345,173 +1865,7 @@ const File = ({
     }
   };
 
-  const getFindValidDiagnosisCode = async (value) => {
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`
-    );
-    if (response.data) {
-      if (response.data == "ICD disease not found") {
-        setAddValidCodeCheck(false);
-      } else {
-        setAddValidCodeCheck(true);
-        inputValue.actualDescription = "adakd dvasdv";
-      }
-    }
-
-    inputValue.actualDescription = "adakd dvasdv";
-  };
-
-  // updated changes
-  const handleFormSubmit = async (event) => {
-    var dos = dosYearDefalutSelect.label;
-    const form = event.currentTarget;
-    event.preventDefault();
-    if (addValidCodeCheck == true) {
-      setAddValidCodeCheck(null);
-      if (form.checkValidity() === true) {
-        setHccFormTab("MEATFORM");
-        setValidated(false);
-        // let convertDate = moment(inputValue.encodedDate).format("MM-DD-YYYY");
-        // var dataFormatSuggested = {
-        //   patientComputeDetailId: localPatientId,
-        //   year: dos,
-        //   tenantId: localTenantId,
-        //   diseaseFormat: {
-        //     diagnosisCode: inputValue.diagnosisCode,
-        //     actualDescription: inputValue.actualDescription,
-        //     encounterDate: convertDate,
-        //     capturedSections: [inputValue.capturedSections],
-        //   },
-        //   providerInfo: {
-        //     providerName: inputValue.providerName,
-        //     authorizedProvider:
-        //       selectProviderInfo == "authorizedProvider" ? true : false,
-        //     noCredential: selectProviderInfo == "noCredential" ? true : false,
-        //     unAuthorizeProvider:
-        //       selectProviderInfo == "unAuthorizeProvider" ? true : false,
-        //     unSigned: selectProviderInfo == "unSigned" ? true : false,
-        //   },
-        // };
-        // try {
-        //   const response = await axios.post(
-        //     ENDPOINTS.apiEndoint +
-        //       `aiservice/patient/addvaliddisease`,
-        //     dataFormatSuggested
-        //   );
-        //   if (response?.status == 200) {
-        //     notification.success({
-        //       message: "Saved Successfully!",
-        //       placement: "top",
-        //       duration: 1,
-        //     });
-        //     form.reset();
-        //     setIsModalOpenValidCodes(false);
-        //     setIsFileFormShow(false);
-        //     setInputValueFileDate("");
-        //     getPatientDetailsReload(
-        //       localPatientId,
-        //       localOrgId,
-        //       localTenantId,
-        //       "fileNotLoad"
-        //     );
-        //     handleCloseForm();
-        //     setIsModalOpenValid(false);
-        //   } else {
-        //   }
-        // } catch (e) {}
-      }
-    }
-
-    setValidated(true);
-  };
-  const handleFormSubmitMeat = async (event) => {
-    var dos = dosYearDefalutSelect.label;
-    const form = event.currentTarget;
-    event.preventDefault();
-    setAddValidCodeCheck(null);
-    if (form.checkValidity() === true) {
-      let convertDate = moment(inputValue.encodedDate).format("MM-DD-YYYY");
-
-      var dataFormatSuggested = {
-        patientComputeDetailId: localPatientId,
-        year: dos,
-        meatDetail: {
-          diseaseName: inputValue.actualDescription,
-          diagnosisCode: inputValue.diagnosisCode,
-          isMeatCriteriaPresent: inputValueMeat.isMeatCriteriaPresent,
-          monitorCapturedFromHeader: inputValueMeat.monitorCapturedFromHeader,
-          monitor: inputValueMeat.monitor,
-          evaluateCapturedFromHeader: inputValueMeat.evaluateCapturedFromHeader,
-          evaluate: inputValueMeat.evaluate,
-          assessmentCapturedFromHeader:
-            inputValueMeat.assessmentCapturedFromHeader,
-          assessment: inputValueMeat.assessment,
-          treatmentCapturedFromHeader:
-            inputValueMeat.treatmentCapturedFromHeader,
-          treatment: inputValueMeat.treatment,
-          radiology: false,
-          lab: false,
-          isManuallyAdded: true,
-          encounterDate: convertDate,
-        },
-        diseaseFormat: {
-          diagnosisCode: inputValue.diagnosisCode,
-          actualDescription: inputValue.actualDescription,
-          encounterDate: convertDate,
-          capturedSections: [inputValue.capturedSections],
-        },
-        providerInfo: {
-          providerName: inputValue.providerName,
-          authorizedProvider:
-            selectProviderInfo == "authorizedProvider" ? true : false,
-          noCredential: selectProviderInfo == "noCredential" ? true : false,
-          unAuthorizeProvider:
-            selectProviderInfo == "unAuthorizeProvider" ? true : false,
-          unSigned: selectProviderInfo == "unSigned" ? true : false,
-        },
-      };
-
-      try {
-        const response = await axios.post(
-          ENDPOINTS.apiEndoint + `dbservice/patient/compute/addvaliddisease`,
-          dataFormatSuggested
-        );
-        if (response?.status == 200) {
-          notification.success({
-            message: "Saved Successfully!",
-            placement: "top",
-            duration: 1,
-          });
-          setHccFormTab("HCCFORM");
-
-          form.reset();
-          setIsModalOpenValidCodes(false);
-          setIsFileFormShow(false);
-          setInputValueFileDate("");
-
-          getPatientDetailsReload(
-            localPatientId,
-            localOrgId,
-            localTenantId,
-            "fileNotLoad"
-          );
-          handleCloseForm();
-          setIsModalOpenValid(false);
-        } else {
-        }
-      } catch (e) {}
-    }
-
-    setValidated(true);
-  };
-
-  const getPatientDetailsReload = async (
-    patientId,
-    orgId,
-    tenId,
-    fileloadCondition
-  ) => {
+  const getPatientDetailsReload = async (patientId) => {
     dispatch(getPatientDetailsResult(patientId));
   };
 
@@ -2648,63 +2002,6 @@ const File = ({
     });
   };
 
-  const getEncounterDateBackgroundHcc = (value, code, place, meatResult) => {
-    return value?.map((res) => {
-      const result = encounterDateMatching.filter((res2) => res2.name == res);
-      var backColor = result[0]?.colors;
-      var sectionMapArr = res ? (
-        <span
-          onClick={() => getEncounterDetailsHcc(res, code, place, meatResult)}
-          className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
-        >
-          <i>
-            <CalendarOutlined className={visitStyles.calenderIcon} />
-          </i>
-          {moment(res, "MM/DD/YYYY").format("MMM DD")}
-        </span>
-      ) : (
-        ""
-      );
-      return sectionMapArr;
-    });
-  };
-
-  const getEncounterDetailsHcc = async (date, code, place, meatResult) => {
-    const findPageNumber = listPageNumber.filter((i) => i.date === date);
-    if (findPageNumber.length != 0) {
-      var dataset = code + " - (" + date + ")";
-      var headerName =
-        patientDocumentResult.patientId +
-        " / " +
-        patientDocumentResult.patientName +
-        " / " +
-        dataset;
-      setFileModalTitle(headerName);
-
-      setFileLoading(true);
-      if (place == "MEAT") {
-        setSelectMeatName(headerName);
-        setSelectMeatResult(meatResult);
-        setIsModalOpen(true);
-      } else if (place == "COMBO") {
-        setIsModalOpenCaptureSection(true);
-      } else {
-        setIsModalOpenValidCodes(true);
-      }
-      var date = findPageNumber[0].date;
-      if (findPageNumber[0].startPage.length != 0) {
-        var pageNumber = findPageNumber[0].startPage[0].pageNumber - 1;
-        setFileInitialPage(pageNumber);
-        setFileDosPageNumber(pageNumber);
-        var splitPoint = date.substring(" ", 5);
-        setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
-        setFindFileKeyword(splitPoint);
-        if (pageNumber == fileInitialPage) {
-        }
-      }
-    }
-  };
-
   const getEncounterDateBackground = (value) => {
     return value?.map((res) => {
       const result = encounterDateMatching.filter((res2) => res2.name == res);
@@ -2727,7 +2024,11 @@ const File = ({
   };
 
   const getEncounterDetails = async (date) => {
-    const findPageNumber = listPageNumber.filter((i) =>  moment(i.date).format("MM/DD/YYYY") === moment(date).format("MM/DD/YYYY"));
+    const findPageNumber = listPageNumber.filter(
+      (i) =>
+        moment(i.date).format("MM/DD/YYYY") ===
+        moment(date).format("MM/DD/YYYY")
+    );
     if (findPageNumber.length != 0) {
       setFileLoading(true);
       var date = findPageNumber[0].date;
@@ -2742,7 +2043,7 @@ const File = ({
           });
         }
         setFileInitialPage(pageNumber);
-        setFileDosPageNumber(pageNumber);
+
         var splitPoint = date.substring(" ", 5);
         setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
         setFindFileKeyword(splitPoint);
@@ -2751,228 +2052,6 @@ const File = ({
           page: pageNumber,
         });
       }
-    }
-    // var dotLoading = (
-    //   <div className={visitStyles.loadingFileHeader}>
-    //     <Spinner />
-    //   </div>
-    // );
-    // setProviderDetails(dotLoading);
-    // var encounterDate = moment(date).format("MM/DD/YYYY");
-    // var result = await getProviderDetails(localPatientId, encounterDate);
-    // var data = "";
-    // if (result?.status == "SUCCESS") {
-    //   var datas = result.response;
-    //   data = (
-    //     <div className="validhcc-details">
-    //       <div>Provider Name : {datas.providerName}</div>
-    //       <div>Authorized Provider : {datas.authorizedProvider}</div>
-    //       <div>UnAuthorize Provider : {datas.unAuthorizeProvider}</div>
-    //       <div>No Credential : {datas.noCredential}</div>
-    //       <div>UnSigned : {datas.unSigned}</div>
-    //     </div>
-    //   );
-    // } else {
-    //   data = (
-    //     <div className="validhcc-details">
-    //       <div>Provider Not Found</div>
-    //     </div>
-    //   );
-    // }
-    // setProviderDetails(data);
-  };
-
-  const getCaptureSectionBackgroundMeat = (
-    value,
-    dis,
-    encounterDate,
-    meatresult
-  ) => {
-    if (value) {
-      var igonreCase = value.toLowerCase();
-      const result = captureSectionMatching.filter(
-        (res2) => res2.sectionName == igonreCase
-      );
-
-      var backColor = result[0]?.backgroundColor;
-      var textColor = result[0]?.sectionColor;
-      var disCode = result[0]?.diagnosisCode;
-      var headerNames = result[0]?.sectionName;
-
-      var sectionMapArr = (
-        <span
-          onClick={() => handleOpenModal(value, dis, encounterDate, meatresult)}
-          style={{ backgroundColor: backColor, color: textColor }}
-          className={`cr-pointer mt-2 text-start ${visitStyles.captureheaderMeat}`}
-        >
-          {value}
-        </span>
-      );
-      return sectionMapArr;
-    }
-  };
-
-  const getCaptureSectionBackgroundMeatFile = (
-    value,
-    dis,
-    encounterDate,
-    meatresult
-  ) => {
-    if (value) {
-      var igonreCase = value.toLowerCase();
-      const result = captureSectionMatching.filter(
-        (res2) => res2.sectionName == igonreCase
-      );
-
-      var backColor = result[0]?.backgroundColor;
-      var textColor = result[0]?.sectionColor;
-      var disCode = result[0]?.diagnosisCode;
-      var headerNames = result[0]?.sectionName;
-
-      var sectionMapArr = (
-        <span
-          onClick={() => handleOpenModal(value, dis, encounterDate, meatresult)}
-          style={{ backgroundColor: backColor, color: textColor }}
-          className={`cr-pointer mt-2 text-start ${visitStyles.captureheaderMeatView}`}
-        >
-          {value}
-        </span>
-      );
-      return sectionMapArr;
-    }
-  };
-
-  const addMeatQuery = (value, condition) => {
-    inputValue.diagnosisCodeQuery = value.diagnosisCode;
-    if (condition == "Add") {
-      setMeatQueryUpdate(false);
-      inputValue.providerName = "";
-      inputValue.headerName = "";
-      inputValue.imagingTestHeader = "";
-      inputValue.description = "";
-      inputValue.queryReason = "";
-      inputValue.reason = "";
-    } else {
-      inputValue.providerName = value.providerName;
-      inputValue.headerName = value.headerName;
-      inputValue.imagingTestHeader = value.imagingTestHeader;
-      inputValue.description = value.description;
-      inputValue.queryReason = value.queryReason;
-      inputValue.reason = value.reason;
-      setMeatQueryUpdate(true);
-    }
-    setIsMeatQueryModal(true);
-  };
-
-  const meatQueriedComments = (value) => {
-    setMeatQueryResult(value);
-    setMeatQueriedDetailsModal(true);
-    setMeatQueriedDetailsShow(false);
-  };
-  const dosListMeat = [
-    { value: "08/01/2023", label: "08/01/2023" },
-    { value: "24/06/2023", label: "24/06/2023" },
-  ];
-
-  const handleSubmitMeatQuery = async (event) => {
-    const form = event.currentTarget;
-    event.preventDefault();
-    if (
-      inputValue?.providerName === "" ||
-      inputValue?.headerName === "" ||
-      inputValue?.imagingTestHeader === "" ||
-      inputValue?.queryReason === "" ||
-      inputValue?.description === "" ||
-      inputValue?.reason
-    ) {
-      let errors = {
-        providername:
-          inputValue?.providerName === "" ? "Please enter provider name" : "",
-        quickQuery:
-          inputValue?.headerName === "" ? "Please select quick query" : "",
-        imagingQuery:
-          inputValue?.imagingTestHeader === ""
-            ? "Please select imaging query"
-            : "",
-        queryReason:
-          inputValue?.queryReason === "" ? "Please select quick reason" : "",
-        description:
-          inputValue?.description === "" ? "Please enter description" : "",
-      };
-
-      setFormErr(errors);
-    } else {
-      if (form.checkValidity() === true) {
-        var dataformat = {
-          patientId: localPatientId,
-          diagnosisCode: inputValue.diagnosisCodeQuery,
-          queryReason: inputValue.queryReason,
-          Reason: inputValue.reason,
-          providerName: inputValue.providerName,
-          imagingTestHeader: inputValue.imagingTestHeader,
-          headerName: inputValue.headerName,
-          dosYear: selectedDosValue,
-          description: inputValue.description,
-        };
-        var result = await submitMeatQuery(dataformat);
-        if (result.status == "SUCCESS") {
-          setMeatQueryResult(result.response);
-          inputValue.queryComment = result.response.queryComment;
-          setIsMeatQueryModal(false);
-          notification.success({
-            message: result.message,
-            placement: "top",
-            duration: 1,
-          });
-          setMeatQueriedDetailsModal(true);
-          setMeatQueriedDetailsShow(true);
-          var result = await getMeatQueryList(selectedDosValue, localPatientId);
-          setMeatQueryList(result.response);
-        }
-      }
-    }
-  };
-  const updateMeatQueryComments = async () => {
-    var updateDataformat = {
-      patientId: localPatientId,
-      diagnosisCode: inputValue.diagnosisCodeQuery,
-      dos: selectedDosValue,
-      queryComment: inputValue.queryComment,
-    };
-    var result = await updateMeatQuery(updateDataformat);
-    if (result.status == "SUCCESS") {
-      setMeatQueryResult(result.response);
-      setIsMeatQueryModal(false);
-      notification.success({
-        message: result.message,
-        placement: "top",
-        duration: 1,
-      });
-      setMeatQueriedDetailsModal(false);
-      setMeatQueriedDetailsShow(false);
-    } else {
-    }
-  };
-  const selectTab = async (number) => {
-    setActiveTabNumber(number);
-    setSelectPreviousCode(null);
-    setFlagTagActive(false);
-    setIsDosSelect(false);
-    setFileInitialPage(0);
-    switch (number) {
-      case 1:
-        setFlagTagActive(true);
-        setIsDosSelect(false);
-        break;
-      case 5:
-        setIsDosSelect(true);
-        break;
-      case 6:
-        // var result = await getMeatQueryList(selectedDosValue, localPatientId);
-        // setMeatQueryList(result.response);
-        break;
-      default:
-        null;
     }
   };
 
@@ -3018,7 +2097,7 @@ const File = ({
     setFindFileKeyword(null);
     var pageIndex = pageNumber - 1;
     setFileInitialPage(pageIndex);
-    setFileDosPageNumber(pageIndex);
+
     setTargetPages(
       (targetPage) =>
         targetPage.pageIndex === pageNumber ||
@@ -3030,29 +2109,6 @@ const File = ({
       value: "",
       page: pageNumber,
     });
-  };
-
-  const getPreviousData = (code, action) => {
-    const result = meatQueryList.filter(
-      (res) => res.diagnosisCode == code && res.currentQuery != true
-    );
-    setSelectPreviousCode(code);
-    var querySort = result;
-    querySort.sort(function (a, b) {
-      return b.queryVersion - a.queryVersion;
-    });
-    setMeatQueryListPrevious(querySort);
-  };
-
-  const handleSelect = (value, title) => {
-    setInputValue({ ...inputValue, [title]: value });
-  };
-
-  const emailSplitFunction = (email) => {
-    if (meatQueriedDetailsModal) {
-      let emailSplit = email?.split("@");
-      return emailSplit[0].charAt(0).toUpperCase() + emailSplit[0].slice(1);
-    }
   };
 
   const getProviderNameList = (data) => {
@@ -3067,123 +2123,7 @@ const File = ({
           : result[0]?.backgroundColor;
       var textColor =
         result[0]?.sectionColor == "#efeff0" ? "#000" : result[0]?.sectionColor;
-      var value = ["09/19/2023"];
-      var sectionMapArr = (
-        // <Popover
-        //   content={
-        //     <>
-        //       {value?.map((res3) => {
-        //         const result = encounterDateMatching.filter(
-        //           (res2) => res2.name == res3
-        //         );
-        //         var backColor = result[0]?.colors;
-        //         <span
-        //           className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
-        //         >
-        //           <i>
-        //             <CalendarOutlined className={visitStyles.calenderIcon} />
-        //           </i>
-        //           {moment(res3).format("MMM DD")}
-        //         </span>;
-        //       })}
-        //     </>
-        //   }
-        //   trigger={["click"]}
-        //   placement="bottom"
-        //   onClick={() => getEncounterProviderDetails(res)}
-        // >
-        <Tooltip title={res}>
-          <span
-            className={`mt-2 text-start ${visitStyles.provider_name} ${visitStyles.elipse}`}
-            style={{ backgroundColor: backColor, color: textColor }}
-          >
-            <i>
-              {" "}
-              <FontAwesomeIcon
-                icon={faCircleUser}
-                style={{
-                  size: 10,
-                  color: textColor,
-                }}
-              />
-            </i>
-            {res}
-          </span>
-        </Tooltip>
-
-        // </Popover>
-      );
-      return sectionMapArr;
     });
-
-    // var value = data?.map((res) =>
-    //   res.providerName ? (
-    //     <Badge
-    //       className={
-    //         res.authorizedProvider === true
-    //           ? `mt-2 text-start ${visitStyles.provider_name}`
-    //           : `mt-2 text-start ${visitStyles.un_provider_name}`
-    //       }
-    //     >
-    //       <i>
-    //         {" "}
-    //         <FontAwesomeIcon
-    //           icon={faCircleUser}
-    //           style={{
-    //             size: 10,
-    //             color:
-    //               res.authorizedProvider === true ? "#008000bf" : "#ff0000cc",
-    //           }}
-    //         />
-    //       </i>
-    //       {res.providerName}
-    //     </Badge>
-    //   ) : null
-    // );
-    // return value;
-  };
-
-  const addComboCode = () => {
-    setIsAddComboCode(true);
-  };
-
-  const handleSubmitComboCode = async (event) => {
-    var dos = dosYearDefalutSelect.label;
-
-    const form = event.currentTarget;
-    event.preventDefault();
-    if (form.checkValidity() === true) {
-      var updateDataformat = {
-        patientId: localPatientId,
-        dosYear: selectedDosValue,
-        comboCode: inputValue.comboCode,
-        additionalCode: inputValue.additionalCode,
-        description: inputValue.description,
-      };
-      var result = await manuallyAddComboCode(updateDataformat);
-      if (result.status == "SUCCESS") {
-        setIsAddComboCode(false);
-        notification.success({
-          message: result.message,
-          placement: "top",
-          duration: 1,
-        });
-        getPatientDetailsReload(
-          localPatientId,
-          localOrgId,
-          localTenantId,
-          "fileNotLoad"
-        );
-      }
-
-      setValidated(true);
-    }
-  };
-
-  const underScoreRemove = (value) => {
-    var str = value;
-    var newStr = str.replace(/_/g, " ");
-    return newStr;
   };
 
   const showErrorMessage = () => {
@@ -3191,43 +2131,6 @@ const File = ({
     notification.destroy();
     notification.info({ message: "Tree Not Available", duration: 1 });
   };
-
-  const confirmMeatQuery = async (code) => {
-    var result = await deleteMeatQuery(localPatientId, code);
-    if (result.status == "SUCCESS") {
-      var result = await getMeatQueryList(selectedDosValue, localPatientId);
-      setMeatQueryList(result.response);
-      notification.success({
-        message: result.message,
-        placement: "top",
-        duration: 1,
-      });
-    } else {
-    }
-  };
-
-  const getEncounterProviderDetails = async (name) => {
-    // var result = await getProviderEncounterDetails(localPatientId, name);
-
-    var value = ["09/19/2023"];
-
-    return value?.map((res) => {
-      const result = encounterDateMatching.filter((res2) => res2.name == res);
-      var backColor = result[0]?.colors;
-      var sectionMapArr = (
-        <span
-          className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
-        >
-          <i>
-            <CalendarOutlined className={visitStyles.calenderIcon} />
-          </i>
-          {moment(res).format("MMM DD")}
-        </span>
-      );
-      return sectionMapArr;
-    });
-  };
-
   const PopContent = (
     <div className={styles.innerPop}>
       <div className={styles.displayDiv}>
@@ -3303,88 +2206,6 @@ const File = ({
       </div>
     </div>
   );
-
-  const handleSelectProvider = (value) => {
-    setSelectProviderInfo(value);
-  };
-
-  const handleFormClear = () => {
-    inputValue.diagnosisCode = "";
-    inputValue.providerName = "";
-    inputValue.actualDescription = "";
-    inputValue.capturedSections = "";
-    setAddValidCodeCheck(null);
-    setInputValueFileDate("");
-    setSelectProviderInfo(null);
-  };
-
-  // var pdfElement = document.getElementsByClassName("rpv-toolbar__item");
-  // if (pdfElement.length != 0) {
-  //   for (let i = 0; i < pdfElement.length; i++) {
-  //     pdfElement[i].addEventListener("click", function (e) {
-  //       if (hyperlinkSeacrh == false) {
-  //         setFileInitialPage(null);
-  //         setFindFileKeyword(null);
-  //       }
-  //     });
-  //   }
-  // }
-
-  const updateCall = async (data) => {
-    const orgId = localStorage.getItem("orgId");
-    const response = await axios.put(
-      ENDPOINTS.apiEndoint + `aiservice/patient/update`,
-      {
-        patientId: localPatientId,
-        orgId: orgId,
-        previousDiagnosisCode: data.diagnosisCode,
-        newPreviousDiagnosisCode: editDiagnosisCode,
-        year: year.value,
-      }
-    );
-    setEditCode(true);
-    setEditDiagnosisCode("");
-  };
-
-  const updateCode = (value) => {
-    return (
-      <>
-        <div className="input-group mb-3">
-          <input
-            type="text"
-            className={`form-control ${editCode && "border border-primary"}`}
-            placeholder="Recipient's username"
-            value={editDiagnosisCode ? editDiagnosisCode : value.diagnosisCode}
-            onChange={(e) => setEditDiagnosisCode(e.target.value)}
-            disabled={!editCode}
-          />
-
-          {editCode ? (
-            <span
-              className="input-group-text"
-              style={{ cursor: "pointer" }}
-              id="basic-addon2"
-              onClick={() => updateCall(value)}
-            >
-              <FontAwesomeIcon icon={faSave} />
-            </span>
-          ) : (
-            <span
-              className="input-group-text"
-              style={{ cursor: "pointer" }}
-              id="basic-addon2"
-              onClick={() => {
-                setEditCode(true);
-                setEditDiagnosisCode(value.diagnosisCode);
-              }}
-            >
-              <FontAwesomeIcon icon={faPen} />
-            </span>
-          )}
-        </div>
-      </>
-    );
-  };
   return (
     <>
       {fileLoading ? (
@@ -3439,8 +2260,16 @@ const File = ({
                                   <FontAwesomeIcon icon={faPen} />
                                 </Popover>
                               </span> */}
-                               <FontAwesomeIcon icon={faPen} style={{ cursor: "pointer" }}  onClick={() => {setFormValues(data),setIsEditHccForm(true),setFormEditPlace("VALID_DISEASE")}}/>
-                              
+                              <FontAwesomeIcon
+                                icon={faPen}
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  setFormValues(data),
+                                    setIsEditHccForm(true),
+                                    setFormEditPlace("VALID_DISEASE");
+                                }}
+                              />
+
                               <Popover
                                 content={
                                   data.dbDescription
@@ -3510,10 +2339,10 @@ const File = ({
                               cancelText="Move to Suggested"
                               onCancel={validToSuggested}
                               okButtonProps={{
-                                type: buttonClicked ? "primary" : "default",
+                                type: "default",
                               }}
                               cancelButtonProps={{
-                                type: buttonClicked ? "danger" : "default",
+                                type: "default",
                               }}
                               description={data.diagnosisCode}
                               onConfirm={confirmvalid}
@@ -3596,8 +2425,18 @@ const File = ({
                             className={`${visitStyles.encounterAndSectionHeader}`}
                           >
                             <div className="d-flex justify-content-end mt-2">
-                              {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
-                            {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
+                              {data.isCmsHcc && (
+                                <div
+                                  className={`${visitStyles.cmsStatus} mx-1`}
+                                >
+                                  CMS
+                                </div>
+                              )}
+                              {data.isRxHcc && (
+                                <div className={`${visitStyles.rxStatus} mx-1`}>
+                                  RX
+                                </div>
+                              )}
                             </div>
                             <div
                               className={`cr-pointer ${styles.meatFoundContainer}`}
@@ -3674,18 +2513,20 @@ const File = ({
                                 </Badge>
                               ) : null}
                             </div>
-                                    {data.isComboCode == true ? (
-                                      <Badge
-                                        className={`mt-2 text-start  ${visitStyles.isComboCode}`}
-                                        onClick={() => {
-                                          setActiveTabHead(3);
-                                          setActiveComboTree({diagnosisCode: data?.diagnosisCode,})
-                                        }}
-                                      >
-                                        Combo
-                                      </Badge>
-                                    ) : null}
-                                  
+                            {data.isComboCode == true ? (
+                              <Badge
+                                className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                onClick={() => {
+                                  setActiveTabHead(3);
+                                  setActiveComboTree({
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}
+                              >
+                                Combo
+                              </Badge>
+                            ) : null}
+
                             {data.getPlace == "Insulin" ? (
                               <span
                                 className={` mt-2 ${visitStyles.radiologyStatus}`}
@@ -3740,33 +2581,6 @@ const File = ({
           </Popover>
           <div className="card-body p-0">
             {hccFileDetails?.loading != true ? (
-              // <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
-              //   <div
-              //     style={{
-              //       height: "71vh",
-              //       maxWidth: "1000px",
-              //       marginLeft: "auto",
-              //       marginRight: "auto",
-              //     }}
-              //   >
-              //     {" "}
-              //     <Viewer
-              //       fileUrl={selectFileURL}
-              //       initialPage={fileInitialPage}
-              //       plugins={[defaultLayoutPluginInstance,searchPluginInstance]}
-              //       onDocumentLoad={handleDocumentLoadFile}
-              //       renderLoader={(percentages) => (
-              //         <div style={{ width: "240px" }}>
-              //           <ProgressBar progress={Math.round(percentages)} />
-              //         </div>
-              //       )}
-              //       renderMode="canvas"
-              //       />
-
-              //   </div>
-              // </Worker>
-              // selectFileURL
-
               <>
                 {selectFileURL && (
                   <PdfViewer
@@ -3823,7 +2637,15 @@ const File = ({
                                     <span className="valid-dis-name">
                                       {data.diagnosisCode}
                                     </span>
-                                    <FontAwesomeIcon icon={faPen} style={{ cursor: "pointer" }}  onClick={() => {setFormValues(data),setIsEditHccForm(true),setFormEditPlace("SUGGESTED_DISEASE")}}/>
+                                    <FontAwesomeIcon
+                                      icon={faPen}
+                                      style={{ cursor: "pointer" }}
+                                      onClick={() => {
+                                        setFormValues(data),
+                                          setIsEditHccForm(true),
+                                          setFormEditPlace("SUGGESTED_DISEASE");
+                                      }}
+                                    />
                                     <Popover
                                       content={
                                         data.dbDescription
@@ -3884,9 +2706,7 @@ const File = ({
                                     }
                                     okText="Move to Deleted"
                                     okButtonProps={{
-                                      type: buttonClicked
-                                        ? "primary"
-                                        : "default",
+                                      type: "default",
                                     }}
                                     description={data.diagnosisCode}
                                     onConfirm={suggestedToDeleted}
@@ -3919,14 +2739,10 @@ const File = ({
                                     cancelText="Move to HCC"
                                     onCancel={suggestedToValid}
                                     okButtonProps={{
-                                      type: buttonClicked
-                                        ? "primary"
-                                        : "default",
+                                      type: "default",
                                     }}
                                     cancelButtonProps={{
-                                      type: buttonClicked
-                                        ? "danger"
-                                        : "default",
+                                      type: "default",
                                     }}
                                     description={data.diagnosisCode}
                                     onConfirm={suggestedToDeleted}
@@ -3975,7 +2791,6 @@ const File = ({
                               <div
                                 className={`${visitStyles.hoverActiveHcc} d-flex justify-content-between`}
                               >
-                            
                                 <div>
                                   <div className="">
                                     <div
@@ -4033,74 +2848,86 @@ const File = ({
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
-                                   <div className="d-flex justify-content-end mt-2">
-                              {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
-                            {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
-                            </div>
-                            <div
-                              className={`cr-pointer ${styles.meatFoundContainer}`}
-                            >
-                              <div
-                                onClick={() => {
-                                  setActiveTabHead(4);
-                                  setActiveMeatTitle({
-                                    header: "M",
-                                    diagnosisCode: data?.diagnosisCode,
-                                  });
-                                }}
-                              >
-                                {getMeatFound(
-                                  data?.diagnosisCode,
-                                  meatCriteriaList,
-                                  "M"
-                                )}
-                              </div>
-                              <div
-                                onClick={() => {
-                                  setActiveTabHead(4);
-                                  setActiveMeatTitle({
-                                    header: "E",
-                                    diagnosisCode: data?.diagnosisCode,
-                                  });
-                                }}
-                              >
-                                {getMeatFound(
-                                  data?.diagnosisCode,
-                                  meatCriteriaList,
-                                  "E"
-                                )}
-                              </div>
-                              <div
-                                onClick={() => {
-                                  setActiveTabHead(4);
-                                  setActiveMeatTitle({
-                                    header: "A",
-                                    diagnosisCode: data?.diagnosisCode,
-                                  });
-                                }}
-                              >
-                                {getMeatFound(
-                                  data?.diagnosisCode,
-                                  meatCriteriaList,
-                                  "A"
-                                )}
-                              </div>
-                              <div
-                                onClick={() => {
-                                  setActiveTabHead(4);
-                                  setActiveMeatTitle({
-                                    header: "T",
-                                    diagnosisCode: data?.diagnosisCode,
-                                  });
-                                }}
-                              >
-                                {getMeatFound(
-                                  data?.diagnosisCode,
-                                  meatCriteriaList,
-                                  "T"
-                                )}
-                              </div>
-                            </div>
+                                  <div className="d-flex justify-content-end mt-2">
+                                    {data.isCmsHcc && (
+                                      <div
+                                        className={`${visitStyles.cmsStatus} mx-1`}
+                                      >
+                                        CMS
+                                      </div>
+                                    )}
+                                    {data.isRxHcc && (
+                                      <div
+                                        className={`${visitStyles.rxStatus} mx-1`}
+                                      >
+                                        RX
+                                      </div>
+                                    )}
+                                  </div>
+                                  <div
+                                    className={`cr-pointer ${styles.meatFoundContainer}`}
+                                  >
+                                    <div
+                                      onClick={() => {
+                                        setActiveTabHead(4);
+                                        setActiveMeatTitle({
+                                          header: "M",
+                                          diagnosisCode: data?.diagnosisCode,
+                                        });
+                                      }}
+                                    >
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "M"
+                                      )}
+                                    </div>
+                                    <div
+                                      onClick={() => {
+                                        setActiveTabHead(4);
+                                        setActiveMeatTitle({
+                                          header: "E",
+                                          diagnosisCode: data?.diagnosisCode,
+                                        });
+                                      }}
+                                    >
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "E"
+                                      )}
+                                    </div>
+                                    <div
+                                      onClick={() => {
+                                        setActiveTabHead(4);
+                                        setActiveMeatTitle({
+                                          header: "A",
+                                          diagnosisCode: data?.diagnosisCode,
+                                        });
+                                      }}
+                                    >
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "A"
+                                      )}
+                                    </div>
+                                    <div
+                                      onClick={() => {
+                                        setActiveTabHead(4);
+                                        setActiveMeatTitle({
+                                          header: "T",
+                                          diagnosisCode: data?.diagnosisCode,
+                                        });
+                                      }}
+                                    >
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "T"
+                                      )}
+                                    </div>
+                                  </div>
                                   <div
                                     className={`${visitStyles.encounterAndSectionHeader}`}
                                   >
@@ -4113,16 +2940,18 @@ const File = ({
                                     ) : null}
                                   </div>
                                   {data.isComboCode == true ? (
-                                      <Badge
-                                        className={`mt-2 text-start  ${visitStyles.isComboCode}`}
-                                        onClick={() => {
-                                          setActiveTabHead(3);
-                                          setActiveComboTree({diagnosisCode: data?.diagnosisCode,})
-                                        }}
-                                      >
-                                        Combo
-                                      </Badge>
-                                    ) : null}
+                                    <Badge
+                                      className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                      onClick={() => {
+                                        setActiveTabHead(3);
+                                        setActiveComboTree({
+                                          diagnosisCode: data?.diagnosisCode,
+                                        });
+                                      }}
+                                    >
+                                      Combo
+                                    </Badge>
+                                  ) : null}
                                   {data.getPlace == "Insulin" ? (
                                     <span
                                       className={` mt-2 ${visitStyles.radiologyStatus}`}
@@ -4248,10 +3077,10 @@ const File = ({
                               cancelText="Move to HCC"
                               onCancel={deletedToValid}
                               okButtonProps={{
-                                type: buttonClicked ? "primary" : "default",
+                                type: "default",
                               }}
                               cancelButtonProps={{
-                                type: buttonClicked ? "danger" : "default",
+                                type: "default",
                               }}
                               description={data.diagnosisCode}
                               onConfirm={deletedToSuggested}
@@ -4271,52 +3100,68 @@ const File = ({
                               </div>
                             </Popconfirm>
                           </div>
-                          <div className={`${visitStyles.hoverActiveHcc} d-flex justify-content-between` }>
+                          <div
+                            className={`${visitStyles.hoverActiveHcc} d-flex justify-content-between`}
+                          >
                             <div>
-                            <div className="">
-                              <div
-                                className={`${visitStyles.encounterAndSectionHeader}`}
-                              >
-                                {getProviderNameList(data?.providerName)}
+                              <div className="">
+                                <div
+                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                >
+                                  {getProviderNameList(data?.providerName)}
+                                </div>
+                                <div
+                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                >
+                                  {getEncounterDateBackground(
+                                    data.encounterDateSplit
+                                  )}
+                                </div>
                               </div>
                               <div
                                 className={`${visitStyles.encounterAndSectionHeader}`}
                               >
-                                {getEncounterDateBackground(
-                                  data.encounterDateSplit
+                                {getCaptureSectionBackgroundFile(
+                                  data?.capturedSections,
+                                  data?.encounterDate,
+                                  data?.actualDescription,
+                                  data?.diagnosisCode
                                 )}
                               </div>
                             </div>
                             <div
                               className={`${visitStyles.encounterAndSectionHeader}`}
                             >
-                              {getCaptureSectionBackgroundFile(
-                                data?.capturedSections,
-                                data?.encounterDate,
-                                data?.actualDescription,
-                                data?.diagnosisCode
-                              )}
-                            </div>
-                            </div>
-                            <div
-                                  className={`${visitStyles.encounterAndSectionHeader}`}
-                                >
-                                   <div className="d-flex justify-content-end mt-2">
-                              {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
-                            {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
-                            </div>
-                            {data.isComboCode == true ? (
-                                      <Badge
-                                        className={`mt-2 text-start  ${visitStyles.isComboCode}`}
-                                        onClick={() => {
-                                          setActiveTabHead(3);
-                                          setActiveComboTree({diagnosisCode: data?.diagnosisCode,})
-                                        }}
-                                      >
-                                        Combo
-                                      </Badge>
-                                    ) : null}
+                              <div className="d-flex justify-content-end mt-2">
+                                {data.isCmsHcc && (
+                                  <div
+                                    className={`${visitStyles.cmsStatus} mx-1`}
+                                  >
+                                    CMS
+                                  </div>
+                                )}
+                                {data.isRxHcc && (
+                                  <div
+                                    className={`${visitStyles.rxStatus} mx-1`}
+                                  >
+                                    RX
+                                  </div>
+                                )}
                               </div>
+                              {data.isComboCode == true ? (
+                                <Badge
+                                  className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                  onClick={() => {
+                                    setActiveTabHead(3);
+                                    setActiveComboTree({
+                                      diagnosisCode: data?.diagnosisCode,
+                                    });
+                                  }}
+                                >
+                                  Combo
+                                </Badge>
+                              ) : null}
+                            </div>
                           </div>
                         </div>
                       </li>
@@ -4342,28 +3187,6 @@ const File = ({
           // height={400}
         >
           <div className="section-container">
-            {/* <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
-              <div
-                style={{
-                  height: "80vh",
-                  // width: "900px",
-                  marginLeft: "auto",
-                  marginRight: "auto",
-                }}
-              >
-                {" "}
-                <Viewer
-                  fileUrl={selectFileURLRadiology}
-                  plugins={[defaultLayoutPluginInstance]}
-                  onDocumentLoad={handleDocumentLoadFile}
-                  renderLoader={(percentages) => (
-                    <div style={{ width: "240px" }}>
-                      <ProgressBar progress={Math.round(percentages)} />
-                    </div>
-                  )}
-                />
-              </div>
-            </Worker> */}
             {selectFileURLRadiology && (
               <PdfViewer
                 src={selectFileURLRadiology}
@@ -4388,28 +3211,6 @@ const File = ({
           // height={400}
         >
           <div className="section-container">
-            {/* <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
-              <div
-                style={{
-                  height: "80vh",
-                  // width: "900px",
-                  marginLeft: "auto",
-                  marginRight: "auto",
-                }}
-              >
-                {" "}
-                <Viewer
-                  fileUrl={labReportFile}
-                  plugins={[defaultLayoutPluginInstance]}
-                  onDocumentLoad={handleDocumentLoadFile}
-                  renderLoader={(percentages) => (
-                    <div style={{ width: "240px" }}>
-                      <ProgressBar progress={Math.round(percentages)} />
-                    </div>
-                  )}
-                />
-              </div>
-            </Worker> */}
             {labReportFile && (
               <PdfViewer
                 src={labReportFile}
@@ -4532,12 +3333,12 @@ const File = ({
         opens && showErrorMessage()
       )}
 
-           <EditHccForm 
-              formValues={formValues}
-              isEditHccForm={isEditHccForm}
-              setIsEditHccForm={setIsEditHccForm}
-              formEditPlace={formEditPlace}
-            />
+      <EditHccForm
+        formValues={formValues}
+        isEditHccForm={isEditHccForm}
+        setIsEditHccForm={setIsEditHccForm}
+        formEditPlace={formEditPlace}
+      />
     </>
   );
 };
