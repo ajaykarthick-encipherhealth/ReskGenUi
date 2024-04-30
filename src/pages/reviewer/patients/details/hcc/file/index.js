@@ -589,7 +589,7 @@ const File = ({
           var providerList = [];
           var providerDeatils = null;
           res.provider?.map((res, index) => {
-            providerList.push(res.providerName);
+            providerList.push(res?.providerName);
           });
 
           if (res.isShow != false) {
@@ -946,7 +946,7 @@ const File = ({
         validDiseaseNewRes?.map((res) => {
           res.provider?.map((res2, index) => {
             capturedSectionsArr?.push({
-              name: res2.providerName,
+              name: res2?.providerName,
               diagnosisCode: res?.diagnosisCode,
             });
           });
