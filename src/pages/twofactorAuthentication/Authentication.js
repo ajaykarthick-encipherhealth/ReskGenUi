@@ -17,7 +17,7 @@ export const generateCodeArray = () =>
 const Index = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const loginResponse=useSelector(state=>state.auth.authInfo)
+  const loginResponse = useSelector((state) => state.auth.authInfo);
   const [seconds, setSeconds] = useState(30);
   const [enableMFA, setEnableMFA] = useState(false);
   const [username, setUsername] = useState();
@@ -107,8 +107,9 @@ const Index = () => {
         {enableMFA ? (
           <>
             <div className={styles.content}>
-              Please confirm your account by entering the authorization code
-              from your authenticator app.
+              Safeguarding your tickets is our highest concern. Please validate
+              your account by entering the authorization code sent to
+              *****@cogentai.com
             </div>
             {/* code Input */}
             <div className={styles.codeBox}>
@@ -137,7 +138,7 @@ const Index = () => {
         ) : (
           <div className={styles.contentDiv}>
             <div style={{ width: "60%" }}>
-              The purpose of Multi-Factor Authentication (MFA) is to enhance the
+              {/* The purpose of Multi-Factor Authentication (MFA) is to enhance the
               security of digital accounts, systems, and sensitive information
               by adding an extra layer of verification beyond just a password.
               Traditional password-based authentication systems have
@@ -145,7 +146,14 @@ const Index = () => {
               requiring users to provide multiple forms of identification. The
               goal is to create a more robust and resilient authentication
               process that significantly enhances the security posture of
-              digital systems and accounts.
+              digital systems and accounts. */}
+              Enhance your security measures by activating the newest
+              Multi-Factor Authentication (MFA) feature. This provides an
+              additional level of protection against unauthorized access and
+              potential security risks. Want to learn more about MFA? Click here
+              to enable it. If you require additional time to prepare, you can
+              choose to skip this step, though adopting MFA will be compulsory
+              in the future.
             </div>
           </div>
         )}
