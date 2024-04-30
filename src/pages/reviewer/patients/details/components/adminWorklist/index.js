@@ -368,13 +368,15 @@ const AdminWorkList = ({ localUserId, setWorkListPatientId }) => {
           </div>
         )}
       </div>
-      <div className="patient-filte-page">
-        <Paginator
-          first={paginationFirst}
-          rows={15}
-          totalRecords={totalElements}
-          onPageChange={onPageChange}
-        />
+      <div className={visitStyles.paginationContiner}>
+        <div className="patient-filte-page">
+          <Paginator
+            first={paginationFirst}
+            rows={15}
+            totalRecords={totalElements}
+            onPageChange={onPageChange}
+          />
+        </div>
       </div>
     </>
   );

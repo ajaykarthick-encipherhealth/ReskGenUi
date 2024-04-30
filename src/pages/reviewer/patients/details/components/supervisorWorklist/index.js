@@ -445,6 +445,7 @@ const SupervisorWorkList = ({ localUserId, setWorkListPatientId }) => {
           </div>
         )}
       </div>
+      <div className={visitStyles.paginationContiner}>
       <div className="patient-filte-page">
         <Paginator
           first={paginationFirst}
@@ -452,6 +453,7 @@ const SupervisorWorkList = ({ localUserId, setWorkListPatientId }) => {
           totalRecords={totalElements}
           onPageChange={onPageChange}
         />
+      </div>
       </div>
     </>
   );
