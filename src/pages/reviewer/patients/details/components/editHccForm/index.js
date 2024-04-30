@@ -51,6 +51,8 @@ const EditHccForm = ({
   ];
   const onFinishHcc = async (form) => {
     if (addValidCodeCheck == true || addValidCodeCheck == null) {
+      setProviderInfoSelectClose(true);
+      setProviderInfoSelectOpen(false);
       var patientId = localStorage.getItem("patientId");
       const dateList = form.encounterDates;
       var providerGet = [];
@@ -75,8 +77,7 @@ const EditHccForm = ({
           ENDPOINTS.apiEndoint + `aiservice/disease/editdisease`,
           dataFormat
         );
-        if (response?.data?.status == "SUCCESS") {
-          setProviderInfoSelectClose(true);
+        if (response?.data?.status == "SUCCESS") {      
           setTimeout(() => {
             setIsEditHccForm(false);
           }, 1);
@@ -244,10 +245,11 @@ const EditHccForm = ({
       sections: selectSection,
     };
     setFormInitialValues(initalForm);
+    form.setFieldsValue(initalForm);
     setTimeout(() => {
       setIsFormShow(true);
     }, 1);
-  }, [formValues]);
+  }, [formValues,form]);
 
   return (
     <>

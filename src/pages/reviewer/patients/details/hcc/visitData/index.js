@@ -3142,7 +3142,7 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
                                 <span className="valid-dis-name">
                                   {data.diagnosisCode}
                                 </span>
-                                {/* <FontAwesomeIcon icon={faPen} style={{ cursor: "pointer" }}  onClick={() => {setFormValues(data),setIsEditHccForm(true),setFormEditPlace("VALID_DISEASE")}}/> */}
+                                <FontAwesomeIcon icon={faPen} style={{ cursor: "pointer" }}  onClick={() => {setFormValues(data),setIsEditHccForm(true),setFormEditPlace("VALID_DISEASE")}}/>
                                 <Popover
                                   content={data.dbDescription ? data.dbDescription : data.actualDescription}
                                   title=""
@@ -3414,7 +3414,7 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle}) => {
                                       <span className="valid-dis-name">
                                         {data.diagnosisCode}
                                       </span>
-                                      {/* <FontAwesomeIcon icon={faPen} style={{ cursor: "pointer" }}  onClick={() => {setFormValues(data),setIsEditHccForm(true),setFormEditPlace("SUGGESTED_DISEASE")}}/> */}
+                                      <FontAwesomeIcon icon={faPen} style={{ cursor: "pointer" }}  onClick={() => {setFormValues(data),setIsEditHccForm(true),setFormEditPlace("SUGGESTED_DISEASE")}}/>
                                       <Popover
                                         content={data.dbDescription ? data.dbDescription : data.actualDescription}
                                         title=""
