@@ -283,6 +283,8 @@ const AddHccForm = ({
                   onChange={getFindNpiNumber}
                   maxLength={10}
                   className={styles.formControl}
+                  onWheel={(e) => e.target.blur()}
+
                 />
               </Form.Item>
             )}
