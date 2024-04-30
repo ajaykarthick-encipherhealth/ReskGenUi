@@ -13728,7 +13728,8 @@ overflow: scroll;
 }
 
 .patient-filte-page {
-  margin-top: 20px;
+  width: 20%;
+  margin-top: 5px;
 }
 
 .patient-filte-page > .p-paginator > span.p-paginator-pages {

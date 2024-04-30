@@ -207,7 +207,8 @@
 }
 
 .actionbtnContainer {
-  float: right;
+  position: relative;
+  right: 60px;
   padding-top: 1.25rem;
 }
 .backArrowBtn {
@@ -1429,15 +1430,22 @@
   border-radius: 10px;
 }
 .patientDetailsHead {
-  height: 70vh;
+  height: 80%;
   margin-right: 0px;
   overflow-y: scroll;
 }
-.patientDetailsHead:hover {
+.paginationContiner {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #fff;
+  height: 55px;
+}
+/* .patientDetailsHead:hover {
   height: 70vh;
   overflow-y: scroll;
   margin-right: 0px;
-}
+} */
 .patientDetailsHead2 {
   height: 65vh;
   margin-right: 0px;

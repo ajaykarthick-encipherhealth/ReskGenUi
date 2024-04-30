@@ -313,6 +313,7 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
           </div>
         )}
       </div>
+      <div className={visitStyles.paginationContiner}>
       <div className="patient-filte-page">
         <Paginator
           first={paginationFirst}
@@ -321,6 +322,8 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
           onPageChange={onPageChange}
         />
       </div>
+      </div>
+   
     </>
   );
 };
