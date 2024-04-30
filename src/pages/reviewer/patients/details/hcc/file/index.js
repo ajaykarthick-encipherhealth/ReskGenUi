@@ -99,7 +99,7 @@ const File = ({
   year,
   setActiveTabHead,
   setActiveMeatTitle,
-  setActiveComboTree
+  setActiveComboTree,
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -337,7 +337,6 @@ const File = ({
   const [formValues, setFormValues] = useState(false);
   const [formEditPlace, setFormEditPlace] = useState("");
 
-
   const getMeatFound = (code, data, value) => {
     const result = data?.filter(
       (res2) => res2?.diagnosisCode?.replace(".", "") == code?.replace(".", "")
@@ -480,7 +479,7 @@ const File = ({
 
   useEffect(() => {
     if (hccFileDetails?.result?.response) {
-      dispatch(pdfUrl(hccFileDetails?.result?.response))
+      dispatch(pdfUrl(hccFileDetails?.result?.response));
       setSelectFileURL(hccFileDetails?.result?.response);
     }
   }, [hccFileDetails]);
@@ -610,8 +609,8 @@ const File = ({
               dbDescription: res.dbDescription,
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
-              providerDeatils:res.provider,
-              isComboCode: res.isComboCode
+              providerDeatils: res.provider,
+              isComboCode: res.isComboCode,
             });
           }
         });
@@ -665,7 +664,7 @@ const File = ({
                 providerName: providerList,
                 isCmsHcc: res.isCmsHcc,
                 isRxHcc: res.isRxHcc,
-                isComboCode: res.isComboCode
+                isComboCode: res.isComboCode,
               });
             }
           });
@@ -699,7 +698,7 @@ const File = ({
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
-              providerDeatils:res.provider,
+              providerDeatils: res.provider,
             });
           });
 
@@ -721,9 +720,9 @@ const File = ({
                 isHccValid: true,
                 providerName: providerList,
                 isCmsHcc: res.isCmsHcc,
-              isRxHcc: res.isRxHcc,
-              isComboCode: res.isComboCode,
-              providerDeatils:res.provider,
+                isRxHcc: res.isRxHcc,
+                isComboCode: res.isComboCode,
+                providerDeatils: res.provider,
                 // defaultPosition:res.defaultPosition
               });
             });
@@ -753,7 +752,7 @@ const File = ({
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
-              providerDeatils:res.provider,
+              providerDeatils: res.provider,
             });
           });
         }
@@ -781,9 +780,9 @@ const File = ({
                 children: res.children ? res.children : [],
                 isMostSpecific: res.isMostSpecific,
                 isCmsHcc: res.isCmsHcc,
-              isRxHcc: res.isRxHcc,
-              isComboCode: res.isComboCode,
-              providerDeatils:res.provider,
+                isRxHcc: res.isRxHcc,
+                isComboCode: res.isComboCode,
+                providerDeatils: res.provider,
               });
             }
           });
@@ -809,7 +808,7 @@ const File = ({
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
-              providerDeatils:res.provider,
+              providerDeatils: res.provider,
             });
           });
         }
@@ -834,7 +833,7 @@ const File = ({
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
-              providerDeatils:res.provider,
+              providerDeatils: res.provider,
             });
           });
         }
@@ -2065,6 +2064,7 @@ const File = ({
   };
 
   const handleSubmitValidNotes = async (event) => {
+    setFileLoading(true);
     const form = event.currentTarget;
     event.preventDefault();
     if (form.checkValidity() === true) {
@@ -2174,6 +2174,7 @@ const File = ({
         duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
+      setFileLoading(false);
     } else {
     }
   };
@@ -2202,6 +2203,7 @@ const File = ({
         duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
+      setFileLoading(false);
     } else {
     }
   };
@@ -2230,6 +2232,7 @@ const File = ({
         duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
+      setFileLoading(false);
     } else {
     }
   };
@@ -2258,6 +2261,7 @@ const File = ({
         duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
+      setFileLoading(false);
     } else {
     }
   };
@@ -2286,6 +2290,7 @@ const File = ({
         duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
+      setFileLoading(false);
     } else {
     }
   };
@@ -2313,6 +2318,7 @@ const File = ({
         duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
+      setFileLoading(false);
     } else {
     }
   };
@@ -2341,6 +2347,7 @@ const File = ({
         duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
+      setFileLoading(false);
     } else {
     }
   };
@@ -2727,7 +2734,11 @@ const File = ({
   };
 
   const getEncounterDetails = async (date) => {
-    const findPageNumber = listPageNumber.filter((i) =>  moment(i.date).format("MM/DD/YYYY") === moment(date).format("MM/DD/YYYY"));
+    const findPageNumber = listPageNumber.filter(
+      (i) =>
+        moment(i.date).format("MM/DD/YYYY") ===
+        moment(date).format("MM/DD/YYYY")
+    );
     if (findPageNumber.length != 0) {
       setFileLoading(true);
       var date = findPageNumber[0].date;
@@ -3439,8 +3450,16 @@ const File = ({
                                   <FontAwesomeIcon icon={faPen} />
                                 </Popover>
                               </span> */}
-                               <FontAwesomeIcon icon={faPen} style={{ cursor: "pointer" }}  onClick={() => {setFormValues(data),setIsEditHccForm(true),setFormEditPlace("VALID_DISEASE")}}/>
-                              
+                              <FontAwesomeIcon
+                                icon={faPen}
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  setFormValues(data),
+                                    setIsEditHccForm(true),
+                                    setFormEditPlace("VALID_DISEASE");
+                                }}
+                              />
+
                               <Popover
                                 content={
                                   data.dbDescription
@@ -3596,8 +3615,18 @@ const File = ({
                             className={`${visitStyles.encounterAndSectionHeader}`}
                           >
                             <div className="d-flex justify-content-end mt-2">
-                              {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
-                            {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
+                              {data.isCmsHcc && (
+                                <div
+                                  className={`${visitStyles.cmsStatus} mx-1`}
+                                >
+                                  CMS
+                                </div>
+                              )}
+                              {data.isRxHcc && (
+                                <div className={`${visitStyles.rxStatus} mx-1`}>
+                                  RX
+                                </div>
+                              )}
                             </div>
                             <div
                               className={`cr-pointer ${styles.meatFoundContainer}`}
@@ -3674,18 +3703,20 @@ const File = ({
                                 </Badge>
                               ) : null}
                             </div>
-                                    {data.isComboCode == true ? (
-                                      <Badge
-                                        className={`mt-2 text-start  ${visitStyles.isComboCode}`}
-                                        onClick={() => {
-                                          setActiveTabHead(3);
-                                          setActiveComboTree({diagnosisCode: data?.diagnosisCode,})
-                                        }}
-                                      >
-                                        Combo
-                                      </Badge>
-                                    ) : null}
-                                  
+                            {data.isComboCode == true ? (
+                              <Badge
+                                className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                onClick={() => {
+                                  setActiveTabHead(3);
+                                  setActiveComboTree({
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}
+                              >
+                                Combo
+                              </Badge>
+                            ) : null}
+
                             {data.getPlace == "Insulin" ? (
                               <span
                                 className={` mt-2 ${visitStyles.radiologyStatus}`}
@@ -3823,7 +3854,15 @@ const File = ({
                                     <span className="valid-dis-name">
                                       {data.diagnosisCode}
                                     </span>
-                                    <FontAwesomeIcon icon={faPen} style={{ cursor: "pointer" }}  onClick={() => {setFormValues(data),setIsEditHccForm(true),setFormEditPlace("SUGGESTED_DISEASE")}}/>
+                                    <FontAwesomeIcon
+                                      icon={faPen}
+                                      style={{ cursor: "pointer" }}
+                                      onClick={() => {
+                                        setFormValues(data),
+                                          setIsEditHccForm(true),
+                                          setFormEditPlace("SUGGESTED_DISEASE");
+                                      }}
+                                    />
                                     <Popover
                                       content={
                                         data.dbDescription
@@ -3975,7 +4014,6 @@ const File = ({
                               <div
                                 className={`${visitStyles.hoverActiveHcc} d-flex justify-content-between`}
                               >
-                            
                                 <div>
                                   <div className="">
                                     <div
@@ -4033,74 +4071,86 @@ const File = ({
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
-                                   <div className="d-flex justify-content-end mt-2">
-                              {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
-                            {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
-                            </div>
-                            <div
-                              className={`cr-pointer ${styles.meatFoundContainer}`}
-                            >
-                              <div
-                                onClick={() => {
-                                  setActiveTabHead(4);
-                                  setActiveMeatTitle({
-                                    header: "M",
-                                    diagnosisCode: data?.diagnosisCode,
-                                  });
-                                }}
-                              >
-                                {getMeatFound(
-                                  data?.diagnosisCode,
-                                  meatCriteriaList,
-                                  "M"
-                                )}
-                              </div>
-                              <div
-                                onClick={() => {
-                                  setActiveTabHead(4);
-                                  setActiveMeatTitle({
-                                    header: "E",
-                                    diagnosisCode: data?.diagnosisCode,
-                                  });
-                                }}
-                              >
-                                {getMeatFound(
-                                  data?.diagnosisCode,
-                                  meatCriteriaList,
-                                  "E"
-                                )}
-                              </div>
-                              <div
-                                onClick={() => {
-                                  setActiveTabHead(4);
-                                  setActiveMeatTitle({
-                                    header: "A",
-                                    diagnosisCode: data?.diagnosisCode,
-                                  });
-                                }}
-                              >
-                                {getMeatFound(
-                                  data?.diagnosisCode,
-                                  meatCriteriaList,
-                                  "A"
-                                )}
-                              </div>
-                              <div
-                                onClick={() => {
-                                  setActiveTabHead(4);
-                                  setActiveMeatTitle({
-                                    header: "T",
-                                    diagnosisCode: data?.diagnosisCode,
-                                  });
-                                }}
-                              >
-                                {getMeatFound(
-                                  data?.diagnosisCode,
-                                  meatCriteriaList,
-                                  "T"
-                                )}
-                              </div>
-                            </div>
+                                  <div className="d-flex justify-content-end mt-2">
+                                    {data.isCmsHcc && (
+                                      <div
+                                        className={`${visitStyles.cmsStatus} mx-1`}
+                                      >
+                                        CMS
+                                      </div>
+                                    )}
+                                    {data.isRxHcc && (
+                                      <div
+                                        className={`${visitStyles.rxStatus} mx-1`}
+                                      >
+                                        RX
+                                      </div>
+                                    )}
+                                  </div>
+                                  <div
+                                    className={`cr-pointer ${styles.meatFoundContainer}`}
+                                  >
+                                    <div
+                                      onClick={() => {
+                                        setActiveTabHead(4);
+                                        setActiveMeatTitle({
+                                          header: "M",
+                                          diagnosisCode: data?.diagnosisCode,
+                                        });
+                                      }}
+                                    >
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "M"
+                                      )}
+                                    </div>
+                                    <div
+                                      onClick={() => {
+                                        setActiveTabHead(4);
+                                        setActiveMeatTitle({
+                                          header: "E",
+                                          diagnosisCode: data?.diagnosisCode,
+                                        });
+                                      }}
+                                    >
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "E"
+                                      )}
+                                    </div>
+                                    <div
+                                      onClick={() => {
+                                        setActiveTabHead(4);
+                                        setActiveMeatTitle({
+                                          header: "A",
+                                          diagnosisCode: data?.diagnosisCode,
+                                        });
+                                      }}
+                                    >
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "A"
+                                      )}
+                                    </div>
+                                    <div
+                                      onClick={() => {
+                                        setActiveTabHead(4);
+                                        setActiveMeatTitle({
+                                          header: "T",
+                                          diagnosisCode: data?.diagnosisCode,
+                                        });
+                                      }}
+                                    >
+                                      {getMeatFound(
+                                        data?.diagnosisCode,
+                                        meatCriteriaList,
+                                        "T"
+                                      )}
+                                    </div>
+                                  </div>
                                   <div
                                     className={`${visitStyles.encounterAndSectionHeader}`}
                                   >
@@ -4113,16 +4163,18 @@ const File = ({
                                     ) : null}
                                   </div>
                                   {data.isComboCode == true ? (
-                                      <Badge
-                                        className={`mt-2 text-start  ${visitStyles.isComboCode}`}
-                                        onClick={() => {
-                                          setActiveTabHead(3);
-                                          setActiveComboTree({diagnosisCode: data?.diagnosisCode,})
-                                        }}
-                                      >
-                                        Combo
-                                      </Badge>
-                                    ) : null}
+                                    <Badge
+                                      className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                      onClick={() => {
+                                        setActiveTabHead(3);
+                                        setActiveComboTree({
+                                          diagnosisCode: data?.diagnosisCode,
+                                        });
+                                      }}
+                                    >
+                                      Combo
+                                    </Badge>
+                                  ) : null}
                                   {data.getPlace == "Insulin" ? (
                                     <span
                                       className={` mt-2 ${visitStyles.radiologyStatus}`}
@@ -4271,52 +4323,68 @@ const File = ({
                               </div>
                             </Popconfirm>
                           </div>
-                          <div className={`${visitStyles.hoverActiveHcc} d-flex justify-content-between` }>
+                          <div
+                            className={`${visitStyles.hoverActiveHcc} d-flex justify-content-between`}
+                          >
                             <div>
-                            <div className="">
-                              <div
-                                className={`${visitStyles.encounterAndSectionHeader}`}
-                              >
-                                {getProviderNameList(data?.providerName)}
+                              <div className="">
+                                <div
+                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                >
+                                  {getProviderNameList(data?.providerName)}
+                                </div>
+                                <div
+                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                >
+                                  {getEncounterDateBackground(
+                                    data.encounterDateSplit
+                                  )}
+                                </div>
                               </div>
                               <div
                                 className={`${visitStyles.encounterAndSectionHeader}`}
                               >
-                                {getEncounterDateBackground(
-                                  data.encounterDateSplit
+                                {getCaptureSectionBackgroundFile(
+                                  data?.capturedSections,
+                                  data?.encounterDate,
+                                  data?.actualDescription,
+                                  data?.diagnosisCode
                                 )}
                               </div>
                             </div>
                             <div
                               className={`${visitStyles.encounterAndSectionHeader}`}
                             >
-                              {getCaptureSectionBackgroundFile(
-                                data?.capturedSections,
-                                data?.encounterDate,
-                                data?.actualDescription,
-                                data?.diagnosisCode
-                              )}
-                            </div>
-                            </div>
-                            <div
-                                  className={`${visitStyles.encounterAndSectionHeader}`}
-                                >
-                                   <div className="d-flex justify-content-end mt-2">
-                              {data.isCmsHcc && <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>}
-                            {data.isRxHcc && <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>}
-                            </div>
-                            {data.isComboCode == true ? (
-                                      <Badge
-                                        className={`mt-2 text-start  ${visitStyles.isComboCode}`}
-                                        onClick={() => {
-                                          setActiveTabHead(3);
-                                          setActiveComboTree({diagnosisCode: data?.diagnosisCode,})
-                                        }}
-                                      >
-                                        Combo
-                                      </Badge>
-                                    ) : null}
+                              <div className="d-flex justify-content-end mt-2">
+                                {data.isCmsHcc && (
+                                  <div
+                                    className={`${visitStyles.cmsStatus} mx-1`}
+                                  >
+                                    CMS
+                                  </div>
+                                )}
+                                {data.isRxHcc && (
+                                  <div
+                                    className={`${visitStyles.rxStatus} mx-1`}
+                                  >
+                                    RX
+                                  </div>
+                                )}
                               </div>
+                              {data.isComboCode == true ? (
+                                <Badge
+                                  className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                  onClick={() => {
+                                    setActiveTabHead(3);
+                                    setActiveComboTree({
+                                      diagnosisCode: data?.diagnosisCode,
+                                    });
+                                  }}
+                                >
+                                  Combo
+                                </Badge>
+                              ) : null}
+                            </div>
                           </div>
                         </div>
                       </li>
@@ -4532,12 +4600,12 @@ const File = ({
         opens && showErrorMessage()
       )}
 
-           <EditHccForm 
-              formValues={formValues}
-              isEditHccForm={isEditHccForm}
-              setIsEditHccForm={setIsEditHccForm}
-              formEditPlace={formEditPlace}
-            />
+      <EditHccForm
+        formValues={formValues}
+        isEditHccForm={isEditHccForm}
+        setIsEditHccForm={setIsEditHccForm}
+        formEditPlace={formEditPlace}
+      />
     </>
   );
 };

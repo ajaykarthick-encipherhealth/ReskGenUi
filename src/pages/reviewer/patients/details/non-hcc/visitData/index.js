@@ -480,6 +480,7 @@ const VisitData = ({}) => {
   };
 
   const handleSubmitValidNotes = async (event) => {
+    setFileLoading(true)
     const form = event.currentTarget;
     event.preventDefault();
     if (form.checkValidity() === true) {
@@ -492,6 +493,7 @@ const VisitData = ({}) => {
   };
 
   const handleSubmitValiInValiddNotes = async (event) => {
+    setFileLoading(true)
     const form = event.currentTarget;
     event.preventDefault();
     if (form.checkValidity() === true) {
@@ -526,6 +528,7 @@ const VisitData = ({}) => {
         duration: 1,
       });
       dispatch(getPatientDetailsResult(localPatientId));
+      setFileLoading(false)
     } else {
     }
   };
@@ -555,6 +558,7 @@ const VisitData = ({}) => {
         duration: 1,
       });
       dispatch(getPatientDetailsResult(localPatientId));
+      setFileLoading(false)
     } else {
     }
   };
