@@ -1900,6 +1900,7 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle, setActiveComboTree}) =>
   };
 
   const handleSubmitValidNotes = async (event) => {
+    setFileLoading(true)
     const form = event.currentTarget;
     event.preventDefault();
     if (form.checkValidity() === true) {
@@ -2010,6 +2011,7 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle, setActiveComboTree}) =>
         duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
+      setFileLoading(false)
     } else {
     }
   };
@@ -2039,6 +2041,7 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle, setActiveComboTree}) =>
         duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
+      setFileLoading(false)
     } else {
     }
   };
@@ -2068,6 +2071,7 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle, setActiveComboTree}) =>
         duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
+      setFileLoading(false)
     } else {
     }
   };
@@ -2097,6 +2101,7 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle, setActiveComboTree}) =>
         duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
+      setFileLoading(false)
     } else {
     }
   };
@@ -2126,6 +2131,7 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle, setActiveComboTree}) =>
         duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
+      setFileLoading(false)
     } else {
     }
   };
@@ -2154,6 +2160,7 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle, setActiveComboTree}) =>
         duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
+      setFileLoading(false)
     } else {
     }
   };
@@ -2183,6 +2190,7 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle, setActiveComboTree}) =>
         duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
+      setFileLoading(false)
     } else {
     }
   };
