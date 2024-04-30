@@ -16,7 +16,7 @@ const GetOTP = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const url = useSelector((state) => state.auth.qrcode);
-  const loginResponse=useSelector(state=>state.auth.verifyMfa)
+  const loginResponse = useSelector((state) => state.auth.verifyMfa);
   const inputRefs = Array.from({ length: codeLength + 1 }, () => useRef(null));
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
@@ -62,7 +62,7 @@ const GetOTP = () => {
       }
     }
   };
-console.log(loginResponse)
+
   return (
     <div className={styles.contentMainDIv}>
       <div className={styles.mfaMainDiv}>
@@ -73,7 +73,7 @@ console.log(loginResponse)
             <div className={styles.pointsDiv}>
               <ol>
                 <li className={styles.steps}>
-                  To Download the one Authentication on your Mobile or tab.
+                To download Authenticator on your device, go to 
                   <div
                     style={{
                       width: "60%",
@@ -92,18 +92,18 @@ console.log(loginResponse)
                       App Store <Image src={redirect} alt="noimg" />
                     </span>
                   </div>
+                 
                 </li>
-                <li className={styles.steps}>
+                {/* <li className={styles.steps}>
                   Open One Authentication on your mobile or tab.
+                </li> */}
+                <li className={styles.steps}>
+                Open Authenticator, tap Menu{" "}
+                  <Image src={hamburgermenu} alt="noimg" /> or settings{" "}
+                  <Image src={settings} alt="noimg" /> and select linked devices.
                 </li>
                 <li className={styles.steps}>
-                  Tap Menu <Image src={hamburgermenu} alt="noimg" /> or settings{" "}
-                  <Image src={settings} alt="noimg" /> and select Linked
-                  devices.
-                </li>
-                <li className={styles.steps}>
-                  Tap link a device and point your phone to this screen to
-                  capture the code
+                  Tap "Link a Device" and scan the QR code for further authentication.
                 </li>
               </ol>
             </div>
