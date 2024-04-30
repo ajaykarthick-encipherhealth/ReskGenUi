@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "../../utility/axiosConfig";
 import { Modal, Select } from "antd";
 import AppTable from "../../components/tables";
-import Data from "./data.json";
-import Semantic from "./semantic.json";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import { actions as searchActions } from "../../stores/search";
@@ -43,6 +41,10 @@ const Searches = ({
   const [years, setYears] = useState(null);
   const [keyword, setKeyword] = useState(null);
   const [deleteModal, setDeleteModal] = useState(false);
+  const [ruleSelect, setRuleSelect] = useState({
+    billable: "",
+    source: ""
+  })
 
   const getYear = () => {
     let years = [];
@@ -215,7 +217,9 @@ const Searches = ({
       }
     } else if (searchType == "SemanticHybridSearch") {
       setModalOpen(action.type);
-      const editData = getSemanticData?.data.find((item) => item.id == action.id);
+      const editData = getSemanticData?.data?.response.find(
+        (item) => item.id == action.id
+      );
       const keyWord = editData?.keywords?.map((item) => ({
         label: item,
         value: item,
@@ -225,13 +229,13 @@ const Searches = ({
   }, [action]);
   useEffect(() => {
     if (searchType == "Rule-engine-search") {
-      getAllICDCodes(search, page, size);
+      getAllICDCodes(search, page, size, ruleSelect.billable, ruleSelect.source);
     } else if (searchType == "SimpleHybridSearch") {
       getSimpleSearch(search);
     } else if (searchType == "SemanticHybridSearch") {
       getSemanticSearch(search);
     }
-  }, [search, searchType, page]);
+  }, [search, searchType, page, ruleSelect]);
 
   const selectTab = (e) => {
     const userId = localStorage.getItem("userId");
@@ -290,17 +294,38 @@ const Searches = ({
               type="text"
               class="form-control"
               placeholder="Search..."
-              // value={search}
+              value={search}
               onChange={(e) => serSearch(e.target.value)}
             />
-            {/* <button
-              class="btns-primary btn-app-primary"
-              type="button"
-              id="button-addon2"
-              onClick={getSearch}
-            >
-              search
-            </button> */}
+            { searchType == "Rule-engine-search" && <>
+            
+            <div style={{ width: "450px" }} className="px-2">
+              <Select
+                onChange={(selectedOption) => setRuleSelect((prev) => ({...prev, billable: selectedOption}))}
+                options={[
+                  {label: "ALL", value: ""},
+                  {label: "BILLABLE", value: "BILLABLE"},
+                  {label: "NON_BILLABLE_NULL", value: "NON_BILLABLE_NULL"},
+                ]}
+                className="custom-react-select"
+                isSearchable={false}
+                placeholder={"Select Status"}
+              />
+            </div>
+            <div style={{ width: "450px" }}>
+              <Select
+                onChange={(selectedOption) => setRuleSelect((prev) => ({...prev, source: selectedOption}))}
+                options={[
+                  {label: "BOTH", value: ""},
+                  {label: "XML", value: "XML"},
+                  {label: "CMS_XML", value: "CMS_XML"},
+                ]}
+                className="custom-react-select"
+                isSearchable={false}
+                placeholder={"Select Status"}
+                style={{ width: "100px" }}
+              />
+            </div></>}
           </div>
         </div>
       </div>
@@ -345,7 +370,11 @@ const Searches = ({
             />
           ) : searchType == "SemanticHybridSearch" ? (
             <AppTable
-              data={getSemanticData.data ? getSemanticData?.data : []}
+              data={
+                getSemanticData.data?.response
+                  ? getSemanticData?.data?.response
+                  : []
+              }
               column={semaniticColumn}
               // status={getButtonStatus}
               onPageChange={onPageChange}
@@ -357,7 +386,11 @@ const Searches = ({
             />
           ) : (
             <AppTable
-              data={getSimpleSearchData?.data ? getSimpleSearchData?.data : []}
+              data={
+                getSimpleSearchData?.data?.response
+                  ? getSimpleSearchData?.data?.response
+                  : []
+              }
               column={simpleColumn}
               // status={getButtonStatus}
               onPageChange={onPageChange}
