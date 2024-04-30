@@ -197,7 +197,7 @@ const EditHccForm = ({
   useEffect(() => {
     var initalForm = {
       diagnosisCode: formValues?.diagnosisCode,
-      actualDescription: formValues?.dbDescription,
+      actualDescription: form.getFieldValue()?.actualDescription,
       selectProviderInfo: selectProviderNameList,
       encounterDates: selectEncounterList,
       sections: selectSectionList,
@@ -217,16 +217,22 @@ const EditHccForm = ({
     var section = [];
     var selectSection = [];
     formValues?.providerName?.map((res) => {
+      if(res){
       providers.push({ value: res, label: res });
       selectProviders.push(res);
+      }
     });
     formValues?.encounterDateSplit?.map((res) => {
+      if(res){
       dates.push({ value: res, label: res });
       selectDates.push(res);
+      }
     });
     formValues?.capturedSections?.map((res) => {
+      if(res){
       section.push({ value: res, label: res });
       selectSection.push(res);
+      }
     });
     setProviderNameList(providers);
     setSelectProviderNameList(selectProviders);
@@ -239,7 +245,7 @@ const EditHccForm = ({
     }
     var initalForm = {
       diagnosisCode: formValues?.diagnosisCode,
-      actualDescription: formValues?.dbDescription,
+      actualDescription: formValues.dbDescription ? formValues.dbDescription : formValues.actualDescription,
       selectProviderInfo: selectProviders,
       encounterDates: selectDates,
       sections: selectSection,
@@ -458,18 +464,11 @@ const EditHccForm = ({
                 </div>
               </div>
               <Form.Item>
+              <div className={styles.editAction}>
                 <Space>
                   <RegularButton type="submit" name="Update" width={100} />
-                  <RegularButton
-                    type="outline"
-                    name="Cancel"
-                    width={100}
-                    method="reset"
-                    onClick={() => {
-                      closeModal();
-                    }}
-                  />
                 </Space>
+                </div>
               </Form.Item>
             </Form>
           </>
