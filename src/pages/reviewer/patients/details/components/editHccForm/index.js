@@ -464,18 +464,11 @@ const EditHccForm = ({
                 </div>
               </div>
               <Form.Item>
+              <div className={styles.editAction}>
                 <Space>
                   <RegularButton type="submit" name="Update" width={100} />
-                  <RegularButton
-                    type="outline"
-                    name="Cancel"
-                    width={100}
-                    method="reset"
-                    onClick={() => {
-                      closeModal();
-                    }}
-                  />
                 </Space>
+                </div>
               </Form.Item>
             </Form>
           </>
