@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { notification } from "antd";
 import { Select } from "antd";
-import { Button, Form, Input, Space, DatePicker } from "antd";
+import { Button, Form, Input, Space, DatePicker,Switch } from "antd";
 import moment from "moment";
 import axios from "../../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../../utility/enpoints";
@@ -21,6 +21,7 @@ const AddHccForm = ({
   diagnosisCode,
   setIsAddHccForm,
 }) => {
+  const [form] = Form.useForm();
   const dispatch = useDispatch();
   const patientDetailsResult = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -29,6 +30,11 @@ const AddHccForm = ({
   const [addValidCodeCheck, setAddValidCodeCheck] = useState(null);
   const [hccFormDetails, setHccFormDetails] = useState(null);
   const [meatDetail, setMeatDetail] = useState(false);
+  const [isNpiNumber, setIsNpiNumber] = useState(false);
+  const [formInitialValues, setFormInitialValues] = useState(null);
+  const [providerDetails, setProviderDetails] = useState(null);
+
+
   const providerInfoList = [
     { value: "authorizedProvider", label: "Authorized Provider" },
     { value: "noCredential", label: "No Credential" },
@@ -129,6 +135,52 @@ const AddHccForm = ({
     }
   };
 
+  const getFindNpiNumber = async (e) => {
+    if(e.target.value.length == 10){
+      notification.warning({
+        message: "Please wait provider details fetch...",
+        placement: "top",
+        duration: 2,
+      });
+    try {
+      const response = await axios.get(
+        ENDPOINTS.apiEndoint +
+          `management/provider/getProviderData?npiNumber=${e.target.value}`
+      );
+      if (response.data) {
+       var initalForm = {
+        providerName: response?.data?.response?.userName,
+        selectProviderInfo: ["Authorized Provider"],
+      };
+      setProviderDetails(initalForm);
+      }
+    } catch (e) {
+      setProviderDetails(null);
+      notification.error({
+        message: e.response.data.message,
+        placement: "top",
+        duration: 2,
+      });
+    }
+  }
+  };
+
+  const onChangeSwitch =()=>{    
+    setIsNpiNumber(isNpiNumber ? false : true);
+    if(isNpiNumber){
+      setProviderDetails(null);
+    }
+  }
+
+  useEffect(() => {
+    var initalForm = {
+      providerName: providerDetails?.providerName,
+      selectProviderInfo: providerDetails?.selectProviderInfo,
+    };
+    setFormInitialValues(initalForm);
+    form.setFieldsValue(initalForm);
+  }, [providerDetails, form]);
+
   return (
     <>
       <div className={styles.formTitleContaniner}>
@@ -137,12 +189,11 @@ const AddHccForm = ({
       {!isMeatForm ? (
         <>
           <Form
+           form={form}
             name="validateOnly"
             layout="vertical"
             autoComplete="off"
-            initialValues={{
-              remember: true,
-            }}
+            initialValues={formInitialValues}
             onFinish={onFinishHcc}
             onFinishFailed={onFinishFailed}
           >
@@ -191,9 +242,37 @@ const AddHccForm = ({
             >
               <Input name="actualDescription" className={styles.formControl} />
             </Form.Item>
+            <Switch
+            checkedChildren="Provider Name" unCheckedChildren="NPI Number"
+                    defaultChecked={isNpiNumber}
+                    onChange={() => {onChangeSwitch()
+                    }}
+                  />
+                {isNpiNumber && 
+                   <Form.Item label="NPI Number" name="npiNumber"  rules={[
+              {
+                required: true,
+                message: "Please enter npi number",
+              },
+              {
+                validator: (_, value) => {
+                  if (
+                    value?.length < 10
+                  ) {
+                    return Promise.reject(
+                      "Please enter 10 digit number"
+                    );
+                  }
+                  return Promise.resolve();
+                },
+              },
+            ]}>
+              <Input type="number" name="providerName"  onChange={getFindNpiNumber}  maxLength={10} className={styles.formControl} />
+            </Form.Item>}
             <Form.Item label="Provider name" name="providerName">
               <Input name="providerName" className={styles.formControl} />
             </Form.Item>
+       
             <Form.Item label="Provider Info" name="selectProviderInfo">
               <Select className={`ant_select_form hcc_form mb-2`}>
                 {providerInfoList?.map((data) => (
