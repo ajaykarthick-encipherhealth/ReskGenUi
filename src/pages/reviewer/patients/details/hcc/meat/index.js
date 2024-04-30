@@ -1081,42 +1081,43 @@ const Meat = ({ activeMeatTitle, year }) => {
               providerList.push(res.providerName);
             });
             const encounterDatearray = res?.encounterDate?.split(",");
-
-            meatListArr.push({
-              diagnosisCode: res.diagnosisCode,
-              diseaseName: res.diseaseName,
-              monitorCapturedFromHeader: res.monitorCapturedFromHeader,
-              assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
-              evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
-              treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
-              providerName: providerList,
-              monitorCapturedFromHeaderColor: colorCodeMatch(
-                dublicateRemoveSecondArr,
-                res.monitorCapturedFromHeader
-              ),
-              assessmentCapturedFromHeaderColor: colorCodeMatch(
-                dublicateRemoveSecondArr,
-                res.assessmentCapturedFromHeader
-              ),
-              evaluateCapturedFromHeaderColor: colorCodeMatch(
-                dublicateRemoveSecondArr,
-                res.evaluateCapturedFromHeader
-              ),
-              treatmentCapturedFromHeaderColor: colorCodeMatch(
-                dublicateRemoveSecondArr,
-                res.treatmentCapturedFromHeader
-              ),
-              monitorColor: COLORS[index],
-              meatColor: COLORS[index],
-              assessment: res.assessment,
-              monitor: res.monitor,
-              evaluate: res.evaluate,
-              treatment: res.treatment,
-              isMeatCriteriaPresent: res.isMeatCriteriaPresent,
-              category: res.category,
-              encounterDate: res.encounterDate,
-              encounterDateSplit: encounterDatearray,
-            });
+            if (res.isShow || res.isShow === null) {
+              meatListArr.push({
+                diagnosisCode: res.diagnosisCode,
+                diseaseName: res.diseaseName,
+                monitorCapturedFromHeader: res.monitorCapturedFromHeader,
+                assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
+                evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
+                treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+                providerName: providerList,
+                monitorCapturedFromHeaderColor: colorCodeMatch(
+                  dublicateRemoveSecondArr,
+                  res.monitorCapturedFromHeader
+                ),
+                assessmentCapturedFromHeaderColor: colorCodeMatch(
+                  dublicateRemoveSecondArr,
+                  res.assessmentCapturedFromHeader
+                ),
+                evaluateCapturedFromHeaderColor: colorCodeMatch(
+                  dublicateRemoveSecondArr,
+                  res.evaluateCapturedFromHeader
+                ),
+                treatmentCapturedFromHeaderColor: colorCodeMatch(
+                  dublicateRemoveSecondArr,
+                  res.treatmentCapturedFromHeader
+                ),
+                monitorColor: COLORS[index],
+                meatColor: COLORS[index],
+                assessment: res.assessment,
+                monitor: res.monitor,
+                evaluate: res.evaluate,
+                treatment: res.treatment,
+                isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+                category: res.category,
+                encounterDate: res.encounterDate,
+                encounterDateSplit: encounterDatearray,
+              });
+            }
           }
         });
 
@@ -2284,7 +2285,10 @@ const Meat = ({ activeMeatTitle, year }) => {
     };
 
     try {
-      const res = await axios.put(ENDPOINTS.apiEndoint + "dbservice/patient/compute/editmeat", data);
+      const res = await axios.put(
+        ENDPOINTS.apiEndoint + "dbservice/patient/compute/editmeat",
+        data
+      );
       if (res.data?.status) {
         getResponePopup(res);
         setEditData(null);
@@ -3071,17 +3075,14 @@ const Meat = ({ activeMeatTitle, year }) => {
             onFinishFailed={onFinishFailed}
           >
             <>
-            <div className="row">
+              <div className="row">
                 <div className="col-xl-6">
-                  <Form.Item
-                    label="Diagnosis Code"
-                    name="diagnosisCode"
-                  >
+                  <Form.Item label="Diagnosis Code" name="diagnosisCode">
                     <Input
-                  name="diagnosisCode"
-                  className={styles.formControl}
-                  disabled
-                />
+                      name="diagnosisCode"
+                      className={styles.formControl}
+                      disabled
+                    />
                     {/* <Select
                       mode="tags"
                       maxTagCount="responsive"
@@ -3097,7 +3098,11 @@ const Meat = ({ activeMeatTitle, year }) => {
                 </div>
                 <div className="col-xl-6">
                   <Form.Item label="Description" name="diseaseName">
-                    <Input name="diseaseName" className={styles.formControl} disabled/>
+                    <Input
+                      name="diseaseName"
+                      className={styles.formControl}
+                      disabled
+                    />
                   </Form.Item>
                 </div>
               </div>
@@ -3108,9 +3113,9 @@ const Meat = ({ activeMeatTitle, year }) => {
                     name="monitorCapturedFromHeader"
                   >
                     <Input
-                  name="monitorCapturedFromHeader"
-                  className={styles.formControl}
-                />
+                      name="monitorCapturedFromHeader"
+                      className={styles.formControl}
+                    />
                     {/* <Select
                       mode="tags"
                       maxTagCount="responsive"
@@ -3137,9 +3142,9 @@ const Meat = ({ activeMeatTitle, year }) => {
                     name="evaluateCapturedFromHeader"
                   >
                     <Input
-                  name="evaluateCapturedFromHeader"
-                  className={styles.formControl}
-                />
+                      name="evaluateCapturedFromHeader"
+                      className={styles.formControl}
+                    />
                     {/* <Select
                       mode="tags"
                       maxTagCount="responsive"
@@ -3177,9 +3182,9 @@ const Meat = ({ activeMeatTitle, year }) => {
                     ]}
                   >
                     <Input
-                  name="assessmentCapturedFromHeader"
-                  className={styles.formControl}
-                />
+                      name="assessmentCapturedFromHeader"
+                      className={styles.formControl}
+                    />
                     {/* <Select
                       mode="tags"
                       maxTagCount="responsive"
@@ -3220,9 +3225,9 @@ const Meat = ({ activeMeatTitle, year }) => {
                     name="treatmentCapturedFromHeader"
                   >
                     <Input
-                  name="treatmentCapturedFromHeader"
-                  className={styles.formControl}
-                />
+                      name="treatmentCapturedFromHeader"
+                      className={styles.formControl}
+                    />
                     {/* <Select
                       mode="tags"
                       maxTagCount="responsive"
