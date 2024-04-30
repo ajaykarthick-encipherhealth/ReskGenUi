@@ -260,7 +260,9 @@ const AddHccForm = ({
 
             {isNpiNumber && (
               <Form.Item
-                label="NPI Number"
+                label={ <label>
+                NPI Number <span style={{ color: "red" }}>*</span>
+              </label>}
                 name="npiNumber"
                 rules={[
                   {
