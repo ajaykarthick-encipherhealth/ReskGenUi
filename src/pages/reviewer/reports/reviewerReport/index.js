@@ -25,7 +25,6 @@ import auditDeclined from "../../.../../../../images/trackingImages/AuditDecline
 import { Paginator } from "primereact/paginator";
 import TableStyle from "../../../../components/table/table.module.css";
 import { useSelector } from "react-redux";
-
 import Image from "next/image";
 import { SVGICON } from "../../../../jsx/constant/theme";
 import {
@@ -37,8 +36,6 @@ import { useDispatch } from "react-redux";
 import dayjs from "dayjs";
 import { workStatusApiAdmin } from "../../../../services/adminServices/DashboardService";
 import { getFlag, getFlags } from "../../../../components/reuseableFunctions";
-
-
 
 const ReviewerReport = ({
   setModal,
@@ -108,14 +105,6 @@ const ReviewerReport = ({
 
     setSelectedRows(updatedRows);
   };
-  // const handleCardRowClick = (e) => {
-  //   const targetTd = e.target.closest("div");
-  //   if (targetTd) {
-  //     const dataIndex = targetTd.parentElement.rowIndex - 1;
-  //     const clickedData = reportListAll[dataIndex];
-  //     gotoPatientDetails(clickedData);
-  //   }
-  // };
 
   const card1Data = [
     {
@@ -315,7 +304,6 @@ const ReviewerReport = ({
       count: "10",
     },
   ];
-
 
   const auditstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
@@ -560,7 +548,6 @@ const ReviewerReport = ({
                       <div className={styles.cardContainer}>
                         {reportListAll?.data?.map((item, id) => (
                           <div key={id} className={styles.card}>
-          
                             <div
                               className={styles.contentGroup}
                               // onClick={handleCardRowClick}

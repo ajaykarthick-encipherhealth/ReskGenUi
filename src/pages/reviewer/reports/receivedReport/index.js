@@ -39,7 +39,6 @@ import {
 } from "../../../../components/headerFilters/functions";
 import { getFlag } from "../../../../components/reuseableFunctions";
 
-
 const ReceivedReport = ({
   details,
   onPageChange,
@@ -295,7 +294,6 @@ const ReceivedReport = ({
     },
   ];
 
-
   const accessTemplate = (item) => {
     switch (item?.role) {
       case "READ":
@@ -453,74 +451,7 @@ const ReceivedReport = ({
                       </div>
                     </div>
                   </div>
-                  {/* <div className="col-xl-8" style={{ marginLeft: "10px" }}>
-                    <div className={styles.cardContainer}>
-                      <div className={styles.card1}>
-                        <div className="header-logo ">
-                          <Image src={IMAGES.headerLogo} />
-                        </div>
-                        <div className="col-xl-12 d-flex mt-4">
-                          <div className={`col-xl-6 ${styles.details}`}>
-                            <div
-                              className={styles.pName}
-                              style={{ padding: "5px" }}
-                            >
-                              Monthly Report
-                            </div>
-                            <div
-                              className={styles.headText}
-                              style={{ padding: "5px" }}
-                            >
-                              2341cdbe-aa40-4efd-96ca-a91dd6c99424
-                            </div>
-                          </div>
-                          <div className={`col-xl-3 ${styles.details}`}>
-                            <div
-                              className={styles.pName}
-                              style={{ padding: "5px" }}
-                            >
-                              DATE
-                            </div>
-                            <div
-                              className={styles.headText}
-                              style={{ padding: "5px" }}
-                            >
-                              03-21-2024
-                            </div>
-                          </div>
-                          <div className={`col-xl-3 ${styles.details}`}>
-                            <div
-                              className={styles.pName}
-                              style={{ padding: "5px" }}
-                            >
-                              SENDER
-                            </div>
-                            <div
-                              className={styles.headText}
-                              style={{ padding: "5px" }}
-                            >
-                              Benjamin Mitchell
-                            </div>
-                          </div>
-                        </div>
-                        <div>
-                          <div
-                            className={styles.pName}
-                            style={{ padding: "10px" }}
-                          >
-                            Sender
-                          </div>
-                        </div>
-                        <div className="d-flex mt-20">
-                          <div className="p-1">
-                            By clicking on the sheet, users can view the
-                            detailed report that was sent to them
-                          </div>
-                          <div className="p-1">{SVGICON?.Sheet}</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div> */}
+
                   <div className="col-xl-6" style={{ marginLeft: "10px" }}>
                     <div className={styles.cardContainer}>
                       <div className={styles.card1}>
