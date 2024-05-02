@@ -348,7 +348,6 @@ function CoderReport({
             </Tooltip>
           );
         default:
-          // Handle the case where flag is not matched
           return (
             <Tooltip title="" placement="bottom">
               <i className={visitStyles.patient_inactive}>
@@ -358,7 +357,6 @@ function CoderReport({
           );
       }
     } else {
-      // Handle the case where data["2023"] doesn't exist or is not an array
       return (
         <Tooltip title="" placement="bottom">
           <i className={visitStyles.patient_inactive}>{SVGICON.emptyFlag}</i>
@@ -473,29 +471,29 @@ function CoderReport({
                       </div>
                     </td>
                     <td
-                    className={TableStyle.childBorder}
-                    style={{ textAlign: "left", paddingLeft: "120px" }}
-                  >
-                    {row.auditedByFirstName ||
-                    row.auditedByLastName ||
-                    row?.auditedByProfileImage ? (
-                      <>
-                        <span style={{ marginRight: "10px" }}>
-                          {renderUserPrfoileAvatar(
-                            row.auditedByFirstName,
-                            row.auditedByLastName,
-                            row?.auditedByProfileImage,
-                            "header"
-                          )}
-                        </span>
-                        <span>
-                          {row.auditedByFirstName} {row.auditedByLastName}
-                        </span>
-                      </>
-                    ) : (
-                      <div style={{ paddingLeft: "50px" }}>---</div>
-                    )}
-                  </td>
+                      className={TableStyle.childBorder}
+                      style={{ textAlign: "left", paddingLeft: "120px" }}
+                    >
+                      {row.auditedByFirstName ||
+                      row.auditedByLastName ||
+                      row?.auditedByProfileImage ? (
+                        <>
+                          <span style={{ marginRight: "10px" }}>
+                            {renderUserPrfoileAvatar(
+                              row.auditedByFirstName,
+                              row.auditedByLastName,
+                              row?.auditedByProfileImage,
+                              "header"
+                            )}
+                          </span>
+                          <span>
+                            {row.auditedByFirstName} {row.auditedByLastName}
+                          </span>
+                        </>
+                      ) : (
+                        <div style={{ paddingLeft: "50px" }}>---</div>
+                      )}
+                    </td>
                     <td className={TableStyle.childBorder}>
                       {row?.rafSum ? row?.rafSum : "000"}{" "}
                     </td>
@@ -537,7 +535,6 @@ function CoderReport({
                         className={TableStyle.customChecked}
                       />
                     </td>
-             
                   </>
                 </tr>
               ))
