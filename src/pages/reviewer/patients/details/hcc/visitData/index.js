@@ -308,6 +308,8 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle, setActiveComboTree}) =>
   const [isEditHccForm, setIsEditHccForm] = useState(false);
   const [formValues, setFormValues] = useState(false);
   const [formEditPlace, setFormEditPlace] = useState("");
+  const [queryFormValues, setQueryFormValues] = useState(false);
+
 
   const getMeatFound = (code, data, value) => {
     const result = data?.filter(
@@ -2696,24 +2698,10 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle, setActiveComboTree}) =>
   };
 
   const addMeatQuery = (value, condition) => {
-    inputValue.diagnosisCodeQuery = value.diagnosisCode;
-    if (condition == "Add") {
-      setMeatQueryUpdate(false);
-      inputValue.providerName = "";
-      inputValue.headerName = "";
-      inputValue.imagingTestHeader = "";
-      inputValue.description = "";
-      inputValue.queryReason = "";
-      inputValue.reason = "";
-    } else {
-      inputValue.providerName = value.providerName;
-      inputValue.headerName = value.headerName;
-      inputValue.imagingTestHeader = value.imagingTestHeader;
-      inputValue.description = value.description;
-      inputValue.queryReason = value.queryReason;
-      inputValue.reason = value.reason;
-      setMeatQueryUpdate(true);
+    var data = {
+      diagnosisCode:value.diagnosisCode
     }
+    setQueryFormValues(data);
     setIsMeatQueryModal(true);
   };
 
@@ -5478,7 +5466,7 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle, setActiveComboTree}) =>
         </div>
       </Offcanvas>
 
-      <AddMeatQuery diagnosisCode={inputValue.diagnosisCodeQuery} handleCloseModal={handleCloseModal} isMeatQueryModal={isMeatQueryModal} setIsMeatQueryModal={setIsMeatQueryModal}/>
+      <AddMeatQuery queryFormValues={queryFormValues} handleCloseModal={handleCloseModal} isMeatQueryModal={isMeatQueryModal} setIsMeatQueryModal={setIsMeatQueryModal}/>
       <EditHccForm 
         formValues={formValues}
         isEditHccForm={isEditHccForm}
