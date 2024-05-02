@@ -102,6 +102,16 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
   }, [dayDateFormated]);
 
   useEffect(() => {
+    if (window !== "undefined") {
+      if (navigate.query.pageNo) {
+        setIsLoading(true);
+        setPageNo(navigate?.query?.pageNo);
+        setPaginationFirst(navigate?.query?.paginationFirst);
+      }
+    }
+  }, [navigate]);
+
+  useEffect(() => {
     const uId = localStorage.getItem("userId");
     setLocalUserId(uId);
     getFilteApi(
@@ -116,17 +126,8 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
       selectedPriority,
       searchTextValue
     );
-  }, [filteratedDashboardData, sort, selectedPriority, searchTextValue,dueDateStart]);
+  }, [filteratedDashboardData, pageNo, sort, selectedPriority, searchTextValue,dueDateStart]);
 
-  useEffect(() => {
-    if (window !== "undefined") {
-      if (navigate.query.pageNo) {
-        setIsLoading(true);
-        setPageNo(navigate?.query?.pageNo);
-        setPaginationFirst(navigate?.query?.paginationFirst);
-      }
-    }
-  }, [navigate]);
 
   useEffect(() => {
     if (patientsListFilter) {
@@ -178,7 +179,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
     searchTextValue
   ) => {
     const uId = localStorage.getItem("userId");
-    const resoureUrl = `dbservice/patient/filter?patientAllocated=${uId}&page=${
+    const resoureUrl = `patientAllocated=${uId}&page=${
       pageNo ? pageNo : 0
     }&size=${pageSize ? pageSize : 15}&processedStatus=${
       statusValue ? statusValue : ""
@@ -242,15 +243,15 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
     setPageSize(e.rows);
-    getFilteApi(
-      e.page,
-      15,
-      statusSelectedValue,
-      dueDateStart,
-      dueDateEnd,
-      processedStart,
-      processedEnd
-    );
+    // getFilteApi(
+    //   e.page,
+    //   15,
+    //   statusSelectedValue,
+    //   dueDateStart,
+    //   dueDateEnd,
+    //   processedStart,
+    //   processedEnd
+    // );
   };
 
   const statusOptions = [

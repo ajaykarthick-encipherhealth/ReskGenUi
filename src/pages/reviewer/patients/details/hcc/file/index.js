@@ -205,7 +205,7 @@ const File = ({
 
   useEffect(() => {
     if (hccFileDetails?.result?.response) {
-      dispatch(pdfUrl(hccFileDetails?.result?.response));
+      // dispatch(pdfUrl(hccFileDetails?.result?.response));
       setSelectFileURL(hccFileDetails?.result?.response);
     }
   }, [hccFileDetails]);
