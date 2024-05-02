@@ -348,6 +348,7 @@ const ReceivedReport = ({
             <div className="row">
               <div>
                 <div className=" col-xl-12 d-flex">
+       
                   <div className="col-xl-6">
                     <div className={styles.cardContainer}>
                       <div className={styles.cardContainer}>
