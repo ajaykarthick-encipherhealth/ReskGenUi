@@ -488,20 +488,7 @@ const ReviewerReport = ({
     }
   };
 
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-  };
 
-  const handleCheckboxChange = (id) => {
-    const index = selectedItems.indexOf(id);
-    if (index === -1) {
-      setSelectedItems([...selectedItems, id]);
-    } else {
-      const updatedSelectedItems = [...selectedItems];
-      updatedSelectedItems.splice(index, 1);
-      setSelectedItems(updatedSelectedItems);
-    }
-  };
   const startDate = DateRanges?.startDate
     ? new Date(DateRanges?.startDate).toISOString()
     : "";
@@ -529,6 +516,30 @@ const ReviewerReport = ({
       <div>
         <div className="content-body">
           <div className="container-fluid">
+            <div  style={{display:"flex", marginLeft:"10px", paddingBottom:"10px"}}>
+              {" "}
+              {reportListAll?.data?.length > 0 && (
+                <div>
+                  <input
+                    type="checkbox"
+                    onChange={handleHeaderCheckboxChange}
+                    className={selectAll ? TableStyle.customChecked : ""}
+                    style={{
+                      width: "22px",
+                      height: "22px",
+                      flexhrink: "0",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                    }}
+                    checked={selectAll}
+                  />
+                </div>
+              )}
+              <span className={styles.pName} style={{ paddingLeft:"20px", textAlign:"center"}}>
+                All
+              </span>
+              
+            </div>
             <div className="row">
               <div>
                 <div className=" col-xl-12 d-flex">
@@ -544,178 +555,180 @@ const ReviewerReport = ({
                       <Empty />
                     </div>
                   ) : (
-                    <div className="col-xl-6">
-                      <div className={styles.cardContainer}>
-                        {reportListAll?.data?.map((item, id) => (
-                          <div key={id} className={styles.card}>
-                            <div
-                              className={styles.contentGroup}
-                              // onClick={handleCardRowClick}
-                              style={{ cursor: "pointer" }}
-                            >
-                              <div className={styles.inputContainer}>
-                                <input
-                                  type="checkbox"
-                                  onChange={() => {
-                                    handleRowCheckboxChange(item);
-                                  }}
-                                  className={TableStyle.customChecked}
-                                  checked={selectedRows?.some(
-                                    (selectedRow) =>
-                                      selectedRow.patientId === item.patientId
-                                  )}
-                                />
-                              </div>
+                    <>
+                      <div className="col-xl-6">
+                        <div className={styles.cardContainer}>
+                          {reportListAll?.data?.map((item, id) => (
+                            <div key={id} className={styles.card}>
                               <div
-                                className="col-xl-12"
-                                style={{ marginLeft: "10px" }}
+                                className={styles.contentGroup}
+                                // onClick={handleCardRowClick}
+                                style={{ cursor: "pointer" }}
                               >
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    alignItems: "center",
-                                    paddingBottom: "5px",
-                                  }}
-                                >
-                                  <div className={`col-xl-6 ${styles.pName}`}>
-                                    {item.patientName
-                                      ? item.patientName
-                                      : "---"}
-                                  </div>
-                                  <div
-                                    className={`col-xl-6 ${styles.dataContainer}`}
-                                  >
-                                    <span className={styles.raf}>
-                                      <Tooltip
-                                        title={"Raf Score"}
-                                        placement="bottom"
-                                      >
-                                        {" "}
-                                        {item.rafSum ? item.rafSum : "---"}
-                                      </Tooltip>
-                                    </span>
-                                    <span style={{ marginRight: "10px" }}>
-                                      {item?.flag ? (
-                                        getFlags(item.flag)
-                                      ) : (
-                                        <div>{SVGICON?.emptyFlag}</div>
-                                      )}
-                                    </span>
-                                    <span style={{ marginRight: "10px" }}>
-                                      {auditstatusBodyTemplate(item)}
-                                    </span>
-                                    <span>
-                                      {processstatusBodyTemplate(item)}
-                                    </span>
-                                  </div>
+                                <div className={styles.inputContainer}>
+                                  <input
+                                    type="checkbox"
+                                    onChange={() => {
+                                      handleRowCheckboxChange(item);
+                                    }}
+                                    className={TableStyle.customChecked}
+                                    checked={selectedRows?.some(
+                                      (selectedRow) =>
+                                        selectedRow.patientId === item.patientId
+                                    )}
+                                  />
                                 </div>
+                                <div
+                                  className="col-xl-12"
+                                  style={{ marginLeft: "10px" }}
+                                >
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "space-between",
+                                      alignItems: "center",
+                                      paddingBottom: "5px",
+                                    }}
+                                  >
+                                    <div className={`col-xl-6 ${styles.pName}`}>
+                                      {item.patientName
+                                        ? item.patientName
+                                        : "---"}
+                                    </div>
+                                    <div
+                                      className={`col-xl-6 ${styles.dataContainer}`}
+                                    >
+                                      <span className={styles.raf}>
+                                        <Tooltip
+                                          title={"Raf Score"}
+                                          placement="bottom"
+                                        >
+                                          {" "}
+                                          {item.rafSum ? item.rafSum : "---"}
+                                        </Tooltip>
+                                      </span>
+                                      <span style={{ marginRight: "10px" }}>
+                                        {item?.flag ? (
+                                          getFlags(item.flag)
+                                        ) : (
+                                          <div>{SVGICON?.emptyFlag}</div>
+                                        )}
+                                      </span>
+                                      <span style={{ marginRight: "10px" }}>
+                                        {auditstatusBodyTemplate(item)}
+                                      </span>
+                                      <span>
+                                        {processstatusBodyTemplate(item)}
+                                      </span>
+                                    </div>
+                                  </div>
 
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    justifyContent: "space-around",
-                                    alignItems: "center",
-                                    paddingBottom: "5px",
-                                  }}
-                                >
                                   <div
-                                    className={`col-xl-2 ${styles.headText}`}
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "space-around",
+                                      alignItems: "center",
+                                      paddingBottom: "5px",
+                                    }}
                                   >
-                                    {item.patientId ? item.patientId : ""}
+                                    <div
+                                      className={`col-xl-2 ${styles.headText}`}
+                                    >
+                                      {item.patientId ? item.patientId : ""}
+                                    </div>
+                                    <div
+                                      className={`col-xl-2 ${styles.headText}`}
+                                    >
+                                      HCC
+                                    </div>
+                                    <div
+                                      className={`col-xl-4 ${styles.headText}`}
+                                    >
+                                      SUPERVISOR
+                                    </div>
+                                    <div
+                                      className={`col-xl-4 ${styles.headText}`}
+                                    >
+                                      REVIEWER
+                                    </div>
                                   </div>
                                   <div
-                                    className={`col-xl-2 ${styles.headText}`}
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "space-around",
+                                      alignItems: "center",
+                                    }}
                                   >
-                                    HCC
-                                  </div>
-                                  <div
-                                    className={`col-xl-4 ${styles.headText}`}
-                                  >
-                                    SUPERVISOR
-                                  </div>
-                                  <div
-                                    className={`col-xl-4 ${styles.headText}`}
-                                  >
-                                    REVIEWER
-                                  </div>
-                                </div>
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    justifyContent: "space-around",
-                                    alignItems: "center",
-                                  }}
-                                >
-                                  <div className={`col-xl-2 ${styles.text}`}>
-                                    {dateFormate(dayjs, item?.processedDate)}
-                                  </div>
-                                  <div className={`col-xl-2 ${styles.text}`}>
-                                    {item.validDiseaseCount
-                                      ? item.validDiseaseCount
-                                      : "---"}
-                                  </div>
-                                  <div className={`col-xl-4 ${styles.text}`}>
-                                    {item.auditedByFirstName ||
-                                    item.auditedByLastName ||
-                                    item.auditedByProfileImage ? (
-                                      <div
-                                        style={{
-                                          display: "flex",
-                                          alignItems: "center",
-                                        }}
-                                      >
-                                        <span style={{ marginRight: "10px" }}>
-                                          {renderUserPrfoileAvatar(
-                                            item.auditedByFirstName,
-                                            item.auditedByLastName,
-                                            item.auditedByProfileImage,
-                                            "header"
-                                          )}
-                                        </span>
-                                        <span>
-                                          {item.auditedByFirstName}{" "}
-                                          {item.auditedByLastName}
-                                        </span>
-                                      </div>
-                                    ) : (
-                                      <div>---</div>
-                                    )}
-                                  </div>
-                                  <div className={`col-xl-4 ${styles.text}`}>
-                                    {item.patientAllocatedFirstName ||
-                                    item.patientAllocatedLastName ||
-                                    item.patientAllocatedProfileImage ? (
-                                      <div
-                                        style={{
-                                          display: "flex",
-                                          alignItems: "center",
-                                        }}
-                                      >
-                                        <span style={{ marginRight: "10px" }}>
-                                          {renderUserPrfoileAvatar(
-                                            item.patientAllocatedFirstName,
-                                            item.patientAllocatedLastName,
-                                            item.patientAllocatedProfileImage,
-                                            "header"
-                                          )}
-                                        </span>
-                                        <span>
-                                          {item.patientAllocatedFirstName}{" "}
-                                          {item.patientAllocatedLastName}
-                                        </span>
-                                      </div>
-                                    ) : (
-                                      <div>---</div>
-                                    )}
+                                    <div className={`col-xl-2 ${styles.text}`}>
+                                      {dateFormate(dayjs, item?.processedDate)}
+                                    </div>
+                                    <div className={`col-xl-2 ${styles.text}`}>
+                                      {item.validDiseaseCount
+                                        ? item.validDiseaseCount
+                                        : "---"}
+                                    </div>
+                                    <div className={`col-xl-4 ${styles.text}`}>
+                                      {item.auditedByFirstName ||
+                                      item.auditedByLastName ||
+                                      item.auditedByProfileImage ? (
+                                        <div
+                                          style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                          }}
+                                        >
+                                          <span style={{ marginRight: "10px" }}>
+                                            {renderUserPrfoileAvatar(
+                                              item.auditedByFirstName,
+                                              item.auditedByLastName,
+                                              item.auditedByProfileImage,
+                                              "header"
+                                            )}
+                                          </span>
+                                          <span>
+                                            {item.auditedByFirstName}{" "}
+                                            {item.auditedByLastName}
+                                          </span>
+                                        </div>
+                                      ) : (
+                                        <div>---</div>
+                                      )}
+                                    </div>
+                                    <div className={`col-xl-4 ${styles.text}`}>
+                                      {item.patientAllocatedFirstName ||
+                                      item.patientAllocatedLastName ||
+                                      item.patientAllocatedProfileImage ? (
+                                        <div
+                                          style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                          }}
+                                        >
+                                          <span style={{ marginRight: "10px" }}>
+                                            {renderUserPrfoileAvatar(
+                                              item.patientAllocatedFirstName,
+                                              item.patientAllocatedLastName,
+                                              item.patientAllocatedProfileImage,
+                                              "header"
+                                            )}
+                                          </span>
+                                          <span>
+                                            {item.patientAllocatedFirstName}{" "}
+                                            {item.patientAllocatedLastName}
+                                          </span>
+                                        </div>
+                                      ) : (
+                                        <div>---</div>
+                                      )}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                       </div>
-                    </div>
+                    </>
                   )}
 
                   <div className="col-xl-6" style={{ marginLeft: "10px" }}>
