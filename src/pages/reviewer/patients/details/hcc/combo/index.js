@@ -1,10 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "../../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../../utility/enpoints";
 import visitStyles from "../../../../../../styles/visitdata.module.css";
-import { Viewer, Worker, ProgressBar } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
-import moment, { months } from "moment";
+import moment from "moment";
 import "react-vertical-timeline-component/style.min.css";
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,14 +14,10 @@ import {
   faCircleUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { CalendarOutlined } from "@ant-design/icons";
-import { Popconfirm, Select, Tag } from "antd";
+import { Popconfirm, notification, Tag, Modal } from "antd";
 import { SVGICON } from "../../../../../../jsx/constant/theme";
-import { Modal } from "antd";
-import { Button } from "react-bootstrap";
+import { Button, Offcanvas } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import { Offcanvas } from "react-bootstrap";
-import { notification } from "antd";
-import { useRouter } from "next/navigation";
 import Spinner from "../../../../../../components/loadingSpinner";
 import styles from "../styles.module.css";
 import { manuallyAddComboCode } from "../../../../../../services/PatientsListSevice";
@@ -68,10 +63,6 @@ const Combo = ({ activeComboTree }) => {
     useState([]);
   const [selectDiseasesName, setSelectDiseasesName] = useState("");
   const [selectCode, setSelectCode] = useState("");
-  const [dosYearDefalutSelect, setDosYearDefalutSelect] = useState("");
-  const [localOrgId, setLocalOrgId] = useState("");
-  const [localTenantId, setLocalTenantId] = useState("");
-  const [selectMeatName, setSelectMeatName] = useState("");
   const [patientDocumentResult, setPatientDocumentResult] = useState([]);
   const [selectFileURL, setSelectFileURL] = useState([]);
   const [validated, setValidated] = useState(false);
@@ -100,7 +91,6 @@ const Combo = ({ activeComboTree }) => {
     additionalCode: "",
   });
   const [localPatientId, setLocalPatientId] = useState("");
-  const [selectedDosValue, setSelectedDosValue] = useState("");
   const [captureSectionMatching, setCaptureSectionMatching] = useState([]);
   const [encounterDateMatching, setEncounterDateMatching] = useState([]);
   const [fileModalHeader, setFileModalHeader] = useState("");
@@ -110,7 +100,6 @@ const Combo = ({ activeComboTree }) => {
   const [fileModalTitle, setFileModalTitle] = useState("");
   const [isAddComboCode, setIsAddComboCode] = useState(false);
   const [listPageNumber, setListPageNumber] = useState([]);
-  const [activeTabNumber, setActiveTabNumber] = useState(0);
   const [fileLoading, setFileLoading] = useState(false);
   const [search, setSearch] = useState(false);
 
@@ -129,37 +118,9 @@ const Combo = ({ activeComboTree }) => {
     setInputValue({ ...inputValue, [key]: value });
   };
 
-  const [isDocumentLoaded, setDocumentLoaded] = React.useState(false);
-  const handleDocumentLoad = () => {
-    setDocumentLoaded(true);
-  };
-  const handleDocumentLoadFile = () => {
-    setDocumentLoaded(true);
-    if (findFileKeyword) {
-      setTimeout(() => {
-        setFileModalHeader(fileModalTitle);
-        if (fileInitialPage) {
-          setTargetPages(
-            (targetPage) =>
-              targetPage.pageIndex === fileInitialPage ||
-              targetPage.pageIndex === fileInitialPage + 1 ||
-              targetPage.pageIndex === fileInitialPage + 2
-          );
-        }
-        highlight({
-          keyword: findFileKeyword,
-        });
-      }, 1000);
-    }
-  };
-
   useEffect(() => {
-    var orgId = localStorage.getItem("orgId");
-    var tenId = localStorage.getItem("tenantId");
-    var patientId = localStorage.getItem("patientId");
+    let patientId = localStorage.getItem("patientId");
     setLocalPatientId(patientId);
-    setLocalOrgId(orgId);
-    setLocalTenantId(tenId);
     getPatientDetails();
   }, [patientDetailsResult]);
 
@@ -174,15 +135,13 @@ const Combo = ({ activeComboTree }) => {
   }, [fileDosPageNumberList]);
 
   useEffect(() => {
-    // loadFilterPatientList();
-    var orgId = localStorage.getItem("orgId");
-    var tenId = localStorage.getItem("tenantId");
-    var patientId = localStorage.getItem("patientId");
+    let orgId = localStorage.getItem("orgId");
+    let tenId = localStorage.getItem("tenantId");
+    let patientId = localStorage.getItem("patientId");
     getPatientDetailsFileLoad(patientId, orgId, tenId);
-  }, [activeTabNumber]);
+  }, []);
 
   useEffect(() => {
-    setDocumentLoaded(true);
     if (findFileKeyword) {
       setTimeout(() => {
         setFileModalHeader(fileModalTitle);
@@ -208,13 +167,13 @@ const Combo = ({ activeComboTree }) => {
 
   const getPatientDetails = async () => {
     if (patientDetailsResult?.result?.response) {
-      var result = patientDetailsResult?.result?.response;
+      let result = patientDetailsResult?.result?.response;
       setPatientDocumentResult(result);
       if (result?.comboDisease) {
-        var combiDisArray = [];
+        let combiDisArray = [];
         if (result?.comboDisease) {
           result?.comboDisease.map((res, index) => {
-            var providerList = [];
+            let providerList = [];
             res.providers?.map((res, index) => {
               providerList.push(res.providerName);
             });
@@ -252,8 +211,8 @@ const Combo = ({ activeComboTree }) => {
           "encounterDateTag9",
           "encounterDateTag10",
         ];
-        var encounterDateColorsMatching = [];
-        var encounterDateArr = [];
+        let encounterDateColorsMatching = [];
+        let encounterDateArr = [];
 
         result?.comboDisease?.map((res) => {
           const array = res?.encounterDate?.split(",");
@@ -263,7 +222,7 @@ const Combo = ({ activeComboTree }) => {
             });
           });
         });
-        var encounterDateArrDublicatesRemove = getUniqueListBy(
+        let encounterDateArrDublicatesRemove = getUniqueListBy(
           encounterDateArr,
           "name"
         );
@@ -275,7 +234,6 @@ const Combo = ({ activeComboTree }) => {
         });
         setEncounterDateMatching(encounterDateColorsMatching);
         setCaptureSectionMatching(sectionColorList.result?.response);
-      } else {
       }
     }
   };
@@ -287,12 +245,10 @@ const Combo = ({ activeComboTree }) => {
   ) => {
     getFileDosPageNumber();
     if (patientDetailsResult?.result?.response) {
-      var result = patientDetailsResult?.result?.response;
+      let result = patientDetailsResult?.result?.response;
       setPatientDocumentResult(result);
       if (result.validDisease != null) {
-        getPatientPdfFile(result?.fileDetailDTO?.azureBlobPath, tenId);
         setPatientFileDTO(result?.fileDetailDTO);
-      } else {
       }
     }
   };
@@ -300,20 +256,6 @@ const Combo = ({ activeComboTree }) => {
   function getUniqueListBy(arr, key) {
     return [...new Map(arr.map((item) => [item[key], item])).values()];
   }
-
-  const getPatientPdfFile = async (fileId, tenId) => {
-    // const response = await axios.get(
-    //   ENDPOINTS.apiEndoint +
-    //     `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
-    // );
-    // if (response.data) {
-    //   var result = response.data.response;
-    //   setSelectFileURL(response.data.response);
-    //   setSelectFileURLValid(response.data.response);
-    //   setIsLoading(false);
-    //   setIsLoadingDos(false);
-    // }
-  };
 
   const confirmComboInvalid = () =>
     new Promise((resolve) => {
@@ -339,9 +281,9 @@ const Combo = ({ activeComboTree }) => {
       (res) => res.diseaseName == selectDiseasesName
     );
     setComboDiseaseCodesList(result);
-    var namePush = [];
+    let namePush = [];
     namePush.push({ name: selectCode + " - " + selectDiseasesName });
-    var newArray = [];
+    let newArray = [];
     newArray = [...invalidComboDiseaseCodesList, ...result2];
     setInvalidComboDiseaseCodesList(newArray);
   };
@@ -354,7 +296,7 @@ const Combo = ({ activeComboTree }) => {
     const result2 = invalidComboDiseaseCodesList.filter(
       (res) => res.diseaseName == selectDiseasesName
     );
-    var newArray = [];
+    let newArray = [];
     newArray = [...comboDiseaseCodesList, ...result2];
     setComboDiseaseCodesList(newArray);
   };
@@ -367,57 +309,6 @@ const Combo = ({ activeComboTree }) => {
     setFileLoading(false);
   };
 
-  const handleOpenModal = async (
-    value,
-    disDescription,
-    encounterDate,
-    meatresult
-  ) => {
-    setSelectMeatResult(meatresult);
-    setFileLoading(true);
-    var splitPoint = disDescription.substring(" ", 20);
-    var dotLoading = (
-      <div className={visitStyles.loadingFileHeader}>
-        <Spinner />
-      </div>
-    );
-    var fileId = patientFileDTO.fileId;
-    const encounterDatesValue = encounterDate.split(",");
-    const encounterDatesHeader = encounterDatesValue[0];
-    var pageNumber = null;
-    try {
-      const response = await axios.get(
-        ENDPOINTS.apiEndoint +
-          `dbservice/pageNumber?header=${value}&fileId=${fileId}&dos=${encounterDatesHeader}&stringFileWord=${splitPoint}`
-      );
-      var result = response.data.response;
-      if (response?.data?.status == "SUCCESS") {
-        if (result?.first == false) {
-          splitPoint = value;
-        }
-        pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
-        setFileInitialPage(pageNumber);
-      } else {
-        setFileInitialPage(null);
-      }
-      if (findFileKeyword == splitPoint) {
-        setFileLoading(false);
-        var dataset = value + " / (" + disDescription + ")";
-      }
-      setFindFileKeyword(splitPoint);
-
-      var dataset = value + " / (" + disDescription + ")";
-      setSelectMeatName(dataset);
-    } catch (error) {
-      splitPoint = value;
-      if (findFileKeyword == value) {
-        setFileLoading(false);
-      }
-      setFindFileKeyword(splitPoint);
-      setFileInitialPage(null);
-    }
-  };
-
   const findValueDocuments = async (
     value,
     disDescription,
@@ -427,12 +318,11 @@ const Combo = ({ activeComboTree }) => {
     diagnosisCode
   ) => {
     setFileLoading(true);
-    var fileId = patientFileDTO.fileId;
+    let fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
-    const encounterDatesHeader = encounterDatesValue[0];
-    var splitPoint = actualDescription;
-    var pageNumber = null;
-    var data = {
+    let splitPoint = actualDescription;
+    let pageNumber = null;
+    let data = {
       fileId: fileId,
       header: headerNames,
       dos: encounterDatesValue,
@@ -444,10 +334,10 @@ const Combo = ({ activeComboTree }) => {
         ENDPOINTS.apiEndoint + `dbservice/pageNumber`,
         data
       );
-      var result = response.data.response;
+      let result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
         pageNumber = result?.second[0] ? result?.second[0] : null;
-        if (result?.first == false) {
+        if (!result?.first) {
           splitPoint = headerNames;
         }
         if (pageNumber == fileInitialPage) {
@@ -501,12 +391,11 @@ const Combo = ({ activeComboTree }) => {
     diagnosisCode
   ) => {
     setFileLoading(true);
-    var fileId = patientFileDTO.fileId;
+    let fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
-    const encounterDatesHeader = encounterDatesValue[0];
-    var splitPoint;
-    var pageNumber = null;
-    var data = {
+    let splitPoint;
+    let pageNumber = null;
+    let data = {
       fileId: fileId,
       header: headerNames,
       dos: encounterDatesValue,
@@ -518,7 +407,7 @@ const Combo = ({ activeComboTree }) => {
         ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
         data
       );
-      var result = response.data.response;
+      let result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
         pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
         splitPoint = result?.searchString;
@@ -567,34 +456,26 @@ const Combo = ({ activeComboTree }) => {
   };
   const handleOpenModalCombinationCodeOld = async (
     value,
-    disDescription,
-    check,
-    whereCome,
-    documentPlace,
     encounterDate,
     headerNames,
-    actualDescription,
-    testModal
+    actualDescription
   ) => {
     setFileLoading(true);
-    setDocumentLoaded(false);
-    var dataset = value + " - (" + disDescription + ")";
-    setSelectMeatName(dataset + " -  " + "Loading...");
-    var dotLoading = (
+
+    let dotLoading = (
       <div className={visitStyles.loadingFileHeader}>
         <Spinner />
       </div>
     );
-    var headerName = dotLoading;
+    let headerName = dotLoading;
     setFileModalHeader(headerName);
     setIsModalOpenCaptureSection(true);
-    var fileId = patientFileDTO.fileId;
+    let fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
-    const encounterDatesHeader = encounterDatesValue[0];
-    var splitPoint = "";
-    var pageNumber = null;
+    let splitPoint = "";
+    let pageNumber = null;
     splitPoint = actualDescription;
-    var data = {
+    let data = {
       fileId: fileId,
       header: headerNames,
       dos: encounterDatesValue,
@@ -606,9 +487,9 @@ const Combo = ({ activeComboTree }) => {
         ENDPOINTS.apiEndoint + `dbservice/pageNumber`,
         data
       );
-      var result = response.data.response;
+      let result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
-        if (result?.first == false) {
+        if (!result?.first) {
           splitPoint = headerNames;
         }
         pageNumber = result?.second[0] ? result?.second[0] : null;
@@ -622,23 +503,14 @@ const Combo = ({ activeComboTree }) => {
         page: pageNumber,
         headers: result?.first,
       });
-      var dataset =
-        value +
-        " - (" +
-        disDescription +
-        ")" +
-        " / (" +
-        actualDescription +
-        ")";
-      setSelectMeatName(dataset);
-      var headerName =
+
+      let headerName =
         patientDocumentResult.patientId +
         " / " +
         patientDocumentResult.patientName +
         " / " +
         dataset;
       setFileModalTitle(headerName);
-      setDocumentLoaded(true);
     } catch (error) {
       splitPoint = headerNames;
       if (findFileKeyword == headerNames) {
@@ -654,34 +526,26 @@ const Combo = ({ activeComboTree }) => {
   };
   const handleOpenModalCombinationCode = async (
     value,
-    disDescription,
-    check,
-    whereCome,
-    documentPlace,
     encounterDate,
     headerNames,
-    actualDescription,
-    testModal
+    actualDescription
   ) => {
     setFileLoading(true);
-    setDocumentLoaded(false);
-    var dataset = value + " - (" + disDescription + ")";
-    setSelectMeatName(dataset + " -  " + "Loading...");
-    var dotLoading = (
+
+    let dotLoading = (
       <div className={visitStyles.loadingFileHeader}>
         <Spinner />
       </div>
     );
-    var headerName = dotLoading;
+    let headerName = dotLoading;
     setFileModalHeader(headerName);
     setIsModalOpenCaptureSection(true);
-    var fileId = patientFileDTO.fileId;
+    let fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
-    const encounterDatesHeader = encounterDatesValue[0];
-    var splitPoint = "";
-    var pageNumber = null;
+    let splitPoint = "";
+    let pageNumber = null;
     splitPoint = actualDescription.substring(" ", 20);
-    var data = {
+    let data = {
       fileId: fileId,
       header: headerNames,
       dos: encounterDatesValue,
@@ -693,21 +557,16 @@ const Combo = ({ activeComboTree }) => {
         ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
         data
       );
-      var result = response.data.response;
+      let result = response.data.response;
       if (response?.data?.status == "SUCCESS") {
         pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
         splitPoint = result?.searchString;
         if (result == null) {
           return handleOpenModalCombinationCodeOld(
             value,
-            disDescription,
-            check,
-            whereCome,
-            documentPlace,
             encounterDate,
             headerNames,
-            actualDescription,
-            testModal
+            actualDescription
           );
         }
         setSearch({
@@ -723,13 +582,13 @@ const Combo = ({ activeComboTree }) => {
           });
         }
         setFileInitialPage(pageNumber);
-        var headerName =
+        let headerName =
           patientDocumentResult.patientId +
           " / " +
           patientDocumentResult.patientName +
           " / " +
           dataset;
-        // setFileModalHeader(headerName);
+
         setFileModalTitle(headerName);
         setSearch({
           value: splitPoint,
@@ -761,12 +620,7 @@ const Combo = ({ activeComboTree }) => {
     setInputValue({ ...inputValue, [key]: value });
   };
 
-  const getPatientDetailsReload = async (
-    patientId,
-    orgId,
-    tenId,
-    fileloadCondition
-  ) => {
+  const getPatientDetailsReload = async (patientId) => {
     dispatch(getPatientDetailsResult(patientId));
   };
 
@@ -787,17 +641,16 @@ const Combo = ({ activeComboTree }) => {
     actualDescription,
     diagnosisCode
   ) => {
-    // getSectionTagColor(value);
-    var dublicateCaptureDelete = removeDuplicates(value);
+    let dublicateCaptureDelete = removeDuplicates(value);
     return dublicateCaptureDelete.map((res) => {
       const result = captureSectionMatching.filter(
         (res2) => res2.sectionName == res
       );
-      var backColor = result[0]?.backgroundColor;
-      var textColor = result[0]?.sectionColor;
-      var disCode = result[0]?.diagnosisCode;
-      var headerNames = result[0]?.sectionName;
-      var sectionMapArr = (
+      let backColor = result[0]?.backgroundColor;
+      let textColor = result[0]?.sectionColor;
+      let disCode = result[0]?.diagnosisCode;
+      let headerNames = result[0]?.sectionName;
+      let sectionMapArr = (
         <span
           onClick={() =>
             findValueDocument(
@@ -827,17 +680,17 @@ const Combo = ({ activeComboTree }) => {
     testModal,
     diagnosisCode
   ) => {
-    var dublicateCaptureDelete = removeDuplicates(value);
+    let dublicateCaptureDelete = removeDuplicates(value);
     return dublicateCaptureDelete.map((res) => {
       const result = captureSectionMatching.filter(
         (res2) => res2.sectionName == res
       );
-      var backColor = result[0]?.backgroundColor;
-      var textColor = result[0]?.sectionColor;
-      var disCode = diagnosisCode;
-      var headerNames = result[0]?.sectionName;
+      let backColor = result[0]?.backgroundColor;
+      let textColor = result[0]?.sectionColor;
+      let disCode = diagnosisCode;
+      let headerNames = result[0]?.sectionName;
 
-      var sectionMapArr = (
+      let sectionMapArr = (
         <span
           onClick={() =>
             handleOpenModalCombinationCode(
@@ -865,8 +718,8 @@ const Combo = ({ activeComboTree }) => {
   const getEncounterDateBackgroundHcc = (value, code, place, meatResult) => {
     return value?.map((res) => {
       const result = encounterDateMatching.filter((res2) => res2.name == res);
-      var backColor = result[0]?.colors;
-      var sectionMapArr = res ? (
+      let backColor = result[0]?.colors;
+      let sectionMapArr = res ? (
         <span
           onClick={() => getEncounterDetailsHcc(res, code, place, meatResult)}
           className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
@@ -886,8 +739,8 @@ const Combo = ({ activeComboTree }) => {
   const getEncounterDetailsHcc = async (date, code, place, meatResult) => {
     const findPageNumber = listPageNumber.filter((i) => i.date === date);
     if (findPageNumber.length != 0) {
-      var dataset = code + " - (" + date + ")";
-      var headerName =
+      let dataset = code + " - (" + date + ")";
+      let headerName =
         patientDocumentResult.patientId +
         " / " +
         patientDocumentResult.patientName +
@@ -897,21 +750,18 @@ const Combo = ({ activeComboTree }) => {
 
       setFileLoading(true);
       if (place == "MEAT") {
-        setSelectMeatName(headerName);
         setSelectMeatResult(meatResult);
       } else if (place == "COMBO") {
         setIsModalOpenCaptureSection(true);
-      } else {
       }
-      var date = findPageNumber[0].date;
+      let date = findPageNumber[0].date;
       if (findPageNumber[0].startPage.length != 0) {
-        var pageNumber = findPageNumber[0].startPage[0].pageNumber;
+        let pageNumber = findPageNumber[0].startPage[0].pageNumber;
         setFileInitialPage(pageNumber);
-        var splitPoint = date.substring(" ", 5);
+        let splitPoint = date.substring(" ", 5);
         setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
         setFindFileKeyword(splitPoint);
-        if (pageNumber == fileInitialPage) {
-        }
+
         setSearch({
           value: splitPoint,
           page: pageNumber,
@@ -921,16 +771,16 @@ const Combo = ({ activeComboTree }) => {
   };
 
   const getFileDosPageNumber = async () => {
-    var result = fileDosPageNumberList?.result;
-    var groupPageNumber = [];
-    var groupEncounterDate = [];
-    for (var key in result?.response) {
-      var optionArray = [];
-      var optionPage = [];
-      var pageNumbervalue = result.response[key];
-      for (var key2 in pageNumbervalue) {
-        var startPage = key2 == "first" ? pageNumbervalue[key2] : null;
-        var keyValue = key2 == "first" ? "Start - " : "End - ";
+    let result = fileDosPageNumberList?.result;
+    let groupPageNumber = [];
+    let groupEncounterDate = [];
+    for (let key in result?.response) {
+      let optionArray = [];
+      let optionPage = [];
+      let pageNumbervalue = result.response[key];
+      for (let key2 in pageNumbervalue) {
+        let startPage = key2 == "first" ? pageNumbervalue[key2] : null;
+        let keyValue = key2 == "first" ? "Start - " : "End - ";
         optionArray.push({
           label: keyValue + " " + pageNumbervalue[key2],
           value: pageNumbervalue[key2] + "," + moment(key).format("MM/DD"),
@@ -953,57 +803,16 @@ const Combo = ({ activeComboTree }) => {
     setListPageNumber(groupEncounterDate);
   };
 
-  const handleChangePageNumber = async (value) => {
-    setPopoverVisible(false);
-    var str_array = value.split(",");
-    var pageNumber = str_array[0];
-    var findData = str_array[1];
-    setFindFileKeyword(null);
-    setFileLoading(true);
-    var pageIndex = pageNumber - 1;
-    setFileInitialPage(pageIndex);
-    setTargetPages(
-      (targetPage) =>
-        targetPage.pageIndex === pageNumber ||
-        targetPage.pageIndex === pageNumber + 1 ||
-        targetPage.pageIndex === pageNumber + 2
-    );
-    setFindFileKeyword(findData);
-  };
-
   const getProviderNameList = (data) => {
-    var dublicateCaptureDelete = removeDuplicates(data);
+    let dublicateCaptureDelete = removeDuplicates(data);
     return dublicateCaptureDelete.map((res) => {
       const result = captureSectionMatching.filter(
         (res2) => res2.sectionName == res
       );
-      var backColor = result[0]?.backgroundColor;
-      var textColor = result[0]?.sectionColor;
-      var value = ["09/19/2023"];
-      var sectionMapArr = (
-        // <Popover
-        //   content={
-        //     <>
-        //       {value?.map((res3) => {
-        //         const result = encounterDateMatching.filter(
-        //           (res2) => res2.name == res3
-        //         );
-        //         var backColor = result[0]?.colors;
-        //         <span
-        //           className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
-        //         >
-        //           <i>
-        //             <CalendarOutlined className={visitStyles.calenderIcon} />
-        //           </i>
-        //           {moment(res3).format("MMM DD")}
-        //         </span>;
-        //       })}
-        //     </>
-        //   }
-        //   trigger={["click"]}
-        //   placement="bottom"
-        //   onClick={() => getEncounterProviderDetails(res)}
-        // >
+      let backColor = result[0]?.backgroundColor;
+      let textColor = result[0]?.sectionColor;
+
+      let sectionMapArr = (
         <span
           className={`mt-2 text-start ${visitStyles.provider_name}`}
           style={{ backgroundColor: backColor, color: textColor }}
@@ -1020,36 +829,9 @@ const Combo = ({ activeComboTree }) => {
           </i>
           {res}
         </span>
-        // </Popover>
       );
       return sectionMapArr;
     });
-
-    // var value = data?.map((res) =>
-    //   res.providerName ? (
-    //     <Badge
-    //       className={
-    //         res.authorizedProvider === true
-    //           ? `mt-2 text-start ${visitStyles.provider_name}`
-    //           : `mt-2 text-start ${visitStyles.un_provider_name}`
-    //       }
-    //     >
-    //       <i>
-    //         {" "}
-    //         <FontAwesomeIcon
-    //           icon={faCircleUser}
-    //           style={{
-    //             size: 10,
-    //             color:
-    //               res.authorizedProvider === true ? "#008000bf" : "#ff0000cc",
-    //           }}
-    //         />
-    //       </i>
-    //       {res.providerName}
-    //     </Badge>
-    //   ) : null
-    // );
-    // return value;
   };
 
   const addComboCode = () => {
@@ -1057,19 +839,17 @@ const Combo = ({ activeComboTree }) => {
   };
 
   const handleSubmitComboCode = async (event) => {
-    var dos = dosYearDefalutSelect.label;
-
     const form = event.currentTarget;
     event.preventDefault();
     if (form.checkValidity() === true) {
-      var updateDataformat = {
+      let updateDataformat = {
         patientId: localPatientId,
-        dosYear: selectedDosValue,
+        dosYear: "",
         comboCode: inputValue.comboCode,
         additionalCode: inputValue.additionalCode,
         description: inputValue.description,
       };
-      var result = await manuallyAddComboCode(updateDataformat);
+      let result = await manuallyAddComboCode(updateDataformat);
       if (result.status == "SUCCESS") {
         setIsAddComboCode(false);
         notification.success({
@@ -1077,12 +857,7 @@ const Combo = ({ activeComboTree }) => {
           placement: "top",
           duration: 1,
         });
-        getPatientDetailsReload(
-          localPatientId,
-          localOrgId,
-          localTenantId,
-          "fileNotLoad"
-        );
+        getPatientDetailsReload(localPatientId);
       }
 
       setValidated(true);
@@ -1097,14 +872,15 @@ const Combo = ({ activeComboTree }) => {
 
   useEffect(() => {
     if (activeComboTree) {
-      // if (combiTree.diagnosisCodeCombo == activeComboTree.diagnosisCode) {
       comboDiseaseCodesList?.map((item) => {
-        if (item.diagnosisCodeCombo.replace(".","") == activeComboTree.diagnosisCode.replace(".","")) {
+        if (
+          item.diagnosisCodeCombo.replace(".", "") ==
+          activeComboTree.diagnosisCode.replace(".", "")
+        ) {
           setOpens(true);
           setCombiTree([{ ...item, expanded: true }]);
         }
       });
-      // }
     }
   }, [activeComboTree]);
 
@@ -1129,13 +905,13 @@ const Combo = ({ activeComboTree }) => {
               <div className={visitStyles.combo_head_card}>
                 <div className="row">
                   <div className="col-xl-3">
-                    <label>Combo Codes</label>
+                    <label htmlFor="combo">Combo Codes</label>
                   </div>
                   <div className="col-xl-3">
-                    <label>Additional Codes</label>
+                    <label htmlFor="additional">Additional Codes</label>
                   </div>
                   <div className="col-xl-5">
-                    <label>Description</label>
+                    <label htmlFor="description">Description</label>
                   </div>
                   <div className="col-xl-1">
                     <div className="d-flex justify-content-center">
@@ -1160,7 +936,10 @@ const Combo = ({ activeComboTree }) => {
                   <div className={visitStyles.hccStickey_head}>
                     {comboDiseaseCodesList?.map((item) => {
                       return (
-                        <div className={visitStyles.combo_details_card}>
+                        <div
+                          className={visitStyles.combo_details_card}
+                          key={item?.id}
+                        >
                           <div className="row">
                             <div className="col-xl-3 d-grid">
                               <span className="font-bold">
@@ -1171,7 +950,10 @@ const Combo = ({ activeComboTree }) => {
                               {item.addOnCodes?.map(
                                 (addCombo, index) =>
                                   addCombo && (
-                                    <span className="font-bold">
+                                    <span
+                                      className="font-bold"
+                                      key={addOnCodeColor[index]}
+                                    >
                                       <Tag color={addOnCodeColor[index]}>
                                         {addCombo}
                                       </Tag>
@@ -1209,20 +991,7 @@ const Combo = ({ activeComboTree }) => {
                                   </div>
                                 </Popconfirm>
                               </div>
-                              {/* <Popconfirm
-                                            title="You want to see the tree view?"
-                                            description={item.diseaseName}
-                                            onConfirm={() => {
-                                              setOpens(true);
-                                              
-                                            }}
-                                            placement="leftTop"
-                                            okText="Yes"
-                                            cancelText="No"
-                                            onOpenChange={() => {
-                                              setCombiTree(item);
-                                            }}
-                                          > */}
+
                               <div
                                 className={visitStyles.close_icon}
                                 style={{ background: "#c7f3c6" }}
@@ -1302,64 +1071,62 @@ const Combo = ({ activeComboTree }) => {
               <div className={visitStyles.combo_head_card}>
                 <div className="row">
                   <div className="col-xl-3">
-                    <label>Combo Codes</label>
+                    <label htmlFor="combo">Combo Codes</label>
                   </div>
                   <div className="col-xl-3">
-                    <label>Additional Codes</label>
+                    <label htmlFor="additional">Additional Codes</label>
                   </div>
                   <div className="col-xl-5">
-                    <label>Description</label>
+                    <label htmlFor="description">Description</label>
                   </div>
                 </div>
               </div>
               {invalidComboDiseaseCodesList?.length != 0 ? (
-                <>
-                  <div className={visitStyles.container}>
-                    <div className={visitStyles.hccStickey_head}>
-                      {invalidComboDiseaseCodesList?.map((item) => {
-                        return (
-                          <div className={visitStyles.combo_details_card}>
-                            <div className="row">
-                              <div className="col-xl-3">
-                                <span className="font-bold">
-                                  {item.diagnosisCodeCombo}
-                                </span>
-                              </div>
-                              <div className="col-xl-3">
-                                <span className="font-bold">
-                                  {item.addOnCode}
-                                </span>
-                              </div>
-                              <div className="col-xl-5">
-                                <span>{item.diseaseName}</span>
-                              </div>
-                              <div className="col-xl-1 comboclose">
-                                <Popconfirm
-                                  title="You want move to Valid?"
-                                  description={item.diseaseName}
-                                  onConfirm={confirmComboValid}
-                                  placement="leftTop"
-                                  okText="Yes"
-                                  cancelText="No"
-                                  onOpenChange={() =>
-                                    onchangeCombo(
-                                      item.diseaseName,
-                                      item.addOnCode
-                                    )
-                                  }
-                                >
-                                  <div className={visitStyles.tick_icon}>
-                                    {SVGICON.tickIcon}
-                                  </div>
-                                </Popconfirm>
-                              </div>
+                <div className={visitStyles.container}>
+                  <div className={visitStyles.hccStickey_head}>
+                    {invalidComboDiseaseCodesList?.map((item) => {
+                      return (
+                        <div className={visitStyles.combo_details_card}>
+                          <div className="row">
+                            <div className="col-xl-3">
+                              <span className="font-bold">
+                                {item.diagnosisCodeCombo}
+                              </span>
+                            </div>
+                            <div className="col-xl-3">
+                              <span className="font-bold">
+                                {item.addOnCode}
+                              </span>
+                            </div>
+                            <div className="col-xl-5">
+                              <span>{item.diseaseName}</span>
+                            </div>
+                            <div className="col-xl-1 comboclose">
+                              <Popconfirm
+                                title="You want move to Valid?"
+                                description={item.diseaseName}
+                                onConfirm={confirmComboValid}
+                                placement="leftTop"
+                                okText="Yes"
+                                cancelText="No"
+                                onOpenChange={() =>
+                                  onchangeCombo(
+                                    item.diseaseName,
+                                    item.addOnCode
+                                  )
+                                }
+                              >
+                                <div className={visitStyles.tick_icon}>
+                                  {SVGICON.tickIcon}
+                                </div>
+                              </Popconfirm>
                             </div>
                           </div>
-                        );
-                      })}
-                    </div>{" "}
+                        </div>
+                      );
+                    })}
                   </div>
-                </>
+                </div>
               ) : null}
             </div>
           </div>
@@ -1389,13 +1156,13 @@ const Combo = ({ activeComboTree }) => {
                   <div className={visitStyles.combo_head_card}>
                     <div className="row">
                       <div className="col-xl-3">
-                        <label>Combo Codes</label>
+                        <label htmlFor="combo">Combo Codes</label>
                       </div>
                       <div className="col-xl-3">
-                        <label>Additional Codes</label>
+                        <label htmlFor="additional">Additional Codes</label>
                       </div>
                       <div className="col-xl-5">
-                        <label>Description</label>
+                        <label htmlFor="description">Description</label>
                       </div>
                       <div className="col-xl-1"></div>
                     </div>
@@ -1405,7 +1172,10 @@ const Combo = ({ activeComboTree }) => {
                       <div className={visitStyles.hccStickey_head}>
                         {comboDiseaseCodesList?.map((item) => {
                           return (
-                            <div className={visitStyles.combo_details_card}>
+                            <div
+                              className={visitStyles.combo_details_card}
+                              key={item?.id}
+                            >
                               <div className="row">
                                 <div className="col-xl-3 d-grid">
                                   <span className="font-bold">
@@ -1416,7 +1186,10 @@ const Combo = ({ activeComboTree }) => {
                                   {item.addOnCodes?.map(
                                     (addCombo, index) =>
                                       addCombo && (
-                                        <span className="font-bold">
+                                        <span
+                                          className="font-bold"
+                                          key={addOnCodeColor[index]}
+                                        >
                                           <Tag color={addOnCodeColor[index]}>
                                             {addCombo}
                                           </Tag>
@@ -1526,29 +1299,6 @@ const Combo = ({ activeComboTree }) => {
                 </div>
               </div>
               <div className="col-xl-7">
-                {/* <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
-                  <div
-                    style={{
-                      height: "80vh",
-                      width: "900px",
-                      marginLeft: "auto",
-                      marginRight: "auto",
-                    }}
-                  >
-                    <Viewer
-                      fileUrl={selectFileURL}
-                      plugins={[defaultLayoutPluginInstance]}
-                      initialPage={fileInitialPage}
-                      onDocumentLoad={handleDocumentLoadFile}
-                      renderLoader={(percentages) => (
-                        <div style={{ width: "240px" }}>
-                          <ProgressBar progress={Math.round(percentages)} />
-                        </div>
-                      )}
-                    />
-                  </div>
-                </Worker> */}
-
                 {selectFileURL && (
                   <PdfViewer
                     src={selectFileURL}
