@@ -25,18 +25,17 @@ import auditDeclined from "../../.../../../../images/trackingImages/AuditDecline
 import { Paginator } from "primereact/paginator";
 import TableStyle from "../../../../components/table/table.module.css";
 import { useSelector } from "react-redux";
-
 import Image from "next/image";
 import { SVGICON } from "../../../../jsx/constant/theme";
 import {
   renderUserPrfoileAvatar,
   dateFormate,
 } from "../../../../components/headerFilters/functions";
-import visitStyles from "../../../../styles/visitdata.module.css";
 import { selectedRow } from "../../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
 import dayjs from "dayjs";
 import { workStatusApiAdmin } from "../../../../services/adminServices/DashboardService";
+import { getFlag, getFlags } from "../../../../components/reuseableFunctions";
 
 const ReviewerReport = ({
   setModal,
@@ -106,14 +105,6 @@ const ReviewerReport = ({
 
     setSelectedRows(updatedRows);
   };
-  // const handleCardRowClick = (e) => {
-  //   const targetTd = e.target.closest("div");
-  //   if (targetTd) {
-  //     const dataIndex = targetTd.parentElement.rowIndex - 1;
-  //     const clickedData = reportListAll[dataIndex];
-  //     gotoPatientDetails(clickedData);
-  //   }
-  // };
 
   const card1Data = [
     {
@@ -313,367 +304,7 @@ const ReviewerReport = ({
       count: "10",
     },
   ];
-  const getFlags = (data) => {
-    if (!data || !data["2023"]) return null;
-    switch (data["2023"][data["2023"]?.length - 1]?.flag) {
-      case "PATIENT_NAME_MISSED":
-        return (
-          <Tooltip title="PATIENT_NAME_MISSED" placement="bottom">
-            <i className={visitStyles.name_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </i>
-          </Tooltip>
-        );
-      case "PATIENT_DOB_MISSED":
-        return (
-          <Tooltip title="PATIENT_DOB_MISSED" placement="bottom">
-            <i className={visitStyles.dob_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </i>
-          </Tooltip>
-        );
-      case "MRN_ID_MISMATCH":
-        return (
-          <Tooltip title="MRN_ID_MISMATCH" placement="bottom">
-            <i className={visitStyles.id_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </i>
-          </Tooltip>
-        );
-      case "PROVIDER_SIGN_MISSED":
-        return (
-          <Tooltip title="PROVIDER_SIGN_MISSED" placement="bottom">
-            <i className={visitStyles.sign_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </i>
-          </Tooltip>
-        );
-      case "PROVIDER_SIGNATURE_MISSED":
-        return (
-          <Tooltip title="PROVIDER_SIGNATURE_MISSED" placement="bottom">
-            <i className={visitStyles.signature_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </i>
-          </Tooltip>
-        );
-      case "PROVIDER_CREDENTIAL_MISSED":
-        return (
-          <Tooltip title="PROVIDER_CREDENTIAL_MISSED" placement="bottom">
-            <i className={visitStyles.cred_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </i>
-          </Tooltip>
-        );
 
-      case "PROVIDER_SIGN_STATUS_PENDING":
-        return (
-          <Tooltip title="PROVIDER_SIGN_STATUS_PENDING" placement="bottom">
-            <i className={visitStyles.sign_status}>
-              {SVGICON.emptyFlagSmallLarge}
-            </i>
-          </Tooltip>
-        );
-
-      case "NO_HCC_FOUND":
-        return (
-          <Tooltip title="NO_HCC_FOUND" placement="bottom">
-            <i className={visitStyles.no_hcc_found}>
-              {SVGICON.emptyFlagSmallLarge}
-            </i>
-          </Tooltip>
-        );
-
-      case "NO_VALID_DOCUMENT_FOUND":
-        return (
-          <Tooltip title="NO_VALID_DOCUMENT_FOUND" placement="bottom">
-            <i className={visitStyles.no_doc_found}>
-              {SVGICON.emptyFlagSmallLarge}
-            </i>
-          </Tooltip>
-        );
-
-      case "PATIENT_DISEASED":
-        return (
-          <Tooltip title="PATIENT_DISEASED" placement="bottom">
-            <i className={visitStyles.patient_diseased}>
-              {SVGICON.emptyFlagSmallLarge}
-            </i>
-          </Tooltip>
-        );
-
-      case "PATIENT_INACTIVE":
-        return (
-          <Tooltip title="PATIENT_INACTIVE" placement="bottom">
-            <i className={visitStyles.patient_inactive}>
-              {SVGICON.emptyFlagSmallLarge}
-            </i>
-          </Tooltip>
-        );
-      case "":
-        return (
-          <Tooltip title="" placement="bottom">
-            <i className={visitStyles.patient_inactive}>{SVGICON.emptyFlag}</i>
-          </Tooltip>
-        );
-    }
-  };
-  const getFlag = (data) => {
-    switch (data.flags) {
-      case "PATIENT_NAME_MISSED":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <div className={visitStyles.name_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              Patient name missed
-            </div>
-          </div>
-        );
-      case "PATIENT_DOB_MISSED":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <div className={visitStyles.dob_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              Patient dob missed
-            </div>
-          </div>
-        );
-      case "MRN_ID_MISMATCH":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <div className={visitStyles.id_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              MRN id Mismatch
-            </div>
-          </div>
-        );
-      case "PROVIDER_SIGN_MISSED":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <div className={visitStyles.sign_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              Provider Sign Missed
-            </div>
-          </div>
-        );
-      case "PROVIDER_SIGNATURE_MISSED":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {" "}
-            <div className={visitStyles.signature_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              Provider Signature Missed
-            </div>
-          </div>
-        );
-      case "PROVIDER_CREDENTIAL_MISSED":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {" "}
-            <div className={visitStyles.cred_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              Provider Credential Missed
-            </div>
-          </div>
-        );
-
-      case "PROVIDER_SIGN_STATUS_PENDING":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {" "}
-            <div className={visitStyles.sign_status}>
-              {SVGICON.emptyFlagSmallLarge}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              Provider Sign Status Pending
-            </div>
-          </div>
-        );
-
-      case "NO_HCC_FOUND":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {" "}
-            <div className={visitStyles.no_hcc_found}>
-              {SVGICON.emptyFlagSmallLarge}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              No HCC Found
-            </div>
-          </div>
-        );
-
-      case "NO_VALID_DOCUMENT_FOUND":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {" "}
-            <div className={visitStyles.no_doc_found}>
-              {SVGICON.emptyFlagSmallLarge}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              No Valid Document Found
-            </div>
-          </div>
-        );
-
-      case "PATIENT_DISEASED":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {" "}
-            <div className={visitStyles.patient_diseased}>
-              {SVGICON.emptyFlagSmallLarge}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              Patient Diseased
-            </div>
-          </div>
-        );
-
-      case "PATIENT_INACTIVE":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {" "}
-            <div className={visitStyles.patient_inactive}>
-              {SVGICON.emptyFlagSmallLarge}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              Patient Inactive
-            </div>
-          </div>
-        );
-      case "":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {" "}
-            <div className={visitStyles.patient_inactive}>
-              {SVGICON.emptyFlag}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              None
-            </div>
-          </div>
-        );
-    }
-  };
   const auditstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
       rowData?.auditDeclinedNotes
@@ -892,7 +523,7 @@ const ReviewerReport = ({
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
   }, [selectedRows]);
-  console.log(reportListAll?.data, "reportList");
+
   return (
     <>
       <div>
@@ -917,11 +548,10 @@ const ReviewerReport = ({
                       <div className={styles.cardContainer}>
                         {reportListAll?.data?.map((item, id) => (
                           <div key={id} className={styles.card}>
-                            {console.log(item, "item")}
                             <div
                               className={styles.contentGroup}
                               // onClick={handleCardRowClick}
-                              style={{cursor:'pointer'}}
+                              style={{ cursor: "pointer" }}
                             >
                               <div className={styles.inputContainer}>
                                 <input
@@ -957,7 +587,13 @@ const ReviewerReport = ({
                                     className={`col-xl-6 ${styles.dataContainer}`}
                                   >
                                     <span className={styles.raf}>
-                                      {item.rafSum ? item.rafSum : "---"}
+                                      <Tooltip
+                                        title={"Raf Score"}
+                                        placement="bottom"
+                                      >
+                                        {" "}
+                                        {item.rafSum ? item.rafSum : "---"}
+                                      </Tooltip>
                                     </span>
                                     <span style={{ marginRight: "10px" }}>
                                       {item?.flag ? (
@@ -996,12 +632,12 @@ const ReviewerReport = ({
                                   <div
                                     className={`col-xl-4 ${styles.headText}`}
                                   >
-                                    AUDITOR NAME
+                                    SUPERVISOR
                                   </div>
                                   <div
                                     className={`col-xl-4 ${styles.headText}`}
                                   >
-                                    PATIENT ALLOCATE TO
+                                    REVIEWER
                                   </div>
                                 </div>
                                 <div
@@ -1096,13 +732,9 @@ const ReviewerReport = ({
                           <div className={`col-xl-2 ${styles.subCard}`}>
                             <div>Completed date</div>
                             <div className={styles.dateContainer}>
-                              <div className={styles.bullet}></div>
-                              <div style={{ fontSize: "10px" }}>03/04/2024</div>
-                            </div>
-
-                            <div className={styles.dateContainer}>
-                              <div className={styles.bullet}></div>
-                              <div style={{ fontSize: "10px" }}>03/04/2024</div>
+                              <div style={{ fontSize: "10px", padding: "5px" }}>
+                                03/04/2024 - 03/04/2024
+                              </div>
                             </div>
                           </div>
 
