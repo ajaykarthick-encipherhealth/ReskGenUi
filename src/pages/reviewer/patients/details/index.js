@@ -159,7 +159,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
     value: item?.id,
     label: (
       <>
-        {item?.flagName ? item?.flagName.replaceAll("_"," ") : ""}
+        {item?.flagName ? item?.flagName.replaceAll("_", " ") : ""}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="23"
@@ -1685,23 +1685,29 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                               <div className="col-xl-2 col-sm-12">
                                 <FontAwesomeIcon icon={faIdCardClip} />
                                 <label>Patient ID</label>
-                                <Tooltip placement="bottom" title={patientDocumentResult.patientId}>
-                                <h6
-                                  className="ageDtails"
-                                  style={{ paddingLeft: "25px" }}
+                                <Tooltip
+                                  placement="bottom"
+                                  title={patientDocumentResult.patientId}
                                 >
-                                  {patientDocumentResult.patientId}
-                                </h6>
+                                  <h6
+                                    className="ageDtails"
+                                    style={{ paddingLeft: "25px" }}
+                                  >
+                                    {patientDocumentResult.patientId}
+                                  </h6>
                                 </Tooltip>
                               </div>
                               <div className="col-xl-2 col-sm-12">
                                 <FontAwesomeIcon icon={faUserCircle} />
 
                                 <label>Patient Name</label>
-                                <Tooltip placement="bottom" title={patientDocumentResult.patientId}>
-                                <h6 className="ageDtails">
-                                  {patientDocumentResult.patientName}
-                                </h6>
+                                <Tooltip
+                                  placement="bottom"
+                                  title={patientDocumentResult.patientId}
+                                >
+                                  <h6 className="ageDtails">
+                                    {patientDocumentResult.patientName}
+                                  </h6>
                                 </Tooltip>
                               </div>
                               <div className="col-xl-2 col-sm-12">
@@ -2951,22 +2957,29 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                             >
                               <div className={`${visitStyles.commentNameHead}`}>
                                 <span className={visitStyles.commentsName}>
-                                  {data?.flagDetails?.flagName && <>
-                                    {data?.flagDetails?.flagName ? data?.flagDetails?.flagName.replaceAll("_", " ") : ''}
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="23"
-                                      height="23"
-                                      viewBox="0 0 800 800"
-                                      fill={data?.flagDetails?.flagColour}
-                                    >
-                                      <path
-                                        d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
-                                        stroke="#000"
-                                        stroke-width="10"
-                                      />
-                                    </svg>
-                                  </>}
+                                  {data?.flagDetails?.flagName && (
+                                    <>
+                                      {data?.flagDetails?.flagName
+                                        ? data?.flagDetails?.flagName.replaceAll(
+                                            "_",
+                                            " "
+                                          )
+                                        : ""}
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="23"
+                                        height="23"
+                                        viewBox="0 0 800 800"
+                                        fill={data?.flagDetails?.flagColour}
+                                      >
+                                        <path
+                                          d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
+                                          stroke="#000"
+                                          stroke-width="10"
+                                        />
+                                      </svg>
+                                    </>
+                                  )}
                                 </span>
                                 <Tooltip
                                   placement="bottom"

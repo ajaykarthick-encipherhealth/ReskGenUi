@@ -42,6 +42,7 @@ import Export from "../../../admin/report/Export";
 import TableStyle from "../../../../components/table/table.module.css";
 import { selectedReport } from "../../../../store/actions/adminAction/ReportActions";
 import { useSelector } from "react-redux";
+import { getFlag } from "../receivedReport";
 
 const SentReport = ({
   details,
@@ -76,7 +77,6 @@ const SentReport = ({
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
-  console.log(details, "data");
   const hashes = selectedUsers.map((user) => {
     const hash = (user?.userDetails?.firstName.charCodeAt(0) % 6) + 1;
     return hash;
@@ -385,281 +385,25 @@ const SentReport = ({
         );
     }
   };
-  const getFlag = (data) => {
-    switch (data.flags) {
-      case "PATIENT_NAME_MISSED":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <div className={visitStyles.name_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              Patient name missed
-            </div>
-          </div>
-        );
-      case "PATIENT_DOB_MISSED":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <div className={visitStyles.dob_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              Patient dob missed
-            </div>
-          </div>
-        );
-      case "MRN_ID_MISMATCH":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <div className={visitStyles.id_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              MRN id Mismatch
-            </div>
-          </div>
-        );
-      case "PROVIDER_SIGN_MISSED":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <div className={visitStyles.sign_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              Provider Sign Missed
-            </div>
-          </div>
-        );
-      case "PROVIDER_SIGNATURE_MISSED":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {" "}
-            <div className={visitStyles.signature_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              Provider Signature Missed
-            </div>
-          </div>
-        );
-      case "PROVIDER_CREDENTIAL_MISSED":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {" "}
-            <div className={visitStyles.cred_missed}>
-              {SVGICON.emptyFlagSmallLarge}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              Provider Credential Missed
-            </div>
-          </div>
-        );
 
-      case "PROVIDER_SIGN_STATUS_PENDING":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {" "}
-            <div className={visitStyles.sign_status}>
-              {SVGICON.emptyFlagSmallLarge}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              Provider Sign Status Pending
-            </div>
-          </div>
-        );
-
-      case "NO_HCC_FOUND":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {" "}
-            <div className={visitStyles.no_hcc_found}>
-              {SVGICON.emptyFlagSmallLarge}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              No HCC Found
-            </div>
-          </div>
-        );
-
-      case "NO_VALID_DOCUMENT_FOUND":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {" "}
-            <div className={visitStyles.no_doc_found}>
-              {SVGICON.emptyFlagSmallLarge}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              No Valid Document Found
-            </div>
-          </div>
-        );
-
-      case "PATIENT_DISEASED":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {" "}
-            <div className={visitStyles.patient_diseased}>
-              {SVGICON.emptyFlagSmallLarge}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              Patient Diseased
-            </div>
-          </div>
-        );
-
-      case "PATIENT_INACTIVE":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {" "}
-            <div className={visitStyles.patient_inactive}>
-              {SVGICON.emptyFlagSmallLarge}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              Patient Inactive
-            </div>
-          </div>
-        );
-      case "":
-        return (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {" "}
-            <div className={visitStyles.patient_inactive}>
-              {SVGICON.emptyFlag}
-            </div>
-            <div
-              style={{ fontSize: "12px", marginLeft: "5px" }}
-              className={visitStyles.name_missed}
-            >
-              None
-            </div>
-          </div>
-        );
+  const startDate = DateRanges?.startDate
+    ? new Date(DateRanges?.startDate).toISOString()
+    : "";
+  const endDate = DateRanges?.endDate
+    ? new Date(DateRanges?.endDate).toISOString()
+    : "";
+  const getWorkFlow = async () => {
+    try {
+      const data = await workStatusApiAdmin(startDate, endDate, router);
+      setDateRange(data.response?.processedStatusCount);
+      setChartValue(data.response);
+    } catch (error) {
+      console.log(error);
     }
   };
-  const startDate = DateRanges?.startDate
-  ? new Date(DateRanges?.startDate).toISOString()
-  : "";
-const endDate = DateRanges?.endDate
-  ? new Date(DateRanges?.endDate).toISOString()
-  : "";
-const getWorkFlow = async () => {
-  try {
-    const data = await workStatusApiAdmin(startDate, endDate, router);
-    setDateRange(data.response?.processedStatusCount);
-    setChartValue(data.response);
-  } catch (error) {
-    console.log(error);
-  }
-};
-useEffect(() => {
-  getWorkFlow();
-}, [startDate, endDate, router]);
+  useEffect(() => {
+    getWorkFlow();
+  }, [startDate, endDate, router]);
   useEffect(() => {
     // Automatically select the first card and display its content on mount
     if (details?.data && details.data.length > 0) {
