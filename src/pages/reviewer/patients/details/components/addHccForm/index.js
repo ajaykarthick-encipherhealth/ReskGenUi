@@ -459,7 +459,7 @@ const AddHccForm = ({
             label="Activice"
             name="Activice"
           > */}
-            <span className="mb-2">Activice : </span>
+            <span className="mb-2">Activice Header: </span>
             <Switch
               name="Activice"
               checkedChildren="No"
