@@ -42,7 +42,7 @@ import Export from "../../../admin/report/Export";
 import TableStyle from "../../../../components/table/table.module.css";
 import { selectedReport } from "../../../../store/actions/adminAction/ReportActions";
 import { useSelector } from "react-redux";
-import { getFlag } from "../receivedReport";
+import { getFlag } from "../../../../components/reuseableFunctions";
 
 const SentReport = ({
   details,
