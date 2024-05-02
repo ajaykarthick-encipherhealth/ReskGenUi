@@ -2057,7 +2057,6 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                                 </span>
                               </Button>
                             </Dropdown>
-                           
                           </div>
                         ) : (
                           <div className={`${visitStyles.actionbtnContainer}`}>
@@ -2109,7 +2108,6 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                                     </span>
                                   </Button>
                                 </Dropdown>
-                     
                               </div>
                             ) : patienIdDetails?.processedStatus == "HOLD" ? (
                               <Dropdown
