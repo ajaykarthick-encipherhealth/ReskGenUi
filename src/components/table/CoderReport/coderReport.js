@@ -347,7 +347,6 @@ function CoderReport({
             </Tooltip>
           );
         default:
-          // Handle the case where flag is not matched
           return (
             <Tooltip title="" placement="bottom">
               <i className={visitStyles.patient_inactive}>
@@ -357,7 +356,6 @@ function CoderReport({
           );
       }
     } else {
-      // Handle the case where data["2023"] doesn't exist or is not an array
       return (
         <Tooltip title="" placement="bottom">
           <i className={visitStyles.patient_inactive}>{SVGICON.emptyFlag}</i>
