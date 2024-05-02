@@ -38,9 +38,9 @@ const AddHccForm = ({
   const [isNpiNumber, setIsNpiNumber] = useState(false);
   const [formInitialValues, setFormInitialValues] = useState(null);
   const [providerDetails, setProviderDetails] = useState(null);
-  const [selectMeat, setSelectMeat] = useState("M")
+  const [selectMeat, setSelectMeat] = useState("M");
   const [isActivice, setIsActivice] = useState(false);
-  const [isFilled, setIsFilled] = useState([])
+  const [isFilled, setIsFilled] = useState([]);
   const [isFormValidate, setIsFormValidate] = useState({
     assessment: "",
     assessmentCapturedFromHeader: "",
@@ -89,11 +89,15 @@ const AddHccForm = ({
     form.isManuallyAdded = true;
     form.diagnosisCode = hccFormDetails.diagnosisCode;
     form.diseaseName = hccFormDetails.actualDescription;
-    form.isMeatCriteriaPresent = true;
+    form.isMeatCriteriaPresent =
+      (isFilled.includes("M") ||
+      isFilled.includes("E") ||
+      isFilled.includes("A") ||
+      isFilled.includes("T"));
     var dataFormat = {
       patientId: patientId,
       year: patientDetailsResult?.result?.response?.dos,
-      meatDetail: form,
+      meatDetail: { ...form, ...isFormValidate },
       diseaseFormat: hccFormDetails,
     };
 
@@ -168,7 +172,10 @@ const AddHccForm = ({
         );
         if (response.data) {
           var initalForm = {
-            providerName: response?.data?.response?.userName + " " + response?.data?.response?.credential,
+            providerName:
+              response?.data?.response?.userName +
+              " " +
+              response?.data?.response?.credential,
             selectProviderInfo: ["Authorized Provider"],
           };
           setProviderDetails(initalForm);
@@ -201,35 +208,63 @@ const AddHccForm = ({
   }, [providerDetails, form]);
 
   useEffect(() => {
-    if ((isFormValidate.assessment && isFormValidate.assessmentCapturedFromHeader) ||
-    (isFormValidate.evaluate && isFormValidate.evaluateCapturedFromHeader) ||
-    (isFormValidate.monitor && isFormValidate.monitorCapturedFromHeader) ||
-    (isFormValidate.treatment && isFormValidate.treatmentCapturedFromHeader)) {
-      setMeatDetail(false)
+    if (
+      (isFormValidate.assessment &&
+        isFormValidate.assessmentCapturedFromHeader) ||
+      (isFormValidate.evaluate && isFormValidate.evaluateCapturedFromHeader) ||
+      (isFormValidate.monitor && isFormValidate.monitorCapturedFromHeader) ||
+      (isFormValidate.treatment && isFormValidate.treatmentCapturedFromHeader)
+    ) {
+      setMeatDetail(false);
     }
-    if(isFormValidate.monitor == "" || isFormValidate.monitorCapturedFromHeader == ""){
-      setIsFilled((prev) => prev.filter((item) => item != "M"))
-    } else if (isFormValidate.monitor && isFormValidate.monitorCapturedFromHeader) {
-      setIsFilled((prev) => ([...prev, "M"]))
+    if (
+      isFormValidate.monitor == "" ||
+      isFormValidate.monitorCapturedFromHeader == ""
+    ) {
+      setIsFilled((prev) => prev.filter((item) => item != "M"));
+      if (isActivice) setMeatDetail(true);
+    } else if (
+      isFormValidate.monitor &&
+      isFormValidate.monitorCapturedFromHeader
+    ) {
+      setIsFilled((prev) => [...prev, "M"]);
     }
-    if (isFormValidate.evaluate == "" || isFormValidate.evaluateCapturedFromHeader == "") {
-      setIsFilled((prev) => prev.filter((item) => item != "E"))
-    } else if (isFormValidate.evaluate && isFormValidate.evaluateCapturedFromHeader) {
-      setIsFilled((prev) => ([...prev, "E"]))
+    if (
+      isFormValidate.evaluate == "" ||
+      isFormValidate.evaluateCapturedFromHeader == ""
+    ) {
+      setIsFilled((prev) => prev.filter((item) => item != "E"));
+    } else if (
+      isFormValidate.evaluate &&
+      isFormValidate.evaluateCapturedFromHeader
+    ) {
+      setIsFilled((prev) => [...prev, "E"]);
     }
-    if(isFormValidate.treatment == "" || isFormValidate.treatmentCapturedFromHeader == ""){
-      setIsFilled((prev) => prev.filter((item) => item != "T"))
-    } else if (isFormValidate.treatment && isFormValidate.treatmentCapturedFromHeader) {
-      setIsFilled((prev) => ([...prev, "T"]))
+    if (
+      isFormValidate.treatment == "" ||
+      isFormValidate.treatmentCapturedFromHeader == ""
+    ) {
+      setIsFilled((prev) => prev.filter((item) => item != "T"));
+    } else if (
+      isFormValidate.treatment &&
+      isFormValidate.treatmentCapturedFromHeader
+    ) {
+      setIsFilled((prev) => [...prev, "T"]);
     }
-    if (isFormValidate.assessment == "" || isFormValidate.assessmentCapturedFromHeader == "") {
-      setIsFilled((prev) => prev.filter((item) => item != "A"))
-    } else if (isFormValidate.assessment && isFormValidate.assessmentCapturedFromHeader) {
-      setIsFilled((prev) => ([...prev, "A"]))
+    if (
+      isFormValidate.assessment == "" ||
+      isFormValidate.assessmentCapturedFromHeader == ""
+    ) {
+      setIsFilled((prev) => prev.filter((item) => item != "A"));
+    } else if (
+      isFormValidate.assessment &&
+      isFormValidate.assessmentCapturedFromHeader
+    ) {
+      setIsFilled((prev) => [...prev, "A"]);
     }
-  }, [isFormValidate])
-  
-
+    // handleActivice(meatDetail);
+  }, [isFormValidate, meatDetail]);
+  console.log(isFormValidate, "isFormValidate");
   return (
     <>
       <div className={styles.formTitleContaniner}>
@@ -291,9 +326,10 @@ const AddHccForm = ({
             >
               <Input name="actualDescription" className={styles.formControl} />
             </Form.Item>
-            <div style={{ display: "flex" ,marginBottom:"10px"}}>
+            <div style={{ display: "flex", marginBottom: "10px" }}>
               <label>Provider NPI : </label>
-              <Switch style={{marginLeft:"15px"}}
+              <Switch
+                style={{ marginLeft: "15px" }}
                 checkedChildren="Yes"
                 unCheckedChildren="No"
                 defaultChecked={isNpiNumber}
@@ -305,9 +341,11 @@ const AddHccForm = ({
 
             {isNpiNumber && (
               <Form.Item
-                label={ <label>
-                NPI Number <span style={{ color: "red" }}>*</span>
-              </label>}
+                label={
+                  <label>
+                    NPI Number <span style={{ color: "red" }}>*</span>
+                  </label>
+                }
                 name="npiNumber"
                 rules={[
                   {
@@ -331,7 +369,6 @@ const AddHccForm = ({
                   maxLength={10}
                   className={styles.formControl}
                   onWheel={(e) => e.target.blur()}
-
                 />
               </Form.Item>
             )}
@@ -402,137 +439,157 @@ const AddHccForm = ({
         </>
       ) : isMeatNew ? (
         <Form
-        name="validateOnly"
-        layout="vertical"
-        autoComplete="off"
-        initialValues={{
-          remember: true,
-        }}
-        onFinish={onFinishMeat}
-        onFinishFailed={onFinishFailed}
-        onChange={(e, val) => {
-          setIsFormValidate((prev) => ({
-            ...prev,
-            [e.target.name]: e.target.value,
-          }));
-        }}
-      >
-        <>
-          {/* <Form.Item
+          name="validateOnly"
+          layout="vertical"
+          autoComplete="off"
+          initialValues={{
+            remember: true,
+          }}
+          onFinish={onFinishMeat}
+          onFinishFailed={onFinishFailed}
+          onChange={(e, val) => {
+            setIsFormValidate((prev) => ({
+              ...prev,
+              [e.target.name]: e.target.value,
+            }));
+          }}
+        >
+          <>
+            {/* <Form.Item
             label="Activice"
             name="Activice"
           > */}
-          <span className="mb-2">Activice : </span>
-          <Switch
-            name="Activice"
-            checkedChildren="No"
-            unCheckedChildren="Yes"
-            onChange={(e) => {setIsActivice(e); setMeatDetail(e)}}
-          />
-          <div className="my-2">
-          <SelectButton select={selectMeat} setSelect={setSelectMeat} completed={isFilled}/>
-          </div>
-          {
-            selectMeat == "M" && 
-          <>
-          <Form.Item
-            label="Monitor Header"
-            name="monitorCapturedFromHeader"
-          >
-            <Input
-              name="monitorCapturedFromHeader"
-              className={styles.formControl}
+            <span className="mb-2">Activice : </span>
+            <Switch
+              name="Activice"
+              checkedChildren="No"
+              unCheckedChildren="Yes"
+              onChange={(e) => {
+                setIsActivice(e);
+                if (e) {
+                  setMeatDetail(e);
+                } else {
+                  setMeatDetail(false);
+                }
+              }}
             />
-          </Form.Item>
-          <Form.Item label="Monitor" name="monitor">
-            <Input name="monitor" className={styles.formControl} />
-          </Form.Item>
-          </>
-}
-{selectMeat == "E" && <>
-          <Form.Item
-            label="Evaluate Header"
-            name="evaluateCapturedFromHeader"
-          >
-            <Input
-              name="evaluateCapturedFromHeader"
-              className={styles.formControl}
-            />
-          </Form.Item>
-          <Form.Item label="Evaluate" name="evaluate">
-            <Input name="evaluate" className={styles.formControl} />
-          </Form.Item>
-          </>}
-          {selectMeat == "A" && <>
-          <Form.Item
-            label={
-              <label>
-                Assessment Header&nbsp;
-                {/* <span style={{ color: "red" }}>*</span> */}
-              </label>
-            }
-            name="assessmentCapturedFromHeader"
-            rules={[
-              {
-                required: false,
-                message: "Please Enter Assessment Header.",
-              },
-            ]}
-          >
-            <Input
-              name="assessmentCapturedFromHeader"
-              className={styles.formControl}
-            />
-          </Form.Item>
-          <Form.Item
-            label={
-              <label>
-                Assessment&nbsp;
-                {/* <span style={{ color: "red" }}>*</span> */}
-              </label>
-            }
-            name="assessment"
-            rules={[
-              {
-                required: false,
-                message: "Please Enter Assessment.",
-              },
-            ]}
-          >
-            <Input name="assessment" className={styles.formControl} />
-          </Form.Item>
-          </>}
-          {selectMeat == "T" && <>
-          <Form.Item
-            label="Treatment Header"
-            name="treatmentCapturedFromHeader"
-          >
-            <Input
-              name="treatmentCapturedFromHeader"
-              className={styles.formControl}
-            />
-          </Form.Item>
-          <Form.Item label="Treatment" name="treatment">
-            <Input name="treatment" className={styles.formControl} />
-          </Form.Item>
-          </>}
-          <Form.Item>
-            <Space>
-              <RegularButton type="submit" name="Save" width={100} disabled={meatDetail}/>
-              <RegularButton
-                type="outline"
-                name="Back"
-                width={100}
-                onClick={() => {
-                  setIsMeatForm(false);
-                }}
+            <div className="my-2 d-flex justify-content-center">
+              <SelectButton
+                select={selectMeat}
+                setSelect={setSelectMeat}
+                completed={isFilled}
               />
-            </Space>
-          </Form.Item>
-        </>
-      </Form>
-      ) :
-       (
+            </div>
+            {selectMeat == "M" && (
+              <>
+                <Form.Item
+                  label="Monitor Header"
+                  name="monitorCapturedFromHeader"
+                >
+                  <Input
+                    name="monitorCapturedFromHeader"
+                    className={styles.formControl}
+                  />
+                </Form.Item>
+                <Form.Item label="Monitor" name="monitor">
+                  <Input name="monitor" className={styles.formControl} />
+                </Form.Item>
+              </>
+            )}
+            {selectMeat == "E" && (
+              <>
+                <Form.Item
+                  label="Evaluate Header"
+                  name="evaluateCapturedFromHeader"
+                >
+                  <Input
+                    name="evaluateCapturedFromHeader"
+                    className={styles.formControl}
+                  />
+                </Form.Item>
+                <Form.Item label="Evaluate" name="evaluate">
+                  <Input name="evaluate" className={styles.formControl} />
+                </Form.Item>
+              </>
+            )}
+            {selectMeat == "A" && (
+              <>
+                <Form.Item
+                  label={
+                    <label>
+                      Assessment Header&nbsp;
+                      {/* <span style={{ color: "red" }}>*</span> */}
+                    </label>
+                  }
+                  name="assessmentCapturedFromHeader"
+                  rules={[
+                    {
+                      required: false,
+                      message: "Please Enter Assessment Header.",
+                    },
+                  ]}
+                >
+                  <Input
+                    name="assessmentCapturedFromHeader"
+                    className={styles.formControl}
+                  />
+                </Form.Item>
+                <Form.Item
+                  label={
+                    <label>
+                      Assessment&nbsp;
+                      {/* <span style={{ color: "red" }}>*</span> */}
+                    </label>
+                  }
+                  name="assessment"
+                  rules={[
+                    {
+                      required: false,
+                      message: "Please Enter Assessment.",
+                    },
+                  ]}
+                >
+                  <Input name="assessment" className={styles.formControl} />
+                </Form.Item>
+              </>
+            )}
+            {selectMeat == "T" && (
+              <>
+                <Form.Item
+                  label="Treatment Header"
+                  name="treatmentCapturedFromHeader"
+                >
+                  <Input
+                    name="treatmentCapturedFromHeader"
+                    className={styles.formControl}
+                  />
+                </Form.Item>
+                <Form.Item label="Treatment" name="treatment">
+                  <Input name="treatment" className={styles.formControl} />
+                </Form.Item>
+              </>
+            )}
+            <Form.Item>
+              <div className=" d-flex justify-content-center">
+                <RegularButton
+                  type="submit"
+                  name="Save"
+                  width={100}
+                  disabled={meatDetail}
+                />
+                <RegularButton
+                  type="outline"
+                  name="Back"
+                  width={100}
+                  onClick={() => {
+                    setIsMeatForm(false);
+                  }}
+                />
+              </div>
+            </Form.Item>
+          </>
+        </Form>
+      ) : (
         <>
           <Form
             name="validateOnly"
