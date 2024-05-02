@@ -34,11 +34,11 @@ const Notification = ({}) => {
   const [selectedList, setSelectedList] = useState([]);
   const [selectedListTeam, setSelectedListTeam] = useState([]);
   const [openDropdown, setOpenDropdown] = useState(false);
-  const [selectedUser, setSelectedUser] = useState();
+  const [selectedUser, setSelectedUser] = useState([]);
   const [search, setSearch] = useState("");
   const [searchUser, setSearchUser] = useState("");
   const [selectCheckBox, setSelectCheckBox] = useState("");
-  const [errMessage, setErrmessage] = useState("");
+  const [errMessage, setErrmessage] = useState({ msg: "", userErr: "" });
   const [errMessageRadio, setErrmessageRadio] = useState("");
 
   const [notificationList, setNotificationList] = useState([]);
@@ -119,23 +119,57 @@ const Notification = ({}) => {
 
   const validDateForm = () => {
     let check = true;
-    setErrmessage("");
     setErrmessageRadio("");
+    // setErrmessage({ msg: "", userErr: "" });
     if (inputValue.content == "") {
       check = false;
-      setErrmessage("Please Enter Message");
+      setErrmessage({ msg: "Please Enter Message", userId: "" });
     }
+
     if (selectCheckBox == "") {
       check = false;
       setErrmessageRadio("Please Select One Option");
     }
+
     return check;
   };
 
+  const ValidateUser = () => {
+    let check = true;
+    if (selectCheckBox === "TEAM") {
+      if (inputValue.managerId === "") {
+        check = false;
+        setErrmessage({ msg: "", userErr: "Please select manager" });
+      }
+      if (inputValue.managerId === "" && inputValue.content === "") {
+        check = false;
+        setErrmessage({
+          msg: "Please Enter Message",
+          userErr: "Please select manager",
+        });
+      }
+    } else if (selectCheckBox === "CUSTOM") {
+      if (inputValue.usersIds.length === 0) {
+        check = false;
+        setErrmessage({ msg: "", userErr: "Please select user" });
+      }
+      if (inputValue.usersIds.length === 0 && inputValue.content === "") {
+        check = false;
+        setErrmessage({
+          msg: "Please Enter Message",
+          userErr: "Please select user",
+        });
+      }
+    } else {
+      return (check = true);
+    }
+
+    return check;
+  };
   const handleSubmit = async () => {
-    if (validDateForm()) {
+    if (ValidateUser() && validDateForm()) {
       setIsBtnLoading(true);
-      setErrmessage("");
+      setErrmessage({ msg: "", userErr: "" });
       let data = {
         managerId: null,
         isAdmin: selectCheckBox == "ADMIN" ? true : false,
@@ -233,38 +267,43 @@ const Notification = ({}) => {
               <div>
                 <div>
                   {selectCheckBox == "CUSTOM" ? (
-                    <div className="d-flex" style={{ width: "600px" }}>
-                      <Select
-                        className={`ant_select_form ${styles.ant_select_form}`}
-                        mode="multiple"
-                        placeholder="Please select"
-                        onChange={handleSelectedOption}
-                        onSearch={handleSearch}
-                        value={selectedList}
-                        open={openDropdown}
-                        onDropdownVisibleChange={(visible) =>
-                          setOpenDropdown(visible)
-                        }
-                        maxTagCount={3}
-                        style={{ height: "42px", width: "515px" }}
-                      >
-                        {filteredOptions?.map((data) => (
-                          <Option key={data?.value} value={data?.value}>
-                            {data?.label}
-                          </Option>
-                        ))}
-                      </Select>
-                      {selectedList?.length > 1 && (
-                        <div>
-                          <Button
-                            className={styles.selectClearBtn}
-                            onClick={() => clearSelectAll()}
-                          >
-                            Clear
-                          </Button>
-                        </div>
-                      )}
-                    </div>
+                    <>
+                      <div className="d-flex" style={{ width: "600px" }}>
+                        <Select
+                          className={`ant_select_form ${styles.ant_select_form}`}
+                          mode="multiple"
+                          placeholder="Please select"
+                          onChange={handleSelectedOption}
+                          onSearch={handleSearch}
+                          value={selectedList}
+                          open={openDropdown}
+                          onDropdownVisibleChange={(visible) =>
+                            setOpenDropdown(visible)
+                          }
+                          maxTagCount={3}
+                          style={{ height: "42px", width: "515px" }}
+                        >
+                          {filteredOptions?.map((data) => (
+                            <Option key={data?.value} value={data?.value}>
+                              {data?.label}
+                            </Option>
+                          ))}
+                        </Select>
+                        {selectedList?.length > 1 && (
+                          <div>
+                            <Button
+                              className={styles.selectClearBtn}
+                              onClick={() => clearSelectAll()}
+                            >
+                              Clear
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                      <p className={styles.errorMessage}>
+                        {errMessage?.userErr}
+                      </p>
+                    </>
                   ) : null}
                   {selectCheckBox == "TEAM" ? (
                     <div style={{ width: "600px" }}>
@@ -283,6 +322,9 @@ const Notification = ({}) => {
                           </Option>
                         ))}
                       </Select>
+                      <p className={styles.errorMessage}>
+                        {errMessage?.userErr}
+                      </p>
                     </div>
                   ) : null}
                 </div>
@@ -319,7 +361,7 @@ const Notification = ({}) => {
                 placeholder="Message"
                 onChange={handleChange}
               ></textarea>
-              <p className={styles.errorMessage}>{errMessage}</p>
+              <p className={styles.errorMessage}>{errMessage?.msg}</p>
             </div>
             <div className={styles.sendListContainer}>
               <SendList result={notificationList} />
