@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import {  Spin, notification } from "antd";
+import { Spin, notification } from "antd";
 import { Paginator } from "primereact/paginator";
 import visitStyles from "../../../styles/visitdata.module.css";
 import AddPatientListTable from "../../../components/table/admin/AddPatients/addPatients";
@@ -95,8 +95,8 @@ export default function Patient() {
   const [selAllocatedBy, setSelAllocatedBy] = useState("");
   const [selCreatedBy, setSelCreatedBy] = useState("");
   const [computedSortOrder, setComputedSortOrder] = useState("DESC");
-  const [selecteddates,setSelectedDates]=useState([])
-  const [selecteddates2,setSelectedDate2s]=useState([])
+  const [selecteddates, setSelectedDates] = useState([]);
+  const [selecteddates2, setSelectedDate2s] = useState([]);
 
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [errors, setErrors] = useState({ year: "" });
@@ -104,11 +104,15 @@ export default function Patient() {
   useEffect(() => {
     if (window !== "undefined") {
       if (navigate) {
-        setPageNo(navigate?.query?.pageNo?navigate?.query?.pageNo:0)
-        setPaginationFirst(navigate?.query?.paginationFirst?navigate?.query?.paginationFirst:0)
+        setPageNo(navigate?.query?.pageNo ? navigate?.query?.pageNo : 0);
+        setPaginationFirst(
+          navigate?.query?.paginationFirst
+            ? navigate?.query?.paginationFirst
+            : 0
+        );
       }
     }
-  }, [navigate])
+  }, [navigate]);
 
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
@@ -568,7 +572,6 @@ export default function Patient() {
                             disable="Yes"
                             selectedDates={selecteddates}
                             setSelectedDates={setSelectedDates}
-                            
                             // created date
                             pickerlabe2="Created Date"
                             defaultStartDate2={""}
@@ -613,10 +616,10 @@ export default function Patient() {
                               statusBodyTemplate={processstatusBodyTemplate}
                               gotoPatientDetails={gotoPatientDetails}
                               patientDetails={patientDetails}
-                              setSortOrder={setComputedSortOrder} 
+                              setSortOrder={setComputedSortOrder}
                               sortOrder={computedSortOrder}
                               setSort={setSort}
-                              page={{pageNo, paginationFirst}}
+                              page={{ pageNo, paginationFirst }}
                             />
                             <div>
                               <div className="pagination-container">

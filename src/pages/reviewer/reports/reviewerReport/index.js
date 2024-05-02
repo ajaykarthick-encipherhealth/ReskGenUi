@@ -2,7 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
 import styles from "../report.module.css";
-import { Checkbox, Popover, Col, Row, Tooltip, Empty } from "antd";
+import {
+  Checkbox,
+  Popover,
+  Col,
+  Row,
+  Tooltip,
+  Empty,
+  notification,
+} from "antd";
 import { extractLatestData } from "../../../supervisor/auditing";
 import AuditedTrack from "../../../../../src/images/trackingImages/AuditedTrack.png";
 import NotAudited from "../../../../../src/images/trackingImages/NotAuditedTrack.png";
@@ -36,11 +44,12 @@ import { useDispatch } from "react-redux";
 import dayjs from "dayjs";
 import { workStatusApiAdmin } from "../../../../services/adminServices/DashboardService";
 import { getFlag, getFlags } from "../../../../components/reuseableFunctions";
+// import { reportListAll } from "../datas";
 
 const ReviewerReport = ({
   setModal,
   modal,
-  reportListAll,
+  patientDetails,
   paginationFirst,
   ReportPatientDetails,
   onPageChange,
@@ -50,19 +59,22 @@ const ReviewerReport = ({
   setSelectedRows,
   selectAll,
   setSelectAll,
-  gotoPatientDetails,
   sortOrder,
   setSortOrder,
   setSort,
+  reportListAll,
+  page,
 }) => {
   const [activeTab, setActiveTab] = useState("Reviewer");
   const [selectedItems, setSelectedItems] = useState([]);
   const router = useRouter();
   const dispatch = useDispatch();
+  const navigate = useRouter();
+
   const worlFlowData = useSelector(
     (state) => state?.AdminDashboardReducers?.data
   );
-  const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
+ 
   const [dateRange, setDateRange] = useState({
     processedStatus: {
       PENDING: 0,
@@ -111,8 +123,8 @@ const ReviewerReport = ({
       id: 1,
       icon: Completed,
       title: "Completed",
-      charts: dateRange.processedStatus
-        ? dateRange.processedStatus.COMPLETED
+      charts: reportListAll?.processedStatusCount?.processedStatus
+        ? reportListAll?.processedStatusCount?.processedStatus.COMPLETED
         : "0",
       bg: "#CCFFD1",
     },
@@ -120,8 +132,8 @@ const ReviewerReport = ({
       id: 2,
       icon: Pending,
       title: "Pending",
-      charts: dateRange.processedStatus
-        ? dateRange.processedStatus.PENDING
+      charts: reportListAll?.processedStatusCount?.processedStatus
+        ? reportListAll?.processedStatusCount?.processedStatus.PENDING
         : "0",
 
       bg: "#CCE9FF",
@@ -130,7 +142,7 @@ const ReviewerReport = ({
       id: 3,
       icon: Hold,
       title: "Hold",
-      charts: dateRange.processedStatus ? dateRange.processedStatus.HOLD : "0",
+      charts: reportListAll?.processedStatusCount?.processedStatus ? reportListAll?.processedStatusCount?.processedStatus.HOLD : "0",
 
       bg: "#DACEFD",
     },
@@ -138,8 +150,8 @@ const ReviewerReport = ({
       id: 4,
       icon: declineIcon,
       title: "Decline",
-      charts: dateRange.processedStatus
-        ? dateRange.processedStatus.DECLINED
+      charts: reportListAll?.processedStatusCount?.processedStatus
+        ? reportListAll?.processedStatusCount?.processedStatus.DECLINED
         : "0",
       bg: "#FAD1D1",
     },
@@ -147,7 +159,7 @@ const ReviewerReport = ({
       id: 5,
       icon: auditedIcon,
       title: "Audited",
-      charts: dateRange.auditedStatus ? dateRange.auditedStatus.AUDITED : "0",
+      charts: reportListAll?.processedStatusCount?.auditedStatus ? reportListAll?.processedStatusCount?.auditedStatus.AUDITED : "0",
 
       bg: "#DBEEF0",
     },
@@ -155,7 +167,7 @@ const ReviewerReport = ({
       id: 6,
       icon: notAudited,
       title: "Not Audited",
-      charts: dateRange.auditedStatus ? dateRange.auditedStatus.NOT_AUDIT : "0",
+      charts: reportListAll?.processedStatusCount?.auditedStatus ? reportListAll?.processedStatusCount?.auditedStatus.NOT_AUDIT : "0",
 
       bg: "#FBE7D0",
     },
@@ -163,7 +175,7 @@ const ReviewerReport = ({
       id: 7,
       icon: reeAuditIcon,
       title: "Re Audit",
-      charts: dateRange.auditedStatus ? dateRange.auditedStatus.REAUDIT : "0",
+      charts: reportListAll?.processedStatusCount?.auditedStatus ? reportListAll?.processedStatusCount?.auditedStatus.REAUDIT : "0",
 
       bg: "#FFDBB8",
     },
@@ -171,7 +183,7 @@ const ReviewerReport = ({
       id: 8,
       icon: reAuditIcon,
       title: "Audit pending",
-      charts: dateRange.auditedStatus ? dateRange.auditedStatus.PENDING : "0",
+      charts: reportListAll?.processedStatusCount?.auditedStatus ? reportListAll?.processedStatusCount?.auditedStatus.PENDING : "0",
 
       bg: "#F3D8E5",
     },
@@ -179,7 +191,8 @@ const ReviewerReport = ({
       id: 9,
       icon: auditHoldIcon,
       title: "Audit hold",
-      charts: dateRange.auditedStatus ? dateRange.auditedStatus.HOLD : "0",
+      charts: reportListAll?.processedStatusCount?.auditedStatus ? reportListAll?.processedStatusCount?.auditedStatus.AUDITHOLD
+      : "0",
 
       bg: "#FFF2CC",
     },
@@ -187,7 +200,7 @@ const ReviewerReport = ({
       id: 10,
       icon: auditDeclined,
       title: "Audit decline",
-      charts: dateRange.auditedStatus ? dateRange.auditedStatus.DECLINED : "0",
+      charts: reportListAll?.processedStatusCount?.auditedStatus ? reportListAll?.processedStatusCount?.auditedStatus.DECLINED : "0",
 
       bg: "#FDD2CE",
     },
@@ -488,37 +501,54 @@ const ReviewerReport = ({
     }
   };
 
+ 
+ 
 
-  const startDate = DateRanges?.startDate
-    ? new Date(DateRanges?.startDate).toISOString()
-    : "";
-  const endDate = DateRanges?.endDate
-    ? new Date(DateRanges?.endDate).toISOString()
-    : "";
-  const getWorkFlow = async () => {
-    try {
-      const data = await workStatusApiAdmin(startDate, endDate, router);
-      setDateRange(data.response?.processedStatusCount);
-      setChartValue(data.response);
-    } catch (error) {
-      console.log(error);
+  const gotoPatientDetails = (data) => {
+    console.log(data, "data");
+    dispatch(patientDetails(data));
+
+    if (data?.processedStatus === "COMPLETED") {
+      console.log(data?.reportListAll?.data?.processedStatus, "t");
+      const controller = new AbortController();
+      const { signal } = controller;
+      controller.abort();
+      localStorage.setItem("patientId", data.patientId);
+      navigate.push({ pathname: "/reviewer/patients/details", query: page });
+    } else {
+      notification.warning({
+        message: data?.patientId + " file not processed. Please wait.",
+      });
     }
   };
-  useEffect(() => {
-    getWorkFlow();
-  }, [startDate, endDate, router]);
+
+  const handleTableRowClick = (id) => {
+    const clickedData = reportListAll?.data?.[id];
+    gotoPatientDetails(clickedData);
+  };
+
+
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
   }, [selectedRows]);
+  console.log(reportListAll, "te");
+
+  console.log(reportListAll?.response?.data, "test");
 
   return (
     <>
       <div>
         <div className="content-body">
           <div className="container-fluid">
-            <div  style={{display:"flex", marginLeft:"10px", paddingBottom:"10px"}}>
+            <div
+              style={{
+                display: "flex",
+                marginLeft: "10px",
+                paddingBottom: "10px",
+              }}
+            >
               {" "}
-              {reportListAll?.data?.length > 0 && (
+              {reportListAll?.response?.data?.length > 0 && (
                 <div>
                   <input
                     type="checkbox"
@@ -535,15 +565,17 @@ const ReviewerReport = ({
                   />
                 </div>
               )}
-              <span className={styles.pName} style={{ paddingLeft:"20px", textAlign:"center"}}>
+              <span
+                className={styles.pName}
+                style={{ paddingLeft: "20px", textAlign: "center" }}
+              >
                 All
               </span>
-              
             </div>
             <div className="row">
               <div>
                 <div className=" col-xl-12 d-flex">
-                  {reportListAll?.data?.length === 0 ? (
+                  {reportListAll?.response?.data?.length === 0 ? (
                     <div
                       className={`col-xl-6 ${styles.card}`}
                       style={{
@@ -558,7 +590,7 @@ const ReviewerReport = ({
                     <>
                       <div className="col-xl-6">
                         <div className={styles.cardContainer}>
-                          {reportListAll?.data?.map((item, id) => (
+                          {reportListAll?.response?.data?.map((item, id) => (
                             <div key={id} className={styles.card}>
                               <div
                                 className={styles.contentGroup}
@@ -633,6 +665,7 @@ const ReviewerReport = ({
                                   >
                                     <div
                                       className={`col-xl-2 ${styles.headText}`}
+                                      onClick={() => handleTableRowClick(id)}
                                     >
                                       {item.patientId ? item.patientId : ""}
                                     </div>
@@ -739,7 +772,7 @@ const ReviewerReport = ({
                           <div className={`col-xl-2 ${styles.subCard}`}>
                             <div>
                               <div>No of charts</div>
-                              <h4>60</h4>
+                              <h4>{reportListAll?.response?.totalElements}</h4>
                             </div>
                           </div>
                           <div className={`col-xl-2 ${styles.subCard}`}>
@@ -755,14 +788,14 @@ const ReviewerReport = ({
                             {" "}
                             <div>
                               <div>Avg RAF score</div>
-                              <h4>1.025</h4>
+                              <h4>{reportListAll?.rafAverage?.toFixed(4) }</h4>
                             </div>
                           </div>
                           <div className={`col-xl-2 ${styles.subCard}`}>
                             {" "}
                             <div>
                               <div>HCC Count</div>
-                              <h4>175</h4>
+                              <h4>{reportListAll?.totalHccCount}</h4>
                             </div>
                           </div>
                         </div>
@@ -891,11 +924,11 @@ const ReviewerReport = ({
         <Paginator
           first={paginationFirst}
           rows={8}
-          totalRecords={ReportPatientDetails?.totalElements}
+          totalRecords={ReportPatientDetails?.response?.totalElements}
           onPageChange={onPageChange}
         />
         <div className="total-pages">
-          Total count: {ReportPatientDetails?.totalElements}
+          Total count: {ReportPatientDetails?.response?.totalElements}
         </div>
       </div>
     </>

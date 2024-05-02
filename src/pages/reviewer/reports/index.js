@@ -14,6 +14,7 @@ import { Modal, DatePicker, Tooltip } from "antd";
 import ExportImg from "../../../images/svg/Export";
 import { debounce } from "../../admin/report/Export";
 import { disableFutureDate } from "../../../components/headerFilters/functions";
+import { patientDetails } from "../../../stores/authflow/actions";
 
 import {
   getReceivedDetails,
@@ -273,19 +274,22 @@ const Reports = () => {
       setPaginationSentFirst(limit);
     }
   }, [reportActiveTab]);
-  // const gotoPatientDetails = (data) => {
-  //   dispatch(patientDetails(data));
-  //   if (data.computing == 2) {
-  //     const controller = new AbortController();
-  //     controller.abort();
-  //     localStorage.setItem("patientId", data.patientId);
-  //     navigate.push("/reviewer/patients/details");
-  //   } else {
-  //     notification.warning({
-  //       message: data.patientId + " file not processed Please wait",
-  //     });
-  //   }
-  // };
+
+  const gotoPatientDetails = (data) => {
+    dispatch(patientDetails(data));
+    if (data.computing == 2) {
+      const controller = new AbortController();
+      const { signal } = controller;
+      controller.abort();
+      localStorage.setItem("patientId", data.patientId);
+      navigate.push("/reviewer/patients/details");
+    } else {
+      notification.warning({
+        message: data.patientId + " file not processed Please wait",
+      });
+    }
+  };
+
   const backRender = () => {
     const user = localStorage.getItem("userRole");
     if (user == "reviewer") {
@@ -488,6 +492,7 @@ const Reports = () => {
                           onPageChange={onPageChange}
                           comments={comments}
                           setComments={setComments}
+                          patientDetails={patientDetails}
                           setSelectedRows={setSelectedRows}
                           selectedRows={selectedRows}
                           setSelectAll={setSelectAll}
@@ -495,7 +500,9 @@ const Reports = () => {
                           setSortOrder={setCoderSortOrder}
                           sortOrder={coderSortOrder}
                           setSort={setSort}
-                          // gotoPatientDetails={gotoPatientDetails}
+                          gotoPatientDetails={gotoPatientDetails}
+                          page={{pageNo, paginationFirst}}
+
                         />
                       </div>
                     )}
