@@ -8860,6 +8860,7 @@ button:focus {
   margin: 0 auto;
   background: #fff;
   border-radius: 10px;
+  min-height:420px;
 }
 
 @media only screen and (max-width: 87.5rem) {
