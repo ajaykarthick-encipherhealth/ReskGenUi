@@ -1647,7 +1647,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
       });
     }
   }, []);
-
+console.log(screenWidth)
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -1679,7 +1679,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                           />
                         </Button>
                       </div>
-                      <div className={`${screenWidth>1500?'col-xl-7':'col-xl-10'} col-sm-12`}>
+                      <div className={`${!screenWidth || screenWidth>1500?'col-xl-7':'col-xl-10'} col-sm-12`}>
                         <div className={`${visitStyles.patient_info_details}`}>
                           <div className="card-body">
                             <div className="row">
@@ -1828,7 +1828,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                           </div>
                         </div>
                       </div>
-                      <div className={`${screenWidth>1500?'col-xl-1':'col-xl-2'} col-sm-12`}>
+                      <div className={`${!screenWidth || screenWidth>1500?'col-xl-1':'col-xl-2'} col-sm-12`}>
                         <div className={visitStyles.priorityStatus}>
                           <div className={`${visitStyles.hccCountHeader} `}>
                             <label>CMS</label>
@@ -1847,7 +1847,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                           </div>
                         </div>
                       </div>
-                      <div className={`${screenWidth>1500?'col-xl-1':'col-xl-2'} col-sm-12 px-4 d-flex`}>
+                      <div className={`${!screenWidth || screenWidth>1500?'col-xl-1':'col-xl-2'} col-sm-12 px-4 d-flex`}>
                         <div className={`${visitStyles.rafscoreheader} `}>
                           <label>Score</label>
                           {patientDetails?.rafScore != null ? (
@@ -1982,7 +1982,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                           </div>
                         </div>
                       </div>
-                      <div className={`${screenWidth>1500?'col-xl-1':'col-xl-2'} col-sm-12`}>
+                      <div className={`${!screenWidth || screenWidth>1500?'col-xl-1':'col-xl-2'} col-sm-12`}>
                         {userRole == "admin" ? (
                           <div className={`${visitStyles.actionbtnContainer}`}>
                             <Dropdown
