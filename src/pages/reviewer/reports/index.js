@@ -46,7 +46,7 @@ const Reports = () => {
   const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
 
-  console.log(reportActiveTab,"active")
+  console.log(reportActiveTab, "active");
 
   const [isLoading, setIsLoading] = useState(true);
   // const [activeTab, setActiveTab] = useState(
@@ -143,12 +143,6 @@ const Reports = () => {
     setSelectAll(false);
   };
 
-  // const handleTabs = (name) => {
-  //   setSelectedDates(null);
-
-  //   dispatch(getActiveTab(name));
-
-  // };
   const handleTabs = (name) => {
     setSelectedDates(null);
     localStorage.setItem("activeTab", name);
