@@ -1,0 +1,20 @@
+.btnColor {
+  background-color: #043069;
+  color: #fff;
+}
+
+.btnColor:hover {
+  background-color: #6c9ddd;
+  color: #fff;
+}
+.btns {
+  cursor: pointer;
+}
+.containerBtn {
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #063069;
+}
+.textColor {
+  color: #fff;
+}

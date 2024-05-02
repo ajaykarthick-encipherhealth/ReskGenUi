@@ -4499,7 +4499,7 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle, setActiveComboTree}) =>
               </div>
               {isFileFormShow ? (
                 <div className={`col-xl-4 ${styles.hccFormContainer}`}>
-                  <AddHccForm diagnosisCode={inputValue.diagnosisCode} handleCloseModal={handleCloseModal}/>
+                  <AddHccForm diagnosisCode={inputValue.diagnosisCode} handleCloseModal={handleCloseModal} isMeatNew={true}/>
                 </div>
               ) : null}
               {!isFileFormShow ? (
@@ -5472,7 +5472,7 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle, setActiveComboTree}) =>
         <div className="offcanvas-body">
           <div className="container-fluid">
             <div className={`className="col-xl-12`}>
-            <AddHccForm diagnosisCode={inputValue.diagnosisCode} handleCloseModal={handleCloseModal}/>
+            <AddHccForm diagnosisCode={inputValue.diagnosisCode} handleCloseModal={handleCloseModal} isMeatNew={true}/>
             </div>
           </div>
         </div>
