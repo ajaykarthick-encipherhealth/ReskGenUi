@@ -1401,6 +1401,7 @@
   width: 100px !important;
   margin-left: -80px;
   height: 35px !important;
+  margin-top: 10px;
 }
 
 .dosSelectPicker > div:nth-child(3) {
@@ -1409,6 +1410,7 @@
 .dosSelectPicker > .css-13cymwt-control {
   min-height: 35px !important;
 }
+
 .hoverActiveHcc {
   margin-bottom: 10px;
 }
@@ -1491,10 +1493,11 @@
   padding: 10px;
   border-radius: 4px;
 }
-.statusFLag {
-  padding-top: 20px;
-  padding-left: 16px;
-}
+/* .statusFLag {
+  
+  height:auto !important;
+  margin: auto !important;
+} */
 .addValidCodeFormFooter {
   margin-top: 10px;
 }
@@ -1692,4 +1695,31 @@
   text-align: center;
   font-size: 12px;
   border-radius: 5px;
+}
+@media screen and (min-width:1500px) {
+  .dosSelectPicker {
+    margin-top: 10px;
+    width: 100px !important;
+    margin-left: -60px;
+    height: 35px !important;
+  }
+  .statusFLag {
+    /* padding-top: 20px;
+    padding-left: 16px; */
+    height:auto !important;
+    margin: auto !important;
+  }
+}
+@media screen and (width<1500px) {
+  .dosSelectPicker {
+    margin-top: 5px;
+    width: 100px !important;
+    margin-left: -100px;
+    height: 35px !important;
+  }
+  .statusFLag{
+    height:30px !important;
+    margin: 30px 0px 0px 10px !important;
+  }
+
 }

@@ -206,7 +206,7 @@ export default function Patient() {
       getAllList(0, pageSize, "", "", true, 2, "", sort);
     }
   };
-  const searchFunction = (search,activeTab) => {
+  const searchFunction = (search, activeTab) => {
     if (activeTab === 1) {
       getAllList(
         pageNo,
@@ -227,12 +227,12 @@ export default function Patient() {
     }
   };
   const debounceFunc = useCallback(
-    debounce((text,activeTab) => searchFunction(text,activeTab), 900),
+    debounce((text, activeTab) => searchFunction(text, activeTab), 900),
     []
   );
   const getNameSearch = (search) => {
     setSearchString(search);
-    debounceFunc(search,activeTab);
+    debounceFunc(search, activeTab);
   };
 
   const handleOpneModal = () => {
@@ -586,8 +586,16 @@ export default function Patient() {
                                   <InputText
                                     type="text"
                                     onChange={(e) => {
-                                      setBatchCount(e.target.value);
-                                      if (e.target.value.length <= 0) {
+                                      // setBatchCount(e.target.value);
+                                      // if (e.target.value.length <= 0) {
+                                      //   setFilterBatchCount(true);
+                                      // }
+                                      const inputValue = e.target.value.replace(
+                                        /[^\d]/g,
+                                        ""
+                                      );
+                                      setBatchCount(inputValue);
+                                      if (inputValue.length <= 0) {
                                         setFilterBatchCount(true);
                                       }
                                     }}
@@ -595,7 +603,7 @@ export default function Patient() {
                                     className="form-control new-form-controls"
                                     placeholder="Batch Count"
                                     style={{ width: "60%" }}
-                                    maxLength={25}
+                                    maxLength={3}
                                     onKeyDown={(e) => {
                                       // Prevent input of backslash ("\")
                                       if (e.key === "\\") {

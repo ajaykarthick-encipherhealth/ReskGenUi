@@ -3,6 +3,12 @@
   color: #fff;
 }
 
+.btnColor:disabled {
+  background-color: #043069;
+  color: #fff;
+  cursor:no-drop;
+}
+
 .btnColor:hover {
   background-color: #6c9ddd;
   color: #fff;

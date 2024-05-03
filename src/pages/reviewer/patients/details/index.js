@@ -72,7 +72,6 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
   );
-  const patientAllResult = useSelector((state) => state?.ReviewerReducers);
   const [confirmNotesModalDecline, setConfirmNotesModalDecline] =
     useState(false);
   const [confirmNotesModalHold, setConfirmNotesModalHold] = useState(false);
@@ -81,10 +80,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
     useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [dosYear, setDosYear] = useState("");
-  const [dosYearRadiology, setDosYearRadiology] = useState("");
   const [dosYearDefalutSelect, setDosYearDefalutSelect] = useState("");
-  const [dosYearDefalutSelectRadiology, setDosYearDefalutSelectRadiology] =
-    useState("");
   const [localOrgId, setLocalOrgId] = useState("");
   const [localTenantId, setLocalTenantId] = useState("");
   const [patientDocumentResult, setPatientDocumentResult] = useState([]);
@@ -93,10 +89,10 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const [matchHccList, setMatchHccList] = useState([]);
   const [newValidDiseaseList, setNewValidDiseaseList] = useState([]);
   const [activeTab, setActiveTab] = useState(1);
-
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
   const [addPatient, setAddPatient] = useState(false);
   const [labReportSlider, setLapReportSlider] = useState(false);
+  const [screenWidth,setScreenWidth]=useState()
   const [inputValue, setInputValue] = useState({
     year: "",
     name: "",
@@ -122,7 +118,6 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const [isModalComments, setIsModalComments] = useState(false);
   const [flagContainerActive, setFlagContainerActive] = useState("");
   const [flagContainerActiveTitle, setFlagContainerActiveTitle] = useState("");
-  const [patientList, setPatientList] = useState([]);
   const [sideNavLabelActiveKey, setSideNavLabelActiveKey] = useState("HCC");
   const [isSideNavShow, setIsSideNavShow] = useState(false);
   const [timelineData, setTimeLineData] = useState([]);
@@ -1645,6 +1640,12 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
 
   useEffect(() => {
     workFgetFlagsowData();
+    if(window){
+      window.addEventListener('resize', () => {
+        const width = window.innerWidth;
+        setScreenWidth(width)
+      });
+    }
   }, []);
 
   return (
@@ -1678,7 +1679,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                           />
                         </Button>
                       </div>
-                      <div className="col-xl-7 col-sm-12">
+                      <div className={`${!screenWidth || screenWidth>1500?'col-xl-7':'col-xl-10'} col-sm-12`}>
                         <div className={`${visitStyles.patient_info_details}`}>
                           <div className="card-body">
                             <div className="row">
@@ -1827,7 +1828,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                           </div>
                         </div>
                       </div>
-                      <div className="col-xl-1 col-sm-12">
+                      <div className={`${!screenWidth || screenWidth>1500?'col-xl-1':'col-xl-2'} col-sm-12`}>
                         <div className={visitStyles.priorityStatus}>
                           <div className={`${visitStyles.hccCountHeader} `}>
                             <label>CMS</label>
@@ -1846,7 +1847,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                           </div>
                         </div>
                       </div>
-                      <div className="col-xl-1 col-sm-12 px-4 d-flex">
+                      <div className={`${!screenWidth || screenWidth>1500?'col-xl-1':'col-xl-2'} col-sm-12 px-4 d-flex`}>
                         <div className={`${visitStyles.rafscoreheader} `}>
                           <label>Score</label>
                           {patientDetails?.rafScore != null ? (
@@ -1962,7 +1963,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                         </span>
                       </div>
 
-                      <div className="col-xl-1 col-sm-12">
+                      <div className="col-xl-1 col-sm-2">
                         <div className="card-body">
                           <div className="row">
                             <div className="col-xl-12 col-sm-12">
@@ -1981,7 +1982,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                           </div>
                         </div>
                       </div>
-                      <div className="col-xl-1 col-sm-12">
+                      <div className={`${!screenWidth || screenWidth>1500?'col-xl-1':'col-xl-2'} col-sm-12`}>
                         {userRole == "admin" ? (
                           <div className={`${visitStyles.actionbtnContainer}`}>
                             <Dropdown

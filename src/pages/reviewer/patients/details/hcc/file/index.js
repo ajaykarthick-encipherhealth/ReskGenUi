@@ -2608,6 +2608,7 @@ const File = ({
               handleCloseModal={handleCloseModal}
               isAddHccForm={isAddHccForm}
               setIsAddHccForm={setIsAddHccForm}
+              isMeatNew={true}
             />
           </div>
         ) : null}

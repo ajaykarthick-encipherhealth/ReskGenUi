@@ -1,0 +1,92 @@
+.mainCard {
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.mainContainer {
+  padding-top: 20px;
+}
+.l1auditorBadge {
+  border-radius: 6px;
+  background: #fed0bb;
+  width: 102px;
+  height: 20px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  color: #000;
+  font-size: 12px;
+  text-align: center;
+}
+
+.l2auditorBadge {
+  border-radius: 6px;
+  background: #e9c46a;
+  width: 102px;
+  height: 20px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  color: #000;
+  font-size: 12px;
+  text-align: center;
+}
+.currentBadge {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.48px;
+  border-radius: 6px;
+  background: #457b9d;
+  width: 66px;
+  height: 20px;
+  display: block;
+  text-align: center;
+}
+
+.previousBadge {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.48px;
+  border-radius: 6px;
+  background: #9c6644;
+  width: 66px;
+  height: 20px;
+  display: block;
+  text-align: center;
+}
+
+.edit_meat_query {
+  border-radius: 6px;
+  background: #04306f;
+  width: 26px;
+  height: 26px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.meat_querySaveBtn {
+  color: #133dd4;
+  font-size: 12px;
+  border-radius: 8px;
+  border: 1px solid #133dd4;
+  background: rgba(19, 61, 212, 0.15);
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+  width: 74px;
+  height: 32px;
+}
+
+.meat_queryfooterBtn {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.queryTextarea {
+  height: 100px !important;
+  width: 98% !important;
+  color: #000;
+  font-size: 12px !important;
+  padding: 10px;
+  border: 1px solid #e6e6e6;
+  border-radius: 17.75rem;
+  border-radius: 8px !important;
+}
