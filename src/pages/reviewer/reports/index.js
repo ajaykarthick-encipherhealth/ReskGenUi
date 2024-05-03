@@ -35,7 +35,7 @@ const statusOptions = [
   { label: "Hold", value: "HOLD" },
 ];
 
-const Reports = ({ workFgetFlagsowData }) => {
+const Reports = () => {
   const dispatch = useDispatch();
   const route = useRouter();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
@@ -47,12 +47,7 @@ const Reports = ({ workFgetFlagsowData }) => {
   const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
 
-  console.log(reportActiveTab, "active");
-
   const [isLoading, setIsLoading] = useState(true);
-  // const [activeTab, setActiveTab] = useState(
-  //   reportActiveTab ? reportActiveTab : "Reviewer"
-  // );
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
