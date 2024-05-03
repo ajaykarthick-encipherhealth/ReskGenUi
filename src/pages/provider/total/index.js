@@ -1,28 +1,16 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
-import Image from "next/image";
-import ReactECharts from "echarts-for-react";
-// import left from "../../../../images/dashboard/left.png";
-// import right from "../../../../images/dashboard/right.png";
-import { Col, Empty, Row, Spin } from "antd";
-// import Card from "../../../../components/card";
-// import HeadTitle from "../../../../components/headtitle";
+import { Col, Row, Spin } from "antd";
 import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
-// import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
-// import { getFilteredList } from "../../../../store/actions/PatientsActions";
-// import { getDailyTaskDatas } from "../../../../store/actions/l2Action/DashboardAction";
 import spinSTYles from "../../../styles/auth.module.css";
-// import { GetUserCount } from "../../../../services/adminServices/DashboardService";
 import Card from "../../../components/card";
 import HeadTitle from "../../../components/headtitle";
 import { getDailyTaskDatas } from "../../../store/actions/DashboardActions";
 import { GetUserCount } from "../../../services/adminServices/DashboardService";
 import ChartsEmbedSDK from "@mongodb-js/charts-embed-dom";
 const Total = () => {
-
-
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
 
@@ -34,21 +22,6 @@ const Total = () => {
     ADMIN: 0,
   });
 
-  
-  const bullets = [
-    {
-      color: "#7599FF",
-      name: "Reviewer",
-    },
-    {
-      color: "#64C8FF",
-      name: "Supervisor",
-    },
-    {
-      color: "#FA896B",
-      name: "Admin",
-    },
-  ];
   const daysOfWeek = [
     "Sunday",
     "Monday",
@@ -86,23 +59,6 @@ const Total = () => {
     }
   }, [dailyStatusData, selectedDate]);
 
-  const showPrevious = () => {
-    const lastData = currentDays[0];
-    const date = dayjs(lastData?.date).subtract(1, "date");
-    const datas = [
-      {
-        id: currentDays?.length + 1,
-        day: dayjs(date).format("dddd"),
-        date: date?.format("MM-DD-YYYY"),
-        dateString: date?.toISOString(),
-      },
-    ];
-    setSelectedDate((prev) => [...prev, ...datas]);
-    datas?.map((data, index) => {
-      return dispatch(getDailyTaskDatas(data?.dateString, router));
-    });
-  };
-
   const getDays = (selectedDate, statusData) => {
     const processedDays = selectedDate?.map((dayInfo, index) => {
       const matchingStatusData = statusData?.find((status) => {
@@ -128,85 +84,6 @@ const Total = () => {
     });
     return setCurrentDays(sorted);
   };
-  const getChartOption = (res) => {
-    return {
-      tooltip: {
-        trigger: "item",
-      },
-      legend: {
-        show: false,
-      },
-      series: [
-        {
-          type: "pie",
-          radius: ["40%", "70%"],
-          label: {
-            show: false,
-            position: "inside",
-            formatter: "{b}: {c}",
-          },
-          data: [
-            {
-              value: roles?.REVIEWER,
-              name: "Reviewer",
-              itemStyle: {
-                color: "#7599FF",
-              },
-            },
-            {
-              value: roles?.SUPERVISOR,
-              name: "Supervisor",
-              itemStyle: {
-                color: "#64C8FF",
-              },
-            },
-            {
-              value: roles?.ADMIN,
-              name: "Admin",
-              itemStyle: {
-                color: "#FA896B",
-              },
-            },
-          ],
-        },
-        {
-          type: "pie",
-          radius: ["0%", "30%"],
-          avoidLabelOverlap: false,
-          label: {
-            show: true,
-            position: "center",
-            formatter: `{b|${
-              roles?.REVIEWER + roles?.SUPERVISOR + roles?.ADMIN
-            }}`,
-            backgroundColor: "transparent",
-
-            rich: {
-              a: {
-                fontSize: 12,
-              },
-              b: {
-                fontSize: 18,
-              },
-            },
-          },
-          labelLine: {
-            show: false,
-          },
-          data: [
-            {
-              value: roles?.REVIEWER + roles?.SUPERVISOR + roles?.ADMIN,
-              name: "Total",
-              itemStyle: {
-                color: "#fff",
-              },
-            },
-          ],
-        },
-      ],
-    };
-  };
-
   const uniqueData = currentDays?.filter((value, index, self) => {
     const firstIndex = self?.findIndex(
       (item) => item?.day === value?.day && item?.date === value?.date
@@ -222,48 +99,43 @@ const Total = () => {
       console.log(error);
     }
   };
-//   const sdk = new ChartsEmbedSDK({
-//     baseUrl: "https://charts.mongodb.com/charts-project-0-gdoee",
-//     showAttribution: false
-//   });
-//   const totalChart = sdk.createChart({
-//     chartId: "65fd785b-6523-4dc2-82d7-1ee277021ad6"
-//   });
-//   useEffect(() => {
-//     totalChart.render(document.getElementById("totalchartdata"));
-  
-//   }, []);
+  //   const sdk = new ChartsEmbedSDK({
+  //     baseUrl: "https://charts.mongodb.com/charts-project-0-gdoee",
+  //     showAttribution: false
+  //   });
+  //   const totalChart = sdk.createChart({
+  //     chartId: "65fd785b-6523-4dc2-82d7-1ee277021ad6"
+  //   });
+  //   useEffect(() => {
+  //     totalChart.render(document.getElementById("totalchartdata"));
 
+  //   }, []);
 
   useEffect(() => {
     getUser();
   }, []);
 
- const sdk = new ChartsEmbedSDK({
+  const sdk = new ChartsEmbedSDK({
     baseUrl: "https://charts.mongodb.com/charts-project-0-gdoee",
-    showAttribution: false
+    showAttribution: false,
   });
   const teamChart = sdk.createChart({
-    chartId: "65fd785b-6523-4dc2-82d7-1ee277021ad6"
+    chartId: "65fd785b-6523-4dc2-82d7-1ee277021ad6",
   });
 
   useEffect(() => {
     teamChart.render(document.getElementById("teamchart"));
-   
   }, []);
 
-
- 
   return (
     <>
       <HeadTitle header="Total Users" />
       <div className={styles.card2} style={{ height: "75%" }}>
-      
         <Card borderRadius="28px" style={{ display: "flex" }}>
           <Row>
-            <Col span={1}></Col> <div id="teamchart" style={{ height: 500 }}></div>
+            <Col span={1}></Col>{" "}
+            <div id="teamchart" style={{ height: 500 }}></div>
             <Col span={30}>
-           
               {currentDays?.length > 0 ? (
                 <Row
                   style={{ display: "flex", justifyContent: "space-between" }}
@@ -302,7 +174,6 @@ const Total = () => {
                             className={styles.container}
                             style={{ width: "308%" }}
                           >
-                            
                             {/* <ReactECharts
                               option={getChartOption(
                                 data?.allocated,
@@ -314,7 +185,6 @@ const Total = () => {
                               )}
                               style={{ width: "100%", height: "200px" }}
                             /> */}
-                          
                           </div>
                         </Col>
                         <Col span={12} className={styles.headerTitle}>

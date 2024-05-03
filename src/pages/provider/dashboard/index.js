@@ -1,43 +1,16 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
-import * as echarts from "echarts";
-import ReactECharts from "echarts-for-react";
 import { Buttons } from "../../../../src/pages/reviewer/workingstatus";
 import Buttonscroller from "../../../../src/components/buttonSroller";
 import HeadTitle from "../../../../src/components/card/index";
 import Card from "../../../../src/components/card/index";
-import Legends from "../../../components/legends";
 import Header from "../../../jsx/layouts/nav/Header";
-import {
-  monthNames,
-  getDays,
-} from "../../../../src/pages/admin/dashboard/accuracy";
 import ChartsEmbedSDK from "@mongodb-js/charts-embed-dom";
-import { useDispatch, useSelector } from "react-redux";
 import YearPicker from "../../../../src/components/yearpicker";
-import { useRouter } from "next/router";
-import { Empty, Spin, Select } from "antd";
-
 import dayjs from "dayjs";
-import {
-  getCompletedStatus,
-  getSelectUserList,
-} from "../../../../src/store/actions/adminAction/DashboardAction";
-import spinSTYles from "../../../../src/styles/auth.module.css";
 import Atlas from "../atlas";
-import WorkFlow from "../../admin/dashboard/workflow";
-import Patient from "../../admin/allocatedUser";
-
 
 const CompletedStatus = () => {
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const completedDatas = useSelector(
-    (state) => state?.AdminDashboardReducers?.completedStatus
-  );
-  const selectUserList = useSelector(
-    (state) => state?.AdminDashboardReducers?.selectedUsers
-  );
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const currentDate = new Date();
@@ -49,8 +22,6 @@ const CompletedStatus = () => {
   const [viewchart, setViewchart] = useState("day");
   const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
   const [chart, setchart] = useState(null);
-  const [isChartRendered, setIsChartRendered] = useState(false);
-
   const dayFilter = () => {
     const adjustedMonth = selectedMonth - 1;
     const startDate = dayjs()
@@ -60,27 +31,23 @@ const CompletedStatus = () => {
       .toDate();
 
     const endDate = dayjs(startDate).endOf("month").toDate();
- 
 
     const filter = { createdDate: { $gte: startDate, $lte: endDate } };
     if (chart) {
       chart.setFilter(filter);
     }
-    console.log("chartchart2",chart)
-
-
+    console.log("chartchart2", chart);
   };
 
   useEffect(() => {
-    if(currentBtn ==="Daily" || currentBtn ==="Weekly")
-    dayFilter();
+    if (currentBtn === "Daily" || currentBtn === "Weekly") dayFilter();
   }, [selectedYear, selectedMonth]);
 
   const monthFilter = () => {
     setSelectedMonth(null);
     const startYearDate = new Date(selectedYear, 0, 1);
     const endYearDate = new Date(selectedYear, 11, 31);
-    
+
     const filter = {
       createdDate: { $gte: startYearDate, $lte: endYearDate },
     };
@@ -88,42 +55,34 @@ const CompletedStatus = () => {
     if (chart) {
       chart.setFilter(filter);
     }
-    console.log("chartchart1",chart)
-
+    console.log("chartchart1", chart);
   };
-
-
-
 
   useEffect(() => {
     const sdk = new ChartsEmbedSDK({
       baseUrl: "https://charts.mongodb.com/charts-project-0-gdoee",
       showAttribution: false,
     });
-    
+
     const currentYear = selectedYear;
-    const currentMonth = selectedMonth -1;
+    const currentMonth = selectedMonth - 1;
 
     const startDate = new Date(currentYear, currentMonth, 1);
     const endDate = new Date(currentYear, currentMonth + 1, 0);
 
-    
     let filter;
 
     if (currentBtn === "Daily" || currentBtn === "Weekly") {
-   
       filter = {
-        createdDate: { $gte: startDate, $lte: endDate }
+        createdDate: { $gte: startDate, $lte: endDate },
       };
     } else if (currentBtn === "Monthly") {
-   
       const startYearDate = new Date(selectedYear, 0, 1);
       const endYearDate = new Date(selectedYear, 11, 31);
       filter = {
-        createdDate: { $gte: startYearDate, $lte: endYearDate }
+        createdDate: { $gte: startYearDate, $lte: endYearDate },
       };
     }
-    
 
     const chartId =
       viewchart === "day"
@@ -134,30 +93,20 @@ const CompletedStatus = () => {
 
     const chart = sdk.createChart({
       chartId: chartId,
-      filter:filter
+      filter: filter,
     });
- 
-    setchart(chart);
-    console.log(chart)
-  }, [viewchart]);
 
+    setchart(chart);
+  }, [viewchart]);
 
   useEffect(() => {
     const renderCharts = () => {
       if (chart) {
         chart.render(document.getElementById("chart-data"));
       }
-     
     };
     renderCharts();
   }, [chart]);
-  
-  
-
-
-
-  
-
   useEffect(() => {
     if (currentBtn === "Monthly") {
       setViewchart("month");
@@ -179,8 +128,6 @@ const CompletedStatus = () => {
       setYear(year);
       setYear(date);
       setSelectedYear(year);
-    
-    
     } else {
       setYear(null);
       setSelectedYear(null);
@@ -188,8 +135,7 @@ const CompletedStatus = () => {
   };
 
   useEffect(() => {
-    if(currentBtn ==="Monthly")
-    monthFilter(selectedYear);
+    if (currentBtn === "Monthly") monthFilter(selectedYear);
   }, [selectedYear]);
 
   const handleMonthChange = (date) => {
@@ -197,7 +143,6 @@ const CompletedStatus = () => {
     setMonth(date);
     setSelectedMonth(month);
     setSelectedMonth(year);
-
 
     const monthNumber = (selectedDate.getMonth() + 1)
       .toString()
@@ -212,11 +157,9 @@ const CompletedStatus = () => {
   return (
     <>
       <Header />
-    
+
       <HeadTitle header="Completed Status" />
       <div style={{ marginTop: "5%" }}>
-     
-        
         <div
           style={{
             width: "75%",
@@ -225,9 +168,12 @@ const CompletedStatus = () => {
             // height: "450px",
           }}
         >
-           <h4>Sample chart</h4>
+          <h4>Sample chart</h4>
           <Card borderRadius="28px" padding="10px">
-            <div className={styles.buttonDiv} style={{position:"relative",left:"-88px"}}>
+            <div
+              className={styles.buttonDiv}
+              style={{ position: "relative", left: "-88px" }}
+            >
               <div className={`d-flex ${styles.selectContainer}`}>
                 <div className={styles.select}>
                   {/* <Select
@@ -241,18 +187,6 @@ const CompletedStatus = () => {
                   style={{ backgroundColor: "#F3F3FF", width: "140px" }}
                 /> */}
                 </div>
-                {/* {isindividual ? (
-                <div className={styles.select}>
-                  <Select
-                    showSearch
-                    value={selectUser}
-                    placeholder="Select User"
-                    className={`custom_select_user ${styles.custom_select_user}`}
-                    onChange={(e) => onChangeUser(e)}
-                    options={optionsUser}
-                  />
-                </div>
-              ) : null} */}
               </div>
               <div className={styles.picker}>
                 <YearPicker
@@ -279,34 +213,6 @@ const CompletedStatus = () => {
                 />
               </div>
             </div>
-            <div
-              id="chart-data"
-              style={{
-                height: 300,
-                width: 1000,
-              }}
-            ></div>
-
-            {/* {completedDatas?.loading ? (
-            <div className={spinSTYles.spinStyle}>
-              <Spin loading={completedDatas?.loading} />
-            </div>
-          ) : completedDatas?.loading === false &&
-            completedDatas?.data?.response ? (
-            <>
-              <ReactECharts
-                option={option}
-                style={{ width: "100%", height: "300px", marginTop: "-15px" }}
-              />
-              <div className={styles.bulletContainer}>
-                <Legends bullets={bullets} />
-              </div>
-            </>
-          ) : (
-            <div className={spinSTYles.spinStyle}>
-              <Empty />
-            </div>
-          )} */}
           </Card>
         </div>
         <Atlas />
