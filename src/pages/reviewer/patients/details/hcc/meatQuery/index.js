@@ -314,6 +314,8 @@ const MeatQuery = ({}) => {
   const [hccVersionDetails, setHccVersionDetails] = useState(null);
   const [selectProviderInfo, setSelectProviderInfo] = useState(null);
   const [hccFormTab, setHccFormTab] = useState("HCCFORM");
+  const [queryFormValues, setQueryFormValues] = useState(false);
+
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -418,24 +420,7 @@ const MeatQuery = ({}) => {
   };
 
   const addMeatQuery = (value, condition) => {
-    inputValue.diagnosisCodeQuery = value.diagnosisCode;
-    if (condition == "Add") {
-      setMeatQueryUpdate(false);
-      inputValue.providerName = "";
-      inputValue.headerName = "";
-      inputValue.imagingTestHeader = "";
-      inputValue.description = "";
-      inputValue.queryReason = "";
-      inputValue.reason = "";
-    } else {
-      inputValue.providerName = value.providerName;
-      inputValue.headerName = value.headerName;
-      inputValue.imagingTestHeader = value.imagingTestHeader;
-      inputValue.description = value.description;
-      inputValue.queryReason = value.queryReason;
-      inputValue.reason = value.reason;
-      setMeatQueryUpdate(true);
-    }
+    setQueryFormValues(value);
     setIsMeatQueryModal(true);
   };
 
@@ -787,7 +772,7 @@ const MeatQuery = ({}) => {
           </div>
         ) : null}
       </div>  
-    <AddMeatQuery diagnosisCode={inputValue.diagnosisCodeQuery} handleCloseModal={handleCloseModal} isMeatQueryModal={isMeatQueryModal} setIsMeatQueryModal={setIsMeatQueryModal} meatEditQueryRes={inputValue}/>
+    <AddMeatQuery queryFormValues={queryFormValues} handleCloseModal={handleCloseModal} isMeatQueryModal={isMeatQueryModal} setIsMeatQueryModal={setIsMeatQueryModal} meatEditQueryRes={inputValue}/>
 
       <Modal
         title="Meat Queried Details"

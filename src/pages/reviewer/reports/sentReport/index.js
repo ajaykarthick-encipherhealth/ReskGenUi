@@ -292,7 +292,7 @@ const SentReport = ({
     try {
       const data = await workStatusApiAdmin(startDate, endDate, router);
       setDateRange(data.response?.processedStatusCount);
-      setChartValue(data.response);
+      // setChartValue(data.response);
     } catch (error) {
       console.log(error);
     }

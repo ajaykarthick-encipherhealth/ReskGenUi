@@ -248,6 +248,7 @@ const UserList = () => {
                         setClear={setClear}
                         clear={clear}
                         addBtn={true}
+                        disable="Yes"
                       />
                     </div>
                     <div

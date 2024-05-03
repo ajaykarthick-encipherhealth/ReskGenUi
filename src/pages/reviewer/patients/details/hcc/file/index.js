@@ -205,7 +205,7 @@ const File = ({
 
   useEffect(() => {
     if (hccFileDetails?.result?.response) {
-      dispatch(pdfUrl(hccFileDetails?.result?.response));
+      // dispatch(pdfUrl(hccFileDetails?.result?.response));
       setSelectFileURL(hccFileDetails?.result?.response);
     }
   }, [hccFileDetails]);
@@ -2608,6 +2608,7 @@ const File = ({
               handleCloseModal={handleCloseModal}
               isAddHccForm={isAddHccForm}
               setIsAddHccForm={setIsAddHccForm}
+              isMeatNew={true}
             />
           </div>
         ) : null}

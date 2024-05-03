@@ -65,7 +65,7 @@ export default function Login() {
   return (
     <div className="page-wraper">
       <div className="login-account">
-        <div className={`row h-100 ${styles.loginContainer}`}>
+        <div className={`row ${styles.loginContainer}`}>
           <div className="col-lg-6 align-self-start">
             <div
               className="account-info-area"
