@@ -75,7 +75,6 @@ const ReviewerReport = ({
   const worlFlowData = useSelector(
     (state) => state?.AdminDashboardReducers?.data
   );
-  console.log(getFlagsData, "getFLag");
   const [dateRange, setDateRange] = useState({
     processedStatus: {
       PENDING: 0,
@@ -107,7 +106,6 @@ const ReviewerReport = ({
       (selectedRow) => selectedRow.patientId === row?.patientId
     );
     let updatedRows;
-    console.log(selectedRows, "rw");
     if (isSelected) {
       updatedRows = selectedRows?.filter(
         (selectedRow) => selectedRow.patientId !== row?.patientId
@@ -432,12 +430,9 @@ const ReviewerReport = ({
   };
 
   const gotoPatientDetails = (data) => {
-    console.log(data, "data");
     dispatch(patientDetails(data));
 
     if (data?.processedStatus === "COMPLETED") {
-      // console.log(data?.reportListAll?.response?.data?.processedStatus, "t");
-
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
@@ -458,9 +453,6 @@ const ReviewerReport = ({
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
   }, [selectedRows]);
-  console.log(reportListAll, "te");
-
-  console.log(reportListAll?.response?.data, "test");
 
   return (
     <>
@@ -692,10 +684,7 @@ const ReviewerReport = ({
                       </div>
                     </>
                   )}
-                  {console.log(
-                    reportListAll?.supervisorAllocationCount,
-                    "supervisor"
-                  )}
+
                   <div className="col-xl-6" style={{ marginLeft: "10px" }}>
                     <div className={styles.cardContainer}>
                       <div className={styles.card1}>
