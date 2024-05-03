@@ -1,4 +1,5 @@
 .group {
+  width: 80%;
   display: flex;
   gap: 10px;
   justify-content: center;
@@ -6,23 +7,27 @@
 }
 
 .group button {
-  padding: 10px 20px;
+  width: 100%;
+  height: 100%;
   background-color: transparent;
   color: black;
   border: none;
   cursor: pointer;
   transition: box-shadow 0.3s ease;
+  padding: 10px;
 }
 
 .buttonContainer {
   border: 1px solid #04306f;
-  padding: 5px;
   border-radius: 10px;
+  width: 20%;
+  height: 50px;
+  margin: auto;
+  display: flex;
   justify-content: center;
-  margin: 0 660px;
+  align-items: center;
 }
-.group button:active {
-  padding: 10px 20px;
+.active {
   background-color: white !important;
   color: #04306f !important;
   border: none;
@@ -31,7 +36,6 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .group button:focus {
-  padding: 10px 20px;
   background-color: white !important; /* Green background */
   color: #04306f !important;
   border: none;
@@ -266,4 +270,36 @@
 }
 .selectedCard {
   border: 1px solid #04306f; /* Adjust the border style as needed */
+}
+.moreStyle{
+  color:#378CE7;
+  border-bottom: 2px solid #378CE7;
+}
+.customChecked[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 1px solid #d4c9c9;
+  outline: none;
+  transition: background-color 0.3s;
+}
+
+.customChecked[type="checkbox"]:checked {
+  width: 20px;
+  height: 20px;
+  background-color: #04306f;
+}
+.customChecked[type="checkbox"]::before {
+  content: "\2713";
+  display: flex;
+  justify-content: center;
+  color: #fff;
+  font-weight: 800;
+  font-size: 14px;
+  margin-top: -2px;
 }
