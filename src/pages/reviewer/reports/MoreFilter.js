@@ -4,7 +4,13 @@ import Image from "next/image";
 import styles from "./report.module.css";
 import { Popover } from "antd";
 
-const MoreFilter = ({ checkedList ,selectedData, setSelectedData,selectAll, setSelectAll}) => {
+const MoreFilter = ({
+  checkedList,
+  selectedData,
+  setSelectedData,
+  selectAll,
+  setSelectAll,
+}) => {
   const handleHeaderCheckboxChange = () => {
     setSelectAll(!selectAll);
     const updatedRows = selectAll ? [] : checkedList;
@@ -31,39 +37,23 @@ const MoreFilter = ({ checkedList ,selectedData, setSelectedData,selectAll, setS
       <input
         type="checkbox"
         onChange={handleHeaderCheckboxChange}
-        className={
-          styles.customChecked
-        }
-        style={{
-          width: "20px",
-          height: "20px",
-          flexhrink: "0",
-          borderRadius: "4px",
-          cursor: "pointer",
-        }}
+        className={`${styles.customChecked}`}
         checked={selectAll}
       />{" "}
-      <span style={{margin:"0 5px"}}>Select All</span>
+      <span style={{ margin: "0 5px" }}>Select All</span>
       {checkedList?.map((item, index) => (
-        <div key={item?.id} style={{margin:"10px 0px"}}>
+        <div key={item?.id} style={{ margin: "10px 0px" }}>
           <input
             type="checkbox"
             onChange={() => {
               handleRowCheckboxChange(item);
             }}
-            className={styles.customChecked}
+            className={`${styles.customChecked}`}
             checked={selectedData?.some(
               (selectedRow) => selectedRow?.id === item?.id
             )}
-            style={{
-              width: "20px",
-              height: "20px",
-              flexhrink: "0",
-              borderRadius: "4px",
-              cursor: "pointer",
-            }}
           />{" "}
-          <span style={{margin:"0 5px"}}>{item.name}</span>
+          <span style={{ margin: "0 5px" }}>{item.name}</span>
         </div>
       ))}
     </>
