@@ -399,45 +399,51 @@ const Reports = () => {
                 <div className="tbl-caption  align-items-center">
                   <div className="tbl-caption  align-items-center">
                     <div
-                      className="row filter-contain"
-                      style={{
-                        marginTop: "47px",
-                        marginBottom: selectedData?.length > 0 ? "20px" : "0px",
-                      }}
+                      className={`row filter-contain mt-4 mb-${
+                        selectedData?.length > 0 ? "3" : "0"
+                      } `}
                     >
-                      <div className="col-xl-2" style={{ display: "flex" }}>
-                        <label className="labelStyle">Search </label>
-                        <div class="form-group has-search">
-                          <FontAwesomeIcon
-                            className="fa fa-search form-control-feedback"
-                            icon={faSearch}
-                          />
+                      <div className="col-xl-2">
+                        <div className="d-flex w-100">
+                          <label className="labelStyle d-flex m-auto">
+                            {" "}
+                            Search
+                          </label>
+                          <div class="form-group has-search2 w-100">
+                            <FontAwesomeIcon
+                              className="fa fa-search form-control-feedback"
+                              icon={faSearch}
+                            />
 
-                          <InputText
-                            name="initialSearch"
-                            type="text"
-                            onChange={(e) => filterChangePatientId(e)}
-                            className="form-control new-form-control reportInput"
-                            placeholder="Search"
-                            maxLength={25}
-                            value={search ? search?.searchVal : ""}
-                            onKeyDown={(e) => {
-                              // Prevent input of backslash ("\")
-                              if (e.key === "\\") {
-                                e.preventDefault();
-                              }
-                            }}
-                          />
+                            <InputText
+                              name="initialSearch"
+                              type="text"
+                              onChange={(e) => filterChangePatientId(e)}
+                              className="form-control new-form-control reportInput"
+                              placeholder="Search"
+                              maxLength={25}
+                              value={search ? search?.searchVal : ""}
+                              onKeyDown={(e) => {
+                                // Prevent input of backslash ("\")
+                                if (e.key === "\\") {
+                                  e.preventDefault();
+                                }
+                              }}
+                            />
+
+                            {/* )} */}
+                          </div>
                         </div>
                       </div>
+
                       {!reportActiveTab || reportActiveTab === "Reviewer" ? (
                         <div className="col-xl-2">
-                          <div style={{ display: "flex", width: "100%" }}>
-                            <label className="labelStyle"> Status</label>
-                            <div
-                              class="form-group has-search"
-                              style={{ width: "100%" }}
-                            >
+                          <div className="d-flex w-100">
+                            <label className="labelStyle d-flex m-auto">
+                              {" "}
+                              Status
+                            </label>
+                            <div class="form-group has-search w-100">
                               <Select
                                 onChange={(selectedOption) => {
                                   dosOnChange(
@@ -455,9 +461,12 @@ const Reports = () => {
                         </div>
                       ) : null}
 
-                      <div className="col-xl-2" style={{ display: "flex" }}>
-                        <div style={{ display: "flex", width: "100%" }}>
-                          <label className="labelStyle"> Date</label>
+                      <div className="col-xl-2 d-flex">
+                        <div className="d-flex w-100">
+                          <label className="labelStyle d-flex m-auto">
+                            {" "}
+                            Date
+                          </label>
                           <div>
                             <RangePicker
                               style={{
@@ -526,27 +535,13 @@ const Reports = () => {
                     <div className="row filter-contain">
                       {selectedData?.length > 0 &&
                         selectedData?.map((info) => (
-                          <div
-                            className="col-xl-2"
-                            style={{ marginTop: "20px" }}
-                          >
-                            <div
-                              style={{
-                                display: "flex",
-                                width: "100%",
-                              }}
-                            >
-                              <label
-                                className="labelStyle"
-                                style={{ display: "flex", width: "auto" }}
-                              >
+                          <div className="col-xl-2 mt-3">
+                            <div className="d-flex w-100">
+                              <label className="labelStyle d-flex m-auto">
                                 {" "}
                                 {info.name}
                               </label>
-                              <div
-                                class="form-group has-search"
-                                style={{ width: "100%" }}
-                              >
+                              <div className="form-group has-search2 w-100">
                                 {info?.isSearch && (
                                   <FontAwesomeIcon
                                     className="fa fa-search form-control-feedback"
