@@ -35,7 +35,7 @@ const statusOptions = [
   { label: "Hold", value: "HOLD" },
 ];
 
-const Reports = () => {
+const Reports = ({ workFgetFlagsowData }) => {
   const dispatch = useDispatch();
   const route = useRouter();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
@@ -501,8 +501,7 @@ const Reports = () => {
                           sortOrder={coderSortOrder}
                           setSort={setSort}
                           gotoPatientDetails={gotoPatientDetails}
-                          page={{pageNo, paginationFirst}}
-
+                          page={{ pageNo, paginationFirst }}
                         />
                       </div>
                     )}

@@ -44,7 +44,7 @@ import { useDispatch } from "react-redux";
 import dayjs from "dayjs";
 import { workStatusApiAdmin } from "../../../../services/adminServices/DashboardService";
 import { getFlag, getFlags } from "../../../../components/reuseableFunctions";
-// import { reportListAll } from "../datas";
+import { connect } from "react-redux";
 
 const ReviewerReport = ({
   setModal,
@@ -64,6 +64,7 @@ const ReviewerReport = ({
   setSort,
   reportListAll,
   page,
+  getFlagsData,
 }) => {
   const [activeTab, setActiveTab] = useState("Reviewer");
   const [selectedItems, setSelectedItems] = useState([]);
@@ -74,7 +75,7 @@ const ReviewerReport = ({
   const worlFlowData = useSelector(
     (state) => state?.AdminDashboardReducers?.data
   );
- 
+  console.log(getFlagsData, "getFLag");
   const [dateRange, setDateRange] = useState({
     processedStatus: {
       PENDING: 0,
@@ -97,7 +98,7 @@ const ReviewerReport = ({
 
   const handleHeaderCheckboxChange = () => {
     setSelectAll(!selectAll);
-    const updatedRows = selectAll ? [] : reportListAll?.data;
+    const updatedRows = selectAll ? [] : reportListAll?.response?.data;
     setSelectedRows(updatedRows);
   };
 
@@ -106,7 +107,7 @@ const ReviewerReport = ({
       (selectedRow) => selectedRow.patientId === row?.patientId
     );
     let updatedRows;
-
+    console.log(selectedRows, "rw");
     if (isSelected) {
       updatedRows = selectedRows?.filter(
         (selectedRow) => selectedRow.patientId !== row?.patientId
@@ -142,7 +143,9 @@ const ReviewerReport = ({
       id: 3,
       icon: Hold,
       title: "Hold",
-      charts: reportListAll?.processedStatusCount?.processedStatus ? reportListAll?.processedStatusCount?.processedStatus.HOLD : "0",
+      charts: reportListAll?.processedStatusCount?.processedStatus
+        ? reportListAll?.processedStatusCount?.processedStatus.HOLD
+        : "0",
 
       bg: "#DACEFD",
     },
@@ -159,7 +162,9 @@ const ReviewerReport = ({
       id: 5,
       icon: auditedIcon,
       title: "Audited",
-      charts: reportListAll?.processedStatusCount?.auditedStatus ? reportListAll?.processedStatusCount?.auditedStatus.AUDITED : "0",
+      charts: reportListAll?.processedStatusCount?.auditedStatus
+        ? reportListAll?.processedStatusCount?.auditedStatus.AUDITED
+        : "0",
 
       bg: "#DBEEF0",
     },
@@ -167,7 +172,9 @@ const ReviewerReport = ({
       id: 6,
       icon: notAudited,
       title: "Not Audited",
-      charts: reportListAll?.processedStatusCount?.auditedStatus ? reportListAll?.processedStatusCount?.auditedStatus.NOT_AUDIT : "0",
+      charts: reportListAll?.processedStatusCount?.auditedStatus
+        ? reportListAll?.processedStatusCount?.auditedStatus.NOT_AUDIT
+        : "0",
 
       bg: "#FBE7D0",
     },
@@ -175,7 +182,9 @@ const ReviewerReport = ({
       id: 7,
       icon: reeAuditIcon,
       title: "Re Audit",
-      charts: reportListAll?.processedStatusCount?.auditedStatus ? reportListAll?.processedStatusCount?.auditedStatus.REAUDIT : "0",
+      charts: reportListAll?.processedStatusCount?.auditedStatus
+        ? reportListAll?.processedStatusCount?.auditedStatus.REAUDIT
+        : "0",
 
       bg: "#FFDBB8",
     },
@@ -183,7 +192,9 @@ const ReviewerReport = ({
       id: 8,
       icon: reAuditIcon,
       title: "Audit pending",
-      charts: reportListAll?.processedStatusCount?.auditedStatus ? reportListAll?.processedStatusCount?.auditedStatus.PENDING : "0",
+      charts: reportListAll?.processedStatusCount?.auditedStatus
+        ? reportListAll?.processedStatusCount?.auditedStatus.PENDING
+        : "0",
 
       bg: "#F3D8E5",
     },
@@ -191,8 +202,9 @@ const ReviewerReport = ({
       id: 9,
       icon: auditHoldIcon,
       title: "Audit hold",
-      charts: reportListAll?.processedStatusCount?.auditedStatus ? reportListAll?.processedStatusCount?.auditedStatus.AUDITHOLD
-      : "0",
+      charts: reportListAll?.processedStatusCount?.auditedStatus
+        ? reportListAll?.processedStatusCount?.auditedStatus.AUDITHOLD
+        : "0",
 
       bg: "#FFF2CC",
     },
@@ -200,7 +212,9 @@ const ReviewerReport = ({
       id: 10,
       icon: auditDeclined,
       title: "Audit decline",
-      charts: reportListAll?.processedStatusCount?.auditedStatus ? reportListAll?.processedStatusCount?.auditedStatus.DECLINED : "0",
+      charts: reportListAll?.processedStatusCount?.auditedStatus
+        ? reportListAll?.processedStatusCount?.auditedStatus.DECLINED
+        : "0",
 
       bg: "#FDD2CE",
     },
@@ -230,90 +244,6 @@ const ReviewerReport = ({
     {
       id: 5,
       flags: "PROVIDER_SIGNATURE_MISSED",
-      count: "10",
-    },
-  ];
-  const auditor = [
-    {
-      id: 1,
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-      count: "10",
-    },
-    {
-      id: 2,
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-      count: "10",
-    },
-    {
-      id: 3,
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-      count: "10",
-    },
-    {
-      id: 4,
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-      count: "10",
-    },
-    {
-      id: 5,
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-      count: "10",
-    },
-  ];
-  const reviewer = [
-    {
-      id: 1,
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-      count: "10",
-    },
-    {
-      id: 2,
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-      count: "10",
-    },
-    {
-      id: 3,
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-      count: "10",
-    },
-    {
-      id: 4,
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-      count: "10",
-    },
-    {
-      id: 5,
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
       count: "10",
     },
   ];
@@ -501,15 +431,13 @@ const ReviewerReport = ({
     }
   };
 
- 
- 
-
   const gotoPatientDetails = (data) => {
     console.log(data, "data");
     dispatch(patientDetails(data));
 
     if (data?.processedStatus === "COMPLETED") {
-      console.log(data?.reportListAll?.data?.processedStatus, "t");
+      // console.log(data?.reportListAll?.response?.data?.processedStatus, "t");
+
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
@@ -523,10 +451,9 @@ const ReviewerReport = ({
   };
 
   const handleTableRowClick = (id) => {
-    const clickedData = reportListAll?.data?.[id];
+    const clickedData = reportListAll?.response?.data?.[id];
     gotoPatientDetails(clickedData);
   };
-
 
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
@@ -549,28 +476,30 @@ const ReviewerReport = ({
             >
               {" "}
               {reportListAll?.response?.data?.length > 0 && (
-                <div>
-                  <input
-                    type="checkbox"
-                    onChange={handleHeaderCheckboxChange}
-                    className={selectAll ? TableStyle.customChecked : ""}
-                    style={{
-                      width: "22px",
-                      height: "22px",
-                      flexhrink: "0",
-                      borderRadius: "4px",
-                      cursor: "pointer",
-                    }}
-                    checked={selectAll}
-                  />
-                </div>
+                <>
+                  <div>
+                    <input
+                      type="checkbox"
+                      onChange={handleHeaderCheckboxChange}
+                      className={selectAll ? TableStyle.customChecked : ""}
+                      style={{
+                        width: "22px",
+                        height: "22px",
+                        flexShrink: "0",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                      }}
+                      checked={selectAll}
+                    />
+                  </div>
+                  <span
+                    className={styles.pName}
+                    style={{ paddingLeft: "20px", textAlign: "center" }}
+                  >
+                    All
+                  </span>
+                </>
               )}
-              <span
-                className={styles.pName}
-                style={{ paddingLeft: "20px", textAlign: "center" }}
-              >
-                All
-              </span>
             </div>
             <div className="row">
               <div>
@@ -763,7 +692,10 @@ const ReviewerReport = ({
                       </div>
                     </>
                   )}
-
+                  {console.log(
+                    reportListAll?.supervisorAllocationCount,
+                    "supervisor"
+                  )}
                   <div className="col-xl-6" style={{ marginLeft: "10px" }}>
                     <div className={styles.cardContainer}>
                       <div className={styles.card1}>
@@ -788,7 +720,7 @@ const ReviewerReport = ({
                             {" "}
                             <div>
                               <div>Avg RAF score</div>
-                              <h4>{reportListAll?.rafAverage?.toFixed(4) }</h4>
+                              <h4>{reportListAll?.rafAverage?.toFixed(4)}</h4>
                             </div>
                           </div>
                           <div className={`col-xl-2 ${styles.subCard}`}>
@@ -854,60 +786,83 @@ const ReviewerReport = ({
                           </div>
                           <div className={`col-xl-4 ${styles.flags}`}>
                             <div className={styles.cardHead}>
-                              Auditor
-                              {auditor.map((item) => (
-                                <div
-                                  className={styles.contentAuditor}
-                                  key={item.id}
-                                >
-                                  <div className={`col-xl-4 ${styles.avatar}`}>
-                                    <span style={{ marginRight: "10px" }}>
-                                      {renderUserPrfoileAvatar(
-                                        item.firstName,
-                                        item.lastName,
-                                        item.profileImageUrl,
-                                        "header"
+                              Supervisor
+                              {reportListAll?.supervisorAllocationCount?.map(
+                                (item) => (
+                                  <div
+                                    className={styles.contentAuditor}
+                                    key={item.id}
+                                  >
+                                    <div className={styles.avatar}>
+                                      {item.userNameDTO?.firstName ||
+                                      item?.userNameDTO?.lastName ||
+                                      item?.userNameDTO?.profileImageUrl ? (
+                                        <>
+                                          <span style={{ marginRight: "10px" }}>
+                                            {renderUserPrfoileAvatar(
+                                              item.userNameDTO?.firstName,
+                                              item?.userNameDTO?.lastName,
+                                              item?.userNameDTO
+                                                ?.profileImageUrl,
+                                              "header"
+                                            )}
+                                          </span>
+                                          <span style={{ fontSize: "12px" }}>
+                                            {item.userNameDTO?.firstName}{" "}
+                                            {item?.userNameDTO?.lastName}
+                                          </span>
+                                        </>
+                                      ) : (
+                                        <div
+                                          style={{
+                                            textAlign: "center",
+                                            height: "30px",
+                                            width: "148px",
+                                          }}
+                                        >
+                                          ---
+                                        </div>
                                       )}
-                                    </span>
-                                    <span>
-                                      {item.firstName} {item.lastName}
-                                    </span>
-                                  </div>
+                                    </div>
 
-                                  <div className={styles.count}>
-                                    {item.count}
+                                    <div className={styles.count}>
+                                      {item.count}
+                                    </div>
                                   </div>
-                                </div>
-                              ))}
+                                )
+                              )}
                             </div>
                           </div>
                           <div className={`col-xl-4 ${styles.flags}`}>
                             <div className={styles.cardHead}>
                               Reviewer
-                              {reviewer.map((item) => (
-                                <div
-                                  className={styles.contentAuditor}
-                                  key={item.id}
-                                >
-                                  <div className={`col-xl-4 ${styles.avatar}`}>
-                                    <span style={{ marginRight: "10px" }}>
-                                      {renderUserPrfoileAvatar(
-                                        item.firstName,
-                                        item.lastName,
-                                        item.profileImageUrl,
-                                        "header"
-                                      )}
-                                    </span>
-                                    <span>
-                                      {item.firstName} {item.lastName}
-                                    </span>
-                                  </div>
+                              {reportListAll?.reviewerAllocationCount?.map(
+                                (item) => (
+                                  <div
+                                    className={styles.contentAuditor}
+                                    key={item.id}
+                                  >
+                                    <div className={styles.avatar}>
+                                      <span style={{ marginRight: "10px" }}>
+                                        {renderUserPrfoileAvatar(
+                                          item.userNameDTO?.firstName,
+                                          item?.userNameDTO?.lastName,
+                                          item?.userNameDTO?.profileImageUrl,
+                                          "header"
+                                        )}
+                                      </span>
+                                      <span style={{ fontSize: "12px" }}>
+                                        {item.userNameDTO?.firstName}{" "}
+                                        {item?.userNameDTO?.lastName}
+                                      </span>
+                                    </div>
 
-                                  <div className={styles.count}>
-                                    {item.count}
+                                    <div className={styles.count}>
+                                      {item.count}
+                                    </div>
                                   </div>
-                                </div>
-                              ))}
+                                )
+                              )}
                             </div>
                           </div>
                         </div>
@@ -935,4 +890,12 @@ const ReviewerReport = ({
   );
 };
 
-export default ReviewerReport;
+const enhancer = connect(
+  (state) => ({
+    getFlagsData: state?.reviewer?.workQueue?.flags?.data,
+  })
+  // {
+  //   workFgetFlagsowData: workflowActions.flagsAction,
+  // }
+);
+export default enhancer(ReviewerReport);
