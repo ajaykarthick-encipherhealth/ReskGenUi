@@ -40,7 +40,7 @@ const Index = () => {
   );
   const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
-  console.log(reportActiveTab,"testtab")
+  console.log(reportActiveTab, "testtab");
   const [isLoading, setIsLoading] = useState(true);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -73,7 +73,7 @@ const Index = () => {
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
-  const [searchVal,setSearchVal]=useState("")
+  const [searchVal, setSearchVal] = useState("");
 
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
@@ -115,11 +115,11 @@ const Index = () => {
     setSelectedDates(null);
     // setActiveTab(name);
     dispatch(getActiveTab(name));
-    setSearchVal("")
-    setCoderSearch("")
-    setReceivedSearch("")
-    setSentSearch("")
-    setSelectedCoderOpt("")
+    setSearchVal("");
+    setCoderSearch("");
+    setReceivedSearch("");
+    setSentSearch("");
+    setSelectedCoderOpt("");
   };
   useEffect(() => {
     setIsLoading(false);

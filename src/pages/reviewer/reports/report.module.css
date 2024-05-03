@@ -271,6 +271,55 @@
 .selectedCard {
   border: 1px solid #04306f; /* Adjust the border style as needed */
 }
+
+.colData {
+  border-radius: 10px;
+  height: 100px;
+  width: 191px;
+  padding: 10px;
+  margin-bottom: 10px;
+  margin-right: 25px;
+}
+.Img {
+  height: 25px;
+  width: 25px;
+}
+.carddiv {
+  height: 80%;
+}
+.avatarAlign {
+  margin-right: 10px;
+}
+.emptyData {
+  text-align: center;
+  height: 30px;
+  width: 148px;
+}
+.smallText {
+  font-size: 12px;
+}
+.checkSep {
+  margin-left: 10px;
+}
+.textcenter {
+  text-align: center;
+}
+.imgSize {
+  height: 24px;
+  width: 24px;
+}
+.checkAlign {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+.cardSeperation {
+  margin-left: 10px;
+}
+
 .moreStyle{
   color:#378CE7;
   border-bottom: 2px solid #378CE7;
@@ -303,3 +352,4 @@
   font-size: 14px;
   margin-top: -2px;
 }
+
