@@ -248,7 +248,7 @@ const Reports = () => {
     }
   };
   const dosOnChange = (selectedOption, name) => {
-    const nameString=name?.split(" ").join("")
+    const nameString = name?.split(" ").join("");
     setSelectedOptions((prevOptions) => ({
       ...prevOptions,
       [nameString]: selectedOption?.value,
@@ -318,6 +318,38 @@ const Reports = () => {
       name: "Patient name",
       isSearch: true,
     },
+    {
+      id: 12,
+      name: "Flag",
+      isSelect: true,
+    },
+    {
+      id: 13,
+      name: "Raf Score",
+      isSelect: false,
+      isSearch: true,
+    },
+    {
+      id: 14,
+      name: "Patient name",
+      isSearch: true,
+    },
+    {
+      id: 22,
+      name: "Flag",
+      isSelect: true,
+    },
+    {
+      id: 32,
+      name: "Raf Score",
+      isSelect: false,
+      isSearch: true,
+    },
+    {
+      id: 42,
+      name: "Patient name",
+      isSearch: true,
+    },
   ];
   return (
     <div>
@@ -366,7 +398,7 @@ const Reports = () => {
                   <div className="tbl-caption  align-items-center">
                     <div
                       className="row filter-contain"
-                      style={{ marginTop: "47px" }}
+                      style={{ marginTop: "47px",marginBottom:selectedData?.length>0?"20px":"0px" }}
                     >
                       <div className="col-xl-2" style={{ display: "flex" }}>
                         <label className="labelStyle">Search </label>
@@ -403,7 +435,10 @@ const Reports = () => {
                             >
                               <Select
                                 onChange={(selectedOption) => {
-                                  dosOnChange(selectedOption, "reviewer Status");
+                                  dosOnChange(
+                                    selectedOption,
+                                    "reviewer Status"
+                                  );
                                 }}
                                 options={statusOptions}
                                 className={`custom-react-select`}
@@ -481,14 +516,17 @@ const Reports = () => {
                         </div>
                       )}
                     </div>
-                    <div
-                      className="row filter-contain"
-                      style={{ marginTop: "47px" }}
-                    >
+                    <div className="row filter-contain">
                       {selectedData?.length > 0 &&
                         selectedData?.map((info) => (
-                          <div className="col-xl-2">
-                            <div style={{ display: "flex", width: "100%" }}>
+                          <div className="col-xl-2" style={{marginTop: "20px"}}>
+                            <div
+                              style={{
+                                display: "flex",
+                                width: "100%",
+                                
+                              }}
+                            >
                               <label
                                 className="labelStyle"
                                 style={{ display: "flex", width: "auto" }}
