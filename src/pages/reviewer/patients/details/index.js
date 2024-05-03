@@ -1647,7 +1647,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
       });
     }
   }, []);
-console.log(screenWidth)
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
