@@ -8860,7 +8860,7 @@ button:focus {
   margin: 0 auto;
   background: #fff;
   border-radius: 10px;
-  min-height:420px;
+  min-height: 420px;
 }
 
 @media only screen and (max-width: 87.5rem) {
@@ -11763,7 +11763,14 @@ li.p-dropdown-item {
   padding-left: 2.375rem;
   font-size: 14px;
 }
-
+.has-search2 .new-form-control {
+  padding-left: 2.375rem;
+  font-size: 14px;
+  border-top-right-radius: 5px !important;
+  border-bottom-right-radius: 5px !important;
+  border-bottom-left-radius: 0px !important;
+  border-top-left-radius: 0px !important;
+}
 .has-search .form-control-feedback {
   position: absolute;
   z-index: 2;
@@ -11776,7 +11783,18 @@ li.p-dropdown-item {
   color: #aaa;
   padding-left: 9px;
 }
-
+.has-search2 .form-control-feedback {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: 16px;
+  height: 40px;
+  line-height: 9.375rem;
+  text-align: center;
+  pointer-events: none;
+  color: #aaa;
+  padding-left: 9px;
+}
 .match-btn {
   width: 60px !important;
 }
@@ -14421,10 +14439,15 @@ input[type="number"] {
 .labelStyle {
   margin-left: 10px;
   background-color: #cee1fd; /* Background color for label */
-  padding: 10px; /* Adjust padding as needed */
+  /* Adjust padding as needed */
   color: #04306f;
   margin-bottom: 0;
-  width: 68px;
+  width: 30% !important;
+  height:42px;
+  display:flex;
+  justify-content: center;
+  /* padding:0 10px; */
+  align-items: center;
   text-align: center;
   border-radius: 5px 0px 0px 5px !important;
   height: 43px;
@@ -14486,6 +14509,11 @@ input[type="number"] {
   color: #fff !important;
   border: 1px solid #6c9ddd !important;
 }
-.ant-select-outlined.ant-select-status-error:not(.ant-select-customize-input) .ant-select-selector{
+.ant-select-outlined.ant-select-status-error:not(.ant-select-customize-input)
+  .ant-select-selector {
   border: 1px solid #d9d9d9;
+}
+.reportInput {
+  width: 100%;
+  border-radius: none !important;
 }

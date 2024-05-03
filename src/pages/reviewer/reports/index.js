@@ -25,6 +25,7 @@ import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import SentReport from "./sentReport";
 import Export from "../report/Export";
+import MoreFilter from "./MoreFilter";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -45,9 +46,6 @@ const Reports = () => {
   );
   const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
-
-  console.log(reportActiveTab, "active");
-
   const [isLoading, setIsLoading] = useState(true);
   // const [activeTab, setActiveTab] = useState(
   //   reportActiveTab ? reportActiveTab : "Reviewer"
@@ -57,12 +55,12 @@ const Reports = () => {
   const [filteredCOder, setFilteredCoder] = useState([]);
   const [comments, setComments] = useState();
   const [selectedRows, setSelectedRows] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
-
+  const [selectAllCheckBoxes, setSelectAllCheckBoxes] = useState(false);
   const [pageNo, setPageNo] = useState(0);
   const [sentPageNo, setSentPageNo] = useState(0);
   const [receivedPageNo, setReceivedPageNo] = useState(0);
-
+  const [selectedData, setSelectedData] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [paginationReceivedFirst, setPaginationReceivedFirst] = useState(0);
   const [paginationSentFirst, setPaginationSentFirst] = useState(0);
@@ -74,7 +72,7 @@ const Reports = () => {
   const [receivedEndDate, setReceivedEndDate] = useState();
   const [coderStartDate, setCoderStartDate] = useState();
   const [coderEndDate, setCoderEndDate] = useState();
-  const [selectedDates, setSelectedDates] = useState(null);
+  const [selectedDates, setSelectedDates] = useState([]);
   const [selectedCoderOpt, setSelectedCoderOpt] = useState("");
   const [coderSearch, setCoderSearch] = useState("");
   const [sentSearch, setSentSearch] = useState("");
@@ -83,10 +81,11 @@ const Reports = () => {
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
-  const [searchVal, setSearchVal] = useState("");
-
+  const [searchVal, setSearchVal] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState([]);
   const [search, setSearch] = useState();
   const { RangePicker } = DatePicker;
+  const [selectedDateRanges, setSelecteddateRanges] = useState([]);
 
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -116,7 +115,7 @@ const Reports = () => {
     setPageNo(e.page);
   };
 
-  const handleCoderPicker = (date, dateString) => {
+  const handleCoderPicker = (date, dateString, tabName) => {
     const formattedDates = dateString?.map((date, index) => {
       const formattedDate =
         index === 1
@@ -124,10 +123,16 @@ const Reports = () => {
           : date && `${date}T00:00:00.000Z`;
       return formattedDate;
     });
-    setSelectedDates(date);
-    setCoderStartDate(formattedDates[0]);
-    setCoderEndDate(formattedDates[1]);
+    setSelectedDates((prevOptions) => ({
+      ...prevOptions,
+      [tabName]: date,
+    }));
+    setSelecteddateRanges((prevOptions) => ({
+      ...prevOptions,
+      [tabName]: { from: formattedDates[0], to: formattedDates[1] },
+    }));
   };
+
   const onReceivedPageChange = (e) => {
     setPaginationReceivedFirst(e.first);
     setReceivedPageNo(e.page);
@@ -145,65 +150,17 @@ const Reports = () => {
 
   const handleTabs = (name) => {
     setSelectedDates(null);
+    setSelecteddateRanges([]);
     localStorage.setItem("activeTab", name);
     dispatch(getActiveTab(name));
+    setSearch();
+    setSearchVal([]);
   };
-  useEffect(() => {
-    setIsLoading(false);
-    if (reportActiveTab === "Sent") {
-      dispatch(
-        getSentDetails(sentPageNo, startDate, endDate, sentSearch, sort)
-      );
-    }
-    if (reportActiveTab === "Received") {
-      dispatch(
-        getReceivedDetails(
-          receivedPageNo,
-          receivedStartDate,
-          receivedEndDate,
-          receivedSearch,
-          sort
-        )
-      );
-    }
 
-    if (!reportActiveTab || reportActiveTab === "Reviewer") {
-      dispatch(
-        getReportDetails(
-          pageNo,
-          coderStartDate,
-          coderEndDate,
-          coderSearch,
-          selectedCoderOpt,
-          sort
-        )
-      );
-    }
-    if (ExportResponse) {
-      setIsModalVisible(false);
-    }
-  }, [
-    pageNo,
-    sentPageNo,
-    receivedPageNo,
-    reportActiveTab,
-    // activeTab,
-    ExportResponse,
-    selectedCoderOpt,
-    coderSearch,
-    coderStartDate,
-    coderEndDate,
-    startDate,
-    endDate,
-    sentSearch,
-    receivedPageNo,
-    receivedStartDate,
-    receivedEndDate,
-    receivedSearch,
-    receivedSortOrder,
-    sort,
-  ]);
   useEffect(() => {
+    const coderSearchString = searchVal.find(
+      (item) => item.field === "initialSearch"
+    )?.search;
     setIsLoading(false);
     const activeTabFromStorage = localStorage.getItem("activeTab");
     const activeTab = activeTabFromStorage ? activeTabFromStorage : "Reviewer";
@@ -211,15 +168,21 @@ const Reports = () => {
 
     if (activeTab === "Sent") {
       dispatch(
-        getSentDetails(sentPageNo, startDate, endDate, sentSearch, sort)
+        getSentDetails(
+          sentPageNo,
+          selectedDateRanges?.Sent?.from,
+          selectedDateRanges?.Sent?.to,
+          coderSearchString ? coderSearchString : "",
+          sort
+        )
       );
     } else if (activeTab === "Received") {
       dispatch(
         getReceivedDetails(
           receivedPageNo,
-          receivedStartDate,
-          receivedEndDate,
-          receivedSearch,
+          selectedDateRanges?.Received?.from,
+          selectedDateRanges?.Received?.to,
+          coderSearchString ? coderSearchString : "",
           sort
         )
       );
@@ -227,10 +190,10 @@ const Reports = () => {
       dispatch(
         getReportDetails(
           pageNo,
-          coderStartDate,
-          coderEndDate,
-          coderSearch,
-          selectedCoderOpt,
+          selectedDateRanges?.Reviewer?.from,
+          selectedDateRanges?.Reviewer?.to,
+          coderSearchString ? coderSearchString : "",
+          selectedOptions?.reviewerStatus,
           sort
         )
       );
@@ -243,19 +206,12 @@ const Reports = () => {
     pageNo,
     sentPageNo,
     receivedPageNo,
-    selectedCoderOpt,
-    coderSearch,
-    coderStartDate,
-    coderEndDate,
-    startDate,
-    endDate,
-    sentSearch,
     receivedPageNo,
-    receivedStartDate,
-    receivedEndDate,
-    receivedSearch,
     receivedSortOrder,
     sort,
+    searchVal,
+    selectedOptions,
+    selectedDateRanges,
   ]);
 
   useEffect(() => {
@@ -292,101 +248,181 @@ const Reports = () => {
       route.push("/reviewer/report?page=0&limit=0");
     }
   };
-  const dosOnChange = (selectedOption) => {
-    const selectedValue = selectedOption.value;
-    setSelectedCoderOpt(selectedValue);
+  const dosOnChange = (selectedOption, name) => {
+    const nameString = name?.split(" ").join("");
+    setSelectedOptions((prevOptions) => ({
+      ...prevOptions,
+      [nameString]: selectedOption?.value,
+    }));
   };
+
   const debouncedSearch = useCallback(
-    debounce((text, reportActiveTab) => {
-      if (reportActiveTab === "Sent") {
-        setSentSearch(text);
-      } else if (reportActiveTab === "Received") {
-        setReceivedSearch(text);
-      } else {
-        setCoderSearch(text);
-      }
-    }, 700),
+    debounce(
+      (
+        text,
+
+        setSearchVal,
+        field
+      ) => {
+        setSearchVal((prev) => {
+          const existingIndex = prev.findIndex((item) => item.field === field);
+          if (existingIndex !== -1) {
+            return prev.map((item, index) => {
+              if (index === existingIndex) {
+                return { ...item, search: text };
+              }
+              return item;
+            });
+          } else {
+            return [...prev, { search: text, field: field }];
+          }
+        });
+      },
+      700
+    ),
     []
   );
-
   const filterChangePatientId = (event) => {
     const value = event.target.value;
+
     let _filters = { ...filters };
     _filters["patientId"].value = value;
     setFilters(_filters);
-    setSearch(value);
-    debouncedSearch(value, reportActiveTab);
+    setSearch({
+      name: event.target.name,
+      searchval: value,
+    });
+
+    const field = event.target.name;
+    debouncedSearch(value, setSearchVal, field);
   };
 
-  return (
-    <>
-      <div>
-        <Header />
-        <div className="content-body">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-xl-12">
-                <div>
-                  <div className={styles.buttonContainer}>
-                    <div className={styles.group}>
-                      <button
-                        className={
-                          reportActiveTab === "Reviewer"
-                            ? `${styles.active}`
-                            : ""
-                        }
-                        onClick={() => {
-                          handleTabs("Reviewer");
-                        }}
-                      >
-                        Reviewer
-                      </button>
-                      <button
-                        className={
-                          reportActiveTab === "Sent" ? `${styles.active}` : ""
-                        }
-                        onClick={() => {
-                          handleTabs("Sent");
-                        }}
-                      >
-                        Sent
-                      </button>
-                      <button
-                        className={
-                          reportActiveTab === "Received"
-                            ? `${styles.active}`
-                            : ""
-                        }
-                        onClick={() => {
-                          handleTabs("Received");
-                        }}
-                      >
-                        Received
-                      </button>
-                    </div>
-                  </div>
+  const checkedList = [
+    {
+      id: 1,
+      name: "Audited Status",
+      isSelect: true,
+    },
+    {
+      id: 2,
+      name: "Flag",
+      isSelect: true,
+    },
+    {
+      id: 3,
+      name: "Raf Score",
+      isSelect: false,
+      isSearch: true,
+    },
+    {
+      id: 4,
+      name: "Patient name",
+      isSearch: true,
+    },
+    {
+      id: 12,
+      name: "Flag",
+      isRangePikcer: true,
+    },
+    {
+      id: 13,
+      name: "Raf Score",
+      isSelect: false,
+      isSearch: true,
+    },
+    {
+      id: 14,
+      name: "Patient name",
+      isSearch: true,
+    },
+    {
+      id: 22,
+      name: "Flag",
+      isSelect: true,
+    },
+    {
+      id: 32,
+      name: "Raf Score",
+      isSelect: false,
+      isRangePikcer: true,
+    },
+    {
+      id: 42,
+      name: "Patient name",
+      isSearch: true,
+    },
+  ];
 
+  return (
+    <div>
+      <Header />
+      <div className="content-body">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-xl-12">
+              <div>
+                <div className={styles.buttonContainer}>
+                  <div className={styles.group}>
+                    <button
+                      className={
+                        reportActiveTab === "Reviewer" ? `${styles.active}` : ""
+                      }
+                      onClick={() => {
+                        handleTabs("Reviewer");
+                      }}
+                    >
+                      Reviewer
+                    </button>
+                    <button
+                      className={
+                        reportActiveTab === "Sent" ? `${styles.active}` : ""
+                      }
+                      onClick={() => {
+                        handleTabs("Sent");
+                      }}
+                    >
+                      Sent
+                    </button>
+                    <button
+                      className={
+                        reportActiveTab === "Received" ? `${styles.active}` : ""
+                      }
+                      onClick={() => {
+                        handleTabs("Received");
+                      }}
+                    >
+                      Received
+                    </button>
+                  </div>
+                </div>
+
+                <div className="tbl-caption  align-items-center">
                   <div className="tbl-caption  align-items-center">
-                    <div className="tbl-caption  align-items-center">
-                      <div
-                        className="row filter-contain"
-                        style={{ marginTop: "47px" }}
-                      >
-                        <div className="col-xl-2" style={{ display: "flex" }}>
-                          <label className="labelStyle">Search </label>
-                          <div class="form-group has-search">
+                    <div
+                      className={`row filter-contain mt-4 mb-${
+                        selectedData?.length > 0 ? "3" : "0"
+                      } `}
+                    >
+                      <div className="col-xl-2">
+                        <div className="d-flex w-100">
+                          <label className="labelStyle d-flex m-auto">
+                            {" "}
+                            Search
+                          </label>
+                          <div class="form-group has-search2 w-100">
                             <FontAwesomeIcon
                               className="fa fa-search form-control-feedback"
                               icon={faSearch}
                             />
+
                             <InputText
-                              style={{ borderRadius: "0 5px 5px 0" }}
+                              name="initialSearch"
                               type="text"
                               onChange={(e) => filterChangePatientId(e)}
-                              className="form-control new-form-control"
+                              className="form-control new-form-control reportInput"
                               placeholder="Search"
                               maxLength={25}
-                              value={search}
+                              value={search ? search?.searchVal : ""}
                               onKeyDown={(e) => {
                                 // Prevent input of backslash ("\")
                                 if (e.key === "\\") {
@@ -394,18 +430,26 @@ const Reports = () => {
                                 }
                               }}
                             />
+
+                            {/* )} */}
                           </div>
                         </div>
-                        {!reportActiveTab || reportActiveTab === "Reviewer" ? (
-                          <div
-                            className="col-xl-2"
-                            style={{ display: "flex", width: "214px" }}
-                          >
-                            <label className="labelStyle"> Status</label>
-                            <div class="form-group has-search">
+                      </div>
+
+                      {!reportActiveTab || reportActiveTab === "Reviewer" ? (
+                        <div className="col-xl-2">
+                          <div className="d-flex w-100">
+                            <label className="labelStyle d-flex m-auto">
+                              {" "}
+                              Status
+                            </label>
+                            <div class="form-group has-search w-100">
                               <Select
                                 onChange={(selectedOption) => {
-                                  dosOnChange(selectedOption);
+                                  dosOnChange(
+                                    selectedOption,
+                                    "reviewer Status"
+                                  );
                                 }}
                                 options={statusOptions}
                                 className={`custom-react-select`}
@@ -414,25 +458,32 @@ const Reports = () => {
                               {/* )} */}
                             </div>
                           </div>
-                        ) : null}
+                        </div>
+                      ) : null}
 
-                        <div className="col-xl-2" style={{ display: "flex" }}>
-                          <label className="labelStyle"> Date</label>
+                      <div className="col-xl-2 d-flex">
+                        <div className="d-flex w-100">
+                          <label className="labelStyle d-flex m-auto">
+                            {" "}
+                            Date
+                          </label>
                           <div>
                             <RangePicker
                               style={{
                                 borderRadius: "0 5px 5px 0",
-                                width: "125%",
+                                width: "100%",
                               }}
-                              value={selectedDates}
-                              onChange={
-                                reportActiveTab === "SentReport"
-                                  ? handleDatePickerChange
-                                  : reportActiveTab === "ReceivedReport"
-                                  ? handleReceivedDatePicker
-                                  : reportActiveTab === "TeamReport"
-                                  ? handleTeamPicker
-                                  : handleCoderPicker
+                              value={
+                                selectedDates
+                                  ? selectedDates[reportActiveTab]
+                                  : undefined
+                              }
+                              onChange={(date, dateString) =>
+                                handleCoderPicker(
+                                  date,
+                                  dateString,
+                                  reportActiveTab
+                                )
                               }
                               disabledDate={(current) =>
                                 disableFutureDate(current)
@@ -440,164 +491,238 @@ const Reports = () => {
                             />
                           </div>
                         </div>
-
-                        {(!reportActiveTab ||
-                          reportActiveTab === "Reviewer") && (
-                          <div className="col-xl-6">
-                            <div className="row flr">
-                              <Tooltip
-                                title={
-                                  rowsLength?.length === 0
-                                    ? "Select report to export"
-                                    : ""
+                      </div>
+                      <div className="col-xl-2">
+                        <MoreFilter
+                          checkedList={checkedList}
+                          selectAll={selectAllCheckBoxes}
+                          setSelectAll={setSelectAllCheckBoxes}
+                          selectedData={selectedData}
+                          setSelectedData={setSelectedData}
+                        />
+                      </div>
+                      {(!reportActiveTab || reportActiveTab === "Reviewer") && (
+                        <div className="col-xl-4">
+                          <div className="row flr">
+                            <Tooltip
+                              title={
+                                rowsLength?.length === 0
+                                  ? "Select report to export"
+                                  : ""
+                              }
+                            >
+                              <button
+                                onClick={() => {
+                                  setIsModalVisible(true);
+                                }}
+                                className={styles.export}
+                                disabled={
+                                  rowsLength?.length > 0 ||
+                                  rowsLength?.data?.length > 0
+                                    ? false
+                                    : true
                                 }
+                                style={{ color: "#04306f" }}
                               >
-                                <button
-                                  onClick={() => {
-                                    setIsModalVisible(true);
-                                  }}
-                                  className={styles.export}
-                                  disabled={
-                                    rowsLength?.length > 0 ||
-                                    rowsLength?.data?.length > 0
-                                      ? false
-                                      : true
-                                  }
-                                  style={{ color: "#04306f" }}
-                                >
-                                  <ExportImg />
-                                  Export
-                                </button>
-                              </Tooltip>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    {reportActiveTab === "Reviewer" && (
-                      <div>
-                        <ReviewerReport
-                          setModal={setModal}
-                          modal={modal}
-                          reportListAll={filteredCOder}
-                          paginationFirst={paginationFirst}
-                          ReportPatientDetails={ReportPatientDetails?.response}
-                          onPageChange={onPageChange}
-                          comments={comments}
-                          setComments={setComments}
-                          setSelectedRows={setSelectedRows}
-                          selectedRows={selectedRows}
-                          setSelectAll={setSelectAll}
-                          selectAll={selectAll}
-                          setSortOrder={setCoderSortOrder}
-                          sortOrder={coderSortOrder}
-                          setSort={setSort}
-                          // gotoPatientDetails={gotoPatientDetails}
-                        />
-                      </div>
-                    )}
-                    {reportActiveTab === "Sent" && (
-                      <div>
-                        {}{" "}
-                        <SentReport
-                          paginationFirst={paginationSentFirst}
-                          details={SentReportDetails?.data?.response}
-                          onSentPageChange={onSentPageChange}
-                          loading={SentReportDetails?.loading}
-                          setSortOrder={setSentSortOrder}
-                          sortOrder={sentSortOrder}
-                          setSort={setSort}
-                          receivedPageNo={sentPageNo}
-                          receivedStartDate={startDate}
-                          receivedEndDate={endDate}
-                          isPhysician={true}
-                        />
-                      </div>
-                    )}
-                    {reportActiveTab === "Received" && (
-                      <div>
-                        <ReceivedReport
-                          paginationFirst={paginationReceivedFirst}
-                          details={ReceivedReportDetails?.data?.response}
-                          onPageChange={onReceivedPageChange}
-                          receivedPageNo={receivedPageNo}
-                          receivedStartDate={receivedStartDate}
-                          receivedEndDate={receivedEndDate}
-                          loading={ReceivedReportDetails?.loading}
-                          setSortOrder={setReceivedSortOrder}
-                          sortOrder={receivedSortOrder}
-                          setSort={setSort}
-                          isPhysician={true}
-                        />
-                      </div>
-                    )}
-                  </div>
-
-                  {modal && (
-                    <Modal
-                      title="Comments"
-                      centered
-                      open={modal}
-                      onOk={() => {
-                        setModal(false);
-                      }}
-                      onCancel={() => {
-                        setModal(false);
-                      }}
-                      footer={null}
-                    >
-                      <div
-                        className="offcanvas-body"
-                        style={{ height: "400px", overflowY: "scroll" }}
-                      >
-                        <div className="container-fluid">
-                          <div className={styles.heads}>
-                            <span className={styles.headText}>Hcc codes</span>
-                          </div>
-                          <div className={styles.data}>
-                            {comments && comments ? (
-                              Object.entries(comments).map(
-                                ([year, commentsArray]) => (
-                                  <div key={year}>
-                                    <div className={styles.datas}>{year}</div>
-                                    {commentsArray.map((comment, index) => (
-                                      <div
-                                        key={index}
-                                        className={styles.comment}
-                                      >
-                                        <p>{comment.comment}</p>
-                                      </div>
-                                    ))}
-                                  </div>
-                                )
-                              )
-                            ) : (
-                              <p>Comments not found</p>
-                            )}
+                                <ExportImg />
+                                Export
+                              </button>
+                            </Tooltip>
                           </div>
                         </div>
-                      </div>
-                    </Modal>
-                  )}
-                  <Export
-                    isModalVisible={isModalVisible}
-                    closeModal={closeModal}
-                    rowsLength={rowsLength}
-                    setIsModalVisible={setIsModalVisible}
-                    setSelectedRows={setSelectedRows}
-                    selectedRows={selectedRows}
-                    setSelectAll={setSelectAll}
-                  />
+                      )}
+                    </div>
+                    <div className="row filter-contain">
+                      {selectedData?.length > 0 &&
+                        selectedData?.map((info) => (
+                          <div className="col-xl-2 mt-3">
+                            <div className="d-flex w-100">
+                              <label className="labelStyle d-flex m-auto">
+                                {" "}
+                                {info.name}
+                              </label>
+                              <div className="form-group has-search2 w-100">
+                                {info?.isSearch && (
+                                  <FontAwesomeIcon
+                                    className="fa fa-search form-control-feedback"
+                                    icon={faSearch}
+                                  />
+                                )}
+                                {info?.isSelect ? (
+                                  <Select
+                                    onChange={(selectedOption) => {
+                                      dosOnChange(selectedOption, info.name);
+                                    }}
+                                    options={statusOptions}
+                                    className={`custom-react-select`}
+                                    isSearchable={false}
+                                  />
+                                ) : info?.isRangePikcer ? (
+                                  <RangePicker
+                                    style={{
+                                      borderRadius: "0 5px 5px 0",
+                                      width: "100%",
+                                    }}
+                                    value={
+                                      selectedDates
+                                        ? selectedDates[info?.name]
+                                        : undefined
+                                    }
+                                    onChange={(date, dateString) =>
+                                      handleCoderPicker(
+                                        date,
+                                        dateString,
+                                        info?.name
+                                      )
+                                    }
+                                    disabledDate={(current) =>
+                                      disableFutureDate(current)
+                                    }
+                                  />
+                                ) : (
+                                  <InputText
+                                    name={info?.name}
+                                    type="text"
+                                    onChange={(e) => filterChangePatientId(e)}
+                                    className="form-control new-form-control reportInput"
+                                    placeholder="Search"
+                                    maxLength={25}
+                                    value={search?.searchVal}
+                                    onKeyDown={(e) => {
+                                      // Prevent input of backslash ("\")
+                                      if (e.key === "\\") {
+                                        e.preventDefault();
+                                      }
+                                    }}
+                                  />
+                                )}
+                                {/* )} */}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
                 </div>
+
+                <div>
+                  {reportActiveTab === "Reviewer" && (
+                    <div>
+                      <ReviewerReport
+                        setModal={setModal}
+                        modal={modal}
+                        reportListAll={filteredCOder}
+                        paginationFirst={paginationFirst}
+                        ReportPatientDetails={ReportPatientDetails?.response}
+                        onPageChange={onPageChange}
+                        comments={comments}
+                        setComments={setComments}
+                        setSelectedRows={setSelectedRows}
+                        selectedRows={selectedRows}
+                        setSelectAll={setSelectAll}
+                        selectAll={selectAll}
+                        setSortOrder={setCoderSortOrder}
+                        sortOrder={coderSortOrder}
+                        setSort={setSort}
+                        // gotoPatientDetails={gotoPatientDetails}
+                      />
+                    </div>
+                  )}
+                  {reportActiveTab === "Sent" && (
+                    <div>
+                      {}{" "}
+                      <SentReport
+                        paginationFirst={paginationSentFirst}
+                        details={SentReportDetails?.data?.response}
+                        onSentPageChange={onSentPageChange}
+                        loading={SentReportDetails?.loading}
+                        setSortOrder={setSentSortOrder}
+                        sortOrder={sentSortOrder}
+                        setSort={setSort}
+                        receivedPageNo={sentPageNo}
+                        receivedStartDate={startDate}
+                        receivedEndDate={endDate}
+                        isPhysician={true}
+                      />
+                    </div>
+                  )}
+                  {reportActiveTab === "Received" && (
+                    <div>
+                      <ReceivedReport
+                        paginationFirst={paginationReceivedFirst}
+                        details={ReceivedReportDetails?.data?.response}
+                        onPageChange={onReceivedPageChange}
+                        receivedPageNo={receivedPageNo}
+                        receivedStartDate={receivedStartDate}
+                        receivedEndDate={receivedEndDate}
+                        loading={ReceivedReportDetails?.loading}
+                        setSortOrder={setReceivedSortOrder}
+                        sortOrder={receivedSortOrder}
+                        setSort={setSort}
+                        isPhysician={true}
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {modal && (
+                  <Modal
+                    title="Comments"
+                    centered
+                    open={modal}
+                    onOk={() => {
+                      setModal(false);
+                    }}
+                    onCancel={() => {
+                      setModal(false);
+                    }}
+                    footer={null}
+                  >
+                    <div
+                      className="offcanvas-body"
+                      style={{ height: "400px", overflowY: "scroll" }}
+                    >
+                      <div className="container-fluid">
+                        <div className={styles.heads}>
+                          <span className={styles.headText}>Hcc codes</span>
+                        </div>
+                        <div className={styles.data}>
+                          {comments && comments ? (
+                            Object.entries(comments).map(
+                              ([year, commentsArray]) => (
+                                <div key={year}>
+                                  <div className={styles.datas}>{year}</div>
+                                  {commentsArray.map((comment, index) => (
+                                    <div key={index} className={styles.comment}>
+                                      <p>{comment.comment}</p>
+                                    </div>
+                                  ))}
+                                </div>
+                              )
+                            )
+                          ) : (
+                            <p>Comments not found</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </Modal>
+                )}
+                <Export
+                  isModalVisible={isModalVisible}
+                  closeModal={closeModal}
+                  rowsLength={rowsLength}
+                  setIsModalVisible={setIsModalVisible}
+                  setSelectedRows={setSelectedRows}
+                  selectedRows={selectedRows}
+                  setSelectAll={setSelectAll}
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
