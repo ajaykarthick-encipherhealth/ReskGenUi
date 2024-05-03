@@ -127,9 +127,11 @@ const HeaderFilters = ({
   setSelectedDates4,
   setSelectedDates5,
   auditallocatedToOptoons,
+  auditSelAllocatedTo,
 }) => {
   const dispatch = useDispatch();
   const [trackInput, setTrackInput] = useState("");
+
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -145,10 +147,10 @@ const HeaderFilters = ({
               <label className={styles.label}>Reviewer</label>
               <div class="form-group has-search">
                 <Select
-                  value={clear ? "" : selectorValue}
+                  value={selectorValue ? selectorValue : ""}
                   onChange={(selectedOption) => {
-                    setSelAllocatedTo(selectedOption);
                     setClear(false);
+                    setSelAllocatedTo(selectedOption);
                   }}
                   options={allocatedToOptoons}
                   className="custom-react-select"
@@ -170,10 +172,10 @@ const HeaderFilters = ({
               <label className={styles.label}>Supervisor</label>
               <div class="form-group has-search">
                 <Select
-                  value={clear ? "" : selector2Value}
+                  value={auditSelAllocatedTo ? auditSelAllocatedTo : ""}
                   onChange={(selectedOption) => {
-                    setAuditSelAllocatedTo(selectedOption);
                     setClear(false);
+                    setAuditSelAllocatedTo(selectedOption);
                   }}
                   options={auditallocatedToOptoons}
                   className="custom-react-select"
@@ -434,7 +436,7 @@ const HeaderFilters = ({
             ) : null}
 
             {isSearch && (
-              <div className={defaultSize} onClick={() => setClear(false)} >
+              <div className={defaultSize} onClick={() => setClear(false)}>
                 {" "}
                 <label style={{ marginLeft: "8px" }}>{searchlabel}</label>
                 <div class="form-group has-search">
@@ -454,7 +456,10 @@ const HeaderFilters = ({
                 </div>
               </div>
             )}
-            <div className={`${bullets ? "col-xl-2" : "col-xl-4"}`} style={{display:"flex", alignItems:"center"}}>
+            <div
+              className={`${bullets ? "col-xl-2" : "col-xl-4"}`}
+              style={{ display: "flex", alignItems: "center" }}
+            >
               {bullets && (
                 <div
                   // className={`${bullets ? "col-xl-1" : "col-xl-4"}`}
@@ -486,9 +491,9 @@ const HeaderFilters = ({
                   </Popover>
                 </div>
               )}
-              <div 
-              style={{marginTop:"30px", width:'100px'}}
-              className={`${bullets ? "col-xl-2" : "col-xl-4" }`}
+              <div
+                style={{ marginTop: "30px", width: "100px" }}
+                className={`${bullets ? "col-xl-2" : "col-xl-4"}`}
                 onClick={() => {
                   setClear(true);
                   setStartDate([]);

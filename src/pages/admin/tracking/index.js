@@ -109,7 +109,6 @@ export default function Patient() {
   const response = useSelector((state) => state.adminList.tracking);
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingBtn, setIsLoadingBlasttn] = useState(true);
   const [addPatient, setAddPatient] = useState(false);
   const [selectedOption, SetSelectedOption] = useState("");
   const [searchTextValue, setSearchTextValue] = useState("");
@@ -624,6 +623,7 @@ export default function Patient() {
                             selector4value={selectedOption}
                             selector2value={auditSelAllocatedTo}
                             selectorValue={selAllocatedTo}
+                            auditSelAllocatedTo={auditSelAllocatedTo}
                           />
                         </div>
                         <div className="col-xl-2">
