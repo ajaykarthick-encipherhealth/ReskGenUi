@@ -72,7 +72,7 @@ const Reports = () => {
   const [receivedEndDate, setReceivedEndDate] = useState();
   const [coderStartDate, setCoderStartDate] = useState();
   const [coderEndDate, setCoderEndDate] = useState();
-  const [selectedDates, setSelectedDates] = useState(null);
+  const [selectedDates, setSelectedDates] = useState([]);
   const [selectedCoderOpt, setSelectedCoderOpt] = useState("");
   const [coderSearch, setCoderSearch] = useState("");
   const [sentSearch, setSentSearch] = useState("");
@@ -85,6 +85,7 @@ const Reports = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [search, setSearch] = useState();
   const { RangePicker } = DatePicker;
+  const [selectedDateRanges, setSelecteddateRanges] = useState([]);
 
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -114,7 +115,7 @@ const Reports = () => {
     setPageNo(e.page);
   };
 
-  const handleCoderPicker = (date, dateString) => {
+  const handleCoderPicker = (date, dateString, tabName) => {
     const formattedDates = dateString?.map((date, index) => {
       const formattedDate =
         index === 1
@@ -122,10 +123,16 @@ const Reports = () => {
           : date && `${date}T00:00:00.000Z`;
       return formattedDate;
     });
-    setSelectedDates(date);
-    setCoderStartDate(formattedDates[0]);
-    setCoderEndDate(formattedDates[1]);
+    setSelectedDates((prevOptions) => ({
+      ...prevOptions,
+      [tabName]: date,
+    }));
+    setSelecteddateRanges((prevOptions) => ({
+      ...prevOptions,
+      [tabName]: { from: formattedDates[0], to: formattedDates[1] },
+    }));
   };
+
   const onReceivedPageChange = (e) => {
     setPaginationReceivedFirst(e.first);
     setReceivedPageNo(e.page);
@@ -143,6 +150,7 @@ const Reports = () => {
 
   const handleTabs = (name) => {
     setSelectedDates(null);
+    setSelecteddateRanges([]);
     localStorage.setItem("activeTab", name);
     dispatch(getActiveTab(name));
     setSearch();
@@ -153,7 +161,6 @@ const Reports = () => {
     const coderSearchString = searchVal.find(
       (item) => item.field === "initialSearch"
     )?.search;
-
     setIsLoading(false);
     const activeTabFromStorage = localStorage.getItem("activeTab");
     const activeTab = activeTabFromStorage ? activeTabFromStorage : "Reviewer";
@@ -163,8 +170,8 @@ const Reports = () => {
       dispatch(
         getSentDetails(
           sentPageNo,
-          startDate,
-          endDate,
+          selectedDateRanges?.Sent?.from,
+          selectedDateRanges?.Sent?.to,
           coderSearchString ? coderSearchString : "",
           sort
         )
@@ -173,8 +180,8 @@ const Reports = () => {
       dispatch(
         getReceivedDetails(
           receivedPageNo,
-          receivedStartDate,
-          receivedEndDate,
+          selectedDateRanges?.Received?.from,
+          selectedDateRanges?.Received?.to,
           coderSearchString ? coderSearchString : "",
           sort
         )
@@ -183,8 +190,8 @@ const Reports = () => {
       dispatch(
         getReportDetails(
           pageNo,
-          coderStartDate,
-          coderEndDate,
+          selectedDateRanges?.Reviewer?.from,
+          selectedDateRanges?.Reviewer?.to,
           coderSearchString ? coderSearchString : "",
           selectedOptions?.reviewerStatus,
           sort
@@ -199,18 +206,12 @@ const Reports = () => {
     pageNo,
     sentPageNo,
     receivedPageNo,
-    selectedCoderOpt,
-    coderStartDate,
-    coderEndDate,
-    startDate,
-    endDate,
     receivedPageNo,
-    receivedStartDate,
-    receivedEndDate,
     receivedSortOrder,
     sort,
     searchVal,
     selectedOptions,
+    selectedDateRanges,
   ]);
 
   useEffect(() => {
@@ -321,7 +322,7 @@ const Reports = () => {
     {
       id: 12,
       name: "Flag",
-      isSelect: true,
+      isRangePikcer: true,
     },
     {
       id: 13,
@@ -343,7 +344,7 @@ const Reports = () => {
       id: 32,
       name: "Raf Score",
       isSelect: false,
-      isSearch: true,
+      isRangePikcer: true,
     },
     {
       id: 42,
@@ -351,6 +352,7 @@ const Reports = () => {
       isSearch: true,
     },
   ];
+
   return (
     <div>
       <Header />
@@ -398,7 +400,10 @@ const Reports = () => {
                   <div className="tbl-caption  align-items-center">
                     <div
                       className="row filter-contain"
-                      style={{ marginTop: "47px",marginBottom:selectedData?.length>0?"20px":"0px" }}
+                      style={{
+                        marginTop: "47px",
+                        marginBottom: selectedData?.length > 0 ? "20px" : "0px",
+                      }}
                     >
                       <div className="col-xl-2" style={{ display: "flex" }}>
                         <label className="labelStyle">Search </label>
@@ -459,15 +464,17 @@ const Reports = () => {
                                 borderRadius: "0 5px 5px 0",
                                 width: "100%",
                               }}
-                              value={selectedDates}
-                              onChange={
-                                reportActiveTab === "SentReport"
-                                  ? handleDatePickerChange
-                                  : reportActiveTab === "ReceivedReport"
-                                  ? handleReceivedDatePicker
-                                  : reportActiveTab === "TeamReport"
-                                  ? handleTeamPicker
-                                  : handleCoderPicker
+                              value={
+                                selectedDates
+                                  ? selectedDates[reportActiveTab]
+                                  : undefined
+                              }
+                              onChange={(date, dateString) =>
+                                handleCoderPicker(
+                                  date,
+                                  dateString,
+                                  reportActiveTab
+                                )
                               }
                               disabledDate={(current) =>
                                 disableFutureDate(current)
@@ -519,12 +526,14 @@ const Reports = () => {
                     <div className="row filter-contain">
                       {selectedData?.length > 0 &&
                         selectedData?.map((info) => (
-                          <div className="col-xl-2" style={{marginTop: "20px"}}>
+                          <div
+                            className="col-xl-2"
+                            style={{ marginTop: "20px" }}
+                          >
                             <div
                               style={{
                                 display: "flex",
                                 width: "100%",
-                                
                               }}
                             >
                               <label
@@ -552,6 +561,28 @@ const Reports = () => {
                                     options={statusOptions}
                                     className={`custom-react-select`}
                                     isSearchable={false}
+                                  />
+                                ) : info?.isRangePikcer ? (
+                                  <RangePicker
+                                    style={{
+                                      borderRadius: "0 5px 5px 0",
+                                      width: "100%",
+                                    }}
+                                    value={
+                                      selectedDates
+                                        ? selectedDates[info?.name]
+                                        : undefined
+                                    }
+                                    onChange={(date, dateString) =>
+                                      handleCoderPicker(
+                                        date,
+                                        dateString,
+                                        info?.name
+                                      )
+                                    }
+                                    disabledDate={(current) =>
+                                      disableFutureDate(current)
+                                    }
                                   />
                                 ) : (
                                   <InputText
