@@ -3134,6 +3134,15 @@ const VisitData = ({setActiveTabHead,setActiveMeatTitle, setActiveComboTree}) =>
                     captureSectionMatching={captureSectionMatching}
                     encounterDateMatching={encounterDateMatching}
                     meatCriteriaList={meatCriteriaList}
+                    findValueDocument={findValueDocument}
+                    getEncounterDetails={getEncounterDetails}
+                    onchangeValid={onchangeValid}
+                    setConfirmNotesModalValid={setConfirmNotesModalValid}
+                    setIsValidAction={setIsValidAction}
+                    getValidHccDetails={getValidHccDetails}
+                    setFormValues={setFormValues}
+                    setIsEditHccForm={setIsEditHccForm}
+                    setFormEditPlace={setFormEditPlace}
                   />
                   </div>
                 </div>

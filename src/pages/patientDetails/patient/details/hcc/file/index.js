@@ -2269,15 +2269,22 @@ const File = ({
               </div>
               <div className={visitStyles.container}>
                 <div className={visitStyles.hccStickey_head}>
-            
-                    <HccCards
-                      list={newValidDiseaseList}
-                      hccVersionDetails={hccVersionDetails}
-                      captureSectionMatching={captureSectionMatching}
-                      encounterDateMatching={encounterDateMatching}
-                      meatCriteriaList={meatCriteriaList}
-                    />
-            
+                  <HccCards
+                    list={newValidDiseaseList}
+                    hccVersionDetails={hccVersionDetails}
+                    captureSectionMatching={captureSectionMatching}
+                    encounterDateMatching={encounterDateMatching}
+                    meatCriteriaList={meatCriteriaList}
+                    findValueDocument={findValueDocument}
+                    getEncounterDetails={getEncounterDetails}
+                    onchangeValid={onchangeValid}
+                    setConfirmNotesModalValid={setConfirmNotesModalValid}
+                    setIsValidAction={setIsValidAction}
+                    getValidHccDetails={getValidHccDetails}
+                    setFormValues={setFormValues}
+                    setIsEditHccForm={setIsEditHccForm}
+                    setFormEditPlace={setFormEditPlace}
+                  />
                 </div>
               </div>
             </ul>
@@ -2361,12 +2368,21 @@ const File = ({
                 </div>
                 <div className={visitStyles.suggestedcontainer2}>
                   <div className={visitStyles.hccStickey_head}>
-                  <HccCards
+                    <HccCards
                       list={suggestedHccList}
                       hccVersionDetails={hccVersionDetails}
                       captureSectionMatching={captureSectionMatching}
                       encounterDateMatching={encounterDateMatching}
                       meatCriteriaList={meatCriteriaList}
+                      findValueDocument={findValueDocument}
+                      getEncounterDetails={getEncounterDetails}
+                      onchangeValid={onchangeValid}
+                      setConfirmNotesModalValid={setConfirmNotesModalValid}
+                      setIsValidAction={setIsValidAction}
+                      getValidHccDetails={getValidHccDetails}
+                      setFormValues={setFormValues}
+                      setIsEditHccForm={setIsEditHccForm}
+                      setFormEditPlace={setFormEditPlace}
                     />
                   </div>
                 </div>
