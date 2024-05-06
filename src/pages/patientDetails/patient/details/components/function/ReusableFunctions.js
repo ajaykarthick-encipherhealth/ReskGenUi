@@ -1,6 +1,6 @@
 import { CalendarOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Tooltip } from "antd";
+import { Tooltip, notification } from "antd";
 import moment from "moment";
 import {
   faArrowsAlt,
@@ -170,4 +170,78 @@ export const getProviderNameList = ({ data, captureSectionMatching }) => {
     );
     return sectionMapArr;
   });
+};
+export const handleSubmitValidNotes = async ({
+  event,
+  setFileLoading,
+  setConfirmNotesModalValid,
+  getPatientDetailsReload,
+  setValidated,
+}) => {
+  setFileLoading(true);
+  const form = event.currentTarget;
+  event.preventDefault();
+  if (form.checkValidity() === true) {
+    setFileLoading(true);
+    setConfirmNotesModalValid(false);
+    var apiURL = "";
+    // validMoveConfirm();
+    if (isValidAction == "validToSuggested") {
+      apiURL = "dbservice/update/move/validtosuggested";
+    }
+    if (isValidAction == "validToDeleted") {
+      apiURL = "dbservice/update/move/validtodeleted";
+    }
+    if (isValidAction == "suggestedToDeleted") {
+      apiURL = "dbservice/update/move/suggestedtodeleted";
+    }
+    if (isValidAction == "suggestedToValid") {
+      apiURL = "dbservice/update/move/suggestedtovalid";
+    }
+    if (isValidAction == "deletedToSuggested") {
+      apiURL = "dbservice/update/move/deletedtoSuggested";
+    }
+    if (isValidAction == "deletedToValid") {
+      apiURL = "dbservice/update/move/deletedtovalid";
+    }
+    try {
+      var dataFormatSuggested = {
+        userId: localUserId,
+        patientId: localPatientId,
+        diagnosisCode: selectInvalidDetails.diagnosisCode,
+        actualDescription: selectInvalidDetails.actualDescription,
+        dbDescription: selectInvalidDetails.dbDescription,
+        notes: inputValue.notes,
+        dos: selectedDosValue,
+        encounterDate: selectInvalidDetails.encounterDate,
+        capturedSections: selectInvalidDetails.capturedSections,
+      };
+      const response = await axios.put(
+        ENDPOINTS.apiEndoint + url,
+        dataFormatSuggested
+      );
+      var result = response.data;
+      if (result.status == "SUCCESS") {
+        notification.success({
+          message: result.message,
+          placement: "top",
+          duration: 1,
+        });
+        getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
+      } else {
+        notification.error({
+          message: result.response,
+          placement: "top",
+          duration: 1,
+        });
+        setFileLoading(false);
+      }
+    } catch (err) {
+      notification.error({
+        message: err?.response?.data?.response,
+      });
+      setFileLoading(false);
+    }
+  }
+  setValidated(true);
 };

@@ -39,6 +39,42 @@ import { pdfUrl } from "../../../../../../stores/authflow/reducers";
 import HccCards from "../../components/HCC";
 import ModelIndex from "../../components/model/Index";
 
+const COLORS = [
+  "bg-bg-seven",
+  "bg-third",
+  "bg-bg-four",
+  "bg-bg-five",
+  "bg-bg-six",
+  "bg-bg-eight",
+  "bg-bg-nine",
+  "bg-bg-ten",
+  "bg-bg-leven",
+];
+
+const COLORS2 = [
+  "sectionTag1",
+  "sectionTag2",
+  "sectionTag3",
+  "sectionTag4",
+  "sectionTag5",
+  "sectionTag6",
+  "sectionTag7",
+  "sectionTag8",
+];
+
+const COLORS3 = [
+  "encounterDateTag1",
+  "encounterDateTag2",
+  "encounterDateTag3",
+  "encounterDateTag4",
+  "encounterDateTag5",
+  "encounterDateTag6",
+  "encounterDateTag7",
+  "encounterDateTag8",
+  "encounterDateTag9",
+  "encounterDateTag10",
+];
+
 const File = ({
   popoverVisible,
   setPopoverVisible,
@@ -196,6 +232,7 @@ const File = ({
   ) => {
     if (patientDetailsResult?.result?.response) {
       var result = patientDetailsResult?.result?.response;
+      console.log(result)
       setPatientDocumentResult(result);
       if (result.validDisease != null) {
         var validDis = "";
@@ -221,17 +258,17 @@ const File = ({
         }
         // setPatientDocumentResult(result);
 
-        result.encounterYears.map((res) => {
-          dosYearArr.push({ value: res, label: res });
-        });
+        // result.encounterYears.map((res) => {
+        //   dosYearArr.push({ value: res, label: res });
+        // });
 
-        const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
+        // const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
 
-        const highestDosValue = dosYearArr.filter(
-          (i) => parseInt(i.value) === highestDOS
-        );
+        // const highestDosValue = dosYearArr.filter(
+        //   (i) => parseInt(i.value) === highestDOS
+        // );
 
-        setSelectedDosValue(highestDosValue[0].value);
+        // setSelectedDosValue(highestDosValue[0].value);
 
         if (result.rafScore != null) {
           rafScore = result.rafScore;
@@ -544,42 +581,6 @@ const File = ({
 
         var capturedSectionsColorsMatching = [];
         var capturedSectionsArr = [];
-
-        const COLORS = [
-          "bg-bg-seven",
-          "bg-third",
-          "bg-bg-four",
-          "bg-bg-five",
-          "bg-bg-six",
-          "bg-bg-eight",
-          "bg-bg-nine",
-          "bg-bg-ten",
-          "bg-bg-leven",
-        ];
-
-        const COLORS2 = [
-          "sectionTag1",
-          "sectionTag2",
-          "sectionTag3",
-          "sectionTag4",
-          "sectionTag5",
-          "sectionTag6",
-          "sectionTag7",
-          "sectionTag8",
-        ];
-
-        const COLORS3 = [
-          "encounterDateTag1",
-          "encounterDateTag2",
-          "encounterDateTag3",
-          "encounterDateTag4",
-          "encounterDateTag5",
-          "encounterDateTag6",
-          "encounterDateTag7",
-          "encounterDateTag8",
-          "encounterDateTag9",
-          "encounterDateTag10",
-        ];
 
         validDiseaseNewRes?.map((res) => {
           res.capturedSections?.map((res2, index) => {
@@ -1298,75 +1299,6 @@ const File = ({
     }
   };
 
-  const handleSubmitValidNotes = async (event) => {
-    setFileLoading(true);
-    const form = event.currentTarget;
-    event.preventDefault();
-    if (form.checkValidity() === true) {
-      setFileLoading(true);
-      setConfirmNotesModalValid(false);
-      var apiURL = "";
-      // validMoveConfirm();
-      if (isValidAction == "validToSuggested") {
-        apiURL = "dbservice/update/move/validtosuggested";
-      }
-      if (isValidAction == "validToDeleted") {
-        apiURL = "dbservice/update/move/validtodeleted";
-      }
-      if (isValidAction == "suggestedToDeleted") {
-        apiURL = "dbservice/update/move/suggestedtodeleted";
-      }
-      if (isValidAction == "suggestedToValid") {
-        apiURL = "dbservice/update/move/suggestedtovalid";
-      }
-      if (isValidAction == "deletedToSuggested") {
-        apiURL = "dbservice/update/move/deletedtoSuggested";
-      }
-      if (isValidAction == "deletedToValid") {
-        apiURL = "dbservice/update/move/deletedtovalid";
-      }
-      try {
-        var dataFormatSuggested = {
-          userId: localUserId,
-          patientId: localPatientId,
-          diagnosisCode: selectInvalidDetails.diagnosisCode,
-          actualDescription: selectInvalidDetails.actualDescription,
-          dbDescription: selectInvalidDetails.dbDescription,
-          notes: inputValue.notes,
-          dos: selectedDosValue,
-          encounterDate: selectInvalidDetails.encounterDate,
-          capturedSections: selectInvalidDetails.capturedSections,
-        };
-        const response = await axios.put(
-          ENDPOINTS.apiEndoint + url,
-          dataFormatSuggested
-        );
-        var result = response.data;
-        if (result.status == "SUCCESS") {
-          notification.success({
-            message: result.message,
-            placement: "top",
-            duration: 1,
-          });
-          getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
-        } else {
-          notification.error({
-            message: result.response,
-            placement: "top",
-            duration: 1,
-          });
-          setFileLoading(false);
-        }
-      } catch (err) {
-        notification.error({
-          message: err?.response?.data?.response,
-        });
-        setFileLoading(false);
-      }
-    }
-    setValidated(true);
-  };
-
   const handleChangeSuggested = async (e) => {
     const key = e.target.name;
     const value = e.target.value;
@@ -1804,7 +1736,8 @@ const File = ({
       </div>
       <ModelIndex
         validated={validated}
-        handleSubmit={handleSubmitValidNotes}
+        handleSubmit={(event)=>handleSubmitValidNotes(event,setFileLoading,setConfirmNotesModalValid,
+          getPatientDetailsReload,setValidated)}
         title={selectDiseasesName}
         openState={confirmNotesModalValid}
         handleCloseModal={handleCloseModal}
