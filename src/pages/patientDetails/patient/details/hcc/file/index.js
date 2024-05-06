@@ -132,62 +132,6 @@ const File = ({
   const [formValues, setFormValues] = useState(false);
   const [formEditPlace, setFormEditPlace] = useState("");
 
-  const getMeatFound = (code, data, value) => {
-    const result = data?.filter(
-      (res2) => res2?.diagnosisCode?.replace(".", "") == code?.replace(".", "")
-    );
-    var backColor = "#f93d3d";
-    var meatTitle = "MEAT";
-    if (result.length != 0) {
-      switch (value) {
-        case "M":
-          if (result[0]?.monitor) {
-            backColor = "#15b315";
-          }
-          meatTitle = "Monitor";
-          break;
-        case "E":
-          if (result[0]?.evaluate) {
-            backColor = "#15b315";
-          }
-          meatTitle = "Evaluate";
-          break;
-        case "A":
-          if (result[0]?.assessment) {
-            backColor = "#15b315";
-          }
-          meatTitle = "Assessment";
-          break;
-        case "T":
-          if (result[0]?.treatment) {
-            backColor = "#15b315";
-          }
-          meatTitle = "Treatment";
-          break;
-        default:
-          null;
-      }
-    }
-    // var badgeMap = (
-    //   <span
-    //     style={{ backgroundColor: backColor, color: "white" }}
-    //     className={`mt-2 ${styles.badgeMeat}`}
-    //   >
-    //     {value}
-    //   </span>
-    // );
-    return (
-      <Tooltip title={meatTitle} placement="bottom">
-        <span
-          style={{ backgroundColor: backColor, color: "white" }}
-          className={`mt-2 ${styles.badgeMeat}`}
-        >
-          {value}
-        </span>
-      </Tooltip>
-    );
-  };
-
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
     var tenId = localStorage.getItem("tenantId");
@@ -199,11 +143,6 @@ const File = ({
     setLocalTenantId(tenId);
     getPatientDetails(patientId, orgId, tenId);
 
-    var dotLoading = (
-      <div className={visitStyles.loadingFileHeader}>
-        <Spinner />
-      </div>
-    );
   }, [patientDetailsResult]);
 
   useEffect(() => {
@@ -268,15 +207,13 @@ const File = ({
         var validDiseaseNewRes = [];
         var invalidDiseaseNewRes = [];
         var unMatchRes = [];
-        var unMatchResHcc = [];
-        var unMatchResNonHcc = [];
-        var meatCriColorTagList = [];
+       
 
         var suggestRadiologyList = [];
         var suggestLabList = [];
 
         var suggestListAll = [];
-        var suggestListAllNonHcc = [];
+     
         var deleteHccList = [];
 
         if (fileloadCondition != "fileNotLoad") {
@@ -300,17 +237,17 @@ const File = ({
           rafScore = result.rafScore;
         }
 
-        var unMacthResList = [];
+     
 
         validDis = result.validDisease;
         validDiseaseNewRes = result?.validDisease;
         // invalidDiseaseNewRes =validDisArray;
         var validDisArray = [];
-        var validEncounterDateArray = [];
+       
         validDiseaseNewRes?.map((res, index) => {
           const encounterDatearray = res?.encounterDate?.split(",");
           var providerList = [];
-          var providerDeatils = null;
+        
           res.provider?.map((res, index) => {
             providerList.push(res?.providerName);
           });
@@ -394,16 +331,11 @@ const File = ({
           });
         }
         if (result.suggestRadiology != null) {
-          // var checkDosRadio = [];
-          // for (var key in result.suggestRadiology) {
-          //   checkDosRadio.push({ value: key, label: key });
-          // }
-          // getPatientDetailsRadiologyYear(orgId,tenId)
           suggestRadiologyList = result.suggestRadiology;
           suggestRadiologyList.map((res, index) => {
             const encounterDatearray = res?.encounterDate?.split(",");
             var providerList = [];
-            var providerDeatils = null;
+
             res?.provider?.map((res2, index) => {
               providerList.push(res2.providerName);
             });
@@ -429,7 +361,7 @@ const File = ({
           if (result.suggestRadiologyCombo != null) {
             result.suggestRadiologyCombo.map((res, index) => {
               var providerList = [];
-              var providerDeatils = null;
+
               res.providers?.map((res2, index) => {
                 providerList.push(res2.providerName);
               });
@@ -458,7 +390,7 @@ const File = ({
           suggestLabList = result.suggestLab;
           suggestLabList.map((res, index) => {
             var providerList = [];
-            var providerDeatils = null;
+
             res?.provider?.map((res2, index) => {
               providerList.push(res2.providerName);
             });
@@ -486,7 +418,7 @@ const File = ({
             if (res.isShow != false) {
               const encounterDatearray = res?.encounterDate?.split(",");
               var providerList = [];
-              var providerDeatils = null;
+
               res?.provider?.map((res, index) => {
                 providerList.push(res.providerName);
               });
@@ -514,7 +446,7 @@ const File = ({
         if (result?.suggestLabInReport) {
           result?.suggestLabInReport?.map((res, index) => {
             var providerList = [];
-            var providerDeatils = null;
+
             res?.provider?.map((res2, index) => {
               providerList.push(res2?.providerName);
             });
@@ -539,7 +471,7 @@ const File = ({
         if (result?.suggestRadiologyInReport) {
           result?.suggestRadiologyInReport?.map((res, index) => {
             var providerList = [];
-            var providerDeatils = null;
+
             res?.provider?.map((res2, index) => {
               providerList.push(res2.providerName);
             });
@@ -764,12 +696,6 @@ const File = ({
             });
           });
         });
-
-        // if (result?.insulinDisease) {
-        //   encounterDateArr.push({
-        //     name: result?.insulinDisease?.dos,
-        //   });
-        // }
 
         result?.unMatchedDisease?.map((res) => {
           const array = res?.encounterDate?.split(",");
@@ -1125,7 +1051,6 @@ const File = ({
         `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
-      var result = response.data.response;
       setSelectFileURLRadiology(response.data.response);
     }
   };
@@ -1136,7 +1061,6 @@ const File = ({
         `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
     );
     if (response.data) {
-      var result = response.data.response;
       setLabReportFile(response.data.response);
     }
   };
@@ -1219,61 +1143,7 @@ const File = ({
     setOpens(false);
   };
 
-  const handleOpenModal = async (
-    value,
-    disDescription,
-    encounterDate,
-    meatresult
-  ) => {
-    setFileLoading(true);
-    var splitPoint = disDescription.substring(" ", 20);
-    var dotLoading = (
-      <div className={visitStyles.loadingFileHeader}>
-        <Spinner />
-      </div>
-    );
-    var fileId = patientFileDTO.fileId;
-    const encounterDatesValue = encounterDate.split(",");
-    const encounterDatesHeader = encounterDatesValue[0];
-    var pageNumber = null;
-    try {
-      const response = await axios.get(
-        ENDPOINTS.apiEndoint +
-          `dbservice/pageNumber?header=${value}&fileId=${fileId}&dos=${encounterDatesHeader}&stringFileWord=${splitPoint}`
-      );
-      var result = response.data.response;
-      if (response?.data?.status == "SUCCESS") {
-        if (result?.first == false) {
-          splitPoint = value;
-        }
-        pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
-        setFileInitialPage(pageNumber);
-      } else {
-        setFileInitialPage(null);
-      }
-
-      if (findFileKeyword == splitPoint) {
-        setFileLoading(false);
-        var dataset = value + " / (" + disDescription + ")";
-      }
-      setFindFileKeyword(splitPoint);
-
-      var dataset = value + " / (" + disDescription + ")";
-      setSelectMeatName(dataset);
-    } catch (error) {
-      splitPoint = value;
-      if (findFileKeyword == value) {
-        setFileLoading(false);
-      }
-      setFindFileKeyword(splitPoint);
-      setFileInitialPage(null);
-      setFileLoading(false);
-    }
-  };
-
   const findValueDocuments = async (
-    value,
-    disDescription,
     headerNames,
     encounterDate,
     actualDescription
@@ -1281,7 +1151,7 @@ const File = ({
     setFileLoading(true);
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
-    const encounterDatesHeader = encounterDatesValue[0];
+
     var splitPoint = actualDescription.substring(" ", 20);
     var pageNumber = null;
     var data = {
@@ -1387,8 +1257,6 @@ const File = ({
           splitPoint = result?.searchString;
           if (result == null) {
             return findValueDocuments(
-              value,
-              disDescription,
               headerNames,
               encounterDate,
               actualDescription
@@ -1430,214 +1298,71 @@ const File = ({
     }
   };
 
-  const handleOpenModalCombinationCode = async (
-    value,
-    disDescription,
-    check,
-    whereCome,
-    documentPlace,
-    encounterDate,
-    headerNames,
-    actualDescription,
-    testModal
-  ) => {
-    setFileLoading(true);
-
-    if (
-      documentPlace == "Radio" ||
-      whereCome == "Radio" ||
-      documentPlace == "Radio-combo"
-    ) {
-      handleOpenModalRadiology(value, disDescription, true);
-    } else if (documentPlace == "Lab" || whereCome == "Lab") {
-      setFileInitialPage(null);
-
-      var splitPoint = disDescription.substring(" ", 40);
-      setFindFileKeyword(splitPoint);
-      setSearch({
-        value: splitPoint,
-        headers: true,
-      });
-      setTimeout(() => {
-        var dataset = "Lab" + " - (" + disDescription + ")";
-        setSelectMeatName(dataset);
-      }, 2000);
-
-      var dataset = "Lab" + " - (" + disDescription + ")";
-      setSelectMeatName(dataset + " -  " + "Loading...");
-
-      setIsModalOpenLab(true);
-    } else {
-      if (check === "valid") {
-        var dataset = value + " - (" + disDescription + ")";
-        setSelectMeatName(dataset + " -  " + "Loading...");
-        var dotLoading = (
-          <div className={visitStyles.loadingFileHeader}>
-            <Spinner />
-          </div>
-        );
-
-        var headerName = dotLoading;
-        setFileModalHeader(headerName);
-
-        var fileId = patientFileDTO.fileId;
-        const encounterDatesValue = encounterDate.split(",");
-        const encounterDatesHeader = encounterDatesValue[0];
-        var splitPoint = "";
-        var pageNumber = null;
-        splitPoint = actualDescription.substring(" ", 20);
-        try {
-          const response = await axios.get(
-            ENDPOINTS.apiEndoint +
-              `dbservice/pageNumber?header=${headerNames}&fileId=${fileId}&dos=${encounterDatesHeader}&stringFileWord=${splitPoint}`
-          );
-          var result = response.data.response;
-          if (response?.data?.status == "SUCCESS") {
-            if (result?.first == false) {
-              splitPoint = headerNames;
-            }
-            pageNumber = result?.second[0] - 1 ? result?.second[0] - 1 : null;
-            setFileInitialPage(pageNumber);
-          } else {
-            splitPoint = headerNames;
-          }
-
-          setFindFileKeyword(splitPoint);
-          var dataset =
-            value +
-            " - (" +
-            disDescription +
-            ")" +
-            " / (" +
-            actualDescription +
-            ")";
-          setSelectMeatName(dataset);
-          var headerName =
-            patientDocumentResult.patientId +
-            " / " +
-            patientDocumentResult.patientName +
-            " / " +
-            dataset;
-          setFileModalTitle(headerName);
-        } catch (error) {
-          splitPoint = headerNames;
-          if (findFileKeyword == headerNames) {
-            setFileLoading(false);
-          }
-          setFindFileKeyword(splitPoint);
-          setFileInitialPage(null);
-        }
-      } else if (check == "valid2") {
-        var splitPoint = "";
-        splitPoint = disDescription;
-        setTimeout(() => {
-          highlight({
-            keyword: splitPoint,
-            matchCase: true,
-          });
-          var dataset = value + " - (" + disDescription + ")";
-          setSelectMeatName(dataset);
-          var headerName =
-            patientDocumentResult.patientId +
-            " / " +
-            patientDocumentResult.patientName +
-            " / " +
-            dataset;
-          setFileModalHeader(headerName);
-        }, 2000);
-
-        var dataset = value + " - (" + disDescription + ")";
-        setSelectMeatName(dataset + " -  " + "Loading...");
-        var headerName =
-          patientDocumentResult.patientId +
-          " / " +
-          patientDocumentResult.patientName +
-          " / " +
-          dataset +
-          " -  " +
-          "Loading...";
-        setFileModalHeader(headerName);
-      } else {
-        var splitPoint = "";
-        splitPoint = disDescription.substring(" ", 20);
-        setTimeout(() => {
-          highlight({
-            keyword: splitPoint,
-            matchCase: true,
-            // wholeWords:true
-          });
-          var dataset = value + " - (" + disDescription + ")";
-          setSelectMeatName(dataset);
-        }, 2000);
-
-        var dataset = value + " - (" + disDescription + ")";
-        setSelectMeatName(dataset + " -  " + "Loading...");
-      }
-    }
-
-    // getSectionResult(value.toLowerCase());
-  };
-  const handleOpenModalRadiology = (value, disDescription, radiologyCheck) => {
-    setFileInitialPage(null);
-
-    if (radiologyCheck == true) {
-      var splitPoint = disDescription.substring(" ", 40);
-      setFindFileKeyword(splitPoint);
-      setSearch({
-        value: splitPoint,
-        headers: true,
-      });
-      setTimeout(() => {
-        var dataset = "Radiology" + " - (" + disDescription + ")";
-        setSelectMeatName(dataset);
-      }, 2000);
-
-      var dataset = "Radiology" + " - (" + disDescription + ")";
-      setSelectMeatName(dataset + " -  " + "Loading...");
-
-      setIsModalOpenRadiology(true);
-    } else {
-      handleOpenModal(value, disDescription);
-    }
-
-    // getSectionResult(value.toLowerCase());
-  };
-
   const handleSubmitValidNotes = async (event) => {
     setFileLoading(true);
     const form = event.currentTarget;
     event.preventDefault();
     if (form.checkValidity() === true) {
+      setFileLoading(true);
       setConfirmNotesModalValid(false);
+      var apiURL = "";
       // validMoveConfirm();
       if (isValidAction == "validToSuggested") {
-        handleSubmitMoveValidToSuggested();
+        apiURL = "dbservice/update/move/validtosuggested";
       }
       if (isValidAction == "validToDeleted") {
-        handleSubmitMoveValidToDeleted();
+        apiURL = "dbservice/update/move/validtodeleted";
       }
       if (isValidAction == "suggestedToDeleted") {
-        handleSubmitMoveSuggestedToDeleted();
+        apiURL = "dbservice/update/move/suggestedtodeleted";
       }
       if (isValidAction == "suggestedToValid") {
-        handleSubmitMoveSuggestedToValid();
+        apiURL = "dbservice/update/move/suggestedtovalid";
       }
       if (isValidAction == "deletedToSuggested") {
-        handleSubmitMoveDeletedToSuggested();
+        apiURL = "dbservice/update/move/deletedtoSuggested";
       }
       if (isValidAction == "deletedToValid") {
-        handleSubmitMoveDeletedToValid();
+        apiURL = "dbservice/update/move/deletedtovalid";
       }
-    }
-    setValidated(true);
-  };
-
-  const handleSubmitValiInValiddNotes = async (event) => {
-    const form = event.currentTarget;
-    event.preventDefault();
-    if (form.checkValidity() === true) {
-      setConfirmNotesModalInValid(false);
-      handleSubmitInValidtoValid();
+      try {
+        var dataFormatSuggested = {
+          userId: localUserId,
+          patientId: localPatientId,
+          diagnosisCode: selectInvalidDetails.diagnosisCode,
+          actualDescription: selectInvalidDetails.actualDescription,
+          dbDescription: selectInvalidDetails.dbDescription,
+          notes: inputValue.notes,
+          dos: selectedDosValue,
+          encounterDate: selectInvalidDetails.encounterDate,
+          capturedSections: selectInvalidDetails.capturedSections,
+        };
+        const response = await axios.put(
+          ENDPOINTS.apiEndoint + url,
+          dataFormatSuggested
+        );
+        var result = response.data;
+        if (result.status == "SUCCESS") {
+          notification.success({
+            message: result.message,
+            placement: "top",
+            duration: 1,
+          });
+          getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
+        } else {
+          notification.error({
+            message: result.response,
+            placement: "top",
+            duration: 1,
+          });
+          setFileLoading(false);
+        }
+      } catch (err) {
+        notification.error({
+          message: err?.response?.data?.response,
+        });
+        setFileLoading(false);
+      }
     }
     setValidated(true);
   };
@@ -1649,17 +1374,12 @@ const File = ({
   };
 
   const getValidHccDetails = async (value, code) => {
-    var patientId = localStorage.getItem("patientId");
     var result = "";
     var data = "";
 
     data = (
       <div className={visitStyles.userDetailsCard}>
-        <div className="bouncing-loader">
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
+        <div className="bouncing-loader"></div>
       </div>
     );
 
@@ -1688,216 +1408,6 @@ const File = ({
     }
   };
 
-  const handleSubmitMoveValidToSuggested = async () => {
-    setFileLoading(true);
-    var dataFormatSuggested = {
-      userId: localUserId,
-      patientId: localPatientId,
-      diagnosisCode: selectInvalidDetails.diagnosisCode,
-      actualDescription: selectInvalidDetails.actualDescription,
-      dbDescription: selectInvalidDetails.dbDescription,
-      notes: inputValue.notes,
-      dos: selectedDosValue,
-      encounterDate: selectInvalidDetails.encounterDate,
-      capturedSections: selectInvalidDetails.capturedSections,
-    };
-    const response = await axios.put(
-      ENDPOINTS.apiEndoint + `dbservice/update/move/validtosuggested`,
-      dataFormatSuggested
-    );
-    var result = response.data;
-    if (result.status == "SUCCESS") {
-      notification.success({
-        message: result.message,
-        placement: "top",
-        duration: 1,
-      });
-      getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
-    }
-  };
-
-  const handleSubmitMoveValidToDeleted = async () => {
-    setFileLoading(true);
-    try{
-      var dataFormatSuggested = {
-        userId: localUserId,
-        patientId: localPatientId,
-        diagnosisCode: selectInvalidDetails.diagnosisCode,
-        actualDescription: selectInvalidDetails.actualDescription,
-        dbDescription: selectInvalidDetails.dbDescription,
-        notes: inputValue.notes,
-        dos: selectedDosValue,
-        encounterDate: selectInvalidDetails.encounterDate,
-        capturedSections: selectInvalidDetails.capturedSections,
-      };
-      const response = await axios.put(
-        ENDPOINTS.apiEndoint + `dbservice/update/move/validtodeleted`,
-        dataFormatSuggested
-      );
-      var result = response.data;
-      console.log(result)
-      if (result.status == "SUCCESS") {
-        notification.success({
-          message: result.message,
-          placement: "top",
-          duration: 1,
-        });
-        getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
-      }else{
-        notification.error({
-          message: result.response,
-          placement: "top",
-          duration: 1,
-        });
-        setFileLoading(false)
-      }
-    }catch(err){
-      notification.error({
-        message:err?.response?.data?.response
-      })
-      setFileLoading(false)
-    }
-  };
-
-  const handleSubmitMoveSuggestedToDeleted = async () => {
-    setFileLoading(true);
-    var dataFormatSuggested = {
-      userId: localUserId,
-      patientId: localPatientId,
-      diagnosisCode: selectInvalidDetails.diagnosisCode,
-      actualDescription: selectInvalidDetails.actualDescription,
-      dbDescription: selectInvalidDetails.dbDescription,
-      notes: inputValue.notes,
-      dos: selectedDosValue,
-      encounterDate: selectInvalidDetails.encounterDate,
-      capturedSections: selectInvalidDetails.capturedSections,
-    };
-    const response = await axios.put(
-      ENDPOINTS.apiEndoint + `dbservice/update/move/suggestedtodeleted`,
-      dataFormatSuggested
-    );
-    var result = response.data;
-    if (result.status == "SUCCESS") {
-      notification.success({
-        message: result.message,
-        placement: "top",
-        duration: 1,
-      });
-      getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
-    }
-  };
-
-  const handleSubmitMoveSuggestedToValid = async () => {
-    setFileLoading(true);
-    var dataFormatSuggested = {
-      userId: localUserId,
-      patientId: localPatientId,
-      diagnosisCode: selectInvalidDetails.diagnosisCode,
-      actualDescription: selectInvalidDetails.actualDescription,
-      dbDescription: selectInvalidDetails.dbDescription,
-      notes: inputValue.notes,
-      dos: selectedDosValue,
-      encounterDate: selectInvalidDetails.encounterDate,
-      capturedSections: selectInvalidDetails.capturedSections,
-    };
-    const response = await axios.put(
-      ENDPOINTS.apiEndoint + `dbservice/update/move/suggestedtovalid`,
-      dataFormatSuggested
-    );
-    var result = response.data;
-    if (result.status == "SUCCESS") {
-      notification.success({
-        message: result.message,
-        placement: "top",
-        duration: 1,
-      });
-      getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
-    }
-  };
-
-  const handleSubmitMoveDeletedToValid = async () => {
-    setFileLoading(true);
-    var dataFormatSuggested = {
-      userId: localUserId,
-      patientId: localPatientId,
-      diagnosisCode: selectInvalidDetails.diagnosisCode,
-      actualDescription: selectInvalidDetails.actualDescription,
-      dbDescription: selectInvalidDetails.dbDescription,
-      notes: inputValue.notes,
-      dos: selectedDosValue,
-      encounterDate: selectInvalidDetails.encounterDate,
-      capturedSections: selectInvalidDetails.capturedSections,
-    };
-    const response = await axios.put(
-      ENDPOINTS.apiEndoint + `dbservice/update/move/deletedtovalid`,
-      dataFormatSuggested
-    );
-    var result = response.data;
-    if (result.status == "SUCCESS") {
-      notification.success({
-        message: result.message,
-        placement: "top",
-        duration: 1,
-      });
-      getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
-    }
-  };
-  const handleSubmitMoveDeletedToSuggested = async () => {
-    setFileLoading(true);
-    var dataFormatSuggested = {
-      userId: localUserId,
-      patientId: localPatientId,
-      diagnosisCode: selectInvalidDetails.diagnosisCode,
-      actualDescription: selectInvalidDetails.actualDescription,
-      dbDescription: selectInvalidDetails.dbDescription,
-      notes: inputValue.notes,
-      dos: selectedDosValue,
-      encounterDate: selectInvalidDetails.encounterDate,
-      capturedSections: selectInvalidDetails.capturedSections,
-    };
-    const response = await axios.put(
-      ENDPOINTS.apiEndoint + `dbservice/update/move/deletedtoSuggested`,
-      dataFormatSuggested
-    );
-    var result = response.data;
-    if (result.status == "SUCCESS") {
-      notification.success({
-        message: result.message,
-        placement: "top",
-        duration: 1,
-      });
-      getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
-    }
-  };
-
-  const handleSubmitInValidtoValid = async () => {
-    setFileLoading(true);
-    var dataFormatSuggested = {
-      userId: localUserId,
-      patientId: localPatientId,
-      diagnosisCode: selectInvalidDetails.diagnosisCode,
-      actualDescription: selectInvalidDetails.actualDescription,
-      dbDescription: selectInvalidDetails.dbDescription,
-      notes: inputValue.notes,
-      dos: selectedDosValue,
-      encounterDate: selectInvalidDetails.encounterDate,
-      capturedSections: selectInvalidDetails.capturedSections,
-    };
-    const response = await axios.put(
-      ENDPOINTS.apiEndoint + `dbservice/update/move/invalidtovalid`,
-      dataFormatSuggested
-    );
-    var result = response.data;
-    if (result.status == "SUCCESS") {
-      notification.success({
-        message: result.message,
-        placement: "top",
-        duration: 1,
-      });
-      getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
-    }
-  };
-
   const getPatientDetailsReload = async (patientId) => {
     dispatch(getPatientDetailsResult(patientId));
     setFileLoading(false);
@@ -1907,17 +1417,6 @@ const File = ({
     setIsFileFormShow(true);
     setValidated(false);
   };
-
-  function removeDuplicates(array) {
-    let output = [];
-    if (array) {
-      for (let item of array) {
-        if (!output.includes(item)) output.push(item);
-      }
-    }
-
-    return output;
-  }
 
   const stringToColour = (str) => {
     let hash = 0;
@@ -1953,108 +1452,6 @@ const File = ({
       } else {
       }
     } catch (e) {}
-  };
-
-  const getCaptureSectionBackgroundFile = (
-    value,
-    encounterDate,
-    actualDescription,
-    diagnosisCode
-  ) => {
-    // getSectionTagColor(value);
-    var dublicateCaptureDelete = removeDuplicates(value);
-    return dublicateCaptureDelete.map((res) => {
-      const result = captureSectionMatching.filter(
-        (res2) => res2.sectionName == res
-      );
-      var backColor = result[0]?.backgroundColor;
-      var textColor = result[0]?.sectionColor;
-      var disCode = result[0]?.diagnosisCode;
-      var headerNames = result[0]?.sectionName;
-      var sectionMapArr = (
-        <span
-          onClick={() =>
-            findValueDocument(
-              disCode,
-              res,
-              headerNames,
-              encounterDate,
-              actualDescription,
-              diagnosisCode
-            )
-          }
-          style={{ backgroundColor: backColor, color: textColor }}
-          className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
-        >
-          {res}
-        </span>
-      );
-      return sectionMapArr;
-    });
-  };
-
-  const getCaptureSectionBackground = (
-    value,
-    documentPlace,
-    encounterDate,
-    actualDescription,
-    testModal,
-    diagnosisCode
-  ) => {
-    var dublicateCaptureDelete = removeDuplicates(value);
-    return dublicateCaptureDelete.map((res) => {
-      const result = captureSectionMatching.filter(
-        (res2) => res2.sectionName == res
-      );
-      var backColor = result[0]?.backgroundColor;
-      var textColor = result[0]?.sectionColor;
-      var disCode = diagnosisCode;
-      var headerNames = result[0]?.sectionName;
-
-      var sectionMapArr = (
-        <span
-          onClick={() =>
-            handleOpenModalCombinationCode(
-              disCode,
-              res,
-              "valid",
-              "null",
-              documentPlace,
-              encounterDate,
-              headerNames,
-              actualDescription,
-              testModal
-            )
-          }
-          style={{ backgroundColor: backColor, color: textColor }}
-          className={`cr-pointer mt-2 text-start ${visitStyles.captureheader}`}
-        >
-          {res}
-        </span>
-      );
-      return sectionMapArr;
-    });
-  };
-
-  const getEncounterDateBackground = (value) => {
-    return value?.map((res) => {
-      const result = encounterDateMatching.filter((res2) => res2.name == res);
-      var backColor = result[0]?.colors;
-      var sectionMapArr = res ? (
-        <span
-          onClick={() => getEncounterDetails(res)}
-          className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
-        >
-          <i>
-            <CalendarOutlined className={visitStyles.calenderIcon} />
-          </i>
-          {moment(res).format("MMM DD")}
-        </span>
-      ) : (
-        ""
-      );
-      return sectionMapArr;
-    });
   };
 
   const getEncounterDetails = async (date) => {
@@ -2144,43 +1541,6 @@ const File = ({
       page: pageNumber,
     });
   };
-
-  const getProviderNameList = (data) => {
-    var dublicateCaptureDelete = removeDuplicates(data);
-    return dublicateCaptureDelete.map((res) => {
-      const result = captureSectionMatching.filter(
-        (res2) => res2.sectionName == res
-      );
-      var backColor =
-        result[0]?.backgroundColor == "#efeff033"
-          ? "#54548d33"
-          : result[0]?.backgroundColor;
-      var textColor =
-        result[0]?.sectionColor == "#efeff0" ? "#000" : result[0]?.sectionColor;
-      var value = ["09/19/2023"];
-      var sectionMapArr = (
-        <span
-          className={`mt-2 text-start ${visitStyles.provider_name}`}
-          style={{ backgroundColor: backColor, color: textColor }}
-        >
-          <i>
-            {" "}
-            <FontAwesomeIcon
-              icon={faCircleUser}
-              style={{
-                size: 10,
-                color: textColor,
-              }}
-            />
-          </i>
-          {res}
-        </span>
-        // </Popover>
-      );
-      return sectionMapArr;
-    });
-  };
-
   const showErrorMessage = () => {
     setOpens(false);
     notification.destroy();
@@ -2225,42 +1585,6 @@ const File = ({
     </div>
   );
 
-  const PopContentHccVersion = (
-    <div className={styles.innerPop}>
-      <div className={styles.displayDiv}>
-        {hccVersionDetails ? (
-          <>
-            {hccVersionDetails.length != 0 ? (
-              hccVersionDetails?.map((data) => (
-                <div className={styles.hoverDiv}>
-                  <div className={`row ${styles.selectDetailsContainer}`}>
-                    <div className="col-xl-3">
-                      <span className={styles.selectHead}>{data.name}</span>
-                    </div>
-                    <div className="col-xl-3">
-                      <span className={styles.selectHead}>{data.value}</span>
-                    </div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className={styles.hoverDiv}>
-                <div className={`row ${styles.selectDetailsContainerNoData}`}>
-                  <div className="col-xl-3 text-center">
-                    <span className={styles.selectHead}>NO DATA</span>
-                  </div>
-                </div>
-              </div>
-            )}
-          </>
-        ) : (
-          <div className={visitStyles.loadingFileHeader}>
-            <Spinner />
-          </div>
-        )}
-      </div>
-    </div>
-  );
   return (
     <>
       {fileLoading ? (
@@ -2314,6 +1638,9 @@ const File = ({
                     editFormPlace={"VALID_DISEASE"}
                     setOpens={setOpens}
                     setCombiTree={setCombiTree}
+                    setActiveTabHead={setActiveTabHead}
+                    setActiveMeatTitle={setActiveMeatTitle}
+                    setActiveComboTree={setActiveComboTree}
                   />
                 </div>
               </div>
@@ -2419,6 +1746,9 @@ const File = ({
                       editFormPlace={"SUGGESTED_DISEASE"}
                       setOpens={setOpens}
                       setCombiTree={setCombiTree}
+                      setActiveTabHead={setActiveTabHead}
+                      setActiveMeatTitle={setActiveMeatTitle}
+                      setActiveComboTree={setActiveComboTree}
                     />
                   </div>
                 </div>
@@ -2461,6 +1791,9 @@ const File = ({
                       isDeletedCodes={true}
                       setOpens={setOpens}
                       setCombiTree={setCombiTree}
+                      setActiveTabHead={setActiveTabHead}
+                      setActiveMeatTitle={setActiveMeatTitle}
+                      setActiveComboTree={setActiveComboTree}
                     />
                   </div>
                 </div>

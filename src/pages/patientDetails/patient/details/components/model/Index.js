@@ -25,7 +25,7 @@ const ModelIndex = ({
       onOk={handleCloseModal}
       onCancel={handleCloseModal}
       footer={null}
-      width={combiTree ? "auto" : labReportFile && "80%"}
+      width={combiTree ? "auto" : labReportFile ? "80%":modalOpenValidContent && "90%"}
     >
       {combiTree ? (
         <CamboTree tree={combiTree} />

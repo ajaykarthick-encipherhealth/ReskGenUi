@@ -14,6 +14,7 @@ import { SVGICON } from "../../../../../../jsx/constant/theme";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { CalendarOutlined } from "@ant-design/icons";
 import moment from "moment";
+import { getCaptureSectionBackgroundFile, getEncounterDateBackground, getMeatFound, getProviderNameList } from "../function/ReusableFunctions";
 
 const HccCards = ({
   list,
@@ -37,124 +38,11 @@ const HccCards = ({
   isDeletedCodes,
   setOpens,
   setCombiTree,
+  setActiveTabHead,
+  setActiveMeatTitle,
+  setActiveComboTree
 }) => {
-  const getEncounterDateBackground = (value) => {
-    return value?.map((res) => {
-      const result = encounterDateMatching.filter((res2) => res2.name == res);
-      var backColor = result[0]?.colors;
-      var sectionMapArr = res ? (
-        <span
-          onClick={() => getEncounterDetails(res)}
-          className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
-        >
-          <i>
-            <CalendarOutlined className={visitStyles.calenderIcon} />
-          </i>
-          {moment(res).format("MMM DD")}
-        </span>
-      ) : (
-        ""
-      );
-      return sectionMapArr;
-    });
-  };
-  const getCaptureSectionBackgroundFile = (
-    value,
-    encounterDate,
-    actualDescription,
-    diagnosisCode,
-    documentPlace
-  ) => {
-    // getSectionTagColor(value);
-    var dublicateCaptureDelete = removeDuplicates(value);
-    return dublicateCaptureDelete.map((res) => {
-      const result = captureSectionMatching.filter(
-        (res2) => res2.sectionName == res
-      );
-      var backColor = result[0]?.backgroundColor;
-      var textColor = result[0]?.sectionColor;
-      var disCode = result[0]?.diagnosisCode;
-      var headerNames = result[0]?.sectionName;
-      var sectionMapArr = (
-        <span
-          onClick={() =>
-            findValueDocument(
-              disCode,
-              res,
-              headerNames,
-              encounterDate,
-              actualDescription,
-              diagnosisCode,
-              documentPlace
-            )
-          }
-          style={{ backgroundColor: backColor, color: textColor }}
-          className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
-        >
-          {res}
-        </span>
-      );
-      return sectionMapArr;
-    });
-  };
-
-  const getMeatFound = (code, data, value) => {
-    const result = data?.filter(
-      (res2) => res2?.diagnosisCode?.replace(".", "") == code?.replace(".", "")
-    );
-    var backColor = "#f93d3d";
-    var meatTitle = "MEAT";
-    if (result?.length != 0) {
-      switch (value) {
-        case "M":
-          if (result[0]?.monitor) {
-            backColor = "#15b315";
-          }
-          meatTitle = "Monitor";
-          break;
-        case "E":
-          if (result[0]?.evaluate) {
-            backColor = "#15b315";
-          }
-          meatTitle = "Evaluate";
-          break;
-        case "A":
-          if (result[0]?.assessment) {
-            backColor = "#15b315";
-          }
-          meatTitle = "Assessment";
-          break;
-        case "T":
-          if (result[0]?.treatment) {
-            backColor = "#15b315";
-          }
-          meatTitle = "Treatment";
-          break;
-        default:
-          null;
-      }
-    }
-    // var badgeMap = (
-    //   <span
-    //     style={{ backgroundColor: backColor, color: "white" }}
-    //     className={`mt-2 ${styles.badgeMeat}`}
-    //   >
-    //     {value}
-    //   </span>
-    // );
-    return (
-      <Tooltip title={meatTitle} placement="bottom">
-        <span
-          style={{ backgroundColor: backColor, color: "white" }}
-          className={`mt-2 ${styles.badgeMeat}`}
-        >
-          {value}
-        </span>
-      </Tooltip>
-    );
-  };
-
-  const PopContentHccVersion = (
+ const PopContentHccVersion = (
     <div className={styles.innerPop}>
       <div className={styles.displayDiv}>
         {hccVersionDetails ? (
@@ -190,54 +78,6 @@ const HccCards = ({
       </div>
     </div>
   );
-
-  function removeDuplicates(array) {
-    let output = [];
-    if (array) {
-      for (let item of array) {
-        if (!output.includes(item)) output.push(item);
-      }
-    }
-
-    return output;
-  }
-
-  const getProviderNameList = (data) => {
-    var dublicateCaptureDelete = removeDuplicates(data);
-    return dublicateCaptureDelete.map((res) => {
-      const result = captureSectionMatching.filter(
-        (res2) => res2.sectionName == res
-      );
-      var backColor =
-        result[0]?.backgroundColor == "#efeff033"
-          ? "#54548d33"
-          : result[0]?.backgroundColor;
-      var textColor =
-        result[0]?.sectionColor == "#efeff0" ? "#000" : result[0]?.sectionColor;
-      var value = ["09/19/2023"];
-      var sectionMapArr = (
-        <span
-          className={`mt-2 text-start ${visitStyles.provider_name}`}
-          style={{ backgroundColor: backColor, color: textColor }}
-        >
-          <i>
-            {" "}
-            <FontAwesomeIcon
-              icon={faCircleUser}
-              style={{
-                size: 10,
-                color: textColor,
-              }}
-            />
-          </i>
-          {res}
-        </span>
-        // </Popover>
-      );
-      return sectionMapArr;
-    });
-  };
-
   return (
     <>
       {list?.map((data, i) => (
@@ -249,16 +89,7 @@ const HccCards = ({
               <div>
                 <span className="disease-name d-flex mb-1">
                   <span className="valid-dis-name">{data.diagnosisCode}</span>
-                  {/* removed reason for demo */}
-                  {/* <span className="">
-                                <Popover
-                                  content={updateCode(data)}
-                                  title=""
-                                  trigger="click"
-                                >
-                                  <FontAwesomeIcon icon={faPen} />
-                                </Popover>
-                              </span> */}
+                 
                   {!isDeletedCodes && (
                     <FontAwesomeIcon
                       icon={faPen}
@@ -397,10 +228,10 @@ const HccCards = ({
             <div className="d-flex justify-content-between">
               <div className={`${visitStyles.hoverActiveHcc}`}>
                 <div className={`${visitStyles.encounterAndSectionHeader}`}>
-                  {getProviderNameList(data?.providerName)}
+                  {getProviderNameList(data?.providerName,captureSectionMatching)}
                 </div>
                 <div className={`${visitStyles.encounterAndSectionHeader}`}>
-                  {getEncounterDateBackground(data.encounterDateSplit)}
+                  {getEncounterDateBackground(data?.encounterDateSplit,encounterDateMatching,getEncounterDetails)}
                 </div>
                 <div className={`${visitStyles.encounterAndSectionHeader}`}>
                   {getCaptureSectionBackgroundFile(
@@ -408,21 +239,12 @@ const HccCards = ({
                     data?.encounterDate,
                     data?.actualDescription,
                     data?.diagnosisCode,
-
-                    data?.getPlace
+                    data?.getPlace,
+                    findValueDocument,
+                    captureSectionMatching
                   )}
                 </div>
-                {/* {data?.isMostSpecific == true ? (
-                                        <div
-                                          className={`${visitStyles.encounterAndSectionHeader}`}
-                                        >
-                                          <span
-                                            className={`mt-2 text-start cr-pointer ${styles.mostSpecificTag}`}
-                                          >
-                                            IsMostSpecific
-                                          </span>
-                                        </div>
-                                      ) : null} */}
+              
               </div>
               <div className={`${visitStyles.encounterAndSectionHeader}`}>
                 <div className="d-flex justify-content-end mt-2">
@@ -529,25 +351,7 @@ const HccCards = ({
                     </span>
                   </Tooltip>
                 ) : null}
-                {data.getPlace == "Lab" ? (
-                  <Tooltip title="LAB">
-                    <span
-                      className={` mt-2 ${visitStyles.labStatus}`}
-                      bg={`  mt-2 bg-bg-seven `}
-                    >
-                      Lab
-                    </span>
-                  </Tooltip>
-                ) : data.getPlace == "Radio" ? (
-                  <Tooltip title="RADIOLOGY">
-                    <span
-                      className={` mt-2 ${visitStyles.radiologyStatus}`}
-                      bg={`  mt-2 bg-bg-eight `}
-                    >
-                      Radiology
-                    </span>
-                  </Tooltip>
-                ) : null}
+               
               </div>
             </div>
           </div>
