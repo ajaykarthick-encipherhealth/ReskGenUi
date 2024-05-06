@@ -1367,7 +1367,7 @@ const File = ({
     try {
       if (documentPlace === "Lab" || documentPlace === "Radio") {
         setSearch({
-          value: splitPoint,
+          value: disDescription,
           headers: true,
         });
         setFileLoading(false);
@@ -2469,56 +2469,6 @@ const File = ({
           </div>
         ) : null}
       </div>
-      {/* {isModalOpenRadiology && (
-        <Modal
-          title={selectMeatName}
-          // title="Pdf Test"
-          centered
-          open={isModalOpenRadiology}
-          // style={{ top: 5 }}
-          onOk={handleCloseModal}
-          onCancel={handleCloseModal}
-          width="70%"
-          footer={false}
-          // height={400}
-        >
-          <div className="section-container">
-            {selectFileURLRadiology && (
-              <PdfViewer
-                src={selectFileURLRadiology}
-                searchQuery={search?.value ? search?.value : ""}
-                pageNumber={search?.page ? search?.page : 1}
-                headers={search?.headers}
-              />
-            )}
-          </div>
-        </Modal>
-      )} */}
-      {/* {isModalOpenLab && (
-        <Modal
-          title={selectMeatName}
-          // title="Pdf Test"
-          centered
-          open={isModalOpenLab}
-          // style={{ top: 5 }}
-          onOk={handleCloseModal}
-          onCancel={handleCloseModal}
-          width="70%"
-          // height={400}
-        >
-          <div className="section-container">
-            {labReportFile && (
-              <PdfViewer
-                src={labReportFile}
-                searchQuery={search?.value ? search?.value : ""}
-                pageNumber={search?.page ? search?.page : 1}
-                headers={search?.headers}
-              />
-            )}
-          </div>
-        </Modal>
-      )} */}
-
       <ModelIndex
         validated={validated}
         handleSubmit={handleSubmitValidNotes}

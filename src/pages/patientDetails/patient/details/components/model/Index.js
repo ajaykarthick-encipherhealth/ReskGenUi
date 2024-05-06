@@ -14,7 +14,8 @@ const ModelIndex = ({
   handleChangeSuggested,
   combiTree,
   labReportFile,
-  search
+  search,
+  modalOpenValidContent,
 }) => {
   return (
     <Modal
@@ -24,7 +25,7 @@ const ModelIndex = ({
       onOk={handleCloseModal}
       onCancel={handleCloseModal}
       footer={null}
-      width={combiTree ? "auto":labReportFile && '80%'}
+      width={combiTree ? "auto" : labReportFile && "80%"}
     >
       {combiTree ? (
         <CamboTree tree={combiTree} />
@@ -35,6 +36,8 @@ const ModelIndex = ({
           pageNumber={search?.page ? search?.page : 1}
           headers={search?.headers}
         />
+      ) : modalOpenValidContent ? (
+        modalOpenValidContent
       ) : (
         <div className="offcanvas-body">
           <div className="container-fluid">

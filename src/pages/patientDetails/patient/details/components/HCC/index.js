@@ -306,6 +306,7 @@ const HccCards = ({
                     className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
                   ></span>
                 ) : null}
+
                 <Popover
                   onClick={() =>
                     getValidHccDetails(
