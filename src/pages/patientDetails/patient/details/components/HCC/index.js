@@ -5,12 +5,8 @@ import { Badge, Popconfirm, Popover, Tooltip } from "antd";
 import styles from "./styles.module.css";
 import { Spinner } from "react-bootstrap";
 import {
-  faClose,
-  faArrowLeft,
-  faPlus,
   faArrowsAlt,
   faSitemap,
-  faAngleDown,
   faCircleUser,
   faPen,
 } from "@fortawesome/free-solid-svg-icons";
@@ -28,12 +24,17 @@ const HccCards = ({
   getEncounterDetails,
   findValueDocument,
   onchangeValid,
-  setConfirmNotesModalValid,
-  setIsValidAction,
   getValidHccDetails,
   setFormValues,
   setIsEditHccForm,
   setFormEditPlace,
+  okText,
+  cancelText,
+  confirmFunc,
+  cancelFunc,
+  editFormPlace,
+  suggestedToDeleted,
+  isDeletedCodes,
 }) => {
   const getEncounterDateBackground = (value) => {
     return value?.map((res) => {
@@ -233,26 +234,6 @@ const HccCards = ({
     });
   };
 
-  const confirmvalid = () =>
-    new Promise((resolve) => {
-      setTimeout(() =>
-        resolve(
-          setConfirmNotesModalValid(true),
-          setIsValidAction("validToDeleted")
-        )
-      );
-    });
-
-  const validToSuggested = () =>
-    new Promise((resolve) => {
-      setTimeout(() =>
-        resolve(
-          setConfirmNotesModalValid(true),
-          setIsValidAction("validToSuggested")
-        )
-      );
-    });
-
   return (
     <>
       {list?.map((data, i) => (
@@ -274,15 +255,17 @@ const HccCards = ({
                                   <FontAwesomeIcon icon={faPen} />
                                 </Popover>
                               </span> */}
-                  <FontAwesomeIcon
-                    icon={faPen}
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      setFormValues(data),
-                        setIsEditHccForm(true),
-                        setFormEditPlace("VALID_DISEASE");
-                    }}
-                  />
+                  {!isDeletedCodes && (
+                    <FontAwesomeIcon
+                      icon={faPen}
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        setFormValues(data),
+                          setIsEditHccForm(true),
+                          setFormEditPlace(editFormPlace);
+                      }}
+                    />
+                  )}
 
                   <Popover
                     content={
@@ -335,7 +318,6 @@ const HccCards = ({
                     <i className="cr-pointer">{SVGICON.infoIcon}</i>
                   </Tooltip>
                 </Popover>
-
                 <Popconfirm
                   title="Choose an action"
                   icon={
@@ -345,9 +327,21 @@ const HccCards = ({
                       }}
                     />
                   }
-                  okText="Move to Deleted"
-                  cancelText="Move to Suggested"
-                  onCancel={validToSuggested}
+                  okText={
+                    data.getPlace == "Radio" || data.getPlace == "Lab"
+                      ? "Move to Deleted"
+                      : okText
+                  }
+                  cancelText={
+                    data.getPlace === "Radio" || data.getPlace === "Lab"
+                      ? ""
+                      : cancelText
+                  }
+                  onCancel={
+                    data.getPlace === "Radio" || data.getPlace === "Lab"
+                      ? ""
+                      : cancelFunc
+                  }
                   okButtonProps={{
                     type: "default",
                   }}
@@ -355,7 +349,11 @@ const HccCards = ({
                     type: "default",
                   }}
                   description={data.diagnosisCode}
-                  onConfirm={confirmvalid}
+                  onConfirm={
+                    data.getPlace == "Radio" || data.getPlace == "Lab"
+                      ? suggestedToDeleted
+                      : confirmFunc
+                  }
                   placement="leftTop"
                   onOpenChange={() => onchangeValid(data.diagnosisCode, data)}
                 >
@@ -506,6 +504,25 @@ const HccCards = ({
                   >
                     Insulin
                   </span>
+                ) : null}
+                {data.getPlace == "Lab" ? (
+                  <Tooltip title="LAB">
+                    <span
+                      className={` mt-2 ${visitStyles.labStatus}`}
+                      bg={`  mt-2 bg-bg-seven `}
+                    >
+                      Lab
+                    </span>
+                  </Tooltip>
+                ) : data.getPlace == "Radio" ? (
+                  <Tooltip title="RADIOLOGY">
+                    <span
+                      className={` mt-2 ${visitStyles.radiologyStatus}`}
+                      bg={`  mt-2 bg-bg-eight `}
+                    >
+                      Radiology
+                    </span>
+                  </Tooltip>
                 ) : null}
                 {data.getPlace == "Lab" ? (
                   <Tooltip title="LAB">
