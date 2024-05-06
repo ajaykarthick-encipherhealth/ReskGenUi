@@ -30,7 +30,11 @@ import { notification } from "antd";
 import { Tooltip } from "antd";
 import Spinner from "../../../../../../components/loadingSpinner";
 import styles from "../styles.module.css";
-import { getPatientDetailsResult } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
+import {
+  getLabFileDetails,
+  getPatientDetailsResult,
+  getRadiologyFileDetails,
+} from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import CamboTree from "../org";
 import PdfViewer from "../../PdfViewerComponent";
 import AddHccForm from "../../components/addHccForm";
@@ -93,6 +97,12 @@ const File = ({
   );
   const hccFileDetails = useSelector(
     (state) => state?.ReviewerReducers?.hccFileDetails
+  );
+  const radiologyFileDetails = useSelector(
+    (state) => state?.ReviewerReducers?.radiologyFileDetails
+  );
+  const labFileDetails= useSelector(
+    (state) => state?.ReviewerReducers?.labFileDetails
   );
   const fileDosPageNumberList = useSelector(
     (state) => state?.ReviewerReducers.dosPageNumberList
@@ -178,7 +188,6 @@ const File = ({
     setLocalOrgId(orgId);
     setLocalTenantId(tenId);
     getPatientDetails(patientId, orgId, tenId);
-
   }, [patientDetailsResult]);
 
   useEffect(() => {
@@ -186,7 +195,13 @@ const File = ({
       // dispatch(pdfUrl(hccFileDetails?.result?.response));
       setSelectFileURL(hccFileDetails?.result?.response);
     }
-  }, [hccFileDetails]);
+    if (radiologyFileDetails?.result?.response) {
+      setSelectFileURLRadiology(radiologyFileDetails?.result?.response);
+    }
+    if (labFileDetails?.result?.response) {
+      setLabReportFile(labFileDetails?.result?.response);
+    }
+  }, [hccFileDetails, radiologyFileDetails,labFileDetails]);
 
   useEffect(() => {
     getFileDosPageNumber();
@@ -232,7 +247,6 @@ const File = ({
   ) => {
     if (patientDetailsResult?.result?.response) {
       var result = patientDetailsResult?.result?.response;
-      console.log(result)
       setPatientDocumentResult(result);
       if (result.validDisease != null) {
         var validDis = "";
@@ -244,13 +258,12 @@ const File = ({
         var validDiseaseNewRes = [];
         var invalidDiseaseNewRes = [];
         var unMatchRes = [];
-       
 
         var suggestRadiologyList = [];
         var suggestLabList = [];
 
         var suggestListAll = [];
-     
+
         var deleteHccList = [];
 
         if (fileloadCondition != "fileNotLoad") {
@@ -274,17 +287,15 @@ const File = ({
           rafScore = result.rafScore;
         }
 
-     
-
         validDis = result.validDisease;
         validDiseaseNewRes = result?.validDisease;
         // invalidDiseaseNewRes =validDisArray;
         var validDisArray = [];
-       
+
         validDiseaseNewRes?.map((res, index) => {
           const encounterDatearray = res?.encounterDate?.split(",");
           var providerList = [];
-        
+
           res.provider?.map((res, index) => {
             providerList.push(res?.providerName);
           });
@@ -996,9 +1007,8 @@ const File = ({
             }
           });
 
-          getPatientPdfFileRadiology(
-            result.radiologyFileDetail[0].azureBlobPath,
-            tenId
+          dispatch(
+            getRadiologyFileDetails(result.radiologyFileDetail[0].azureBlobPath)
           );
         }
       }
@@ -1027,7 +1037,7 @@ const File = ({
         }
 
         var fileDetails = resultTest.labFileDetail;
-        getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
+        dispatch(getLabFileDetails(fileDetails[0].azureBlobPath));
       }
     }
   };
@@ -1046,25 +1056,29 @@ const File = ({
     return colorReturnValue;
   }
 
-  const getPatientPdfFileRadiology = async (fileId, tenId) => {
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
-    );
-    if (response.data) {
-      setSelectFileURLRadiology(response.data.response);
-    }
-  };
+  // const getPatientPdfFileRadiology = async (fileId, tenId, isRadiology) => {
+  //   const response = await axios.get(
+  //     ENDPOINTS.apiEndoint +
+  //       `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
+  //   );
+  //   if (response.data) {
+  //     if (isRadiology) {
+  //       setSelectFileURLRadiology(response.data.response);
+  //     } else {
+  //       setLabReportFile(response.data.response);
+  //     }
+  //   }
+  // };
 
-  const getLabReportFiles = async (fileId, tenId) => {
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
-    );
-    if (response.data) {
-      setLabReportFile(response.data.response);
-    }
-  };
+  // const getLabReportFiles = async (fileId, tenId) => {
+  //   const response = await axios.get(
+  //     ENDPOINTS.apiEndoint +
+  //       `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
+  //   );
+  //   if (response.data) {
+  //     setLabReportFile(response.data.response);
+  //   }
+  // };
 
   const confirmvalid = () =>
     new Promise((resolve) => {
@@ -1142,161 +1156,6 @@ const File = ({
     setActiveTabNumber(activeTabNumber == null ? 0 : null);
     setIsEditHccForm(false);
     setOpens(false);
-  };
-
-  const findValueDocuments = async (
-    headerNames,
-    encounterDate,
-    actualDescription
-  ) => {
-    setFileLoading(true);
-    var fileId = patientFileDTO.fileId;
-    const encounterDatesValue = encounterDate.split(",");
-
-    var splitPoint = actualDescription.substring(" ", 20);
-    var pageNumber = null;
-    var data = {
-      fileId: fileId,
-      header: headerNames,
-      dos: encounterDatesValue,
-      stringFileWord: splitPoint,
-    };
-    try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/pageNumber`,
-        data
-      );
-      var result = response.data.response;
-      if (response?.data?.status == "SUCCESS") {
-        pageNumber = result?.second[0] ? result?.second[0] : null;
-        if (result?.first == false) {
-          splitPoint = headerNames;
-        }
-        if (pageNumber == fileInitialPage) {
-          setFileLoading(false);
-          notification.warning({
-            message: "This detail also same page",
-            placement: "top",
-            duration: 1,
-          });
-        }
-        setSearch({
-          value: splitPoint,
-          page: pageNumber,
-          headers: result?.first,
-        });
-        setFileInitialPage(pageNumber);
-      } else {
-        splitPoint = headerNames;
-        setFileInitialPage(null);
-      }
-      setTargetPages(
-        (targetPage) =>
-          targetPage.pageIndex === pageNumber ||
-          targetPage.pageIndex === pageNumber + 1 ||
-          targetPage.pageIndex === pageNumber + 2
-      );
-      setFindFileKeyword(splitPoint);
-      if (findFileKeyword == splitPoint) {
-        setFileLoading(false);
-      }
-    } catch (error) {
-      setSearch({
-        value: headerNames,
-        headers: true,
-      });
-      splitPoint = headerNames;
-      if (findFileKeyword == headerNames) {
-        setFileLoading(false);
-      }
-      setFindFileKeyword(splitPoint);
-      setFileInitialPage(null);
-    }
-  };
-
-  const findValueDocument = async (
-    value,
-    disDescription,
-    headerNames,
-    encounterDate,
-    actualDescription,
-    diagnosisCode,
-    documentPlace
-  ) => {
-    setFileLoading(true);
-    var fileId = patientFileDTO.fileId;
-    const encounterDatesValue = encounterDate.split(",");
-    var splitPoint;
-    var pageNumber = null;
-    var data = {
-      fileId: fileId,
-      header: headerNames,
-      dos: encounterDatesValue,
-      stringFileWord: actualDescription.substring(" ", 20),
-      diagnosisCode: diagnosisCode,
-    };
-    try {
-      if (documentPlace === "Lab" || documentPlace === "Radio") {
-        setSearch({
-          value: disDescription,
-          headers: true,
-        });
-        setFileLoading(false);
-        if (documentPlace === "Lab") {
-          setIsModalOpenLab(true);
-        } else {
-          setIsModalOpenRadiology(true);
-        }
-      } else {
-        const response = await axios.post(
-          ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
-          data
-        );
-        var result = response.data.response;
-        if (response?.data?.status == "SUCCESS") {
-          pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
-          splitPoint = result?.searchString;
-          if (result == null) {
-            return findValueDocuments(
-              headerNames,
-              encounterDate,
-              actualDescription
-            );
-          }
-          if (pageNumber == fileInitialPage) {
-            setFileLoading(false);
-            notification.warning({
-              message: "This detail also same page",
-              placement: "top",
-              duration: 1,
-            });
-          }
-          setSearch({
-            value: splitPoint,
-            page: result?.pageNumber,
-            headers: false,
-          });
-          setFileInitialPage(pageNumber);
-        } else {
-          splitPoint = headerNames;
-          setFileInitialPage(null);
-        }
-        setTargetPages((targetPage) => {
-          targetPage.pageIndex === pageNumber;
-        });
-        setFindFileKeyword(splitPoint);
-        if (findFileKeyword == splitPoint) {
-          setFileLoading(false);
-        }
-      }
-    } catch (error) {
-      splitPoint = headerNames;
-      if (findFileKeyword == headerNames) {
-        setFileLoading(false);
-      }
-      setFindFileKeyword(splitPoint);
-      setFileInitialPage(null);
-    }
   };
 
   const handleChangeSuggested = async (e) => {
@@ -1556,7 +1415,7 @@ const File = ({
                     captureSectionMatching={captureSectionMatching}
                     encounterDateMatching={encounterDateMatching}
                     meatCriteriaList={meatCriteriaList}
-                    findValueDocument={findValueDocument}
+                    // findValueDocument={findValueDocument}
                     getEncounterDetails={getEncounterDetails}
                     onchangeValid={onchangeValid}
                     getValidHccDetails={getValidHccDetails}
@@ -1573,6 +1432,11 @@ const File = ({
                     setActiveTabHead={setActiveTabHead}
                     setActiveMeatTitle={setActiveMeatTitle}
                     setActiveComboTree={setActiveComboTree}
+                    setSearch={setSearch}
+                    setFileLoading={setFileLoading}
+                    setIsModalOpenLab={setIsModalOpenLab}
+                    setIsModalOpenRadiology={setIsModalOpenRadiology}
+                    setFileModalHeader={setFileModalHeader}
                   />
                 </div>
               </div>
@@ -1663,7 +1527,7 @@ const File = ({
                       captureSectionMatching={captureSectionMatching}
                       encounterDateMatching={encounterDateMatching}
                       meatCriteriaList={meatCriteriaList}
-                      findValueDocument={findValueDocument}
+                      // findValueDocument={findValueDocument}
                       getEncounterDetails={getEncounterDetails}
                       onchangeValid={onchangeValid}
                       getValidHccDetails={getValidHccDetails}
@@ -1681,6 +1545,12 @@ const File = ({
                       setActiveTabHead={setActiveTabHead}
                       setActiveMeatTitle={setActiveMeatTitle}
                       setActiveComboTree={setActiveComboTree}
+                      setSearch={setSearch}
+                      setFileLoading={setFileLoading}
+                      setIsModalOpenLab={setIsModalOpenLab}
+                      setIsModalOpenRadiology={setIsModalOpenRadiology}
+                      patientDocumentResult={patientDocumentResult}
+                      setFileModalHeader={setFileModalHeader}
                     />
                   </div>
                 </div>
@@ -1709,7 +1579,7 @@ const File = ({
                       captureSectionMatching={captureSectionMatching}
                       encounterDateMatching={encounterDateMatching}
                       meatCriteriaList={meatCriteriaList}
-                      findValueDocument={findValueDocument}
+                      // findValueDocument={findValueDocument}
                       getEncounterDetails={getEncounterDetails}
                       onchangeValid={onchangeValid}
                       getValidHccDetails={getValidHccDetails}
@@ -1726,6 +1596,12 @@ const File = ({
                       setActiveTabHead={setActiveTabHead}
                       setActiveMeatTitle={setActiveMeatTitle}
                       setActiveComboTree={setActiveComboTree}
+                      setSearch={setSearch}
+                      setFileLoading={setFileLoading}
+                      setIsModalOpenLab={setIsModalOpenLab}
+                      setIsModalOpenRadiology={setIsModalOpenRadiology}
+                      patientDocumentResult={patientDocumentResult}
+                      setFileModalHeader={setFileModalHeader}
                     />
                   </div>
                 </div>
@@ -1736,8 +1612,15 @@ const File = ({
       </div>
       <ModelIndex
         validated={validated}
-        handleSubmit={(event)=>handleSubmitValidNotes(event,setFileLoading,setConfirmNotesModalValid,
-          getPatientDetailsReload,setValidated)}
+        handleSubmit={(event) =>
+          handleSubmitValidNotes(
+            event,
+            setFileLoading,
+            setConfirmNotesModalValid,
+            getPatientDetailsReload,
+            setValidated
+          )
+        }
         title={selectDiseasesName}
         openState={confirmNotesModalValid}
         handleCloseModal={handleCloseModal}

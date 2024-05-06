@@ -10,6 +10,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import visitStyles from "../../../../../../styles/visitdata.module.css";
 import styles from "../HCC/styles.module.css";
+import axios from "../../../../../../utility/axiosConfig";
+import ENDPOINTS from "../../../../../../utility/enpoints";
+import { useSelector } from "react-redux";
 
 export const getEncounterDateBackground = ({
   value,
@@ -42,8 +45,15 @@ export const getCaptureSectionBackgroundFile = (
   actualDescription,
   diagnosisCode,
   documentPlace,
-  findValueDocument,
-  captureSectionMatching
+  captureSectionMatching,
+  setSearch,
+  setFileLoading,
+  setIsModalOpenLab,
+  setIsModalOpenRadiology,
+  setIsModalOpenValidCodes,
+  setFileModalHeader,
+  fileId,
+  patientDocumentResult,
 ) => {
   var dublicateCaptureDelete = removeDuplicates(value);
   return dublicateCaptureDelete.map((res) => {
@@ -57,15 +67,22 @@ export const getCaptureSectionBackgroundFile = (
     var sectionMapArr = (
       <span
         onClick={() =>
-          findValueDocument(
-            disCode,
+          findValueDocument({
             res,
             headerNames,
             encounterDate,
             actualDescription,
             diagnosisCode,
-            documentPlace
-          )
+            documentPlace,
+            setSearch,
+            setFileLoading,
+            setIsModalOpenLab,
+            setIsModalOpenRadiology,
+            setIsModalOpenValidCodes,
+            setFileModalHeader,fileId,
+            patientDocumentResult,
+          
+        })
         }
         style={{ backgroundColor: backColor, color: textColor }}
         className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
@@ -244,4 +261,187 @@ export const handleSubmitValidNotes = async ({
     }
   }
   setValidated(true);
+};
+
+const findValueDocuments = async (
+  headerNames,
+  encounterDate,
+  actualDescription,
+  setFileLoading
+) => {
+  setFileLoading(true);
+  var fileId = patientFileDTO.fileId;
+  const encounterDatesValue = encounterDate.split(",");
+
+  var splitPoint = actualDescription.substring(" ", 20);
+  var pageNumber = null;
+  var data = {
+    fileId: fileId,
+    header: headerNames,
+    dos: encounterDatesValue,
+    stringFileWord: splitPoint,
+  };
+  try {
+    const response = await axios.post(
+      ENDPOINTS.apiEndoint + `dbservice/pageNumber`,
+      data
+    );
+    var result = response.data.response;
+    if (response?.data?.status == "SUCCESS") {
+      pageNumber = result?.second[0] ? result?.second[0] : null;
+      if (result?.first == false) {
+        splitPoint = headerNames;
+      }
+      if (pageNumber == fileInitialPage) {
+        setFileLoading(false);
+        notification.warning({
+          message: "This detail also same page",
+          placement: "top",
+          duration: 1,
+        });
+      }
+      setSearch({
+        value: splitPoint,
+        page: pageNumber,
+        headers: result?.first,
+      });
+      // setFileInitialPage(pageNumber);
+    } else {
+      setSearch({
+        value: splitPoint,
+        page: "",
+        headers:true,
+      });
+      // splitPoint = headerNames;
+      // setFileInitialPage(null);
+    }
+    // setTargetPages(
+    //   (targetPage) =>
+    //     targetPage.pageIndex === pageNumber ||
+    //     targetPage.pageIndex === pageNumber + 1 ||
+    //     targetPage.pageIndex === pageNumber + 2
+    // );
+    // setFindFileKeyword(splitPoint);
+    // if (findFileKeyword == splitPoint) {
+    //   setFileLoading(false);
+    // }
+  } catch (error) {
+    setSearch({
+      value: headerNames,
+      headers: true,
+    });
+    setFileLoading(false)
+    // splitPoint = headerNames;
+    // if (findFileKeyword == headerNames) {
+    //   setFileLoading(false);
+    // }
+    // setFindFileKeyword(splitPoint);
+    // setFileInitialPage(null);
+  }
+};
+
+export const findValueDocument = async ({
+  disDescription,
+  headerNames,
+  encounterDate,
+  actualDescription,
+  diagnosisCode,
+  documentPlace,
+  setSearch,
+  setFileLoading,
+  setIsModalOpenLab,
+  setIsModalOpenRadiology,
+  setIsModalOpenValidCodes,
+  setFileModalHeader,
+  fileId,
+  patientDocumentResult,
+}) => {
+  setFileLoading(true);
+ 
+  const encounterDatesValue = encounterDate.split(",");
+  var splitPoint;
+  var pageNumber = null;
+  var data = {
+    fileId: fileId?.result?.fileDetailDTO,
+    header: headerNames,
+    dos: encounterDatesValue,
+    stringFileWord: actualDescription.substring(" ", 20),
+    diagnosisCode: diagnosisCode,
+  };
+  var headerName = patientDocumentResult?
+    patientDocumentResult.patientId +
+    " / " +
+    patientDocumentResult.patientName +
+    " / " +
+    diagnosisCode +
+    " - (" +
+    headerNames +
+    ")":"";
+  setFileModalHeader(headerName);
+  try {
+    if (documentPlace === "Lab" || documentPlace === "Radio") {
+      setSearch({
+        value: headerNames,
+        headers: true,
+      });
+      setFileLoading(false);
+      if (documentPlace === "Lab") {
+        setIsModalOpenLab(true);
+      } else {
+        setIsModalOpenRadiology(true);
+      }
+    } else {
+     if(patientDocumentResult){
+       setIsModalOpenValidCodes(true);
+     }
+      const response = await axios.post(
+        ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
+        data
+      );
+      var result = response.data.response;
+      console.log(response)
+      if (response?.data?.status == "SUCCESS") {
+        pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
+        splitPoint = result?.searchString;
+        if (result == null) {
+          return findValueDocuments(
+            headerNames,
+            encounterDate,
+            actualDescription,
+            setSearch,
+            setFileLoading,
+          );
+        }
+        if (pageNumber == fileInitialPage) {
+          setFileLoading(false);
+          notification.warning({
+            message: "This detail also same page",
+            placement: "top",
+            duration: 1,
+          });
+        }
+        setSearch({
+          value: splitPoint,
+          page: result?.pageNumber,
+          headers: false,
+        });
+      } else {
+        setSearch({
+          value: headerNames,
+          page: "",
+          headers: true,
+        });
+      }
+    }
+  } catch (error) {
+    // splitPoint = headerNames;
+    // if (findFileKeyword == headerNames) {
+    setSearch({
+      value: headerNames,
+      page: "",
+      headers: true,
+    });
+    setFileLoading(false);
+    // }
+  }
 };

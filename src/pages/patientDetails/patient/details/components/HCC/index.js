@@ -7,14 +7,17 @@ import { Spinner } from "react-bootstrap";
 import {
   faArrowsAlt,
   faSitemap,
-  faCircleUser,
   faPen,
 } from "@fortawesome/free-solid-svg-icons";
 import { SVGICON } from "../../../../../../jsx/constant/theme";
 import { QuestionCircleOutlined } from "@ant-design/icons";
-import { CalendarOutlined } from "@ant-design/icons";
-import moment from "moment";
-import { getCaptureSectionBackgroundFile, getEncounterDateBackground, getMeatFound, getProviderNameList } from "../function/ReusableFunctions";
+import {
+  getCaptureSectionBackgroundFile,
+  getEncounterDateBackground,
+  getMeatFound,
+  getProviderNameList,
+} from "../function/ReusableFunctions";
+import { useSelector } from "react-redux";
 
 const HccCards = ({
   list,
@@ -23,7 +26,6 @@ const HccCards = ({
   encounterDateMatching,
   meatCriteriaList,
   getEncounterDetails,
-  findValueDocument,
   onchangeValid,
   getValidHccDetails,
   setFormValues,
@@ -40,9 +42,17 @@ const HccCards = ({
   setCombiTree,
   setActiveTabHead,
   setActiveMeatTitle,
-  setActiveComboTree
+  setActiveComboTree,
+  setSearch,
+  setFileLoading,
+  setIsModalOpenLab,
+  setIsModalOpenRadiology,
+  setIsModalOpenValidCodes,
+  setFileModalHeader,
+  patientDocumentResult,
 }) => {
- const PopContentHccVersion = (
+  const fileId=useSelector(state=>state?.ReviewerReducers?.patientDetails)
+  const PopContentHccVersion = (
     <div className={styles.innerPop}>
       <div className={styles.displayDiv}>
         {hccVersionDetails ? (
@@ -89,7 +99,7 @@ const HccCards = ({
               <div>
                 <span className="disease-name d-flex mb-1">
                   <span className="valid-dis-name">{data.diagnosisCode}</span>
-                 
+
                   {!isDeletedCodes && (
                     <FontAwesomeIcon
                       icon={faPen}
@@ -228,10 +238,17 @@ const HccCards = ({
             <div className="d-flex justify-content-between">
               <div className={`${visitStyles.hoverActiveHcc}`}>
                 <div className={`${visitStyles.encounterAndSectionHeader}`}>
-                  {getProviderNameList(data?.providerName,captureSectionMatching)}
+                  {getProviderNameList(
+                    data?.providerName,
+                    captureSectionMatching
+                  )}
                 </div>
                 <div className={`${visitStyles.encounterAndSectionHeader}`}>
-                  {getEncounterDateBackground(data?.encounterDateSplit,encounterDateMatching,getEncounterDetails)}
+                  {getEncounterDateBackground(
+                    data?.encounterDateSplit,
+                    encounterDateMatching,
+                    getEncounterDetails
+                  )}
                 </div>
                 <div className={`${visitStyles.encounterAndSectionHeader}`}>
                   {getCaptureSectionBackgroundFile(
@@ -240,11 +257,18 @@ const HccCards = ({
                     data?.actualDescription,
                     data?.diagnosisCode,
                     data?.getPlace,
-                    findValueDocument,
-                    captureSectionMatching
+                    captureSectionMatching,
+                    setSearch,
+                    setFileLoading,
+                    setIsModalOpenLab,
+                    setIsModalOpenRadiology,
+                    setIsModalOpenValidCodes,
+                    setFileModalHeader,
+                    fileId,
+                    patientDocumentResult,
+                    
                   )}
                 </div>
-              
               </div>
               <div className={`${visitStyles.encounterAndSectionHeader}`}>
                 <div className="d-flex justify-content-end mt-2">
@@ -351,7 +375,6 @@ const HccCards = ({
                     </span>
                   </Tooltip>
                 ) : null}
-               
               </div>
             </div>
           </div>
