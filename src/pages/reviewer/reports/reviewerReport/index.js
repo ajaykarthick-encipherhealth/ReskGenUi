@@ -712,7 +712,7 @@ const ReviewerReport = ({
                               ))}
                             </Row>
                           </div>
-                          <div className="col-xl-12  d-flex mt-4">
+                          <div className="col-xl-12  d-flex mt-1">
                             <div className={`col-xl-4 ${styles.flags}`}>
                               <div className={styles.cardHead}>Flags</div>
                               {flagData.map((flagItem) => (

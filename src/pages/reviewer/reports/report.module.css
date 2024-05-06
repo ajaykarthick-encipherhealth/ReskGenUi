@@ -79,7 +79,7 @@
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 844px;
+  height: 800px;
 }
 .card1 h2 {
   margin-top: 0;
@@ -320,9 +320,9 @@
   margin-left: 10px;
 }
 
-.moreStyle{
-  color:#378CE7;
-  border-bottom: 2px solid #378CE7;
+.moreStyle {
+  color: #378ce7;
+  border-bottom: 2px solid #378ce7;
 }
 .customChecked[type="checkbox"] {
   width: 20px;
@@ -352,4 +352,3 @@
   font-size: 14px;
   margin-top: -2px;
 }
-
