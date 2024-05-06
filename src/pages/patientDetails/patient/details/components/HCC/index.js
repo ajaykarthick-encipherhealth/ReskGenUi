@@ -35,6 +35,8 @@ const HccCards = ({
   editFormPlace,
   suggestedToDeleted,
   isDeletedCodes,
+  setOpens,
+  setCombiTree,
 }) => {
   const getEncounterDateBackground = (value) => {
     return value?.map((res) => {
@@ -60,7 +62,8 @@ const HccCards = ({
     value,
     encounterDate,
     actualDescription,
-    diagnosisCode
+    diagnosisCode,
+    documentPlace
   ) => {
     // getSectionTagColor(value);
     var dublicateCaptureDelete = removeDuplicates(value);
@@ -81,7 +84,8 @@ const HccCards = ({
               headerNames,
               encounterDate,
               actualDescription,
-              diagnosisCode
+              diagnosisCode,
+              documentPlace
             )
           }
           style={{ backgroundColor: backColor, color: textColor }}
@@ -397,14 +401,14 @@ const HccCards = ({
                 <div className={`${visitStyles.encounterAndSectionHeader}`}>
                   {getEncounterDateBackground(data.encounterDateSplit)}
                 </div>
-
                 <div className={`${visitStyles.encounterAndSectionHeader}`}>
                   {getCaptureSectionBackgroundFile(
                     data?.capturedSections,
                     data?.encounterDate,
                     data?.actualDescription,
                     data?.diagnosisCode,
-                    data?.dbDescription
+
+                    data?.getPlace
                   )}
                 </div>
                 {/* {data?.isMostSpecific == true ? (

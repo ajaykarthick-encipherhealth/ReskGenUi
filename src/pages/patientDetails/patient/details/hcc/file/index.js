@@ -37,6 +37,7 @@ import AddHccForm from "../../components/addHccForm";
 import EditHccForm from "../../components/editHccForm";
 import { pdfUrl } from "../../../../../../stores/authflow/reducers";
 import HccCards from "../../components/HCC";
+import ModelIndex from "../../components/model/Index";
 
 const File = ({
   popoverVisible,
@@ -1215,6 +1216,7 @@ const File = ({
     setFileLoading(false);
     setActiveTabNumber(activeTabNumber == null ? 0 : null);
     setIsEditHccForm(false);
+    setOpens(false);
   };
 
   const handleOpenModal = async (
@@ -1265,7 +1267,7 @@ const File = ({
       }
       setFindFileKeyword(splitPoint);
       setFileInitialPage(null);
-      setFileLoading(false)
+      setFileLoading(false);
     }
   };
 
@@ -1347,12 +1349,12 @@ const File = ({
     headerNames,
     encounterDate,
     actualDescription,
-    diagnosisCode
+    diagnosisCode,
+    documentPlace
   ) => {
     setFileLoading(true);
     var fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
-    const encounterDatesHeader = encounterDatesValue[0];
     var splitPoint;
     var pageNumber = null;
     var data = {
@@ -1363,47 +1365,60 @@ const File = ({
       diagnosisCode: diagnosisCode,
     };
     try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
-        data
-      );
-      var result = response.data.response;
-      if (response?.data?.status == "SUCCESS") {
-        pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
-        splitPoint = result?.searchString;
-        if (result == null) {
-          return findValueDocuments(
-            value,
-            disDescription,
-            headerNames,
-            encounterDate,
-            actualDescription
-          );
-        }
-        if (pageNumber == fileInitialPage) {
-          setFileLoading(false);
-          notification.warning({
-            message: "This detail also same page",
-            placement: "top",
-            duration: 1,
-          });
-        }
+      if (documentPlace === "Lab" || documentPlace === "Radio") {
         setSearch({
           value: splitPoint,
-          page: result?.pageNumber,
-          headers: false,
+          headers: true,
         });
-        setFileInitialPage(pageNumber);
-      } else {
-        splitPoint = headerNames;
-        setFileInitialPage(null);
-      }
-      setTargetPages((targetPage) => {
-        targetPage.pageIndex === pageNumber;
-      });
-      setFindFileKeyword(splitPoint);
-      if (findFileKeyword == splitPoint) {
         setFileLoading(false);
+        if (documentPlace === "Lab") {
+          setIsModalOpenLab(true);
+        } else {
+          setIsModalOpenRadiology(true);
+        }
+      } else {
+        const response = await axios.post(
+          ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
+          data
+        );
+        var result = response.data.response;
+        if (response?.data?.status == "SUCCESS") {
+          pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
+          splitPoint = result?.searchString;
+          if (result == null) {
+            return findValueDocuments(
+              value,
+              disDescription,
+              headerNames,
+              encounterDate,
+              actualDescription
+            );
+          }
+          if (pageNumber == fileInitialPage) {
+            setFileLoading(false);
+            notification.warning({
+              message: "This detail also same page",
+              placement: "top",
+              duration: 1,
+            });
+          }
+          setSearch({
+            value: splitPoint,
+            page: result?.pageNumber,
+            headers: false,
+          });
+          setFileInitialPage(pageNumber);
+        } else {
+          splitPoint = headerNames;
+          setFileInitialPage(null);
+        }
+        setTargetPages((targetPage) => {
+          targetPage.pageIndex === pageNumber;
+        });
+        setFindFileKeyword(splitPoint);
+        if (findFileKeyword == splitPoint) {
+          setFileLoading(false);
+        }
       }
     } catch (error) {
       splitPoint = headerNames;
@@ -1674,7 +1689,7 @@ const File = ({
   };
 
   const handleSubmitMoveValidToSuggested = async () => {
-    setFileLoading(true)
+    setFileLoading(true);
     var dataFormatSuggested = {
       userId: localUserId,
       patientId: localPatientId,
@@ -1698,41 +1713,54 @@ const File = ({
         duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
-
-    } 
+    }
   };
 
   const handleSubmitMoveValidToDeleted = async () => {
-    setFileLoading(true)
-    var dataFormatSuggested = {
-      userId: localUserId,
-      patientId: localPatientId,
-      diagnosisCode: selectInvalidDetails.diagnosisCode,
-      actualDescription: selectInvalidDetails.actualDescription,
-      dbDescription: selectInvalidDetails.dbDescription,
-      notes: inputValue.notes,
-      dos: selectedDosValue,
-      encounterDate: selectInvalidDetails.encounterDate,
-      capturedSections: selectInvalidDetails.capturedSections,
-    };
-    const response = await axios.put(
-      ENDPOINTS.apiEndoint + `dbservice/update/move/validtodeleted`,
-      dataFormatSuggested
-    );
-    var result = response.data;
-    if (result.status == "SUCCESS") {
-      notification.success({
-        message: result.message,
-        placement: "top",
-        duration: 1,
-      });
-      getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
-    
-    } 
+    setFileLoading(true);
+    try{
+      var dataFormatSuggested = {
+        userId: localUserId,
+        patientId: localPatientId,
+        diagnosisCode: selectInvalidDetails.diagnosisCode,
+        actualDescription: selectInvalidDetails.actualDescription,
+        dbDescription: selectInvalidDetails.dbDescription,
+        notes: inputValue.notes,
+        dos: selectedDosValue,
+        encounterDate: selectInvalidDetails.encounterDate,
+        capturedSections: selectInvalidDetails.capturedSections,
+      };
+      const response = await axios.put(
+        ENDPOINTS.apiEndoint + `dbservice/update/move/validtodeleted`,
+        dataFormatSuggested
+      );
+      var result = response.data;
+      console.log(result)
+      if (result.status == "SUCCESS") {
+        notification.success({
+          message: result.message,
+          placement: "top",
+          duration: 1,
+        });
+        getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
+      }else{
+        notification.error({
+          message: result.response,
+          placement: "top",
+          duration: 1,
+        });
+        setFileLoading(false)
+      }
+    }catch(err){
+      notification.error({
+        message:err?.response?.data?.response
+      })
+      setFileLoading(false)
+    }
   };
 
   const handleSubmitMoveSuggestedToDeleted = async () => {
-    setFileLoading(true)
+    setFileLoading(true);
     var dataFormatSuggested = {
       userId: localUserId,
       patientId: localPatientId,
@@ -1756,12 +1784,11 @@ const File = ({
         duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
-  
-    } 
+    }
   };
 
   const handleSubmitMoveSuggestedToValid = async () => {
-    setFileLoading(true)
+    setFileLoading(true);
     var dataFormatSuggested = {
       userId: localUserId,
       patientId: localPatientId,
@@ -1785,12 +1812,11 @@ const File = ({
         duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
-     
-    } 
+    }
   };
 
   const handleSubmitMoveDeletedToValid = async () => {
-    setFileLoading(true)
+    setFileLoading(true);
     var dataFormatSuggested = {
       userId: localUserId,
       patientId: localPatientId,
@@ -1814,11 +1840,10 @@ const File = ({
         duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
-     
-    } 
+    }
   };
   const handleSubmitMoveDeletedToSuggested = async () => {
-    setFileLoading(true)
+    setFileLoading(true);
     var dataFormatSuggested = {
       userId: localUserId,
       patientId: localPatientId,
@@ -1842,12 +1867,11 @@ const File = ({
         duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
-      
     }
   };
 
   const handleSubmitInValidtoValid = async () => {
-    setFileLoading(true)
+    setFileLoading(true);
     var dataFormatSuggested = {
       userId: localUserId,
       patientId: localPatientId,
@@ -1871,13 +1895,12 @@ const File = ({
         duration: 1,
       });
       getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
-      
     }
   };
 
   const getPatientDetailsReload = async (patientId) => {
     dispatch(getPatientDetailsResult(patientId));
-    setFileLoading(false)
+    setFileLoading(false);
   };
 
   const addValidCodeFile = async (event) => {
@@ -2289,6 +2312,8 @@ const File = ({
                     confirmFunc={confirmvalid}
                     cancelFunc={validToSuggested}
                     editFormPlace={"VALID_DISEASE"}
+                    setOpens={setOpens}
+                    setCombiTree={setCombiTree}
                   />
                 </div>
               </div>
@@ -2392,6 +2417,8 @@ const File = ({
                       cancelFunc={suggestedToValid}
                       suggestedToDeleted={suggestedToDeleted}
                       editFormPlace={"SUGGESTED_DISEASE"}
+                      setOpens={setOpens}
+                      setCombiTree={setCombiTree}
                     />
                   </div>
                 </div>
@@ -2432,6 +2459,8 @@ const File = ({
                       confirmFunc={deletedToSuggested}
                       cancelFunc={deletedToValid}
                       isDeletedCodes={true}
+                      setOpens={setOpens}
+                      setCombiTree={setCombiTree}
                     />
                   </div>
                 </div>
@@ -2440,7 +2469,7 @@ const File = ({
           </div>
         ) : null}
       </div>
-      {isModalOpenRadiology && (
+      {/* {isModalOpenRadiology && (
         <Modal
           title={selectMeatName}
           // title="Pdf Test"
@@ -2464,8 +2493,8 @@ const File = ({
             )}
           </div>
         </Modal>
-      )}
-      {isModalOpenLab && (
+      )} */}
+      {/* {isModalOpenLab && (
         <Modal
           title={selectMeatName}
           // title="Pdf Test"
@@ -2488,114 +2517,42 @@ const File = ({
             )}
           </div>
         </Modal>
-      )}
-      {confirmNotesModalValid && (
-        <Modal
-          title={selectDiseasesName}
-          centered
-          open={confirmNotesModalValid}
-          onOk={handleCloseModal}
-          onCancel={handleCloseModal}
-          footer={null}
-        >
-          <div className="offcanvas-body">
-            <div className="container-fluid">
-              <Form
-                noValidate
-                validated={validated}
-                onSubmit={handleSubmitValidNotes}
-              >
-                <div className="row">
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Reason <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <textarea
-                      required
-                      className="form-control"
-                      id="notes"
-                      name="notes"
-                      onChange={handleChangeSuggested}
-                      rows="5"
-                    ></textarea>
-                  </div>
-                </div>
+      )} */}
 
-                <div>
-                  <Button type="submit" className="btn btn-primary btn-sm me-1">
-                    Submit
-                  </Button>
-                  <Button
-                    onClick={() => handleCloseModal()}
-                    className="btn btn-danger btn-sm light ms-1"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </Form>
-            </div>
-          </div>
-        </Modal>
-      )}
-      {confirmNotesModalInValid && (
-        <Modal
-          title={selectDiseasesName}
-          centered
-          open={confirmNotesModalInValid}
-          onOk={handleCloseModal}
-          onCancel={handleCloseModal}
-          footer={null}
-        >
-          <div className="offcanvas-body">
-            <div className="container-fluid">
-              <Form
-                noValidate
-                validated={validated}
-                onSubmit={handleSubmitValiInValiddNotes}
-              >
-                <div className="row">
-                  <div className="col-xl-12 mb-3">
-                    <Form.Label>
-                      Reason <span className="text-danger">*</span>{" "}
-                    </Form.Label>
-                    <textarea
-                      className="form-control"
-                      id="notes"
-                      name="notes"
-                      onChange={handleChangeSuggested}
-                      rows="5"
-                    ></textarea>
-                  </div>
-                </div>
+      <ModelIndex
+        validated={validated}
+        handleSubmit={handleSubmitValidNotes}
+        title={selectDiseasesName}
+        openState={confirmNotesModalValid}
+        handleCloseModal={handleCloseModal}
+        handleChangeSuggested={handleChangeSuggested}
+      />
 
-                <div>
-                  <Button type="submit" className="btn btn-primary btn-sm me-1">
-                    Submit
-                  </Button>
-                  <Button
-                    onClick={() => handleCloseModal()}
-                    className="btn btn-danger btn-sm light ms-1"
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </Form>
-            </div>
-          </div>
-        </Modal>
-      )}
+      <ModelIndex
+        validated={validated}
+        title={selectMeatName}
+        openState={isModalOpenLab}
+        handleCloseModal={handleCloseModal}
+        labReportFile={labReportFile}
+        search={search}
+      />
+
+      <ModelIndex
+        validated={validated}
+        title={selectMeatName}
+        openState={isModalOpenRadiology}
+        handleCloseModal={handleCloseModal}
+        labReportFile={selectFileURLRadiology}
+        search={search}
+      />
       {opens && combiTree[0]?.children?.length > 0 ? (
-        <Modal
+        <ModelIndex
+          validated={validated}
           title={fileModalHeader}
-          width="90%"
-          centered
-          open={opens}
-          onOk={() => setOpens(false)}
-          onCancel={() => setOpens(false)}
-          footer={null}
-        >
-          <CamboTree tree={combiTree} />
-        </Modal>
+          openState={opens}
+          handleCloseModal={handleCloseModal}
+          combiTree={combiTree}
+        />
       ) : (
         opens && showErrorMessage()
       )}

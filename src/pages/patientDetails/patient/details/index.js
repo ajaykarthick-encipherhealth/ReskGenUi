@@ -2797,6 +2797,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                           <AdminWorkList
                             localUserId={localUserId}
                             setWorkListPatientId={setWorkListPatientId}
+                           setIsModalComments={setIsModalComments}
                           />
                         ) : userRole == "supervisor" ? (
                           <SupervisorWorkList
