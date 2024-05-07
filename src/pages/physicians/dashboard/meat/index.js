@@ -33,7 +33,7 @@ const Meat = ({ data, meatCount, totalFullMeat }) => {
           >
             <div>{meatCount ? meatCount : 0}</div>
           </div>
-          <div
+          {/* <div
             className={`valid-text d-flex justify-content-center mt-3 mb-1 ${Styles.title_cards}`}
           >
             <span className={`${Styles.title_card_content}`}>
@@ -42,7 +42,7 @@ const Meat = ({ data, meatCount, totalFullMeat }) => {
           </div>
           <div className={`${Styles.card_title_value} d-flex justify-content-center`}>
             <div>{totalFullMeat ? totalFullMeat : 0}</div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

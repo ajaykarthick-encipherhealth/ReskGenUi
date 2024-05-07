@@ -36,7 +36,7 @@ const PhysicianDashboard = ({getAllPhysician, getPhysiciansDetails}) => {
               <div className="d-flex align-items-end px-2">
                 <div className="pb-2">TOTAL REVENUE INCREASE: </div>&nbsp;
                 <div className={Styles.revenue}>
-                  {getPhysiciansDetails?.response?.differencePercentage}%&nbsp;{" "}
+                  {getPhysiciansDetails?.data?.response?.differencePercentage}%&nbsp;{" "}
                   <FontAwesomeIcon icon={faArrowUp} />
                 </div>
               </div>
@@ -44,10 +44,10 @@ const PhysicianDashboard = ({getAllPhysician, getPhysiciansDetails}) => {
             {/* </div> */}
             <div className="card p-3">
               <Valid
-                data={getPhysiciansDetails?.response?.validCount}
+                data={getPhysiciansDetails?.data?.response?.validCount}
                 counts={{
-                  validDiseaseRafSum: getPhysiciansDetails?.response?.validDiseaseRafSum,
-                  validRafAmount: getPhysiciansDetails?.response?.validRafAmount,
+                  validDiseaseRafSum: getPhysiciansDetails?.data?.response?.validDiseaseRafSum,
+                  validRafAmount: getPhysiciansDetails?.data?.response?.validRafAmount,
                 }}
               />
             </div>
@@ -56,10 +56,10 @@ const PhysicianDashboard = ({getAllPhysician, getPhysiciansDetails}) => {
             <h3>Suggested Diagnosis</h3>
             <div className="card p-3">
               <Suggested
-                data={getPhysiciansDetails?.response?.suggestedCount}
+                data={getPhysiciansDetails?.data?.response?.suggestedCount}
                 counts={{
-                  validDiseaseRafSum: getPhysiciansDetails?.response?.suggestedRafSum,
-                  validRafAmount: getPhysiciansDetails?.response?.suggestedRafAmount,
+                  validDiseaseRafSum: getPhysiciansDetails?.data?.response?.suggestedRafSum,
+                  validRafAmount: getPhysiciansDetails?.data?.response?.suggestedRafAmount,
                 }}
               />
             </div>
@@ -69,13 +69,13 @@ const PhysicianDashboard = ({getAllPhysician, getPhysiciansDetails}) => {
             <div className="card p-3">
               <Meat
                 data={[
-                  getPhysiciansDetails?.response?.treatmentCount,
-                  getPhysiciansDetails?.response?.assessmentCount,
-                  getPhysiciansDetails?.response?.evaluationCount,
-                  getPhysiciansDetails?.response?.monitorCount,
+                  getPhysiciansDetails?.data?.response?.treatmentCount,
+                  getPhysiciansDetails?.data?.response?.assessmentCount,
+                  getPhysiciansDetails?.data?.response?.evaluationCount,
+                  getPhysiciansDetails?.data?.response?.monitorCount,
                 ]}
-                meatCount={getPhysiciansDetails?.response?.totalMeatCount}
-                totalFullMeat={getPhysiciansDetails?.response?.totalFullMeatCount}
+                meatCount={getPhysiciansDetails?.data?.response?.totalMeatCount}
+                totalFullMeat={getPhysiciansDetails?.data?.response?.totalFullMeatCount}
               />
             </div>
           </div>
