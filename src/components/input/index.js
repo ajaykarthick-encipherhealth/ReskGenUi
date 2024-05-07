@@ -32,6 +32,7 @@ const InputField = ({
   searchVal,
 }) => {
   const [inputStr, setInputStr] = useState("");
+  const disallowedCharacters = ['[', '{', ']', '}', '|', '!', ',', '%', '^', "\\", "(", ")", "#"];
   const debounceFunc = useCallback(
     debounce((text, activeTab) => {
       if (activeTab === "SentReport") {
@@ -91,7 +92,7 @@ const InputField = ({
         disabled={isDisabled ? true : false}
         onKeyDown={(e) => {
           // Prevent input of backslash ("\")
-          if (e.key === "\\") {
+          if (disallowedCharacters.includes(e.key)) {
             e.preventDefault();
           }
         }}

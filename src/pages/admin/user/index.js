@@ -85,7 +85,7 @@ const UserList = () => {
     if (response?.data?.status === "SUCCESS") {
       setAddUser(false);
       setUseAdd(true);
-
+      form.resetFields();
       setIsLoadingBtn(false);
     }
     setRoleValue([]);
@@ -197,9 +197,7 @@ const UserList = () => {
     console.log(value);
   };
   const onFinish = (values) => {
-    console.log(values);
     handleSubmit(values);
-    form.resetFields();
   };
 
   return (
@@ -353,12 +351,12 @@ const UserList = () => {
             </div>
           </div>
         </Offcanvas>
-
         <Offcanvas
           show={addUser}
           onHide={() => {
             setAddUser(false);
             setRoleValue([]);
+            setRole('')
           }}
           className="offcanvas-end offcanvas-md-size"
           placement="end"
@@ -372,6 +370,7 @@ const UserList = () => {
               className="btn-close"
               onClick={() => {
                 setAddUser(false);
+                form.resetFields();
               }}
             >
               <i className="fa-solid fa-xmark"></i>
@@ -613,6 +612,8 @@ const UserList = () => {
                       onClick={() => {
                         setAddUser(false);
                         setRoleValue([]);
+                        setRole('')
+                        form.resetFields();
                       }}
                     >
                       Cancel
