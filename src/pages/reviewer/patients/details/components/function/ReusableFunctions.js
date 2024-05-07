@@ -45,7 +45,6 @@ const getEncounterDetails = async (date, fileDosPageNumberList,setIsModalOpenVal
   setFileModalHeader,
   patientDocumentResult
 ) => {
-  console.log(date, fileDosPageNumberList)
   var result = fileDosPageNumberList?.result;
   var groupEncounterDate = [];
   for (var key in result?.response) {
@@ -446,7 +445,6 @@ export const findValueDocument = async ({
         data
       );
       var result = response.data.response;
-      console.log(response);
       if (response?.data?.status == "SUCCESS") {
         pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
         splitPoint = result?.searchString;
