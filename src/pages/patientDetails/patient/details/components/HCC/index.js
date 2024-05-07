@@ -16,6 +16,7 @@ import {
   getEncounterDateBackground,
   getMeatFound,
   getProviderNameList,
+  moveToAnotherAction,
 } from "../function/ReusableFunctions";
 import { useSelector } from "react-redux";
 
@@ -50,6 +51,8 @@ const HccCards = ({
   setIsModalOpenValidCodes,
   setFileModalHeader,
   patientDocumentResult,
+  setConfirmNotesModalValid,
+  setIsValidAction
 }) => {
   const fileId=useSelector(state=>state?.ReviewerReducers?.patientDetails)
   const PopContentHccVersion = (
@@ -59,7 +62,7 @@ const HccCards = ({
           <>
             {hccVersionDetails.length != 0 ? (
               hccVersionDetails?.map((data) => (
-                <div className={styles.hoverDiv}>
+                <div className={styles.hoverDiv} key={data?.id}>
                   <div className={`row ${styles.selectDetailsContainer}`}>
                     <div className="col-xl-3">
                       <span className={styles.selectHead}>{data.name}</span>
@@ -91,7 +94,7 @@ const HccCards = ({
   return (
     <>
       {list?.map((data, i) => (
-        <li>
+        <li key={data?.id}>
           <div className={`hccActiveCard ${visitStyles.hcc_card}`}>
             <div
               className={` justify-content-between ${visitStyles.hcc_card_nameHead}`}
@@ -183,10 +186,10 @@ const HccCards = ({
                       ? ""
                       : cancelText
                   }
-                  onCancel={
+                  onCancel={()=>
                     data.getPlace === "Radio" || data.getPlace === "Lab"
                       ? ""
-                      : cancelFunc
+                      : moveToAnotherAction(setConfirmNotesModalValid,setIsValidAction,"deletedToValid")
                   }
                   okButtonProps={{
                     type: "default",
@@ -195,10 +198,10 @@ const HccCards = ({
                     type: "default",
                   }}
                   description={data.diagnosisCode}
-                  onConfirm={
+                  onConfirm={()=>
                     data.getPlace == "Radio" || data.getPlace == "Lab"
-                      ? suggestedToDeleted
-                      : confirmFunc
+                      ? moveToAnotherAction(setConfirmNotesModalValid,setIsValidAction,"suggestedToDeleted")
+                      : moveToAnotherAction(setConfirmNotesModalValid,setIsValidAction,"suggestedToValid")
                   }
                   placement="leftTop"
                   onOpenChange={() => onchangeValid(data.diagnosisCode, data)}

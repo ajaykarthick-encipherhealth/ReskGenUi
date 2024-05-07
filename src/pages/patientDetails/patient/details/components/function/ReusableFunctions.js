@@ -3,16 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tooltip, notification } from "antd";
 import moment from "moment";
 import {
-  faArrowsAlt,
-  faSitemap,
   faCircleUser,
-  faPen,
 } from "@fortawesome/free-solid-svg-icons";
 import visitStyles from "../../../../../../styles/visitdata.module.css";
 import styles from "../HCC/styles.module.css";
 import axios from "../../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../../utility/enpoints";
-import { useSelector } from "react-redux";
 
 export const getEncounterDateBackground = ({
   value,
@@ -62,7 +58,6 @@ export const getCaptureSectionBackgroundFile = (
     );
     var backColor = result[0]?.backgroundColor;
     var textColor = result[0]?.sectionColor;
-    var disCode = result[0]?.diagnosisCode;
     var headerNames = result[0]?.sectionName;
     var sectionMapArr = (
       <span
@@ -201,8 +196,6 @@ export const handleSubmitValidNotes = async ({
   if (form.checkValidity() === true) {
     setFileLoading(true);
     setConfirmNotesModalValid(false);
-    var apiURL = "";
-    // validMoveConfirm();
     if (isValidAction == "validToSuggested") {
       apiURL = "dbservice/update/move/validtosuggested";
     }
@@ -305,38 +298,19 @@ const findValueDocuments = async (
         page: pageNumber,
         headers: result?.first,
       });
-      // setFileInitialPage(pageNumber);
     } else {
       setSearch({
         value: splitPoint,
         page: "",
         headers:true,
       });
-      // splitPoint = headerNames;
-      // setFileInitialPage(null);
     }
-    // setTargetPages(
-    //   (targetPage) =>
-    //     targetPage.pageIndex === pageNumber ||
-    //     targetPage.pageIndex === pageNumber + 1 ||
-    //     targetPage.pageIndex === pageNumber + 2
-    // );
-    // setFindFileKeyword(splitPoint);
-    // if (findFileKeyword == splitPoint) {
-    //   setFileLoading(false);
-    // }
   } catch (error) {
     setSearch({
       value: headerNames,
       headers: true,
     });
     setFileLoading(false)
-    // splitPoint = headerNames;
-    // if (findFileKeyword == headerNames) {
-    //   setFileLoading(false);
-    // }
-    // setFindFileKeyword(splitPoint);
-    // setFileInitialPage(null);
   }
 };
 
@@ -434,8 +408,6 @@ export const findValueDocument = async ({
       }
     }
   } catch (error) {
-    // splitPoint = headerNames;
-    // if (findFileKeyword == headerNames) {
     setSearch({
       value: headerNames,
       page: "",
@@ -445,3 +417,13 @@ export const findValueDocument = async ({
     // }
   }
 };
+
+export const moveToAnotherAction = (setConfirmNotesModalValid,setIsValidAction,name) =>
+new Promise((resolve) => {
+  setTimeout(() =>
+    resolve(
+      setConfirmNotesModalValid(true),
+      setIsValidAction(name)
+    )
+  );
+});
