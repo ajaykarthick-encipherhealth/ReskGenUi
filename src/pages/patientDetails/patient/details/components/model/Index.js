@@ -1,7 +1,6 @@
-import React from "react";
-import { Modal } from "antd";
+import React, { useState } from "react";
+import { Modal, Form, Input, Space } from "antd";
 import { Button } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
 import CamboTree from "../../hcc/org";
 import PdfViewer from "../../PdfViewerComponent";
 import { handleSubmitValidNotes } from "../function/ReusableFunctions";
@@ -12,7 +11,6 @@ const ModelIndex = ({
   title,
   openState,
   handleCloseModal,
-  handleChangeSuggested,
   combiTree,
   labReportFile,
   search,
@@ -20,7 +18,12 @@ const ModelIndex = ({
   setFileLoading,
   setConfirmNotesModalValid,
   getPatientDetailsReload,
+  isValidAction,
+  selectInvalidDetails
 }) => {
+  const [form] = Form.useForm();
+  const { TextArea } = Input;
+
   return (
     <Modal
       title={title}
@@ -29,7 +32,13 @@ const ModelIndex = ({
       onOk={handleCloseModal}
       onCancel={handleCloseModal}
       footer={null}
-      width={combiTree ? "auto" : labReportFile ? "80%":modalOpenValidContent && "90%"}
+      width={
+        combiTree
+          ? "auto"
+          : labReportFile
+          ? "80%"
+          : modalOpenValidContent && "90%"
+      }
     >
       {combiTree ? (
         <CamboTree tree={combiTree} />
@@ -46,42 +55,56 @@ const ModelIndex = ({
         <div className="offcanvas-body">
           <div className="container-fluid">
             <Form
-             onSubmit={(e)=>
-            //   handleSubmitValidNotes(
-            //   e,
-            //     setFileLoading,
-            //     setConfirmNotesModalValid,
-            //     getPatientDetailsReload,
-            // )
-            console.log(e)
-            }>
-              <div className="row">
-                <div className="col-xl-12 mb-3">
-                  <Form.Label>
-                    Reason <span className="text-danger">*</span>{" "}
-                  </Form.Label>
-                  <textarea
-                    className="form-control"
-                    id="notes"
-                    name="notes"
-                    onChange={handleChangeSuggested}
-                    rows="5"
-                  ></textarea>
-                </div>
-              </div>
-
-              <div>
-                <Button type="submit" className="btn btn-primary btn-sm me-1">
-                  Submit
-                </Button>
-                <Button
-                  onClick={() => handleCloseModal()}
-                  className="btn btn-danger btn-sm light ms-1"
-                >
-                  Cancel
-                </Button>
-              </div>
+              name="validateOnly"
+              layout="vertical"
+              autoComplete="off"
+              form={form}
+              onFinish={(values) =>
+                handleSubmitValidNotes({
+                  values,
+                  setFileLoading,
+                  setConfirmNotesModalValid,
+                  getPatientDetailsReload,
+                  isValidAction,
+                  selectInvalidDetails
+                })
+              }
+            >
+              <Form.Item
+                label={
+                  <label>
+                    Reason <span style={{ color: "red" }}>*</span>
+                  </label>
+                }
+                name="reason"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter reason",
+                  },
+                ]}
+              >
+                <TextArea
+                  name="reason"
+                  className="form-textarea"
+                  autoSize={{ minRows: 3, maxRows: 5 }}
+                />
+              </Form.Item>
+              <Form.Item>
+                <Space>
+                  <Button type="submit" className="btn btn-primary btn-sm me-1">
+                    Submit
+                  </Button>
+                  <Button
+                    onClick={() => handleCloseModal()}
+                    className="btn btn-danger btn-sm light ms-1"
+                  >
+                    Cancel
+                  </Button>
+                </Space>
+              </Form.Item>
             </Form>
+           
           </div>
         </div>
       )}

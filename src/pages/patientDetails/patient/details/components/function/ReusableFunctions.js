@@ -184,19 +184,20 @@ export const getProviderNameList = ({ data, captureSectionMatching }) => {
   });
 };
 export const handleSubmitValidNotes = async ({
-  event,
+  values,
   setFileLoading,
   setConfirmNotesModalValid,
   getPatientDetailsReload,
-  setValidated,
+  isValidAction,
+  selectInvalidDetails
 }) => {
-  console.log(event)
-  setFileLoading(true);
-  const form = event.currentTarget;
-  event.preventDefault();
-  if (form.checkValidity() === true) {
-    setFileLoading(true);
+  console.log(values)
+  console.log(selectInvalidDetails)
+  console.log(isValidAction)
+
+  // setFileLoading(true);
     setConfirmNotesModalValid(false);
+    var apiURL = "";
     if (isValidAction == "validToSuggested") {
       apiURL = "dbservice/update/move/validtosuggested";
     }
@@ -216,19 +217,21 @@ export const handleSubmitValidNotes = async ({
       apiURL = "dbservice/update/move/deletedtovalid";
     }
     try {
+      var patientId = localStorage.getItem("patientId");
+      var userId = localStorage.getItem("userId");
       var dataFormatSuggested = {
-        userId: localUserId,
-        patientId: localPatientId,
+        userId: userId,
+        patientId: patientId,
         diagnosisCode: selectInvalidDetails.diagnosisCode,
         actualDescription: selectInvalidDetails.actualDescription,
         dbDescription: selectInvalidDetails.dbDescription,
-        notes: inputValue.notes,
-        dos: selectedDosValue,
+        notes: values.reason,
+        dos: selectInvalidDetails.dos,
         encounterDate: selectInvalidDetails.encounterDate,
         capturedSections: selectInvalidDetails.capturedSections,
       };
       const response = await axios.put(
-        ENDPOINTS.apiEndoint + url,
+        ENDPOINTS.apiEndoint + apiURL,
         dataFormatSuggested
       );
       var result = response.data;
@@ -253,8 +256,6 @@ export const handleSubmitValidNotes = async ({
       });
       setFileLoading(false);
     }
-  }
-  setValidated(true);
 };
 
 const findValueDocuments = async (

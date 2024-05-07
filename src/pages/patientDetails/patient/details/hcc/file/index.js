@@ -271,6 +271,7 @@ const File = ({
 
   const onchangeValid = (code, data) => {
     var title = code + " - " + data.actualDescription;
+    data.dos= patientDetailsResult?.result?.response?.dos;
     setSelectDiseasesName(title);
     setSelectInvalidDetails(data);
   };
@@ -290,6 +291,7 @@ const File = ({
   };
 
   const handleChangeSuggested = async (e) => {
+    console.log(e.target.name)
     const key = e.target.name;
     const value = e.target.value;
     setInputValue({ ...inputValue, [key]: value });
@@ -708,6 +710,8 @@ const File = ({
         setFileLoading={setFileLoading}
         setConfirmNotesModalValid={setConfirmNotesModalValid}
         getPatientDetailsReload={getPatientDetailsReload}
+        isValidAction={isValidAction}
+        selectInvalidDetails={selectInvalidDetails}
       />
 
       <ModelIndex
