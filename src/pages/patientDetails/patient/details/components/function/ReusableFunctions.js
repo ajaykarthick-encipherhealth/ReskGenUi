@@ -191,10 +191,6 @@ export const handleSubmitValidNotes = async ({
   isValidAction,
   selectInvalidDetails
 }) => {
-  console.log(values)
-  console.log(selectInvalidDetails)
-  console.log(isValidAction)
-
   // setFileLoading(true);
     setConfirmNotesModalValid(false);
     var apiURL = "";
