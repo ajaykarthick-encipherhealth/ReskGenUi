@@ -183,7 +183,8 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const [hccCounts, setHccCounts] = useState({ isCmsHcc: 0, isRxHcc: 0 });
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [workListPatientId, setWorkListPatientId] = useState(null);
-
+  const [isFileCheck, setIsFileCheck] = useState(false);
+  
   const flagPostList = getFlagsData?.response?.map((item) => ({
     value: item?.id,
     label: (
@@ -260,13 +261,21 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   }, [patientDetailsResult]);
 
   useEffect(() => {
-    dispatch(
-      getHccFileDetails(
-        patientDetailsResult?.result?.response?.fileDetailDTO?.azureBlobPath
-      )
-    );
-    dispatch(getDosPageNumber(patientDetailsResult?.result?.response?.fileId));
-  }, [patientDetailsResult?.result?.response?.fileDetailDTO?.azureBlobPath]);
+    if (patientDetailsResult?.result?.response?.fileId) {
+      const patientId = localStorage.getItem("patientId");
+      if (isFileCheck == false && patientId == patientDetailsResult?.result?.response.patientId) {
+        dispatch(
+          getHccFileDetails(
+            patientDetailsResult?.result?.response?.fileDetailDTO?.azureBlobPath
+          )
+        );
+        dispatch(
+          getDosPageNumber(patientDetailsResult?.result?.response?.fileId)
+        );
+        setIsFileCheck(true);
+      }
+    }
+  }, [patientDetailsResult?.result?.response?.fileDetailDTO?.azureBlobPath])
 
   const getPatientIdDetails = async (patientId, flagFirstData) => {
     const response = await axios.get(
