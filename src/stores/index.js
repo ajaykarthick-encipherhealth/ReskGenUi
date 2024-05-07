@@ -25,7 +25,8 @@ import { AuthReducer, PatientStore } from "./authflow/reducers";
 
 import { reducer as UpdateDashboardReducer } from "./reviewer/dashboard";
 import { reducer as updatedPatientsReducer} from './reviewer/workqueue';
-import { reducer as searchReducer } from "./search"
+import { reducer as searchReducer } from "./search";
+import { reducer as physicianReducer } from "./physician/dashboard"
 
 const reducers = combineReducers({
   // old reducers
@@ -57,6 +58,9 @@ const reducers = combineReducers({
     workQueue:updatedPatientsReducer
   }),
   search: searchReducer,
+  physician: combineReducers({
+    dashboard : physicianReducer
+  })
 });
 
 const middlewares = [thunkMiddleware, promiseMiddleware];

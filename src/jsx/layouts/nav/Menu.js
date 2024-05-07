@@ -127,6 +127,14 @@ export const L2AuditMenuList = [
     to: "/coder/auditing",
   },
 ];
+
+export const PhysicanMenu = [
+  {
+    title: "Dashboard",
+    iconStyle: SVGICON.dashboardIcon,
+    to: "/physicians/dashboard",
+  }
+];
 export const L2AuditorMenuList = [
   {
     title: "Dashboard",

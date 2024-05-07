@@ -15,8 +15,10 @@ const Suggested = ({ data, counts }) => {
           <div className={Styles.title}>DIAGNOSIS CODES</div>
           <div className="d-flex">
             <BarChart
-              diagnosisCode={data?.map((item) => item?.diagnosisCode)?.splice(0, 9)}
-              diagnosisCodeCount={data?.map((item) => item?.count)?.splice(0, 9)}
+              diagnosisCode={data
+                ?.map((item) => item.diagnosisCode)
+                .splice(0, 9)}
+              diagnosisCodeCount={data?.map((item) => item.count).splice(0, 9)}
             />
             <div className="d-flex">
               <div
@@ -42,8 +44,8 @@ const Suggested = ({ data, counts }) => {
                   <tbody>
                     {data?.map((item) => (
                       <tr>
-                        <td className="p-2">{item?.diagnosisCode}</td>
-                        <td>{item?.count}</td>
+                        <td className="p-2">{item.diagnosisCode}</td>
+                        <td>{item.count}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -65,7 +67,7 @@ const Suggested = ({ data, counts }) => {
             </span>
           </div>
           <div className={`${Styles.card_title} d-flex justify-content-center`}>
-            <div>{counts?.validDiseaseRafSum}</div>
+            <div>{counts.validDiseaseRafSum ? counts.validDiseaseRafSum : 0}</div>
           </div>
           <div
             className={`valid-text d-flex justify-content-center mt-3 mb-1 ${Styles.title_cards}`}
@@ -75,7 +77,7 @@ const Suggested = ({ data, counts }) => {
             </span>
           </div>
           <div className={`${Styles.card_title} d-flex justify-content-center`}>
-            <div>${counts?.validRafAmount}</div>
+            <div>${counts.validRafAmount}</div>
           </div>
           <div
             className={`valid-text d-flex justify-content-center mt-3 mb-1 ${Styles.title_card_total}`}
@@ -85,7 +87,7 @@ const Suggested = ({ data, counts }) => {
             </span>
           </div>
           <div className={`${Styles.card_title} d-flex justify-content-center`}>
-            <div>{data?.map((item) => item?.count).reduce((tol, item) => tol + item)}</div>
+          <div>{data?.map((item) => item.count).length > 0 ? data?.map((item) => item.count).reduce((tol, item) => tol + item) : 0}</div>
           </div>
         </div>
       </div>
