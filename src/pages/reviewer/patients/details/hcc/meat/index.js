@@ -1163,22 +1163,22 @@ const Meat = ({ activeMeatTitle, year }) => {
         setMeatCriteriaListNonHcc(nonHccMeatListArr);
         setIsLoadingDos(false);
 
-        if (result.suggestRadiology != null) {
-          if (result.suggestRadiology.length != 0) {
-            getPatientDetailsRadiologyYear(orgId, tenId);
-          }
-        }
+        // if (result.suggestRadiology != null) {
+        //   if (result.suggestRadiology.length != 0) {
+        //     getPatientDetailsRadiologyYear(orgId, tenId);
+        //   }
+        // }
 
-        if (result.suggestLab != null) {
-          if (result.suggestLab.length != 0) {
-            getLabReportDetailsInititalLoad(
-              orgId,
-              tenId,
-              capturedSectionsColorsMatching,
-              encounterDateColorsMatching
-            );
-          }
-        }
+        // if (result.suggestLab != null) {
+        //   if (result.suggestLab.length != 0) {
+        //     getLabReportDetailsInititalLoad(
+        //       orgId,
+        //       tenId,
+        //       capturedSectionsColorsMatching,
+        //       encounterDateColorsMatching
+        //     );
+        //   }
+        // }
       } else {
         setIsLoading(false);
       }
@@ -1203,68 +1203,68 @@ const Meat = ({ activeMeatTitle, year }) => {
       }
     }
   };
-  const getPatientDetailsRadiologyYear = async (orgId, tenId) => {
-    var patientId = localStorage.getItem("patientId");
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
-    );
-    if (response.data) {
-      var result = response.data.response;
-      setPatientDetailsRadiology(result);
-      setRadiologyResult(result);
-      if (result.radiologyFileDetail != null) {
-        if (result.radiologyFileDetail.length != 0) {
-          var dosYearArrFile = [];
-          result.radiologyFileDetail.map((res, index) => {
-            for (var key in res.documentDos) {
-              dosYearArrFile.push({
-                value: key,
-                label: key + " - " + res.documentDos[key].testName,
-              });
-            }
-          });
-          setFileRadiologyDateofServiceList(dosYearArrFile);
-          setRadiologyFileDateDefaulteSelect(dosYearArrFile[0]);
-          getPatientPdfFileRadiology(
-            result.radiologyFileDetail[0].azureBlobPath,
-            tenId
-          );
-          setRadiologyFileDetailCheck(true);
-        }
-      } else {
-        setIsLoading(false);
-      }
-    }
-  };
-  const getLabReportDetailsInititalLoad = async (
-    orgId,
-    tenId,
-    matchCode,
-    encounterData
-  ) => {
-    var patientId = localStorage.getItem("patientId");
+  // const getPatientDetailsRadiologyYear = async (orgId, tenId) => {
+  //   var patientId = localStorage.getItem("patientId");
+  //   const response = await axios.get(
+  //     ENDPOINTS.apiEndoint +
+  //       `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`
+  //   );
+  //   if (response.data) {
+  //     var result = response.data.response;
+  //     setPatientDetailsRadiology(result);
+  //     setRadiologyResult(result);
+  //     if (result.radiologyFileDetail != null) {
+  //       if (result.radiologyFileDetail.length != 0) {
+  //         var dosYearArrFile = [];
+  //         result.radiologyFileDetail.map((res, index) => {
+  //           for (var key in res.documentDos) {
+  //             dosYearArrFile.push({
+  //               value: key,
+  //               label: key + " - " + res.documentDos[key].testName,
+  //             });
+  //           }
+  //         });
+  //         setFileRadiologyDateofServiceList(dosYearArrFile);
+  //         setRadiologyFileDateDefaulteSelect(dosYearArrFile[0]);
+  //         // getPatientPdfFileRadiology(
+  //         //   result.radiologyFileDetail[0].azureBlobPath,
+  //         //   tenId
+  //         // );
+  //         setRadiologyFileDetailCheck(true);
+  //       }
+  //     } else {
+  //       setIsLoading(false);
+  //     }
+  //   }
+  // };
+  // const getLabReportDetailsInititalLoad = async (
+  //   orgId,
+  //   tenId,
+  //   matchCode,
+  //   encounterData
+  // ) => {
+  //   var patientId = localStorage.getItem("patientId");
 
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
-    );
+  //   const response = await axios.get(
+  //     ENDPOINTS.apiEndoint +
+  //       `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`
+  //   );
 
-    var resultTest = response.data.response;
+  //   var resultTest = response.data.response;
 
-    var dosYearArrFile = [];
-    if (resultTest.labFileDetail != null) {
-      if (resultTest.labFileDetail.length != 0) {
-        for (var key in resultTest.labFileDetail[0].documentDos) {
-          dosYearArrFile.push({ value: key, label: key });
-        }
-        setFileLabDateofServiceList(dosYearArrFile);
-        setLabFileDateDefaulteSelect(dosYearArrFile[0]);
-        var fileDetails = resultTest.labFileDetail;
-        getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
-      }
-    }
-  };
+  //   var dosYearArrFile = [];
+  //   if (resultTest.labFileDetail != null) {
+  //     if (resultTest.labFileDetail.length != 0) {
+  //       for (var key in resultTest.labFileDetail[0].documentDos) {
+  //         dosYearArrFile.push({ value: key, label: key });
+  //       }
+  //       setFileLabDateofServiceList(dosYearArrFile);
+  //       setLabFileDateDefaulteSelect(dosYearArrFile[0]);
+  //       var fileDetails = resultTest.labFileDetail;
+  //       // getLabReportFiles(fileDetails[0].azureBlobPath, tenId);
+  //     }
+  //   }
+  // };
 
   function getUniqueListBy(arr, key) {
     return [...new Map(arr.map((item) => [item[key], item])).values()];
@@ -1294,27 +1294,27 @@ const Meat = ({ activeMeatTitle, year }) => {
     // }
   };
 
-  const getPatientPdfFileRadiology = async (fileId, tenId) => {
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
-    );
-    if (response.data) {
-      var result = response.data.response;
-      setSelectFileURLRadiology(response.data.response);
-    }
-  };
+  // const getPatientPdfFileRadiology = async (fileId, tenId) => {
+  //   const response = await axios.get(
+  //     ENDPOINTS.apiEndoint +
+  //       `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
+  //   );
+  //   if (response.data) {
+  //     var result = response.data.response;
+  //     setSelectFileURLRadiology(response.data.response);
+  //   }
+  // };
 
-  const getLabReportFiles = async (fileId, tenId) => {
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
-    );
-    if (response.data) {
-      var result = response.data.response;
-      setLabReportFile(response.data.response);
-    }
-  };
+  // const getLabReportFiles = async (fileId, tenId) => {
+  //   const response = await axios.get(
+  //     ENDPOINTS.apiEndoint +
+  //       `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`
+  //   );
+  //   if (response.data) {
+  //     var result = response.data.response;
+  //     setLabReportFile(response.data.response);
+  //   }
+  // };
 
   const confirmInvalidMeat = () =>
     new Promise((resolve) => {

@@ -10,6 +10,7 @@ import { GET_PATIENT_DETAILS ,GET_MEAT_QUERY,GET_SECTION_COLOR,GET_HCC_FILE,GET_
     radiologyFileDetails:null,
     labDeatils:null,
     labFileDetails:null,
+   
   };
   
   export const ReviewerReducers = (state = initialState, action) => {

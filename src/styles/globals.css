@@ -11554,6 +11554,7 @@ img.login-logo {
 .ant-modal-body {
   min-height: 10px !important;
   height: auto !important;
+  width:100% !important;
   /* max-height: 400px !important; */
   overflow: scroll !important;
 }
@@ -14517,3 +14518,4 @@ input[type="number"] {
   width: 100%;
   border-radius: none !important;
 }
+

@@ -69,6 +69,11 @@ export const getMFAValidation =
           pathname: `/twofactorAuthentication/Authentication`,
           search: `params=${encodedParams}`,
         });
+      }else{
+        dispatch({
+          type: ENABLEMFA,
+          payload: { data: null, loading: trfalsee },
+        });
       }
     } catch (err) {
       dispatch({
@@ -205,6 +210,11 @@ export const loginAction =
             description: response?.data?.message,
           });
         }
+      }else{
+        dispatch({
+          type: AUTHENTICATION,
+          payload: { data: result, loading: false },
+        });
       }
     } catch (err) {
       dispatch({
