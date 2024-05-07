@@ -808,3 +808,12 @@ export const getPatientDetails = async (
     }
   }
 };
+
+
+const GetData = () => {
+  return (
+   <></>
+  )
+}
+
+export default GetData;

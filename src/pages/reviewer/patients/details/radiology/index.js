@@ -15,27 +15,11 @@ import SpinnerDots from "../../../../../components/spinner";
 const Radiology = ({}) => {
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
-  const radiologyDetailsResult = useSelector(
-    (state) => state?.ReviewerReducers?.radiologyDeatils
-  );
+
   useEffect(() => {
     const patientId = localStorage.getItem("patientId");
     dispatch(getRadiologyDetails(patientId));
   }, []);
-
-  useEffect(() => {
-    if (radiologyDetailsResult?.result?.response) {
-      if (radiologyDetailsResult?.result?.response?.radiologyFileDetail) {
-        dispatch(
-          getRadiologyFileDetails(
-            radiologyDetailsResult?.result?.response?.radiologyFileDetail[0]
-              .azureBlobPath
-          )
-        );
-        setIsLoading(true);
-      }
-    }
-  }, [radiologyDetailsResult?.result?.response]);
 
   return (
     <>
