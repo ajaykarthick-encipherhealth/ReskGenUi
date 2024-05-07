@@ -67,7 +67,7 @@ const Suggested = ({ data, counts }) => {
             </span>
           </div>
           <div className={`${Styles.card_title} d-flex justify-content-center`}>
-            <div>{counts.validDiseaseRafSum ? counts.validDiseaseRafSum : 0}</div>
+            <div>{counts?.validDiseaseRafSum ? counts?.validDiseaseRafSum : 0}</div>
           </div>
           <div
             className={`valid-text d-flex justify-content-center mt-3 mb-1 ${Styles.title_cards}`}
@@ -77,7 +77,7 @@ const Suggested = ({ data, counts }) => {
             </span>
           </div>
           <div className={`${Styles.card_title} d-flex justify-content-center`}>
-            <div>${counts.validRafAmount}</div>
+            <div>${counts?.validRafAmount ? counts?.validRafAmount : 0}</div>
           </div>
           <div
             className={`valid-text d-flex justify-content-center mt-3 mb-1 ${Styles.title_card_total}`}
