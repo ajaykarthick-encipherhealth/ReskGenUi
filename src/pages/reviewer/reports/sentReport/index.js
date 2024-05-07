@@ -630,7 +630,7 @@ const SentReport = ({
       <div className="pagination-container">
         <Paginator
           first={paginationFirst}
-          rows={15}
+          rows={7}
           totalRecords={details?.totalElements}
           onPageChange={onSentPageChange}
         />
