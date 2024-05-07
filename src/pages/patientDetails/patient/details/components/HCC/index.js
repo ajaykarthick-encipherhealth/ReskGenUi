@@ -49,6 +49,7 @@ const HccCards = ({
   patientDocumentResult,
   setConfirmNotesModalValid,
   cardTitle,
+  setIsValidAction
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
