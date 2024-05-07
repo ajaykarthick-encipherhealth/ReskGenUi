@@ -42,7 +42,7 @@ const DoubleBarChant = ({ data }) => {
       {
         type: "bar",
         itemStyle: {
-          color: "yellow", // Color for the first bar series
+          color: "red", // Color for the first bar series
         },
       },
     ],

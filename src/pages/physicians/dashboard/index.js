@@ -40,7 +40,9 @@ const PhysicianDashboard = ({ getAllPhysician, getPhysiciansDetails }) => {
             >
               <div className="text-center">
                 <div className={Styles.fontHead}>TOTAL FILE COUNT</div>
-                <div className={Styles.fontHead}>200</div>
+                <div className={Styles.fontHead}>{getPhysiciansDetails?.data?.response?.totalPatientCount
+                    ? getPhysiciansDetails?.data?.response?.totalPatientCount
+                    : 0}</div>
               </div>
             </div>
           </div>
@@ -163,7 +165,7 @@ const PhysicianDashboard = ({ getAllPhysician, getPhysiciansDetails }) => {
                 ]}
                 meatCount={getPhysiciansDetails?.data?.response?.totalMeatCount}
                 totalFullMeat={
-                  getPhysiciansDetails?.data?.response?.totalFullMeatCount
+                  getPhysiciansDetails?.data?.response?.totalComboCount
                 }
               />
             </div>
