@@ -5,8 +5,8 @@ import Styles from "../style.module.css";
 
 const Suggested = ({ data, counts }) => {
     const pieValues = [
-        { value: 95, name: 'Accuracy', itemStyle: { color: "#73c0de" } },
-        { value: 5, name: 'Manual', itemStyle: { color: "#d966ff" } },
+        { value: 100, name: 'Accuracy', itemStyle: { color: "#73c0de" } },
+        // { value: 5, name: 'Manual', itemStyle: { color: "#d966ff" } },
       ];
   return (
     <div>
@@ -73,11 +73,11 @@ const Suggested = ({ data, counts }) => {
             className={`valid-text d-flex justify-content-center mt-3 mb-1 ${Styles.title_cards}`}
           >
             <span className={`${Styles.title_card_content}`}>
-              RAF AMOUNT WITHOUT MEAT CARE
+              REVENUE
             </span>
           </div>
           <div className={`${Styles.card_title} d-flex justify-content-center`}>
-            <div>${counts?.validRafAmount ? counts?.validRafAmount : 0}</div>
+            <div>${counts?.validRafAmount ? counts?.validRafAmount.toFixed(2) : 0}</div>
           </div>
           <div
             className={`valid-text d-flex justify-content-center mt-3 mb-1 ${Styles.title_card_total}`}

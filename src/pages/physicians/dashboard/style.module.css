@@ -43,3 +43,8 @@
     padding: 0;
     color: green;
 }
+
+.fontHead {
+    font-size: x-large;
+    font-weight: 600;
+}

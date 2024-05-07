@@ -9,7 +9,8 @@ const BarChartMeat = ({data}) => {
 
   const option = {
     xAxis: {
-      max: 'dataMax'
+      max: 'dataMax',
+      show: false
     },
     yAxis: {
       type: 'category',
