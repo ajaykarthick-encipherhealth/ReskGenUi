@@ -249,7 +249,7 @@ export const handleSubmitValidNotes = async ({
   setConfirmNotesModalValid,
   getPatientDetailsReload,
   isValidAction,
-  selectInvalidDetails,
+  selectDisDetails,
   dispatch,
 }) => {
   setFileLoading(true);
@@ -291,13 +291,13 @@ export const handleSubmitValidNotes = async ({
     var dataFormatSuggested = {
       userId: userId,
       patientId: patientId,
-      diagnosisCode: selectInvalidDetails.diagnosisCode,
-      actualDescription: selectInvalidDetails.actualDescription,
-      dbDescription: selectInvalidDetails.dbDescription,
+      diagnosisCode: selectDisDetails.diagnosisCode,
+      actualDescription: selectDisDetails.actualDescription,
+      dbDescription: selectDisDetails.dbDescription,
       notes: values.reason,
-      dos: selectInvalidDetails.dos,
-      encounterDate: selectInvalidDetails.encounterDate,
-      capturedSections: selectInvalidDetails.capturedSections,
+      dos: selectDisDetails.dos,
+      encounterDate: selectDisDetails.encounterDate,
+      capturedSections: selectDisDetails.capturedSections,
     };
     const response = await axios.put(
       ENDPOINTS.apiEndoint + apiURL,

@@ -69,6 +69,8 @@ const VisitData = ({
   const [formValues, setFormValues] = useState(false);
   const [formEditPlace, setFormEditPlace] = useState("");
   const [queryFormValues, setQueryFormValues] = useState(false);
+  const [selectDisDetails, setSelectDisDetails] = useState(false);
+
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
     var tenId = localStorage.getItem("tenantId");
@@ -109,8 +111,9 @@ const VisitData = ({
 
   const onchangeValid = (code, data) => {
     var title = code + " - " + data.actualDescription;
+    data.dos = patientDetailsResult?.result?.response?.dos;
     setSelectDiseasesName(title);
-    setSelectInvalidDetails(data);
+    setSelectDisDetails(data);
   };
 
   const handleCloseModal = () => {
@@ -552,18 +555,13 @@ const VisitData = ({
       />
       <ModelIndex
         validated={validated}
-        handleSubmit={(event) =>
-          handleSubmitValidNotes(
-            event,
-            setFileLoading,
-            setConfirmNotesModalValid,
-            getPatientDetailsReload,
-            setValidated
-          )
-        }
         title={selectDiseasesName}
         openState={confirmNotesModalValid}
         handleCloseModal={handleCloseModal}
+        setFileLoading={setFileLoading}
+        setConfirmNotesModalValid={setConfirmNotesModalValid}
+        isValidAction={isValidAction}
+        selectDisDetails={selectDisDetails}
       />
 
       {opens && combiTree[0]?.children?.length > 0 ? (

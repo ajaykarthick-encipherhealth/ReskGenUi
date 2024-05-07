@@ -20,7 +20,7 @@ const ModelIndex = ({
   setConfirmNotesModalValid,
   getPatientDetailsReload,
   isValidAction,
-  selectInvalidDetails,
+  selectDisDetails,
 }) => {
   const [form] = Form.useForm();
   const { TextArea } = Input;
@@ -68,7 +68,7 @@ const ModelIndex = ({
                   setConfirmNotesModalValid,
                   getPatientDetailsReload,
                   isValidAction,
-                  selectInvalidDetails,
+                  selectDisDetails,
                   dispatch
                 })
                 form.resetFields();

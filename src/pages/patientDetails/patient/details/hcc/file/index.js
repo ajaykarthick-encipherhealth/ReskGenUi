@@ -64,7 +64,7 @@ const File = ({
   const [selectFileURLRadiology, setSelectFileURLRadiology] = useState([]);
   const [isModalOpenRadiology, setIsModalOpenRadiology] = useState(false);
   const [isModalOpenLab, setIsModalOpenLab] = useState(false);
-  const [selectInvalidDetails, setSelectInvalidDetails] = useState(false);
+  const [selectDisDetails, setSelectDisDetails] = useState(false);
   const [labReportFile, setLabReportFile] = useState([]);
   const [suggestedHccList, setSuggestedHccList] = useState([]);
   const [isValidAction, setIsValidAction] = useState("");
@@ -119,7 +119,7 @@ const File = ({
     var title = code + " - " + data.actualDescription;
     data.dos = patientDetailsResult?.result?.response?.dos;
     setSelectDiseasesName(title);
-    setSelectInvalidDetails(data);
+    setSelectDisDetails(data);
   };
 
   const handleCloseModal = () => {
@@ -498,7 +498,7 @@ const File = ({
         setConfirmNotesModalValid={setConfirmNotesModalValid}
         getPatientDetailsReload={getPatientDetailsReload}
         isValidAction={isValidAction}
-        selectInvalidDetails={selectInvalidDetails}
+        selectDisDetails={selectDisDetails}
       />
 
       <ModelIndex
