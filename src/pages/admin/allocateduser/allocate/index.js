@@ -39,7 +39,7 @@ const AllocateModal = ({
   };
 
   const getUserList = async (search) => {
-    const orgId = localStorage.getItem('orgId')
+    const orgId = localStorage.getItem("orgId");
     let resoureUrl = `dbservice/user/getL1UsersByOrgIdAndTenantId?orgid=${orgId}&searchString=${search}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
@@ -152,7 +152,7 @@ const AllocateModal = ({
                     setActiveCard(item.id);
                     setActiveEmail(item.email);
                     getAllCheckList(item.email);
-                    setAllocateDate("")
+                    setAllocateDate("");
                   }
                 }}
               >

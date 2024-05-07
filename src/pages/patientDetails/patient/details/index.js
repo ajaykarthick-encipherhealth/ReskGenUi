@@ -62,6 +62,40 @@ import {
 } from "../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import { actions as workflowActions } from "../../../../stores/reviewer/workqueue";
 
+export const navigetPageDetails = async (
+  pageTitle,
+  setSideNavLabelActiveKey,
+  setPatientDocumentResult,
+  setActiveTab,
+  setIsLoadingDos,
+  setIsLoading
+) => {
+  setSideNavLabelActiveKey(pageTitle);
+  var patientId = localStorage.getItem("patientId");
+  if (pageTitle == "HCC" && patientId) {
+    const response = await axios.get(
+      ENDPOINTS.apiEndoint +
+        `dbservice/patient/compute/get?patientid=${patientId}&orgid=${localOrgId}`
+    );
+    if (response.data) {
+      var result = response.data.response;
+      setPatientDocumentResult(result);
+    }
+    setActiveTab(1);
+    setIsLoadingDos(false);
+  }
+  if (pageTitle == "NON HCC") {
+    setActiveTab(2);
+    setIsLoadingDos(false);
+  }
+  if (pageTitle == "Radiology") {
+    setActiveTab(3);
+  }
+  if (pageTitle == "Lab Report") {
+    setActiveTab(4);
+  }
+  setIsLoading(false);
+};
 const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -92,7 +126,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
   const [addPatient, setAddPatient] = useState(false);
   const [labReportSlider, setLapReportSlider] = useState(false);
-  const [screenWidth,setScreenWidth]=useState()
+  const [screenWidth, setScreenWidth] = useState();
   const [inputValue, setInputValue] = useState({
     year: "",
     name: "",
@@ -725,34 +759,6 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
       iconStyle: IMAGES.visitDataLabreport,
     },
   ];
-
-  const navigetPageDetails = async (pageTitle) => {
-    setSideNavLabelActiveKey(pageTitle);
-    var patientId = localStorage.getItem("patientId");
-    if (pageTitle == "HCC" && patientId) {
-      const response = await axios.get(
-        ENDPOINTS.apiEndoint +
-          `dbservice/patient/compute/get?patientid=${patientId}&orgid=${localOrgId}`
-      );
-      if (response.data) {
-        var result = response.data.response;
-        setPatientDocumentResult(result);
-      }
-      setActiveTab(1);
-      setIsLoadingDos(false);
-    }
-    if (pageTitle == "NON HCC") {
-      setActiveTab(2);
-      setIsLoadingDos(false);
-    }
-    if (pageTitle == "Radiology") {
-      setActiveTab(3);
-    }
-    if (pageTitle == "Lab Report") {
-      setActiveTab(4);
-    }
-    setIsLoading(false);
-  };
 
   const handleSubmitPatientFile = async (event) => {
     const form = event.currentTarget;
@@ -1640,10 +1646,10 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
 
   useEffect(() => {
     workFgetFlagsowData();
-    if(window){
-      window.addEventListener('resize', () => {
+    if (window) {
+      window.addEventListener("resize", () => {
         const width = window.innerWidth;
-        setScreenWidth(width)
+        setScreenWidth(width);
       });
     }
   }, []);
@@ -1679,7 +1685,13 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                           />
                         </Button>
                       </div>
-                      <div className={`${!screenWidth || screenWidth>1500?'col-xl-7':'col-xl-10'} col-sm-12`}>
+                      <div
+                        className={`${
+                          !screenWidth || screenWidth > 1500
+                            ? "col-xl-7"
+                            : "col-xl-10"
+                        } col-sm-12`}
+                      >
                         <div className={`${visitStyles.patient_info_details}`}>
                           <div className="card-body">
                             <div className="row">
@@ -1828,7 +1840,13 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                           </div>
                         </div>
                       </div>
-                      <div className={`${!screenWidth || screenWidth>1500?'col-xl-1':'col-xl-2'} col-sm-12`}>
+                      <div
+                        className={`${
+                          !screenWidth || screenWidth > 1500
+                            ? "col-xl-1"
+                            : "col-xl-2"
+                        } col-sm-12`}
+                      >
                         <div className={visitStyles.priorityStatus}>
                           <div className={`${visitStyles.hccCountHeader} `}>
                             <label>CMS</label>
@@ -1847,7 +1865,13 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                           </div>
                         </div>
                       </div>
-                      <div className={`${!screenWidth || screenWidth>1500?'col-xl-1':'col-xl-2'} col-sm-12 px-4 d-flex`}>
+                      <div
+                        className={`${
+                          !screenWidth || screenWidth > 1500
+                            ? "col-xl-1"
+                            : "col-xl-2"
+                        } col-sm-12 px-4 d-flex`}
+                      >
                         <div className={`${visitStyles.rafscoreheader} `}>
                           <label>Score</label>
                           {patientDetails?.rafScore != null ? (
@@ -1982,7 +2006,13 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                           </div>
                         </div>
                       </div>
-                      <div className={`${!screenWidth || screenWidth>1500?'col-xl-1':'col-xl-2'} col-sm-12`}>
+                      <div
+                        className={`${
+                          !screenWidth || screenWidth > 1500
+                            ? "col-xl-1"
+                            : "col-xl-2"
+                        } col-sm-12`}
+                      >
                         {userRole == "admin" ? (
                           <div className={`${visitStyles.actionbtnContainer}`}>
                             <Dropdown
@@ -2211,7 +2241,14 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                                       <li
                                         className={`${visitStyles.sideNavLabel}`}
                                         onClick={() =>
-                                          navigetPageDetails(data.type)
+                                          navigetPageDetails(
+                                            data.type,
+                                            setSideNavLabelActiveKey,
+                                            setPatientDocumentResult,
+                                            setActiveTab,
+                                            setIsLoadingDos,
+                                            setIsLoading
+                                          )
                                         }
                                       >
                                         <a
@@ -2760,6 +2797,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                           <AdminWorkList
                             localUserId={localUserId}
                             setWorkListPatientId={setWorkListPatientId}
+                           setIsModalComments={setIsModalComments}
                           />
                         ) : userRole == "supervisor" ? (
                           <SupervisorWorkList

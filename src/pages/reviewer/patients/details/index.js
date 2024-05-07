@@ -92,7 +92,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
   const [addPatient, setAddPatient] = useState(false);
   const [labReportSlider, setLapReportSlider] = useState(false);
-  const [screenWidth,setScreenWidth]=useState()
+  const [screenWidth, setScreenWidth] = useState();
   const [inputValue, setInputValue] = useState({
     year: "",
     name: "",
@@ -1640,10 +1640,10 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
 
   useEffect(() => {
     workFgetFlagsowData();
-    if(window){
-      window.addEventListener('resize', () => {
+    if (window) {
+      window.addEventListener("resize", () => {
         const width = window.innerWidth;
-        setScreenWidth(width)
+        setScreenWidth(width);
       });
     }
   }, []);
@@ -1653,7 +1653,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
         <NavBar />
         <div className={visitStyles.headerFixed}>
-          <div class="content-body">
+          <div className="content-body">
             {sectionColorList?.loading == true ? (
               <SpinnerDots />
             ) : (
@@ -1679,7 +1679,13 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                           />
                         </Button>
                       </div>
-                      <div className={`${!screenWidth || screenWidth>1500?'col-xl-7':'col-xl-10'} col-sm-12`}>
+                      <div
+                        className={`${
+                          !screenWidth || screenWidth > 1500
+                            ? "col-xl-7"
+                            : "col-xl-10"
+                        } col-sm-12`}
+                      >
                         <div className={`${visitStyles.patient_info_details}`}>
                           <div className="card-body">
                             <div className="row">
@@ -1828,7 +1834,13 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                           </div>
                         </div>
                       </div>
-                      <div className={`${!screenWidth || screenWidth>1500?'col-xl-1':'col-xl-2'} col-sm-12`}>
+                      <div
+                        className={`${
+                          !screenWidth || screenWidth > 1500
+                            ? "col-xl-1"
+                            : "col-xl-2"
+                        } col-sm-12`}
+                      >
                         <div className={visitStyles.priorityStatus}>
                           <div className={`${visitStyles.hccCountHeader} `}>
                             <label>CMS</label>
@@ -1847,7 +1859,13 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                           </div>
                         </div>
                       </div>
-                      <div className={`${!screenWidth || screenWidth>1500?'col-xl-1':'col-xl-2'} col-sm-12 px-4 d-flex`}>
+                      <div
+                        className={`${
+                          !screenWidth || screenWidth > 1500
+                            ? "col-xl-1"
+                            : "col-xl-2"
+                        } col-sm-12 px-4 d-flex`}
+                      >
                         <div className={`${visitStyles.rafscoreheader} `}>
                           <label>Score</label>
                           {patientDetails?.rafScore != null ? (
@@ -1982,7 +2000,13 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                           </div>
                         </div>
                       </div>
-                      <div className={`${!screenWidth || screenWidth>1500?'col-xl-1':'col-xl-2'} col-sm-12`}>
+                      <div
+                        className={`${
+                          !screenWidth || screenWidth > 1500
+                            ? "col-xl-1"
+                            : "col-xl-2"
+                        } col-sm-12`}
+                      >
                         {userRole == "admin" ? (
                           <div className={`${visitStyles.actionbtnContainer}`}>
                             <Dropdown
@@ -2937,7 +2961,6 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                               <span className={visitStyles.commentsDesc}>
                                 {data.comments}
                               </span>
-                              {console.log(data, "time")}
                               <span className={visitStyles.commentsTime}>
                                 {moment(data.commentCreatedAt).format(
                                   "MM-DD-YYYY hh:mm:A"
