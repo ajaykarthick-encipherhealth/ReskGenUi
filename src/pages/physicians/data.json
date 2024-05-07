@@ -1,0 +1,445 @@
+{
+    "status": "SUCCESS",
+    "message": "Success!!",
+    "response": {
+        "validCount": [
+            {
+                "diagnosisCode": "E785",
+                "count": 22
+            },
+            {
+                "diagnosisCode": "I10",
+                "count": 21
+            },
+            {
+                "diagnosisCode": "I129",
+                "count": 12
+            },
+            {
+                "diagnosisCode": "I2510",
+                "count": 11
+            },
+            {
+                "diagnosisCode": "K219",
+                "count": 8
+            },
+            {
+                "diagnosisCode": "N1830",
+                "count": 8
+            },
+            {
+                "diagnosisCode": "I110",
+                "count": 7
+            },
+            {
+                "diagnosisCode": "E782",
+                "count": 7
+            },
+            {
+                "diagnosisCode": "E1142",
+                "count": 6
+            },
+            {
+                "diagnosisCode": "J449",
+                "count": 6
+            },
+            {
+                "diagnosisCode": "E039",
+                "count": 6
+            },
+            {
+                "diagnosisCode": "E1122",
+                "count": 6
+            },
+            {
+                "diagnosisCode": "E119",
+                "count": 5
+            },
+            {
+                "diagnosisCode": "E1165",
+                "count": 4
+            },
+            {
+                "diagnosisCode": "M810",
+                "count": 4
+            },
+            {
+                "diagnosisCode": "E1151",
+                "count": 4
+            },
+            {
+                "diagnosisCode": "I4891",
+                "count": 4
+            },
+            {
+                "diagnosisCode": "I5030",
+                "count": 3
+            },
+            {
+                "diagnosisCode": "Z794",
+                "count": 3
+            },
+            {
+                "diagnosisCode": "E6601",
+                "count": 3
+            },
+            {
+                "diagnosisCode": "E7800",
+                "count": 2
+            },
+            {
+                "diagnosisCode": "E1140",
+                "count": 2
+            },
+            {
+                "diagnosisCode": "E113299",
+                "count": 2
+            },
+            {
+                "diagnosisCode": "F329",
+                "count": 2
+            },
+            {
+                "diagnosisCode": "Z6842",
+                "count": 2
+            },
+            {
+                "diagnosisCode": "F32A",
+                "count": 2
+            },
+            {
+                "diagnosisCode": "I5032",
+                "count": 2
+            },
+            {
+                "diagnosisCode": "L97519",
+                "count": 2
+            },
+            {
+                "diagnosisCode": "G43909",
+                "count": 2
+            },
+            {
+                "diagnosisCode": "I509",
+                "count": 2
+            },
+            {
+                "diagnosisCode": "E11621",
+                "count": 2
+            },
+            {
+                "diagnosisCode": "I130",
+                "count": 2
+            },
+            {
+                "diagnosisCode": "F0150",
+                "count": 2
+            },
+            {
+                "diagnosisCode": "N179",
+                "count": 2
+            },
+            {
+                "diagnosisCode": "F331",
+                "count": 2
+            },
+            {
+                "diagnosisCode": "F411",
+                "count": 2
+            },
+            {
+                "diagnosisCode": "I5020",
+                "count": 2
+            },
+            {
+                "diagnosisCode": "B20",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "J9601",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "J441",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "E46",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "F320",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "E7849",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "I2720",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "D696",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "I639",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "J849",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "I119",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "G9520",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "K22719",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "E063",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "J431",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "F319",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "I219",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "E113311",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "F0390",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "G959",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "K2270",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "B1820",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "I69354",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "E041",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "I4819",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "G301",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "D689",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "F410",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "F3181",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "J45901",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "N1834",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "B181",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "I5023",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "N184",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "L97929",
+                "count": 1
+            }
+        ],
+        "suggestedCount": [
+            {
+                "diagnosisCode": "K219",
+                "count": 5
+            },
+            {
+                "diagnosisCode": "J439",
+                "count": 4
+            },
+            {
+                "diagnosisCode": "F32A",
+                "count": 3
+            },
+            {
+                "diagnosisCode": "N179",
+                "count": 3
+            },
+            {
+                "diagnosisCode": "I700",
+                "count": 3
+            },
+            {
+                "diagnosisCode": "E7800",
+                "count": 2
+            },
+            {
+                "diagnosisCode": "I10",
+                "count": 2
+            },
+            {
+                "diagnosisCode": "I2510",
+                "count": 2
+            },
+            {
+                "diagnosisCode": "G8322",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "I7140",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "K5190",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "J8410",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "I679",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "I2109",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "I214",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "I2720",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "G459",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "F3341",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "I2721",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "F329",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "Z6841",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "E119",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "G319",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "I739",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "Z6842",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "G43909",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "L138",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "E781",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "J45909",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "K56609",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "D689",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "E785",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "F4321",
+                "count": 1
+            },
+            {
+                "diagnosisCode": "I7121",
+                "count": 1
+            }
+        ],
+        "monitorCount": 109,
+        "evaluationCount": 88,
+        "assessmentCount": 79,
+        "treatmentCount": 150,
+        "totalMeatCount": 208,
+        "validDiseaseRafSum": 37.845,
+        "suggestedRafSum": 9.013,
+        "validRafAmount": 30276,
+        "suggestedRafAmount": 7210.4,
+        "differencePercentage": 23.816,
+        "totalFullMeatCount": 26
+    }
+}

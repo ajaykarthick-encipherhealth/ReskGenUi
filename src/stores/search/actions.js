@@ -30,3 +30,8 @@ export const updateSemantic = createActionThunk(
   "UPDATE_SEMANTIC",
   network.updateSemantic
 );
+
+export const getSuggestedCodes = createActionThunk(
+  "GET_SUGGESTED_CODES",
+  network.getSuggested
+);

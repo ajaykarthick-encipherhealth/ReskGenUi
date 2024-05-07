@@ -6,7 +6,8 @@ import {
   getSimpleSearch,
   getSemanticSearch,
   updateSemantic,
-  deleteICDCodes
+  deleteICDCodes,
+  getSuggestedCodes
 } from "./actions";
 
 const initialState = {
@@ -44,7 +45,8 @@ const searchReducer = combineReducers({
   deleteICDCodes: createReducer(deleteICDCodes),
   getSimpleSearch: createReducer(getSimpleSearch),
   getSemanticSearch: createReducer(getSemanticSearch),
-  updateSemantic: createReducer(updateSemantic)
+  updateSemantic: createReducer(updateSemantic),
+  getSuggestedCodes: createReducer(getSuggestedCodes)
 });
 
 export default searchReducer;

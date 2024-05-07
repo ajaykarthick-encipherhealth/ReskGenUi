@@ -23,6 +23,7 @@ const Searches = ({
   getSimpleSearchData,
   getSemanticData,
   getUpdateSemanticStatus,
+  getSuggestedCodes,
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -43,8 +44,10 @@ const Searches = ({
   const [deleteModal, setDeleteModal] = useState(false);
   const [ruleSelect, setRuleSelect] = useState({
     billable: "",
-    source: ""
-  })
+    source: "",
+  });
+  const [suggestedCode, setSuggestedCodes] = useState([]);
+  const [selectBillable, setSelectBillable] = useState(null);
 
   const getYear = () => {
     let years = [];
@@ -58,6 +61,7 @@ const Searches = ({
     { name: "code", value: "code" },
     { name: "description", value: "description" },
     { name: "years", value: "years", isarray: true },
+    { name: "billable", value: "billable" },
     {
       name: "active",
       value: {
@@ -109,26 +113,6 @@ const Searches = ({
     setPage(e.page);
   };
 
-  console.log(action);
-
-  const getSearch = async () => {
-    const token = localStorage.getItem("token");
-    try {
-      const response = await axios.get(
-        `http://13.68.177.51:8090/res?q=${search}`
-        // {
-        //   headers: {
-        //     Authorization: `Bearer ${token}`,
-        //   },
-        // }
-      );
-      setList(response.data);
-      return response.data;
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   const handleChange = (e) => {
     setUpdateDetails((prev) => ({
       ...prev,
@@ -136,18 +120,26 @@ const Searches = ({
     }));
   };
 
-  const createdICDCodes = (type) => {
+  const createdICDCodes = async(type) => {
     if (type == "edit") {
-      createICDCode({
+      const res = await createICDCode({
         id: action.id,
         code: updateDetails.codes,
         description: updateDetails.description,
         years: years.map((date) => date.value),
+        billable: selectBillable ? selectBillable : "",
       });
-      if (getICDStatus?.data?.status == "SUCCESS") {
+      if (res.status == "SUCCESS") {
         getResponePopup(getICDStatus);
         setModalOpen("");
-        getAllICDCodes(search, page, size);
+        setSelectBillable(null)
+        getAllICDCodes(
+          search,
+          page,
+          size,
+          ruleSelect.billable,
+          ruleSelect.source
+        );
       }
       setUpdateDetails({});
       setYears(null);
@@ -167,7 +159,6 @@ const Searches = ({
       setYears(null);
     }
   };
-
   const editSemantic = () => {
     updateSemantic({
       id: action.id,
@@ -195,6 +186,17 @@ const Searches = ({
     }
   };
 
+  const getCallSuggested = async (code) => {
+    try {
+      const res = await getSuggestedCodes(code);
+      if (res.response) {
+        setSuggestedCodes([code, ...res.response]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     if (searchType == "Rule-engine-search") {
       if (action.type == "edit") {
@@ -202,16 +204,19 @@ const Searches = ({
         const editData = getAllICDCodesData?.data?.response.content.find(
           (item) => item.id == action.id
         );
+
         const year = editData?.years?.map((item) => ({
           label: item,
           value: item,
         }));
+        getCallSuggested(editData.code);
         setUpdateDetails({
           ...updateDetails,
           codes: editData.code,
           description: editData.description,
         });
         setYears(year);
+        setSelectBillable({ label: editData?.billable, value: editData?.billable });
       } else if (action.type == "delete") {
         setDeleteModal(true);
       }
@@ -229,7 +234,13 @@ const Searches = ({
   }, [action]);
   useEffect(() => {
     if (searchType == "Rule-engine-search") {
-      getAllICDCodes(search, page, size, ruleSelect.billable, ruleSelect.source);
+      getAllICDCodes(
+        search,
+        page,
+        size,
+        ruleSelect.billable,
+        ruleSelect.source
+      );
     } else if (searchType == "SimpleHybridSearch") {
       getSimpleSearch(search);
     } else if (searchType == "SemanticHybridSearch") {
@@ -243,7 +254,6 @@ const Searches = ({
     serSearch("");
     dispatch(getCurrentUser(userId, router));
   };
-
   return (
     <>
       <div className="d-flex justify-content-center align-item-center">
@@ -297,36 +307,48 @@ const Searches = ({
               value={search}
               onChange={(e) => serSearch(e.target.value)}
             />
-            { searchType == "Rule-engine-search" && <>
-            
-            <div style={{ width: "450px" }} className="px-2">
-              <Select
-                onChange={(selectedOption) => setRuleSelect((prev) => ({...prev, billable: selectedOption}))}
-                options={[
-                  {label: "ALL", value: ""},
-                  {label: "BILLABLE", value: "BILLABLE"},
-                  {label: "NON_BILLABLE", value: "NON_BILLABLE"},
-                  {label: "NULL", value: "NULL"},
-                ]}
-                className="custom-react-select"
-                isSearchable={false}
-                placeholder={"Select Billable"}
-              />
-            </div>
-            <div style={{ width: "450px" }}>
-              <Select
-                onChange={(selectedOption) => setRuleSelect((prev) => ({...prev, source: selectedOption}))}
-                options={[
-                  {label: "BOTH", value: ""},
-                  {label: "XML", value: "XML"},
-                  {label: "CMS_EXCEL", value: "CMS_EXCEL"},
-                ]}
-                className="custom-react-select"
-                isSearchable={false}
-                placeholder={"Select Source"}
-                style={{ width: "100px" }}
-              />
-            </div></>}
+            {searchType == "Rule-engine-search" && (
+              <>
+                <div style={{ width: "450px" }} className="px-2">
+                  <Select
+                    onChange={(selectedOption) =>
+                      setRuleSelect((prev) => ({
+                        ...prev,
+                        billable: selectedOption,
+                      }))
+                    }
+                    options={[
+                      { label: "ALL", value: "" },
+                      { label: "BILLABLE", value: "BILLABLE" },
+                      { label: "NON_BILLABLE", value: "NON_BILLABLE" },
+                      { label: "NULL", value: "NULL" },
+                    ]}
+                    className="custom-react-select"
+                    isSearchable={false}
+                    placeholder={"Select Billable"}
+                  />
+                </div>
+                <div style={{ width: "450px" }}>
+                  <Select
+                    onChange={(selectedOption) =>
+                      setRuleSelect((prev) => ({
+                        ...prev,
+                        source: selectedOption,
+                      }))
+                    }
+                    options={[
+                      { label: "BOTH", value: "" },
+                      { label: "XML", value: "XML" },
+                      { label: "CMS_EXCEL", value: "CMS_EXCEL" },
+                    ]}
+                    className="custom-react-select"
+                    isSearchable={false}
+                    placeholder={"Select Source"}
+                    style={{ width: "100px" }}
+                  />
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -556,7 +578,7 @@ const Searches = ({
                     name="description"
                     onChange={handleChange}
                   />
-                  <div className="mb-3">
+                  <div className="mb-2">
                     <Select
                       mode="multiple"
                       allowClear
@@ -566,6 +588,43 @@ const Searches = ({
                       onChange={(e, select) => setYears(select)}
                       options={getYear()}
                     />
+                  </div>
+                  <div className="mb-3">
+                    <Select
+                      onChange={(selectedOption) =>
+                        setSelectBillable(selectedOption)
+                      }
+                      value={selectBillable}
+                      style={{ width: "100%", textAlign: "left" }}
+                      options={[
+                        { label: "BILLABLE", value: "BILLABLE" },
+                        { label: "NON_BILLABLE", value: "NON_BILLABLE" },
+                      ]}
+                      className="custom-react-select"
+                      isSearchable={false}
+                      placeholder={"Select Billable"}
+                    />
+                  </div>
+                  <div>
+                    {suggestedCode?.map((item) => (
+                      <div class="form-check mx-2 text-start">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          name="selectCodes"
+                          id="selectCodes"
+                          checked={updateDetails?.codes == item}
+                          onClick={() =>
+                            setUpdateDetails((prev) => {
+                              return { ...prev, codes: item };
+                            })
+                          }
+                        ></input>
+                        <label class="form-check-label" for="selectCodes">
+                          {item}
+                        </label>
+                      </div>
+                    ))}
                   </div>
                   <button
                     class="btns-primary btn-app-primary"
@@ -609,6 +668,7 @@ const enhancer = connect(
     getSimpleSearch: searchActions.getSimpleSearch,
     getSemanticSearch: searchActions.getSemanticSearch,
     updateSemantic: searchActions.updateSemantic,
+    getSuggestedCodes: searchActions.getSuggestedCodes,
   }
 );
 export default enhancer(Searches);

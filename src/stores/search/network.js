@@ -18,7 +18,7 @@ export async function createIcdCode(obj) {
     body: JSON.stringify(obj)
   };
   const data = await requestPortal(
-    `management/addOrUpdateIcdCodeWithYear
+    `dbservice/add-or-update-icd-code-with-year
   `,
     options
   );
@@ -55,6 +55,18 @@ export async function getSemantic(search) {
   };
   const data = await requestPortal(
     `management/res?q=${search}
+  `,
+    options
+  );
+  return data;
+}
+
+export async function getSuggested(code) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/hccdisease/geticdsuggestedcodes?year=2023&diagnosisCode=${code}
   `,
     options
   );

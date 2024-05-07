@@ -1,7 +1,7 @@
 import { notification } from "antd";
 
 export const getResponePopup = (res) => {
-  switch (res.data.status) {
+  switch (res?.data?.status ? res?.data?.status : res?.status) {
     case "USER_DEFINED_ERROR":
       return notification.warning({
         description: res?.data?.message,

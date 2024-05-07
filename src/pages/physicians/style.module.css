@@ -1,0 +1,45 @@
+.title {
+    font-size: larger;
+    font-weight: 700;
+}
+.title_card {
+    background-color: #0766AD;
+    color: #fff;
+    padding: 5px;
+    border-radius: 15px;
+}
+.card_title {
+    border: 1px solid gray;
+    border-radius: 15px;
+}
+.card_title > div {
+    font-size: 45px;
+}
+.title_cards {
+    background-color: #429EBD;
+    color: #fff;
+    padding: 5px;
+    border-radius: 15px;
+}
+
+.title_card_total{
+    background-color: #164863;
+    color: #fff;
+    padding: 5px;
+    border-radius: 15px;
+}
+.card_title_value {
+    border: 1px solid gray;
+    border-radius: 15px;
+    /* height: 100%; */
+}
+.card_title_value > div {
+    font-size: 75px;
+}
+
+.revenue {
+    font-size:xx-large;
+    margin: 0;
+    padding: 0;
+    color: green;
+}
