@@ -306,7 +306,7 @@ const File = ({
 
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `dbservice/hccdisease/icd10mappingForDisease?year=${selectedDosValue}&diagnosisCode=${code}`
+        `dbservice/hccdisease/icd10mappingForDisease?year=${patientDetailsResult?.result?.response?.dos}&diagnosisCode=${code}`
     );
     if (response.data) {
       var value = [];
