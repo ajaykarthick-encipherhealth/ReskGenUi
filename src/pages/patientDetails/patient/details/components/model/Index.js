@@ -4,6 +4,7 @@ import { Button } from "react-bootstrap";
 import CamboTree from "../../hcc/org";
 import PdfViewer from "../../PdfViewerComponent";
 import { handleSubmitValidNotes } from "../function/ReusableFunctions";
+import { useDispatch } from "react-redux";
 
 const ModelIndex = ({
   validated,
@@ -19,10 +20,11 @@ const ModelIndex = ({
   setConfirmNotesModalValid,
   getPatientDetailsReload,
   isValidAction,
-  selectInvalidDetails
+  selectInvalidDetails,
 }) => {
   const [form] = Form.useForm();
   const { TextArea } = Input;
+  const dispatch = useDispatch();
 
   return (
     <Modal
@@ -66,7 +68,8 @@ const ModelIndex = ({
                   setConfirmNotesModalValid,
                   getPatientDetailsReload,
                   isValidAction,
-                  selectInvalidDetails
+                  selectInvalidDetails,
+                  dispatch
                 })
               }
             >

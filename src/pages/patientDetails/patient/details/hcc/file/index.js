@@ -1,49 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { Badge } from "react-bootstrap";
-import axios from "../../../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../../../utility/enpoints";
-import visitStyles from "../../../../../../styles/visitdata.module.css";
-import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import moment from "moment";
-import "react-vertical-timeline-component/style.min.css";
-
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faClose,
   faArrowLeft,
   faPlus,
-  faArrowsAlt,
-  faSitemap,
   faAngleDown,
-  faPen,
-  faCircleUser,
 } from "@fortawesome/free-solid-svg-icons";
-import { CalendarOutlined } from "@ant-design/icons";
-import { QuestionCircleOutlined } from "@ant-design/icons";
-import { Popconfirm, Popover } from "antd";
-import { SVGICON } from "../../../../../../jsx/constant/theme";
-import { Modal } from "antd";
+import axios from "../../../../../../utility/axiosConfig";
+import ENDPOINTS from "../../../../../../utility/enpoints";
+import visitStyles from "../../../../../../styles/visitdata.module.css";
+import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
+import { Popover, notification } from "antd";
 import { Button } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
-import { notification } from "antd";
-import { Tooltip } from "antd";
-import Spinner from "../../../../../../components/loadingSpinner";
 import styles from "../styles.module.css";
-import {
-  getLabFileDetails,
-  getPatientDetailsResult,
-  getRadiologyFileDetails,
-} from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
-import CamboTree from "../org";
+import { getPatientDetailsResult } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import PdfViewer from "../../PdfViewerComponent";
 import AddHccForm from "../../components/addHccForm";
 import EditHccForm from "../../components/editHccForm";
-import { pdfUrl } from "../../../../../../stores/authflow/reducers";
 import HccCards from "../../components/HCC";
 import ModelIndex from "../../components/model/Index";
 import { getPatientDetails } from "../../components/function/GetData";
-import { handleSubmitValidNotes } from "../../components/function/ReusableFunctions";
 
 const File = ({
   popoverVisible,
@@ -73,20 +51,10 @@ const File = ({
   const fileDosPageNumberList = useSelector(
     (state) => state?.ReviewerReducers.dosPageNumberList
   );
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
-  const { toolbarPluginInstance } = defaultLayoutPluginInstance;
-  const { searchPluginInstance } = toolbarPluginInstance;
-  const { highlight } = searchPluginInstance;
-  const { setTargetPages } = searchPluginInstance;
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
-  const [confirmNotesModalInValid, setConfirmNotesModalInValid] =
-    useState(false);
   const [selectDiseasesName, setSelectDiseasesName] = useState("");
   const [meatCriteriaList, setMeatCriteriaList] = useState([]);
-  const [localOrgId, setLocalOrgId] = useState("");
-  const [localTenantId, setLocalTenantId] = useState("");
-  const [selectMeatName, setSelectMeatName] = useState("");
   const [patientDocumentResult, setPatientDocumentResult] = useState([]);
   const [selectFileURL, setSelectFileURL] = useState([]);
   const [validated, setValidated] = useState(false);
@@ -96,31 +64,6 @@ const File = ({
   const [selectFileURLRadiology, setSelectFileURLRadiology] = useState([]);
   const [isModalOpenRadiology, setIsModalOpenRadiology] = useState(false);
   const [isModalOpenLab, setIsModalOpenLab] = useState(false);
-  const [inputValue, setInputValue] = useState({
-    year: "",
-    name: "",
-    patientId: "",
-    notes: "",
-    diagnosisCode: "",
-    actualDescription: "",
-    capturedSections: "",
-    encodedDate: "",
-    flag: "",
-    comments: "",
-    description: "",
-    queryReason: "",
-    providerName: "",
-    imagingTestHeader: "",
-    headerName: "",
-    queryComment: "",
-    reason: "",
-    diagnosisCodeQuery: "",
-    comboCode: "",
-    additionalCode: "",
-  });
-  const [localUserId, setLocalUserId] = useState("");
-  const [localPatientId, setLocalPatientId] = useState("");
-  const [selectedDosValue, setSelectedDosValue] = useState("");
   const [selectInvalidDetails, setSelectInvalidDetails] = useState(false);
   const [labReportFile, setLabReportFile] = useState([]);
   const [suggestedHccList, setSuggestedHccList] = useState([]);
@@ -129,13 +72,7 @@ const File = ({
   const [captureSectionMatching, setCaptureSectionMatching] = useState([]);
   const [encounterDateMatching, setEncounterDateMatching] = useState([]);
   const [fileModalHeader, setFileModalHeader] = useState("");
-  const [patientFileDTO, setPatientFileDTO] = useState("");
-  const [fileInitialPage, setFileInitialPage] = useState(null);
-  const [findFileKeyword, setFindFileKeyword] = useState("");
-  const [fileModalTitle, setFileModalTitle] = useState("");
   const [pageNumberOptions, setPageNumberOptions] = useState([]);
-  const [listPageNumber, setListPageNumber] = useState([]);
-  const [activeTabNumber, setActiveTabNumber] = useState(0);
   const [fileLoading, setFileLoading] = useState(false);
   const [hccVersionDetails, setHccVersionDetails] = useState(null);
   const [search, setSearch] = useState();
@@ -147,12 +84,6 @@ const File = ({
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
     var tenId = localStorage.getItem("tenantId");
-    var patientId = localStorage.getItem("patientId");
-    var uId = localStorage.getItem("userId");
-    setLocalUserId(uId);
-    setLocalPatientId(patientId);
-    setLocalOrgId(orgId);
-    setLocalTenantId(tenId);
     getPatientDetails(
       orgId,
       tenId,
@@ -171,7 +102,6 @@ const File = ({
 
   useEffect(() => {
     if (hccFileDetails?.result?.response) {
-      // dispatch(pdfUrl(hccFileDetails?.result?.response));
       setSelectFileURL(hccFileDetails?.result?.response);
     }
     if (radiologyFileDetails?.result?.response) {
@@ -185,93 +115,9 @@ const File = ({
   useEffect(() => {
     getFileDosPageNumber();
   }, [fileDosPageNumberList]);
-
-  useEffect(() => {
-    if (findFileKeyword) {
-      setTimeout(() => {
-        setFileModalHeader(fileModalTitle);
-
-        if (fileInitialPage != null) {
-          setTargetPages(
-            (targetPage) =>
-              targetPage.pageIndex === fileInitialPage ||
-              targetPage.pageIndex === fileInitialPage + 1 ||
-              targetPage.pageIndex === fileInitialPage + 2
-          );
-        } else {
-          setTargetPages(null);
-        }
-        highlight({
-          keyword: findFileKeyword,
-        });
-        setTimeout(() => {
-          setFileLoading(false);
-        }, 1000);
-      }, 1000);
-    }
-  }, [fileInitialPage, findFileKeyword, fileModalTitle]);
-
-  const confirmvalid = () =>
-    new Promise((resolve) => {
-      setTimeout(() =>
-        resolve(
-          setConfirmNotesModalValid(true),
-          setIsValidAction("validToDeleted")
-        )
-      );
-    });
-
-  const validToSuggested = () =>
-    new Promise((resolve) => {
-      setTimeout(() =>
-        resolve(
-          setConfirmNotesModalValid(true),
-          setIsValidAction("validToSuggested")
-        )
-      );
-    });
-
-  const suggestedToValid = () =>
-    new Promise((resolve) => {
-      setTimeout(() =>
-        resolve(
-          setConfirmNotesModalValid(true),
-          setIsValidAction("suggestedToValid")
-        )
-      );
-    });
-  const suggestedToDeleted = () =>
-    new Promise((resolve) => {
-      setTimeout(() =>
-        resolve(
-          setConfirmNotesModalValid(true),
-          setIsValidAction("suggestedToDeleted")
-        )
-      );
-    });
-
-  const deletedToSuggested = () =>
-    new Promise((resolve) => {
-      setTimeout(() =>
-        resolve(
-          setConfirmNotesModalValid(true),
-          setIsValidAction("deletedToSuggested")
-        )
-      );
-    });
-  const deletedToValid = () =>
-    new Promise((resolve) => {
-      setTimeout(() =>
-        resolve(
-          setConfirmNotesModalValid(true),
-          setIsValidAction("deletedToValid")
-        )
-      );
-    });
-
   const onchangeValid = (code, data) => {
     var title = code + " - " + data.actualDescription;
-    data.dos= patientDetailsResult?.result?.response?.dos;
+    data.dos = patientDetailsResult?.result?.response?.dos;
     setSelectDiseasesName(title);
     setSelectInvalidDetails(data);
   };
@@ -279,22 +125,12 @@ const File = ({
   const handleCloseModal = () => {
     setValidated(false);
     setConfirmNotesModalValid(false);
-    setConfirmNotesModalInValid(false);
     setIsModalOpenRadiology(false);
     setIsModalOpenLab(false);
     setIsFileFormShow(false);
-    setFindFileKeyword(null);
     setFileLoading(false);
-    setActiveTabNumber(activeTabNumber == null ? 0 : null);
     setIsEditHccForm(false);
     setOpens(false);
-  };
-
-  const handleChangeSuggested = async (e) => {
-    console.log(e.target.name)
-    const key = e.target.name;
-    const value = e.target.value;
-    setInputValue({ ...inputValue, [key]: value });
   };
 
   const getValidHccDetails = async (value, code) => {
@@ -342,38 +178,6 @@ const File = ({
     setValidated(false);
   };
 
-  const getEncounterDetails = async (date) => {
-    const findPageNumber = listPageNumber.filter(
-      (i) =>
-        moment(i.date).format("MM/DD/YYYY") ===
-        moment(date).format("MM/DD/YYYY")
-    );
-    if (findPageNumber.length != 0) {
-      setFileLoading(true);
-      var date = findPageNumber[0].date;
-      if (findPageNumber[0].startPage.length != 0) {
-        var pageNumber = findPageNumber[0].startPage[0].pageNumber;
-        if (pageNumber == fileInitialPage) {
-          setFileLoading(false);
-          notification.warning({
-            message: "This detail also same page",
-            placement: "top",
-            duration: 1,
-          });
-        }
-        setFileInitialPage(pageNumber);
-
-        var splitPoint = date.substring(" ", 5);
-        setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
-        setFindFileKeyword(splitPoint);
-        setSearch({
-          value: splitPoint,
-          page: pageNumber,
-        });
-      }
-    }
-  };
-
   const getFileDosPageNumber = async () => {
     var result = fileDosPageNumberList?.result;
     var groupPageNumber = [];
@@ -399,13 +203,8 @@ const File = ({
         label: moment(key).format("MM-DD-YYYY"),
         options: optionArray,
       });
-      groupEncounterDate.push({
-        date: moment(key).format("MM/DD/YYYY"),
-        startPage: optionPage,
-      });
     }
     setPageNumberOptions(groupPageNumber);
-    setListPageNumber(groupEncounterDate);
   };
 
   const handleChangePageNumber = async (value) => {
@@ -500,8 +299,6 @@ const File = ({
                     captureSectionMatching={captureSectionMatching}
                     encounterDateMatching={encounterDateMatching}
                     meatCriteriaList={meatCriteriaList}
-                    // findValueDocument={findValueDocument}
-                    getEncounterDetails={getEncounterDetails}
                     onchangeValid={onchangeValid}
                     getValidHccDetails={getValidHccDetails}
                     setFormValues={setFormValues}
@@ -509,8 +306,6 @@ const File = ({
                     setFormEditPlace={setFormEditPlace}
                     okText="Move to Deleted"
                     cancelText="Move to Suggested"
-                    confirmFunc={confirmvalid}
-                    cancelFunc={validToSuggested}
                     editFormPlace={"VALID_DISEASE"}
                     setOpens={setOpens}
                     setCombiTree={setCombiTree}
@@ -524,6 +319,7 @@ const File = ({
                     setFileModalHeader={setFileModalHeader}
                     setConfirmNotesModalValid={setConfirmNotesModalValid}
                     setIsValidAction={setIsValidAction}
+                    cardTitle="HCC"
                   />
                 </div>
               </div>
@@ -582,7 +378,6 @@ const File = ({
         {isFileFormShow ? (
           <div className="col-xl-4">
             <AddHccForm
-              diagnosisCode={inputValue.diagnosisCode}
               handleCloseModal={handleCloseModal}
               isAddHccForm={isAddHccForm}
               setIsAddHccForm={setIsAddHccForm}
@@ -614,8 +409,6 @@ const File = ({
                       captureSectionMatching={captureSectionMatching}
                       encounterDateMatching={encounterDateMatching}
                       meatCriteriaList={meatCriteriaList}
-                      // findValueDocument={findValueDocument}
-                      getEncounterDetails={getEncounterDetails}
                       onchangeValid={onchangeValid}
                       getValidHccDetails={getValidHccDetails}
                       setFormValues={setFormValues}
@@ -623,9 +416,6 @@ const File = ({
                       setFormEditPlace={setFormEditPlace}
                       okText={"Move to Deleted"}
                       cancelText={"Move to HCC"}
-                      confirmFunc={suggestedToDeleted}
-                      cancelFunc={suggestedToValid}
-                      suggestedToDeleted={suggestedToDeleted}
                       editFormPlace={"SUGGESTED_DISEASE"}
                       setOpens={setOpens}
                       setCombiTree={setCombiTree}
@@ -640,6 +430,7 @@ const File = ({
                       setFileModalHeader={setFileModalHeader}
                       setConfirmNotesModalValid={setConfirmNotesModalValid}
                       setIsValidAction={setIsValidAction}
+                      cardTitle="SUGGESTED"
                     />
                   </div>
                 </div>
@@ -668,8 +459,6 @@ const File = ({
                       captureSectionMatching={captureSectionMatching}
                       encounterDateMatching={encounterDateMatching}
                       meatCriteriaList={meatCriteriaList}
-                      // findValueDocument={findValueDocument}
-                      getEncounterDetails={getEncounterDetails}
                       onchangeValid={onchangeValid}
                       getValidHccDetails={getValidHccDetails}
                       setFormValues={setFormValues}
@@ -677,8 +466,6 @@ const File = ({
                       setFormEditPlace={setFormEditPlace}
                       okText="Move to Suggested"
                       cancelText="Move to HCC"
-                      confirmFunc={deletedToSuggested}
-                      cancelFunc={deletedToValid}
                       isDeletedCodes={true}
                       setOpens={setOpens}
                       setCombiTree={setCombiTree}
@@ -693,6 +480,7 @@ const File = ({
                       setFileModalHeader={setFileModalHeader}
                       setConfirmNotesModalValid={setConfirmNotesModalValid}
                       setIsValidAction={setIsValidAction}
+                      cardTitle="DELETED"
                     />
                   </div>
                 </div>
@@ -706,7 +494,6 @@ const File = ({
         title={selectDiseasesName}
         openState={confirmNotesModalValid}
         handleCloseModal={handleCloseModal}
-        handleChangeSuggested={handleChangeSuggested}
         setFileLoading={setFileLoading}
         setConfirmNotesModalValid={setConfirmNotesModalValid}
         getPatientDetailsReload={getPatientDetailsReload}

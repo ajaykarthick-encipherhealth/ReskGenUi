@@ -245,6 +245,7 @@ export const getPatientDetails = async (
             });
             deleteHccList.push({
               actualDescription: res.actualDescription,
+              dbDescription: res.dbDescription,
               capturedSections: res.capturedSections,
               diagnosisCode: res.diagnosisCode,
               encounterDate: res.encounterDate,

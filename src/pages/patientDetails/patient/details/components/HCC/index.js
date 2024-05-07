@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import visitStyles from "../../../../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Badge, Popconfirm, Popover, Tooltip } from "antd";
@@ -26,7 +26,6 @@ const HccCards = ({
   captureSectionMatching,
   encounterDateMatching,
   meatCriteriaList,
-  getEncounterDetails,
   onchangeValid,
   getValidHccDetails,
   setFormValues,
@@ -34,10 +33,7 @@ const HccCards = ({
   setFormEditPlace,
   okText,
   cancelText,
-  confirmFunc,
-  cancelFunc,
   editFormPlace,
-  suggestedToDeleted,
   isDeletedCodes,
   setOpens,
   setCombiTree,
@@ -52,9 +48,14 @@ const HccCards = ({
   setFileModalHeader,
   patientDocumentResult,
   setConfirmNotesModalValid,
-  setIsValidAction
+  cardTitle,
 }) => {
-  const fileId=useSelector(state=>state?.ReviewerReducers?.patientDetails)
+  const fileId = useSelector(
+    (state) => state?.ReviewerReducers?.patientDetails
+  );
+  const fileDosPageNumberList = useSelector(
+    (state) => state?.ReviewerReducers.dosPageNumberList
+  );
   const PopContentHccVersion = (
     <div className={styles.innerPop}>
       <div className={styles.displayDiv}>
@@ -186,10 +187,13 @@ const HccCards = ({
                       ? ""
                       : cancelText
                   }
-                  onCancel={()=>
-                    data.getPlace === "Radio" || data.getPlace === "Lab"
-                      ? ""
-                      : moveToAnotherAction(setConfirmNotesModalValid,setIsValidAction,"deletedToValid")
+                  onCancel={() =>
+                    moveToAnotherAction(
+                      setConfirmNotesModalValid,
+                      setIsValidAction,
+                      cancelText,
+                      cardTitle
+                    )
                   }
                   okButtonProps={{
                     type: "default",
@@ -198,10 +202,13 @@ const HccCards = ({
                     type: "default",
                   }}
                   description={data.diagnosisCode}
-                  onConfirm={()=>
-                    data.getPlace == "Radio" || data.getPlace == "Lab"
-                      ? moveToAnotherAction(setConfirmNotesModalValid,setIsValidAction,"suggestedToDeleted")
-                      : moveToAnotherAction(setConfirmNotesModalValid,setIsValidAction,"suggestedToValid")
+                  onConfirm={() =>
+                    moveToAnotherAction(
+                      setConfirmNotesModalValid,
+                      setIsValidAction,
+                      okText,
+                      cardTitle
+                    )
                   }
                   placement="leftTop"
                   onOpenChange={() => onchangeValid(data.diagnosisCode, data)}
@@ -241,17 +248,21 @@ const HccCards = ({
             <div className="d-flex justify-content-between">
               <div className={`${visitStyles.hoverActiveHcc}`}>
                 <div className={`${visitStyles.encounterAndSectionHeader}`}>
-                  {getProviderNameList(
-                    data?.providerName,
-                    captureSectionMatching
-                  )}
+                  {getProviderNameList({
+                    data: data?.providerName,
+                    captureSectionMatching: captureSectionMatching,
+                  })}
                 </div>
                 <div className={`${visitStyles.encounterAndSectionHeader}`}>
-                  {getEncounterDateBackground(
-                    data?.encounterDateSplit,
-                    encounterDateMatching,
-                    getEncounterDetails
-                  )}
+                  {getEncounterDateBackground({
+                    value: data?.encounterDateSplit,
+                    encounterDateMatching: encounterDateMatching,
+                    fileDosPageNumberList: fileDosPageNumberList,
+                    setIsModalOpenValidCodes:setIsModalOpenValidCodes? setIsModalOpenValidCodes : null,
+                    setSearch:setSearch,
+                    setFileModalHeader:setFileModalHeader,
+                    patientDocumentResult:patientDocumentResult
+                  })}
                 </div>
                 <div className={`${visitStyles.encounterAndSectionHeader}`}>
                   {getCaptureSectionBackgroundFile(
@@ -268,8 +279,7 @@ const HccCards = ({
                     setIsModalOpenValidCodes,
                     setFileModalHeader,
                     fileId,
-                    patientDocumentResult,
-                    
+                    patientDocumentResult
                   )}
                 </div>
               </div>

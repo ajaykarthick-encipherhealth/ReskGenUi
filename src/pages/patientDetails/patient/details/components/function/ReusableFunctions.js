@@ -2,25 +2,31 @@ import { CalendarOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tooltip, notification } from "antd";
 import moment from "moment";
-import {
-  faCircleUser,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import visitStyles from "../../../../../../styles/visitdata.module.css";
 import styles from "../HCC/styles.module.css";
 import axios from "../../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../../utility/enpoints";
+import { getPatientDetailsResult } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 
 export const getEncounterDateBackground = ({
   value,
   encounterDateMatching,
-  getEncounterDetails,
+  fileDosPageNumberList,
+  setIsModalOpenValidCodes,
+  setSearch,
+  setFileModalHeader,
+  patientDocumentResult
 }) => {
   return value?.map((res) => {
     const result = encounterDateMatching.filter((res2) => res2.name == res);
     var backColor = result[0]?.colors;
     var sectionMapArr = res ? (
       <span
-        onClick={() => getEncounterDetails(res)}
+        onClick={() => getEncounterDetails(res, fileDosPageNumberList,setIsModalOpenValidCodes,setSearch,
+          setFileModalHeader,
+          patientDocumentResult
+        )}
         className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
       >
         <i>
@@ -33,6 +39,60 @@ export const getEncounterDateBackground = ({
     );
     return sectionMapArr;
   });
+};
+
+const getEncounterDetails = async (date, fileDosPageNumberList,setIsModalOpenValidCodes,setSearch,
+  setFileModalHeader,
+  patientDocumentResult
+) => {
+  console.log(date, fileDosPageNumberList)
+  var result = fileDosPageNumberList?.result;
+  var groupEncounterDate = [];
+  for (var key in result?.response) {
+    var optionArray = [];
+    var optionPage = [];
+    var pageNumbervalue = result.response[key];
+    for (var key2 in pageNumbervalue) {
+      var startPage = key2 == "first" ? pageNumbervalue[key2] : null;
+      var keyValue = key2 == "first" ? "Start - " : "End - ";
+      optionArray.push({
+        label: keyValue + " " + pageNumbervalue[key2],
+        value: pageNumbervalue[key2] + "," + moment(key).format("MM/DD"),
+      });
+      if (startPage) {
+        optionPage.push({
+          pageNumber: startPage,
+        });
+      }
+    }
+    groupEncounterDate.push({
+      date: moment(key).format("MM/DD/YYYY"),
+      startPage: optionPage,
+    });
+  }
+  const findPageNumber = groupEncounterDate.filter((i) => i.date === date);
+  if (findPageNumber.length != 0) {
+    if(setIsModalOpenValidCodes){
+      setIsModalOpenValidCodes(true);
+      var headerName = patientDocumentResult
+      ? patientDocumentResult.patientId +
+        " / " +
+        patientDocumentResult.patientName +
+        " / " +
+        date
+      : "";
+    setFileModalHeader(headerName);
+    }
+    var date = findPageNumber[0].date;
+    if (findPageNumber[0].startPage.length != 0) {
+      var pageNumber = findPageNumber[0].startPage[0].pageNumber;
+      var splitPoint = date.substring(" ", 5);
+      setSearch({
+        value: splitPoint,
+        page: pageNumber,
+      });
+    }
+  }
 };
 
 export const getCaptureSectionBackgroundFile = (
@@ -49,7 +109,7 @@ export const getCaptureSectionBackgroundFile = (
   setIsModalOpenValidCodes,
   setFileModalHeader,
   fileId,
-  patientDocumentResult,
+  patientDocumentResult
 ) => {
   var dublicateCaptureDelete = removeDuplicates(value);
   return dublicateCaptureDelete.map((res) => {
@@ -74,10 +134,10 @@ export const getCaptureSectionBackgroundFile = (
             setIsModalOpenLab,
             setIsModalOpenRadiology,
             setIsModalOpenValidCodes,
-            setFileModalHeader,fileId,
+            setFileModalHeader,
+            fileId,
             patientDocumentResult,
-          
-        })
+          })
         }
         style={{ backgroundColor: backColor, color: textColor }}
         className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
@@ -189,73 +249,83 @@ export const handleSubmitValidNotes = async ({
   setConfirmNotesModalValid,
   getPatientDetailsReload,
   isValidAction,
-  selectInvalidDetails
+  selectInvalidDetails,
+  dispatch,
 }) => {
-  console.log(values)
-  console.log(selectInvalidDetails)
-  console.log(isValidAction)
-
-  // setFileLoading(true);
-    setConfirmNotesModalValid(false);
-    var apiURL = "";
-    if (isValidAction == "validToSuggested") {
-      apiURL = "dbservice/update/move/validtosuggested";
-    }
-    if (isValidAction == "validToDeleted") {
-      apiURL = "dbservice/update/move/validtodeleted";
-    }
-    if (isValidAction == "suggestedToDeleted") {
-      apiURL = "dbservice/update/move/suggestedtodeleted";
-    }
-    if (isValidAction == "suggestedToValid") {
-      apiURL = "dbservice/update/move/suggestedtovalid";
-    }
-    if (isValidAction == "deletedToSuggested") {
-      apiURL = "dbservice/update/move/deletedtoSuggested";
-    }
-    if (isValidAction == "deletedToValid") {
-      apiURL = "dbservice/update/move/deletedtovalid";
-    }
-    try {
-      var patientId = localStorage.getItem("patientId");
-      var userId = localStorage.getItem("userId");
-      var dataFormatSuggested = {
-        userId: userId,
-        patientId: patientId,
-        diagnosisCode: selectInvalidDetails.diagnosisCode,
-        actualDescription: selectInvalidDetails.actualDescription,
-        dbDescription: selectInvalidDetails.dbDescription,
-        notes: values.reason,
-        dos: selectInvalidDetails.dos,
-        encounterDate: selectInvalidDetails.encounterDate,
-        capturedSections: selectInvalidDetails.capturedSections,
-      };
-      const response = await axios.put(
-        ENDPOINTS.apiEndoint + apiURL,
-        dataFormatSuggested
-      );
-      var result = response.data;
-      if (result.status == "SUCCESS") {
-        notification.success({
-          message: result.message,
-          placement: "top",
-          duration: 1,
-        });
-        getPatientDetailsReload(localPatientId, localOrgId, localTenantId);
-      } else {
-        notification.error({
-          message: result.response,
-          placement: "top",
-          duration: 1,
-        });
-        setFileLoading(false);
-      }
-    } catch (err) {
-      notification.error({
-        message: err?.response?.data?.response,
-      });
+  setFileLoading(true);
+  setConfirmNotesModalValid(false);
+  var apiURL = "";
+  if (
+    isValidAction.name == "Move to Suggested" &&
+    isValidAction.title == "HCC"
+  ) {
+    apiURL = "dbservice/update/move/validtosuggested";
+  }
+  if (isValidAction.name == "Move to Deleted" && isValidAction.title == "HCC") {
+    apiURL = "dbservice/update/move/validtodeleted";
+  }
+  if (
+    isValidAction.name == "Move to Deleted" &&
+    isValidAction.title == "SUGGESTED"
+  ) {
+    apiURL = "dbservice/update/move/suggestedtodeleted";
+  }
+  if (
+    isValidAction.name == "Move to HCC" &&
+    isValidAction.title == "SUGGESTED"
+  ) {
+    apiURL = "dbservice/update/move/suggestedtovalid";
+  }
+  if (
+    isValidAction.name == "Move to Suggested" &&
+    isValidAction.title == "DELETED"
+  ) {
+    apiURL = "dbservice/update/move/deletedtoSuggested";
+  }
+  if (isValidAction.name == "Move to HCC" && isValidAction.title == "DELETED") {
+    apiURL = "dbservice/update/move/deletedtovalid";
+  }
+  try {
+    var patientId = localStorage.getItem("patientId");
+    var userId = localStorage.getItem("userId");
+    var dataFormatSuggested = {
+      userId: userId,
+      patientId: patientId,
+      diagnosisCode: selectInvalidDetails.diagnosisCode,
+      actualDescription: selectInvalidDetails.actualDescription,
+      dbDescription: selectInvalidDetails.dbDescription,
+      notes: values.reason,
+      dos: selectInvalidDetails.dos,
+      encounterDate: selectInvalidDetails.encounterDate,
+      capturedSections: selectInvalidDetails.capturedSections,
+    };
+    const response = await axios.put(
+      ENDPOINTS.apiEndoint + apiURL,
+      dataFormatSuggested
+    );
+    var result = response.data;
+    if (result.status == "SUCCESS") {
       setFileLoading(false);
+      notification.success({
+        message: result.message,
+        placement: "top",
+        duration: 1,
+      });
+      dispatch(getPatientDetailsResult(patientId));
+    } else {
+      setFileLoading(false);
+      notification.error({
+        message: result.response,
+        placement: "top",
+        duration: 1,
+      });
     }
+  } catch (err) {
+    setFileLoading(false);
+    notification.error({
+      message: err?.response?.data?.response,
+    });
+  }
 };
 
 const findValueDocuments = async (
@@ -304,7 +374,7 @@ const findValueDocuments = async (
       setSearch({
         value: splitPoint,
         page: "",
-        headers:true,
+        headers: true,
       });
     }
   } catch (error) {
@@ -312,7 +382,7 @@ const findValueDocuments = async (
       value: headerNames,
       headers: true,
     });
-    setFileLoading(false)
+    setFileLoading(false);
   }
 };
 
@@ -333,7 +403,7 @@ export const findValueDocument = async ({
   patientDocumentResult,
 }) => {
   setFileLoading(true);
- 
+
   const encounterDatesValue = encounterDate.split(",");
   var splitPoint;
   var pageNumber = null;
@@ -344,15 +414,16 @@ export const findValueDocument = async ({
     stringFileWord: actualDescription.substring(" ", 20),
     diagnosisCode: diagnosisCode,
   };
-  var headerName = patientDocumentResult?
-    patientDocumentResult.patientId +
-    " / " +
-    patientDocumentResult.patientName +
-    " / " +
-    diagnosisCode +
-    " - (" +
-    headerNames +
-    ")":"";
+  var headerName = patientDocumentResult
+    ? patientDocumentResult.patientId +
+      " / " +
+      patientDocumentResult.patientName +
+      " / " +
+      diagnosisCode +
+      " - (" +
+      headerNames +
+      ")"
+    : "";
   setFileModalHeader(headerName);
   try {
     if (documentPlace === "Lab" || documentPlace === "Radio") {
@@ -367,15 +438,15 @@ export const findValueDocument = async ({
         setIsModalOpenRadiology(true);
       }
     } else {
-     if(patientDocumentResult){
-       setIsModalOpenValidCodes(true);
-     }
+      if (patientDocumentResult) {
+        setIsModalOpenValidCodes(true);
+      }
       const response = await axios.post(
         ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
         data
       );
       var result = response.data.response;
-      console.log(response)
+      console.log(response);
       if (response?.data?.status == "SUCCESS") {
         pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
         splitPoint = result?.searchString;
@@ -385,7 +456,7 @@ export const findValueDocument = async ({
             encounterDate,
             actualDescription,
             setSearch,
-            setFileLoading,
+            setFileLoading
           );
         }
         if (pageNumber == fileInitialPage) {
@@ -420,12 +491,20 @@ export const findValueDocument = async ({
   }
 };
 
-export const moveToAnotherAction = (setConfirmNotesModalValid,setIsValidAction,name) =>
-new Promise((resolve) => {
-  setTimeout(() =>
-    resolve(
-      setConfirmNotesModalValid(true),
-      setIsValidAction(name)
-    )
-  );
-});
+export const moveToAnotherAction = (
+  setConfirmNotesModalValid,
+  setIsValidAction,
+  name,
+  title
+) =>
+  new Promise((resolve) => {
+    setTimeout(() =>
+      resolve(
+        setConfirmNotesModalValid(true),
+        setIsValidAction({
+          name: name,
+          title: title,
+        })
+      )
+    );
+  });
