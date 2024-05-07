@@ -43,6 +43,7 @@ import { pdfUrl } from "../../../../../../stores/authflow/reducers";
 import HccCards from "../../components/HCC";
 import ModelIndex from "../../components/model/Index";
 import { getPatientDetails } from "../../components/function/GetData";
+import { handleSubmitValidNotes } from "../../components/function/ReusableFunctions";
 
 const File = ({
   popoverVisible,
@@ -700,19 +701,13 @@ const File = ({
       </div>
       <ModelIndex
         validated={validated}
-        handleSubmit={(event) =>
-          handleSubmitValidNotes(
-            event,
-            setFileLoading,
-            setConfirmNotesModalValid,
-            getPatientDetailsReload,
-            setValidated
-          )
-        }
         title={selectDiseasesName}
         openState={confirmNotesModalValid}
         handleCloseModal={handleCloseModal}
         handleChangeSuggested={handleChangeSuggested}
+        setFileLoading={setFileLoading}
+        setConfirmNotesModalValid={setConfirmNotesModalValid}
+        getPatientDetailsReload={getPatientDetailsReload}
       />
 
       <ModelIndex

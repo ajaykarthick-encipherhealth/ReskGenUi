@@ -4,6 +4,7 @@ import { Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import CamboTree from "../../hcc/org";
 import PdfViewer from "../../PdfViewerComponent";
+import { handleSubmitValidNotes } from "../function/ReusableFunctions";
 
 const ModelIndex = ({
   validated,
@@ -16,6 +17,9 @@ const ModelIndex = ({
   labReportFile,
   search,
   modalOpenValidContent,
+  setFileLoading,
+  setConfirmNotesModalValid,
+  getPatientDetailsReload,
 }) => {
   return (
     <Modal
@@ -41,7 +45,16 @@ const ModelIndex = ({
       ) : (
         <div className="offcanvas-body">
           <div className="container-fluid">
-            <Form noValidate validated={validated} onSubmit={handleSubmit}>
+            <Form
+             onSubmit={(e)=>
+            //   handleSubmitValidNotes(
+            //   e,
+            //     setFileLoading,
+            //     setConfirmNotesModalValid,
+            //     getPatientDetailsReload,
+            // )
+            console.log(e)
+            }>
               <div className="row">
                 <div className="col-xl-12 mb-3">
                   <Form.Label>

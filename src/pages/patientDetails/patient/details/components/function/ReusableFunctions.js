@@ -190,6 +190,7 @@ export const handleSubmitValidNotes = async ({
   getPatientDetailsReload,
   setValidated,
 }) => {
+  console.log(event)
   setFileLoading(true);
   const form = event.currentTarget;
   event.preventDefault();
