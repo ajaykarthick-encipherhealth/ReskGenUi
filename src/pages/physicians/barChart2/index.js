@@ -18,7 +18,7 @@ const BarChartMeat = ({data}) => {
     series: [
       {
         type: "bar",
-        data: data.map((value, index) => ({
+        data: data?.map((value, index) => ({
           value: value,
           itemStyle: {
             color: colors[index]
