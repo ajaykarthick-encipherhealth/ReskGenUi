@@ -62,6 +62,40 @@ import {
 } from "../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import { actions as workflowActions } from "../../../../stores/reviewer/workqueue";
 
+export const navigetPageDetails = async (
+  pageTitle,
+  setSideNavLabelActiveKey,
+  setPatientDocumentResult,
+  setActiveTab,
+  setIsLoadingDos,
+  setIsLoading
+) => {
+  setSideNavLabelActiveKey(pageTitle);
+  var patientId = localStorage.getItem("patientId");
+  if (pageTitle == "HCC" && patientId) {
+    const response = await axios.get(
+      ENDPOINTS.apiEndoint +
+        `dbservice/patient/compute/get?patientid=${patientId}&orgid=${localOrgId}`
+    );
+    if (response.data) {
+      var result = response.data.response;
+      setPatientDocumentResult(result);
+    }
+    setActiveTab(1);
+    setIsLoadingDos(false);
+  }
+  if (pageTitle == "NON HCC") {
+    setActiveTab(2);
+    setIsLoadingDos(false);
+  }
+  if (pageTitle == "Radiology") {
+    setActiveTab(3);
+  }
+  if (pageTitle == "Lab Report") {
+    setActiveTab(4);
+  }
+  setIsLoading(false);
+};
 const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -150,8 +184,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [workListPatientId, setWorkListPatientId] = useState(null);
   const [isFileCheck, setIsFileCheck] = useState(false);
-
-
+  
   const flagPostList = getFlagsData?.response?.map((item) => ({
     value: item?.id,
     label: (
@@ -242,7 +275,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
         setIsFileCheck(true);
       }
     }
-  }, [patientDetailsResult?.result?.response?.fileDetailDTO?.azureBlobPath]);
+  }, [patientDetailsResult?.result?.response?.fileDetailDTO?.azureBlobPath])
 
   const getPatientIdDetails = async (patientId, flagFirstData) => {
     const response = await axios.get(
@@ -735,34 +768,6 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
       iconStyle: IMAGES.visitDataLabreport,
     },
   ];
-
-  const navigetPageDetails = async (pageTitle) => {
-    setSideNavLabelActiveKey(pageTitle);
-    var patientId = localStorage.getItem("patientId");
-    if (pageTitle == "HCC" && patientId) {
-      const response = await axios.get(
-        ENDPOINTS.apiEndoint +
-          `dbservice/patient/compute/get?patientid=${patientId}&orgid=${localOrgId}`
-      );
-      if (response.data) {
-        var result = response.data.response;
-        setPatientDocumentResult(result);
-      }
-      setActiveTab(1);
-      setIsLoadingDos(false);
-    }
-    if (pageTitle == "NON HCC") {
-      setActiveTab(2);
-      setIsLoadingDos(false);
-    }
-    if (pageTitle == "Radiology") {
-      setActiveTab(3);
-    }
-    if (pageTitle == "Lab Report") {
-      setActiveTab(4);
-    }
-    setIsLoading(false);
-  };
 
   const handleSubmitPatientFile = async (event) => {
     const form = event.currentTarget;
@@ -1663,7 +1668,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
         <NavBar />
         <div className={visitStyles.headerFixed}>
-          <div className="content-body">
+          <div class="content-body">
             {sectionColorList?.loading == true ? (
               <SpinnerDots />
             ) : (
@@ -2245,7 +2250,14 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                                       <li
                                         className={`${visitStyles.sideNavLabel}`}
                                         onClick={() =>
-                                          navigetPageDetails(data.type)
+                                          navigetPageDetails(
+                                            data.type,
+                                            setSideNavLabelActiveKey,
+                                            setPatientDocumentResult,
+                                            setActiveTab,
+                                            setIsLoadingDos,
+                                            setIsLoading
+                                          )
                                         }
                                       >
                                         <a
@@ -2794,6 +2806,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                           <AdminWorkList
                             localUserId={localUserId}
                             setWorkListPatientId={setWorkListPatientId}
+                           setIsModalComments={setIsModalComments}
                           />
                         ) : userRole == "supervisor" ? (
                           <SupervisorWorkList
@@ -2971,6 +2984,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                               <span className={visitStyles.commentsDesc}>
                                 {data.comments}
                               </span>
+                              {console.log(data, "time")}
                               <span className={visitStyles.commentsTime}>
                                 {moment(data.commentCreatedAt).format(
                                   "MM-DD-YYYY hh:mm:A"

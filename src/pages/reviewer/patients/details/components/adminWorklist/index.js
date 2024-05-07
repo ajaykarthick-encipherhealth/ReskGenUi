@@ -30,7 +30,7 @@ export function extractLatestData(notes) {
   return declinedData;
 }
 
-const AdminWorkList = ({ localUserId, setWorkListPatientId }) => {
+const AdminWorkList = ({ localUserId, setWorkListPatientId,setIsModalComments }) => {
   const dispatch = useDispatch();
   const result = useSelector((state) => state.adminList.patients);
   const { RangePicker } = DatePicker;
@@ -86,6 +86,7 @@ const AdminWorkList = ({ localUserId, setWorkListPatientId }) => {
 
   const getPatientListToDetails = (id) => {
     setWorkListPatientId(id);
+    setIsModalComments(false)
   };
 
   const handleDatePickerChange = async (dateString) => {
