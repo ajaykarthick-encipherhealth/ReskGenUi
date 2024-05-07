@@ -3,12 +3,12 @@ import ReactECharts from 'echarts-for-react';
 
 const PieChart = ({data}) => {
 
-  const total = data.reduce((acc, curr) => acc + curr.value, 0);
+  const total = data?.reduce((acc, curr) => acc + curr?.value, 0);
 
   // Calculate percentages
-  const percentageData = data.map(item => ({
+  const percentageData = data?.map(item => ({
     ...item,
-    value: ((item.value / total) * 100).toFixed(2),
+    value: ((item?.value / total) * 100).toFixed(2),
     label: {
       show: true,
       position: 'outside',
@@ -40,7 +40,7 @@ const PieChart = ({data}) => {
         labelLine: {
           show: true,
         },
-        data: percentageData,
+        data: percentageData?.length>0?percentageData:[],
       },
     ],
   };

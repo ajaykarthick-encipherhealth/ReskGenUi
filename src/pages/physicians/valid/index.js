@@ -14,12 +14,10 @@ const Valid = ({ data, counts }) => {
         <div className="col-6">
           <div className={Styles.title}>DIAGNOSIS CODES</div>
           <div className="d-flex">
-            <BarChart
-              diagnosisCode={data
-                .map((item) => item.diagnosisCode)
-                .splice(0, 9)}
-              diagnosisCodeCount={data.map((item) => item.count).splice(0, 9)}
-            />
+            {data && <BarChart
+              diagnosisCode={data?.map((item) => item?.diagnosisCode)?.splice(0, 9)}
+              diagnosisCodeCount={data?.map((item) => item?.count)?.splice(0, 9)}
+            />}
             <div className="d-flex">
               <div
                 className="px-3"
@@ -42,10 +40,10 @@ const Valid = ({ data, counts }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {data.map((item) => (
+                    {data?.map((item) => (
                       <tr>
-                        <td className="p-2">{item.diagnosisCode}</td>
-                        <td>{item.count}</td>
+                        <td className="p-2">{item?.diagnosisCode}</td>
+                        <td>{item?.count}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -56,7 +54,7 @@ const Valid = ({ data, counts }) => {
         </div>
         <div className="col-3">
           <div className={Styles.title}>ACCURACY</div>
-          <PieChart data={pieValues}/>
+          {pieValues && <PieChart data={pieValues}/>}
         </div>
         <div className="col-3">
           <div
@@ -67,7 +65,7 @@ const Valid = ({ data, counts }) => {
             </span>
           </div>
           <div className={`${Styles.card_title} d-flex justify-content-center`}>
-            <div>{counts.validDiseaseRafSum}</div>
+            <div>{counts?.validDiseaseRafSum}</div>
           </div>
           <div
             className={`valid-text d-flex justify-content-center mt-3 mb-1 ${Styles.title_cards}`}
@@ -77,7 +75,7 @@ const Valid = ({ data, counts }) => {
             </span>
           </div>
           <div className={`${Styles.card_title} d-flex justify-content-center`}>
-            <div>${counts.validRafAmount}</div>
+            <div>${counts?.validRafAmount}</div>
           </div>
           <div
             className={`valid-text d-flex justify-content-center mt-3 mb-1 ${Styles.title_card_total}`}
@@ -87,7 +85,7 @@ const Valid = ({ data, counts }) => {
             </span>
           </div>
           <div className={`${Styles.card_title} d-flex justify-content-center`}>
-            <div>{data.map((item) => item.count).reduce((tol, item) => tol + item)}</div>
+            <div>{data?.map((item) => item?.count).reduce((tol, item) => tol + item)}</div>
           </div>
         </div>
       </div>
