@@ -61,7 +61,7 @@ const ModelIndex = ({
               layout="vertical"
               autoComplete="off"
               form={form}
-              onFinish={(values) =>
+              onFinish={(values) => {
                 handleSubmitValidNotes({
                   values,
                   setFileLoading,
@@ -71,7 +71,9 @@ const ModelIndex = ({
                   selectInvalidDetails,
                   dispatch
                 })
+                form.resetFields();
               }
+            }
             >
               <Form.Item
                 label={
@@ -99,7 +101,10 @@ const ModelIndex = ({
                     Submit
                   </Button>
                   <Button
-                    onClick={() => handleCloseModal()}
+                    onClick={() => {
+                      handleCloseModal();
+                      form.resetFields();
+                    }}
                     className="btn btn-danger btn-sm light ms-1"
                   >
                     Cancel
@@ -107,7 +112,6 @@ const ModelIndex = ({
                 </Space>
               </Form.Item>
             </Form>
-           
           </div>
         </div>
       )}
