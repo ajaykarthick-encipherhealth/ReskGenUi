@@ -33,6 +33,7 @@ import {
   ProviderMenuList,
   EHRMenuList,
   PhysicianMenuList,
+  PhysicanMenu,
 } from "./Menu";
 import ENDPOINTS from "../../../utility/enpoints";
 import {
@@ -345,7 +346,8 @@ const Header = ({
       case "ehr":
         return EHRMenuList;
       case "physician":
-        return PhysicianMenuList;
+        // return PhysicianMenuList;
+        return PhysicanMenu;
       default:
         return [];
     }
