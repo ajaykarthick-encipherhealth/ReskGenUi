@@ -136,10 +136,14 @@ const HccCards = ({
                   </Popover>
                 </span>
               </div>
-
+               {/* {data.defaultPosition} */}
               <div className="d-flex">
-                {data.defaultPosition ==
-                "VALID" ? null : data.defaultPosition == "INVALID" ? (
+                {cardTitle == "SUGGESTED" || cardTitle == "DELETED" ?
+                <>
+                 {data.defaultPosition ==
+                "VALID" ?  <span
+                className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
+              ></span> : data.defaultPosition == "INVALID" ? (
                   <span
                     className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
                   ></span>
@@ -152,6 +156,8 @@ const HccCards = ({
                     className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
                   ></span>
                 ) : null}
+                </> : null}
+               
 
                 <Popover
                   onClick={() =>
