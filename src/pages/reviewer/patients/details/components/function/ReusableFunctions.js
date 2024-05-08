@@ -45,6 +45,8 @@ export const getEncounterDateBackground = ({
             patientDocumentResult,
             selectMeatResult,
             datas
+            patientDocumentResult
+
           )
         }
         className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
@@ -137,7 +139,9 @@ export const getCaptureSectionBackgroundFile = (
   setIsModalOpenValidCodes,
   setFileModalHeader,
   fileId,
-  patientDocumentResult
+  patientDocumentResult,
+  fileInitialPage,
+  setFileInitialPage
 ) => {
   var dublicateCaptureDelete = removeDuplicates(value);
   return dublicateCaptureDelete.map((res) => {
@@ -165,6 +169,8 @@ export const getCaptureSectionBackgroundFile = (
             setFileModalHeader,
             fileId,
             patientDocumentResult,
+            fileInitialPage,
+            setFileInitialPage,
           })
         }
         style={{ backgroundColor: backColor, color: textColor }}
@@ -360,12 +366,15 @@ const findValueDocuments = async (
   headerNames,
   encounterDate,
   actualDescription,
-  setFileLoading
+  setSearch,
+  setFileLoading,
+  fileId,
+  fileInitialPage,
+  setFileInitialPage
 ) => {
   setFileLoading(true);
-  var fileId = patientFileDTO.fileId;
+  var fileId = fileId?.result?.response?.fileId;
   const encounterDatesValue = encounterDate.split(",");
-
   var splitPoint = actualDescription.substring(" ", 20);
   var pageNumber = null;
   var data = {
@@ -379,10 +388,10 @@ const findValueDocuments = async (
       ENDPOINTS.apiEndoint + `dbservice/pageNumber`,
       data
     );
-    var result = response.data.response;
-    if (response?.data?.status == "SUCCESS") {
+    var result = response?.data?.response;
+    if (response?.data?.status === "SUCCESS") {
       pageNumber = result?.second[0] ? result?.second[0] : null;
-      if (result?.first == false) {
+      if (!result?.first) {
         splitPoint = headerNames;
       }
       if (pageNumber == fileInitialPage) {
@@ -393,24 +402,32 @@ const findValueDocuments = async (
           duration: 1,
         });
       }
+
       setSearch({
         value: splitPoint,
         page: pageNumber,
         headers: result?.first,
       });
+      setFileInitialPage(pageNumber);
+      setFileLoading(false);
     } else {
+      splitPoint = headerNames;
       setSearch({
         value: splitPoint,
         page: "",
         headers: true,
       });
+      setFileLoading(false);
+      setFileInitialPage(null);
     }
   } catch (error) {
     setSearch({
       value: headerNames,
+      page: "",
       headers: true,
     });
     setFileLoading(false);
+    setFileInitialPage(null);
   }
 };
 
@@ -429,6 +446,8 @@ export const findValueDocument = async ({
   setFileModalHeader,
   fileId,
   patientDocumentResult,
+  fileInitialPage,
+  setFileInitialPage,
 }) => {
   setFileLoading(true);
 
@@ -436,7 +455,7 @@ export const findValueDocument = async ({
   var splitPoint;
   var pageNumber = null;
   var data = {
-    fileId: fileId?.result?.fileDetailDTO,
+    fileId: fileId?.result?.response?.fileId,
     header: headerNames,
     dos: encounterDatesValue,
     stringFileWord: actualDescription.substring(" ", 20),
@@ -483,7 +502,10 @@ export const findValueDocument = async ({
             encounterDate,
             actualDescription,
             setSearch,
-            setFileLoading
+            setFileLoading,
+            fileId,
+            fileInitialPage,
+            setFileInitialPage
           );
         }
         if (pageNumber == fileInitialPage) {
@@ -499,21 +521,20 @@ export const findValueDocument = async ({
           page: result?.pageNumber,
           headers: false,
         });
+        setFileInitialPage(pageNumber);
       } else {
-        setSearch({
-          value: headerNames,
-          page: "",
-          headers: true,
-        });
+        splitPoint = headerName;
+        setFileInitialPage(null);
       }
     }
   } catch (error) {
-    setSearch({
-      value: headerNames,
-      page: "",
-      headers: true,
-    });
+    // setSearch({
+    //   value: headerNames,
+    //   page: "",
+    //   headers: true,
+    // });
     setFileLoading(false);
+    setFileInitialPage(pageNumber);
     // }
   }
 };

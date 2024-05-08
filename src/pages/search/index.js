@@ -120,19 +120,19 @@ const Searches = ({
     }));
   };
 
-  const createdICDCodes = async(type) => {
+  const createdICDCodes = async (type) => {
     if (type == "edit") {
       const res = await createICDCode({
         id: action.id,
         code: updateDetails.codes,
         description: updateDetails.description,
         years: years.map((date) => date.value),
-        billable: selectBillable ? selectBillable : "",
+        billable: selectBillable.value ? selectBillable.value : "",
       });
       if (res.status == "SUCCESS") {
         getResponePopup(getICDStatus);
         setModalOpen("");
-        setSelectBillable(null)
+        setSelectBillable(null);
         getAllICDCodes(
           search,
           page,
@@ -190,7 +190,7 @@ const Searches = ({
     try {
       const res = await getSuggestedCodes(code);
       if (res.response) {
-        setSuggestedCodes([code, ...res.response]);
+        setSuggestedCodes([...res.response]);
       }
     } catch (error) {
       console.log(error);
@@ -214,9 +214,13 @@ const Searches = ({
           ...updateDetails,
           codes: editData.code,
           description: editData.description,
+          matchCode: editData.code + " - " + editData.description,
         });
         setYears(year);
-        setSelectBillable({ label: editData?.billable, value: editData?.billable });
+        setSelectBillable({
+          label: editData?.billable,
+          value: editData?.billable,
+        });
       } else if (action.type == "delete") {
         setDeleteModal(true);
       }
@@ -605,7 +609,14 @@ const Searches = ({
                       placeholder={"Select Billable"}
                     />
                   </div>
-                  <div>
+                  <div
+                    className="card py-2"
+                    style={{
+                      maxHeight: "200px",
+                      overflowY: "scroll",
+                      background: "#ebebeb",
+                    }}
+                  >
                     {suggestedCode?.map((item) => (
                       <div class="form-check mx-2 text-start">
                         <input
@@ -613,10 +624,16 @@ const Searches = ({
                           type="radio"
                           name="selectCodes"
                           id="selectCodes"
-                          checked={updateDetails?.codes == item}
+                          checked={
+                            updateDetails?.matchCode == item
+                          }
                           onClick={() =>
                             setUpdateDetails((prev) => {
-                              return { ...prev, codes: item };
+                              return {
+                                ...prev,
+                                codes: item.split(" ")[0],
+                                matchCode: item,
+                              };
                             })
                           }
                         ></input>
