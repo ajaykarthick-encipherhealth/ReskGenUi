@@ -16,17 +16,37 @@ export const getEncounterDateBackground = ({
   setIsModalOpenValidCodes,
   setSearch,
   setFileModalHeader,
-  patientDocumentResult
+  patientDocumentResult,
+  selectMeatResult,
+  datas,
 }) => {
+  console.log(
+    value,
+    encounterDateMatching,
+    fileDosPageNumberList,
+    setIsModalOpenValidCodes,
+    setSearch,
+    setFileModalHeader,
+    patientDocumentResult,
+    "test"
+  );
   return value?.map((res) => {
     const result = encounterDateMatching.filter((res2) => res2.name == res);
     var backColor = result[0]?.colors;
     var sectionMapArr = res ? (
       <span
-        onClick={() => getEncounterDetails(res, fileDosPageNumberList,setIsModalOpenValidCodes,setSearch,
-          setFileModalHeader,
-          patientDocumentResult
-        )}
+        onClick={() =>
+          getEncounterDetails(
+            res,
+            fileDosPageNumberList,
+            setIsModalOpenValidCodes,
+            setSearch,
+            setFileModalHeader,
+            patientDocumentResult,
+            selectMeatResult,
+            datas
+          )
+        }
         className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
       >
         <i>
@@ -41,10 +61,19 @@ export const getEncounterDateBackground = ({
   });
 };
 
-const getEncounterDetails = async (date, fileDosPageNumberList,setIsModalOpenValidCodes,setSearch,
+const getEncounterDetails = async (
+  date,
+  fileDosPageNumberList,
+  setIsModalOpenValidCodes,
+  setSearch,
   setFileModalHeader,
-  patientDocumentResult
+  patientDocumentResult,
+  selectMeatResult,
+  datas
 ) => {
+  console.log(setIsModalOpenValidCodes, "test1");
+  selectMeatResult ? selectMeatResult(datas) : "";
+
   var result = fileDosPageNumberList?.result;
   var groupEncounterDate = [];
   for (var key in result?.response) {
@@ -71,16 +100,16 @@ const getEncounterDetails = async (date, fileDosPageNumberList,setIsModalOpenVal
   }
   const findPageNumber = groupEncounterDate.filter((i) => i.date === date);
   if (findPageNumber.length != 0) {
-    if(setIsModalOpenValidCodes){
+    if (setIsModalOpenValidCodes) {
       setIsModalOpenValidCodes(true);
       var headerName = patientDocumentResult
-      ? patientDocumentResult.patientId +
-        " / " +
-        patientDocumentResult.patientName +
-        " / " +
-        date
-      : "";
-    setFileModalHeader(headerName);
+        ? patientDocumentResult.patientId +
+          " / " +
+          patientDocumentResult.patientName +
+          " / " +
+          date
+        : "";
+      setFileModalHeader(headerName);
     }
     var date = findPageNumber[0].date;
     if (findPageNumber[0].startPage.length != 0) {
@@ -507,10 +536,8 @@ export const moveToAnotherAction = (
     );
   });
 
-  const ReusableFunctions = () => {
-    return (
-     <></>
-    )
-  }
-  
-  export default ReusableFunctions;
+const ReusableFunctions = () => {
+  return <></>;
+};
+
+export default ReusableFunctions;
