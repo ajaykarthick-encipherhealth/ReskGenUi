@@ -236,6 +236,7 @@ const VisitData = ({
                 searchQuery={search?.value ? search?.value : ""}
                 pageNumber={search?.page ? search?.page : 1}
                 headers={search?.headers}
+                headerContent={search?.headerContent}
               />
             )}
           </div>

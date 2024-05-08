@@ -16,17 +16,29 @@ export const getEncounterDateBackground = ({
   setIsModalOpenValidCodes,
   setSearch,
   setFileModalHeader,
-  patientDocumentResult
+  patientDocumentResult,
+  selectMeatResult,
+  datas,
 }) => {
   return value?.map((res) => {
     const result = encounterDateMatching.filter((res2) => res2.name == res);
     var backColor = result[0]?.colors;
     var sectionMapArr = res ? (
       <span
-        onClick={() => getEncounterDetails(res, fileDosPageNumberList,setIsModalOpenValidCodes,setSearch,
-          setFileModalHeader,
-          patientDocumentResult
-        )}
+        onClick={() =>
+          getEncounterDetails(
+            res,
+            fileDosPageNumberList,
+            setIsModalOpenValidCodes,
+            setSearch,
+            setFileModalHeader,
+            patientDocumentResult,
+            selectMeatResult,
+            datas,
+            patientDocumentResult
+
+          )
+        }
         className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
       >
         <i>
@@ -41,10 +53,17 @@ export const getEncounterDateBackground = ({
   });
 };
 
-const getEncounterDetails = async (date, fileDosPageNumberList,setIsModalOpenValidCodes,setSearch,
+const getEncounterDetails = async (
+  date,
+  fileDosPageNumberList,
+  setIsModalOpenValidCodes,
+  setSearch,
   setFileModalHeader,
-  patientDocumentResult
+  patientDocumentResult,
+  selectMeatResult,
+  datas
 ) => {
+  selectMeatResult ? selectMeatResult(datas) : "";
   var result = fileDosPageNumberList?.result;
   var groupEncounterDate = [];
   for (var key in result?.response) {
@@ -71,16 +90,16 @@ const getEncounterDetails = async (date, fileDosPageNumberList,setIsModalOpenVal
   }
   const findPageNumber = groupEncounterDate.filter((i) => i.date === date);
   if (findPageNumber.length != 0) {
-    if(setIsModalOpenValidCodes){
+    if (setIsModalOpenValidCodes) {
       setIsModalOpenValidCodes(true);
       var headerName = patientDocumentResult
-      ? patientDocumentResult.patientId +
-        " / " +
-        patientDocumentResult.patientName +
-        " / " +
-        date
-      : "";
-    setFileModalHeader(headerName);
+        ? patientDocumentResult.patientId +
+          " / " +
+          patientDocumentResult.patientName +
+          " / " +
+          date
+        : "";
+      setFileModalHeader(headerName);
     }
     var date = findPageNumber[0].date;
     if (findPageNumber[0].startPage.length != 0) {
@@ -108,7 +127,9 @@ export const getCaptureSectionBackgroundFile = (
   setIsModalOpenValidCodes,
   setFileModalHeader,
   fileId,
-  patientDocumentResult
+  patientDocumentResult,
+  fileInitialPage,
+  setFileInitialPage
 ) => {
   var dublicateCaptureDelete = removeDuplicates(value);
   return dublicateCaptureDelete.map((res) => {
@@ -136,6 +157,8 @@ export const getCaptureSectionBackgroundFile = (
             setFileModalHeader,
             fileId,
             patientDocumentResult,
+            fileInitialPage,
+            setFileInitialPage,
           })
         }
         style={{ backgroundColor: backColor, color: textColor }}
@@ -331,12 +354,15 @@ const findValueDocuments = async (
   headerNames,
   encounterDate,
   actualDescription,
-  setFileLoading
+  setSearch,
+  setFileLoading,
+  fileId,
+  fileInitialPage,
+  setFileInitialPage
 ) => {
   setFileLoading(true);
-  var fileId = patientFileDTO.fileId;
+  var fileId = fileId?.result?.response?.fileId;
   const encounterDatesValue = encounterDate.split(",");
-
   var splitPoint = actualDescription.substring(" ", 20);
   var pageNumber = null;
   var data = {
@@ -350,10 +376,10 @@ const findValueDocuments = async (
       ENDPOINTS.apiEndoint + `dbservice/pageNumber`,
       data
     );
-    var result = response.data.response;
-    if (response?.data?.status == "SUCCESS") {
+    var result = response?.data?.response;
+    if (response?.data?.status === "SUCCESS") {
       pageNumber = result?.second[0] ? result?.second[0] : null;
-      if (result?.first == false) {
+      if (!result?.first) {
         splitPoint = headerNames;
       }
       if (pageNumber == fileInitialPage) {
@@ -367,21 +393,31 @@ const findValueDocuments = async (
       setSearch({
         value: splitPoint,
         page: pageNumber,
-        headers: result?.first,
+        headers: false,
+        headerContent:headerNames
       });
+      setFileInitialPage(pageNumber);
+      setFileLoading(false);
     } else {
+      splitPoint = headerNames;
       setSearch({
         value: splitPoint,
         page: "",
         headers: true,
+        headerContent:headerNames
       });
+      setFileLoading(false);
+      setFileInitialPage(null);
     }
   } catch (error) {
     setSearch({
       value: headerNames,
+      page: "",
       headers: true,
+      headerContent:headerNames
     });
     setFileLoading(false);
+    setFileInitialPage(null);
   }
 };
 
@@ -400,14 +436,15 @@ export const findValueDocument = async ({
   setFileModalHeader,
   fileId,
   patientDocumentResult,
+  fileInitialPage,
+  setFileInitialPage,
 }) => {
   setFileLoading(true);
-
   const encounterDatesValue = encounterDate.split(",");
   var splitPoint;
   var pageNumber = null;
   var data = {
-    fileId: fileId?.result?.fileDetailDTO,
+    fileId: fileId?.result?.response?.fileId,
     header: headerNames,
     dos: encounterDatesValue,
     stringFileWord: actualDescription.substring(" ", 20),
@@ -429,6 +466,7 @@ export const findValueDocument = async ({
       setSearch({
         value: headerNames,
         headers: true,
+        headerContent:headerNames
       });
       setFileLoading(false);
       if (documentPlace === "Lab") {
@@ -437,8 +475,8 @@ export const findValueDocument = async ({
         setIsModalOpenRadiology(true);
       }
     } else {
-      if (patientDocumentResult) {
-        setIsModalOpenValidCodes(true);
+      if (patientDocumentResult && setIsModalOpenValidCodes) {
+          setIsModalOpenValidCodes(true);
       }
       const response = await axios.post(
         ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
@@ -454,7 +492,10 @@ export const findValueDocument = async ({
             encounterDate,
             actualDescription,
             setSearch,
-            setFileLoading
+            setFileLoading,
+            fileId,
+            fileInitialPage,
+            setFileInitialPage
           );
         }
         if (pageNumber == fileInitialPage) {
@@ -469,22 +510,22 @@ export const findValueDocument = async ({
           value: splitPoint,
           page: result?.pageNumber,
           headers: false,
+          headerContent:headerNames
         });
+        setFileInitialPage(pageNumber);
       } else {
-        setSearch({
-          value: headerNames,
-          page: "",
-          headers: true,
-        });
+        splitPoint = headerName;
+        setFileInitialPage(null);
       }
     }
   } catch (error) {
-    setSearch({
-      value: headerNames,
-      page: "",
-      headers: true,
-    });
+    // setSearch({
+    //   value: headerNames,
+    //   page: "",
+    //   headers: true,
+    // });
     setFileLoading(false);
+    setFileInitialPage(pageNumber);
     // }
   }
 };
@@ -507,10 +548,8 @@ export const moveToAnotherAction = (
     );
   });
 
-  const ReusableFunctions = () => {
-    return (
-     <></>
-    )
-  }
-  
-  export default ReusableFunctions;
+const ReusableFunctions = () => {
+  return <></>;
+};
+
+export default ReusableFunctions;
