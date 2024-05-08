@@ -20,16 +20,6 @@ export const getEncounterDateBackground = ({
   selectMeatResult,
   datas,
 }) => {
-  console.log(
-    value,
-    encounterDateMatching,
-    fileDosPageNumberList,
-    setIsModalOpenValidCodes,
-    setSearch,
-    setFileModalHeader,
-    patientDocumentResult,
-    "test"
-  );
   return value?.map((res) => {
     const result = encounterDateMatching.filter((res2) => res2.name == res);
     var backColor = result[0]?.colors;
@@ -71,9 +61,7 @@ const getEncounterDetails = async (
   selectMeatResult,
   datas
 ) => {
-  console.log(setIsModalOpenValidCodes, "test1");
   selectMeatResult ? selectMeatResult(datas) : "";
-
   var result = fileDosPageNumberList?.result;
   var groupEncounterDate = [];
   for (var key in result?.response) {
