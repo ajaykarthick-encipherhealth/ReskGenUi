@@ -8,7 +8,6 @@ import {
   faArrowsAlt,
   faSitemap,
   faPen,
-  faListDots,
 } from "@fortawesome/free-solid-svg-icons";
 import { SVGICON } from "../../../../../../jsx/constant/theme";
 import { QuestionCircleOutlined } from "@ant-design/icons";
@@ -163,126 +162,96 @@ const HccCards = ({
                 ) : null}
 
                 <Popover
+                  onClick={() =>
+                    getValidHccDetails(
+                      data.actualDescription,
+                      data.diagnosisCode
+                    )
+                  }
+                  content={PopContentHccVersion}
+                  title={data.diagnosisCode}
                   placement="bottom"
-                  title={""}
-                  content={() => (
-                    <>
-                      <div className="px-1">
-                        <Popover
-                          onClick={() =>
-                            getValidHccDetails(
-                              data.actualDescription,
-                              data.diagnosisCode
-                            )
-                          }
-                          content={PopContentHccVersion}
-                          title={data.diagnosisCode}
-                          placement="bottom"
-                          trigger="click"
-                        >
-                          {/* <Tooltip title="HCC Version Details" placement="bottom"> */}
-                          <div className="cr-pointer">
-                            <i className="cr-pointer">{SVGICON.infoIcon}</i>
-                            <span className="px-1">HCC Version Details</span>
-                          </div>
-                          {/* </Tooltip> */}
-                        </Popover>
-                      </div>
-
-                      <Popconfirm
-                        title="Choose an action"
-                        icon={
-                          <QuestionCircleOutlined
-                            style={{
-                              color: "blue",
-                            }}
-                          />
-                        }
-                        okText={
-                          data.getPlace == "Radio" || data.getPlace == "Lab"
-                            ? "Move to Deleted"
-                            : okText
-                        }
-                        cancelText={
-                          data.getPlace === "Radio" || data.getPlace === "Lab"
-                            ? ""
-                            : cancelText
-                        }
-                        onCancel={() =>
-                          moveToAnotherAction(
-                            setConfirmNotesModalValid,
-                            setIsValidAction,
-                            cancelText,
-                            cardTitle
-                          )
-                        }
-                        okButtonProps={{
-                          type: "default",
-                        }}
-                        cancelButtonProps={{
-                          type: "default",
-                        }}
-                        description={data.diagnosisCode}
-                        onConfirm={() =>
-                          moveToAnotherAction(
-                            setConfirmNotesModalValid,
-                            setIsValidAction,
-                            okText,
-                            cardTitle
-                          )
-                        }
-                        placement="bottom"
-                        onOpenChange={() =>
-                          onchangeValid(data.diagnosisCode, data)
-                        }
-                      >
-                        {
-                          <div className="cr-pointer d-flex">
-                            <div className={visitStyles.close_icon}>
-                              <FontAwesomeIcon
-                                icon={faArrowsAlt}
-                                style={{
-                                  size: 8,
-                                  color: "#a80404",
-                                }}
-                              />
-                            </div>
-                            <div className="px-2 mt-1">Actions</div>
-                          </div>
-                        }
-                      </Popconfirm>
-                      {data.isMostSpecific == true && (
-                        <div className="cr-pointer d-flex">
-                          <div
-                            className={visitStyles.close_icon}
-                            style={{ background: "#c7f3c6" }}
-                            onClick={() => {
-                              setOpens(true);
-                              setCombiTree([{ ...data, expanded: true }]);
-                            }}
-                          >
-                            <FontAwesomeIcon
-                              icon={faSitemap}
-                              style={{
-                                size: 8,
-                                color: "#088f39",
-                              }}
-                            />
-                          </div>
-                          <div className="px-2 mt-1">Combo Tree View</div>
-                        </div>
-                      )}
-                    </>
-                  )}
+                  trigger="click"
                 >
-                  <FontAwesomeIcon
-                    icon={faListDots}
-                    style={{
-                      size: 8,
-                      color: "#000",
-                    }}
-                  />
+                  <Tooltip title="HCC Version Details" placement="bottom">
+                    <i className="cr-pointer">{SVGICON.infoIcon}</i>
+                  </Tooltip>
                 </Popover>
+                <Popconfirm
+                  title="Choose an action"
+                  icon={
+                    <QuestionCircleOutlined
+                      style={{
+                        color: "blue",
+                      }}
+                    />
+                  }
+                  okText={
+                    data.getPlace == "Radio" || data.getPlace == "Lab"
+                      ? "Move to Deleted"
+                      : okText
+                  }
+                  cancelText={
+                    data.getPlace === "Radio" || data.getPlace === "Lab"
+                      ? ""
+                      : cancelText
+                  }
+                  onCancel={() =>
+                    moveToAnotherAction(
+                      setConfirmNotesModalValid,
+                      setIsValidAction,
+                      cancelText,
+                      cardTitle
+                    )
+                  }
+                  okButtonProps={{
+                    type: "default",
+                  }}
+                  cancelButtonProps={{
+                    type: "default",
+                  }}
+                  description={data.diagnosisCode}
+                  onConfirm={() =>
+                    moveToAnotherAction(
+                      setConfirmNotesModalValid,
+                      setIsValidAction,
+                      okText,
+                      cardTitle
+                    )
+                  }
+                  placement="leftTop"
+                  onOpenChange={() => onchangeValid(data.diagnosisCode, data)}
+                >
+                  <div className={visitStyles.close_icon}>
+                    {
+                      <FontAwesomeIcon
+                        icon={faArrowsAlt}
+                        style={{
+                          size: 8,
+                          color: "#a80404",
+                        }}
+                      />
+                    }
+                  </div>
+                </Popconfirm>
+                {data.isMostSpecific == true && (
+                  <div
+                    className={visitStyles.close_icon}
+                    style={{ background: "#c7f3c6" }}
+                    onClick={() => {
+                      setOpens(true);
+                      setCombiTree([{ ...data, expanded: true }]);
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faSitemap}
+                      style={{
+                        size: 8,
+                        color: "#088f39",
+                      }}
+                    />
+                  </div>
+                )}
               </div>
             </div>
             <div className="d-flex justify-content-between">
@@ -322,8 +291,7 @@ const HccCards = ({
                     setFileModalHeader,
                     fileId,
                     patientDocumentResult,
-                    fileInitialPage,
-                    setFileInitialPage
+                    fileInitialPage, setFileInitialPage
                   )}
                 </div>
               </div>
