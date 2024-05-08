@@ -12,6 +12,10 @@ import HeaderFilters from "../../../components/headerFilters";
 import { getUsers } from "../../../store/actions/adminAction/usersAction";
 import { AddUser } from "../../../services/adminServices/usersService";
 import { Paginator } from "primereact/paginator";
+import {
+  encyptingPass,
+  getValidatePassword,
+} from "../../../components/headerFilters/functions";
 const { Option } = Select;
 const options3 = [
   { value: "ALL", label: "ALL" },
@@ -78,9 +82,12 @@ const UserList = () => {
   const [form] = Form.useForm();
 
   const handleSubmit = async (userFormData) => {
+    const encrptedData = encyptingPass(userFormData?.password);
     userFormData.tenantId = localTenantId;
     userFormData.organizationId = localOrgId;
     userFormData.role = [userFormData?.role];
+    userFormData.password = encrptedData?.pass;
+    userFormData.passwordIv = encrptedData.iv;
     const response = await AddUser(userFormData, setFormData);
     if (response?.data?.status === "SUCCESS") {
       setAddUser(false);
@@ -193,9 +200,9 @@ const UserList = () => {
     }, 750);
   }, [addUser]);
 
-  const onRoleChange = (value) => {
-    console.log(value);
-  };
+  // const onRoleChange = (value) => {
+  //   // console.log(value);
+  // };
   const onFinish = (values) => {
     handleSubmit(values);
   };
@@ -356,7 +363,7 @@ const UserList = () => {
           onHide={() => {
             setAddUser(false);
             setRoleValue([]);
-            setRole('')
+            setRole("");
           }}
           className="offcanvas-end offcanvas-md-size"
           placement="end"
@@ -507,7 +514,7 @@ const UserList = () => {
                     >
                       <Select
                         placeholder="Select role"
-                        onChange={onRoleChange}
+                        // onChange={onRoleChange}
                         allowClear
                         style={{ height: "42px" }}
                       >
@@ -587,10 +594,8 @@ const UserList = () => {
                         <Input.Password
                           style={{
                             height: "42px",
-                  
                           }}
                           placeholder="Re enter the password"
-                          
                         />
                       </div>
                     </Form.Item>
@@ -612,7 +617,7 @@ const UserList = () => {
                       onClick={() => {
                         setAddUser(false);
                         setRoleValue([]);
-                        setRole('')
+                        setRole("");
                         form.resetFields();
                       }}
                     >

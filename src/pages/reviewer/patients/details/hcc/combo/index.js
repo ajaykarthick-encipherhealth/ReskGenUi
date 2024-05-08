@@ -11,9 +11,7 @@ import {
   faPlus,
   faArrowsAlt,
   faSitemap,
-  faCircleUser,
 } from "@fortawesome/free-solid-svg-icons";
-import { CalendarOutlined } from "@ant-design/icons";
 import { Popconfirm, notification, Tag, Modal } from "antd";
 import { SVGICON } from "../../../../../../jsx/constant/theme";
 import { Button, Offcanvas } from "react-bootstrap";
@@ -24,6 +22,10 @@ import { manuallyAddComboCode } from "../../../../../../services/PatientsListSev
 import { getPatientDetailsResult } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import CamboTree from "../org";
 import PdfViewer from "../../PdfViewerComponent";
+import {
+  getEncounterDateBackground,
+  getProviderNameList,
+} from "../../components/function/ReusableFunctions";
 const addOnCodeColor = [
   "magenta",
   "red",
@@ -131,17 +133,6 @@ const Combo = ({ activeComboTree }) => {
   }, [hccFileDetails]);
 
   useEffect(() => {
-    getFileDosPageNumber();
-  }, [fileDosPageNumberList]);
-
-  useEffect(() => {
-    let orgId = localStorage.getItem("orgId");
-    let tenId = localStorage.getItem("tenantId");
-    let patientId = localStorage.getItem("patientId");
-    getPatientDetailsFileLoad(patientId, orgId, tenId);
-  }, []);
-
-  useEffect(() => {
     if (findFileKeyword) {
       setTimeout(() => {
         setFileModalHeader(fileModalTitle);
@@ -234,21 +225,6 @@ const Combo = ({ activeComboTree }) => {
         });
         setEncounterDateMatching(encounterDateColorsMatching);
         setCaptureSectionMatching(sectionColorList.result?.response);
-      }
-    }
-  };
-  const getPatientDetailsFileLoad = async (
-    patientId,
-    orgId,
-    tenId,
-    fileloadCondition
-  ) => {
-    getFileDosPageNumber();
-    if (patientDetailsResult?.result?.response) {
-      let result = patientDetailsResult?.result?.response;
-      setPatientDocumentResult(result);
-      if (result.validDisease != null) {
-        setPatientFileDTO(result?.fileDetailDTO);
       }
     }
   };
@@ -715,125 +691,6 @@ const Combo = ({ activeComboTree }) => {
     });
   };
 
-  const getEncounterDateBackgroundHcc = (value, code, place, meatResult) => {
-    return value?.map((res) => {
-      const result = encounterDateMatching.filter((res2) => res2.name == res);
-      let backColor = result[0]?.colors;
-      let sectionMapArr = res ? (
-        <span
-          onClick={() => getEncounterDetailsHcc(res, code, place, meatResult)}
-          className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
-        >
-          <i>
-            <CalendarOutlined className={visitStyles.calenderIcon} />
-          </i>
-          {moment(res, "MM/DD/YYYY").format("MMM DD")}
-        </span>
-      ) : (
-        ""
-      );
-      return sectionMapArr;
-    });
-  };
-
-  const getEncounterDetailsHcc = async (date, code, place, meatResult) => {
-    const findPageNumber = listPageNumber.filter((i) => i.date === date);
-    if (findPageNumber.length != 0) {
-      let dataset = code + " - (" + date + ")";
-      let headerName =
-        patientDocumentResult.patientId +
-        " / " +
-        patientDocumentResult.patientName +
-        " / " +
-        dataset;
-      setFileModalTitle(headerName);
-
-      setFileLoading(true);
-      if (place == "MEAT") {
-        setSelectMeatResult(meatResult);
-      } else if (place == "COMBO") {
-        setIsModalOpenCaptureSection(true);
-      }
-      let date = findPageNumber[0].date;
-      if (findPageNumber[0].startPage.length != 0) {
-        let pageNumber = findPageNumber[0].startPage[0].pageNumber;
-        setFileInitialPage(pageNumber);
-        let splitPoint = date.substring(" ", 5);
-        setTargetPages((targetPage) => targetPage.pageIndex === pageNumber);
-        setFindFileKeyword(splitPoint);
-
-        setSearch({
-          value: splitPoint,
-          page: pageNumber,
-        });
-      }
-    }
-  };
-
-  const getFileDosPageNumber = async () => {
-    let result = fileDosPageNumberList?.result;
-    let groupPageNumber = [];
-    let groupEncounterDate = [];
-    for (let key in result?.response) {
-      let optionArray = [];
-      let optionPage = [];
-      let pageNumbervalue = result.response[key];
-      for (let key2 in pageNumbervalue) {
-        let startPage = key2 == "first" ? pageNumbervalue[key2] : null;
-        let keyValue = key2 == "first" ? "Start - " : "End - ";
-        optionArray.push({
-          label: keyValue + " " + pageNumbervalue[key2],
-          value: pageNumbervalue[key2] + "," + moment(key).format("MM/DD"),
-        });
-        if (startPage) {
-          optionPage.push({
-            pageNumber: startPage,
-          });
-        }
-      }
-      groupPageNumber.push({
-        label: moment(key).format("MM-DD-YYYY"),
-        options: optionArray,
-      });
-      groupEncounterDate.push({
-        date: moment(key).format("MM/DD/YYYY"),
-        startPage: optionPage,
-      });
-    }
-    setListPageNumber(groupEncounterDate);
-  };
-
-  const getProviderNameList = (data) => {
-    let dublicateCaptureDelete = removeDuplicates(data);
-    return dublicateCaptureDelete.map((res) => {
-      const result = captureSectionMatching.filter(
-        (res2) => res2.sectionName == res
-      );
-      let backColor = result[0]?.backgroundColor;
-      let textColor = result[0]?.sectionColor;
-
-      let sectionMapArr = (
-        <span
-          className={`mt-2 text-start ${visitStyles.provider_name}`}
-          style={{ backgroundColor: backColor, color: textColor }}
-        >
-          <i>
-            {" "}
-            <FontAwesomeIcon
-              icon={faCircleUser}
-              style={{
-                size: 10,
-                color: textColor,
-              }}
-            />
-          </i>
-          {res}
-        </span>
-      );
-      return sectionMapArr;
-    });
-  };
-
   const addComboCode = () => {
     setIsAddComboCode(true);
   };
@@ -1008,23 +865,34 @@ const Combo = ({ activeComboTree }) => {
                                   }}
                                 />
                               </div>
-                              {/* </Popconfirm> */}
                             </div>
                             <div className={styles.comboDetailsHeaders}>
                               <div>
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
-                                  {getProviderNameList(item?.providerName)}
+                                  {getProviderNameList({
+                                    data: item?.providerName,
+                                    captureSectionMatching:
+                                      captureSectionMatching,
+                                  })}
                                 </div>
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
-                                  {getEncounterDateBackgroundHcc(
-                                    item.encounterDateSplit,
-                                    item.diagnosisCodeCombo,
-                                    "COMBO"
-                                  )}
+                                  {getEncounterDateBackground({
+                                    value: item?.encounterDateSplit,
+                                    encounterDateMatching:
+                                      encounterDateMatching,
+                                    fileDosPageNumberList:
+                                      fileDosPageNumberList,
+                                    setIsModalOpenValidCodes:
+                                      setIsModalOpenCaptureSection,
+                                    setSearch: setSearch,
+                                    setFileModalHeader: setFileModalHeader,
+                                    patientDocumentResult:
+                                      patientDocumentResult,
+                                  })}
                                 </div>
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}
@@ -1039,13 +907,6 @@ const Combo = ({ activeComboTree }) => {
                                   )}
                                 </div>
                               </div>
-                              {/* <div>
-                                            <span
-                                              className={styles.ruleTypeCol}
-                                            >
-                                              {underScoreRemove(item.ruleType)}
-                                            </span>
-                                          </div> */}
                             </div>
                           </div>
                         </div>
@@ -1133,11 +994,9 @@ const Combo = ({ activeComboTree }) => {
         </div>
       </div>
 
-      {/* Modals */}
       {isModalOpenCaptureSection && (
         <Modal
           title={fileModalHeader}
-          // title="Pdf Test"
           centered
           open={isModalOpenCaptureSection}
           style={{ top: 1 }}
@@ -1145,7 +1004,6 @@ const Combo = ({ activeComboTree }) => {
           onCancel={handleCloseModal}
           width="95%"
           footer={false}
-          // height={500}
         >
           <div className="section-container">
             <div className="row">
@@ -1227,20 +1085,7 @@ const Combo = ({ activeComboTree }) => {
                                       </div>
                                     </Popconfirm>
                                   </div>
-                                  {/* <Popconfirm
-                                            title="You want to see the tree view?"
-                                            description={item.diseaseName}
-                                            onConfirm={() => {
-                                              setOpens(true);
-                                              
-                                            }}
-                                            placement="leftTop"
-                                            okText="Yes"
-                                            cancelText="No"
-                                            onOpenChange={() => {
-                                              setCombiTree(item);
-                                            }}
-                                          > */}
+
                                   <div
                                     className={visitStyles.close_icon}
                                     style={{ background: "#c7f3c6" }}
@@ -1259,23 +1104,35 @@ const Combo = ({ activeComboTree }) => {
                                       }}
                                     />
                                   </div>
-                                  {/* </Popconfirm> */}
                                 </div>
                                 <div className={styles.comboDetailsHeaders}>
                                   <div>
                                     <div
                                       className={`${visitStyles.encounterAndSectionHeader}`}
                                     >
-                                      {getProviderNameList(item?.providerName)}
+                                      {getProviderNameList({
+                                        data: item?.providerName,
+                                        captureSectionMatching:
+                                          captureSectionMatching,
+                                      })}
                                     </div>
                                     <div
                                       className={`${visitStyles.encounterAndSectionHeader}`}
                                     >
-                                      {getEncounterDateBackgroundHcc(
-                                        item.encounterDateSplit,
-                                        item.diagnosisCode,
-                                        "COMBO"
-                                      )}
+                                      {getEncounterDateBackground({
+                                        value: item?.encounterDateSplit,
+                                        encounterDateMatching:
+                                          encounterDateMatching,
+                                        fileDosPageNumberList:
+                                          fileDosPageNumberList,
+                                        setIsModalOpenValidCodes:
+                                          setIsModalOpenCaptureSection,
+
+                                        setSearch: setSearch,
+                                        setFileModalHeader: setFileModalHeader,
+                                        patientDocumentResult:
+                                          patientDocumentResult,
+                                      })}
                                     </div>
                                     <div
                                       className={`${visitStyles.encounterAndSectionHeader}`}

@@ -63,7 +63,7 @@ const Valid = ({ data, counts }) => {
             className={`valid-text d-flex justify-content-center mb-1 ${Styles.title_card}`}
           >
             <span className={`${Styles.title_card_content}`}>
-              RAF WITH MEAT CARE
+             TOTAL RAF SCORE
             </span>
           </div>
           <div className={`${Styles.card_title} d-flex justify-content-center`}>

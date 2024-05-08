@@ -62,10 +62,20 @@ const Accuracy = () => {
   const [isindividual, setIsindividual] = useState(false);
   const [year, setYear] = useState();
   const [month, setMonth] = useState();
+  const [optionsUser, setOptionUser] = useState([]);
 
   const dispatch = useDispatch();
   const accuracyDatas = useSelector((state) => state?.l2Dashboard?.accuracy);
+  const individualDetails = useSelector(
+    (state) => state?.l2Dashboard?.individualUser
+  );
 
+  const userOption = () => {
+    const res = individualDetails?.data?.response.map((item) => {
+      return { label: item.firstName + " " + item.lastName, value: item.userName };
+    });
+    setOptionUser(res);
+  };
   const numberOfWeeks =
     accuracyDatas?.data?.response?.mapAccuracy &&
     Object?.keys(accuracyDatas?.data?.response.mapAccuracy)?.length;
@@ -80,7 +90,7 @@ const Accuracy = () => {
     { value: "TEAM", label: "TEAM" },
     { value: "INDIVIDUAL", label: "INDIVIDUAL" },
   ];
-  const optionsUser = [];
+  // const optionsUser = [];
 
   const chartBlockedDates = (year, month, param, val, currentBtn) => {
     year = Number(year);
@@ -159,6 +169,12 @@ const Accuracy = () => {
   }, [selectMemberType]);
 
   useEffect(() => {
+    if (individualDetails?.data?.response) {
+      userOption();
+    }
+  }, [individualDetails]);
+
+  useEffect(() => {
     dispatch(
       getAccuracyScoreNew(
         currentBtn.toUpperCase(),
@@ -170,6 +186,7 @@ const Accuracy = () => {
         selectUser
       )
     );
+    dispatch(getUserByIndividual());
   }, [currentBtn, selectedMonth, selectedYear, selectMemberType, selectUser]);
 
   const handleButtonClick = (index, btn) => {
@@ -474,7 +491,7 @@ const Accuracy = () => {
             </div>
           </div>
         </Card>
-      </div> 
+      </div>
     </>
   );
 };

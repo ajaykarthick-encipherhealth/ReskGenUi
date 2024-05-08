@@ -390,6 +390,7 @@ const findValueDocuments = async (
           duration: 1,
         });
       }
+
       setSearch({
         value: splitPoint,
         page: pageNumber,
