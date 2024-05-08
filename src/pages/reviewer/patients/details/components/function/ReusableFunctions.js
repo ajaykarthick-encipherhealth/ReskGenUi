@@ -34,7 +34,7 @@ export const getEncounterDateBackground = ({
             setFileModalHeader,
             patientDocumentResult,
             selectMeatResult,
-            datas
+            datas,
             patientDocumentResult
 
           )
