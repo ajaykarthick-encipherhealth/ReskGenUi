@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import visitStyles from "../../../../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Badge, Popconfirm, Popover, Tooltip } from "antd";
@@ -49,7 +49,7 @@ const HccCards = ({
   patientDocumentResult,
   setConfirmNotesModalValid,
   cardTitle,
-  setIsValidAction
+  setIsValidAction,
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -57,6 +57,7 @@ const HccCards = ({
   const fileDosPageNumberList = useSelector(
     (state) => state?.ReviewerReducers.dosPageNumberList
   );
+  const [fileInitialPage, setFileInitialPage] = useState(null);
   const PopContentHccVersion = (
     <div className={styles.innerPop}>
       <div className={styles.displayDiv}>
@@ -136,28 +137,29 @@ const HccCards = ({
                   </Popover>
                 </span>
               </div>
-               {/* {data.defaultPosition} */}
+              {/* {data.defaultPosition} */}
               <div className="d-flex">
-                {cardTitle == "SUGGESTED" || cardTitle == "DELETED" ?
-                <>
-                 {data.defaultPosition ==
-                "VALID" ?  <span
-                className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
-              ></span> : data.defaultPosition == "INVALID" ? (
-                  <span
-                    className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
-                  ></span>
-                ) : data.defaultPosition == "SUGGESTED" ? (
-                  <span
-                    className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
-                  ></span>
-                ) : data.defaultPosition == "DELETED" ? (
-                  <span
-                    className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
-                  ></span>
+                {cardTitle == "SUGGESTED" || cardTitle == "DELETED" ? (
+                  <>
+                    {data.defaultPosition == "VALID" ? (
+                      <span
+                        className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
+                      ></span>
+                    ) : data.defaultPosition == "INVALID" ? (
+                      <span
+                        className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
+                      ></span>
+                    ) : data.defaultPosition == "SUGGESTED" ? (
+                      <span
+                        className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
+                      ></span>
+                    ) : data.defaultPosition == "DELETED" ? (
+                      <span
+                        className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
+                      ></span>
+                    ) : null}
+                  </>
                 ) : null}
-                </> : null}
-               
 
                 <Popover
                   onClick={() =>
@@ -265,10 +267,12 @@ const HccCards = ({
                     value: data?.encounterDateSplit,
                     encounterDateMatching: encounterDateMatching,
                     fileDosPageNumberList: fileDosPageNumberList,
-                    setIsModalOpenValidCodes:setIsModalOpenValidCodes? setIsModalOpenValidCodes : null,
-                    setSearch:setSearch,
-                    setFileModalHeader:setFileModalHeader,
-                    patientDocumentResult:patientDocumentResult
+                    setIsModalOpenValidCodes: setIsModalOpenValidCodes
+                      ? setIsModalOpenValidCodes
+                      : null,
+                    setSearch: setSearch,
+                    setFileModalHeader: setFileModalHeader,
+                    patientDocumentResult: patientDocumentResult,
                   })}
                 </div>
                 <div className={`${visitStyles.encounterAndSectionHeader}`}>
@@ -286,7 +290,8 @@ const HccCards = ({
                     setIsModalOpenValidCodes,
                     setFileModalHeader,
                     fileId,
-                    patientDocumentResult
+                    patientDocumentResult,
+                    fileInitialPage, setFileInitialPage
                   )}
                 </div>
               </div>

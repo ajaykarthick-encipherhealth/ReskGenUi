@@ -66,7 +66,7 @@ export async function getSuggested(code) {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/hccdisease/geticdsuggestedcodes?year=2023&diagnosisCode=${code}
+    `dbservice/geticdsuggestedcodes?year=2023&diagnosisCode=${code}
   `,
     options
   );
