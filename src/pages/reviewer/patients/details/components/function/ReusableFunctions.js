@@ -17,6 +17,8 @@ export const getEncounterDateBackground = ({
   setSearch,
   setFileModalHeader,
   patientDocumentResult,
+  selectMeatResult,
+  datas,
 }) => {
   return value?.map((res) => {
     const result = encounterDateMatching.filter((res2) => res2.name == res);
@@ -30,7 +32,11 @@ export const getEncounterDateBackground = ({
             setIsModalOpenValidCodes,
             setSearch,
             setFileModalHeader,
+            patientDocumentResult,
+            selectMeatResult,
+            datas,
             patientDocumentResult
+
           )
         }
         className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
@@ -53,8 +59,11 @@ const getEncounterDetails = async (
   setIsModalOpenValidCodes,
   setSearch,
   setFileModalHeader,
-  patientDocumentResult
+  patientDocumentResult,
+  selectMeatResult,
+  datas
 ) => {
+  selectMeatResult ? selectMeatResult(datas) : "";
   var result = fileDosPageNumberList?.result;
   var groupEncounterDate = [];
   for (var key in result?.response) {
