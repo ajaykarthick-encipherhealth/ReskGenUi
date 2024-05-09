@@ -127,7 +127,7 @@ const Searches = ({
         code: updateDetails.codes,
         description: updateDetails.description,
         years: years.map((date) => date.value),
-        billable: selectBillable.value ? selectBillable.value : "",
+        billable: selectBillable.value ? selectBillable.value : selectBillable,
       });
       if (res.status == "SUCCESS") {
         getResponePopup(getICDStatus);
