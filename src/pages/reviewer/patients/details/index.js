@@ -47,7 +47,6 @@ import {
   auditHold,
   auditDecline,
 } from "../../../../services/PatientsListSevice";
-import { validateYear } from "../../../../components/headerFilters/functions";
 import { getPatientID } from "../../../../store/actions/PatientsActions";
 import Timeline from "./timline";
 import ReviwerWorkList from "./components/reviwerWorklist";
@@ -61,6 +60,8 @@ import {
   getDosPageNumber,
 } from "../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import { actions as workflowActions } from "../../../../stores/reviewer/workqueue";
+import AddLabForm from "./components/addLabForm";
+import AddRadiologyForm from "./components/addRadiologyForm";
 
 export const navigetPageDetails = async (
   pageTitle,
@@ -208,21 +209,6 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
     ),
     name: item?.flagName,
   }));
-
-  const handleChange = async (e) => {
-    const key = e.target.name;
-    if (key == "encodedDate") {
-      setInputValueFileDate(e.target.value);
-    } else if (e.target.name === "year") {
-      const validateYearField = validateYear(e.target.value, setError);
-      if (validateYearField) {
-        setError({ year: "" });
-        setInputValue({ ...inputValue, [key]: value });
-      }
-    }
-    const value = e.target.value;
-    setInputValue({ ...inputValue, [key]: value });
-  };
 
   useEffect(() => {
     const patientId = localStorage.getItem("patientId");
@@ -566,7 +552,6 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
     setAdminActionItems(menu4);
   };
 
-  const statuses = ["PENDING", "COMPLETED", "HOLD", "DECLINED"];
   const getPatientDetails = async (patientId) => {
     setHccValidCount(0);
     if (patientDetailsResult?.result?.response) {
@@ -769,126 +754,12 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
       iconStyle: IMAGES.visitDataLabreport,
     },
   ];
-
-  const handleSubmitPatientFile = async (event) => {
-    const form = event.currentTarget;
-    event.preventDefault();
-    if (form.checkValidity() === true) {
-      setIsLoadingBtn(true);
-      event.preventDefault();
-      event.stopPropagation();
-      submitRadiology();
-    }
-    setValidated(true);
-  };
-
-  const handleSubmitLabReport = async (event) => {
-    const form = event.currentTarget;
-    event.preventDefault();
-    if (form.checkValidity() === true) {
-      setIsLoadingBtn(true);
-      event.preventDefault();
-      event.stopPropagation();
-      submitLabReport();
-    }
-    setValidated(true);
-  };
-
   const addPatientFile = (data) => {
-    inputValue.patientId = patientDocumentResult.patientId;
-    inputValue.name = patientDocumentResult.patientName;
-    setValidated(false);
     setAddPatient(true);
-    setIsLoadingBtn(false);
   };
   const addLabReport = (data) => {
-    inputValue.patientId = patientDocumentResult.patientId;
-    inputValue.name = patientDocumentResult.patientName;
-    setValidated(false);
     setLapReportSlider(true);
-    setIsLoadingBtn(false);
   };
-
-  const onChangeFileRadiology = (e) => {
-    setSelectFileRadiology(e[0]);
-  };
-  const onChangeLabReportFile = (e) => {
-    setSelectLabReportFile(e[0]);
-  };
-
-  const submitRadiology = async () => {
-    const formData = new FormData();
-    formData.append("file", selectFileRadiology);
-    formData.append("orgid", localOrgId);
-    formData.append("tenantid", localTenantId);
-    formData.append("userid", localUserId);
-    formData.append("patientid", inputValue.patientId);
-    formData.append("patientname", inputValue.name);
-    formData.append("dos", inputValue.year);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
-    const response = await axios.post(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/upload/radiology
-      `,
-      formData,
-      headers
-    );
-    var result = response.data;
-    if (result.status == "SUCCESS") {
-      notification.success({
-        message: result.message,
-        placement: "top",
-        duration: 1,
-      });
-      setAddPatient(false);
-      setIsLoadingBtn(false);
-      getPatientDetailsRadiology(localOrgId, localTenantId);
-    } else {
-      setIsLoadingBtn(false);
-    }
-    setAddPatient(false);
-  };
-  const submitLabReport = async () => {
-    const formData = new FormData();
-    formData.append("file", selectLabReportFile);
-    formData.append("orgid", localOrgId);
-    formData.append("tenantid", localTenantId);
-    formData.append("userid", localUserId);
-    formData.append("patientid", inputValue.patientId);
-    formData.append("patientname", inputValue.name);
-    formData.append("dos", inputValue.year);
-    const headers = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    };
-    const response = await axios.post(
-      ENDPOINTS.apiEndoint +
-        `aiservice/ai/upload/lab
-      `,
-      formData,
-      headers
-    );
-    var result = response.data;
-    if (result.status == "SUCCESS") {
-      notification.success({
-        message: result.message,
-        placement: "top",
-        duration: 1,
-      });
-      setAddPatient(false);
-      setIsLoadingBtn(false);
-      getPatientDetailsRadiology(localOrgId, localTenantId);
-    } else {
-      setIsLoadingBtn(false);
-    }
-    setAddPatient(false);
-  };
-
   const handleSubmitHccComplete = async () => {
     var userData = {
       userId: localUserId,
@@ -2587,193 +2458,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                         </div>
                       </div>
                     </Modal>
-                  )}
-
-                  <Offcanvas
-                    onHide={setAddPatient}
-                    show={addPatient}
-                    className="offcanvas-end"
-                    placement="end"
-                  >
-                    <div className="offcanvas-header">
-                      <h5 className="modal-title" id="#gridSystemModal">
-                        Add Patient Radiology
-                      </h5>
-                      <button
-                        type="button"
-                        className="btn-close"
-                        onClick={() => setAddPatient(false)}
-                      >
-                        <i className="fa-solid fa-xmark"></i>
-                      </button>
-                    </div>
-                    <div className="offcanvas-body">
-                      <div className="container-fluid">
-                        <Form
-                          noValidate
-                          validated={validated}
-                          onSubmit={handleSubmitPatientFile}
-                        >
-                          <div className="row">
-                            <div className="col-xl-12 mb-3">
-                              <Form.Label>
-                                Patient ID
-                                <span className="text-danger">*</span>
-                              </Form.Label>
-                              <Form.Control
-                                name="patientId"
-                                required
-                                type="text"
-                                value={inputValue.patientId}
-                                onChange={handleChange}
-                              />
-                            </div>
-                            <div className="col-xl-12 mb-3">
-                              <Form.Label>
-                                Year of Service
-                                <span className="text-danger">*</span>
-                              </Form.Label>
-                              <Form.Control
-                                name="year"
-                                required
-                                type="number"
-                                min="1"
-                                onChange={handleChange}
-                              />
-                              {error?.year && (
-                                <div className="text-danger fs-12">
-                                  {error.year}
-                                </div>
-                              )}
-                            </div>
-
-                            <div className="col-xl-12 mb-3">
-                              <Form.Label>
-                                File <span className="text-danger">*</span>
-                              </Form.Label>
-                              <Form.Control
-                                type="file"
-                                accept="application/pdf,text/plain"
-                                required
-                                onChange={(e) =>
-                                  onChangeFileRadiology(e.target.files)
-                                }
-                                disabled={isLoadingBtn ? true : false}
-                              />
-                            </div>
-                          </div>
-
-                          <div>
-                            <Button
-                              type="submit"
-                              className="btn btn-primary btn-sm me-1"
-                            >
-                              {isLoadingBtn ? "Loading..." : "Submit"}
-                            </Button>
-                            <Button
-                              onClick={() => setAddPatient(false)}
-                              className="btn btn-danger btn-sm light ms-1"
-                            >
-                              Cancel
-                            </Button>
-                          </div>
-                        </Form>
-                      </div>
-                    </div>
-                  </Offcanvas>
-                  <Offcanvas
-                    onHide={setLapReportSlider}
-                    show={labReportSlider}
-                    className="offcanvas-end"
-                    placement="end"
-                  >
-                    <div className="offcanvas-header">
-                      <h5 className="modal-title" id="#gridSystemModal">
-                        Add Patient Lab Report
-                      </h5>
-                      <button
-                        type="button"
-                        className="btn-close"
-                        onClick={() => setLapReportSlider(false)}
-                      >
-                        <i className="fa-solid fa-xmark"></i>
-                      </button>
-                    </div>
-                    <div className="offcanvas-body">
-                      <div className="container-fluid">
-                        <Form
-                          noValidate
-                          validated={validated}
-                          onSubmit={handleSubmitLabReport}
-                        >
-                          <div className="row">
-                            <div className="col-xl-12 mb-3">
-                              <Form.Label>
-                                Patient ID
-                                <span className="text-danger">*</span>
-                              </Form.Label>
-                              <Form.Control
-                                name="patientId"
-                                required
-                                type="text"
-                                value={inputValue.patientId}
-                                onChange={handleChange}
-                              />
-                            </div>
-                            <div className="col-xl-12 mb-3">
-                              <Form.Label>
-                                Year of Service
-                                <span className="text-danger">*</span>
-                              </Form.Label>
-                              <Form.Control
-                                name="year"
-                                required
-                                type="number"
-                                min="1"
-                                onChange={handleChange}
-                              />
-                              {error?.year && (
-                                <div className="text-danger fs-12">
-                                  {error.year}
-                                </div>
-                              )}
-                            </div>
-
-                            <div className="col-xl-12 mb-3">
-                              <Form.Label>
-                                File
-                                <span className="text-danger">*</span>
-                              </Form.Label>
-                              <Form.Control
-                                type="file"
-                                accept="application/pdf,text/plain"
-                                required
-                                onChange={(e) =>
-                                  onChangeLabReportFile(e.target.files)
-                                }
-                                disabled={isLoadingBtn ? true : false}
-                              />
-                            </div>
-                          </div>
-
-                          <div>
-                            <Button
-                              type="submit"
-                              className="btn btn-primary btn-sm me-1"
-                            >
-                              {isLoadingBtn ? "Loading..." : "Submit"}
-                            </Button>
-                            <Button
-                              onClick={() => setLapReportSlider(false)}
-                              className="btn btn-danger btn-sm light ms-1"
-                            >
-                              Cancel
-                            </Button>
-                          </div>
-                        </Form>
-                      </div>
-                    </div>
-                  </Offcanvas>
+                  )}           
 
                   <Offcanvas
                     onHide={handleCloseModal}
@@ -3104,6 +2789,8 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
         setSelectedChart={setSelectedChart}
         selectedChart={selectedChart}
       />
+      <AddLabForm setOpen={setLapReportSlider} open={labReportSlider}/>
+      <AddRadiologyForm setOpen={setAddPatient} open={addPatient}/>
     </>
   );
 };

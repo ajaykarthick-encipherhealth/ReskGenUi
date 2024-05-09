@@ -25,7 +25,6 @@ const ModelIndex = ({
   const [form] = Form.useForm();
   const { TextArea } = Input;
   const dispatch = useDispatch();
-
   return (
     <Modal
       title={title}
@@ -50,6 +49,7 @@ const ModelIndex = ({
           searchQuery={search?.value ? search?.value : ""}
           pageNumber={search?.page ? search?.page : 1}
           headers={search?.headers}
+          headerContent={search?.headerContent}
         />
       ) : modalOpenValidContent ? (
         modalOpenValidContent

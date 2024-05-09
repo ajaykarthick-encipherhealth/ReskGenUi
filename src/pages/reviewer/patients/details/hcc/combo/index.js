@@ -327,7 +327,8 @@ const Combo = ({ activeComboTree }) => {
         setSearch({
           value: splitPoint,
           page: pageNumber,
-          headers: result?.first,
+          headers: false,
+          headerContent: headerNames,
         });
         setFileInitialPage(pageNumber);
       } else {
@@ -352,6 +353,7 @@ const Combo = ({ activeComboTree }) => {
       setSearch({
         value: splitPoint,
         headers: true,
+        headerContent: headerNames,
       });
       setFindFileKeyword(splitPoint);
       setFileInitialPage(null);
@@ -366,6 +368,17 @@ const Combo = ({ activeComboTree }) => {
     actualDescription,
     diagnosisCode
   ) => {
+    setIsModalOpenCaptureSection(true);
+    let headerName =
+      patientDocumentResult.patientId +
+      " / " +
+      patientDocumentResult.patientName +
+      " / " +
+      diagnosisCode +
+      " - (" +
+      headerNames +
+      ")";
+    setFileModalTitle(headerName);
     setFileLoading(true);
     let fileId = patientFileDTO.fileId;
     const encounterDatesValue = encounterDate.split(",");
@@ -408,168 +421,10 @@ const Combo = ({ activeComboTree }) => {
         setSearch({
           value: splitPoint,
           page: result?.pageNumber,
+          headers: false,
+          headerContent: headerNames,
         });
         setFileInitialPage(pageNumber);
-      } else {
-        splitPoint = headerNames;
-        setFileInitialPage(null);
-      }
-      setTargetPages((targetPage) => {
-        targetPage.pageIndex === pageNumber;
-      });
-      setFindFileKeyword(splitPoint);
-      if (findFileKeyword == splitPoint) {
-        setFileLoading(false);
-      }
-    } catch (error) {
-      splitPoint = headerNames;
-      if (findFileKeyword == headerNames) {
-        setFileLoading(false);
-      }
-      setFindFileKeyword(splitPoint);
-      setFileInitialPage(null);
-    }
-  };
-  const handleOpenModalCombinationCodeOld = async (
-    value,
-    encounterDate,
-    headerNames,
-    actualDescription
-  ) => {
-    setFileLoading(true);
-
-    let dotLoading = (
-      <div className={visitStyles.loadingFileHeader}>
-        <Spinner />
-      </div>
-    );
-    let headerName = dotLoading;
-    setFileModalHeader(headerName);
-    setIsModalOpenCaptureSection(true);
-    let fileId = patientFileDTO.fileId;
-    const encounterDatesValue = encounterDate.split(",");
-    let splitPoint = "";
-    let pageNumber = null;
-    splitPoint = actualDescription;
-    let data = {
-      fileId: fileId,
-      header: headerNames,
-      dos: encounterDatesValue,
-      stringFileWord: splitPoint,
-      diagnosisCode: value,
-    };
-    try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/pageNumber`,
-        data
-      );
-      let result = response.data.response;
-      if (response?.data?.status == "SUCCESS") {
-        if (!result?.first) {
-          splitPoint = headerNames;
-        }
-        pageNumber = result?.second[0] ? result?.second[0] : null;
-        setFileInitialPage(pageNumber);
-      } else {
-        splitPoint = headerNames;
-      }
-      setFindFileKeyword(splitPoint);
-      setSearch({
-        value: splitPoint,
-        page: pageNumber,
-        headers: result?.first,
-      });
-
-      let headerName =
-        patientDocumentResult.patientId +
-        " / " +
-        patientDocumentResult.patientName +
-        " / " +
-        dataset;
-      setFileModalTitle(headerName);
-    } catch (error) {
-      splitPoint = headerNames;
-      if (findFileKeyword == headerNames) {
-        setFileLoading(false);
-      }
-      setSearch({
-        value: splitPoint,
-        headers: true,
-      });
-      setFindFileKeyword(splitPoint);
-      setFileInitialPage(null);
-    }
-  };
-  const handleOpenModalCombinationCode = async (
-    value,
-    encounterDate,
-    headerNames,
-    actualDescription
-  ) => {
-    setFileLoading(true);
-
-    let dotLoading = (
-      <div className={visitStyles.loadingFileHeader}>
-        <Spinner />
-      </div>
-    );
-    let headerName = dotLoading;
-    setFileModalHeader(headerName);
-    setIsModalOpenCaptureSection(true);
-    let fileId = patientFileDTO.fileId;
-    const encounterDatesValue = encounterDate.split(",");
-    let splitPoint = "";
-    let pageNumber = null;
-    splitPoint = actualDescription.substring(" ", 20);
-    let data = {
-      fileId: fileId,
-      header: headerNames,
-      dos: encounterDatesValue,
-      stringFileWord: actualDescription.substring(" ", 20),
-      diagnosisCode: value,
-    };
-    try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
-        data
-      );
-      let result = response.data.response;
-      if (response?.data?.status == "SUCCESS") {
-        pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
-        splitPoint = result?.searchString;
-        if (result == null) {
-          return handleOpenModalCombinationCodeOld(
-            value,
-            encounterDate,
-            headerNames,
-            actualDescription
-          );
-        }
-        setSearch({
-          value: splitPoint,
-          page: pageNumber,
-        });
-        if (pageNumber == fileInitialPage) {
-          setFileLoading(false);
-          notification.warning({
-            message: "This detail also same page",
-            placement: "top",
-            duration: 1,
-          });
-        }
-        setFileInitialPage(pageNumber);
-        let headerName =
-          patientDocumentResult.patientId +
-          " / " +
-          patientDocumentResult.patientName +
-          " / " +
-          dataset;
-
-        setFileModalTitle(headerName);
-        setSearch({
-          value: splitPoint,
-          page: result?.pageNumber,
-        });
       } else {
         splitPoint = headerNames;
         setFileInitialPage(null);
@@ -669,16 +524,13 @@ const Combo = ({ activeComboTree }) => {
       let sectionMapArr = (
         <span
           onClick={() =>
-            handleOpenModalCombinationCode(
+            findValueDocument(
               disCode,
-              res,
-              "valid",
-              "null",
-              documentPlace,
-              encounterDate,
-              headerNames,
               actualDescription,
-              testModal
+              headerNames,
+              encounterDate,
+              actualDescription,
+              disCode
             )
           }
           style={{ backgroundColor: backColor, color: textColor }}
@@ -1162,6 +1014,7 @@ const Combo = ({ activeComboTree }) => {
                     searchQuery={search?.value ? search?.value : ""}
                     pageNumber={search?.page ? search?.page : 1}
                     headers={search?.headers}
+                    headerContent={search?.headerContent}
                   />
                 )}
               </div>

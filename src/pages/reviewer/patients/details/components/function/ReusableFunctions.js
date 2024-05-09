@@ -394,7 +394,8 @@ const findValueDocuments = async (
       setSearch({
         value: splitPoint,
         page: pageNumber,
-        headers: result?.first,
+        headers: false,
+        headerContent:headerNames
       });
       setFileInitialPage(pageNumber);
       setFileLoading(false);
@@ -404,6 +405,7 @@ const findValueDocuments = async (
         value: splitPoint,
         page: "",
         headers: true,
+        headerContent:headerNames
       });
       setFileLoading(false);
       setFileInitialPage(null);
@@ -413,6 +415,7 @@ const findValueDocuments = async (
       value: headerNames,
       page: "",
       headers: true,
+      headerContent:headerNames
     });
     setFileLoading(false);
     setFileInitialPage(null);
@@ -438,7 +441,6 @@ export const findValueDocument = async ({
   setFileInitialPage,
 }) => {
   setFileLoading(true);
-
   const encounterDatesValue = encounterDate.split(",");
   var splitPoint;
   var pageNumber = null;
@@ -465,6 +467,7 @@ export const findValueDocument = async ({
       setSearch({
         value: headerNames,
         headers: true,
+        headerContent:headerNames
       });
       setFileLoading(false);
       if (documentPlace === "Lab") {
@@ -473,8 +476,8 @@ export const findValueDocument = async ({
         setIsModalOpenRadiology(true);
       }
     } else {
-      if (patientDocumentResult) {
-        setIsModalOpenValidCodes(true);
+      if (patientDocumentResult && setIsModalOpenValidCodes) {
+          setIsModalOpenValidCodes(true);
       }
       const response = await axios.post(
         ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
@@ -508,6 +511,7 @@ export const findValueDocument = async ({
           value: splitPoint,
           page: result?.pageNumber,
           headers: false,
+          headerContent:headerNames
         });
         setFileInitialPage(pageNumber);
       } else {
