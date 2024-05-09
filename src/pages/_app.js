@@ -109,7 +109,7 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     const currentPath = window.location.pathname;
-    if (showTerminal && !currentPath?.includes("/patientDetails")) {
+    if (showTerminal && !currentPath?.includes("/patientDetails/details")) {
       const userRole = localStorage.getItem("userRole");
       const currentPath = router.pathname;
       if (userRole && !currentPath.includes(`/${userRole}/`)) {
