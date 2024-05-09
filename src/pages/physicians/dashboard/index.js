@@ -27,7 +27,7 @@ const PhysicianDashboard = ({ getAllPhysician, getPhysiciansDetails }) => {
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
-      <div className="mt-5">
+      <div className="p-5 px-4">
         <div className="row p-3 pt-5">
           <div className="col-3">
             <div
