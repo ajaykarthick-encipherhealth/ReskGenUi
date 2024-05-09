@@ -171,9 +171,23 @@ const PhysicianDashboard = ({ getAllPhysician, getPhysiciansDetails }) => {
                   getPhysiciansDetails?.data?.response?.evaluationCount,
                   getPhysiciansDetails?.data?.response?.monitorCount,
                 ]}
-                meatCount={getPhysiciansDetails?.data?.response?.totalMeatCount}
+                meatCount={
+                  getPhysiciansDetails?.data?.response?.validPhysicianDiagnosisCodeCountDTO?.map(
+                    (item) => item.count
+                  ).length > 0
+                    ? getPhysiciansDetails?.data?.response?.validPhysicianDiagnosisCodeCountDTO
+                        .map((item) => item.count)
+                        .reduce((tol, item) => tol + item)
+                    : 0
+                }
                 totalFullMeat={
-                  getPhysiciansDetails?.data?.response?.totalComboCount
+                  getPhysiciansDetails?.data?.response?.suggestedPhysicianDiagnosisCodeCountDTO?.map(
+                    (item) => item.count
+                  ).length > 0
+                    ? getPhysiciansDetails?.data?.response?.suggestedPhysicianDiagnosisCodeCountDTO
+                        .map((item) => item.count)
+                        .reduce((tol, item) => tol + item)
+                    : 0
                 }
               />
             </div>
@@ -182,7 +196,10 @@ const PhysicianDashboard = ({ getAllPhysician, getPhysiciansDetails }) => {
             <h3>OIG - High Risk Diagnosis Code</h3>
             <div className="card p-3">
               <HighRisk
-               data={getPhysiciansDetails?.data?.response?.oigMeatCheckDtoResponseList ?? []}
+                data={
+                  getPhysiciansDetails?.data?.response
+                    ?.oigMeatCheckDtoResponseList ?? []
+                }
               />
             </div>
           </div>

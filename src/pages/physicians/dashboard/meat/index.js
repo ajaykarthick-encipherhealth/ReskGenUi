@@ -6,7 +6,8 @@ import BarChartMeat from "../barChart2";
 
 const Meat = ({ data, meatCount, totalFullMeat }) => {
   const pieValues = [
-    { value: 100, name: "Accuracy", itemStyle: { color: "#ffad33" } },
+    { value: meatCount, name: "MEAT PRESENT", itemStyle: { color: "#00ab00" } },
+    { value: totalFullMeat, name: "MEAT ABSENT", itemStyle: { color: "#fe5b5b" } }
   ];
   return (
     <div>
@@ -16,7 +17,7 @@ const Meat = ({ data, meatCount, totalFullMeat }) => {
             className={`valid-text d-flex justify-content-center align-item-center mb-2 ${Styles.title_card}`}
           >
             <span className={`${Styles.title_card_content}`}>
-              TOTAL MEAT
+                WITH MEAT
             </span>
           </div>
           <div
@@ -28,7 +29,7 @@ const Meat = ({ data, meatCount, totalFullMeat }) => {
             className={`valid-text d-flex justify-content-center mt-3 mb-1 ${Styles.title_cards}`}
           >
             <span className={`${Styles.title_card_content}`}>
-              COMBINATION COUNT
+               WITHOUT MEAT
             </span>
           </div>
           <div className={`${Styles.card_title_value} d-flex justify-content-center`}>
@@ -37,7 +38,7 @@ const Meat = ({ data, meatCount, totalFullMeat }) => {
         </div>
       
         <div className="col-4">
-          <div className={`d-flex justify-content-center ${Styles.title}`}>MEAT CARE ACCURACY</div>
+          <div className={`d-flex justify-content-center ${Styles.title}`}>MEAT CARE</div>
           <PieChart data={pieValues} />
         </div>
         <div className="col-5">
