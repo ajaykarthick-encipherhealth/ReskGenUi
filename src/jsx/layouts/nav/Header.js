@@ -23,7 +23,7 @@ import {
   CloseCircleOutlined,
   DownOutlined,
   SettingOutlined,
- CloseOutlined 
+  CloseOutlined,
 } from "@ant-design/icons";
 import styles from "../../../styles/file-managemnt.module.css";
 import { IMAGES } from "../../constant/theme";
@@ -599,23 +599,22 @@ const Header = ({
                             </div>
                           </Badge>
                         </div>
-                       
+
                         <div className="header-media d-flex">
                           <Popover
                             trigger="click"
                             open={openContent}
-                           
                             content={
                               <div className={styles.popDIv}>
                                 {/* <Button type="text" className="w-100 border-0 bg-transparent position-relative" onClick={()=>setOpenContent(false)}>
                                   <CloseCircleOutlined style={{color:"#000",fontSize:"16px"}} className="position-absolute top-0 start-100 translate-middle" />
                                 </Button> */}
                                 <div className={styles.closeContainer2}>
-            <CloseCircleOutlined
-              onClick={() => setOpenContent(false)}
-              className={styles.close_icon}
-            />
-          </div>
+                                  <CloseCircleOutlined
+                                    onClick={() => setOpenContent(false)}
+                                    className={styles.close_icon}
+                                  />
+                                </div>
                                 <div
                                   style={{
                                     margin: "20px 0px 0 30px",
