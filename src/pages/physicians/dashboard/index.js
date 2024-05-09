@@ -10,7 +10,7 @@ import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { connect } from "react-redux";
 import { actions as physicianActions } from "../../../stores/physician/dashboard";
 import HighRisk from "./OIG";
-import Data from "./data.json"
+import Data from "./data.json";
 
 const PhysicianDashboard = ({ getAllPhysician, getPhysiciansDetails }) => {
   const getPhysicians = async () => {
@@ -24,8 +24,6 @@ const PhysicianDashboard = ({ getAllPhysician, getPhysiciansDetails }) => {
   useEffect(() => {
     getPhysicians();
   }, []);
-
-  console.log(getPhysiciansDetails, "testing");
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
@@ -41,9 +39,11 @@ const PhysicianDashboard = ({ getAllPhysician, getPhysiciansDetails }) => {
             >
               <div className="text-center">
                 <div className={Styles.fontHead}>TOTAL FILE COUNT</div>
-                <div className={Styles.fontHead}>{getPhysiciansDetails?.data?.response?.totalPatientCount
+                <div className={Styles.fontHead}>
+                  {getPhysiciansDetails?.data?.response?.totalPatientCount
                     ? getPhysiciansDetails?.data?.response?.totalPatientCount
-                    : 0}</div>
+                    : 0}
+                </div>
               </div>
             </div>
           </div>
@@ -100,7 +100,8 @@ const PhysicianDashboard = ({ getAllPhysician, getPhysiciansDetails }) => {
             >
               <div className="text-center">
                 <div className={Styles.fontHead}>TOTAL REVENUE</div>
-                <div className={Styles.fontHead}>$
+                <div className={Styles.fontHead}>
+                  $
                   {getPhysiciansDetails?.data?.response?.suggestedRafAmount &&
                   getPhysiciansDetails?.data?.response?.validRafAmount
                     ? Number(
@@ -130,7 +131,10 @@ const PhysicianDashboard = ({ getAllPhysician, getPhysiciansDetails }) => {
             {/* </div> */}
             <div className="card p-3">
               <Valid
-                data={getPhysiciansDetails?.data?.response?.validPhysicianDiagnosisCodeCountDTO}
+                data={
+                  getPhysiciansDetails?.data?.response
+                    ?.validPhysicianDiagnosisCodeCountDTO
+                }
                 counts={{
                   validDiseaseRafSum:
                     getPhysiciansDetails?.data?.response?.validDiseaseRafSum,
@@ -144,7 +148,10 @@ const PhysicianDashboard = ({ getAllPhysician, getPhysiciansDetails }) => {
             <h3>Care Gap Analysis - Suggested Diagnosis</h3>
             <div className="card p-3">
               <Suggested
-                data={getPhysiciansDetails?.data?.response?.suggestedPhysicianDiagnosisCodeCountDTO}
+                data={
+                  getPhysiciansDetails?.data?.response
+                    ?.suggestedPhysicianDiagnosisCodeCountDTO
+                }
                 counts={{
                   validDiseaseRafSum:
                     getPhysiciansDetails?.data?.response?.suggestedRafSum,
@@ -174,7 +181,9 @@ const PhysicianDashboard = ({ getAllPhysician, getPhysiciansDetails }) => {
           <div className="col-12 mt-4 pt-3">
             <h3>OIG - High Risk Diagnosis Code</h3>
             <div className="card p-3">
-             <HighRisk data={getPhysiciansDetails?.data?.response?.oigMeatCheckDtoResponseList}/>
+              <HighRisk
+               data={getPhysiciansDetails?.data?.response?.oigMeatCheckDtoResponseList ?? []}
+              />
             </div>
           </div>
         </div>
