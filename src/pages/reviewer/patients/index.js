@@ -126,7 +126,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
       selectedPriority,
       searchTextValue
     );
-  }, [filteratedDashboardData, pageNo, sort, selectedPriority, searchTextValue,dueDateStart]);
+  }, [filteratedDashboardData, pageNo, sort, selectedPriority, searchTextValue,dueDateStart,statusSelectedValue]);
 
 
   useEffect(() => {
@@ -293,15 +293,15 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
       value = "";
     }
     setStausSelectedValue(value);
-    getFilteApi(
-      0,
-      pageSize,
-      value,
-      dueDateStart,
-      dueDateEnd,
-      processedStart,
-      processedEnd
-    );
+    // getFilteApi(
+    //   0,
+    //   pageSize,
+    //   value,
+    //   dueDateStart,
+    //   dueDateEnd,
+    //   processedStart,
+    //   processedEnd
+    // );
   };
   const onChangePriority = (selectedOption) => {
     let value = selectedOption?.value;
