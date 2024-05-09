@@ -2,10 +2,10 @@ import React from "react";
 import DoubleBarChant from "../doubleBarChant";
 
 const HighRisk = ({ data }) => {
-  const codesList = data.map((item) => ([
-   item.diagnosisCode,
-   item.meatPresentCount,
-   item.meatAbsentCount,
+  const codesList = data?.map((item) => ([
+   item?.diagnosisCode,
+   item?.meatPresentCount,
+   item?.meatAbsentCount,
   ]));
   return (
     <div>
