@@ -391,3 +391,8 @@
   cursor: pointer;
   font-size: 20px;
 }
+.closeContainer2{
+  position: relative;
+  left:380px;
+}
+
