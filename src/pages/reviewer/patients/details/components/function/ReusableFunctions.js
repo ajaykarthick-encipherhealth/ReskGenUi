@@ -514,6 +514,7 @@ export const findValueDocument = async ({
           headerContent:headerNames
         });
         setFileInitialPage(pageNumber);
+        setFileLoading(false);
       } else {
         splitPoint = headerName;
         setFileInitialPage(null);
