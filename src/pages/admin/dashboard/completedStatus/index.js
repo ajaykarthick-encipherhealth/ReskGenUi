@@ -202,10 +202,13 @@ const CompletedStatus = () => {
       )
     );
   }, [currentBtn, selectedMonth, selectedYear, selectUser]);
-  const optionsUser = managersList?.data?.response?.map((item) => ({
-    value: item?.userName,
-    label: `${item?.firstName}  ${item?.lastName}`,
-  }));
+  const optionsUser = [
+    { value: "", label: "All" },
+    ...(managersList?.data?.response || []).map((item) => ({
+      value: item?.userName,
+      label: `${item?.firstName} ${item?.lastName}`,
+    })),
+  ];
 
   return (
     <>
