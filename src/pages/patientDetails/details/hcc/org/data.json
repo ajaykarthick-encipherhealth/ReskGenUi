@@ -1,0 +1,118 @@
+[
+  {
+    "diseaseName": "Hypertensive chronic kidney disease with stage 5 chronic kidney disease or end stage renal disease",
+    "diagnosisCodeCombo": "I120",
+    "addOnCode": "N186",
+    "addOnCodeTwo": "I5021",
+    "RuleType": "MOST_SPECIFIC_COMBO",
+    "capturedSections": ["assessment", "plan", "assessments", "plans", "tetwt"],
+    "providers": [
+      {
+        "providerName": "Soukiasian, Harmik J, MD",
+        "authorizedProvider": true,
+        "unAuthorizeProvider": false,
+        "noCredential": false,
+        "unSigned": false
+      }
+    ],
+    "encounterDate": "11/26/2023",
+    "formedCodes": ["I110", "I120"],
+    "expanded": true,
+    "children": [
+      {
+        "diseaseName": "Hypertensive heart disease with heart failure",
+        "diagnosisCodeCombo": "I110",
+        "addOnCode": null,
+        "addOnCodeTwo": null,
+        "addOnCodeThree": null,
+        "comboCodeCapturedFromHeader": null,
+        "capturedSections": [
+          "assessment",
+          "plan",
+          "assessments",
+          "plans",
+          "tetwt"
+        ],
+        "providers": [
+          {
+            "providerName": "Soukiasian, Harmik J, MD",
+            "authorizedProvider": true,
+            "unAuthorizeProvider": false,
+            "noCredential": false,
+            "unSigned": false
+          }
+        ],
+        "encounterDate": "11/26/2023",
+        "formedCodes": ["I10", "I5021"],
+        "expanded": false,
+        "children": [
+          {
+            "diagnosisCode": "I10",
+            "actualDescription": "Hypertension",
+            "dbDescription": "Essential (primary) hypertension",
+            "notes": null,
+            "capturedSections": [
+              "assessment",
+              "plan",
+              "assessments",
+              "plans",
+              "tetwt"
+            ],
+            "encounterDate": "11/26/2023",
+            "isManuallyAdded": null,
+            "manuallyAddedAt": null,
+            "manuallyAddedBy": null,
+            "isHccValid": null,
+            "isChanged": null,
+            "defaultPosition": null,
+            "actionEventAuditId": null,
+            "isMostSpecific": null,
+            "provider": [
+              {
+                "providerName": "Soukiasian, Harmik J, MD",
+                "authorizedProvider": true,
+                "unAuthorizeProvider": false,
+                "noCredential": false,
+                "unSigned": false
+              }
+            ],
+            "formedCodes": null,
+            "formedTree": null,
+            "isShow": false,
+            "expanded": true
+          },
+          {
+            "diagnosisCode": "I50.21",
+            "actualDescription": "Acute systolic congestive heart failure",
+            "dbDescription": "Acute systolic (congestive) heart failure",
+            "notes": null,
+            "capturedSections": [],
+            "encounterDate": "11/26/2023",
+            "isManuallyAdded": null,
+            "manuallyAddedAt": null,
+            "manuallyAddedBy": null,
+            "isHccValid": null,
+            "isChanged": null,
+            "defaultPosition": null,
+            "actionEventAuditId": null,
+            "isMostSpecific": null,
+            "provider": [
+              {
+                "providerName": "Soukiasian, Harmik J, MD",
+                "authorizedProvider": true,
+                "unAuthorizeProvider": false,
+                "noCredential": false,
+                "unSigned": false
+              }
+            ],
+            "formedCodes": null,
+            "formedTree": null,
+            "isShow": true,
+            "expanded": true
+          }
+        ],
+        "ruleType": "COMBINATION_RULE_ENGINE"
+      }
+    ]
+  }
+]

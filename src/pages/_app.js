@@ -19,7 +19,8 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const [showTerminal, setShowTerminal] = useState(false);
-  const [timer, setTimer] = useState();
+  const [validPath, setValidPath] = useState(true);
+
   useEffect(() => {
     const currentPath = window.location.pathname;
     fetch(currentPath)
@@ -33,7 +34,8 @@ function MyApp({ Component, pageProps }) {
             currentPath?.includes("/ehrlogin") ||
             currentPath?.includes("/twofactorAuthentication/") ||
             currentPath?.includes("search") ||
-            currentPath?.includes('/reviewer/patients/details')
+            currentPath?.includes("/reviewer/patients/details")
+            
           ) {
             setShowTerminal(false);
           } else {
@@ -104,6 +106,18 @@ function MyApp({ Component, pageProps }) {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, [dispatch, showTerminal]);
+
+  useEffect(() => {
+    const currentPath = window.location.pathname;
+    if (showTerminal && !currentPath?.includes("/patientDetails")) {
+      const userRole = localStorage.getItem("userRole");
+      const currentPath = router.pathname;
+      if (userRole && !currentPath.includes(`/${userRole}/`)) {
+        router.replace("/_error");
+      }
+      
+    }
+  }, [showTerminal]);
 
   return (
     <PrimeReactProvider>
