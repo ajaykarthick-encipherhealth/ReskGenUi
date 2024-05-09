@@ -288,7 +288,6 @@ const Meat = ({ activeMeatTitle, year }) => {
         <Spinner />
       </div>
     );
-    console.log("dadabsd")
 
     var fileId = patientDetailsResult?.result?.response?.fileId;
     const encounterDatesValue = encounterDate.split(",");
@@ -301,8 +300,6 @@ const Meat = ({ activeMeatTitle, year }) => {
       stringFileWord: splitPoint,
     };
 
-    console.log("dadabsd")
-
     try {
       const response = await axios.post(
         ENDPOINTS.apiEndoint + `dbservice/pageNumber`,
@@ -313,7 +310,6 @@ const Meat = ({ activeMeatTitle, year }) => {
         if (result?.first == false) {
           splitPoint = value;
         }
-        console.log("dadabsd")
 
         pageNumber = result?.second[0] ? result?.second[0] : null;
         setSearch({
@@ -322,10 +318,6 @@ const Meat = ({ activeMeatTitle, year }) => {
           headers: false,
           headerContent: value,
         });
-        console.log("fffffffff")
-
-
-        console.log("dadabsd")
         setFileInitialPage(pageNumber);
         setFileDosPageNumber(pageNumber);
       } else {
