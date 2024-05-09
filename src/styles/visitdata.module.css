@@ -1280,7 +1280,7 @@
 }
 
 .flagDetailsChange {
-  margin-top: 7px !important;
+  /* margin-top: 2px !important; */
   /* height: 17px !important;
     width: 17px !important; */
   display: block;

@@ -8,7 +8,8 @@ import {
   faArrowsAlt,
   faSitemap,
   faPen,
-  faListDots,
+  faEllipsisVertical,
+  faBook,
 } from "@fortawesome/free-solid-svg-icons";
 import { SVGICON } from "../../../../../../jsx/constant/theme";
 import { QuestionCircleOutlined } from "@ant-design/icons";
@@ -142,9 +143,9 @@ const HccCards = ({
               <div className="d-flex">
                 {cardTitle == "SUGGESTED" || cardTitle == "DELETED" ? (
                   <>
-                    {data.defaultPosition == "VALID" ? (
+                    {"VALID" ? (
                       <span
-                        className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
+                        className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange} mx-2`}
                       ></span>
                     ) : data.defaultPosition == "INVALID" ? (
                       <span
@@ -163,8 +164,9 @@ const HccCards = ({
                 ) : null}
 
                 <Popover
-                  placement="bottom"
+                  placement="left"
                   title={""}
+                  trigger="click"
                   content={() => (
                     <>
                       <div className="px-1">
@@ -247,7 +249,7 @@ const HccCards = ({
                                 }}
                               />
                             </div>
-                            <div className="px-2 mt-1">Actions</div>
+                            <div className="m-1">Actions</div>
                           </div>
                         }
                       </Popconfirm>
@@ -272,11 +274,35 @@ const HccCards = ({
                           <div className="px-2 mt-1">Combo Tree View</div>
                         </div>
                       )}
+                      {data.notes && (
+                        <div className="cr-pointer px-1 mr-1">
+                          <Popover
+                            content={() => <p>{data.notes}</p>}
+                            title={data.diagnosisCode}
+                            placement="bottom"
+                            trigger="click"
+                          >
+                            {/* <Tooltip title="HCC Version Details" placement="bottom"> */}
+                            <div className="cr-pointer">
+                              <FontAwesomeIcon
+                                icon={faBook}
+                                style={{
+                                  size: 8,
+                                  color: "#195cf5b5",
+                                }}
+                              />
+                              <span className="px-1 mx-1">Notes</span>
+                            </div>
+                            {/* </Tooltip> */}
+                          </Popover>
+                        </div>
+                      )}
                     </>
                   )}
+                  className="cr-pointer"
                 >
                   <FontAwesomeIcon
-                    icon={faListDots}
+                    icon={faEllipsisVertical}
                     style={{
                       size: 8,
                       color: "#000",
