@@ -16,6 +16,7 @@ const YearPicker = ({
 }) => {
   const currentDate = dayjs().format("MM");
   const currentYearDate = dayjs().format("DD/MM/YYYY");
+
   return (
     <>
       <div className={styles.pickerBox}>
@@ -35,7 +36,7 @@ const YearPicker = ({
           <Select
             value={
               val
-                ? { label: val?.toString()?.length < 10 ? `0${val}` : val, value: val }
+                ? { label: val<10 ? `0${val}` : val, value: val }
                 : { label: currentDate, value: currentDate }
             }
             onChange={(e) => onChangeMonth(e)}

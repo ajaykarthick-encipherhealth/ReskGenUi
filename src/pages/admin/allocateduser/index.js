@@ -524,7 +524,9 @@ export default function Patient() {
                                 <button
                                   style={{ width: "40px", height: "40px" }}
                                   className={reportStyles.filterBtn}
-                                  onClick={() => setIsPatientList(false)}
+                                  onClick={() => {
+                                    setIsPatientList(false)
+                                    setAllocatedOption("")}}
                                 >
                                   <Image src={leftArrow} />
                                 </button>
