@@ -142,7 +142,8 @@ export const getPatientDetails = async (
   setMeatCriteriaList,
   patientDetailsResult,
   dispatch,
-  sectionColorList
+  sectionColorList,
+  setAllDisList
 ) => {
   if (patientDetailsResult?.result?.response) {
     var result = patientDetailsResult?.result?.response;
@@ -793,6 +794,9 @@ export const getPatientDetails = async (
       setCaptureSectionMatching(newArrayColorMatchs);
 
       setMeatCriteriaList(meatListArr);
+      if(setAllDisList){
+      setAllDisList([...validDisArray,...deleteHccList,...suggestListAll])
+      }
 
       if (result.suggestRadiology != null) {
         if (result.suggestRadiology.length != 0) {
