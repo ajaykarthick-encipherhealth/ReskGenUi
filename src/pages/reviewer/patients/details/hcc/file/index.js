@@ -25,6 +25,7 @@ import { getPatientDetails } from "../../components/function/GetData";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { onDragEnd } from "../../components/function/ReusableFunctions";
 
+
 const File = ({
   popoverVisible,
   setPopoverVisible,
@@ -83,6 +84,7 @@ const File = ({
   const [formValues, setFormValues] = useState(false);
   const [formEditPlace, setFormEditPlace] = useState("");
   const [allDisList, setAllDisList] = useState([]);
+
 
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
@@ -275,7 +277,7 @@ const File = ({
           </div>
         </div>
       ) : null}
-      <DragDropContext
+        <DragDropContext
         onDragEnd={(result) =>
           onDragEnd(
             result,
@@ -368,32 +370,6 @@ const File = ({
                 }}
               />
             </Button>
-            </div>
-          </Popover>
-          <div className="card-body p-0">
-            {hccFileDetails?.loading != true ? (
-              <>
-                {selectFileURL && (
-                  <PdfViewer
-                    src={selectFileURL}
-                    searchQuery={search?.value ? search?.value : ""}
-                    pageNumber={search?.page ? search?.page : 1}
-                    headers={search?.headers}
-                    headerContent={search?.headerContent}
-                  />
-                )}
-              </>
-            ) : null}
-          </div>
-        </div>
-        {isFileFormShow ? (
-          <div className="col-xl-4">
-            <AddHccForm
-              handleCloseModal={handleCloseModal}
-              isAddHccForm={isAddHccForm}
-              setIsAddHccForm={setIsAddHccForm}
-              isMeatNew={true}
-            />
           </div>
           <div className={isFileFormShow ? "col-xl-7" : "col-xl-6"}>
             <Popover
