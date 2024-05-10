@@ -203,6 +203,7 @@ export const getPatientDetails = async (
             isRxHcc: res.isRxHcc,
             providerDeatils: res.provider,
             isComboCode: res.isComboCode,
+            notes: res.notes
           });
         }
       });
@@ -258,6 +259,7 @@ export const getPatientDetails = async (
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
+              notes: res.notes
             });
           }
         });
@@ -287,6 +289,7 @@ export const getPatientDetails = async (
             isRxHcc: res.isRxHcc,
             isComboCode: res.isComboCode,
             providerDeatils: res.provider,
+            notes: res.notes
           });
         });
 
@@ -311,6 +314,7 @@ export const getPatientDetails = async (
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
               providerDeatils: res.provider,
+              notes: res.notes
               // defaultPosition:res.defaultPosition
             });
           });
@@ -341,6 +345,7 @@ export const getPatientDetails = async (
             isRxHcc: res.isRxHcc,
             isComboCode: res.isComboCode,
             providerDeatils: res.provider,
+            notes: res.notes
           });
         });
       }
@@ -371,6 +376,7 @@ export const getPatientDetails = async (
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
               providerDeatils: res.provider,
+              notes: res.notes
             });
           }
         });
@@ -397,6 +403,7 @@ export const getPatientDetails = async (
             isRxHcc: res.isRxHcc,
             isComboCode: res.isComboCode,
             providerDeatils: res.provider,
+            notes: res.notes
           });
         });
       }
@@ -422,6 +429,7 @@ export const getPatientDetails = async (
             isRxHcc: res.isRxHcc,
             isComboCode: res.isComboCode,
             providerDeatils: res.provider,
+            notes: res.notes
           });
         });
       }

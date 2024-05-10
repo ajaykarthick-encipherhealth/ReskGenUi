@@ -8,7 +8,8 @@ import {
   faArrowsAlt,
   faSitemap,
   faPen,
-  faListDots,
+  faEllipsisVertical,
+  faBook,
 } from "@fortawesome/free-solid-svg-icons";
 import { SVGICON } from "../../../../../../jsx/constant/theme";
 import { QuestionCircleOutlined } from "@ant-design/icons";
@@ -158,6 +159,72 @@ const HccCards = ({
                                 </>
                               </Popover>
                             </span>
+                  <Popover
+                    content={
+                      data.dbDescription
+                        ? data.dbDescription
+                        : data.actualDescription
+                    }
+                    title=""
+                    trigger="hover"
+                  >
+                    <>
+                      {" "}
+                      -{" "}
+                      {data.dbDescription
+                        ? data.dbDescription
+                        : data.actualDescription}
+                    </>
+                  </Popover>
+                </span>
+              </div>
+              {/* {data.defaultPosition} */}
+              <div className="d-flex">
+                {cardTitle == "SUGGESTED" || cardTitle == "DELETED" ? (
+                  <>
+                    {"VALID" ? (
+                      <span
+                        className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange} mx-2`}
+                      ></span>
+                    ) : data.defaultPosition == "INVALID" ? (
+                      <span
+                        className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
+                      ></span>
+                    ) : data.defaultPosition == "SUGGESTED" ? (
+                      <span
+                        className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
+                      ></span>
+                    ) : data.defaultPosition == "DELETED" ? (
+                      <span
+                        className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
+                      ></span>
+                    ) : null}
+                  </>
+                ) : null}
+
+                <Popover
+                  placement="left"
+                  title={""}
+                  trigger="click"
+                  content={() => (
+                    <>
+                      <div className="px-1">
+                        <Popover
+                          onClick={() =>
+                            getValidHccDetails(
+                              data.actualDescription,
+                              data.diagnosisCode
+                            )
+                          }
+                          content={PopContentHccVersion}
+                          title={data.diagnosisCode}
+                          placement="bottom"
+                          trigger="click"
+                        >
+                          {/* <Tooltip title="HCC Version Details" placement="bottom"> */}
+                          <div className="cr-pointer">
+                            <i className="cr-pointer">{SVGICON.infoIcon}</i>
+                            <span className="px-1">HCC Version Details</span>
                           </div>
                           {/* {data.defaultPosition} */}
                           <div className="d-flex">
@@ -365,6 +432,7 @@ const HccCards = ({
                                 setFileInitialPage
                               )}
                             </div>
+                            <div className="m-1">Actions</div>
                           </div>
                           <div
                             className={`${visitStyles.encounterAndSectionHeader}`}
@@ -509,7 +577,197 @@ const HccCards = ({
             </>
           ))}
         </div>
-      )}
+
+                      )}
+                      {data.notes && (
+                        <div className="cr-pointer px-1 mr-1">
+                          <Popover
+                            content={() => <p>{data.notes}</p>}
+                            title={data.diagnosisCode}
+                            placement="bottom"
+                            trigger="click"
+                          >
+                            {/* <Tooltip title="HCC Version Details" placement="bottom"> */}
+                            <div className="cr-pointer">
+                              <FontAwesomeIcon
+                                icon={faBook}
+                                style={{
+                                  size: 8,
+                                  color: "#195cf5b5",
+                                }}
+                              />
+                              <span className="px-1 mx-1">Notes</span>
+                            </div>
+                            {/* </Tooltip> */}
+                          </Popover>
+                        </div>
+                      )}
+                    </>
+                  )}
+                  className="cr-pointer"
+                >
+                  <FontAwesomeIcon
+                    icon={faEllipsisVertical}
+                    style={{
+                      size: 8,
+                      color: "#000",
+                    }}
+                  />
+                </Popover>
+              </div>
+            </div>
+            <div className="d-flex justify-content-between">
+              <div className={`${visitStyles.hoverActiveHcc}`}>
+                <div className={`${visitStyles.encounterAndSectionHeader}`}>
+                  {getProviderNameList({
+                    data: data?.providerName,
+                    captureSectionMatching: captureSectionMatching,
+                  })}
+                </div>
+                <div className={`${visitStyles.encounterAndSectionHeader}`}>
+                  {getEncounterDateBackground({
+                    value: data?.encounterDateSplit,
+                    encounterDateMatching: encounterDateMatching,
+                    fileDosPageNumberList: fileDosPageNumberList,
+                    setIsModalOpenValidCodes: setIsModalOpenValidCodes
+                      ? setIsModalOpenValidCodes
+                      : null,
+                    setSearch: setSearch,
+                    setFileModalHeader: setFileModalHeader,
+                    patientDocumentResult: patientDocumentResult,
+                  })}
+                </div>
+                <div className={`${visitStyles.encounterAndSectionHeader}`}>
+                  {getCaptureSectionBackgroundFile(
+                    data?.capturedSections,
+                    data?.encounterDate,
+                    data?.actualDescription,
+                    data?.diagnosisCode,
+                    data?.getPlace,
+                    captureSectionMatching,
+                    setSearch,
+                    setFileLoading,
+                    setIsModalOpenLab,
+                    setIsModalOpenRadiology,
+                    setIsModalOpenValidCodes,
+                    setFileModalHeader,
+                    fileId,
+                    patientDocumentResult,
+                    fileInitialPage,
+                    setFileInitialPage
+                  )}
+                </div>
+              </div>
+              <div className={`${visitStyles.encounterAndSectionHeader}`}>
+                <div className="d-flex justify-content-end mt-2">
+                  {data.isCmsHcc && (
+                    <div className={`${visitStyles.cmsStatus} mx-1`}>CMS</div>
+                  )}
+                  {data.isRxHcc && (
+                    <div className={`${visitStyles.rxStatus} mx-1`}>RX</div>
+                  )}
+                </div>
+                <div className={`cr-pointer ${styles.meatFoundContainer}`}>
+                  <div
+                    onClick={() => {
+                      setActiveTabHead(4);
+                      setActiveMeatTitle({
+                        header: "M",
+                        diagnosisCode: data?.diagnosisCode,
+                      });
+                    }}
+                  >
+                    {getMeatFound(data?.diagnosisCode, meatCriteriaList, "M")}
+                  </div>
+                  <div
+                    onClick={() => {
+                      setActiveTabHead(4);
+                      setActiveMeatTitle({
+                        header: "E",
+                        diagnosisCode: data?.diagnosisCode,
+                      });
+                    }}
+                  >
+                    {getMeatFound(data?.diagnosisCode, meatCriteriaList, "E")}
+                  </div>
+                  <div
+                    onClick={() => {
+                      setActiveTabHead(4);
+                      setActiveMeatTitle({
+                        header: "A",
+                        diagnosisCode: data?.diagnosisCode,
+                      });
+                    }}
+                  >
+                    {getMeatFound(data?.diagnosisCode, meatCriteriaList, "A")}
+                  </div>
+                  <div
+                    onClick={() => {
+                      setActiveTabHead(4);
+                      setActiveMeatTitle({
+                        header: "T",
+                        diagnosisCode: data?.diagnosisCode,
+                      });
+                    }}
+                  >
+                    {getMeatFound(data?.diagnosisCode, meatCriteriaList, "T")}
+                  </div>
+                </div>
+                <div className={`${visitStyles.encounterAndSectionHeader}`}>
+                  {data.isManuallyAdded == true ? (
+                    <Badge
+                      className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                    >
+                      Manually Added
+                    </Badge>
+                  ) : null}
+                </div>
+                {data.isComboCode == true ? (
+                  <Badge
+                    className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                    onClick={() => {
+                      setActiveTabHead(3);
+                      setActiveComboTree({
+                        diagnosisCode: data?.diagnosisCode,
+                      });
+                    }}
+                  >
+                    Combo
+                  </Badge>
+                ) : null}
+
+                {data.getPlace == "Insulin" ? (
+                  <span
+                    className={` mt-2 ${visitStyles.radiologyStatus}`}
+                    bg={`  mt-2 bg-bg-eight `}
+                  >
+                    Insulin
+                  </span>
+                ) : null}
+                {data.getPlace == "Lab" ? (
+                  <Tooltip title="LAB">
+                    <span
+                      className={` mt-2 ${visitStyles.labStatus}`}
+                      bg={`  mt-2 bg-bg-seven `}
+                    >
+                      Lab
+                    </span>
+                  </Tooltip>
+                ) : data.getPlace == "Radio" ? (
+                  <Tooltip title="RADIOLOGY">
+                    <span
+                      className={` mt-2 ${visitStyles.radiologyStatus}`}
+                      bg={`  mt-2 bg-bg-eight `}
+                    >
+                      Radiology
+                    </span>
+                  </Tooltip>
+                ) : null}
+              </div>
+            </div>
+          </div>
+        </li>
+      ))}
     </>
   );
 };

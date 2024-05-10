@@ -150,6 +150,7 @@ const HeaderFilters = ({
   isNextCreatedBySelector,
   selectReportOptions,
   value,
+  setSelectedManger,
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
@@ -240,7 +241,7 @@ const HeaderFilters = ({
                   value={defaultSelectValue2 ? defaultSelectValue2 : ""}
                   onChange={(selectedOption) => {
                     setSelectedOption2(selectedOption);
-
+                    setSelectedManger("")
                     if (selectedOption?.label === "All") {
                       setSelectedOption3(null);
                     }
@@ -260,6 +261,8 @@ const HeaderFilters = ({
                   // value={defaultSelectValue2}
                   onChange={(selectedOption) => {
                     setSelectedOption2(selectedOption?.value);
+                    console.log("stetrd");
+                    setSelectedManger("");
                   }}
                   options={selectOptions2}
                   // placeholder={defaultSelectValue2}
@@ -275,11 +278,10 @@ const HeaderFilters = ({
               <div class="form-group has-search">
                 <Select
                   showSearch
-                  value={value}
+                  value={value ? value : ""}
                   onChange={(selectedOption) => {
                     if (selectedCoderOptReport?.value === "SUPERVISOR") {
                       setSelectedOption3(selectedOption);
-
                       setSelect(null);
                     }
                     if (selectedCoderOptReport?.value === "REVIEWER") {
@@ -366,7 +368,11 @@ const HeaderFilters = ({
           {isNextRow && (
             <div
               className={"col-xl-1"}
-              style={{ margin: "30px 0 0 10px", cursor: "pointer",width:"120px" }}
+              style={{
+                margin: "30px 0 0 10px",
+                cursor: "pointer",
+                width: "120px",
+              }}
               onClick={() => setShowFilters(!showFilters)}
             >
               <button className={styles.filterBtn}>
@@ -377,7 +383,7 @@ const HeaderFilters = ({
           {bullets && (
             <div
               className={`${bullets ? "col-xl-1" : "col-xl-4"}`}
-              style={{ margin: "30px 0 0 0px", marginLeft:'39px'}}
+              style={{ margin: "30px 0 0 0px", marginLeft: "39px" }}
             >
               <Popover
                 content={
@@ -401,7 +407,11 @@ const HeaderFilters = ({
                 trigger={["click"]}
                 placement="bottom"
               >
-                <Image src={warning} className="mt-[10px]"style={{cursor:"pointer"}} />
+                <Image
+                  src={warning}
+                  className="mt-[10px]"
+                  style={{ cursor: "pointer" }}
+                />
               </Popover>
             </div>
           )}

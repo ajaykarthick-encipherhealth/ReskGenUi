@@ -368,6 +368,32 @@ const File = ({
                 }}
               />
             </Button>
+            </div>
+          </Popover>
+          <div className="card-body p-0">
+            {hccFileDetails?.loading != true ? (
+              <>
+                {selectFileURL && (
+                  <PdfViewer
+                    src={selectFileURL}
+                    searchQuery={search?.value ? search?.value : ""}
+                    pageNumber={search?.page ? search?.page : 1}
+                    headers={search?.headers}
+                    headerContent={search?.headerContent}
+                  />
+                )}
+              </>
+            ) : null}
+          </div>
+        </div>
+        {isFileFormShow ? (
+          <div className="col-xl-4">
+            <AddHccForm
+              handleCloseModal={handleCloseModal}
+              isAddHccForm={isAddHccForm}
+              setIsAddHccForm={setIsAddHccForm}
+              isMeatNew={true}
+            />
           </div>
           <div className={isFileFormShow ? "col-xl-7" : "col-xl-6"}>
             <Popover

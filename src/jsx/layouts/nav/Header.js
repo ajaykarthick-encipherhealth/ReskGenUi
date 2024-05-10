@@ -23,6 +23,7 @@ import {
   CloseCircleOutlined,
   DownOutlined,
   SettingOutlined,
+  CloseOutlined,
 } from "@ant-design/icons";
 import styles from "../../../styles/file-managemnt.module.css";
 import { IMAGES } from "../../constant/theme";
@@ -61,7 +62,6 @@ import {
   logoutAllDevice,
 } from "../../../stores/authflow/actions";
 import { actions as dashbaordActions } from "../../../stores/reviewer/dashboard";
-import { MenuItem } from "@react-pdf-viewer/core";
 
 const btnItems = [
   {
@@ -599,96 +599,105 @@ const Header = ({
                             </div>
                           </Badge>
                         </div>
+
                         <div className="header-media d-flex">
                           <Popover
                             trigger="click"
+                            open={openContent}
                             content={
-                              !openContent && (
-                                <div className={styles.popDIv}>
+                              <div className={styles.popDIv}>
+                                {/* <Button type="text" className="w-100 border-0 bg-transparent position-relative" onClick={()=>setOpenContent(false)}>
+                                  <CloseCircleOutlined style={{color:"#000",fontSize:"16px"}} className="position-absolute top-0 start-100 translate-middle" />
+                                </Button> */}
+                                <div className={styles.closeContainer2}>
+                                  <CloseCircleOutlined
+                                    onClick={() => setOpenContent(false)}
+                                    className={styles.close_icon}
+                                  />
+                                </div>
+                                <div
+                                  style={{
+                                    margin: "20px 0px 0 30px",
+                                    display: "flex",
+                                  }}
+                                >
                                   <div
-                                    style={{
-                                      margin: "20px 0px 0 30px",
-                                      display: "flex",
-                                    }}
+                                    style={{ width: "80px", height: "80px" }}
                                   >
+                                    {profileUploadedTime?.loading ? (
+                                      <Spin
+                                        indicator={
+                                          <LoadingOutlined
+                                            style={{ fontSize: 24 }}
+                                          />
+                                        }
+                                        loading={profileUploadedTime?.loading}
+                                        style={{ marginTop: "10px" }}
+                                      />
+                                    ) : (
+                                      renderUserPrfoile(
+                                        userName,
+                                        lastName,
+                                        profileImg,
+                                        "header",
+                                        "70px",
+                                        "70px"
+                                      )
+                                    )}
                                     <div
-                                      style={{ width: "80px", height: "80px" }}
+                                      onClick={() => {
+                                        setOpenContent(false);
+                                        setOpenUploader(!openUploader);
+                                      }}
+                                      className={styles.edit}
                                     >
-                                      {profileUploadedTime?.loading ? (
-                                        <Spin
-                                          indicator={
-                                            <LoadingOutlined
-                                              style={{ fontSize: 24 }}
-                                            />
-                                          }
-                                          loading={profileUploadedTime?.loading}
-                                          style={{ marginTop: "10px" }}
-                                        />
-                                      ) : (
-                                        renderUserPrfoile(
-                                          userName,
-                                          lastName,
-                                          profileImg,
-                                          "header",
-                                          "70px",
-                                          "70px"
-                                        )
-                                      )}
-                                      <div
-                                        onClick={() => {
-                                          setOpenContent(false);
-                                          setOpenUploader(!openUploader);
-                                        }}
-                                        className={styles.edit}
-                                      >
-                                        <span>
-                                          <Image src={editImg} alt="noimg" />
-                                        </span>
-                                      </div>
-                                    </div>
-                                    <div style={{ margin: "10px 0 0 5px" }}>
-                                      <span
-                                        className="ms-2 header-name d-flex mr-3"
-                                        style={{
-                                          fontWeight: "700",
-                                          fontSize: "16px",
-                                        }}
-                                      >
-                                        {userName}
-                                      </span>
-                                      <span
-                                        className="text-[#4F4F4F] ms-2 subHeader-name d-flex mr-3 "
-                                        style={{
-                                          fontWeight: "500",
-                                          fontSize: "6px",
-                                        }}
-                                      >
-                                        {currentRole == "reviewer"
-                                          ? "Reviewer"
-                                          : currentRole == "supervisor"
-                                          ? "Supervisor"
-                                          : currentRole == "tenant"
-                                          ? "Tenant Admin"
-                                          : currentRole == "ehr"
-                                          ? "EHR"
-                                          : "Admin"}
+                                      <span>
+                                        <Image src={editImg} alt="noimg" />
                                       </span>
                                     </div>
                                   </div>
-
-                                  <Divider className={styles.divider} />
-                                  <div
-                                    className={styles.footerDiv}
-                                    onClick={logoutFunction}
-                                  >
-                                    {/* <Image src={logout} /> */}
-                                    <span className={styles.footerCont}>
-                                      {" "}
-                                      Log out
+                                  <div style={{ margin: "10px 0 0 5px" }}>
+                                    <span
+                                      className="ms-2 header-name d-flex mr-3"
+                                      style={{
+                                        fontWeight: "700",
+                                        fontSize: "16px",
+                                      }}
+                                    >
+                                      {userName}
+                                    </span>
+                                    <span
+                                      className="text-[#4F4F4F] ms-2 subHeader-name d-flex mr-3 "
+                                      style={{
+                                        fontWeight: "500",
+                                        fontSize: "6px",
+                                      }}
+                                    >
+                                      {currentRole == "reviewer"
+                                        ? "Reviewer"
+                                        : currentRole == "supervisor"
+                                        ? "Supervisor"
+                                        : currentRole == "tenant"
+                                        ? "Tenant Admin"
+                                        : currentRole == "ehr"
+                                        ? "EHR"
+                                        : "Admin"}
                                     </span>
                                   </div>
                                 </div>
-                              )
+
+                                <Divider className={styles.divider} />
+                                <div
+                                  className={styles.footerDiv}
+                                  onClick={logoutFunction}
+                                >
+                                  {/* <Image src={logout} /> */}
+                                  <span className={styles.footerCont}>
+                                    {" "}
+                                    Log out
+                                  </span>
+                                </div>
+                              </div>
                             }
                           >
                             <div>
@@ -696,7 +705,7 @@ const Header = ({
                                 <div
                                   className="header-media"
                                   style={{ marginTop: "-3px" }}
-                                  onClick={() => setOpenContent(false)}
+                                  onClick={() => setOpenContent(true)}
                                 >
                                   {profileUploadedTime?.loading ? (
                                     <Spin
@@ -793,8 +802,14 @@ const Header = ({
       <Modal
         title="Upload Profile Image"
         open={openUploader}
-        onOk={() => setOpenUploader(false)}
-        onCancel={() => setOpenUploader(false)}
+        onOk={() => {
+          setOpenUploader(false);
+          setOpenContent(false);
+        }}
+        onCancel={() => {
+          setOpenContent(false);
+          setOpenUploader(false);
+        }}
       >
         <div>
           <ImageUploader

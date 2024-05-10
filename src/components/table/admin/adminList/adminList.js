@@ -70,7 +70,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
             options={items}
             placeholder={!data?.role[0] && "Select Role"}
             defaultValue={isMultiple ? data.role : data?.role}
-            open={open}
+            // open={open}
             onDropdownVisibleChange={(visible) => setOpen(visible)}
           />
           {selectedRoles?.length <= 1 && selectedRoles[0] === "REVIEWER" && (
@@ -82,7 +82,7 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                 onChange={handleManager}
                 options={optionsUser?.length > 0 ? optionsUser : []}
                 placeholder={"Change Manager"}
-                open={openManager}
+                // open={openManager}
                 onDropdownVisibleChange={(visible) => setOpenManager(visible)}
               />
             </>
