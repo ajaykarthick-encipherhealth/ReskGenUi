@@ -148,7 +148,7 @@ const Header = ({
   };
 
   const logoutFunction = async () => {
-    setOpenContent(true);
+    setOpenContent(false);
     Swal.fire({
       title: "Warning!",
       text: "Do you want Logout!",

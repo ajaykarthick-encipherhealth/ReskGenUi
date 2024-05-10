@@ -13,7 +13,7 @@ import spinSTYles from "../../../../styles/auth.module.css";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 import { actions as dashbaordActions } from "../../../../stores/reviewer/dashboard";
-import { getHighlightedIndex } from "../../../admin/dashboard/accuracy";
+import { chartBlockedDates, getGraphData, getHighlightedIndex } from "../../../admin/dashboard/accuracy";
 
 export const getISOWeekNumber = (date) => {
   const currentDate = new Date(date);
@@ -60,24 +60,6 @@ export const monthNames = [
   "DEC",
 ];
 
-export const getData = (currentDate, selectedMonth, selectedYear) => {
-  if (selectedMonth < currentDate?.getMonth() + 1) {
-    return true;
-  } else if (
-    selectedMonth > currentDate?.getMonth() + 1 &&
-    parseInt(selectedYear) < currentDate?.getFullYear()
-  ) {
-    return true;
-  } else if (
-    selectedMonth <= currentDate?.getMonth() + 1 &&
-    parseInt(selectedYear) <= currentDate?.getFullYear()
-  ) {
-    return true;
-  } else {
-    return false;
-  }
-};
-
 const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
   const [activeButton, setActiveButton] = useState(0);
   const [initialAccuracyData, setInitialAccuracyData] = useState(null);
@@ -110,53 +92,6 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
   const handleButtonClick = (index, btn) => {
     setActiveButton(index);
     setCurrentBtn(btn);
-  };
-
-  const chartBlockedDates = (year, month, param, val, currentBtn) => {
-    year = Number(year);
-    month = Number(month);
-    if (year < currentDate.getFullYear() && param?.data?.response?.length > 0) {
-      return param?.data?.response?.map((item) => item[val]);
-    } else if (
-      year == currentDate.getFullYear() &&
-      month < currentDate.getMonth() + 1 &&
-      param?.data?.response?.length > 0
-    ) {
-      return param?.data?.response?.map((item) => item[val]);
-    } else if (
-      year == currentDate.getFullYear() &&
-      month == currentDate.getMonth() + 1 &&
-      currentBtn !== "Monthly" &&
-      param?.data?.response?.length > 0
-    ) {
-      if (currentBtn == "Daily" && param?.data?.response?.length > 0) {
-        return param?.data?.response?.map(
-          (item, index) => index < new Date().getDate() && item[val]
-        );
-      } else if (currentBtn == "Weekly" && param?.data?.response?.length > 0) {
-        return param?.data?.response?.map(
-          (item, index) => index < getDateWeek(currentDate) && item[val]
-        );
-      } else if (currentBtn == "Monthly" && param?.data?.response?.length > 0) {
-        return param?.data?.response?.map(
-          (item, index) => index < new Date().getMonth() + 1 && item[val]
-        );
-      }
-    } else if (
-      year == currentDate.getFullYear() &&
-      currentBtn == "Monthly" &&
-      param?.data?.response?.length > 0
-    ) {
-      if (month > currentDate?.getMonth() + 1) {
-        return false;
-      } else {
-        return param?.data?.response?.map(
-          (item, index) => index < new Date().getMonth() + 1 && item[val]
-        );
-      }
-    } else {
-      return false;
-    }
   };
 
   const handleYearChange = (date, dateString) => {
@@ -310,34 +245,43 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
     series: [
       {
         name: "totalCorrectCount",
-        data: getData(currentDate, selectedMonth, selectedYear)
-          ? accuracyDatas?.data?.response?.map(
-              (item) => item?.totalCorrectCount
-            )
-          : [],
+        data: getGraphData(
+          accuracyDatas?.data?.response,
+          "totalCorrectCount",
+          selectedMonth,
+          selectedYear,
+          currentBtn,
+          currentDate
+        ),
         color: "#0b59f1",
         yAxis: 1,
       },
       {
         name: "totalWrongCount",
-        data: getData(currentDate, selectedMonth, selectedYear)
-          ? accuracyDatas?.data?.response?.map((item) => item?.totalWrongCount)
-          : [],
+        data:getGraphData(
+          accuracyDatas?.data?.response,
+          "totalWrongCount",
+          selectedMonth,
+          selectedYear,
+          currentBtn,
+          currentDate
+        ),
+       
         color: "red",
         yAxis: 1,
       },
       {
         name: "Temperature",
         type: "spline",
-        data: getData(currentDate, selectedMonth, selectedYear)
-          ? chartBlockedDates(
-              selectedYear,
-              selectedMonth,
-              accuracyDatas,
-              "averageScore",
-              currentBtn
-            )
-          : [],
+        data: 
+        chartBlockedDates(
+          selectedYear,
+          selectedMonth,
+          accuracyDatas?.data?.response,
+          "averageScore",
+          currentBtn,
+          currentDate
+        ),
         tooltip: {
           valueSuffix: "",
         },

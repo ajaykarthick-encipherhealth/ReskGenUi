@@ -107,6 +107,76 @@ export function getHighlightedIndex(
   return constHighlitedIndex;
 }
 
+export const getGraphData = (
+  param,
+  text,
+  month,
+  year,
+  currentBtn,
+  currentDate
+) => {
+  if (
+    currentBtn === "Monthly" &&
+    parseInt(year) <= parseInt(currentDate.getFullYear())
+  ) {
+    if (parseInt(year) <= parseInt(currentDate.getFullYear())) {
+      return param?.map((item) => item[text]);
+    }
+  } else if (currentBtn !== "Monthly") {
+    if (parseInt(month) <= parseInt(currentDate?.getMonth() + 1)) {
+      return param?.map((item) => item[text]);
+    }
+  }
+};
+export const chartBlockedDates = (
+  year,
+  month,
+  param,
+  val,
+  currentBtn,
+  currentDate
+) => {
+  year = Number(year);
+  month = Number(month);
+  if (year < currentDate.getFullYear()) {
+    return param?.map((item) => item[val]);
+  } else if (
+    year == currentDate.getFullYear() &&
+    month < currentDate.getMonth() + 1 &&
+    currentBtn !== "Monthly"
+  ) {
+    return param?.map((item) => item[val]);
+  } else if (
+    year == currentDate.getFullYear() &&
+    month == currentDate.getMonth() + 1 &&
+    currentBtn !== "Monthly"
+  ) {
+    if (currentBtn == "Daily") {
+      return param?.map(
+        (item, index) => index < new Date().getDate() && item[val]
+      );
+    } else if (currentBtn == "Weekly") {
+      return param?.map(
+        (item, index) => index < getDateWeek(currentDate) && item[val]
+      );
+    }
+    // else if (currentBtn == "Monthly") {
+    //   return param?.data?.response.map(
+    //     (item, index) => index < new Date().getMonth() + 1 && item[val]
+    //   );
+    // }
+  } else if (year == currentDate.getFullYear() && currentBtn == "Monthly") {
+    if (parseInt(year) > parseInt(currentDate.getFullYear())) {
+      return false;
+    } else {
+      return param?.map(
+        (item, index) => index < new Date().getMonth() + 1 && item[val]
+      );
+    }
+  } else {
+    return false;
+  }
+};
 const Accuracy = () => {
   const [activeButton, setActiveButton] = useState(0);
   const [initialAccuracyData, setInitialAccuracyData] = useState(null);
@@ -173,16 +243,8 @@ const Accuracy = () => {
   let highlightIndex = -1;
 
   if (currentBtn === "Monthly") {
-    if (
-      parseInt(selectedYear) === new Date().getFullYear() &&
-      selectedMonth === new Date().getMonth() + 1
-    ) {
+    if (parseInt(selectedYear) === parseInt(new Date().getFullYear()) || parseInt(selectedMonth) <= parseInt(currentDate.getMonth()+1)) {
       highlightIndex = currentDate.getMonth();
-    } else if (
-      parseInt(selectedYear) === new Date().getFullYear() &&
-      selectedMonth < new Date().getMonth() + 1
-    ) {
-      highlightIndex = selectedMonth - 1;
     }
   } else if (currentBtn === "Daily") {
     if (
@@ -206,47 +268,6 @@ const Accuracy = () => {
     data = Object.values(accuracyDatas?.data?.response);
   }
 
-  const chartBlockedDates = (year, month, param, val, currentBtn) => {
-    year = Number(year);
-    month = Number(month);
-    if (year < currentDate.getFullYear()) {
-      return param?.data?.response.map((item) => item[val]);
-    } else if (
-      year == currentDate.getFullYear() &&
-      month < currentDate.getMonth() + 1
-    ) {
-      return param?.data?.response.map((item) => item[val]);
-    } else if (
-      year == currentDate.getFullYear() &&
-      month == currentDate.getMonth() + 1 &&
-      currentBtn !== "Monthly"
-    ) {
-      if (currentBtn == "Daily") {
-        return param?.data?.response.map(
-          (item, index) => index < new Date().getDate() && item[val]
-        );
-      } else if (currentBtn == "Weekly") {
-        return param?.data?.response.map(
-          (item, index) => index < getDateWeek(currentDate) && item[val]
-        );
-      } else if (currentBtn == "Monthly") {
-        return param?.data?.response.map(
-          (item, index) => index < new Date().getMonth() + 1 && item[val]
-        );
-      }
-    } else if (year == currentDate.getFullYear() && currentBtn == "Monthly") {
-      if (month > currentDate?.getMonth() + 1) {
-        return false;
-      } else {
-        return param?.data?.response.map(
-          (item, index) => index < new Date().getMonth() + 1 && item[val]
-        );
-      }
-    } else {
-      return false;
-    }
-  };
-
   const chartBlocked = (year, month, param) => {
     year = Number(year);
     month = Number(month);
@@ -254,7 +275,8 @@ const Accuracy = () => {
       return param.map((item) => item);
     } else if (
       year == currentDate.getFullYear() &&
-      month < currentDate.getMonth() + 1
+      month < currentDate.getMonth() + 1 &&
+      currentBtn !== "Monthly"
     ) {
       if (
         year == currentDate.getFullYear() &&
@@ -270,7 +292,7 @@ const Accuracy = () => {
     } else if (
       year == currentDate.getFullYear() &&
       month == currentDate.getMonth() + 1 &&
-      currentBtn != "Monthly"
+      currentBtn !== "Monthly"
     ) {
       if (currentBtn == "Daily") {
         return param.map((item, index) => index < new Date().getDate() && item);
@@ -278,16 +300,17 @@ const Accuracy = () => {
         return param.map(
           (item, index) => index < getDateWeek(currentDate) && item
         );
-      } else if (currentBtn == "Monthly") {
-        return param.map(
-          (item, index) => index < new Date().getMonth() + 1 && item
-        );
       }
-    } else if (year == currentDate.getFullYear() && currentBtn == "Monthly") {
-      if (month > currentDate?.getMonth() + 1) {
+      // else if (currentBtn == "Monthly") {
+      //   return param.map(
+      //     (item, index) => index < new Date().getMonth() + 1 && item
+      //   );
+      // }
+    } else if (year == currentDate.getFullYear() && currentBtn === "Monthly") {
+      if (year > currentDate.getFullYear()) {
         return false;
       } else {
-        return param.map(
+        return param?.map(
           (item, index) => index < new Date().getMonth() + 1 && item
         );
       }
@@ -469,43 +492,43 @@ const Accuracy = () => {
       },
     },
     series: [
-      // {
-      //   name: "averageScore",
-      //   data: accuracyDatas?.data?.response.map((item) => item.averageScore),
-      //   color: "#cc0000",
-      // },
       {
         name: "totalCorrectCount",
-        data:
-          selectedMonth <= currentDate?.getMonth() + 1 &&
-          QualityAccuracyDatas?.data?.response?.map(
-            (item) => item?.totalCorrectCount
-          ),
+        data: getGraphData(
+          QualityAccuracyDatas?.data?.response,
+          "totalCorrectCount",
+          selectedMonth,
+          selectedYear,
+          currentBtn,
+          currentDate
+        ),
         color: "#0b59f1",
         yAxis: 1,
       },
       {
         name: "totalWrongCount",
-        data:
-          selectedMonth <= currentDate?.getMonth() + 1 &&
-          QualityAccuracyDatas?.data?.response?.map(
-            (item) => item.totalWrongCount
-          ),
+        data: getGraphData(
+          QualityAccuracyDatas?.data?.response,
+          "totalWrongCount",
+          selectedMonth,
+          selectedYear,
+          currentBtn,
+          currentDate
+        ),
         color: "red",
         yAxis: 1,
       },
       {
         name: "Temperature",
         type: "spline",
-        // data: QualityAccuracyDatas?.data?.response.map(
-        //   (item) => item?.averageScore
-        // ),
+
         data: chartBlockedDates(
           selectedYear,
           selectedMonth,
-          QualityAccuracyDatas,
+          QualityAccuracyDatas?.data?.response,
           "averageScore",
-          currentBtn
+          currentBtn,
+          currentDate
         ),
         tooltip: {
           valueSuffix: "",
