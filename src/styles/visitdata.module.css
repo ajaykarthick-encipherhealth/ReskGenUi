@@ -605,7 +605,7 @@
 
 .container,
 .suggestedcontainer {
-  min-height: 10vh;
+  min-height: 64vh;
   max-height: 64vh;
   /* overflow-y: scroll; */
   overflow: hidden;
@@ -625,7 +625,7 @@
 }
 
 .suggestedcontainer2 {
-  min-height: 10vh;
+  min-height: 30vh;
   max-height: 30vh;
   overflow: hidden;
 }
@@ -639,7 +639,7 @@
 }
 
 .deletedContainer {
-  min-height: 10vh;
+  min-height: 30vh;
   max-height: 30vh;
   overflow: hidden;
 }
@@ -1696,7 +1696,7 @@
   font-size: 12px;
   border-radius: 5px;
 }
-@media screen and (min-width:1500px) {
+@media screen and (min-width: 1500px) {
   .dosSelectPicker {
     margin-top: 10px;
     width: 100px !important;
@@ -1706,7 +1706,7 @@
   .statusFLag {
     /* padding-top: 20px;
     padding-left: 16px; */
-    height:auto !important;
+    height: auto !important;
     margin: auto !important;
   }
 }
@@ -1717,9 +1717,8 @@
     margin-left: -100px;
     height: 35px !important;
   }
-  .statusFLag{
-    height:30px !important;
+  .statusFLag {
+    height: 30px !important;
     margin: 30px 0px 0px 10px !important;
   }
-
 }
