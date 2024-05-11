@@ -23,7 +23,9 @@ const ModelIndex = ({
   isValidAction,
   selectDisDetails,
   isEdit,
-  setOpenEdit
+  setOpenEdit,
+  initialValues, 
+  setInitialValues
 }) => {
   const [form] = Form.useForm();
   const { TextArea } = Input;
@@ -122,7 +124,7 @@ const ModelIndex = ({
         </div>
         )
       )}
-      {isEdit && <EditForm/>}
+      {isEdit && <EditForm setOpenEdit={setOpenEdit} initialValues={initialValues} setInitialValues={setInitialValues}/>}
     </Modal>
   );
 };

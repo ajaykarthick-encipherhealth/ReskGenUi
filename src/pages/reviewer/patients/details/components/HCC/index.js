@@ -66,6 +66,12 @@ const HccCards = ({
   );
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
+  const [initialValues, setInitialValues] = useState({
+    diagnosisCode: "",
+    header: "",
+    searchString: "",
+    pagenumber: "",
+  });
   const PopContentHccVersion = (
     <div className={styles.innerPop}>
       <div className={styles.displayDiv}>
@@ -104,6 +110,12 @@ const HccCards = ({
   );
   const handleCloseModal = () => {
     setOpenEdit(false);
+    setInitialValues({
+      diagnosisCode: "",
+      header: "",
+      searchString: "",
+      pagenumber: "",
+    })
   };
   return (
     <>
@@ -566,6 +578,8 @@ const HccCards = ({
         handleCloseModal={handleCloseModal}
         isEdit={ENDPOINTS?.isLocalEdit}
         setOpenEdit={setOpenEdit}
+        initialValues={initialValues} 
+        setInitialValues={setInitialValues}
       />
       ;
     </>
