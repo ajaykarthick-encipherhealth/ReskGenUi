@@ -535,7 +535,8 @@ const HccCards = ({
                 </Draggable>
               </li>
             </>
-          ))}
+          ))}           
+          <span className="d-none">{provided?.placeholder}</span>
         </div>
       )}
     </>
