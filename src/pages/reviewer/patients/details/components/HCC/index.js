@@ -22,7 +22,8 @@ import {
 } from "../function/ReusableFunctions";
 import { useSelector } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
-
+import ModelIndex from "../model/Index";
+import ENDPOINTS from "../../../../../../utility/enpoints";
 
 const HccCards = ({
   list,
@@ -54,7 +55,8 @@ const HccCards = ({
   setConfirmNotesModalValid,
   cardTitle,
   setIsValidAction,
-  provided
+  provided,
+  isVisitData,
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -63,6 +65,7 @@ const HccCards = ({
     (state) => state?.ReviewerReducers.dosPageNumberList
   );
   const [fileInitialPage, setFileInitialPage] = useState(null);
+  const [openEdit, setOpenEdit] = useState(false);
   const PopContentHccVersion = (
     <div className={styles.innerPop}>
       <div className={styles.displayDiv}>
@@ -99,6 +102,9 @@ const HccCards = ({
       </div>
     </div>
   );
+  const handleCloseModal = () => {
+    setOpenEdit(false);
+  };
   return (
     <>
       {provided && (
@@ -331,6 +337,21 @@ const HccCards = ({
                                       </Popover>
                                     </div>
                                   )}
+                                  {/* edit Option */}
+                                  {isVisitData && ENDPOINTS?.isLocalEdit && (
+                                    <div
+                                      className="d-flex"
+                                      onClick={() => setOpenEdit(true)}
+                                    >
+                                      <FontAwesomeIcon
+                                        icon={faPen}
+                                        style={{ margin: "3px 10px 0 0" }}
+                                      />
+                                      <span style={{ cursor: "pointer" }}>
+                                        Edit
+                                      </span>
+                                    </div>
+                                  )}
                                 </>
                               )}
                               className="cr-pointer"
@@ -535,10 +556,18 @@ const HccCards = ({
                 </Draggable>
               </li>
             </>
-          ))}           
+          ))}
           <span className="d-none">{provided?.placeholder}</span>
         </div>
       )}
+      <ModelIndex
+        title={"Edit"}
+        openState={openEdit}
+        handleCloseModal={handleCloseModal}
+        isEdit={ENDPOINTS?.isLocalEdit}
+        setOpenEdit={setOpenEdit}
+      />
+      ;
     </>
   );
 };

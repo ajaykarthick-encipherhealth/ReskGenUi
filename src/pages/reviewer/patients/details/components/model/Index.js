@@ -5,6 +5,7 @@ import CamboTree from "../../hcc/org";
 import PdfViewer from "../../PdfViewerComponent";
 import { handleSubmitValidNotes } from "../function/ReusableFunctions";
 import { useDispatch } from "react-redux";
+import EditForm from "./EditForm";
 
 const ModelIndex = ({
   validated,
@@ -21,6 +22,8 @@ const ModelIndex = ({
   getPatientDetailsReload,
   isValidAction,
   selectDisDetails,
+  isEdit,
+  setOpenEdit
 }) => {
   const [form] = Form.useForm();
   const { TextArea } = Input;
@@ -36,14 +39,15 @@ const ModelIndex = ({
       width={
         combiTree
           ? "auto"
-          : labReportFile
+          : labReportFile || setOpenEdit
           ? "80%"
           : modalOpenValidContent && "90%"
       }
     >
-      {combiTree ? (
+      {combiTree && (
         <CamboTree tree={combiTree} />
-      ) : labReportFile ? (
+      ) }
+      {labReportFile && (
         <PdfViewer
           src={labReportFile}
           searchQuery={search?.value ? search?.value : ""}
@@ -51,10 +55,12 @@ const ModelIndex = ({
           headers={search?.headers}
           headerContent={search?.headerContent}
         />
-      ) : modalOpenValidContent ? (
+      )}
+      {modalOpenValidContent ? (
         modalOpenValidContent
       ) : (
-        <div className="offcanvas-body">
+        !setOpenEdit && (
+          <div className="offcanvas-body">
           <div className="container-fluid">
             <Form
               name="validateOnly"
@@ -114,7 +120,9 @@ const ModelIndex = ({
             </Form>
           </div>
         </div>
+        )
       )}
+      {isEdit && <EditForm/>}
     </Modal>
   );
 };

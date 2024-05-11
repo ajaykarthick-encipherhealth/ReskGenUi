@@ -1,4 +1,4 @@
-import { GET_PATIENT_DETAILS ,GET_MEAT_QUERY,GET_SECTION_COLOR,GET_HCC_FILE,GET_DOS_PAGE,GET_RADIOLOGY_DETAILS,GET_RADIOLOGY_FILE,GET_LAB_DETAILS,GET_LAB_FILE} from "../../actions/ReviewerAction/PatientDetailsAction";
+import { GET_PATIENT_DETAILS ,GET_MEAT_QUERY,GET_SECTION_COLOR,GET_HCC_FILE,GET_DOS_PAGE,GET_RADIOLOGY_DETAILS,GET_RADIOLOGY_FILE,GET_LAB_DETAILS,GET_LAB_FILE,PATIENT_DATA} from "../../actions/ReviewerAction/PatientDetailsAction";
 
   const initialState = {
     patientDetails: null,
@@ -10,6 +10,7 @@ import { GET_PATIENT_DETAILS ,GET_MEAT_QUERY,GET_SECTION_COLOR,GET_HCC_FILE,GET_
     radiologyFileDetails:null,
     labDeatils:null,
     labFileDetails:null,
+    patientData:null
    
   };
   
@@ -66,6 +67,12 @@ import { GET_PATIENT_DETAILS ,GET_MEAT_QUERY,GET_SECTION_COLOR,GET_HCC_FILE,GET_
       return {
         ...state,
         labFileDetails: action.payload,
+      };
+    }
+    if (action.type === PATIENT_DATA) {
+      return {
+        ...state,
+        patientData: action.payload,
       };
     }
     return state;

@@ -4,6 +4,7 @@ const ENDPOINTS = {
   apiEndointFileUploadHcc: "https://local.hcc.encipherhealth.com/secure/",
   apiLocal: "http://localhost:3003/",
   isShow: false,
-  PdfViewer: "https://viewer.cogentai.encipherhealth.com/web/viewer.html"
+  PdfViewer: "https://viewer.cogentai.encipherhealth.com/web/viewer.html",
+  isLocalEdit:true
 };
 export default ENDPOINTS;
