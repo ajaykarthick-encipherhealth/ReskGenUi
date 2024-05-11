@@ -58,6 +58,7 @@ import {
   getAllSectionColor,
   getHccFileDetails,
   getDosPageNumber,
+  getCurrentPatientDetails,
 } from "../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import { actions as workflowActions } from "../../../../stores/reviewer/workqueue";
 import AddLabForm from "./components/addLabForm";
@@ -560,6 +561,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
 
       setPatientDocumentResult(result);
       setPatientDetails(result);
+
       if (result.validDisease != null) {
         var dosYearArr = [];
         result.encounterYears.map((res) => {
