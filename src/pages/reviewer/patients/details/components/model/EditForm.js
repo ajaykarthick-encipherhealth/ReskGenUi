@@ -1,8 +1,13 @@
 import { Button, Col, Form, Input, Row, Select } from "antd";
 import React from "react";
+import { useSelector } from "react-redux";
 
 const EditForm = () => {
   const [form] = Form.useForm();
+  const patientDetailsResult = useSelector(
+    (state) => state?.ReviewerReducers?.patientDetails
+  );
+  console.log(patientDetailsResult);
   const handleForm = (values) => {
     console.log(values);
   };
@@ -67,6 +72,10 @@ const EditForm = () => {
               {
                 required: true,
                 message: "Please enter pagenumber!",
+              },
+              {
+                pattern: /^[0-9]{1,2}$/,
+                message: "Please enter a valid page number (2 digits only).",
               },
             ]}
           >

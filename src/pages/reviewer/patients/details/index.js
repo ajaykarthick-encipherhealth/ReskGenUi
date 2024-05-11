@@ -561,7 +561,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
 
       setPatientDocumentResult(result);
       setPatientDetails(result);
-      dispatch(getCurrentPatientDetails(result))
+
       if (result.validDisease != null) {
         var dosYearArr = [];
         result.encounterYears.map((res) => {

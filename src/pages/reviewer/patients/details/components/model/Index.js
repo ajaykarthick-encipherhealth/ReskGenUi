@@ -39,9 +39,9 @@ const ModelIndex = ({
       width={
         combiTree
           ? "auto"
-          : labReportFile || setOpenEdit
+          : labReportFile
           ? "80%"
-          : modalOpenValidContent && "90%"
+          : setOpenEdit?"60%": modalOpenValidContent && "90%"
       }
     >
       {combiTree && (
