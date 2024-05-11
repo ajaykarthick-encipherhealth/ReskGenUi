@@ -536,7 +536,7 @@ const HccCards = ({
               </li>
             </>
           ))}           
-          <span className="d-none">{provided.placeholder}</span>
+          <span className="d-none">{provided?.placeholder}</span>
         </div>
       )}
     </>
