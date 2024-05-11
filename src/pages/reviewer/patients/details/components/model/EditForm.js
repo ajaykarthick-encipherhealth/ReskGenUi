@@ -10,6 +10,7 @@ const EditForm = () => {
   console.log(patientDetailsResult);
   const handleForm = (values) => {
     console.log(values);
+    form.resetFields()
   };
   return (
     <Form form={form} onFinish={handleForm}>
@@ -87,7 +88,7 @@ const EditForm = () => {
       </Row>
 
       <Form.Item>
-        <Button htmlType="submit">Submit</Button>
+        <Button type="primary" htmlType="submit">Submit</Button>
       </Form.Item>
     </Form>
   );
