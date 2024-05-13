@@ -233,10 +233,20 @@ const Export = ({
                         : reportName
                     }
                   >
-                    <Input
-                      placeholder="Enter report name"
-                      disabled={selectedReportInfo?.reportName ? true : false}
-                    />
+                  <InputField
+                  ReportName={
+                    selectedReportInfo?.reportName
+                      ? selectedReportInfo?.reportName
+                      : reportName
+                  }
+                  setInputValue={setReportName}
+                  delay={1000}
+                  type="text"
+                  placeholder="Enter report name"
+                  isSearch={false}
+                  isDisabled={selectedReportInfo?.reportName ? true : false}
+                  isInputFiled={true}
+                />
                   </Form.Item>
                 </div>
               </div>

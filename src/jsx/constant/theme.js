@@ -3470,6 +3470,47 @@ export const SVGICON = {
       />
     </svg>
   ),
+  deleteIcon: (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="22"
+      height="22"
+      viewBox="0 0 22 22"
+      fill="none"
+    >
+      <rect width="22" height="22" rx="5" fill="#FFCCD7" />
+      <path
+        d="M9.66667 10.3333V14.3333"
+        stroke="#FF204E"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M12.3333 10.3333V14.3333"
+        stroke="#FF204E"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M5.66667 7.66675H16.3333"
+        stroke="#FF204E"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M7 7.66675H11H15V15.0001C15 16.1047 14.1046 17.0001 13 17.0001H9C7.89543 17.0001 7 16.1047 7 15.0001V7.66675Z"
+        stroke="#FF204E"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M9 6.33333C9 5.59695 9.59695 5 10.3333 5H11.6667C12.4031 5 13 5.59695 13 6.33333V7.66667H9V6.33333Z"
+        stroke="#FF204E"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  ),
 };
 
 const appTheme = {
