@@ -8,7 +8,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { checkBoxData, debounce } from "../../pages/admin/report/Export";
 import { updateSentReport } from "../../services/ReportService";
-import { getActiveTab } from "../../store/actions/l2Action/AuditReportAction"
+import { getActiveTab } from "../../store/actions/l2Action/AuditReportAction";
 import InputField from "../../components/input";
 import { SVGICON } from "../../jsx/constant/theme";
 const Export = ({
@@ -38,13 +38,16 @@ const Export = ({
   const [activeButton, setActiveButton] = useState("excel");
   const [activeBtn, setActiveBtn] = useState("read");
   const [checkall, setCheckAll] = useState(checkBoxData);
+  const [inputStr, setInputStr] = useState("");
 
   useEffect(() => {
     setCurrentUser(localStorage.getItem("userId"));
     var orgId = localStorage.getItem("orgId");
     dispatch(getUsersList(orgId, search));
   }, [search]);
+
   const dispatch = useDispatch();
+
   const options = usersList?.response
     ?.map(
       (data) =>
@@ -65,7 +68,7 @@ const Export = ({
     );
     setSelectedList(filteredData?.map((item) => item?.userName));
     setSelectedUser((prevUsers) => [
-      { ...prevUsers, user: value[0], role: null },
+      { ...prevUsers, user: value[0], role: activeBtn.toUpperCase() },
     ]);
     setOpen(false);
   };
@@ -178,10 +181,13 @@ const Export = ({
     ReportName:
       selectedReportInfo?.receivedUsers?.length > 0
         ? selectedReportInfo?.reportName
-        : reportName,
+        : inputStr,
   });
-  const isAllChecked = checkall.every((item) => item.checked);
+  const isAllChecked = checkall?.every((item) => item.checked);
 
+  useEffect(() => {
+    setInputStr("");
+  }, [isModalVisible]);
   return (
     <Modal
       title="Export "
@@ -192,7 +198,7 @@ const Export = ({
     >
       <Form form={form} onFinish={onFinish}>
         <div className="container-fluid">
-          <label className={styles.text}>Report Name</label>
+          {/* <label className={styles.text}>Report Name</label> */}
           <div className={`p-2 ${styles.reportLabel}`}>
             Give a proper & suitable name for Report
           </div>
@@ -215,7 +221,7 @@ const Export = ({
                       ReportName={
                         selectedReportInfo?.reportName
                           ? selectedReportInfo?.reportName
-                          : reportName
+                          : inputStr
                       }
                       setInputValue={setReportName}
                       delay={1000}
@@ -224,6 +230,9 @@ const Export = ({
                       isSearch={false}
                       isDisabled={selectedReportInfo?.reportName ? true : false}
                       isInputFiled={true}
+                      activeTab={"Report"}
+                      setSearchVal={setInputStr}
+                      isReport={true}
                     />
                   </Form.Item>
                 </div>
@@ -391,6 +400,7 @@ const Export = ({
                     </div>
                   </div>
                 </div>
+
                 <div>
                   <Button
                     onClick={() => {
@@ -405,13 +415,9 @@ const Export = ({
                       color: "#fff",
                       marginTop: "10px",
                     }}
-                    // disabled={
-                    //   selectedUser &&
-                    //   selectedUser[0]?.user &&
-                    //   selectedUser[0]?.role
-                    //     ? false
-                    //     : true
-                    // }
+                    disabled={
+                      selectedUser && selectedUser?.length > 0 ? false : true
+                    }
                   >
                     Add
                   </Button>
