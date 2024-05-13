@@ -417,3 +417,12 @@
 .editAction > button {
   padding: 5px !important;
 }
+.closeContainer2{
+  position: relative;
+  left:150px;
+}
+.closeIcon{
+  width: 15px;
+  cursor: pointer;
+  font-size: 14px;
+}

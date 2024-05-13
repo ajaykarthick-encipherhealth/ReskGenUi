@@ -12,7 +12,11 @@ import {
   faBook,
 } from "@fortawesome/free-solid-svg-icons";
 import { SVGICON } from "../../../../../../jsx/constant/theme";
-import { QuestionCircleOutlined } from "@ant-design/icons";
+import {
+  QuestionCircleOutlined,
+  CloseCircleOutlined,
+  CloseOutlined,
+} from "@ant-design/icons";
 import {
   getCaptureSectionBackgroundFile,
   getEncounterDateBackground,
@@ -24,6 +28,9 @@ import { useSelector } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
 import ModelIndex from "../model/Index";
 import ENDPOINTS from "../../../../../../utility/enpoints";
+import CloseStyles from "../../../../../../styles/file-managemnt.module.css";
+import { getActivePateint } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
+import { useDispatch } from "react-redux";
 
 const HccCards = ({
   list,
@@ -58,6 +65,7 @@ const HccCards = ({
   provided,
   isVisitData,
 }) => {
+  const dispatch = useDispatch();
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
   );
@@ -66,6 +74,7 @@ const HccCards = ({
   );
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
+  const [openContent, setOpenContent] = useState(null);
   const [initialValues, setInitialValues] = useState({
     diagnosisCode: "",
     header: "",
@@ -115,8 +124,9 @@ const HccCards = ({
       header: "",
       searchString: "",
       pagenumber: "",
-    })
+    });
   };
+
   return (
     <>
       {provided && (
@@ -207,8 +217,25 @@ const HccCards = ({
                               placement="left"
                               title={""}
                               trigger="click"
+                              open={
+                                openContent === data?.diagnosisCode
+                                  ? true
+                                  : false
+                              }
+                              onVisibleChange={(visible) =>
+                                setOpenContent(
+                                  visible ? data?.diagnosisCode : null
+                                )
+                              }
                               content={() => (
                                 <>
+                                  <div className={styles.closeContainer2}>
+                                    <CloseOutlined
+                                      onClick={() => setOpenContent(null)}
+                                      className={styles.closeIcon}
+                                    />
+                                  </div>
+
                                   <div className="px-1">
                                     <Popover
                                       onClick={() =>
@@ -368,13 +395,19 @@ const HccCards = ({
                               )}
                               className="cr-pointer"
                             >
-                              <FontAwesomeIcon
-                                icon={faEllipsisVertical}
-                                style={{
-                                  size: 8,
-                                  color: "#000",
+                              <div
+                                onClick={() => {
+                                  setOpenContent(data?.diagnosisCode);
                                 }}
-                              />
+                              >
+                                <FontAwesomeIcon
+                                  icon={faEllipsisVertical}
+                                  style={{
+                                    size: 8,
+                                    color: "#000",
+                                  }}
+                                />
+                              </div>
                             </Popover>
                           </div>
                         </div>
@@ -578,8 +611,9 @@ const HccCards = ({
         handleCloseModal={handleCloseModal}
         isEdit={ENDPOINTS?.isLocalEdit}
         setOpenEdit={setOpenEdit}
-        initialValues={initialValues} 
+        initialValues={initialValues}
         setInitialValues={setInitialValues}
+        setOpenContent={setOpenContent}
       />
       ;
     </>

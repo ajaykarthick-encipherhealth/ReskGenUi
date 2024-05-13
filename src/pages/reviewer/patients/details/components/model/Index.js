@@ -24,8 +24,9 @@ const ModelIndex = ({
   selectDisDetails,
   isEdit,
   setOpenEdit,
-  initialValues, 
-  setInitialValues
+  initialValues,
+  setInitialValues,
+  setOpenContent,
 }) => {
   const [form] = Form.useForm();
   const { TextArea } = Input;
@@ -43,12 +44,12 @@ const ModelIndex = ({
           ? "auto"
           : labReportFile
           ? "80%"
-          : setOpenEdit?"60%": modalOpenValidContent && "90%"
+          : setOpenEdit
+          ? "60%"
+          : modalOpenValidContent && "90%"
       }
     >
-      {combiTree && (
-        <CamboTree tree={combiTree} />
-      ) }
+      {combiTree && <CamboTree tree={combiTree} />}
       {labReportFile && (
         <PdfViewer
           src={labReportFile}
@@ -58,73 +59,80 @@ const ModelIndex = ({
           headerContent={search?.headerContent}
         />
       )}
-      {modalOpenValidContent ? (
-        modalOpenValidContent
-      ) : (
-        !setOpenEdit && (
-          <div className="offcanvas-body">
-          <div className="container-fluid">
-            <Form
-              name="validateOnly"
-              layout="vertical"
-              autoComplete="off"
-              form={form}
-              onFinish={(values) => {
-                handleSubmitValidNotes({
-                  values,
-                  setFileLoading,
-                  setConfirmNotesModalValid,
-                  getPatientDetailsReload,
-                  isValidAction,
-                  selectDisDetails,
-                  dispatch
-                })
-                form.resetFields();
-              }
-            }
-            >
-              <Form.Item
-                label={
-                  <label>
-                    Reason <span style={{ color: "red" }}>*</span>
-                  </label>
-                }
-                name="reason"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please enter reason",
-                  },
-                ]}
-              >
-                <TextArea
-                  name="reason"
-                  className="form-textarea"
-                  autoSize={{ minRows: 3, maxRows: 5 }}
-                />
-              </Form.Item>
-              <Form.Item>
-                <Space>
-                  <Button type="submit" className="btn btn-primary btn-sm me-1">
-                    Submit
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      handleCloseModal();
-                      form.resetFields();
-                    }}
-                    className="btn btn-danger btn-sm light ms-1"
+      {modalOpenValidContent
+        ? modalOpenValidContent
+        : !setOpenEdit && (
+            <div className="offcanvas-body">
+              <div className="container-fluid">
+                <Form
+                  name="validateOnly"
+                  layout="vertical"
+                  autoComplete="off"
+                  form={form}
+                  onFinish={(values) => {
+                    handleSubmitValidNotes({
+                      values,
+                      setFileLoading,
+                      setConfirmNotesModalValid,
+                      getPatientDetailsReload,
+                      isValidAction,
+                      selectDisDetails,
+                      dispatch,
+                    });
+                    form.resetFields();
+                  }}
+                >
+                  <Form.Item
+                    label={
+                      <label>
+                        Reason <span style={{ color: "red" }}>*</span>
+                      </label>
+                    }
+                    name="reason"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter reason",
+                      },
+                    ]}
                   >
-                    Cancel
-                  </Button>
-                </Space>
-              </Form.Item>
-            </Form>
-          </div>
-        </div>
-        )
+                    <TextArea
+                      name="reason"
+                      className="form-textarea"
+                      autoSize={{ minRows: 3, maxRows: 5 }}
+                    />
+                  </Form.Item>
+                  <Form.Item>
+                    <Space>
+                      <Button
+                        type="submit"
+                        className="btn btn-primary btn-sm me-1"
+                      >
+                        Submit
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          handleCloseModal();
+                          form.resetFields();
+                        }}
+                        className="btn btn-danger btn-sm light ms-1"
+                      >
+                        Cancel
+                      </Button>
+                    </Space>
+                  </Form.Item>
+                </Form>
+              </div>
+            </div>
+          )}
+      {isEdit && (
+        <EditForm
+          setOpenEdit={setOpenEdit}
+          initialValues={initialValues}
+          setInitialValues={setInitialValues}
+          setOpenContent={setOpenContent}
+        />
       )}
-      {isEdit && <EditForm setOpenEdit={setOpenEdit} initialValues={initialValues} setInitialValues={setInitialValues}/>}
     </Modal>
   );
 };

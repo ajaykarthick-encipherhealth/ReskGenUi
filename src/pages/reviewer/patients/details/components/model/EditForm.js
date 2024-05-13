@@ -2,7 +2,7 @@ import { Button, Col, Form, Input, Row } from "antd";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 
-const EditForm = ({ setOpenEdit, initialValues, setInitialValues }) => {
+const EditForm = ({ setOpenEdit, initialValues, setInitialValues,setOpenContent }) => {
   const [form] = Form.useForm();
   const patientDetailsResult = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -18,15 +18,18 @@ const EditForm = ({ setOpenEdit, initialValues, setInitialValues }) => {
   const handleForm = (values) => {
     console.log(values);
     setInitialValues({
-        diagnosisCode: "",
-        header: "",
-        searchString: "",
-        pagenumber: "",
-      })
+      diagnosisCode: "",
+      header: "",
+      searchString: "",
+      pagenumber: "",
+    });
   };
+  useEffect(() => {
+    setOpenContent(null);
+  });
   return (
     <Form form={form} onFinish={handleForm} labelCol={{ span: 6 }}>
-      <Row gutter={16} >
+      <Row gutter={16}>
         <Col span={12}>
           <Form.Item
             label="Diagnosis Code"
@@ -60,11 +63,11 @@ const EditForm = ({ setOpenEdit, initialValues, setInitialValues }) => {
             ]}
           >
             <div>
-            <Input
-              placeholder="Enter header"
-              value={initialValues.header}
-              onChange={(e) => handleChange("header", e.target.value)}
-            />
+              <Input
+                placeholder="Enter header"
+                value={initialValues.header}
+                onChange={(e) => handleChange("header", e.target.value)}
+              />
             </div>
           </Form.Item>
         </Col>
@@ -81,13 +84,13 @@ const EditForm = ({ setOpenEdit, initialValues, setInitialValues }) => {
               },
             ]}
           >
-           <div>
-           <Input
-              placeholder="Enter diagnosis search string"
-              value={initialValues.searchString}
-              onChange={(e) => handleChange("searchString", e.target.value)}
-            />
-           </div>
+            <div>
+              <Input
+                placeholder="Enter diagnosis search string"
+                value={initialValues.searchString}
+                onChange={(e) => handleChange("searchString", e.target.value)}
+              />
+            </div>
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -106,11 +109,11 @@ const EditForm = ({ setOpenEdit, initialValues, setInitialValues }) => {
             ]}
           >
             <div>
-            <Input
-              placeholder="Enter page number"
-              value={initialValues.pagenumber}
-              onChange={(e) => handleChange("pagenumber", e.target.value)}
-            />
+              <Input
+                placeholder="Enter page number"
+                value={initialValues.pagenumber}
+                onChange={(e) => handleChange("pagenumber", e.target.value)}
+              />
             </div>
           </Form.Item>
         </Col>
@@ -136,7 +139,7 @@ const EditForm = ({ setOpenEdit, initialValues, setInitialValues }) => {
                 header: "",
                 searchString: "",
                 pagenumber: "",
-              })
+              });
             }}
           >
             Cancel
