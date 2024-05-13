@@ -27,6 +27,7 @@ const ModelIndex = ({
   initialValues,
   setInitialValues,
   setOpenContent,
+  selectedData
 }) => {
   const [form] = Form.useForm();
   const { TextArea } = Input;
@@ -39,6 +40,7 @@ const ModelIndex = ({
       onOk={handleCloseModal}
       onCancel={handleCloseModal}
       footer={null}
+      closable={false}
       width={
         combiTree
           ? "auto"
@@ -131,6 +133,7 @@ const ModelIndex = ({
           initialValues={initialValues}
           setInitialValues={setInitialValues}
           setOpenContent={setOpenContent}
+          selectedData={selectedData}
         />
       )}
     </Modal>

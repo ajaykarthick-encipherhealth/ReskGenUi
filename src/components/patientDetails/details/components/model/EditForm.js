@@ -2,7 +2,13 @@ import { Button, Col, Form, Input, Row } from "antd";
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 
-const EditForm = ({ setOpenEdit, initialValues, setInitialValues,setOpenContent }) => {
+const EditForm = ({
+  setOpenEdit,
+  initialValues,
+  setInitialValues,
+  setOpenContent,
+  selectedData,
+}) => {
   const [form] = Form.useForm();
   const patientDetailsResult = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -15,18 +21,27 @@ const EditForm = ({ setOpenEdit, initialValues, setInitialValues,setOpenContent 
     }));
   };
   console.log(patientDetailsResult);
-  const handleForm = (values) => {
-    console.log(values);
+  const handleForm = () => {
+    console.log(initialValues);
     setInitialValues({
-      diagnosisCode: "",
+      diagnosisCode: selectedData?.diagnosisCode,
       header: "",
       searchString: "",
       pagenumber: "",
+      actualDescription: selectedData?.actualDescription,
     });
+    form.resetFields()
   };
   useEffect(() => {
     setOpenContent(null);
   });
+  useEffect(()=>{
+    form.setFieldValue({
+      header:"",
+      searchString:"",
+      pagenumber:""
+    })
+  })
   return (
     <Form form={form} onFinish={handleForm} labelCol={{ span: 6 }}>
       <Row gutter={16}>
@@ -34,23 +49,22 @@ const EditForm = ({ setOpenEdit, initialValues, setInitialValues,setOpenContent 
           <Form.Item
             label="Diagnosis Code"
             name="diagnosisCode"
-            rules={[
-              {
-                required: true,
-                message: "Please enter code!",
-              },
-            ]}
             wrapperCol={{ span: 18 }}
           >
             <div>
-              <Input
-                placeholder="Enter diagnosis code"
-                value={initialValues.diagnosisCode}
-                onChange={(e) => handleChange("diagnosisCode", e.target.value)}
-              />
+              <Input value={initialValues?.diagnosisCode} disabled={true} />
             </div>
           </Form.Item>
         </Col>
+        <Col span={12}>
+          <Form.Item label="Actual Description" name="actualDescription">
+            <div>
+              <Input value={initialValues?.actualDescription} disabled={true} />
+            </div>
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={16}>
         <Col span={12}>
           <Form.Item
             label="Header"
@@ -71,8 +85,6 @@ const EditForm = ({ setOpenEdit, initialValues, setInitialValues,setOpenContent 
             </div>
           </Form.Item>
         </Col>
-      </Row>
-      <Row gutter={16}>
         <Col span={12}>
           <Form.Item
             label="Search String"
@@ -134,6 +146,7 @@ const EditForm = ({ setOpenEdit, initialValues, setInitialValues,setOpenContent 
             }}
             onClick={() => {
               setOpenEdit(false);
+              form.resetFields()
               setInitialValues({
                 diagnosisCode: "",
                 header: "",

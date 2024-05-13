@@ -12,10 +12,7 @@ import {
   faBook,
 } from "@fortawesome/free-solid-svg-icons";
 import { SVGICON } from "../../../../../jsx/constant/theme";
-import {
-  QuestionCircleOutlined,
-  CloseOutlined,
-} from "@ant-design/icons";
+import { QuestionCircleOutlined, CloseOutlined } from "@ant-design/icons";
 import {
   getCaptureSectionBackgroundFile,
   getEncounterDateBackground,
@@ -23,7 +20,7 @@ import {
   getProviderNameList,
   moveToAnotherAction,
 } from "../function/ReusableFunctions";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
 import ModelIndex from "../model/Index";
 import ENDPOINTS from "../../../../../utility/enpoints";
@@ -61,7 +58,6 @@ const HccCards = ({
   provided,
   isVisitData,
 }) => {
-  const dispatch = useDispatch();
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
   );
@@ -71,8 +67,8 @@ const HccCards = ({
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
   const [openContent, setOpenContent] = useState(null);
+  const [selectedData, setSelectedData] = useState();
   const [initialValues, setInitialValues] = useState({
-    diagnosisCode: "",
     header: "",
     searchString: "",
     pagenumber: "",
@@ -116,7 +112,6 @@ const HccCards = ({
   const handleCloseModal = () => {
     setOpenEdit(false);
     setInitialValues({
-      diagnosisCode: "",
       header: "",
       searchString: "",
       pagenumber: "",
@@ -376,7 +371,15 @@ const HccCards = ({
                                   {isVisitData && ENDPOINTS?.isLocalEdit && (
                                     <div
                                       className="d-flex"
-                                      onClick={() => setOpenEdit(true)}
+                                      onClick={() => {
+                                        setOpenEdit(true);
+                                        setSelectedData(data);
+                                        setInitialValues({
+                                          diagnosisCode: data?.diagnosisCode,
+                                          actualDescription:
+                                            data?.actualDescription,
+                                        });
+                                      }}
                                     >
                                       <FontAwesomeIcon
                                         icon={faPen}
@@ -610,6 +613,7 @@ const HccCards = ({
         initialValues={initialValues}
         setInitialValues={setInitialValues}
         setOpenContent={setOpenContent}
+        selectedData={selectedData}
       />
       ;
     </>
