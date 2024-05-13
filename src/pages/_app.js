@@ -109,9 +109,9 @@ function MyApp({ Component, pageProps }) {
   useEffect(() => {
     const currentPath = window.location.pathname;
     const userRole = localStorage.getItem("userRole");
-    if (userRole && !currentPath.includes(`/${userRole}/`)) {
-      router.replace("/_error");
-    }
+    // if (userRole && !currentPath.includes(`/${userRole}/`) || "/search") {
+    //   router.replace("/_error");
+    // }
   }, [showTerminal]);
 
   return (
