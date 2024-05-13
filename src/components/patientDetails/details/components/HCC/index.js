@@ -615,7 +615,6 @@ const HccCards = ({
         setOpenContent={setOpenContent}
         selectedData={selectedData}
       />
-      ;
     </>
   );
 };
