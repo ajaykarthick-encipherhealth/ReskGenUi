@@ -228,6 +228,7 @@ const VisitData = ({
                     setConfirmNotesModalValid={setConfirmNotesModalValid}
                     setIsValidAction={setIsValidAction}
                     cardTitle="HCC"
+                    isVisitData={true}
                   />
                 </div>
               </div>
@@ -298,6 +299,7 @@ const VisitData = ({
                       setConfirmNotesModalValid={setConfirmNotesModalValid}
                       setIsValidAction={setIsValidAction}
                       cardTitle="SUGGESTED"
+                      isVisitData={true}
                     />
                   </div>
                 </div>
@@ -349,6 +351,7 @@ const VisitData = ({
                       setConfirmNotesModalValid={setConfirmNotesModalValid}
                       setIsValidAction={setIsValidAction}
                       cardTitle="DELETED"
+                      isVisitData={true}
                     />
                   </div>
                 </div>
@@ -437,6 +440,7 @@ const VisitData = ({
                               setIsValidAction={setIsValidAction}
                               cardTitle="HCC"
                               provided={provided}
+                              isVisitData={true}
                             />
                           </div>
                         </div>
@@ -506,6 +510,7 @@ const VisitData = ({
                               setIsValidAction={setIsValidAction}
                               cardTitle="SUGGESTED"
                               provided={provided}
+                              isVisitData={true}
                             />
                           </div>
                         </div>
@@ -573,6 +578,7 @@ const VisitData = ({
                               setIsValidAction={setIsValidAction}
                               cardTitle="DELETED"
                               provided={provided}
+                              isVisitData={true}
                             />
                           </div>
                         </div>
