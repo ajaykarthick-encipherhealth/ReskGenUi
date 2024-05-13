@@ -21,7 +21,7 @@ const EditForm = ({
     }));
   };
   console.log(patientDetailsResult);
-  const handleForm = (values) => {
+  const handleForm = () => {
     console.log(initialValues);
     setInitialValues({
       diagnosisCode: selectedData?.diagnosisCode,
@@ -30,10 +30,18 @@ const EditForm = ({
       pagenumber: "",
       actualDescription: selectedData?.actualDescription,
     });
+    form.resetFields()
   };
   useEffect(() => {
     setOpenContent(null);
   });
+  useEffect(()=>{
+    form.setFieldValue({
+      header:"",
+      searchString:"",
+      pagenumber:""
+    })
+  })
   return (
     <Form form={form} onFinish={handleForm} labelCol={{ span: 6 }}>
       <Row gutter={16}>
@@ -138,6 +146,7 @@ const EditForm = ({
             }}
             onClick={() => {
               setOpenEdit(false);
+              form.resetFields()
               setInitialValues({
                 diagnosisCode: "",
                 header: "",
