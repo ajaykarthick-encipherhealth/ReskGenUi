@@ -650,7 +650,7 @@ const ReviewerReport = ({
                         <div className={styles.card1}>
                           <div className={styles.summaryText}>Summary</div>
                           <div className="col-xl-12  d-flex mt-4">
-                            <div className={`col-xl-2 ${styles.subCard}`}>
+                            <div className={`col-xl-4 ${styles.subCard}`}>
                               <div>
                                 <div>No of charts</div>
                                 <h4>
@@ -658,23 +658,16 @@ const ReviewerReport = ({
                                 </h4>
                               </div>
                             </div>
-                            <div className={`col-xl-2 ${styles.subCard}`}>
-                              <div>Completed date</div>
-                              <div className={styles.dateContainer}>
-                                <div className={`p-1 ${styles.smallText}`}>
-                                  03/04/2024 - 03/04/2024
-                                </div>
-                              </div>
-                            </div>
+                      
 
-                            <div className={`col-xl-2 ${styles.subCard}`}>
+                            <div className={`col-xl-4 ${styles.subCard}`}>
                               {" "}
                               <div>
                                 <div>Avg RAF score</div>
                                 <h4>{reportListAll?.rafAverage?.toFixed(4)}</h4>
                               </div>
                             </div>
-                            <div className={`col-xl-2 ${styles.subCard}`}>
+                            <div className={`col-xl-4 ${styles.subCard}`}>
                               {" "}
                               <div>
                                 <div>HCC Count</div>

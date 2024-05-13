@@ -79,7 +79,7 @@
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 800px;
+  height: 838px;
 }
 .card1 h2 {
   margin-top: 0;
@@ -169,7 +169,7 @@
   text-align: center;
   background-color: #e1edfe;
   border-radius: 10px;
-  margin-right: 10px;
+  margin-right: 5px;
 }
 .sentSubCard {
   height: 100px;
