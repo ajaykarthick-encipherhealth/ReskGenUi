@@ -9,6 +9,8 @@ import {
   renderUserPrfoileAvatar,
 } from "../../../../components/headerFilters/functions";
 import { colors } from "../sentReport";
+import SpinnerDots from "../../../components/spinner";
+import { Empty } from "antd";
 
 const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
   const [detailsContent, setDetailsContent] = useState(details?.content);
@@ -253,6 +255,7 @@ const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
       : getChartAdminOption();
   useEffect(() => {
     setDetailsContent(details?.content);
+  console.log(details,"le")
   }, [details]);
 
   const router = useRouter();
@@ -282,7 +285,8 @@ const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
               <div>
                 <div className=" col-xl-12 d-flex">
                   <div className="col-xl-6">
-                    <div className={styles.cardContainer}>
+                  
+                    {detailsContent === 0 ?  <Empty /> :  <div className={styles.cardContainer}>
                       <div className={styles.cardContainer}>
                         {detailsContent?.map((item, index) => {
                           const formattedDate = dateFormate(
@@ -382,7 +386,8 @@ const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
                           );
                         })}
                       </div>
-                    </div>
+                    </div>}
+                   
                   </div>
 
                   <div className="col-xl-6" style={{ marginLeft: "10px" }}>

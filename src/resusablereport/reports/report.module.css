@@ -79,7 +79,7 @@
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 838px;
+  height: 805px;
 }
 .card1 h2 {
   margin-top: 0;
@@ -161,7 +161,6 @@
   font-weight: 600;
   font-family: manrope;
   color: black;
-  margin: 13px;
 }
 .subCard {
   height: 75px;
@@ -210,6 +209,7 @@
   background-color: #e1edfe;
   margin-right: 5px;
   padding: 10px;
+  overflow: scroll;
 }
 .flag {
   width: 209px;
@@ -235,10 +235,12 @@
   display: flex;
   padding: 5px;
   overflow-y: scroll;
+  justify-content: space-between;
 }
 .contentAuditor {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .avatar {
   display: flex;
@@ -492,4 +494,8 @@
   background-color: #ccebff;
   border-radius: 10px;
   margin-right: 10px;
+}
+.contentOverFlow {
+  height: 200px;
+  overflow: scroll;
 }
