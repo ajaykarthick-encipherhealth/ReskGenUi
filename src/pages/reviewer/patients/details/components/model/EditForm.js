@@ -17,7 +17,12 @@ const EditForm = ({ setOpenEdit, initialValues, setInitialValues }) => {
   console.log(patientDetailsResult);
   const handleForm = (values) => {
     console.log(values);
-    form.resetFields();
+    setInitialValues({
+        diagnosisCode: "",
+        header: "",
+        searchString: "",
+        pagenumber: "",
+      })
   };
   return (
     <Form form={form} onFinish={handleForm} labelCol={{ span: 6 }}>
@@ -126,7 +131,12 @@ const EditForm = ({ setOpenEdit, initialValues, setInitialValues }) => {
             }}
             onClick={() => {
               setOpenEdit(false);
-              form.resetFields();
+              setInitialValues({
+                diagnosisCode: "",
+                header: "",
+                searchString: "",
+                pagenumber: "",
+              })
             }}
           >
             Cancel
