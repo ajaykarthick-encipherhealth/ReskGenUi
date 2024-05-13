@@ -39,7 +39,7 @@ import NonHcc from "./non-hcc/index";
 import Radiology from "./radiology/index";
 import Lab from "./lab/index";
 import SpinnerDots from "../../../components/spinner";
-import AllocateModal from "../../admin/allocateduser/allocate";
+import AllocateModal from "../../../pages/admin/allocateduser/allocate";
 import {
   auditPatientupdate,
   reAuditupdate,

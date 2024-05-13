@@ -35,7 +35,7 @@ function AddPatientListTable({
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
       // localStorage.setItem('paginations', JSON.stringify(page))
-      navigate.push({ pathname: "/reviewer/patients/details", query: page });
+      navigate.push({ pathname: "/admin/patients/details", query: page });
     } else {
       notification.warning({
         message: data.patientId + " file not processed. Please wait.",
