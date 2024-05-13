@@ -27,6 +27,7 @@ const ModelIndex = ({
   initialValues,
   setInitialValues,
   setOpenContent,
+  selectedData
 }) => {
   const [form] = Form.useForm();
   const { TextArea } = Input;
@@ -131,6 +132,7 @@ const ModelIndex = ({
           initialValues={initialValues}
           setInitialValues={setInitialValues}
           setOpenContent={setOpenContent}
+          selectedData={selectedData}
         />
       )}
     </Modal>
