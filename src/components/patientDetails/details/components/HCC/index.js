@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Badge, Popconfirm, Popover, Tooltip } from "antd";
@@ -12,11 +12,8 @@ import {
   faBook,
 } from "@fortawesome/free-solid-svg-icons";
 import { SVGICON } from "../../../../../jsx/constant/theme";
-import { QuestionCircleOutlined } from "@ant-design/icons";
-import { SVGICON } from "../../../../../../jsx/constant/theme";
 import {
   QuestionCircleOutlined,
-  CloseCircleOutlined,
   CloseOutlined,
 } from "@ant-design/icons";
 import {
@@ -26,13 +23,10 @@ import {
   getProviderNameList,
   moveToAnotherAction,
 } from "../function/ReusableFunctions";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
 import ModelIndex from "../model/Index";
-import ENDPOINTS from "../../../../../../utility/enpoints";
-import CloseStyles from "../../../../../../styles/file-managemnt.module.css";
-import { getActivePateint } from "../../../../../../store/actions/ReviewerAction/PatientDetailsAction";
-import { useDispatch } from "react-redux";
+import ENDPOINTS from "../../../../../utility/enpoints";
 
 const HccCards = ({
   list,
