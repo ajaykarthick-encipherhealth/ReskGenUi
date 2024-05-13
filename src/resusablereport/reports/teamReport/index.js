@@ -11,43 +11,42 @@ import {
   Empty,
   notification,
 } from "antd";
-import { extractLatestData } from "../../../supervisor/auditing";
-import AuditedTrack from "../../../../../src/images/trackingImages/AuditedTrack.png";
-import NotAudited from "../../../../../src/images/trackingImages/NotAuditedTrack.png";
-import AuditHold from "../../../../../src/images/trackingImages/AuditHoldTrack.png";
-import ReAudit from "../../../../../src/images/trackingImages/reAuditTrack.png";
-import AuditPending from "../../../../../src/images/trackingImages/AuditPending.png";
-import Hold from "../../../../../src/images/trackingImages/HoldTrack.png";
-import Pending from "../../../../../src/images/trackingImages/PendingTrack.png";
-import Completed from "../../../../../src/images/trackingImages/CompletedTrack.png";
-import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
-import AuditedDeclineTrack from "../../../../../src/images/trackingImages/AuditDeclined.png";
-import Abort from "../../../../../src/images/trackingImages/Abort.png";
-import declineIcon from "../../.../../../../images/trackingImages/DeclineTrack.png";
-import reAuditIcon from "../../.../../../../images/trackingImages/AuditPending.png";
-import auditHoldIcon from "../../.../../../../images/trackingImages/AuditHoldTrack.png";
-import auditedIcon from "../../.../../../../images/trackingImages/AuditedTrack.png";
-import reeAuditIcon from "../../.../../../../images/trackingImages/reAuditTrack.png";
-import notAudited from "../../.../../../../images/trackingImages/NotAuditedTrack.png";
-import auditDeclined from "../../.../../../../images/trackingImages/AuditDeclined.png";
+import { extractLatestData } from "../../../pages/supervisor/auditing";
+import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
+import NotAudited from "../../../../src/images/trackingImages/NotAuditedTrack.png";
+import AuditHold from "../../../../src/images/trackingImages/AuditHoldTrack.png";
+import ReAudit from "../../../../src/images/trackingImages/reAuditTrack.png";
+import AuditPending from "../../../../src/images/trackingImages/AuditPending.png";
+import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
+import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
+import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
+import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
+import AuditedDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
+import Abort from "../../../../src/images/trackingImages/Abort.png";
+import declineIcon from "../../.../../../images/trackingImages/DeclineTrack.png";
+import reAuditIcon from "../../.../../../images/trackingImages/AuditPending.png";
+import auditHoldIcon from "../../.../../../images/trackingImages/AuditHoldTrack.png";
+import auditedIcon from "../../.../../../images/trackingImages/AuditedTrack.png";
+import reeAuditIcon from "../../.../../../images/trackingImages/reAuditTrack.png";
+import notAudited from "../../.../../../images/trackingImages/NotAuditedTrack.png";
+import auditDeclined from "../../.../../../images/trackingImages/AuditDeclined.png";
 import { Paginator } from "primereact/paginator";
-import TableStyle from "../../../../components/table/table.module.css";
+import TableStyle from "../../../components/table/table.module.css";
 import { useSelector } from "react-redux";
 import Image from "next/image";
-import { SVGICON } from "../../../../jsx/constant/theme";
+import { SVGICON } from "../../../jsx/constant/theme";
 import {
   renderUserPrfoileAvatar,
   dateFormate,
-} from "../../../../components/headerFilters/functions";
-import { selectedRow } from "../../../../store/actions/ReportActions";
+} from "../../../components/headerFilters/functions";
+import { selectedRow } from "../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
 import dayjs from "dayjs";
-import { workStatusApiAdmin } from "../../../../services/adminServices/DashboardService";
-import { getFlag, getFlags } from "../../../../components/reuseableFunctions";
+import { getFlag, getFlags } from "../../../components/reuseableFunctions";
 import { connect } from "react-redux";
-import SpinnerDots from "../../../../components/spinner";
+import SpinnerDots from "../../../components/spinner";
 
-const ReviewerReport = ({
+const TeamReport = ({
   setModal,
   modal,
   patientDetails,
@@ -647,7 +646,7 @@ const ReviewerReport = ({
                       </>
                     )}
 
-                    <div className={`col-xl-6 ${styles.cardSeperation}`} >
+                    <div className={`col-xl-6 ${styles.cardSeperation}`}>
                       <div className={styles.cardContainer}>
                         <div className={styles.card1}>
                           <div className={styles.summaryText}>Summary</div>
@@ -830,9 +829,7 @@ const ReviewerReport = ({
   );
 };
 
-const enhancer = connect(
-  (state) => ({
-    getFlagsData: state?.reviewer?.workQueue?.flags?.data,
-  })
-);
-export default enhancer(ReviewerReport);
+const enhancer = connect((state) => ({
+  getFlagsData: state?.reviewer?.workQueue?.flags?.data,
+}));
+export default enhancer(TeamReport);

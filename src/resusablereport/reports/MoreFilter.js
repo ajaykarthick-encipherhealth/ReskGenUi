@@ -1,5 +1,5 @@
 import React from "react";
-import filter from "../../../images/svg/newReport/filter.svg";
+import filter from "../../images/svg/newReport/filter.svg";
 import Image from "next/image";
 import styles from "./report.module.css";
 import { Popover } from "antd";

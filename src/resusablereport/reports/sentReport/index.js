@@ -1,19 +1,60 @@
 import React, { useState, useEffect } from "react";
 import styles from "../report.module.css";
 import { Paginator } from "primereact/paginator";
-import { useRouter } from "next/router";
 import dayjs from "dayjs";
+import { Avatar } from "antd";
 import ReactECharts from "echarts-for-react";
 import {
   dateFormate,
   renderUserPrfoileAvatar,
-} from "../../../../components/headerFilters/functions";
-import { colors } from "../sentReport";
-
-const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
-  const [detailsContent, setDetailsContent] = useState(details?.content);
+} from "../../../components/headerFilters/functions";
+import EditButton from "../../../images/adminUsers/EditButton";
+import SpinnerDots from "../../../components/spinner";
+import Export from "../../../pages/admin/report/Export";
+export const colors = {
+  A: "#8A2BE2",
+  B: "#5F9EA0",
+  C: "#8EE5EE",
+  D: "#42426F",
+  E: "#00BFFF",
+  F: "#EEB4B4",
+  G: "#FF4040",
+  H: "#D2691E",
+  I: "#4A766E",
+  J: "#FF7F00",
+  K: "#F08080",
+  L: "#FF7256",
+  M: "#FFA500",
+  N: "#FF2400",
+  O: "#FFB5C5",
+  P: "#CD919E",
+  Q: "#FF6347",
+  R: "#E35BD8",
+  S: "#E066FF",
+  T: "#EAADEA",
+  U: "#FFB90F",
+  V: "#EEE9BF",
+  W: "#EEEE00",
+  X: "#CD0000",
+  Y: "#CD8500",
+  Z: "#607B8B",
+};
+const SentReport = ({ details, onSentPageChange, paginationFirst }) => {
+  const [selectedCardIndex, setSelectedCardIndex] = useState(0);
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
+  const [selectedUsers, setSelectedUsers] = useState([]);
   const [reportActiveTab, setReportActiveTab] = useState("Supervisor");
 
+  const handleTabs = (tab) => {
+    setReportActiveTab(tab);
+  };
+  const hashes = selectedUsers.map((user) => {
+    const hash = (user?.userDetails?.firstName.charCodeAt(0) % 6) + 1;
+    return hash;
+  });
 
   const getChartOption = (res) => {
     return {
@@ -249,30 +290,25 @@ const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
       ],
     };
   };
+
   const selectedChartOption =
-  reportActiveTab === "Supervisor"
-    ? getChartUserOption()
-    : getChartAdminOption();
+    reportActiveTab === "Supervisor"
+      ? getChartUserOption()
+      : getChartAdminOption();
+
   useEffect(() => {
-    setDetailsContent(details?.content);
+    if (details?.data && details.data.length > 0) {
+      handleCardSelection(details.data[0], 0);
+    }
   }, [details]);
 
-  const router = useRouter();
-  const handleTabs = (tab) => {
-    setReportActiveTab(tab);
+  const handleCardSelection = (item, index) => {
+    setSelectedCardIndex(index);
+    setSelectedCard(item);
   };
 
-  const accessTemplate = (item) => {
-    switch (item?.role) {
-      case "READ":
-        return <span className={styles.readStyle}>Read</span>;
-
-      case "DOWNLOAD":
-        return <span className={styles.downloadStyle}>Download</span>;
-
-      default:
-        return null;
-    }
+  const closeModal = () => {
+    setOpenEdit(false);
   };
 
   return (
@@ -284,15 +320,25 @@ const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
               <div>
                 <div className=" col-xl-12 d-flex">
                   <div className="col-xl-6">
-                    <div className={styles.cardContainer}>
+                    {!details?.data ? (
+                      <SpinnerDots />
+                    ) : (
                       <div className={styles.cardContainer}>
-                        {detailsContent?.map((item, index) => {
+                        {details?.data?.map((item, index) => {
                           const formattedDate = dateFormate(
                             dayjs,
-                            item?.receiveDate
+                            item?.sendDate
                           );
                           return (
-                            <div key={index} className={styles.card}>
+                            <div
+                              key={index}
+                              className={`${styles.card} ${
+                                index === selectedCardIndex
+                                  ? styles.selectedCard
+                                  : ""
+                              }`}
+                              onClick={() => handleCardSelection(item, index)}
+                            >
                               <div className={styles.contentGroup}>
                                 <div className="col-xl-12">
                                   <div
@@ -306,76 +352,83 @@ const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
                                     <div className={`col-xl-6 ${styles.pName}`}>
                                       {item.reportName}
                                     </div>
-
-                                    <div className={`col-xl-2 `}>
-                                      {accessTemplate(item)}
+                                    <div
+                                      className={`col-xl-2 ${styles.dataContainer}`}
+                                    >
+                                      <div
+                                        onClick={() => {
+                                          setSelectedRows(item);
+                                          setOpenEdit(true);
+                                        }}
+                                      >
+                                        <EditButton />
+                                      </div>
                                     </div>
                                   </div>
 
                                   <div
                                     style={{
-                                      display: "flex",
-                                      justifyContent: "space-between",
-                                      alignItems: "center",
                                       paddingBottom: "5px",
                                     }}
                                   >
                                     <div
-                                      className={`col-xl-8 ${styles.headText}`}
+                                      className={`col-xl-12 ${styles.headText}`}
                                     >
-                                      {item.id}
-                                    </div>
-                                    <div
-                                      className={`col-xl-4 ${styles.headText}`}
-                                    >
-                                      {item.repotee}
+                                      {item._id}
                                     </div>
                                   </div>
-                                  <div
-                                    style={{
-                                      display: "flex",
-                                      justifyContent: "space-between",
-                                      alignItems: "center",
-                                    }}
-                                  >
+                                  <div className="d-flex justify-content-between align-items-center">
                                     <div className={`col-xl-2 ${styles.text}`}>
                                       {formattedDate}
                                     </div>
                                     <div className={`col-xl-4 ${styles.text}`}>
-                                      {item.senderDetails?.firstName ||
-                                      item.senderDetails?.lastName ||
-                                      item?.senderDetails?.profileImageUrl ? (
-                                        <div
-                                          style={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                          }}
-                                        >
-                                          {" "}
-                                          <span style={{ marginRight: "10px" }}>
-                                            {" "}
-                                            {renderUserPrfoileAvatar(
-                                              item.senderDetails?.firstName,
-                                              item.senderDetails?.lastName,
-                                              item?.senderDetails
-                                                ?.profileImageUrl,
-                                              "header"
-                                            )}
-                                          </span>
-                                          <span>
-                                            {item.senderDetails?.firstName}{" "}
-                                            {item.senderDetails?.lastName}
-                                          </span>
-                                        </div>
-                                      ) : (
-                                        <div style={{ textAlign: "center" }}>
-                                          ---
-                                        </div>
-                                      )}
-
-                                      <span>
-                                        {item.firstName} {item.lastName}
-                                      </span>
+                                      <Avatar.Group maxCount={2}>
+                                        {item?.receivedUsers?.map(
+                                          (data, index) =>
+                                            selectedCard?.receivedUsers
+                                              .length === 1 ? (
+                                              <div
+                                                key={index}
+                                                style={{
+                                                  display: "flex",
+                                                  alignItems: "center",
+                                                }}
+                                              >
+                                                <span
+                                                  style={{ marginRight: "5px" }}
+                                                >
+                                                  {renderUserPrfoileAvatar(
+                                                    data?.userDetails
+                                                      ?.firstName,
+                                                    data?.userDetails?.lastName,
+                                                    data?.userDetails
+                                                      ?.profileImageUrl,
+                                                    "header"
+                                                  )}
+                                                </span>
+                                                <span>
+                                                  {data?.userDetails?.firstName}{" "}
+                                                  {data?.userDetails?.lastName}
+                                                </span>
+                                              </div>
+                                            ) : (
+                                              <div key={index}>
+                                                {data?.userDetails
+                                                  ?.profileImageUrl && (
+                                                  <Avatar
+                                                    style={{
+                                                      objectFit: "unset",
+                                                    }}
+                                                    src={
+                                                      data.userDetails
+                                                        .profileImageUrl
+                                                    }
+                                                  />
+                                                )}
+                                              </div>
+                                            )
+                                        )}
+                                      </Avatar.Group>
                                     </div>
                                   </div>
                                 </div>
@@ -384,7 +437,7 @@ const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
                           );
                         })}
                       </div>
-                    </div>
+                    )}
                   </div>
 
                   <div className="col-xl-6" style={{ marginLeft: "10px" }}>
@@ -493,16 +546,27 @@ const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
       <div className="pagination-container">
         <Paginator
           first={paginationFirst}
-          rows={15}
+          rows={7}
           totalRecords={details?.totalElements}
-          onPageChange={onPageChange}
+          onPageChange={onSentPageChange}
         />
         <div className="total-pages">
           Total count: {details?.totalElements > 0 ? details?.totalElements : 0}
         </div>
       </div>
+      {openEdit && (
+        <Export
+          isModalVisible={openEdit}
+          closeModal={closeModal}
+          setIsModalVisible={setOpenEdit}
+          setSelectedRows={setSelectedRows}
+          setSelectAll={setSelectAll}
+          selectedRows={selectedRows}
+          isSent={true}
+        />
+      )}
     </>
   );
 };
 
-export default ReceivedReport;
+export default SentReport;
