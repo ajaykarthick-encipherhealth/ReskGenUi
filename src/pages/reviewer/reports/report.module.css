@@ -444,9 +444,9 @@
 .userContainer {
   border: 1px solid #04306f;
   border-radius: 10px;
-  width: 68%;
+  width: 30%;
   height: 45px;
-  margin: auto;
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -476,4 +476,20 @@
   border-radius: 5px;
   cursor: pointer;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.readSubCard {
+  height: 100px;
+  padding: 10px;
+  text-align: center;
+  background-color: #ebd4f7;
+  border-radius: 10px;
+  margin-right: 10px;
+}
+.downloadSubCard {
+  height: 100px;
+  padding: 10px;
+  text-align: center;
+  background-color: #ccebff;
+  border-radius: 10px;
+  margin-right: 10px;
 }

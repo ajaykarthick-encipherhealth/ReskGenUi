@@ -2,54 +2,45 @@ import React, { useState, useEffect } from "react";
 import styles from "../report.module.css";
 import { Paginator } from "primereact/paginator";
 import dayjs from "dayjs";
-import { useDispatch } from "react-redux";
-import { useRouter } from "next/router";
-import { Avatar, Col, Row, Tooltip, Empty } from "antd";
-import { workStatusApiAdmin } from "../../../../services/adminServices/DashboardService";
+import { Avatar } from "antd";
 import ReactECharts from "echarts-for-react";
-
 import {
   dateFormate,
-  getBackgroundColor,
   renderUserPrfoileAvatar,
-  sortFunction,
 } from "../../../../components/headerFilters/functions";
 import EditButton from "../../../../images/adminUsers/EditButton";
-import { IMAGES } from "src/jsx/constant/theme.js";
 import SpinnerDots from "../../../../components/spinner";
 import Export from "../../../admin/report/Export";
-import TableStyle from "../../../../components/table/table.module.css";
-import { selectedReport } from "../../../../store/actions/adminAction/ReportActions";
-import { useSelector } from "react-redux";
-import { getFlag } from "../../../../components/reuseableFunctions";
 
-const SentReport = ({
-  details,
-  onSentPageChange,
-  paginationFirst,
-  receivedPageNo,
-  receivedStartDate,
-  receivedEndDate,
-  isPhysician,
-  isAdmin,
-}) => {
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
-  const [dateRange, setDateRange] = useState({
-    processedStatus: {
-      PENDING: 0,
-      COMPLETED: 0,
-      HOLD: 0,
-      DECLINED: 0,
-    },
-    auditedStatus: {
-      AUDIT_PENDING: 0,
-      DECLINED: 0,
-      AUDITED: 0,
-      AUDITHOLD: 0,
-    },
-  });
+export const colors = {
+  A: "#8A2BE2",
+  B: "#5F9EA0",
+  C: "#8EE5EE",
+  D: "#42426F",
+  E: "#00BFFF",
+  F: "#EEB4B4",
+  G: "#FF4040",
+  H: "#D2691E",
+  I: "#4A766E",
+  J: "#FF7F00",
+  K: "#F08080",
+  L: "#FF7256",
+  M: "#FFA500",
+  N: "#FF2400",
+  O: "#FFB5C5",
+  P: "#CD919E",
+  Q: "#FF6347",
+  R: "#E35BD8",
+  S: "#E066FF",
+  T: "#EAADEA",
+  U: "#FFB90F",
+  V: "#EEE9BF",
+  W: "#EEEE00",
+  X: "#CD0000",
+  Y: "#CD8500",
+  Z: "#607B8B",
+};
+const SentReport = ({ details, onSentPageChange, paginationFirst }) => {
   const [selectedCardIndex, setSelectedCardIndex] = useState(0);
   const [selectedCard, setSelectedCard] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
@@ -65,6 +56,7 @@ const SentReport = ({
     const hash = (user?.userDetails?.firstName.charCodeAt(0) % 6) + 1;
     return hash;
   });
+
   const getChartOption = (res) => {
     return {
       tooltip: {
@@ -135,7 +127,35 @@ const SentReport = ({
     };
   };
 
-  const getChartUserOption = (res) => {
+  const getChartUserOption = () => {
+    const getRandomColor = (letter) =>
+      colors[letter.toUpperCase()] || "#B35CE1";
+
+    const data = [
+      { value: 10, name: "Benjamin " },
+      { value: 20, name: " Micheal" },
+      { value: 20, name: "kack" },
+      { value: 20, name: "johan " },
+      { value: 20, name: "Tset" },
+    ];
+
+    const nameColors = {};
+
+    data.forEach((item) => {
+      const firstLetter = item.name[0];
+
+      if (!nameColors[item.name]) {
+        nameColors[item.name] = getRandomColor(firstLetter);
+      }
+    });
+    const pieData = data.map((item) => ({
+      value: item.value,
+      name: item.name,
+      itemStyle: {
+        color: nameColors[item.name],
+      },
+    }));
+
     return {
       tooltip: {
         trigger: "item",
@@ -152,50 +172,7 @@ const SentReport = ({
             position: "inside",
             formatter: "{b}: {c}",
           },
-          data: [
-            {
-              value: 10,
-              name: "Excel",
-              itemStyle: {
-                color: "#B35CE1",
-              },
-            },
-            {
-              value: 20,
-              name: "Csv",
-              itemStyle: {
-                color: "#0A9FFF",
-              },
-            },
-            {
-              value: 10,
-              name: "Excel",
-              itemStyle: {
-                color: "#B35CE1",
-              },
-            },
-            {
-              value: 20,
-              name: "Csv",
-              itemStyle: {
-                color: "#0A9FFF",
-              },
-            },
-            {
-              value: 10,
-              name: "Excel",
-              itemStyle: {
-                color: "#B35CE1",
-              },
-            },
-            {
-              value: 20,
-              name: "Csv",
-              itemStyle: {
-                color: "#0A9FFF",
-              },
-            },
-          ],
+          data: pieData,
         },
         {
           type: "pie",
@@ -206,7 +183,6 @@ const SentReport = ({
             position: "center",
             formatter: `{b|${60}}`,
             backgroundColor: "transparent",
-
             rich: {
               a: {
                 fontSize: 12,
@@ -232,7 +208,37 @@ const SentReport = ({
       ],
     };
   };
-  const getChartAdminOption = (res) => {
+
+  const getChartAdminOption = () => {
+    const getRandomColor = (letter) =>
+      colors[letter.toUpperCase()] || "#B35CE1";
+
+    const data = [
+      { value: 10, name: "Benjamin Mitchell" },
+      { value: 20, name: "David Micheal" },
+      { value: 20, name: "Richard William" },
+      { value: 20, name: "Thomas Joseph" },
+      { value: 20, name: "Andrew paul" },
+    ];
+
+    const nameColors = {};
+
+    data.forEach((item) => {
+      const firstLetter = item.name[0];
+
+      if (!nameColors[item.name]) {
+        nameColors[item.name] = getRandomColor(firstLetter);
+      }
+    });
+
+    const pieData = data.map((item) => ({
+      value: item.value,
+      name: item.name,
+      itemStyle: {
+        color: nameColors[item.name],
+      },
+    }));
+
     return {
       tooltip: {
         trigger: "item",
@@ -249,50 +255,7 @@ const SentReport = ({
             position: "inside",
             formatter: "{b}: {c}",
           },
-          data: [
-            {
-              value: 10,
-              name: "priuy",
-              itemStyle: {
-                color: "#B35CE1",
-              },
-            },
-            {
-              value: 20,
-              name: "priya",
-              itemStyle: {
-                color: "#0A9FFF",
-              },
-            },
-            {
-              value: 10,
-              name: "sneha",
-              itemStyle: {
-                color: "#B35CE1",
-              },
-            },
-            {
-              value: 20,
-              name: "john",
-              itemStyle: {
-                color: "#0A9FFF",
-              },
-            },
-            {
-              value: 10,
-              name: "test",
-              itemStyle: {
-                color: "#B35CE1",
-              },
-            },
-            {
-              value: 20,
-              name: "jk",
-              itemStyle: {
-                color: "#0A9FFF",
-              },
-            },
-          ],
+          data: pieData,
         },
         {
           type: "pie",
@@ -303,7 +266,6 @@ const SentReport = ({
             position: "center",
             formatter: `{b|${60}}`,
             backgroundColor: "transparent",
-
             rich: {
               a: {
                 fontSize: 12,
@@ -329,30 +291,13 @@ const SentReport = ({
       ],
     };
   };
+
   const selectedChartOption =
-    reportActiveTab === 'Supervisor' ? getChartUserOption() : getChartAdminOption();  
-  const mostCommonHash = getBackgroundColor(hashes);
+    reportActiveTab === "Supervisor"
+      ? getChartUserOption()
+      : getChartAdminOption();
 
-  const startDate = DateRanges?.startDate
-    ? new Date(DateRanges?.startDate).toISOString()
-    : "";
-  const endDate = DateRanges?.endDate
-    ? new Date(DateRanges?.endDate).toISOString()
-    : "";
-  const getWorkFlow = async () => {
-    try {
-      const data = await workStatusApiAdmin(startDate, endDate, router);
-      setDateRange(data.response?.processedStatusCount);
-      // setChartValue(d;
-    } catch (error) {
-      console.log(error);
-    }
-  };
   useEffect(() => {
-    getWorkFlow();
-  }, [startDate, endDate, router]);
-  useEffect(() => {
-    // Automatically select the first card and display its content on mount
     if (details?.data && details.data.length > 0) {
       handleCardSelection(details.data[0], 0);
     }
@@ -365,26 +310,6 @@ const SentReport = ({
 
   const closeModal = () => {
     setOpenEdit(false);
-  };
-  const handleReceiverReport = (item) => {
-    const info = {
-      reportUser: item,
-      receivedPageNo: receivedPageNo,
-      receivedStartDate: receivedStartDate,
-      receivedEndDate: receivedEndDate,
-    };
-    dispatch(selectedReport(info));
-    isPhysician
-      ? router?.push(
-          `/reviewer/report/individualreport?reportId=${
-            item?._id
-          }&sentreport=${true}&page=${receivedPageNo}&limit=${paginationFirst}`
-        )
-      : router?.push(
-          `/admin/report/individualreport?reportId=${
-            item?._id
-          }&sentreport=${true}&isAdmin=${isAdmin}&page=${receivedPageNo}&limit=${paginationFirst}`
-        );
   };
 
   return (
@@ -453,13 +378,7 @@ const SentReport = ({
                                       {item._id}
                                     </div>
                                   </div>
-                                  <div
-                                    style={{
-                                      display: "flex",
-                                      justifyContent: "space-between",
-                                      alignItems: "center",
-                                    }}
-                                  >
+                                  <div className="d-flex justify-content-between align-items-center">
                                     <div className={`col-xl-2 ${styles.text}`}>
                                       {formattedDate}
                                     </div>
@@ -539,13 +458,13 @@ const SentReport = ({
                           </div>
                         </div>
                         <div className="col-xl-12  d-flex mt-4">
-                          <div className={`col-xl-6 ${styles.sentSubCard}`}>
+                          <div className={`col-xl-6 ${styles.readSubCard}`}>
                             <div>
                               <div>No of Read</div>
                               <h4>60</h4>
                             </div>
                           </div>
-                          <div className={`col-xl-6 ${styles.sentSubCard}`}>
+                          <div className={`col-xl-6 ${styles.downloadSubCard}`}>
                             <div>
                               <div>No of Download</div>
                               <h4>20</h4>
@@ -555,48 +474,66 @@ const SentReport = ({
                         <div className={styles.summaryText}>Overall Chart</div>
 
                         <div
-                          className={`d-flex ${styles.card}`}
-                          style={{
-                            justifyContent: "space-between",
-                            padding: "45px",
-                            margin:"30p"
-                          }}
+                          className={` ${styles.card} justify-content-between p-2 m-2`}
                         >
-                        
+                          <div className="d-flex justify-content-end">
+                            <div className={styles.userContainer}>
+                              <div className={styles.user}>
+                                <button
+                                  className={
+                                    reportActiveTab === "Supervisor"
+                                      ? `${styles.active}`
+                                      : ""
+                                  }
+                                  onClick={() => {
+                                    handleTabs("Supervisor");
+                                  }}
+                                >
+                                  Supervisor
+                                </button>
+                                <button
+                                  className={
+                                    reportActiveTab === "Admin"
+                                      ? `${styles.active}`
+                                      : ""
+                                  }
+                                  onClick={() => {
+                                    handleTabs("Admin");
+                                  }}
+                                >
+                                  Admin
+                                </button>
+                              </div>
+                            </div>
+                          </div>
 
-                          <div style={{ width: '50%' }}>
-      <div className={styles.summaryText} style={{ textAlign: 'center' }}>
-        Report Type
-      </div>
-      <ReactECharts option={getChartOption()} style={{ height: '230px' }} />
-    </div>
-    <div style={{ width: '50%' }}>
-      <div style={{ display: 'flex' }}>
-        <div className={styles.summaryText}>Users</div>
-        <div className={styles.userContainer}>
-          <div className={styles.user}>
-            <button
-              className={reportActiveTab === 'Supervisor' ? `${styles.active}` : ''}
-              onClick={() => {
-                handleTabs('Supervisor');
-              }}
-            >
-              Supervisor
-            </button>
-            <button
-              className={reportActiveTab === 'Admin' ? `${styles.active}` : ''}
-              onClick={() => {
-                handleTabs('Admin');
-              }}
-            >
-              Admin
-            </button>
-          </div>
-        </div>
-      </div>
+                          <div className=" d-flex justify-content-between p-2 m-2">
+                            <div style={{ width: "50%" }}>
+                              <div
+                                className={styles.summaryText}
+                                style={{ textAlign: "center" }}
+                              >
+                                Report Type
+                              </div>
+                              <ReactECharts
+                                option={getChartOption()}
+                                style={{ height: "230px" }}
+                              />
+                            </div>
+                            <div style={{ width: "50%" }}>
+                              <div
+                                className={styles.summaryText}
+                                style={{ textAlign: "center" }}
+                              >
+                                Users
+                              </div>
 
-      <ReactECharts option={selectedChartOption} style={{ height: '230px' }} />
-    </div>
+                              <ReactECharts
+                                option={selectedChartOption}
+                                style={{ height: "230px" }}
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
