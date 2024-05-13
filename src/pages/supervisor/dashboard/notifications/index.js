@@ -9,7 +9,7 @@ import HeadTitle from "../../../../components/headtitle";
 import { SVGICON } from "../../../../jsx/constant/theme";
 import NoNotification from "../../../../images/dashboard/no-notification.png";
 import spinSTYles from "../../../../styles/auth.module.css";
-const Notifications = ({notificationResponse}) => {
+const Notifications = ({ notificationResponse }) => {
   const [openNotifications, setOpenNotification] = useState(false);
   const handleOpen = () => {
     setOpenNotification(!openNotifications);
@@ -45,7 +45,8 @@ const Notifications = ({notificationResponse}) => {
     ) : (
       <div className={styles.no_notificarion_container}>
         {!notificationResponse?.loading &&
-          notificationResponse?.data?.response?.content?.length === 0 && (
+          (!notificationResponse?.data?.response?.content ||
+            notificationResponse?.data?.response?.content?.length === 0) && (
             <Image src={NoNotification} alt="" />
           )}
       </div>
@@ -100,10 +101,7 @@ const Notifications = ({notificationResponse}) => {
     </>
   );
 };
-const enhancer = connect(
-  (state) => ({
-    notificationResponse: state?.reviewer?.dashboard?.notification
-  }),
-  
-);
+const enhancer = connect((state) => ({
+  notificationResponse: state?.reviewer?.dashboard?.notification,
+}));
 export default enhancer(Notifications);

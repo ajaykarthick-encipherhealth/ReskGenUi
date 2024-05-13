@@ -11,7 +11,6 @@ import { updateSentReport } from "../../services/ReportService";
 import { getActiveTab } from "../../store/actions/l2Action/AuditReportAction"
 import InputField from "../../components/input";
 import { SVGICON } from "../../jsx/constant/theme";
-const { Option } = Select;
 const Export = ({
   isModalVisible,
   closeModal,
@@ -181,6 +180,8 @@ const Export = ({
         ? selectedReportInfo?.reportName
         : reportName,
   });
+  const isAllChecked = checkall.every((item) => item.checked);
+
   return (
     <Modal
       title="Export "
@@ -200,52 +201,30 @@ const Export = ({
             <div className="d-flex text-center">
               <div className="col-md-10" style={{ marginRight: "10px" }}>
                 <div className="form-group">
-                  {/* <input
-                  type="text"
-                  className={styles.reportInput}
-                  id="reportName"
-                  placeholder="Enter report name"
-                  value={reportName}
-                  onChange={(e) => setReportName(e.target.value)}
-                /> */}
-                  {/* <InputField
-                  ReportName={
-                    selectedReportInfo?.reportName
-                      ? selectedReportInfo?.reportName
-                      : reportName
-                  }
-                  setInputValue={setReportName}
-                  // delay={1000}
-                  type="text"
-                  placeholder="Enter report name"
-                  isSearch={false}
-                  isDisabled={selectedReportInfo?.reportName ? true : false}
-                  isInputFiled={true}
-                /> */}
                   <Form.Item
-                    label="Report Name"
-                    className={`p-2 ${styles.reportLabel}`}
+                    label={<div className={styles.fields}>Report Name</div>}
                     name="ReportName"
-                    initialValue={
-                      selectedReportInfo?.reportName
-                        ? selectedReportInfo?.reportName
-                        : reportName
-                    }
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input your ReportName!",
+                      },
+                    ]}
                   >
-                  <InputField
-                  ReportName={
-                    selectedReportInfo?.reportName
-                      ? selectedReportInfo?.reportName
-                      : reportName
-                  }
-                  setInputValue={setReportName}
-                  delay={1000}
-                  type="text"
-                  placeholder="Enter report name"
-                  isSearch={false}
-                  isDisabled={selectedReportInfo?.reportName ? true : false}
-                  isInputFiled={true}
-                />
+                    <InputField
+                      ReportName={
+                        selectedReportInfo?.reportName
+                          ? selectedReportInfo?.reportName
+                          : reportName
+                      }
+                      setInputValue={setReportName}
+                      delay={1000}
+                      type="text"
+                      placeholder=""
+                      isSearch={false}
+                      isDisabled={selectedReportInfo?.reportName ? true : false}
+                      isInputFiled={true}
+                    />
                   </Form.Item>
                 </div>
               </div>
@@ -280,19 +259,6 @@ const Export = ({
           </div>
           <div className="col-md-12" style={{ marginTop: "10px" }}>
             <div className="d-flex p-2">
-              {/* <div className="d-flex">
-            <div className={`p-2 ${styles.reportLabel}`}>
-              Select the fields you want to sent
-            </div>
-
-            <div
-              className={`p-2  ${styles.reportLabel}`}
-              style={{ marginLeft: "17px" }}
-            >
-              Select the user you want to send the report to
-            </div>
-          </div> */}
-
               <div>
                 <div className="d-flex p-2">
                   <div style={{ marginRight: "10px" }}>Report Fields</div>
@@ -309,6 +275,7 @@ const Export = ({
                           });
                         }
                       }}
+                      checked={isAllChecked}
                     >
                       {" "}
                       Select All
@@ -400,7 +367,10 @@ const Export = ({
                           border: "none",
                           color: "black",
                         }}
-                        onClick={() => handleActiveBtn("read")}
+                        onClick={() => {
+                          handleActiveBtn("read");
+                          handleSelectedRole("READ");
+                        }}
                       >
                         Read
                       </Button>
@@ -411,7 +381,10 @@ const Export = ({
                           border: "none",
                           color: "black",
                         }}
-                        onClick={() => handleActiveBtn("download")}
+                        onClick={() => {
+                          handleActiveBtn("download");
+                          handleSelectedRole("DOWNLOAD");
+                        }}
                       >
                         Download
                       </Button>
@@ -419,12 +392,6 @@ const Export = ({
                   </div>
                 </div>
                 <div>
-                  {console.log(
-                    selectedUser &&
-                      selectedUser[0]?.user &&
-                      selectedUser[0]?.role,
-                    "tets"
-                  )}
                   <Button
                     onClick={() => {
                       setDisplay(true);
@@ -484,32 +451,30 @@ const Export = ({
             </div>
           </div>
         </div>
-      </Form>
-
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-            <Form.Item>
-            <Button
-          type="primary"
-          htmlType="submit"
+        <div
           style={{
-            backgroundColor: "#04306f",
-            color: "#fff",
-            width: "100px",
-            height: "40px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
-          disabled={userList?.length > 0 ? false : true}
         >
-          Generate
-        </Button>
-            </Form.Item>
-      
-      </div>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{
+                backgroundColor: "#04306f",
+                color: "#fff",
+                width: "100px",
+                height: "40px",
+              }}
+              disabled={userList?.length > 0 ? false : true}
+            >
+              Generate
+            </Button>
+          </Form.Item>
+        </div>
+      </Form>
     </Modal>
   );
 };
