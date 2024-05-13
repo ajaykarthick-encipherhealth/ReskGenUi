@@ -18,7 +18,10 @@ import HccCards from "../../components/HCC";
 import ModelIndex from "../../components/model/Index";
 import { getPatientDetails } from "../../components/function/GetData";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { moveToAnotherAction, onDragEnd } from "../../components/function/ReusableFunctions";
+import {
+  moveToAnotherAction,
+  onDragEnd,
+} from "../../components/function/ReusableFunctions";
 
 const VisitData = ({
   setActiveTabHead,
@@ -74,7 +77,6 @@ const VisitData = ({
   const [queryFormValues, setQueryFormValues] = useState(false);
   const [selectDisDetails, setSelectDisDetails] = useState(false);
   const [allDisList, setAllDisList] = useState([]);
-
 
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
@@ -183,186 +185,253 @@ const VisitData = ({
 
   const modalOpenValidContent = (
     <div className="section-container">
-      <div className="my-post-content row pt-3">
-        {!isFileFormShow ? (
-          <div className="col-xl-3">
-            <ul className="timeline">
-              <div
-                className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
-              >
-                <span className={`${visitStyles.hcc_title_name}`}>HCC</span>
-                <div className="d-flex justify-content-center">
-                  <span className={`${visitStyles.hcc_title_badge}`}>
-                    {newValidDiseaseList.length}
-                  </span>
-                </div>
-              </div>
-              <div className={visitStyles.container}>
-                <div className={visitStyles.hccStickey_head}>
-                  <HccCards
-                    list={newValidDiseaseList}
-                    hccVersionDetails={hccVersionDetails}
-                    captureSectionMatching={captureSectionMatching}
-                    encounterDateMatching={encounterDateMatching}
-                    meatCriteriaList={meatCriteriaList}
-                    onchangeValid={onchangeValid}
-                    getValidHccDetails={getValidHccDetails}
-                    setFormValues={setFormValues}
-                    setIsEditHccForm={setIsEditHccForm}
-                    setFormEditPlace={setFormEditPlace}
-                    okText="Move to Deleted"
-                    cancelText="Move to Suggested"
-                    editFormPlace={"VALID_DISEASE"}
-                    setOpens={setOpens}
-                    setCombiTree={setCombiTree}
-                    setActiveTabHead={setActiveTabHead}
-                    setActiveMeatTitle={setActiveMeatTitle}
-                    setActiveComboTree={setActiveComboTree}
-                    setSearch={setSearch}
-                    setFileLoading={setFileLoading}
-                    setIsModalOpenLab={setIsModalOpenLab}
-                    setIsModalOpenRadiology={setIsModalOpenRadiology}
-                    setIsModalOpenValidCodes={setIsModalOpenValidCodes}
-                    setFileModalHeader={setFileModalHeader}
-                    patientDocumentResult={patientDocumentResult}
-                    setConfirmNotesModalValid={setConfirmNotesModalValid}
-                    setIsValidAction={setIsValidAction}
-                    cardTitle="HCC"
-                    isVisitData={true}
-                  />
-                </div>
-              </div>
-            </ul>
+      <DragDropContext
+        onDragEnd={(result) =>
+          onDragEnd(
+            result,
+            allDisList,
+            setSelectDiseasesName,
+            setSelectDisDetails,
+            setConfirmNotesModalValid,
+            setIsValidAction,
+            patientDetailsResult
+          )
+        }
+      >
+        <div className="my-post-content row pt-3">
+          {!isFileFormShow ? (
+            <div className="col-xl-3">
+              <Droppable droppableId={"HCC"} key={"HCC"}>
+                {(provided) => {
+                  return (
+                    <div
+                      className="timeline"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
+                      <div
+                        className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
+                      >
+                        <span className={`${visitStyles.hcc_title_name}`}>
+                          HCC
+                        </span>
+                        <div className="d-flex justify-content-center">
+                          <span className={`${visitStyles.hcc_title_badge}`}>
+                            {newValidDiseaseList.length}
+                          </span>
+                        </div>
+                      </div>
+                      <div className={visitStyles.container}>
+                        <div className={visitStyles.hccStickey_head}>
+                          <HccCards
+                            list={newValidDiseaseList}
+                            hccVersionDetails={hccVersionDetails}
+                            captureSectionMatching={captureSectionMatching}
+                            encounterDateMatching={encounterDateMatching}
+                            meatCriteriaList={meatCriteriaList}
+                            onchangeValid={onchangeValid}
+                            getValidHccDetails={getValidHccDetails}
+                            setFormValues={setFormValues}
+                            setIsEditHccForm={setIsEditHccForm}
+                            setFormEditPlace={setFormEditPlace}
+                            okText="Move to Deleted"
+                            cancelText="Move to Suggested"
+                            editFormPlace={"VALID_DISEASE"}
+                            setOpens={setOpens}
+                            setCombiTree={setCombiTree}
+                            setActiveTabHead={setActiveTabHead}
+                            setActiveMeatTitle={setActiveMeatTitle}
+                            setActiveComboTree={setActiveComboTree}
+                            setSearch={setSearch}
+                            setFileLoading={setFileLoading}
+                            setIsModalOpenLab={setIsModalOpenLab}
+                            setIsModalOpenRadiology={setIsModalOpenRadiology}
+                            setIsModalOpenValidCodes={setIsModalOpenValidCodes}
+                            setFileModalHeader={setFileModalHeader}
+                            patientDocumentResult={patientDocumentResult}
+                            setConfirmNotesModalValid={
+                              setConfirmNotesModalValid
+                            }
+                            setIsValidAction={setIsValidAction}
+                            cardTitle="HCC"
+                            isVisitData={true}
+                            provided={provided}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }}
+              </Droppable>
+            </div>
+          ) : null}
+          <div className={isFileFormShow ? "col-xl-8" : "col-xl-6"}>
+            <div className="card-body p-0">
+              {selectFileURL && (
+                <PdfViewer
+                  src={selectFileURL}
+                  searchQuery={search?.value ? search?.value : ""}
+                  pageNumber={search?.page ? search?.page : 1}
+                  headers={search?.headers}
+                  headerContent={search?.headerContent}
+                />
+              )}
+            </div>
           </div>
-        ) : null}
-        <div className={isFileFormShow ? "col-xl-8" : "col-xl-6"}>
-          <div className="card-body p-0">
-            {selectFileURL && (
-              <PdfViewer
-                src={selectFileURL}
-                searchQuery={search?.value ? search?.value : ""}
-                pageNumber={search?.page ? search?.page : 1}
-                headers={search?.headers}
-                headerContent={search?.headerContent}
+          {isFileFormShow ? (
+            <div className={`col-xl-4 ${styles.hccFormContainer}`}>
+              <AddHccForm
+                handleCloseModal={handleCloseModal}
+                isMeatNew={true}
               />
-            )}
-          </div>
-        </div>
-        {isFileFormShow ? (
-          <div className={`col-xl-4 ${styles.hccFormContainer}`}>
-            <AddHccForm handleCloseModal={handleCloseModal} isMeatNew={true} />
-          </div>
-        ) : null}
-        {!isFileFormShow ? (
-          <div className="col-xl-3">
-            <div className="">
-              <ul className="timeline">
-                <div
-                  className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
-                >
-                  <span className={`${visitStyles.suggested_title_name}`}>
-                    SUGGESTED CODES
-                  </span>
-                  <div className="d-flex justify-content-center">
-                    <span className={`${visitStyles.suggested_title_badge}`}>
-                      {suggestedHccList.length}
-                    </span>
-                  </div>
-                </div>
-                <div className={visitStyles.suggestedcontainer2}>
-                  <div className={visitStyles.hccStickey_head}>
-                    <HccCards
-                      list={suggestedHccList}
-                      hccVersionDetails={hccVersionDetails}
-                      captureSectionMatching={captureSectionMatching}
-                      encounterDateMatching={encounterDateMatching}
-                      meatCriteriaList={meatCriteriaList}
-                      onchangeValid={onchangeValid}
-                      getValidHccDetails={getValidHccDetails}
-                      setFormValues={setFormValues}
-                      setIsEditHccForm={setIsEditHccForm}
-                      setFormEditPlace={setFormEditPlace}
-                      okText={"Move to Deleted"}
-                      editFormPlace={"SUGGESTED_DISEASE"}
-                      setOpens={setOpens}
-                      setCombiTree={setCombiTree}
-                      setActiveTabHead={setActiveTabHead}
-                      setActiveMeatTitle={setActiveMeatTitle}
-                      setActiveComboTree={setActiveComboTree}
-                      setSearch={setSearch}
-                      setFileLoading={setFileLoading}
-                      setIsModalOpenLab={setIsModalOpenLab}
-                      setIsModalOpenRadiology={setIsModalOpenRadiology}
-                      setIsModalOpenValidCodes={setIsModalOpenValidCodes}
-                      setFileModalHeader={setFileModalHeader}
-                      patientDocumentResult={patientDocumentResult}
-                      setConfirmNotesModalValid={setConfirmNotesModalValid}
-                      setIsValidAction={setIsValidAction}
-                      cardTitle="SUGGESTED"
-                      isVisitData={true}
-                    />
-                  </div>
-                </div>
-              </ul>
             </div>
+          ) : null}
+          {!isFileFormShow ? (
+            <div className="col-xl-3">
+              <div className="">
+                <Droppable droppableId={"SUGGESTED"} key={"SUGGESTED"}>
+                  {(provided) => {
+                    return (
+                      <div
+                        className="timeline"
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                      >
+                        <div
+                          className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
+                        >
+                          <span
+                            className={`${visitStyles.suggested_title_name}`}
+                          >
+                            SUGGESTED CODES
+                          </span>
+                          <div className="d-flex justify-content-center">
+                            <span
+                              className={`${visitStyles.suggested_title_badge}`}
+                            >
+                              {suggestedHccList.length}
+                            </span>
+                          </div>
+                        </div>
+                        <div className={visitStyles.suggestedcontainer2}>
+                          <div className={visitStyles.hccStickey_head}>
+                            <HccCards
+                              list={suggestedHccList}
+                              hccVersionDetails={hccVersionDetails}
+                              captureSectionMatching={captureSectionMatching}
+                              encounterDateMatching={encounterDateMatching}
+                              meatCriteriaList={meatCriteriaList}
+                              onchangeValid={onchangeValid}
+                              getValidHccDetails={getValidHccDetails}
+                              setFormValues={setFormValues}
+                              setIsEditHccForm={setIsEditHccForm}
+                              setFormEditPlace={setFormEditPlace}
+                              okText={"Move to Deleted"}
+                              editFormPlace={"SUGGESTED_DISEASE"}
+                              setOpens={setOpens}
+                              setCombiTree={setCombiTree}
+                              setActiveTabHead={setActiveTabHead}
+                              setActiveMeatTitle={setActiveMeatTitle}
+                              setActiveComboTree={setActiveComboTree}
+                              setSearch={setSearch}
+                              setFileLoading={setFileLoading}
+                              setIsModalOpenLab={setIsModalOpenLab}
+                              setIsModalOpenRadiology={setIsModalOpenRadiology}
+                              setIsModalOpenValidCodes={
+                                setIsModalOpenValidCodes
+                              }
+                              setFileModalHeader={setFileModalHeader}
+                              patientDocumentResult={patientDocumentResult}
+                              setConfirmNotesModalValid={
+                                setConfirmNotesModalValid
+                              }
+                              setIsValidAction={setIsValidAction}
+                              cardTitle="SUGGESTED"
+                              isVisitData={true}
+                              provided={provided}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  }}
+                </Droppable>
+              </div>
 
-            <div className={visitStyles.deleteFileContainer}>
-              <ul className="timeline">
-                <div
-                  className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
-                >
-                  <span className={`${visitStyles.deleted_title_name}`}>
-                    DELETED CODES
-                  </span>
-                  <div className="d-flex justify-content-center">
-                    <span className={`${visitStyles.deleted_title_badge}`}>
-                      {deletedHccList.length}
-                    </span>
-                  </div>
-                </div>
-                <div className={visitStyles.deletedContainer}>
-                  <div className={visitStyles.hccStickey_head}>
-                    <HccCards
-                      list={deletedHccList}
-                      hccVersionDetails={hccVersionDetails}
-                      captureSectionMatching={captureSectionMatching}
-                      encounterDateMatching={encounterDateMatching}
-                      meatCriteriaList={meatCriteriaList}
-                      onchangeValid={onchangeValid}
-                      getValidHccDetails={getValidHccDetails}
-                      setFormValues={setFormValues}
-                      setIsEditHccForm={setIsEditHccForm}
-                      setFormEditPlace={setFormEditPlace}
-                      okText="Move to Suggested"
-                      cancelText="Move to HCC"
-                      isDeletedCodes={true}
-                      setOpens={setOpens}
-                      setCombiTree={setCombiTree}
-                      setActiveTabHead={setActiveTabHead}
-                      setActiveMeatTitle={setActiveMeatTitle}
-                      setActiveComboTree={setActiveComboTree}
-                      setSearch={setSearch}
-                      setFileLoading={setFileLoading}
-                      setIsModalOpenLab={setIsModalOpenLab}
-                      setIsModalOpenRadiology={setIsModalOpenRadiology}
-                      setIsModalOpenValidCodes={setIsModalOpenValidCodes}
-                      setFileModalHeader={setFileModalHeader}
-                      patientDocumentResult={patientDocumentResult}
-                      setConfirmNotesModalValid={setConfirmNotesModalValid}
-                      setIsValidAction={setIsValidAction}
-                      cardTitle="DELETED"
-                      isVisitData={true}
-                    />
-                  </div>
-                </div>
-              </ul>
+              <div className={visitStyles.deleteFileContainer}>
+                <Droppable droppableId={"DELETED"} key={"DELETED"}>
+                  {(provided) => {
+                    return (
+                      <div
+                        className="timeline"
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                      >
+                        <div
+                          className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
+                        >
+                          <span className={`${visitStyles.deleted_title_name}`}>
+                            DELETED CODES
+                          </span>
+                          <div className="d-flex justify-content-center">
+                            <span
+                              className={`${visitStyles.deleted_title_badge}`}
+                            >
+                              {deletedHccList.length}
+                            </span>
+                          </div>
+                        </div>
+                        <div className={visitStyles.deletedContainer}>
+                          <div className={visitStyles.hccStickey_head}>
+                            <HccCards
+                              list={deletedHccList}
+                              hccVersionDetails={hccVersionDetails}
+                              captureSectionMatching={captureSectionMatching}
+                              encounterDateMatching={encounterDateMatching}
+                              meatCriteriaList={meatCriteriaList}
+                              onchangeValid={onchangeValid}
+                              getValidHccDetails={getValidHccDetails}
+                              setFormValues={setFormValues}
+                              setIsEditHccForm={setIsEditHccForm}
+                              setFormEditPlace={setFormEditPlace}
+                              okText="Move to Suggested"
+                              cancelText="Move to HCC"
+                              isDeletedCodes={true}
+                              setOpens={setOpens}
+                              setCombiTree={setCombiTree}
+                              setActiveTabHead={setActiveTabHead}
+                              setActiveMeatTitle={setActiveMeatTitle}
+                              setActiveComboTree={setActiveComboTree}
+                              setSearch={setSearch}
+                              setFileLoading={setFileLoading}
+                              setIsModalOpenLab={setIsModalOpenLab}
+                              setIsModalOpenRadiology={setIsModalOpenRadiology}
+                              setIsModalOpenValidCodes={
+                                setIsModalOpenValidCodes
+                              }
+                              setFileModalHeader={setFileModalHeader}
+                              patientDocumentResult={patientDocumentResult}
+                              setConfirmNotesModalValid={
+                                setConfirmNotesModalValid
+                              }
+                              setIsValidAction={setIsValidAction}
+                              cardTitle="DELETED"
+                              isVisitData={true}
+                              provided={provided}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  }}
+                </Droppable>
+              </div>
             </div>
-          </div>
-        ) : null}
-      </div>
+          ) : null}
+        </div>
+      </DragDropContext>
     </div>
   );
-
 
   return (
     <>
@@ -375,7 +444,19 @@ const VisitData = ({
           </div>
         </div>
       ) : null}
-      <DragDropContext onDragEnd={(result) => onDragEnd(result,allDisList,setSelectDiseasesName,setSelectDisDetails,setConfirmNotesModalValid,setIsValidAction,patientDetailsResult)}>
+      <DragDropContext
+        onDragEnd={(result) =>
+          onDragEnd(
+            result,
+            allDisList,
+            setSelectDiseasesName,
+            setSelectDisDetails,
+            setConfirmNotesModalValid,
+            setIsValidAction,
+            patientDetailsResult
+          )
+        }
+      >
         <div className="my-post-content pt-3">
           <div className="widget-media   ps--active-y">
             <div className="row">
