@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import styles from "../report.module.css";
 import { Paginator } from "primereact/paginator";
 import dayjs from "dayjs";
+import { useRouter } from "next/router";
 import { Avatar } from "antd";
 import ReactECharts from "echarts-for-react";
+import { useDispatch } from "react-redux";
 import {
   dateFormate,
   renderUserPrfoileAvatar,
@@ -11,6 +13,8 @@ import {
 import EditButton from "../../../images/adminUsers/EditButton";
 import SpinnerDots from "../../../components/spinner";
 import Export from "../../../pages/admin/report/Export";
+import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
+
 export const colors = {
   A: "#8A2BE2",
   B: "#5F9EA0",
@@ -39,7 +43,18 @@ export const colors = {
   Y: "#CD8500",
   Z: "#607B8B",
 };
-const SentReport = ({ details, onSentPageChange, paginationFirst }) => {
+const SentReport = ({   details,
+  onSentPageChange,
+  paginationFirst,
+  sortOrder,
+  setSortOrder,
+  setSort,
+  receivedPageNo,
+  receivedStartDate,
+  receivedEndDate,
+  }) => {
+    const dispatch = useDispatch();
+    const router = useRouter();
   const [selectedCardIndex, setSelectedCardIndex] = useState(0);
   const [selectedCard, setSelectedCard] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
@@ -125,7 +140,21 @@ const SentReport = ({ details, onSentPageChange, paginationFirst }) => {
       ],
     };
   };
-
+  const handleReceiverReport = (item) => {
+    console.log(item,"r")
+    const info = {
+      reportUser: item,
+      receivedPageNo: receivedPageNo,
+      receivedStartDate: receivedStartDate,
+      receivedEndDate: receivedEndDate,
+    };
+    dispatch(selectedReport(info));
+    router?.push(
+      `/supervisor/report/individualreport?reportId=${
+        item?._id
+      }&sentreport=${true}&page=${receivedPageNo}&limit=${paginationFirst}`
+    );
+  };
   const getChartUserOption = () => {
     const getRandomColor = (letter) =>
       colors[letter.toUpperCase()] || "#B35CE1";
@@ -337,7 +366,8 @@ const SentReport = ({ details, onSentPageChange, paginationFirst }) => {
                                   ? styles.selectedCard
                                   : ""
                               }`}
-                              onClick={() => handleCardSelection(item, index)}
+                              // onClick={() => handleCardSelection(item, index)}
+                              onClick={() => handleReceiverReport(item)}
                             >
                               <div className={styles.contentGroup}>
                                 <div className="col-xl-12">
@@ -358,6 +388,7 @@ const SentReport = ({ details, onSentPageChange, paginationFirst }) => {
                                       <div
                                         onClick={() => {
                                           setSelectedRows(item);
+                                          dispatch(selectedReport(item))
                                           setOpenEdit(true);
                                         }}
                                       >
