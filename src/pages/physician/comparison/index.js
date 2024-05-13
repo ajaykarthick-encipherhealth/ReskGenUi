@@ -28,8 +28,8 @@ import ClientResult from "./ClientResult";
 import CogentAIResult from "./CogentAIResult";
 import RafSummary from "./RafSummary";
 import ModalContent from "./ModalContent";
-import { COLORS3 } from "../../reviewer/patients/details/hcc";
 import { getPatients } from "../../../store/actions/physicianAction/patientsActions";
+import { COLORS3 } from "../../../components/patientDetails/details/components/function/GetData";
 
 
 export function removeDuplicates(array) {

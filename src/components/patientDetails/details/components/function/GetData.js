@@ -5,7 +5,7 @@ import {
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
 
-const COLORS = [
+export const COLORS = [
   "bg-bg-seven",
   "bg-third",
   "bg-bg-four",
@@ -17,7 +17,7 @@ const COLORS = [
   "bg-bg-leven",
 ];
 
-const COLORS2 = [
+export const COLORS2 = [
   "sectionTag1",
   "sectionTag2",
   "sectionTag3",
@@ -28,7 +28,7 @@ const COLORS2 = [
   "sectionTag8",
 ];
 
-const COLORS3 = [
+export const COLORS3 = [
   "encounterDateTag1",
   "encounterDateTag2",
   "encounterDateTag3",

@@ -7,8 +7,8 @@ import {
   getEncounterDateBackgroundHcc,
   getProviderNameList,
 } from "../index";
-import { getMeatFound } from "../../../reviewer/patients/details/hcc";
 import { useSelector } from "react-redux";
+import { getMeatFound } from "../../../../components/patientDetails/details/components/function/ReusableFunctions";
 
 export const reusableElipses = (str, count) => {
   if (str?.length > count - 5) {
