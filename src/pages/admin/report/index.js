@@ -270,6 +270,7 @@ const Index = () => {
       route.push("/admin/report?page=0&limit=0");
     }
   };
+
   return (
     <>
       <Header />
@@ -320,8 +321,9 @@ const Index = () => {
                             isSelector3={
                               (!reportActiveTab ||
                                 reportActiveTab === "CoderReport") &&
-                              selectUserList?.data?.response?.length &&
-                              selectedCoderOptReport?.label !== "All"
+                              // selectUserList?.data?.response?.length &&
+                              selectedCoderOptReport?.label !== "All" &&
+                              selectedCoderOptReport
                                 ? true
                                 : false
                             }
@@ -331,6 +333,7 @@ const Index = () => {
                             setSelectedOption3={setSelectedManger}
                             defaultSelectValue3="All"
                             value={selectManager}
+                            setSelectedManger={setSelectedManger}
                             // rangepicker
                             isRangePicker={true}
                             pickerlabel={

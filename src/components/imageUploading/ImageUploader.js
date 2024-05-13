@@ -40,10 +40,6 @@ const ImageUploader = ({ setOpenUploader, setOpenContent }) => {
     }
   };
 
-  useEffect(() => {
-    setOpenContent(true);
-  }, []);
-
   return (
     <div className={styles.cover}>
       <label>

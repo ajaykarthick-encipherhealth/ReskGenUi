@@ -25,8 +25,8 @@ import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import SentReport from "./sentReport";
-import Export from "../report/Export";
 import MoreFilter from "./MoreFilter";
+import Export from "./Export";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -503,7 +503,7 @@ const Reports = () => {
                           setSelectedData={setSelectedData}
                         />
                       </div>
-                      {(!reportActiveTab || reportActiveTab === "Reviewer") && (
+                      {(
                         <div className="col-xl-4">
                           <div className="row flr">
                             <Tooltip
@@ -518,12 +518,12 @@ const Reports = () => {
                                   setIsModalVisible(true);
                                 }}
                                 className={styles.export}
-                                disabled={
-                                  rowsLength?.length > 0 ||
-                                  rowsLength?.data?.length > 0
-                                    ? false
-                                    : true
-                                }
+                                // disabled={
+                                //   rowsLength?.length > 0 ||
+                                //   rowsLength?.data?.length > 0
+                                //     ? false
+                                //     : true
+                                // }
                                 style={{ color: "#04306f" }}
                               >
                                 <ExportImg />

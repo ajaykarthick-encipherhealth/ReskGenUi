@@ -275,10 +275,10 @@ export const priorityStatus = (value) => {
 
 export const generateOptionsList = (items) => {
   if (!items?.data) {
-    return [{ label: "Loading...", value: "Loading..." }];
+    return [{ label: "Loading...", value: "", isDisabled: true }];
   } else {
     const options = [
-      { label: "All", value: "" },
+      { label: "All", value: ""},
       ...items?.data?.data?.response?.map((item) => ({
         label: (
           <span>
@@ -294,10 +294,10 @@ export const generateOptionsList = (items) => {
 };
 export const generateOptionsLists = (items) => {
   if (!items?.data) {
-    return [{ label: "Loading...", value: "Loading..." }];
+    return [{ label: "Loading...", value: "", isDisabled: true }];
   } else {
     const options = [
-      { label: "All", value: "" },
+      { label: "All", value: ""},
       ...items?.data?.data?.response?.map((item) => ({
         label: (
           <span>
@@ -593,7 +593,7 @@ export const getValidatePassword = (password, setErrors) => {
 export const validateConfirmPassword = (
   password,
   confirmPassword,
-  setErrors,
+  setErrors
 ) => {
   if (password !== confirmPassword) {
     setErrors({
@@ -671,7 +671,6 @@ export const encyptingPass = (password) => {
   return values;
 };
 
-
 export const getDateAndTime = (date) => {
-  return moment(date).format('MM/DD/YYYY h:mm A')
-}
+  return moment(date).format("MM/DD/YYYY h:mm A");
+};

@@ -2,13 +2,13 @@
     "status": "SUCCESS",
     "message": "Success!!",
     "response": {
-        "validCount": [
-            {
-                "diagnosisCode": "E785",
-                "count": 22
-            },
+        "validPhysicianDiagnosisCodeCountDTO": [
             {
                 "diagnosisCode": "I10",
+                "count": 21
+            },
+            {
+                "diagnosisCode": "E785",
                 "count": 21
             },
             {
@@ -17,7 +17,7 @@
             },
             {
                 "diagnosisCode": "I2510",
-                "count": 11
+                "count": 10
             },
             {
                 "diagnosisCode": "K219",
@@ -216,10 +216,6 @@
                 "count": 1
             },
             {
-                "diagnosisCode": "I219",
-                "count": 1
-            },
-            {
                 "diagnosisCode": "E113311",
                 "count": 1
             },
@@ -292,7 +288,7 @@
                 "count": 1
             }
         ],
-        "suggestedCount": [
+        "suggestedPhysicianDiagnosisCodeCountDTO": [
             {
                 "diagnosisCode": "K219",
                 "count": 5
@@ -355,10 +351,6 @@
             },
             {
                 "diagnosisCode": "I2720",
-                "count": 1
-            },
-            {
-                "diagnosisCode": "G459",
                 "count": 1
             },
             {
@@ -430,16 +422,103 @@
                 "count": 1
             }
         ],
-        "monitorCount": 109,
+        "totalPatientCount": 55,
+        "monitorCount": 105,
         "evaluationCount": 88,
-        "assessmentCount": 79,
-        "treatmentCount": 150,
-        "totalMeatCount": 208,
-        "validDiseaseRafSum": 37.845,
-        "suggestedRafSum": 9.013,
-        "validRafAmount": 30276,
-        "suggestedRafAmount": 7210.4,
-        "differencePercentage": 23.816,
-        "totalFullMeatCount": 26
+        "assessmentCount": 75,
+        "treatmentCount": 146,
+        "totalMeatCount": 203,
+        "validDiseaseRafSum": 37.519,
+        "suggestedRafSum": 8.969,
+        "validRafAmount": 30015.199999999997,
+        "suggestedRafAmount": 7175.2,
+        "differencePercentage": 23.905,
+        "totalFullMeatCount": null,
+        "totalComboCount": 35,
+        "oigMeatCheckDtoResponseList": [
+            {
+                "diagnosisCode": "i639",
+                "meatPresentPatientIds": [
+                    "EH/clarus-batch07/13"
+                ],
+                "meatAbsentPatientIds": [],
+                "meatPresentCount": 1,
+                "meatAbsentCount": 0
+            },
+            {
+                "diagnosisCode": "f32a",
+                "meatPresentPatientIds": [
+                    "EH/clarus-batch01/6/1",
+                    "EH/clarus-batch03/12"
+                ],
+                "meatAbsentPatientIds": [
+                    "EH/clarus-batch01/5",
+                    "EH/clarus-batch01/7/1",
+                    "EH/clarus-batch01/8",
+                    "EH/clarus-batch07/9"
+                ],
+                "meatPresentCount": 2,
+                "meatAbsentCount": 4
+            },
+            {
+                "diagnosisCode": "f331",
+                "meatPresentPatientIds": [
+                    "EH/clarus-batch03/19"
+                ],
+                "meatAbsentPatientIds": [
+                    "EH/clarus-batch05/5"
+                ],
+                "meatPresentCount": 1,
+                "meatAbsentCount": 1
+            },
+            {
+                "diagnosisCode": "f320",
+                "meatPresentPatientIds": [
+                    "EH/clarus-batch01/5"
+                ],
+                "meatAbsentPatientIds": [],
+                "meatPresentCount": 1,
+                "meatAbsentCount": 0
+            },
+            {
+                "diagnosisCode": "f3341",
+                "meatPresentPatientIds": [],
+                "meatAbsentPatientIds": [
+                    "EH/clarus-batch07/5"
+                ],
+                "meatPresentCount": 0,
+                "meatAbsentCount": 1
+            },
+            {
+                "diagnosisCode": "f329",
+                "meatPresentPatientIds": [
+                    "EH/clarus-batch01/16",
+                    "EH/clarus-batch07/14"
+                ],
+                "meatAbsentPatientIds": [
+                    "EH/clarus-batch05/3"
+                ],
+                "meatPresentCount": 2,
+                "meatAbsentCount": 1
+            },
+            {
+                "diagnosisCode": "i214",
+                "meatPresentPatientIds": [],
+                "meatAbsentPatientIds": [
+                    "EH/clarus-batch03/1"
+                ],
+                "meatPresentCount": 0,
+                "meatAbsentCount": 1
+            },
+            {
+                "diagnosisCode": "i2109",
+                "meatPresentPatientIds": [],
+                "meatAbsentPatientIds": [
+                    "EH/clarus-batch03/17"
+                ],
+                "meatPresentCount": 0,
+                "meatAbsentCount": 1
+            }
+        ]
     }
 }

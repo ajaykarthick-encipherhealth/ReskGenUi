@@ -2,306 +2,302 @@ import React, { useState, useEffect } from "react";
 import styles from "../report.module.css";
 import { Paginator } from "primereact/paginator";
 import dayjs from "dayjs";
-import { useDispatch } from "react-redux";
-import { useRouter } from "next/router";
-import { Avatar, Col, Row, Tooltip, Empty } from "antd";
-import Image from "next/image";
-import { SVGICON } from "../../../../jsx/constant/theme";
-import { extractLatestData } from "../../../supervisor/auditing";
-import AuditedTrack from "../../../../../src/images/trackingImages/AuditedTrack.png";
-import NotAudited from "../../../../../src/images/trackingImages/NotAuditedTrack.png";
-import AuditHold from "../../../../../src/images/trackingImages/AuditHoldTrack.png";
-import ReAudit from "../../../../../src/images/trackingImages/reAuditTrack.png";
-import AuditPending from "../../../../../src/images/trackingImages/AuditPending.png";
-import Hold from "../../../../../src/images/trackingImages/HoldTrack.png";
-import Pending from "../../../../../src/images/trackingImages/PendingTrack.png";
-import Completed from "../../../../../src/images/trackingImages/CompletedTrack.png";
-import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
-import AuditedDeclineTrack from "../../../../../src/images/trackingImages/AuditDeclined.png";
-import Abort from "../../../../../src/images/trackingImages/Abort.png";
-import declineIcon from "../../.../../../../images/trackingImages/DeclineTrack.png";
-import reAuditIcon from "../../.../../../../images/trackingImages/AuditPending.png";
-import auditHoldIcon from "../../.../../../../images/trackingImages/AuditHoldTrack.png";
-import auditedIcon from "../../.../../../../images/trackingImages/AuditedTrack.png";
-import reeAuditIcon from "../../.../../../../images/trackingImages/reAuditTrack.png";
-import notAudited from "../../.../../../../images/trackingImages/NotAuditedTrack.png";
-import auditDeclined from "../../.../../../../images/trackingImages/AuditDeclined.png";
-import visitStyles from "../../../../styles/visitdata.module.css";
-import { workStatusApiAdmin } from "../../../../services/adminServices/DashboardService";
-
+import { Avatar } from "antd";
+import ReactECharts from "echarts-for-react";
 import {
   dateFormate,
-  getBackgroundColor,
   renderUserPrfoileAvatar,
-  sortFunction,
 } from "../../../../components/headerFilters/functions";
 import EditButton from "../../../../images/adminUsers/EditButton";
-import { IMAGES } from "src/jsx/constant/theme.js";
 import SpinnerDots from "../../../../components/spinner";
 import Export from "../../../admin/report/Export";
-import TableStyle from "../../../../components/table/table.module.css";
-import { selectedReport } from "../../../../store/actions/adminAction/ReportActions";
-import { useSelector } from "react-redux";
-import { getFlag } from "../../../../components/reuseableFunctions";
 
-const SentReport = ({
-  details,
-  onSentPageChange,
-  paginationFirst,
-  receivedPageNo,
-  receivedStartDate,
-  receivedEndDate,
-  isPhysician,
-  isAdmin,
-}) => {
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
-  const [dateRange, setDateRange] = useState({
-    processedStatus: {
-      PENDING: 0,
-      COMPLETED: 0,
-      HOLD: 0,
-      DECLINED: 0,
-    },
-    auditedStatus: {
-      AUDIT_PENDING: 0,
-      DECLINED: 0,
-      AUDITED: 0,
-      AUDITHOLD: 0,
-    },
-  });
+export const colors = {
+  A: "#8A2BE2",
+  B: "#5F9EA0",
+  C: "#8EE5EE",
+  D: "#42426F",
+  E: "#00BFFF",
+  F: "#EEB4B4",
+  G: "#FF4040",
+  H: "#D2691E",
+  I: "#4A766E",
+  J: "#FF7F00",
+  K: "#F08080",
+  L: "#FF7256",
+  M: "#FFA500",
+  N: "#FF2400",
+  O: "#FFB5C5",
+  P: "#CD919E",
+  Q: "#FF6347",
+  R: "#E35BD8",
+  S: "#E066FF",
+  T: "#EAADEA",
+  U: "#FFB90F",
+  V: "#EEE9BF",
+  W: "#EEEE00",
+  X: "#CD0000",
+  Y: "#CD8500",
+  Z: "#607B8B",
+};
+const SentReport = ({ details, onSentPageChange, paginationFirst }) => {
   const [selectedCardIndex, setSelectedCardIndex] = useState(0);
   const [selectedCard, setSelectedCard] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [reportActiveTab, setReportActiveTab] = useState("Supervisor");
+
+  const handleTabs = (tab) => {
+    setReportActiveTab(tab);
+  };
   const hashes = selectedUsers.map((user) => {
     const hash = (user?.userDetails?.firstName.charCodeAt(0) % 6) + 1;
     return hash;
   });
 
-  const mostCommonHash = getBackgroundColor(hashes);
-  const backgroundColor = getBackgroundColor(mostCommonHash);
-  const card1Data = [
-    {
-      id: 1,
-      icon: Completed,
-      title: "Completed",
-      charts: dateRange.processedStatus
-        ? dateRange.processedStatus.COMPLETED
-        : "0",
-      bg: "#CCFFD1",
-    },
-    {
-      id: 2,
-      icon: Pending,
-      title: "Pending",
-      charts: dateRange.processedStatus
-        ? dateRange.processedStatus.PENDING
-        : "0",
+  const getChartOption = (res) => {
+    return {
+      tooltip: {
+        trigger: "item",
+      },
+      legend: {
+        show: false,
+      },
+      series: [
+        {
+          type: "pie",
+          radius: ["40%", "60%"],
+          label: {
+            show: false,
+            position: "inside",
+            formatter: "{b}: {c}",
+          },
+          data: [
+            {
+              value: 10,
+              name: "Excel",
+              itemStyle: {
+                color: "#B35CE1",
+              },
+            },
+            {
+              value: 20,
+              name: "Csv",
+              itemStyle: {
+                color: "#0A9FFF",
+              },
+            },
+          ],
+        },
+        {
+          type: "pie",
+          radius: ["0%", "30%"],
+          avoidLabelOverlap: false,
+          label: {
+            show: true,
+            position: "center",
+            formatter: `{b|${60}}`,
+            backgroundColor: "transparent",
 
-      bg: "#CCE9FF",
-    },
-    {
-      id: 3,
-      icon: Hold,
-      title: "Hold",
-      charts: dateRange.processedStatus ? dateRange.processedStatus.HOLD : "0",
-
-      bg: "#DACEFD",
-    },
-    {
-      id: 4,
-      icon: declineIcon,
-      title: "Decline",
-      charts: dateRange.processedStatus
-        ? dateRange.processedStatus.DECLINED
-        : "0",
-      bg: "#FAD1D1",
-    },
-    {
-      id: 5,
-      icon: auditedIcon,
-      title: "Audited",
-      charts: dateRange.auditedStatus ? dateRange.auditedStatus.AUDITED : "0",
-
-      bg: "#DBEEF0",
-    },
-    {
-      id: 6,
-      icon: notAudited,
-      title: "Not Audited",
-      charts: dateRange.auditedStatus ? dateRange.auditedStatus.NOT_AUDIT : "0",
-
-      bg: "#FBE7D0",
-    },
-    {
-      id: 7,
-      icon: reeAuditIcon,
-      title: "Re Audit",
-      charts: dateRange.auditedStatus ? dateRange.auditedStatus.REAUDIT : "0",
-
-      bg: "#FFDBB8",
-    },
-    {
-      id: 8,
-      icon: reAuditIcon,
-      title: "Audit pending",
-      charts: dateRange.auditedStatus ? dateRange.auditedStatus.PENDING : "0",
-
-      bg: "#F3D8E5",
-    },
-    {
-      id: 9,
-      icon: auditHoldIcon,
-      title: "Audit hold",
-      charts: dateRange.auditedStatus ? dateRange.auditedStatus.HOLD : "0",
-
-      bg: "#FFF2CC",
-    },
-    {
-      id: 10,
-      icon: auditDeclined,
-      title: "Audit decline",
-      charts: dateRange.auditedStatus ? dateRange.auditedStatus.DECLINED : "0",
-
-      bg: "#FDD2CE",
-    },
-  ];
-  const flagData = [
-    {
-      id: 1,
-      flags: "PATIENT_NAME_MISSED",
-      count: "10",
-    },
-    {
-      id: 2,
-      flags: "PATIENT_DOB_MISSED",
-      count: "10",
-    },
-    {
-      id: 3,
-      flags: "MRN_ID_MISMATCH",
-      count: "10",
-    },
-    {
-      id: 4,
-      flags: "PROVIDER_SIGN_MISSED",
-      count: "10",
-    },
-    {
-      id: 5,
-      flags: "PROVIDER_SIGNATURE_MISSED",
-      count: "10",
-    },
-  ];
-  const auditor = [
-    {
-      id: 1,
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-      count: "10",
-    },
-    {
-      id: 2,
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-      count: "10",
-    },
-    {
-      id: 3,
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-      count: "10",
-    },
-    {
-      id: 4,
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-      count: "10",
-    },
-    {
-      id: 5,
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-      count: "10",
-    },
-  ];
-  const reviewer = [
-    {
-      id: 1,
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-      count: "10",
-    },
-    {
-      id: 2,
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-      count: "10",
-    },
-    {
-      id: 3,
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-      count: "10",
-    },
-    {
-      id: 4,
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-      count: "10",
-    },
-    {
-      id: 5,
-      firstName: "Benjamin",
-      lastName: "Mitchell",
-      profileImageUrl:
-        "https://cogentaifiles.blob.core.windows.net/profileimages/c81a62d5-06c6-406a-9bb4-e8940e81aaac.png",
-      count: "10",
-    },
-  ];
-
-  const startDate = DateRanges?.startDate
-    ? new Date(DateRanges?.startDate).toISOString()
-    : "";
-  const endDate = DateRanges?.endDate
-    ? new Date(DateRanges?.endDate).toISOString()
-    : "";
-  const getWorkFlow = async () => {
-    try {
-      const data = await workStatusApiAdmin(startDate, endDate, router);
-      setDateRange(data.response?.processedStatusCount);
-      // setChartValue(data.response);
-    } catch (error) {
-      console.log(error);
-    }
+            rich: {
+              a: {
+                fontSize: 12,
+              },
+              b: {
+                fontSize: 18,
+              },
+            },
+          },
+          labelLine: {
+            show: false,
+          },
+          data: [
+            {
+              value: 90,
+              name: "Total",
+              itemStyle: {
+                color: "#fff",
+              },
+            },
+          ],
+        },
+      ],
+    };
   };
+
+  const getChartUserOption = () => {
+    const getRandomColor = (letter) =>
+      colors[letter.toUpperCase()] || "#B35CE1";
+
+    const data = [
+      { value: 10, name: "Benjamin " },
+      { value: 20, name: " Micheal" },
+      { value: 20, name: "kack" },
+      { value: 20, name: "johan " },
+      { value: 20, name: "Tset" },
+    ];
+
+    const nameColors = {};
+
+    data.forEach((item) => {
+      const firstLetter = item.name[0];
+
+      if (!nameColors[item.name]) {
+        nameColors[item.name] = getRandomColor(firstLetter);
+      }
+    });
+    const pieData = data.map((item) => ({
+      value: item.value,
+      name: item.name,
+      itemStyle: {
+        color: nameColors[item.name],
+      },
+    }));
+
+    return {
+      tooltip: {
+        trigger: "item",
+      },
+      legend: {
+        show: false,
+      },
+      series: [
+        {
+          type: "pie",
+          radius: ["40%", "60%"],
+          label: {
+            show: false,
+            position: "inside",
+            formatter: "{b}: {c}",
+          },
+          data: pieData,
+        },
+        {
+          type: "pie",
+          radius: ["0%", "30%"],
+          avoidLabelOverlap: false,
+          label: {
+            show: true,
+            position: "center",
+            formatter: `{b|${60}}`,
+            backgroundColor: "transparent",
+            rich: {
+              a: {
+                fontSize: 12,
+              },
+              b: {
+                fontSize: 18,
+              },
+            },
+          },
+          labelLine: {
+            show: false,
+          },
+          data: [
+            {
+              value: 90,
+              name: "Total",
+              itemStyle: {
+                color: "#fff",
+              },
+            },
+          ],
+        },
+      ],
+    };
+  };
+
+  const getChartAdminOption = () => {
+    const getRandomColor = (letter) =>
+      colors[letter.toUpperCase()] || "#B35CE1";
+
+    const data = [
+      { value: 10, name: "Benjamin Mitchell" },
+      { value: 20, name: "David Micheal" },
+      { value: 20, name: "Richard William" },
+      { value: 20, name: "Thomas Joseph" },
+      { value: 20, name: "Andrew paul" },
+    ];
+
+    const nameColors = {};
+
+    data.forEach((item) => {
+      const firstLetter = item.name[0];
+
+      if (!nameColors[item.name]) {
+        nameColors[item.name] = getRandomColor(firstLetter);
+      }
+    });
+
+    const pieData = data.map((item) => ({
+      value: item.value,
+      name: item.name,
+      itemStyle: {
+        color: nameColors[item.name],
+      },
+    }));
+
+    return {
+      tooltip: {
+        trigger: "item",
+      },
+      legend: {
+        show: false,
+      },
+      series: [
+        {
+          type: "pie",
+          radius: ["40%", "60%"],
+          label: {
+            show: false,
+            position: "inside",
+            formatter: "{b}: {c}",
+          },
+          data: pieData,
+        },
+        {
+          type: "pie",
+          radius: ["0%", "30%"],
+          avoidLabelOverlap: false,
+          label: {
+            show: true,
+            position: "center",
+            formatter: `{b|${60}}`,
+            backgroundColor: "transparent",
+            rich: {
+              a: {
+                fontSize: 12,
+              },
+              b: {
+                fontSize: 18,
+              },
+            },
+          },
+          labelLine: {
+            show: false,
+          },
+          data: [
+            {
+              value: 90,
+              name: "Total",
+              itemStyle: {
+                color: "#fff",
+              },
+            },
+          ],
+        },
+      ],
+    };
+  };
+
+  const selectedChartOption =
+    reportActiveTab === "Supervisor"
+      ? getChartUserOption()
+      : getChartAdminOption();
+
   useEffect(() => {
-    getWorkFlow();
-  }, [startDate, endDate, router]);
-  useEffect(() => {
-    // Automatically select the first card and display its content on mount
     if (details?.data && details.data.length > 0) {
       handleCardSelection(details.data[0], 0);
     }
@@ -314,26 +310,6 @@ const SentReport = ({
 
   const closeModal = () => {
     setOpenEdit(false);
-  };
-  const handleReceiverReport = (item) => {
-    const info = {
-      reportUser: item,
-      receivedPageNo: receivedPageNo,
-      receivedStartDate: receivedStartDate,
-      receivedEndDate: receivedEndDate,
-    };
-    dispatch(selectedReport(info));
-    isPhysician
-      ? router?.push(
-          `/reviewer/report/individualreport?reportId=${
-            item?._id
-          }&sentreport=${true}&page=${receivedPageNo}&limit=${paginationFirst}`
-        )
-      : router?.push(
-          `/admin/report/individualreport?reportId=${
-            item?._id
-          }&sentreport=${true}&isAdmin=${isAdmin}&page=${receivedPageNo}&limit=${paginationFirst}`
-        );
   };
 
   return (
@@ -402,13 +378,7 @@ const SentReport = ({
                                       {item._id}
                                     </div>
                                   </div>
-                                  <div
-                                    style={{
-                                      display: "flex",
-                                      justifyContent: "space-between",
-                                      alignItems: "center",
-                                    }}
-                                  >
+                                  <div className="d-flex justify-content-between align-items-center">
                                     <div className={`col-xl-2 ${styles.text}`}>
                                       {formattedDate}
                                     </div>
@@ -476,145 +446,92 @@ const SentReport = ({
                       <div className={styles.card1}>
                         <div className={styles.summaryText}>Summary</div>
                         <div className="col-xl-12  d-flex mt-4">
-                          <div className={`col-xl-2 ${styles.subCard}`}>
+                          <div className={`col-xl-6 ${styles.sentSubCard}`}>
                             <div>
-                              <div>No of charts</div>
+                              <div>Overall Reports Sent</div>
+                              <h4>80</h4>
+                            </div>
+                          </div>
+                          <div className={`col-xl-6 ${styles.sentSubCard}`}>
+                            <div>Overall Users</div>
+                            <h4>140</h4>
+                          </div>
+                        </div>
+                        <div className="col-xl-12  d-flex mt-4">
+                          <div className={`col-xl-6 ${styles.readSubCard}`}>
+                            <div>
+                              <div>No of Read</div>
                               <h4>60</h4>
                             </div>
                           </div>
-                          <div className={`col-xl-2 ${styles.subCard}`}>
-                            <div>Completed date</div>
-                            <div className={styles.dateContainer}>
-                              <div style={{ fontSize: "10px", padding: "5px" }}>
-                                03/04/2024 - 03/04/2024
+                          <div className={`col-xl-6 ${styles.downloadSubCard}`}>
+                            <div>
+                              <div>No of Download</div>
+                              <h4>20</h4>
+                            </div>
+                          </div>
+                        </div>
+                        <div className={styles.summaryText}>Overall Chart</div>
+
+                        <div
+                          className={` ${styles.card} justify-content-between p-2 m-2`}
+                        >
+                          <div className="d-flex justify-content-end">
+                            <div className={styles.userContainer}>
+                              <div className={styles.user}>
+                                <button
+                                  className={
+                                    reportActiveTab === "Supervisor"
+                                      ? `${styles.active}`
+                                      : ""
+                                  }
+                                  onClick={() => {
+                                    handleTabs("Supervisor");
+                                  }}
+                                >
+                                  Supervisor
+                                </button>
+                                <button
+                                  className={
+                                    reportActiveTab === "Admin"
+                                      ? `${styles.active}`
+                                      : ""
+                                  }
+                                  onClick={() => {
+                                    handleTabs("Admin");
+                                  }}
+                                >
+                                  Admin
+                                </button>
                               </div>
                             </div>
                           </div>
 
-                          <div className={`col-xl-2 ${styles.subCard}`}>
-                            {" "}
-                            <div>
-                              <div>Avg RAF score</div>
-                              <h4>1.025</h4>
-                            </div>
-                          </div>
-                          <div className={`col-xl-2 ${styles.subCard}`}>
-                            {" "}
-                            <div>
-                              <div>HCC Count</div>
-                              <h4>175</h4>
-                            </div>
-                          </div>
-                        </div>
-                        <div className={` pt-2 ${styles.summaryText}`}>
-                          Status
-                        </div>
-                        <div className="col-xl-12  d-flex mt-2">
-                          <Row
-                            className={styles.carddiv}
-                            style={{ height: "80%" }}
-                          >
-                            {card1Data?.map((data) => (
-                              <Col
-                                span={5}
-                                style={{
-                                  backgroundColor: data.bg,
-                                  borderRadius: "10px",
-                                  height: "100px",
-                                  width: "191px",
-                                  padding: "10px",
-                                  marginRight: "25px",
-                                  marginBottom: "10px",
-                                }}
-                                className={styles.colData}
-                              >
-                                <div className={styles.header}>
-                                  <Image
-                                    src={data?.icon}
-                                    className={styles.Img}
-                                    style={{ height: "25px", width: "25px" }}
-                                  />
-                                  <div className={styles.heading}>
-                                    {data.title}
-                                  </div>
-                                </div>
-
-                                <h4>{data?.charts ? data?.charts : "0"}</h4>
-                              </Col>
-                            ))}
-                          </Row>
-                        </div>
-                        <div className="col-xl-12  d-flex mt-4">
-                          <div className={`col-xl-4 ${styles.flags}`}>
-                            <div className={styles.cardHead}>Flags</div>
-                            {flagData.map((flagItem) => (
+                          <div className=" d-flex justify-content-between p-2 m-2">
+                            <div style={{ width: "50%" }}>
                               <div
-                                className={styles.contentGroups}
-                                key={flagItem.id}
+                                className={styles.summaryText}
+                                style={{ textAlign: "center" }}
                               >
-                                <div className={styles.count}>
-                                  {flagItem.count}
-                                </div>
-                                <div>{getFlag(flagItem)}</div>
+                                Report Type
                               </div>
-                            ))}
-                          </div>
-                          <div className={`col-xl-4 ${styles.flags}`}>
-                            <div className={styles.cardHead}>
-                              Auditor
-                              {auditor.map((item) => (
-                                <div
-                                  className={styles.contentAuditor}
-                                  key={item.id}
-                                >
-                                  <div className={`col-xl-4 ${styles.avatar}`}>
-                                    <span style={{ marginRight: "10px" }}>
-                                      {renderUserPrfoileAvatar(
-                                        item.firstName,
-                                        item.lastName,
-                                        item.profileImageUrl,
-                                        "header"
-                                      )}
-                                    </span>
-                                    <span>
-                                      {item.firstName} {item.lastName}
-                                    </span>
-                                  </div>
-
-                                  <div className={styles.count}>
-                                    {item.count}
-                                  </div>
-                                </div>
-                              ))}
+                              <ReactECharts
+                                option={getChartOption()}
+                                style={{ height: "230px" }}
+                              />
                             </div>
-                          </div>
-                          <div className={`col-xl-4 ${styles.flags}`}>
-                            <div className={styles.cardHead}>
-                              Reviewer
-                              {reviewer.map((item) => (
-                                <div
-                                  className={styles.contentAuditor}
-                                  key={item.id}
-                                >
-                                  <div className={`col-xl-4 ${styles.avatar}`}>
-                                    <span style={{ marginRight: "10px" }}>
-                                      {renderUserPrfoileAvatar(
-                                        item.firstName,
-                                        item.lastName,
-                                        item.profileImageUrl,
-                                        "header"
-                                      )}
-                                    </span>
-                                    <span>
-                                      {item.firstName} {item.lastName}
-                                    </span>
-                                  </div>
+                            <div style={{ width: "50%" }}>
+                              <div
+                                className={styles.summaryText}
+                                style={{ textAlign: "center" }}
+                              >
+                                Users
+                              </div>
 
-                                  <div className={styles.count}>
-                                    {item.count}
-                                  </div>
-                                </div>
-                              ))}
+                              <ReactECharts
+                                option={selectedChartOption}
+                                style={{ height: "230px" }}
+                              />
                             </div>
                           </div>
                         </div>

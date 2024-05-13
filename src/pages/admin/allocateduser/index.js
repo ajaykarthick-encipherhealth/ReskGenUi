@@ -82,20 +82,28 @@ export default function Patient() {
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortCompleteOrder, setSortCompleteOrder] = useState("DESC");
   const filteredList = useSelector((state) => state.auth.filterList);
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+  const [searchStr, setSearchStr] = useState("");
   const dispatch = useDispatch();
 
   const getAllList = async (
     pageNo = 0,
     pageSize = 15,
-    startDate = "",
-    endDate = "",
+    startDate,
+    endDate,
     allocate = true,
     status = 2,
-    search = "",
-    sort
+    search,
+    sort,
+    selectedOption
   ) => {
     const uId = localStorage.getItem("userId");
-    let resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=${uId}&computationStart=${startDate}&computationEnd=${endDate}&isAllocation=${allocate}&status=${status}&searchString=${search}&sortdirection=${
+    let resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=${uId}&computationStart=${
+      startDate ? startDate : ""
+    }&computationEnd=${
+      endDate ? endDate : ""
+    }&isAllocation=${allocate}&status=${status}&searchString=${search}&sortdirection=${
       sort?.sortDir
     }&sortfield=${sort?.sortField}&priority=${
       selectedOption ? selectedOption : ""
@@ -155,29 +163,24 @@ export default function Patient() {
   };
 
   const handleReceivedDatePicker = (date, dateString) => {
-    if (dateString[0] == "") {
-      getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
-    } else if (dateString.length > 1) {
-      const formattedDates = dateString?.map((date, index) => {
+    console.log(dateString);
+    if (date === null || (Array.isArray(date) && date.length === 0)) {
+      setStartDate("");
+      setEndDate("");
+    }
+
+    const formattedDates =
+      dateString?.length > 0 &&
+      dateString?.map((data, index) => {
         const formattedDate =
           index === 1
-            ? `${moment(date).format("YYYY-MM-DD")}T23:59:59.999Z`
-            : `${moment(date).format("YYYY-MM-DD")}T00:00:00.000Z`;
+            ? data && `${data}T23:59:59.999Z`
+            : data && `${data}T00:00:00.000Z`;
+
         return formattedDate;
       });
-      if (dateString.length > 0) {
-        getAllList(
-          pageNo,
-          pageSize,
-          formattedDates[0],
-          formattedDates[1],
-          true,
-          2,
-          "",
-          sort
-        );
-      }
-    }
+    setStartDate(formattedDates[0]);
+    setEndDate(formattedDates[1]);
   };
 
   const onPageChangePatient = (e) => {
@@ -203,21 +206,12 @@ export default function Patient() {
     } else {
       setIsPatientList(false);
       setPageNo(0);
-      getAllList(0, pageSize, "", "", true, 2, "", sort);
+      // getAllList(0, pageSize, "", "", true, 2, "", sort);
     }
   };
   const searchFunction = (search, activeTab) => {
     if (activeTab === 1) {
-      getAllList(
-        pageNo,
-        pageSize,
-        dateRange ? dateRange[0] : "",
-        dateRange ? dateRange[1] : "",
-        true,
-        2,
-        search,
-        sort
-      );
+      setSearchStr(search);
     } else {
       if (!isPatientList) {
         getAuditL2List(pageNo, search);
@@ -293,9 +287,28 @@ export default function Patient() {
 
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab === 1) {
-      getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
+      getAllList(
+        pageNo,
+        pageSize,
+        startDate,
+        endDate,
+        true,
+        2,
+        searchStr,
+        sort,
+        selectedOption
+      );
     }
-  }, [pageNo, pageSize, sort, activeTab]);
+  }, [
+    pageNo,
+    pageSize,
+    sort,
+    activeTab,
+    startDate,
+    endDate,
+    searchStr,
+    selectedOption,
+  ]);
 
   const renderRows = () => {
     return !tableLoading && l2UserListAll?.length > 0 ? (
@@ -458,7 +471,7 @@ export default function Patient() {
   useEffect(() => {
     setIsLoading(true);
     if (!isPatientList) {
-      getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
+      // getAllList(pageNo, pageSize, "", "", true, 2, "", sort);
     } else {
       getL2PatientList(
         l2selectUser,
@@ -511,7 +524,9 @@ export default function Patient() {
                                 <button
                                   style={{ width: "40px", height: "40px" }}
                                   className={reportStyles.filterBtn}
-                                  onClick={() => setIsPatientList(false)}
+                                  onClick={() => {
+                                    setIsPatientList(false)
+                                    setAllocatedOption("")}}
                                 >
                                   <Image src={leftArrow} />
                                 </button>
@@ -555,7 +570,7 @@ export default function Patient() {
                                 <label>Computed Date</label>
                                 <div>
                                   <RangePicker
-                                    format="MM-DD-YYYY"
+                                    format="YYYY-MM-DD"
                                     onChange={(dates, dateStrings) => {
                                       setDateRange(dateStrings);
                                       handleReceivedDatePicker(

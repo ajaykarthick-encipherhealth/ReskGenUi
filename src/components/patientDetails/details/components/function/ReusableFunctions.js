@@ -36,7 +36,6 @@ export const getEncounterDateBackground = ({
             selectMeatResult,
             datas,
             patientDocumentResult
-
           )
         }
         className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
@@ -94,10 +93,10 @@ const getEncounterDetails = async (
       setIsModalOpenValidCodes(true);
       var headerName = patientDocumentResult
         ? patientDocumentResult.patientId +
-          " / " +
-          patientDocumentResult.patientName +
-          " / " +
-          date
+        " / " +
+        patientDocumentResult.patientName +
+        " / " +
+        date
         : "";
       setFileModalHeader(headerName);
     }
@@ -394,7 +393,8 @@ const findValueDocuments = async (
       setSearch({
         value: splitPoint,
         page: pageNumber,
-        headers: result?.first,
+        headers: false,
+        headerContent:headerNames
       });
       setFileInitialPage(pageNumber);
       setFileLoading(false);
@@ -404,6 +404,7 @@ const findValueDocuments = async (
         value: splitPoint,
         page: "",
         headers: true,
+        headerContent:headerNames
       });
       setFileLoading(false);
       setFileInitialPage(null);
@@ -413,6 +414,7 @@ const findValueDocuments = async (
       value: headerNames,
       page: "",
       headers: true,
+      headerContent:headerNames
     });
     setFileLoading(false);
     setFileInitialPage(null);
@@ -438,7 +440,6 @@ export const findValueDocument = async ({
   setFileInitialPage,
 }) => {
   setFileLoading(true);
-
   const encounterDatesValue = encounterDate.split(",");
   var splitPoint;
   var pageNumber = null;
@@ -451,13 +452,13 @@ export const findValueDocument = async ({
   };
   var headerName = patientDocumentResult
     ? patientDocumentResult.patientId +
-      " / " +
-      patientDocumentResult.patientName +
-      " / " +
-      diagnosisCode +
-      " - (" +
-      headerNames +
-      ")"
+    " / " +
+    patientDocumentResult.patientName +
+    " / " +
+    diagnosisCode +
+    " - (" +
+    headerNames +
+    ")"
     : "";
   setFileModalHeader(headerName);
   try {
@@ -465,6 +466,7 @@ export const findValueDocument = async ({
       setSearch({
         value: headerNames,
         headers: true,
+        headerContent:headerNames
       });
       setFileLoading(false);
       if (documentPlace === "Lab") {
@@ -473,8 +475,8 @@ export const findValueDocument = async ({
         setIsModalOpenRadiology(true);
       }
     } else {
-      if (patientDocumentResult) {
-        setIsModalOpenValidCodes(true);
+      if (patientDocumentResult && setIsModalOpenValidCodes) {
+          setIsModalOpenValidCodes(true);
       }
       const response = await axios.post(
         ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
@@ -508,8 +510,10 @@ export const findValueDocument = async ({
           value: splitPoint,
           page: result?.pageNumber,
           headers: false,
+          headerContent:headerNames
         });
         setFileInitialPage(pageNumber);
+        setFileLoading(false);
       } else {
         splitPoint = headerName;
         setFileInitialPage(null);
@@ -544,6 +548,82 @@ export const moveToAnotherAction = (
       )
     );
   });
+
+export const onDragEnd = (
+  result,
+  allDisList,
+  setSelectDiseasesName,
+  setSelectDisDetails,
+  setConfirmNotesModalValid,
+  setIsValidAction,
+  patientDetailsResult
+) => {
+  var textJoin =
+    result?.source?.droppableId + " to " + result?.destination?.droppableId;
+  var selectData = allDisList.filter(
+    (i) => i.diagnosisCode === result.draggableId
+  );
+  var selectObject = selectData[0];
+  if (selectObject) {
+    var title =
+      selectObject.diagnosisCode + " - " + selectObject.actualDescription;
+    selectObject.dos = patientDetailsResult?.result?.response?.dos;
+    setSelectDiseasesName(title);
+    setSelectDisDetails(selectObject);
+  }
+  switch (textJoin) {
+    case "HCC to SUGGESTED":
+      moveToAnotherAction(
+        setConfirmNotesModalValid,
+        setIsValidAction,
+        "Move to Suggested",
+        "HCC"
+      );
+      break;
+    case "HCC to DELETED":
+      moveToAnotherAction(
+        setConfirmNotesModalValid,
+        setIsValidAction,
+        "Move to Deleted",
+        "HCC"
+      );
+     break;
+    case "SUGGESTED to HCC":
+      moveToAnotherAction(
+        setConfirmNotesModalValid,
+        setIsValidAction,
+        "Move to HCC",
+        "SUGGESTED"
+      );
+      break;
+    case "SUGGESTED to DELETED":
+      moveToAnotherAction(
+        setConfirmNotesModalValid,
+        setIsValidAction,
+        "Move to Deleted",
+        "SUGGESTED"
+      );
+      break;
+    case "DELETED to SUGGESTED":
+      moveToAnotherAction(
+        setConfirmNotesModalValid,
+        setIsValidAction,
+        "Move to Suggested",
+        "DELETED"
+      );
+      break;
+    case "DELETED to HCC":
+      moveToAnotherAction(
+        setConfirmNotesModalValid,
+        setIsValidAction,
+        "Move to HCC",
+        "DELETED"
+      );
+      break;
+    default:
+      null;
+  }
+};
 
 const ReusableFunctions = () => {
   return <></>;

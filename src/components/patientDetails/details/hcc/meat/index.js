@@ -277,7 +277,7 @@ const Meat = ({ activeMeatTitle, year }) => {
     value,
     disDescription,
     encounterDate,
-    meatresult
+    meatresult,
   ) => {
     setSelectMeatResult(meatresult);
     setFileLoading(true);
@@ -288,7 +288,8 @@ const Meat = ({ activeMeatTitle, year }) => {
         <Spinner />
       </div>
     );
-    var fileId = patientFileDTO.fileId;
+
+    var fileId = patientDetailsResult?.result?.response?.fileId;
     const encounterDatesValue = encounterDate.split(",");
     const encounterDatesHeader = encounterDatesValue[0];
     var pageNumber = null;
@@ -298,6 +299,7 @@ const Meat = ({ activeMeatTitle, year }) => {
       dos: encounterDatesValue,
       stringFileWord: splitPoint,
     };
+
     try {
       const response = await axios.post(
         ENDPOINTS.apiEndoint + `dbservice/pageNumber`,
@@ -308,11 +310,13 @@ const Meat = ({ activeMeatTitle, year }) => {
         if (result?.first == false) {
           splitPoint = value;
         }
+
         pageNumber = result?.second[0] ? result?.second[0] : null;
         setSearch({
           value: splitPoint,
           page: pageNumber,
-          headers: result?.first,
+          headers: false,
+          headerContent: value,
         });
         setFileInitialPage(pageNumber);
         setFileDosPageNumber(pageNumber);
@@ -400,13 +404,15 @@ const Meat = ({ activeMeatTitle, year }) => {
             value,
             disDescription,
             encounterDate,
-            meatresult
+            meatresult,
           );
         }
         splitPoint = result?.searchString;
         setSearch({
           value: splitPoint,
           page: result?.pageNumber,
+          headers: false,
+          headerContent: headerNames,
         });
         setFileInitialPage(pageNumber);
         setFileDosPageNumber(pageNumber);
@@ -1323,6 +1329,7 @@ const Meat = ({ activeMeatTitle, year }) => {
                       searchQuery={search?.value ? search?.value : ""}
                       pageNumber={search?.page ? search?.page : 1}
                       headers={search?.headers}
+                      headerContent={search?.headerContent}
                     />
                   )}
                 </>

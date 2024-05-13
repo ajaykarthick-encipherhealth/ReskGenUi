@@ -127,7 +127,7 @@ const Searches = ({
         code: updateDetails.codes,
         description: updateDetails.description,
         years: years.map((date) => date.value),
-        billable: selectBillable.value ? selectBillable.value : "",
+        billable: selectBillable.value ? selectBillable.value : selectBillable,
       });
       if (res.status == "SUCCESS") {
         getResponePopup(getICDStatus);
@@ -609,6 +609,7 @@ const Searches = ({
                       placeholder={"Select Billable"}
                     />
                   </div>
+                  {suggestedCode.length > 0 &&
                   <div
                     className="card py-2"
                     style={{
@@ -618,7 +619,7 @@ const Searches = ({
                     }}
                   >
                     {suggestedCode?.map((item) => (
-                      <div class="form-check mx-2 text-start">
+                      <div class="d-flex mx-2 mt-0 text-start">
                         <input
                           class="form-check-input"
                           type="radio"
@@ -642,7 +643,7 @@ const Searches = ({
                         </label>
                       </div>
                     ))}
-                  </div>
+                  </div>}
                   <button
                     class="btns-primary btn-app-primary"
                     type="button"
