@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
-import styles from "../../../resusablereport/reports/report.module.css";
+import styles from "./report.module.css";
+import ReviewerReport from "./reviewerReport";
+import SentRewiewer from "./sentReport";
+import ReceivedReport from "./receivedReport";
 import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -12,6 +15,7 @@ import ExportImg from "../../../images/svg/Export";
 import { debounce } from "../../admin/report/Export";
 import { disableFutureDate } from "../../../components/headerFilters/functions";
 import { patientDetails } from "../../../stores/authflow/actions";
+
 import {
   getReceivedDetails,
   getReportDetails,
@@ -20,11 +24,9 @@ import {
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
-import MoreFilter from "../../../resusablereport/reports/MoreFilter";
-import ReviewerReport from "../../../resusablereport/reports/reviewerReport";
-import SentReport from "../../../resusablereport/reports/sentReport";
-import ReceivedReport from "../../../resusablereport/reports/sentReport";
-import Export from "../../../resusablereport/reports/Export";
+import SentReport from "./sentReport";
+import MoreFilter from "./MoreFilter";
+import Export from "./Export";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -45,7 +47,9 @@ const Reports = () => {
   );
   const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
+
   const [isLoading, setIsLoading] = useState(true);
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
   const [comments, setComments] = useState();
@@ -59,6 +63,7 @@ const Reports = () => {
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [paginationReceivedFirst, setPaginationReceivedFirst] = useState(0);
   const [paginationSentFirst, setPaginationSentFirst] = useState(0);
+
   const [modal, setModal] = useState(false);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
@@ -498,7 +503,7 @@ const Reports = () => {
                           setSelectedData={setSelectedData}
                         />
                       </div>
-                      {
+                      {(
                         <div className="col-xl-4">
                           <div className="row flr">
                             <Tooltip
@@ -527,7 +532,7 @@ const Reports = () => {
                             </Tooltip>
                           </div>
                         </div>
-                      }
+                      )}
                     </div>
                     <div className="row filter-contain">
                       {selectedData?.length > 0 &&
@@ -602,67 +607,68 @@ const Reports = () => {
                   </div>
                 </div>
 
-                <div>
-                  {reportActiveTab === "Reviewer" && (
-                    <div>
-                      <ReviewerReport
-                        setModal={setModal}
-                        modal={modal}
-                        reportListAll={filteredCOder}
-                        paginationFirst={paginationFirst}
-                        ReportPatientDetails={ReportPatientDetails?.response}
-                        onPageChange={onPageChange}
-                        comments={comments}
-                        setComments={setComments}
-                        patientDetails={patientDetails}
-                        setSelectedRows={setSelectedRows}
-                        selectedRows={selectedRows}
-                        setSelectAll={setSelectAll}
-                        selectAll={selectAll}
-                        setSortOrder={setCoderSortOrder}
-                        sortOrder={coderSortOrder}
-                        setSort={setSort}
-                        gotoPatientDetails={gotoPatientDetails}
-                        page={{ pageNo, paginationFirst }}
-                      />
-                    </div>
-                  )}
-                  {reportActiveTab === "Sent" && (
-                    <div>
-                      {}{" "}
-                      <SentReport
-                        paginationFirst={paginationSentFirst}
-                        details={SentReportDetails?.data?.response}
-                        onSentPageChange={onSentPageChange}
-                        loading={SentReportDetails?.loading}
-                        setSortOrder={setSentSortOrder}
-                        sortOrder={sentSortOrder}
-                        setSort={setSort}
-                        receivedPageNo={sentPageNo}
-                        receivedStartDate={startDate}
-                        receivedEndDate={endDate}
-                        isPhysician={true}
-                      />
-                    </div>
-                  )}
-                  {reportActiveTab === "Received" && (
-                    <div>
-                      <ReceivedReport
-                        paginationFirst={paginationReceivedFirst}
-                        details={ReceivedReportDetails?.data?.response}
-                        onPageChange={onReceivedPageChange}
-                        receivedPageNo={receivedPageNo}
-                        receivedStartDate={receivedStartDate}
-                        receivedEndDate={receivedEndDate}
-                        loading={ReceivedReportDetails?.loading}
-                        setSortOrder={setReceivedSortOrder}
-                        sortOrder={receivedSortOrder}
-                        setSort={setSort}
-                        isPhysician={true}
-                      />
-                    </div>
-                  )}
-                </div>
+
+                  <div>
+                    {reportActiveTab === "Reviewer" && (
+                      <div>
+                        <ReviewerReport
+                          setModal={setModal}
+                          modal={modal}
+                          reportListAll={filteredCOder}
+                          paginationFirst={paginationFirst}
+                          ReportPatientDetails={ReportPatientDetails?.response}
+                          onPageChange={onPageChange}
+                          comments={comments}
+                          setComments={setComments}
+                          patientDetails={patientDetails}
+                          setSelectedRows={setSelectedRows}
+                          selectedRows={selectedRows}
+                          setSelectAll={setSelectAll}
+                          selectAll={selectAll}
+                          setSortOrder={setCoderSortOrder}
+                          sortOrder={coderSortOrder}
+                          setSort={setSort}
+                          gotoPatientDetails={gotoPatientDetails}
+                          page={{ pageNo, paginationFirst }}
+                        />
+                      </div>
+                    )}
+                    {reportActiveTab === "Sent" && (
+                      <div>
+                        {}{" "}
+                        <SentReport
+                          paginationFirst={paginationSentFirst}
+                          details={SentReportDetails?.data?.response}
+                          onSentPageChange={onSentPageChange}
+                          loading={SentReportDetails?.loading}
+                          setSortOrder={setSentSortOrder}
+                          sortOrder={sentSortOrder}
+                          setSort={setSort}
+                          receivedPageNo={sentPageNo}
+                          receivedStartDate={startDate}
+                          receivedEndDate={endDate}
+                          isPhysician={true}
+                        />
+                      </div>
+                    )}
+                    {reportActiveTab === "Received" && (
+                      <div>
+                        <ReceivedReport
+                          paginationFirst={paginationReceivedFirst}
+                          details={ReceivedReportDetails?.data?.response}
+                          onPageChange={onReceivedPageChange}
+                          receivedPageNo={receivedPageNo}
+                          receivedStartDate={receivedStartDate}
+                          receivedEndDate={receivedEndDate}
+                          loading={ReceivedReportDetails?.loading}
+                          setSortOrder={setReceivedSortOrder}
+                          sortOrder={receivedSortOrder}
+                          setSort={setSort}
+                          isPhysician={true}
+                        />
+                      </div>
+                    )}
+                  </div>
 
                 {modal && (
                   <Modal

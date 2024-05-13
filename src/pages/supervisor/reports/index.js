@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
 import styles from "../../../resusablereport/reports/report.module.css";
-import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
+import {
+  getActiveTab,
+  getReportDetails,
+  getTeamReportDetails,
+} from "../../../store/actions/l2Action/AuditReportAction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
@@ -14,7 +18,6 @@ import { disableFutureDate } from "../../../components/headerFilters/functions";
 import { patientDetails } from "../../../stores/authflow/actions";
 import {
   getReceivedDetails,
-  getReportDetails,
   getSentDetails,
 } from "../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
@@ -25,6 +28,7 @@ import ReviewerReport from "../../../resusablereport/reports/reviewerReport";
 import SentReport from "../../../resusablereport/reports/sentReport";
 import ReceivedReport from "../../../resusablereport/reports/sentReport";
 import Export from "../../../resusablereport/reports/Export";
+import TeamReport from "../../../resusablereport/reports/teamReport";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -59,6 +63,7 @@ const Reports = () => {
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [paginationReceivedFirst, setPaginationReceivedFirst] = useState(0);
   const [paginationSentFirst, setPaginationSentFirst] = useState(0);
+  const [teamPageNo, setTeamPageNo] = useState(0);
   const [modal, setModal] = useState(false);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
@@ -71,6 +76,8 @@ const Reports = () => {
   const [coderSearch, setCoderSearch] = useState("");
   const [sentSearch, setSentSearch] = useState("");
   const [receivedSearch, setReceivedSearch] = useState("");
+  const [teamStartDate, setTeamStartDate] = useState();
+
   const [receivedSortOrder, setReceivedSortOrder] = useState("DESC");
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
@@ -157,7 +164,9 @@ const Reports = () => {
     )?.search;
     setIsLoading(false);
     const activeTabFromStorage = localStorage.getItem("activeTab");
-    const activeTab = activeTabFromStorage ? activeTabFromStorage : "Reviewer";
+    const activeTab = activeTabFromStorage
+      ? activeTabFromStorage
+      : "Audit Report";
     dispatch(getActiveTab(activeTab));
 
     if (activeTab === "Sent") {
@@ -188,6 +197,17 @@ const Reports = () => {
           selectedDateRanges?.Reviewer?.to,
           coderSearchString ? coderSearchString : "",
           selectedOptions?.reviewerStatus,
+          sort
+        )
+      );
+    }
+    if (reportActiveTab === "TeamReport") {
+      dispatch(
+        getTeamReportDetails(
+          teamPageNo,
+          teamStartDate,
+          teamEndDate,
+          teamSearch,
           sort
         )
       );
@@ -358,17 +378,34 @@ const Reports = () => {
           <div className="row">
             <div className="col-xl-12">
               <div>
-                <div className={styles.buttonContainer}>
+                <div
+                  className={styles.buttonContainer}
+                  style={{ width: "40% !important" }}
+                >
                   <div className={styles.group}>
                     <button
                       className={
-                        reportActiveTab === "Reviewer" ? `${styles.active}` : ""
+                        reportActiveTab === "Audit Report"
+                          ? `${styles.active}`
+                          : ""
                       }
                       onClick={() => {
-                        handleTabs("Reviewer");
+                        handleTabs("Audit Report");
                       }}
                     >
-                      Reviewer
+                      Audit Report
+                    </button>
+                    <button
+                      className={
+                        reportActiveTab === "Team Report"
+                          ? `${styles.active}`
+                          : ""
+                      }
+                      onClick={() => {
+                        handleTabs("Team Report");
+                      }}
+                    >
+                      Team Report
                     </button>
                     <button
                       className={
@@ -433,7 +470,8 @@ const Reports = () => {
                         </div>
                       </div>
 
-                      {!reportActiveTab || reportActiveTab === "Reviewer" ? (
+                      {!reportActiveTab ||
+                      reportActiveTab === "Audit Report" ? (
                         <div className="col-xl-2">
                           <div className="d-flex w-100">
                             <label className="labelStyle d-flex m-auto">
@@ -603,7 +641,7 @@ const Reports = () => {
                 </div>
 
                 <div>
-                  {reportActiveTab === "Reviewer" && (
+                  {reportActiveTab === "Audit Report" && (
                     <div>
                       <ReviewerReport
                         setModal={setModal}
@@ -631,6 +669,24 @@ const Reports = () => {
                     <div>
                       {}{" "}
                       <SentReport
+                        paginationFirst={paginationSentFirst}
+                        details={SentReportDetails?.data?.response}
+                        onSentPageChange={onSentPageChange}
+                        loading={SentReportDetails?.loading}
+                        setSortOrder={setSentSortOrder}
+                        sortOrder={sentSortOrder}
+                        setSort={setSort}
+                        receivedPageNo={sentPageNo}
+                        receivedStartDate={startDate}
+                        receivedEndDate={endDate}
+                        isPhysician={true}
+                      />
+                    </div>
+                  )}
+                  {reportActiveTab === "Team Report" && (
+                    <div>
+                      {}{" "}
+                      <TeamReport
                         paginationFirst={paginationSentFirst}
                         details={SentReportDetails?.data?.response}
                         onSentPageChange={onSentPageChange}
