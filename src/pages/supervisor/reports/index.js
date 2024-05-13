@@ -536,7 +536,7 @@ const Reports = () => {
                           setSelectedData={setSelectedData}
                         />
                       </div>
-                      {
+                      { !reportActiveTab || reportActiveTab === "Audit Report" ? 
                         <div className="col-xl-4">
                           <div className="row flr">
                             <Tooltip
@@ -551,12 +551,12 @@ const Reports = () => {
                                   setIsModalVisible(true);
                                 }}
                                 className={styles.export}
-                                // disabled={
-                                //   rowsLength?.length > 0 ||
-                                //   rowsLength?.data?.length > 0
-                                //     ? false
-                                //     : true
-                                // }
+                                disabled={
+                                  rowsLength?.length > 0 ||
+                                  rowsLength?.data?.length > 0
+                                    ? false
+                                    : true
+                                }
                                 style={{ color: "#04306f" }}
                               >
                                 <ExportImg />
@@ -564,7 +564,7 @@ const Reports = () => {
                               </button>
                             </Tooltip>
                           </div>
-                        </div>
+                        </div> : null
                       }
                     </div>
                     <div className="row filter-contain">

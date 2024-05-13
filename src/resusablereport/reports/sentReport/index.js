@@ -43,7 +43,8 @@ export const colors = {
   Y: "#CD8500",
   Z: "#607B8B",
 };
-const SentReport = ({   details,
+const SentReport = ({
+  details,
   onSentPageChange,
   paginationFirst,
   sortOrder,
@@ -52,9 +53,9 @@ const SentReport = ({   details,
   receivedPageNo,
   receivedStartDate,
   receivedEndDate,
-  }) => {
-    const dispatch = useDispatch();
-    const router = useRouter();
+}) => {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const [selectedCardIndex, setSelectedCardIndex] = useState(0);
   const [selectedCard, setSelectedCard] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
@@ -141,7 +142,7 @@ const SentReport = ({   details,
     };
   };
   const handleReceiverReport = (item) => {
-    console.log(item,"r")
+    console.log(item, "r");
     const info = {
       reportUser: item,
       receivedPageNo: receivedPageNo,
@@ -388,7 +389,7 @@ const SentReport = ({   details,
                                       <div
                                         onClick={() => {
                                           setSelectedRows(item);
-                                          dispatch(selectedReport(item))
+                                          dispatch(selectedReport(item));
                                           setOpenEdit(true);
                                         }}
                                       >

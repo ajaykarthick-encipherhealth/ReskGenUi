@@ -658,7 +658,6 @@ const ReviewerReport = ({
                                 </h4>
                               </div>
                             </div>
-                      
 
                             <div className={`col-xl-4 ${styles.subCard}`}>
                               {" "}
@@ -711,27 +710,84 @@ const ReviewerReport = ({
                                   className={styles.contentGroups}
                                   key={flagItem.id}
                                 >
+                                  <div>{getFlag(flagItem)}</div>
                                   <div className={styles.count}>
                                     {flagItem.count}
                                   </div>
-                                  <div>{getFlag(flagItem)}</div>
                                 </div>
                               ))}
                             </div>
                             <div className={`col-xl-4 ${styles.flags}`}>
                               <div className={styles.cardHead}>
-                                Supervisor
-                                {reportListAll?.supervisorAllocationCount?.map(
-                                  (item) => (
+                                <div> Supervisor </div>
+                                <div className={styles.contentOverFlow}>
+                                  {reportListAll?.supervisorAllocationCount?.map(
+                                    (item) => (
+                                      <div
+                                        className={styles.contentAuditor}
+                                        key={item.id}
+                                      >
+                                        <div className={styles.avatar}>
+                                          {item.userNameDTO?.firstName ||
+                                          item?.userNameDTO?.lastName ||
+                                          item?.userNameDTO?.profileImageUrl ? (
+                                            <>
+                                              <span
+                                                className={styles.avatarAlign}
+                                              >
+                                                {renderUserPrfoileAvatar(
+                                                  item.userNameDTO?.firstName,
+                                                  item?.userNameDTO?.lastName,
+                                                  item?.userNameDTO
+                                                    ?.profileImageUrl,
+                                                  "header"
+                                                )}
+                                              </span>
+                                              <span
+                                                className={styles.smallText}
+                                              >
+                                                {item.userNameDTO?.firstName}{" "}
+                                                {item?.userNameDTO?.lastName}
+                                              </span>
+                                            </>
+                                          ) : (
+                                            <div className={styles.emptyData}>
+                                              ---
+                                            </div>
+                                          )}
+                                        </div>
+                                        <div className={styles.count}>
+                                          {item.count}
+                                        </div>
+                                      </div>
+                                    )
+                                  )}
+                                  {(!reportListAll?.supervisorAllocationCount ||
+                                    reportListAll?.supervisorAllocationCount
+                                      .length === 0) && (
                                     <div
-                                      className={styles.contentAuditor}
-                                      key={item.id}
+                                      className="d-flex justify-content-center align-items-center"
+                                      style={{ height: "200px" }}
                                     >
-                                      <div className={styles.avatar}>
-                                        {item.userNameDTO?.firstName ||
-                                        item?.userNameDTO?.lastName ||
-                                        item?.userNameDTO?.profileImageUrl ? (
-                                          <>
+                                      <Empty />{" "}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                            <div className={`col-xl-4 ${styles.flags}`}>
+                              <div className={`${styles.cardHead} sticky-top`}>
+                                <div>Reviewer</div>
+                                <div className={styles.contentOverFlow}>
+                                  {!reportListAll?.reviewerAllocationCount
+                                    .length === 0 ? (
+                                    reportListAll?.reviewerAllocationCount?.map(
+                                      (item) => (
+                                        <div
+                                          className={styles.contentAuditor}
+                                          key={item.id}
+                                        >
+                                          <div className={styles.avatar}>
                                             <span
                                               className={styles.avatarAlign}
                                             >
@@ -747,52 +803,23 @@ const ReviewerReport = ({
                                               {item.userNameDTO?.firstName}{" "}
                                               {item?.userNameDTO?.lastName}
                                             </span>
-                                          </>
-                                        ) : (
-                                          <div className={styles.emptyData}>
-                                            ---
                                           </div>
-                                        )}
-                                      </div>
 
-                                      <div className={styles.count}>
-                                        {item.count}
-                                      </div>
-                                    </div>
-                                  )
-                                )}
-                              </div>
-                            </div>
-                            <div className={`col-xl-4 ${styles.flags}`}>
-                              <div className={styles.cardHead}>
-                                Reviewer
-                                {reportListAll?.reviewerAllocationCount?.map(
-                                  (item) => (
+                                          <div className={styles.count}>
+                                            {item.count}
+                                          </div>
+                                        </div>
+                                      )
+                                    )
+                                  ) : (
                                     <div
-                                      className={styles.contentAuditor}
-                                      key={item.id}
+                                      className="d-flex justify-content-center align-items-center"
+                                      style={{ height: "200px" }}
                                     >
-                                      <div className={styles.avatar}>
-                                        <span className={styles.avatarAlign}>
-                                          {renderUserPrfoileAvatar(
-                                            item.userNameDTO?.firstName,
-                                            item?.userNameDTO?.lastName,
-                                            item?.userNameDTO?.profileImageUrl,
-                                            "header"
-                                          )}
-                                        </span>
-                                        <span className={styles.smallText}>
-                                          {item.userNameDTO?.firstName}{" "}
-                                          {item?.userNameDTO?.lastName}
-                                        </span>
-                                      </div>
-
-                                      <div className={styles.count}>
-                                        {item.count}
-                                      </div>
+                                      <Empty />{" "}
                                     </div>
-                                  )
-                                )}
+                                  )}
+                                </div>
                               </div>
                             </div>
                           </div>
