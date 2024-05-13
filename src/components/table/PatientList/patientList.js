@@ -30,11 +30,11 @@ function PatientTable({
   const navigate = useRouter();
 
   const handlePriorityChange = (patientId, selectedValue) => {
-    setSelectedPriority((prev) => ({
-      ...prev,
-      id: patientId,
-      value: selectedValue,
-    }));
+    // setSelectedPriority((prev) => ({
+    //   ...prev,
+    //   id: patientId,
+    //   value: selectedValue,
+    // }));
   };
 
   const gotoPatientDetails = (data) => {
