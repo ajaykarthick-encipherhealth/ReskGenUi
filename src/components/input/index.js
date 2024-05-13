@@ -30,6 +30,7 @@ const InputField = ({
   activeTab,
   setSearchVal,
   searchVal,
+  isReport
 }) => {
   const [inputStr, setInputStr] = useState("");
   const disallowedCharacters = ['[', '{', ']', '}', '|', '!', ',', '%', '^', "\\", "(", ")", "#"];
@@ -75,7 +76,7 @@ const InputField = ({
         value={
           isTracking
             ? trackInput
-            : ReportName
+            : isReport
             ? ReportName
             : activeTab
             ? searchVal
