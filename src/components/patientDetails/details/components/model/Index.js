@@ -40,7 +40,7 @@ const ModelIndex = ({
       onOk={handleCloseModal}
       onCancel={handleCloseModal}
       footer={null}
-      closable={false}
+      closable={isEdit?false:true} 
       width={
         combiTree
           ? "auto"
