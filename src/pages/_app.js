@@ -35,7 +35,6 @@ function MyApp({ Component, pageProps }) {
             currentPath?.includes("/twofactorAuthentication/") ||
             currentPath?.includes("search") ||
             currentPath?.includes("/reviewer/patients/details")
-            
           ) {
             setShowTerminal(false);
           } else {
@@ -109,13 +108,9 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     const currentPath = window.location.pathname;
-    if (showTerminal && !currentPath?.includes("/patientDetails/details")) {
-      const userRole = localStorage.getItem("userRole");
-      const currentPath = router.pathname;
-      if (userRole && !currentPath.includes(`/${userRole}/`)) {
-        router.replace("/_error");
-      }
-      
+    const userRole = localStorage.getItem("userRole");
+    if (userRole && !currentPath.includes(`/${userRole}/`)) {
+      router.replace("/_error");
     }
   }, [showTerminal]);
 
