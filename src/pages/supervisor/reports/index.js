@@ -20,7 +20,7 @@ import {
   getReceivedDetails,
   getSentDetails,
 } from "../../../store/actions/ReportActions";
-import { useDispatch } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import MoreFilter from "../../../resusablereport/reports/MoreFilter";
@@ -29,6 +29,7 @@ import SentReport from "../../../resusablereport/reports/sentReport";
 import ReceivedReport from "../../../resusablereport/reports/sentReport";
 import Export from "../../../resusablereport/reports/Export";
 import TeamReport from "../../../resusablereport/reports/teamReport";
+import { actions as workflowActions } from "../../../stores/reviewer/workqueue";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -38,15 +39,13 @@ const statusOptions = [
   { label: "Hold", value: "HOLD" },
 ];
 
-const Reports = () => {
+const Reports = ({workFgetFlagsowData}) => {
   const dispatch = useDispatch();
   const route = useRouter();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
   const ReportPatientDetails = useSelector((state) => state.report?.details);
   // const SentReportDetails = useSelector((state) => state.report?.sentDetails);
   const SentReportDetails = useSelector((state) => state.report?.sentDetails);
-
-  console.log(SentReportDetails?.data?.response,"test")
 
   const ReceivedReportDetails = useSelector(
     (state) => state.report?.receivedDetails
@@ -73,15 +72,8 @@ const Reports = () => {
   const [endDate, setEndDate] = useState();
   const [receivedStartDate, setReceivedStartDate] = useState();
   const [receivedEndDate, setReceivedEndDate] = useState();
-  const [coderStartDate, setCoderStartDate] = useState();
-  const [coderEndDate, setCoderEndDate] = useState();
   const [selectedDates, setSelectedDates] = useState([]);
-  const [selectedCoderOpt, setSelectedCoderOpt] = useState("");
-  const [coderSearch, setCoderSearch] = useState("");
-  const [sentSearch, setSentSearch] = useState("");
-  const [receivedSearch, setReceivedSearch] = useState("");
   const [teamStartDate, setTeamStartDate] = useState();
-
   const [receivedSortOrder, setReceivedSortOrder] = useState("DESC");
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
@@ -224,6 +216,7 @@ const Reports = () => {
     if (ExportResponse) {
       setIsModalVisible(false);
     }
+    workFgetFlagsowData()
   }, [
     pageNo,
     sentPageNo,
@@ -647,5 +640,12 @@ const Reports = () => {
     </div>
   );
 };
-
-export default Reports;
+const enhancer = connect(
+  (state) => ({
+    getFlagsData: state?.reviewer?.workQueue?.flags?.data,
+  }),
+  {
+    workFgetFlagsowData: workflowActions.flagsAction,
+  }
+);
+export default enhancer(Reports);
