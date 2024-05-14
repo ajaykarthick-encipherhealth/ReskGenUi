@@ -1,0 +1,834 @@
+{
+  "status": "SUCCESS",
+  "message": "Success!!",
+  "response": {
+    "patientId": "EH@001",
+    "patientName": "Not Provided",
+    "mrNumber": null,
+    "fileId": "76fc246a-3d10-42c4-89fc-6e208b9e414e",
+    "orgId": "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
+    "tenantId": "b4d34e42-79a6-478e-b3af-12ce7311fa09",
+    "dob": "Not Provided",
+    "gender": "Not Provided",
+    "age": 66,
+    "processDate": {
+      "1": "2024-05-10T12:00:00Z",
+      "2": "2024-05-08T09:30:00Z"
+    },
+    "declineNotes": {
+      "1": "Patient declined treatment due to personal reasons.",
+      "2": "Treatment declined by patient's family member."
+    },
+    "holdNotes": {
+      "1": "Treatment put on hold pending further test results.",
+      "2": "Patient requested treatment to be temporarily paused."
+    },
+    "validDisease": [
+      {
+        "diagnosisCode": "A123",
+        "actualDescription": "Description of the actual diagnosis",
+        "dbDescription": "Description of the diagnosis from the database",
+        "notes": "Additional notes related to the diagnosis",
+        "capturedSections": ["section1", "section2"],
+        "dateOfServices": ["2024-05-10", "2024-05-11"],
+        "hyperlinks": [
+          {
+            "header": "section1",
+            "pageNumber": 1,
+            "substring": "Substring1",
+            "dateOfService": "2024-05-10"
+          },
+          {
+            "header": "section2",
+            "pageNumber": 2,
+            "substring": "Substring2",
+            "dateOfService": "2024-05-11"
+          }
+        ],
+        "encounterDate": "2024-05-11",
+        "isManuallyAdded": true,
+        "manuallyAddedAt": "2024-05-10T08:30:00Z",
+        "manuallyAddedBy": "John Doe",
+        "isHccValid": true,
+        "isChanged": false,
+        "defaultPosition": "VALID",
+        "actionEventAuditId": "audit123",
+        "isMostSpecific": true,
+        "providerNames": ["Provider1", "Provider2"],
+        "formedCodes": ["Code1", "Code2"],
+        "children": [
+          {
+            "diagnosisCode": "A123",
+            "actualDescription": "Description of the actual diagnosis",
+            "dbDescription": "Description of the diagnosis from the database",
+            "notes": "Additional notes related to the diagnosis",
+            "capturedSections": ["section1", "section2"],
+            "dateOfServices": ["2024-05-10", "2024-05-11"],
+            "hyperlinks": [
+              {
+                "header": "section1",
+                "pageNumber": 1,
+                "substring": "Substring1",
+                "dateOfService": "2024-05-10"
+              },
+              {
+                "header": "section2",
+                "pageNumber": 2,
+                "substring": "Substring2",
+                "dateOfService": "2024-05-11"
+              }
+            ],
+            "encounterDate": "2024-05-11",
+            "isManuallyAdded": true,
+            "manuallyAddedAt": "2024-05-10T08:30:00Z",
+            "manuallyAddedBy": "John Doe",
+            "isHccValid": true,
+            "isChanged": false,
+            "defaultPosition": "VALID",
+            "actionEventAuditId": "audit123",
+            "isMostSpecific": true,
+            "providerNames": ["Provider1", "Provider2"],
+            "formedCodes": ["Code1", "Code2"],
+            "children": [],
+            "expanded": true,
+            "isShow": true,
+            "isComboCode": false,
+            "diseaseSource": "VALID_DISEASE",
+            "suspectType": ["HEADER_MISSING", "DOS_MISSING"],
+            "diseaseAudit": {
+              "aiSources": ["COGG_4_TURBO_1106", "COGG_4_TURBO_0125,"],
+              "codeSource": "RULE_ENGINE",
+              "directConfirmation": true
+            }
+          }
+        ],
+        "expanded": true,
+        "isShow": true,
+        "isComboCode": false,
+        "diseaseSource": "VALID_DISEASE",
+        "suspectType": ["HEADER_MISSING", "DOS_MISSING"],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106", "COGG_4_TURBO_0125,"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": true
+        }
+      }
+    ],
+
+    "invalidDisease": [
+      {
+        "diagnosisCode": "A123",
+        "actualDescription": "Description of the actual diagnosis",
+        "dbDescription": "Description of the diagnosis from the database",
+        "notes": "Additional notes related to the diagnosis",
+        "capturedSections": ["section1", "section2"],
+        "dateOfServices": ["2024-05-10", "2024-05-11"],
+        "hyperlinks": [
+          {
+            "header": "section1",
+            "pageNumber": 1,
+            "substring": "Substring1",
+            "dateOfService": "2024-05-10"
+          },
+          {
+            "header": "section2",
+            "pageNumber": 2,
+            "substring": "Substring2",
+            "dateOfService": "2024-05-11"
+          }
+        ],
+        "encounterDate": "2024-05-11",
+        "isManuallyAdded": true,
+        "manuallyAddedAt": "2024-05-10T08:30:00Z",
+        "manuallyAddedBy": "John Doe",
+        "isHccValid": true,
+        "isChanged": false,
+        "defaultPosition": "VALID",
+        "actionEventAuditId": "audit123",
+        "isMostSpecific": true,
+        "providerNames": ["Provider1", "Provider2"],
+        "formedCodes": ["Code1", "Code2"],
+        "children": [
+          {
+            "diagnosisCode": "A123",
+            "actualDescription": "Description of the actual diagnosis",
+            "dbDescription": "Description of the diagnosis from the database",
+            "notes": "Additional notes related to the diagnosis",
+            "capturedSections": ["section1", "section2"],
+            "dateOfServices": ["2024-05-10", "2024-05-11"],
+            "hyperlinks": [
+              {
+                "header": "section1",
+                "pageNumber": 1,
+                "substring": "Substring1",
+                "dateOfService": "2024-05-10"
+              },
+              {
+                "header": "section2",
+                "pageNumber": 2,
+                "substring": "Substring2",
+                "dateOfService": "2024-05-11"
+              }
+            ],
+            "encounterDate": "2024-05-11",
+            "isManuallyAdded": true,
+            "manuallyAddedAt": "2024-05-10T08:30:00Z",
+            "manuallyAddedBy": "John Doe",
+            "isHccValid": true,
+            "isChanged": false,
+            "defaultPosition": "VALID",
+            "actionEventAuditId": "audit123",
+            "isMostSpecific": true,
+            "providerNames": ["Provider1", "Provider2"],
+            "formedCodes": ["Code1", "Code2"],
+            "children": [],
+            "expanded": true,
+            "isShow": true,
+            "isComboCode": false,
+            "diseaseSource": "VALID_DISEASE",
+            "suspectType": ["HEADER_MISSING", "DOS_MISSING"],
+            "diseaseAudit": {
+              "aiSources": ["COGG_4_TURBO_1106", "COGG_4_TURBO_0125,"],
+              "codeSource": "RULE_ENGINE",
+              "directConfirmation": true
+            }
+          }
+        ],
+        "expanded": true,
+        "isShow": true,
+        "isComboCode": false,
+        "diseaseSource": "VALID_DISEASE",
+        "suspectType": ["HEADER_MISSING", "DOS_MISSING"],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106", "COGG_4_TURBO_0125,"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": true
+        }
+      }
+    ],
+    "deletedDiseases": [
+      {
+        "diagnosisCode": "A123",
+        "actualDescription": "Description of the actual diagnosis",
+        "dbDescription": "Description of the diagnosis from the database",
+        "notes": "Additional notes related to the diagnosis",
+        "capturedSections": ["section1", "section2"],
+        "dateOfServices": ["2024-05-10", "2024-05-11"],
+        "hyperlinks": [
+          {
+            "header": "section1",
+            "pageNumber": 1,
+            "substring": "Substring1",
+            "dateOfService": "2024-05-10"
+          },
+          {
+            "header": "section2",
+            "pageNumber": 2,
+            "substring": "Substring2",
+            "dateOfService": "2024-05-11"
+          }
+        ],
+        "encounterDate": "2024-05-11",
+        "isManuallyAdded": true,
+        "manuallyAddedAt": "2024-05-10T08:30:00Z",
+        "manuallyAddedBy": "John Doe",
+        "isHccValid": true,
+        "isChanged": false,
+        "defaultPosition": "VALID",
+        "actionEventAuditId": "audit123",
+        "isMostSpecific": true,
+        "providerNames": ["Provider1", "Provider2"],
+        "formedCodes": ["Code1", "Code2"],
+        "children": [
+          {
+            "diagnosisCode": "A123",
+            "actualDescription": "Description of the actual diagnosis",
+            "dbDescription": "Description of the diagnosis from the database",
+            "notes": "Additional notes related to the diagnosis",
+            "capturedSections": ["section1", "section2"],
+            "dateOfServices": ["2024-05-10", "2024-05-11"],
+            "hyperlinks": [
+              {
+                "header": "section1",
+                "pageNumber": 1,
+                "substring": "Substring1",
+                "dateOfService": "2024-05-10"
+              },
+              {
+                "header": "section2",
+                "pageNumber": 2,
+                "substring": "Substring2",
+                "dateOfService": "2024-05-11"
+              }
+            ],
+            "encounterDate": "2024-05-11",
+            "isManuallyAdded": true,
+            "manuallyAddedAt": "2024-05-10T08:30:00Z",
+            "manuallyAddedBy": "John Doe",
+            "isHccValid": true,
+            "isChanged": false,
+            "defaultPosition": "VALID",
+            "actionEventAuditId": "audit123",
+            "isMostSpecific": true,
+            "providerNames": ["Provider1", "Provider2"],
+            "formedCodes": ["Code1", "Code2"],
+            "children": [],
+            "expanded": true,
+            "isShow": true,
+            "isComboCode": false,
+            "diseaseSource": "VALID_DISEASE",
+            "suspectType": ["HEADER_MISSING", "DOS_MISSING"],
+            "diseaseAudit": {
+              "aiSources": ["COGG_4_TURBO_1106", "COGG_4_TURBO_0125,"],
+              "codeSource": "RULE_ENGINE",
+              "directConfirmation": true
+            }
+          }
+        ],
+        "expanded": true,
+        "isShow": true,
+        "isComboCode": false,
+        "diseaseSource": "VALID_DISEASE",
+        "suspectType": ["HEADER_MISSING", "DOS_MISSING"],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106", "COGG_4_TURBO_0125,"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": true
+        }
+      }
+    ],
+    "unMatchedDisease": [
+      {
+        "diagnosisCode": "A123",
+        "actualDescription": "Description of the actual diagnosis",
+        "dbDescription": "Description of the diagnosis from the database",
+        "notes": "Additional notes related to the diagnosis",
+        "capturedSections": ["section1", "section2"],
+        "dateOfServices": ["2024-05-10", "2024-05-11"],
+        "hyperlinks": [
+          {
+            "header": "section1",
+            "pageNumber": 1,
+            "substring": "Substring1",
+            "dateOfService": "2024-05-10"
+          },
+          {
+            "header": "section2",
+            "pageNumber": 2,
+            "substring": "Substring2",
+            "dateOfService": "2024-05-11"
+          }
+        ],
+        "encounterDate": "2024-05-11",
+        "isManuallyAdded": true,
+        "manuallyAddedAt": "2024-05-10T08:30:00Z",
+        "manuallyAddedBy": "John Doe",
+        "isHccValid": true,
+        "isChanged": false,
+        "defaultPosition": "VALID",
+        "actionEventAuditId": "audit123",
+        "isMostSpecific": true,
+        "providerNames": ["Provider1", "Provider2"],
+        "formedCodes": ["Code1", "Code2"],
+        "children": [
+          {
+            "diagnosisCode": "A123",
+            "actualDescription": "Description of the actual diagnosis",
+            "dbDescription": "Description of the diagnosis from the database",
+            "notes": "Additional notes related to the diagnosis",
+            "capturedSections": ["section1", "section2"],
+            "dateOfServices": ["2024-05-10", "2024-05-11"],
+            "hyperlinks": [
+              {
+                "header": "section1",
+                "pageNumber": 1,
+                "substring": "Substring1",
+                "dateOfService": "2024-05-10"
+              },
+              {
+                "header": "section2",
+                "pageNumber": 2,
+                "substring": "Substring2",
+                "dateOfService": "2024-05-11"
+              }
+            ],
+            "encounterDate": "2024-05-11",
+            "isManuallyAdded": true,
+            "manuallyAddedAt": "2024-05-10T08:30:00Z",
+            "manuallyAddedBy": "John Doe",
+            "isHccValid": true,
+            "isChanged": false,
+            "defaultPosition": "VALID",
+            "actionEventAuditId": "audit123",
+            "isMostSpecific": true,
+            "providerNames": ["Provider1", "Provider2"],
+            "formedCodes": ["Code1", "Code2"],
+            "children": [],
+            "expanded": true,
+            "isShow": true,
+            "isComboCode": false,
+            "diseaseSource": "VALID_DISEASE",
+            "suspectType": ["HEADER_MISSING", "DOS_MISSING"],
+            "diseaseAudit": {
+              "aiSources": ["COGG_4_TURBO_1106", "COGG_4_TURBO_0125,"],
+              "codeSource": "RULE_ENGINE",
+              "directConfirmation": true
+            }
+          }
+        ],
+        "expanded": true,
+        "isShow": true,
+        "isComboCode": false,
+        "diseaseSource": "VALID_DISEASE",
+        "suspectType": ["HEADER_MISSING", "DOS_MISSING"],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106", "COGG_4_TURBO_0125,"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": true
+        }
+      }
+    ],
+    "suggestRadiology": [
+      {
+        "diagnosisCode": "A123",
+        "actualDescription": "Description of the actual diagnosis",
+        "dbDescription": "Description of the diagnosis from the database",
+        "notes": "Additional notes related to the diagnosis",
+        "capturedSections": ["section1", "section2"],
+        "dateOfServices": ["2024-05-10", "2024-05-11"],
+        "hyperlinks": [
+          {
+            "header": "section1",
+            "pageNumber": 1,
+            "substring": "Substring1",
+            "dateOfService": "2024-05-10"
+          },
+          {
+            "header": "section2",
+            "pageNumber": 2,
+            "substring": "Substring2",
+            "dateOfService": "2024-05-11"
+          }
+        ],
+        "encounterDate": "2024-05-11",
+        "isManuallyAdded": true,
+        "manuallyAddedAt": "2024-05-10T08:30:00Z",
+        "manuallyAddedBy": "John Doe",
+        "isHccValid": true,
+        "isChanged": false,
+        "defaultPosition": "VALID",
+        "actionEventAuditId": "audit123",
+        "isMostSpecific": true,
+        "providerNames": ["Provider1", "Provider2"],
+        "formedCodes": ["Code1", "Code2"],
+        "children": [
+          {
+            "diagnosisCode": "A123",
+            "actualDescription": "Description of the actual diagnosis",
+            "dbDescription": "Description of the diagnosis from the database",
+            "notes": "Additional notes related to the diagnosis",
+            "capturedSections": ["section1", "section2"],
+            "dateOfServices": ["2024-05-10", "2024-05-11"],
+            "hyperlinks": [
+              {
+                "header": "section1",
+                "pageNumber": 1,
+                "substring": "Substring1",
+                "dateOfService": "2024-05-10"
+              },
+              {
+                "header": "section2",
+                "pageNumber": 2,
+                "substring": "Substring2",
+                "dateOfService": "2024-05-11"
+              }
+            ],
+            "encounterDate": "2024-05-11",
+            "isManuallyAdded": true,
+            "manuallyAddedAt": "2024-05-10T08:30:00Z",
+            "manuallyAddedBy": "John Doe",
+            "isHccValid": true,
+            "isChanged": false,
+            "defaultPosition": "VALID",
+            "actionEventAuditId": "audit123",
+            "isMostSpecific": true,
+            "providerNames": ["Provider1", "Provider2"],
+            "formedCodes": ["Code1", "Code2"],
+            "children": [],
+            "expanded": true,
+            "isShow": true,
+            "isComboCode": false,
+            "diseaseSource": "VALID_DISEASE",
+            "suspectType": ["HEADER_MISSING", "DOS_MISSING"],
+            "diseaseAudit": {
+              "aiSources": ["COGG_4_TURBO_1106", "COGG_4_TURBO_0125,"],
+              "codeSource": "RULE_ENGINE",
+              "directConfirmation": true
+            }
+          }
+        ],
+        "expanded": true,
+        "isShow": true,
+        "isComboCode": false,
+        "diseaseSource": "VALID_DISEASE",
+        "suspectType": ["HEADER_MISSING", "DOS_MISSING"],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106", "COGG_4_TURBO_0125,"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": true
+        }
+      }
+    ],
+    "suggestRadiologyCombo": [
+      {
+        "diseaseName": "Example Disease",
+        "diagnosisCodeCombo": "ABC123",
+        "addOnCode": "XYZ789",
+        "addOnCodeTwo": "DEF456",
+        "addOnCodeThree": "GHI012",
+        "comboCodeCapturedFromHeader": "section123",
+        "ruleType": "COMBINATION_RULE_ENGINE",
+        "dateOfServices": ["2024-05-10", "2024-05-11"],
+        "hyperlinks": [
+          {
+            "header": "Link Header",
+            "pageNumber": 1,
+            "substring": "Link Substring",
+            "dateOfService": "2024-05-10"
+          },
+          {
+            "header": "Another Link Header",
+            "pageNumber": 2,
+            "substring": "Another Link Substring",
+            "dateOfService": "2024-05-11"
+          }
+        ],
+        "providerNames": ["Provider1", "Provider2"],
+        "capturedSections": ["Section1", "Section2"],
+        "providers": [
+          {
+            "providerName": "Provider1",
+            "authorizedProvider": false,
+            "unAuthorizeProvider": false,
+            "noCredential": false,
+            "unSigned": false
+          }
+        ],
+        "encounterDate": "2024-05-10",
+        "formedCodes": ["FormedCode1", "FormedCode2"],
+        "expanded": true,
+        "children": []
+      }
+    ],
+    "suggestLab": [
+      {
+        "diagnosisCode": "A123",
+        "actualDescription": "Description of the actual diagnosis",
+        "dbDescription": "Description of the diagnosis from the database",
+        "notes": "Additional notes related to the diagnosis",
+        "capturedSections": ["section1", "section2"],
+        "dateOfServices": ["2024-05-10", "2024-05-11"],
+        "hyperlinks": [
+          {
+            "header": "section1",
+            "pageNumber": 1,
+            "substring": "Substring1",
+            "dateOfService": "2024-05-10"
+          },
+          {
+            "header": "section2",
+            "pageNumber": 2,
+            "substring": "Substring2",
+            "dateOfService": "2024-05-11"
+          }
+        ],
+        "encounterDate": "2024-05-11",
+        "isManuallyAdded": true,
+        "manuallyAddedAt": "2024-05-10T08:30:00Z",
+        "manuallyAddedBy": "John Doe",
+        "isHccValid": true,
+        "isChanged": false,
+        "defaultPosition": "VALID",
+        "actionEventAuditId": "audit123",
+        "isMostSpecific": true,
+        "providerNames": ["Provider1", "Provider2"],
+        "formedCodes": ["Code1", "Code2"],
+        "children": [
+          {
+            "diagnosisCode": "A123",
+            "actualDescription": "Description of the actual diagnosis",
+            "dbDescription": "Description of the diagnosis from the database",
+            "notes": "Additional notes related to the diagnosis",
+            "capturedSections": ["section1", "section2"],
+            "dateOfServices": ["2024-05-10", "2024-05-11"],
+            "hyperlinks": [
+              {
+                "header": "section1",
+                "pageNumber": 1,
+                "substring": "Substring1",
+                "dateOfService": "2024-05-10"
+              },
+              {
+                "header": "section2",
+                "pageNumber": 2,
+                "substring": "Substring2",
+                "dateOfService": "2024-05-11"
+              }
+            ],
+            "encounterDate": "2024-05-11",
+            "isManuallyAdded": true,
+            "manuallyAddedAt": "2024-05-10T08:30:00Z",
+            "manuallyAddedBy": "John Doe",
+            "isHccValid": true,
+            "isChanged": false,
+            "defaultPosition": "VALID",
+            "actionEventAuditId": "audit123",
+            "isMostSpecific": true,
+            "providerNames": ["Provider1", "Provider2"],
+            "formedCodes": ["Code1", "Code2"],
+            "children": [],
+            "expanded": true,
+            "isShow": true,
+            "isComboCode": false,
+            "diseaseSource": "VALID_DISEASE",
+            "suspectType": ["HEADER_MISSING", "DOS_MISSING"],
+            "diseaseAudit": {
+              "aiSources": ["COGG_4_TURBO_1106", "COGG_4_TURBO_0125,"],
+              "codeSource": "RULE_ENGINE",
+              "directConfirmation": true
+            }
+          }
+        ],
+        "expanded": true,
+        "isShow": true,
+        "isComboCode": false,
+        "diseaseSource": "VALID_DISEASE",
+        "suspectType": ["HEADER_MISSING", "DOS_MISSING"],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106", "COGG_4_TURBO_0125,"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": true
+        }
+      }
+    ],
+    "comboDisease": [
+      {
+        "diseaseName": "Example Disease",
+        "diagnosisCodeCombo": "ABC123",
+        "addOnCode": "XYZ789",
+        "addOnCodeTwo": "DEF456",
+        "addOnCodeThree": "GHI012",
+        "comboCodeCapturedFromHeader": "section123",
+        "ruleType": "COMBINATION_RULE_ENGINE",
+        "dateOfServices": ["2024-05-10", "2024-05-11"],
+        "hyperlinks": [
+          {
+            "header": "section1",
+            "pageNumber": 1,
+            "substring": "Link Substring",
+            "dateOfService": "2024-05-10"
+          },
+          {
+            "header": "section2",
+            "pageNumber": 2,
+            "substring": "Another Link Substring",
+            "dateOfService": "2024-05-11"
+          }
+        ],
+        "providerNames": ["Provider1", "Provider2"],
+        "capturedSections": ["section1", "section2"],
+        "providers": [
+          {
+            "providerName": "Provider1",
+            "authorizedProvider": false,
+            "unAuthorizeProvider": false,
+            "noCredential": false,
+            "unSigned": false
+          }
+        ],
+        "encounterDate": "2024-05-10",
+        "formedCodes": ["FormedCode1", "FormedCode2"],
+        "expanded": true,
+        "children": []
+      }
+    ],
+    "meatCriteria": [
+      {
+        "diseaseName": "Example Disease",
+        "diagnosisCode": "ABC123",
+        "visitDetailsDTO": {
+          "providerSet": [
+            {
+              "providerName": "Dr. Jane Smith, MD",
+              "authorizedProvider": true,
+              "unAuthorizeProvider": false,
+              "noCredential": false,
+              "unSigned": false
+            }
+          ],
+          "capturedSectionsList": ["section1", "section2", "section3"],
+          "encounterDate": "2024-05-10"
+        },
+
+        "isMeatCriteriaPresent": true,
+        "monitorCapturedFromHeader": "Monitor Captured From Header",
+        "monitor": "Monitor Info",
+        "evaluateCapturedFromHeader": "Evaluate Captured From Header",
+        "evaluate": "Evaluate Info",
+        "assessmentCapturedFromHeader": "Assessment Captured From Header",
+        "assessment": "Assessment Info",
+        "treatmentCapturedFromHeader": "Treatment Captured From Header",
+        "treatment": "Treatment Info",
+        "encounterDate": "2024-05-10",
+        "radiology": true,
+        "lab": false,
+        "hyperlinks": [
+          {
+            "header": "Monitor Captured From Header",
+            "pageNumber": 1,
+            "substring": "Substring1",
+            "dateOfService": "2024-05-10"
+          },
+          {
+            "header": "Evaluate Captured From Header",
+            "pageNumber": 2,
+            "substring": "Substring2",
+            "dateOfService": "2024-05-11"
+          },
+          {
+            "header": "Assessment Captured From Header",
+            "pageNumber": 3,
+            "substring": "Substring1",
+            "dateOfService": "2024-05-10"
+          },
+          {
+            "header": "Treatment Captured From Header",
+            "pageNumber": 4,
+            "substring": "Substring2",
+            "dateOfService": "2024-05-11"
+          }
+        ]
+      }
+    ],
+    "dosFiltered": {
+      "20240101": [1, 2, 3],
+      "20240102": [4, 5],
+      "20240103": [6]
+    },
+
+    "rafScore": {
+      "v24Score": 9.5,
+      "v28Score": 11.2,
+      "V24Score70Percent": 6.65,
+      "V28Score30Percent": 3.36,
+      "score": 12.0,
+      "rafVersionDTO": {
+        "rafYear": 2024,
+        "v24Percentage": 70.0,
+        "v28Percentage": 30.0,
+        "v24Score": 30.0,
+        "v28Score": 40.0,
+        "overAllScore": 35.0
+      },
+      "scoreOutputDTOList": [
+        {
+          "demo": {
+            "age": 67.0,
+            "orec": 3,
+            "sex": "F"
+          },
+          "dx_hccs": [
+            {
+              "dx_desc": "Chronic Obstructive Pulmonary Disease",
+              "dx_name": "COPD",
+              "hcc_list": [
+                {
+                  "hcc_desc": "COPD with Acute Exacerbation",
+                  "hcc_name": "HCC110",
+                  "hcc_raf": 0.7,
+                  "premium": 20,
+                  "trumped_by": ["HCC111"]
+                },
+                {
+                  "hcc_desc": "COPD without Acute Exacerbation",
+                  "hcc_name": "HCC111",
+                  "hcc_raf": 0.5,
+                  "premium": 15,
+                  "trumped_by": []
+                }
+              ]
+            }
+          ],
+          "flag": "OK",
+          "hcc_model": {
+            "model": "V24",
+            "version": "1.0"
+          },
+          "raf": {
+            "demo_detail": {
+              "CNA_F65_69": 0.6
+            },
+            "demo_score": 1.3,
+            "hcc_detail": {
+              "HCC110": 0.5
+            },
+            "hcc_score": 0.8,
+            "premium": 22,
+            "score": 3.1
+          }
+        }
+      ]
+    }
+  },
+  "encounterYears": [2023],
+  "fileUrl": "https://image-url-here",
+
+  "suggestLabInReport": null,
+  "suggestRadiologyInReport": null,
+
+  "insulinDisease": null,
+
+  "scoreOutputDTO": null,
+  "scoreDetailVersionDTO": null,
+  "fileDetailDTO": {
+    "patientId": "123456",
+    "fileId": "7890",
+    "userId": "user123",
+    "orgId": "org456",
+    "yearOfService": 2024,
+    "dos": "2024-05-12",
+    "customerType": "SYNC_API_ONLY",
+    "fileType": "CHART",
+    "documentDos": {
+      "Test A": {
+        "testName": "Test A",
+        "pageNumbers": [1, 2, 3]
+      },
+      "Test B": {
+        "testName": "Test B",
+        "pageNumbers": [4, 5]
+      }
+    },
+    "tenantId": "tenant789",
+    "fileName": "example.pdf",
+    "azureBlobPath": "https://example.blob.core.windows.net/container/example.pdf",
+    "file_url": "https://example.com/files/7890",
+    "exceptionInfo": [
+      {
+        "exceptionId": "ex123",
+        "exceptionType": "FILE_NOT_FOUND"
+      },
+      {
+        "exceptionId": "ex456",
+        "exceptionType": "INVALID_FORMAT"
+      }
+    ],
+    "action": "UPDATE"
+  },
+
+  "radiologyRawConentId": "radContent123",
+  "radiologyFilesId": ["radFile1", "radFile2", "radFile3"],
+  "labRawContentId": "labContent456",
+  "labFilesId": ["labFile1", "labFile2"],
+  "comments": "These are some comments regarding the files."
+}
