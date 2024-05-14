@@ -263,8 +263,8 @@ const Accuracy = () => {
             "Total Correct: " +
             finalData.totalCorrectCount +
             "<br/>" +
-            "Total Correct: " +
-            finalData.totalCorrectCount
+            "Total Wrong: " +
+            finalData.totalWrongCount
           );
         } else {
           return "No data available";
