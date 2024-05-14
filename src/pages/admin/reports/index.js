@@ -14,7 +14,6 @@ import { disableFutureDate } from "../../../components/headerFilters/functions";
 import { patientDetails } from "../../../stores/authflow/actions";
 import { getSentDetails } from "../../../store/actions/ReportActions";
 import { connect, useDispatch } from "react-redux";
-import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import MoreFilter from "../../../resusablereport/reports/MoreFilter";
 import ReviewerReport from "../../../resusablereport/reports/reviewerReport";
@@ -43,7 +42,6 @@ const options = [
 
 const Reports = ({ workFgetFlagsowData }) => {
   const dispatch = useDispatch();
-  const route = useRouter();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
   const ReportPatientDetails = useSelector((state) => state.report?.details);
   const SentReportDetails = useSelector((state) => state.report?.sentDetails);
@@ -71,18 +69,8 @@ const Reports = ({ workFgetFlagsowData }) => {
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [paginationReceivedFirst, setPaginationReceivedFirst] = useState(0);
   const [paginationSentFirst, setPaginationSentFirst] = useState(0);
-  const [selectedCoderOptReport, setSelectedCoderOptReport] = useState("");
-  const [selectManager, setSelectedManger] = useState("");
   const [modal, setModal] = useState(false);
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
-  const [receivedStartDate, setReceivedStartDate] = useState();
-  const [receivedEndDate, setReceivedEndDate] = useState();
-  const [coderStartDate, setCoderStartDate] = useState();
-  const [coderEndDate, setCoderEndDate] = useState();
   const [selectedDates, setSelectedDates] = useState([]);
-  const [selectedCoderOpt, setSelectedCoderOpt] = useState("");
-  const [coderSearch, setCoderSearch] = useState("");
   const [receivedSortOrder, setReceivedSortOrder] = useState("DESC");
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
@@ -222,7 +210,6 @@ const Reports = ({ workFgetFlagsowData }) => {
     }
   }, [
     pageNo,
-    coderSearch,
     sentPageNo,
     receivedPageNo,
     receivedPageNo,

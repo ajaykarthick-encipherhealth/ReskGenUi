@@ -23,7 +23,6 @@ import {
 import { connect, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
-import MoreFilter from "../../../resusablereport/reports/MoreFilter";
 import ReviewerReport from "../../../resusablereport/reports/reviewerReport";
 import SentReport from "../../../resusablereport/reports/sentReport";
 import ReceivedReport from "../../../resusablereport/reports/receivedReport";
@@ -55,25 +54,16 @@ const Reports = ({ workFgetFlagsowData }) => {
   const [filteredCOder, setFilteredCoder] = useState([]);
   const [comments, setComments] = useState();
   const [selectedRows, setSelectedRows] = useState([]);
-  const [selectAllCheckBoxes, setSelectAllCheckBoxes] = useState(false);
   const [pageNo, setPageNo] = useState(0);
   const [sentPageNo, setSentPageNo] = useState(0);
   const [receivedPageNo, setReceivedPageNo] = useState(0);
-  const [selectedData, setSelectedData] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [paginationReceivedFirst, setPaginationReceivedFirst] = useState(0);
   const [paginationSentFirst, setPaginationSentFirst] = useState(0);
   const [teamPageNo, setTeamPageNo] = useState(0);
   const [modal, setModal] = useState(false);
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
-  const [receivedStartDate, setReceivedStartDate] = useState();
-  const [receivedEndDate, setReceivedEndDate] = useState();
   const [selectedDates, setSelectedDates] = useState([]);
-  const [teamStartDate, setTeamStartDate] = useState();
-  const [teamSearch, setTeamSearch] = useState("");
-  const [teamEndDate, setTeamEndDate] = useState();
   const [receivedSortOrder, setReceivedSortOrder] = useState("DESC");
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
@@ -370,9 +360,7 @@ const Reports = ({ workFgetFlagsowData }) => {
                 <div className="tbl-caption  align-items-center">
                   <div className="tbl-caption  align-items-center">
                     <div
-                      className={`row filter-contain mt-4 mb-${
-                        selectedData?.length > 0 ? "3" : "0"
-                      } `}
+                      className={`row filter-contain mt-4 mb-0 `}
                     >
                       <div className="col-xl-2">
                         <div className="d-flex w-100">
@@ -536,8 +524,8 @@ const Reports = ({ workFgetFlagsowData }) => {
                         sortOrder={sentSortOrder}
                         setSort={setSort}
                         receivedPageNo={sentPageNo}
-                        receivedStartDate={startDate}
-                        receivedEndDate={endDate}
+                        receivedStartDate={selectedDateRanges?.Sent?.from}
+                        receivedEndDate={selectedDateRanges?.Sent?.to}
                         isPhysician={true}
                       />
                     </div>
@@ -554,8 +542,8 @@ const Reports = ({ workFgetFlagsowData }) => {
                         sortOrder={sentSortOrder}
                         setSort={setSort}
                         receivedPageNo={sentPageNo}
-                        receivedStartDate={startDate}
-                        receivedEndDate={endDate}
+                        receivedStartDate={selectedDateRanges?.TeamReport?.from}
+                        receivedEndDate={selectedDateRanges?.TeamReport?.to}
                         isPhysician={true}
                       />
                     </div>
@@ -567,8 +555,8 @@ const Reports = ({ workFgetFlagsowData }) => {
                         details={ReceivedReportDetails?.data?.response}
                         onPageChange={onReceivedPageChange}
                         receivedPageNo={receivedPageNo}
-                        receivedStartDate={receivedStartDate}
-                        receivedEndDate={receivedEndDate}
+                        receivedStartDate={selectedDateRanges?.Received?.from}
+                        receivedEndDate={selectedDateRanges?.Received?.to}
                         loading={ReceivedReportDetails?.loading}
                         setSortOrder={setReceivedSortOrder}
                         sortOrder={receivedSortOrder}
