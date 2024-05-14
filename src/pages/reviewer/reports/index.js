@@ -425,7 +425,7 @@ const Reports = ({workFgetFlagsowData}) => {
                       </div>
 
                       {!reportActiveTab || reportActiveTab === "Reviewer" ? (
-                        <div className="col-xl-4">
+                        <div className="col-xl-6">
                           <div className="row flr">
                             <Tooltip
                               title={

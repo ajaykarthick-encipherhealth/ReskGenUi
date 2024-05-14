@@ -28,7 +28,6 @@ import {
 import { actions as workflowActions } from "../../../stores/reviewer/workqueue";
 import { getSelectUserList } from "../../../store/actions/adminAction/DashboardAction";
 
-
 const statusOptions = [
   { label: "All", value: "ALL" },
   { label: "Completed", value: "COMPLETED" },
@@ -162,6 +161,10 @@ const Reports = ({ workFgetFlagsowData }) => {
     dispatch(getActiveTab(name));
     setSearch();
     setSearchVal([]);
+    if (name !== "Admin") {
+      setSelectedData([]);
+      setSelectAllCheckBoxes(false)
+    }
   };
 
   useEffect(() => {
@@ -466,53 +469,9 @@ const Reports = ({ workFgetFlagsowData }) => {
                           </div>
                         </div>
                       </div>
-                      {reportActiveTab === "Admin" && (
-                        <div className="col-xl-2">
-                          <MoreFilter
-                            checkedList={checkedList}
-                            selectAll={selectAllCheckBoxes}
-                            setSelectAll={setSelectAllCheckBoxes}
-                            selectedData={selectedData}
-                            setSelectedData={setSelectedData}
-                          />
-                        </div>
-                      )}
-
-                      {!reportActiveTab || reportActiveTab === "Admin" ? (
-                        <div className="col-xl-6">
-                          <div className="row flr">
-                            <Tooltip
-                              title={
-                                rowsLength?.length === 0
-                                  ? "Select report to export"
-                                  : ""
-                              }
-                            >
-                              <button
-                                onClick={() => {
-                                  setIsModalVisible(true);
-                                }}
-                                className={styles.export}
-                                disabled={
-                                  rowsLength?.length > 0 ||
-                                  rowsLength?.data?.length > 0
-                                    ? false
-                                    : true
-                                }
-                                style={{ color: "#04306f" }}
-                              >
-                                <ExportImg />
-                                Export
-                              </button>
-                            </Tooltip>
-                          </div>
-                        </div>
-                      ) : null}
-                    </div>
-                    <div className="row filter-contain">
                       {selectedData?.length > 0 &&
                         selectedData?.map((info) => (
-                          <div className="col-xl-2 mt-3">
+                          <div className="col-xl-2">
                             <div className="d-flex w-100">
                               {info?.name && (
                                 <label className="labelStyle d-flex m-auto">
@@ -587,6 +546,45 @@ const Reports = ({ workFgetFlagsowData }) => {
                             </div>
                           </div>
                         ))}
+                      {reportActiveTab === "Admin" && (
+                        <div className={`col-xl-${selectedData?.length===0? "8":"2"} d-flex`}>
+                          <div className={`col-xl-${selectedData?.length===0? "10":"0"} mx-${selectedData?.length ===0?"4":"0"} py-2`}>
+                          <MoreFilter
+                            checkedList={checkedList}
+                            selectAll={selectAllCheckBoxes}
+                            setSelectAll={setSelectAllCheckBoxes}
+                            selectedData={selectedData}
+                            setSelectedData={setSelectedData}
+                          />
+                          </div>
+                          {!reportActiveTab || reportActiveTab === "Admin" ? (
+                            <Tooltip
+                              title={
+                                rowsLength?.length === 0
+                                  ? "Select report to export"
+                                  : ""
+                              }
+                            >
+                              <button
+                                onClick={() => {
+                                  setIsModalVisible(true);
+                                }}
+                                className={styles.export}
+                                disabled={
+                                  rowsLength?.length > 0 ||
+                                  rowsLength?.data?.length > 0
+                                    ? false
+                                    : true
+                                }
+                                style={{ color: "#04306f" }}
+                              >
+                                <ExportImg />
+                                Export
+                              </button>
+                            </Tooltip>
+                          ) : null}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -595,24 +593,25 @@ const Reports = ({ workFgetFlagsowData }) => {
                   {reportActiveTab === "Admin" && (
                     <div>
                       <ReviewerReport
-                        setModal={setModal}
-                        modal={modal}
+                        // setModal={setModal}
+                        // modal={modal}
                         reportListAll={filteredCOder}
                         paginationFirst={paginationFirst}
                         ReportPatientDetails={ReportPatientDetails?.response}
                         onPageChange={onPageChange}
-                        comments={comments}
-                        setComments={setComments}
+                        // comments={comments}
+                        // setComments={setComments}
                         patientDetails={patientDetails}
                         setSelectedRows={setSelectedRows}
                         selectedRows={selectedRows}
                         setSelectAll={setSelectAll}
                         selectAll={selectAll}
-                        setSortOrder={setCoderSortOrder}
-                        sortOrder={coderSortOrder}
-                        setSort={setSort}
+                        // setSortOrder={setCoderSortOrder}
+                        // sortOrder={coderSortOrder}
+                        // setSort={setSort}
                         gotoPatientDetails={gotoPatientDetails}
                         page={{ pageNo, paginationFirst }}
+                        isAdmin={true}
                       />
                     </div>
                   )}
@@ -624,12 +623,9 @@ const Reports = ({ workFgetFlagsowData }) => {
                         details={SentReportDetails?.data?.response}
                         onSentPageChange={onSentPageChange}
                         loading={SentReportDetails?.loading}
-                        setSortOrder={setSentSortOrder}
-                        sortOrder={sentSortOrder}
-                        setSort={setSort}
                         receivedPageNo={sentPageNo}
-                        receivedStartDate={startDate}
-                        receivedEndDate={endDate}
+                        receivedStartDate={selectedDateRanges?.Sent?.from}
+                        receivedEndDate={selectedDateRanges?.Sent?.to}
                         isPhysician={true}
                       />
                     </div>
@@ -640,14 +636,14 @@ const Reports = ({ workFgetFlagsowData }) => {
                         paginationFirst={paginationReceivedFirst}
                         details={ReceivedReportDetails?.data?.response}
                         onPageChange={onReceivedPageChange}
-                        receivedPageNo={receivedPageNo}
-                        receivedStartDate={receivedStartDate}
-                        receivedEndDate={receivedEndDate}
-                        loading={ReceivedReportDetails?.loading}
-                        setSortOrder={setReceivedSortOrder}
-                        sortOrder={receivedSortOrder}
-                        setSort={setSort}
-                        isPhysician={true}
+                        // receivedPageNo={receivedPageNo}
+                        // receivedStartDate={ selectedDateRanges?.Received?.from}
+                        // receivedEndDate={ selectedDateRanges?.Received?.to}
+                        // loading={ReceivedReportDetails?.loading}
+                        // setSortOrder={setReceivedSortOrder}
+                        // sortOrder={receivedSortOrder}
+                        // setSort={setSort}
+                        // isPhysician={true}
                       />
                     </div>
                   )}

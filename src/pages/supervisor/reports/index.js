@@ -39,7 +39,7 @@ const statusOptions = [
   { label: "Hold", value: "HOLD" },
 ];
 
-const Reports = ({workFgetFlagsowData}) => {
+const Reports = ({ workFgetFlagsowData }) => {
   const dispatch = useDispatch();
   const route = useRouter();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
@@ -56,7 +56,7 @@ const Reports = ({workFgetFlagsowData}) => {
   const [comments, setComments] = useState();
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectAllCheckBoxes, setSelectAllCheckBoxes] = useState(false);
-  const [pageNo, setPageNo] = useState(7);
+  const [pageNo, setPageNo] = useState(0);
   const [sentPageNo, setSentPageNo] = useState(0);
   const [receivedPageNo, setReceivedPageNo] = useState(0);
   const [selectedData, setSelectedData] = useState([]);
@@ -156,25 +156,37 @@ const Reports = ({workFgetFlagsowData}) => {
 
   useEffect(() => {
     setIsLoading(false);
+    const coderSearchString = searchVal.find(
+      (item) => item.field === "initialSearch"
+    )?.search;
+    setIsLoading(false);
+    const activeTabFromStorage = localStorage.getItem("activeTab");
+    const activeTab = activeTabFromStorage
+      ? activeTabFromStorage
+      : "Audit Report";
+    dispatch(getActiveTab(activeTab));
 
-    if (reportActiveTab === "Sent") {
+    if (activeTab === "Sent") {
       dispatch(
-        getSentDetails(sentPageNo, startDate, endDate, sentSearch, sort)
-      );
-    }
-    if (reportActiveTab === "Received") {
-      dispatch(
-        getReceivedDetails(
-          receivedPageNo,
-          receivedStartDate,
-          receivedEndDate,
-          receivedSearch,
+        getSentDetails(
+          sentPageNo,
+          selectedDateRanges?.Sent?.from,
+          selectedDateRanges?.Sent?.to,
+          coderSearchString ? coderSearchString : "",
           sort
         )
       );
-    }
-
-    if (!reportActiveTab || reportActiveTab === "AuditReport") {
+    } else if (activeTab === "Received") {
+      dispatch(
+        getReceivedDetails(
+          receivedPageNo,
+          selectedDateRanges?.Received?.from,
+          selectedDateRanges?.Received?.to,
+          coderSearchString ? coderSearchString : "",
+          sort
+        )
+      );
+    } else {
       dispatch(
         getReportDetails(
           pageNo,
@@ -188,7 +200,6 @@ const Reports = ({workFgetFlagsowData}) => {
         )
       );
     }
-
     if (reportActiveTab === "TeamReport") {
       dispatch(
         getTeamReportDetails(
@@ -204,30 +215,17 @@ const Reports = ({workFgetFlagsowData}) => {
     if (ExportResponse) {
       setIsModalVisible(false);
     }
-    workFgetFlagsowData()
+    workFgetFlagsowData();
   }, [
     pageNo,
     sentPageNo,
     receivedPageNo,
-    reportActiveTab,
-    ExportResponse,
-    selectedCoderOpt,
-    coderSearch,
-    coderStartDate,
-    coderEndDate,
-    startDate,
-    endDate,
-    sentSearch,
     receivedPageNo,
-    receivedStartDate,
-    receivedEndDate,
-    receivedSearch,
-    reportActiveTab,
+    receivedSortOrder,
     sort,
-    teamSearch,
-    teamEndDate,
-    teamStartDate,
-    teamPageNo,
+    searchVal,
+    selectedOptions,
+    selectedDateRanges,
   ]);
 
   useEffect(() => {
@@ -468,7 +466,7 @@ const Reports = ({workFgetFlagsowData}) => {
                       </div>
                       {!reportActiveTab ||
                       reportActiveTab === "Audit Report" ? (
-                        <div className="col-xl-4">
+                        <div className="col-xl-6">
                           <div className="row flr">
                             <Tooltip
                               title={

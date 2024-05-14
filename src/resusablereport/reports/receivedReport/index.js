@@ -10,7 +10,6 @@ import {
 } from "../../../components/headerFilters/functions";
 import { colors } from "../sentReport";
 import SpinnerDots from "../../../components/spinner";
-import { Empty } from "antd";
 
 const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
   const [reportActiveTab, setReportActiveTab] = useState("Supervisor");
