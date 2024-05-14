@@ -122,6 +122,7 @@ console.log(reportActiveTab,"d")
   };
 
   const handleCoderPicker = (date, dateString, tabName) => {
+    const nameString = tabName?.split(" ").join("");
     const formattedDates = dateString?.map((date, index) => {
       const formattedDate =
         index === 1
@@ -129,13 +130,14 @@ console.log(reportActiveTab,"d")
           : date && `${date}T00:00:00.000Z`;
       return formattedDate;
     });
+
     setSelectedDates((prevOptions) => ({
       ...prevOptions,
       [tabName]: date,
     }));
     setSelecteddateRanges((prevOptions) => ({
       ...prevOptions,
-      [tabName]: { from: formattedDates[0], to: formattedDates[1] },
+      [nameString]: { from: formattedDates[0], to: formattedDates[1] },
     }));
   };
 
@@ -187,10 +189,12 @@ console.log(reportActiveTab,"d")
       dispatch(
         getReportDetails(
           pageNo,
-          coderStartDate,
-          coderEndDate,
-          coderSearch,
-          selectedCoderOpt,
+          selectedDateRanges?.AuditReport?.from,
+          selectedDateRanges?.AuditReport?.to,
+          coderSearchString ? coderSearchString : "",
+          selectedOptions?.reviewerStatus
+            ? selectedOptions?.reviewerStatus
+            : "",
           sort
         )
       );
@@ -200,9 +204,9 @@ console.log(reportActiveTab,"d")
       dispatch(
         getTeamReportDetails(
           teamPageNo,
-          teamStartDate,
-          teamEndDate,
-          teamSearch,
+          selectedDateRanges?.TeamReport?.from,
+          selectedDateRanges?.TeamReport?.to,
+          coderSearchString ? coderSearchString : "",
           sort
         )
       );
@@ -267,12 +271,6 @@ console.log(reportActiveTab,"d")
     }
   };
 
-  const backRender = () => {
-    const user = localStorage.getItem("userRole");
-    if (user == "reviewer") {
-      route.push("/reviewer/report?page=0&limit=0");
-    }
-  };
   const dosOnChange = (selectedOption, name) => {
     const nameString = name?.split(" ").join("");
     setSelectedOptions((prevOptions) => ({
@@ -321,63 +319,6 @@ console.log(reportActiveTab,"d")
     const field = event.target.name;
     debouncedSearch(value, setSearchVal, field);
   };
-
-  const checkedList = [
-    {
-      id: 1,
-      name: "Audited Status",
-      isSelect: true,
-    },
-    {
-      id: 2,
-      name: "Flag",
-      isSelect: true,
-    },
-    {
-      id: 3,
-      name: "Raf Score",
-      isSelect: false,
-      isSearch: true,
-    },
-    {
-      id: 4,
-      name: "Patient name",
-      isSearch: true,
-    },
-    {
-      id: 12,
-      name: "Flag",
-      isRangePikcer: true,
-    },
-    {
-      id: 13,
-      name: "Raf Score",
-      isSelect: false,
-      isSearch: true,
-    },
-    {
-      id: 14,
-      name: "Patient name",
-      isSearch: true,
-    },
-    {
-      id: 22,
-      name: "Flag",
-      isSelect: true,
-    },
-    {
-      id: 32,
-      name: "Raf Score",
-      isSelect: false,
-      isRangePikcer: true,
-    },
-    {
-      id: 42,
-      name: "Patient name",
-      isSearch: true,
-    },
-  ];
-
   return (
     <div>
       <Header />
@@ -535,15 +476,6 @@ console.log(reportActiveTab,"d")
                           </div>
                         </div>
                       </div>
-                      <div className="col-xl-2">
-                        <MoreFilter
-                          checkedList={checkedList}
-                          selectAll={selectAllCheckBoxes}
-                          setSelectAll={setSelectAllCheckBoxes}
-                          selectedData={selectedData}
-                          setSelectedData={setSelectedData}
-                        />
-                      </div>
                       {!reportActiveTab ||
                       reportActiveTab === "Audit Report" ? (
                         <div className="col-xl-4">
@@ -575,76 +507,6 @@ console.log(reportActiveTab,"d")
                           </div>
                         </div>
                       ) : null}
-                    </div>
-                    <div className="row filter-contain">
-                      {selectedData?.length > 0 &&
-                        selectedData?.map((info) => (
-                          <div className="col-xl-2 mt-3">
-                            <div className="d-flex w-100">
-                              <label className="labelStyle d-flex m-auto">
-                                {" "}
-                                {info.name}
-                              </label>
-                              <div className="form-group has-search2 w-100">
-                                {info?.isSearch && (
-                                  <FontAwesomeIcon
-                                    className="fa fa-search form-control-feedback"
-                                    icon={faSearch}
-                                  />
-                                )}
-                                {info?.isSelect ? (
-                                  <Select
-                                    onChange={(selectedOption) => {
-                                      dosOnChange(selectedOption, info.name);
-                                    }}
-                                    options={statusOptions}
-                                    className={`custom-react-select`}
-                                    isSearchable={false}
-                                  />
-                                ) : info?.isRangePikcer ? (
-                                  <RangePicker
-                                    style={{
-                                      borderRadius: "0 5px 5px 0",
-                                      width: "100%",
-                                    }}
-                                    value={
-                                      selectedDates
-                                        ? selectedDates[info?.name]
-                                        : undefined
-                                    }
-                                    onChange={(date, dateString) =>
-                                      handleCoderPicker(
-                                        date,
-                                        dateString,
-                                        info?.name
-                                      )
-                                    }
-                                    disabledDate={(current) =>
-                                      disableFutureDate(current)
-                                    }
-                                  />
-                                ) : (
-                                  <InputText
-                                    name={info?.name}
-                                    type="text"
-                                    onChange={(e) => filterChangePatientId(e)}
-                                    className="form-control new-form-control reportInput"
-                                    placeholder="Search"
-                                    maxLength={25}
-                                    value={search?.searchVal}
-                                    onKeyDown={(e) => {
-                                      // Prevent input of backslash ("\")
-                                      if (e.key === "\\") {
-                                        e.preventDefault();
-                                      }
-                                    }}
-                                  />
-                                )}
-                                {/* )} */}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
                     </div>
                   </div>
                 </div>
