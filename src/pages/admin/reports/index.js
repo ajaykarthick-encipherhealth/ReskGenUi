@@ -13,7 +13,7 @@ import { debounce } from "../../admin/report/Export";
 import { disableFutureDate } from "../../../components/headerFilters/functions";
 import { patientDetails } from "../../../stores/authflow/actions";
 import { getSentDetails } from "../../../store/actions/ReportActions";
-import { useDispatch } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import MoreFilter from "../../../resusablereport/reports/MoreFilter";
@@ -25,6 +25,7 @@ import {
   getReceivedDetails,
   getReportDetails,
 } from "../../../store/actions/adminAction/ReportActions";
+import { actions as workflowActions } from "../../../stores/reviewer/workqueue";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -34,7 +35,7 @@ const statusOptions = [
   { label: "Hold", value: "HOLD" },
 ];
 
-const Reports = () => {
+const Reports = ({ workFgetFlagsowData }) => {
   const dispatch = useDispatch();
   const route = useRouter();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
@@ -63,7 +64,6 @@ const Reports = () => {
   const [paginationSentFirst, setPaginationSentFirst] = useState(0);
   const [selectedCoderOptReport, setSelectedCoderOptReport] = useState("");
   const [selectManager, setSelectedManger] = useState("");
-
   const [modal, setModal] = useState(false);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
@@ -74,8 +74,6 @@ const Reports = () => {
   const [selectedDates, setSelectedDates] = useState([]);
   const [selectedCoderOpt, setSelectedCoderOpt] = useState("");
   const [coderSearch, setCoderSearch] = useState("");
-  const [sentSearch, setSentSearch] = useState("");
-  const [receivedSearch, setReceivedSearch] = useState("");
   const [receivedSortOrder, setReceivedSortOrder] = useState("DESC");
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
@@ -164,6 +162,7 @@ const Reports = () => {
     const activeTabFromStorage = localStorage.getItem("activeTab");
     const activeTab = activeTabFromStorage ? activeTabFromStorage : "Admin";
     dispatch(getActiveTab(activeTab));
+    workFgetFlagsowData();
 
     if (activeTab === "Sent") {
       dispatch(
@@ -508,7 +507,7 @@ const Reports = () => {
                         />
                       </div>
 
-                      { !reportActiveTab || reportActiveTab === "Admin" ? 
+                      {!reportActiveTab || reportActiveTab === "Admin" ? (
                         <div className="col-xl-6">
                           <div className="row flr">
                             <Tooltip
@@ -536,8 +535,8 @@ const Reports = () => {
                               </button>
                             </Tooltip>
                           </div>
-                        </div> : null
-                      }
+                        </div>
+                      ) : null}
                     </div>
                     <div className="row filter-contain">
                       {selectedData?.length > 0 &&
@@ -734,5 +733,12 @@ const Reports = () => {
     </div>
   );
 };
-
-export default Reports;
+const enhancer = connect(
+  (state) => ({
+    getFlagsData: state?.reviewer?.workQueue?.flags?.data,
+  }),
+  {
+    workFgetFlagsowData: workflowActions.flagsAction,
+  }
+);
+export default enhancer(Reports);
