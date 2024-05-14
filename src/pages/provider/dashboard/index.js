@@ -160,6 +160,7 @@ const CompletedStatusChart = () => {
           <div className="row">
             <div className="col-12">
               <div>
+             
                 <h4>File Processing chart </h4>
                 <Card borderRadius="28px" padding="10px">
                   <div className={styles.buttonDiv}>

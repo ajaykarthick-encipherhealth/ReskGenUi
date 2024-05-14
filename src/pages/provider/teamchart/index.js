@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { TeamChart } from "../../../services/adminServices/DashboardService";
 import ChartsEmbedSDK from "@mongodb-js/charts-embed-dom";
 import Donutchart from "../donutchart";
+import QualityScore from "../../demoReviewer/qualityScore";
 
 const Teamchart = () => {
   const dispatch = useDispatch();
@@ -159,6 +160,8 @@ const Teamchart = () => {
         <Donutchart />
         </div>
       </div>
+<QualityScore />
+
 
 
      </div>

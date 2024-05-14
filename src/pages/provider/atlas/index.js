@@ -13,7 +13,6 @@ import dayjs from "dayjs";
 import { getCompletedStatus } from "../../../store/actions/adminAction/DashboardAction";
 import Insights from "../insights";
 
-
 const Atlas = () => {
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
@@ -32,17 +31,17 @@ const Atlas = () => {
 
   const dispatch = useDispatch();
   const router = useRouter();
-  useEffect(() => {
-    dispatch(
-      getCOmpletedScore(
-        currentBtn.toUpperCase(),
-        currentDate.getDate(),
-        selectedMonth,
-        selectedYear,
-        router
-      )
-    );
-  }, [currentBtn, selectedMonth, selectedYear]);
+  // useEffect(() => {
+  //   dispatch(
+  //     getCOmpletedScore(
+  //       currentBtn.toUpperCase(),
+  //       currentDate.getDate(),
+  //       selectedMonth,
+  //       selectedYear,
+  //       router
+  //     )
+  //   );
+  // }, [currentBtn, selectedMonth, selectedYear]);
 
   const handleButtonClick = (index, btn) => {
     setActiveButton(index);
@@ -83,7 +82,6 @@ const Atlas = () => {
 
   const onChangeUser = (e) => {
     setSelectUser(e);
-    console.log("select user", e.value);
   };
 
   const optionsUser = [
@@ -91,51 +89,51 @@ const Atlas = () => {
     { value: "praveen01@encipherhealth.onmicrosoft.com", label: "Praveen" },
     {
       value: "michael@encipherhealth.onmicrosoft.com",
-      label: "michael@encipherhealth.onmicrosoft.com",
+      label: "Michael",
     },
     {
       value: "vignesh@encipherhealth.onmicrosoft.com",
-      label: "vignesh@encipherhealth.onmicrosoft.com",
+      label: "Vignesh",
     },
     {
       value: "peter@encipherhealth.onmicrosoft.com",
-      label: "peter@encipherhealth.onmicrosoft.com",
+      label: "Peter",
     },
     {
       value: "ranjith01@encipherhealth.onmicrosoft.com",
-      label: "ranjith01@encipherhealth.onmicrosoft.com",
+      label: "Ranjith",
     },
     {
       value: "henry@encipherhealth.onmicrosoft.com",
-      label: "henry@encipherhealth.onmicrosoft.com",
+      label: "Henry",
     },
     {
       value: "watson@encipherhealth.onmicrosoft.com",
-      label: "watson@encipherhealth.onmicrosoft.com",
+      label: "Watson",
     },
     {
       value: "uvais01@encipherhealth.onmicrosoft.com",
-      label: "uvais01@encipherhealth.onmicrosoft.com",
+      label: "Uvais",
     },
     {
       value: "logesh01@encipherhealth.onmicrosoft.com",
-      label: "logesh01@encipherhealth.onmicrosoft.com",
+      label: "lLogesh",
     },
     {
       value: "benj@encipherhealth.onmicrosoft.com",
-      label: "benj@encipherhealth.onmicrosoft.com",
+      label: "Benj",
     },
     {
       value: "vignesh1@encipherhealth.onmicrosoft.com",
-      label: "vignesh1@encipherhealth.onmicrosoft.com",
+      label: "Vignesh1",
     },
     {
       value: "tarun01@encipherhealth.onmicrosoft.com",
-      label: "tarun01@encipherhealth.onmicrosoft.com",
+      label: "Tarun",
     },
     {
       value: "jeans01@encipherhealth.onmicrosoft.com",
-      label: "jeans01@encipherhealth.onmicrosoft.com",
+      label: "Jeans",
     },
   ];
 
@@ -184,7 +182,7 @@ const Atlas = () => {
         date: { $gte: startDate, $lte: endDate },
       };
     }
-
+    console.log("filter", filter);
     if (charts) {
       charts.setFilter(filter);
     }
@@ -192,7 +190,7 @@ const Atlas = () => {
 
   useEffect(() => {
     if (currentBtn === "Daily" || currentBtn === "Weekly") dayChartFilter();
-  }, [selectedYear, selectedMonth]);
+  }, [selectedYear, selectedMonth, selectUser]);
 
   const monthChartFilter = () => {
     setSelectedMonth(null);
@@ -211,7 +209,7 @@ const Atlas = () => {
         date: { $gte: startYearDate, $lte: endYearDate },
       };
     }
-
+console.log("filter month",filter);
     if (charts) {
       charts.setFilter(filter);
     }
@@ -225,7 +223,7 @@ const Atlas = () => {
     const sdk = new ChartsEmbedSDK({
       baseUrl: "https://charts.mongodb.com/charts-project-0-gdoee",
       showAttribution: false,
-      gridLines:false,
+      gridLines: false,
     });
 
     const currentYear = selectedYear;
@@ -278,85 +276,86 @@ const Atlas = () => {
       <div className="container">
         <div className="row">
           <div className="col-12">
-          <div
-        style={{
-          // width: "75%",
-          // position: "relative",
-          // left: "50px",
-          // height: "450px",
-        }}
-      >
-        <h4>Completed Status</h4>
-        <Card borderRadius="28px" padding="10px" height="350px">
-          <div className={styles.buttonDiv}>
-            <div className={`d-flex ${styles.selectContainer}`}>
-              <div className={styles.select}>
-                <Select
-                  value={
-                    selectMemberType?.length === 0 ? "All" : selectMemberType
-                  }
-                  // placeholder="Select User Type"
-                  onChange={(e) => memberTypeChanges(e)}
-                  className={`custom_select_type ${styles.custom_select_type}`}
-                  options={options}
-                  style={{ backgroundColor: "#F3F3FF", width: "140px" }}
-                />
-              </div>
-              {isindividual ? (
-                <div className={styles.select}>
-                  <Select
-                    showSearch
-                    value={selectUser}
-                    placeholder="Select User"
-                    className={`custom_select_user ${styles.custom_select_user}`}
-                    onChange={(e) => onChangeUser(e)}
-                    options={optionsUser}
-                  />
+            <div
+              style={
+                {
+                  // width: "75%",
+                  // position: "relative",
+                  // left: "50px",
+                  // height: "450px",
+                }
+              }
+            >
+              <h4>Completed Status</h4>
+              <Card borderRadius="28px" padding="10px" height="350px">
+                <div className={styles.buttonDiv}>
+                  <div className={`d-flex ${styles.selectContainer}`}>
+                    <div className={styles.select}>
+                      <Select
+                        value={
+                          selectMemberType?.length === 0
+                            ? "All"
+                            : selectMemberType
+                        }
+                        // placeholder="Select User Type"
+                        onChange={(e) => memberTypeChanges(e)}
+                        className={`custom_select_type ${styles.custom_select_type}`}
+                        options={options}
+                        style={{ backgroundColor: "#F3F3FF", width: "140px" }}
+                      />
+                    </div>
+                    {isindividual ? (
+                      <div className={styles.select}>
+                        <Select
+                          showSearch
+                          value={selectUser}
+                          placeholder="Select User"
+                          className={`custom_select_user ${styles.custom_select_user}`}
+                          onChange={(e) => onChangeUser(e)}
+                          options={optionsUser}
+                        />
+                      </div>
+                    ) : null}
+                  </div>
+                  <div className={styles.picker}>
+                    <YearPicker
+                      onChangeYear={handleYearChange}
+                      onChangeMonth={handleMonthChange}
+                      type={currentBtn}
+                      bgColor="#F3F3FF"
+                      val={month}
+                      val1={year}
+                    />
+                  </div>
+                  <div className={styles.btnScroller}>
+                    <Buttonscroller
+                      selectedYear={selectedYear}
+                      selectedMonth={selectedMonth}
+                      Buttons={Buttons}
+                      handleButtonClick={handleButtonClick}
+                      activeButton={activeButton}
+                      activeColor="#fff"
+                      inActiveColor="#000000"
+                      activeBg="#1E1B39"
+                      inActiveBg="#F3F3FF"
+                      containerBg="#F3F3FF"
+                    />
+                  </div>
                 </div>
-              ) : null}
-            </div>
-            <div className={styles.picker}>
-              <YearPicker
-                onChangeYear={handleYearChange}
-                onChangeMonth={handleMonthChange}
-                type={currentBtn}
-                bgColor="#F3F3FF"
-                val={month}
-                val1={year}
-              />
-            </div>
-            <div className={styles.btnScroller}>
-              <Buttonscroller
-                selectedYear={selectedYear}
-                selectedMonth={selectedMonth}
-                Buttons={Buttons}
-                handleButtonClick={handleButtonClick}
-                activeButton={activeButton}
-                activeColor="#fff"
-                inActiveColor="#000000"
-                activeBg="#1E1B39"
-                inActiveBg="#F3F3FF"
-                containerBg="#F3F3FF"
-              />
+
+                <div
+                  id="chartdata"
+                  style={{
+                    height: 300,
+                    width: 1200,
+                  }}
+                ></div>
+              </Card>
             </div>
           </div>
-        
-          <div
-            id="chartdata"
-            style={{
-              height: 300,
-              width: 1200,
-            }}
-          ></div>
-         
-         
-        </Card>
+        </div>
       </div>
 
-          </div>
-        </div>
-        </div>
-     
       <Insights />
     </div>
   );
