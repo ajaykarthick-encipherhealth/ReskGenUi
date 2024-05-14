@@ -6,7 +6,8 @@ import { useRouter } from "next/router";
 import { TeamChart } from "../../../services/adminServices/DashboardService";
 import ChartsEmbedSDK from "@mongodb-js/charts-embed-dom";
 import Donutchart from "../donutchart";
-import QualityScore from "../../demoReviewer/qualityScore";
+import QualityScore from "../demoReviewer/qualityScore";
+
 
 
 

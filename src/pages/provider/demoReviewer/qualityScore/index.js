@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from "react";
-import styles from './styles.module.css'
-import { Buttons } from "../../reviewer/workingstatus";
-import Buttonscroller from "../../../components/buttonSroller";
-import Card from "../../../components/card/index";
+import styles from "./styles.module.css";
+import { Buttons } from "../../../reviewer/workingstatus";
+import Buttonscroller from "../../../../components/buttonSroller";
+import Card from "../../../../components/card/index";
 import ChartsEmbedSDK from "@mongodb-js/charts-embed-dom";
-import YearPicker from "../../../components/yearpicker";
+import YearPicker from "../../../../components/yearpicker";
 import dayjs from "dayjs";
 import ProductivityStatus from "../productivityStatus";
-
-
-
-
-
 
 const QualityScore = () => {
   const [activeButton, setActiveButton] = useState(0);
@@ -52,7 +47,7 @@ const QualityScore = () => {
     const endYearDate = new Date(selectedYear, 11, 31);
 
     const filter = {
-        dueDate: { $gte: startYearDate, $lte: endYearDate },
+      dueDate: { $gte: startYearDate, $lte: endYearDate },
     };
 
     if (chart) {
@@ -154,11 +149,7 @@ const QualityScore = () => {
 
   return (
     <>
-    
-
-     
-      <div className="mt-3" >
-        
+      <div className="mt-3">
         <div className="container">
           <div className="row">
             <div className="col-12">
@@ -204,10 +195,9 @@ const QualityScore = () => {
                 </Card>
               </div>
             </div>
-           {/* <ProductivityStatus/> */}
+            {/* <ProductivityStatus/> */}
           </div>
         </div>
-
       </div>
     </>
   );

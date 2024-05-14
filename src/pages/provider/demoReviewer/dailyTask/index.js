@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
-import Card from "../../../components/card";
-
+import Card from "../../../../components/card";
 import ChartsEmbedSDK from "@mongodb-js/charts-embed-dom";
-import SupervisiorProducitivity from "../../provider/demoSupervisior/productivityStatus";
+
 
 
 const DailyTask = () => {
