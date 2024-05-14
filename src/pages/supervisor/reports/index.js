@@ -43,7 +43,11 @@ const Reports = () => {
   const route = useRouter();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
   const ReportPatientDetails = useSelector((state) => state.report?.details);
+  // const SentReportDetails = useSelector((state) => state.report?.sentDetails);
   const SentReportDetails = useSelector((state) => state.report?.sentDetails);
+
+  console.log(SentReportDetails?.data?.response,"test")
+
   const ReceivedReportDetails = useSelector(
     (state) => state.report?.receivedDetails
   );
@@ -189,7 +193,7 @@ const Reports = () => {
           sort
         )
       );
-    } else {
+    } else if(activeTab === "Audit Report") {
       dispatch(
         getReportDetails(
           pageNo,

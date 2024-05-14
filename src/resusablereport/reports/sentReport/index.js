@@ -33,7 +33,7 @@ export const colors = {
   O: "#FFB5C5",
   P: "#CD919E",
   Q: "#FF6347",
-  R: "#E35BD8",
+  R: "#B9FF66",
   S: "#E066FF",
   T: "#EAADEA",
   U: "#FFB90F",
@@ -72,7 +72,15 @@ const SentReport = ({
     return hash;
   });
 
-  const getChartOption = (res) => {
+  const getChartOption = (data) => {
+    const excelCount =
+      details?.sentReportCountByTypeDTOList?.find(
+        (item) => item._id === "EXCEL"
+      )?.count || 0;
+    const csvCount =
+      details?.sentReportCountByTypeDTOList?.find((item) => item._id === "CSV")
+        ?.count || 0;
+
     return {
       tooltip: {
         trigger: "item",
@@ -91,14 +99,14 @@ const SentReport = ({
           },
           data: [
             {
-              value: 10,
+              value: excelCount,
               name: "Excel",
               itemStyle: {
                 color: "#B35CE1",
               },
             },
             {
-              value: 20,
+              value: csvCount,
               name: "Csv",
               itemStyle: {
                 color: "#0A9FFF",
@@ -113,9 +121,8 @@ const SentReport = ({
           label: {
             show: true,
             position: "center",
-            formatter: `{b|${60}}`,
+            formatter: `{b|${excelCount + csvCount}}`,
             backgroundColor: "transparent",
-
             rich: {
               a: {
                 fontSize: 12,
@@ -130,7 +137,7 @@ const SentReport = ({
           },
           data: [
             {
-              value: 90,
+              value: excelCount + csvCount,
               name: "Total",
               itemStyle: {
                 color: "#fff",
@@ -141,6 +148,11 @@ const SentReport = ({
       ],
     };
   };
+
+  const chartOption = getChartOption(details?.sentReportCountByTypeDTOList);
+  console.log(chartOption);
+
+  console.log(details, "t");
   const handleReceiverReport = (item) => {
     console.log(item, "r");
     const info = {
@@ -156,32 +168,33 @@ const SentReport = ({
       }&sentreport=${true}&page=${receivedPageNo}&limit=${paginationFirst}`
     );
   };
-  const getChartUserOption = () => {
+  const getChartUserOption = (response) => {
     const getRandomColor = (letter) =>
       colors[letter.toUpperCase()] || "#B35CE1";
 
-    const data = [
-      { value: 10, name: "Benjamin " },
-      { value: 20, name: " Micheal" },
-      { value: 20, name: "kack" },
-      { value: 20, name: "johan " },
-      { value: 20, name: "Tset" },
-    ];
+    const data =
+      details?.sentReportUserWiseCountDtoByRole?.sentReportUserWiseCountListForSupervisor?.map(
+        (item) => ({
+          value: item.userCount,
+          name: `${item.userNameDTO?.firstName} ${item.userNameDTO?.lastName}`,
+        })
+      );
 
     const nameColors = {};
 
-    data.forEach((item) => {
+    data?.forEach((item) => {
       const firstLetter = item.name[0];
 
       if (!nameColors[item.name]) {
         nameColors[item.name] = getRandomColor(firstLetter);
       }
     });
-    const pieData = data.map((item) => ({
-      value: item.value,
-      name: item.name,
+
+    const pieData = data?.map((item) => ({
+      value: item?.value,
+      name: item?.name,
       itemStyle: {
-        color: nameColors[item.name],
+        color: nameColors[item?.name],
       },
     }));
 
@@ -210,7 +223,10 @@ const SentReport = ({
           label: {
             show: true,
             position: "center",
-            formatter: `{b|${60}}`,
+            formatter: `{b|${data?.reduce(
+              (acc, curr) => acc + curr.value,
+              0
+            )}}`,
             backgroundColor: "transparent",
             rich: {
               a: {
@@ -226,7 +242,7 @@ const SentReport = ({
           },
           data: [
             {
-              value: 90,
+              value: data?.reduce((acc, curr) => acc + curr.value, 0),
               name: "Total",
               itemStyle: {
                 color: "#fff",
@@ -238,17 +254,17 @@ const SentReport = ({
     };
   };
 
-  const getChartAdminOption = () => {
+  const getChartAdminOption = (response) => {
     const getRandomColor = (letter) =>
       colors[letter.toUpperCase()] || "#B35CE1";
 
-    const data = [
-      { value: 10, name: "Benjamin Mitchell" },
-      { value: 20, name: "David Micheal" },
-      { value: 20, name: "Richard William" },
-      { value: 20, name: "Thomas Joseph" },
-      { value: 20, name: "Andrew paul" },
-    ];
+    const data =
+      details.sentReportUserWiseCountDtoByRole.sentReportUserWiseCountListForAdmin.map(
+        (item) => ({
+          value: item.userCount,
+          name: `${item.userNameDTO.firstName} ${item.userNameDTO.lastName}`,
+        })
+      );
 
     const nameColors = {};
 
@@ -293,7 +309,7 @@ const SentReport = ({
           label: {
             show: true,
             position: "center",
-            formatter: `{b|${60}}`,
+            formatter: `{b|${data.reduce((acc, curr) => acc + curr.value, 0)}}`,
             backgroundColor: "transparent",
             rich: {
               a: {
@@ -309,7 +325,7 @@ const SentReport = ({
           },
           data: [
             {
-              value: 90,
+              value: data.reduce((acc, curr) => acc + curr.value, 0),
               name: "Total",
               itemStyle: {
                 color: "#fff",
@@ -327,9 +343,14 @@ const SentReport = ({
       : getChartAdminOption();
 
   useEffect(() => {
-    if (details?.data && details.data.length > 0) {
-      handleCardSelection(details.data[0], 0);
+    if (
+      details?.receivedReportDTOList?.data &&
+      details?.receivedReportDTOList?.data > 0
+    ) {
+      handleCardSelection(details?.receivedReportDTOList?.data[0], 0);
+      console.log(details?.data, "data");
     }
+    console.log(details?.reportCountResponseDTO, "coun");
   }, [details]);
 
   const handleCardSelection = (item, index) => {
@@ -350,224 +371,267 @@ const SentReport = ({
               <div>
                 <div className=" col-xl-12 d-flex">
                   <div className="col-xl-6">
-                    {!details?.data ? (
+                    {!details?.receivedReportDTOList?.data ? (
                       <SpinnerDots />
                     ) : (
                       <div className={styles.cardContainer}>
-                        {details?.data?.map((item, index) => {
-                          const formattedDate = dateFormate(
-                            dayjs,
-                            item?.sendDate
-                          );
-                          return (
-                            <div
-                              key={index}
-                              className={`${styles.card} ${
-                                index === selectedCardIndex
-                                  ? styles.selectedCard
-                                  : ""
-                              }`}
-                              // onClick={() => handleCardSelection(item, index)}
-                              onClick={() => handleReceiverReport(item)}
-                            >
-                              <div className={styles.contentGroup}>
-                                <div className="col-xl-12">
-                                  <div
-                                    style={{
-                                      display: "flex",
-                                      justifyContent: "space-between",
-                                      alignItems: "center",
-                                      paddingBottom: "5px",
-                                    }}
-                                  >
-                                    <div className={`col-xl-6 ${styles.pName}`}>
-                                      {item.reportName}
-                                    </div>
+                        {details?.receivedReportDTOList?.data?.map(
+                          (item, index) => {
+                            const formattedDate = dateFormate(
+                              dayjs,
+                              item?.sendDate
+                            );
+                            return (
+                              <div
+                                key={index}
+                                className={`${styles.card} ${
+                                  index === selectedCardIndex
+                                    ? styles.selectedCard
+                                    : ""
+                                }`}
+                                // onClick={() => handleCardSelection(item, index)}
+                                onClick={() => handleReceiverReport(item)}
+                              >
+                                <div className={styles.contentGroup}>
+                                  <div className="col-xl-12">
                                     <div
-                                      className={`col-xl-2 ${styles.dataContainer}`}
+                                      style={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        alignItems: "center",
+                                        paddingBottom: "5px",
+                                      }}
                                     >
                                       <div
-                                        onClick={() => {
-                                          setSelectedRows(item);
-                                          dispatch(selectedReport(item));
-                                          setOpenEdit(true);
-                                        }}
+                                        className={`col-xl-6 ${styles.pName}`}
                                       >
-                                        <EditButton />
+                                        {item.reportName}
+                                      </div>
+                                      <div
+                                        className={`col-xl-2 ${styles.dataContainer}`}
+                                      >
+                                        <div
+                                          onClick={() => {
+                                            setSelectedRows(item);
+                                            dispatch(selectedReport(item));
+                                            setOpenEdit(true);
+                                          }}
+                                        >
+                                          <EditButton />
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
 
-                                  <div
-                                    style={{
-                                      paddingBottom: "5px",
-                                    }}
-                                  >
                                     <div
-                                      className={`col-xl-12 ${styles.headText}`}
+                                      style={{
+                                        paddingBottom: "5px",
+                                      }}
                                     >
-                                      {item._id}
+                                      <div
+                                        className={`col-xl-12 ${styles.headText}`}
+                                      >
+                                        {item._id}
+                                      </div>
                                     </div>
-                                  </div>
-                                  <div className="d-flex justify-content-between align-items-center">
-                                    <div className={`col-xl-2 ${styles.text}`}>
-                                      {formattedDate}
-                                    </div>
-                                    <div className={`col-xl-4 ${styles.text}`}>
-                                      <Avatar.Group maxCount={2}>
-                                        {item?.receivedUsers?.map(
-                                          (data, index) =>
-                                            selectedCard?.receivedUsers
-                                              .length === 1 ? (
-                                              <div
-                                                key={index}
-                                                style={{
-                                                  display: "flex",
-                                                  alignItems: "center",
-                                                }}
-                                              >
-                                                <span
-                                                  style={{ marginRight: "5px" }}
+                                    <div className="d-flex justify-content-between align-items-center">
+                                      <div
+                                        className={`col-xl-2 ${styles.text}`}
+                                      >
+                                        {formattedDate}
+                                      </div>
+                                      <div
+                                        className={`col-xl-4 ${styles.text}`}
+                                      >
+                                        <Avatar.Group maxCount={2}>
+                                          {item?.receivedUsers?.map(
+                                            (data, index) =>
+                                              selectedCard?.receivedUsers
+                                                .length === 1 ? (
+                                                <div
+                                                  key={index}
+                                                  style={{
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                  }}
                                                 >
-                                                  {renderUserPrfoileAvatar(
-                                                    data?.userDetails
-                                                      ?.firstName,
-                                                    data?.userDetails?.lastName,
-                                                    data?.userDetails
-                                                      ?.profileImageUrl,
-                                                    "header"
-                                                  )}
-                                                </span>
-                                                <span>
-                                                  {data?.userDetails?.firstName}{" "}
-                                                  {data?.userDetails?.lastName}
-                                                </span>
-                                              </div>
-                                            ) : (
-                                              <div key={index}>
-                                                {data?.userDetails
-                                                  ?.profileImageUrl && (
-                                                  <Avatar
+                                                  <span
                                                     style={{
-                                                      objectFit: "unset",
+                                                      marginRight: "5px",
                                                     }}
-                                                    src={
-                                                      data.userDetails
-                                                        .profileImageUrl
+                                                  >
+                                                    {renderUserPrfoileAvatar(
+                                                      data?.userDetails
+                                                        ?.firstName,
+                                                      data?.userDetails
+                                                        ?.lastName,
+                                                      data?.userDetails
+                                                        ?.profileImageUrl,
+                                                      "header"
+                                                    )}
+                                                  </span>
+                                                  <span>
+                                                    {
+                                                      data?.userDetails
+                                                        ?.firstName
+                                                    }{" "}
+                                                    {
+                                                      data?.userDetails
+                                                        ?.lastName
                                                     }
-                                                  />
-                                                )}
-                                              </div>
-                                            )
-                                        )}
-                                      </Avatar.Group>
+                                                  </span>
+                                                </div>
+                                              ) : (
+                                                <div key={index}>
+                                                  {data?.userDetails
+                                                    ?.profileImageUrl && (
+                                                    <Avatar
+                                                      style={{
+                                                        objectFit: "unset",
+                                                      }}
+                                                      src={
+                                                        data.userDetails
+                                                          .profileImageUrl
+                                                      }
+                                                    />
+                                                  )}
+                                                </div>
+                                              )
+                                          )}
+                                        </Avatar.Group>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          );
-                        })}
+                            );
+                          }
+                        )}
                       </div>
                     )}
                   </div>
 
                   <div className="col-xl-6" style={{ marginLeft: "10px" }}>
-                    <div className={styles.cardContainer}>
-                      <div className={styles.card1}>
-                        <div className={styles.summaryText}>Summary</div>
-                        <div className="col-xl-12  d-flex mt-4">
-                          <div className={`col-xl-6 ${styles.sentSubCard}`}>
-                            <div>
-                              <div>Overall Reports Sent</div>
-                              <h4>80</h4>
-                            </div>
-                          </div>
-                          <div className={`col-xl-6 ${styles.sentSubCard}`}>
-                            <div>Overall Users</div>
-                            <h4>140</h4>
-                          </div>
-                        </div>
-                        <div className="col-xl-12  d-flex mt-4">
-                          <div className={`col-xl-6 ${styles.readSubCard}`}>
-                            <div>
-                              <div>No of Read</div>
-                              <h4>60</h4>
-                            </div>
-                          </div>
-                          <div className={`col-xl-6 ${styles.downloadSubCard}`}>
-                            <div>
-                              <div>No of Download</div>
-                              <h4>20</h4>
-                            </div>
-                          </div>
-                        </div>
-                        <div className={styles.summaryText}>Overall Chart</div>
-
-                        <div
-                          className={` ${styles.card} justify-content-between p-2 m-2`}
-                        >
-                          <div className="d-flex justify-content-end">
-                            <div className={styles.userContainer}>
-                              <div className={styles.user}>
-                                <button
-                                  className={
-                                    reportActiveTab === "Supervisor"
-                                      ? `${styles.active}`
-                                      : ""
+                    {!details?.receivedReportDTOList?.data ? (
+                      <SpinnerDots />
+                    ) : (
+                      <div className={styles.cardContainer}>
+                        <div className={styles.card1}>
+                          <div className={styles.summaryText}>Summary</div>
+                          <div className="col-xl-12  d-flex mt-4">
+                            <div className={`col-xl-6 ${styles.sentSubCard}`}>
+                              <div>
+                                <div>Overall Reports Sent</div>
+                                <h4>
+                                  {
+                                    details?.receivedReportDTOList
+                                      ?.totalElements
                                   }
-                                  onClick={() => {
-                                    handleTabs("Supervisor");
-                                  }}
-                                >
-                                  Supervisor
-                                </button>
-                                <button
-                                  className={
-                                    reportActiveTab === "Admin"
-                                      ? `${styles.active}`
-                                      : ""
-                                  }
-                                  onClick={() => {
-                                    handleTabs("Admin");
-                                  }}
-                                >
-                                  Admin
-                                </button>
+                                </h4>
                               </div>
+                            </div>
+                            <div className={`col-xl-6 ${styles.sentSubCard}`}>
+                              <div>Overall Users</div>
+                              <h4>{details?.overAllUsersCount}</h4>
                             </div>
                           </div>
+                          <div className="col-xl-12 d-flex mt-4">
+                            {details?.reportCountResponseDTO?.map(
+                              (item, index) => (
+                                <React.Fragment key={index}>
+                                  {item._id === "READ" && (
+                                    <div
+                                      className={`col-xl-6 ${styles.readSubCard}`}
+                                    >
+                                      <div>
+                                        <div>No of Read</div>
+                                        <h4>{item.roleCount}</h4>
+                                      </div>
+                                    </div>
+                                  )}
+                                  {item._id === "DOWNLOAD" && (
+                                    <div
+                                      className={`col-xl-6 ${styles.downloadSubCard}`}
+                                    >
+                                      <div>
+                                        <div>No of Download</div>
+                                        <h4>{item.roleCount}</h4>
+                                      </div>
+                                    </div>
+                                  )}
+                                </React.Fragment>
+                              )
+                            )}
+                          </div>
 
-                          <div className=" d-flex justify-content-between p-2 m-2">
-                            <div style={{ width: "50%" }}>
-                              <div
-                                className={styles.summaryText}
-                                style={{ textAlign: "center" }}
-                              >
-                                Report Type
+                          <div className={styles.summaryText}>
+                            Overall Chart
+                          </div>
+
+                          <div
+                            className={` ${styles.card} justify-content-between p-2 m-2`}
+                          >
+                            <div className="d-flex justify-content-end">
+                              <div className={styles.userContainer}>
+                                <div className={styles.user}>
+                                  <button
+                                    className={
+                                      reportActiveTab === "Supervisor"
+                                        ? `${styles.active}`
+                                        : ""
+                                    }
+                                    onClick={() => {
+                                      handleTabs("Supervisor");
+                                    }}
+                                  >
+                                    Supervisor
+                                  </button>
+                                  <button
+                                    className={
+                                      reportActiveTab === "Admin"
+                                        ? `${styles.active}`
+                                        : ""
+                                    }
+                                    onClick={() => {
+                                      handleTabs("Admin");
+                                    }}
+                                  >
+                                    Admin
+                                  </button>
+                                </div>
                               </div>
-                              <ReactECharts
-                                option={getChartOption()}
-                                style={{ height: "230px" }}
-                              />
                             </div>
-                            <div style={{ width: "50%" }}>
-                              <div
-                                className={styles.summaryText}
-                                style={{ textAlign: "center" }}
-                              >
-                                Users
-                              </div>
 
-                              <ReactECharts
-                                option={selectedChartOption}
-                                style={{ height: "230px" }}
-                              />
+                            <div className=" d-flex justify-content-between p-2 m-2">
+                              <div style={{ width: "50%" }}>
+                                <div
+                                  className={styles.summaryText}
+                                  style={{ textAlign: "center" }}
+                                >
+                                  Report Type
+                                </div>
+                                <ReactECharts
+                                  option={getChartOption()}
+                                  style={{ height: "230px" }}
+                                />
+                              </div>
+                              <div style={{ width: "50%" }}>
+                                <div
+                                  className={styles.summaryText}
+                                  style={{ textAlign: "center" }}
+                                >
+                                  Users
+                                </div>
+
+                                <ReactECharts
+                                  option={selectedChartOption}
+                                  style={{ height: "230px" }}
+                                />
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
