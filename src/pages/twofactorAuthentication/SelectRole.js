@@ -48,7 +48,6 @@ const SelectRole = () => {
       message: "Login Successfully",
       duration: 1,
     });
-    localStorage.removeItem("password");
     setRoleError(false);
     const rolesMapping = {
       admin: { userRole: "admin", route: "/admin/dashboard" },
