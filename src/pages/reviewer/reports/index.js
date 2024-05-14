@@ -23,7 +23,7 @@ import { useSelector } from "react-redux";
 import MoreFilter from "../../../resusablereport/reports/MoreFilter";
 import ReviewerReport from "../../../resusablereport/reports/reviewerReport";
 import SentReport from "../../../resusablereport/reports/sentReport";
-import ReceivedReport from "../../../resusablereport/reports/sentReport";
+import ReceivedReport from "../../../resusablereport/reports/receivedReport";
 import Export from "../../../resusablereport/reports/Export";
 import { actions as workflowActions } from "../../../stores/reviewer/workqueue";
 
@@ -485,7 +485,6 @@ const Reports = ({workFgetFlagsowData}) => {
                   )}
                   {reportActiveTab === "Sent" && (
                     <div>
-                      {}{" "}
                       <SentReport
                         paginationFirst={paginationSentFirst}
                         details={SentReportDetails?.data?.response}

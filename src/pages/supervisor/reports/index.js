@@ -26,7 +26,7 @@ import { useSelector } from "react-redux";
 import MoreFilter from "../../../resusablereport/reports/MoreFilter";
 import ReviewerReport from "../../../resusablereport/reports/reviewerReport";
 import SentReport from "../../../resusablereport/reports/sentReport";
-import ReceivedReport from "../../../resusablereport/reports/sentReport";
+import ReceivedReport from "../../../resusablereport/reports/receivedReport";
 import Export from "../../../resusablereport/reports/Export";
 import TeamReport from "../../../resusablereport/reports/teamReport";
 import { actions as workflowActions } from "../../../stores/reviewer/workqueue";
@@ -44,9 +44,7 @@ const Reports = ({workFgetFlagsowData}) => {
   const route = useRouter();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
   const ReportPatientDetails = useSelector((state) => state.report?.details);
-  // const SentReportDetails = useSelector((state) => state.report?.sentDetails);
   const SentReportDetails = useSelector((state) => state.report?.sentDetails);
-
   const ReceivedReportDetails = useSelector(
     (state) => state.report?.receivedDetails
   );
@@ -74,6 +72,8 @@ const Reports = ({workFgetFlagsowData}) => {
   const [receivedEndDate, setReceivedEndDate] = useState();
   const [selectedDates, setSelectedDates] = useState([]);
   const [teamStartDate, setTeamStartDate] = useState();
+  const [teamSearch, setTeamSearch] = useState("");
+  const [teamEndDate, setTeamEndDate] = useState();
   const [receivedSortOrder, setReceivedSortOrder] = useState("DESC");
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
@@ -83,7 +83,6 @@ const Reports = ({workFgetFlagsowData}) => {
   const [search, setSearch] = useState();
   const { RangePicker } = DatePicker;
   const [selectedDateRanges, setSelecteddateRanges] = useState([]);
-
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     patientId: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -106,7 +105,6 @@ const Reports = ({workFgetFlagsowData}) => {
       }
     });
   });
-
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
@@ -157,37 +155,26 @@ const Reports = ({workFgetFlagsowData}) => {
   };
 
   useEffect(() => {
-    const coderSearchString = searchVal.find(
-      (item) => item.field === "initialSearch"
-    )?.search;
     setIsLoading(false);
-    const activeTabFromStorage = localStorage.getItem("activeTab");
-    const activeTab = activeTabFromStorage
-      ? activeTabFromStorage
-      : "Audit Report";
-    dispatch(getActiveTab(activeTab));
 
-    if (activeTab === "Sent") {
+    if (reportActiveTab === "Sent") {
       dispatch(
-        getSentDetails(
-          sentPageNo,
-          selectedDateRanges?.Sent?.from,
-          selectedDateRanges?.Sent?.to,
-          coderSearchString ? coderSearchString : "",
-          sort
-        )
+        getSentDetails(sentPageNo, startDate, endDate, sentSearch, sort)
       );
-    } else if (activeTab === "Received") {
+    }
+    if (reportActiveTab === "Received") {
       dispatch(
         getReceivedDetails(
           receivedPageNo,
-          selectedDateRanges?.Received?.from,
-          selectedDateRanges?.Received?.to,
-          coderSearchString ? coderSearchString : "",
+          receivedStartDate,
+          receivedEndDate,
+          receivedSearch,
           sort
         )
       );
-    } else if(activeTab === "Audit Report") {
+    }
+
+    if (!reportActiveTab || reportActiveTab === "AuditReport") {
       dispatch(
         getReportDetails(
           pageNo,
@@ -201,6 +188,7 @@ const Reports = ({workFgetFlagsowData}) => {
         )
       );
     }
+
     if (reportActiveTab === "TeamReport") {
       dispatch(
         getTeamReportDetails(
@@ -221,12 +209,25 @@ const Reports = ({workFgetFlagsowData}) => {
     pageNo,
     sentPageNo,
     receivedPageNo,
+    reportActiveTab,
+    ExportResponse,
+    selectedCoderOpt,
+    coderSearch,
+    coderStartDate,
+    coderEndDate,
+    startDate,
+    endDate,
+    sentSearch,
     receivedPageNo,
-    receivedSortOrder,
+    receivedStartDate,
+    receivedEndDate,
+    receivedSearch,
+    reportActiveTab,
     sort,
-    searchVal,
-    selectedOptions,
-    selectedDateRanges,
+    teamSearch,
+    teamEndDate,
+    teamStartDate,
+    teamPageNo,
   ]);
 
   useEffect(() => {
