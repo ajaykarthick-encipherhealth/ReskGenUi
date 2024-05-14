@@ -33,7 +33,7 @@ const statusOptions = [
   { label: "Hold", value: "HOLD" },
 ];
 
-const Reports = ({workFgetFlagsowData}) => {
+const Reports = ({ workFgetFlagsowData }) => {
   const dispatch = useDispatch();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
   const ReportPatientDetails = useSelector((state) => state.report?.details);
@@ -138,6 +138,9 @@ const Reports = ({workFgetFlagsowData}) => {
   };
 
   useEffect(() => {
+    workFgetFlagsowData();
+  }, []);
+  useEffect(() => {
     const coderSearchString = searchVal.find(
       (item) => item.field === "initialSearch"
     )?.search;
@@ -145,7 +148,6 @@ const Reports = ({workFgetFlagsowData}) => {
     const activeTabFromStorage = localStorage.getItem("activeTab");
     const activeTab = activeTabFromStorage ? activeTabFromStorage : "Reviewer";
     dispatch(getActiveTab(activeTab));
-    workFgetFlagsowData()
 
     if (activeTab === "Sent") {
       dispatch(
@@ -320,9 +322,7 @@ const Reports = ({workFgetFlagsowData}) => {
 
                 <div className="tbl-caption  align-items-center">
                   <div className="tbl-caption  align-items-center">
-                    <div
-                      className={`row filter-contain mt-4 mb-0`}
-                    >
+                    <div className={`row filter-contain mt-4 mb-0`}>
                       <div className="col-xl-2">
                         <div className="d-flex w-100">
                           <label className="labelStyle d-flex m-auto">

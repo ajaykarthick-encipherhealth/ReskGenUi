@@ -144,6 +144,10 @@ const Reports = ({ workFgetFlagsowData }) => {
     setSearchVal([]);
   };
 
+  useEffect(()=>{
+    workFgetFlagsowData();
+  },[])
+  
   useEffect(() => {
     setIsLoading(false);
     const coderSearchString = searchVal.find(
@@ -205,7 +209,6 @@ const Reports = ({ workFgetFlagsowData }) => {
     if (ExportResponse) {
       setIsModalVisible(false);
     }
-    workFgetFlagsowData();
   }, [
     pageNo,
     sentPageNo,

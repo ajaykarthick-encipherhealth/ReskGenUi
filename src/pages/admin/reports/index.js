@@ -155,6 +155,9 @@ const Reports = ({ workFgetFlagsowData }) => {
     }
   };
 
+  useEffect(()=>{
+    workFgetFlagsowData();
+  },[])
   useEffect(() => {
     const coderSearchString = searchVal.find(
       (item) => item.field === "initialSearch"
@@ -163,7 +166,7 @@ const Reports = ({ workFgetFlagsowData }) => {
     const activeTabFromStorage = localStorage.getItem("activeTab");
     const activeTab = activeTabFromStorage ? activeTabFromStorage : "Admin";
     dispatch(getActiveTab(activeTab));
-    workFgetFlagsowData();
+
 
     if (activeTab === "Sent") {
       dispatch(
