@@ -20,7 +20,7 @@ import {
   getReceivedDetails,
   getSentDetails,
 } from "../../../store/actions/ReportActions";
-import { useDispatch } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import MoreFilter from "../../../resusablereport/reports/MoreFilter";
@@ -29,6 +29,7 @@ import SentReport from "../../../resusablereport/reports/sentReport";
 import ReceivedReport from "../../../resusablereport/reports/receivedReport";
 import Export from "../../../resusablereport/reports/Export";
 import TeamReport from "../../../resusablereport/reports/teamReport";
+import { actions as workflowActions } from "../../../stores/reviewer/workqueue";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -38,7 +39,7 @@ const statusOptions = [
   { label: "Hold", value: "HOLD" },
 ];
 
-const Reports = () => {
+const Reports = ({workFgetFlagsowData}) => {
   const dispatch = useDispatch();
   const route = useRouter();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
@@ -69,13 +70,7 @@ const Reports = () => {
   const [endDate, setEndDate] = useState();
   const [receivedStartDate, setReceivedStartDate] = useState();
   const [receivedEndDate, setReceivedEndDate] = useState();
-  const [coderStartDate, setCoderStartDate] = useState();
-  const [coderEndDate, setCoderEndDate] = useState();
   const [selectedDates, setSelectedDates] = useState([]);
-  const [selectedCoderOpt, setSelectedCoderOpt] = useState("");
-  const [coderSearch, setCoderSearch] = useState("");
-  const [sentSearch, setSentSearch] = useState("");
-  const [receivedSearch, setReceivedSearch] = useState("");
   const [teamStartDate, setTeamStartDate] = useState();
   const [teamSearch, setTeamSearch] = useState("");
   const [teamEndDate, setTeamEndDate] = useState();
@@ -88,7 +83,6 @@ const Reports = () => {
   const [search, setSearch] = useState();
   const { RangePicker } = DatePicker;
   const [selectedDateRanges, setSelecteddateRanges] = useState([]);
-
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     patientId: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -210,6 +204,7 @@ const Reports = () => {
     if (ExportResponse) {
       setIsModalVisible(false);
     }
+    workFgetFlagsowData()
   }, [
     pageNo,
     sentPageNo,
@@ -646,5 +641,12 @@ const Reports = () => {
     </div>
   );
 };
-
-export default Reports;
+const enhancer = connect(
+  (state) => ({
+    getFlagsData: state?.reviewer?.workQueue?.flags?.data,
+  }),
+  {
+    workFgetFlagsowData: workflowActions.flagsAction,
+  }
+);
+export default enhancer(Reports);

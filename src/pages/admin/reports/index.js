@@ -13,7 +13,7 @@ import { debounce } from "../../admin/report/Export";
 import { disableFutureDate } from "../../../components/headerFilters/functions";
 import { patientDetails } from "../../../stores/authflow/actions";
 import { getSentDetails } from "../../../store/actions/ReportActions";
-import { useDispatch } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import MoreFilter from "../../../resusablereport/reports/MoreFilter";
@@ -25,7 +25,9 @@ import {
   getReceivedDetails,
   getReportDetails,
 } from "../../../store/actions/adminAction/ReportActions";
+import { actions as workflowActions } from "../../../stores/reviewer/workqueue";
 import { getSelectUserList } from "../../../store/actions/adminAction/DashboardAction";
+
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -34,14 +36,13 @@ const statusOptions = [
   { label: "Declined", value: "DECLINED" },
   { label: "Hold", value: "HOLD" },
 ];
-
 const options = [
   { value: "", label: "All" },
   { value: "REVIEWER", label: "REVIEWER" },
   { value: "SUPERVISOR", label: "SUPERVISOR" },
 ];
 
-const Reports = () => {
+const Reports = ({ workFgetFlagsowData }) => {
   const dispatch = useDispatch();
   const route = useRouter();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
@@ -73,7 +74,6 @@ const Reports = () => {
   const [paginationSentFirst, setPaginationSentFirst] = useState(0);
   const [selectedCoderOptReport, setSelectedCoderOptReport] = useState("");
   const [selectManager, setSelectedManger] = useState("");
-
   const [modal, setModal] = useState(false);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
@@ -84,8 +84,6 @@ const Reports = () => {
   const [selectedDates, setSelectedDates] = useState([]);
   const [selectedCoderOpt, setSelectedCoderOpt] = useState("");
   const [coderSearch, setCoderSearch] = useState("");
-  const [sentSearch, setSentSearch] = useState("");
-  const [receivedSearch, setReceivedSearch] = useState("");
   const [receivedSortOrder, setReceivedSortOrder] = useState("DESC");
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
@@ -174,6 +172,7 @@ const Reports = () => {
     const activeTabFromStorage = localStorage.getItem("activeTab");
     const activeTab = activeTabFromStorage ? activeTabFromStorage : "Admin";
     dispatch(getActiveTab(activeTab));
+    workFgetFlagsowData();
 
     if (activeTab === "Sent") {
       dispatch(
@@ -714,5 +713,12 @@ const Reports = () => {
     </div>
   );
 };
-
-export default Reports;
+const enhancer = connect(
+  (state) => ({
+    getFlagsData: state?.reviewer?.workQueue?.flags?.data,
+  }),
+  {
+    workFgetFlagsowData: workflowActions.flagsAction,
+  }
+);
+export default enhancer(Reports);
