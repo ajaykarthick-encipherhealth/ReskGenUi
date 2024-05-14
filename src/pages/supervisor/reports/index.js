@@ -43,14 +43,10 @@ const Reports = () => {
   const route = useRouter();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
   const ReportPatientDetails = useSelector((state) => state.report?.details);
-  // const SentReportDetails = useSelector((state) => state.report?.sentDetails);
   const SentReportDetails = useSelector((state) => state.report?.sentDetails);
-
   const ReceivedReportDetails = useSelector(
     (state) => state.report?.receivedDetails
   );
-  console.log(ReceivedReportDetails?.data?.response, "test");
-
   const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
   const [isLoading, setIsLoading] = useState(true);
@@ -115,7 +111,6 @@ const Reports = () => {
       }
     });
   });
-console.log(reportActiveTab,"d")
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);

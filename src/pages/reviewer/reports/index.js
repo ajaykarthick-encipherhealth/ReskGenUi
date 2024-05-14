@@ -43,8 +43,6 @@ const Reports = () => {
   const ReceivedReportDetails = useSelector(
     (state) => state.report?.receivedDetails
   );
-  console.log(SentReportDetails, "sennt")
-  console.log(ReceivedReportDetails, "received")
   const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
   const [isLoading, setIsLoading] = useState(true);
@@ -631,7 +629,6 @@ const Reports = () => {
                   )}
                   {reportActiveTab === "Sent" && (
                     <div>
-                      {}{" "}
                       <SentReport
                         paginationFirst={paginationSentFirst}
                         details={SentReportDetails?.data?.response}
@@ -647,7 +644,6 @@ const Reports = () => {
                       />
                     </div>
                   )}
-                  {console.log(reportActiveTab,"tab")}
                   {reportActiveTab === "Received" && (
                     <div>
                       <ReceivedReport
