@@ -411,10 +411,10 @@ const ReviewerReport = ({
 
     if (data?.processedStatus === "COMPLETED") {
       const controller = new AbortController();
-      const { signal } = controller;
+      const currentRole=localStorage.getItem("userRole");
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
-      navigate.push({ pathname: "/reviewer/patients/details", query: page });
+      navigate.push({ pathname: `/${currentRole}/patients/details`, query: page });
     } else {
       notification.warning({
         message: data?.patientId + " file not processed. Please wait.",
@@ -507,6 +507,7 @@ const ReviewerReport = ({
                                   </div>
                                   <div
                                     className={`col-xl-12 ${styles.checkSep}`}
+                                    onClick={() => handleTableRowClick(id)}
                                   >
                                     <div className="d-flex justify-content-between align-items-center pb-1">
                                       <div
@@ -547,7 +548,7 @@ const ReviewerReport = ({
                                     <div className="d-flex justify-content-around align-items-center pb-1">
                                       <div
                                         className={`col-xl-2 ${styles.headText}`}
-                                        onClick={() => handleTableRowClick(id)}
+                                        // onClick={() => handleTableRowClick(id)}
                                       >
                                         {item.patientId ? item.patientId : ""}
                                       </div>
