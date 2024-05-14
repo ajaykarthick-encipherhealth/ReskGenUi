@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 import { getCompletedStatus } from "../../../store/actions/adminAction/DashboardAction";
 import Insights from "../insights";
 
+
 const Atlas = () => {
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
@@ -62,14 +63,7 @@ const Atlas = () => {
 
   const handleMonthChange = (date) => {
     setMonth(date);
-    setSelectedMonth(month);
-    setSelectedMonth(year);
-
-    const selectedDate = new Date(date);
-    const monthNumber = (selectedDate.getMonth() + 1)
-      .toString()
-      .padStart(2, "0");
-    setSelectedMonth(monthNumber);
+    setSelectedMonth(date);
   };
 
   const options = [
@@ -231,6 +225,7 @@ const Atlas = () => {
     const sdk = new ChartsEmbedSDK({
       baseUrl: "https://charts.mongodb.com/charts-project-0-gdoee",
       showAttribution: false,
+      gridLines:false,
     });
 
     const currentYear = selectedYear;
@@ -279,12 +274,15 @@ const Atlas = () => {
   }, [charts]);
 
   return (
-    <div style={{ marginTop: "2%" }}>
-      <div
+    <div>
+      <div className="container">
+        <div className="row">
+          <div className="col-12">
+          <div
         style={{
-          width: "75%",
-          position: "relative",
-          left: "50px",
+          // width: "75%",
+          // position: "relative",
+          // left: "50px",
           // height: "450px",
         }}
       >
@@ -342,8 +340,23 @@ const Atlas = () => {
               />
             </div>
           </div>
+        
+          <div
+            id="chartdata"
+            style={{
+              height: 300,
+              width: 1200,
+            }}
+          ></div>
+         
+         
         </Card>
       </div>
+
+          </div>
+        </div>
+        </div>
+     
       <Insights />
     </div>
   );
