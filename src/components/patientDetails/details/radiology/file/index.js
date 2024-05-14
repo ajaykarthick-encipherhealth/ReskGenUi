@@ -8,25 +8,32 @@ import {
   faCircleUser,
   faCheck,
   faInfo,
-  faPlus,
   faArrowsAlt,
-  faSitemap,
 } from "@fortawesome/free-solid-svg-icons";
 import { CalendarOutlined } from "@ant-design/icons";
-import { Popconfirm, Divider, Popover, Menu, DatePicker, Dropdown } from "antd";
+import { Popconfirm, Popover } from "antd";
 import Select from "react-select";
 import { Modal } from "antd";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import CamboTree from "../../hcc/org";
+import { getPatientRadiologyDetails } from "../../components/function/GetDataRadiology";
+import PdfViewer from "../../PdfViewerComponent";
+import {
+  onDragEnd,
+} from "../../components/function/ReusableFunctionsRadiology";
+import styles from "../../hcc/styles.module.css";
 
-const File = ({}) => {
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import RadiologyCards from "../../components/RADIOLOGY";
+import ModelIndex from "../../components/model/Index";
+
+const File = ({ setActiveTabHead, setActiveMeatTitle }) => {
   const radiologyDetailsResult = useSelector(
     (state) => state?.ReviewerReducers?.radiologyDeatils
   );
   const radiologyFile = useSelector(
     (state) => state?.ReviewerReducers?.radiologyFileDetails
   );
-  console.log(radiologyDetailsResult)
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
   );
@@ -59,257 +66,60 @@ const File = ({}) => {
 
   const [radiologyFileDetailCheck, setRadiologyFileDetailCheck] =
     useState(false);
-  const [dosYearDefalutSelectRadiology, setDosYearDefalutSelectRadiology] =
-    useState("");
+  const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
 
   const [isDocumentLoaded, setDocumentLoaded] = React.useState(false);
   const handleDocumentLoad = () => {
     setDocumentLoaded(true);
   };
+  const [search, setSearch] = useState();
+  const [meatCriteriaListRadiology, setMeatCriteriaListRadiology] = useState(
+    []
+  );
+  const [selectDetails, setSelectDetails] = useState();
+  const [isValidAction, setIsValidAction] = useState("");
+  const [fileLoading, setFileLoading] = useState(false);
+  const [allDisList, setAllDisList] = useState([]);
+  const [deletedDiseasesList, setDeletedDiseasesList] = useState([]);
 
   useEffect(() => {
-    setNewValidDiseaseListRadiology([]);
-    setInNewValidDiseaseListRadiology([]);
-    setRadiologyFileDetailCheck(false);
-    getPatientDetailsRadiologyYear();
+    getPatientRadiologyDetails(
+      radiologyDetailsResult,
+      sectionColorList,
+      setPatientDetailsRadiology,
+      setFileRadiologyDateofServiceList,
+      setRadiologyFileDateDefaulteSelect,
+      setRadiologyFileDetailCheck,
+      setCaptureSectionMatching,
+      setEncounterDateMatching,
+      setNewValidDiseaseListRadiology,
+      setInNewValidDiseaseListRadiology,
+      setIsLoadingDos,
+      setMeatCriteriaListRadiology,
+      setAllDisList,
+      setDeletedDiseasesList
+    );
   }, [radiologyDetailsResult]);
-  
+
   useEffect(() => {
     setSelectFileURLRadiology([]);
     getPatientPdfFileRadiology();
   }, [radiologyFile?.result?.response]);
 
-
-  const getPatientDetailsRadiologyYear = async () => {
-    var patientId = localStorage.getItem("patientId");
-    if (radiologyDetailsResult?.result?.response) {
-      var result = radiologyDetailsResult?.result?.response;
-      setPatientDetailsRadiology(result);
-      if (result.radiologyFileDetail != null) {
-        if (result.radiologyFileDetail.length != 0) {
-          var dosYearArrFile = [];
-
-          result.radiologyFileDetail.map((res, index) => {
-            for (var key in res.documentDos) {
-              dosYearArrFile.push({
-                value: key,
-                label: key + " - " + res.documentDos[key].testName,
-              });
-            }
-          });
-          setFileRadiologyDateofServiceList(dosYearArrFile);
-          setRadiologyFileDateDefaulteSelect(dosYearArrFile[0]);
-          setRadiologyFileDetailCheck(true);
-        }
-      }
-      if (result.validDisease != null) {
-        var validDis = "";
-        var comboDis = "";
-        var dosYearArr = [];
-        var validDiseaseNewRes = [];
-        var invalidDiseaseNewRes = [];
-        var unMatchRes = [];
-
-        for (var key in result.validDisease) {
-          dosYearArr.push({ value: key, label: key });
-        }
-
-        var dateofService = dosYearArr[0].value;
-        validDis = result.validDisease[dateofService];
-        validDiseaseNewRes = result.validDisease[dateofService];
-        invalidDiseaseNewRes = result.invalidDisease[dateofService];
-        if (result.unmatchedDisease != null) {
-          var unMatchResCheck = result.unmatchedDisease[dateofService];
-
-          if (unMatchResCheck != null) {
-            unMatchRes = result.unmatchedDisease[dateofService];
-          }
-        }
-        var validDisArray = [];
-        validDiseaseNewRes.map((res, index) => {
-          const encounterDatearray = res.encounterDate.split(",");
-          var providerList = [];
-          res.provider?.map((res, index) => {
-            providerList.push(res.providerName);
-          });
-          validDisArray.push({
-            actualDescription: res.actualDescription,
-            capturedSections: res.capturedSections,
-            diagnosisCode: res.diagnosisCode,
-            encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
-            isManuallyAdded: res.isManuallyAdded,
-            isHccValid: res.isHccValid,
-            defaultPosition: res.defaultPosition,
-            providerName: providerList,
-          });
-        });
-
-        var invalidDisArray = [];
-        invalidDiseaseNewRes.map((res, index) => {
-          const encounterDatearray = res.encounterDate.split(",");
-          var providerList = [];
-          res.provider?.map((res, index) => {
-            providerList.push(res.providerName);
-          });
-          invalidDisArray.push({
-            actualDescription: res.actualDescription,
-            capturedSections: res.capturedSections,
-            diagnosisCode: res.diagnosisCode,
-            encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
-            isManuallyAdded: res.isManuallyAdded,
-            isHccValid: res.isHccValid,
-            defaultPosition: res.defaultPosition,
-            providerName: providerList,
-          });
-        });
-
-        var capturedSectionsColorsMatching = [];
-        var capturedSectionsArr = [];
-
-        const COLORS2 = [
-          "sectionTag5",
-          "sectionTag6",
-          "sectionTag7",
-          "sectionTag8",
-          "sectionTag1",
-          "sectionTag2",
-          "sectionTag3",
-          "sectionTag4",
-        ];
-
-        const COLORS3 = [
-          "encounterDateTag1",
-          "encounterDateTag2",
-          "encounterDateTag3",
-          "encounterDateTag4",
-          "encounterDateTag5",
-          "encounterDateTag6",
-          "encounterDateTag7",
-          "encounterDateTag8",
-        ];
-
-        validDiseaseNewRes.map((res) => {
-          res.capturedSections.map((res2, index) => {
-            capturedSectionsArr.push({
-              name: res2,
-              diagnosisCode: res.diagnosisCode,
-            });
-          });
-        });
-
-        var dublicateSectionArr = getUniqueListBy(capturedSectionsArr, "name");
-
-        dublicateSectionArr.map((res, index) => {
-          capturedSectionsColorsMatching.push({
-            name: res.name,
-            diagnosisCode: res.diagnosisCode,
-            colors: COLORS2[index],
-          });
-        });
-        var sectionColorResult = sectionColorList.result?.response;
-
-        let sectionColorResultMatch = sectionColorResult.filter((o1) =>
-          dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
-        );
-        let sectionColorResultNotMatch = dublicateSectionArr.filter(
-          (o1) => !sectionColorResult.some((o2) => o1.name === o2.sectionName)
-        );
-
-        var notMatchColorArray = [];
-        sectionColorResultNotMatch?.map((res, index) => {
-          var radomColorcode = stringToColour(res.name);
-          var randomColorChangeShadow = radomColorcode + 33;
-          notMatchColorArray.push({
-            sectionName: res.name,
-            backgroundColor: randomColorChangeShadow,
-            sectionColor: radomColorcode,
-          });
-        });
-
-        var newArrayColorMatchs = [];
-        newArrayColorMatchs = [
-          ...sectionColorResult,
-          ...sectionColorResultMatch,
-          ...notMatchColorArray,
-        ];
-
-        setCaptureSectionMatching(newArrayColorMatchs);
-
-        var encounterDateColorsMatching = [];
-        var encounterDateArr = [];
-
-        validDiseaseNewRes.map((res) => {
-          const array = res.encounterDate.split(",");
-          array.map((res2) => {
-            encounterDateArr.push({
-              name: res2,
-            });
-          });
-        });
-
-        var encounterDateArrDublicatesRemove = getUniqueListBy(
-          encounterDateArr,
-          "name"
-        );
-        encounterDateArrDublicatesRemove.map((res, index) => {
-          encounterDateColorsMatching.push({
-            name: res.name,
-            colors: COLORS3[index],
-          });
-        });
-        setEncounterDateMatching(encounterDateColorsMatching);
-        setNewValidDiseaseListRadiology(validDisArray);
-        setInNewValidDiseaseListRadiology(invalidDisArray);
-        setIsLoadingDos(false);
-      }
-    }
-  };
-  function getUniqueListBy(arr, key) {
-    return [...new Map(arr.map((item) => [item[key], item])).values()];
-  }
-
   const getPatientPdfFileRadiology = async (fileId, tenId) => {
-    if (radiologyFile?.result?.response && radiologyDetailsResult?.result?.response?.patientId) {
+    if (
+      radiologyFile?.result?.response &&
+      radiologyDetailsResult?.result?.response?.patientId
+    ) {
       setSelectFileURLRadiology(radiologyFile?.result?.response);
     }
   };
 
-  const confirmvalid = () =>
-    new Promise((resolve) => {
-      setTimeout(() =>
-        resolve(
-          setConfirmNotesModalValid(true),
-          setIsValidAction("validToDeleted")
-        )
-      );
-    });
-
-  const confirmInvalidMoveDis = () =>
-    new Promise((resolve) => {
-      validMoveConfirmDis();
-      setTimeout(() => resolve(null), 1000);
-    });
-
   const onchangeValid = (code, data) => {
     var title = code + " - " + data.actualDescription;
+      data.dos = data.dosYear;
     setSelectDiseasesName(title);
-    setSelectInvalidDetails(data);
-  };
-  const validMoveConfirmDis = () => {
-    const result = invalidMoveDiseasesList.filter(
-      (res) => res.diagnosisCode != selectDiseasesName
-    );
-    setInvalidMoveDiseasesList(result);
-    const result2 = invalidMoveDiseasesList.filter(
-      (res2) => res2.diagnosisCode == selectDiseasesName
-    );
-    // var namePush = [];
-    // namePush.push({ name: selectDiseasesName });
-    var newArray = [];
-    newArray = [...newValidDiseaseList, ...result2];
-    setNewValidDiseaseList(newArray);
+    setSelectDetails(data);
   };
 
   const findValueDocument = (value, disDescription) => {
@@ -331,401 +141,234 @@ const File = ({}) => {
     });
   };
 
-  function removeDuplicates(array) {
-    let output = [];
-    for (let item of array) {
-      if (!output.includes(item)) output.push(item);
-    }
-
-    return output;
-  }
-
-  const getCaptureSectionBackgroundFile = (value) => {
-    var dublicateCaptureDelete = removeDuplicates(value);
-    return dublicateCaptureDelete.map((res) => {
-      const result = captureSectionMatching.filter(
-        (res2) => res2.sectionName == res
-      );
-      var backColor = result[0]?.backgroundColor;
-      var textColor = result[0]?.sectionColor;
-      var headerNames = result[0]?.sectionName;
-      var disCode = result[0]?.diagnosisCode;
-
-      var sectionMapArr = (
-        <span
-          onClick={() => findValueDocument(disCode, res)}
-          style={{ backgroundColor: backColor, color: textColor }}
-          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
-        >
-          {res}
-        </span>
-      );
-      return sectionMapArr;
-    });
-  };
-
-  const getEncounterDateBackground = (value) => {
-    return value.map((res) => {
-      const result = encounterDateMatching.filter((res2) => res2.name == res);
-      var backColor = result[0]?.colors;
-      var sectionMapArr = (
-        <span onClick={() => getEncounterDetails(res)}>
-          <span
-            className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
-          >
-            <i>
-              <CalendarOutlined className={visitStyles.calenderIcon} />
-            </i>
-            {moment(res).format("MMM DD")}
-          </span>
-        </span>
-      );
-      return sectionMapArr;
-    });
-  };
-
-  const getEncounterDetails = async (date) => {
-    var date = moment(date).format("DD");
-    highlight({
-      keyword: date,
-    });
-  };
-
-  const showErrorMessage = () => {
-    setOpens(false);
-    notification.destroy();
-    notification.info({ message: "Tree Not Available", duration: 1 });
-  };
-
-  const getProviderNameList = (data) => {
-    var dublicateCaptureDelete = removeDuplicates(data);
-    return dublicateCaptureDelete.map((res) => {
-      const result = captureSectionMatching.filter(
-        (res2) => res2.sectionName == res
-      );
-      var backColor = result[0]?.backgroundColor == "#efeff033" ? "#54548d33" : result[0]?.backgroundColor ;
-      var textColor = result[0]?.sectionColor == "#efeff0" ? "#000" : result[0]?.sectionColor;
-      var sectionMapArr = (
-        <span
-          className={`mt-2 text-start ${visitStyles.provider_name}`}
-          style={{ backgroundColor: backColor, color: textColor }}
-        >
-          <i>
-            {" "}
-            <FontAwesomeIcon
-              icon={faCircleUser}
-              style={{
-                size: 10,
-                color: textColor,
-              }}
-            />
-          </i>
-          {res}
-        </span>
-      );
-      return sectionMapArr;
-    });
+  
+  const handleCloseModal = () => {
+    setConfirmNotesModalValid(false);
   };
 
   return (
     <>
-      <div className="my-post-content pt-3">
-        <div className="radiology-select-dos">
-          {radiologyFileDetailCheck ? (
-            <Select
-              onChange={(e) => dosOnChangeRadiologyFile(e)}
-              options={radiologyFileDateofServieList}
-              className="custom-react-select"
-              defaultValue={radiologyFileDateDefaulteSelect}
-              isSearchable={false}
-            />
-          ) : (
-            <div></div>
-          )}
+    {fileLoading ? (
+        <div className={styles.overlay_style}>
+          <div className={styles.overlay__inner_style}>
+            <div className={styles.overlay__content_style}>
+              <span className={styles.spinner_style}></span>
+            </div>
+          </div>
         </div>
-        <div className="row">
-          <div className="col-xl-3">
-            <ul className="timeline">
-              <div
-                className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
-              >
-                <span className={`${visitStyles.hcc_title_name}`}>HCC</span>
-                <div className="d-flex justify-content-center">
-                  <span className={`${visitStyles.hcc_title_badge}`}>
-                    {newValidDiseaseListRadiology.length}
-                  </span>
-                </div>
-              </div>
-
-              {newValidDiseaseListRadiology.map((data, i) => (
-                <li>
-                  <div className={`${visitStyles.hcc_card}`}>
-                    <div className={`${visitStyles.hcc_card_nameHead}`}>
+      ) : null}
+      <DragDropContext
+        onDragEnd={(result) =>
+          onDragEnd(
+            result,
+            allDisList,
+            setSelectDiseasesName,
+            setSelectDetails,
+            setConfirmNotesModalValid,
+            setIsValidAction,
+            radiologyDetailsResult
+          )
+        }
+      >
+        <div className="my-post-content pt-3">
+          <div className="radiology-select-dos">
+            {radiologyFileDetailCheck ? (
+              <Select
+                onChange={(e) => dosOnChangeRadiologyFile(e)}
+                options={radiologyFileDateofServieList}
+                className="custom-react-select"
+                defaultValue={radiologyFileDateDefaulteSelect}
+                isSearchable={false}
+              />
+            ) : (
+              <div></div>
+            )}
+          </div>
+          <div className="row">
+            <div className="col-xl-3">
+              <Droppable droppableId={"HCC"} key={"HCC"}>
+                {(provided) => {
+                  return (
+                    <div
+                      className="timeline"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
                       <div
-                        className="media-body"
-                        onClick={() =>
-                          findValueDocument(
-                            data.diagnosisCode,
-                            data.actualDescription
-                          )
-                        }
+                        className={`valid-text d-flex justify-content-sm-between ${visitStyles.hcc_title_card}`}
                       >
-                        <span className="mb-1 disease-name d-flex">
-                          <span className="valid-dis-name">
-                            {data.diagnosisCode}
-                          </span>{" "}
-                          - {data.actualDescription}
+                        <span className={`${visitStyles.hcc_title_name}`}>
+                          HCC
                         </span>
+                        <div className="d-flex justify-content-center">
+                          <span className={`${visitStyles.hcc_title_badge}`}>
+                            {newValidDiseaseListRadiology.length}
+                          </span>
+                        </div>
                       </div>
-
-                      <Popconfirm
-                        title="You want to delete?"
-                        description={data.diagnosisCode}
-                        onConfirm={confirmvalid}
-                        placement="leftTop"
-                        okText="Yes"
-                        cancelText="No"
-                        onOpenChange={() => onchangeValid(data.diagnosisCode)}
-                      >
-                        <div className={visitStyles.close_icon}>
-                          <FontAwesomeIcon
-                            icon={faArrowsAlt}
-                            style={{ size: 8, color: "#a80404" }}
+                      <div className={visitStyles.container}>
+                        <div className={visitStyles.hccStickey_head}>
+                          <RadiologyCards
+                            list={newValidDiseaseListRadiology}
+                            captureSectionMatching={captureSectionMatching}
+                            meatCriteriaList={meatCriteriaListRadiology}
+                            encounterDateMatching={encounterDateMatching}
+                            onchangeValid={onchangeValid}
+                            okText="Move to Deleted"
+                            cancelText="Move to Suggested"
+                            editFormPlace={"VALID_DISEASE"}
+                            setSearch={setSearch}
+                            setFileModalHeader={setFileModalHeader}
+                            setConfirmNotesModalValid={
+                              setConfirmNotesModalValid
+                            }
+                            cardTitle="RADIOLOGY_HCC"
+                            provided={provided}
+                            setActiveTabHead={setActiveTabHead}
+                            setActiveMeatTitle={setActiveMeatTitle}
+                            setIsValidAction={setIsValidAction}
+                            setFileLoading={setFileLoading}
                           />
                         </div>
-                      </Popconfirm>
-                    </div>
-                    <div className={`${visitStyles.hoverActiveHcc}`}>
-                      <div
-                        className={`${visitStyles.encounterAndSectionHeader}`}
-                      >
-                        {getProviderNameList(data?.providerName)}
-                      </div>
-                      <div
-                        className={`${visitStyles.encounterAndSectionHeader}`}
-                      >
-                        {getEncounterDateBackground(
-                          data.encounterDateSplit,
-                          data.diagnosisCode
-                        )}
-                      </div>
-                      <div>
-                        {getCaptureSectionBackgroundFile(
-                          data.capturedSections,
-                          "Radio"
-                        )}
                       </div>
                     </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="col-xl-6">
-            <div className="card-body p-0 z-index-low">
-              <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
-                <div
-                  style={{
-                    height: "62vh",
-                    maxWidth: "1000px",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                  }}
-                >
-                  {" "}
-                  <Viewer
-                    fileUrl={selectFileURLRadiology}
-                    plugins={[defaultLayoutPluginInstance]}
-                    onDocumentLoad={handleDocumentLoad}
-                    renderLoader={(percentages) => (
-                      <div style={{ width: "240px" }}>
-                        <ProgressBar progress={Math.round(percentages)} />
-                      </div>
-                    )}
+                  );
+                }}
+              </Droppable>
+            </div>
+            <div className="col-xl-6">
+              <div className="card-body p-0 z-index-low">
+                {selectFileURLRadiology && (
+                  <PdfViewer
+                    src={selectFileURLRadiology}
+                    searchQuery={search?.value ? search?.value : ""}
+                    pageNumber={search?.page ? search?.page : 1}
+                    headers={search?.headers}
                   />
-                </div>
-              </Worker>
+                )}
+              </div>
             </div>
-          </div>
-          <div className="col-xl-3">
-            <div className="">
-              <ul className="timeline">
-                <div
-                  className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
-                >
-                  <span className={`${visitStyles.suggested_title_name}`}>
-                    NON-HCC
-                  </span>
-                  <div className="d-flex justify-content-center">
-                    <span className={`${visitStyles.suggested_title_badge}`}>
-                      {newInValidDiseaseListRadiology.length}
-                    </span>
-                  </div>
-                </div>
-                <div className={visitStyles.suggestedcontainer2}>
-                  <div className={visitStyles.hccStickey_head}>
-                    {newInValidDiseaseListRadiology.map((data, i) => (
-                      <li>
-                        <div className={`${visitStyles.hcc_card}`}>
-                          <div className={`${visitStyles.hcc_card_nameHead}`}>
-                            <div
-                              className="media-body"
-                              onClick={() =>
-                                findValueDocument(
-                                  data.diagnosisCode,
-                                  data.actualDescription
-                                )
-                              }
+            <div className="col-xl-3">
+                <Droppable droppableId={"NON_HCC"} key={"NON_HCC"}>
+                  {(provided) => {
+                    return (
+                      <div
+                        className="timeline"
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                      >
+                        <div
+                          className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
+                        >
+                          <span
+                            className={`${visitStyles.suggested_title_name}`}
+                          >
+                            NON-HCC
+                          </span>
+                          <div className="d-flex justify-content-center">
+                            <span
+                              className={`${visitStyles.suggested_title_badge}`}
                             >
-                              <span className="mb-1 disease-name d-flex">
-                                <span className="valid-dis-name">
-                                  {data.diagnosisCode}
-                                </span>{" "}
-                                - {data.actualDescription}
-                              </span>
-                            </div>
-
-                            <Popconfirm
-                              title="You want to delete?"
-                              description={data.diagnosisCode}
-                              onConfirm={confirmvalid}
-                              placement="leftTop"
-                              okText="Yes"
-                              cancelText="No"
-                              onOpenChange={() =>
-                                onchangeValid(data.diagnosisCode)
-                              }
-                            >
-                              <div className={visitStyles.close_icon}>
-                                <FontAwesomeIcon
-                                  icon={faArrowsAlt}
-                                  style={{
-                                    size: 8,
-                                    color: "#a80404",
-                                  }}
-                                />
-                              </div>
-                            </Popconfirm>
-                          </div>
-                          <div className={`${visitStyles.hoverActiveHcc}`}>
-                            <div
-                              className={`${visitStyles.encounterAndSectionHeader}`}
-                            >
-                              {getProviderNameList(data?.providerName)}
-                            </div>
-                            <div
-                              className={`${visitStyles.encounterAndSectionHeader}`}
-                            >
-                              {getEncounterDateBackground(
-                                data.encounterDateSplit,
-                                data.diagnosisCode
-                              )}
-                            </div>
-                            <div>
-                              {getCaptureSectionBackgroundFile(
-                                data.capturedSections,
-                                "Radio"
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                    ))}
-                  </div>
-                </div>
-              </ul>
-            </div>
-
-            <div className="">
-              <ul className="timeline">
-                <div
-                  className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
-                >
-                  <span className={`${visitStyles.deleted_title_name}`}>
-                    DELETED CODES
-                  </span>
-                  <div className="d-flex justify-content-center">
-                    <span className={`${visitStyles.deleted_title_badge}`}>
-                      {invalidMoveDiseasesList.length}
-                    </span>
-                  </div>
-                </div>
-                <div className={visitStyles.suggestedcontainer2}>
-                  <div className={visitStyles.hccStickey_head}>
-                    {invalidMoveDiseasesList.map((data, i) => (
-                      <li>
-                        <div className="timeline-panel invalid-disease">
-                          <div className="media-body">
-                            <span className="mb-1 disease-name d-flex">
-                              <span className="valid-dis-name">
-                                {data.diagnosisCode}
-                              </span>{" "}
-                              - {data.actualDescription}
+                              {newInValidDiseaseListRadiology.length}
                             </span>
                           </div>
-                          <Popover
-                            content={data.dbDescription}
-                            title={data.diagnosisCode}
-                            placement="bottom"
-                            trigger="click"
-                          >
-                            <div className="icon-box  bg-danger-light me-1">
-                              <FontAwesomeIcon
-                                icon={faInfo}
-                                style={{
-                                  color: "blue",
-                                }}
-                              />
-                            </div>
-                          </Popover>
-                          <Popconfirm
-                            title="You want move to valid?"
-                            description={data.diagnosisCode}
-                            onConfirm={confirmInvalidMoveDis}
-                            placement="leftTop"
-                            okText="Yes"
-                            cancelText="No"
-                            onOpenChange={() =>
-                              onchangeValid(data.diagnosisCode)
-                            }
-                          >
-                            <div className="icon-box  bg-danger-light me-1">
-                              <FontAwesomeIcon
-                                icon={faCheck}
-                                style={{
-                                  color: "orange",
-                                }}
-                              />
-                            </div>
-                          </Popconfirm>
                         </div>
-                      </li>
-                    ))}
-                  </div>
-                </div>
-              </ul>
+                        <div className={visitStyles.suggestedcontainer2}>
+                          <div className={visitStyles.hccStickey_head}>
+                            <RadiologyCards
+                              list={newInValidDiseaseListRadiology}
+                              captureSectionMatching={captureSectionMatching}
+                              meatCriteriaList={meatCriteriaListRadiology}
+                              encounterDateMatching={encounterDateMatching}
+                              onchangeValid={onchangeValid}
+                              okText="Move to Deleted"
+                              cancelText="Move to HCC"
+                              editFormPlace={"VALID_DISEASE"}
+                              setSearch={setSearch}
+                              setFileModalHeader={setFileModalHeader}
+                              setConfirmNotesModalValid={
+                                setConfirmNotesModalValid
+                              }
+                              cardTitle="NON_HCC"
+                              provided={provided}
+                              setActiveTabHead={setActiveTabHead}
+                              setActiveMeatTitle={setActiveMeatTitle}
+                              setIsValidAction={setIsValidAction}
+                              setFileLoading={setFileLoading}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  }}
+                </Droppable>
+
+                <Droppable
+                  droppableId={"RADILOGY_DELETED"}
+                  key={"RADILOGY_DELETED"}
+                >
+                  {(provided) => {
+                    return (
+                      <div
+                        className="timeline"
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                      >
+                        <div
+                          className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
+                        >
+                          <span className={`${visitStyles.deleted_title_name}`}>
+                            DELETED CODES
+                          </span>
+                          <div className="d-flex justify-content-center">
+                            <span
+                              className={`${visitStyles.deleted_title_badge}`}
+                            >
+                              {deletedDiseasesList.length}
+                            </span>
+                          </div>
+                        </div>
+                        <div className={visitStyles.suggestedcontainer2}>
+                          <div className={visitStyles.hccStickey_head}>
+                            <RadiologyCards
+                              list={deletedDiseasesList}
+                              captureSectionMatching={captureSectionMatching}
+                              meatCriteriaList={meatCriteriaListRadiology}
+                              encounterDateMatching={encounterDateMatching}
+                              onchangeValid={onchangeValid}
+                              okText="Move to Suggested"
+                              cancelText="Move to HCC"
+                              setSearch={setSearch}
+                              setFileModalHeader={setFileModalHeader}
+                              setConfirmNotesModalValid={
+                                setConfirmNotesModalValid
+                              }
+                              cardTitle="RADILOGY_DELETED"
+                              provided={provided}
+                              setActiveTabHead={setActiveTabHead}
+                              setActiveMeatTitle={setActiveMeatTitle}
+                              setIsValidAction={setIsValidAction}
+                              setFileLoading={setFileLoading}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  }}
+                </Droppable>
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Modals */}
-
-      {opens && combiTree[0]?.children?.length > 0 ? (
-        <Modal
-          title={fileModalHeader}
-          width="90%"
-          centered
-          open={opens}
-          onOk={() => setOpens(false)}
-          onCancel={() => setOpens(false)}
-          footer={null}
-        >
-          <CamboTree tree={combiTree} />
-        </Modal>
-      ) : (
-        opens && showErrorMessage()
-      )}
+      </DragDropContext>
+      <ModelIndex
+        title={selectDiseasesName}
+        openState={confirmNotesModalValid}
+        handleCloseModal={handleCloseModal}
+        setConfirmNotesModalValid={setConfirmNotesModalValid}
+        isValidAction={isValidAction}
+        selectDisDetails={selectDetails}
+        setFileLoading={setFileLoading}
+      />
     </>
   );
 };

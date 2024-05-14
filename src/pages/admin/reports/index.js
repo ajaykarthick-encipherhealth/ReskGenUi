@@ -26,6 +26,8 @@ import {
   getReportDetails,
 } from "../../../store/actions/adminAction/ReportActions";
 import { actions as workflowActions } from "../../../stores/reviewer/workqueue";
+import { getSelectUserList } from "../../../store/actions/adminAction/DashboardAction";
+
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -33,6 +35,11 @@ const statusOptions = [
   { label: "Pending", value: "PENDING" },
   { label: "Declined", value: "DECLINED" },
   { label: "Hold", value: "HOLD" },
+];
+const options = [
+  { value: "", label: "All" },
+  { value: "REVIEWER", label: "REVIEWER" },
+  { value: "SUPERVISOR", label: "SUPERVISOR" },
 ];
 
 const Reports = ({ workFgetFlagsowData }) => {
@@ -44,6 +51,9 @@ const Reports = ({ workFgetFlagsowData }) => {
   const ReceivedReportDetails = useSelector(
     (state) => state.report?.receivedDetails
   );
+  const selectUserList = useSelector(
+    (state) => state?.AdminDashboardReducers?.selectedUsers
+  );
   const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
 
@@ -54,7 +64,7 @@ const Reports = ({ workFgetFlagsowData }) => {
   const [comments, setComments] = useState();
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectAllCheckBoxes, setSelectAllCheckBoxes] = useState(false);
-  const [pageNo, setPageNo] = useState(7);
+  const [pageNo, setPageNo] = useState(0);
   const [sentPageNo, setSentPageNo] = useState(0);
   const [receivedPageNo, setReceivedPageNo] = useState(0);
   const [selectedData, setSelectedData] = useState([]);
@@ -188,14 +198,17 @@ const Reports = ({ workFgetFlagsowData }) => {
       dispatch(
         getReportDetails(
           pageNo,
-          coderStartDate,
-          coderEndDate,
-          coderSearch,
-          selectedCoderOpt,
-          selectedCoderOptReport?.value ? selectedCoderOptReport?.value : "",
+          selectedDateRanges?.Admin?.from,
+          selectedDateRanges?.Admin?.to,
+          coderSearchString ? coderSearchString : "",
+          selectedOptions?.Status?.value,
+          selectedOptions?.UserRole?.value
+            ? selectedOptions?.UserRole?.value
+            : "",
           sort,
-          selectManager?.value && selectedCoderOptReport?.value !== "All"
-            ? selectManager?.value
+          selectedOptions?.User?.value &&
+            selectedOptions?.UserRole?.value !== "All"
+            ? selectedOptions?.User?.value
             : ""
         )
       );
@@ -206,6 +219,7 @@ const Reports = ({ workFgetFlagsowData }) => {
     }
   }, [
     pageNo,
+    coderSearch,
     sentPageNo,
     receivedPageNo,
     receivedPageNo,
@@ -239,7 +253,8 @@ const Reports = ({ workFgetFlagsowData }) => {
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
-      navigate.push("/reviewer/patients/details");
+      const userRole = localStorage.getItem("userRole");
+      navigate.push(`/${userRole}/patients/details`);
     } else {
       notification.warning({
         message: data.patientId + " file not processed Please wait",
@@ -247,20 +262,21 @@ const Reports = ({ workFgetFlagsowData }) => {
     }
   };
 
-  const backRender = () => {
-    const user = localStorage.getItem("userRole");
-    if (user == "reviewer") {
-      route.push("/reviewer/report?page=0&limit=0");
-    }
-  };
   const dosOnChange = (selectedOption, name) => {
     const nameString = name?.split(" ").join("");
-    setSelectedOptions((prevOptions) => ({
-      ...prevOptions,
-      [nameString]: selectedOption?.value,
-    }));
+    if (name === "User Role") {
+      setSelectedOptions((prevOptions) => ({
+        ...prevOptions,
+        [nameString]: selectedOption,
+        User: { value: "", label: "Select..." },
+      }));
+    } else {
+      setSelectedOptions((prevOptions) => ({
+        ...prevOptions,
+        [nameString]: selectedOption,
+      }));
+    }
   };
-
   const debouncedSearch = useCallback(
     debounce(
       (
@@ -301,60 +317,39 @@ const Reports = ({ workFgetFlagsowData }) => {
     const field = event.target.name;
     debouncedSearch(value, setSearchVal, field);
   };
+  useEffect(() => {
+    if (selectedOptions?.UserRole?.label) {
+      dispatch(getSelectUserList(selectedOptions?.UserRole?.value));
+    }
+  }, [selectedOptions?.UserRole]);
 
+  const optionsUser =
+    selectUserList?.data?.response?.map((res) => ({
+      value: res.userName,
+      label: res.firstName + " " + res.lastName,
+    })) || [];
+
+  if (optionsUser.length > 0) {
+    optionsUser.unshift({ value: "", label: "All" });
+  }
   const checkedList = [
     {
       id: 1,
-      name: "Audited Status",
-      isSelect: true,
+      name: "Status",
+      isSelect: !reportActiveTab || reportActiveTab === "Admin" ? true : false,
+      options: statusOptions,
     },
     {
       id: 2,
-      name: "Flag",
+      name: "User Role",
       isSelect: true,
+      options: !reportActiveTab || reportActiveTab === "Admin" ? options : null,
     },
     {
       id: 3,
-      name: "Raf Score",
-      isSelect: false,
-      isSearch: true,
-    },
-    {
-      id: 4,
-      name: "Patient name",
-      isSearch: true,
-    },
-    {
-      id: 12,
-      name: "Flag",
-      isRangePikcer: true,
-    },
-    {
-      id: 13,
-      name: "Raf Score",
-      isSelect: false,
-      isSearch: true,
-    },
-    {
-      id: 14,
-      name: "Patient name",
-      isSearch: true,
-    },
-    {
-      id: 22,
-      name: "Flag",
+      name: "User",
       isSelect: true,
-    },
-    {
-      id: 32,
-      name: "Raf Score",
-      isSelect: false,
-      isRangePikcer: true,
-    },
-    {
-      id: 42,
-      name: "Patient name",
-      isSearch: true,
+      options: optionsUser,
     },
   ];
 
@@ -440,32 +435,6 @@ const Reports = ({ workFgetFlagsowData }) => {
                           </div>
                         </div>
                       </div>
-
-                      {!reportActiveTab || reportActiveTab === "Reviewer" ? (
-                        <div className="col-xl-2">
-                          <div className="d-flex w-100">
-                            <label className="labelStyle d-flex m-auto">
-                              {" "}
-                              Status
-                            </label>
-                            <div class="form-group has-search w-100">
-                              <Select
-                                onChange={(selectedOption) => {
-                                  dosOnChange(
-                                    selectedOption,
-                                    "reviewer Status"
-                                  );
-                                }}
-                                options={statusOptions}
-                                className={`custom-react-select`}
-                                isSearchable={false}
-                              />
-                              {/* )} */}
-                            </div>
-                          </div>
-                        </div>
-                      ) : null}
-
                       <div className="col-xl-2 d-flex">
                         <div className="d-flex w-100">
                           <label className="labelStyle d-flex m-auto">
@@ -497,15 +466,17 @@ const Reports = ({ workFgetFlagsowData }) => {
                           </div>
                         </div>
                       </div>
-                      <div className="col-xl-2">
-                        <MoreFilter
-                          checkedList={checkedList}
-                          selectAll={selectAllCheckBoxes}
-                          setSelectAll={setSelectAllCheckBoxes}
-                          selectedData={selectedData}
-                          setSelectedData={setSelectedData}
-                        />
-                      </div>
+                      {reportActiveTab === "Admin" && (
+                        <div className="col-xl-2">
+                          <MoreFilter
+                            checkedList={checkedList}
+                            selectAll={selectAllCheckBoxes}
+                            setSelectAll={setSelectAllCheckBoxes}
+                            selectedData={selectedData}
+                            setSelectedData={setSelectedData}
+                          />
+                        </div>
+                      )}
 
                       {!reportActiveTab || reportActiveTab === "Admin" ? (
                         <div className="col-xl-6">
@@ -543,10 +514,12 @@ const Reports = ({ workFgetFlagsowData }) => {
                         selectedData?.map((info) => (
                           <div className="col-xl-2 mt-3">
                             <div className="d-flex w-100">
-                              <label className="labelStyle d-flex m-auto">
-                                {" "}
-                                {info.name}
-                              </label>
+                              {info?.name && (
+                                <label className="labelStyle d-flex m-auto">
+                                  {" "}
+                                  {info.name}
+                                </label>
+                              )}
                               <div className="form-group has-search2 w-100">
                                 {info?.isSearch && (
                                   <FontAwesomeIcon
@@ -559,9 +532,14 @@ const Reports = ({ workFgetFlagsowData }) => {
                                     onChange={(selectedOption) => {
                                       dosOnChange(selectedOption, info.name);
                                     }}
-                                    options={statusOptions}
+                                    options={
+                                      info?.name === "User"
+                                        ? optionsUser
+                                        : info?.options
+                                    }
                                     className={`custom-react-select`}
                                     isSearchable={false}
+                                    value={selectedOptions[info?.name]}
                                   />
                                 ) : info?.isRangePikcer ? (
                                   <RangePicker
@@ -586,21 +564,23 @@ const Reports = ({ workFgetFlagsowData }) => {
                                     }
                                   />
                                 ) : (
-                                  <InputText
-                                    name={info?.name}
-                                    type="text"
-                                    onChange={(e) => filterChangePatientId(e)}
-                                    className="form-control new-form-control reportInput"
-                                    placeholder="Search"
-                                    maxLength={25}
-                                    value={search?.searchVal}
-                                    onKeyDown={(e) => {
-                                      // Prevent input of backslash ("\")
-                                      if (e.key === "\\") {
-                                        e.preventDefault();
-                                      }
-                                    }}
-                                  />
+                                  info?.isSearch && (
+                                    <InputText
+                                      name={info?.name}
+                                      type="text"
+                                      onChange={(e) => filterChangePatientId(e)}
+                                      className="form-control new-form-control reportInput"
+                                      placeholder="Search"
+                                      maxLength={25}
+                                      value={search?.searchVal}
+                                      onKeyDown={(e) => {
+                                        // Prevent input of backslash ("\")
+                                        if (e.key === "\\") {
+                                          e.preventDefault();
+                                        }
+                                      }}
+                                    />
+                                  )
                                 )}
                                 {/* )} */}
                               </div>
