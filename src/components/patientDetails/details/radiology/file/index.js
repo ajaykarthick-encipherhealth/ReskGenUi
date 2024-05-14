@@ -141,65 +141,7 @@ const File = ({ setActiveTabHead, setActiveMeatTitle }) => {
     });
   };
 
-  function removeDuplicates(array) {
-    let output = [];
-    for (let item of array) {
-      if (!output.includes(item)) output.push(item);
-    }
-
-    return output;
-  }
-
-  const getCaptureSectionBackgroundFile = (value) => {
-    var dublicateCaptureDelete = removeDuplicates(value);
-    return dublicateCaptureDelete.map((res) => {
-      const result = captureSectionMatching.filter(
-        (res2) => res2.sectionName == res
-      );
-      var backColor = result[0]?.backgroundColor;
-      var textColor = result[0]?.sectionColor;
-      var headerNames = result[0]?.sectionName;
-      var disCode = result[0]?.diagnosisCode;
-
-      var sectionMapArr = (
-        <span
-          onClick={() => findValueDocument(disCode, res)}
-          style={{ backgroundColor: backColor, color: textColor }}
-          className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
-        >
-          {res}
-        </span>
-      );
-      return sectionMapArr;
-    });
-  };
-
-  const getEncounterDateBackground = (value) => {
-    return value.map((res) => {
-      const result = encounterDateMatching.filter((res2) => res2.name == res);
-      var backColor = result[0]?.colors;
-      var sectionMapArr = (
-        <span onClick={() => getEncounterDetails(res)}>
-          <span
-            className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
-          >
-            <i>
-              <CalendarOutlined className={visitStyles.calenderIcon} />
-            </i>
-            {moment(res).format("MMM DD")}
-          </span>
-        </span>
-      );
-      return sectionMapArr;
-    });
-  };
-
-  const getEncounterDetails = async (date) => {
-    var date = moment(date).format("DD");
-    highlight({
-      keyword: date,
-    });
-  };
+  
   const handleCloseModal = () => {
     setConfirmNotesModalValid(false);
   };
