@@ -656,58 +656,75 @@
       {
         "diseaseName": "Example Disease",
         "diagnosisCode": "ABC123",
-        "visitDetailsDTO": {
-          "providerSet": [
-            {
-              "providerName": "Dr. Jane Smith, MD",
-              "authorizedProvider": true,
-              "unAuthorizeProvider": false,
-              "noCredential": false,
-              "unSigned": false
-            }
-          ],
-          "capturedSectionsList": ["section1", "section2", "section3"],
-          "encounterDate": "2024-05-10"
-        },
-
+        "providerNames": ["Provider1", "Provider2"],
+        "dateOfService": ["2024-05-10", "2024-05-11"],
         "isMeatCriteriaPresent": true,
-        "monitorCapturedFromHeader": "Monitor Captured From Header",
-        "monitor": "Monitor Info",
-        "evaluateCapturedFromHeader": "Evaluate Captured From Header",
-        "evaluate": "Evaluate Info",
-        "assessmentCapturedFromHeader": "Assessment Captured From Header",
-        "assessment": "Assessment Info",
-        "treatmentCapturedFromHeader": "Treatment Captured From Header",
-        "treatment": "Treatment Info",
-        "encounterDate": "2024-05-10",
-        "radiology": true,
-        "lab": false,
-        "hyperlinks": [
+        "monitorAspect": "Example Monitor Aspect",
+        "monitorHyperLink": [
           {
-            "header": "Monitor Captured From Header",
-            "pageNumber": 1,
-            "substring": "Substring1",
+            "header": "Example Monitor Aspect",
+            "pageNumber": 10,
+            "substring": "example substring",
             "dateOfService": "2024-05-10"
           },
           {
-            "header": "Evaluate Captured From Header",
-            "pageNumber": 2,
-            "substring": "Substring2",
-            "dateOfService": "2024-05-11"
-          },
-          {
-            "header": "Assessment Captured From Header",
-            "pageNumber": 3,
-            "substring": "Substring1",
-            "dateOfService": "2024-05-10"
-          },
-          {
-            "header": "Treatment Captured From Header",
-            "pageNumber": 4,
-            "substring": "Substring2",
+            "header": "Example Monitor Aspect",
+            "pageNumber": 15,
+            "substring": "another substring",
             "dateOfService": "2024-05-11"
           }
-        ]
+        ],
+        "evaluateAspect": "Example Evaluate Aspect",
+        "evaluateHyperLink": [
+          {
+            "header": "assessment",
+            "pageNumber": 20,
+            "substring": "evaluate substring",
+            "dateOfService": "2024-05-10"
+          },
+          {
+            "header": "plan",
+            "pageNumber": 25,
+            "substring": "another evaluate substring",
+            "dateOfService": "2024-05-12"
+          }
+        ],
+        "assessmentAspect": "Example Assessment Aspect",
+        "assessmentHyperLink": [
+          {
+            "header": "assessment",
+            "pageNumber": 30,
+            "substring": "assessment substring",
+            "dateOfService": "2024-05-10"
+          },
+          {
+            "header": "hpi",
+            "pageNumber": 35,
+            "substring": "another assessment substring",
+            "dateOfService": "2024-05-11"
+          }
+        ],
+        "treatmentAspect": "Example Treatment Aspect",
+        "treatmentHyperLink": [
+          {
+            "header": "treatment",
+            "pageNumber": 40,
+            "substring": "treatment substring",
+            "dateOfService": "2024-05-10"
+          },
+          {
+            "header": "past medical history",
+            "pageNumber": 45,
+            "substring": "another treatment substring",
+            "dateOfService": "2024-05-12"
+          }
+        ],
+        "isShow": true,
+        "encounterDate": "2024-05-14",
+        "radiology": true,
+        "lab": false,
+        "isManuallyAdded": false,
+        "manuallyAddedAt": "2024-05-14T10:00:00Z"
       }
     ],
     "dosFiltered": {

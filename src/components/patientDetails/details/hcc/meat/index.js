@@ -24,6 +24,7 @@ import { getResponePopup } from "../../../../../utils/reusable";
 import AddMeatQuery from "../../components/addMeatQuery";
 import {
   getEncounterDateBackground,
+  getHeaderHyperlink,
   getProviderNameList,
 } from "../../components/function/ReusableFunctions";
 import { getPatientDetails } from "../../components/function/GetData";
@@ -359,142 +360,142 @@ const Meat = ({ activeMeatTitle, year }) => {
     meatresult,
     type
   ) => {
-    setSelectMeatResult(meatresult);
-    setFileLoading(true);
-    setIsModalOpen(true);
-    var splitPoint = disDescription.substring(" ", 20);
-    var dotLoading = (
-      <div className={visitStyles.loadingFileHeader}>
-        <Spinner />
-      </div>
-    );
-    var fileId = patientFileDTO.fileId;
-    const encounterDatesValue = encounterDate.split(",");
-    const encounterDatesHeader = encounterDatesValue[0];
-    var pageNumber = null;
-    // var data = {
-    //   fileId: fileId,
-    //   header: value,
-    //   diagnosisCode: meatresult.diagnosisCode,
-    //   dos: encounterDatesValue,
-    //   stringFileWord: splitPoint,
-    // };
-    const patientId = localStorage.getItem("patientId");
-    var data = {
-      patientId: patientId,
-      diagnosisCode: meatresult.diagnosisCode,
-      year: year.value,
-      header: value,
-      dos: encounterDatesValue,
-      meatType: type,
-    };
-    try {
-      // const response = await axios.post(
-      //   ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
-      //   data
-      // );
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/pageNumber/hyperlink`,
-        data
-      );
-      var result = response.data.response;
-      if (response?.data?.status == "SUCCESS") {
-        if (result == null) {
-          return handleOpenModals(
-            value,
-            disDescription,
-            encounterDate,
-            meatresult,
-          );
-        }
-        splitPoint = result?.searchString;
-        setSearch({
-          value: splitPoint,
-          page: result?.pageNumber,
-          headers: false,
-          headerContent: headerNames,
-        });
-        setFileInitialPage(pageNumber);
-        setFileDosPageNumber(pageNumber);
-      } else {
-        setFileInitialPage(null);
-        setFileDosPageNumber(null);
-      }
-      setMeatModalTitle(dotLoading);
-      setIsLoadingSection(true);
-      if (findFileKeyword == splitPoint) {
-        setFileLoading(false);
-        var dataset = value + " / (" + disDescription + ")";
-        setMeatModalTitle(dataset);
-      }
-      setFindFileKeyword(splitPoint);
+  //   setSelectMeatResult(meatresult);
+  //   setFileLoading(true);
+  //   setIsModalOpen(true);
+  //   var splitPoint = disDescription.substring(" ", 20);
+  //   var dotLoading = (
+  //     <div className={visitStyles.loadingFileHeader}>
+  //       <Spinner />
+  //     </div>
+  //   );
+  //   var fileId = patientFileDTO.fileId;
+  //   const encounterDatesValue = encounterDate.split(",");
+  //   const encounterDatesHeader = encounterDatesValue[0];
+  //   var pageNumber = null;
+  //   // var data = {
+  //   //   fileId: fileId,
+  //   //   header: value,
+  //   //   diagnosisCode: meatresult.diagnosisCode,
+  //   //   dos: encounterDatesValue,
+  //   //   stringFileWord: splitPoint,
+  //   // };
+  //   const patientId = localStorage.getItem("patientId");
+  //   var data = {
+  //     patientId: patientId,
+  //     diagnosisCode: meatresult.diagnosisCode,
+  //     year: year.value,
+  //     header: value,
+  //     dos: encounterDatesValue,
+  //     meatType: type,
+  //   };
+  //   try {
+  //     // const response = await axios.post(
+  //     //   ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
+  //     //   data
+  //     // );
+  //     const response = await axios.post(
+  //       ENDPOINTS.apiEndoint + `dbservice/pageNumber/hyperlink`,
+  //       data
+  //     );
+  //     var result = response.data.response;
+  //     if (response?.data?.status == "SUCCESS") {
+  //       if (result == null) {
+  //         return handleOpenModals(
+  //           value,
+  //           disDescription,
+  //           encounterDate,
+  //           meatresult,
+  //         );
+  //       }
+  //       splitPoint = result?.searchString;
+  //       setSearch({
+  //         value: splitPoint,
+  //         page: result?.pageNumber,
+  //         headers: false,
+  //         headerContent: headerNames,
+  //       });
+  //       setFileInitialPage(pageNumber);
+  //       setFileDosPageNumber(pageNumber);
+  //     } else {
+  //       setFileInitialPage(null);
+  //       setFileDosPageNumber(null);
+  //     }
+  //     setMeatModalTitle(dotLoading);
+  //     setIsLoadingSection(true);
+  //     if (findFileKeyword == splitPoint) {
+  //       setFileLoading(false);
+  //       var dataset = value + " / (" + disDescription + ")";
+  //       setMeatModalTitle(dataset);
+  //     }
+  //     setFindFileKeyword(splitPoint);
 
-      var dataset = value + " / (" + disDescription + ")";
-      setSelectMeatName(dataset);
-    } catch (error) {
-      var dataset = value + " / (" + disDescription + ")";
-      setSelectMeatName(dataset);
-      splitPoint = value;
-      if (findFileKeyword == value) {
-        setFileLoading(false);
-      }
-      setFindFileKeyword(splitPoint);
-      setFileInitialPage(null);
-      setFileDosPageNumber(null);
-    }
-  };
+  //     var dataset = value + " / (" + disDescription + ")";
+  //     setSelectMeatName(dataset);
+  //   } catch (error) {
+  //     var dataset = value + " / (" + disDescription + ")";
+  //     setSelectMeatName(dataset);
+  //     splitPoint = value;
+  //     if (findFileKeyword == value) {
+  //       setFileLoading(false);
+  //     }
+  //     setFindFileKeyword(splitPoint);
+  //     setFileInitialPage(null);
+  //     setFileDosPageNumber(null);
+  //   }
+  // };
 
-  const getFindValidDiagnosisCode = async (value) => {
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`
-    );
-    if (response.data) {
-      if (response.data == "ICD disease not found") {
-        setAddValidCodeCheck(false);
-      } else {
-        setAddValidCodeCheck(true);
-        inputValue.actualDescription = "adakd dvasdv";
-      }
-    }
+  // const getFindValidDiagnosisCode = async (value) => {
+  //   const response = await axios.get(
+  //     ENDPOINTS.apiEndoint +
+  //       `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`
+  //   );
+  //   if (response.data) {
+  //     if (response.data == "ICD disease not found") {
+  //       setAddValidCodeCheck(false);
+  //     } else {
+  //       setAddValidCodeCheck(true);
+  //       inputValue.actualDescription = "adakd dvasdv";
+  //     }
+  //   }
 
-    inputValue.actualDescription = "adakd dvasdv";
-  };
+  //   inputValue.actualDescription = "adakd dvasdv";
+  // };
 
-  const stringToColour = (str) => {
-    let hash = 0;
-    str?.split("").forEach((char) => {
-      hash = char.charCodeAt(0) + ((hash << 5) - hash);
-    });
-    let colour = "#";
-    for (let i = 0; i < 3; i++) {
-      const value = (hash >> (i * 8)) & 0xff;
-      colour += value.toString(16).padStart(2, "0");
-    }
-    return colour;
-  };
+  // const stringToColour = (str) => {
+  //   let hash = 0;
+  //   str?.split("").forEach((char) => {
+  //     hash = char.charCodeAt(0) + ((hash << 5) - hash);
+  //   });
+  //   let colour = "#";
+  //   for (let i = 0; i < 3; i++) {
+  //     const value = (hash >> (i * 8)) & 0xff;
+  //     colour += value.toString(16).padStart(2, "0");
+  //   }
+  //   return colour;
+  // };
 
-  const submitSectionColors = async (
-    sectionName,
-    sectionColor,
-    backgroundColor
-  ) => {
-    var postData = {
-      backgroundColor: backgroundColor,
-      sectionColor: sectionColor,
-      sectionName: sectionName,
-    };
+  // const submitSectionColors = async (
+  //   sectionName,
+  //   sectionColor,
+  //   backgroundColor
+  // ) => {
+  //   var postData = {
+  //     backgroundColor: backgroundColor,
+  //     sectionColor: sectionColor,
+  //     sectionName: sectionName,
+  //   };
 
-    try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/section/color/save`,
-        postData
-      );
-      var result = response.data;
-      if (result.status == "SUCCESS") {
-      } else {
-      }
-    } catch (e) {}
+  //   try {
+  //     const response = await axios.post(
+  //       ENDPOINTS.apiEndoint + `dbservice/section/color/save`,
+  //       postData
+  //     );
+  //     var result = response.data;
+  //     if (result.status == "SUCCESS") {
+  //     } else {
+  //     }
+  //   } catch (e) {}
   };
 
   const getCaptureSectionBackgroundMeat = (
@@ -502,29 +503,55 @@ const Meat = ({ activeMeatTitle, year }) => {
     dis,
     encounterDate,
     meatresult,
-    type
+    type,
+    hyperlinks,
+    diagnosisCode
   ) => {
     if (value) {
       var igonreCase = value.toLowerCase();
       const result = captureSectionMatching.filter(
-        (res2) => res2.sectionName == igonreCase
+        (res2) => res2.sectionName === igonreCase
+      );
+      const headerResult = hyperlinks?.filter(
+        (res2) => res2.header?.toLowerCase() === result[0]?.sectionName
       );
 
       var backColor = result[0]?.backgroundColor;
       var textColor = result[0]?.sectionColor;
       var disCode = result[0]?.diagnosisCode;
       var headerNames = result[0]?.sectionName;
-
       var sectionMapArr = (
+        <Popover
+        placement="bottom"
+        content={
+          getHeaderHyperlink(
+          headerResult,
+          encounterDateMatching,
+          "hcc",
+          setSearch,
+          setFileLoading,
+          setIsModalOpenLab,
+          setIsModalOpenRadiology,
+          setIsModalOpen,
+          setFileModalHeader,
+          patientDocumentResult,
+          fileInitialPage,
+          setFileInitialPage,
+          diagnosisCode,
+          setSelectMeatResult,
+          meatresult
+        )}
+      >
         <span
-          onClick={() =>
-            handleOpenModal(value, dis, encounterDate, meatresult, type)
-          }
+          // onClick={() =>
+          //   handleOpenModal(value, dis, encounterDate, meatresult, type)
+          // }
           style={{ backgroundColor: backColor, color: textColor }}
           className={`cr-pointer mt-2 text-start ${visitStyles.captureheaderMeat}`}
         >
           {value}
         </span>
+        </Popover>
       );
       return sectionMapArr;
     }
@@ -743,7 +770,9 @@ const Meat = ({ activeMeatTitle, year }) => {
                             item.monitor,
                             item.encounterDate,
                             item,
-                            "MONITOR"
+                            "MONITOR",
+                            item.monitorHyperLink,
+                            item.diagnosisCode
                           )}
                         </div>
                       </div>
@@ -777,7 +806,9 @@ const Meat = ({ activeMeatTitle, year }) => {
                             item.evaluate,
                             item.encounterDate,
                             item,
-                            "EVALUATION"
+                            "EVALUATION",
+                            item.evaluateHyperLink,
+                            item.diagnosisCode
                           )}
                         </div>
                       </div>
@@ -812,7 +843,9 @@ const Meat = ({ activeMeatTitle, year }) => {
                             item.assessment,
                             item.encounterDate,
                             item,
-                            "ASSESSMENT"
+                            "ASSESSMENT",
+                            item.assessmentHyperLink,
+                            item.diagnosisCode
                           )}
                         </div>
                       </div>
@@ -846,7 +879,9 @@ const Meat = ({ activeMeatTitle, year }) => {
                             item.treatment,
                             item.encounterDate,
                             item,
-                            "TREATMENT"
+                            "TREATMENT",
+                            item.treatmentHyperLink,
+                            item.diagnosisCode
                           )}
                         </div>
                       </div>
@@ -1054,7 +1089,7 @@ const Meat = ({ activeMeatTitle, year }) => {
 
       {isModalOpen && (
         <Modal
-          title={meatModalTitle}
+          title={fileModalHeader}
           // title="Pdf Test"
           centered
           open={isModalOpen}
@@ -1176,12 +1211,14 @@ const Meat = ({ activeMeatTitle, year }) => {
                           </span>
                         )}
                         <div>
-                          {getCaptureSectionBackgroundMeatFile(
-                            selectMeatResult?.monitorCapturedFromHeader,
-                            selectMeatResult?.monitor,
-                            selectMeatResult?.encounterDate,
+                        {getCaptureSectionBackgroundMeat(
+                            selectMeatResult.monitorCapturedFromHeader,
+                            selectMeatResult.monitor,
+                            selectMeatResult.encounterDate,
                             selectMeatResult,
-                            "MONITOR"
+                            "MONITOR",
+                            selectMeatResult.monitorHyperLink,
+                            selectMeatResult.diagnosisCode
                           )}
                         </div>
                       </div>
@@ -1220,12 +1257,14 @@ const Meat = ({ activeMeatTitle, year }) => {
                           </span>
                         )}
                         <div>
-                          {getCaptureSectionBackgroundMeatFile(
-                            selectMeatResult?.evaluateCapturedFromHeader,
-                            selectMeatResult?.evaluate,
-                            selectMeatResult?.encounterDate,
+                        {getCaptureSectionBackgroundMeat(
+                            selectMeatResult.evaluateCapturedFromHeader,
+                            selectMeatResult.evaluate,
+                            selectMeatResult.encounterDate,
                             selectMeatResult,
-                            "EVALUATION"
+                            "EVALUATION",
+                            selectMeatResult.evaluateHyperLink,
+                            selectMeatResult.diagnosisCode
                           )}
                         </div>
                       </div>
@@ -1265,12 +1304,14 @@ const Meat = ({ activeMeatTitle, year }) => {
                         )}
 
                         <div>
-                          {getCaptureSectionBackgroundMeatFile(
-                            selectMeatResult?.assessmentCapturedFromHeader,
-                            selectMeatResult?.assessment,
-                            selectMeatResult?.encounterDate,
+                        {getCaptureSectionBackgroundMeat(
+                            selectMeatResult.assessmentCapturedFromHeader,
+                            selectMeatResult.assessment,
+                            selectMeatResult.encounterDate,
                             selectMeatResult,
-                            "ASSESSMENT"
+                            "ASSESSMENT",
+                            selectMeatResult.assessmentHyperLink,
+                            selectMeatResult.diagnosisCode
                           )}
                         </div>
                       </div>
@@ -1308,12 +1349,14 @@ const Meat = ({ activeMeatTitle, year }) => {
                           </span>
                         )}
                         <div>
-                          {getCaptureSectionBackgroundMeatFile(
-                            selectMeatResult?.treatmentCapturedFromHeader,
-                            selectMeatResult?.treatment,
-                            selectMeatResult?.encounterDate,
+                        {getCaptureSectionBackgroundMeat(
+                            selectMeatResult.treatmentCapturedFromHeader,
+                            selectMeatResult.treatment,
+                            selectMeatResult.encounterDate,
                             selectMeatResult,
-                            "TREATMENT"
+                            "TREATMENT",
+                            selectMeatResult.treatmentHyperLink,
+                            selectMeatResult.diagnosisCode
                           )}
                         </div>
                       </div>
