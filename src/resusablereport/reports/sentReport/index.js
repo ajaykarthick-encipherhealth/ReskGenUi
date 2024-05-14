@@ -3,7 +3,7 @@ import styles from "../report.module.css";
 import { Paginator } from "primereact/paginator";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
-import { Avatar } from "antd";
+import { Avatar, Empty } from "antd";
 import ReactECharts from "echarts-for-react";
 import { useDispatch } from "react-redux";
 import {
@@ -369,7 +369,7 @@ const SentReport = ({
                       <SpinnerDots />
                     ) : (
                       <div className={styles.cardContainer}>
-                        {details?.receivedReportDTOList?.data?.map(
+                        {details?.receivedReportDTOList?.data?.length>0?details?.receivedReportDTOList?.data?.map(
                           (item, index) => {
                             const formattedDate = dateFormate(
                               dayjs,
@@ -499,7 +499,7 @@ const SentReport = ({
                               </div>
                             );
                           }
-                        )}
+                        ):<Empty/>}
                       </div>
                     )}
                   </div>

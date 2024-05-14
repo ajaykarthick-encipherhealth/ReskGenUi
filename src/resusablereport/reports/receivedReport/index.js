@@ -10,6 +10,7 @@ import {
 } from "../../../components/headerFilters/functions";
 import { colors } from "../sentReport";
 import SpinnerDots from "../../../components/spinner";
+import { Empty } from "antd";
 
 const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
   const [reportActiveTab, setReportActiveTab] = useState("Supervisor");
@@ -51,7 +52,6 @@ const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
               name: "Csv",
               itemStyle: {
                 color: csvCount ? "#0A9FFF" : "#d9d9d9",
-           
               },
             },
           ],
@@ -267,12 +267,8 @@ const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
       ? getChartUserOption()
       : getChartAdminOption();
 
-
   useEffect(() => {
-    if (
-      details?.reportStatusDTOList &&
-      details?.reportStatusDTOList > 0
-    ) {
+    if (details?.reportStatusDTOList && details?.reportStatusDTOList > 0) {
       handleCardSelection(details?.reportStatusDTOList[0], 0);
     }
   }, [details]);
@@ -309,116 +305,126 @@ const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
                     ) : (
                       <div className={styles.cardContainer}>
                         <div className={styles.cardContainer}>
-                          {details?.reportStatusDTOList?.content?.map(
-                            (item, index) => {
-                 
-                              const formattedDate = dateFormate(
-                                dayjs,
-                                item?.receiveDate
-                              );
-                              return (
-                                <div key={index} className={styles.card}>
-                                  <div className={styles.contentGroup}>
-                                    <div className="col-xl-12">
-                                      <div
-                                        style={{
-                                          display: "flex",
-                                          justifyContent: "space-between",
-                                          alignItems: "center",
-                                          paddingBottom: "5px",
-                                        }}
-                                      >
+                          {details?.reportStatusDTOList?.content?.length > 0 ? (
+                            details?.reportStatusDTOList?.content?.map(
+                              (item, index) => {
+                                const formattedDate = dateFormate(
+                                  dayjs,
+                                  item?.receiveDate
+                                );
+                                return (
+                                  <div key={index} className={styles.card}>
+                                    <div className={styles.contentGroup}>
+                                      <div className="col-xl-12">
                                         <div
-                                          className={`col-xl-6 ${styles.pName}`}
+                                          style={{
+                                            display: "flex",
+                                            justifyContent: "space-between",
+                                            alignItems: "center",
+                                            paddingBottom: "5px",
+                                          }}
                                         >
-                                          {item.reportName}
+                                          <div
+                                            className={`col-xl-6 ${styles.pName}`}
+                                          >
+                                            {item.reportName}
+                                          </div>
+
+                                          <div className={`col-xl-2 `}>
+                                            {accessTemplate(item)}
+                                          </div>
                                         </div>
 
-                                        <div className={`col-xl-2 `}>
-                                          {accessTemplate(item)}
-                                        </div>
-                                      </div>
-
-                                      <div
-                                        style={{
-                                          display: "flex",
-                                          justifyContent: "space-between",
-                                          alignItems: "center",
-                                          paddingBottom: "5px",
-                                        }}
-                                      >
                                         <div
-                                          className={`col-xl-8 ${styles.headText}`}
+                                          style={{
+                                            display: "flex",
+                                            justifyContent: "space-between",
+                                            alignItems: "center",
+                                            paddingBottom: "5px",
+                                          }}
                                         >
-                                          {item.id}
-                                        </div>
-                                        <div
-                                          className={`col-xl-4 ${styles.headText}`}
-                                        >
-                                          {item.repotee}
-                                        </div>
-                                      </div>
-                                      <div
-                                        style={{
-                                          display: "flex",
-                                          justifyContent: "space-between",
-                                          alignItems: "center",
-                                        }}
-                                      >
-                                        <div
-                                          className={`col-xl-2 ${styles.text}`}
-                                        >
-                                          {formattedDate}
+                                          <div
+                                            className={`col-xl-8 ${styles.headText}`}
+                                          >
+                                            {item.id}
+                                          </div>
+                                          <div
+                                            className={`col-xl-4 ${styles.headText}`}
+                                          >
+                                            {item.repotee}
+                                          </div>
                                         </div>
                                         <div
-                                          className={`col-xl-4 ${styles.text}`}
+                                          style={{
+                                            display: "flex",
+                                            justifyContent: "space-between",
+                                            alignItems: "center",
+                                          }}
                                         >
-                                          {item.senderDetails?.firstName ||
-                                          item.senderDetails?.lastName ||
-                                          item?.senderDetails
-                                            ?.profileImageUrl ? (
-                                            <div
-                                              style={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                              }}
-                                            >
-                                              {" "}
-                                              <span
-                                                style={{ marginRight: "10px" }}
+                                          <div
+                                            className={`col-xl-2 ${styles.text}`}
+                                          >
+                                            {formattedDate}
+                                          </div>
+                                          <div
+                                            className={`col-xl-4 ${styles.text}`}
+                                          >
+                                            {item.senderDetails?.firstName ||
+                                            item.senderDetails?.lastName ||
+                                            item?.senderDetails
+                                              ?.profileImageUrl ? (
+                                              <div
+                                                style={{
+                                                  display: "flex",
+                                                  alignItems: "center",
+                                                }}
                                               >
                                                 {" "}
-                                                {renderUserPrfoileAvatar(
-                                                  item.senderDetails?.firstName,
-                                                  item.senderDetails?.lastName,
-                                                  item?.senderDetails
-                                                    ?.profileImageUrl,
-                                                  "header"
-                                                )}
-                                              </span>
-                                              <span>
-                                                {item.senderDetails?.firstName}{" "}
-                                                {item.senderDetails?.lastName}
-                                              </span>
-                                            </div>
-                                          ) : (
-                                            <div
-                                              style={{ textAlign: "center" }}
-                                            >
-                                              ---
-                                            </div>
-                                          )}
+                                                <span
+                                                  style={{
+                                                    marginRight: "10px",
+                                                  }}
+                                                >
+                                                  {" "}
+                                                  {renderUserPrfoileAvatar(
+                                                    item.senderDetails
+                                                      ?.firstName,
+                                                    item.senderDetails
+                                                      ?.lastName,
+                                                    item?.senderDetails
+                                                      ?.profileImageUrl,
+                                                    "header"
+                                                  )}
+                                                </span>
+                                                <span>
+                                                  {
+                                                    item.senderDetails
+                                                      ?.firstName
+                                                  }{" "}
+                                                  {item.senderDetails?.lastName}
+                                                </span>
+                                              </div>
+                                            ) : (
+                                              <div
+                                                style={{ textAlign: "center" }}
+                                              >
+                                                ---
+                                              </div>
+                                            )}
 
-                                          <span>
-                                            {item.firstName} {item.lastName}
-                                          </span>
+                                            <span>
+                                              {item.firstName} {item.lastName}
+                                            </span>
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
-                                </div>
-                              );
-                            }
+                                );
+                              }
+                            )
+                          ) : (
+                            <Empty />
                           )}
                         </div>
                       </div>
@@ -437,10 +443,7 @@ const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
                               <div>
                                 <div>Overall Reports Sent</div>
                                 <h4>
-                                  {
-                                    details?.reportStatusDTOList
-                                      ?.totalElements
-                                  }
+                                  {details?.reportStatusDTOList?.totalElements}
                                 </h4>
                               </div>
                             </div>
@@ -562,7 +565,10 @@ const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
           onPageChange={onPageChange}
         />
         <div className="total-pages">
-          Total count: {details?.reportStatusDTOList?.content?.totalElements > 0 ? details?.content?.reportStatusDTOList?.totalElements : 0}
+          Total count:{" "}
+          {details?.reportStatusDTOList?.content?.totalElements > 0
+            ? details?.content?.reportStatusDTOList?.totalElements
+            : 0}
         </div>
       </div>
     </>
