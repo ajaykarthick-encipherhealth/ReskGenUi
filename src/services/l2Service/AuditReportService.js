@@ -16,7 +16,7 @@ export const patientDetails = async (
   const sortField = sort?.sortField === "undefined" ? "" : sort?.sortField;
   const sortDirection = sort?.sortDir === "undefined" ? "" : sort?.sortDir;
 
-  const url = `dbservice/patient/auditor/assinedreport?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&orgid=${orgId}&sortfield=${sortField}&sortdirection=${sortDirection}`;
+  const url = `dbservice/patient/auditor/assinedreport?pageno=${pagenum}&size=7&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&orgid=${orgId}&sortfield=${sortField}&sortdirection=${sortDirection}`;
 
   try {
     const response = await axios.get(`${ENDPOINTS?.apiEndoint}${url}`, {
