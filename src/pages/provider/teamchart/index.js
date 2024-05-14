@@ -5,6 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { TeamChart } from "../../../services/adminServices/DashboardService";
 import ChartsEmbedSDK from "@mongodb-js/charts-embed-dom";
+import Donutchart from "../donutchart";
+import QualityScore from "../demoReviewer/qualityScore";
+
+
+
 
 const Teamchart = () => {
   const dispatch = useDispatch();
@@ -120,6 +125,9 @@ const Teamchart = () => {
   });
   const teamChart = sdk.createChart({
     chartId: "65f93b7c-05d4-46ea-8c27-7b2e54f9d0cd",
+    options: {
+      background: "transparent",
+    },
   });
 
   useEffect(() => {
@@ -128,76 +136,40 @@ const Teamchart = () => {
 
   return (
     <>
-      <h4>Team chart status</h4>
-      <div className={styles.card5}>
-        <Card borderRadius="30px" padding="0px">
-          <div className={styles.buttonDiv}>
-            <div className={styles.select}>
-              {/* <Select
-                showSearch
-                value={selectUser}
-                placeholder="Select Team"
-                className={`custom_select_user ${styles.custom_select_user}`}
-                onChange={(e) => onChangeUser(e)}
-                options={optionsUser}
-              /> */}
-            </div>
-            <div
-              id="teamchart"
-              className="mt-3 p-4"
-              style={{
-                height: 370,
-                width: 1000,
-              }}
-            ></div>
-            <div className={styles.header}>
-              {/* <div
-                style={{
-                  width: "100%",
-                  bottom: "0",
-                }}
-                className={styles.chartContainer}
-              >
-                {teamChartData?.loading ? (
-                  <div
-                    className={spinSTYles.spinStyle}
-                    style={{
-                      paddingTop: "150px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Spin loading={teamChartData?.loading} />
-                  </div>
-                ) : teamChartData?.data?.response?.length > 0 ? (
-                  option && (
-                    <ReactApexChart
-                      options={options2}
-                      series={series2}
-                      type="bar"
-                      height={630}
-                    />
-                    // <ReactECharts
-                    //   option={option}
-                    //   style={{
-                    //     width: "100%",
-                    //     height: "680px",
-                    //     marginTop: "-30px",
-                    //     overflowY: "hidden",
-                    //   }}
-                    // />
-                  )
-                ) : (
-                  <div className={spinSTYles.spinStyle}>
-                    <Empty />
-                  </div>
-                )}
-              </div> */}
-            </div>
+     <div className="container">
+     <div className="row">
+        <div className="col-8">
+        <h4 className="pt-3">Team chart status</h4>
+          <div className={styles.card5}>
+            <Card borderRadius="30px" padding="0px">
+              <div className={styles.buttonDiv}>
+                <div className={styles.select}>
+                </div>
+                <div
+                  id="teamchart"
+                  className="mt-3 p-4"
+                  style={{
+                    height: 340,
+                    width: 850,
+                  }}
+                ></div>
+              </div>
+            </Card>
           </div>
-        </Card>
+        </div>
+        <div className="col-4">
+          <h4 className="pt-3">Total Users</h4>
+       
+        <Donutchart />
+        </div>
       </div>
+<QualityScore />
+
+
+
+     </div>
+      
+      
     </>
   );
 };

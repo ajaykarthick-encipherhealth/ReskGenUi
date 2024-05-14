@@ -10,7 +10,8 @@ import YearPicker from "../../../../src/components/yearpicker";
 import dayjs from "dayjs";
 import Atlas from "../atlas";
 
-const CompletedStatus = () => {
+
+const CompletedStatusChart = () => {
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
   const currentDate = new Date();
@@ -36,8 +37,8 @@ const CompletedStatus = () => {
     if (chart) {
       chart.setFilter(filter);
     }
-    console.log("chartchart2", chart);
   };
+  console.log(currentDate);
 
   useEffect(() => {
     if (currentBtn === "Daily" || currentBtn === "Weekly") dayFilter();
@@ -60,8 +61,9 @@ const CompletedStatus = () => {
 
   useEffect(() => {
     const sdk = new ChartsEmbedSDK({
-      baseUrl: "https://charts.mongodb.com/charts-project-0-gdoee",
+      baseUrl: "https://charts.mongodb.com/charts-project-1-hubxull",
       showAttribution: false,
+      gridLines: false,
     });
 
     const currentYear = selectedYear;
@@ -86,14 +88,19 @@ const CompletedStatus = () => {
 
     const chartId =
       viewchart === "day"
-        ? "65ec335a-9b59-4944-82bb-78cb56e41036"
+        ? "5d367e3c-dff4-475b-953c-56837b824617"
         : viewchart === "month"
-        ? "65ec1a38-c122-4dea-89e2-a526faba5329"
-        : "65ec37bb-9b59-4f60-8b5c-78cb56f18191";
+        ? "663dbcc7-b117-4e8d-8526-509d68af7d3a"
+        : "403f8f1b-8f3f-4b00-9d27-81eefa4dd585";
 
     const chart = sdk.createChart({
       chartId: chartId,
       filter: filter,
+      options: {
+        gridlines: {
+          enabled: false,
+        },
+      },
     });
 
     setchart(chart);
@@ -139,19 +146,8 @@ const CompletedStatus = () => {
   }, [selectedYear]);
 
   const handleMonthChange = (date) => {
-    const selectedDate = new Date(date);
     setMonth(date);
-    setSelectedMonth(month);
-    setSelectedMonth(year);
-
-    const monthNumber = (selectedDate.getMonth() + 1)
-      .toString()
-      .padStart(2, "0");
-    if (currentBtn === "Monthly") {
-      setSelectedMonth();
-    } else {
-      setSelectedMonth(monthNumber);
-    }
+    setSelectedMonth(date);
   };
 
   return (
@@ -160,65 +156,59 @@ const CompletedStatus = () => {
 
       <HeadTitle header="Completed Status" />
       <div style={{ marginTop: "5%" }}>
-        <div
-          style={{
-            width: "75%",
-            position: "relative",
-            left: "50px",
-            // height: "450px",
-          }}
-        >
-          <h4>Sample chart</h4>
-          <Card borderRadius="28px" padding="10px">
-            <div
-              className={styles.buttonDiv}
-              style={{ position: "relative", left: "-88px" }}
-            >
-              <div className={`d-flex ${styles.selectContainer}`}>
-                <div className={styles.select}>
-                  {/* <Select
-                  value={
-                    selectMemberType?.length === 0 ? "Select User" : selectMemberType
-                  }
-                  // placeholder="Select User Type"
-                  onChange={(e) => memberTypeChanges(e)}
-                  className={`custom_select_type ${styles.custom_select_type}`}
-                  options={options}
-                  style={{ backgroundColor: "#F3F3FF", width: "140px" }}
-                /> */}
-                </div>
-              </div>
-              <div className={styles.picker}>
-                <YearPicker
-                  onChangeYear={handleYearChange}
-                  onChangeMonth={handleMonthChange}
-                  type={currentBtn}
-                  bgColor="#F3F3FF"
-                  val={month}
-                  val1={year}
-                />
-              </div>
-              <div className={styles.btnScroller}>
-                <Buttonscroller
-                  selectedYear={selectedYear}
-                  selectedMonth={selectedMonth}
-                  Buttons={Buttons}
-                  handleButtonClick={handleButtonClick}
-                  activeButton={activeButton}
-                  activeColor="#fff"
-                  inActiveColor="#000000"
-                  activeBg="#1E1B39"
-                  inActiveBg="#F3F3FF"
-                  containerBg="#F3F3FF"
-                />
+        <div className="container">
+          <div className="row">
+            <div className="col-12">
+              <div>
+             
+                <h4>File Processing chart </h4>
+                <Card borderRadius="28px" padding="10px">
+                  <div className={styles.buttonDiv}>
+                    <div className={`d-flex ${styles.selectContainer}`}>
+                      <div className={styles.select}></div>
+                    </div>
+                    <div className={styles.picker}>
+                      <YearPicker
+                        onChangeYear={handleYearChange}
+                        onChangeMonth={handleMonthChange}
+                        type={currentBtn}
+                        bgColor="#F3F3FF"
+                        val={month}
+                        val1={year}
+                      />
+                    </div>
+                    <div className={styles.btnScroller}>
+                      <Buttonscroller
+                        selectedYear={selectedYear}
+                        selectedMonth={selectedMonth}
+                        Buttons={Buttons}
+                        handleButtonClick={handleButtonClick}
+                        activeButton={activeButton}
+                        activeColor="#fff"
+                        inActiveColor="#000000"
+                        activeBg="#1E1B39"
+                        inActiveBg="#F3F3FF"
+                        containerBg="#F3F3FF"
+                      />
+                    </div>
+                  </div>
+                  <div
+                    id="chart-data"
+                    style={{
+                      height: 300,
+                      width: 1200,
+                    }}
+                  ></div>
+                </Card>
               </div>
             </div>
-          </Card>
+          </div>
         </div>
+
         <Atlas />
       </div>
     </>
   );
 };
 
-export default CompletedStatus;
+export default CompletedStatusChart;

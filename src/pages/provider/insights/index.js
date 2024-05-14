@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
-import {useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import Buttonscroller from "../../../components/buttonSroller";
 import { Buttons } from "../../reviewer/workingstatus";
@@ -68,7 +68,6 @@ const Insights = () => {
     (state) => state?.AdminDashboardReducers?.accuracy
   );
 
-
   const numberOfWeeks =
     accuracyDatas?.data?.response &&
     Object.keys(accuracyDatas?.data?.response)?.length;
@@ -89,7 +88,6 @@ const Insights = () => {
     setCurrentTabBtn(btn);
   };
 
-
   const handleYearChange = (date, dateString) => {
     if (dateString) {
       const year = new Date(dateString).getFullYear();
@@ -104,21 +102,9 @@ const Insights = () => {
   };
 
   const handleMonthChange = (date) => {
-    const selectedDate = new Date(date);
     setMonth(date);
-    setSelectedMonth(month);
-    setSelectedMonth(year);
-
-    const monthNumber = (selectedDate.getMonth() + 1)
-      .toString()
-      .padStart(2, "0");
-    if (currentBtn === "Monthly") {
-      setSelectedMonth();
-    } else {
-      setSelectedMonth(monthNumber);
-    }
+    setSelectedMonth(date);
   };
-
   let xAxisData = [];
   if (currentBtn === "Monthly") {
     xAxisData = monthNames;
@@ -154,7 +140,6 @@ const Insights = () => {
   if (currentBtn && accuracyDatas?.data?.response) {
     data = Object.values(accuracyDatas?.data?.response);
   }
-
 
   useEffect(() => {
     if (currentTabBtn === "CogentAI Accuracy") {
@@ -281,145 +266,72 @@ const Insights = () => {
   }, [atlaschart]);
 
   return (
-    <div
-      style={{
-        width: "75%",
-        position: "relative",
-        left: "50px",
-        // height: "450px",
-      }}
-    >
-      <h4 className="mt-3">Accuracy and Quality Insights</h4>
-      <div className={styles.card3}>
-        <Card borderRadius="28px" padding="10px">
-          <div className={styles.buttonDiv}>
-            <div className={`d-flex ${styles.selectContainer}`}>
-              <div className={styles.btnScroller}>
-                <Buttonscroller
-                  Buttons={TabButtons}
-                  handleButtonClick={handleTabButtonClick}
-                  activeButton={activeTabButton}
-                  activeColor="#fff"
-                  inActiveColor="
+    <div className="container">
+      <div className="row">
+        <div className="col-12">
+          <h4 className="mt-3">Accuracy and Quality Insights</h4>
+          <div className={styles.card3}>
+            <Card borderRadius="28px" padding="10px">
+              <div className={styles.buttonDiv}>
+                <div className={`d-flex ${styles.selectContainer}`}>
+                  <div className={styles.btnScroller}>
+                    <Buttonscroller
+                      Buttons={TabButtons}
+                      handleButtonClick={handleTabButtonClick}
+                      activeButton={activeTabButton}
+                      activeColor="#fff"
+                      inActiveColor="
                 #000000"
-                  activeBg="#043069"
-                  inActiveBg="
+                      activeBg="#043069"
+                      inActiveBg="
                 #E6EEFF"
-                  containerBg="
+                      containerBg="
                 #E6EEFF"
-                  width="150px"
-                />
-              </div>
-            </div>
-            <div className="d-flex">
-              <div className={styles.picker}>
-                <YearPicker
-                  onChangeYear={handleYearChange}
-                  onChangeMonth={handleMonthChange}
-                  type={currentBtn}
-                  bgColor="#E6EEFF"
-                  val={month}
-                  val1={year}
-                />
-               
-              </div>
-              <div className={styles.btnScroller}>
-                <Buttonscroller
-                  Buttons={Buttons}
-                  handleButtonClick={handleButtonClick}
-                  activeButton={activeButton}
-                  activeColor="#fff"
-                  inActiveColor="
-                #000000"
-                  activeBg="#04306f"
-                  inActiveBg="
-                #E6EEFF"
-                  containerBg="
-                #E6EEFF"
-                />
-              </div>
-            </div>
-          </div>
-          <div
-            id="chartfilterdata"
-            style={{
-              height: 300,
-              width: 1000,
-            }}
-          ></div>
-          <div className={styles.header}>
-            {/* <div style={{ width: "85%", overflowX: "scroll" }}>
-              {accuracyDatas?.loading || QualityAccuracyDatas?.loading ? (
-                <div className={spinSTYles.spinStyle}>
-                  <Spin loading={accuracyDatas?.loading} />
-                </div>
-              ) : accuracyDatas?.loading === false &&
-                accuracyDatas?.data?.response ? (
-                currentTabBtn === "CogentAI Accuracy" ? (
-                  <ReactECharts
-                    option={option}
-                    style={{
-                      width: "100%",
-                      height: "340px",
-                      marginTop: "-30px",
-                      overflowX: "hidden",
-                    }}
-                  />
-                ) : (
-                  <div className={styles.highchartStyle}>
-                    <HighchartsReact
-                      highcharts={Highcharts}
-                      options={config}
-                      className={styles.hightchartStyles}
+                      width="150px"
                     />
                   </div>
-                )
-              ) : (
-                <div className={spinSTYles.spinStyle}>
-                  <Empty />
                 </div>
-              )}
-            </div> */}
-            {/* <div className={styles.accuracy}>
-              <div className={styles.header}>
-                <Image src={accuracy} className={styles.Img} />
-                <div className={styles.heading}>
-                  {currentTabBtn === "CogentAI Accuracy"
-                    ? "Accuracy"
-                    : "Average Score"}
+                <div className="d-flex">
+                  <div className={styles.picker}>
+                    <YearPicker
+                      onChangeYear={handleYearChange}
+                      onChangeMonth={handleMonthChange}
+                      type={currentBtn}
+                      bgColor="#E6EEFF"
+                      val={month}
+                      val1={year}
+                    />
+                  </div>
+                  <div className={styles.btnScroller}>
+                    <Buttonscroller
+                      Buttons={Buttons}
+                      handleButtonClick={handleButtonClick}
+                      activeButton={activeButton}
+                      activeColor="#fff"
+                      inActiveColor="
+                #000000"
+                      activeBg="#04306f"
+                      inActiveBg="
+                #E6EEFF"
+                      containerBg="
+                #E6EEFF"
+                    />
+                  </div>
                 </div>
               </div>
-              <div className={styles.month}>
-                {currentBtn === "Daily"
-                  ? `Day ${currentDate.getDate()}`
-                  : currentBtn === "Monthly"
-                  ? `Month ${monthNames[currentDate.getMonth()]}`
-                  : `Week ${getDateWeek(currentDate)}`}
-              </div>
-
-              <div className={styles.percentage}>
-                <span className={styles.insideTitle}>
-                  {currentTabBtn === "CogentAI Accuracy"
-                    ? accuracyDatas?.data?.response &&
-                      accuracyDatas?.data?.response[highlightIndex + 1]
-                      ? `${Math.round(
-                          accuracyDatas?.data?.response[highlightIndex + 1]
-                        )}%`
-                      : "0%"
-                    : QualityAccuracyDatas?.data?.response &&
-                      QualityAccuracyDatas?.data?.response[highlightIndex]
-                    ? `${Math.round(
-                        QualityAccuracyDatas?.data?.response[highlightIndex]
-                          ?.averageScore
-                      )}%`
-                    : "0%"}
-                </span>
-              </div>
-            </div> */}
+              <div
+                id="chartfilterdata"
+                style={{
+                  height: 300,
+                  width: 1200,
+                }}
+              ></div>
+              
+            </Card>
           </div>
-        </Card>
+        </div>
+        <Teamchart />
       </div>
-      <Teamchart />
     </div>
   );
 };
