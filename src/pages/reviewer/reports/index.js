@@ -23,7 +23,7 @@ import { useSelector } from "react-redux";
 import MoreFilter from "../../../resusablereport/reports/MoreFilter";
 import ReviewerReport from "../../../resusablereport/reports/reviewerReport";
 import SentReport from "../../../resusablereport/reports/sentReport";
-import ReceivedReport from "../../../resusablereport/reports/sentReport";
+import ReceivedReport from "../../../resusablereport/reports/receivedReport";
 import Export from "../../../resusablereport/reports/Export";
 
 const statusOptions = [
@@ -43,6 +43,8 @@ const Reports = () => {
   const ReceivedReportDetails = useSelector(
     (state) => state.report?.receivedDetails
   );
+  console.log(SentReportDetails, "sennt")
+  console.log(ReceivedReportDetails, "received")
   const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
   const [isLoading, setIsLoading] = useState(true);
@@ -645,6 +647,7 @@ const Reports = () => {
                       />
                     </div>
                   )}
+                  {console.log(reportActiveTab,"tab")}
                   {reportActiveTab === "Received" && (
                     <div>
                       <ReceivedReport

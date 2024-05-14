@@ -150,11 +150,7 @@ const SentReport = ({
   };
 
   const chartOption = getChartOption(details?.sentReportCountByTypeDTOList);
-  console.log(chartOption);
-
-  console.log(details, "t");
   const handleReceiverReport = (item) => {
-    console.log(item, "r");
     const info = {
       reportUser: item,
       receivedPageNo: receivedPageNo,
@@ -259,16 +255,16 @@ const SentReport = ({
       colors[letter.toUpperCase()] || "#B35CE1";
 
     const data =
-      details.sentReportUserWiseCountDtoByRole.sentReportUserWiseCountListForAdmin.map(
+      details?.sentReportUserWiseCountDtoByRole?.sentReportUserWiseCountListForAdmin?.map(
         (item) => ({
-          value: item.userCount,
-          name: `${item.userNameDTO.firstName} ${item.userNameDTO.lastName}`,
+          value: item?.userCount,
+          name: `${item?.userNameDTO?.firstName} ${item?.userNameDTO?.lastName}`,
         })
       );
 
     const nameColors = {};
 
-    data.forEach((item) => {
+    data?.forEach((item) => {
       const firstLetter = item.name[0];
 
       if (!nameColors[item.name]) {
@@ -276,7 +272,7 @@ const SentReport = ({
       }
     });
 
-    const pieData = data.map((item) => ({
+    const pieData = data?.map((item) => ({
       value: item.value,
       name: item.name,
       itemStyle: {
@@ -309,7 +305,10 @@ const SentReport = ({
           label: {
             show: true,
             position: "center",
-            formatter: `{b|${data.reduce((acc, curr) => acc + curr.value, 0)}}`,
+            formatter: `{b|${data?.reduce(
+              (acc, curr) => acc + curr.value,
+              0
+            )}}`,
             backgroundColor: "transparent",
             rich: {
               a: {
@@ -325,7 +324,7 @@ const SentReport = ({
           },
           data: [
             {
-              value: data.reduce((acc, curr) => acc + curr.value, 0),
+              value: data?.reduce((acc, curr) => acc + curr.value, 0),
               name: "Total",
               itemStyle: {
                 color: "#fff",
@@ -348,9 +347,7 @@ const SentReport = ({
       details?.receivedReportDTOList?.data > 0
     ) {
       handleCardSelection(details?.receivedReportDTOList?.data[0], 0);
-      console.log(details?.data, "data");
     }
-    console.log(details?.reportCountResponseDTO, "coun");
   }, [details]);
 
   const handleCardSelection = (item, index) => {
@@ -515,7 +512,10 @@ const SentReport = ({
                       <SpinnerDots />
                     ) : (
                       <div className={styles.cardContainer}>
-                        <div className={styles.card1}>
+                        <div
+                          className={styles.card1}
+                          style={{ height: "816 !important" }}
+                        >
                           <div className={styles.summaryText}>Summary</div>
                           <div className="col-xl-12  d-flex mt-4">
                             <div className={`col-xl-6 ${styles.sentSubCard}`}>
@@ -535,7 +535,7 @@ const SentReport = ({
                             </div>
                           </div>
                           <div className="col-xl-12 d-flex mt-4">
-                            {details?.reportCountResponseDTO?.map(
+                            {details?.reportCountResponseByAccessDTO?.map(
                               (item, index) => (
                                 <React.Fragment key={index}>
                                   {item._id === "READ" && (

@@ -26,7 +26,7 @@ import { useSelector } from "react-redux";
 import MoreFilter from "../../../resusablereport/reports/MoreFilter";
 import ReviewerReport from "../../../resusablereport/reports/reviewerReport";
 import SentReport from "../../../resusablereport/reports/sentReport";
-import ReceivedReport from "../../../resusablereport/reports/sentReport";
+import ReceivedReport from "../../../resusablereport/reports/receivedReport";
 import Export from "../../../resusablereport/reports/Export";
 import TeamReport from "../../../resusablereport/reports/teamReport";
 
@@ -46,11 +46,11 @@ const Reports = () => {
   // const SentReportDetails = useSelector((state) => state.report?.sentDetails);
   const SentReportDetails = useSelector((state) => state.report?.sentDetails);
 
-  console.log(SentReportDetails?.data?.response,"test")
-
   const ReceivedReportDetails = useSelector(
     (state) => state.report?.receivedDetails
   );
+  console.log(ReceivedReportDetails?.data?.response, "test");
+
   const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
   const [isLoading, setIsLoading] = useState(true);
@@ -81,7 +81,8 @@ const Reports = () => {
   const [sentSearch, setSentSearch] = useState("");
   const [receivedSearch, setReceivedSearch] = useState("");
   const [teamStartDate, setTeamStartDate] = useState();
-
+  const [teamSearch, setTeamSearch] = useState("");
+  const [teamEndDate, setTeamEndDate] = useState();
   const [receivedSortOrder, setReceivedSortOrder] = useState("DESC");
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
@@ -114,7 +115,7 @@ const Reports = () => {
       }
     });
   });
-
+console.log(reportActiveTab,"d")
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
@@ -163,48 +164,38 @@ const Reports = () => {
   };
 
   useEffect(() => {
-    const coderSearchString = searchVal.find(
-      (item) => item.field === "initialSearch"
-    )?.search;
     setIsLoading(false);
-    const activeTabFromStorage = localStorage.getItem("activeTab");
-    const activeTab = activeTabFromStorage
-      ? activeTabFromStorage
-      : "Audit Report";
-    dispatch(getActiveTab(activeTab));
 
-    if (activeTab === "Sent") {
+    if (reportActiveTab === "Sent") {
       dispatch(
-        getSentDetails(
-          sentPageNo,
-          selectedDateRanges?.Sent?.from,
-          selectedDateRanges?.Sent?.to,
-          coderSearchString ? coderSearchString : "",
-          sort
-        )
+        getSentDetails(sentPageNo, startDate, endDate, sentSearch, sort)
       );
-    } else if (activeTab === "Received") {
+    }
+    if (reportActiveTab === "Received") {
       dispatch(
         getReceivedDetails(
           receivedPageNo,
-          selectedDateRanges?.Received?.from,
-          selectedDateRanges?.Received?.to,
-          coderSearchString ? coderSearchString : "",
-          sort
-        )
-      );
-    } else if(activeTab === "Audit Report") {
-      dispatch(
-        getReportDetails(
-          pageNo,
-          selectedDateRanges?.Reviewer?.from,
-          selectedDateRanges?.Reviewer?.to,
-          coderSearchString ? coderSearchString : "",
-          selectedOptions?.reviewerStatus,
+          receivedStartDate,
+          receivedEndDate,
+          receivedSearch,
           sort
         )
       );
     }
+
+    if (!reportActiveTab || reportActiveTab === "AuditReport") {
+      dispatch(
+        getReportDetails(
+          pageNo,
+          coderStartDate,
+          coderEndDate,
+          coderSearch,
+          selectedCoderOpt,
+          sort
+        )
+      );
+    }
+
     if (reportActiveTab === "TeamReport") {
       dispatch(
         getTeamReportDetails(
@@ -224,12 +215,25 @@ const Reports = () => {
     pageNo,
     sentPageNo,
     receivedPageNo,
+    reportActiveTab,
+    ExportResponse,
+    selectedCoderOpt,
+    coderSearch,
+    coderStartDate,
+    coderEndDate,
+    startDate,
+    endDate,
+    sentSearch,
     receivedPageNo,
-    receivedSortOrder,
+    receivedStartDate,
+    receivedEndDate,
+    receivedSearch,
+    reportActiveTab,
     sort,
-    searchVal,
-    selectedOptions,
-    selectedDateRanges,
+    teamSearch,
+    teamEndDate,
+    teamStartDate,
+    teamPageNo,
   ]);
 
   useEffect(() => {
@@ -540,7 +544,8 @@ const Reports = () => {
                           setSelectedData={setSelectedData}
                         />
                       </div>
-                      { !reportActiveTab || reportActiveTab === "Audit Report" ? 
+                      {!reportActiveTab ||
+                      reportActiveTab === "Audit Report" ? (
                         <div className="col-xl-4">
                           <div className="row flr">
                             <Tooltip
@@ -568,8 +573,8 @@ const Reports = () => {
                               </button>
                             </Tooltip>
                           </div>
-                        </div> : null
-                      }
+                        </div>
+                      ) : null}
                     </div>
                     <div className="row filter-contain">
                       {selectedData?.length > 0 &&
