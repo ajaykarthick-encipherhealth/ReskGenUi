@@ -5,6 +5,7 @@ import Card from "../../../components/card";
 import ChartsEmbedSDK from "@mongodb-js/charts-embed-dom";
 import SupervisiorProducitivity from "../../provider/demoSupervisior/productivityStatus";
 
+
 const DailyTask = () => {
  
 
@@ -42,7 +43,7 @@ const DailyTask = () => {
           </div>
         </Card>
       </div>
-      <SupervisiorProducitivity/>
+     
     </>
   );
 };

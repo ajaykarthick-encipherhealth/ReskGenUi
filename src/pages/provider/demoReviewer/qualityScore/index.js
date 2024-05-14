@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import styles from './styles.module.css'
-import { Buttons } from "../../../../src/pages/reviewer/workingstatus";
-import Buttonscroller from "../../../../src/components/buttonSroller";
-import HeadTitle from "../../../../src/components/card/index";
-import Card from "../../../../src/components/card/index";
-import Header from "../../../jsx/layouts/nav/Header";
+import { Buttons } from "../../reviewer/workingstatus";
+import Buttonscroller from "../../../components/buttonSroller";
+import Card from "../../../components/card/index";
 import ChartsEmbedSDK from "@mongodb-js/charts-embed-dom";
-import YearPicker from "../../../../src/components/yearpicker";
+import YearPicker from "../../../components/yearpicker";
 import dayjs from "dayjs";
 import ProductivityStatus from "../productivityStatus";
+
+
+
 
 
 
@@ -203,7 +204,7 @@ const QualityScore = () => {
                 </Card>
               </div>
             </div>
-           <ProductivityStatus/>
+           {/* <ProductivityStatus/> */}
           </div>
         </div>
 

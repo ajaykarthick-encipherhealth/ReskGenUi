@@ -12,6 +12,8 @@ import CompletedStatus from "../completedStatus";
 
 
 
+
+
 const SupervisiorProducitivity = () => {
   const [activeButton, setActiveButton] = useState(0);
   const [currentBtn, setCurrentBtn] = useState("Daily");
@@ -203,7 +205,7 @@ const SupervisiorProducitivity = () => {
                 </Card>
               </div>
             </div>
-          <CompletedStatus/>
+         <CompletedStatus/>
           </div>
         </div>
 
@@ -213,4 +215,4 @@ const SupervisiorProducitivity = () => {
 };
 
 export default SupervisiorProducitivity
-;
+
