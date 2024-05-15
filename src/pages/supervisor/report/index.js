@@ -47,6 +47,7 @@ const Reports = ({ workFgetFlagsowData }) => {
   const ReceivedReportDetails = useSelector(
     (state) => state.report?.receivedDetails
   );
+  const TeamReportDetails = useSelector((state) => state.report?.teamDetails);
   const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
   const [isLoading, setIsLoading] = useState(true);
@@ -98,6 +99,10 @@ const Reports = ({ workFgetFlagsowData }) => {
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
+  };
+  const onTeamPageChange = (e) => {
+    setPaginationSentFirst(e.first);
+    setTeamPageNo(e.page);
   };
 
   const handleCoderPicker = (date, dateString, tabName) => {
@@ -535,13 +540,13 @@ const Reports = ({ workFgetFlagsowData }) => {
                       {}{" "}
                       <TeamReport
                         paginationFirst={paginationSentFirst}
-                        details={SentReportDetails?.data?.response}
-                        onSentPageChange={onSentPageChange}
-                        loading={SentReportDetails?.loading}
+                        details={TeamReportDetails?.data?.response}
+                        onSentPageChange={onTeamPageChange}
+                        loading={TeamReportDetails?.loading}
                         setSortOrder={setSentSortOrder}
                         sortOrder={sentSortOrder}
                         setSort={setSort}
-                        receivedPageNo={sentPageNo}
+                        receivedPageNo={teamPageNo}
                         receivedStartDate={selectedDateRanges?.TeamReport?.from}
                         receivedEndDate={selectedDateRanges?.TeamReport?.to}
                         isPhysician={true}
