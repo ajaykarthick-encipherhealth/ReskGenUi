@@ -87,7 +87,7 @@ export const AuditReportReducer = (state = initialState, action) => {
   if (action.type === FILEDETAILS) {
     return {
       ...state,
-      uploadFile: action.payload,
+      uploadFile: action?.payload,
     };
   }
   if (action.type === REPORT) {

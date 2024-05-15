@@ -518,6 +518,9 @@ const Reports = ({ workFgetFlagsowData }) => {
                         setSort={setSort}
                         gotoPatientDetails={gotoPatientDetails}
                         page={{ pageNo, paginationFirst }}
+                        receivedPageNo={receivedPageNo}
+                        receivedStartDate={selectedDateRanges?.Received?.from}
+                        receivedEndDate={selectedDateRanges?.Received?.to}
                       />
                     </div>
                   )}
