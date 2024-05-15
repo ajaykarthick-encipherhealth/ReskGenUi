@@ -71,16 +71,30 @@ export const getTeamReportDetails = (
   sort
 ) => {
   return (dispatch) => {
+    dispatch({
+      type: TEAM_REPORT,
+      payload:{loading:true,
+        data: null
+      },
+    });
     try {
       TeamReport(pagenum, startDate, endDate, search, sort).then((response) => {
         if (response) {
           dispatch({
             type: TEAM_REPORT,
-            payload: response?.data,
+            payload:{loading:false,
+              data: response?.data
+            },
           });
         }
       });
     } catch (err) {
+      dispatch({
+        type: TEAM_REPORT,
+        payload:{loading:false,
+          data: null
+        },
+      });
       console.log(err);
     }
   };

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-
 import styles from "../report.module.css";
 import {
   Checkbox,
@@ -47,57 +46,32 @@ import { connect } from "react-redux";
 import SpinnerDots from "../../../components/spinner";
 
 const TeamReport = ({
-  setModal,
-  modal,
+  // setModal,
+  // modal,
   patientDetails,
   paginationFirst,
   ReportPatientDetails,
   onPageChange,
-  comments,
-  setComments,
+  // comments,
+  // setComments,
   selectedRows,
   setSelectedRows,
   selectAll,
   setSelectAll,
-  sortOrder,
-  setSortOrder,
-  setSort,
+  // sortOrder,
+  // setSortOrder,
+  // setSort,
   reportListAll,
   page,
   getFlagsData,
+  isAdmin
 }) => {
-  const [activeTab, setActiveTab] = useState("Reviewer");
-  const [selectedItems, setSelectedItems] = useState([]);
-  const router = useRouter();
+
   const dispatch = useDispatch();
   const navigate = useRouter();
-
-  const worlFlowData = useSelector(
-    (state) => state?.AdminDashboardReducers?.data
-  );
-  const [dateRange, setDateRange] = useState({
-    processedStatus: {
-      PENDING: 0,
-      COMPLETED: 0,
-      HOLD: 0,
-      DECLINED: 0,
-    },
-    auditedStatus: {
-      AUDIT_PENDING: 0,
-      DECLINED: 0,
-      AUDITED: 0,
-      AUDITHOLD: 0,
-    },
-  });
-  const [chartValue, setChartValue] = useState({
-    totalAuditedAssigned: 0,
-    totalPatients: 0,
-    totalPatientsAllocated: 0,
-  });
-
   const handleHeaderCheckboxChange = () => {
     setSelectAll(!selectAll);
-    const updatedRows = selectAll ? [] : reportListAll?.response?.data;
+    const updatedRows = selectAll ? [] : reportListAll?.response?.response?.data;
     setSelectedRows(updatedRows);
   };
 
@@ -122,8 +96,8 @@ const TeamReport = ({
       id: 1,
       icon: Completed,
       title: "Completed",
-      charts: reportListAll?.processedStatusCount?.processedStatus
-        ? reportListAll?.processedStatusCount?.processedStatus.COMPLETED
+      charts: reportListAll?.response?.processedStatusCount?.processedStatus
+        ? reportListAll?.response?.processedStatusCount?.processedStatus.COMPLETED
         : "0",
       bg: "#CCFFD1",
     },
@@ -131,8 +105,8 @@ const TeamReport = ({
       id: 2,
       icon: Pending,
       title: "Pending",
-      charts: reportListAll?.processedStatusCount?.processedStatus
-        ? reportListAll?.processedStatusCount?.processedStatus.PENDING
+      charts: reportListAll?.response?.processedStatusCount?.processedStatus
+        ? reportListAll?.response?.processedStatusCount?.processedStatus.PENDING
         : "0",
 
       bg: "#CCE9FF",
@@ -141,8 +115,8 @@ const TeamReport = ({
       id: 3,
       icon: Hold,
       title: "Hold",
-      charts: reportListAll?.processedStatusCount?.processedStatus
-        ? reportListAll?.processedStatusCount?.processedStatus.HOLD
+      charts: reportListAll?.response?.processedStatusCount?.processedStatus
+        ? reportListAll?.response?.processedStatusCount?.processedStatus.HOLD
         : "0",
 
       bg: "#DACEFD",
@@ -151,8 +125,8 @@ const TeamReport = ({
       id: 4,
       icon: declineIcon,
       title: "Decline",
-      charts: reportListAll?.processedStatusCount?.processedStatus
-        ? reportListAll?.processedStatusCount?.processedStatus.DECLINED
+      charts: reportListAll?.response?.processedStatusCount?.processedStatus
+        ? reportListAll?.response?.processedStatusCount?.processedStatus.DECLINED
         : "0",
       bg: "#FAD1D1",
     },
@@ -160,8 +134,8 @@ const TeamReport = ({
       id: 5,
       icon: auditedIcon,
       title: "Audited",
-      charts: reportListAll?.processedStatusCount?.auditedStatus
-        ? reportListAll?.processedStatusCount?.auditedStatus.AUDITED
+      charts: reportListAll?.response?.processedStatusCount?.auditedStatus
+        ? reportListAll?.response?.processedStatusCount?.auditedStatus.AUDITED
         : "0",
 
       bg: "#DBEEF0",
@@ -170,8 +144,8 @@ const TeamReport = ({
       id: 6,
       icon: notAudited,
       title: "Not Audited",
-      charts: reportListAll?.processedStatusCount?.auditedStatus
-        ? reportListAll?.processedStatusCount?.auditedStatus.NOT_AUDIT
+      charts: reportListAll?.response?.processedStatusCount?.auditedStatus
+        ? reportListAll?.response?.processedStatusCount?.auditedStatus.NOT_AUDIT
         : "0",
 
       bg: "#FBE7D0",
@@ -180,8 +154,8 @@ const TeamReport = ({
       id: 7,
       icon: reeAuditIcon,
       title: "Re Audit",
-      charts: reportListAll?.processedStatusCount?.auditedStatus
-        ? reportListAll?.processedStatusCount?.auditedStatus.REAUDIT
+      charts: reportListAll?.response?.processedStatusCount?.auditedStatus
+        ? reportListAll?.response?.processedStatusCount?.auditedStatus.REAUDIT
         : "0",
 
       bg: "#FFDBB8",
@@ -190,8 +164,8 @@ const TeamReport = ({
       id: 8,
       icon: reAuditIcon,
       title: "Audit pending",
-      charts: reportListAll?.processedStatusCount?.auditedStatus
-        ? reportListAll?.processedStatusCount?.auditedStatus.PENDING
+      charts: reportListAll?.response?.processedStatusCount?.auditedStatus
+        ? reportListAll?.response?.processedStatusCount?.auditedStatus.PENDING
         : "0",
 
       bg: "#F3D8E5",
@@ -200,8 +174,8 @@ const TeamReport = ({
       id: 9,
       icon: auditHoldIcon,
       title: "Audit hold",
-      charts: reportListAll?.processedStatusCount?.auditedStatus
-        ? reportListAll?.processedStatusCount?.auditedStatus.AUDITHOLD
+      charts: reportListAll?.response?.processedStatusCount?.auditedStatus
+        ? reportListAll?.response?.processedStatusCount?.auditedStatus.AUDITHOLD
         : "0",
 
       bg: "#FFF2CC",
@@ -210,39 +184,11 @@ const TeamReport = ({
       id: 10,
       icon: auditDeclined,
       title: "Audit decline",
-      charts: reportListAll?.processedStatusCount?.auditedStatus
-        ? reportListAll?.processedStatusCount?.auditedStatus.DECLINED
+      charts: reportListAll?.response?.processedStatusCount?.auditedStatus
+        ? reportListAll?.response?.processedStatusCount?.auditedStatus.DECLINED
         : "0",
 
       bg: "#FDD2CE",
-    },
-  ];
-
-  const flagData = [
-    {
-      id: 1,
-      flags: "PATIENT_NAME_MISSED",
-      count: "10",
-    },
-    {
-      id: 2,
-      flags: "PATIENT_DOB_MISSED",
-      count: "10",
-    },
-    {
-      id: 3,
-      flags: "MRN_ID_MISMATCH",
-      count: "10",
-    },
-    {
-      id: 4,
-      flags: "PROVIDER_SIGN_MISSED",
-      count: "10",
-    },
-    {
-      id: 5,
-      flags: "PROVIDER_SIGNATURE_MISSED",
-      count: "10",
     },
   ];
 
@@ -412,10 +358,10 @@ const TeamReport = ({
 
     if (data?.processedStatus === "COMPLETED") {
       const controller = new AbortController();
-      const { signal } = controller;
+      const currentRole=localStorage.getItem("userRole");
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
-      navigate.push({ pathname: "/reviewer/patients/details", query: page });
+      navigate.push({ pathname: `/${currentRole}/patients/details`, query: page });
     } else {
       notification.warning({
         message: data?.patientId + " file not processed. Please wait.",
@@ -424,22 +370,23 @@ const TeamReport = ({
   };
 
   const handleTableRowClick = (id) => {
-    const clickedData = reportListAll?.response?.data?.[id];
+    const clickedData = reportListAll?.response?.response?.data?.[id];
     gotoPatientDetails(clickedData);
   };
 
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
   }, [selectedRows]);
-
   return (
     <>
       <div>
         <div className="content-body">
-          {!reportListAll?.response?.data ? (
+          {!reportListAll?.response?.response?.data ? (
             <SpinnerDots />
           ) : (
-            <div className="container-fluid py-4">
+
+            <div className={`container-fluid py-4`}>
+
               <div
                 style={{
                   display: "flex",
@@ -448,7 +395,7 @@ const TeamReport = ({
                 }}
               >
                 {" "}
-                {reportListAll?.response?.data?.length > 0 && (
+                {reportListAll?.response?.response?.data?.length > 0 && (
                   <>
                     <div>
                       <input
@@ -470,7 +417,7 @@ const TeamReport = ({
               <div className="row">
                 <div>
                   <div className=" col-xl-12 d-flex">
-                    {reportListAll?.response?.data?.length === 0 ? (
+                    {reportListAll?.response?.response?.data?.length === 0 ? (
                       <div
                         className={`col-xl-6 ${styles.card}`}
                         style={{
@@ -485,7 +432,7 @@ const TeamReport = ({
                       <>
                         <div className="col-xl-6">
                           <div className={styles.cardContainer}>
-                            {reportListAll?.response?.data?.map((item, id) => (
+                            {reportListAll?.response?.response?.data?.map((item, id) => (
                               <div key={id} className={styles.card}>
                                 <div
                                   className={styles.contentGroup}
@@ -508,6 +455,7 @@ const TeamReport = ({
                                   </div>
                                   <div
                                     className={`col-xl-12 ${styles.checkSep}`}
+                                    onClick={() => handleTableRowClick(id)}
                                   >
                                     <div className="d-flex justify-content-between align-items-center pb-1">
                                       <div
@@ -548,7 +496,7 @@ const TeamReport = ({
                                     <div className="d-flex justify-content-around align-items-center pb-1">
                                       <div
                                         className={`col-xl-2 ${styles.headText}`}
-                                        onClick={() => handleTableRowClick(id)}
+                                        // onClick={() => handleTableRowClick(id)}
                                       >
                                         {item.patientId ? item.patientId : ""}
                                       </div>
@@ -651,35 +599,27 @@ const TeamReport = ({
                         <div className={styles.card1}>
                           <div className={styles.summaryText}>Summary</div>
                           <div className="col-xl-12  d-flex mt-4">
-                            <div className={`col-xl-2 ${styles.subCard}`}>
+                            <div className={`col-xl-4 ${styles.subCard}`}>
                               <div>
                                 <div>No of charts</div>
                                 <h4>
-                                  {reportListAll?.response?.totalElements}
+                                  {reportListAll?.response?.response?.totalElements}
                                 </h4>
                               </div>
                             </div>
-                            <div className={`col-xl-2 ${styles.subCard}`}>
-                              <div>Completed date</div>
-                              <div className={styles.dateContainer}>
-                                <div className={`p-1 ${styles.smallText}`}>
-                                  03/04/2024 - 03/04/2024
-                                </div>
-                              </div>
-                            </div>
 
-                            <div className={`col-xl-2 ${styles.subCard}`}>
+                            <div className={`col-xl-4 ${styles.subCard}`}>
                               {" "}
                               <div>
                                 <div>Avg RAF score</div>
-                                <h4>{reportListAll?.rafAverage?.toFixed(4)}</h4>
+                                <h4>{reportListAll?.response?.rafAverage?.toFixed(4)}</h4>
                               </div>
                             </div>
-                            <div className={`col-xl-2 ${styles.subCard}`}>
+                            <div className={`col-xl-4 ${styles.subCard}`}>
                               {" "}
                               <div>
                                 <div>HCC Count</div>
-                                <h4>{reportListAll?.totalHccCount}</h4>
+                                <h4>{reportListAll?.response?.totalHccCount}</h4>
                               </div>
                             </div>
                           </div>
@@ -714,32 +654,106 @@ const TeamReport = ({
                           <div className="col-xl-12  d-flex mt-1">
                             <div className={`col-xl-4 ${styles.flags}`}>
                               <div className={styles.cardHead}>Flags</div>
-                              {flagData.map((flagItem) => (
+                              {getFlagsData?.response.map((flagItem) => (
                                 <div
                                   className={styles.contentGroups}
                                   key={flagItem.id}
                                 >
-                                  <div className={styles.count}>
-                                    {flagItem.count}
+                                  <div>
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="23"
+                                      height="23"
+                                      viewBox="0 0 800 800"
+                                      fill={flagItem?.flagColour}
+                                    >
+                                      <path
+                                        d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
+                                        stroke="#000"
+                                        stroke-width="10"
+                                      />
+                                    </svg>
+                                    <span style={{fontSize:"12px"}}>{flagItem?.flagName
+                                      ? flagItem?.flagName.replaceAll("_", " ")
+                                      : ""}</span>
                                   </div>
-                                  <div>{getFlag(flagItem)}</div>
+                                  <div className={styles.count}>
+                                    {flagItem.count?flagItem.count:0}
+                                  </div>
                                 </div>
                               ))}
                             </div>
                             <div className={`col-xl-4 ${styles.flags}`}>
                               <div className={styles.cardHead}>
-                                Supervisor
-                                {reportListAll?.supervisorAllocationCount?.map(
-                                  (item) => (
+                                <div> Supervisor </div>
+                                <div className={styles.contentOverFlow}>
+                                  {reportListAll?.response?.supervisorAllocationCount?.map(
+                                    (item) => (
+                                      <div
+                                        className={styles.contentAuditor}
+                                        key={item.id}
+                                      >
+                                        <div className={styles.avatar}>
+                                          {item.userNameDTO?.firstName ||
+                                          item?.userNameDTO?.lastName ||
+                                          item?.userNameDTO?.profileImageUrl ? (
+                                            <>
+                                              <span
+                                                className={styles.avatarAlign}
+                                              >
+                                                {renderUserPrfoileAvatar(
+                                                  item.userNameDTO?.firstName,
+                                                  item?.userNameDTO?.lastName,
+                                                  item?.userNameDTO
+                                                    ?.profileImageUrl,
+                                                  "header"
+                                                )}
+                                              </span>
+                                              <span
+                                                className={styles.smallText}
+                                              >
+                                                {item.userNameDTO?.firstName}{" "}
+                                                {item?.userNameDTO?.lastName}
+                                              </span>
+                                            </>
+                                          ) : (
+                                            <div className={styles.emptyData}>
+                                              ---
+                                            </div>
+                                          )}
+                                        </div>
+                                        <div className={styles.count}>
+                                          {item.count}
+                                        </div>
+                                      </div>
+                                    )
+                                  )}
+                                  {(!reportListAll?.response?.supervisorAllocationCount ||
+                                    reportListAll?.response?.supervisorAllocationCount
+                                      .length === 0) && (
                                     <div
-                                      className={styles.contentAuditor}
-                                      key={item.id}
+                                      className="d-flex justify-content-center align-items-center"
+                                      style={{ height: "200px" }}
                                     >
-                                      <div className={styles.avatar}>
-                                        {item.userNameDTO?.firstName ||
-                                        item?.userNameDTO?.lastName ||
-                                        item?.userNameDTO?.profileImageUrl ? (
-                                          <>
+                                      <Empty />{" "}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                            <div className={`col-xl-4 ${styles.flags}`}>
+                              <div className={`${styles.cardHead} sticky-top`}>
+                                <div>Reviewer</div>
+                                <div className={styles.contentOverFlow}>
+                                  {!reportListAll?.response?.reviewerAllocationCount
+                                    .length === 0 ? (
+                                    reportListAll?.response?.reviewerAllocationCount?.map(
+                                      (item) => (
+                                        <div
+                                          className={styles.contentAuditor}
+                                          key={item.id}
+                                        >
+                                          <div className={styles.avatar}>
                                             <span
                                               className={styles.avatarAlign}
                                             >
@@ -755,52 +769,23 @@ const TeamReport = ({
                                               {item.userNameDTO?.firstName}{" "}
                                               {item?.userNameDTO?.lastName}
                                             </span>
-                                          </>
-                                        ) : (
-                                          <div className={styles.emptyData}>
-                                            ---
                                           </div>
-                                        )}
-                                      </div>
 
-                                      <div className={styles.count}>
-                                        {item.count}
-                                      </div>
-                                    </div>
-                                  )
-                                )}
-                              </div>
-                            </div>
-                            <div className={`col-xl-4 ${styles.flags}`}>
-                              <div className={styles.cardHead}>
-                                Reviewer
-                                {reportListAll?.reviewerAllocationCount?.map(
-                                  (item) => (
+                                          <div className={styles.count}>
+                                            {item.count}
+                                          </div>
+                                        </div>
+                                      )
+                                    )
+                                  ) : (
                                     <div
-                                      className={styles.contentAuditor}
-                                      key={item.id}
+                                      className="d-flex justify-content-center align-items-center"
+                                      style={{ height: "200px" }}
                                     >
-                                      <div className={styles.avatar}>
-                                        <span className={styles.avatarAlign}>
-                                          {renderUserPrfoileAvatar(
-                                            item.userNameDTO?.firstName,
-                                            item?.userNameDTO?.lastName,
-                                            item?.userNameDTO?.profileImageUrl,
-                                            "header"
-                                          )}
-                                        </span>
-                                        <span className={styles.smallText}>
-                                          {item.userNameDTO?.firstName}{" "}
-                                          {item?.userNameDTO?.lastName}
-                                        </span>
-                                      </div>
-
-                                      <div className={styles.count}>
-                                        {item.count}
-                                      </div>
+                                      <Empty />{" "}
                                     </div>
-                                  )
-                                )}
+                                  )}
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -814,15 +799,16 @@ const TeamReport = ({
           )}
         </div>
       </div>
+
       <div className="pagination-container">
         <Paginator
           first={paginationFirst}
           rows={8}
-          totalRecords={ReportPatientDetails?.response?.totalElements}
+          totalRecords={ReportPatientDetails?.response?.response?.totalElements}
           onPageChange={onPageChange}
         />
         <div className="total-pages">
-          Total count: {ReportPatientDetails?.response?.totalElements}
+          Total count: {ReportPatientDetails?.response?.response?.totalElements}
         </div>
       </div>
     </>

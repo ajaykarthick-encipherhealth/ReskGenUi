@@ -1,3 +1,4 @@
+import { checkAutoLogin } from "../../stores/authflow/actions";
 import axios from "../../utility/axiosConfig";
 import ENDPOINTS from "../../utility/enpoints";
 
@@ -38,7 +39,7 @@ export const TeamReport = async (
 ) => {
   const token = localStorage.getItem("token");
   const orgId = localStorage.getItem("orgId");
-  const url = `dbservice/patient/auditorreport?pageno=${pagenum}&size=15&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&orgid=${orgId}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}`;
+  const url = `dbservice/patient/auditorreport?pageno=${pagenum}&size=7&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&orgid=${orgId}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}`;
 
   try {
     const response = await axios.get(`${ENDPOINTS?.apiEndoint}${url}`, {

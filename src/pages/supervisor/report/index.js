@@ -47,6 +47,9 @@ const Reports = ({ workFgetFlagsowData }) => {
   const ReceivedReportDetails = useSelector(
     (state) => state.report?.receivedDetails
   );
+  const TeamReportDetails = useSelector(
+    (state) => state.AuditReport?.teamDetails
+  );
   const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
   const [isLoading, setIsLoading] = useState(true);
@@ -73,6 +76,7 @@ const Reports = ({ workFgetFlagsowData }) => {
   const [search, setSearch] = useState();
   const { RangePicker } = DatePicker;
   const [selectedDateRanges, setSelecteddateRanges] = useState([]);
+  const [paginationTeamFirst, setPaginationTeamFirst] = useState(0);
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     patientId: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -98,6 +102,10 @@ const Reports = ({ workFgetFlagsowData }) => {
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
+  };
+  const onTeamPageChange = (e) => {
+    setPaginationTeamFirst(e.first);
+    setTeamPageNo(e.page);
   };
 
   const handleCoderPicker = (date, dateString, tabName) => {
@@ -144,10 +152,10 @@ const Reports = ({ workFgetFlagsowData }) => {
     setSearchVal([]);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     workFgetFlagsowData();
-  },[])
-  
+  }, []);
+
   useEffect(() => {
     setIsLoading(false);
     const coderSearchString = searchVal.find(
@@ -180,6 +188,16 @@ const Reports = ({ workFgetFlagsowData }) => {
           sort
         )
       );
+    } else if (reportActiveTab === "Team Report") {
+      dispatch(
+        getTeamReportDetails(
+          teamPageNo,
+          selectedDateRanges?.TeamReport?.from,
+          selectedDateRanges?.TeamReport?.to,
+          coderSearchString ? coderSearchString : "",
+          sort
+        )
+      );
     } else {
       dispatch(
         getReportDetails(
@@ -190,17 +208,6 @@ const Reports = ({ workFgetFlagsowData }) => {
           selectedOptions?.reviewerStatus
             ? selectedOptions?.reviewerStatus
             : "",
-          sort
-        )
-      );
-    }
-    if (reportActiveTab === "TeamReport") {
-      dispatch(
-        getTeamReportDetails(
-          teamPageNo,
-          selectedDateRanges?.TeamReport?.from,
-          selectedDateRanges?.TeamReport?.to,
-          coderSearchString ? coderSearchString : "",
           sort
         )
       );
@@ -219,6 +226,7 @@ const Reports = ({ workFgetFlagsowData }) => {
     searchVal,
     selectedOptions,
     selectedDateRanges,
+    teamPageNo,
   ]);
 
   useEffect(() => {
@@ -362,9 +370,7 @@ const Reports = ({ workFgetFlagsowData }) => {
 
                 <div className="tbl-caption  align-items-center">
                   <div className="tbl-caption  align-items-center">
-                    <div
-                      className={`row filter-contain mt-4 mb-0 `}
-                    >
+                    <div className={`row filter-contain mt-4 mb-0 `}>
                       <div className="col-xl-2">
                         <div className="d-flex w-100">
                           <label className="labelStyle d-flex m-auto">
@@ -533,21 +539,40 @@ const Reports = ({ workFgetFlagsowData }) => {
                       />
                     </div>
                   )}
+
                   {reportActiveTab === "Team Report" && (
                     <div>
                       {}{" "}
                       <TeamReport
-                        paginationFirst={paginationSentFirst}
-                        details={SentReportDetails?.data?.response}
-                        onSentPageChange={onSentPageChange}
-                        loading={SentReportDetails?.loading}
-                        setSortOrder={setSentSortOrder}
-                        sortOrder={sentSortOrder}
+                        setModal={setModal}
+                        modal={modal}
+                        reportListAll={TeamReportDetails?.data}
+                        paginationFirst={paginationTeamFirst}
+                        ReportPatientDetails={TeamReportDetails?.data}
+                        onPageChange={onTeamPageChange}
+                        comments={comments}
+                        setComments={setComments}
+                        patientDetails={patientDetails}
+                        setSelectedRows={setSelectedRows}
+                        selectedRows={selectedRows}
+                        setSelectAll={setSelectAll}
+                        selectAll={selectAll}
+                        setSortOrder={setCoderSortOrder}
+                        sortOrder={coderSortOrder}
                         setSort={setSort}
-                        receivedPageNo={sentPageNo}
-                        receivedStartDate={selectedDateRanges?.TeamReport?.from}
-                        receivedEndDate={selectedDateRanges?.TeamReport?.to}
-                        isPhysician={true}
+                        gotoPatientDetails={gotoPatientDetails}
+                        page={{ teamPageNo, paginationTeamFirst }}
+                        // paginationFirst={paginationSentFirst}
+                        // reportListAll={TeamReportDetails?.data?.response?.response?.data}
+                        // onPageChange={onTeamPageChange}
+                        // loading={TeamReportDetails?.loading}
+                        // setSortOrder={setSentSortOrder}
+                        // sortOrder={sentSortOrder}
+                        // setSort={setSort}
+                        // receivedPageNo={teamPageNo}
+                        // receivedStartDate={selectedDateRanges?.TeamReport?.from}
+                        // receivedEndDate={selectedDateRanges?.TeamReport?.to}
+                        // isPhysician={true}
                       />
                     </div>
                   )}
