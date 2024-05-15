@@ -292,7 +292,7 @@ const VisitData = ({ setActiveTabHead, setActiveMeatTitle }) => {
 
       {isModalOpenRadiology && (
         <Modal
-          title={selectMeatName}
+          title={fileModalHeader}
           centered
           open={isModalOpenRadiology}
           onOk={handleCloseModal}
