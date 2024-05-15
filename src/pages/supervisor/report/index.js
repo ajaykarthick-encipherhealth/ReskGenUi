@@ -462,7 +462,7 @@ const Reports = ({ workFgetFlagsowData }) => {
                         </div>
                       </div>
                       {!reportActiveTab ||
-                      reportActiveTab === "Audit Report" ? (
+                      reportActiveTab === "Audit Report" || reportActiveTab === "Team Report" ? (
                         <div className="col-xl-6">
                           <div className="row flr">
                             <Tooltip
