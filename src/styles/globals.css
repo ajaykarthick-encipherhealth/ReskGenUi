@@ -14518,8 +14518,7 @@ input[type="number"] {
   width: 100%;
   border-radius: none !important;
 }
-.newReportPicker >
-.ant-picker-input >input{
+.newReportPicker > .ant-picker-input >input{
   font-size: 12px !important;
 }
 
