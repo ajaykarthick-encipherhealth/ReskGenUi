@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { Tab, Nav } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import "react-circular-progressbar/dist/styles.css";
-import styles from "./report.module.css";
+import styles from "../report/report.module.css";
 import Header from "../../../jsx/layouts/nav/Header";
 import SentReportTable from "../../../components/table/sentReport/sentReport";
 import ReceivedReport from "../../../components/table/receivedReport/receivedReport";
