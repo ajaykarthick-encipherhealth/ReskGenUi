@@ -3,11 +3,7 @@ import styles from "./styles.module.css";
 import Card from "../../../../components/card";
 import ChartsEmbedSDK from "@mongodb-js/charts-embed-dom";
 
-
-
 const DailyTask = () => {
- 
-
   const sdk = new ChartsEmbedSDK({
     baseUrl: "https://charts.mongodb.com/charts-project-1-hubxull",
     showAttribution: false,
@@ -22,13 +18,11 @@ const DailyTask = () => {
 
   return (
     <>
-     <h4 className="mt-2">Daily Task  </h4>
-      <div className={styles.card6}>
+      <h4 className="mt-2">Daily Task </h4>
+      <div className={styles.cards}>
         <Card borderRadius="30px" padding="0px">
           <div className={styles.buttonDiv}>
-            <div className={styles.select}>
-           
-            </div>
+            <div className={styles.select}></div>
             <div
               id="daily-chart"
               className="mt-3 p-4"
@@ -37,12 +31,10 @@ const DailyTask = () => {
                 width: 430,
               }}
             ></div>
-            <div className={styles.header}>
-             </div>
+            <div className={styles.header}></div>
           </div>
         </Card>
       </div>
-     
     </>
   );
 };

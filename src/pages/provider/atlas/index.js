@@ -28,20 +28,8 @@ const Atlas = () => {
   const [charts, setCharts] = useState(null);
   const [showChart, setShowChart] = useState("daily");
   const [selectUser, setSelectUser] = useState("");
-
   const dispatch = useDispatch();
   const router = useRouter();
-  // useEffect(() => {
-  //   dispatch(
-  //     getCOmpletedScore(
-  //       currentBtn.toUpperCase(),
-  //       currentDate.getDate(),
-  //       selectedMonth,
-  //       selectedYear,
-  //       router
-  //     )
-  //   );
-  // }, [currentBtn, selectedMonth, selectedYear]);
 
   const handleButtonClick = (index, btn) => {
     setActiveButton(index);
