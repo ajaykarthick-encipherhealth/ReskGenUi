@@ -29,7 +29,7 @@ import leftArrow from "../../../../images/svg/leftArrow.svg";
 import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
 import { useRouter } from "next/router";
 import { getReportActiveTab } from "../../../../store/actions/adminAction/ReportActions";
-import { debounce } from "../../../admin/report/Export";
+import { debounce } from "../../../admin/reports/Export";
 
 const IndividualReceiverReport = () => {
   const dispatch = useDispatch();

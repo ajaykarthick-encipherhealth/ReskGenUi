@@ -1,31 +1,31 @@
-import React, { useState, useEffect, useCallback } from "react";
-import Header from "../../../jsx/layouts/nav/Header";
-import styles from "../../../resusablereport/reports/report.module.css";
-import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { InputText } from "primereact/inputtext";
-import { FilterMatchMode } from "primereact/api";
-import Select from "react-select";
-import { Modal, DatePicker, Tooltip } from "antd";
-import ExportImg from "../../../images/svg/Export";
-import { debounce } from "../../admin/report/Export";
-import { disableFutureDate } from "../../../components/headerFilters/functions";
-import { patientDetails } from "../../../stores/authflow/actions";
-import { getSentDetails } from "../../../store/actions/ReportActions";
-import { connect, useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { Modal, DatePicker } from "antd";
 import { useSelector } from "react-redux";
-import MoreFilter from "../../../resusablereport/reports/MoreFilter";
-import ReviewerReport from "../../../resusablereport/reports/reviewerReport";
-import SentReport from "../../../resusablereport/reports/sentReport";
-import ReceivedReport from "../../../resusablereport/reports/receivedReport";
-import Export from "../../../resusablereport/reports/Export";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Tab, Nav } from "react-bootstrap";
+import Select from "react-select";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch } from "react-redux";
+import { FilterMatchMode } from "primereact/api";
+import { InputText } from "primereact/inputtext";
+import "react-circular-progressbar/dist/styles.css";
+import styles from "./report.module.css";
+import Header from "../../../jsx/layouts/nav/Header";
+import SentReportTable from "../../../components/table/sentReport/sentReport";
+import ReceivedReport from "../../../components/table/receivedReport/receivedReport";
+import CoderReport from "../../../components/table/CoderReport/coderReport";
+import Export, { debounce } from "./Export";
 import {
   getReceivedDetails,
   getReportDetails,
+  getSentDetails,
+  selectedReport,
 } from "../../../store/actions/adminAction/ReportActions";
-import { actions as workflowActions } from "../../../stores/reviewer/workqueue";
 import { getSelectUserList } from "../../../store/actions/adminAction/DashboardAction";
+import SpinnerDots from "../../../components/spinner";
+import HeaderFilters from "../../../components/headerFilters";
+import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
+import { useRouter } from "next/router";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -34,58 +34,64 @@ const statusOptions = [
   { label: "Declined", value: "DECLINED" },
   { label: "Hold", value: "HOLD" },
 ];
-const options = [
-  { value: "", label: "All" },
-  { value: "REVIEWER", label: "REVIEWER" },
-  { value: "SUPERVISOR", label: "SUPERVISOR" },
-];
 
-const Reports = ({ workFgetFlagsowData }) => {
+const Index = () => {
   const dispatch = useDispatch();
-  const ExportResponse = useSelector((state) => state.report?.exportRes);
-  const ReportPatientDetails = useSelector((state) => state.report?.details);
-  const SentReportDetails = useSelector((state) => state.report?.sentDetails);
+  const route = useRouter();
+  const ExportResponse = useSelector((state) => state.adminReport?.exportRes);
+
+  const ReportPatientDetails = useSelector(
+    (state) => state.adminReport?.details
+  );
+  const SentReportDetails = useSelector(
+    (state) => state.adminReport?.sentDetails
+  );
+
   const ReceivedReportDetails = useSelector(
-    (state) => state.report?.receivedDetails
+    (state) => state.adminReport?.receivedDetails
   );
-  const selectUserList = useSelector(
-    (state) => state?.AdminDashboardReducers?.selectedUsers
-  );
+
   const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
-
+  
   const [isLoading, setIsLoading] = useState(true);
-
+  const [activeTab, setActiveTab] = useState("CoderReport");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
   const [comments, setComments] = useState();
   const [selectedRows, setSelectedRows] = useState([]);
-  const [selectAllCheckBoxes, setSelectAllCheckBoxes] = useState(false);
+  const [selectAll, setSelectAll] = useState(false);
   const [pageNo, setPageNo] = useState(0);
   const [sentPageNo, setSentPageNo] = useState(0);
   const [receivedPageNo, setReceivedPageNo] = useState(0);
-  const [selectedData, setSelectedData] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
+
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [paginationReceivedFirst, setPaginationReceivedFirst] = useState(0);
   const [paginationSentFirst, setPaginationSentFirst] = useState(0);
+
   const [modal, setModal] = useState(false);
-  const [selectedDates, setSelectedDates] = useState([]);
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+  const [receivedStartDate, setReceivedStartDate] = useState();
+  const [receivedEndDate, setReceivedEndDate] = useState();
+  const [coderStartDate, setCoderStartDate] = useState();
+  const [coderEndDate, setCoderEndDate] = useState();
+  const [selectedDates, setSelectedDates] = useState(null);
+  const [selectedCoderOpt, setSelectedCoderOpt] = useState("");
+  const [selectedCoderOptReport, setSelectedCoderOptReport] = useState("");
+  const [coderSearch, setCoderSearch] = useState("");
+  const [sentSearch, setSentSearch] = useState("");
+  const [receivedSearch, setReceivedSearch] = useState("");
   const [receivedSortOrder, setReceivedSortOrder] = useState("DESC");
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
-  const [searchVal, setSearchVal] = useState([]);
-  const [selectedOptions, setSelectedOptions] = useState([]);
-  const [search, setSearch] = useState();
-  const { RangePicker } = DatePicker;
-  const [selectedDateRanges, setSelecteddateRanges] = useState([]);
-
-  const [filters, setFilters] = useState({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    patientId: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    patientName: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  });
+  const [isindividual, setIsindividual] = useState(false);
+  const [selectMemberType, setSelectMemberType] = useState("");
+  const [selectUser, setSelectUser] = useState([]);
+  const [selectManager, setSelectedManger] = useState("");
+  const [select, setSelect] = useState(null);
+  const [searchVal, setSearchVal] = useState("");
 
   const ReceivedOptions = [];
   ReceivedReportDetails?.data?.response?.content?.map((item) => {
@@ -93,7 +99,9 @@ const Reports = ({ workFgetFlagsowData }) => {
   });
   const SentOptions = [];
   const uniqueRoles = new Set();
-
+  const selectUserList = useSelector(
+    (state) => state?.AdminDashboardReducers?.selectedUsers
+  );
   SentReportDetails?.data?.response?.data?.forEach((data) => {
     data?.receivedUsers?.forEach((item) => {
       const role = item.role;
@@ -103,30 +111,19 @@ const Reports = ({ workFgetFlagsowData }) => {
       }
     });
   });
+  const memberTypeChanges = (e) => {
+    setSelectMemberType(e);
+    setIsindividual(false);
+    setSelectUser([]);
+    if (e != "All") {
+      setIsindividual(true);
+    }
+  };
 
   const onPageChange = (e) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
   };
-
-  const handleCoderPicker = (date, dateString, tabName) => {
-    const formattedDates = dateString?.map((date, index) => {
-      const formattedDate =
-        index === 1
-          ? date && `${date}T23:59:59.999Z`
-          : date && `${date}T00:00:00.000Z`;
-      return formattedDate;
-    });
-    setSelectedDates((prevOptions) => ({
-      ...prevOptions,
-      [tabName]: date,
-    }));
-    setSelecteddateRanges((prevOptions) => ({
-      ...prevOptions,
-      [tabName]: { from: formattedDates[0], to: formattedDates[1] },
-    }));
-  };
-
   const onReceivedPageChange = (e) => {
     setPaginationReceivedFirst(e.first);
     setReceivedPageNo(e.page);
@@ -144,70 +141,52 @@ const Reports = ({ workFgetFlagsowData }) => {
 
   const handleTabs = (name) => {
     setSelectedDates(null);
-    setSelecteddateRanges([]);
-    localStorage.setItem("activeTab", name);
+    // setActiveTab(name);
     dispatch(getActiveTab(name));
-    setSearch();
-    setSearchVal([]);
-    if (name !== "Admin") {
-      setSelectedData([]);
-      setSelectAllCheckBoxes(false)
-    }
+    setCoderSearch("");
+    setReceivedSearch("");
+    setSentSearch("");
+    setSearchVal("");
+    setSelectedCoderOpt("")
   };
-
-  useEffect(()=>{
-    workFgetFlagsowData();
-  },[])
   useEffect(() => {
-    const coderSearchString = searchVal.find(
-      (item) => item.field === "initialSearch"
-    )?.search;
+    dispatch(getSelectUserList(selectMemberType));
+  }, [selectMemberType]);
+  useEffect(() => {
     setIsLoading(false);
-    const activeTabFromStorage = localStorage.getItem("activeTab");
-    const activeTab = activeTabFromStorage ? activeTabFromStorage : "Admin";
-    dispatch(getActiveTab(activeTab));
-
-
-    if (activeTab === "Sent") {
+    if (reportActiveTab === "SentReport") {
       dispatch(
-        getSentDetails(
-          sentPageNo,
-          selectedDateRanges?.Sent?.from,
-          selectedDateRanges?.Sent?.to,
-          coderSearchString ? coderSearchString : "",
-          sort
-        )
+        getSentDetails(sentPageNo, startDate, endDate, sentSearch, sort)
       );
-    } else if (activeTab === "Received") {
+    }
+    if (reportActiveTab === "ReceivedReport") {
       dispatch(
         getReceivedDetails(
           receivedPageNo,
-          selectedDateRanges?.Received?.from,
-          selectedDateRanges?.Received?.to,
-          coderSearchString ? coderSearchString : "",
+          receivedStartDate,
+          receivedEndDate,
+          receivedSearch,
           sort
         )
       );
-    } else {
+    }
+
+    if (!reportActiveTab || reportActiveTab === "CoderReport") {
       dispatch(
         getReportDetails(
           pageNo,
-          selectedDateRanges?.Admin?.from,
-          selectedDateRanges?.Admin?.to,
-          coderSearchString ? coderSearchString : "",
-          selectedOptions?.Status?.value,
-          selectedOptions?.UserRole?.value
-            ? selectedOptions?.UserRole?.value
-            : "",
+          coderStartDate,
+          coderEndDate,
+          coderSearch,
+          selectedCoderOpt,
+          selectedCoderOptReport?.value ? selectedCoderOptReport?.value : "",
           sort,
-          selectedOptions?.User?.value &&
-            selectedOptions?.UserRole?.value !== "All"
-            ? selectedOptions?.User?.value
+          selectManager?.value && selectedCoderOptReport?.value !== "All"
+            ? selectManager?.value
             : ""
         )
       );
     }
-
     if (ExportResponse) {
       setIsModalVisible(false);
     }
@@ -215,106 +194,46 @@ const Reports = ({ workFgetFlagsowData }) => {
     pageNo,
     sentPageNo,
     receivedPageNo,
+    reportActiveTab,
+    ExportResponse,
+    selectedCoderOpt,
+    selectedCoderOptReport,
+    coderSearch,
+    coderStartDate,
+    coderEndDate,
+    startDate,
+    endDate,
+    sentSearch,
     receivedPageNo,
+    receivedStartDate,
+    receivedEndDate,
+    receivedSearch,
     receivedSortOrder,
     sort,
-    searchVal,
-    selectedOptions,
-    selectedDateRanges,
+    selectManager,
+    select,
   ]);
 
   useEffect(() => {
     setFilteredCoder(ReportPatientDetails?.response);
   }, [ReportPatientDetails]);
-
   useEffect(() => {
-    const page = new URLSearchParams(window.location.search).get("page");
-    const limit = new URLSearchParams(window.location.search).get("limit");
-    if (reportActiveTab === "Received" && page) {
-      setReceivedPageNo(page);
-      setPaginationReceivedFirst(limit);
-    } else if (reportActiveTab === "Sent" && page) {
-      setSentPageNo(page);
-      setPaginationSentFirst(limit);
+    if (selectedCoderOptReport && !select) {
+      dispatch(
+        getSelectUserList(
+          selectedCoderOptReport === null &&
+            selectedCoderOptReport?.value === "All"
+            ? ""
+            : selectedCoderOptReport?.value
+        )
+      );
     }
-  }, [reportActiveTab]);
-
-  const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
-    if (data.computing == 2) {
-      const controller = new AbortController();
-      const { signal } = controller;
-      controller.abort();
-      localStorage.setItem("patientId", data.patientId);
-      const userRole = localStorage.getItem("userRole");
-      navigate.push(`/${userRole}/patients/details`);
-    } else {
-      notification.warning({
-        message: data.patientId + " file not processed Please wait",
-      });
-    }
-  };
-
-  const dosOnChange = (selectedOption, name) => {
-    const nameString = name?.split(" ").join("");
-    if (name === "User Role") {
-      setSelectedOptions((prevOptions) => ({
-        ...prevOptions,
-        [nameString]: selectedOption,
-        User: { value: "", label: "Select..." },
-      }));
-    } else {
-      setSelectedOptions((prevOptions) => ({
-        ...prevOptions,
-        [nameString]: selectedOption,
-      }));
-    }
-  };
-  const debouncedSearch = useCallback(
-    debounce(
-      (
-        text,
-
-        setSearchVal,
-        field
-      ) => {
-        setSearchVal((prev) => {
-          const existingIndex = prev.findIndex((item) => item.field === field);
-          if (existingIndex !== -1) {
-            return prev.map((item, index) => {
-              if (index === existingIndex) {
-                return { ...item, search: text };
-              }
-              return item;
-            });
-          } else {
-            return [...prev, { search: text, field: field }];
-          }
-        });
-      },
-      700
-    ),
-    []
-  );
-  const filterChangePatientId = (event) => {
-    const value = event.target.value;
-
-    let _filters = { ...filters };
-    _filters["patientId"].value = value;
-    setFilters(_filters);
-    setSearch({
-      name: event.target.name,
-      searchval: value,
-    });
-
-    const field = event.target.name;
-    debouncedSearch(value, setSearchVal, field);
-  };
-  useEffect(() => {
-    if (selectedOptions?.UserRole?.label) {
-      dispatch(getSelectUserList(selectedOptions?.UserRole?.value));
-    }
-  }, [selectedOptions?.UserRole]);
+  }, [selectedCoderOptReport]);
+  const options = [
+    { value: "", label: "All" },
+    { value: "REVIEWER", label: "REVIEWER" },
+    { value: "SUPERVISOR", label: "SUPERVISOR" },
+  ];
 
   const optionsUser =
     selectUserList?.data?.response?.map((res) => ({
@@ -325,386 +244,398 @@ const Reports = ({ workFgetFlagsowData }) => {
   if (optionsUser.length > 0) {
     optionsUser.unshift({ value: "", label: "All" });
   }
-  const checkedList = [
-    {
-      id: 1,
-      name: "Status",
-      isSelect: !reportActiveTab || reportActiveTab === "Admin" ? true : false,
-      options: statusOptions,
-    },
-    {
-      id: 2,
-      name: "User Role",
-      isSelect: true,
-      options: !reportActiveTab || reportActiveTab === "Admin" ? options : null,
-    },
-    {
-      id: 3,
-      name: "User",
-      isSelect: true,
-      options: optionsUser,
-    },
-  ];
+
+  useEffect(() => {
+    if (reportActiveTab) {
+      dispatch(getActiveTab(reportActiveTab));
+    }
+
+  }, [reportActiveTab]);
+
+  useEffect(() => {
+    const page = new URLSearchParams(window.location.search).get("page");
+    const limit = new URLSearchParams(window.location.search).get("limit");
+    if (reportActiveTab === "ReceivedReport" && page) {
+      setReceivedPageNo(page);
+      setPaginationReceivedFirst(limit);
+    } else if (reportActiveTab === "SentReport" && page) {
+      setSentPageNo(page);
+      setPaginationSentFirst(limit);
+    }
+  }, [reportActiveTab]);
+
+  const backRender = () => {
+    const user = localStorage.getItem("userRole");
+    if (user == "admin") {
+      route.push("/admin/report?page=0&limit=0");
+    }
+  };
 
   return (
-    <div>
+    <>
       <Header />
-      <div className="content-body">
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-xl-12">
-              <div>
-                <div className={styles.buttonContainer}>
-                  <div className={styles.group}>
-                    <button
-                      className={
-                        reportActiveTab === "Admin" ? `${styles.active}` : ""
-                      }
-                      onClick={() => {
-                        handleTabs("Admin");
-                      }}
-                    >
-                      Admin
-                    </button>
-                    <button
-                      className={
-                        reportActiveTab === "Sent" ? `${styles.active}` : ""
-                      }
-                      onClick={() => {
-                        handleTabs("Sent");
-                      }}
-                    >
-                      Sent
-                    </button>
-                    <button
-                      className={
-                        reportActiveTab === "Received" ? `${styles.active}` : ""
-                      }
-                      onClick={() => {
-                        handleTabs("Received");
-                      }}
-                    >
-                      Received
-                    </button>
-                  </div>
-                </div>
+      <div className={styles.maincontainer}>
+        <div class="content-body">
+          {!ReportPatientDetails?.response ? (
+            <SpinnerDots />
+          ) : (
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-xl-12">
+                  <div className="">
+                    <div className="card-body p-0">
+                      <div className="table-responsive active-projects task-table">
+                        <div className="tbl-caption  align-items-center">
+                          <HeaderFilters
+                            // search
+                            setSentSearch={setSentSearch}
+                            setReceivedSearch={setReceivedSearch}
+                            setCoderSearch={setCoderSearch}
+                            isSearch={true}
+                            setSearchVal={setSearchVal}
+                            searchlabel="Search by Name"
+                            searchVal={searchVal}
+                            // selector
+                            selectlabel="Select Status"
+                            isSelector={
+                              !reportActiveTab ||
+                              reportActiveTab === "CoderReport"
+                                ? true
+                                : false
+                            }
+                            setSelectedOption={setSelectedCoderOpt}
+                            selectOptions={statusOptions}
+                            defaultSelectValue1={""}
+                            // selector
 
-                <div className="tbl-caption  align-items-center">
-                  <div className="tbl-caption  align-items-center">
-                    <div
-                      className={`row filter-contain mt-4 mb-${
-                        selectedData?.length > 0 ? "3" : "0"
-                      } `}
-                    >
-                      <div className="col-xl-2">
-                        <div className="d-flex w-100">
-                          <label className="labelStyle d-flex m-auto">
-                            {" "}
-                            Search
-                          </label>
-                          <div class="form-group has-search2 w-100">
-                            <FontAwesomeIcon
-                              className="fa fa-search form-control-feedback"
-                              icon={faSearch}
-                            />
+                            selectlabel2="Select User Role"
+                            selectReportOptions={
+                              !reportActiveTab ||
+                              reportActiveTab === "CoderReport"
+                                ? options
+                                : null
+                            }
+                            setSelectedOption2={setSelectedCoderOptReport}
+                            defaultSelectValue2={selectedCoderOptReport}
+                            // selector3
+                            isSelector3={
+                              (!reportActiveTab ||
+                                reportActiveTab === "CoderReport") &&
+                              // selectUserList?.data?.response?.length &&
+                              selectedCoderOptReport?.label !== "All" &&
+                              selectedCoderOptReport
+                                ? true
+                                : false
+                            }
+                            selectedCoderOptReport={selectedCoderOptReport}
+                            selectlabel3="Select User"
+                            selectOptions3={optionsUser}
+                            setSelectedOption3={setSelectedManger}
+                            defaultSelectValue3="All"
+                            value={selectManager}
+                            setSelectedManger={setSelectedManger}
+                            // rangepicker
+                            isRangePicker={true}
+                            pickerlabel={
+                              reportActiveTab === "ReceivedReport"
+                                ? "Received Date"
+                                : reportActiveTab === "SentReport"
+                                ? "Sent Date"
+                                : "Select Date"
+                            }
+                            setStartDate={setStartDate}
+                            setEndDate={setEndDate}
+                            setReceivedStartDate={setReceivedStartDate}
+                            setReceivedEndDate={setReceivedEndDate}
+                            setCoderStartDate={setCoderStartDate}
+                            setCoderEndDate={setCoderEndDate}
+                            activeTab={
+                              !reportActiveTab ? "CoderReport" : reportActiveTab
+                            }
+                            rowsLength={rowsLength}
+                            setIsModalVisible={setIsModalVisible}
+                            selectedDates={selectedDates}
+                            setSelectedDates={setSelectedDates}
+                            disable="Yes"
+                            setSelect={setSelect}
+                            adminReport={true}
+                          />
+                        </div>
+                        <Export
+                          isModalVisible={isModalVisible}
+                          closeModal={closeModal}
+                          rowsLength={rowsLength}
+                          setIsModalVisible={setIsModalVisible}
+                          setSelectedRows={setSelectedRows}
+                          setSelectAll={setSelectAll}
+                          // selectedRows={selectedRows}
+                        />
 
-                            <InputText
-                              name="initialSearch"
-                              type="text"
-                              onChange={(e) => filterChangePatientId(e)}
-                              className="form-control new-form-control reportInput"
-                              placeholder="Search"
-                              maxLength={25}
-                              value={search ? search?.searchVal : ""}
-                              onKeyDown={(e) => {
-                                // Prevent input of backslash ("\")
-                                if (e.key === "\\") {
-                                  e.preventDefault();
+                        <div
+                          id="task-tbl_wrapper"
+                          className="dataTables_wrapper no-footer"
+                        >
+                          <div
+                            className="profile-tab "
+                            style={{ marginTop: "20px" }}
+                          >
+                            <div className="custom-tab-1">
+                              <Tab.Container
+                                defaultActiveKey={
+                                  reportActiveTab === "ReceivedReport"
+                                    ? "meatCriteria"
+                                    : reportActiveTab === "SentReport"
+                                    ? "comboDiseases"
+                                    : "validDiseases"
                                 }
-                              }}
-                            />
-
-                            {/* )} */}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="col-xl-2 d-flex">
-                        <div className="d-flex w-100">
-                          <label className="labelStyle d-flex m-auto">
-                            {" "}
-                            Date
-                          </label>
-                          <div>
-                            <RangePicker
-                              style={{
-                                borderRadius: "0 5px 5px 0",
-                                width: "100%",
-                              }}
-                              value={
-                                selectedDates
-                                  ? selectedDates[reportActiveTab]
-                                  : undefined
-                              }
-                              onChange={(date, dateString) =>
-                                handleCoderPicker(
-                                  date,
-                                  dateString,
-                                  reportActiveTab
-                                )
-                              }
-                              disabledDate={(current) =>
-                                disableFutureDate(current)
-                              }
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      {selectedData?.length > 0 &&
-                        selectedData?.map((info) => (
-                          <div className="col-xl-2">
-                            <div className="d-flex w-100">
-                              {info?.name && (
-                                <label className="labelStyle d-flex m-auto">
-                                  {" "}
-                                  {info.name}
-                                </label>
-                              )}
-                              <div className="form-group has-search2 w-100">
-                                {info?.isSearch && (
-                                  <FontAwesomeIcon
-                                    className="fa fa-search form-control-feedback"
-                                    icon={faSearch}
-                                  />
-                                )}
-                                {info?.isSelect ? (
-                                  <Select
-                                    onChange={(selectedOption) => {
-                                      dosOnChange(selectedOption, info.name);
+                              >
+                                <Nav as="ul" className="nav nav-tabs">
+                                  <Nav.Item
+                                    as="li"
+                                    className="nav-item"
+                                    onClick={() => {
+                                      handleTabs("CoderReport");
+                                      backRender();
+                                      dispatch(selectedReport(null));
                                     }}
-                                    options={
-                                      info?.name === "User"
-                                        ? optionsUser
-                                        : info?.options
-                                    }
-                                    className={`custom-react-select`}
-                                    isSearchable={false}
-                                    value={selectedOptions[info?.name]}
-                                  />
-                                ) : info?.isRangePikcer ? (
-                                  <RangePicker
-                                    style={{
-                                      borderRadius: "0 5px 5px 0",
-                                      width: "100%",
+                                  >
+                                    <Nav.Link
+                                      to="#my-posts"
+                                      eventKey="validDiseases"
+                                    >
+                                      Admin Report
+                                    </Nav.Link>
+                                  </Nav.Item>
+                                  <Nav.Item
+                                    as="li"
+                                    className="nav-item"
+                                    onClick={() => {
+                                      handleTabs("SentReport");
+                                      backRender();
                                     }}
-                                    value={
-                                      selectedDates
-                                        ? selectedDates[info?.name]
-                                        : undefined
-                                    }
-                                    onChange={(date, dateString) =>
-                                      handleCoderPicker(
-                                        date,
-                                        dateString,
-                                        info?.name
-                                      )
-                                    }
-                                    disabledDate={(current) =>
-                                      disableFutureDate(current)
-                                    }
-                                  />
-                                ) : (
-                                  info?.isSearch && (
-                                    <InputText
-                                      name={info?.name}
-                                      type="text"
-                                      onChange={(e) => filterChangePatientId(e)}
-                                      className="form-control new-form-control reportInput"
-                                      placeholder="Search"
-                                      maxLength={25}
-                                      value={search?.searchVal}
-                                      onKeyDown={(e) => {
-                                        // Prevent input of backslash ("\")
-                                        if (e.key === "\\") {
-                                          e.preventDefault();
-                                        }
-                                      }}
+                                  >
+                                    <Nav.Link
+                                      to="#my-posts"
+                                      eventKey="comboDiseases"
+                                    >
+                                      Sent Report
+                                    </Nav.Link>
+                                  </Nav.Item>
+                                  <Nav.Item
+                                    as="li"
+                                    className="nav-item"
+                                    onClick={() => {
+                                      handleTabs("ReceivedReport");
+                                      backRender();
+                                    }}
+                                  >
+                                    <Nav.Link
+                                      to="#my-posts"
+                                      eventKey="meatCriteria"
+                                    >
+                                      Received Report
+                                    </Nav.Link>
+                                  </Nav.Item>
+                                </Nav>
+                                <Tab.Content>
+                                  <Tab.Pane
+                                    id="my-posts"
+                                    eventKey="validDiseases"
+                                  >
+                                    <CoderReport
+                                      setModal={setModal}
+                                      modal={modal}
+                                      reportListAll={filteredCOder}
+                                      paginationFirst={paginationFirst}
+                                      ReportPatientDetails={
+                                        ReportPatientDetails?.response
+                                      }
+                                      onPageChange={onPageChange}
+                                      comments={comments}
+                                      setComments={setComments}
+                                      setSelectedRows={setSelectedRows}
+                                      selectedRows={selectedRows}
+                                      setSelectAll={setSelectAll}
+                                      selectAll={selectAll}
+                                      setSortOrder={setCoderSortOrder}
+                                      sortOrder={coderSortOrder}
+                                      setSort={setSort}
                                     />
-                                  )
-                                )}
-                                {/* )} */}
-                              </div>
+                                  </Tab.Pane>
+                                  <Tab.Pane
+                                    id="my-posts"
+                                    eventKey="nonhcc"
+                                  ></Tab.Pane>
+                                  <Tab.Pane
+                                    id="my-posts"
+                                    eventKey="comboDiseases"
+                                  >
+                                    <SentReportTable
+                                      paginationFirst={paginationSentFirst}
+                                      details={
+                                        SentReportDetails?.data?.response
+                                      }
+                                      onSentPageChange={onSentPageChange}
+                                      loading={SentReportDetails?.loading}
+                                      setSortOrder={setSentSortOrder}
+                                      sortOrder={sentSortOrder}
+                                      setSort={setSort}
+                                      receivedPageNo={sentPageNo}
+                                      receivedStartDate={startDate}
+                                      receivedEndDate={endDate}
+                                      isAdmin={true}
+                                    />
+                                  </Tab.Pane>
+                                  <Tab.Pane
+                                    id="my-posts"
+                                    eventKey="meatCriteria"
+                                  >
+                                    {ReceivedReportDetails?.data?.response
+                                      ?.content && (
+                                      <ReceivedReport
+                                        paginationFirst={
+                                          paginationReceivedFirst
+                                        }
+                                        details={
+                                          ReceivedReportDetails?.data?.response
+                                        }
+                                        onPageChange={onReceivedPageChange}
+                                        receivedPageNo={receivedPageNo}
+                                        receivedStartDate={receivedStartDate}
+                                        receivedEndDate={receivedEndDate}
+                                        loading={ReceivedReportDetails?.loading}
+                                        setSortOrder={setReceivedSortOrder}
+                                        sortOrder={receivedSortOrder}
+                                        setSort={setSort}
+                                        isAdmin={true}
+                                      />
+                                    )}
+                                  </Tab.Pane>
+                                  <Tab.Pane
+                                    id="my-posts"
+                                    eventKey="RafScore"
+                                  ></Tab.Pane>
+                                  <Tab.Pane
+                                    id="my-posts"
+                                    eventKey="file"
+                                  ></Tab.Pane>
+                                </Tab.Content>
+                              </Tab.Container>
                             </div>
                           </div>
-                        ))}
-                      {reportActiveTab === "Admin" && (
-                        <div className={`col-xl-${selectedData?.length===0? "8":"2"} d-flex`}>
-                          <div className={`col-xl-${selectedData?.length===0? "10":"0"} mx-${selectedData?.length ===0?"4":"0"} py-2`}>
-                          <MoreFilter
-                            checkedList={checkedList}
-                            selectAll={selectAllCheckBoxes}
-                            setSelectAll={setSelectAllCheckBoxes}
-                            selectedData={selectedData}
-                            setSelectedData={setSelectedData}
-                          />
-                          </div>
-                          {!reportActiveTab || reportActiveTab === "Admin" ? (
-                            <Tooltip
-                              title={
-                                rowsLength?.length === 0
-                                  ? "Select report to export"
-                                  : ""
-                              }
+
+                          {modal && (
+                            <Modal
+                              title="Comments"
+                              centered
+                              open={modal}
+                              onOk={() => {
+                                setModal(false);
+                              }}
+                              onCancel={() => {
+                                setModal(false);
+                              }}
+                              footer={null}
                             >
-                              <button
-                                onClick={() => {
-                                  setIsModalVisible(true);
-                                }}
-                                className={styles.export}
-                                disabled={
-                                  rowsLength?.length > 0 ||
-                                  rowsLength?.data?.length > 0
-                                    ? false
-                                    : true
-                                }
-                                style={{ color: "#04306f" }}
+                              <div
+                                className="offcanvas-body"
+                                style={{ height: "400px", overflowY: "scroll" }}
                               >
-                                <ExportImg />
-                                Export
-                              </button>
-                            </Tooltip>
-                          ) : null}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  {reportActiveTab === "Admin" && (
-                    <div>
-                      <ReviewerReport
-                        // setModal={setModal}
-                        // modal={modal}
-                        reportListAll={filteredCOder}
-                        paginationFirst={paginationFirst}
-                        ReportPatientDetails={ReportPatientDetails?.response}
-                        onPageChange={onPageChange}
-                        // comments={comments}
-                        // setComments={setComments}
-                        patientDetails={patientDetails}
-                        setSelectedRows={setSelectedRows}
-                        selectedRows={selectedRows}
-                        setSelectAll={setSelectAll}
-                        selectAll={selectAll}
-                        // setSortOrder={setCoderSortOrder}
-                        // sortOrder={coderSortOrder}
-                        // setSort={setSort}
-                        gotoPatientDetails={gotoPatientDetails}
-                        page={{ pageNo, paginationFirst }}
-                        isAdmin={true}
-                      />
-                    </div>
-                  )}
-                  {reportActiveTab === "Sent" && (
-                    <div>
-                      {}{" "}
-                      <SentReport
-                        paginationFirst={paginationSentFirst}
-                        details={SentReportDetails?.data?.response}
-                        onSentPageChange={onSentPageChange}
-                        loading={SentReportDetails?.loading}
-                        receivedPageNo={sentPageNo}
-                        receivedStartDate={selectedDateRanges?.Sent?.from}
-                        receivedEndDate={selectedDateRanges?.Sent?.to}
-                        isPhysician={true}
-                      />
-                    </div>
-                  )}
-                  {reportActiveTab === "Received" && (
-                    <div>
-                      <ReceivedReport
-                        paginationFirst={paginationReceivedFirst}
-                        details={ReceivedReportDetails?.data?.response}
-                        onPageChange={onReceivedPageChange}
-                        // receivedPageNo={receivedPageNo}
-                        // receivedStartDate={ selectedDateRanges?.Received?.from}
-                        // receivedEndDate={ selectedDateRanges?.Received?.to}
-                        // loading={ReceivedReportDetails?.loading}
-                        // setSortOrder={setReceivedSortOrder}
-                        // sortOrder={receivedSortOrder}
-                        // setSort={setSort}
-                        // isPhysician={true}
-                      />
-                    </div>
-                  )}
-                </div>
-
-                {modal && (
-                  <Modal
-                    title="Comments"
-                    centered
-                    open={modal}
-                    onOk={() => {
-                      setModal(false);
-                    }}
-                    onCancel={() => {
-                      setModal(false);
-                    }}
-                    footer={null}
-                  >
-                    <div
-                      className="offcanvas-body"
-                      style={{ height: "400px", overflowY: "scroll" }}
-                    >
-                      <div className="container-fluid">
-                        <div className={styles.heads}>
-                          <span className={styles.headText}>Hcc codes</span>
-                        </div>
-                        <div className={styles.data}>
-                          {comments && comments ? (
-                            Object.entries(comments).map(
-                              ([year, commentsArray]) => (
-                                <div key={year}>
-                                  <div className={styles.datas}>{year}</div>
-                                  {commentsArray.map((comment, index) => (
-                                    <div key={index} className={styles.comment}>
-                                      <p>{comment.comment}</p>
+                                <div className="container-fluid">
+                                  <div className={styles.heads}>
+                                    <span className={styles.headText}>
+                                      Hcc codes
+                                    </span>
+                                  </div>
+                                  <div className={styles.data}>
+                                    {comments && comments ? (
+                                      Object.entries(comments).map(
+                                        ([year, commentsArray]) => (
+                                          <div key={year}>
+                                            <div className={styles.datas}>
+                                              {year}
+                                            </div>
+                                            {commentsArray.map(
+                                              (comment, index) => (
+                                                <div
+                                                  key={index}
+                                                  className={styles.comment}
+                                                >
+                                                  <p>{comment.comment}</p>
+                                                </div>
+                                              )
+                                            )}
+                                          </div>
+                                        )
+                                      )
+                                    ) : (
+                                      <p>Comments not found</p>
+                                    )}
+                                    {/* <div className={styles.datas}>
+                                      Visit Data
                                     </div>
-                                  ))}
+                                    <div className={styles.description}>
+                                      Lorem Ipsum is simply dummy text of the
+                                      printing and typesetting industry.
+                                    </div>
+                                  </div>
+                                  <div className={styles.data}>
+                                    <div className={styles.datas}>
+                                      Combination codes
+                                    </div>
+                                    <div className={styles.description}>
+                                      Lorem Ipsum is simply dummy text of the
+                                      printing and typesetting industry.
+                                    </div>
+                                  </div>
+                                  <div className={styles.data}>
+                                    <div className={styles.datas}>
+                                      M.E.A.T criteria
+                                    </div>
+                                    <div className={styles.description}>
+                                      Lorem Ipsum is simply dummy text of the
+                                      printing and typesetting industry.
+                                    </div>
+                                  </div>
+                                  <div className={styles.heads}>
+                                    <span className={styles.headText}>
+                                      Radiology{" "}
+                                    </span>
+                                  </div>
+                                  <div className={styles.data}>
+                                    <div className={styles.datas}>
+                                      Visit Data
+                                    </div>
+                                    <div className={styles.description}>
+                                      Lorem Ipsum is simply dummy text of the
+                                      printing and typesetting industry.
+                                    </div>
+                                  </div>
+                                  <div className={styles.data}>
+                                    <div className={styles.datas}>
+                                      Combination codes
+                                    </div>
+                                    <div className={styles.description}>
+                                      Lorem Ipsum is simply dummy text of the
+                                      printing and typesetting industry.
+                                    </div> */}
+                                  </div>
                                 </div>
-                              )
-                            )
-                          ) : (
-                            <p>Comments not found</p>
+                              </div>
+                            </Modal>
                           )}
                         </div>
                       </div>
                     </div>
-                  </Modal>
-                )}
-                <Export
-                  isModalVisible={isModalVisible}
-                  closeModal={closeModal}
-                  rowsLength={rowsLength}
-                  setIsModalVisible={setIsModalVisible}
-                  setSelectedRows={setSelectedRows}
-                  selectedRows={selectedRows}
-                  setSelectAll={setSelectAll}
-                />
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
-    </div>
+    </>
   );
 };
-const enhancer = connect(
-  (state) => ({
-    getFlagsData: state?.reviewer?.workQueue?.flags?.data,
-  }),
-  {
-    workFgetFlagsowData: workflowActions.flagsAction,
-  }
-);
-export default enhancer(Reports);
+
+export default Index;

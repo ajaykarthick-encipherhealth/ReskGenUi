@@ -15,7 +15,7 @@ import {
 import SpinnerDots from "../../../../components/spinner";
 import { selectedReport } from "../../../../store/actions/adminAction/ReportActions";
 import EditButton from "../../../../images/adminUsers/EditButton";
-import Export from "../../report/Export";
+import Export from "../../reports/Export";
 
 function SentReportTable({
   details,

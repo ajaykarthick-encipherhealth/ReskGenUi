@@ -12,7 +12,7 @@ import {
 } from "../../../components/headerFilters/functions";
 import EditButton from "../../../images/adminUsers/EditButton";
 import SpinnerDots from "../../../components/spinner";
-import Export from "../../../pages/admin/report/Export";
+import Export from "../../../pages/admin/reports/Export";
 import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
 
 export const colors = {
