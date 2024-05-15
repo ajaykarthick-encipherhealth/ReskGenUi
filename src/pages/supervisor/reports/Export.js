@@ -1,7 +1,7 @@
 import { Button, Checkbox, Form, Input, Modal, Radio, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styles from "./report.module.css";
+import styles from "../report/report.module.css";
 import { getExportDetails } from "../../../store/actions/ReportActions";
 import { getUsersList } from "../../../store/actions/adminAction/ReportActions";
 import { checkBoxData, debounce } from "../../admin/reports/Export";

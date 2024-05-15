@@ -1,6 +1,6 @@
 import { Button, Checkbox, Form, Input, Modal, Radio, Select } from "antd";
 import React, { useEffect, useState } from "react";
-import styles from "./report.module.css";
+import styles from "../report/report.module.css";
 import {
   getExportDetails,
   getUsersList,
