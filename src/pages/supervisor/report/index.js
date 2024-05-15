@@ -194,7 +194,8 @@ const Reports = ({ workFgetFlagsowData }) => {
         )
       );
     }
-    if (reportActiveTab === "TeamReport") {
+    console.log(reportActiveTab)
+    if (reportActiveTab === "Team Report") {
       dispatch(
         getTeamReportDetails(
           teamPageNo,
