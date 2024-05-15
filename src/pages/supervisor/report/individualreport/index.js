@@ -39,7 +39,6 @@ const IndividualReceiverReport = () => {
   const sentReportDatas = useSelector(
     (state) => state.adminReport?.sentDetails
   );
-  console.log(sentReportDatas, "t");
   const [tableData, setTableData] = useState([]);
   const [csvTableData, setCSVTableData] = useState([]);
   const [searchValue, setSearchValue] = useState("");
@@ -131,12 +130,6 @@ const IndividualReceiverReport = () => {
       const reportdata = reportDatas?.data?.response?.content?.filter(
         (item) => item?.reportId === id
       );
-      console.log(
-        sentReportDatas?.data?.response?.receivedReportDTOList?.data,
-        "sent"
-      );
-      console.log(reportDatas, "repor");
-
       const sentdata = sentReportDatas?.data?.response?.data?.filter(
         (item) => item?._id === id
       );
