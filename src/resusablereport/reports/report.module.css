@@ -177,6 +177,10 @@
   background-color: #e1edfe;
   border-radius: 10px;
   margin-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 .bullet {
   height: 8px;
@@ -486,6 +490,9 @@
   background-color: #ebd4f7;
   border-radius: 10px;
   margin-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .downloadSubCard {
   height: 100px;
@@ -494,6 +501,9 @@
   background-color: #ccebff;
   border-radius: 10px;
   margin-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .contentOverFlow {
   height: 200px;
