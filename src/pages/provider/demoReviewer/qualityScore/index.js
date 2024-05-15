@@ -195,7 +195,7 @@ const QualityScore = () => {
                 </Card>
               </div>
             </div>
-            {/* <ProductivityStatus/> */}
+            <ProductivityStatus/>
           </div>
         </div>
       </div>

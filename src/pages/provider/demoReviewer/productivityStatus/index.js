@@ -7,7 +7,7 @@ import Card from "../../../../components/card/index";
 import ChartsEmbedSDK from "@mongodb-js/charts-embed-dom";
 import YearPicker from "../../../../components/yearpicker";
 import dayjs from "dayjs";
-import DailyTask from "../dailyTask";
+import SupervisiorProducitivity from "../../demoSupervisior/productivityStatus";
 
 
 
@@ -206,12 +206,14 @@ const ProductivityStatus = () => {
                 </Card>
               </div>
             </div>
-            <DailyTask/>
+           
             
           </div>
         </div>
 
       </div>
+      {/* <DailyTask/> */}
+     <SupervisiorProducitivity/>
     </>
   );
 };

@@ -5,6 +5,7 @@ import ChartsEmbedSDK from "@mongodb-js/charts-embed-dom";
 
 
 
+
 const DailyTask = () => {
  
 
@@ -23,7 +24,7 @@ const DailyTask = () => {
   return (
     <>
      <h4 className="mt-2">Daily Task  </h4>
-      <div className={styles.card6}>
+      <div className={styles.cards}>
         <Card borderRadius="30px" padding="0px">
           <div className={styles.buttonDiv}>
             <div className={styles.select}>
@@ -41,7 +42,9 @@ const DailyTask = () => {
              </div>
           </div>
         </Card>
+       
       </div>
+      
      
     </>
   );

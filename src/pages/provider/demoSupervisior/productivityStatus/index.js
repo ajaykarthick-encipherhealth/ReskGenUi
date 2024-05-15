@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from './styles.module.css'
+import styles from "./styles.module.css";
 import { Buttons } from "../../../reviewer/workingstatus";
 import Buttonscroller from "../../../../components/buttonSroller";
 import Card from "../../../../components/card/index";
@@ -7,11 +7,6 @@ import Header from "../../../../jsx/layouts/nav/Header";
 import ChartsEmbedSDK from "@mongodb-js/charts-embed-dom";
 import YearPicker from "../../../../components/yearpicker";
 import dayjs from "dayjs";
-import CompletedStatus from "../completedStatus";
-
-
-
-
 
 
 const SupervisiorProducitivity = () => {
@@ -155,16 +150,13 @@ const SupervisiorProducitivity = () => {
 
   return (
     <>
-    
-
-     
-      <div className="mt-3" >
-        
+      <div className="mt-3">
         <div className="container">
           <div className="row">
             <div className="col-12">
               <div>
                 <h4>Supervisior Productivity Status </h4>
+
                 <Card borderRadius="28px" padding="10px">
                   <div className={styles.buttonDiv}>
                     <div className={`d-flex ${styles.selectContainer}`}>
@@ -205,14 +197,13 @@ const SupervisiorProducitivity = () => {
                 </Card>
               </div>
             </div>
-         <CompletedStatus/>
           </div>
+          
         </div>
-
       </div>
+      {/* <CompletedStatus /> */}
     </>
   );
 };
 
-export default SupervisiorProducitivity
-
+export default SupervisiorProducitivity;

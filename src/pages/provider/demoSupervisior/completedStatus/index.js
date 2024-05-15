@@ -443,7 +443,7 @@ const CompletedStatus = () => {
   return (
     <>
       <HeadTitle header="Team Quality Score" />
-      <div className={styles.card3}>
+      <div className={styles.card5}>
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
             <div className={`d-flex ${styles.selectContainer}`}>
@@ -500,7 +500,7 @@ const CompletedStatus = () => {
           <div
             id="demo-chart"
             style={{
-              height: 300,
+              height: 250,
               width: 1200,
             }}
           ></div>
