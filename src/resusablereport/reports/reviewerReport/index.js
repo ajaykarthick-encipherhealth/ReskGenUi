@@ -64,7 +64,6 @@ const ReviewerReport = ({
   reportListAll,
   page,
   getFlagsData,
-  isAdmin,
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -352,7 +351,6 @@ const ReviewerReport = ({
     }
   };
 
-  console.log(reportListAll, "testing");
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
 

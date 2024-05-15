@@ -511,6 +511,7 @@ const Reports = ({ workFgetFlagsowData }) => {
                                     disabledDate={(current) =>
                                       disableFutureDate(current)
                                     }
+                                    className="newReportPicker"
                                   />
                                 ) : (
                                   info?.isSearch && (

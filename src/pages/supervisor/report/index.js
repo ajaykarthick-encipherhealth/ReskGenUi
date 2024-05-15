@@ -457,6 +457,7 @@ const Reports = ({ workFgetFlagsowData }) => {
                               disabledDate={(current) =>
                                 disableFutureDate(current)
                               }
+                              className="newReportPicker"
                             />
                           </div>
                         </div>
@@ -518,9 +519,7 @@ const Reports = ({ workFgetFlagsowData }) => {
                         setSort={setSort}
                         gotoPatientDetails={gotoPatientDetails}
                         page={{ pageNo, paginationFirst }}
-                        receivedPageNo={receivedPageNo}
-                        receivedStartDate={selectedDateRanges?.Received?.from}
-                        receivedEndDate={selectedDateRanges?.Received?.to}
+                       
                       />
                     </div>
                   )}
@@ -538,7 +537,7 @@ const Reports = ({ workFgetFlagsowData }) => {
                         receivedPageNo={sentPageNo}
                         receivedStartDate={selectedDateRanges?.Sent?.from}
                         receivedEndDate={selectedDateRanges?.Sent?.to}
-                        isPhysician={true}
+                        isSupervisor={true}
                       />
                     </div>
                   )}
@@ -593,6 +592,7 @@ const Reports = ({ workFgetFlagsowData }) => {
                         sortOrder={receivedSortOrder}
                         setSort={setSort}
                         isPhysician={true}
+                       
                       />
                     </div>
                   )}

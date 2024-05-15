@@ -602,12 +602,12 @@ const ReceivedReport = ({
         <Paginator
           first={paginationFirst}
           rows={15}
-          totalRecords={details?.reportStatusDTOList?.content?.totalElements}
+          totalRecords={details?.reportStatusDTOList?.totalElements}
           onPageChange={onPageChange}
         />
         <div className="total-pages">
           Total count:{" "}
-          {details?.reportStatusDTOList?.content?.totalElements > 0
+          {details?.reportStatusDTOList?.totalElements > 0
             ? details?.content?.reportStatusDTOList?.totalElements
             : 0}
         </div>
