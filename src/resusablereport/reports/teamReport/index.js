@@ -742,7 +742,7 @@ const TeamReport = ({
                               </div>
                             </div>
                             <div className={`col-xl-4 ${styles.flags}`}>
-                              <div className={`${styles.cardHead} sticky-top`}>
+                              <div className={`${styles.cardHead}`}>
                                 <div>Reviewer</div>
                                 <div className={styles.contentOverFlow}>
                                   {!reportListAll?.response?.reviewerAllocationCount
