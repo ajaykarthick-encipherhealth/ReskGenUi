@@ -608,7 +608,7 @@ const ReceivedReport = ({
         <div className="total-pages">
           Total count:{" "}
           {details?.reportStatusDTOList?.totalElements > 0
-            ? details?.content?.reportStatusDTOList?.totalElements
+            ? details?.reportStatusDTOList?.totalElements
             : 0}
         </div>
       </div>
