@@ -493,7 +493,7 @@ export const getPatientDetails = async (
             diseaseName: res.diseaseName,
             diagnosisCode: res.diagnosisCode,
             encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
+            encounterDateSplit: res.dateOfServices,
             providerName: providerList,
             providers: res.provider ? res.providers : res.provider,
             ruleType: res.ruleType,
@@ -847,7 +847,6 @@ export const getPatientDetails = async (
       ];
 
       setCaptureSectionMatching(newArrayColorMatchs);
-      console.log(meatListArr)
 
       setMeatCriteriaList && setMeatCriteriaList(meatListArr);
       setAllDisList && setAllDisList([...validDisArray,...deleteHccList,...suggestListAll])
