@@ -144,10 +144,10 @@ const Reports = ({ workFgetFlagsowData }) => {
     setSearchVal([]);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     workFgetFlagsowData();
-  },[])
-  
+  }, []);
+
   useEffect(() => {
     setIsLoading(false);
     const coderSearchString = searchVal.find(
@@ -180,6 +180,16 @@ const Reports = ({ workFgetFlagsowData }) => {
           sort
         )
       );
+    } else if (reportActiveTab === "Team Report") {
+      dispatch(
+        getTeamReportDetails(
+          teamPageNo,
+          selectedDateRanges?.TeamReport?.from,
+          selectedDateRanges?.TeamReport?.to,
+          coderSearchString ? coderSearchString : "",
+          sort
+        )
+      );
     } else {
       dispatch(
         getReportDetails(
@@ -190,18 +200,6 @@ const Reports = ({ workFgetFlagsowData }) => {
           selectedOptions?.reviewerStatus
             ? selectedOptions?.reviewerStatus
             : "",
-          sort
-        )
-      );
-    }
-    console.log(reportActiveTab)
-    if (reportActiveTab === "Team Report") {
-      dispatch(
-        getTeamReportDetails(
-          teamPageNo,
-          selectedDateRanges?.TeamReport?.from,
-          selectedDateRanges?.TeamReport?.to,
-          coderSearchString ? coderSearchString : "",
           sort
         )
       );
@@ -363,9 +361,7 @@ const Reports = ({ workFgetFlagsowData }) => {
 
                 <div className="tbl-caption  align-items-center">
                   <div className="tbl-caption  align-items-center">
-                    <div
-                      className={`row filter-contain mt-4 mb-0 `}
-                    >
+                    <div className={`row filter-contain mt-4 mb-0 `}>
                       <div className="col-xl-2">
                         <div className="d-flex w-100">
                           <label className="labelStyle d-flex m-auto">
