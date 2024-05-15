@@ -1,3 +1,4 @@
+import { message } from "antd";
 import React from "react";
 import { Offcanvas, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
@@ -13,6 +14,22 @@ const FileUploading = ({
   onChangeFile,
   errors,
 }) => {
+  const validateFileName = (fileName) => {
+    // Regular expression to detect double extensions
+    const doubleExtensionPattern = /\.[^/.]+(\.[^/.]+)$/;
+    return !doubleExtensionPattern.test(fileName);
+  };
+
+  const handleFileChange = (files) => {
+    const file = files[0];
+    if (file && validateFileName(file.name)) {
+      onChangeFile(files);
+    } else {
+      message.error("Invalid files");
+      const fileValue = document.getElementById('fileInput')
+      fileValue.value = ""
+    }
+  };
   return (
     <Offcanvas
       onHide={setAddPatient}
@@ -72,10 +89,11 @@ const FileUploading = ({
                   File <span className="text-danger">*</span>{" "}
                 </Form.Label>
                 <Form.Control
+                  id="fileInput"
                   required
                   type="file"
-                  accept="application/pdf,text/plain"
-                  onChange={(e) => onChangeFile(e.target.files)}
+                  accept=".pdf"
+                  onChange={(e) => handleFileChange(e.target.files)}
                   disabled={isLoadingBtn ? true : false}
                 />
               </div>
