@@ -386,7 +386,7 @@ const SentReport = ({
                                       : ""
                                   }`}
                                   // onClick={() => handleCardSelection(item, index)}
-                                  onClick={() => handleReceiverReport(item)}
+                                  
                                 >
                                   <div className={styles.contentGroup}>
                                     <div className="col-xl-12">
@@ -397,9 +397,10 @@ const SentReport = ({
                                           alignItems: "center",
                                           paddingBottom: "5px",
                                         }}
+                                        
                                       >
                                         <div
-                                          className={`col-xl-6 ${styles.pName}`}
+                                          className={`col-xl-6 ${styles.pName} cr-pointer`}onClick={() => handleReceiverReport(item)}
                                         >
                                           {item.reportName}
                                         </div>
@@ -424,12 +425,13 @@ const SentReport = ({
                                         }}
                                       >
                                         <div
-                                          className={`col-xl-12 ${styles.headText}`}
+                                          className={`col-xl-12 ${styles.headText} cr-pointer`}
+                                          onClick={() => handleReceiverReport(item)}
                                         >
                                           {item._id}
                                         </div>
                                       </div>
-                                      <div className="d-flex justify-content-between align-items-center">
+                                      <div className="d-flex justify-content-between align-items-center cr-pointer" onClick={() => handleReceiverReport(item)}>
                                         <div
                                           className={`col-xl-2 ${styles.text}`}
                                         >
