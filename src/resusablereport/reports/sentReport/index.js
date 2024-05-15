@@ -146,7 +146,6 @@ const SentReport = ({
     };
   };
 
-  const chartOption = getChartOption(details?.sentReportCountByTypeDTOList);
   const handleReceiverReport = (item) => {
     const info = {
       reportUser: item,
@@ -155,8 +154,9 @@ const SentReport = ({
       receivedEndDate: receivedEndDate,
     };
     dispatch(selectedReport(info));
+    const currentpath=localStorage.getItem("userRole")
     router?.push(
-      `/supervisor/report/individualreport?reportId=${
+      `/${currentpath}/report/individualreport?reportId=${
         item?._id
       }&sentreport=${true}&page=${receivedPageNo}&limit=${paginationFirst}`
     );
@@ -345,7 +345,6 @@ const SentReport = ({
     ) {
       handleCardSelection(details?.receivedReportDTOList?.data[0], 0);
     }
-    console.log(details?.receivedReportDTOList?.data, "rece");
   }, [details]);
 
   const handleCardSelection = (item, index) => {
@@ -400,7 +399,7 @@ const SentReport = ({
                                         
                                       >
                                         <div
-                                          className={`col-xl-6 ${styles.pName} cr-pointer`}onClick={() => handleReceiverReport(item)}
+                                          className={`col-xl-6 ${styles.pName} cr-pointer`} onClick={() => handleReceiverReport(item)}
                                         >
                                           {item.reportName}
                                         </div>

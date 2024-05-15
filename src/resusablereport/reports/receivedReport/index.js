@@ -11,8 +11,18 @@ import {
 import { colors } from "../sentReport";
 import SpinnerDots from "../../../components/spinner";
 import { Empty } from "antd";
+import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
+import { useDispatch } from "react-redux";
 
-const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
+const ReceivedReport = ({
+  details,
+  onPageChange,
+  paginationFirst,
+  receivedPageNo,
+  receivedStartDate,
+  receivedEndDate,
+}) => {
+  const dispatch = useDispatch();
   const [reportActiveTab, setReportActiveTab] = useState("Supervisor");
   const getChartOption = (data) => {
     const excelCount =
@@ -290,7 +300,21 @@ const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
         return null;
     }
   };
-
+  const handleReceiverReport = (item) => {
+    const info = {
+      reportUser: item,
+      receivedPageNo: receivedPageNo,
+      receivedStartDate: receivedStartDate,
+      receivedEndDate: receivedEndDate,
+    };
+    dispatch(selectedReport(info));
+    const currentpath = localStorage.getItem("userRole");
+    router?.push(
+      `/${currentpath}/report/individualreport?reportId=${
+        item?.reportId
+      }&isAdminPage=${true}&page=${receivedPageNo}&limit=${paginationFirst}`
+    );
+  };
   return (
     <>
       <div>
@@ -315,7 +339,11 @@ const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
                                 return (
                                   <div key={index} className={styles.card}>
                                     <div className={styles.contentGroup}>
-                                      <div className="col-xl-12">
+                                      <div className="col-xl-12 cr-pointer"
+                                      onClick={() =>
+                                        handleReceiverReport(item)
+                                      }
+                                       >
                                         <div
                                           style={{
                                             display: "flex",
@@ -323,9 +351,11 @@ const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
                                             alignItems: "center",
                                             paddingBottom: "5px",
                                           }}
+                                          
                                         >
                                           <div
                                             className={`col-xl-6 ${styles.pName}`}
+                                           
                                           >
                                             {item.reportName}
                                           </div>
