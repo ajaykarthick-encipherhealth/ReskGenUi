@@ -116,7 +116,7 @@ const Export = ({
     const data = {
       fields: fields,
       patientIds: patientIds,
-      fileType: values.ReportTYpe,
+      fileType: activeButton.toUpperCase(),
       reportName: values.ReportName,
       userAndAccess: editUserAndAccess,
       patientIds: idList,
@@ -144,7 +144,7 @@ const Export = ({
     setSelectedRows([]);
     setSelectAll(false);
     setTimeout(() => {
-      setIsModalVisible(false);
+      // setIsModalVisible(false);
     }, 500);
   };
 
@@ -228,7 +228,7 @@ const Export = ({
                       type="text"
                       placeholder=""
                       isSearch={false}
-                      isDisabled={selectedReportInfo?.reportName ? true : false}
+                      // isDisabled={selectedReportInfo?.reportName ? true : false}
                       isInputFiled={true}
                       activeTab={"Report"}
                       setSearchVal={setInputStr}
