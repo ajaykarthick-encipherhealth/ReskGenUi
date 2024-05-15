@@ -370,144 +370,94 @@ const SentReport = ({
                       <SpinnerDots />
                     ) : (
                       <div className={styles.cardContainer}>
-                        {details?.receivedReportDTOList?.data?.length>0?details?.receivedReportDTOList?.data?.map(
-                          (item, index) => {
-                            const formattedDate = dateFormate(
-                              dayjs,
-                              item?.sendDate
-                            );
-                            return (
-                              <div
-                                key={index}
-                                className={`${styles.card} ${
-                                  index === selectedCardIndex
-                                    ? styles.selectedCard
-                                    : ""
-                                }`}
-                                // onClick={() => handleCardSelection(item, index)}
-                                onClick={() => handleReceiverReport(item)}
-                              >
-                                <div className={styles.contentGroup}>
-                                  <div className="col-xl-12">
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        alignItems: "center",
-                                        paddingBottom: "5px",
-                                      }}
-                                    >
+                        {details?.receivedReportDTOList?.data?.length > 0 ? (
+                          details?.receivedReportDTOList?.data?.map(
+                            (item, index) => {
+                              const formattedDate = dateFormate(
+                                dayjs,
+                                item?.sendDate
+                              );
+                              return (
+                                <div
+                                  key={index}
+                                  className={`${styles.card} ${
+                                    index === selectedCardIndex
+                                      ? styles.selectedCard
+                                      : ""
+                                  }`}
+                                  // onClick={() => handleCardSelection(item, index)}
+                                  onClick={() => handleReceiverReport(item)}
+                                >
+                                  <div className={styles.contentGroup}>
+                                    <div className="col-xl-12">
                                       <div
-                                        className={`col-xl-6 ${styles.pName}`}
-                                      >
-                                        {item.reportName}
-                                      </div>
-                                      <div
-                                        className={`col-xl-2 ${styles.dataContainer}`}
+                                        style={{
+                                          display: "flex",
+                                          justifyContent: "space-between",
+                                          alignItems: "center",
+                                          paddingBottom: "5px",
+                                        }}
                                       >
                                         <div
-                                          onClick={() => {
-                                            setSelectedRows(item);
-                                            dispatch(selectedReport(item));
-                                            setOpenEdit(true);
-                                          }}
+                                          className={`col-xl-6 ${styles.pName}`}
                                         >
-                                          <EditButton />
+                                          {item.reportName}
+                                        </div>
+                                        <div
+                                          className={`col-xl-2 ${styles.dataContainer}`}
+                                        >
+                                          <div
+                                            onClick={() => {
+                                              setSelectedRows(item);
+                                              dispatch(selectedReport(item));
+                                              setOpenEdit(true);
+                                            }}
+                                          >
+                                            <EditButton />
+                                          </div>
                                         </div>
                                       </div>
-                                    </div>
 
-                                    <div
-                                      style={{
-                                        paddingBottom: "5px",
-                                      }}
-                                    >
                                       <div
-                                        className={`col-xl-12 ${styles.headText}`}
+                                        style={{
+                                          paddingBottom: "5px",
+                                        }}
                                       >
-                                        {item._id}
+                                        <div
+                                          className={`col-xl-12 ${styles.headText}`}
+                                        >
+                                          {item._id}
+                                        </div>
                                       </div>
-                                    </div>
-                                    <div className="d-flex justify-content-between align-items-center">
-                                      <div
-                                        className={`col-xl-2 ${styles.text}`}
-                                      >
-                                        {formattedDate}
-                                      </div>
-                                      <div
-                                        className={`col-xl-4 ${styles.text}`}
-                                      >
-                                        <Avatar.Group maxCount={2}>
-                                          {item?.receivedUsers?.map(
-                                            (data, index) => (
-                                              <Popover
-                                                key={index}
-                                                content={
-                                                  <div
-                                                    style={{
-                                                      display: "flex",
-                                                      justifyContent: "center",
-                                                      alignItems: "center",
-                                                      flexDirection: "column",
-                                                    }}
-                                                  >
+                                      <div className="d-flex justify-content-between align-items-center">
+                                        <div
+                                          className={`col-xl-2 ${styles.text}`}
+                                        >
+                                          {formattedDate}
+                                        </div>
+                                        <div
+                                          className={`col-xl-4 ${styles.text}`}
+                                        >
+                                          <Avatar.Group maxCount={2}>
+                                            {item?.receivedUsers?.map(
+                                              (data, index) => (
+                                                <Popover
+                                                  key={index}
+                                                  content={
                                                     <div
                                                       style={{
-                                                        padding: "10px",
+                                                        display: "flex",
+                                                        justifyContent:
+                                                          "center",
+                                                        alignItems: "center",
+                                                        flexDirection: "column",
                                                       }}
                                                     >
-                                                      {
-                                                        data?.userDetails
-                                                          ?.firstName
-                                                      }{" "}
-                                                      {
-                                                        data?.userDetails
-                                                          ?.lastName
-                                                      }
-                                                    </div>
-                                                    {data?.userDetails
-                                                      ?.profileImageUrl && (
-                                                      <img
-                                                        src={
-                                                          data.userDetails
-                                                            .profileImageUrl
-                                                        }
-                                                        alt="Profile"
-                                                        style={{
-                                                          maxWidth: "100px",
-                                                          maxHeight: "100px",
-                                                        }}
-                                                      />
-                                                    )}
-                                                  </div>
-                                                }
-                                              >
-                                                <div
-                                                  style={{
-                                                    display: "inline-block",
-                                                    marginRight: "5px",
-                                                  }}
-                                                >
-                                                  {item.receivedUsers.length ===
-                                                    1 && (
-                                                    <div className="d-flex justify-content-center align-items-center">
                                                       <div
                                                         style={{
-                                                          marginRight: "10px",
+                                                          padding: "10px",
                                                         }}
                                                       >
-                                                        {renderUserPrfoileAvatar(
-                                                          data?.userDetails
-                                                            ?.firstName,
-                                                          data?.userDetails
-                                                            ?.lastName,
-                                                          data?.userDetails
-                                                            ?.profileImageUrl,
-                                                          "header"
-                                                        )}
-                                                      </div>
-
-                                                      <div>
                                                         {
                                                           data?.userDetails
                                                             ?.firstName
@@ -517,21 +467,81 @@ const SentReport = ({
                                                             ?.lastName
                                                         }
                                                       </div>
+                                                      {data?.userDetails
+                                                        ?.profileImageUrl && (
+                                                        <img
+                                                          src={
+                                                            data.userDetails
+                                                              .profileImageUrl
+                                                          }
+                                                          alt="Profile"
+                                                          style={{
+                                                            maxWidth: "100px",
+                                                            maxHeight: "100px",
+                                                          }}
+                                                        />
+                                                      )}
                                                     </div>
-                                                  )}
-                                                </div>
-                                              </Popover>
-                                            )
-                                          )}
-                                        </Avatar.Group>
+                                                  }
+                                                >
+                                                  <div
+                                                    style={{
+                                                      display: "inline-block",
+                                                      marginRight: "5px",
+                                                    }}
+                                                  >
+                                                    {item.receivedUsers
+                                                      .length === 1 && (
+                                                      <div className="d-flex justify-content-center align-items-center">
+                                                        <div
+                                                          style={{
+                                                            marginRight: "10px",
+                                                          }}
+                                                        >
+                                                          {renderUserPrfoileAvatar(
+                                                            data?.userDetails
+                                                              ?.firstName,
+                                                            data?.userDetails
+                                                              ?.lastName,
+                                                            data?.userDetails
+                                                              ?.profileImageUrl,
+                                                            "header"
+                                                          )}
+                                                        </div>
+
+                                                        <div>
+                                                          {
+                                                            data?.userDetails
+                                                              ?.firstName
+                                                          }{" "}
+                                                          {
+                                                            data?.userDetails
+                                                              ?.lastName
+                                                          }
+                                                        </div>
+                                                      </div>
+                                                    )}
+                                                  </div>
+                                                </Popover>
+                                              )
+                                            )}
+                                          </Avatar.Group>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
-                            );
-                          }
-                        ):<Empty/>}
+                              );
+                            }
+                          )
+                        ) : (
+                          <div
+                            className="d-flex justify-content-center align-items-center"
+                            style={{ height: "700px" }}
+                          >
+                            <Empty />
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
@@ -550,17 +560,19 @@ const SentReport = ({
                             <div className={`col-xl-6 ${styles.sentSubCard}`}>
                               <div>
                                 <div>Overall Reports Sent</div>
-                                <h4>
+                                <div className="fw-bold">
                                   {
                                     details?.receivedReportDTOList
                                       ?.totalElements
                                   }
-                                </h4>
+                                </div>
                               </div>
                             </div>
                             <div className={`col-xl-6 ${styles.sentSubCard}`}>
                               <div>Overall Users</div>
-                              <h4>{details?.overAllUsersCount}</h4>
+                              <div className="fw-bold">
+                                {details?.overAllUsersCount}
+                              </div>
                             </div>
                           </div>
                           <div className="col-xl-12 d-flex mt-4">
@@ -573,7 +585,9 @@ const SentReport = ({
                                     >
                                       <div>
                                         <div>No of Read</div>
-                                        <h4>{item.roleCount}</h4>
+                                        <div className="fw-bold">
+                                          {item.roleCount}
+                                        </div>
                                       </div>
                                     </div>
                                   )}
@@ -583,7 +597,9 @@ const SentReport = ({
                                     >
                                       <div>
                                         <div>No of Download</div>
-                                        <h4>{item.roleCount}</h4>
+                                        <div className="fw-bold">
+                                          {item.roleCount}
+                                        </div>
                                       </div>
                                     </div>
                                   )}

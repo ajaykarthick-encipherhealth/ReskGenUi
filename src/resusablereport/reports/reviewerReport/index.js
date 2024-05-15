@@ -64,7 +64,7 @@ const ReviewerReport = ({
   reportListAll,
   page,
   getFlagsData,
-  isAdmin
+  isAdmin,
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -357,10 +357,13 @@ const ReviewerReport = ({
 
     if (data?.processedStatus === "COMPLETED") {
       const controller = new AbortController();
-      const currentRole=localStorage.getItem("userRole");
+      const currentRole = localStorage.getItem("userRole");
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
-      navigate.push({ pathname: `/${currentRole}/patients/details`, query: page });
+      navigate.push({
+        pathname: `/${currentRole}/patients/details`,
+        query: page,
+      });
     } else {
       notification.warning({
         message: data?.patientId + " file not processed. Please wait.",
@@ -462,6 +465,7 @@ const ReviewerReport = ({
                                           ? item.patientName
                                           : "---"}
                                       </div>
+
                                       <div
                                         className={`col-xl-6 ${styles.dataContainer}`}
                                       >
@@ -491,12 +495,18 @@ const ReviewerReport = ({
                                     </div>
 
                                     <div className="d-flex justify-content-around align-items-center pb-1">
-                                      <div
-                                        className={`col-xl-2 ${styles.headText}`}
-                                        // onClick={() => handleTableRowClick(id)}
+                                      <Tooltip
+                                        title={"Patient Id"}
+                                        placement="bottom"
                                       >
-                                        {item.patientId ? item.patientId : ""}
-                                      </div>
+                                        <div
+                                          className={`col-xl-2 ${styles.headText}`}
+                                          // onClick={() => handleTableRowClick(id)}
+                                        >
+                                          {item.patientId ? item.patientId : ""}
+                                        </div>
+                                      </Tooltip>
+
                                       <div
                                         className={`col-xl-2 ${styles.headText}`}
                                       >
@@ -514,14 +524,20 @@ const ReviewerReport = ({
                                       </div>
                                     </div>
                                     <div className="d-flex justify-content-around align-items-center">
-                                      <div
-                                        className={`col-xl-2 ${styles.text}`}
+                                      <Tooltip
+                                        title={"Completed Date"}
+                                        placement="bottom"
                                       >
-                                        {dateFormate(
-                                          dayjs,
-                                          item?.processedDate
-                                        )}
-                                      </div>
+                                        <div
+                                          className={`col-xl-2 ${styles.text}`}
+                                        >
+                                          {dateFormate(
+                                            dayjs,
+                                            item?.processedDate
+                                          )}
+                                        </div>
+                                      </Tooltip>
+
                                       <div
                                         className={`col-xl-2 ${styles.text}`}
                                       >
@@ -651,34 +667,41 @@ const ReviewerReport = ({
                           <div className="col-xl-12  d-flex mt-1">
                             <div className={`col-xl-4 ${styles.flags}`}>
                               <div className={styles.cardHead}>Flags</div>
-                              {getFlagsData?.response.map((flagItem) => (
-                                <div
-                                  className={styles.contentGroups}
-                                  key={flagItem.id}
-                                >
-                                  <div>
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="23"
-                                      height="23"
-                                      viewBox="0 0 800 800"
-                                      fill={flagItem?.flagColour}
-                                    >
-                                      <path
-                                        d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
-                                        stroke="#000"
-                                        stroke-width="10"
-                                      />
-                                    </svg>
-                                    <span style={{fontSize:"12px"}}>{flagItem?.flagName
-                                      ? flagItem?.flagName.replaceAll("_", " ")
-                                      : ""}</span>
+                              <div className={styles.contentOverFlow}>
+                                {getFlagsData?.response.map((flagItem) => (
+                                  <div
+                                    className={styles.contentGroups}
+                                    key={flagItem.id}
+                                  >
+                                    <div>
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="23"
+                                        height="23"
+                                        viewBox="0 0 800 800"
+                                        fill={flagItem?.flagColour}
+                                      >
+                                        <path
+                                          d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
+                                          stroke="#000"
+                                          stroke-width="10"
+                                        />
+                                      </svg>
+                                      <span style={{ fontSize: "12px" }}>
+                                        {flagItem?.flagName
+                                          ? flagItem?.flagName.replaceAll(
+                                              "_",
+                                              " "
+                                            )
+                                          : ""}
+                                      </span>
+                                    </div>
+                                    <div className={styles.count}>
+                                      {flagItem.count ? flagItem.count : 0}
+                                    </div>
                                   </div>
-                                  <div className={styles.count}>
-                                    {flagItem.count?flagItem.count:0}
-                                  </div>
-                                </div>
-                              ))}
+                                ))}
+                              </div>
                             </div>
                             <div className={`col-xl-4 ${styles.flags}`}>
                               <div className={styles.cardHead}>
@@ -779,7 +802,7 @@ const ReviewerReport = ({
                                       className="d-flex justify-content-center align-items-center"
                                       style={{ height: "200px" }}
                                     >
-                                      <Empty />{" "}
+                                      <Empty />
                                     </div>
                                   )}
                                 </div>
