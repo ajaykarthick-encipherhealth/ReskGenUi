@@ -462,7 +462,7 @@ const Reports = ({ workFgetFlagsowData }) => {
                         </div>
                       </div>
                       {!reportActiveTab ||
-                      reportActiveTab === "Audit Report" ? (
+                      reportActiveTab === "Audit Report" || reportActiveTab === "Team Report" ? (
                         <div className="col-xl-6">
                           <div className="row flr">
                             <Tooltip
@@ -518,6 +518,9 @@ const Reports = ({ workFgetFlagsowData }) => {
                         setSort={setSort}
                         gotoPatientDetails={gotoPatientDetails}
                         page={{ pageNo, paginationFirst }}
+                        receivedPageNo={receivedPageNo}
+                        receivedStartDate={selectedDateRanges?.Received?.from}
+                        receivedEndDate={selectedDateRanges?.Received?.to}
                       />
                     </div>
                   )}

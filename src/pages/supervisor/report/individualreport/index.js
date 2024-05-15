@@ -34,10 +34,12 @@ import { getReportActiveTab } from "../../../../store/actions/adminAction/Report
 const IndividualReceiverReport = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const url = useSelector((state) => state.AuditReport.uploadFile);
-  const reportDatas = useSelector((state) => state.AuditReport.receivedDetails);
+  const url = useSelector((state) => state?.AuditReport?.uploadFile);
+  const reportDatas = useSelector(
+    (state) => state?.AuditReport?.receivedDetails
+  );
   const sentReportDatas = useSelector(
-    (state) => state.adminReport?.sentDetails
+    (state) => state?.adminReport?.sentDetails
   );
   const [tableData, setTableData] = useState([]);
   const [csvTableData, setCSVTableData] = useState([]);
@@ -124,16 +126,18 @@ const IndividualReceiverReport = () => {
       setDetailsContent(
         isSentReport
           ? sentReportDatas?.data?.response?.receivedReportDTOList?.data
-          : reportDatas?.data?.response?.content
+          : reportDatas?.data?.response?.reportStatusDTOList?.content
       );
       const id = new URLSearchParams(window.location.search).get("reportId");
-      const reportdata = reportDatas?.data?.response?.content?.filter(
-        (item) => item?.reportId === id
-      );
+      const reportdata =
+        reportDatas?.data?.response?.reportStatusDTOList?.content?.filter(
+          (item) => item?.reportId === id
+        );
       const sentdata = sentReportDatas?.data?.response?.data?.filter(
         (item) => item?._id === id
       );
-      // setReportInfo(!isSentReport ? reportdata[0] : sentdata[0]);
+
+      setReportInfo(!isSentReport ? reportdata[0] : sentdata[0]);
     }
   }, [reportDatas, sentReportDatas, isSentReport]);
 
