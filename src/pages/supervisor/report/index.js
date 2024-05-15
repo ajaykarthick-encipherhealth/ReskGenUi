@@ -29,6 +29,7 @@ import ReceivedReport from "../../../resusablereport/reports/receivedReport";
 import Export from "../../../resusablereport/reports/Export";
 import TeamReport from "../../../resusablereport/reports/teamReport";
 import { actions as workflowActions } from "../../../stores/reviewer/workqueue";
+import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -476,6 +477,7 @@ const Reports = ({ workFgetFlagsowData }) => {
                               <button
                                 onClick={() => {
                                   setIsModalVisible(true);
+                                  dispatch(selectedReport(null))
                                 }}
                                 className={styles.export}
                                 disabled={

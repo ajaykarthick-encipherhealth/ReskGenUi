@@ -132,7 +132,7 @@ const Export = ({
       dispatch(getExportDetails(data));
     } else {
       dispatch(updateSentReport(updatedData));
-      dispatch(getActiveTab("SentReport"));
+      dispatch(getActiveTab("Sent"));
     }
     form.resetFields();
     setUsersList([]);
@@ -188,6 +188,7 @@ const Export = ({
   useEffect(() => {
     setInputStr("");
   }, [isModalVisible]);
+
   return (
     <Modal
       title="Export "
@@ -228,7 +229,7 @@ const Export = ({
                       type="text"
                       placeholder=""
                       isSearch={false}
-                      // isDisabled={selectedReportInfo?.reportName ? true : false}
+                      isDisabled={selectedReportInfo?.reportName ? true : false}
                       isInputFiled={true}
                       activeTab={"Report"}
                       setSearchVal={setInputStr}
@@ -268,6 +269,7 @@ const Export = ({
           </div>
           <div className="col-md-12" style={{ marginTop: "10px" }}>
             <div className="d-flex p-2">
+              {!selectedReportInfo &&
               <div>
                 <div className="d-flex p-2">
                   <div style={{ marginRight: "10px" }}>Report Fields</div>
@@ -327,8 +329,8 @@ const Export = ({
                   </ul>
                 </div>
               </div>
-
-              <div className="col-md-9">
+}
+              <div className={`col-md-${selectedReportInfo?"12":"9"}`}>
                 <div className={`p-2 `}>Sent To</div>
                 <div className={`p-2 ${styles.reportLabel}`}>
                   Select the fields you want to sent
