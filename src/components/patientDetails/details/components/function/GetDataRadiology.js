@@ -30,8 +30,10 @@ export const getPatientRadiologyDetails = async (
             });
           }
         });
-        setFileRadiologyDateofServiceList && setFileRadiologyDateofServiceList(dosYearArrFile);
-        setRadiologyFileDateDefaulteSelect && setRadiologyFileDateDefaulteSelect(dosYearArrFile[0]);
+        setFileRadiologyDateofServiceList &&
+          setFileRadiologyDateofServiceList(dosYearArrFile);
+        setRadiologyFileDateDefaulteSelect &&
+          setRadiologyFileDateDefaulteSelect(dosYearArrFile[0]);
         setRadiologyFileDetailCheck && setRadiologyFileDetailCheck(true);
       }
     }
@@ -51,11 +53,11 @@ export const getPatientRadiologyDetails = async (
       var dateofService = dosYearArr[0].value;
       validDis = result.validDisease[dateofService];
       validDiseaseNewRes = result?.validDisease[dateofService];
-      if(result?.invalidDisease){
-      invalidDiseaseNewRes = result?.invalidDisease[dateofService];
+      if (result?.invalidDisease) {
+        invalidDiseaseNewRes = result?.invalidDisease[dateofService];
       }
-      if(result?.deletedDisease){
-      deletedRes = result?.deletedDisease[dateofService];
+      if (result?.deletedDisease) {
+        deletedRes = result?.deletedDisease[dateofService];
       }
       if (result.unmatchedDisease != null) {
         var unMatchResCheck = result.unmatchedDisease[dateofService];
@@ -81,7 +83,7 @@ export const getPatientRadiologyDetails = async (
           isHccValid: res.isHccValid,
           defaultPosition: res.defaultPosition,
           providerName: providerList,
-          dosYear:dateofService
+          dosYear: dateofService,
         });
       });
 
@@ -102,7 +104,7 @@ export const getPatientRadiologyDetails = async (
           isHccValid: res.isHccValid,
           defaultPosition: res.defaultPosition,
           providerName: providerList,
-          dosYear:dateofService
+          dosYear: dateofService,
         });
       });
 
@@ -123,8 +125,7 @@ export const getPatientRadiologyDetails = async (
           isHccValid: res.isHccValid,
           defaultPosition: res.defaultPosition,
           providerName: providerList,
-          dosYear:dateofService
-
+          dosYear: dateofService,
         });
       });
 
@@ -222,37 +223,44 @@ export const getPatientRadiologyDetails = async (
           colors: COLORS3[index],
         });
       });
-      var meatCri = '';
+      var meatCri = "";
       if (result.meatCriteria != null) {
         meatCri = result.meatCriteria[dateofService];
       }
       var meatListArr = [];
-        meatCri.map((res, index) => {
-          meatListArr.push({
-            diagnosisCode: res.diagnosisCode,
-            diseaseName: res.diseaseName,
-            monitorCapturedFromHeader: res.monitorCapturedFromHeader,
-            assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
-            evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
-            treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
-            radiology: res.radiology,
-            assessment: res.assessment,
-            monitor: res.monitor,
-            evaluate: res.evaluate,
-            treatment: res.treatment,
-            isMeatCriteriaPresent: res.isMeatCriteriaPresent,
-          });
+      meatCri.map((res, index) => {
+        meatListArr.push({
+          diagnosisCode: res.diagnosisCode,
+          diseaseName: res.diseaseName,
+          monitorCapturedFromHeader: res.monitorCapturedFromHeader,
+          assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
+          evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
+          treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+          radiology: res.radiology,
+          assessment: res.assessment,
+          monitor: res.monitor,
+          evaluate: res.evaluate,
+          treatment: res.treatment,
+          isMeatCriteriaPresent: res.isMeatCriteriaPresent,
         });
+      });
       setMeatCriteriaListRadiology(meatListArr);
       setEncounterDateMatching(encounterDateColorsMatching);
-      setNewValidDiseaseListRadiology(validDisArray);
-      setInNewValidDiseaseListRadiology(invalidDisArray);
-      setDeletedDiseasesList(deletedDisArray);
-      setAllDisList([...validDisArray,...invalidDisArray,...deletedDisArray]);
+      setNewValidDiseaseListRadiology &&
+        setNewValidDiseaseListRadiology(validDisArray);
+      setInNewValidDiseaseListRadiology &&
+        setInNewValidDiseaseListRadiology(invalidDisArray);
+      setDeletedDiseasesList && setDeletedDiseasesList(deletedDisArray);
+      setAllDisList &&
+        setAllDisList([
+          ...validDisArray,
+          ...invalidDisArray,
+          ...deletedDisArray,
+        ]);
       setIsLoadingDos && setIsLoadingDos(false);
     }
   }
 };
 function getUniqueListBy(arr, key) {
-    return [...new Map(arr.map((item) => [item[key], item])).values()];
+  return [...new Map(arr.map((item) => [item[key], item])).values()];
 }

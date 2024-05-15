@@ -14,6 +14,16 @@ import SpinnerDots from "../../../../components/spinner";
 const Lab = ({}) => {
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
+  const [activeTabHead, setActiveTabHead] = useState(1);
+  const [activeMeatTitle, setActiveMeatTitle] = useState(null);
+
+  const selectTab = (num) => {
+    setActiveTabHead(num);
+    if (num == 4) {
+      setActiveMeatTitle(null);
+    }
+  };
+
   useEffect(() => {
     const patientId = localStorage.getItem("patientId");
     dispatch(getLabDetails(patientId));
@@ -24,16 +34,17 @@ const Lab = ({}) => {
       <div className={visitStyles.visitdata_tab_body}>
         <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
           <div className="custom-tab-1">
-            <Tab.Container defaultActiveKey="file">
+            <Tab.Container activeKey={activeTabHead}>
               <div className="row">
                 <div className="col-xl-11">
                   <Nav as="ul" className="nav nav-tabs">
                     <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
-                        eventKey="file"
+                        eventKey={1}
                         className={visitStyles.navColor}
                         activeClassName={visitStyles.activeLink}
+                        onClick={() => selectTab(1)}
                       >
                         File
                       </Nav.Link>
@@ -41,9 +52,10 @@ const Lab = ({}) => {
                     <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
-                        eventKey="validDiseases"
+                        eventKey={2}
                         className={visitStyles.navColor}
                         activeClassName={visitStyles.activeLink}
+                        onClick={() => selectTab(2)}
                       >
                         Visit Data
                       </Nav.Link>
@@ -51,9 +63,10 @@ const Lab = ({}) => {
                     <Nav.Item as="li" className="nav-item">
                       <Nav.Link
                         to="#my-posts"
-                        eventKey="meatCriteria"
+                        eventKey={3}
                         className={visitStyles.navColor}
                         activeClassName={visitStyles.activeLink}
+                        onClick={() => selectTab(3)}
                       >
                         MEAT Criteria
                       </Nav.Link>
@@ -70,13 +83,19 @@ const Lab = ({}) => {
                 <SpinnerDots />
               ) : (
                 <Tab.Content>
-                  <Tab.Pane id="my-posts" eventKey="validDiseases">
-                    <VisitData />
+                  <Tab.Pane id="my-posts" eventKey={1}>
+                    <File
+                      setActiveTabHead={setActiveTabHead}
+                      setActiveMeatTitle={setActiveMeatTitle}
+                    />
                   </Tab.Pane>
-                  <Tab.Pane id="my-posts" eventKey="file">
-                    <File />
+                  <Tab.Pane id="my-posts" eventKey={2}>
+                    <VisitData
+                      setActiveTabHead={setActiveTabHead}
+                      setActiveMeatTitle={setActiveMeatTitle}
+                    />
                   </Tab.Pane>
-                  <Tab.Pane id="my-posts" eventKey="meatCriteria">
+                  <Tab.Pane id="my-posts" eventKey={3}>
                     <Meat />
                   </Tab.Pane>
                 </Tab.Content>
