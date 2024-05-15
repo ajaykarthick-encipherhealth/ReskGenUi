@@ -46,54 +46,28 @@ import { connect } from "react-redux";
 import SpinnerDots from "../../../components/spinner";
 
 const ReviewerReport = ({
-  setModal,
-  modal,
+  // setModal,
+  // modal,
   patientDetails,
   paginationFirst,
   ReportPatientDetails,
   onPageChange,
-  comments,
-  setComments,
+  // comments,
+  // setComments,
   selectedRows,
   setSelectedRows,
   selectAll,
   setSelectAll,
-  sortOrder,
-  setSortOrder,
-  setSort,
+  // sortOrder,
+  // setSortOrder,
+  // setSort,
   reportListAll,
   page,
   getFlagsData,
+  isAdmin
 }) => {
-  const [activeTab, setActiveTab] = useState("Reviewer");
-  const [selectedItems, setSelectedItems] = useState([]);
-  const router = useRouter();
   const dispatch = useDispatch();
   const navigate = useRouter();
-
-  const worlFlowData = useSelector(
-    (state) => state?.AdminDashboardReducers?.data
-  );
-  const [dateRange, setDateRange] = useState({
-    processedStatus: {
-      PENDING: 0,
-      COMPLETED: 0,
-      HOLD: 0,
-      DECLINED: 0,
-    },
-    auditedStatus: {
-      AUDIT_PENDING: 0,
-      DECLINED: 0,
-      AUDITED: 0,
-      AUDITHOLD: 0,
-    },
-  });
-  const [chartValue, setChartValue] = useState({
-    totalAuditedAssigned: 0,
-    totalPatients: 0,
-    totalPatientsAllocated: 0,
-  });
-
   const handleHeaderCheckboxChange = () => {
     setSelectAll(!selectAll);
     const updatedRows = selectAll ? [] : reportListAll?.response?.data;
@@ -214,34 +188,6 @@ const ReviewerReport = ({
         : "0",
 
       bg: "#FDD2CE",
-    },
-  ];
-
-  const flagData = [
-    {
-      id: 1,
-      flags: "PATIENT_NAME_MISSED",
-      count: "10",
-    },
-    {
-      id: 2,
-      flags: "PATIENT_DOB_MISSED",
-      count: "10",
-    },
-    {
-      id: 3,
-      flags: "MRN_ID_MISMATCH",
-      count: "10",
-    },
-    {
-      id: 4,
-      flags: "PROVIDER_SIGN_MISSED",
-      count: "10",
-    },
-    {
-      id: 5,
-      flags: "PROVIDER_SIGNATURE_MISSED",
-      count: "10",
     },
   ];
 
@@ -437,7 +383,7 @@ const ReviewerReport = ({
           {!reportListAll?.response?.data ? (
             <SpinnerDots />
           ) : (
-            <div className="container-fluid">
+            <div className={`container-fluid py-4`}>
               <div
                 style={{
                   display: "flex",

@@ -23,7 +23,6 @@ import {
 import { connect, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
-import MoreFilter from "../../../resusablereport/reports/MoreFilter";
 import ReviewerReport from "../../../resusablereport/reports/reviewerReport";
 import SentReport from "../../../resusablereport/reports/sentReport";
 import ReceivedReport from "../../../resusablereport/reports/receivedReport";
@@ -39,7 +38,7 @@ const statusOptions = [
   { label: "Hold", value: "HOLD" },
 ];
 
-const Reports = ({workFgetFlagsowData}) => {
+const Reports = ({ workFgetFlagsowData }) => {
   const dispatch = useDispatch();
   const route = useRouter();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
@@ -55,25 +54,16 @@ const Reports = ({workFgetFlagsowData}) => {
   const [filteredCOder, setFilteredCoder] = useState([]);
   const [comments, setComments] = useState();
   const [selectedRows, setSelectedRows] = useState([]);
-  const [selectAllCheckBoxes, setSelectAllCheckBoxes] = useState(false);
   const [pageNo, setPageNo] = useState(0);
   const [sentPageNo, setSentPageNo] = useState(0);
   const [receivedPageNo, setReceivedPageNo] = useState(0);
-  const [selectedData, setSelectedData] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [paginationReceivedFirst, setPaginationReceivedFirst] = useState(0);
   const [paginationSentFirst, setPaginationSentFirst] = useState(0);
   const [teamPageNo, setTeamPageNo] = useState(0);
   const [modal, setModal] = useState(false);
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
-  const [receivedStartDate, setReceivedStartDate] = useState();
-  const [receivedEndDate, setReceivedEndDate] = useState();
   const [selectedDates, setSelectedDates] = useState([]);
-  const [teamStartDate, setTeamStartDate] = useState();
-  const [teamSearch, setTeamSearch] = useState("");
-  const [teamEndDate, setTeamEndDate] = useState();
   const [receivedSortOrder, setReceivedSortOrder] = useState("DESC");
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
@@ -154,27 +144,43 @@ const Reports = ({workFgetFlagsowData}) => {
     setSearchVal([]);
   };
 
+  useEffect(()=>{
+    workFgetFlagsowData();
+  },[])
+  
   useEffect(() => {
     setIsLoading(false);
+    const coderSearchString = searchVal.find(
+      (item) => item.field === "initialSearch"
+    )?.search;
+    setIsLoading(false);
+    const activeTabFromStorage = localStorage.getItem("activeTab");
+    const activeTab = activeTabFromStorage
+      ? activeTabFromStorage
+      : "Audit Report";
+    dispatch(getActiveTab(activeTab));
 
-    if (reportActiveTab === "Sent") {
+    if (activeTab === "Sent") {
       dispatch(
-        getSentDetails(sentPageNo, startDate, endDate, sentSearch, sort)
-      );
-    }
-    if (reportActiveTab === "Received") {
-      dispatch(
-        getReceivedDetails(
-          receivedPageNo,
-          receivedStartDate,
-          receivedEndDate,
-          receivedSearch,
+        getSentDetails(
+          sentPageNo,
+          selectedDateRanges?.Sent?.from,
+          selectedDateRanges?.Sent?.to,
+          coderSearchString ? coderSearchString : "",
           sort
         )
       );
-    }
-
-    if (!reportActiveTab || reportActiveTab === "AuditReport") {
+    } else if (activeTab === "Received") {
+      dispatch(
+        getReceivedDetails(
+          receivedPageNo,
+          selectedDateRanges?.Received?.from,
+          selectedDateRanges?.Received?.to,
+          coderSearchString ? coderSearchString : "",
+          sort
+        )
+      );
+    } else {
       dispatch(
         getReportDetails(
           pageNo,
@@ -188,7 +194,6 @@ const Reports = ({workFgetFlagsowData}) => {
         )
       );
     }
-
     if (reportActiveTab === "TeamReport") {
       dispatch(
         getTeamReportDetails(
@@ -204,30 +209,16 @@ const Reports = ({workFgetFlagsowData}) => {
     if (ExportResponse) {
       setIsModalVisible(false);
     }
-    workFgetFlagsowData()
   }, [
     pageNo,
     sentPageNo,
     receivedPageNo,
-    reportActiveTab,
-    ExportResponse,
-    selectedCoderOpt,
-    coderSearch,
-    coderStartDate,
-    coderEndDate,
-    startDate,
-    endDate,
-    sentSearch,
     receivedPageNo,
-    receivedStartDate,
-    receivedEndDate,
-    receivedSearch,
-    reportActiveTab,
+    receivedSortOrder,
     sort,
-    teamSearch,
-    teamEndDate,
-    teamStartDate,
-    teamPageNo,
+    searchVal,
+    selectedOptions,
+    selectedDateRanges,
   ]);
 
   useEffect(() => {
@@ -372,9 +363,7 @@ const Reports = ({workFgetFlagsowData}) => {
                 <div className="tbl-caption  align-items-center">
                   <div className="tbl-caption  align-items-center">
                     <div
-                      className={`row filter-contain mt-4 mb-${
-                        selectedData?.length > 0 ? "3" : "0"
-                      } `}
+                      className={`row filter-contain mt-4 mb-0 `}
                     >
                       <div className="col-xl-2">
                         <div className="d-flex w-100">
@@ -468,7 +457,7 @@ const Reports = ({workFgetFlagsowData}) => {
                       </div>
                       {!reportActiveTab ||
                       reportActiveTab === "Audit Report" ? (
-                        <div className="col-xl-4">
+                        <div className="col-xl-6">
                           <div className="row flr">
                             <Tooltip
                               title={
@@ -538,8 +527,8 @@ const Reports = ({workFgetFlagsowData}) => {
                         sortOrder={sentSortOrder}
                         setSort={setSort}
                         receivedPageNo={sentPageNo}
-                        receivedStartDate={startDate}
-                        receivedEndDate={endDate}
+                        receivedStartDate={selectedDateRanges?.Sent?.from}
+                        receivedEndDate={selectedDateRanges?.Sent?.to}
                         isPhysician={true}
                       />
                     </div>
@@ -556,8 +545,8 @@ const Reports = ({workFgetFlagsowData}) => {
                         sortOrder={sentSortOrder}
                         setSort={setSort}
                         receivedPageNo={sentPageNo}
-                        receivedStartDate={startDate}
-                        receivedEndDate={endDate}
+                        receivedStartDate={selectedDateRanges?.TeamReport?.from}
+                        receivedEndDate={selectedDateRanges?.TeamReport?.to}
                         isPhysician={true}
                       />
                     </div>
@@ -569,8 +558,8 @@ const Reports = ({workFgetFlagsowData}) => {
                         details={ReceivedReportDetails?.data?.response}
                         onPageChange={onReceivedPageChange}
                         receivedPageNo={receivedPageNo}
-                        receivedStartDate={receivedStartDate}
-                        receivedEndDate={receivedEndDate}
+                        receivedStartDate={selectedDateRanges?.Received?.from}
+                        receivedEndDate={selectedDateRanges?.Received?.to}
                         loading={ReceivedReportDetails?.loading}
                         setSortOrder={setReceivedSortOrder}
                         sortOrder={receivedSortOrder}
