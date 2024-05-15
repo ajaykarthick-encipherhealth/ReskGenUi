@@ -1,4 +1,4 @@
-import styles from "./report.module.css";
+import styles from "../report/report.module.css";
 import { useSelector, useDispatch } from "react-redux";
 import { Tab, Nav } from "react-bootstrap";
 import Select from "react-select";
