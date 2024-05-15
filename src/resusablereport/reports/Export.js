@@ -144,7 +144,7 @@ const Export = ({
     setSelectedRows([]);
     setSelectAll(false);
     setTimeout(() => {
-      // setIsModalVisible(false);
+      setIsModalVisible(false);
     }, 500);
   };
 
