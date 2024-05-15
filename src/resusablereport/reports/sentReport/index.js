@@ -361,7 +361,7 @@ const SentReport = ({
     <>
       <div>
         <div className="content-body">
-          <div className="container-fluid">
+          <div className="container-fluid py-4">
             <div className="row">
               <div>
                 <div className=" col-xl-12 d-flex">

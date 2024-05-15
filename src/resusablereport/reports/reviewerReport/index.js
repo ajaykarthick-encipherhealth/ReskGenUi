@@ -352,6 +352,7 @@ const ReviewerReport = ({
     }
   };
 
+  console.log(reportListAll, "testing");
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
 
@@ -765,8 +766,8 @@ const ReviewerReport = ({
                               <div className={`${styles.cardHead} sticky-top`}>
                                 <div>Reviewer</div>
                                 <div className={styles.contentOverFlow}>
-                                  {!reportListAll?.reviewerAllocationCount
-                                    .length === 0 ? (
+                                  {reportListAll?.reviewerAllocationCount
+                                    .length > 0 ? (
                                     reportListAll?.reviewerAllocationCount?.map(
                                       (item) => (
                                         <div

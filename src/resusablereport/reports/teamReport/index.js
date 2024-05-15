@@ -439,7 +439,7 @@ const TeamReport = ({
           {!reportListAll?.response?.data ? (
             <SpinnerDots />
           ) : (
-            <div className="container-fluid">
+            <div className="container-fluid py-4">
               <div
                 style={{
                   display: "flex",
