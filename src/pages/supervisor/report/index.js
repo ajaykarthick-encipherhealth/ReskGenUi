@@ -47,7 +47,9 @@ const Reports = ({ workFgetFlagsowData }) => {
   const ReceivedReportDetails = useSelector(
     (state) => state.report?.receivedDetails
   );
-  const TeamReportDetails = useSelector((state) => state.report?.teamDetails);
+  const TeamReportDetails = useSelector(
+    (state) => state.AuditReport?.teamDetails
+  );
   const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
   const [isLoading, setIsLoading] = useState(true);
@@ -74,6 +76,7 @@ const Reports = ({ workFgetFlagsowData }) => {
   const [search, setSearch] = useState();
   const { RangePicker } = DatePicker;
   const [selectedDateRanges, setSelecteddateRanges] = useState([]);
+  const [paginationTeamFirst, setPaginationTeamFirst] = useState(0);
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
     patientId: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -101,7 +104,7 @@ const Reports = ({ workFgetFlagsowData }) => {
     setPageNo(e.page);
   };
   const onTeamPageChange = (e) => {
-    setPaginationSentFirst(e.first);
+    setPaginationTeamFirst(e.first);
     setTeamPageNo(e.page);
   };
 
@@ -223,6 +226,7 @@ const Reports = ({ workFgetFlagsowData }) => {
     searchVal,
     selectedOptions,
     selectedDateRanges,
+    teamPageNo,
   ]);
 
   useEffect(() => {
@@ -535,21 +539,40 @@ const Reports = ({ workFgetFlagsowData }) => {
                       />
                     </div>
                   )}
+
                   {reportActiveTab === "Team Report" && (
                     <div>
                       {}{" "}
                       <TeamReport
-                        paginationFirst={paginationSentFirst}
-                        details={TeamReportDetails?.data?.response}
-                        onSentPageChange={onTeamPageChange}
-                        loading={TeamReportDetails?.loading}
-                        setSortOrder={setSentSortOrder}
-                        sortOrder={sentSortOrder}
+                        setModal={setModal}
+                        modal={modal}
+                        reportListAll={TeamReportDetails?.data}
+                        paginationFirst={paginationTeamFirst}
+                        ReportPatientDetails={TeamReportDetails?.data}
+                        onPageChange={onTeamPageChange}
+                        comments={comments}
+                        setComments={setComments}
+                        patientDetails={patientDetails}
+                        setSelectedRows={setSelectedRows}
+                        selectedRows={selectedRows}
+                        setSelectAll={setSelectAll}
+                        selectAll={selectAll}
+                        setSortOrder={setCoderSortOrder}
+                        sortOrder={coderSortOrder}
                         setSort={setSort}
-                        receivedPageNo={teamPageNo}
-                        receivedStartDate={selectedDateRanges?.TeamReport?.from}
-                        receivedEndDate={selectedDateRanges?.TeamReport?.to}
-                        isPhysician={true}
+                        gotoPatientDetails={gotoPatientDetails}
+                        page={{ teamPageNo, paginationTeamFirst }}
+                        // paginationFirst={paginationSentFirst}
+                        // reportListAll={TeamReportDetails?.data?.response?.response?.data}
+                        // onPageChange={onTeamPageChange}
+                        // loading={TeamReportDetails?.loading}
+                        // setSortOrder={setSentSortOrder}
+                        // sortOrder={sentSortOrder}
+                        // setSort={setSort}
+                        // receivedPageNo={teamPageNo}
+                        // receivedStartDate={selectedDateRanges?.TeamReport?.from}
+                        // receivedEndDate={selectedDateRanges?.TeamReport?.to}
+                        // isPhysician={true}
                       />
                     </div>
                   )}
