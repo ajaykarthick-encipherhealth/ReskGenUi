@@ -1,6 +1,6 @@
 import { CalendarOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Tooltip, notification,Popover } from "antd";
+import { Tooltip, notification, Popover } from "antd";
 import moment from "moment";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import visitStyles from "../../../../../styles/visitdata.module.css";
@@ -184,7 +184,7 @@ const newFindValueDocument = (
   setSelectMeatResult,
   meatresult
 ) => {
-  console.log(data)
+  console.log(data);
   setFileLoading(true);
   setSelectMeatResult && setSelectMeatResult(meatresult);
   var headerName = patientDocumentResult
@@ -260,30 +260,30 @@ export const getCaptureSectionBackgroundFile = (
     var headerNames = result[0]?.sectionName;
     var sectionMapArr = (
       <Popover
-      placement="bottom"
-      content={getHeaderHyperlink(
-        headerResult,
-        encounterDateMatching,
-        documentPlace,
-        setSearch,
-        setFileLoading,
-        setIsModalOpenLab,
-        setIsModalOpenRadiology,
-        setIsModalOpenValidCodes,
-        setFileModalHeader,
-        patientDocumentResult,
-        fileInitialPage,
-        setFileInitialPage,
-        diagnosisCode
-      )}
-    >
-      <span
-        style={{ backgroundColor: backColor, color: textColor }}
-        className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
+        placement="bottom"
+        content={getHeaderHyperlink(
+          headerResult,
+          encounterDateMatching,
+          documentPlace,
+          setSearch,
+          setFileLoading,
+          setIsModalOpenLab,
+          setIsModalOpenRadiology,
+          setIsModalOpenValidCodes,
+          setFileModalHeader,
+          patientDocumentResult,
+          fileInitialPage,
+          setFileInitialPage,
+          diagnosisCode
+        )}
       >
-        {res}
-      </span>
-    </Popover>
+        <span
+          style={{ backgroundColor: backColor, color: textColor }}
+          className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
+        >
+          {res}
+        </span>
+      </Popover>
       // <span
       //   onClick={() =>
       //     findValueDocument({
@@ -324,25 +324,25 @@ export const getMeatFound = (code, data, value) => {
   if (result?.length != 0) {
     switch (value) {
       case "M":
-        if (result[0]?.monitor) {
+        if (result[0]?.monitorAspect) {
           backColor = "#15b315";
         }
         meatTitle = "Monitor";
         break;
       case "E":
-        if (result[0]?.evaluate) {
+        if (result[0]?.evaluateAspect) {
           backColor = "#15b315";
         }
         meatTitle = "Evaluate";
         break;
       case "A":
-        if (result[0]?.assessment) {
+        if (result[0]?.assessmentAspect) {
           backColor = "#15b315";
         }
         meatTitle = "Assessment";
         break;
       case "T":
-        if (result[0]?.treatment) {
+        if (result[0]?.treatmentAspect) {
           backColor = "#15b315";
         }
         meatTitle = "Treatment";
@@ -768,6 +768,60 @@ export const onDragEnd = (
     default:
       null;
   }
+};
+
+export const getCaptureSectionBackgroundMeatNew = (
+  value,
+  captureSectionMatching,
+  documentPlace,
+  setSearch,
+  setFileLoading,
+  setIsModalOpenLab,
+  setIsModalOpenRadiology,
+  setIsModalOpenValidCodes,
+  setFileModalHeader,
+  patientDocumentResult,
+  fileInitialPage,
+  setFileInitialPage,
+  diagnosisCode,
+  setSelectMeatResult,
+  meatresult
+) => {
+  return value.map((res) => {
+    const result = captureSectionMatching?.filter(
+      (res2) => res2.sectionName === res.header
+    );
+    var backColor = result[0]?.backgroundColor;
+    var textColor = result[0]?.sectionColor;
+    var headerNames = result[0]?.sectionName;
+    var sectionMapArr = (
+      <span
+        onClick={() =>
+          newFindValueDocument(
+            res,
+            documentPlace,
+            setSearch,
+            setFileLoading,
+            setIsModalOpenLab,
+            setIsModalOpenRadiology,
+            setIsModalOpenValidCodes,
+            setFileModalHeader,
+            patientDocumentResult,
+            fileInitialPage,
+            setFileInitialPage,
+            diagnosisCode,
+            setSelectMeatResult,
+            meatresult
+          )
+        }
+        style={{ backgroundColor: backColor, color: textColor }}
+        className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
+      >
+        {res.header}
+      </span>
+    );
+    return sectionMapArr;
+  });
 };
 
 const ReusableFunctions = () => {

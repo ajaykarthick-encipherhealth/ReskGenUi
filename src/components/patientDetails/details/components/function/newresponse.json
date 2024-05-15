@@ -25,7 +25,7 @@
     },
     "validDisease": [
       {
-        "diagnosisCode": "A123",
+        "diagnosisCode": "ABC123",
         "actualDescription": "Description of the actual diagnosis",
         "dbDescription": "Description of the diagnosis from the database",
         "notes": "Additional notes related to the diagnosis",
@@ -662,16 +662,16 @@
         "monitorAspect": "Example Monitor Aspect",
         "monitorHyperLink": [
           {
-            "header": "Example Monitor Aspect",
-            "pageNumber": 10,
-            "substring": "example substring",
+            "header": "assessment",
+            "pageNumber": 20,
+            "substring": "monitor substring",
             "dateOfService": "2024-05-10"
           },
           {
-            "header": "Example Monitor Aspect",
-            "pageNumber": 15,
-            "substring": "another substring",
-            "dateOfService": "2024-05-11"
+            "header": "plan",
+            "pageNumber": 25,
+            "substring": "monitor evaluate substring",
+            "dateOfService": "2024-05-12"
           }
         ],
         "evaluateAspect": "Example Evaluate Aspect",
