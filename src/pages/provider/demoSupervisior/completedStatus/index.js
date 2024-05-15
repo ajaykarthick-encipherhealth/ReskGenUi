@@ -62,7 +62,6 @@ const CompletedStatus = () => {
   const [isindividual, setIsindividual] = useState(false);
   const [year, setYear] = useState();
   const [month, setMonth] = useState();
-  // const [optionsUser, setOptionUser] = useState([]);
   const [chart, setChart] = useState(null);
   const [scoreChart, setScoreChart] = useState("daily");
   const dispatch = useDispatch();
@@ -70,24 +69,6 @@ const CompletedStatus = () => {
   const individualDetails = useSelector(
     (state) => state?.l2Dashboard?.individualUser
   );
-
-  // const userOption = () => {
-  //   const res = individualDetails?.data?.response.map((item) => {
-  //     return {
-  //       label: item.firstName + " " + item.lastName,
-  //       value: item.userName,
-  //     };
-  //   });
-  //   setOptionUser(res);
-  // };
-  // const numberOfWeeks =
-  //   accuracyDatas?.data?.response?.mapAccuracy &&
-  //   Object?.keys(accuracyDatas?.data?.response.mapAccuracy)?.length;
-
-  // const weekNames = Array.from(
-  //   { length: numberOfWeeks },
-  //   (_, index) => `Week ${index + 1}`
-  // );
   const router = useRouter();
 
   const options = [
@@ -98,7 +79,6 @@ const CompletedStatus = () => {
   const optionsUser = [
     { value: "Benjamin Mitchell", label: "Benjamin Mitchell" },
     { value: "Isabella Turner", label: "Isabella Turner" },
-
   ];
 
   const memberTypeChanges = (e) => {
@@ -117,12 +97,6 @@ const CompletedStatus = () => {
   useEffect(() => {
     dispatch(getUserByIndividual());
   }, [selectMemberType]);
-
-  // useEffect(() => {
-  //   if (individualDetails?.data?.response) {
-  //     userOption();
-  //   }
-  // }, [individualDetails]);
 
   useEffect(() => {
     dispatch(
@@ -153,193 +127,7 @@ const CompletedStatus = () => {
     setSelectedMonth(date);
   };
 
-  // let xAxisData = [];
-  // if (currentBtn === "Monthly") {
-  //   xAxisData = monthNames;
-  // } else if (currentBtn === "Daily") {
-  //   xAxisData = getDays(
-  //     accuracyDatas?.data?.response?.mapAccuracy &&
-  //       Object.keys(accuracyDatas?.data?.response?.mapAccuracy)?.length
-  //   );
-  // } else if (currentBtn === "Weekly") {
-  //   xAxisData = weekNames;
-  // }
-
-  // const option = {
-  //   chart: {
-  //     type: "column",
-  //   },
-  //   title: {
-  //     text: "",
-  //   },
-
-  //   xAxis: {
-  //     categories: xAxisData,
-  //     crosshair: true,
-  //     labels: {
-  //       style: {
-  //         color: "gray",
-  //         fontWeight: "500",
-  //       },
-  //     },
-  //     lineColor: "#d9d9d9",
-  //   },
-  //   yAxis: [
-  //     {
-  //       // primary yAxis (right)
-  //       title: {
-  //         text: "Quality",
-  //         style: {
-  //           color: "#2dafff",
-  //         },
-  //       },
-  //       labels: {
-  //         format: "{value}%",
-  //         style: {
-  //           color: "gray",
-  //           fontWeight: "500",
-  //         },
-  //       },
-  //       opposite: false,
-  //       min: 0,
-  //       max: 100,
-  //     },
-  //     {
-  //       // Secondary yAxis (right)
-  //       title: {
-  //         text: "Changes Count",
-  //         style: {
-  //           color: "#0b59f1",
-  //         },
-  //       },
-  //       labels: {
-  //         format: "{value}",
-  //         style: {
-  //           color: "gray",
-  //           fontWeight: "500",
-  //         },
-  //       },
-  //       opposite: true,
-  //       min: 0,
-  //       max: 10,
-  //       tickInterval: 4,
-  //     },
-  //   ],
-  //   legend: {
-  //     enabled: false,
-  //   },
-  //   credits: {
-  //     enabled: false,
-  //   },
-  //   tooltip: {
-  //     formatter: function () {
-  //       let finalData;
-  //       if (
-  //         typeof this.point.category === "string" &&
-  //         this.point.category.startsWith("Week")
-  //       ) {
-  //         const weekIndex = parseInt(this.point.category.substring(4));
-
-  //         finalData = accuracyDatas?.data?.response?.mapAccuracy?.find(
-  //           (item) => item?.weekOfMonth === weekIndex
-  //         );
-  //       } else if (
-  //         typeof this.point.category === "string" &&
-  //         monthNames.includes(this.point.category.toUpperCase())
-  //       ) {
-  //         const hoveredMonthIndex = monthNames?.findIndex(
-  //           (month) => month === this.point.category
-  //         );
-
-  //         finalData = accuracyDatas?.data?.response?.mapAccuracy?.find(
-  //           (item) => item?.monthOfYear === hoveredMonthIndex + 1
-  //         );
-  //       } else {
-  //         finalData = accuracyDatas?.data?.response?.mapAccuracy?.find(
-  //           (item) => item?.dayOfMonth === this.x
-  //         );
-  //       }
-
-  //       if (finalData) {
-  //         return (
-  //           "Average Score: " +
-  //           finalData.averageScore +
-  //           "<br/>" +
-  //           "Total Correct: " +
-  //           finalData.totalCorrectCount +
-  //           "<br/>" +
-  //           "Total Correct: " +
-  //           finalData.totalCorrectCount
-  //         );
-  //       } else {
-  //         return "No data available";
-  //       }
-  //     },
-  //   },
-
-  //   plotOptions: {
-  //     column: {
-  //       stacking: "normal",
-  //       dataLabels: {
-  //         enabled: false,
-  //         format: "{point.y}",
-  //       },
-  //       pointWidth: 20,
-  //       borderRadius: 10,
-  //     },
-  //   },
-  //   series: [
-  //     {
-  //       name: "totalCorrectCount",
-  //       data: getGraphData(
-  //         accuracyDatas?.data?.response?.mapAccuracy,
-  //         "totalCorrectCount",
-  //         selectedMonth,
-  //         selectedYear,
-  //         currentBtn,
-  //         currentDate
-  //       ),
-  //       color: "#0b59f1",
-  //       yAxis: 1,
-  //     },
-  //     {
-  //       name: "totalWrongCount",
-  //       data: getGraphData(
-  //         accuracyDatas?.data?.response?.mapAccuracy,
-  //         "totalWrongCount",
-  //         selectedMonth,
-  //         selectedYear,
-  //         currentBtn,
-  //         currentDate
-  //       ),
-  //       color: "red",
-  //       yAxis: 1,
-  //     },
-  //     {
-  //       name: "Temperature",
-  //       type: "spline",
-  //       data: chartBlockedDates(
-  //         selectedYear,
-  //         selectedMonth,
-  //         accuracyDatas?.data?.response?.mapAccuracy,
-  //         "averageScore",
-  //         currentBtn,
-  //         currentDate
-  //       ),
-  //       tooltip: {
-  //         valueSuffix: "",
-  //       },
-  //       yAxis: 0,
-  //     },
-  //   ],
-  // };
-  // useEffect(() => {
-  //   if (accuracyDatas?.data?.response?.mapAccuracy) {
-  //     setInitialAccuracyData(accuracyDatas?.data?.response?.mapAccuracy);
-  //   }
-  // }, [accuracyDatas]);
-
-  useEffect(() => {
+    useEffect(() => {
     if (currentBtn === "Monthly") {
       setScoreChart("monthly");
     } else if (currentBtn === "Daily") {
@@ -348,67 +136,6 @@ const CompletedStatus = () => {
       setScoreChart("weekly");
     }
   }, [currentBtn]);
-
-  // const dayChartFilter = () => {
-  //   const adjustedMonth = selectedMonth - 1;
-
-  //   const startDate = dayjs()
-  //     .year(selectedYear)
-  //     .month(adjustedMonth)
-  //     .startOf("month")
-  //     .toDate();
-
-  //   const endDate = dayjs(startDate).endOf("month").toDate();
-  //   let filter;
-  //   if (selectUser) {
-  //     filter = {
-  //       date: { $gte: startDate, $lte: endDate },
-  //       userName: selectUser,
-  //     };
-  //   } else {
-  //     filter = {
-  //       date: { $gte: startDate, $lte: endDate },
-  //     };
-  //   }
-
-  //   if (chart) {
-  //     chart.setFilter(filter);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (currentBtn === "Daily" || currentBtn === "Weekly") dayChartFilter();
-  // }, [selectedYear, selectedMonth]);
-
-  // const monthChartFilter = () => {
-  //   setSelectedMonth(null);
-
-  //   const startYearDate = new Date(selectedYear, 0, 1);
-  //   const endYearDate = new Date(selectedYear, 11, 31);
-  //   console.log(startYearDate,"startYearDate")
-  //   console.log(endYearDate,"endYearDate")
-
-  //   let filter;
-  //   if (selectUser) {
-  //     filter = {
-  //       dueDate: { $gte: startYearDate, $lte: endYearDate },
-  //       userName: selectUser,
-  //     };
-  //   } else {
-  //     filter = {
-  //       dueDate: { $gte: startYearDate, $lte: endYearDate },
-  //     };
-  //     console.log(filter)
-  //   }
-
-  //   if (chart) {
-  //     chart.setFilter(filter);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (currentBtn === "Monthly") monthChartFilter(selectedYear);
-  // }, [selectedYear]);
 
   useEffect(() => {
     const sdk = new ChartsEmbedSDK({
@@ -437,13 +164,12 @@ const CompletedStatus = () => {
         chart.render(document.getElementById("demo-chart"));
       }
     };
-
     renderCharts();
   }, [chart]);
   return (
     <>
       <HeadTitle header="Team Quality Score" />
-      <div className={styles.card3}>
+      <div className={styles.card5}>
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
             <div className={`d-flex ${styles.selectContainer}`}>
@@ -500,7 +226,7 @@ const CompletedStatus = () => {
           <div
             id="demo-chart"
             style={{
-              height: 300,
+              height: 250,
               width: 1200,
             }}
           ></div>

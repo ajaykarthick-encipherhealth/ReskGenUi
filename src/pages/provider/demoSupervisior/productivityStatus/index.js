@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from './styles.module.css'
+import styles from "./styles.module.css";
 import { Buttons } from "../../../reviewer/workingstatus";
 import Buttonscroller from "../../../../components/buttonSroller";
 import Card from "../../../../components/card/index";
@@ -7,12 +7,6 @@ import Header from "../../../../jsx/layouts/nav/Header";
 import ChartsEmbedSDK from "@mongodb-js/charts-embed-dom";
 import YearPicker from "../../../../components/yearpicker";
 import dayjs from "dayjs";
-import CompletedStatus from "../completedStatus";
-
-
-
-
-
 
 const SupervisiorProducitivity = () => {
   const [activeButton, setActiveButton] = useState(0);
@@ -68,15 +62,12 @@ const SupervisiorProducitivity = () => {
       showAttribution: false,
       gridLines: false,
     });
-
     const currentYear = selectedYear;
     const currentMonth = selectedMonth - 1;
-
     const startDate = new Date(currentYear, currentMonth, 1);
     const endDate = new Date(currentYear, currentMonth + 1, 0);
 
     let filter;
-
     if (currentBtn === "Daily" || currentBtn === "Weekly") {
       filter = {
         date: { $gte: startDate, $lte: endDate },
@@ -155,17 +146,13 @@ const SupervisiorProducitivity = () => {
 
   return (
     <>
-    
-
-     
-      <div className="mt-3" >
-        
+      <div className="mt-3">
         <div className="container">
           <div className="row">
             <div className="col-12">
               <div>
                 <h4>Supervisior Productivity Status </h4>
-                <Card borderRadius="28px" padding="10px">
+                 <Card borderRadius="28px" padding="10px">
                   <div className={styles.buttonDiv}>
                     <div className={`d-flex ${styles.selectContainer}`}>
                       <div className={styles.select}></div>
@@ -205,14 +192,11 @@ const SupervisiorProducitivity = () => {
                 </Card>
               </div>
             </div>
-         <CompletedStatus/>
           </div>
         </div>
-
       </div>
     </>
   );
 };
 
-export default SupervisiorProducitivity
-
+export default SupervisiorProducitivity;

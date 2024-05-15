@@ -1,16 +1,12 @@
-
 import React, { useEffect, useState } from "react";
-import styles from './styles.module.css'
+import styles from "./styles.module.css";
 import { Buttons } from "../../../reviewer/workingstatus";
 import Buttonscroller from "../../../../components/buttonSroller";
 import Card from "../../../../components/card/index";
 import ChartsEmbedSDK from "@mongodb-js/charts-embed-dom";
 import YearPicker from "../../../../components/yearpicker";
 import dayjs from "dayjs";
-import DailyTask from "../dailyTask";
-
-
-
+import SupervisiorProducitivity from "../../demoSupervisior/productivityStatus";
 
 const ProductivityStatus = () => {
   const [activeButton, setActiveButton] = useState(0);
@@ -51,7 +47,7 @@ const ProductivityStatus = () => {
     const endYearDate = new Date(selectedYear, 11, 31);
 
     const filter = {
-        date: { $gte: startYearDate, $lte: endYearDate },
+      date: { $gte: startYearDate, $lte: endYearDate },
     };
 
     if (chart) {
@@ -85,9 +81,6 @@ const ProductivityStatus = () => {
         date: { $gte: startYearDate, $lte: endYearDate },
       };
     }
-  
-
-   
 
     const chartId =
       viewchart === "day"
@@ -98,16 +91,14 @@ const ProductivityStatus = () => {
 
     const chart = sdk.createChart({
       chartId: chartId,
-      filter:filter,
-     
+      filter: filter,
       options: {
         gridlines: {
           enabled: false,
         },
       },
     });
-
-    setchart(chart);
+     setchart(chart);
   }, [viewchart]);
 
   useEffect(() => {
@@ -156,11 +147,7 @@ const ProductivityStatus = () => {
 
   return (
     <>
-    
-
-     
-      <div className="mt-3" >
-        
+      <div className="mt-3">
         <div className="container">
           <div className="row">
             <div className="col-12">
@@ -206,12 +193,11 @@ const ProductivityStatus = () => {
                 </Card>
               </div>
             </div>
-            <DailyTask/>
-            
           </div>
         </div>
-
       </div>
+      {/* <DailyTask/> */}
+      <SupervisiorProducitivity />
     </>
   );
 };

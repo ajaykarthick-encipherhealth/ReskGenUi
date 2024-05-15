@@ -384,7 +384,9 @@ const TeamReport = ({
           {!reportListAll?.response?.response?.data ? (
             <SpinnerDots />
           ) : (
+
             <div className={`container-fluid py-4`}>
+
               <div
                 style={{
                   display: "flex",

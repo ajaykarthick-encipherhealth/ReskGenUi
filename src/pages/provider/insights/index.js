@@ -281,7 +281,7 @@ const Insights = () => {
                       activeButton={activeTabButton}
                       activeColor="#fff"
                       inActiveColor="
-                #000000"
+               #000000"
                       activeBg="#043069"
                       inActiveBg="
                 #E6EEFF"
@@ -326,7 +326,6 @@ const Insights = () => {
                   width: 1200,
                 }}
               ></div>
-              
             </Card>
           </div>
         </div>

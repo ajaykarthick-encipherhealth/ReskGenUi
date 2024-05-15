@@ -295,7 +295,7 @@ const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
     <>
       <div>
         <div className="content-body">
-          <div className="container-fluid">
+          <div className="container-fluid py-4">
             <div className="row">
               <div>
                 <div className=" col-xl-12 d-flex">
@@ -424,7 +424,12 @@ const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
                               }
                             )
                           ) : (
-                            <Empty />
+                            <div
+                              className="d-flex justify-content-center align-items-center"
+                              style={{ height: "700px" }}
+                            >
+                              <Empty />
+                            </div>
                           )}
                         </div>
                       </div>
@@ -442,14 +447,16 @@ const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
                             <div className={`col-xl-6 ${styles.sentSubCard}`}>
                               <div>
                                 <div>Overall Reports Sent</div>
-                                <h4>
+                                <div className="fw-bold">
                                   {details?.reportStatusDTOList?.totalElements}
-                                </h4>
+                                </div>
                               </div>
                             </div>
                             <div className={`col-xl-6 ${styles.sentSubCard}`}>
                               <div>Overall Users</div>
-                              <h4>{details?.overAllUsersCount}</h4>
+                              <div className="fw-bold">
+                                {details?.overAllUsersCount}
+                              </div>
                             </div>
                           </div>
                           <div className="col-xl-12 d-flex mt-4">
@@ -462,7 +469,9 @@ const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
                                     >
                                       <div>
                                         <div>No of Read</div>
-                                        <h4>{item.roleCount}</h4>
+                                        <div className="fw-bold">
+                                          {item.roleCount}
+                                        </div>
                                       </div>
                                     </div>
                                   )}
@@ -472,7 +481,9 @@ const ReceivedReport = ({ details, onPageChange, paginationFirst }) => {
                                     >
                                       <div>
                                         <div>No of Download</div>
-                                        <h4>{item.roleCount}</h4>
+                                        <div className="fw-bold">
+                                          {item.roleCount}
+                                        </div>
                                       </div>
                                     </div>
                                   )}
