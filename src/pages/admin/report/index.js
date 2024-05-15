@@ -538,7 +538,7 @@ const Reports = ({ workFgetFlagsowData }) => {
                         ))}
                       {reportActiveTab === "Admin" && (
                         <div className={`col-xl-${selectedData?.length===0? "8":"2"} d-flex`}>
-                          <div className={`col-xl-${selectedData?.length===0? "10":"0"} mx-${selectedData?.length ===0?"4":"0"} py-2`}>
+                          <div className={`col-xl-${selectedData?.length===0? "10":"0"} mx-${selectedData?.length ===0?"4":"0"} py-2 mx-2`}>
                           <MoreFilter
                             checkedList={checkedList}
                             selectAll={selectAllCheckBoxes}
