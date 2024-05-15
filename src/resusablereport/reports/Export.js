@@ -6,7 +6,7 @@ import {
   getUsersList,
 } from "../../store/actions/ReportActions";
 import { useDispatch, useSelector } from "react-redux";
-import { checkBoxData, debounce } from "../../pages/admin/report/Export";
+import { checkBoxData, debounce } from "../../pages/admin/reports/Export";
 import { updateSentReport } from "../../services/ReportService";
 import { getActiveTab } from "../../store/actions/l2Action/AuditReportAction";
 import InputField from "../../components/input";

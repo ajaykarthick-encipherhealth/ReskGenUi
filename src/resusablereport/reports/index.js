@@ -12,7 +12,7 @@ import { FilterMatchMode } from "primereact/api";
 import Select from "react-select";
 import { Modal, DatePicker, Tooltip } from "antd";
 import ExportImg from "../../images/svg/Export";
-import { debounce } from "../../pages/admin/report/Export";
+import { debounce } from "../../pages/admin/reports/Export";
 import { disableFutureDate } from "../../components/headerFilters/functions";
 import { patientDetails } from "../../stores/authflow/actions";
 
