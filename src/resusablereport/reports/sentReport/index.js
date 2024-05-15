@@ -3,7 +3,7 @@ import styles from "../report.module.css";
 import { Paginator } from "primereact/paginator";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
-import { Avatar } from "antd";
+import { Popover, Avatar } from "antd";
 import ReactECharts from "echarts-for-react";
 import { useDispatch } from "react-redux";
 import {
@@ -348,6 +348,7 @@ const SentReport = ({
     ) {
       handleCardSelection(details?.receivedReportDTOList?.data[0], 0);
     }
+    console.log(details?.receivedReportDTOList?.data, "rece");
   }, [details]);
 
   const handleCardSelection = (item, index) => {
@@ -441,58 +442,89 @@ const SentReport = ({
                                       >
                                         <Avatar.Group maxCount={2}>
                                           {item?.receivedUsers?.map(
-                                            (data, index) =>
-                                              selectedCard?.receivedUsers
-                                                .length === 1 ? (
-                                                <div
-                                                  key={index}
-                                                  style={{
-                                                    display: "flex",
-                                                    alignItems: "center",
-                                                  }}
-                                                >
-                                                  <span
+                                            (data, index) => (
+                                              <Popover
+                                                key={index}
+                                                content={
+                                                  <div
                                                     style={{
-                                                      marginRight: "5px",
+                                                      display: "flex",
+                                                      justifyContent: "center",
+                                                      alignItems: "center",
+                                                      flexDirection: "column",
                                                     }}
                                                   >
-                                                    {renderUserPrfoileAvatar(
-                                                      data?.userDetails
-                                                        ?.firstName,
-                                                      data?.userDetails
-                                                        ?.lastName,
-                                                      data?.userDetails
-                                                        ?.profileImageUrl,
-                                                      "header"
-                                                    )}
-                                                  </span>
-                                                  <span>
-                                                    {
-                                                      data?.userDetails
-                                                        ?.firstName
-                                                    }{" "}
-                                                    {
-                                                      data?.userDetails
-                                                        ?.lastName
-                                                    }
-                                                  </span>
-                                                </div>
-                                              ) : (
-                                                <div key={index}>
-                                                  {data?.userDetails
-                                                    ?.profileImageUrl && (
-                                                    <Avatar
+                                                    <div
                                                       style={{
-                                                        objectFit: "unset",
+                                                        padding: "10px",
                                                       }}
-                                                      src={
-                                                        data.userDetails
-                                                          .profileImageUrl
+                                                    >
+                                                      {
+                                                        data?.userDetails
+                                                          ?.firstName
+                                                      }{" "}
+                                                      {
+                                                        data?.userDetails
+                                                          ?.lastName
                                                       }
-                                                    />
+                                                    </div>
+                                                    {data?.userDetails
+                                                      ?.profileImageUrl && (
+                                                      <img
+                                                        src={
+                                                          data.userDetails
+                                                            .profileImageUrl
+                                                        }
+                                                        alt="Profile"
+                                                        style={{
+                                                          maxWidth: "100px",
+                                                          maxHeight: "100px",
+                                                        }}
+                                                      />
+                                                    )}
+                                                  </div>
+                                                }
+                                              >
+                                                <div
+                                                  style={{
+                                                    display: "inline-block",
+                                                    marginRight: "5px",
+                                                  }}
+                                                >
+                                                  {item.receivedUsers.length ===
+                                                    1 && (
+                                                    <div className="d-flex justify-content-center align-items-center">
+                                                      <div
+                                                        style={{
+                                                          marginRight: "10px",
+                                                        }}
+                                                      >
+                                                        {renderUserPrfoileAvatar(
+                                                          data?.userDetails
+                                                            ?.firstName,
+                                                          data?.userDetails
+                                                            ?.lastName,
+                                                          data?.userDetails
+                                                            ?.profileImageUrl,
+                                                          "header"
+                                                        )}
+                                                      </div>
+
+                                                      <div>
+                                                        {
+                                                          data?.userDetails
+                                                            ?.firstName
+                                                        }{" "}
+                                                        {
+                                                          data?.userDetails
+                                                            ?.lastName
+                                                        }
+                                                      </div>
+                                                    </div>
                                                   )}
                                                 </div>
-                                              )
+                                              </Popover>
+                                            )
                                           )}
                                         </Avatar.Group>
                                       </div>
@@ -643,11 +675,14 @@ const SentReport = ({
         <Paginator
           first={paginationFirst}
           rows={7}
-          totalRecords={details?.totalElements}
+          totalRecords={details?.receivedReportDTOList?.totalElements}
           onPageChange={onSentPageChange}
         />
         <div className="total-pages">
-          Total count: {details?.totalElements > 0 ? details?.totalElements : 0}
+          Total count:{" "}
+          {details?.receivedReportDTOList?.totalElements > 0
+            ? details?.receivedReportDTOList?.totalElements
+            : 0}
         </div>
       </div>
       {openEdit && (

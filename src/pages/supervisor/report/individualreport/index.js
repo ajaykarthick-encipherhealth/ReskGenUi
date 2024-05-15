@@ -39,7 +39,7 @@ const IndividualReceiverReport = () => {
   const sentReportDatas = useSelector(
     (state) => state.adminReport?.sentDetails
   );
-
+  console.log(sentReportDatas, "t");
   const [tableData, setTableData] = useState([]);
   const [csvTableData, setCSVTableData] = useState([]);
   const [searchValue, setSearchValue] = useState("");
@@ -124,17 +124,23 @@ const IndividualReceiverReport = () => {
     if (reportDatas?.data || (sentReportDatas?.data && isSentReport)) {
       setDetailsContent(
         isSentReport
-          ? sentReportDatas?.data?.response?.data
+          ? sentReportDatas?.data?.response?.receivedReportDTOList?.data
           : reportDatas?.data?.response?.content
       );
       const id = new URLSearchParams(window.location.search).get("reportId");
       const reportdata = reportDatas?.data?.response?.content?.filter(
         (item) => item?.reportId === id
       );
+      console.log(
+        sentReportDatas?.data?.response?.receivedReportDTOList?.data,
+        "sent"
+      );
+      console.log(reportDatas, "repor");
+
       const sentdata = sentReportDatas?.data?.response?.data?.filter(
         (item) => item?._id === id
       );
-      setReportInfo(!isSentReport ? reportdata[0] : sentdata[0]);
+      // setReportInfo(!isSentReport ? reportdata[0] : sentdata[0]);
     }
   }, [reportDatas, sentReportDatas, isSentReport]);
 
@@ -160,9 +166,15 @@ const IndividualReceiverReport = () => {
                     if (isAdminPage) {
                       router?.push("/admin/report");
                     } else {
-                      const page = new URLSearchParams(window.location.search).get("page");
-                      const limit = new URLSearchParams(window.location.search).get("limit");
-                      router?.push(`/supervisor/report?page=${page}&limit=${limit}`);
+                      const page = new URLSearchParams(
+                        window.location.search
+                      ).get("page");
+                      const limit = new URLSearchParams(
+                        window.location.search
+                      ).get("limit");
+                      router?.push(
+                        `/supervisor/report?page=${page}&limit=${limit}`
+                      );
                     }
 
                     dispatch(
@@ -234,7 +246,20 @@ const IndividualReceiverReport = () => {
                           }}
                         >
                           <div className={styles.user}>
-                          <div style={{ color: reportInfo?.reportName === item?.reportName ? "#04306f" : "black", fontWeight: reportInfo?.reportName === item?.reportName ? "bold" : "normal" }}>{item?.reportName}</div>
+                            <div
+                              style={{
+                                color:
+                                  reportInfo?.reportName === item?.reportName
+                                    ? "#04306f"
+                                    : "black",
+                                fontWeight:
+                                  reportInfo?.reportName === item?.reportName
+                                    ? "bold"
+                                    : "normal",
+                              }}
+                            >
+                              {item?.reportName}
+                            </div>
 
                             {item?.type && (
                               <div

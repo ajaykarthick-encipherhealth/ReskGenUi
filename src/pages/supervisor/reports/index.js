@@ -56,7 +56,7 @@ const Reports = ({workFgetFlagsowData}) => {
   const [comments, setComments] = useState();
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectAllCheckBoxes, setSelectAllCheckBoxes] = useState(false);
-  const [pageNo, setPageNo] = useState(7);
+  const [pageNo, setPageNo] = useState(0);
   const [sentPageNo, setSentPageNo] = useState(0);
   const [receivedPageNo, setReceivedPageNo] = useState(0);
   const [selectedData, setSelectedData] = useState([]);
