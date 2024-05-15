@@ -16,11 +16,11 @@ import {
   getMeatFound,
   getProviderNameList,
   moveToAnotherAction,
-} from "../function/ReusableFunctionsRadiology";
+} from "../function/ReusableFunctionLab";
 import { useSelector, useDispatch } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
 
-const RadiologyCards = ({
+const LabCards = ({
   list,
   captureSectionMatching,
   encounterDateMatching,
@@ -40,7 +40,7 @@ const RadiologyCards = ({
   isVisitData,
   setIsModalOpenValidCodes,
   setIsValidAction,
-  setIsModalOpenRadiology
+  setIsModalOpenLab
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -200,7 +200,7 @@ const RadiologyCards = ({
                                 data?.diagnosisCode,
                                 captureSectionMatching,
                                 setSearch,
-                                setIsModalOpenRadiology,
+                                setIsModalOpenLab,
                                 setFileModalHeader
                               )}
                             </div>
@@ -213,7 +213,7 @@ const RadiologyCards = ({
                             >
                               <div
                                 onClick={() => {
-                                  setActiveTabHead(4);
+                                  setActiveTabHead(3);
                                   setActiveMeatTitle({
                                     header: "M",
                                     diagnosisCode: data?.diagnosisCode,
@@ -228,7 +228,7 @@ const RadiologyCards = ({
                               </div>
                               <div
                                 onClick={() => {
-                                  setActiveTabHead(4);
+                                  setActiveTabHead(3);
                                   setActiveMeatTitle({
                                     header: "E",
                                     diagnosisCode: data?.diagnosisCode,
@@ -243,7 +243,7 @@ const RadiologyCards = ({
                               </div>
                               <div
                                 onClick={() => {
-                                  setActiveTabHead(4);
+                                  setActiveTabHead(3);
                                   setActiveMeatTitle({
                                     header: "A",
                                     diagnosisCode: data?.diagnosisCode,
@@ -258,7 +258,7 @@ const RadiologyCards = ({
                               </div>
                               <div
                                 onClick={() => {
-                                  setActiveTabHead(4);
+                                  setActiveTabHead(3);
                                   setActiveMeatTitle({
                                     header: "T",
                                     diagnosisCode: data?.diagnosisCode,
@@ -288,4 +288,4 @@ const RadiologyCards = ({
   );
 };
 
-export default RadiologyCards;
+export default LabCards;

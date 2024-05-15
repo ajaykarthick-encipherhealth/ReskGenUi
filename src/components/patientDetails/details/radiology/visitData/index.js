@@ -1,23 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { Viewer, Worker, ProgressBar } from "@react-pdf-viewer/core";
-import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
-import moment, { months } from "moment";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleUser,
-  faCheck,
-  faInfo,
-  faPlus,
-  faArrowsAlt,
-  faSitemap,
-} from "@fortawesome/free-solid-svg-icons";
-import { CalendarOutlined } from "@ant-design/icons";
-import { Popconfirm, Divider, Popover, Menu, DatePicker, Dropdown } from "antd";
 import { Modal } from "antd";
 import { useRouter } from "next/navigation";
-import CamboTree from "../../hcc/org";
 import { getPatientRadiologyDetails } from "../../components/function/GetDataRadiology";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import styles from "../../hcc/styles.module.css";
@@ -38,27 +23,9 @@ const VisitData = ({ setActiveTabHead, setActiveMeatTitle }) => {
   const radiologyFile = useSelector(
     (state) => state?.ReviewerReducers?.radiologyFileDetails
   );
-
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
-  const { toolbarPluginInstance } = defaultLayoutPluginInstance;
-  const { searchPluginInstance } = toolbarPluginInstance;
-  const { highlight } = searchPluginInstance;
-  const [invalidMoveDiseasesList, setInvalidMoveDiseasesList] = useState([]);
-  const [comboDiseaseCodesList, setComboDiseaseCodesList] = useState([]);
-  const [invalidComboDiseaseCodesList, setInvalidComboDiseaseCodesList] =
-    useState([]);
-
   const [selectDiseasesName, setSelectDiseasesName] = useState("");
-  const [meatCriteriaList, setMeatCriteriaList] = useState([]);
-  const [invalidMeatCriteriaList, setInvalidMeatCriteriaList] = useState([]);
-  const [selectCode, setSelectCode] = useState("");
-  const [localTenantId, setLocalTenantId] = useState("");
   const [selectMeatName, setSelectMeatName] = useState("");
   const [patientDetailsRadiology, setPatientDetailsRadiology] = useState([]);
-  const [combiTree, setCombiTree] = useState({});
-  const [opens, setOpens] = useState(false);
-  const [newValidDiseaseList, setNewValidDiseaseList] = useState([]);
-
   const [newValidDiseaseListRadiology, setNewValidDiseaseListRadiology] =
     useState([]);
   const [newInValidDiseaseListRadiology, setInNewValidDiseaseListRadiology] =
@@ -69,12 +36,6 @@ const VisitData = ({ setActiveTabHead, setActiveMeatTitle }) => {
   const [captureSectionMatching, setCaptureSectionMatching] = useState([]);
   const [encounterDateMatching, setEncounterDateMatching] = useState([]);
   const [fileModalHeader, setFileModalHeader] = useState("");
-
-  const [isDocumentLoaded, setDocumentLoaded] = React.useState(false);
-  const handleDocumentLoad = () => {
-    setDocumentLoaded(true);
-  };
-
   const [search, setSearch] = useState();
   const [meatCriteriaListRadiology, setMeatCriteriaListRadiology] = useState(
     []

@@ -1,21 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Viewer, Worker, ProgressBar } from "@react-pdf-viewer/core";
-import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
-import moment, { months } from "moment";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleUser,
-  faCheck,
-  faInfo,
-  faArrowsAlt,
-} from "@fortawesome/free-solid-svg-icons";
-import { CalendarOutlined } from "@ant-design/icons";
-import { Popconfirm, Popover } from "antd";
 import Select from "react-select";
-import { Modal } from "antd";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import CamboTree from "../../hcc/org";
 import { getPatientRadiologyDetails } from "../../components/function/GetDataRadiology";
 import PdfViewer from "../../PdfViewerComponent";
 import {
@@ -37,18 +23,9 @@ const File = ({ setActiveTabHead, setActiveMeatTitle }) => {
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
   );
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
-  const { toolbarPluginInstance } = defaultLayoutPluginInstance;
-  const { searchPluginInstance } = toolbarPluginInstance;
-  const { highlight } = searchPluginInstance;
-  const [invalidMoveDiseasesList, setInvalidMoveDiseasesList] = useState([]);
   const [selectDiseasesName, setSelectDiseasesName] = useState("");
   const [localTenantId, setLocalTenantId] = useState("");
   const [patientDetailsRadiology, setPatientDetailsRadiology] = useState([]);
-  const [combiTree, setCombiTree] = useState({});
-  const [opens, setOpens] = useState(false);
-  const [newValidDiseaseList, setNewValidDiseaseList] = useState([]);
-
   const [newValidDiseaseListRadiology, setNewValidDiseaseListRadiology] =
     useState([]);
   const [newInValidDiseaseListRadiology, setInNewValidDiseaseListRadiology] =
@@ -67,11 +44,6 @@ const File = ({ setActiveTabHead, setActiveMeatTitle }) => {
   const [radiologyFileDetailCheck, setRadiologyFileDetailCheck] =
     useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
-
-  const [isDocumentLoaded, setDocumentLoaded] = React.useState(false);
-  const handleDocumentLoad = () => {
-    setDocumentLoaded(true);
-  };
   const [search, setSearch] = useState();
   const [meatCriteriaListRadiology, setMeatCriteriaListRadiology] = useState(
     []
@@ -140,8 +112,7 @@ const File = ({ setActiveTabHead, setActiveMeatTitle }) => {
       }
     });
   };
-
-  
+    
   const handleCloseModal = () => {
     setConfirmNotesModalValid(false);
   };

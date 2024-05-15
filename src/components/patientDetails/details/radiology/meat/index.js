@@ -2,15 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import { Badge } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { Viewer, Worker, ProgressBar } from "@react-pdf-viewer/core";
-import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
-import moment, { months } from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUser, faArrowsAlt } from "@fortawesome/free-solid-svg-icons";
-import { CalendarOutlined } from "@ant-design/icons";
-import { Popconfirm, Divider, Popover, Menu, DatePicker, Dropdown } from "antd";
+import { faArrowsAlt } from "@fortawesome/free-solid-svg-icons";
+import { Popconfirm, Popover } from "antd";
 import { Modal } from "antd";
-import CamboTree from "../../hcc/org";
+import PdfViewer from "../../PdfViewerComponent";
+import { getPatientRadiologyDetails } from "../../components/function/GetDataRadiology";
 
 const Meat = ({}) => {
   const radiologyDetailsResult = useSelector(
@@ -22,18 +19,11 @@ const Meat = ({}) => {
   const radiologyFile = useSelector(
     (state) => state?.ReviewerReducers?.radiologyFileDetails
   );
-
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
-  const { toolbarPluginInstance } = defaultLayoutPluginInstance;
-  const { searchPluginInstance } = toolbarPluginInstance;
-  const { highlight } = searchPluginInstance;
   const [meatCriteriaList, setMeatCriteriaList] = useState([]);
   const [invalidMeatCriteriaList, setInvalidMeatCriteriaList] = useState([]);
   const [localTenantId, setLocalTenantId] = useState("");
   const [selectMeatName, setSelectMeatName] = useState("");
   const [patientDetailsRadiology, setPatientDetailsRadiology] = useState([]);
-  const [combiTree, setCombiTree] = useState({});
-  const [opens, setOpens] = useState(false);
   const [meatCriteriaListRadiology, setMeatCriteriaListRadiology] = useState(
     []
   );
@@ -44,14 +34,25 @@ const Meat = ({}) => {
   const [selectMeatResult, setSelectMeatResult] = useState(null);
   const [isModalOpenRadiologyMeat, setIsModalOpenRadiologyMeat] =
     useState(false);
-  const [isDocumentLoaded, setDocumentLoaded] = React.useState(false);
-  const handleDocumentLoad = () => {
-    setDocumentLoaded(true);
-  };
+  const [search, setSearch] = useState();
 
   useEffect(() => {
-    setMeatCriteriaListRadiology([]);
-    getPatientDetailsRadiologyYear();
+    getPatientRadiologyDetails(
+      radiologyDetailsResult,
+      sectionColorList,
+      setPatientDetailsRadiology,
+      "",
+      "",
+      "",
+      setCaptureSectionMatching,
+      setEncounterDateMatching,
+      "",
+      "",
+      "",
+      setMeatCriteriaListRadiology,
+      "",
+      ""
+    );
   }, [radiologyDetailsResult]);
 
   useEffect(() => {
@@ -59,105 +60,11 @@ const Meat = ({}) => {
     getPatientPdfFileRadiology();
   }, [radiologyFile?.result?.response]);
 
-  const getPatientDetailsRadiologyYear = async () => {
-    if (radiologyDetailsResult?.result?.response) {
-      var result = radiologyDetailsResult?.result?.response;
-      setPatientDetailsRadiology(result);
-      if (result.validDisease != null) {
-        var meatCri = "";
-        var dosYearArr = [];
-        for (var key in result.validDisease) {
-          dosYearArr.push({ value: key, label: key });
-        }
-        var dateofService = dosYearArr[0].value;
-        if (result.meatCriteria != null) {
-          meatCri = result.meatCriteria[dateofService];
-        }
-        var validDiseaseNewRes = result?.validDisease[dateofService];
-        var capturedSectionsColorsMatching = [];
-        var capturedSectionsArr = [];
-        validDiseaseNewRes.map((res) => {
-          res.capturedSections.map((res2, index) => {
-            capturedSectionsArr.push({
-              name: res2,
-              diagnosisCode: res.diagnosisCode,
-            });
-          });
-        });
-
-        var dublicateSectionArr = getUniqueListBy(capturedSectionsArr, "name");
-
-        dublicateSectionArr.map((res, index) => {
-          capturedSectionsColorsMatching.push({
-            name: res.name,
-            diagnosisCode: res.diagnosisCode,
-          });
-        });
-        var sectionColorResult = sectionColorList.result?.response;
-
-        let sectionColorResultMatch = sectionColorResult.filter((o1) =>
-          dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
-        );
-        let sectionColorResultNotMatch = dublicateSectionArr.filter(
-          (o1) => !sectionColorResult.some((o2) => o1.name === o2.sectionName)
-        );
-
-        var notMatchColorArray = [];
-        sectionColorResultNotMatch?.map((res, index) => {
-          var radomColorcode = stringToColour(res.name);
-          var randomColorChangeShadow = radomColorcode + 33;
-          notMatchColorArray.push({
-            sectionName: res.name,
-            backgroundColor: randomColorChangeShadow,
-            sectionColor: radomColorcode,
-          });
-        });
-
-        var newArrayColorMatchs = [];
-        newArrayColorMatchs = [
-          ...sectionColorResult,
-          ...sectionColorResultMatch,
-          ...notMatchColorArray,
-        ];
-
-        setCaptureSectionMatching(newArrayColorMatchs);
-        var meatListArr = [];
-        meatCri.map((res, index) => {
-          meatListArr.push({
-            diagnosisCode: res.diagnosisCode,
-            diseaseName: res.diseaseName,
-            monitorCapturedFromHeader: res.monitorCapturedFromHeader,
-            assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
-            evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
-            treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
-            radiology: res.radiology,
-            assessment: res.assessment,
-            monitor: res.monitor,
-            evaluate: res.evaluate,
-            treatment: res.treatment,
-            isMeatCriteriaPresent: res.isMeatCriteriaPresent,
-          });
-        });
-        setMeatCriteriaListRadiology(meatListArr);
-      }
-    }
-  };
-  function getUniqueListBy(arr, key) {
-    return [...new Map(arr.map((item) => [item[key], item])).values()];
-  }
-
-  function colorCodeMatch(arrList, key) {
-    var colorReturnValue = null;
-    const result = arrList.filter((res) => res.header == key);
-    if (result[0] != undefined) {
-      colorReturnValue = result[0].color;
-    }
-
-    return colorReturnValue;
-  }
-
   const getPatientPdfFileRadiology = async (fileId, tenId) => {
-    if (radiologyFile?.result?.response && radiologyDetailsResult?.result?.response?.patientId) {
+    if (
+      radiologyFile?.result?.response &&
+      radiologyDetailsResult?.result?.response?.patientId
+    ) {
       setSelectFileURLRadiology(radiologyFile?.result?.response);
     }
   };
@@ -195,23 +102,14 @@ const Meat = ({}) => {
   ) => {
     setSelectMeatResult(meatresult);
     var splitPoint = disDescription.substring(" ", 40);
-    setTimeout(() => {
-      highlight({
-        keyword: splitPoint,
-      });
-      var dataset = value + " - (" + disDescription + ")";
-      setSelectMeatName(dataset);
-    }, 2000);
-    setDocumentLoaded(true);
     var dataset = value + " - (" + disDescription + ")";
-    setSelectMeatName(dataset + " -  " + "Loading...");
+    setSelectMeatName(dataset);
+    setSearch({
+      value: splitPoint,
+      headers: false,
+      headerContent: value,
+    });
     setIsModalOpenRadiologyMeat(true);
-  };
-
-  const showErrorMessage = () => {
-    setOpens(false);
-    notification.destroy();
-    notification.info({ message: "Tree Not Available", duration: 1 });
   };
 
   const getCaptureSectionBackgroundMeat = (
@@ -462,35 +360,14 @@ const Meat = ({}) => {
         </div>
       </div>
 
-      {/* Modals */}
-
-      {opens && combiTree[0]?.children?.length > 0 ? (
-        <Modal
-          title={fileModalHeader}
-          width="90%"
-          centered
-          open={opens}
-          onOk={() => setOpens(false)}
-          onCancel={() => setOpens(false)}
-          footer={null}
-        >
-          <CamboTree tree={combiTree} />
-        </Modal>
-      ) : (
-        opens && showErrorMessage()
-      )}
-
       <Modal
         title={selectMeatName}
-        // title="Pdf Test"
         centered
         open={isModalOpenRadiologyMeat}
-        // style={{ top: 5 }}
         onOk={handleCloseModal}
         onCancel={handleCloseModal}
         width="90%"
         footer={false}
-        // height={400}
       >
         <div className="section-container">
           <div className="my-post-content pt-3">
@@ -720,27 +597,14 @@ const Meat = ({}) => {
               </div>
               <div className="col-xl-8">
                 <div className="card-body p-0 z-index-low">
-                  <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.js">
-                    <div
-                      style={{
-                        height: "80vh",
-                        marginLeft: "auto",
-                        marginRight: "auto",
-                      }}
-                    >
-                      {" "}
-                      <Viewer
-                        fileUrl={selectFileURLRadiology}
-                        plugins={[defaultLayoutPluginInstance]}
-                        onDocumentLoad={handleDocumentLoad}
-                        renderLoader={(percentages) => (
-                          <div style={{ width: "240px" }}>
-                            <ProgressBar progress={Math.round(percentages)} />
-                          </div>
-                        )}
-                      />
-                    </div>
-                  </Worker>
+                  {selectFileURLRadiology && (
+                    <PdfViewer
+                      src={selectFileURLRadiology}
+                      searchQuery={search?.value ? search?.value : ""}
+                      pageNumber={search?.page ? search?.page : 1}
+                      headers={search?.headers}
+                    />
+                  )}
                 </div>
               </div>
             </div>
