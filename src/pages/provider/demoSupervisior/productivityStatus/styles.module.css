@@ -16,9 +16,8 @@
   justify-content: end;
 }
 .picker {
-  /* width: 30%; */
+ 
   display: flex;
-  /* justify-content: space-between; */
   margin-right: 20px;
 }
 .accuracy {

@@ -29,7 +29,6 @@ const QualityScore = () => {
       .toDate();
 
     const endDate = dayjs(startDate).endOf("month").toDate();
-
     const filter = { dueDate: { $gte: startDate, $lte: endDate } };
     if (chart) {
       chart.setFilter(filter);
@@ -195,7 +194,7 @@ const QualityScore = () => {
                 </Card>
               </div>
             </div>
-            <ProductivityStatus/>
+            <ProductivityStatus />
           </div>
         </div>
       </div>
