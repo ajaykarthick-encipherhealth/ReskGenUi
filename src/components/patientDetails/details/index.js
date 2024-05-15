@@ -72,17 +72,18 @@ export const navigetPageDetails = async (
 ) => {
   setSideNavLabelActiveKey(pageTitle);
   var patientId = localStorage.getItem("patientId");
+  var orgId = localStorage.getItem("orgId");
   if (pageTitle == "HCC" && patientId) {
+    setActiveTab(1);
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `dbservice/patient/compute/get?patientid=${patientId}&orgid=${localOrgId}`
+        `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
     );
     if (response.data) {
       var result = response.data.response;
       setPatientDocumentResult(result);
     }
     setActiveTab(1);
-    setIsLoadingDos(false);
   }
   if (pageTitle == "NON HCC") {
     setActiveTab(2);
