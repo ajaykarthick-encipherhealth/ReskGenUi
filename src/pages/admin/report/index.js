@@ -23,6 +23,7 @@ import Export from "../../../resusablereport/reports/Export";
 import {
   getReceivedDetails,
   getReportDetails,
+  selectedReport,
 } from "../../../store/actions/adminAction/ReportActions";
 import { actions as workflowActions } from "../../../stores/reviewer/workqueue";
 import { getSelectUserList } from "../../../store/actions/adminAction/DashboardAction";
@@ -559,6 +560,7 @@ const Reports = ({ workFgetFlagsowData }) => {
                               <button
                                 onClick={() => {
                                   setIsModalVisible(true);
+                                  dispatch(selectedReport(null))
                                 }}
                                 className={styles.export}
                                 disabled={

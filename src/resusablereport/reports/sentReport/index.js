@@ -12,7 +12,7 @@ import {
 } from "../../../components/headerFilters/functions";
 import EditButton from "../../../images/adminUsers/EditButton";
 import SpinnerDots from "../../../components/spinner";
-import Export from "../../../pages/admin/reports/Export";
+import Export from "../Export";
 import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
 
 export const colors = {
@@ -412,6 +412,7 @@ const SentReport = ({
                                               dispatch(selectedReport(item));
                                               setOpenEdit(true);
                                             }}
+                                            className="cr-pointer"
                                           >
                                             <EditButton />
                                           </div>

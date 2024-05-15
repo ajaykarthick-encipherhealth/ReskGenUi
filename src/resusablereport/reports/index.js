@@ -344,7 +344,7 @@ const Reports = () => {
       isSearch: true,
     },
   ];
-console.log(activeRole,"role")
+
   return (
     <div>
       <Header />
