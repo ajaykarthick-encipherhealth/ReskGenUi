@@ -385,7 +385,7 @@ const ReviewerReport = ({
           {!reportListAll?.response?.data ? (
             <SpinnerDots />
           ) : (
-            <div className={`container-fluid py-4`}>
+            <div className={`container-fluid py-4 px-2`}>
               <div
                 style={{
                   display: "flex",

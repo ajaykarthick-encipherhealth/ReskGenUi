@@ -360,7 +360,7 @@ const SentReport = ({
     <>
       <div>
         <div className="content-body">
-          <div className="container-fluid py-4">
+          <div className="container-fluid py-4 px-2">
             <div className="row">
               <div>
                 <div className=" col-xl-12 d-flex">
