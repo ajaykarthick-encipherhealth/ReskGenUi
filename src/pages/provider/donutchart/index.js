@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import Card from "../../../components/card";
-
 import ChartsEmbedSDK from "@mongodb-js/charts-embed-dom";
 
 const Donutchart = () => {
- 
-
   const sdk = new ChartsEmbedSDK({
     baseUrl: "https://charts.mongodb.com/charts-project-1-hubxull",
     showAttribution: false,
@@ -21,13 +18,10 @@ const Donutchart = () => {
 
   return (
     <>
-     
       <div className={styles.card6}>
         <Card borderRadius="30px" padding="0px">
           <div className={styles.buttonDiv}>
-            <div className={styles.select}>
-           
-            </div>
+            <div className={styles.select}></div>
             <div
               id="donutchart"
               className="mt-3 p-4"
@@ -36,8 +30,7 @@ const Donutchart = () => {
                 width: 430,
               }}
             ></div>
-            <div className={styles.header}>
-             </div>
+            <div className={styles.header}></div>
           </div>
         </Card>
       </div>

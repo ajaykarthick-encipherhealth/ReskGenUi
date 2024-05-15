@@ -8,9 +8,6 @@ import ChartsEmbedSDK from "@mongodb-js/charts-embed-dom";
 import Donutchart from "../donutchart";
 import QualityScore from "../demoReviewer/qualityScore";
 
-
-
-
 const Teamchart = () => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -136,40 +133,33 @@ const Teamchart = () => {
 
   return (
     <>
-     <div className="container">
-     <div className="row">
-        <div className="col-8">
-        <h4 className="pt-3">Team chart status</h4>
-          <div className={styles.card5}>
-            <Card borderRadius="30px" padding="0px">
-              <div className={styles.buttonDiv}>
-                <div className={styles.select}>
+      <div className="container">
+        <div className="row">
+          <div className="col-8">
+            <h4 className="pt-3">Team chart status</h4>
+            <div className={styles.card5}>
+              <Card borderRadius="30px" padding="0px">
+                <div className={styles.buttonDiv}>
+                  <div className={styles.select}></div>
+                  <div
+                    id="teamchart"
+                    className="mt-3 p-4"
+                    style={{
+                      height: 340,
+                      width: 850,
+                    }}
+                  ></div>
                 </div>
-                <div
-                  id="teamchart"
-                  className="mt-3 p-4"
-                  style={{
-                    height: 340,
-                    width: 850,
-                  }}
-                ></div>
-              </div>
-            </Card>
+              </Card>
+            </div>
+          </div>
+          <div className="col-4">
+           <h4 className="pt-3">Total Users</h4>
+            <Donutchart />
           </div>
         </div>
-        <div className="col-4">
-          <h4 className="pt-3">Total Users</h4>
-       
-        <Donutchart />
-        </div>
+        <QualityScore />
       </div>
-<QualityScore />
-
-
-
-     </div>
-      
-      
     </>
   );
 };
