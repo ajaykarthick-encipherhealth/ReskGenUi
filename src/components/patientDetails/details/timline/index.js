@@ -17,427 +17,348 @@ const Timeline = ({
       return newStr;
     }
   };
+
+  const getStatusColors = (state) => {
+    console.log(status);
+    let previousStateColor = "";
+    switch (state) {
+      case "COMPLETED":
+        previousStateColor = "#00BC13";
+        break;
+      case "PENDING":
+        previousStateColor = "#0078D4";
+        break;
+      case "HOLD":
+        previousStateColor = "#3C0AD2";
+        break;
+      case "DECLINED":
+        previousStateColor = "#EB5252";
+        break;
+      case "AUDITED":
+        previousStateColor = "#4AA1AB";
+        break;
+      case "REAUDIT":
+        previousStateColor = "#964B00";
+        break;
+      case "AUDITHOLD":
+        previousStateColor = "#EBAE00";
+        break;
+      case "AUDIT_PENDING":
+        previousStateColor = "#BD3A79";
+        break;
+      case "AUDIT_DECLINED":
+        previousStateColor = "#C21807";
+        break;
+      default:
+        previousStateColor = "";
+    }
+    return previousStateColor;
+  };
+  function renderTimelineItem(item) {
+    const getBadgeClassName = () => {
+      switch (item.action) {
+        case "MOVED_INVALID_TO_VALID":
+          return "timeline-badge MOVED_INVALID_TO_VALID";
+        case "MOVED_SUGGESTED_TO_VALID":
+          return "timeline-badge MOVED_SUGGESTED_TO_VALID";
+        case "MOVED_VALID_TO_SUGGESTED":
+          return "timeline-badge MOVED_VALID_TO_SUGGESTED";
+        case "VALID_DISEASE_ADDED":
+          return "timeline-badge VALID_DISEASE_ADDED";
+        case "MOVED_VALID_TO_DELETED":
+          return "timeline-badge MOVED_VALID_TO_DELETED";
+        case "COMPLETED":
+          return "timeline-badge COMPLETED";
+        case "MOVED_DELETED_TO_VALID":
+          return "timeline-badge MOVED_DELETED_TO_VALID";
+        case "MOVED_DELETED_TO_SUGGESTED":
+          return "timeline-badge MOVED_DELETED_TO_SUGGESTED";
+        case "MOVED_SUGGESTED_TO_DELETED":
+          return "timeline-badge MOVED_SUGGESTED_TO_DELETED";
+        case "ENCOUNTER_FILE_UPDATED":
+          return "timeline-badge ENCOUNTER_FILE_UPDATED";
+        case "ENCOUNTER_FILE_ADDED":
+          return "timeline-badge ENCOUNTER_FILE_ADDED";
+        case "HOLD":
+          return "timeline-badge HOLD";
+        case "DECLINED":
+          return "timeline-badge DECLINED";
+        case "PENDING":
+          return "timeline-badge DECLINED";
+        default:
+          return "timeline-badge DECLINED";
+      }
+    };
+
+    const getTimelineHeading = () => {
+      switch (item.action) {
+        case "MOVED_INVALID_TO_VALID":
+          return (
+            <div className="d-flex">
+              {item.diagnosisCode} - Moved from{" "}
+              <span className={visitStyles.invalidColor}>invalid</span> to{" "}
+              <span className={visitStyles.validColor}> valid</span>
+            </div>
+          );
+        case "MOVED_SUGGESTED_TO_VALID":
+          return (
+            <div className="d-flex">
+              {item.diagnosisCode} - Moved from{" "}
+              <span className={visitStyles.suggestedColor}>suggested</span> to{" "}
+              <span className={visitStyles.validColor}> valid</span>
+            </div>
+          );
+        case "MOVED_VALID_TO_SUGGESTED":
+          return (
+            <div className="d-flex">
+              {item.diagnosisCode} - Moved from{" "}
+              <span className={visitStyles.validColor}>valid</span> to{" "}
+              <span className={visitStyles.suggestedColor}> suggested</span>
+            </div>
+          );
+        case "VALID_DISEASE_ADDED":
+          return `${item.diagnosisCode} - Valid from disease added`;
+        case "MOVED_VALID_TO_DELETED":
+          return (
+            <div className="d-flex">
+              {item.diagnosisCode} - Moved from{" "}
+              <span className={visitStyles.validColor}>valid</span> to{" "}
+              <span className={visitStyles.deletedColor}> deleted</span>
+            </div>
+          );
+        case "AUDITED":
+          return (
+            <div className="d-flex">
+              Changed from{" "}
+              <span
+                style={{
+                  padding: "0 5px 0 5px",
+                  color: getStatusColors(item?.previousProcessedState),
+                  fontWeight: "700",
+                }}
+              >
+                {item?.previousProcessedState}
+              </span>{" "}
+              to <span className={visitStyles.audited}>AUDITED</span>
+            </div>
+          );
+        case "REAUDIT":
+          return (
+            <div className="d-flex">
+              Changed from{" "}
+              <span
+                style={{
+                  padding: "0 5px 0 5px",
+                  color: getStatusColors(item?.previousProcessedState),
+                  fontWeight: "700",
+                }}
+              >
+                {item?.previousProcessedState}
+              </span>{" "}
+              to <span className={visitStyles.reaudit}>REAUDIT</span>
+            </div>
+          );
+        case "AUDITHOLD":
+          return (
+            <div className="d-flex">
+              Changed from{" "}
+              <span
+                style={{
+                  padding: "0 5px 0 5px",
+                  color: getStatusColors(item?.previousProcessedState),
+                  fontWeight: "700",
+                }}
+              >
+                {item?.previousProcessedState}
+              </span>{" "}
+              to <span className={visitStyles?.audithold}>AUDITHOLD</span>
+            </div>
+          );
+        case "AUDIT_PENDING":
+          return (
+            <div className="d-flex">
+              Changed from{" "}
+              <span
+                style={{
+                  padding: "0 5px 0 5px",
+                  color: getStatusColors(item?.previousProcessedState),
+                  fontWeight: "700",
+                }}
+              >
+                {item?.previousProcessedState}
+              </span>{" "}
+              to{" "}
+              <span className={visitStyles?.auditpending}>AUDIT_PENDING</span>
+            </div>
+          );
+        case "AUDIT_DECLINED":
+          return (
+            <div className="d-flex">
+              Changed from{" "}
+              <span
+                style={{
+                  padding: "0 5px 0 5px",
+                  color: getStatusColors(item?.previousProcessedState),
+                  fontWeight: "700",
+                }}
+              >
+                {item?.previousProcessedState}
+              </span>{" "}
+              to{" "}
+              <span className={visitStyles?.auditdeclined}>AUDIT_DECLINED</span>
+            </div>
+          );
+
+        case "MEAT_QUERY_STORED":
+          return `Changed from ${item.previousProcessedState} to Meat Query Stored`;
+        case "COMPLETED":
+          return (
+            <div className="d-flex">
+              Changed from{" "}
+              <span
+                style={{
+                  padding: "0 5px 0 5px",
+                  color: getStatusColors(item?.previousProcessedState),
+                  fontWeight: "700",
+                }}
+              >
+                {item?.previousProcessedState}
+              </span>{" "}
+              to <span className={visitStyles.completedColor}> COMPLETED</span>
+            </div>
+          );
+        case "MOVED_DELETED_TO_VALID":
+          return (
+            <div className="d-flex">
+              {item.diagnosisCode} - Moved from{" "}
+              <span className={visitStyles.deletedColor}>deleted</span> to{" "}
+              <span className={visitStyles.validColor}> valid</span>
+            </div>
+          );
+        case "MOVED_DELETED_TO_SUGGESTED":
+          return (
+            <div className="d-flex">
+              {item.diagnosisCode} - Moved from{" "}
+              <span className={visitStyles.deletedColor}>deleted</span> to{" "}
+              <span className={visitStyles.suggestedColor}> suggested</span>
+            </div>
+          );
+        case "MOVED_SUGGESTED_TO_DELETED":
+          return (
+            <div className="d-flex w-100">
+              {item.diagnosisCode} - Moved from{" "}
+              <span className={visitStyles.suggestedColor}>suggested</span> to{" "}
+              <span className={visitStyles.deletedColor}> deleted</span>
+            </div>
+          );
+        case "ENCOUNTER_FILE_UPDATED":
+          return `${item.diagnosisCode} - Encounter file updated`;
+        case "ENCOUNTER_FILE_ADDED":
+          return `${item.diagnosisCode} - Encounter file added`;
+        case "MEAT_ADDED":
+          return `${item.diagnosisCode} - Meat added`;
+        case "HOLD":
+          return (
+            <div className="d-flex">
+              Changed from{" "}
+              <span
+                style={{
+                  padding: "0 5px 0 5px",
+                  color: getStatusColors(item?.previousProcessedState),
+                  fontWeight: "700",
+                }}
+              >
+                {item?.previousProcessedState}
+              </span>{" "}
+              to <span className={visitStyles.holdColor}> HOLD</span>
+            </div>
+          );
+        case "DECLINED":
+          return (
+            <div className="d-flex">
+              Changed from{" "}
+              <span
+                style={{
+                  padding: "0 5px 0 5px",
+                  color: getStatusColors(item?.previousProcessedState),
+                  fontWeight: "700",
+                }}
+              >
+                {item?.previousProcessedState}
+              </span>{" "}
+              to <span className={visitStyles.declinedColor}> DECLINED</span>
+            </div>
+          );
+        case "PENDING":
+          return (
+            <div className="d-flex">
+              Changed from{" "}
+              <span
+                style={{
+                  padding: "0 5px 0 5px",
+                  color: getStatusColors(item?.previousProcessedState),
+                  fontWeight: "700",
+                }}
+              >
+                {item?.previousProcessedState}
+              </span>{" "}
+              to <span className={visitStyles.pendingColor}> PENDING</span>{" "}
+            </div>
+          );
+        default:
+          return (
+            <div className="d-flex">
+              Changed from{" "}
+              <span
+                style={{
+                  padding: "0 5px 0 5px",
+                  color: getStatusColors(item?.previousProcessedState),
+                  fontWeight: "700",
+                }}
+              >
+                {item?.previousProcessedState}
+              </span>{" "}
+              to {underScoreRemove(item.action)}
+            </div>
+          );
+      }
+    };
+    return (
+      <li key={item?.id}>
+        <Tooltip title={item.userName} placement="bottom">
+          <Popover
+            placement="bottom"
+            content={userDetails}
+            onOpenChange={() => renderUserDetails(item.userName)}
+          >
+            <div className={getBadgeClassName()}>
+              {splitUserName(item.userName)}
+            </div>
+          </Popover>
+        </Tooltip>
+        <div className="timeline-panel text-muted">
+          <span className={`${visitStyles.timelineheading} d-flex`}>
+            {getTimelineHeading()}
+          </span>
+          <span className={visitStyles.timelineDate}>
+            {moment(item.createdDate).format("MM-DD-YYYY hh:mm:A")}
+          </span>
+        </div>
+      </li>
+    );
+  }
   return (
     <div className={visitStyles.timeLine}>
       {!filterDataLoading ? (
-        <>
-          <div className="widget-timeline">
-            <ul className="timeline">
-              {timelineData?.map((item, index) => (
-                <li>
-                  {item.action == "MOVED_INVALID_TO_VALID" ? (
-                    <Tooltip title={item.userName} placement="bottom">
-                      <Popover placement="bottom" content={userDetails}>
-                        <div className="timeline-badge MOVED_INVALID_TO_VALID">
-                          {splitUserName(item.userName)}
-                        </div>
-                      </Popover>
-                    </Tooltip>
-                  ) : item.action == "MOVED_SUGGESTED_TO_VALID" ? (
-                    <Tooltip title={item.userName} placement="bottom">
-                      <Popover
-                        placement="bottom"
-                        content={userDetails}
-                        onOpenChange={() => renderUserDetails(item.userName)}
-                      >
-                        <div className="timeline-badge MOVED_SUGGESTED_TO_VALID">
-                          {splitUserName(item.userName)}
-                        </div>
-                      </Popover>
-                    </Tooltip>
-                  ) : item.action == "MOVED_VALID_TO_SUGGESTED" ? (
-                    <Tooltip title={item.userName} placement="bottom">
-                      <Popover
-                        placement="bottom"
-                        content={userDetails}
-                        onOpenChange={() => renderUserDetails(item.userName)}
-                      >
-                        <div className="timeline-badge MOVED_VALID_TO_SUGGESTED">
-                          {splitUserName(item.userName)}
-                        </div>
-                      </Popover>
-                    </Tooltip>
-                  ) : item.action == "VALID_DISEASE_ADDED" ? (
-                    <Tooltip title={item.userName} placement="bottom">
-                      <Popover
-                        placement="bottom"
-                        content={userDetails}
-                        onOpenChange={() => renderUserDetails(item.userName)}
-                      >
-                        <div className="timeline-badge VALID_DISEASE_ADDED">
-                          {splitUserName(item.userName)}
-                        </div>
-                      </Popover>
-                    </Tooltip>
-                  ) : item.action == "MOVED_VALID_TO_DELETED" ? (
-                    <Tooltip title={item.userName} placement="bottom">
-                      <Popover
-                        placement="bottom"
-                        content={userDetails}
-                        onOpenChange={() => renderUserDetails(item.userName)}
-                      >
-                        <div className="timeline-badge MOVED_VALID_TO_DELETED">
-                          {splitUserName(item.userName)}
-                        </div>
-                      </Popover>
-                    </Tooltip>
-                  ) : item.action == "COMPLETED" ? (
-                    <Tooltip title={item.userName} placement="bottom">
-                      <Popover
-                        placement="bottom"
-                        content={userDetails}
-                        onOpenChange={() => renderUserDetails(item.userName)}
-                      >
-                        <div className="timeline-badge COMPLETED">
-                          {splitUserName(item.userName)}
-                        </div>
-                      </Popover>
-                    </Tooltip>
-                  ) : item.action == "MOVED_DELETED_TO_VALID" ? (
-                    <Tooltip title={item.userName} placement="bottom">
-                      <Popover
-                        placement="bottom"
-                        content={userDetails}
-                        onOpenChange={() => renderUserDetails(item.userName)}
-                      >
-                        <div className="timeline-badge MOVED_DELETED_TO_VALID">
-                          {splitUserName(item.userName)}
-                        </div>
-                      </Popover>
-                    </Tooltip>
-                  ) : item.action == "MOVED_DELETED_TO_SUGGESTED" ? (
-                    <Tooltip title={item.userName} placement="bottom">
-                      <Popover
-                        placement="bottom"
-                        content={userDetails}
-                        onOpenChange={() => renderUserDetails(item.userName)}
-                      >
-                        <div className="timeline-badge MOVED_DELETED_TO_SUGGESTED">
-                          {splitUserName(item.userName)}
-                        </div>
-                      </Popover>
-                    </Tooltip>
-                  ) : item.action == "MOVED_SUGGESTED_TO_DELETED" ? (
-                    <Tooltip title={item.userName} placement="bottom">
-                      <Popover
-                        placement="bottom"
-                        content={userDetails}
-                        onOpenChange={() => renderUserDetails(item.userName)}
-                      >
-                        <div className="timeline-badge MOVED_SUGGESTED_TO_DELETED">
-                          {splitUserName(item.userName)}
-                        </div>
-                      </Popover>
-                    </Tooltip>
-                  ) : item.action == "ENCOUNTER_FILE_UPDATED" ? (
-                    <Tooltip title={item.userName} placement="bottom">
-                      <Popover
-                        placement="bottom"
-                        content={userDetails}
-                        onOpenChange={() => renderUserDetails(item.userName)}
-                      >
-                        <div className="timeline-badge ENCOUNTER_FILE_UPDATED">
-                          {splitUserName(item.userName)}
-                        </div>
-                      </Popover>
-                    </Tooltip>
-                  ) : item.action == "ENCOUNTER_FILE_ADDED" ? (
-                    <Tooltip title={item.userName} placement="bottom">
-                      <Popover
-                        placement="bottom"
-                        content={userDetails}
-                        onOpenChange={() => renderUserDetails(item.userName)}
-                      >
-                        <div className="timeline-badge ENCOUNTER_FILE_ADDED">
-                          {splitUserName(item.userName)}
-                        </div>
-                      </Popover>
-                    </Tooltip>
-                  ) : item.action == "HOLD" ? (
-                    <Tooltip title={item.userName} placement="bottom">
-                      <Popover
-                        placement="bottom"
-                        content={userDetails}
-                        onOpenChange={() => renderUserDetails(item.userName)}
-                      >
-                        <div className="timeline-badge HOLD">
-                          {splitUserName(item.userName)}
-                        </div>
-                      </Popover>
-                    </Tooltip>
-                  ) : item.action == "DECLINED" ? (
-                    <Tooltip title={item.userName} placement="bottom">
-                      <Popover
-                        placement="bottom"
-                        content={userDetails}
-                        onOpenChange={() => renderUserDetails(item.userName)}
-                      >
-                        <div className="timeline-badge DECLINED">
-                          {splitUserName(item.userName)}
-                        </div>
-                      </Popover>
-                    </Tooltip>
-                  ) : item.action == "PENDING" ? (
-                    <Tooltip title={item.userName} placement="bottom">
-                      <Popover
-                        placement="bottom"
-                        content={userDetails}
-                        onOpenChange={() => renderUserDetails(item.userName)}
-                      >
-                        <div className="timeline-badge DECLINED">
-                          {splitUserName(item.userName)}
-                        </div>
-                      </Popover>
-                    </Tooltip>
-                  ) : (
-                    <Tooltip title={item.userName} placement="bottom">
-                      <Popover
-                        placement="bottom"
-                        content={userDetails}
-                        onOpenChange={() => renderUserDetails(item.userName)}
-                      >
-                        <div className="timeline-badge DECLINED">
-                          {splitUserName(item.userName)}
-                        </div>
-                      </Popover>
-                    </Tooltip>
-                  )}
-                  <a className="timeline-panel text-muted">
-                    {item.action == "MOVED_INVALID_TO_VALID" ? (
-                      <span className={visitStyles.timelineheading}>
-                        {item.diagnosisCode} - Moved from invalid to valid
-                      </span>
-                    ) : item.action == "MOVED_SUGGESTED_TO_VALID" ? (
-                      <span className={visitStyles.timelineheading}>
-                        {item.diagnosisCode} - Moved from Suggested to valid
-                      </span>
-                    ) : item.action == "MOVED_VALID_TO_SUGGESTED" ? (
-                      <span className={visitStyles.timelineheading}>
-                        {item.diagnosisCode} - Moved from valid to suggested
-                      </span>
-                    ) : item.action == "VALID_DISEASE_ADDED" ? (
-                      <span className={visitStyles.timelineheading}>
-                        {item.diagnosisCode} - Valid from disease added
-                      </span>
-                    ) : item.action == "MOVED_VALID_TO_DELETED" ? (
-                      <span className={visitStyles.timelineheading}>
-                        {item.diagnosisCode} - Moved from valid to deleted
-                      </span>
-                    ) : item.action == "AUDITED" ? (
-                      <span className={visitStyles.timelineheading}>
-                        Changed from {""}
-                        {item.previousProcessedState} to AUDITED
-                      </span>
-                    ) : item.action == "REAUDIT" ? (
-                      <span className={visitStyles.timelineheading}>
-                        Changed from {""}
-                        {item.previousProcessedState} to REAUDIT
-                      </span>
-                    ) : item.action == "AUDITHOLD" ? (
-                      <span className={visitStyles.timelineheading}>
-                        Changed from {""}
-                        {item.previousProcessedState} to AUDITHOLD
-                      </span>
-                    ) : item.action == "AUDITPENDING" ? (
-                      <span className={visitStyles.timelineheading}>
-                        Changed from {""}
-                        {item.previousProcessedState} to AUDITPENDING
-                      </span>
-                    ) : item.action == "MEAT_QUERY_STORED" ? (
-                      <span className={visitStyles.timelineheading}>
-                        Changed from {""}
-                        {item.previousProcessedState} to Meat Query Stored
-                      </span>
-                    ) : item.action == "COMPLETED" ? (
-                      <span
-                        className={visitStyles.timelineheading}
-                        style={{ display: "flex" }}
-                      >
-                        {`Changed from`}
-                        <span
-                          style={{
-                            padding: "0 5px 0 5px",
-                            color:
-                              item?.previousProcessedState === "COMPLETED"
-                                ? "#00BC13"
-                                : item?.previousProcessedState === "PENDING"
-                                ? "#0078D4"
-                                : item?.previousProcessedState === "HOLD"
-                                ? "#3C0AD2"
-                                : item?.previousProcessedState === "DECLINED"
-                                ? "#EB5252"
-                                : "",
-                            fontWeight: "700",
-                          }}
-                        >
-                          {item.previousProcessedState}
-                        </span>
-                        {` to`}
-                        <span
-                          style={{
-                            color: "#00BC13",
-                            fontWeight: "700",
-                            paddingLeft: "5px",
-                          }}
-                        >
-                          COMPLETED
-                        </span>
-                        {/* Changed from
-                        {item.previousProcessedState} to COMPLETD */}
-                      </span>
-                    ) : item.action == "MOVED_DELETED_TO_VALID" ? (
-                      <span className={visitStyles.timelineheading}>
-                        {item.diagnosisCode} - Moved from deleted to valid
-                      </span>
-                    ) : item.action == "MOVED_DELETED_TO_SUGGESTED" ? (
-                      <span className={visitStyles.timelineheading}>
-                        {item.diagnosisCode} - Moved from deleted to suggested
-                      </span>
-                    ) : item.action == "MOVED_SUGGESTED_TO_DELETED" ? (
-                      <span className={visitStyles.timelineheading}>
-                        {item.diagnosisCode} - Moved from suggested to deleted
-                      </span>
-                    ) : item.action == "ENCOUNTER_FILE_UPDATED" ? (
-                      <span className={visitStyles.timelineheading}>
-                        {item.diagnosisCode} - Encounter file updated
-                      </span>
-                    ) : item.action == "ENCOUNTER_FILE_ADDED" ? (
-                      <span className={visitStyles.timelineheading}>
-                        {item.diagnosisCode} - Encounter file added
-                      </span>
-                    ) : item.action == "MEAT_ADDED" ? (
-                      <span className={visitStyles.timelineheading}>
-                        {item.diagnosisCode} - Meat added
-                      </span>
-                    ) : item.action == "HOLD" ? (
-                      <span
-                        className={visitStyles.timelineheading}
-                        style={{ display: "flex" }}
-                      >
-                        {`Changed from`}
-                        <span
-                          style={{
-                            padding: "0 5px 0 5px",
-                            color:
-                              item?.previousProcessedState === "COMPLETED"
-                                ? "#00BC13"
-                                : item?.previousProcessedState === "PENDING"
-                                ? "#0078D4"
-                                : item?.previousProcessedState === "HOLD"
-                                ? "#3C0AD2"
-                                : item?.previousProcessedState === "DECLINED"
-                                ? "#EB5252"
-                                : "",
-                            fontWeight: "700",
-                          }}
-                        >
-                          {item.previousProcessedState}
-                        </span>
-                        {` to`}
-                        <span
-                          style={{
-                            color: "#3C0AD2",
-                            fontWeight: "700",
-                            paddingLeft: "5px",
-                          }}
-                        >
-                          HOLD
-                        </span>
-                      </span>
-                    ) : item.action == "DECLINED" ? (
-                      <span
-                        className={visitStyles.timelineheading}
-                        style={{ display: "flex" }}
-                      >
-                        {`Changed from`}
-                        <span
-                          style={{
-                            padding: "0 5px 0 5px",
-                            fontWeight: "700",
-                            color:
-                              item?.previousProcessedState === "COMPLETED"
-                                ? "#00BC13"
-                                : item?.previousProcessedState === "PENDING"
-                                ? "#0078D4"
-                                : item?.previousProcessedState === "HOLD"
-                                ? "#3C0AD2"
-                                : item?.previousProcessedState === "DECLINED"
-                                ? "#EB5252"
-                                : "",
-                          }}
-                        >
-                          {item.previousProcessedState}
-                        </span>
-                        {` to`}
-                        <span
-                          style={{
-                            color: "#EB5252",
-                            fontWeight: "700",
-                            paddingLeft: "5px",
-                          }}
-                        >
-                          DECLINED
-                        </span>
-                        {/* Changed from
-                      {item.previousProcessedState} to
-                      DECLINED */}
-                      </span>
-                    ) : item.action == "PENDING" ? (
-                      <span
-                        className={visitStyles.timelineheading}
-                        style={{ display: "flex" }}
-                      >
-                        {`Changed from`}
-                        <span
-                          style={{
-                            padding: "0 5px 0 5px",
-                            fontWeight: "700",
-                            color:
-                              item?.previousProcessedState === "COMPLETED"
-                                ? "#00BC13"
-                                : item?.previousProcessedState === "PENDING"
-                                ? "#0078D4"
-                                : item?.previousProcessedState === "HOLD"
-                                ? "#3C0AD2"
-                                : item?.previousProcessedState === "DECLINED"
-                                ? "#EB5252"
-                                : "",
-                          }}
-                        >
-                          {item.previousProcessedState}
-                        </span>
-                        {` to`}
-                        <span
-                          style={{
-                            color: "#0078D4",
-                            fontWeight: "700",
-                            paddingLeft: "5px",
-                          }}
-                        >
-                          PENDING
-                        </span>
-                        {/* Changed from
-                        {item.previousProcessedState} to DECLINED */}
-                      </span>
-                    ) : (
-                      <span className={visitStyles.timelineheading}>
-                        Changed from {""}
-                        {item.previousProcessedState} to{" "}
-                        {underScoreRemove(item.action)}
-                      </span>
-                    )}
-                    <span className={visitStyles.timelineDate}>
-                      {moment(item.createdDate).format("MM-DD-YYYY hh:mm:A")}
-                    </span>
-                  </a>
-                </li>
-              ))}
-              {timelineData?.length == 0 ? (
-                <h6 className="text-center">NO DATA</h6>
-              ) : null}
-            </ul>
-          </div>
-        </>
+        <div className="widget-timeline">
+          <ul className="timeline">
+            {timelineData?.length > 0 ? (
+              timelineData?.map((item) => renderTimelineItem(item))
+            ) : (
+              <h6 className="text-center">NO DATA</h6>
+            )}
+          </ul>
+        </div>
       ) : (
         <div className={visitStyles.userDetailsCard}>
           <div className="bouncing-loader">

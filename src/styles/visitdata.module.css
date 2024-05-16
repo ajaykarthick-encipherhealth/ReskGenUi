@@ -748,7 +748,7 @@
 }
 
 .commentDrawer {
-  width: 350px !important;
+  width: 390px !important;
   background-color: #fff !important;
 }
 
@@ -1044,7 +1044,12 @@
   margin-top: 2px;
   border-radius: 2px;
 }
-
+.validColor{
+  color: #04b700;
+  padding:0 5px;
+  font-size: 14px !important;
+  font-weight: 700;
+}
 .nonhccFlag {
   height: 13px;
   width: 13px;
@@ -1052,6 +1057,12 @@
   margin-right: 3px;
   margin-top: 2px;
   border-radius: 2px;
+}
+.invalidColor{
+  color: #fada5e;
+  padding:0 5px;
+  font-size: 14px !important;
+  font-weight: 700;
 }
 
 .suggestedFlag {
@@ -1062,6 +1073,12 @@
   margin-top: 2px;
   border-radius: 2px;
 }
+.suggestedColor{
+  color: #ff9209;
+  padding:0 5px;
+  font-size: 14px !important;
+  font-weight: 700;
+}
 .deleteFlag {
   height: 13px;
   width: 13px;
@@ -1069,6 +1086,32 @@
   margin-right: 3px;
   margin-top: 2px;
   border-radius: 2px;
+}
+.deletedColor{
+  color: #be3144;
+  padding:0 5px;
+  font-size: 14px !important;
+  font-weight: 700;
+}
+.completedColor{
+  color:#00BC13;
+  padding:0 5px;
+  font-weight: 700;
+}
+.holdColor{
+  color:#3C0AD2;
+  padding:0 5px;
+  font-weight: 700;
+}
+.pendingColor{
+  color:#0078D4;
+  padding:0 5px;
+  font-weight: 700;
+}
+.declinedColor{
+  color:#EB5252;
+  padding:0 5px;
+  font-weight: 700;
 }
 .completed {
   height: 10px;
@@ -1105,6 +1148,31 @@
   margin-right: 5px;
   margin-top: 2px;
   border-radius: 20px;
+}
+.audited{
+  color:#4AA1AB;
+  padding:0 5px;
+  font-weight: 700;
+}
+.audithold{
+  color:#EBAE00;
+  padding:0 5px;
+  font-weight: 700;
+}
+.auditpending{
+  color:#BD3A79;
+  padding:0 5px;
+  font-weight: 700;
+}
+.reaudit{
+  color:#964B00;
+  padding:0 5px;
+  font-weight: 700;
+}
+.auditdeclined{
+  color:#C21807;
+  padding:0 5px;
+  font-weight: 700;
 }
 .processing {
   height: 10px;
