@@ -23,11 +23,9 @@ import { getPatientDetailsResult } from "../../../../../store/actions/ReviewerAc
 import CamboTree from "../org";
 import PdfViewer from "../../PdfViewerComponent";
 import {
-  getCaptureSectionBackgroundFile,
   getEncounterDateBackground,
   getProviderNameList,
 } from "../../components/function/ReusableFunctions";
-import { getPatientDetails } from "../../components/function/GetData";
 const addOnCodeColor = [
   "magenta",
   "red",
@@ -123,31 +121,10 @@ const Combo = ({ activeComboTree }) => {
   };
 
   useEffect(() => {
-    var orgId = localStorage.getItem("orgId");
-    var tenId = localStorage.getItem("tenantId");
-    getPatientDetails(
-      orgId,
-      tenId,
-      setPatientDocumentResult,
-      "",
-      "",
-      "",
-      setEncounterDateMatching,
-      setCaptureSectionMatching,
-      "",
-      patientDetailsResult,
-      dispatch,
-      sectionColorList,
-      "",
-      setComboDiseaseCodesList
-    );
+    let patientId = localStorage.getItem("patientId");
+    setLocalPatientId(patientId);
+    getPatientDetails();
   }, [patientDetailsResult]);
-
-  // useEffect(() => {
-  //   let patientId = localStorage.getItem("patientId");
-  //   setLocalPatientId(patientId);
-  //   getPatientDetails();
-  // }, [patientDetailsResult]);
 
   useEffect(() => {
     if (hccFileDetails?.result?.response) {
@@ -179,82 +156,78 @@ const Combo = ({ activeComboTree }) => {
     }
   }, [fileInitialPage, findFileKeyword, fileModalTitle]);
 
-  // const getPatientDetails = async () => {
-  //   if (patientDetailsResult?.result?.response) {
-  //     let result = patientDetailsResult?.result?.response;
-  //     setPatientDocumentResult(result);
-  //     if (result?.comboDisease) {
-  //       let combiDisArray = [];
-  //       if (result?.comboDisease) {
-  //         result?.comboDisease.map((res, index) => {
-  //           let providerList = [];
-  //           // res.providers?.map((res, index) => {
-  //           //   providerList.push(res.providerName);
-  //           // });
-  //           res.providerNames?.map((res2) => {
-  //             providerList.push(res2);
-  //           });
-  //           const encounterDatearray = res?.encounterDate?.split(",");
-  //           combiDisArray.push({
-  //             addOnCode: res.addOnCode,
-  //             addOnCodeTwo: res.addOnCodeTwo,
-  //             addOnCodeThree: res.addOnCodeThree,
-  //             addOnCodes: [res.addOnCode, res.addOnCodeTwo, res.addOnCodeThree],
-  //             diagnosisCodeCombo: res.diagnosisCodeCombo,
-  //             diseaseName: res.diseaseName,
-  //             diagnosisCode: res.diagnosisCode,
-  //             encounterDate: res.encounterDate,
-  //             encounterDateSplit: encounterDatearray,
-  //             providerName: providerList,
-  //             providers: res.provider ? res.providers : res.provider,
-  //             ruleType: res.ruleType,
-  //             capturedSections: res.capturedSections,
-  //             children: res.children ? res.children : [],
-  //             expanded: true,
-  //             hyperlinks:res?.hyperlinks
-  //           });
-  //         });
-  //       }
-  //       setPatientFileDTO(result?.fileDetailDTO);
-  //       setComboDiseaseCodesList(combiDisArray);
-  //       const COLORS3 = [
-  //         "encounterDateTag1",
-  //         "encounterDateTag2",
-  //         "encounterDateTag3",
-  //         "encounterDateTag4",
-  //         "encounterDateTag5",
-  //         "encounterDateTag6",
-  //         "encounterDateTag7",
-  //         "encounterDateTag8",
-  //         "encounterDateTag9",
-  //         "encounterDateTag10",
-  //       ];
-  //       let encounterDateColorsMatching = [];
-  //       let encounterDateArr = [];
+  const getPatientDetails = async () => {
+    if (patientDetailsResult?.result?.response) {
+      let result = patientDetailsResult?.result?.response;
+      setPatientDocumentResult(result);
+      if (result?.comboDisease) {
+        let combiDisArray = [];
+        if (result?.comboDisease) {
+          result?.comboDisease.map((res, index) => {
+            let providerList = [];
+            res.providers?.map((res, index) => {
+              providerList.push(res.providerName);
+            });
+            const encounterDatearray = res?.encounterDate?.split(",");
+            combiDisArray.push({
+              addOnCode: res.addOnCode,
+              addOnCodeTwo: res.addOnCodeTwo,
+              addOnCodeThree: res.addOnCodeThree,
+              addOnCodes: [res.addOnCode, res.addOnCodeTwo, res.addOnCodeThree],
+              diagnosisCodeCombo: res.diagnosisCodeCombo,
+              diseaseName: res.diseaseName,
+              diagnosisCode: res.diagnosisCode,
+              encounterDate: res.encounterDate,
+              encounterDateSplit: encounterDatearray,
+              providerName: providerList,
+              providers: res.provider ? res.providers : res.provider,
+              ruleType: res.ruleType,
+              capturedSections: res.capturedSections,
+              children: res.children ? res.children : [],
+              expanded: true,
+            });
+          });
+        }
+        setPatientFileDTO(result?.fileDetailDTO);
+        setComboDiseaseCodesList(combiDisArray);
+        const COLORS3 = [
+          "encounterDateTag1",
+          "encounterDateTag2",
+          "encounterDateTag3",
+          "encounterDateTag4",
+          "encounterDateTag5",
+          "encounterDateTag6",
+          "encounterDateTag7",
+          "encounterDateTag8",
+          "encounterDateTag9",
+          "encounterDateTag10",
+        ];
+        let encounterDateColorsMatching = [];
+        let encounterDateArr = [];
 
-  //       result?.comboDisease?.map((res) => {
-  //         const array = res?.encounterDate?.split(",");
-  //         array?.map((res2) => {
-  //           encounterDateArr?.push({
-  //             name: res2,
-  //           });
-  //         });
-  //       });
-  //       let encounterDateArrDublicatesRemove = getUniqueListBy(
-  //         encounterDateArr,
-  //         "name"
-  //       );
-  //       encounterDateArrDublicatesRemove.map((res, index) => {
-  //         encounterDateColorsMatching.push({
-  //           name: res.name,
-  //           colors: COLORS3[index],
-  //         });
-  //       });
-  //       setEncounterDateMatching(encounterDateColorsMatching);
-  //       setCaptureSectionMatching(sectionColorList.result?.response);
-  //     }
-  //   }
-  // };
+        result?.comboDisease?.map((res) => {
+          const array = res?.encounterDate?.split(",");
+          array?.map((res2) => {
+            encounterDateArr?.push({
+              name: res2,
+            });
+          });
+        });
+        let encounterDateArrDublicatesRemove = getUniqueListBy(
+          encounterDateArr,
+          "name"
+        );
+        encounterDateArrDublicatesRemove.map((res, index) => {
+          encounterDateColorsMatching.push({
+            name: res.name,
+            colors: COLORS3[index],
+          });
+        });
+        setEncounterDateMatching(encounterDateColorsMatching);
+        setCaptureSectionMatching(sectionColorList.result?.response);
+      }
+    }
+  };
 
   function getUniqueListBy(arr, key) {
     return [...new Map(arr.map((item) => [item[key], item])).values()];
@@ -493,82 +466,82 @@ const Combo = ({ activeComboTree }) => {
     return output;
   }
 
-  // const getCaptureSectionBackgroundFile = (
-  //   value,
-  //   encounterDate,
-  //   actualDescription,
-  //   diagnosisCode
-  // ) => {
-  //   let dublicateCaptureDelete = removeDuplicates(value);
-  //   return dublicateCaptureDelete.map((res) => {
-  //     const result = captureSectionMatching.filter(
-  //       (res2) => res2.sectionName == res
-  //     );
-  //     let backColor = result[0]?.backgroundColor;
-  //     let textColor = result[0]?.sectionColor;
-  //     let disCode = result[0]?.diagnosisCode;
-  //     let headerNames = result[0]?.sectionName;
-  //     let sectionMapArr = (
-  //       <span
-  //         onClick={() =>
-  //           findValueDocument(
-  //             disCode,
-  //             res,
-  //             headerNames,
-  //             encounterDate,
-  //             actualDescription,
-  //             diagnosisCode
-  //           )
-  //         }
-  //         style={{ backgroundColor: backColor, color: textColor }}
-  //         className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
-  //       >
-  //         {res}
-  //       </span>
-  //     );
-  //     return sectionMapArr;
-  //   });
-  // };
+  const getCaptureSectionBackgroundFile = (
+    value,
+    encounterDate,
+    actualDescription,
+    diagnosisCode
+  ) => {
+    let dublicateCaptureDelete = removeDuplicates(value);
+    return dublicateCaptureDelete.map((res) => {
+      const result = captureSectionMatching.filter(
+        (res2) => res2.sectionName == res
+      );
+      let backColor = result[0]?.backgroundColor;
+      let textColor = result[0]?.sectionColor;
+      let disCode = result[0]?.diagnosisCode;
+      let headerNames = result[0]?.sectionName;
+      let sectionMapArr = (
+        <span
+          onClick={() =>
+            findValueDocument(
+              disCode,
+              res,
+              headerNames,
+              encounterDate,
+              actualDescription,
+              diagnosisCode
+            )
+          }
+          style={{ backgroundColor: backColor, color: textColor }}
+          className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
+        >
+          {res}
+        </span>
+      );
+      return sectionMapArr;
+    });
+  };
 
-  // const getCaptureSectionBackground = (
-  //   value,
-  //   documentPlace,
-  //   encounterDate,
-  //   actualDescription,
-  //   testModal,
-  //   diagnosisCode
-  // ) => {
-  //   let dublicateCaptureDelete = removeDuplicates(value);
-  //   return dublicateCaptureDelete.map((res) => {
-  //     const result = captureSectionMatching.filter(
-  //       (res2) => res2.sectionName == res
-  //     );
-  //     let backColor = result[0]?.backgroundColor;
-  //     let textColor = result[0]?.sectionColor;
-  //     let disCode = diagnosisCode;
-  //     let headerNames = result[0]?.sectionName;
+  const getCaptureSectionBackground = (
+    value,
+    documentPlace,
+    encounterDate,
+    actualDescription,
+    testModal,
+    diagnosisCode
+  ) => {
+    let dublicateCaptureDelete = removeDuplicates(value);
+    return dublicateCaptureDelete.map((res) => {
+      const result = captureSectionMatching.filter(
+        (res2) => res2.sectionName == res
+      );
+      let backColor = result[0]?.backgroundColor;
+      let textColor = result[0]?.sectionColor;
+      let disCode = diagnosisCode;
+      let headerNames = result[0]?.sectionName;
 
-  //     let sectionMapArr = (
-  //       <span
-  //         onClick={() =>
-  //           findValueDocument(
-  //             disCode,
-  //             actualDescription,
-  //             headerNames,
-  //             encounterDate,
-  //             actualDescription,
-  //             disCode
-  //           )
-  //         }
-  //         style={{ backgroundColor: backColor, color: textColor }}
-  //         className={`cr-pointer mt-2 text-start ${visitStyles.captureheader}`}
-  //       >
-  //         {res}
-  //       </span>
-  //     );
-  //     return sectionMapArr;
-  //   });
-  // };
+      let sectionMapArr = (
+        <span
+          onClick={() =>
+            findValueDocument(
+              disCode,
+              actualDescription,
+              headerNames,
+              encounterDate,
+              actualDescription,
+              disCode
+            )
+          }
+          style={{ backgroundColor: backColor, color: textColor }}
+          className={`cr-pointer mt-2 text-start ${visitStyles.captureheader}`}
+        >
+          {res}
+        </span>
+      );
+      return sectionMapArr;
+    });
+  };
 
   const addComboCode = () => {
     setIsAddComboCode(true);
@@ -776,34 +749,14 @@ const Combo = ({ activeComboTree }) => {
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
-                                  {getCaptureSectionBackgroundFile(
-                                    item?.capturedSections,
-                                    item?.encounterDate,
-                                    item?.actualDescription,
-                                    item?.diagnosisCode,
-                                    item?.getPlace,
-                                    captureSectionMatching,
-                                    setSearch,
-                                    setFileLoading,
-                                    "",
-                                    "",
-                                    setIsModalOpenCaptureSection,
-                                    setFileModalHeader,
-                                    "",
-                                    patientDocumentResult,
-                                    fileInitialPage,
-                                    setFileInitialPage,
-                                    item?.hyperlinks,
-                                    encounterDateMatching
-                                  )}
-                                  {/* {getCaptureSectionBackground(
+                                  {getCaptureSectionBackground(
                                     item.capturedSections,
                                     "COMBO",
                                     item.encounterDate,
                                     item.diseaseName,
                                     null,
                                     item.diagnosisCodeCombo
-                                  )} */}
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -1039,22 +992,8 @@ const Combo = ({ activeComboTree }) => {
                                       {getCaptureSectionBackgroundFile(
                                         item?.capturedSections,
                                         item?.encounterDate,
-                                        item?.actualDescription,
-                                        item?.diagnosisCode,
-                                        item?.getPlace,
-                                        captureSectionMatching,
-                                        setSearch,
-                                        setFileLoading,
-                                        "",
-                                        "",
-                                        setIsModalOpenCaptureSection,
-                                        setFileModalHeader,
-                                        "",
-                                        patientDocumentResult,
-                                        fileInitialPage,
-                                        setFileInitialPage,
-                                        item?.hyperlinks,
-                                        encounterDateMatching
+                                        item?.diseaseName,
+                                        item?.diagnosisCodeCombo
                                       )}
                                     </div>
                                   </div>
