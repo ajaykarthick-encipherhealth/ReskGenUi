@@ -14252,7 +14252,6 @@ span.meat-name-details2 {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  overflow: hidden;
   height: 20px;
   min-width: 230px;
   max-width: 525px;
@@ -14260,9 +14259,6 @@ span.meat-name-details2 {
 .table-responsive {
   overflow-x: hidden !important;
 }
-/* .ant-progress-text {
-  display: none !important;
-} */
 .notification .ant-checkbox .ant-checkbox-inner {
   width: 20px !important;
   height: 20px !important;
