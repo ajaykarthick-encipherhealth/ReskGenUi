@@ -33,8 +33,8 @@ function TrackingTable({
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
-      navigate.push({pathname: "/reviewer/patients/details", query:{...page, isAdminTracking: true}})
+      localStorage.setItem("patientId", data?.patientId);
+      navigate.push({pathname: "/admin/patients/details", query:{...page, isAdminTracking: true}})
     } else {
       notification.warning({
         message: data.patientId + " file not processed. Please wait.",

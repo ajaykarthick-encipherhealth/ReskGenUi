@@ -69,7 +69,7 @@ export const AdminMenuList = [
     title: "Patients",
     iconStyle: SVGICON.patientListIcon,
     to: "/admin/patients",
-    childRoute: "/reviewer/patients/details",
+    childRoute: "/admin/patients/details",
   },
   {
     title: "File Processing",
@@ -85,7 +85,7 @@ export const AdminMenuList = [
     title: "Tracking",
     iconStyle: SVGICON.Tracking,
     to: "/admin/tracking",
-    childRoute3: "/reviewer/patients/details",
+    childRoute3: "/admin/patients/details",
   },
   {
     title: "Report",
@@ -152,7 +152,7 @@ export const L2AuditorMenuList = [
     title: "Audited Queue",
     iconStyle: SVGICON.patientListIcon,
     to: "/supervisor/auditing",
-    childRoute: "/reviewer/patients/details",
+    childRoute: "/supervisor/patients/details",
   },
   // {
   //   title: "FeedBack",
