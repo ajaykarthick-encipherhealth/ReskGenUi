@@ -4,6 +4,7 @@ import {
 } from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
+import NewResponse from "./newresponse.json";
 
 export const COLORS = [
   "bg-bg-seven",
@@ -143,10 +144,14 @@ export const getPatientDetails = async (
   patientDetailsResult,
   dispatch,
   sectionColorList,
-  setAllDisList
+  setAllDisList,
+  setComboDiseaseCodesList
 ) => {
-  if (patientDetailsResult?.result?.response) {
-    var result = patientDetailsResult?.result?.response;
+  console.log(NewResponse?.response);
+  // if (patientDetailsResult?.result?.response) {
+  //   var result = patientDetailsResult?.result?.response;
+  if (NewResponse?.response) {
+    var result = NewResponse?.response;
     setPatientDocumentResult(result);
     if (result.validDisease != null) {
       var validDis = "";
@@ -179,8 +184,11 @@ export const getPatientDetails = async (
         const encounterDatearray = res?.encounterDate?.split(",");
         var providerList = [];
 
-        res.provider?.map((res, index) => {
-          providerList.push(res?.providerName);
+        // res.provider?.map((res, index) => {
+        //   providerList.push(res?.providerName);
+        // });
+        res.providerNames?.map((res) => {
+          providerList.push(res);
         });
 
         if (res.isShow != false) {
@@ -189,7 +197,7 @@ export const getPatientDetails = async (
             capturedSections: res.capturedSections,
             diagnosisCode: res.diagnosisCode,
             encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
+            encounterDateSplit: res.dateOfServices,
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
@@ -203,7 +211,8 @@ export const getPatientDetails = async (
             isRxHcc: res.isRxHcc,
             providerDeatils: res.provider,
             isComboCode: res.isComboCode,
-            notes: res.notes
+            notes: res.notes,
+            hyperlinks:res?.hyperlinks
           });
         }
       });
@@ -230,10 +239,11 @@ export const getPatientDetails = async (
           capturedSections: res.capturedSections,
           diagnosisCode: res.diagnosisCode,
           encounterDate: res.encounterDate,
-          encounterDateSplit: encounterDatearray,
+          encounterDateSplit: res.dateOfServices,
           isManuallyAdded: res.isManuallyAdded,
           isHccValid: res.isHccValid,
           defaultPosition: res.defaultPosition,
+          hyperlinks:res?.hyperlinks
         });
       });
 
@@ -242,8 +252,11 @@ export const getPatientDetails = async (
           if (res.isShow != false) {
             const encounterDatearray = res?.encounterDate?.split(",");
             var providerList = [];
-            res.provider?.map((res, index) => {
-              providerList.push(res.providerName);
+            // res.provider?.map((res, index) => {
+            //   providerList.push(res.providerName);
+            // });
+            res.providerNames?.map((res) => {
+              providerList.push(res);
             });
             deleteHccList.push({
               actualDescription: res.actualDescription,
@@ -251,7 +264,7 @@ export const getPatientDetails = async (
               capturedSections: res.capturedSections,
               diagnosisCode: res.diagnosisCode,
               encounterDate: res.encounterDate,
-              encounterDateSplit: encounterDatearray,
+              encounterDateSplit: res.dateOfServices,
               isManuallyAdded: res.isManuallyAdded,
               isHccValid: res.isHccValid,
               defaultPosition: res.defaultPosition,
@@ -259,7 +272,8 @@ export const getPatientDetails = async (
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
-              notes: res.notes
+              notes: res.notes,
+              hyperlinks:res?.hyperlinks
             });
           }
         });
@@ -270,15 +284,18 @@ export const getPatientDetails = async (
           const encounterDatearray = res?.encounterDate?.split(",");
           var providerList = [];
 
-          res?.provider?.map((res2, index) => {
-            providerList.push(res2.providerName);
+          // res?.provider?.map((res2, index) => {
+          //   providerList.push(res2.providerName);
+          // });
+          res.providerNames?.map((res) => {
+            providerList.push(res);
           });
           suggestListAll.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
             diagnosisCode: res.diagnosisCode,
             encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
+            encounterDateSplit: res.dateOfServices,
             getPlace: "Radio",
             isHccValid: true,
             defaultPosition: res.defaultPosition,
@@ -289,7 +306,8 @@ export const getPatientDetails = async (
             isRxHcc: res.isRxHcc,
             isComboCode: res.isComboCode,
             providerDeatils: res.provider,
-            notes: res.notes
+            notes: res.notes,
+            hyperlinks:res?.hyperlinks
           });
         });
 
@@ -297,8 +315,11 @@ export const getPatientDetails = async (
           result.suggestRadiologyCombo.map((res, index) => {
             var providerList = [];
 
-            res.providers?.map((res2, index) => {
-              providerList.push(res2.providerName);
+            // res.providers?.map((res2, index) => {
+            //   providerList.push(res2.providerName);
+            // });
+            res.providerNames?.map((res, index) => {
+              providerList.push(res);
             });
             const encounterDatearray = res?.encounterDate?.split(",");
             suggestListAll.push({
@@ -306,7 +327,7 @@ export const getPatientDetails = async (
               capturedSections: res.capturedSections,
               diagnosisCode: res.diagnosisCodeCombo,
               encounterDate: res.encounterDate,
-              encounterDateSplit: encounterDatearray,
+              encounterDateSplit: res.dateOfServices,
               getPlace: "Radio-combo",
               isHccValid: true,
               providerName: providerList,
@@ -314,7 +335,8 @@ export const getPatientDetails = async (
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
               providerDeatils: res.provider,
-              notes: res.notes
+              notes: res.notes,
+              hyperlinks:res?.hyperlinks
               // defaultPosition:res.defaultPosition
             });
           });
@@ -327,8 +349,11 @@ export const getPatientDetails = async (
         suggestLabList.map((res, index) => {
           var providerList = [];
 
-          res?.provider?.map((res2, index) => {
-            providerList.push(res2.providerName);
+          // res?.provider?.map((res2, index) => {
+          //   providerList.push(res2.providerName);
+          // });
+          res.providerNames?.map((res2) => {
+            providerList.push(res2);
           });
           const encounterDatearray = res?.encounterDate?.split(",");
           suggestListAll.push({
@@ -336,7 +361,7 @@ export const getPatientDetails = async (
             capturedSections: res.capturedSections,
             diagnosisCode: res.diagnosisCode,
             encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
+            encounterDateSplit: res.dateOfServices,
             getPlace: "Lab",
             isHccValid: true,
             defaultPosition: res.defaultPosition,
@@ -345,7 +370,8 @@ export const getPatientDetails = async (
             isRxHcc: res.isRxHcc,
             isComboCode: res.isComboCode,
             providerDeatils: res.provider,
-            notes: res.notes
+            notes: res.notes,
+            hyperlinks:res?.hyperlinks
           });
         });
       }
@@ -356,8 +382,11 @@ export const getPatientDetails = async (
             const encounterDatearray = res?.encounterDate?.split(",");
             var providerList = [];
 
-            res?.provider?.map((res, index) => {
-              providerList.push(res.providerName);
+            // res?.provider?.map((res, index) => {
+            //   providerList.push(res.providerName);
+            // });
+            res.providerNames?.map((res2) => {
+              providerList.push(res2);
             });
             suggestListAll.push({
               actualDescription: res.actualDescription,
@@ -366,7 +395,7 @@ export const getPatientDetails = async (
               capturedSections: res.capturedSections,
               diagnosisCode: res.diagnosisCode,
               encounterDate: res.encounterDate,
-              encounterDateSplit: encounterDatearray,
+              encounterDateSplit: res.dateOfServices,
               getPlace: "Hcc",
               defaultPosition: res.defaultPosition,
               providerName: providerList,
@@ -376,7 +405,8 @@ export const getPatientDetails = async (
               isRxHcc: res.isRxHcc,
               isComboCode: res.isComboCode,
               providerDeatils: res.provider,
-              notes: res.notes
+              notes: res.notes,
+              hyperlinks:res?.hyperlinks
             });
           }
         });
@@ -385,8 +415,11 @@ export const getPatientDetails = async (
         result?.suggestLabInReport?.map((res, index) => {
           var providerList = [];
 
-          res?.provider?.map((res2, index) => {
-            providerList.push(res2?.providerName);
+          // res?.provider?.map((res2, index) => {
+          //   providerList.push(res2?.providerName);
+          // });
+          res.providerNames?.map((res2) => {
+            providerList.push(res2);
           });
           const encounterDatearray = res?.encounterDate?.split(",");
           suggestListAll.push({
@@ -394,7 +427,7 @@ export const getPatientDetails = async (
             capturedSections: res.capturedSections,
             diagnosisCode: res.diagnosisCode,
             encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
+            encounterDateSplit: res.dateOfServices,
             getPlace: "Hcc",
             isHccValid: true,
             defaultPosition: res.defaultPosition,
@@ -403,7 +436,8 @@ export const getPatientDetails = async (
             isRxHcc: res.isRxHcc,
             isComboCode: res.isComboCode,
             providerDeatils: res.provider,
-            notes: res.notes
+            notes: res.notes,
+            hyperlinks:res?.hyperlinks
           });
         });
       }
@@ -411,8 +445,11 @@ export const getPatientDetails = async (
         result?.suggestRadiologyInReport?.map((res, index) => {
           var providerList = [];
 
-          res?.provider?.map((res2, index) => {
-            providerList.push(res2.providerName);
+          // res?.provider?.map((res2, index) => {
+          //   providerList.push(res2.providerName);
+          // });
+          res.providerNames?.map((res2) => {
+            providerList.push(res2);
           });
           const encounterDatearray = res?.encounterDate?.split(",");
           suggestListAll.push({
@@ -420,7 +457,7 @@ export const getPatientDetails = async (
             capturedSections: res.capturedSections,
             diagnosisCode: res.diagnosisCode,
             encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
+            encounterDateSplit: res.dateOfServices,
             getPlace: "Hcc",
             isHccValid: true,
             defaultPosition: res.defaultPosition,
@@ -429,7 +466,8 @@ export const getPatientDetails = async (
             isRxHcc: res.isRxHcc,
             isComboCode: res.isComboCode,
             providerDeatils: res.provider,
-            notes: res.notes
+            notes: res.notes,
+            hyperlinks:res?.hyperlinks
           });
         });
       }
@@ -442,8 +480,8 @@ export const getPatientDetails = async (
       if (result.comboDisease) {
         comboDis.map((res, index) => {
           var providerList = [];
-          res.providers?.map((res, index) => {
-            providerList.push(res.providerName);
+          res.providerNames?.map((res) => {
+            providerList.push(res);
           });
           const encounterDatearray = res?.encounterDate?.split(",");
           combiDisArray.push({
@@ -455,13 +493,14 @@ export const getPatientDetails = async (
             diseaseName: res.diseaseName,
             diagnosisCode: res.diagnosisCode,
             encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
+            encounterDateSplit: res.dateOfServices,
             providerName: providerList,
             providers: res.provider ? res.providers : res.provider,
             ruleType: res.ruleType,
             capturedSections: res.capturedSections,
             children: res.children ? res.children : [],
             expanded: true,
+            hyperlinks:res?.hyperlinks
           });
         });
       }
@@ -477,10 +516,10 @@ export const getPatientDetails = async (
       for (var key in validDis) {
         validDiseasesArray.push({ name: validDis[key] });
       }
-
-      setNewValidDiseaseList(validDisArray);
-      setSuggestedHccList(suggestListAll);
-      setDeletedHccList(deleteHccList);
+      setNewValidDiseaseList && setNewValidDiseaseList(validDisArray);      
+      setSuggestedHccList && setSuggestedHccList(suggestListAll);
+      setDeletedHccList && setDeletedHccList(deleteHccList);
+      setComboDiseaseCodesList && setComboDiseaseCodesList(combiDisArray)
 
       var capturedSectionsColorsMatching = [];
       var capturedSectionsArr = [];
@@ -573,7 +612,7 @@ export const getPatientDetails = async (
 
       validDiseaseNewRes.map((res) => {
         const array = res?.encounterDate?.split(",");
-        array?.map((res2) => {
+        res?.dateOfServices.map((res2) => {
           encounterDateArr.push({
             name: res2,
           });
@@ -591,7 +630,7 @@ export const getPatientDetails = async (
 
       result?.unMatchedDisease?.map((res) => {
         const array = res?.encounterDate?.split(",");
-        array?.map((res2) => {
+        res?.dateOfServices.map((res2) => {
           encounterDateArr.push({
             name: res2,
           });
@@ -599,7 +638,7 @@ export const getPatientDetails = async (
       });
       result?.suggestRadiology?.map((res) => {
         const array = res?.encounterDate?.split(",");
-        array?.map((res2) => {
+        res?.dateOfServices.map((res2) => {
           encounterDateArr.push({
             name: res2,
           });
@@ -608,7 +647,7 @@ export const getPatientDetails = async (
 
       result?.suggestLab?.map((res) => {
         const array = res?.encounterDate.split(",");
-        array.map((res2) => {
+        res?.dateOfServices.map((res2) => {
           encounterDateArr?.push({
             name: res2,
           });
@@ -617,7 +656,7 @@ export const getPatientDetails = async (
 
       result?.suggestLabInReport?.map((res) => {
         const array = res?.encounterDate?.split(",");
-        array?.map((res2) => {
+        res?.dateOfServices.map((res2) => {
           encounterDateArr.push({
             name: res2,
           });
@@ -625,7 +664,7 @@ export const getPatientDetails = async (
       });
       result?.suggestRadiologyInReport?.map((res) => {
         const array = res?.encounterDate?.split(",");
-        array?.map((res2) => {
+        res?.dateOfServices.map((res2) => {
           encounterDateArr.push({
             name: res2,
           });
@@ -666,35 +705,35 @@ export const getPatientDetails = async (
 
       meatCri?.map((res, index) => {
         if (
-          res.monitorCapturedFromHeader != "" &&
-          res.monitorCapturedFromHeader != null
+          res.monitorAspect != "" &&
+          res.monitorAspect != null
         ) {
           meatMoniterHead.push({
-            header: res.monitorCapturedFromHeader.toLowerCase(),
+            header: res.monitorAspect.toLowerCase(),
           });
         }
         if (
-          res.evaluateCapturedFromHeader != "" &&
-          res.evaluateCapturedFromHeader != null
+          res.evaluateAspect != "" &&
+          res.evaluateAspect != null
         ) {
           meatEvaluteHead.push({
-            header: res.evaluateCapturedFromHeader.toLowerCase(),
+            header: res.evaluateAspect.toLowerCase(),
           });
         }
         if (
-          res.assessmentCapturedFromHeader != "" &&
-          res.assessmentCapturedFromHeader != null
+          res.assessmentAspect != "" &&
+          res.assessmentAspect != null
         ) {
           meatAssesmentHead.push({
-            header: res.assessmentCapturedFromHeader.toLowerCase(),
+            header: res.assessmentAspect.toLowerCase(),
           });
         }
         if (
-          res.treatmentCapturedFromHeader != "" &&
-          res.treatmentCapturedFromHeader != null
+          res.treatmentAspect != "" &&
+          res.treatmentAspect != null
         ) {
           meatTreatMentHead.push({
-            header: res.treatmentCapturedFromHeader.toLowerCase(),
+            header: res.treatmentAspect.toLowerCase(),
           });
         }
         var newArray = [];
@@ -735,24 +774,31 @@ export const getPatientDetails = async (
             treatment: res.treatment,
             isMeatCriteriaPresent: res.isMeatCriteriaPresent,
             category: res.category,
-            encounterDate: res.encounterDate,
+            encounterDate: res.dateOfServices,
+            hyperlinks:res?.hyperlinks
           });
         } else {
           var providerList = [];
-          res?.visitDetailsDTO?.providerSet?.map((res, index) => {
-            providerList.push(res.providerName);
+          // res?.visitDetailsDTO?.providerSet?.map((res, index) => {
+          //   providerList.push(res.providerName);
+          // });
+          res.providerNames?.map((res, index) => {
+            providerList.push(res);
           });
           const encounterDatearray = res?.encounterDate?.split(",");
 
           meatListArr.push({
             diagnosisCode: res.diagnosisCode,
             diseaseName: res.diseaseName,
-            monitorCapturedFromHeader: res.monitorCapturedFromHeader,
-            assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
-            evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
-            treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+            monitorAspect: res.monitorAspect,
+            monitorHyperLink:res.monitorHyperLink,
+            assessmentAspect: res.assessmentAspect,
+            assessmentHyperLink:res.assessmentHyperLink,
+            evaluateAspect: res.evaluateAspect,
+            evaluateHyperLink:res.evaluateHyperLink,
+            treatmentAspect: res.treatmentAspect,
+            treatmentHyperLink:res.treatmentHyperLink,
             providerName: providerList,
-
             monitorColor: COLORS[index],
             meatColor: COLORS[index],
             assessment: res.assessment,
@@ -762,7 +808,8 @@ export const getPatientDetails = async (
             isMeatCriteriaPresent: res.isMeatCriteriaPresent,
             category: res.category,
             encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
+            encounterDateSplit: res.dateOfService,
+            hyperlinks:res?.hyperlinks
           });
         }
       });
@@ -801,10 +848,8 @@ export const getPatientDetails = async (
 
       setCaptureSectionMatching(newArrayColorMatchs);
 
-      setMeatCriteriaList(meatListArr);
-      if(setAllDisList){
-      setAllDisList([...validDisArray,...deleteHccList,...suggestListAll])
-      }
+      setMeatCriteriaList && setMeatCriteriaList(meatListArr);
+      setAllDisList && setAllDisList([...validDisArray,...deleteHccList,...suggestListAll])
 
       if (result.suggestRadiology != null) {
         if (result.suggestRadiology.length != 0) {
