@@ -335,7 +335,7 @@ export default function Patient() {
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
-      navigate.push("/reviewer/patients/details");
+      navigate.push("/admin/patients/details");
     } else {
       notification.warning({
         message: data.patientId + " file not processed Please wait",

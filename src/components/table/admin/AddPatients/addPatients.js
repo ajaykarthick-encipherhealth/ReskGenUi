@@ -33,7 +33,7 @@ function AddPatientListTable({
       const controller = new AbortController();
       const { signal } = controller;
       controller.abort();
-      localStorage.setItem("patientId", data.patientId);
+      localStorage.setItem("patientId", data?.patientId);
       // localStorage.setItem('paginations', JSON.stringify(page))
       navigate.push({ pathname: "/admin/patients/details", query: page });
     } else {
