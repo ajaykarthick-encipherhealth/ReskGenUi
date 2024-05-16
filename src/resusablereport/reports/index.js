@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import Header from "../../jsx/layouts/nav/Header";
 import styles from "./report.module.css";
 import ReviewerReport from "./reviewerReport";
-import SentRewiewer from "./sentReport";
 import ReceivedReport from "./receivedReport";
 import { getActiveTab } from "../../store/actions/l2Action/AuditReportAction";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

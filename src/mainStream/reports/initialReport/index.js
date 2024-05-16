@@ -200,7 +200,7 @@ export const processstatusBodyTemplate = (rowData) => {
   }
 };
 
-const ReviewerReport = ({
+const InitialCard = ({
   patientDetails,
   paginationFirst,
   ReportPatientDetails,
@@ -544,4 +544,4 @@ const ReviewerReport = ({
 const enhancer = connect((state) => ({
   getFlagsData: state?.reviewer?.workQueue?.flags?.data,
 }));
-export default enhancer(ReviewerReport);
+export default enhancer(InitialCard);
