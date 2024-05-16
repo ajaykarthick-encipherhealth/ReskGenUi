@@ -12,14 +12,13 @@ const Timeline = ({
 }) => {
   const underScoreRemove = (value) => {
     if (value) {
-      var str = value;
-      var newStr = str.replace(/_/g, " ");
+      let str = value;
+      let newStr = str.replace(/_/g, " ");
       return newStr;
     }
   };
 
   const getStatusColors = (state) => {
-    console.log(status);
     let previousStateColor = "";
     switch (state) {
       case "COMPLETED":
