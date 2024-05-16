@@ -455,9 +455,7 @@ const HccCards = ({
                                 fileId,
                                 patientDocumentResult,
                                 fileInitialPage,
-                                setFileInitialPage,
-                                data?.hyperlinks,
-                                encounterDateMatching
+                                setFileInitialPage
                               )}
                             </div>
                           </div>
