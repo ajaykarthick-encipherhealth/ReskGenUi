@@ -18,14 +18,14 @@ const CardComponent = ({
 }) => {
   const handleDateFormat = (date) => {
     return dayjs(date).format("MM-DD-YYYY");
-  };    
-  console.log(data,"data")
+  };
+  console.log(data, "data");
   return (
     <div className={styles.cardContainer}>
       {data?.length > 0 ? (
         <div
           key={index}
-          style={{ marginBottom: "10px" }}
+          style={{ marginBottom: "10px", cursor: "pointer" }}
           className={`${styles.card} ${
             index === selectedCardIndex ? styles.selectedCard : ""
           }`}
@@ -46,7 +46,8 @@ const CardComponent = ({
                 </div>
                 <div className={`col-xl-2 ${styles.dataContainer}`}>
                   <div
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       setSelectedRows(item);
                       dispatch(selectedReport(item));
                       setOpenEdit(true);

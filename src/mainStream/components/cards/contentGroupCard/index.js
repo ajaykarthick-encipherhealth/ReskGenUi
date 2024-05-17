@@ -1,6 +1,5 @@
-
 import React from "react";
-import { Tooltip } from "antd";
+import { Tooltip, notification } from "antd";
 import styles from "../../../../resusablereport/reports/report.module.css";
 import TableStyle from "../../../../components/table/table.module.css";
 import dayjs from "dayjs";
@@ -10,12 +9,14 @@ import {
 } from "../../../../components/headerFilters/functions";
 import { getFlags } from "../../../../components/reuseableFunctions";
 import { SVGICON } from "../../../../jsx/constant/theme";
+import { patientDetails } from "../../../../stores/authflow/actions";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
 
 const ContentGroupCard = ({
   item,
   handleRowCheckboxChange,
   selectedRows,
-  handleTableRowClick,
   auditstatusBodyTemplate,
   processstatusBodyTemplate,
   flag,
@@ -30,7 +31,51 @@ const ContentGroupCard = ({
   patientAllocatedFirstName,
   patientAllocatedLastName,
   patientAllocatedProfileImage,
+  content,
+  page
 }) => {
+  const dispatch = useDispatch();
+  const navigate = useRouter();
+  const gotoPatientDetails = (data) => {
+    if (!data) {
+      notification.warning({
+        message: "Data is undefined. Please wait.",
+      });
+      return;
+    }
+
+    dispatch(patientDetails(data));
+
+    if (data.processedStatus === "COMPLETED") {
+      const controller = new AbortController();
+      const currentRole = localStorage.getItem("userRole");
+      controller.abort();
+      localStorage.setItem("patientId", data.patientId);
+      navigate.push({
+        pathname: `/${currentRole}/patients/details`,
+        query: page,
+      });
+    } else {
+      notification.warning({
+        message: data.patientId + " file not processed. Please wait.",
+      });
+    }
+  };
+
+  const handleTableRowClick = (id) => {
+    console.log('handleTableRowClick - id:', id);
+    console.log('handleTableRowClick - content:', content);
+
+    const clickedData = content.find((item) => item.patientId === id);
+    if (clickedData) {
+      gotoPatientDetails(clickedData);
+    } else {
+      notification.warning({
+        message: "No data found for this row. Please wait.",
+      });
+    }
+  };
+
   return (
     <div className={styles.card}>
       <div className={styles.contentGroup} style={{ cursor: "pointer" }}>

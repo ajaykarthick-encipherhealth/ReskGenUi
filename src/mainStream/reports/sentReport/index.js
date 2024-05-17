@@ -25,6 +25,7 @@ import {
   getChartAdminOption,
 } from "../../../mainStream/components/chartUtils";
 import TabSwitcher from "../../components/tabSwitch";
+import Pagination from "../../components/pagination";
 
 const SentReport = ({
   details,
@@ -290,20 +291,12 @@ const SentReport = ({
           </div>
         </div>
       </div>
-      <div className="pagination-container">
-        <Paginator
-          first={paginationFirst}
-          rows={7}
-          totalRecords={details?.receivedReportDTOList?.totalElements}
-          onPageChange={onSentPageChange}
-        />
-        <div className="total-pages">
-          Total count:{" "}
-          {details?.receivedReportDTOList?.totalElements > 0
-            ? details?.receivedReportDTOList?.totalElements
-            : 0}
-        </div>
-      </div>
+      
+      <Pagination
+        first={paginationFirst}
+        totalRecords={details?.receivedReportDTOList?.totalElements}
+        onPageChange={onSentPageChange}
+      />
       {openEdit && (
         <Export
           isModalVisible={openEdit}

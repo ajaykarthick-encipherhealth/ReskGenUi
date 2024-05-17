@@ -22,6 +22,7 @@ import {
   getChartAdminOption,
 } from "../../../mainStream/components/chartUtils";
 import GroupCard from "../../../mainStream/components/cards/groupCard";
+import Pagination from "../../components/pagination";
 const ReceivedReport = ({
   details,
   onPageChange,
@@ -261,20 +262,12 @@ const ReceivedReport = ({
           </div>
         </div>
       </div>
-      <div className="pagination-container">
-        <Paginator
-          first={paginationFirst}
-          rows={15}
-          totalRecords={details?.reportStatusDTOList?.totalElements}
-          onPageChange={onPageChange}
-        />
-        <div className="total-pages">
-          Total count:{" "}
-          {details?.reportStatusDTOList?.totalElements > 0
-            ? details?.reportStatusDTOList?.totalElements
-            : 0}
-        </div>
-      </div>
+
+      <Pagination
+        first={paginationFirst}
+        totalRecords={details?.reportStatusDTOList?.totalElements}
+        onPageChange={onPageChange}
+      />
     </>
   );
 };

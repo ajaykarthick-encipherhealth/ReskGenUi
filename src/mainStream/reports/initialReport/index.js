@@ -1,12 +1,7 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import styles from "../../../resusablereport/reports/report.module.css";
-import {
-  Popover,
-  Row,
-  Empty,
-  notification,
-} from "antd";
+import { Popover, Row, Empty, notification } from "antd";
 import { extractLatestData } from "../../../pages/supervisor/auditing";
 import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
 import NotAudited from "../../../../src/images/trackingImages/NotAuditedTrack.png";
@@ -26,13 +21,10 @@ import auditedIcon from "../../.../../../images/trackingImages/AuditedTrack.png"
 import reeAuditIcon from "../../.../../../images/trackingImages/reAuditTrack.png";
 import notAudited from "../../.../../../images/trackingImages/NotAuditedTrack.png";
 import auditDeclined from "../../.../../../images/trackingImages/AuditDeclined.png";
-import { Paginator } from "primereact/paginator";
+
 import TableStyle from "../../../components/table/table.module.css";
 import Image from "next/image";
-import {
-  renderUserPrfoileAvatar,
-
-} from "../../../components/headerFilters/functions";
+import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
 import { selectedRow } from "../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
 import { connect } from "react-redux";
@@ -42,6 +34,7 @@ import SubCard from "../../../mainStream/components/cards/subCard";
 import AllocationCount from "../../../mainStream/components/allocationCount";
 import Flags from "../../../mainStream/components/flagCount";
 import MiniCards from "../../../mainStream/components/miniCards";
+import Pagination from "../../components/pagination";
 
 export const auditstatusBodyTemplate = (rowData) => {
   const declinedDataFromAudit = extractLatestData(rowData?.auditDeclinedNotes);
@@ -362,6 +355,31 @@ const InitialCard = ({
     gotoPatientDetails(clickedData);
   };
 
+  const subCardData = [
+    {
+      title: "No of charts",
+      value: reportListAll?.response?.totalElements,
+    },
+    {
+      title: "Avg RAF score",
+      value: reportListAll?.rafAverage?.toFixed(4),
+    },
+    {
+      title: "HCC Count",
+      value: reportListAll?.totalHccCount,
+    },
+  ];
+  const allocationCountData = [
+    {
+      title: "Supervisor",
+      allocationCount: reportListAll?.supervisorAllocationCount,
+    },
+    {
+      title: "Reviewer",
+      allocationCount: reportListAll?.reviewerAllocationCount,
+    },
+  ];
+
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
   }, [selectedRows]);
@@ -420,9 +438,11 @@ const InitialCard = ({
                           <div className={styles.cardContainer}>
                             {reportListAll?.response?.data?.map((item, id) => (
                               <ContentGroupCard
+                              content={reportListAll?.response?.data}
                                 key={id}
                                 item={item}
                                 flag={item?.flag}
+                                page={page}
                                 handleRowCheckboxChange={
                                   handleRowCheckboxChange
                                 }
@@ -464,19 +484,14 @@ const InitialCard = ({
                       <div className={styles.cardContainer}>
                         <div className={styles.card1}>
                           <div className={styles.summaryText}>Summary</div>
-                          <div className="col-xl-12  d-flex mt-4">
-                            <SubCard
-                              title="No of charts"
-                              value={reportListAll?.response?.totalElements}
-                            />
-                            <SubCard
-                              title="Avg RAF score"
-                              value={reportListAll?.rafAverage?.toFixed(4)}
-                            />
-                            <SubCard
-                              title="HCC Count"
-                              value={reportListAll?.totalHccCount}
-                            />
+                          <div className="col-xl-12 d-flex mt-4">
+                            {subCardData.map((card, index) => (
+                              <SubCard
+                                key={index}
+                                title={card.title}
+                                value={card.value}
+                              />
+                            ))}
                           </div>
                           <div className={` pt-2 ${styles.summaryText}`}>
                             Overall Status
@@ -499,22 +514,17 @@ const InitialCard = ({
                               flagsData={getFlagsData?.response}
                               styles={styles}
                             />
-                            <AllocationCount
-                              title="Supervisor"
-                              allocationCount={
-                                reportListAll?.supervisorAllocationCount
-                              }
-                              renderUserPrfoileAvatar={renderUserPrfoileAvatar}
-                              styles={styles}
-                            />
-                            <AllocationCount
-                              title="Reviewer"
-                              allocationCount={
-                                reportListAll?.reviewerAllocationCount
-                              }
-                              renderUserPrfoileAvatar={renderUserPrfoileAvatar}
-                              styles={styles}
-                            />
+                            {allocationCountData.map((item, index) => (
+                              <AllocationCount
+                                key={index}
+                                title={item.title}
+                                allocationCount={item.allocationCount}
+                                renderUserPrfoileAvatar={
+                                  renderUserPrfoileAvatar
+                                }
+                                styles={styles}
+                              />
+                            ))}
                           </div>
                         </div>
                       </div>
@@ -526,17 +536,11 @@ const InitialCard = ({
           )}
         </div>
       </div>
-      <div className="pagination-container">
-        <Paginator
-          first={paginationFirst}
-          rows={8}
-          totalRecords={ReportPatientDetails?.response?.totalElements}
-          onPageChange={onPageChange}
-        />
-        <div className="total-pages">
-          Total count: {ReportPatientDetails?.response?.totalElements}
-        </div>
-      </div>
+      <Pagination
+        first={paginationFirst}
+        totalRecords={ReportPatientDetails?.response?.totalElements}
+        onPageChange={onPageChange}
+      />
     </>
   );
 };

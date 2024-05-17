@@ -14,7 +14,7 @@ const GroupCard = ({
   const handleDateFormat = (date) => {
     return dayjs(date).format("MM-DD-YYYY");
   };
-  console.log(data, "data");
+
   const accessTemplate = (item) => {
     switch (item?.role) {
       case "READ":
