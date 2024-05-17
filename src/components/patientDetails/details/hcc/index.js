@@ -7,6 +7,7 @@ import Meat from "./meat";
 import RafScore from "./raf";
 import MeatQuery from "./meatQuery";
 import File from "./file";
+import { Button, Dropdown, Select } from "antd";
 const Hcc = ({ year }) => {
   const [activeTabHead, setActiveTabHead] = useState(1);
   const [flagTagActive, setFlagTagActive] = useState(false);
@@ -34,14 +35,16 @@ const Hcc = ({ year }) => {
       setActiveMeatTitle(null);
     }, 10000);
   }, [activeMeatTitle]);
-
+  const handleOptions = (value) => {
+    console.log(value);
+  };
   return (
     <div className={visitStyles.visitdata_tab_body}>
       <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
         <div className="custom-tab-1 ">
           <Tab.Container activeKey={activeTabHead}>
             <div className="row">
-              <div className="col-xl-8">
+              <div className="col-xl-12">
                 <Nav as="ul" className="nav nav-tabs">
                   <Nav.Item as="li" className="nav-item">
                     <Nav.Link
@@ -103,6 +106,16 @@ const Hcc = ({ year }) => {
                     >
                       Query
                     </Nav.Link>
+                  </Nav.Item>
+                  <Nav.Item as="li" className="nav-item">
+                    <Select
+                      placeholder="Select DOS"
+                      option={[]}
+                      onChange={handleOptions}
+                    />
+                  </Nav.Item>
+                  <Nav.Item as="li" className="nav-item mx-4">
+                    <Button>hg</Button>
                   </Nav.Item>
                 </Nav>
               </div>

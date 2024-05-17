@@ -371,7 +371,8 @@ const File = ({
               />
             </Button>
           </div>
-          <div className={isFileFormShow ? "col-xl-7" : "col-xl-6"}>
+        
+          <div className={"col-xl-7"}>
             <Popover
               open={popoverVisible}
               content={PopContent}
