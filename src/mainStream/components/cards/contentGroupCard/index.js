@@ -1,4 +1,4 @@
-// components/ContentGroupCard.js
+
 import React from "react";
 import { Tooltip } from "antd";
 import styles from "../../../../resusablereport/reports/report.module.css";

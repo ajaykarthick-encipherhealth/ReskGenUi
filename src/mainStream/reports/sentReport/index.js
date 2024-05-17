@@ -6,10 +6,6 @@ import { useRouter } from "next/router";
 import { Popover, Avatar, Empty } from "antd";
 import ReactECharts from "echarts-for-react";
 import { useDispatch } from "react-redux";
-import {
-  dateFormate,
-  renderUserPrfoileAvatar,
-} from "../../../components/headerFilters/functions";
 import EditButton from "../../../images/adminUsers/EditButton";
 import SpinnerDots from "../../../components/spinner";
 import Export from "../../../pages/admin/reports/Export";
