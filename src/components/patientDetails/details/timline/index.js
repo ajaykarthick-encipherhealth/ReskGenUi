@@ -131,9 +131,8 @@ const Timeline = ({
               Changed from{" "}
               <span
                 style={{
-                  padding: "0 5px 0 5px",
                   color: getStatusColors(item?.previousProcessedState),
-                  fontSize:"12px"
+                  fontSize: "12px",
                 }}
               >
                 {item?.previousProcessedState}
@@ -147,9 +146,8 @@ const Timeline = ({
               Changed from{" "}
               <span
                 style={{
-                  padding: "0 5px 0 5px",
                   color: getStatusColors(item?.previousProcessedState),
-                  fontSize:"12px"
+                  fontSize: "12px",
                 }}
               >
                 {item?.previousProcessedState}
@@ -163,9 +161,8 @@ const Timeline = ({
               Changed from{" "}
               <span
                 style={{
-                  padding: "0 5px 0 5px",
                   color: getStatusColors(item?.previousProcessedState),
-                  fontSize:"12px"
+                  fontSize: "12px",
                 }}
               >
                 {item?.previousProcessedState}
@@ -179,9 +176,8 @@ const Timeline = ({
               Changed from{" "}
               <span
                 style={{
-                  padding: "0 5px 0 5px",
                   color: getStatusColors(item?.previousProcessedState),
-                  fontSize:"12px"
+                  fontSize: "12px",
                 }}
               >
                 {item?.previousProcessedState}
@@ -193,12 +189,11 @@ const Timeline = ({
         case "AUDIT_DECLINED":
           return (
             <div className="d-flex">
-              Changed from {" "}
+              Changed from{" "}
               <span
                 style={{
-                  padding: "0 5px 0 5px",
                   color: getStatusColors(item?.previousProcessedState),
-                  fontSize:"12px"
+                  fontSize: "12px",
                 }}
               >
                 {item?.previousProcessedState}
@@ -216,9 +211,8 @@ const Timeline = ({
               Changed from{" "}
               <span
                 style={{
-                  padding: "0 5px 0 5px",
                   color: getStatusColors(item?.previousProcessedState),
-                  fontSize:"12px"
+                  fontSize: "12px",
                 }}
               >
                 {item?.previousProcessedState}
@@ -262,9 +256,8 @@ const Timeline = ({
               Changed from{" "}
               <span
                 style={{
-                  padding: "0 5px 0 5px",
                   color: getStatusColors(item?.previousProcessedState),
-                  fontSize:"12px"
+                  fontSize: "12px",
                 }}
               >
                 {item?.previousProcessedState}
@@ -278,9 +271,9 @@ const Timeline = ({
               Changed from{" "}
               <span
                 style={{
-                  padding: "0 5px 0 5px",
+                  //
                   color: getStatusColors(item?.previousProcessedState),
-                  fontSize:"12px"
+                  fontSize: "12px",
                 }}
               >
                 {item?.previousProcessedState}
@@ -294,9 +287,8 @@ const Timeline = ({
               Changed from{" "}
               <span
                 style={{
-                  padding: "0 5px 0 5px",
                   color: getStatusColors(item?.previousProcessedState),
-                  fontSize:"12px"
+                  fontSize: "12px",
                 }}
               >
                 {item?.previousProcessedState}
@@ -310,9 +302,8 @@ const Timeline = ({
               Changed from
               <span
                 style={{
-                  padding: "0 5px 0 5px",
                   color: getStatusColors(item?.previousProcessedState),
-                  fontSize:"12px"
+                  fontSize: "12px",
                 }}
               >
                 {item?.previousProcessedState}

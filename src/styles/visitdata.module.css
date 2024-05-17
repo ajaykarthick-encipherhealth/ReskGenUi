@@ -748,7 +748,7 @@
 }
 
 .commentDrawer {
-  width: auto !important;
+  /* width: 370px !important; */
   background-color: #fff !important;
 }
 
