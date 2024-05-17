@@ -21,7 +21,7 @@ import { connect, useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import InitialCard from "../../../mainStream/reports/initialReport";
 import SentReport from "../../../mainStream/reports/sentReport";
-import ReceivedReport from "../../../resusablereport/reports/receivedReport";
+import ReceivedReport from "../../../mainStream/reports/receivedReport";
 import Export from "../../../resusablereport/reports/Export";
 import { actions as workflowActions } from "../../../stores/reviewer/workqueue";
 import { selectedReport } from "../../../store/actions/adminAction/ReportActions";

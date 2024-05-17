@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styles from "../../../resusablereport/reports/report.module.css";
 import { Paginator } from "primereact/paginator";
-import dayjs from "dayjs";
 import { useRouter } from "next/router";
-import { Popover, Avatar, Empty } from "antd";
 import ReactECharts from "echarts-for-react";
-import { useDispatch } from "react-redux";
-import EditButton from "../../../images/adminUsers/EditButton";
 import SpinnerDots from "../../../components/spinner";
-import Export from "../../../pages/admin/reports/Export";
+import { Empty } from "antd";
 import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
-import CardComponent from "../../../mainStream/components/cards/miniGroupCard";
+import { useDispatch } from "react-redux";
+import TabSwitcher from "../../../mainStream/components/tabSwitch";
 import {
   AccessCountSection,
   OverallReportsSection,
@@ -18,59 +15,57 @@ import {
 } from "../../../mainStream/components/subMiniCard";
 import CustomTable from "../../../mainStream/components/customTable";
 import { color } from "highcharts";
+
 import {
-  colors,
   getChartOption,
   getChartUserOption,
   getChartAdminOption,
 } from "../../../mainStream/components/chartUtils";
-import TabSwitcher from "../../components/tabSwitch";
-
-const SentReport = ({
+import GroupCard from "../../../mainStream/components/cards/groupCard";
+const ReceivedReport = ({
   details,
-  onSentPageChange,
+  onPageChange,
   paginationFirst,
   receivedPageNo,
   receivedStartDate,
   receivedEndDate,
 }) => {
   const dispatch = useDispatch();
-  const router = useRouter();
+  const [reportActiveTab, setReportActiveTab] = useState("Supervisor");
   const [selectedCardIndex, setSelectedCardIndex] = useState(0);
-  const [selectedCard, setSelectedCard] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
-  const [selectAll, setSelectAll] = useState(false);
-  const [reportActiveTab, setReportActiveTab] = useState("Supervisor");
 
+  useEffect(() => {
+    if (details?.reportStatusDTOList && details?.reportStatusDTOList > 0) {
+      handleCardSelection(details?.reportStatusDTOList[0], 0);
+    }
+  }, [details]);
+
+  const router = useRouter();
   const handleTabs = (tab) => {
     setReportActiveTab(tab);
   };
-
-  const data =
-    details?.sentReportUserWiseCountDtoByRole?.sentReportUserWiseCountListForSupervisor?.map(
-      (item) => ({
-        value: item.userCount,
-        name: `${item.userNameDTO?.firstName} ${item.userNameDTO?.lastName}`,
-      })
+  const handleReceiverReport = (item) => {
+    const info = {
+      reportUser: item,
+      receivedPageNo: receivedPageNo,
+      receivedStartDate: receivedStartDate,
+      receivedEndDate: receivedEndDate,
+    };
+    dispatch(selectedReport(info));
+    const currentpath = localStorage.getItem("userRole");
+    router?.push(
+      `/${currentpath}/report/individualreport?reportId=${
+        item?.reportId
+      }&isAdminPage=${true}&page=${receivedPageNo}&limit=${paginationFirst}`
     );
-  const datas =
-    details?.sentReportUserWiseCountDtoByRole?.sentReportUserWiseCountListForAdmin?.map(
-      (item) => ({
-        value: item?.userCount,
-        name: `${item?.userNameDTO?.firstName} ${item?.userNameDTO?.lastName}`,
-      })
-    );
-
-  const nameColors = {};
-  const getRandomColor = (letter) => colors[letter.toUpperCase()] || "#B35CE1";
-  datas?.forEach((item) => {
-    const firstLetter = item?.name[0];
-
-    if (!nameColors[item?.name]) {
-      nameColors[item?.name] = getRandomColor(firstLetter);
-    }
-  });
+  };
+  const options = getChartOption(details);
+  const userOptions = getChartUserOption(details);
+  const adminOptions = getChartAdminOption(details);
+  const selectedChartOption =
+    reportActiveTab === "Supervisor" ? userOptions : adminOptions;
   const excelCount =
     details?.sentReportCountByTypeDTOList?.find((item) => item._id === "EXCEL")
       ?.count || 0;
@@ -89,44 +84,21 @@ const SentReport = ({
       color: "#0A9FFF",
     },
   ];
-
-  useEffect(() => {
-    if (
-      details?.receivedReportDTOList?.data &&
-      details?.receivedReportDTOList?.data > 0
-    ) {
-      handleCardSelection(details?.receivedReportDTOList?.data[0], 0);
-    }
-    console.log(details?.receivedReportDTOList?.data, "rece");
-  }, [details]);
-
-  const handleCardSelection = (item, index) => {
-    setSelectedCardIndex(index);
-    setSelectedCard(item);
-  };
-
-  const closeModal = () => {
-    setOpenEdit(false);
-  };
-  const options = getChartOption(details);
-  const userOptions = getChartUserOption(details);
-  const adminOptions = getChartAdminOption(details);
-  const selectedChartOption =
-    reportActiveTab === "Supervisor" ? userOptions : adminOptions;
-  const handleReceiverReport = (item) => {
-    const info = {
-      reportUser: item,
-      receivedPageNo: receivedPageNo,
-      receivedStartDate: receivedStartDate,
-      receivedEndDate: receivedEndDate,
-    };
-    dispatch(selectedReport(info));
-    router?.push(
-      `/supervisor/report/individualreport?reportId=${
-        item?._id
-      }&sentreport=${true}&page=${receivedPageNo}&limit=${paginationFirst}`
+  const data =
+    details?.sentReportUserWiseCountDtoByRole?.sentReportUserWiseCountListForSupervisor?.map(
+      (item) => ({
+        value: item.userCount,
+        name: `${item.userNameDTO?.firstName} ${item.userNameDTO?.lastName}`,
+      })
     );
-  };
+  const datas =
+    details?.sentReportUserWiseCountDtoByRole?.sentReportUserWiseCountListForAdmin?.map(
+      (item) => ({
+        value: item?.userCount,
+        name: `${item?.userNameDTO?.firstName} ${item?.userNameDTO?.lastName}`,
+      })
+    );
+
   return (
     <>
       <div>
@@ -136,16 +108,16 @@ const SentReport = ({
               <div>
                 <div className=" col-xl-12 d-flex">
                   <div className="col-xl-5">
-                    {!details?.receivedReportDTOList?.data ? (
+                    {!details?.reportStatusDTOList.content ? (
                       <SpinnerDots />
                     ) : (
                       <div>
-                        {details?.receivedReportDTOList?.data?.length > 0 ? (
-                          details?.receivedReportDTOList?.data.map(
+                        {details?.reportStatusDTOList.content.length > 0 ? (
+                          details?.reportStatusDTOList.content.map(
                             (item, index) => (
-                              <CardComponent
+                              <GroupCard
                                 key={index}
-                                data={details?.receivedReportDTOList?.data}
+                                data={details?.reportStatusDTOList.content}
                                 selectedCardIndex={selectedCardIndex}
                                 handleReceiverReport={handleReceiverReport}
                                 setSelectedRows={setSelectedRows}
@@ -166,7 +138,7 @@ const SentReport = ({
                   </div>
 
                   <div className="col-xl-7" style={{ marginLeft: "10px" }}>
-                    {!details?.receivedReportDTOList?.data ? (
+                    {!details?.reportStatusDTOList?.content ? (
                       <SpinnerDots />
                     ) : (
                       <div className={styles.cardContainer}>
@@ -175,11 +147,10 @@ const SentReport = ({
                           <div className="col-xl-12  d-flex mt-4">
                             <OverallReportsSection
                               totalReports={
-                                details?.receivedReportDTOList?.totalElements
+                                details?.reportStatusDTOList?.totalElements
                               }
                               styles={styles}
                             />
-
                             <OverallUsersSection
                               totalUsers={details?.overAllUsersCount}
                               styles={styles}
@@ -293,30 +264,19 @@ const SentReport = ({
       <div className="pagination-container">
         <Paginator
           first={paginationFirst}
-          rows={7}
-          totalRecords={details?.receivedReportDTOList?.totalElements}
-          onPageChange={onSentPageChange}
+          rows={15}
+          totalRecords={details?.reportStatusDTOList?.totalElements}
+          onPageChange={onPageChange}
         />
         <div className="total-pages">
           Total count:{" "}
-          {details?.receivedReportDTOList?.totalElements > 0
-            ? details?.receivedReportDTOList?.totalElements
+          {details?.reportStatusDTOList?.totalElements > 0
+            ? details?.reportStatusDTOList?.totalElements
             : 0}
         </div>
       </div>
-      {openEdit && (
-        <Export
-          isModalVisible={openEdit}
-          closeModal={closeModal}
-          setIsModalVisible={setOpenEdit}
-          setSelectedRows={setSelectedRows}
-          setSelectAll={setSelectAll}
-          selectedRows={selectedRows}
-          isSent={true}
-        />
-      )}
     </>
   );
 };
 
-export default SentReport;
+export default ReceivedReport;
