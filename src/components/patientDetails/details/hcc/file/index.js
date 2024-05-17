@@ -25,7 +25,6 @@ import { getPatientDetails } from "../../components/function/GetData";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { onDragEnd } from "../../components/function/ReusableFunctions";
 
-
 const File = ({
   popoverVisible,
   setPopoverVisible,
@@ -33,6 +32,9 @@ const File = ({
   setActiveTabHead,
   setActiveMeatTitle,
   setActiveComboTree,
+  pageNumberOptions, 
+  setPageNumberOptions,
+  search, setSearch
 }) => {
   const dispatch = useDispatch();
 
@@ -75,16 +77,15 @@ const File = ({
   const [captureSectionMatching, setCaptureSectionMatching] = useState([]);
   const [encounterDateMatching, setEncounterDateMatching] = useState([]);
   const [fileModalHeader, setFileModalHeader] = useState("");
-  const [pageNumberOptions, setPageNumberOptions] = useState([]);
+  // const [pageNumberOptions, setPageNumberOptions] = useState([]);
   const [fileLoading, setFileLoading] = useState(false);
   const [hccVersionDetails, setHccVersionDetails] = useState(null);
-  const [search, setSearch] = useState();
+  // const [search, setSearch] = useState();
   const [isAddHccForm, setIsAddHccForm] = useState(false);
   const [isEditHccForm, setIsEditHccForm] = useState(false);
   const [formValues, setFormValues] = useState(false);
   const [formEditPlace, setFormEditPlace] = useState("");
   const [allDisList, setAllDisList] = useState([]);
-
 
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
@@ -213,58 +214,12 @@ const File = ({
     setPageNumberOptions(groupPageNumber);
   };
 
-  const handleChangePageNumber = async (value) => {
-    setPopoverVisible(false);
-    var str_array = value.split(",");
-    var pageNumber = str_array[0];
-    setSearch({
-      value: "",
-      page: pageNumber,
-    });
-  };
+ 
   const showErrorMessage = () => {
     setOpens(false);
     notification.destroy();
     notification.info({ message: "Tree Not Available", duration: 1 });
   };
-  const PopContent = (
-    <div className={styles.innerPop}>
-      <div className={styles.displayDiv}>
-        <div className={styles.closeContainer}>
-          <FontAwesomeIcon
-            icon={faClose}
-            style={{
-              size: 5,
-              color: "#fff",
-            }}
-            className={styles.close_icon}
-            onClick={() => setPopoverVisible(false)}
-          />
-        </div>
-        {pageNumberOptions
-          ? pageNumberOptions?.map((data) => (
-              <div className={styles.hoverDiv}>
-                <div className={`row ${styles.selectDetailsContainer}`}>
-                  <div className="col-xl-3">
-                    <span className={styles.selectHead}>{data.label}</span>
-                  </div>
-                  {data?.options.map((data2) => (
-                    <div className={`col-xl-3 ${styles.selectDetailsDiv}`}>
-                      <span
-                        onClick={() => handleChangePageNumber(data2.value)}
-                        className={styles.selectDetails}
-                      >
-                        {data2?.label}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))
-          : null}
-      </div>
-    </div>
-  );
 
   return (
     <>
@@ -277,7 +232,7 @@ const File = ({
           </div>
         </div>
       ) : null}
-        <DragDropContext
+      <DragDropContext
         onDragEnd={(result) =>
           onDragEnd(
             result,
@@ -358,22 +313,23 @@ const File = ({
               </Droppable>
             </div>
           ) : null}
-          <div className={isFileFormShow ? "col-xl-1" : "d-none"}>
-            <Button
-              onClick={() => handleCloseModal()}
-              className={`ms-2 ${visitStyles.backArrowBtn}`}
-            >
-              <FontAwesomeIcon
-                icon={faArrowLeft}
-                style={{
-                  color: "rgb(38 50 107)",
-                }}
-              />
-            </Button>
-          </div>
-        
-          <div className={"col-xl-7"}>
-            <Popover
+          {isFileFormShow && (
+            <div className={"col-xl-1"}>
+              <Button
+                onClick={() => handleCloseModal()}
+                className={`ms-2 ${visitStyles.backArrowBtn}`}
+              >
+                <FontAwesomeIcon
+                  icon={faArrowLeft}
+                  style={{
+                    color: "rgb(38 50 107)",
+                  }}
+                />
+              </Button>
+            </div>
+          )}
+          <div className={"col-xl-6"}>
+            {/* <Popover
               open={popoverVisible}
               content={PopContent}
               placement="bottom"
@@ -392,7 +348,7 @@ const File = ({
                   }}
                 />
               </div>
-            </Popover>
+            </Popover> */}
             <div className="card-body p-0">
               {hccFileDetails?.loading != true ? (
                 <>

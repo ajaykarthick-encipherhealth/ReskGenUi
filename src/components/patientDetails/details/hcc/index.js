@@ -7,14 +7,19 @@ import Meat from "./meat";
 import RafScore from "./raf";
 import MeatQuery from "./meatQuery";
 import File from "./file";
-import { Button, Dropdown, Select } from "antd";
+import { Button, Dropdown, Popover, Select } from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDown, faClose } from "@fortawesome/free-solid-svg-icons";
+import styles from "../hcc/styles.module.css";
+
 const Hcc = ({ year }) => {
   const [activeTabHead, setActiveTabHead] = useState(1);
   const [flagTagActive, setFlagTagActive] = useState(false);
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [activeMeatTitle, setActiveMeatTitle] = useState(null);
   const [activeComboTree, setActiveComboTree] = useState(null);
-
+  const [pageNumberOptions, setPageNumberOptions] = useState([]);
+  const [search, setSearch] = useState();
   const selectTab = (num) => {
     setFlagTagActive(false);
     setActiveTabHead(num);
@@ -38,6 +43,54 @@ const Hcc = ({ year }) => {
   const handleOptions = (value) => {
     console.log(value);
   };
+  const handleChangePageNumber = async (value) => {
+    setPopoverVisible(false);
+    var str_array = value.split(",");
+    var pageNumber = str_array[0];
+    setSearch({
+      value: "",
+      page: pageNumber,
+    });
+  };
+  const PopContent = (
+    <div className={styles.innerPop}>
+      <div className={styles.displayDiv}>
+        {/* <div className={styles.closeContainer}>
+          <FontAwesomeIcon
+            icon={faClose}
+            style={{
+              size: 5,
+              color: "#fff",
+            }}
+            className={styles.close_icon}
+            onClick={() => setPopoverVisible(false)}
+          />
+        </div> */}
+        {pageNumberOptions
+          ? pageNumberOptions?.map((data) => (
+              <div className={styles.hoverDiv}>
+                <div className={`row ${styles.selectDetailsContainer}`}>
+                  <div className="col-xl-3">
+                    <span className={styles.selectHead}>{data.label}</span>
+                  </div>
+                  {data?.options.map((data2) => (
+                    <div className={`col-xl-3 ${styles.selectDetailsDiv}`}>
+                      <span
+                        onClick={() => handleChangePageNumber(data2.value)}
+                        className={styles.selectDetails}
+                      >
+                        {data2?.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))
+          : null}
+      </div>
+    </div>
+  );
+  console.log(popoverVisible, PopContent);
   return (
     <div className={visitStyles.visitdata_tab_body}>
       <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
@@ -117,6 +170,26 @@ const Hcc = ({ year }) => {
                   <Nav.Item as="li" className="nav-item mx-4">
                     <Button>hg</Button>
                   </Nav.Item>
+                  <Popover
+                    // open={popoverVisible}
+                    content={PopContent}
+                    placement="bottom"
+                    trigger={"click"}
+                    // onOpenChange={() => setPopoverVisible(false)}
+                  >
+                    <div className={styles.dosContainer}>
+                      <span className={styles.dosPageNumber}>
+                        Select Dos Page Number
+                      </span>
+                      <FontAwesomeIcon
+                        icon={faAngleDown}
+                        style={{
+                          size: 10,
+                          color: "#e6e6e6",
+                        }}
+                      />
+                    </div>
+                  </Popover>
                 </Nav>
               </div>
               {flagTagActive ? (
@@ -152,6 +225,10 @@ const Hcc = ({ year }) => {
                   setActiveTabHead={setActiveTabHead}
                   setActiveMeatTitle={setActiveMeatTitle}
                   setActiveComboTree={setActiveComboTree}
+                  pageNumberOptions={pageNumberOptions}
+                  setPageNumberOptions={setPageNumberOptions}
+                  search={search}
+                  setSearch={setSearch}
                 />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={2}>
