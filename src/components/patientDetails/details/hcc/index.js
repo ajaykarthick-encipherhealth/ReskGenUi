@@ -90,7 +90,7 @@ const Hcc = ({ year }) => {
       </div>
     </div>
   );
-  console.log(popoverVisible, PopContent);
+
   return (
     <div className={visitStyles.visitdata_tab_body}>
       <div className={`profile-tab ${visitStyles.visitdata_header_card2}`}>
@@ -186,6 +186,7 @@ const Hcc = ({ year }) => {
                         style={{
                           size: 10,
                           color: "#e6e6e6",
+                          marginLeft:"5px"
                         }}
                       />
                     </div>
