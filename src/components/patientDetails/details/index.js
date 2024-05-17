@@ -2780,6 +2780,8 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                     show={isModalComments}
                     placement="end"
                     className={`offcanvas-end ${visitStyles.commentDrawer}`}
+                    style={{width:flagContainerActiveTitle==="Timeline"?"460px":"370px"}}
+                   
                   >
                     <div className="offcanvas-header">
                       <h5 className="modal-title" id="#gridSystemModal">

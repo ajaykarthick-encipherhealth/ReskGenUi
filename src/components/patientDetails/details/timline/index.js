@@ -95,24 +95,24 @@ const Timeline = ({
           return (
             <div className="d-flex">
               {item.diagnosisCode} - Moved from{" "}
-              <span className={visitStyles.invalidColor}>invalid</span> to{" "}
-              <span className={visitStyles.validColor}> valid</span>
+              <span className={visitStyles.invalidColor}>INVALID</span> to{" "}
+              <span className={visitStyles.validColor}> VALID</span>
             </div>
           );
         case "MOVED_SUGGESTED_TO_VALID":
           return (
             <div className="d-flex">
               {item.diagnosisCode} - Moved from{" "}
-              <span className={visitStyles.suggestedColor}>suggested</span> to{" "}
-              <span className={visitStyles.validColor}> valid</span>
+              <span className={visitStyles.suggestedColor}>SUGGESTED</span> to{" "}
+              <span className={visitStyles.validColor}> VALID</span>
             </div>
           );
         case "MOVED_VALID_TO_SUGGESTED":
           return (
             <div className="d-flex">
               {item.diagnosisCode} - Moved from{" "}
-              <span className={visitStyles.validColor}>valid</span> to{" "}
-              <span className={visitStyles.suggestedColor}> suggested</span>
+              <span className={visitStyles.validColor}>VALID</span> to{" "}
+              <span className={visitStyles.suggestedColor}>SUGGESTED</span>
             </div>
           );
         case "VALID_DISEASE_ADDED":
@@ -121,8 +121,8 @@ const Timeline = ({
           return (
             <div className="d-flex">
               {item.diagnosisCode} - Moved from{" "}
-              <span className={visitStyles.validColor}>valid</span> to{" "}
-              <span className={visitStyles.deletedColor}> deleted</span>
+              <span className={visitStyles.validColor}>VALID</span> to{" "}
+              <span className={visitStyles.deletedColor}>DELETED</span>
             </div>
           );
         case "AUDITED":
@@ -131,9 +131,9 @@ const Timeline = ({
               Changed from{" "}
               <span
                 style={{
-                  padding: "0 5px 0 5px",
                   color: getStatusColors(item?.previousProcessedState),
-                  fontWeight: "700",
+                  fontSize: "12px",
+                  padding: "0 5px",
                 }}
               >
                 {item?.previousProcessedState}
@@ -147,9 +147,9 @@ const Timeline = ({
               Changed from{" "}
               <span
                 style={{
-                  padding: "0 5px 0 5px",
                   color: getStatusColors(item?.previousProcessedState),
-                  fontWeight: "700",
+                  fontSize: "12px",
+                  padding: "0 5px",
                 }}
               >
                 {item?.previousProcessedState}
@@ -163,9 +163,9 @@ const Timeline = ({
               Changed from{" "}
               <span
                 style={{
-                  padding: "0 5px 0 5px",
                   color: getStatusColors(item?.previousProcessedState),
-                  fontWeight: "700",
+                  fontSize: "12px",
+                  padding: "0 5px",
                 }}
               >
                 {item?.previousProcessedState}
@@ -179,9 +179,9 @@ const Timeline = ({
               Changed from{" "}
               <span
                 style={{
-                  padding: "0 5px 0 5px",
                   color: getStatusColors(item?.previousProcessedState),
-                  fontWeight: "700",
+                  fontSize: "12px",
+                  padding: "0 5px",
                 }}
               >
                 {item?.previousProcessedState}
@@ -196,9 +196,9 @@ const Timeline = ({
               Changed from{" "}
               <span
                 style={{
-                  padding: "0 5px 0 5px",
                   color: getStatusColors(item?.previousProcessedState),
-                  fontWeight: "700",
+                  fontSize: "12px",
+                  padding: "0 5px",
                 }}
               >
                 {item?.previousProcessedState}
@@ -216,9 +216,9 @@ const Timeline = ({
               Changed from{" "}
               <span
                 style={{
-                  padding: "0 5px 0 5px",
                   color: getStatusColors(item?.previousProcessedState),
-                  fontWeight: "700",
+                  fontSize: "12px",
+                  padding: "0 5px",
                 }}
               >
                 {item?.previousProcessedState}
@@ -230,24 +230,24 @@ const Timeline = ({
           return (
             <div className="d-flex">
               {item.diagnosisCode} - Moved from{" "}
-              <span className={visitStyles.deletedColor}>deleted</span> to{" "}
-              <span className={visitStyles.validColor}> valid</span>
+              <span className={visitStyles.deletedColor}>DELETED</span> to{" "}
+              <span className={visitStyles.validColor}> VALID</span>
             </div>
           );
         case "MOVED_DELETED_TO_SUGGESTED":
           return (
             <div className="d-flex">
               {item.diagnosisCode} - Moved from{" "}
-              <span className={visitStyles.deletedColor}>deleted</span> to{" "}
-              <span className={visitStyles.suggestedColor}> suggested</span>
+              <span className={visitStyles.deletedColor}>DELETED</span> to{" "}
+              <span className={visitStyles.suggestedColor}>SUGGESTED</span>
             </div>
           );
         case "MOVED_SUGGESTED_TO_DELETED":
           return (
             <div className="d-flex w-100">
               {item.diagnosisCode} - Moved from{" "}
-              <span className={visitStyles.suggestedColor}>suggested</span> to{" "}
-              <span className={visitStyles.deletedColor}> deleted</span>
+              <span className={visitStyles.suggestedColor}>SUGGESTED</span> to{" "}
+              <span className={visitStyles.deletedColor}> DELETED</span>
             </div>
           );
         case "ENCOUNTER_FILE_UPDATED":
@@ -262,14 +262,14 @@ const Timeline = ({
               Changed from{" "}
               <span
                 style={{
-                  padding: "0 5px 0 5px",
                   color: getStatusColors(item?.previousProcessedState),
-                  fontWeight: "700",
+                  fontSize: "12px",
+                  padding: "0 5px",
                 }}
               >
                 {item?.previousProcessedState}
               </span>{" "}
-              to <span className={visitStyles.holdColor}> HOLD</span>
+              to <span className={visitStyles.holdColor}>HOLD</span>
             </div>
           );
         case "DECLINED":
@@ -278,9 +278,9 @@ const Timeline = ({
               Changed from{" "}
               <span
                 style={{
-                  padding: "0 5px 0 5px",
                   color: getStatusColors(item?.previousProcessedState),
-                  fontWeight: "700",
+                  fontSize: "12px",
+                  padding: "0 5px",
                 }}
               >
                 {item?.previousProcessedState}
@@ -294,9 +294,9 @@ const Timeline = ({
               Changed from{" "}
               <span
                 style={{
-                  padding: "0 5px 0 5px",
                   color: getStatusColors(item?.previousProcessedState),
-                  fontWeight: "700",
+                  fontSize: "12px",
+                  padding: "0 5px",
                 }}
               >
                 {item?.previousProcessedState}
@@ -307,16 +307,16 @@ const Timeline = ({
         default:
           return (
             <div className="d-flex">
-              Changed from{" "}
+              Changed from
               <span
                 style={{
-                  padding: "0 5px 0 5px",
                   color: getStatusColors(item?.previousProcessedState),
-                  fontWeight: "700",
+                  fontSize: "12px",
+                  padding: "0 5px",
                 }}
               >
                 {item?.previousProcessedState}
-              </span>{" "}
+              </span>
               to {underScoreRemove(item.action)}
             </div>
           );

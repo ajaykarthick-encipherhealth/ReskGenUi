@@ -748,7 +748,7 @@
 }
 
 .commentDrawer {
-  width: 390px !important;
+  /* width: 370px !important; */
   background-color: #fff !important;
 }
 
@@ -1047,7 +1047,7 @@
 .validColor {
   color: #04b700;
   padding: 0 5px;
-  font-size: 14px !important;
+ 
 }
 .nonhccFlag {
   height: 13px;
@@ -1060,7 +1060,7 @@
 .invalidColor {
   color: #fada5e;
   padding: 0 5px;
-  font-size: 14px !important;
+
 }
 
 .suggestedFlag {
@@ -1074,7 +1074,7 @@
 .suggestedColor {
   color: #ff9209;
   padding: 0 5px;
-  font-size: 14px !important;
+
 }
 .deleteFlag {
   height: 13px;
@@ -1086,12 +1086,12 @@
 }
 .deletedColor {
   color: #be3144;
-  padding: 0 5px;
-  font-size: 14px !important;
+  padding: 1px 5px;
+
 }
 .completedColor {
   color: #00bc13;
-  padding: 0 5px;
+  padding: 1px 5px;
 }
 .holdColor {
   color: #3c0ad2;
