@@ -2774,7 +2774,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                       </div>
                     </div>
                   </Offcanvas>
-{console.log(flagContainerActive)}
+
                   <Offcanvas
                     onHide={handleCloseModal}
                     show={isModalComments}
