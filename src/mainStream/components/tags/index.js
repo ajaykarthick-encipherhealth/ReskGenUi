@@ -1,7 +1,9 @@
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getActiveTab } from "../../store/actions/l2Action/AuditReportAction";
+import { getActiveTab } from "../../../store/actions/l2Action/AuditReportAction";
+
+
 import styles from '../../../resusablereport/reports/report.module.css';
 
 const TabNavigation = ({ tabs }) => {

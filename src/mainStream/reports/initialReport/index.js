@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
-import styles from "../report.module.css";
+import styles from "../../../resusablereport/reports/report.module.css";
 import {
   Popover,
   Row,

@@ -1,8 +1,8 @@
 import React from "react";
 import { Empty } from "antd";
-import { colors } from "../../../resusablereport/reports/sentReport";
+import { colors } from "../chartUtils";
 
-const CustomTable = ({ data, styles, head2, head1 }) => {
+const CustomTable = ({ data, styles, head2, head1, color }) => {
   const nameColors = {};
   const getRandomColor = (letter) => colors[letter.toUpperCase()] || "#B35CE1";
   data?.forEach((item) => {
@@ -14,7 +14,7 @@ const CustomTable = ({ data, styles, head2, head1 }) => {
   });
   return (
     <div>
-      <table className="table">
+      <table className="table" style={{ border: "2px solid #e6e6e6" }}>
         <thead>
           <tr>
             <th
@@ -29,7 +29,6 @@ const CustomTable = ({ data, styles, head2, head1 }) => {
               {head1}
             </th>
             <th
-              className={styles.HeadTd}
               style={{
                 backgroundColor: "#04306F",
                 color: "white",
@@ -67,7 +66,9 @@ const CustomTable = ({ data, styles, head2, head1 }) => {
                   >
                     <div
                       style={{
-                        backgroundColor: nameColors[item?.name],
+                        backgroundColor: color
+                          ? item.color
+                          : nameColors[item?.name],
                         height: "6px",
                         width: "6px",
                         borderRadius: "50%",
@@ -78,15 +79,7 @@ const CustomTable = ({ data, styles, head2, head1 }) => {
                     <div>{item?.name}</div>
                   </div>
                 </td>
-                <td
-                  style={{
-                    display: "flex",
-                    justifyContent: "left",
-                    alignItems: "center",
-                  }}
-                >
-                  {item.value}
-                </td>
+                <td style={{}}>{item.value}</td>
               </tr>
             ))
           )}

@@ -8,11 +8,12 @@ import {
   dateFormate,
   renderUserPrfoileAvatar,
 } from "../../../components/headerFilters/functions";
-import { colors } from "../sentReport";
+
 import SpinnerDots from "../../../components/spinner";
 import { Empty } from "antd";
 import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
 import { useDispatch } from "react-redux";
+import { colors } from "../../../mainStream/components/chartUtils";
 
 const ReceivedReport = ({
   details,

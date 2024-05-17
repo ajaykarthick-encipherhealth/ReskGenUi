@@ -1,6 +1,6 @@
 import React from "react";
 import { Empty, Popover, Avatar } from "antd";
-import dayjs from "dayjs"; // Import dayjs library for date formatting
+import dayjs from "dayjs";
 import EditButton from "../../../../images/adminUsers/EditButton";
 import { renderUserPrfoileAvatar } from "../../../../components/headerFilters/functions";
 
@@ -17,14 +17,14 @@ const CardComponent = ({
   index,
 }) => {
   const handleDateFormat = (date) => {
-    return dayjs(date).format("MM-DD-YYYY"); 
+    return dayjs(date).format("MM-DD-YYYY");
   };
   return (
     <div className={styles.cardContainer}>
       {data?.length > 0 ? (
         <div
           key={index}
-          style={{ marginBottom: "5px" }}
+          style={{ marginBottom: "10px" }}
           className={`${styles.card} ${
             index === selectedCardIndex ? styles.selectedCard : ""
           }`}
