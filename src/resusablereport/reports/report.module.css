@@ -36,11 +36,11 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .group button:focus {
-  background-color: white !important; /* Green background */
+  background-color: white !important;
   color: #04306f !important;
   border: none;
   border-radius: 5px;
-  cursor: pointer; /* Darker background */
+  cursor: pointer;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
 }
 .cardContainer {

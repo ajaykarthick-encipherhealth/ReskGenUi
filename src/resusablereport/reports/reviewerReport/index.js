@@ -1,9 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import styles from "../report.module.css";
 import {
+  Checkbox,
   Popover,
+  Col,
   Row,
+  Tooltip,
   Empty,
   notification,
 } from "antd";
@@ -28,187 +31,36 @@ import notAudited from "../../.../../../images/trackingImages/NotAuditedTrack.pn
 import auditDeclined from "../../.../../../images/trackingImages/AuditDeclined.png";
 import { Paginator } from "primereact/paginator";
 import TableStyle from "../../../components/table/table.module.css";
+import { useSelector } from "react-redux";
 import Image from "next/image";
+import { SVGICON } from "../../../jsx/constant/theme";
 import {
   renderUserPrfoileAvatar,
-
+  dateFormate,
 } from "../../../components/headerFilters/functions";
 import { selectedRow } from "../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
+import dayjs from "dayjs";
+import { getFlag, getFlags } from "../../../components/reuseableFunctions";
 import { connect } from "react-redux";
 import SpinnerDots from "../../../components/spinner";
-import ContentGroupCard from "../../../mainStream/components/cards/contentGroupCard";
-import SubCard from "../../../mainStream/components/cards/subCard";
-import AllocationCount from "../../../mainStream/components/allocationCount";
-import Flags from "../../../mainStream/components/flagCount";
-import MiniCards from "../../../mainStream/components/miniCards";
-
-export const auditstatusBodyTemplate = (rowData) => {
-  const declinedDataFromAudit = extractLatestData(rowData?.auditDeclinedNotes);
-
-  const declinedDataFromDeclined = extractLatestData(
-    rowData?.auditDeclinedNotes
-  );
-
-  const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
-  switch (rowData.auditedStatus) {
-    case "AUDIT_PENDING":
-      return (
-        <Popover placement="bottom" title="Status: AUDIT PENDING">
-          <span className="patient-status">
-            <Image src={AuditPending} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-
-    case "AUDITHOLD":
-      return (
-        <Popover placement="bottom" title=" Status: AUDIT HOLD">
-          <span className="patient-status">
-            <Image src={AuditHold} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-    case "REAUDIT":
-      return (
-        <Popover placement="bottom" title=" Status: REAUDIT">
-          <span className="patient-status">
-            <Image src={ReAudit} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-    case "AUDITED":
-      return (
-        <Popover placement="bottom" title=" Status: AUDITED">
-          <span className="patient-status">
-            <Image src={AuditedTrack} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-    case "AUDITED":
-      return (
-        <span className="patient-status">
-          <Image src={AuditedTrack} className={styles.imgSize} />
-        </span>
-      );
-
-    case "NOT_AUDIT":
-      return (
-        <Popover placement="bottom" title=" Status: NOT AUDIT">
-          <span className="patient-status">
-            <Image src={NotAudited} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-    case "AUDIT_DECLINED":
-      return (
-        <Popover
-          placement="bottom"
-          title=" Status: AUDIT DECLINED"
-          content={`Reason: ${declinedData ? declinedData : "---"}`}
-        >
-          <span className="patient-status">
-            <Image src={AuditedDeclineTrack} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-    case null:
-      return <span className="patient-status">---</span>;
-  }
-};
-export const processstatusBodyTemplate = (rowData) => {
-  const declinedDataFromAudit = extractLatestData(rowData?.auditDeclinedNotes);
-
-  const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
-
-  const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
-  if (!rowData?.processedStatus) {
-    return null;
-  }
-  switch (rowData?.processedStatus) {
-    case "COMPLETED":
-      return (
-        <Popover placement="bottom" title="Status: COMPLETED">
-          <span className={`patient-status ${styles.textCenter}`}>
-            <Image src={Completed} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-
-    case "PENDING":
-      return (
-        <Popover placement="bottom" title="Status: PENDING">
-          <span className={`patient-status ${styles.textCenter}`}>
-            <Image src={Pending} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-
-    case "DECLINED":
-      return (
-        <Popover
-          placement="bottom"
-          title="Status: DECLINED"
-          content={`Reason: ${declinedData ? declinedData : "---"}`}
-        >
-          <span className={`patient-status ${styles.textCenter}`}>
-            <Image src={Declined} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-
-    case "NOTCOMPUTED":
-      return (
-        <Popover placement="bottom" title="Status: NOT COMPUTED">
-          <span className={`patient-status ${styles.textCenter}`}>
-            <Image src={Pending} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-    case "COMPUTED":
-      return (
-        <Popover placement="bottom" title="Status: PENDING">
-          <span className={`patient-status ${styles.textCenter}`}>
-            <Image src={Pending} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-    case "HOLD":
-      return (
-        <Popover placement="bottom" title="Status: HOLD">
-          <span className={`patient-status ${styles.textCenter}`}>
-            <Image src={Hold} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-    case "ABORTED_BY_CRON":
-      return (
-        <Popover placement="bottom" title="Status: ABORTED BY CRON">
-          <span className={`patient-status ${styles.textCenter}`}>
-            <Image src={Abort} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-    case null:
-      return (
-        <Popover placement="bottom" title="Status: PENDING">
-          <span className={`patient-status ${styles.textCenter}`}>
-            <Image src={Pending} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-  }
-};
 
 const ReviewerReport = ({
+  // setModal,
+  // modal,
   patientDetails,
   paginationFirst,
   ReportPatientDetails,
   onPageChange,
+  // comments,
+  // setComments,
   selectedRows,
   setSelectedRows,
   selectAll,
   setSelectAll,
+  // sortOrder,
+  // setSortOrder,
+  // setSort,
   reportListAll,
   page,
   getFlagsData,
@@ -338,6 +190,167 @@ const ReviewerReport = ({
     },
   ];
 
+  const auditstatusBodyTemplate = (rowData) => {
+    const declinedDataFromAudit = extractLatestData(
+      rowData?.auditDeclinedNotes
+    );
+
+    const declinedDataFromDeclined = extractLatestData(
+      rowData?.auditDeclinedNotes
+    );
+
+    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
+    switch (rowData.auditedStatus) {
+      case "AUDIT_PENDING":
+        return (
+          <Popover placement="bottom" title="Status: AUDIT PENDING">
+            <span className="patient-status">
+              <Image src={AuditPending} className={styles.imgSize} />
+            </span>
+          </Popover>
+        );
+
+      case "AUDITHOLD":
+        return (
+          <Popover placement="bottom" title=" Status: AUDIT HOLD">
+            <span className="patient-status">
+              <Image src={AuditHold} className={styles.imgSize} />
+            </span>
+          </Popover>
+        );
+      case "REAUDIT":
+        return (
+          <Popover placement="bottom" title=" Status: REAUDIT">
+            <span className="patient-status">
+              <Image src={ReAudit} className={styles.imgSize} />
+            </span>
+          </Popover>
+        );
+      case "AUDITED":
+        return (
+          <Popover placement="bottom" title=" Status: AUDITED">
+            <span className="patient-status">
+              <Image src={AuditedTrack} className={styles.imgSize} />
+            </span>
+          </Popover>
+        );
+      case "AUDITED":
+        return (
+          <span className="patient-status">
+            <Image src={AuditedTrack} className={styles.imgSize} />
+          </span>
+        );
+
+      case "NOT_AUDIT":
+        return (
+          <Popover placement="bottom" title=" Status: NOT AUDIT">
+            <span className="patient-status">
+              <Image src={NotAudited} className={styles.imgSize} />
+            </span>
+          </Popover>
+        );
+      case "AUDIT_DECLINED":
+        return (
+          <Popover
+            placement="bottom"
+            title=" Status: AUDIT DECLINED"
+            content={`Reason: ${declinedData ? declinedData : "---"}`}
+          >
+            <span className="patient-status">
+              <Image src={AuditedDeclineTrack} className={styles.imgSize} />
+            </span>
+          </Popover>
+        );
+      case null:
+        return <span className="patient-status">---</span>;
+    }
+  };
+  const processstatusBodyTemplate = (rowData) => {
+    const declinedDataFromAudit = extractLatestData(
+      rowData?.auditDeclinedNotes
+    );
+
+    const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
+
+    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
+    if (!rowData?.processedStatus) {
+      return null;
+    }
+    switch (rowData?.processedStatus) {
+      case "COMPLETED":
+        return (
+          <Popover placement="bottom" title="Status: COMPLETED">
+            <span className={`patient-status ${styles.textCenter}`}>
+              <Image src={Completed} className={styles.imgSize} />
+            </span>
+          </Popover>
+        );
+
+      case "PENDING":
+        return (
+          <Popover placement="bottom" title="Status: PENDING">
+            <span className={`patient-status ${styles.textCenter}`}>
+              <Image src={Pending} className={styles.imgSize} />
+            </span>
+          </Popover>
+        );
+
+      case "DECLINED":
+        return (
+          <Popover
+            placement="bottom"
+            title="Status: DECLINED"
+            content={`Reason: ${declinedData ? declinedData : "---"}`}
+          >
+            <span className={`patient-status ${styles.textCenter}`}>
+              <Image src={Declined} className={styles.imgSize} />
+            </span>
+          </Popover>
+        );
+
+      case "NOTCOMPUTED":
+        return (
+          <Popover placement="bottom" title="Status: NOT COMPUTED">
+            <span className={`patient-status ${styles.textCenter}`}>
+              <Image src={Pending} className={styles.imgSize} />
+            </span>
+          </Popover>
+        );
+      case "COMPUTED":
+        return (
+          <Popover placement="bottom" title="Status: PENDING">
+            <span className={`patient-status ${styles.textCenter}`}>
+              <Image src={Pending} className={styles.imgSize} />
+            </span>
+          </Popover>
+        );
+      case "HOLD":
+        return (
+          <Popover placement="bottom" title="Status: HOLD">
+            <span className={`patient-status ${styles.textCenter}`}>
+              <Image src={Hold} className={styles.imgSize} />
+            </span>
+          </Popover>
+        );
+      case "ABORTED_BY_CRON":
+        return (
+          <Popover placement="bottom" title="Status: ABORTED BY CRON">
+            <span className={`patient-status ${styles.textCenter}`}>
+              <Image src={Abort} className={styles.imgSize} />
+            </span>
+          </Popover>
+        );
+      case null:
+        return (
+          <Popover placement="bottom" title="Status: PENDING">
+            <span className={`patient-status ${styles.textCenter}`}>
+              <Image src={Pending} className={styles.imgSize} />
+            </span>
+          </Popover>
+        );
+    }
+  };
+
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
 
@@ -419,41 +432,174 @@ const ReviewerReport = ({
                         <div className="col-xl-6">
                           <div className={styles.cardContainer}>
                             {reportListAll?.response?.data?.map((item, id) => (
-                              <ContentGroupCard
-                                key={id}
-                                item={item}
-                                flag={item?.flag}
-                                handleRowCheckboxChange={
-                                  handleRowCheckboxChange
-                                }
-                                selectedRows={selectedRows}
-                                handleTableRowClick={handleTableRowClick}
-                                auditstatusBodyTemplate={auditstatusBodyTemplate(
-                                  item
-                                )}
-                                processstatusBodyTemplate={processstatusBodyTemplate(
-                                  item
-                                )}
-                                rafSum={item.rafSum}
-                                patientName={item.patientName}
-                                processedDate={item?.processedDate}
-                                patientId={item?.patientId}
-                                validDiseaseCount={item?.validDiseaseCount}
-                                auditedByFirstName={item?.auditedByFirstName}
-                                auditedByLastName={item?.auditedByLastName}
-                                auditedByProfileImage={
-                                  item?.auditedByProfileImage
-                                }
-                                patientAllocatedFirstName={
-                                  item?.patientAllocatedFirstName
-                                }
-                                patientAllocatedLastName={
-                                  item?.patientAllocatedLastName
-                                }
-                                patientAllocatedProfileImage={
-                                  item?.patientAllocatedProfileImage
-                                }
-                              />
+                              <div key={id} className={styles.card}>
+                                <div
+                                  className={styles.contentGroup}
+                                  // onClick={handleCardRowClick}
+                                  style={{ cursor: "pointer" }}
+                                >
+                                  <div className={styles.inputContainer}>
+                                    <input
+                                      type="checkbox"
+                                      onChange={() => {
+                                        handleRowCheckboxChange(item);
+                                      }}
+                                      className={TableStyle.customChecked}
+                                      checked={selectedRows?.some(
+                                        (selectedRow) =>
+                                          selectedRow.patientId ===
+                                          item.patientId
+                                      )}
+                                    />
+                                  </div>
+                                  <div
+                                    className={`col-xl-12 ${styles.checkSep}`}
+                                    onClick={() => handleTableRowClick(id)}
+                                  >
+                                    <div className="d-flex justify-content-between align-items-center pb-1">
+                                      <div
+                                        className={`col-xl-6 ${styles.pName}`}
+                                      >
+                                        {item.patientName
+                                          ? item.patientName
+                                          : "---"}
+                                      </div>
+
+                                      <div
+                                        className={`col-xl-6 ${styles.dataContainer}`}
+                                      >
+                                        <span className={styles.raf}>
+                                          <Tooltip
+                                            title={"Raf Score"}
+                                            placement="bottom"
+                                          >
+                                            {" "}
+                                            {item.rafSum ? item.rafSum : "---"}
+                                          </Tooltip>
+                                        </span>
+                                        <span className={styles.avatarAlign}>
+                                          {item?.flag ? (
+                                            getFlags(item.flag)
+                                          ) : (
+                                            <div>{SVGICON?.emptyFlag}</div>
+                                          )}
+                                        </span>
+                                        <span className={styles.avatarAlign}>
+                                          {auditstatusBodyTemplate(item)}
+                                        </span>
+                                        <span>
+                                          {processstatusBodyTemplate(item)}
+                                        </span>
+                                      </div>
+                                    </div>
+
+                                    <div className="d-flex justify-content-around align-items-center pb-1">
+                                      <Tooltip
+                                        title={"Patient Id"}
+                                        placement="bottom"
+                                      >
+                                        <div
+                                          className={`col-xl-2 ${styles.headText}`}
+                                          // onClick={() => handleTableRowClick(id)}
+                                        >
+                                          {item.patientId ? item.patientId : ""}
+                                        </div>
+                                      </Tooltip>
+
+                                      <div
+                                        className={`col-xl-2 ${styles.headText}`}
+                                      >
+                                        HCC
+                                      </div>
+                                      <div
+                                        className={`col-xl-4 ${styles.headText}`}
+                                      >
+                                        SUPERVISOR
+                                      </div>
+                                      <div
+                                        className={`col-xl-4 ${styles.headText}`}
+                                      >
+                                        REVIEWER
+                                      </div>
+                                    </div>
+                                    <div className="d-flex justify-content-around align-items-center">
+                                      <Tooltip
+                                        title={"Completed Date"}
+                                        placement="bottom"
+                                      >
+                                        <div
+                                          className={`col-xl-2 ${styles.text}`}
+                                        >
+                                          {dateFormate(
+                                            dayjs,
+                                            item?.processedDate
+                                          )}
+                                        </div>
+                                      </Tooltip>
+
+                                      <div
+                                        className={`col-xl-2 ${styles.text}`}
+                                      >
+                                        {item.validDiseaseCount
+                                          ? item.validDiseaseCount
+                                          : "---"}
+                                      </div>
+                                      <div
+                                        className={`col-xl-4 ${styles.text}`}
+                                      >
+                                        {item.auditedByFirstName ||
+                                        item.auditedByLastName ||
+                                        item.auditedByProfileImage ? (
+                                          <div className="d-flex align-items-center">
+                                            <span
+                                              className={styles.avatarAlign}
+                                            >
+                                              {renderUserPrfoileAvatar(
+                                                item.auditedByFirstName,
+                                                item.auditedByLastName,
+                                                item.auditedByProfileImage,
+                                                "header"
+                                              )}
+                                            </span>
+                                            <span>
+                                              {item.auditedByFirstName}{" "}
+                                              {item.auditedByLastName}
+                                            </span>
+                                          </div>
+                                        ) : (
+                                          <div>---</div>
+                                        )}
+                                      </div>
+                                      <div
+                                        className={`col-xl-4 ${styles.text}`}
+                                      >
+                                        {item.patientAllocatedFirstName ||
+                                        item.patientAllocatedLastName ||
+                                        item.patientAllocatedProfileImage ? (
+                                          <div className="d-flex align-items-center">
+                                            <span
+                                              className={styles.avatarAlign}
+                                            >
+                                              {renderUserPrfoileAvatar(
+                                                item.patientAllocatedFirstName,
+                                                item.patientAllocatedLastName,
+                                                item.patientAllocatedProfileImage,
+                                                "header"
+                                              )}
+                                            </span>
+                                            <span>
+                                              {item.patientAllocatedFirstName}{" "}
+                                              {item.patientAllocatedLastName}
+                                            </span>
+                                          </div>
+                                        ) : (
+                                          <div>---</div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             ))}
                           </div>
                         </div>
@@ -465,18 +611,29 @@ const ReviewerReport = ({
                         <div className={styles.card1}>
                           <div className={styles.summaryText}>Summary</div>
                           <div className="col-xl-12  d-flex mt-4">
-                            <SubCard
-                              title="No of charts"
-                              value={reportListAll?.response?.totalElements}
-                            />
-                            <SubCard
-                              title="Avg RAF score"
-                              value={reportListAll?.rafAverage?.toFixed(4)}
-                            />
-                            <SubCard
-                              title="HCC Count"
-                              value={reportListAll?.totalHccCount}
-                            />
+                            <div className={`col-xl-4 ${styles.subCard}`}>
+                              <div>
+                                <div>No of charts</div>
+                                <h4>
+                                  {reportListAll?.response?.totalElements}
+                                </h4>
+                              </div>
+                            </div>
+
+                            <div className={`col-xl-4 ${styles.subCard}`}>
+                              {" "}
+                              <div>
+                                <div>Avg RAF score</div>
+                                <h4>{reportListAll?.rafAverage?.toFixed(4)}</h4>
+                              </div>
+                            </div>
+                            <div className={`col-xl-4 ${styles.subCard}`}>
+                              {" "}
+                              <div>
+                                <div>HCC Count</div>
+                                <h4>{reportListAll?.totalHccCount}</h4>
+                              </div>
+                            </div>
                           </div>
                           <div className={` pt-2 ${styles.summaryText}`}>
                             Overall Status
@@ -484,37 +641,172 @@ const ReviewerReport = ({
                           <div className="col-xl-12  d-flex mt-2">
                             <Row className={styles.carddiv}>
                               {card1Data?.map((data) => (
-                                <MiniCards
-                                  backgroundColor={data.bg}
-                                  icon={data?.icon}
-                                  title={data.title}
-                                  charts={data.charts}
-                                  styles={styles}
-                                />
+                                <Col
+                                  span={5}
+                                  style={{
+                                    backgroundColor: data.bg,
+                                  }}
+                                  className={styles.colData}
+                                >
+                                  <div className={styles.header}>
+                                    <Image
+                                      src={data?.icon}
+                                      className={styles.Img}
+                                    />
+                                    <div className={styles.heading}>
+                                      {data.title}
+                                    </div>
+                                  </div>
+
+                                  <h4>{data?.charts ? data?.charts : "0"}</h4>
+                                </Col>
                               ))}
                             </Row>
                           </div>
                           <div className="col-xl-12  d-flex mt-1">
-                            <Flags
-                              flagsData={getFlagsData?.response}
-                              styles={styles}
-                            />
-                            <AllocationCount
-                              title="Supervisor"
-                              allocationCount={
-                                reportListAll?.supervisorAllocationCount
-                              }
-                              renderUserPrfoileAvatar={renderUserPrfoileAvatar}
-                              styles={styles}
-                            />
-                            <AllocationCount
-                              title="Reviewer"
-                              allocationCount={
-                                reportListAll?.reviewerAllocationCount
-                              }
-                              renderUserPrfoileAvatar={renderUserPrfoileAvatar}
-                              styles={styles}
-                            />
+                            <div className={`col-xl-4 ${styles.flags}`}>
+                              <div className={styles.cardHead}>Flags</div>
+                              <div className={styles.contentOverFlow}>
+                                {getFlagsData?.response.map((flagItem) => (
+                                  <div
+                                    className={styles.contentGroups}
+                                    key={flagItem.id}
+                                  >
+                                    <div>
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="23"
+                                        height="23"
+                                        viewBox="0 0 800 800"
+                                        fill={flagItem?.flagColour}
+                                      >
+                                        <path
+                                          d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
+                                          stroke="#000"
+                                          stroke-width="10"
+                                        />
+                                      </svg>
+                                      <span style={{ fontSize: "12px" }}>
+                                        {flagItem?.flagName
+                                          ? flagItem?.flagName.replaceAll(
+                                              "_",
+                                              " "
+                                            )
+                                          : ""}
+                                      </span>
+                                    </div>
+                                    <div className={styles.count}>
+                                      {flagItem.count ? flagItem.count : 0}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                            <div className={`col-xl-4 ${styles.flags}`}>
+                              <div className={styles.cardHead}>
+                                <div> Supervisor </div>
+                                <div className={styles.contentOverFlow}>
+                                  {reportListAll?.supervisorAllocationCount?.map(
+                                    (item) => (
+                                      <div
+                                        className={styles.contentAuditor}
+                                        key={item.id}
+                                      >
+                                        <div className={styles.avatar}>
+                                          {item.userNameDTO?.firstName ||
+                                          item?.userNameDTO?.lastName ||
+                                          item?.userNameDTO?.profileImageUrl ? (
+                                            <>
+                                              <span
+                                                className={styles.avatarAlign}
+                                              >
+                                                {renderUserPrfoileAvatar(
+                                                  item.userNameDTO?.firstName,
+                                                  item?.userNameDTO?.lastName,
+                                                  item?.userNameDTO
+                                                    ?.profileImageUrl,
+                                                  "header"
+                                                )}
+                                              </span>
+                                              <span
+                                                className={styles.smallText}
+                                              >
+                                                {item.userNameDTO?.firstName}{" "}
+                                                {item?.userNameDTO?.lastName}
+                                              </span>
+                                            </>
+                                          ) : (
+                                            <div className={styles.emptyData}>
+                                              ---
+                                            </div>
+                                          )}
+                                        </div>
+                                        <div className={styles.count}>
+                                          {item.count}
+                                        </div>
+                                      </div>
+                                    )
+                                  )}
+                                  {(!reportListAll?.supervisorAllocationCount ||
+                                    reportListAll?.supervisorAllocationCount
+                                      .length === 0) && (
+                                    <div
+                                      className="d-flex justify-content-center align-items-center"
+                                      style={{ height: "200px" }}
+                                    >
+                                      <Empty />{" "}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                            <div className={`col-xl-4 ${styles.flags}`}>
+                              <div className={`${styles.cardHead}`}>
+                                <div>Reviewer</div>
+                                <div className={styles.contentOverFlow}>
+                                  {reportListAll?.reviewerAllocationCount
+                                    .length > 0 ? (
+                                    reportListAll?.reviewerAllocationCount?.map(
+                                      (item) => (
+                                        <div
+                                          className={styles.contentAuditor}
+                                          key={item.id}
+                                        >
+                                          <div className={styles.avatar}>
+                                            <span
+                                              className={styles.avatarAlign}
+                                            >
+                                              {renderUserPrfoileAvatar(
+                                                item.userNameDTO?.firstName,
+                                                item?.userNameDTO?.lastName,
+                                                item?.userNameDTO
+                                                  ?.profileImageUrl,
+                                                "header"
+                                              )}
+                                            </span>
+                                            <span className={styles.smallText}>
+                                              {item.userNameDTO?.firstName}{" "}
+                                              {item?.userNameDTO?.lastName}
+                                            </span>
+                                          </div>
+
+                                          <div className={styles.count}>
+                                            {item.count}
+                                          </div>
+                                        </div>
+                                      )
+                                    )
+                                  ) : (
+                                    <div
+                                      className="d-flex justify-content-center align-items-center"
+                                      style={{ height: "200px" }}
+                                    >
+                                      <Empty />
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>

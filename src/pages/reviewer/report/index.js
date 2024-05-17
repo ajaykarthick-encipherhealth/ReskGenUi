@@ -19,13 +19,12 @@ import {
 } from "../../../store/actions/ReportActions";
 import { connect, useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import InitialCard from "../../../mainStream/reports/initialReport"
+import InitialCard from "../../../mainStream/reports/initialReport";
+import SentReport from "../../../mainStream/reports/sentReport";
 import ReceivedReport from "../../../resusablereport/reports/receivedReport";
 import Export from "../../../resusablereport/reports/Export";
 import { actions as workflowActions } from "../../../stores/reviewer/workqueue";
 import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
-import TabNavigation from "../../../mainStream/components/tags";
-import SentReport from "../../../mainStream/reports/sentReport";
 
 const statusOptions = [
   { label: "All", value: "ALL" },
@@ -287,7 +286,40 @@ const Reports = ({ workFgetFlagsowData }) => {
           <div className="row">
             <div className="col-xl-12">
               <div>
-              <TabNavigation tabs={["Reviewer", "Sent", "Received"]} />
+                <div className={styles.buttonContainer}>
+                  <div className={styles.group}>
+                    <button
+                      className={
+                        reportActiveTab === "Reviewer" ? `${styles.active}` : ""
+                      }
+                      onClick={() => {
+                        handleTabs("Reviewer");
+                      }}
+                    >
+                      Reviewer
+                    </button>
+                    <button
+                      className={
+                        reportActiveTab === "Sent" ? `${styles.active}` : ""
+                      }
+                      onClick={() => {
+                        handleTabs("Sent");
+                      }}
+                    >
+                      Sent
+                    </button>
+                    <button
+                      className={
+                        reportActiveTab === "Received" ? `${styles.active}` : ""
+                      }
+                      onClick={() => {
+                        handleTabs("Received");
+                      }}
+                    >
+                      Received
+                    </button>
+                  </div>
+                </div>
 
                 <div className="tbl-caption  align-items-center">
                   <div className="tbl-caption  align-items-center">

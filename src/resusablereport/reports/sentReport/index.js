@@ -12,15 +12,8 @@ import {
 } from "../../../components/headerFilters/functions";
 import EditButton from "../../../images/adminUsers/EditButton";
 import SpinnerDots from "../../../components/spinner";
-import Export from "../../../pages/admin/reports/Export";
+import Export from "../Export";
 import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
-import CardComponent from "../../../mainStream/components/cards/miniGroupCard";
-import {
-  AccessCountSection,
-  OverallReportsSection,
-  OverallUsersSection,
-} from "../../../mainStream/components/subMiniCard";
-import CustomTable from "../../../mainStream/components/customTable";
 
 export const colors = {
   A: "#8A2BE2",
@@ -50,7 +43,6 @@ export const colors = {
   Y: "#CD8500",
   Z: "#607B8B",
 };
-export const nameColors = {};
 const SentReport = ({
   details,
   onSentPageChange,
@@ -76,37 +68,8 @@ const SentReport = ({
     const hash = (user?.userDetails?.firstName.charCodeAt(0) % 6) + 1;
     return hash;
   });
-  const data =
-    details?.sentReportUserWiseCountDtoByRole?.sentReportUserWiseCountListForSupervisor?.map(
-      (item) => ({
-        value: item.userCount,
-        name: `${item.userNameDTO?.firstName} ${item.userNameDTO?.lastName}`,
-      })
-    );
-  const datas =
-    details?.sentReportUserWiseCountDtoByRole?.sentReportUserWiseCountListForAdmin?.map(
-      (item) => ({
-        value: item?.userCount,
-        name: `${item?.userNameDTO?.firstName} ${item?.userNameDTO?.lastName}`,
-      })
-    );
-  const nameColors = {};
-  const getRandomColor = (letter) => colors[letter.toUpperCase()] || "#B35CE1";
-  datas?.forEach((item) => {
-    const firstLetter = item?.name[0];
 
-    if (!nameColors[item?.name]) {
-      nameColors[item?.name] = getRandomColor(firstLetter);
-    }
-  });
-  const excelCount =
-    details?.sentReportCountByTypeDTOList?.find((item) => item._id === "EXCEL")
-      ?.count || 0;
-  const csvCount =
-    details?.sentReportCountByTypeDTOList?.find((item) => item._id === "CSV")
-      ?.count || 0;
-
-  const getChartOption = () => {
+  const getChartOption = (data) => {
     const excelCount =
       details?.sentReportCountByTypeDTOList?.find(
         (item) => item._id === "EXCEL"
@@ -183,7 +146,6 @@ const SentReport = ({
     };
   };
 
-  const chartOption = getChartOption(details?.sentReportCountByTypeDTOList);
   const handleReceiverReport = (item) => {
     const info = {
       reportUser: item,
@@ -192,8 +154,9 @@ const SentReport = ({
       receivedEndDate: receivedEndDate,
     };
     dispatch(selectedReport(info));
+    const currentpath=localStorage.getItem("userRole")
     router?.push(
-      `/supervisor/report/individualreport?reportId=${
+      `/${currentpath}/report/individualreport?reportId=${
         item?._id
       }&sentreport=${true}&page=${receivedPageNo}&limit=${paginationFirst}`
     );
@@ -296,6 +259,8 @@ const SentReport = ({
         })
       );
 
+    const nameColors = {};
+
     data?.forEach((item) => {
       const firstLetter = item.name[0];
 
@@ -380,7 +345,6 @@ const SentReport = ({
     ) {
       handleCardSelection(details?.receivedReportDTOList?.data[0], 0);
     }
-    console.log(details?.receivedReportDTOList?.data, "rece");
   }, [details]);
 
   const handleCardSelection = (item, index) => {
@@ -404,27 +368,181 @@ const SentReport = ({
                     {!details?.receivedReportDTOList?.data ? (
                       <SpinnerDots />
                     ) : (
-                      <div>
+                      <div className={styles.cardContainer}>
                         {details?.receivedReportDTOList?.data?.length > 0 ? (
-                          details?.receivedReportDTOList?.data.map(
-                            (item, index) => (
-                              <CardComponent
-                                key={index}
-                                data={details?.receivedReportDTOList?.data}
-                                selectedCardIndex={selectedCardIndex}
-                                handleReceiverReport={handleReceiverReport}
-                                setSelectedRows={setSelectedRows}
-                                dispatch={dispatch}
-                                selectedReport={selectedReport}
-                                setOpenEdit={setOpenEdit}
-                                styles={styles}
-                                item={item}
-                                index={index}
-                              />
-                            )
+                          details?.receivedReportDTOList?.data?.map(
+                            (item, index) => {
+                              const formattedDate = dateFormate(
+                                dayjs,
+                                item?.sendDate
+                              );
+                              return (
+                                <div
+                                  key={index}
+                                  className={`${styles.card} ${
+                                    index === selectedCardIndex
+                                      ? styles.selectedCard
+                                      : ""
+                                  }`}
+                                  // onClick={() => handleCardSelection(item, index)}
+                                  
+                                >
+                                  <div className={styles.contentGroup}>
+                                    <div className="col-xl-12">
+                                      <div
+                                        style={{
+                                          display: "flex",
+                                          justifyContent: "space-between",
+                                          alignItems: "center",
+                                          paddingBottom: "5px",
+                                        }}
+                                        
+                                      >
+                                        <div
+                                          className={`col-xl-6 ${styles.pName} cr-pointer`} onClick={() => handleReceiverReport(item)}
+                                        >
+                                          {item.reportName}
+                                        </div>
+                                        <div
+                                          className={`col-xl-2 ${styles.dataContainer}`}
+                                        >
+                                          <div
+                                            onClick={() => {
+                                              setSelectedRows(item);
+                                              dispatch(selectedReport(item));
+                                              setOpenEdit(true);
+                                            }}
+                                            className="cr-pointer"
+                                          >
+                                            <EditButton />
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div
+                                        style={{
+                                          paddingBottom: "5px",
+                                        }}
+                                      >
+                                        <div
+                                          className={`col-xl-12 ${styles.headText} cr-pointer`}
+                                          onClick={() => handleReceiverReport(item)}
+                                        >
+                                          {item._id}
+                                        </div>
+                                      </div>
+                                      <div className="d-flex justify-content-between align-items-center cr-pointer" onClick={() => handleReceiverReport(item)}>
+                                        <div
+                                          className={`col-xl-2 ${styles.text}`}
+                                        >
+                                          {formattedDate}
+                                        </div>
+                                        <div
+                                          className={`col-xl-4 ${styles.text}`}
+                                        >
+                                          <Avatar.Group maxCount={2}>
+                                            {item?.receivedUsers?.map(
+                                              (data, index) => (
+                                                <Popover
+                                                  key={index}
+                                                  content={
+                                                    <div
+                                                      style={{
+                                                        display: "flex",
+                                                        justifyContent:
+                                                          "center",
+                                                        alignItems: "center",
+                                                        flexDirection: "column",
+                                                      }}
+                                                    >
+                                                      <div
+                                                        style={{
+                                                          padding: "10px",
+                                                        }}
+                                                      >
+                                                        {
+                                                          data?.userDetails
+                                                            ?.firstName
+                                                        }{" "}
+                                                        {
+                                                          data?.userDetails
+                                                            ?.lastName
+                                                        }
+                                                      </div>
+                                                      {data?.userDetails
+                                                        ?.profileImageUrl && (
+                                                        <img
+                                                          src={
+                                                            data.userDetails
+                                                              .profileImageUrl
+                                                          }
+                                                          alt="Profile"
+                                                          style={{
+                                                            maxWidth: "100px",
+                                                            maxHeight: "100px",
+                                                          }}
+                                                        />
+                                                      )}
+                                                    </div>
+                                                  }
+                                                >
+                                                  <div
+                                                    style={{
+                                                      display: "inline-block",
+                                                      marginRight: "5px",
+                                                    }}
+                                                  >
+                                                    {item.receivedUsers
+                                                      .length === 1 && (
+                                                      <div className="d-flex justify-content-center align-items-center">
+                                                        <div
+                                                          style={{
+                                                            marginRight: "10px",
+                                                          }}
+                                                        >
+                                                          {renderUserPrfoileAvatar(
+                                                            data?.userDetails
+                                                              ?.firstName,
+                                                            data?.userDetails
+                                                              ?.lastName,
+                                                            data?.userDetails
+                                                              ?.profileImageUrl,
+                                                            "header"
+                                                          )}
+                                                        </div>
+
+                                                        <div>
+                                                          {
+                                                            data?.userDetails
+                                                              ?.firstName
+                                                          }{" "}
+                                                          {
+                                                            data?.userDetails
+                                                              ?.lastName
+                                                          }
+                                                        </div>
+                                                      </div>
+                                                    )}
+                                                  </div>
+                                                </Popover>
+                                              )
+                                            )}
+                                          </Avatar.Group>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            }
                           )
                         ) : (
-                          <Empty />
+                          <div
+                            className="d-flex justify-content-center align-items-center"
+                            style={{ height: "700px" }}
+                          >
+                            <Empty />
+                          </div>
                         )}
                       </div>
                     )}
@@ -435,25 +553,61 @@ const SentReport = ({
                       <SpinnerDots />
                     ) : (
                       <div className={styles.cardContainer}>
-                        <div className={styles.card2}>
+                        <div
+                          className={styles.card1}
+                          style={{ height: "816 !important" }}
+                        >
                           <div className={styles.summaryText}>Summary</div>
                           <div className="col-xl-12  d-flex mt-4">
-                            <OverallReportsSection
-                              totalReports={
-                                details?.receivedReportDTOList?.totalElements
-                              }
-                              styles={styles}
-                            />
-
-                            <OverallUsersSection
-                              totalUsers={details?.overAllUsersCount}
-                              styles={styles}
-                            />
-
-                            <AccessCountSection
-                              data={details?.reportCountResponseByAccessDTO}
-                              styles={styles}
-                            />
+                            <div className={`col-xl-6 ${styles.sentSubCard}`}>
+                              <div>
+                                <div>Overall Reports Sent</div>
+                                <div className="fw-bold">
+                                  {
+                                    details?.receivedReportDTOList
+                                      ?.totalElements
+                                  }
+                                </div>
+                              </div>
+                            </div>
+                            <div className={`col-xl-6 ${styles.sentSubCard}`}>
+                              <div>Overall Users</div>
+                              <div className="fw-bold">
+                                {details?.overAllUsersCount}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-xl-12 d-flex mt-4">
+                            {details?.reportCountResponseByAccessDTO?.map(
+                              (item, index) => (
+                                <React.Fragment key={index}>
+                                  {item._id === "READ" && (
+                                    <div
+                                      className={`col-xl-6 ${styles.readSubCard}`}
+                                    >
+                                      <div>
+                                        <div>No of Read</div>
+                                        <div className="fw-bold">
+                                          {item.roleCount}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+                                  {item._id === "DOWNLOAD" && (
+                                    <div
+                                      className={`col-xl-6 ${styles.downloadSubCard}`}
+                                    >
+                                      <div>
+                                        <div>No of Download</div>
+                                        <div className="fw-bold">
+                                          {item.roleCount}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+                                </React.Fragment>
+                              )
+                            )}
                           </div>
 
                           <div className={styles.summaryText}>
@@ -461,171 +615,64 @@ const SentReport = ({
                           </div>
 
                           <div
-                            className={` ${styles.card3} justify-content-between p-2 m-2`}
+                            className={` ${styles.card} justify-content-between p-2 m-2`}
                           >
-                            <div>
-                              <div style={{ width: "100%" }}>
-                                <div
-                                  className={styles.summaryText}
-                                  style={{ paddingLeft: "10px" }}
-                                >
-                                  Report Type
-                                </div>
-                                <div className="row">
-                                  <div className="col-md-6">
-                                    <ReactECharts
-                                      option={getChartOption()}
-                                      style={{ height: "230px" }}
-                                    />
-                                  </div>
-                                  <div className="col-md-6">
-                                    <table className="table">
-                                      <thead>
-                                        <tr>
-                                          <th
-                                            style={{
-                                              backgroundColor: "#04306F",
-                                              color: "white",
-                                            }}
-                                          >
-                                            Type
-                                          </th>
-                                          <th
-                                            style={{
-                                              backgroundColor: "#04306F",
-                                              color: "white",
-                                            }}
-                                          >
-                                            Count
-                                          </th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        <tr>
-                                          <td
-                                            style={{
-                                              width: "155px",
-                                              padding: "10px",
-                                            }}
-                                          >
-                                            <div className="d-flex justify-content-center align-items-center">
-                                              <div
-                                                className={styles.excelColor}
-                                              ></div>
-                                              <div>Excel</div>
-                                            </div>
-                                          </td>
-                                          <td
-                                            style={{
-                                              width: "155px",
-                                              padding: "10px",
-                                            }}
-                                          >
-                                            {excelCount}
-                                          </td>
-                                        </tr>
-                                        <tr>
-                                          <td
-                                            style={{
-                                              width: "155px",
-                                              padding: "10px",
-                                            }}
-                                          >
-                                            <div className="d-flex justify-content-center align-items-center">
-                                              <div
-                                                className={styles.csvColor}
-                                              ></div>
-                                              <div>CSV</div>
-                                            </div>
-                                          </td>
-
-                                          <td
-                                            style={{
-                                              width: "155px",
-                                            }}
-                                          >
-                                            {csvCount}
-                                          </td>
-                                        </tr>
-                                      </tbody>
-                                    </table>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div className="d-flex justify-content-end">
-                                <div className={styles.userContainer}>
-                                  <div className={styles.user}>
-                                    <button
-                                      className={
-                                        reportActiveTab === "Supervisor"
-                                          ? `${styles.active}`
-                                          : ""
-                                      }
-                                      onClick={() => {
-                                        handleTabs("Supervisor");
-                                      }}
-                                    >
-                                      Supervisor
-                                    </button>
-                                    <button
-                                      className={
-                                        reportActiveTab === "Admin"
-                                          ? `${styles.active}`
-                                          : ""
-                                      }
-                                      onClick={() => {
-                                        handleTabs("Admin");
-                                      }}
-                                    >
-                                      Admin
-                                    </button>
-                                  </div>
+                            <div className="d-flex justify-content-end">
+                              <div className={styles.userContainer}>
+                                <div className={styles.user}>
+                                  <button
+                                    className={
+                                      reportActiveTab === "Supervisor"
+                                        ? `${styles.active}`
+                                        : ""
+                                    }
+                                    onClick={() => {
+                                      handleTabs("Supervisor");
+                                    }}
+                                  >
+                                    Supervisor
+                                  </button>
+                                  <button
+                                    className={
+                                      reportActiveTab === "Admin"
+                                        ? `${styles.active}`
+                                        : ""
+                                    }
+                                    onClick={() => {
+                                      handleTabs("Admin");
+                                    }}
+                                  >
+                                    Admin
+                                  </button>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                          <div
-                            className={` ${styles.card3} justify-content-between p-2 m-2`}
-                          >
-                            <div style={{ width: "100%" }}>
-                              <div
-                                className={styles.summaryText}
-                                style={{ paddingLeft: "10px" }}
-                              >
-                                Users
+
+                            <div className=" d-flex justify-content-between p-2 m-2">
+                              <div style={{ width: "50%" }}>
+                                <div
+                                  className={styles.summaryText}
+                                  style={{ textAlign: "center" }}
+                                >
+                                  Report Type
+                                </div>
+                                <ReactECharts
+                                  option={getChartOption()}
+                                  style={{ height: "230px" }}
+                                />
                               </div>
-                              <div className="row">
-                                <div className="col-md-6">
-                                  <ReactECharts
-                                    option={selectedChartOption}
-                                    style={{ height: "230px" }}
-                                  />
+                              <div style={{ width: "50%" }}>
+                                <div
+                                  className={styles.summaryText}
+                                  style={{ textAlign: "center" }}
+                                >
+                                  Users
                                 </div>
-                                <div className="col-md-6">
-                                  {reportActiveTab === "Supervisor" ? (
-                                    <div
-                                      style={{
-                                        height: "200px",
-                                        overflow: "scroll",
-                                      }}
-                                    >
-                                      <CustomTable
-                                        data={data}
-                                        styles={styles}
-                                        head1={"Supervisor"}
-                                        head2={"Count"}
-                                      />
-                                    </div>
-                                  ) : (
-                                    <CustomTable
-                                      data={datas}
-                                      styles={styles}
-                                      head1={"Admin"}
-                                      head2={"Count"}
-                                    />
-                                  )}
-                                </div>
+
+                                <ReactECharts
+                                  option={selectedChartOption}
+                                  style={{ height: "230px" }}
+                                />
                               </div>
                             </div>
                           </div>
