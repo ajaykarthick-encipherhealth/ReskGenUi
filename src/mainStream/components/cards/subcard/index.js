@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../../../resusablereport/reports/report.module.css";
+import styles from "../../../reports/report.module.css";
 
 const SubCard = ({ title, value }) => {
   return (

@@ -30,12 +30,12 @@ import { useDispatch } from "react-redux";
 import { connect } from "react-redux";
 import SpinnerDots from "../../../components/spinner";
 import ContentGroupCard from "../../../mainStream/components/cards/contentGroupCard";
-import SubCard from "../../../mainStream/components/cards/subCard";
+
 import AllocationCount from "../../../mainStream/components/allocationCount";
 import Flags from "../../../mainStream/components/flagCount";
 import MiniCards from "../../../mainStream/components/miniCards";
 import Pagination from "../../components/pagination";
-
+import SubCard from "../../../mainStream/components/cards/subcard"
 export const auditstatusBodyTemplate = (rowData) => {
   const declinedDataFromAudit = extractLatestData(rowData?.auditDeclinedNotes);
 
