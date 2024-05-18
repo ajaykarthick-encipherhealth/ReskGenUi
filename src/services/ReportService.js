@@ -2,36 +2,52 @@ import axios from "../utility/axiosConfig";
 import ENDPOINTS from "../utility/enpoints";
 import { getSentDetails } from "../store/actions/ReportActions";
 
-export const UPDATE_SENTREPORT='UPDATE_SENTREPORT'
+export const UPDATE_SENTREPORT = "UPDATE_SENTREPORT";
 
-export const patientDetails = async (pagenum,startDate="",endDate="",search,filter="",sort) => {
+export const patientDetails = async (
+  pagenum,
+  startDate = "",
+  endDate = "",
+  search,
+  filter = "",
+  sort
+) => {
   const token = localStorage.getItem("token");
 
-  const searchValue = filter === "ALL" ? "" : filter
- const url=`dbservice/patient/coderreport?pageno=${pagenum}&size=7&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}`
+  const searchValue = filter === "ALL" ? "" : filter;
+  const url = `dbservice/patient/coderreport?pageno=${pagenum}&size=7&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}`;
 
   try {
-    const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}${url}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await axios.get(`${ENDPOINTS?.apiEndoint}${url}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response;
   } catch (err) {
     console.log(err);
   }
 };
-export const SentReport = async (pagenum,startDate="",endDate="",search,sort) => {
+export const SentReport = async (
+  pagenum,
+  startDate = "",
+  endDate = "",
+  search,
+  sort
+) => {
   const token = localStorage.getItem("token");
- 
-  const url= `dbservice/reportdetails/sent?pageNo=${pagenum}&size=7&startdate=${startDate?startDate:""}&enddate=${endDate?endDate:""}&searchstring=${search?search:""}&sortfield=${sort?.sortField?sort?.sortField:""}&sortdirection=${sort?.sortDir?sort?.sortDir:""}`
+  console.log(pagenum, "pagenum");
+  const url = `dbservice/reportdetails/sent?pageNo=${pagenum}&size=7&startdate=${
+    startDate ? startDate : ""
+  }&enddate=${endDate ? endDate : ""}&searchstring=${
+    search ? search : ""
+  }&sortfield=${sort?.sortField ? sort?.sortField : ""}&sortdirection=${
+    sort?.sortDir ? sort?.sortDir : ""
+  }`;
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}${url}`,
-      
+
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -43,24 +59,27 @@ export const SentReport = async (pagenum,startDate="",endDate="",search,sort) =>
     console.log(err);
   }
 };
-export const ReceivedReport = async (pagenum,startDate="",endDate="",search,sort) => {
+export const ReceivedReport = async (
+  pagenum,
+  startDate = "",
+  endDate = "",
+  search,
+  sort
+) => {
   const token = localStorage.getItem("token");
-  const url= `dbservice/reportdetails/received?pageNo=${pagenum}&size=7&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}`
+  const url = `dbservice/reportdetails/received?pageNo=${pagenum}&size=7&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}`;
   try {
-    const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}${url}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await axios.get(`${ENDPOINTS?.apiEndoint}${url}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   } catch (err) {
     console.log(err);
   }
 };
-export const GetSelectedReport = async (reportId,reportInfo) => {
+export const GetSelectedReport = async (reportId, reportInfo) => {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get(
@@ -77,7 +96,7 @@ export const GetSelectedReport = async (reportId,reportInfo) => {
   }
 };
 
-export const exportData=(data)=>{
+export const exportData = (data) => {
   const token = localStorage.getItem("token");
   return axios.post(
     `${ENDPOINTS?.apiEndoint}management/patient/report/export`,
@@ -88,9 +107,9 @@ export const exportData=(data)=>{
       },
     }
   );
-}
+};
 
-export const usersList=(id,search)=>{
+export const usersList = (id, search) => {
   const token = localStorage.getItem("token");
   return axios.get(
     `${ENDPOINTS?.apiEndoint}dbservice/user/getUsersForL1Report?orgid=${id}&searchString=${search}`,
@@ -100,9 +119,9 @@ export const usersList=(id,search)=>{
       },
     }
   );
-}
+};
 
-export const getFile=(pathname)=>{
+export const getFile = (pathname) => {
   const token = localStorage.getItem("token");
   return axios.get(
     `${ENDPOINTS?.apiEndoint}management/patient/report/getfile?blobName=${pathname}`,
@@ -112,7 +131,7 @@ export const getFile=(pathname)=>{
       },
     }
   );
-}
+};
 
 export const updateSentReport = (data) => async (dispatch) => {
   const token = localStorage.getItem("token");

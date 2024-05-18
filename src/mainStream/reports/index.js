@@ -12,11 +12,6 @@ import ExportImg from "../../images/svg/Export";
 import { debounce } from "../../../src/pages/admin/reports/Export";
 import { disableFutureDate } from "../../components/headerFilters/functions";
 import { patientDetails } from "../../stores/authflow/actions";
-import {
-  getReceivedDetails,
-  getReportDetails,
-  getSentDetails,
-} from "../../store/actions/ReportActions";
 import { connect, useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import InitialCard from "../../mainStream/reports/initialReport";
@@ -24,6 +19,7 @@ import SentReport from "../../mainStream/reports/sentReport";
 import ReceivedReport from "../../mainStream/reports/receivedReport";
 import Export from "../../resusablereport/reports/Export";
 import { actions as workflowActions } from "../../stores/reviewer/workqueue";
+import { actions as reviewerAction } from "../../stores/reviewer/report";
 import { selectedReport } from "../../store/actions/adminAction/ReportActions";
 import Tab from "../components/tags";
 
@@ -35,14 +31,18 @@ const statusOptions = [
   { label: "Hold", value: "HOLD" },
 ];
 
-const Reports = ({ workFgetFlagsowData }) => {
+const Reports = ({
+  workFgetFlagsowData,
+  reviewerReport,
+  ReportPatientDetails,
+  reviewerLoader,
+  SentReportDetails,
+  sentReport,
+  ReceivedReportDetails,
+  receivedReport,
+}) => {
   const dispatch = useDispatch();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
-  const ReportPatientDetails = useSelector((state) => state.report?.details);
-  const SentReportDetails = useSelector((state) => state.report?.sentDetails);
-  const ReceivedReportDetails = useSelector(
-    (state) => state.report?.receivedDetails
-  );
   const rowsLength = useSelector((state) => state?.report?.row);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
   const [isLoading, setIsLoading] = useState(true);
@@ -152,36 +152,30 @@ const Reports = ({ workFgetFlagsowData }) => {
     dispatch(getActiveTab(activeTab));
 
     if (activeTab === "Sent") {
-      dispatch(
-        getSentDetails(
-          sentPageNo,
-          selectedDateRanges?.Sent?.from,
-          selectedDateRanges?.Sent?.to,
-          coderSearchString ? coderSearchString : "",
-          sort
-        )
-      );
+      sentReport({
+        pagenum: sentPageNo,
+        startDate: selectedDateRanges?.Sent?.from,
+        endDate: selectedDateRanges?.Sent?.to,
+        search: coderSearchString ? coderSearchString : "",
+        sort: sort,
+      });
     } else if (activeTab === "Received") {
-      dispatch(
-        getReceivedDetails(
-          receivedPageNo,
-          selectedDateRanges?.Received?.from,
-          selectedDateRanges?.Received?.to,
-          coderSearchString ? coderSearchString : "",
-          sort
-        )
-      );
+      receivedReport({
+        pagenum: receivedPageNo,
+        startDate: selectedDateRanges?.Received?.from,
+        endDate: selectedDateRanges?.Received?.to,
+        search: coderSearchString ? coderSearchString : "",
+        sort: sort,
+      });
     } else {
-      dispatch(
-        getReportDetails(
-          pageNo,
-          selectedDateRanges?.Reviewer?.from,
-          selectedDateRanges?.Reviewer?.to,
-          coderSearchString ? coderSearchString : "",
-          selectedOptions?.reviewerStatus,
-          sort
-        )
-      );
+      reviewerReport({
+        pagenum: pageNo,
+        startDate: selectedDateRanges?.Reviewer?.from,
+        endDate: selectedDateRanges?.Reviewer?.to,
+        search: coderSearchString ? coderSearchString : "",
+        filter: selectedOptions?.reviewerStatus,
+        sort: sort,
+      });
     }
 
     if (ExportResponse) {
@@ -190,7 +184,6 @@ const Reports = ({ workFgetFlagsowData }) => {
   }, [
     pageNo,
     sentPageNo,
-    receivedPageNo,
     receivedPageNo,
     receivedSortOrder,
     sort,
@@ -278,7 +271,6 @@ const Reports = ({ workFgetFlagsowData }) => {
     const field = event.target.name;
     debouncedSearch(value, setSearchVal, field);
   };
-
   return (
     <div>
       <Header />
@@ -292,7 +284,6 @@ const Reports = ({ workFgetFlagsowData }) => {
                   handleTabs={handleTabs}
                   tabs={["Reviewer", "Sent", "Received"]}
                 />
-
                 <div className="tbl-caption  align-items-center">
                   <div className="tbl-caption  align-items-center">
                     <div className={`row filter-contain mt-4 mb-0`}>
@@ -444,6 +435,7 @@ const Reports = ({ workFgetFlagsowData }) => {
                         setSort={setSort}
                         gotoPatientDetails={gotoPatientDetails}
                         page={{ pageNo, paginationFirst }}
+                        loader={reviewerLoader}
                       />
                     </div>
                   )}
@@ -546,9 +538,18 @@ const Reports = ({ workFgetFlagsowData }) => {
 const enhancer = connect(
   (state) => ({
     getFlagsData: state?.reviewer?.workQueue?.flags?.data,
+    ReportPatientDetails: state?.reviewer?.report?.reviewer?.data,
+    reviewerLoader: state?.reviewer?.report?.reviewerLoader,
+    SentReportDetails: state?.reviewer?.report?.sent,
+    sentLoader: state?.reviewer?.report?.sentLoader,
+    ReceivedReportDetails: state?.reviewer?.report?.received,
+    receivedLoader: state?.reviewer?.report?.receivedLoader,
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,
+    reviewerReport: reviewerAction.reviewerReport,
+    sentReport: reviewerAction.sentReport,
+    receivedReport: reviewerAction.receivedReport,
   }
 );
 export default enhancer(Reports);

@@ -205,6 +205,7 @@ const InitialCard = ({
   reportListAll,
   page,
   getFlagsData,
+  loader
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -387,7 +388,7 @@ const InitialCard = ({
     <>
       <div>
         <div className="content-body">
-          {!reportListAll?.response?.data ? (
+          {loader ? (
             <SpinnerDots />
           ) : (
             <div className={`container-fluid py-4 px-2`}>
