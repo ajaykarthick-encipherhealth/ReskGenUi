@@ -40,6 +40,8 @@ const Reports = ({
   sentReport,
   ReceivedReportDetails,
   receivedReport,
+  receivedLoader,
+  sentLoader
 }) => {
   const dispatch = useDispatch();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
@@ -271,6 +273,7 @@ const Reports = ({
     const field = event.target.name;
     debouncedSearch(value, setSearchVal, field);
   };
+  console.log(receivedLoader,"se")
   return (
     <div>
       <Header />
@@ -453,6 +456,7 @@ const Reports = ({
                         receivedStartDate={selectedDateRanges?.Sent?.from}
                         receivedEndDate={selectedDateRanges?.Sent?.to}
                         isPhysician={true}
+                        loader={sentLoader}
                       />
                     </div>
                   )}
@@ -470,6 +474,7 @@ const Reports = ({
                         sortOrder={receivedSortOrder}
                         setSort={setSort}
                         isPhysician={true}
+                        loader={receivedLoader}
                       />
                     </div>
                   )}
@@ -535,13 +540,14 @@ const Reports = ({
     </div>
   );
 };
+
 const enhancer = connect(
   (state) => ({
     getFlagsData: state?.reviewer?.workQueue?.flags?.data,
     ReportPatientDetails: state?.reviewer?.report?.reviewer?.data,
     reviewerLoader: state?.reviewer?.report?.reviewerLoader,
     SentReportDetails: state?.reviewer?.report?.sent,
-    sentLoader: state?.reviewer?.report?.sentLoader,
+    sentLoader: state?.reviewer?.report?.senntLoader,
     ReceivedReportDetails: state?.reviewer?.report?.received,
     receivedLoader: state?.reviewer?.report?.receivedLoader,
   }),
