@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import styles from "../../../resusablereport/reports/report.module.css";
-import { Paginator } from "primereact/paginator";
 import { useRouter } from "next/router";
 import ReactECharts from "echarts-for-react";
 import SpinnerDots from "../../../components/spinner";

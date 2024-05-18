@@ -35,10 +35,9 @@ import AllocationCount from "../../../mainStream/components/allocationCount";
 import Flags from "../../../mainStream/components/flagCount";
 import MiniCards from "../../../mainStream/components/miniCards";
 import Pagination from "../../components/pagination";
-import SubCard from "../../../mainStream/components/cards/subcard"
+import SubCard from "../../../mainStream/components/cards/subcard";
 export const auditstatusBodyTemplate = (rowData) => {
   const declinedDataFromAudit = extractLatestData(rowData?.auditDeclinedNotes);
-
   const declinedDataFromDeclined = extractLatestData(
     rowData?.auditDeclinedNotes
   );
@@ -205,7 +204,7 @@ const InitialCard = ({
   reportListAll,
   page,
   getFlagsData,
-  loader
+  loader,
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -439,7 +438,7 @@ const InitialCard = ({
                           <div className={styles.cardContainer}>
                             {reportListAll?.response?.data?.map((item, id) => (
                               <ContentGroupCard
-                              content={reportListAll?.response?.data}
+                                content={reportListAll?.response?.data}
                                 key={id}
                                 item={item}
                                 flag={item?.flag}

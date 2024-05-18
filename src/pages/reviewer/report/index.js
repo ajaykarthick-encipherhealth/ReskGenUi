@@ -1,12 +1,12 @@
-import React from 'react'
-import Reports from '../../../mainStream/reports'
+import React from "react";
+import Reports from "../../../mainStream/reports";
 
 const index = () => {
   return (
     <div>
-      <Reports/>
+      <Reports />
     </div>
-  )
-}
+  );
+};
 
-export default index
+export default index;

@@ -9,12 +9,16 @@ const Flags = ({ flagsData, styles }) => {
         {flagsData?.map((flagItem) => (
           <div className={styles.contentGroups} key={flagItem.id}>
             <div>
-            {SVGICON.flagsSvg}
+              {SVGICON.flagsSvg}
               <span style={{ fontSize: "12px" }}>
-                {flagItem?.flagName ? flagItem?.flagName.replaceAll("_", " ") : ""}
+                {flagItem?.flagName
+                  ? flagItem?.flagName.replaceAll("_", " ")
+                  : ""}
               </span>
             </div>
-            <div className={styles.count}>{flagItem.count ? flagItem.count : 0}</div>
+            <div className={styles.count}>
+              {flagItem.count ? flagItem.count : 0}
+            </div>
           </div>
         ))}
       </div>

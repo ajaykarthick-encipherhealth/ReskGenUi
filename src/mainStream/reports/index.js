@@ -41,7 +41,7 @@ const Reports = ({
   ReceivedReportDetails,
   receivedReport,
   receivedLoader,
-  sentLoader
+  sentLoader,
 }) => {
   const dispatch = useDispatch();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
@@ -273,7 +273,7 @@ const Reports = ({
     const field = event.target.name;
     debouncedSearch(value, setSearchVal, field);
   };
-  console.log(receivedLoader,"se")
+  console.log(receivedLoader, "se");
   return (
     <div>
       <Header />
