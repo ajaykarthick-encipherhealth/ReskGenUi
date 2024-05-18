@@ -9194,13 +9194,13 @@ tr>td{
   border: 1px solid black !important;
 } */
 
-table th:first-child {
+/* table th:first-child {
   border-radius: 10px 0 0 10px;
-}
+} */
 
-table th:last-child {
+/* table th:last-child {
   border-radius: 0 10px 10px 0;
-}
+} */
 
 /* serachform style */
 
@@ -11554,7 +11554,7 @@ img.login-logo {
 .ant-modal-body {
   min-height: 10px !important;
   height: auto !important;
-  width:100% !important;
+  width: 100% !important;
   /* max-height: 400px !important; */
   overflow: scroll !important;
 }
@@ -14440,8 +14440,8 @@ input[type="number"] {
   color: #04306f;
   margin-bottom: 0;
   width: 30% !important;
-  height:42px;
-  display:flex;
+  height: 42px;
+  display: flex;
   justify-content: center;
   /* padding:0 10px; */
   align-items: center;
@@ -14514,7 +14514,6 @@ input[type="number"] {
   width: 100%;
   border-radius: none !important;
 }
-.newReportPicker > .ant-picker-input >input{
+.newReportPicker > .ant-picker-input > input {
   font-size: 12px !important;
 }
-

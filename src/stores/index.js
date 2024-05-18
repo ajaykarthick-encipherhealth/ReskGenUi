@@ -27,7 +27,7 @@ import { reducer as UpdateDashboardReducer } from "./reviewer/dashboard";
 import { reducer as updatedPatientsReducer} from './reviewer/workqueue';
 import { reducer as searchReducer } from "./search";
 import { reducer as physicianReducer } from "./physician/dashboard"
-
+import { reducer as reportReducer } from "./reviewer/report"
 const reducers = combineReducers({
   // old reducers
   sideMenu: toggleMenu,
@@ -53,9 +53,11 @@ const reducers = combineReducers({
   physicianComparison: PhysicianComparisonReducer,
   tanantAdmin: TanantAdminService,
   ReviewerReducers: ReviewerReducers,
+
   reviewer: combineReducers({
     dashboard: UpdateDashboardReducer,
-    workQueue:updatedPatientsReducer
+    workQueue:updatedPatientsReducer,
+    report: reportReducer
   }),
   search: searchReducer,
   physician: combineReducers({

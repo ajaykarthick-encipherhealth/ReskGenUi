@@ -1,10 +1,58 @@
 import { requestPortal } from "../../../utils/network";
 
-export async function loadDashboard() {
+export async function reviewerApi({
+  pagenum,
+  startDate = "",
+  endDate = "",
+  search,
+  filter = "",
+  sort,
+}) {
   const options = {
     method: "GET",
   };
-  const data = await requestPortal(`dbservice/patient/getbyuser?userId=ajith01@encipherhealth.onmicrosoft.com&page=0&size=10
-  `, options);
+  const data = await requestPortal(
+    `dbservice/patient/coderreport?pageno=${pagenum}&size=7&startdate=${startDate}&enddate=${endDate}&status=${filter}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}
+  `,
+    options
+  );
+  return data;
+}
+
+export async function sentApi({
+  pagenum,
+  startDate = "",
+  endDate = "",
+  search,
+  sort,
+}) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/reportdetails/sent?pageNo=${pagenum}&size=7&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&sortfield=${
+      sort.sortField || ""
+    }&sortdirection=${sort.sortDir || ""}
+  `,
+    options
+  );
+  return data;
+}
+
+export async function receivedApi({
+  pagenum,
+  startDate = "",
+  endDate = "",
+  search,
+  sort,
+}) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/reportdetails/received?pageNo=${pagenum}&size=7&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}
+  `,
+    options
+  );
   return data;
 }
