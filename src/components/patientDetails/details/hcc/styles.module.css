@@ -339,17 +339,11 @@
   padding-left: 15px;
 }
 .dosContainer {
-  margin-top: -55px;
   border: 1px solid #e6e6e6 !important;
-  padding: 5px;
+  padding: 3px 0px;
   border-radius: 6px;
-  display: flex;
-  justify-content: space-between;
   cursor: pointer;
-  width: 280px;
-  margin-bottom: 10px;
-  float: right;
-  margin-right: -200px;
+  margin-bottom: 5px;
 }
 .dosContainer svg {
   padding-top: 1px;

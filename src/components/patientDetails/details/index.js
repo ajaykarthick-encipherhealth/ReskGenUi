@@ -26,6 +26,7 @@ import {
   Tooltip,
   Modal,
   notification,
+  Badge,
 } from "antd";
 import { IMAGES, SVGICON } from "../../../jsx/constant/theme";
 import Select from "react-select";
@@ -185,7 +186,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [workListPatientId, setWorkListPatientId] = useState(null);
   const [isFileCheck, setIsFileCheck] = useState(false);
-  
+
   const flagPostList = getFlagsData?.response?.map((item) => ({
     value: item?.id,
     label: (
@@ -264,7 +265,10 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   useEffect(() => {
     if (patientDetailsResult?.result?.response?.fileId) {
       const patientId = localStorage.getItem("patientId");
-      if (isFileCheck == false && patientId == patientDetailsResult?.result?.response.patientId) {
+      if (
+        isFileCheck == false &&
+        patientId == patientDetailsResult?.result?.response.patientId
+      ) {
         dispatch(
           getHccFileDetails(
             patientDetailsResult?.result?.response?.fileDetailDTO?.azureBlobPath
@@ -276,7 +280,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
         setIsFileCheck(true);
       }
     }
-  }, [patientDetailsResult?.result?.response?.fileDetailDTO?.azureBlobPath])
+  }, [patientDetailsResult?.result?.response?.fileDetailDTO?.azureBlobPath]);
 
   const getPatientIdDetails = async (patientId, flagFirstData) => {
     const response = await axios.get(
@@ -2312,20 +2316,24 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                             <ul className="">
                               {flagList?.map((data) => {
                                 return (
-                                  <>
-                                    <Tooltip title={data.name} placement="left">
-                                      <li
-                                        className={
-                                          flagContainerActive == data.name
-                                            ? `${visitStyles.commentsTagActive}`
-                                            : `${visitStyles.commentsTag}`
-                                        }
-                                        onClick={() => addComments(data.name)}
-                                      >
+                                  <Tooltip title={data.name} placement="left">
+                                    <li
+                                      className={
+                                        flagContainerActive == data.name
+                                          ? `${visitStyles.commentsTagActive}`
+                                          : `${visitStyles.commentsTag}`
+                                      }
+                                      onClick={() => addComments(data.name)}
+                                    >
+                                      {data.name === "Flag" ? (
+                                        <Badge count={5} style={{background:"#04306f",margin:"-2px"}} size="large">
+                                          <i>{data.icon}</i>
+                                        </Badge>
+                                      ) : (
                                         <i>{data.icon}</i>
-                                      </li>
-                                    </Tooltip>
-                                  </>
+                                      )}
+                                    </li>
+                                  </Tooltip>
                                 );
                               })}
                             </ul>
@@ -2809,7 +2817,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                           <AdminWorkList
                             localUserId={localUserId}
                             setWorkListPatientId={setWorkListPatientId}
-                           setIsModalComments={setIsModalComments}
+                            setIsModalComments={setIsModalComments}
                           />
                         ) : userRole == "supervisor" ? (
                           <SupervisorWorkList
