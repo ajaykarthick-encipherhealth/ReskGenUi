@@ -287,7 +287,9 @@ export const getCaptureSectionBackgroundFile = (
       //   {res}
       // </span>
     );
-    return sectionMapArr;
+    if(res != ""){
+      return sectionMapArr;
+    }
   });
 };
 
@@ -796,7 +798,9 @@ export const getCaptureSectionBackgroundMeatNew = (
         {res.header}
       </span>
     );
-    return sectionMapArr;
+    if(res.header != ""){
+      return sectionMapArr;
+    }
   });
 };
 
