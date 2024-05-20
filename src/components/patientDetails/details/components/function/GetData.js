@@ -213,7 +213,7 @@ export const getPatientDetails = async (
         });
       });
 
-      result?.suggestedHccDiseases?.map((res, index) => {
+      result?.suggestedDisease?.map((res, index) => {
         if (res.isShow != false) {
           var providerList = [];
           var dosList = [];

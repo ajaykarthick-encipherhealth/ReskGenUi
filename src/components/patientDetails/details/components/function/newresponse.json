@@ -2271,8 +2271,806 @@
         }
       }
     ],
-    "deletedDiseases": null,
-    "suggestedDisease": null,
+    "deletedDiseases": [
+      {
+        "diagnosisCode": "E1140",
+        "actualDescription": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+        "dbDescription": "Type 2 diabetes mellitus with diabetic neuropathy, unspecified",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": false,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I252",
+        "actualDescription": "Old myocardial infarction",
+        "dbDescription": "Old myocardial infarction",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-07-14",
+          "2023-05-25",
+          "2023-09-24"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Old myocardial infarction",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Old MI (myocardial infarction)",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Old MI (myocardial infarction),",
+            "dateOfService": "2023-07-14"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Old MI (myocardial infarction)",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Old MI (myocardial infarction)",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Old MI (myocardial infarction)",
+            "dateOfService": "2023-09-24"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "E1142",
+        "actualDescription": "Diabetic peripheral neuropathy",
+        "dbDescription": "Type 2 diabetes mellitus with diabetic polyneuropathy",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Diabetic peripheral neuropathy",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Diabetic peripheral neuropathy",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Diabetic peripheral neuropathy",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Diabetic peripheral neuropathy,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["COMBO_CODE"],
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I110",
+        "actualDescription": "Hypertensive heart disease with congestive heart failure",
+        "dbDescription": "Hypertensive heart disease with heart failure",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Hypertensive heart disease with congestive heart failure",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Hypertensive heart disease with congestive heart failure",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Hypertensive heart disease with congestive heart failure",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Hypertensive heart disease with congestive heart failure",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Hypertensive heart disease with congestive heart failure,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["CHILDREN_EXPANDED"],
+        "isShow": false,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "E1122",
+        "actualDescription": "Diabetes with CKD (Type 2)",
+        "dbDescription": "Type 2 diabetes mellitus with diabetic chronic kidney disease",
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-01-16", "2023-05-25", "2023-10-08"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 35,
+            "substring": "Diabetes with CKD (Type 2)",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 26,
+            "substring": "5. Diabetes with CKD (Type 2) -",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 7,
+            "substring": "3. Diabetes with CKD (Type 2) -",
+            "dateOfService": "2023-10-08"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Paul Kilpatrick, PA"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["COMBO_CODE"],
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I5030",
+        "actualDescription": "Unspecified diastolic heart failure",
+        "dbDescription": "Unspecified diastolic (congestive) heart failure",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Unspecified diastolic heart failure",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Unspecified diastolic heart failure",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Unspecified diastolic heart failure",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Unspecified diastolic heart failure",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Unspecified diastolic heart failure,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I129",
+        "actualDescription": "Hypertensive CKD Stage 1-4 or uns stage",
+        "dbDescription": "Hypertensive chronic kidney disease with stage 1 through stage 4 chronic kidney disease, or unspecified chronic kidney disease",
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-10-08"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 7,
+            "substring": "8. Hypertensive CKD Stage 1-4 or uns stage -",
+            "dateOfService": "2023-10-08"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Paul Kilpatrick, PA"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["CHILDREN_EXPANDED"],
+        "isShow": false,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      }
+    ],
+    "suggestedDisease": [
+      {
+        "diagnosisCode": "E1140",
+        "actualDescription": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+        "dbDescription": "Type 2 diabetes mellitus with diabetic neuropathy, unspecified",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": false,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I252",
+        "actualDescription": "Old myocardial infarction",
+        "dbDescription": "Old myocardial infarction",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-07-14",
+          "2023-05-25",
+          "2023-09-24"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Old myocardial infarction",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Old MI (myocardial infarction)",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Old MI (myocardial infarction),",
+            "dateOfService": "2023-07-14"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Old MI (myocardial infarction)",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Old MI (myocardial infarction)",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Old MI (myocardial infarction)",
+            "dateOfService": "2023-09-24"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "E1142",
+        "actualDescription": "Diabetic peripheral neuropathy",
+        "dbDescription": "Type 2 diabetes mellitus with diabetic polyneuropathy",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Diabetic peripheral neuropathy",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Diabetic peripheral neuropathy",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Diabetic peripheral neuropathy",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Diabetic peripheral neuropathy,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["COMBO_CODE"],
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I110",
+        "actualDescription": "Hypertensive heart disease with congestive heart failure",
+        "dbDescription": "Hypertensive heart disease with heart failure",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Hypertensive heart disease with congestive heart failure",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Hypertensive heart disease with congestive heart failure",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Hypertensive heart disease with congestive heart failure",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Hypertensive heart disease with congestive heart failure",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Hypertensive heart disease with congestive heart failure,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["CHILDREN_EXPANDED"],
+        "isShow": false,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "E1122",
+        "actualDescription": "Diabetes with CKD (Type 2)",
+        "dbDescription": "Type 2 diabetes mellitus with diabetic chronic kidney disease",
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-01-16", "2023-05-25", "2023-10-08"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 35,
+            "substring": "Diabetes with CKD (Type 2)",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 26,
+            "substring": "5. Diabetes with CKD (Type 2) -",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 7,
+            "substring": "3. Diabetes with CKD (Type 2) -",
+            "dateOfService": "2023-10-08"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Paul Kilpatrick, PA"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["COMBO_CODE"],
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I5030",
+        "actualDescription": "Unspecified diastolic heart failure",
+        "dbDescription": "Unspecified diastolic (congestive) heart failure",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Unspecified diastolic heart failure",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Unspecified diastolic heart failure",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Unspecified diastolic heart failure",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Unspecified diastolic heart failure",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Unspecified diastolic heart failure,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I129",
+        "actualDescription": "Hypertensive CKD Stage 1-4 or uns stage",
+        "dbDescription": "Hypertensive chronic kidney disease with stage 1 through stage 4 chronic kidney disease, or unspecified chronic kidney disease",
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-10-08"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 7,
+            "substring": "8. Hypertensive CKD Stage 1-4 or uns stage -",
+            "dateOfService": "2023-10-08"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Paul Kilpatrick, PA"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["CHILDREN_EXPANDED"],
+        "isShow": false,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      }
+    ],
     "comboDisease": [
       {
         "diseaseName": "Other specified diabetes mellitus with other circulatory complications",
@@ -4069,6 +4867,7 @@
         "treatment": null
       }
     ],
+    "encounterYears": [2021, 2022, 2023],
     "rafScore": null,
     "flag": null,
     "meatQuery": null,

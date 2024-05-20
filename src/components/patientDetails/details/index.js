@@ -577,14 +577,14 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const getPatientDetails = async (patientId) => {
     setHccValidCount(0);
     if (patientDetailsResult?.result?.response) {
-      var result = NewResponse;
+      var result = NewResponse.response;
       dispatch(getMeatQueryList(result?.dos, patientId));
 
       setPatientDocumentResult(result);
       setPatientDetails(result);
-      if (result.validDisease != null) {
+      if (result.hccDiseases != null) {
         var dosYearArr = [];
-        result.encounterYears.map((res) => {
+        result.encounterYears?.map((res) => {
           dosYearArr.push({ value: res, label: res });
         });
         const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
@@ -593,8 +593,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
         );
 
         var validDisArray = [];
-        result?.validDisease?.map((res, index) => {
-          const encounterDatearray = res?.encounterDate?.split(",");
+        result?.hccDiseases?.map((res, index) => {
           if (res?.isShow != false) {
             validDisArray.push({
               isCmsHcc: res.isCmsHcc,
@@ -622,7 +621,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
         setPatientResultReload(true);
       } else if (result?.encounterYears?.length > 0) {
         var dosYearArr = [];
-        result.encounterYears.map((res) => {
+        result.encounterYears?.map((res) => {
           dosYearArr.push({ value: res, label: res });
         });
         const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
