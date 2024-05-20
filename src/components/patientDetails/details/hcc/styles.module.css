@@ -412,9 +412,10 @@
   padding: 5px !important;
 }
 .dosStatusIcon {
-  width: 18%;
-  height: 18%;
+  width: 16%;
+  height: 16%;
   margin-left: 15px;
+  margin-top: 5px;
 }
 .dosLable {
   font-size: 14px;

@@ -38,45 +38,6 @@ const Hcc = ({ year }) => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [dosSummariesList, setDosSummariesList] = useState([]);
 
-
-  console.log(patientDosResult)
-
-  const dosSummaries = [
-    {
-      value: "2023-10-08",
-      label: (
-        <>
-          <div className="d-flex">
-            <span className={styles.dosLable}>2023-10-08</span>
-            <Image src={Hold} className={styles.dosStatusIcon} />
-          </div>
-        </>
-      ),
-    },
-    {
-      value: "2023-10-08",
-      label: (
-        <>
-          <div className="d-flex">
-            <span className={styles.dosLable}>2023-10-08</span>
-            <Image src={Completed} className={styles.dosStatusIcon} />
-          </div>
-        </>
-      ),
-    },
-    {
-      value: "2023-10-08",
-      label: (
-        <>
-          <div className="d-flex">
-            <span className={styles.dosLable}>2023-10-08</span>
-            <Image src={Pending} className={styles.dosStatusIcon} />
-          </div>
-        </>
-      ),
-    },
-  ];
-
   const handleActionClick = () => {};
 
   const dropdownMenu = (
@@ -155,7 +116,6 @@ const Hcc = ({ year }) => {
         dosList.push({ value: res, label: dosLable });
       });
       setDosSummariesList(dosList)
-      console.log(dosList)
     }
   }, [patientDosResult?.result?.response]);
 
@@ -294,7 +254,7 @@ const Hcc = ({ year }) => {
                       className="dosSelect"
                     >
                       {dosSummariesList?.map((data) => (
-                        <Option key={data?.date} value={data?.date}>
+                        <Option key={data?.value} value={data?.value}>
                           {data.label}
                         </Option>
                       ))}
