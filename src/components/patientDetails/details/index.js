@@ -272,7 +272,6 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
         )
       );
     }
-    console.log(patientDetailsResult?.result?.response);
   }, [patientDetailsResult?.result?.response]);
 
   useEffect(() => {
@@ -320,9 +319,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
       );
     } catch (e) {
       setIsLoading(false);
-    }
-    // console.log(result.data.response)
-  };
+    }  };
 
   const getPatientIdDetails = async (patientId, flagFirstData) => {
     const response = await axios.get(
@@ -3019,7 +3016,6 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                               <span className={visitStyles.commentsDesc}>
                                 {data.comments}
                               </span>
-                              {console.log(data, "time")}
                               <span className={visitStyles.commentsTime}>
                                 {moment(data.commentCreatedAt).format(
                                   "MM-DD-YYYY hh:mm:A"
