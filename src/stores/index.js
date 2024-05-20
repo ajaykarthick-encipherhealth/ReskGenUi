@@ -24,10 +24,12 @@ import { ReviewerReducers } from "../store/reducers/ReviewerReducers/ReviewerRed
 import { AuthReducer, PatientStore } from "./authflow/reducers";
 
 import { reducer as UpdateDashboardReducer } from "./reviewer/dashboard";
-import { reducer as updatedPatientsReducer} from './reviewer/workqueue';
+import { reducer as updatedPatientsReducer } from "./reviewer/workqueue";
 import { reducer as searchReducer } from "./search";
-import { reducer as physicianReducer } from "./physician/dashboard"
-import { reducer as reportReducer } from "./reviewer/report"
+import { reducer as physicianReducer } from "./physician/dashboard";
+import { reducer as reportReducer } from "./reviewer/report";
+import { reducer as supervisorReportReducer } from "./supervisor/report";
+
 const reducers = combineReducers({
   // old reducers
   sideMenu: toggleMenu,
@@ -56,13 +58,16 @@ const reducers = combineReducers({
 
   reviewer: combineReducers({
     dashboard: UpdateDashboardReducer,
-    workQueue:updatedPatientsReducer,
-    report: reportReducer
+    workQueue: updatedPatientsReducer,
+    report: reportReducer,
+  }),
+  supervisor: combineReducers({
+    report: supervisorReportReducer,
   }),
   search: searchReducer,
   physician: combineReducers({
-    dashboard : physicianReducer
-  })
+    dashboard: physicianReducer,
+  }),
 });
 
 const middlewares = [thunkMiddleware, promiseMiddleware];

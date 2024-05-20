@@ -69,7 +69,8 @@ const TeamReport = ({
   reportListAll,
   page,
   getFlagsData,
-  isAdmin
+  isAdmin,
+  loader
 }) => {
 
   const dispatch = useDispatch();
@@ -199,15 +200,15 @@ const TeamReport = ({
   const subCardData = [
     {
       title: "No of charts",
-      value: reportListAll?.response?.totalElements,
+      value: reportListAll?.response?.response?.totalElements,
     },
     {
       title: "Avg RAF score",
-      value: reportListAll?.rafAverage?.toFixed(4),
+      value: reportListAll?.response?.rafAverage?.toFixed(4),
     },
     {
       title: "HCC Count",
-      value: reportListAll?.totalHccCount,
+      value: reportListAll?.response?.totalHccCount,
     },
   ];
   const auditstatusBodyTemplate = (rowData) => {
@@ -394,11 +395,11 @@ const TeamReport = ({
   const allocationCountData = [
     {
       title: "Supervisor",
-      allocationCount: reportListAll?.supervisorAllocationCount,
+      allocationCount: reportListAll?.response?.supervisorAllocationCount,
     },
     {
       title: "Reviewer",
-      allocationCount: reportListAll?.reviewerAllocationCount,
+      allocationCount: reportListAll?.response?.reviewerAllocationCount,
     },
   ];
   useEffect(() => {

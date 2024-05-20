@@ -5,10 +5,10 @@ const Tab = ({ activeTab, handleTabs, tabs }) => {
   return (
     <div className={styles.buttonContainer}>
       <div className={styles.group}>
-        {tabs.map((tab) => (
+        {tabs?.map((tab) => (
           <button
             key={tab}
-            className={activeTab === tab ? `${styles.active}` : ""}
+            className={ activeTab === tab ? `${styles.active}` : ""}
             onClick={() => handleTabs(tab)}
           >
             {tab}

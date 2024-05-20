@@ -16,10 +16,11 @@ import { getSentDetails } from "../../../store/actions/ReportActions";
 import { connect, useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import MoreFilter from "../../../resusablereport/reports/MoreFilter";
-import ReviewerReport from "../../../resusablereport/reports/reviewerReport";
-import SentReport from "../../../resusablereport/reports/sentReport";
-import ReceivedReport from "../../../resusablereport/reports/receivedReport";
+
 import Export from "../../../resusablereport/reports/Export";
+import InitialCard from "../../../mainStream/reports/initialReport";
+import SentReport from "../../../mainStream/reports/sentReport";
+import ReceivedReport from "../../../mainStream/reports/receivedReport";
 import {
   getReceivedDetails,
   getReportDetails,
@@ -586,7 +587,7 @@ const Reports = ({ workFgetFlagsowData }) => {
                 <div>
                   {reportActiveTab === "Admin" && (
                     <div>
-                      <ReviewerReport
+                      <InitialCard
                         // setModal={setModal}
                         // modal={modal}
                         reportListAll={filteredCOder}

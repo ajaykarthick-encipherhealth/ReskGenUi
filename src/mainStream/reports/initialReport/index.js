@@ -213,7 +213,7 @@ const InitialCard = ({
     const updatedRows = selectAll ? [] : reportListAll?.response?.data;
     setSelectedRows(updatedRows);
   };
-
+  console.log(reportListAll?.response?.data?.length, "t");
   const handleRowCheckboxChange = (row) => {
     const isSelected = selectedRows?.some(
       (selectedRow) => selectedRow.patientId === row?.patientId
