@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faClose } from "@fortawesome/free-solid-svg-icons";
 import styles from "../hcc/styles.module.css";
 import moment from "moment";
-import { getPatientDetailsResult } from "../../../../store/actions/ReviewerAction/PatientDetailsAction";
+import { getPatientDosList } from "../../../../store/actions/ReviewerAction/PatientDetailsAction";
 
 const { Option } = Select;
 
@@ -30,7 +30,7 @@ const Hcc = ({ year }) => {
   const [pageNumberOptions, setPageNumberOptions] = useState([]);
   const [search, setSearch] = useState();
 
-  console.log(patientDosResult)
+  // console.log(patientDosResult)
 
   const dosSummaries = [
     {
@@ -171,7 +171,7 @@ const Hcc = ({ year }) => {
     console.log(moment(value).format("YYYY-MM-DD"));
     const patientId = localStorage.getItem("patientId");
     dispatch(
-      getPatientDetailsResult(patientId, moment(value).format("YYYY-MM-DD"))
+      getPatientDosList(patientId, moment(value).format("YYYY-MM-DD"))
     );
   };
   const handleChangePageNumber = async (value) => {
@@ -301,8 +301,9 @@ const Hcc = ({ year }) => {
                     </Select>
                   </Nav.Item>
                   <Nav.Item as="li" className="nav-item mx-4">
-                    <Button>hg</Button>
+                    <Button className="primary">Completed Dos</Button>
                   </Nav.Item>
+                   {activeTabHead == 1 &&
                   <Popover
                     // open={popoverVisible}
                     content={PopContent}
@@ -323,11 +324,10 @@ const Hcc = ({ year }) => {
                         }}
                       />
                     </div>
-                  </Popover>
-                </Nav>
-              </div>
-              {flagTagActive ? (
-                <div className="col-xl-4">
+                  </Popover> }
+                  <Nav.Item as="li" className="nav-item mx-4">
+                   {flagTagActive ? (
+                <div>
                   <div className={visitStyles.flags}>
                     <div className={visitStyles.flags}>
                       <span className={visitStyles.hccFlag}></span>
@@ -348,6 +348,10 @@ const Hcc = ({ year }) => {
                   </div>
                 </div>
               ) : null}
+                  </Nav.Item> 
+                </Nav>
+              </div>
+              
             </div>
 
             <Tab.Content>

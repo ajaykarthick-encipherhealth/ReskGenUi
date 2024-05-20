@@ -152,7 +152,7 @@ export const getPatientDetails = async (
   // if (patientDetailsResult?.result?.response) {
   //   var result = patientDetailsResult?.result?.response;
   if (NewResponse) {
-    var result = NewResponse;
+    var result = NewResponse.response;
     setPatientDocumentResult(result);
     if (result.hccDiseases != null) {
       var hccDisArray = [];
@@ -166,7 +166,7 @@ export const getPatientDetails = async (
       if (result.scoreDetailVersionDTO != null) {
         rafScore = result.scoreDetailVersionDTO;
       }
-      result.hccDiseases?.map((res, index) => {
+      result?.hccDiseases?.map((res, index) => {
         var providerList = [];
         var dosList = [];
         res.providerNames?.map((res) => {
@@ -180,7 +180,7 @@ export const getPatientDetails = async (
           capturedSections: res.capturedSections,
           diagnosisCode: res.diagnosisCode,
           encounterDate: res.encounterDate,
-          encounterDateSplit: dosList,
+          encounterDateSplit:  res.dateOfServices,
           isManuallyAdded: res.isManuallyAdded,
           isHccValid: res.isHccValid,
           defaultPosition: res.defaultPosition,
@@ -213,7 +213,7 @@ export const getPatientDetails = async (
         });
       });
 
-      result?.suggestedHccDiseases.map((res, index) => {
+      result?.suggestedHccDiseases?.map((res, index) => {
         if (res.isShow != false) {
           var providerList = [];
           var dosList = [];
@@ -230,7 +230,7 @@ export const getPatientDetails = async (
             capturedSections: res.capturedSections,
             diagnosisCode: res.diagnosisCode,
             encounterDate: res.encounterDate,
-            encounterDateSplit: dosList,
+            encounterDateSplit:  res.dateOfServices,
             getPlace: "Hcc",
             defaultPosition: res.defaultPosition,
             providerName: providerList,
@@ -273,8 +273,7 @@ export const getPatientDetails = async (
         }
       });
 
-      if (result?.comboDisease) {
-        result.comboDisease.map((res, index) => {
+      result?.comboDisease?.map((res, index) => {
           var providerList = [];
           var dosList = [];
           res.providerNames?.map((res) => {
@@ -292,7 +291,7 @@ export const getPatientDetails = async (
             diseaseName: res.diseaseName,
             diagnosisCode: res.diagnosisCode,
             encounterDate: res.encounterDate,
-            encounterDateSplit: dosList,
+            encounterDateSplit:  res.dateOfServices,
             providerName: providerList,
             providers: res.provider ? res.providers : res.provider,
             ruleType: res.ruleType,
@@ -301,8 +300,7 @@ export const getPatientDetails = async (
             expanded: true,
             hyperlinks: res?.hyperlinks,
           });
-        });
-      }
+      });
 
       setNewValidDiseaseList && setNewValidDiseaseList(hccDisArray);
       setSuggestedHccList && setSuggestedHccList(suggestListAll);
@@ -313,7 +311,7 @@ export const getPatientDetails = async (
       var capturedSectionsColorsMatching = [];
       var capturedSectionsArr = [];
 
-      result.hccDiseases?.map((res) => {
+      result?.hccDiseases?.map((res) => {
         res.capturedSections?.map((res2, index) => {
           capturedSectionsArr?.push({
             name: res2,
@@ -322,7 +320,7 @@ export const getPatientDetails = async (
         });
       });
 
-      result.hccDiseases?.map((res) => {
+      result?.hccDiseases?.map((res) => {
         res.providerNames?.map((res2, index) => {
           capturedSectionsArr?.push({
             name: res2,
@@ -391,17 +389,17 @@ export const getPatientDetails = async (
       var encounterDateColorsMatching = [];
       var encounterDateArr = [];
 
-      result.hccDiseases.map((res) => {
+      result?.hccDiseases?.map((res) => {
         res?.dateOfServices.map((res2) => {
           encounterDateArr.push({
-            name: res2.date,
+            name: res2,
           });
         });
       });
       result?.nonHccDiseases?.map((res) => {
         res?.dateOfServices.map((res2) => {
           encounterDateArr.push({
-            name: res2.date,
+            name: res2,
           });
         });
       });
@@ -409,7 +407,7 @@ export const getPatientDetails = async (
       result?.suggestedDiseases?.map((res) => {
         res?.dateOfServices.map((res2) => {
           encounterDateArr.push({
-            name: res2.date,
+            name: res2,
           });
         });
       });
@@ -529,7 +527,7 @@ export const getPatientDetails = async (
             isMeatCriteriaPresent: res.isMeatCriteriaPresent,
             category: res.category,
             encounterDate: res.encounterDate,
-            encounterDateSplit: dosList,
+            encounterDateSplit:  res.dateOfServices,
             hyperlinks: res?.hyperlinks,
           });
         }

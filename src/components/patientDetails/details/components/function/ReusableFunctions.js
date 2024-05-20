@@ -107,7 +107,7 @@ export const getHeaderHyperlink = (
 ) => {
   return value?.map((res) => {
     const result = encounterDateMatching.filter(
-      (res2) => res2.name == res?.dateOfService.date
+      (res2) => res2.name == res?.dateOfService
     );
     var backColor = result[0]?.colors;
     var sectionMapArr = res ? (
@@ -135,7 +135,7 @@ export const getHeaderHyperlink = (
         <i>
           <CalendarOutlined className={visitStyles.calenderIcon} />
         </i>
-        {moment(res?.dateOfService.date).format("MMM DD")}
+        {moment(res?.dateOfService).format("MMM DD")}
       </span>
     ) : (
       ""
