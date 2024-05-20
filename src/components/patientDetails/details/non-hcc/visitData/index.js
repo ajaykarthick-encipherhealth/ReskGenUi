@@ -149,58 +149,48 @@ const VisitData = ({}) => {
     if (patientDetailsResult?.result?.response) {
       var result = patientDetailsResult?.result?.response;
       setPatientDocumentResult(result);
-      if (result.validDisease != null) {
         setPatientFileDTO(result.fileDetailDTO);
         var invalidDis = "";
         var dosYearArr = [];
         var invalidDiseaseNewRes = [];
         var unMatchRes = [];
         var suggestListAllNonHcc = [];
-        result.encounterYears.map((res) => {
-          dosYearArr.push({ value: res, label: res });
-        });
-        const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
-        const highestDosValue = dosYearArr.filter(
-          (i) => parseInt(i.value) === highestDOS
-        );
-        setSelectedDosValue(highestDosValue[0].value);
-        result.invalidDisease.map((res, index) => {
-          const encounterDatearray = res.encounterDate.split(",");
+        result?.nonHccDiseases?.map((res, index) => {
           var providerList = [];
-          res.provider?.map((res, index) => {
-            providerList.push(res.providerName);
+          res.providerNames?.map((res, index) => {
+            providerList.push(res);
           });
           invalidDiseaseNewRes.push({
             actualDescription: res.actualDescription,
             capturedSections: res.capturedSections,
             diagnosisCode: res.diagnosisCode,
             encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
+            encounterDateSplit: res.dateOfServices,
             isManuallyAdded: res.isManuallyAdded,
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
             providerName: providerList,
           });
         });
-        if (result.unMatchedDisease != null) {
-          unMatchRes = result.unMatchedDisease;
-          unMatchRes.map((res, index) => {
-            const encounterDatearray = res.encounterDate.split(",");
-            if (res?.isHccValid == false) {
-              suggestListAllNonHcc.push({
-                actualDescription: res.actualDescription,
-                diagnosisCodeFinding: res.diagnosisCode,
-                isHccValid: res.isHccValid,
-                capturedSections: res.capturedSections,
-                diagnosisCode: res.diagnosisCode,
-                encounterDate: res.encounterDate,
-                encounterDateSplit: encounterDatearray,
-                getPlace: "Hcc",
-              });
-            }
-          });
-        }
-        invalidDis = result.invalidDisease;
+        // if (result.unMatchedDisease != null) {
+        //   unMatchRes = result.unMatchedDisease;
+        //   unMatchRes.map((res, index) => {
+        //     const encounterDatearray = res.encounterDate.split(",");
+        //     if (res?.isHccValid == false) {
+        //       suggestListAllNonHcc.push({
+        //         actualDescription: res.actualDescription,
+        //         diagnosisCodeFinding: res.diagnosisCode,
+        //         isHccValid: res.isHccValid,
+        //         capturedSections: res.capturedSections,
+        //         diagnosisCode: res.diagnosisCode,
+        //         encounterDate: res.encounterDate,
+        //         encounterDateSplit: encounterDatearray,
+        //         getPlace: "Hcc",
+        //       });
+        //     }
+        //   });
+        // }
+        invalidDis = result?.invalidDisease;
         setInNewValidDiseaseList(invalidDiseaseNewRes);
         setSuggestedNonHccList(suggestListAllNonHcc);
         var capturedSectionsColorsMatching = [];
@@ -269,9 +259,8 @@ const VisitData = ({}) => {
 
         var encounterDateColorsMatching = [];
         var encounterDateArr = [];
-        result.invalidDisease.map((res) => {
-          const array = res.encounterDate.split(",");
-          array.map((res2) => {
+        result?.nonHccDiseases.map((res) => {
+          res?.dateOfServices?.map((res2) => {
             encounterDateArr.push({
               name: res2,
             });
@@ -288,9 +277,6 @@ const VisitData = ({}) => {
           });
         });
         setEncounterDateMatching(encounterDateColorsMatching);
-      } else {
-        setIsLoading(false);
-      }
     }
   };
   const getFileDosPageNumber = async () => {

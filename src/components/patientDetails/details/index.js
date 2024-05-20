@@ -1671,7 +1671,12 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
 
   return (
     <>
-      {isLoading ? (
+     
+      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+        <NavBar />
+        <div className={visitStyles.headerFixed}>
+          <div class="content-body">
+          {isLoading ? (
         <div className={styles.overlay_style}>
           <div className={styles.overlay__inner_style}>
             <div className={styles.overlay__content_style}>
@@ -1680,10 +1685,6 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
           </div>
         </div>
       ) : null}
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
-        <NavBar />
-        <div className={visitStyles.headerFixed}>
-          <div class="content-body">
             {sectionColorList?.loading == true ? (
               <SpinnerDots />
             ) : (
@@ -2301,7 +2302,6 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                         </div>
 
                         <div className={`${visitStyles.secondContainer}`}>
-                          {patientResultReload ? (
                             <>
                               {activeTab == 1 ? (
                                 <Hcc
@@ -2318,7 +2318,6 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                                 <Lab />
                               )}
                             </>
-                          ) : null}
                         </div>
 
                         <div className={`${visitStyles.thirdContainer}`}>
