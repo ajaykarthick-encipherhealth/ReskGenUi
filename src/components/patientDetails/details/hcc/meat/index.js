@@ -8,7 +8,7 @@ import "react-vertical-timeline-component/style.min.css";
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsAlt, faPen } from "@fortawesome/free-solid-svg-icons";
-import { Popconfirm, Popover, Input, Space, Form } from "antd";
+import { Popconfirm, Popover, Input, Space, Form ,Select} from "antd";
 import { SVGICON } from "../../../../../jsx/constant/theme";
 import { Modal } from "antd";
 import { notification } from "antd";
@@ -23,10 +23,14 @@ import RegularButton from "../../../../../components/button";
 import { getResponePopup } from "../../../../../utils/reusable";
 import AddMeatQuery from "../../components/addMeatQuery";
 import {
+  getCaptureSectionBackgroundMeatNew,
   getEncounterDateBackground,
+  getHeaderHyperlink,
   getProviderNameList,
 } from "../../components/function/ReusableFunctions";
 import { getPatientDetails } from "../../components/function/GetData";
+
+const { Option } = Select;
 
 const Meat = ({ activeMeatTitle, year }) => {
   const navigate = useRouter();
@@ -132,21 +136,28 @@ const Meat = ({ activeMeatTitle, year }) => {
   const [search, setSearch] = useState(false);
   const [editData, setEditData] = useState({});
   const [queryFormValues, setQueryFormValues] = useState(false);
-  const handleChange = async (e) => {
-    const key = e.target.name;
-    if (key == "diagnosisCodeQuery") {
-      getFindValidDiagnosisCode(e.target.value);
+  const [monitorHyperLinkList, setMonitorHyperLinkList] = useState([]);
+
+  const dosSummariesList = [
+    {
+      "dos": "2023-09-30",
+      "startPageNumber": 4,
+      "endPageNumber": 4
+    },
+    {
+      "dos": "2023-03-29",
+      "startPageNumber": 5,
+      "endPageNumber": 10
+    },
+    {
+      "dos": "2023-10-11",
+      "startPageNumber": 1,
+      "endPageNumber": 3
     }
-    if (key == "diagnosisCode") {
-      getFindValidDiagnosisCode(e.target.value);
-    }
-    if (key == "encodedDate") {
-      setInputValueFileDate(e.target.value);
-    }
-    const value = e.target.value;
-    setInputValue({ ...inputValue, [key]: value });
-  };
-  const [isDocumentLoaded, setDocumentLoaded] = React.useState(false);
+  ]
+
+  
+
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
     var tenId = localStorage.getItem("tenantId");
@@ -171,32 +182,6 @@ const Meat = ({ activeMeatTitle, year }) => {
       setSelectFileURL(hccFileDetails?.result?.response);
     }
   }, [hccFileDetails]);
-
-  useEffect(() => {
-    setDocumentLoaded(true);
-    if (findFileKeyword) {
-      setTimeout(() => {
-        setFileModalHeader(fileModalTitle);
-        setMeatModalTitle(selectMeatName);
-        if (fileInitialPage != null) {
-          setTargetPages(
-            (targetPage) =>
-              targetPage.pageIndex === fileInitialPage ||
-              targetPage.pageIndex === fileInitialPage + 1 ||
-              targetPage.pageIndex === fileInitialPage + 2
-          );
-        } else {
-          setTargetPages(null);
-        }
-        highlight({
-          keyword: findFileKeyword,
-        });
-        setTimeout(() => {
-          setFileLoading(false);
-        }, 1000);
-      }, 1000);
-    }
-  }, [fileInitialPage, findFileKeyword, fileModalTitle]);
 
   const confirmInvalidMeat = () =>
     new Promise((resolve) => {
@@ -272,296 +257,7 @@ const Meat = ({ activeMeatTitle, year }) => {
     setFileLoading(false);
     setActiveTabNumber(activeTabNumber == null ? 0 : null);
   };
-
-  const handleOpenModals = async (
-    value,
-    disDescription,
-    encounterDate,
-    meatresult,
-  ) => {
-    setSelectMeatResult(meatresult);
-    setFileLoading(true);
-    setIsModalOpen(true);
-    var splitPoint = disDescription.substring(" ", 20);
-    var dotLoading = (
-      <div className={visitStyles.loadingFileHeader}>
-        <Spinner />
-      </div>
-    );
-
-    var fileId = patientDetailsResult?.result?.response?.fileId;
-    const encounterDatesValue = encounterDate.split(",");
-    const encounterDatesHeader = encounterDatesValue[0];
-    var pageNumber = null;
-    var data = {
-      fileId: fileId,
-      header: value,
-      dos: encounterDatesValue,
-      stringFileWord: splitPoint,
-    };
-
-    try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/pageNumber`,
-        data
-      );
-      var result = response.data.response;
-      if (response?.data?.status == "SUCCESS") {
-        if (result?.first == false) {
-          splitPoint = value;
-        }
-
-        pageNumber = result?.second[0] ? result?.second[0] : null;
-        setSearch({
-          value: splitPoint,
-          page: pageNumber,
-          headers: false,
-          headerContent: value,
-        });
-        setFileInitialPage(pageNumber);
-        setFileDosPageNumber(pageNumber);
-      } else {
-        setFileInitialPage(null);
-        setFileDosPageNumber(null);
-      }
-      setMeatModalTitle(dotLoading);
-      setIsLoadingSection(true);
-      if (findFileKeyword == splitPoint) {
-        setFileLoading(false);
-        var dataset = value + " / (" + disDescription + ")";
-        setMeatModalTitle(dataset);
-      }
-      setFindFileKeyword(splitPoint);
-
-      var dataset = value + " / (" + disDescription + ")";
-      setSelectMeatName(dataset);
-    } catch (error) {
-      var dataset = value + " / (" + disDescription + ")";
-      setSelectMeatName(dataset);
-      splitPoint = value;
-      setSearch({
-        value: splitPoint,
-        headers: true,
-      });
-      if (findFileKeyword == value) {
-        setFileLoading(false);
-      }
-      setFindFileKeyword(splitPoint);
-      setFileInitialPage(null);
-      setFileDosPageNumber(null);
-    }
-  };
-
-  const handleOpenModal = async (
-    value,
-    disDescription,
-    encounterDate,
-    meatresult,
-    type
-  ) => {
-    setSelectMeatResult(meatresult);
-    setFileLoading(true);
-    setIsModalOpen(true);
-    var splitPoint = disDescription.substring(" ", 20);
-    var dotLoading = (
-      <div className={visitStyles.loadingFileHeader}>
-        <Spinner />
-      </div>
-    );
-    var fileId = patientFileDTO.fileId;
-    const encounterDatesValue = encounterDate.split(",");
-    const encounterDatesHeader = encounterDatesValue[0];
-    var pageNumber = null;
-    // var data = {
-    //   fileId: fileId,
-    //   header: value,
-    //   diagnosisCode: meatresult.diagnosisCode,
-    //   dos: encounterDatesValue,
-    //   stringFileWord: splitPoint,
-    // };
-    const patientId = localStorage.getItem("patientId");
-    var data = {
-      patientId: patientId,
-      diagnosisCode: meatresult.diagnosisCode,
-      year: year.value,
-      header: value,
-      dos: encounterDatesValue,
-      meatType: type,
-    };
-    try {
-      // const response = await axios.post(
-      //   ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
-      //   data
-      // );
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/pageNumber/hyperlink`,
-        data
-      );
-      var result = response.data.response;
-      if (response?.data?.status == "SUCCESS") {
-        if (result == null) {
-          return handleOpenModals(
-            value,
-            disDescription,
-            encounterDate,
-            meatresult,
-          );
-        }
-        splitPoint = result?.searchString;
-        setSearch({
-          value: splitPoint,
-          page: result?.pageNumber,
-          headers: false,
-          headerContent: headerNames,
-        });
-        setFileInitialPage(pageNumber);
-        setFileDosPageNumber(pageNumber);
-      } else {
-        setFileInitialPage(null);
-        setFileDosPageNumber(null);
-      }
-      setMeatModalTitle(dotLoading);
-      setIsLoadingSection(true);
-      if (findFileKeyword == splitPoint) {
-        setFileLoading(false);
-        var dataset = value + " / (" + disDescription + ")";
-        setMeatModalTitle(dataset);
-      }
-      setFindFileKeyword(splitPoint);
-
-      var dataset = value + " / (" + disDescription + ")";
-      setSelectMeatName(dataset);
-    } catch (error) {
-      var dataset = value + " / (" + disDescription + ")";
-      setSelectMeatName(dataset);
-      splitPoint = value;
-      if (findFileKeyword == value) {
-        setFileLoading(false);
-      }
-      setFindFileKeyword(splitPoint);
-      setFileInitialPage(null);
-      setFileDosPageNumber(null);
-    }
-  };
-
-  const getFindValidDiagnosisCode = async (value) => {
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`
-    );
-    if (response.data) {
-      if (response.data == "ICD disease not found") {
-        setAddValidCodeCheck(false);
-      } else {
-        setAddValidCodeCheck(true);
-        inputValue.actualDescription = "adakd dvasdv";
-      }
-    }
-
-    inputValue.actualDescription = "adakd dvasdv";
-  };
-
-  const stringToColour = (str) => {
-    let hash = 0;
-    str?.split("").forEach((char) => {
-      hash = char.charCodeAt(0) + ((hash << 5) - hash);
-    });
-    let colour = "#";
-    for (let i = 0; i < 3; i++) {
-      const value = (hash >> (i * 8)) & 0xff;
-      colour += value.toString(16).padStart(2, "0");
-    }
-    return colour;
-  };
-
-  const submitSectionColors = async (
-    sectionName,
-    sectionColor,
-    backgroundColor
-  ) => {
-    var postData = {
-      backgroundColor: backgroundColor,
-      sectionColor: sectionColor,
-      sectionName: sectionName,
-    };
-
-    try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/section/color/save`,
-        postData
-      );
-      var result = response.data;
-      if (result.status == "SUCCESS") {
-      } else {
-      }
-    } catch (e) {}
-  };
-
-  const getCaptureSectionBackgroundMeat = (
-    value,
-    dis,
-    encounterDate,
-    meatresult,
-    type
-  ) => {
-    if (value) {
-      var igonreCase = value.toLowerCase();
-      const result = captureSectionMatching.filter(
-        (res2) => res2.sectionName == igonreCase
-      );
-
-      var backColor = result[0]?.backgroundColor;
-      var textColor = result[0]?.sectionColor;
-      var disCode = result[0]?.diagnosisCode;
-      var headerNames = result[0]?.sectionName;
-
-      var sectionMapArr = (
-        <span
-          onClick={() =>
-            handleOpenModal(value, dis, encounterDate, meatresult, type)
-          }
-          style={{ backgroundColor: backColor, color: textColor }}
-          className={`cr-pointer mt-2 text-start ${visitStyles.captureheaderMeat}`}
-        >
-          {value}
-        </span>
-      );
-      return sectionMapArr;
-    }
-  };
-
-  const getCaptureSectionBackgroundMeatFile = (
-    value,
-    dis,
-    encounterDate,
-    meatresult,
-    type
-  ) => {
-    if (value) {
-      var igonreCase = value.toLowerCase();
-      const result = captureSectionMatching.filter(
-        (res2) => res2.sectionName == igonreCase
-      );
-
-      var backColor = result[0]?.backgroundColor;
-      var textColor = result[0]?.sectionColor;
-      var disCode = result[0]?.diagnosisCode;
-      var headerNames = result[0]?.sectionName;
-
-      var sectionMapArr = (
-        <span
-          onClick={() =>
-            handleOpenModal(value, dis, encounterDate, meatresult, type)
-          }
-          style={{ backgroundColor: backColor, color: textColor }}
-          className={`cr-pointer mt-2 text-start ${visitStyles.captureheaderMeatView}`}
-        >
-          {value}
-        </span>
-      );
-      return sectionMapArr;
-    }
-  };
+  
 
   const addMeatQuery = (value, condition) => {
     var data = {
@@ -709,6 +405,7 @@ const Meat = ({ activeMeatTitle, year }) => {
                             patientDocumentResult: patientDocumentResult,
                             selectMeatResult: setSelectMeatResult,
                             datas: item,
+                            dosSummariesList:dosSummariesList
                           })}
                         </div>
                       </div>
@@ -722,14 +419,14 @@ const Meat = ({ activeMeatTitle, year }) => {
                             : `col-xl-2 d-grid`
                         }
                       >
-                        {item.monitor != "" ? (
+                        {item.monitorAspect != "" ? (
                           <Popover
                             placement="topLeft"
                             title="Monitor"
-                            content={item.monitor}
+                            content={item.monitorAspect}
                           >
                             <span className="meat-name-details">
-                              {item.monitor}
+                              {item.monitorAspect}
                             </span>
                           </Popover>
                         ) : (
@@ -738,12 +435,22 @@ const Meat = ({ activeMeatTitle, year }) => {
                           </span>
                         )}
                         <div>
-                          {getCaptureSectionBackgroundMeat(
-                            item.monitorCapturedFromHeader,
-                            item.monitor,
-                            item.encounterDate,
-                            item,
-                            "MONITOR"
+                          {getCaptureSectionBackgroundMeatNew(
+                            item.monitorHyperLink,
+                            captureSectionMatching,
+                            "hcc",
+                            setSearch,
+                            setFileLoading,
+                            setIsModalOpenLab,
+                            setIsModalOpenRadiology,
+                            setIsModalOpen,
+                            setFileModalHeader,
+                            patientDocumentResult,
+                            fileInitialPage,
+                            setFileInitialPage,
+                            item.diagnosisCode,
+                            setSelectMeatResult,
+                            item
                           )}
                         </div>
                       </div>
@@ -756,14 +463,14 @@ const Meat = ({ activeMeatTitle, year }) => {
                             : `col-xl-2 d-grid`
                         }
                       >
-                        {item.evaluate != "" ? (
+                        {item.evaluateAspect != "" ? (
                           <Popover
                             placement="topLeft"
                             title="Evaluation"
-                            content={item.evaluate}
+                            content={item.evaluateAspect}
                           >
                             <span className="meat-name-details">
-                              {item.evaluate}
+                              {item.evaluateAspect}
                             </span>
                           </Popover>
                         ) : (
@@ -772,12 +479,22 @@ const Meat = ({ activeMeatTitle, year }) => {
                           </span>
                         )}
                         <div>
-                          {getCaptureSectionBackgroundMeat(
-                            item.evaluateCapturedFromHeader,
-                            item.evaluate,
-                            item.encounterDate,
-                            item,
-                            "EVALUATION"
+                        {getCaptureSectionBackgroundMeatNew(
+                            item.evaluateHyperLink,
+                            captureSectionMatching,
+                            "hcc",
+                            setSearch,
+                            setFileLoading,
+                            setIsModalOpenLab,
+                            setIsModalOpenRadiology,
+                            setIsModalOpen,
+                            setFileModalHeader,
+                            patientDocumentResult,
+                            fileInitialPage,
+                            setFileInitialPage,
+                            item.diagnosisCode,
+                            setSelectMeatResult,
+                            item
                           )}
                         </div>
                       </div>
@@ -790,14 +507,14 @@ const Meat = ({ activeMeatTitle, year }) => {
                             : `col-xl-2 d-grid`
                         }
                       >
-                        {item.assessment != "" ? (
+                        {item.assessmentAspect != "" ? (
                           <Popover
                             placement="topLeft"
                             title="Assessment"
-                            content={item.assessment}
+                            content={item.assessmentAspect}
                           >
                             <span className="meat-name-details">
-                              {item.assessment}
+                              {item.assessmentAspect}
                             </span>
                           </Popover>
                         ) : (
@@ -807,12 +524,22 @@ const Meat = ({ activeMeatTitle, year }) => {
                         )}
 
                         <div>
-                          {getCaptureSectionBackgroundMeat(
-                            item.assessmentCapturedFromHeader,
-                            item.assessment,
-                            item.encounterDate,
-                            item,
-                            "ASSESSMENT"
+                        {getCaptureSectionBackgroundMeatNew(
+                            item.assessmentHyperLink,
+                            captureSectionMatching,
+                            "hcc",
+                            setSearch,
+                            setFileLoading,
+                            setIsModalOpenLab,
+                            setIsModalOpenRadiology,
+                            setIsModalOpen,
+                            setFileModalHeader,
+                            patientDocumentResult,
+                            fileInitialPage,
+                            setFileInitialPage,
+                            item.diagnosisCode,
+                            setSelectMeatResult,
+                            item
                           )}
                         </div>
                       </div>
@@ -825,14 +552,14 @@ const Meat = ({ activeMeatTitle, year }) => {
                             : `col-xl-2 d-grid`
                         }
                       >
-                        {item.treatment != "" ? (
+                        {item.treatmentAspect != "" ? (
                           <Popover
                             placement="topLeft"
                             title="Treatment"
-                            content={item.treatment}
+                            content={item.treatmentAspect}
                           >
                             <span className="meat-name-details">
-                              {item.treatment}
+                              {item.treatmentAspect}
                             </span>
                           </Popover>
                         ) : (
@@ -841,12 +568,22 @@ const Meat = ({ activeMeatTitle, year }) => {
                           </span>
                         )}
                         <div>
-                          {getCaptureSectionBackgroundMeat(
-                            item.treatmentCapturedFromHeader,
-                            item.treatment,
-                            item.encounterDate,
-                            item,
-                            "TREATMENT"
+                          {getCaptureSectionBackgroundMeatNew(
+                            item.treatmentHyperLink,
+                            captureSectionMatching,
+                            "hcc",
+                            setSearch,
+                            setFileLoading,
+                            setIsModalOpenLab,
+                            setIsModalOpenRadiology,
+                            setIsModalOpen,
+                            setFileModalHeader,
+                            patientDocumentResult,
+                            fileInitialPage,
+                            setFileInitialPage,
+                            item.diagnosisCode,
+                            setSelectMeatResult,
+                            item
                           )}
                         </div>
                       </div>
@@ -910,18 +647,40 @@ const Meat = ({ activeMeatTitle, year }) => {
                 <>
                   <div className="invalid-combo">
                     <span>Invalid MeatCriteria</span>
-                  </div>
-
+                  </div>  
                   {invalidMeatCriteriaList?.map((item) => {
-                    return (
-                      <div className={visitStyles.meat_details_card}>
+                return (
+                  <div
+                    className={
+                      item.isMeatCriteriaPresent === true
+                        ? `${visitStyles.meat_details_card}`
+                        : `${visitStyles.meat_details_card_false}`
+                    }
+                  >
+                    <div className="row">
+                      <div className="col-xl-3">
                         <div className="row">
-                          <div className="col-xl-1">
-                            <span className="font-bold">
+                          <div className="col-xl-4 d-grid">
+                            <span className="meat-name-details font-bold">
                               {item.diagnosisCode}
                             </span>
+                            {item.category == "Valid" ? (
+                              <Badge
+                                className="valid-meat badge-circle mt-2"
+                                bg={` badge-circle mt-2 bg-validmeat`}
+                              >
+                                {item.category}
+                              </Badge>
+                            ) : (
+                              <Badge
+                                className="valid-meat badge-circle mt-2"
+                                bg={` badge-circle mt-2 bg-validUnmatch`}
+                              >
+                                {item.category}
+                              </Badge>
+                            )}
                           </div>
-                          <div className="col-xl-2">
+                          <div className="col-xl-8">
                             <Popover
                               placement="topLeft"
                               title="Description"
@@ -932,113 +691,255 @@ const Meat = ({ activeMeatTitle, year }) => {
                               </span>
                             </Popover>
                           </div>
-                          <div className="col-xl-2 d-grid">
-                            <Popover
-                              placement="topLeft"
-                              title="Monitor"
-                              content={item.monitor}
-                            >
-                              <span className="meat-name-details">
-                                {item.monitor}
-                              </span>
-                            </Popover>
-                            <div>
-                              {getCaptureSectionBackgroundMeat(
-                                item.monitorCapturedFromHeader,
-                                item.monitor,
-                                item.encounterDate,
-                                item
-                              )}
-                            </div>
-                          </div>
-                          <div className="col-xl-2 d-grid">
-                            <Popover
-                              placement="topLeft"
-                              title="Evaluation"
-                              content={item.evaluate}
-                            >
-                              <span className="meat-name-details">
-                                {item.evaluate}
-                              </span>
-                            </Popover>
-                            <div>
-                              {getCaptureSectionBackgroundMeat(
-                                item.evaluateCapturedFromHeader,
-                                item.evaluate,
-                                item.encounterDate,
-                                item
-                              )}
-                            </div>
-                          </div>
-                          <div className="col-xl-2 d-grid">
-                            <Popover
-                              placement="topLeft"
-                              title="Assessment"
-                              content={item.assessment}
-                            >
-                              <span className="meat-name-details">
-                                {item.assessment}
-                              </span>
-                            </Popover>
-                            <div>
-                              {getCaptureSectionBackgroundMeat(
-                                item.assessmentCapturedFromHeader,
-                                item.assessment,
-                                item.encounterDate,
-                                item
-                              )}
-                            </div>
-                          </div>
-                          <div className="col-xl-2 d-grid">
-                            <Popover
-                              placement="topLeft"
-                              title="Treatment"
-                              content={item.treatment}
-                            >
-                              <span className="meat-name-details">
-                                {item.treatment}
-                              </span>
-                            </Popover>
-
-                            <div>
-                              {getCaptureSectionBackgroundMeat(
-                                item.treatmentCapturedFromHeader,
-                                item.treatment,
-                                item.encounterDate,
-                                item
-                              )}
-                            </div>
-                          </div>
-                          <div className="col-xl-1 meatclose">
-                            <Popconfirm
-                              title="You want move to Valid?"
-                              description={item.diseaseName}
-                              onConfirm={confirmValidMeat}
-                              placement="leftTop"
-                              okText="Yes"
-                              cancelText="No"
-                              onOpenChange={() =>
-                                onchangeMeat(
-                                  item.diseaseName,
-                                  item.diagnosisCode
-                                )
-                              }
-                            >
-                              <div className={visitStyles.close_icon}>
-                                <FontAwesomeIcon
-                                  icon={faArrowsAlt}
-                                  style={{
-                                    size: 8,
-                                    color: "#a80404",
-                                  }}
-                                />
-                              </div>
-                            </Popconfirm>
-                          </div>
+                        </div>
+                        <div
+                          className={`${visitStyles.encounterAndSectionHeader}`}
+                        >
+                          {getProviderNameList({
+                            data: item?.providerName,
+                            captureSectionMatching: captureSectionMatching,
+                          })}
+                        </div>
+                        <div
+                          className={`${visitStyles.encounterAndSectionHeader}`}
+                        >
+                          {getEncounterDateBackground({
+                            value: item?.encounterDateSplit,
+                            encounterDateMatching: encounterDateMatching,
+                            fileDosPageNumberList: fileDosPageNumberList,
+                            setIsModalOpenValidCodes: setIsModalOpen,
+                            setSearch: setSearch,
+                            setFileModalHeader: setMeatModalTitle,
+                            patientDocumentResult: patientDocumentResult,
+                            selectMeatResult: setSelectMeatResult,
+                            datas: item,
+                          })}
                         </div>
                       </div>
-                    );
-                  })}
+
+                      <div
+                        className={
+                          activeMeatTitle?.header === "M" &&
+                          activeMeatTitle?.diagnosisCode?.replace(".", "") ==
+                            item?.diagnosisCode?.replace(".", "")
+                            ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                            : `col-xl-2 d-grid`
+                        }
+                      >
+                        {item.monitorAspect != "" ? (
+                          <Popover
+                            placement="topLeft"
+                            title="Monitor"
+                            content={item.monitorAspect}
+                          >
+                            <span className="meat-name-details">
+                              {item.monitorAspect}
+                            </span>
+                          </Popover>
+                        ) : (
+                          <span className="meat-name-details text-center font-bold">
+                            -
+                          </span>
+                        )}
+                        <div>
+                          {getCaptureSectionBackgroundMeatNew(
+                            item.monitorHyperLink,
+                            captureSectionMatching,
+                            "hcc",
+                            setSearch,
+                            setFileLoading,
+                            setIsModalOpenLab,
+                            setIsModalOpenRadiology,
+                            setIsModalOpen,
+                            setFileModalHeader,
+                            patientDocumentResult,
+                            fileInitialPage,
+                            setFileInitialPage,
+                            item.diagnosisCode,
+                            setSelectMeatResult,
+                            item
+                          )}
+                        </div>
+                      </div>
+                      <div
+                        className={
+                          activeMeatTitle?.header === "E" &&
+                          activeMeatTitle?.diagnosisCode?.replace(".", "") ==
+                            item?.diagnosisCode?.replace(".", "")
+                            ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                            : `col-xl-2 d-grid`
+                        }
+                      >
+                        {item.evaluateAspect != "" ? (
+                          <Popover
+                            placement="topLeft"
+                            title="Evaluation"
+                            content={item.evaluateAspect}
+                          >
+                            <span className="meat-name-details">
+                              {item.evaluateAspect}
+                            </span>
+                          </Popover>
+                        ) : (
+                          <span className="meat-name-details text-center font-bold">
+                            -
+                          </span>
+                        )}
+                        <div>
+                        {getCaptureSectionBackgroundMeatNew(
+                            item.evaluateHyperLink,
+                            captureSectionMatching,
+                            "hcc",
+                            setSearch,
+                            setFileLoading,
+                            setIsModalOpenLab,
+                            setIsModalOpenRadiology,
+                            setIsModalOpen,
+                            setFileModalHeader,
+                            patientDocumentResult,
+                            fileInitialPage,
+                            setFileInitialPage,
+                            item.diagnosisCode,
+                            setSelectMeatResult,
+                            item
+                          )}
+                        </div>
+                      </div>
+                      <div
+                        className={
+                          activeMeatTitle?.header === "A" &&
+                          activeMeatTitle?.diagnosisCode?.replace(".", "") ==
+                            item?.diagnosisCode?.replace(".", "")
+                            ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                            : `col-xl-2 d-grid`
+                        }
+                      >
+                        {item.assessmentAspect != "" ? (
+                          <Popover
+                            placement="topLeft"
+                            title="Assessment"
+                            content={item.assessmentAspect}
+                          >
+                            <span className="meat-name-details">
+                              {item.assessmentAspect}
+                            </span>
+                          </Popover>
+                        ) : (
+                          <span className="meat-name-details text-center font-bold">
+                            -
+                          </span>
+                        )}
+
+                        <div>
+                        {getCaptureSectionBackgroundMeatNew(
+                            item.assessmentHyperLink,
+                            captureSectionMatching,
+                            "hcc",
+                            setSearch,
+                            setFileLoading,
+                            setIsModalOpenLab,
+                            setIsModalOpenRadiology,
+                            setIsModalOpen,
+                            setFileModalHeader,
+                            patientDocumentResult,
+                            fileInitialPage,
+                            setFileInitialPage,
+                            item.diagnosisCode,
+                            setSelectMeatResult,
+                            item
+                          )}
+                        </div>
+                      </div>
+                      <div
+                        className={
+                          activeMeatTitle?.header === "T" &&
+                          activeMeatTitle?.diagnosisCode?.replace(".", "") ==
+                            item?.diagnosisCode?.replace(".", "")
+                            ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                            : `col-xl-2 d-grid`
+                        }
+                      >
+                        {item.treatmentAspect != "" ? (
+                          <Popover
+                            placement="topLeft"
+                            title="Treatment"
+                            content={item.treatmentAspect}
+                          >
+                            <span className="meat-name-details">
+                              {item.treatmentAspect}
+                            </span>
+                          </Popover>
+                        ) : (
+                          <span className="meat-name-details text-center font-bold">
+                            -
+                          </span>
+                        )}
+                        <div>
+                          {getCaptureSectionBackgroundMeatNew(
+                            item.treatmentHyperLink,
+                            captureSectionMatching,
+                            "hcc",
+                            setSearch,
+                            setFileLoading,
+                            setIsModalOpenLab,
+                            setIsModalOpenRadiology,
+                            setIsModalOpen,
+                            setFileModalHeader,
+                            patientDocumentResult,
+                            fileInitialPage,
+                            setFileInitialPage,
+                            item.diagnosisCode,
+                            setSelectMeatResult,
+                            item
+                          )}
+                        </div>
+                      </div>
+                      <div className="col-xl-1 meatclose">
+                        <Popconfirm
+                          title="You want move to Invalid?"
+                          description={item.diseaseName}
+                          onConfirm={confirmInvalidMeat}
+                          placement="leftTop"
+                          okText="Yes"
+                          cancelText="No"
+                          onOpenChange={() =>
+                            onchangeMeat(item.diseaseName, item.diagnosisCode)
+                          }
+                        >
+                          <div className={visitStyles.close_icon}>
+                            <FontAwesomeIcon
+                              icon={faArrowsAlt}
+                              style={{ size: 8, color: "#a80404" }}
+                            />
+                          </div>
+                        </Popconfirm>
+                        <Tooltip title="Edit">
+                          <div
+                            className={visitStyles.edit_icon}
+                            onClick={() => {
+                              setMeatEdit(true);
+                              setEditData(item);
+                            }}
+                          >
+                            <FontAwesomeIcon
+                              icon={faPen}
+                              style={{ size: 8, color: "#706e70" }}
+                            />
+                          </div>
+                        </Tooltip>
+                        {item.isMeatCriteriaPresent === false ? (
+                          <div
+                            onClick={() => addMeatQuery(item, "Add")}
+                            className={visitStyles.add_meat_query}
+                          >
+                            {SVGICON.meatQueryIcon}
+                          </div>
+                        ) : null}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}               
                 </>
               ) : null}
             </div>
@@ -1054,7 +955,7 @@ const Meat = ({ activeMeatTitle, year }) => {
 
       {isModalOpen && (
         <Modal
-          title={meatModalTitle}
+          title={fileModalHeader}
           // title="Pdf Test"
           centered
           open={isModalOpen}
@@ -1160,14 +1061,14 @@ const Meat = ({ activeMeatTitle, year }) => {
                   >
                     <div className="row">
                       <div className="col-xl-12 d-grid">
-                        {selectMeatResult?.monitor != "" ? (
+                        {selectMeatResult?.monitorAspect != "" ? (
                           <Popover
                             placement="topLeft"
                             title="Monitor"
-                            content={selectMeatResult?.monitor}
+                            content={selectMeatResult?.monitorAspect}
                           >
                             <span className="meat-name-details2">
-                              {selectMeatResult?.monitor}
+                              {selectMeatResult?.monitorAspect}
                             </span>
                           </Popover>
                         ) : (
@@ -1176,12 +1077,22 @@ const Meat = ({ activeMeatTitle, year }) => {
                           </span>
                         )}
                         <div>
-                          {getCaptureSectionBackgroundMeatFile(
-                            selectMeatResult?.monitorCapturedFromHeader,
-                            selectMeatResult?.monitor,
-                            selectMeatResult?.encounterDate,
-                            selectMeatResult,
-                            "MONITOR"
+                        {getCaptureSectionBackgroundMeatNew(
+                            selectMeatResult.monitorHyperLink,
+                            captureSectionMatching,
+                            "hcc",
+                            setSearch,
+                            setFileLoading,
+                            setIsModalOpenLab,
+                            setIsModalOpenRadiology,
+                            setIsModalOpen,
+                            setFileModalHeader,
+                            patientDocumentResult,
+                            fileInitialPage,
+                            setFileInitialPage,
+                            selectMeatResult.diagnosisCode,
+                            setSelectMeatResult,
+                            selectMeatResult
                           )}
                         </div>
                       </div>
@@ -1204,14 +1115,14 @@ const Meat = ({ activeMeatTitle, year }) => {
                   >
                     <div className="row">
                       <div className="col-xl-12 d-grid">
-                        {selectMeatResult?.evaluate != "" ? (
+                        {selectMeatResult?.evaluateAspect != "" ? (
                           <Popover
                             placement="topLeft"
                             title="Evaluation"
-                            content={selectMeatResult?.evaluate}
+                            content={selectMeatResult?.evaluateAspect}
                           >
                             <span className="meat-name-details2">
-                              {selectMeatResult?.evaluate}
+                              {selectMeatResult?.evaluateAspect}
                             </span>
                           </Popover>
                         ) : (
@@ -1220,12 +1131,22 @@ const Meat = ({ activeMeatTitle, year }) => {
                           </span>
                         )}
                         <div>
-                          {getCaptureSectionBackgroundMeatFile(
-                            selectMeatResult?.evaluateCapturedFromHeader,
-                            selectMeatResult?.evaluate,
-                            selectMeatResult?.encounterDate,
-                            selectMeatResult,
-                            "EVALUATION"
+                        {getCaptureSectionBackgroundMeatNew(
+                            selectMeatResult.evaluateHyperLink,
+                            captureSectionMatching,
+                            "hcc",
+                            setSearch,
+                            setFileLoading,
+                            setIsModalOpenLab,
+                            setIsModalOpenRadiology,
+                            setIsModalOpen,
+                            setFileModalHeader,
+                            patientDocumentResult,
+                            fileInitialPage,
+                            setFileInitialPage,
+                            selectMeatResult.diagnosisCode,
+                            setSelectMeatResult,
+                            selectMeatResult
                           )}
                         </div>
                       </div>
@@ -1248,14 +1169,14 @@ const Meat = ({ activeMeatTitle, year }) => {
                   >
                     <div className="row">
                       <div className="col-xl-12 d-grid">
-                        {selectMeatResult?.assessment != "" ? (
+                        {selectMeatResult?.assessmentAspect != "" ? (
                           <Popover
                             placement="topLeft"
                             title="Assessment"
-                            content={selectMeatResult?.assessment}
+                            content={selectMeatResult?.assessmentAspect}
                           >
                             <span className="meat-name-details2">
-                              {selectMeatResult?.assessment}
+                              {selectMeatResult?.assessmentAspect}
                             </span>
                           </Popover>
                         ) : (
@@ -1265,12 +1186,22 @@ const Meat = ({ activeMeatTitle, year }) => {
                         )}
 
                         <div>
-                          {getCaptureSectionBackgroundMeatFile(
-                            selectMeatResult?.assessmentCapturedFromHeader,
-                            selectMeatResult?.assessment,
-                            selectMeatResult?.encounterDate,
-                            selectMeatResult,
-                            "ASSESSMENT"
+                        {getCaptureSectionBackgroundMeatNew(
+                            selectMeatResult.assessmentHyperLink,
+                            captureSectionMatching,
+                            "hcc",
+                            setSearch,
+                            setFileLoading,
+                            setIsModalOpenLab,
+                            setIsModalOpenRadiology,
+                            setIsModalOpen,
+                            setFileModalHeader,
+                            patientDocumentResult,
+                            fileInitialPage,
+                            setFileInitialPage,
+                            selectMeatResult.diagnosisCode,
+                            setSelectMeatResult,
+                            selectMeatResult
                           )}
                         </div>
                       </div>
@@ -1292,14 +1223,14 @@ const Meat = ({ activeMeatTitle, year }) => {
                   >
                     <div className="row">
                       <div className="col-xl-12 d-grid">
-                        {selectMeatResult?.treatment != "" ? (
+                        {selectMeatResult?.treatmentAspect != "" ? (
                           <Popover
                             placement="topLeft"
                             title="Treatment"
-                            content={selectMeatResult?.treatment}
+                            content={selectMeatResult?.treatmentAspect}
                           >
                             <span className="meat-name-details2">
-                              {selectMeatResult?.treatment}
+                              {selectMeatResult?.treatmentAspect}
                             </span>
                           </Popover>
                         ) : (
@@ -1308,12 +1239,22 @@ const Meat = ({ activeMeatTitle, year }) => {
                           </span>
                         )}
                         <div>
-                          {getCaptureSectionBackgroundMeatFile(
-                            selectMeatResult?.treatmentCapturedFromHeader,
-                            selectMeatResult?.treatment,
-                            selectMeatResult?.encounterDate,
-                            selectMeatResult,
-                            "TREATMENT"
+                        {getCaptureSectionBackgroundMeatNew(
+                            selectMeatResult.treatmentHyperLink,
+                            captureSectionMatching,
+                            "hcc",
+                            setSearch,
+                            setFileLoading,
+                            setIsModalOpenLab,
+                            setIsModalOpenRadiology,
+                            setIsModalOpen,
+                            setFileModalHeader,
+                            patientDocumentResult,
+                            fileInitialPage,
+                            setFileInitialPage,
+                            selectMeatResult.diagnosisCode,
+                            setSelectMeatResult,
+                            selectMeatResult
                           )}
                         </div>
                       </div>
@@ -1399,7 +1340,20 @@ const Meat = ({ activeMeatTitle, year }) => {
               </div>
               <div className="row">
                 <div className="col-xl-6">
-                  <Form.Item
+                <Form.Item label="Section" name="monitorHyperLink">
+                    <Select
+                      mode="tags"
+                      maxTagCount="responsive"
+                      className={`ant_select_form hcc_form mb-2`}
+                    >
+                      {editData?.monitorHyperLink?.map((data) => (
+                        <Option key={data?.header} value={data?.header}>
+                          {data?.header}
+                        </Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                  {/* <Form.Item
                     label="Monitor Header"
                     name="monitorCapturedFromHeader"
                   >
@@ -1407,11 +1361,11 @@ const Meat = ({ activeMeatTitle, year }) => {
                       name="monitorCapturedFromHeader"
                       className={styles.formControl}
                     />
-                  </Form.Item>
+                  </Form.Item> */}
                 </div>
                 <div className="col-xl-6">
-                  <Form.Item label="Monitor" name="monitor">
-                    <Input name="monitor" className={styles.formControl} />
+                  <Form.Item label="Monitor" name="monitorAspect">
+                    <Input name="monitorAspect" className={styles.formControl} />
                   </Form.Item>
                 </div>
               </div>
@@ -1428,8 +1382,8 @@ const Meat = ({ activeMeatTitle, year }) => {
                   </Form.Item>
                 </div>
                 <div className="col-xl-6">
-                  <Form.Item label="Evaluate" name="evaluate">
-                    <Input name="evaluate" className={styles.formControl} />
+                  <Form.Item label="Evaluate" name="evaluateAspect">
+                    <Input name="evaluateAspect" className={styles.formControl} />
                   </Form.Item>
                 </div>
               </div>
@@ -1454,7 +1408,7 @@ const Meat = ({ activeMeatTitle, year }) => {
                 <div className="col-xl-6">
                   <Form.Item
                     label={<label>Assessment&nbsp;</label>}
-                    name="assessment"
+                    name="assessmentAspect"
                     rules={[
                       {
                         required: false,
@@ -1462,7 +1416,7 @@ const Meat = ({ activeMeatTitle, year }) => {
                       },
                     ]}
                   >
-                    <Input name="assessment" className={styles.formControl} />
+                    <Input name="assessmentAspect" className={styles.formControl} />
                   </Form.Item>
                 </div>
               </div>
@@ -1479,8 +1433,8 @@ const Meat = ({ activeMeatTitle, year }) => {
                   </Form.Item>
                 </div>
                 <div className="col-xl-6">
-                  <Form.Item label="Treatment" name="treatment">
-                    <Input name="treatment" className={styles.formControl} />
+                  <Form.Item label="Treatment" name="treatmentAspect">
+                    <Input name="treatmentAspect" className={styles.formControl} />
                   </Form.Item>
                 </div>{" "}
               </div>

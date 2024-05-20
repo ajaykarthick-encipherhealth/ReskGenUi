@@ -1,6 +1,6 @@
 import { CalendarOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Tooltip, notification } from "antd";
+import { Tooltip, notification, Popover } from "antd";
 import moment from "moment";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import visitStyles from "../../../../../styles/visitdata.module.css";
@@ -19,6 +19,7 @@ export const getEncounterDateBackground = ({
   patientDocumentResult,
   selectMeatResult,
   datas,
+  dosSummariesList,
 }) => {
   return value?.map((res) => {
     const result = encounterDateMatching.filter((res2) => res2.name == res);
@@ -28,7 +29,7 @@ export const getEncounterDateBackground = ({
         onClick={() =>
           getEncounterDetails(
             res,
-            fileDosPageNumberList,
+            dosSummariesList,
             setIsModalOpenValidCodes,
             setSearch,
             setFileModalHeader,
@@ -54,7 +55,7 @@ export const getEncounterDateBackground = ({
 
 const getEncounterDetails = async (
   date,
-  fileDosPageNumberList,
+  dosSummariesList,
   setIsModalOpenValidCodes,
   setSearch,
   setFileModalHeader,
@@ -63,53 +64,143 @@ const getEncounterDetails = async (
   datas
 ) => {
   selectMeatResult ? selectMeatResult(datas) : "";
-  var result = fileDosPageNumberList?.result;
-  var groupEncounterDate = [];
-  for (var key in result?.response) {
-    var optionArray = [];
-    var optionPage = [];
-    var pageNumbervalue = result.response[key];
-    for (var key2 in pageNumbervalue) {
-      var startPage = key2 == "first" ? pageNumbervalue[key2] : null;
-      var keyValue = key2 == "first" ? "Start - " : "End - ";
-      optionArray.push({
-        label: keyValue + " " + pageNumbervalue[key2],
-        value: pageNumbervalue[key2] + "," + moment(key).format("MM/DD"),
-      });
-      if (startPage) {
-        optionPage.push({
-          pageNumber: startPage,
-        });
-      }
-    }
-    groupEncounterDate.push({
-      date: moment(key).format("MM/DD/YYYY"),
-      startPage: optionPage,
-    });
-  }
-  const findPageNumber = groupEncounterDate.filter((i) => i.date === date);
+  const findPageNumber = dosSummariesList.filter(
+    (i) =>
+      moment(i.dos.date).format("MM-DD-YYYY") ===
+      moment(date).format("MM-DD-YYYY")
+  );
   if (findPageNumber.length != 0) {
     if (setIsModalOpenValidCodes) {
       setIsModalOpenValidCodes(true);
       var headerName = patientDocumentResult
         ? patientDocumentResult.patientId +
-        " / " +
-        patientDocumentResult.patientName +
-        " / " +
-        date
+          " / " +
+          patientDocumentResult.patientName +
+          " / " +
+          moment(date).format("MM-DD-YYYY")
         : "";
       setFileModalHeader(headerName);
     }
-    var date = findPageNumber[0].date;
-    if (findPageNumber[0].startPage.length != 0) {
-      var pageNumber = findPageNumber[0].startPage[0].pageNumber;
-      var splitPoint = date.substring(" ", 5);
-      setSearch({
-        value: splitPoint,
-        page: pageNumber,
-      });
+    setSearch({
+      value: "DOS: " + moment(findPageNumber[0]?.dos).format("MM/DD/YYYY"),
+      page: findPageNumber[0]?.startPageNumber,
+    });
+  }
+};
+
+export const getHeaderHyperlink = (
+  value,
+  encounterDateMatching,
+  documentPlace,
+  setSearch,
+  setFileLoading,
+  setIsModalOpenLab,
+  setIsModalOpenRadiology,
+  setIsModalOpenValidCodes,
+  setFileModalHeader,
+  patientDocumentResult,
+  fileInitialPage,
+  setFileInitialPage,
+  diagnosisCode,
+  setSelectMeatResult,
+  meatresult
+) => {
+  return value?.map((res) => {
+    const result = encounterDateMatching.filter(
+      (res2) => res2.name == res?.dateOfService.date
+    );
+    var backColor = result[0]?.colors;
+    var sectionMapArr = res ? (
+      <span
+        onClick={() =>
+          newFindValueDocument(
+            res,
+            documentPlace,
+            setSearch,
+            setFileLoading,
+            setIsModalOpenLab,
+            setIsModalOpenRadiology,
+            setIsModalOpenValidCodes,
+            setFileModalHeader,
+            patientDocumentResult,
+            fileInitialPage,
+            setFileInitialPage,
+            diagnosisCode,
+            setSelectMeatResult,
+            meatresult
+          )
+        }
+        className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
+      >
+        <i>
+          <CalendarOutlined className={visitStyles.calenderIcon} />
+        </i>
+        {moment(res?.dateOfService.date).format("MMM DD")}
+      </span>
+    ) : (
+      ""
+    );
+    return sectionMapArr;
+  });
+};
+
+const newFindValueDocument = (
+  data,
+  documentPlace,
+  setSearch,
+  setFileLoading,
+  setIsModalOpenLab,
+  setIsModalOpenRadiology,
+  setIsModalOpenValidCodes,
+  setFileModalHeader,
+  patientDocumentResult,
+  fileInitialPage,
+  setFileInitialPage,
+  diagnosisCode,
+  setSelectMeatResult,
+  meatresult
+) => {
+  console.log(data);
+  setFileLoading(true);
+  setSelectMeatResult && setSelectMeatResult(meatresult);
+  var headerName = patientDocumentResult
+    ? patientDocumentResult.patientId +
+      " / " +
+      patientDocumentResult.patientName +
+      " / " +
+      diagnosisCode +
+      " - (" +
+      data?.header +
+      ")"
+    : "";
+  setFileModalHeader(headerName);
+  if (data?.pageNumber == fileInitialPage) {
+    setFileLoading(false);
+    notification.warning({
+      message: "This detail also same page",
+      placement: "top",
+      duration: 1,
+    });
+  }
+  setSearch({
+    value: data?.substring,
+    page: data?.pageNumber,
+    headers: false,
+    headerContent: data?.header,
+  });
+  if (documentPlace === "Lab" || documentPlace === "Radio") {
+    if (documentPlace === "Lab") {
+      setIsModalOpenLab(true);
+    } else {
+      setIsModalOpenRadiology(true);
+    }
+  } else {
+    if (patientDocumentResult && setIsModalOpenValidCodes) {
+      setIsModalOpenValidCodes(true);
     }
   }
+  setFileInitialPage(data?.pageNumber);
+  setFileLoading(false);
 };
 
 export const getCaptureSectionBackgroundFile = (
@@ -128,43 +219,73 @@ export const getCaptureSectionBackgroundFile = (
   fileId,
   patientDocumentResult,
   fileInitialPage,
-  setFileInitialPage
+  setFileInitialPage,
+  hyperlinks,
+  encounterDateMatching
 ) => {
   var dublicateCaptureDelete = removeDuplicates(value);
   return dublicateCaptureDelete.map((res) => {
-    const result = captureSectionMatching.filter(
-      (res2) => res2.sectionName == res
+    const result = captureSectionMatching?.filter(
+      (res2) => res2.sectionName === res
+    );
+    const headerResult = hyperlinks?.filter(
+      (res2) => res2.header === result[0]?.sectionName
     );
     var backColor = result[0]?.backgroundColor;
     var textColor = result[0]?.sectionColor;
     var headerNames = result[0]?.sectionName;
     var sectionMapArr = (
-      <span
-        onClick={() =>
-          findValueDocument({
-            res,
-            headerNames,
-            encounterDate,
-            actualDescription,
-            diagnosisCode,
-            documentPlace,
-            setSearch,
-            setFileLoading,
-            setIsModalOpenLab,
-            setIsModalOpenRadiology,
-            setIsModalOpenValidCodes,
-            setFileModalHeader,
-            fileId,
-            patientDocumentResult,
-            fileInitialPage,
-            setFileInitialPage,
-          })
-        }
-        style={{ backgroundColor: backColor, color: textColor }}
-        className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
+      <Popover
+        placement="bottom"
+        content={getHeaderHyperlink(
+          headerResult,
+          encounterDateMatching,
+          documentPlace,
+          setSearch,
+          setFileLoading,
+          setIsModalOpenLab,
+          setIsModalOpenRadiology,
+          setIsModalOpenValidCodes,
+          setFileModalHeader,
+          patientDocumentResult,
+          fileInitialPage,
+          setFileInitialPage,
+          diagnosisCode
+        )}
       >
-        {res}
-      </span>
+        <span
+          style={{ backgroundColor: backColor, color: textColor }}
+          className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
+        >
+          {res}
+        </span>
+      </Popover>
+      // <span
+      //   onClick={() =>
+      //     findValueDocument({
+      //       res,
+      //       headerNames,
+      //       encounterDate,
+      //       actualDescription,
+      //       diagnosisCode,
+      //       documentPlace,
+      //       setSearch,
+      //       setFileLoading,
+      //       setIsModalOpenLab,
+      //       setIsModalOpenRadiology,
+      //       setIsModalOpenValidCodes,
+      //       setFileModalHeader,
+      //       fileId,
+      //       patientDocumentResult,
+      //       fileInitialPage,
+      //       setFileInitialPage,
+      //     })
+      //   }
+      //   style={{ backgroundColor: backColor, color: textColor }}
+      //   className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
+      // >
+      //   {res}
+      // </span>
     );
     return sectionMapArr;
   });
@@ -179,25 +300,25 @@ export const getMeatFound = (code, data, value) => {
   if (result?.length != 0) {
     switch (value) {
       case "M":
-        if (result[0]?.monitor) {
+        if (result[0]?.monitorAspect) {
           backColor = "#15b315";
         }
         meatTitle = "Monitor";
         break;
       case "E":
-        if (result[0]?.evaluate) {
+        if (result[0]?.evaluateAspect) {
           backColor = "#15b315";
         }
         meatTitle = "Evaluate";
         break;
       case "A":
-        if (result[0]?.assessment) {
+        if (result[0]?.assessmentAspect) {
           backColor = "#15b315";
         }
         meatTitle = "Assessment";
         break;
       case "T":
-        if (result[0]?.treatment) {
+        if (result[0]?.treatmentAspect) {
           backColor = "#15b315";
         }
         meatTitle = "Treatment";
@@ -394,7 +515,7 @@ const findValueDocuments = async (
         value: splitPoint,
         page: pageNumber,
         headers: false,
-        headerContent:headerNames
+        headerContent: headerNames,
       });
       setFileInitialPage(pageNumber);
       setFileLoading(false);
@@ -404,7 +525,7 @@ const findValueDocuments = async (
         value: splitPoint,
         page: "",
         headers: true,
-        headerContent:headerNames
+        headerContent: headerNames,
       });
       setFileLoading(false);
       setFileInitialPage(null);
@@ -414,7 +535,7 @@ const findValueDocuments = async (
       value: headerNames,
       page: "",
       headers: true,
-      headerContent:headerNames
+      headerContent: headerNames,
     });
     setFileLoading(false);
     setFileInitialPage(null);
@@ -452,13 +573,13 @@ export const findValueDocument = async ({
   };
   var headerName = patientDocumentResult
     ? patientDocumentResult.patientId +
-    " / " +
-    patientDocumentResult.patientName +
-    " / " +
-    diagnosisCode +
-    " - (" +
-    headerNames +
-    ")"
+      " / " +
+      patientDocumentResult.patientName +
+      " / " +
+      diagnosisCode +
+      " - (" +
+      headerNames +
+      ")"
     : "";
   setFileModalHeader(headerName);
   try {
@@ -466,7 +587,7 @@ export const findValueDocument = async ({
       setSearch({
         value: headerNames,
         headers: true,
-        headerContent:headerNames
+        headerContent: headerNames,
       });
       setFileLoading(false);
       if (documentPlace === "Lab") {
@@ -476,7 +597,7 @@ export const findValueDocument = async ({
       }
     } else {
       if (patientDocumentResult && setIsModalOpenValidCodes) {
-          setIsModalOpenValidCodes(true);
+        setIsModalOpenValidCodes(true);
       }
       const response = await axios.post(
         ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
@@ -510,7 +631,7 @@ export const findValueDocument = async ({
           value: splitPoint,
           page: result?.pageNumber,
           headers: false,
-          headerContent:headerNames
+          headerContent: headerNames,
         });
         setFileInitialPage(pageNumber);
         setFileLoading(false);
@@ -587,7 +708,7 @@ export const onDragEnd = (
         "Move to Deleted",
         "HCC"
       );
-     break;
+      break;
     case "SUGGESTED to HCC":
       moveToAnotherAction(
         setConfirmNotesModalValid,
@@ -623,6 +744,60 @@ export const onDragEnd = (
     default:
       null;
   }
+};
+
+export const getCaptureSectionBackgroundMeatNew = (
+  value,
+  captureSectionMatching,
+  documentPlace,
+  setSearch,
+  setFileLoading,
+  setIsModalOpenLab,
+  setIsModalOpenRadiology,
+  setIsModalOpenValidCodes,
+  setFileModalHeader,
+  patientDocumentResult,
+  fileInitialPage,
+  setFileInitialPage,
+  diagnosisCode,
+  setSelectMeatResult,
+  meatresult
+) => {
+  return value.map((res) => {
+    const result = captureSectionMatching?.filter(
+      (res2) => res2.sectionName === res.header
+    );
+    var backColor = result[0]?.backgroundColor;
+    var textColor = result[0]?.sectionColor;
+    var headerNames = result[0]?.sectionName;
+    var sectionMapArr = (
+      <span
+        onClick={() =>
+          newFindValueDocument(
+            res,
+            documentPlace,
+            setSearch,
+            setFileLoading,
+            setIsModalOpenLab,
+            setIsModalOpenRadiology,
+            setIsModalOpenValidCodes,
+            setFileModalHeader,
+            patientDocumentResult,
+            fileInitialPage,
+            setFileInitialPage,
+            diagnosisCode,
+            setSelectMeatResult,
+            meatresult
+          )
+        }
+        style={{ backgroundColor: backColor, color: textColor }}
+        className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
+      >
+        {res.header}
+      </span>
+    );
+    return sectionMapArr;
+  });
 };
 
 const ReusableFunctions = () => {

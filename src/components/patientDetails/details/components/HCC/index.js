@@ -73,6 +73,122 @@ const HccCards = ({
     searchString: "",
     pagenumber: "",
   });
+
+  const dosSummariesList = [
+    {
+      "dos": {
+        "date": "2023-10-08T18:30:00.000Z"
+      },
+      "startPageNumber": 1,
+      "endPagNumber": 9
+    },
+    {
+      "dos": {
+        "date": "2023-09-24T18:30:00.000Z"
+      },
+      "startPageNumber": 10,
+      "endPagNumber": 12
+    },
+    {
+      "dos": {
+        "date": "2023-07-14T18:30:00.000Z"
+      },
+      "startPageNumber": 13,
+      "endPagNumber": 15
+    },
+    {
+      "dos": {
+        "date": "2023-06-21T18:30:00.000Z"
+      },
+      "startPageNumber": 16,
+      "endPagNumber": 19
+    },
+    {
+      "dos": {
+        "date": "2023-05-25T18:30:00.000Z"
+      },
+      "startPageNumber": 20,
+      "endPagNumber": 27
+    },
+    {
+      "dos": {
+        "date": "2023-01-16T18:30:00.000Z"
+      },
+      "startPageNumber": 28,
+      "endPagNumber": 37
+    },
+    {
+      "dos": {
+        "date": "2022-09-11T18:30:00.000Z"
+      },
+      "startPageNumber": 38,
+      "endPagNumber": 45
+    },
+    {
+      "dos": {
+        "date": "2022-05-08T18:30:00.000Z"
+      },
+      "startPageNumber": 46,
+      "endPagNumber": 54
+    },
+    {
+      "dos": {
+        "date": "2022-02-06T18:30:00.000Z"
+      },
+      "startPageNumber": 55,
+      "endPagNumber": 58
+    },
+    {
+      "dos": {
+        "date": "2021-10-10T18:30:00.000Z"
+      },
+      "startPageNumber": 59,
+      "endPagNumber": 66
+    },
+    {
+      "dos": {
+        "date": "2021-09-07T18:30:00.000Z"
+      },
+      "startPageNumber": 67,
+      "endPagNumber": 74
+    },
+    {
+      "dos": {
+        "date": "2021-06-29T18:30:00.000Z"
+      },
+      "startPageNumber": 75,
+      "endPagNumber": 77
+    },
+    {
+      "dos": {
+        "date": "2021-06-28T18:30:00.000Z"
+      },
+      "startPageNumber": 78,
+      "endPagNumber": 81
+    },
+    {
+      "dos": {
+        "date": "2021-06-08T18:30:00.000Z"
+      },
+      "startPageNumber": 82,
+      "endPagNumber": 84
+    },
+    {
+      "dos": {
+        "date": "2021-03-07T18:30:00.000Z"
+      },
+      "startPageNumber": 85,
+      "endPagNumber": 94
+    },
+    {
+      "dos": {
+        "date": "2021-02-21T18:30:00.000Z"
+      },
+      "startPageNumber": 95,
+      "endPagNumber": 100
+    }
+  ]
+
   const PopContentHccVersion = (
     <div className={styles.innerPop}>
       <div className={styles.displayDiv}>
@@ -434,6 +550,7 @@ const HccCards = ({
                                 setSearch: setSearch,
                                 setFileModalHeader: setFileModalHeader,
                                 patientDocumentResult: patientDocumentResult,
+                                dosSummariesList:dosSummariesList
                               })}
                             </div>
                             <div
@@ -455,7 +572,9 @@ const HccCards = ({
                                 fileId,
                                 patientDocumentResult,
                                 fileInitialPage,
-                                setFileInitialPage
+                                setFileInitialPage,
+                                data?.hyperlinks,
+                                encounterDateMatching
                               )}
                             </div>
                           </div>
