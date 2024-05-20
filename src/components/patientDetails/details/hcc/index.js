@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Tab, Nav } from "react-bootstrap";
+import { useDispatch,useSelector } from "react-redux";
 import visitStyles from "../../../../styles/visitdata.module.css";
 import VisitData from "./visitData";
 import Combo from "./combo";
@@ -11,8 +12,16 @@ import { Button, Dropdown, Popover, Select } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faClose } from "@fortawesome/free-solid-svg-icons";
 import styles from "../hcc/styles.module.css";
+import moment from "moment";
+import { getPatientDetailsResult } from "../../../../store/actions/ReviewerAction/PatientDetailsAction";
+
+const { Option } = Select;
 
 const Hcc = ({ year }) => {
+  const dispatch = useDispatch();
+  const patientDosResult = useSelector(
+    (state) => state?.ReviewerReducers?.patientDosList
+  );
   const [activeTabHead, setActiveTabHead] = useState(1);
   const [flagTagActive, setFlagTagActive] = useState(false);
   const [popoverVisible, setPopoverVisible] = useState(false);
@@ -20,6 +29,124 @@ const Hcc = ({ year }) => {
   const [activeComboTree, setActiveComboTree] = useState(null);
   const [pageNumberOptions, setPageNumberOptions] = useState([]);
   const [search, setSearch] = useState();
+
+  console.log(patientDosResult)
+
+  const dosSummaries = [
+    {
+      dos: {
+        date: "2023-10-08T18:30:00.000Z",
+      },
+      startPageNumber: 1,
+      endPagNumber: 9,
+    },
+    {
+      dos: {
+        date: "2023-09-24T18:30:00.000Z",
+      },
+      startPageNumber: 10,
+      endPagNumber: 12,
+    },
+    {
+      dos: {
+        date: "2023-07-14T18:30:00.000Z",
+      },
+      startPageNumber: 13,
+      endPagNumber: 15,
+    },
+    {
+      dos: {
+        date: "2023-06-21T18:30:00.000Z",
+      },
+      startPageNumber: 16,
+      endPagNumber: 19,
+    },
+    {
+      dos: {
+        date: "2023-05-25T18:30:00.000Z",
+      },
+      startPageNumber: 20,
+      endPagNumber: 27,
+    },
+    {
+      dos: {
+        date: "2023-01-16T18:30:00.000Z",
+      },
+      startPageNumber: 28,
+      endPagNumber: 37,
+    },
+    {
+      dos: {
+        date: "2022-09-11T18:30:00.000Z",
+      },
+      startPageNumber: 38,
+      endPagNumber: 45,
+    },
+    {
+      dos: {
+        date: "2022-05-08T18:30:00.000Z",
+      },
+      startPageNumber: 46,
+      endPagNumber: 54,
+    },
+    {
+      dos: {
+        date: "2022-02-06T18:30:00.000Z",
+      },
+      startPageNumber: 55,
+      endPagNumber: 58,
+    },
+    {
+      dos: {
+        date: "2021-10-10T18:30:00.000Z",
+      },
+      startPageNumber: 59,
+      endPagNumber: 66,
+    },
+    {
+      dos: {
+        date: "2021-09-07T18:30:00.000Z",
+      },
+      startPageNumber: 67,
+      endPagNumber: 74,
+    },
+    {
+      dos: {
+        date: "2021-06-29T18:30:00.000Z",
+      },
+      startPageNumber: 75,
+      endPagNumber: 77,
+    },
+    {
+      dos: {
+        date: "2021-06-28T18:30:00.000Z",
+      },
+      startPageNumber: 78,
+      endPagNumber: 81,
+    },
+    {
+      dos: {
+        date: "2021-06-08T18:30:00.000Z",
+      },
+      startPageNumber: 82,
+      endPagNumber: 84,
+    },
+    {
+      dos: {
+        date: "2021-03-07T18:30:00.000Z",
+      },
+      startPageNumber: 85,
+      endPagNumber: 94,
+    },
+    {
+      dos: {
+        date: "2021-02-21T18:30:00.000Z",
+      },
+      startPageNumber: 95,
+      endPagNumber: 100,
+    },
+  ];
+
   const selectTab = (num) => {
     setFlagTagActive(false);
     setActiveTabHead(num);
@@ -41,7 +168,11 @@ const Hcc = ({ year }) => {
     }, 10000);
   }, [activeMeatTitle]);
   const handleOptions = (value) => {
-    console.log(value);
+    console.log(moment(value).format("YYYY-MM-DD"));
+    const patientId = localStorage.getItem("patientId");
+    dispatch(
+      getPatientDetailsResult(patientId, moment(value).format("YYYY-MM-DD"))
+    );
   };
   const handleChangePageNumber = async (value) => {
     setPopoverVisible(false);
@@ -161,11 +292,13 @@ const Hcc = ({ year }) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item as="li" className="nav-item">
-                    <Select
-                      placeholder="Select DOS"
-                      option={[]}
-                      onChange={handleOptions}
-                    />
+                    <Select placeholder="Select DOS" onChange={handleOptions}>
+                      {dosSummaries?.map((data) => (
+                        <Option key={data?.dos?.date} value={data?.dos?.date}>
+                          {moment(data?.dos?.date).format("MM/DD/YYYY")}
+                        </Option>
+                      ))}
+                    </Select>
                   </Nav.Item>
                   <Nav.Item as="li" className="nav-item mx-4">
                     <Button>hg</Button>
@@ -186,7 +319,7 @@ const Hcc = ({ year }) => {
                         style={{
                           size: 10,
                           color: "#e6e6e6",
-                          marginLeft:"5px"
+                          marginLeft: "5px",
                         }}
                       />
                     </div>

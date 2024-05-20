@@ -60,8 +60,11 @@ import {
   getAllSectionColor,
   getHccFileDetails,
   getDosPageNumber,
+  getPatientDosList,
 } from "../../../store/actions/ReviewerAction/PatientDetailsAction";
 import { actions as workflowActions } from "../../../stores/reviewer/workqueue";
+import NewResponse from "../details/components/function/newresponse.json";
+
 
 export const navigetPageDetails = async (
   pageTitle,
@@ -574,7 +577,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const getPatientDetails = async (patientId) => {
     setHccValidCount(0);
     if (patientDetailsResult?.result?.response) {
-      var result = patientDetailsResult?.result?.response;
+      var result = NewResponse;
       dispatch(getMeatQueryList(result?.dos, patientId));
 
       setPatientDocumentResult(result);
@@ -594,14 +597,6 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
           const encounterDatearray = res?.encounterDate?.split(",");
           if (res?.isShow != false) {
             validDisArray.push({
-              actualDescription: res.actualDescription,
-              capturedSections: res.capturedSections,
-              diagnosisCode: res.diagnosisCode,
-              encounterDate: res.encounterDate,
-              encounterDateSplit: encounterDatearray,
-              isManuallyAdded: res.isManuallyAdded,
-              isHccValid: res.isHccValid,
-              defaultPosition: res.defaultPosition,
               isCmsHcc: res.isCmsHcc,
               isRxHcc: res.isRxHcc,
             });
@@ -622,6 +617,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
         setDosYear(dosYearArr);
         setIsLoadingDos(false);
         getFlagListLastDetails(patientId, highestDosValue[0].value);
+        dispatch(getPatientDosList(localPatientId,highestDosValue[0].value));
         setIsLoading(false);
         setPatientResultReload(true);
       } else if (result?.encounterYears?.length > 0) {
@@ -725,6 +721,8 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const dosOnChange = async (e) => {
     setPatientResultReload(false);
     getPatientDetailsYear(e.value);
+    dispatch(getPatientDosList(localPatientId,e.value)
+    );
   };
 
   const submitSuggestedHcc = async (notes) => {

@@ -124,3 +124,22 @@ export async function DosPageNumber(fileId) {
   } catch (err) {
   }
 }
+
+export async function DosWiseList(patientId,year) {
+  const token = localStorage.getItem("token");
+  const orgId = localStorage.getItem("orgId");
+  var apiurl = `patientid=${patientId}&orgid=${orgId}&year=${year}` 
+  console.log(apiurl)
+  // try {
+  //   const response = await axios.get(
+  //     `${ENDPOINTS?.apiEndoint}dbservice/patient/compute/get?`+apiurl,
+  //     {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     }
+  //   );
+  //   return response.data;
+  // } catch (err) {
+  // }
+}

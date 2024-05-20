@@ -439,35 +439,27 @@ export const getPatientDetails = async (
       var nonHccMeatListArr = [];
 
       result?.meatCriteria?.map((res, index) => {
-        if (res.monitorAspect != "" && res.monitorAspect != null) {
-          meatMoniterHead.push({
-            header: res.monitorAspect.toLowerCase(),
+          res?.monitorHyperLink?.map((res2, index) => {
+            meatMoniterHead.push({
+              name: res2.header,
+            });
           });
-        }
-        if (res.evaluateAspect != "" && res.evaluateAspect != null) {
-          meatEvaluteHead.push({
-            header: res.evaluateAspect.toLowerCase(),
+          res?.evaluateHyperLink?.map((res2, index) => {
+            meatMoniterHead.push({
+              name: res2.header,
+            });
           });
-        }
-        if (res.assessmentAspect != "" && res.assessmentAspect != null) {
-          meatAssesmentHead.push({
-            header: res.assessmentAspect.toLowerCase(),
+          res?.assessmentHyperLink?.map((res2, index) => {
+            meatMoniterHead.push({
+              name:res2.header,
+            });
           });
-        }
-        if (res.treatmentAspect != "" && res.treatmentAspect != null) {
-          meatTreatMentHead.push({
-            header: res.treatmentAspect.toLowerCase(),
+          res?.treatmentHyperLink?.map((res2, index) => {
+            meatMoniterHead.push({
+              name: res2.header,
+            });
           });
-        }
-        var newArray = [];
-        newArray = [
-          ...allMeatHead,
-          ...meatMoniterHead,
-          ...meatEvaluteHead,
-          ...meatAssesmentHead,
-          ...meatTreatMentHead,
-        ];
-        var dublicateRemoveArr = getUniqueListBy(newArray, "header");
+        var dublicateRemoveArr = getUniqueListBy(meatMoniterHead, "name");
         dublicateRemoveArr.map((res3, index) => {
           allMeatHeadColor.push({
             header: res3.header,
@@ -544,23 +536,22 @@ export const getPatientDetails = async (
       });
 
       let sectionColorResultMatchMeat = sectionColorResult?.filter((o1) =>
-        meatHeaderList.some((o2) => o1.sectionName === o2.header)
+        meatHeaderList.some((o2) => o1.sectionName === o2.name)
       );
       let sectionColorResultNotMatchMeat = meatHeaderList.filter(
-        (o1) => !sectionColorResult?.some((o2) => o1.header === o2.sectionName)
+        (o1) => !sectionColorResult?.some((o2) => o1.name === o2.sectionName)
       );
-
       var notMatchColorArrayMeat = [];
       sectionColorResultNotMatchMeat?.map((res, index) => {
-        var radomColorcode = stringToColour(res.header);
+        var radomColorcode = stringToColour(res.name);
         var randomColorChangeShadow = radomColorcode + 33;
         notMatchColorArrayMeat.push({
-          sectionName: res.header,
+          sectionName: res.name,
           backgroundColor: randomColorChangeShadow,
           sectionColor: radomColorcode,
         });
         submitSectionColors(
-          res.header,
+          res.name,
           radomColorcode,
           randomColorChangeShadow
         );
