@@ -526,7 +526,7 @@ export const getPatientDetails = async (
             isMeatCriteriaPresent: res.isMeatCriteriaPresent,
             category: res.category,
             encounterDate: res.encounterDate,
-            encounterDateSplit:  res.dateOfServices,
+            encounterDateSplit:  res.dateOfService,
             hyperlinks: res?.hyperlinks,
           });
         }
