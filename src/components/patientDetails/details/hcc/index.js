@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Tab, Nav } from "react-bootstrap";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import visitStyles from "../../../../styles/visitdata.module.css";
 import VisitData from "./visitData";
 import Combo from "./combo";
@@ -8,12 +8,18 @@ import Meat from "./meat";
 import RafScore from "./raf";
 import MeatQuery from "./meatQuery";
 import File from "./file";
-import { Button, Dropdown, Popover, Select } from "antd";
+import { Button, Dropdown, Popover, Select, Menu, Tooltip } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faClose } from "@fortawesome/free-solid-svg-icons";
 import styles from "../hcc/styles.module.css";
 import moment from "moment";
+import { DownOutlined } from "@ant-design/icons";
+import Completed from "../../../../../src/images/trackingImages/CompletedTrack.png";
+import Pending from "../../../../../src/images/trackingImages/PendingTrack.png";
+import Hold from "../../../../../src/images/trackingImages/HoldTrack.png";
+import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
 import { getPatientDosList } from "../../../../store/actions/ReviewerAction/PatientDetailsAction";
+import Image from "next/image";
 
 const { Option } = Select;
 
@@ -29,123 +35,95 @@ const Hcc = ({ year }) => {
   const [activeComboTree, setActiveComboTree] = useState(null);
   const [pageNumberOptions, setPageNumberOptions] = useState([]);
   const [search, setSearch] = useState();
+  const [menuIsOpen, setMenuIsOpen] = useState(false);
+  const [dosSummariesList, setDosSummariesList] = useState([]);
 
-  // console.log(patientDosResult)
+
+  console.log(patientDosResult)
 
   const dosSummaries = [
     {
-      dos: {
-        date: "2023-10-08T18:30:00.000Z",
-      },
-      startPageNumber: 1,
-      endPagNumber: 9,
+      value: "2023-10-08",
+      label: (
+        <>
+          <div className="d-flex">
+            <span className={styles.dosLable}>2023-10-08</span>
+            <Image src={Hold} className={styles.dosStatusIcon} />
+          </div>
+        </>
+      ),
     },
     {
-      dos: {
-        date: "2023-09-24T18:30:00.000Z",
-      },
-      startPageNumber: 10,
-      endPagNumber: 12,
+      value: "2023-10-08",
+      label: (
+        <>
+          <div className="d-flex">
+            <span className={styles.dosLable}>2023-10-08</span>
+            <Image src={Completed} className={styles.dosStatusIcon} />
+          </div>
+        </>
+      ),
     },
     {
-      dos: {
-        date: "2023-07-14T18:30:00.000Z",
-      },
-      startPageNumber: 13,
-      endPagNumber: 15,
-    },
-    {
-      dos: {
-        date: "2023-06-21T18:30:00.000Z",
-      },
-      startPageNumber: 16,
-      endPagNumber: 19,
-    },
-    {
-      dos: {
-        date: "2023-05-25T18:30:00.000Z",
-      },
-      startPageNumber: 20,
-      endPagNumber: 27,
-    },
-    {
-      dos: {
-        date: "2023-01-16T18:30:00.000Z",
-      },
-      startPageNumber: 28,
-      endPagNumber: 37,
-    },
-    {
-      dos: {
-        date: "2022-09-11T18:30:00.000Z",
-      },
-      startPageNumber: 38,
-      endPagNumber: 45,
-    },
-    {
-      dos: {
-        date: "2022-05-08T18:30:00.000Z",
-      },
-      startPageNumber: 46,
-      endPagNumber: 54,
-    },
-    {
-      dos: {
-        date: "2022-02-06T18:30:00.000Z",
-      },
-      startPageNumber: 55,
-      endPagNumber: 58,
-    },
-    {
-      dos: {
-        date: "2021-10-10T18:30:00.000Z",
-      },
-      startPageNumber: 59,
-      endPagNumber: 66,
-    },
-    {
-      dos: {
-        date: "2021-09-07T18:30:00.000Z",
-      },
-      startPageNumber: 67,
-      endPagNumber: 74,
-    },
-    {
-      dos: {
-        date: "2021-06-29T18:30:00.000Z",
-      },
-      startPageNumber: 75,
-      endPagNumber: 77,
-    },
-    {
-      dos: {
-        date: "2021-06-28T18:30:00.000Z",
-      },
-      startPageNumber: 78,
-      endPagNumber: 81,
-    },
-    {
-      dos: {
-        date: "2021-06-08T18:30:00.000Z",
-      },
-      startPageNumber: 82,
-      endPagNumber: 84,
-    },
-    {
-      dos: {
-        date: "2021-03-07T18:30:00.000Z",
-      },
-      startPageNumber: 85,
-      endPagNumber: 94,
-    },
-    {
-      dos: {
-        date: "2021-02-21T18:30:00.000Z",
-      },
-      startPageNumber: 95,
-      endPagNumber: 100,
+      value: "2023-10-08",
+      label: (
+        <>
+          <div className="d-flex">
+            <span className={styles.dosLable}>2023-10-08</span>
+            <Image src={Pending} className={styles.dosStatusIcon} />
+          </div>
+        </>
+      ),
     },
   ];
+
+  const handleActionClick = () => {};
+
+  const dropdownMenu = (
+    <Menu>
+      <Menu.Item key="1">
+        <div className="patient-status">
+          <span className={`badge hold-text`}>HOLD</span>
+        </div>
+      </Menu.Item>
+      <Menu.Item
+        key="2"
+        onClick={() => {
+          handleActionClick("PENDING");
+          setMenuIsOpen(false);
+        }}
+      >
+        <div className="patient-status">
+          <span className={`badge processing-text`}>PENDING</span>
+        </div>
+      </Menu.Item>
+      <Menu.Item
+        key="3"
+        onClick={() => {
+          handleActionClick("DECLINE");
+          setMenuIsOpen(false);
+        }}
+      >
+        <div className="patient-status">
+          <span className={`badge failed-text`} style={{ color: "red" }}>
+            DECLINE
+          </span>
+        </div>
+      </Menu.Item>
+
+      <Menu.Item
+        key="4"
+        onClick={() => {
+          handleActionClick("COMPLETE");
+          setMenuIsOpen(false);
+        }}
+      >
+        <div className="patient-status">
+          <span className={`badge processed-text`}>COMPLETED</span>
+        </div>
+      </Menu.Item>
+    </Menu>
+  );
 
   const selectTab = (num) => {
     setFlagTagActive(false);
@@ -163,6 +141,26 @@ const Hcc = ({ year }) => {
   };
 
   useEffect(() => {
+    if (patientDosResult?.result?.response) {
+      var dosList = [];
+      patientDosResult?.result?.response?.map((res,index) => {
+       var dosLable = (
+            <>
+              <div className="d-flex">
+                <span className={styles.dosLable}>{moment(res).format("MM-MM-YYYY")}</span>
+                <Image src={(index == 1 || index == 4) ?Completed : index == 2 ? Hold : Pending } className={styles.dosStatusIcon} />
+              </div>
+            </>
+          )
+        dosList.push({ value: res, label: dosLable });
+      });
+      setDosSummariesList(dosList)
+      console.log(dosList)
+    }
+  }, [patientDosResult?.result?.response]);
+
+
+  useEffect(() => {
     setTimeout(() => {
       setActiveMeatTitle(null);
     }, 10000);
@@ -170,9 +168,7 @@ const Hcc = ({ year }) => {
   const handleOptions = (value) => {
     console.log(moment(value).format("YYYY-MM-DD"));
     const patientId = localStorage.getItem("patientId");
-    dispatch(
-      getPatientDosList(patientId, moment(value).format("YYYY-MM-DD"))
-    );
+    dispatch(getPatientDosList(patientId, moment(value).format("YYYY-MM-DD")));
   };
   const handleChangePageNumber = async (value) => {
     setPopoverVisible(false);
@@ -292,66 +288,91 @@ const Hcc = ({ year }) => {
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item as="li" className="nav-item">
-                    <Select placeholder="Select DOS" onChange={handleOptions}>
-                      {dosSummaries?.map((data) => (
-                        <Option key={data?.dos?.date} value={data?.dos?.date}>
-                          {moment(data?.dos?.date).format("MM/DD/YYYY")}
+                    <Select
+                      placeholder="Select DOS"
+                      onChange={handleOptions}
+                      className="dosSelect"
+                    >
+                      {dosSummariesList?.map((data) => (
+                        <Option key={data?.date} value={data?.date}>
+                          {data.label}
                         </Option>
                       ))}
                     </Select>
                   </Nav.Item>
-                  <Nav.Item as="li" className="nav-item mx-4">
-                    <Button className="primary">Complete Dos</Button>
+                  <Nav.Item as="li" className="nav-item mx-2">
+                    <Dropdown
+                      overlay={dropdownMenu}
+                      onVisibleChange={(v) => setMenuIsOpen(v)}
+                      visible={menuIsOpen}
+                      className={`pendingBtn ${visitStyles.completedBtnHcc}`}
+                    >
+                      <Button
+                        type="primary"
+                        className={`pendingBtn ${visitStyles.completedBtnHcc}`}
+                      >
+                        <span>PENDING</span>
+                        <span style={{ marginLeft: "10px" }}>
+                          <DownOutlined />
+                        </span>
+                      </Button>
+                    </Dropdown>
                   </Nav.Item>
-                   {activeTabHead == 1 &&
-                  <Popover
-                    // open={popoverVisible}
-                    content={PopContent}
-                    placement="bottom"
-                    trigger={"click"}
-                    // onOpenChange={() => setPopoverVisible(false)}
-                  >
-                    <div className={styles.dosContainer}>
-                      <span className={styles.dosPageNumber}>
-                        Select Dos Page Number
-                      </span>
-                      <FontAwesomeIcon
-                        icon={faAngleDown}
-                        style={{
-                          size: 10,
-                          color: "#e6e6e6",
-                          marginLeft: "5px",
-                        }}
-                      />
-                    </div>
-                  </Popover> }
+                  {activeTabHead == 1 && (
+                    <Popover
+                      // open={popoverVisible}
+                      content={PopContent}
+                      placement="bottom"
+                      trigger={"click"}
+                      // onOpenChange={() => setPopoverVisible(false)}
+                    >
+                      <div className={styles.dosContainer}>
+                        <span className={styles.dosPageNumber}>
+                          Select Dos Page Number
+                        </span>
+                        <FontAwesomeIcon
+                          icon={faAngleDown}
+                          style={{
+                            size: 10,
+                            color: "#e6e6e6",
+                            marginLeft: "5px",
+                          }}
+                        />
+                      </div>
+                    </Popover>
+                  )}
                   <Nav.Item as="li" className="nav-item mx-4">
-                   {flagTagActive ? (
-                <div>
-                  <div className={visitStyles.flags}>
-                    <div className={visitStyles.flags}>
-                      <span className={visitStyles.hccFlag}></span>
-                      <span className={visitStyles.flagCodes}>HCC</span>
-                    </div>
-                    <div className={visitStyles.flags}>
-                      <span className={visitStyles.suggestedFlag}></span>
-                      <span className={visitStyles.flagCodes}>SUGGESTED</span>
-                    </div>
-                    <div className={visitStyles.flags}>
-                      <span className={visitStyles.deleteFlag}></span>
-                      <span className={visitStyles.flagCodes}>DELETED</span>
-                    </div>
-                    <div className={visitStyles.flags}>
-                      <span className={visitStyles.nonhccFlag}></span>
-                      <span className={visitStyles.flagCodes}>NON HCC</span>
-                    </div>
-                  </div>
-                </div>
-              ) : null}
-                  </Nav.Item> 
+                    {flagTagActive ? (
+                      <div>
+                        <div className={visitStyles.flags}>
+                          <div className={visitStyles.flags}>
+                            <span className={visitStyles.hccFlag}></span>
+                            <span className={visitStyles.flagCodes}>HCC</span>
+                          </div>
+                          <div className={visitStyles.flags}>
+                            <span className={visitStyles.suggestedFlag}></span>
+                            <span className={visitStyles.flagCodes}>
+                              SUGGESTED
+                            </span>
+                          </div>
+                          <div className={visitStyles.flags}>
+                            <span className={visitStyles.deleteFlag}></span>
+                            <span className={visitStyles.flagCodes}>
+                              DELETED
+                            </span>
+                          </div>
+                          <div className={visitStyles.flags}>
+                            <span className={visitStyles.nonhccFlag}></span>
+                            <span className={visitStyles.flagCodes}>
+                              NON HCC
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ) : null}
+                  </Nav.Item>
                 </Nav>
               </div>
-              
             </div>
 
             <Tab.Content>

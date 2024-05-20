@@ -14517,3 +14517,7 @@ input[type="number"] {
 .newReportPicker > .ant-picker-input > input {
   font-size: 12px !important;
 }
+.dosSelect > .ant-select-selector {
+  width: 165px !important;
+  text-align: center;
+}

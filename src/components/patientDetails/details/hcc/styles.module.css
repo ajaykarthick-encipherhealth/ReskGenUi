@@ -411,3 +411,12 @@
 .editAction > button {
   padding: 5px !important;
 }
+.dosStatusIcon {
+  width: 18%;
+  height: 18%;
+  margin-left: 15px;
+}
+.dosLable {
+  font-size: 14px;
+  font-weight: 600;
+}

@@ -23,6 +23,25 @@ export async function PatientDetails(patientId,year) {
   }
 }
 
+export async function PatientDetailsNew(patientId,year) {
+  const token = localStorage.getItem("token");
+  const orgId = localStorage.getItem("orgId");
+   var apiurl = `patientId=${patientId}&processedYear=${year}` 
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndointProduction}dbservice/patient/compute/get?`+apiurl,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+  }
+}
+
+
 export async function RadiologyDeatils(patientId) {
   const token = localStorage.getItem("token");
   const orgId = localStorage.getItem("orgId");
@@ -127,19 +146,17 @@ export async function DosPageNumber(fileId) {
 
 export async function DosWiseList(patientId,year) {
   const token = localStorage.getItem("token");
-  const orgId = localStorage.getItem("orgId");
-  var apiurl = `patientid=${patientId}&orgid=${orgId}&year=${year}` 
-  console.log(apiurl)
-  // try {
-  //   const response = await axios.get(
-  //     `${ENDPOINTS?.apiEndoint}dbservice/patient/compute/get?`+apiurl,
-  //     {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     }
-  //   );
-  //   return response.data;
-  // } catch (err) {
-  // }
+  var apiurl = `dbservice/patient/compute/get/alldos?patientId=${patientId}&processedYear=${year}` 
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndointProduction}`+apiurl,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+  }
 }

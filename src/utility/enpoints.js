@@ -5,6 +5,7 @@ const ENDPOINTS = {
   apiLocal: "http://localhost:3003/",
   isShow: false,
   PdfViewer: "https://viewer.cogentai.encipherhealth.com/web/viewer.html",
-  isLocalEdit:true
+  isLocalEdit:true,
+  apiEndointProduction: "https://hcc.encipherhealth.com/secure/",
 };
 export default ENDPOINTS;

@@ -61,6 +61,7 @@ import {
   getHccFileDetails,
   getDosPageNumber,
   getPatientDosList,
+  getPatientDetailsResultNew,
 } from "../../../store/actions/ReviewerAction/PatientDetailsAction";
 import { actions as workflowActions } from "../../../stores/reviewer/workqueue";
 import NewResponse from "../details/components/function/newresponse.json";
@@ -236,13 +237,14 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   }, []);
 
   useEffect(() => {
+    getAllProcessYear();
     const patientId = localStorage.getItem("patientId");
     dispatch(getAllSectionColor());
-    dispatch(
-      getPatientDetailsResult(
-        selectPatientId ? selectPatientId?.patirntId : patientId
-      )
-    );
+    // dispatch(
+    //   getPatientDetailsResult(
+    //     selectPatientId ? selectPatientId?.patirntId : patientId
+    //   )
+    // );
   }, []);
 
   useEffect(() => {
@@ -284,6 +286,30 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
       }
     }
   }, [patientDetailsResult?.result?.response?.fileDetailDTO?.azureBlobPath]);
+
+  const getAllProcessYear = async ()=> {
+    // const patientId = localStorage.getItem("patientId");
+    var patientId  = "eh-20203";
+    const result = await axios.get(
+      ENDPOINTS.apiEndointProduction + `dbservice/patient/compute/get/allyear?patientId=${patientId}`
+    );
+    var dosResonse = result.data.response;
+    var dosYearArr = [];
+    result?.data?.response?.map((res) => {
+      dosYearArr.push({ value: res, label: res });
+    });
+    setDosYearDefalutSelect(dosYearArr[0]);
+    setSelectedDosValue(dosYearArr[0].value);
+    setDosYear(dosYearArr);
+    dispatch(
+      getPatientDetailsResultNew(
+        selectPatientId ? selectPatientId?.patirntId : patientId,
+        dosYearArr[0].value
+      )
+    );
+    dispatch(getPatientDosList(patientId, dosYearArr[0].value));
+    // console.log(result.data.response)
+  }
 
   const getPatientIdDetails = async (patientId, flagFirstData) => {
     const response = await axios.get(
@@ -611,12 +637,11 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
         });
 
         setNewValidDiseaseList(validDisArray);
-        setDosYearDefalutSelect(highestDosValue[0]);
-        setSelectedDosValue(highestDosValue[0].value);
-        setDosYear(dosYearArr);
+        // setDosYearDefalutSelect(highestDosValue[0]);
+        // setSelectedDosValue(highestDosValue[0].value);
+        // setDosYear(dosYearArr);
         setIsLoadingDos(false);
         getFlagListLastDetails(patientId, highestDosValue[0].value);
-        dispatch(getPatientDosList(localPatientId,highestDosValue[0].value));
         setIsLoading(false);
         setPatientResultReload(true);
       } else if (result?.encounterYears?.length > 0) {
@@ -628,9 +653,9 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
         const highestDosValue = dosYearArr.filter(
           (i) => parseInt(i.value) === highestDOS
         );
-        setDosYearDefalutSelect(highestDosValue[0]);
-        setSelectedDosValue(highestDosValue[0].value);
-        setDosYear(dosYearArr);
+        // setDosYearDefalutSelect(highestDosValue[0]);
+        // setSelectedDosValue(highestDosValue[0].value);
+        // setDosYear(dosYearArr);
         setIsLoadingDos(false);
         setPatientResultReload(true);
       } else {
@@ -720,7 +745,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const dosOnChange = async (e) => {
     setPatientResultReload(false);
     getPatientDetailsYear(e.value);
-    dispatch(getPatientDosList(localPatientId,e.value)
+    dispatch(getPatientDosList("eh-20203",e.value)
     );
   };
 

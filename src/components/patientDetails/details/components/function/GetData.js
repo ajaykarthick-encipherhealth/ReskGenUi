@@ -149,10 +149,10 @@ export const getPatientDetails = async (
   setDosSummariesList
 ) => {
   console.log(NewResponse);
-  // if (patientDetailsResult?.result?.response) {
-  //   var result = patientDetailsResult?.result?.response;
-  if (NewResponse) {
-    var result = NewResponse.response;
+  if (patientDetailsResult?.result?.response) {
+    var result = patientDetailsResult?.result?.response;
+  // if (NewResponse) {
+  //   var result = NewResponse.response;
     setPatientDocumentResult(result);
     if (result.hccDiseases != null) {
       var hccDisArray = [];
