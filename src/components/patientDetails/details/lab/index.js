@@ -13,6 +13,9 @@ import SpinnerDots from "../../../../components/spinner";
 
 const Lab = ({}) => {
   const [isLoading, setIsLoading] = useState(true);
+  const labDetailsResult = useSelector(
+    (state) => state?.ReviewerReducers?.labDeatils
+  );
   const dispatch = useDispatch();
   const [activeTabHead, setActiveTabHead] = useState(1);
   const [activeMeatTitle, setActiveMeatTitle] = useState(null);
@@ -28,6 +31,20 @@ const Lab = ({}) => {
     const patientId = localStorage.getItem("patientId");
     dispatch(getLabDetails(patientId));
   }, []);
+
+  useEffect(() => {
+    if (labDetailsResult?.result?.response) {
+      if (labDetailsResult?.result?.response?.labFileDetail) {
+        dispatch(
+          getLabFileDetails(
+            labDetailsResult?.result?.response?.labFileDetail[0]
+              .azureBlobPath
+          )
+        );
+        setIsLoading(true);
+      }
+    }
+  }, [labDetailsResult?.result?.response]);
 
   return (
     <>
