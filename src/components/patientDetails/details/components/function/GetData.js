@@ -148,7 +148,6 @@ export const getPatientDetails = async (
   setComboDiseaseCodesList,
   setDosSummariesList
 ) => {
-  console.log(NewResponse);
   if (patientDetailsResult?.result?.response) {
     var result = patientDetailsResult?.result?.response;
   // if (NewResponse) {

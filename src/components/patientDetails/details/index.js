@@ -64,8 +64,7 @@ import {
   getPatientDetailsResultNew,
 } from "../../../store/actions/ReviewerAction/PatientDetailsAction";
 import { actions as workflowActions } from "../../../stores/reviewer/workqueue";
-import NewResponse from "../details/components/function/newresponse.json";
-
+import styles from "../details/hcc/styles.module.css";
 
 export const navigetPageDetails = async (
   pageTitle,
@@ -118,7 +117,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
   const [confirmNotesModalInValid, setConfirmNotesModalInValid] =
     useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [dosYear, setDosYear] = useState("");
   const [dosYearDefalutSelect, setDosYearDefalutSelect] = useState("");
   const [localOrgId, setLocalOrgId] = useState("");
@@ -265,7 +264,16 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
       orgId,
       tenId
     );
-  }, [patientDetailsResult]);
+    if (patientDetailsResult?.result?.response?.processedYear) {
+      dispatch(
+        getPatientDosList(
+          "eh-20203",
+          patientDetailsResult?.result?.response?.processedYear
+        )
+      );
+    }
+    console.log(patientDetailsResult?.result?.response);
+  }, [patientDetailsResult?.result?.response]);
 
   useEffect(() => {
     if (patientDetailsResult?.result?.response?.fileId) {
@@ -287,29 +295,34 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
     }
   }, [patientDetailsResult?.result?.response?.fileDetailDTO?.azureBlobPath]);
 
-  const getAllProcessYear = async ()=> {
+  const getAllProcessYear = async () => {
     // const patientId = localStorage.getItem("patientId");
-    var patientId  = "eh-20203";
-    const result = await axios.get(
-      ENDPOINTS.apiEndointProduction + `dbservice/patient/compute/get/allyear?patientId=${patientId}`
-    );
-    var dosResonse = result.data.response;
-    var dosYearArr = [];
-    result?.data?.response?.map((res) => {
-      dosYearArr.push({ value: res, label: res });
-    });
-    setDosYearDefalutSelect(dosYearArr[0]);
-    setSelectedDosValue(dosYearArr[0].value);
-    setDosYear(dosYearArr);
-    dispatch(
-      getPatientDetailsResultNew(
-        selectPatientId ? selectPatientId?.patirntId : patientId,
-        dosYearArr[0].value
-      )
-    );
-    dispatch(getPatientDosList(patientId, dosYearArr[0].value));
+    var patientId = "eh-20203";
+    try {
+      const result = await axios.get(
+        ENDPOINTS.apiEndointProduction +
+          `dbservice/patient/compute/get/allyear?patientId=${patientId}`
+      );
+      var dosResonse = result.data.response;
+      var dosYearArr = [];
+      result?.data?.response?.map((res) => {
+        dosYearArr.push({ value: res, label: res });
+      });
+      setDosYearDefalutSelect(dosYearArr[0]);
+      setSelectedDosValue(dosYearArr[0].value);
+      setDosYear(dosYearArr);
+      setIsLoadingDos(false);
+      dispatch(
+        getPatientDetailsResultNew(
+          selectPatientId ? selectPatientId?.patirntId : patientId,
+          dosYearArr[0].value
+        )
+      );
+    } catch (e) {
+      setIsLoading(false);
+    }
     // console.log(result.data.response)
-  }
+  };
 
   const getPatientIdDetails = async (patientId, flagFirstData) => {
     const response = await axios.get(
@@ -603,21 +616,11 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const getPatientDetails = async (patientId) => {
     setHccValidCount(0);
     if (patientDetailsResult?.result?.response) {
-      var result = NewResponse.response;
-      dispatch(getMeatQueryList(result?.dos, patientId));
-
+      var result = patientDetailsResult?.result?.response;
+      dispatch(getMeatQueryList(result?.processedYear, patientId));
       setPatientDocumentResult(result);
       setPatientDetails(result);
       if (result.hccDiseases != null) {
-        var dosYearArr = [];
-        result.encounterYears?.map((res) => {
-          dosYearArr.push({ value: res, label: res });
-        });
-        const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
-        const highestDosValue = dosYearArr.filter(
-          (i) => parseInt(i.value) === highestDOS
-        );
-
         var validDisArray = [];
         result?.hccDiseases?.map((res, index) => {
           if (res?.isShow != false) {
@@ -628,35 +631,15 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
           }
         });
         setHccValidCount(validDisArray.length);
-
         const rxHcc = validDisArray.filter((rx) => rx.isRxHcc == true);
         const cmsHcc = validDisArray.filter((rx) => rx.isCmsHcc == true);
         setHccCounts({
           isCmsHcc: cmsHcc.length > 0 ? cmsHcc.length : 0,
           isRxHcc: rxHcc.length > 0 ? rxHcc.length : 0,
         });
-
         setNewValidDiseaseList(validDisArray);
-        // setDosYearDefalutSelect(highestDosValue[0]);
-        // setSelectedDosValue(highestDosValue[0].value);
-        // setDosYear(dosYearArr);
-        setIsLoadingDos(false);
-        getFlagListLastDetails(patientId, highestDosValue[0].value);
+        getFlagListLastDetails(patientId, result.processedYear);
         setIsLoading(false);
-        setPatientResultReload(true);
-      } else if (result?.encounterYears?.length > 0) {
-        var dosYearArr = [];
-        result.encounterYears?.map((res) => {
-          dosYearArr.push({ value: res, label: res });
-        });
-        const highestDOS = Math.max(...dosYearArr.map((res) => res.value));
-        const highestDosValue = dosYearArr.filter(
-          (i) => parseInt(i.value) === highestDOS
-        );
-        // setDosYearDefalutSelect(highestDosValue[0]);
-        // setSelectedDosValue(highestDosValue[0].value);
-        // setDosYear(dosYearArr);
-        setIsLoadingDos(false);
         setPatientResultReload(true);
       } else {
         setPatientResultReload(true);
@@ -744,9 +727,8 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
 
   const dosOnChange = async (e) => {
     setPatientResultReload(false);
-    getPatientDetailsYear(e.value);
-    dispatch(getPatientDosList("eh-20203",e.value)
-    );
+    setIsLoading(true);
+    dispatch(getPatientDetailsResultNew("eh-20203", e.value));
   };
 
   const submitSuggestedHcc = async (notes) => {
@@ -1692,6 +1674,15 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
 
   return (
     <>
+      {isLoading ? (
+        <div className={styles.overlay_style}>
+          <div className={styles.overlay__inner_style}>
+            <div className={styles.overlay__content_style}>
+              <span className={styles.spinner_style}></span>
+            </div>
+          </div>
+        </div>
+      ) : null}
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
         <NavBar />
         <div className={visitStyles.headerFixed}>
@@ -2348,7 +2339,14 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                                       onClick={() => addComments(data.name)}
                                     >
                                       {data.name === "Flag" ? (
-                                        <Badge count={5} style={{background:"#04306f",margin:"-2px"}} size="large">
+                                        <Badge
+                                          count={5}
+                                          style={{
+                                            background: "#04306f",
+                                            margin: "-2px",
+                                          }}
+                                          size="large"
+                                        >
                                           <i>{data.icon}</i>
                                         </Badge>
                                       ) : (
@@ -2810,8 +2808,12 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                     show={isModalComments}
                     placement="end"
                     className={`offcanvas-end ${visitStyles.commentDrawer}`}
-                    style={{width:flagContainerActiveTitle==="Timeline"?"460px":"370px"}}
-                   
+                    style={{
+                      width:
+                        flagContainerActiveTitle === "Timeline"
+                          ? "460px"
+                          : "370px",
+                    }}
                   >
                     <div className="offcanvas-header">
                       <h5 className="modal-title" id="#gridSystemModal">
