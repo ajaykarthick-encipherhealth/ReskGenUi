@@ -301,7 +301,7 @@ const Hcc = ({ year }) => {
                     </Select>
                   </Nav.Item>
                   <Nav.Item as="li" className="nav-item mx-4">
-                    <Button className="primary">Completed Dos</Button>
+                    <Button className="primary">Complete Dos</Button>
                   </Nav.Item>
                    {activeTabHead == 1 &&
                   <Popover
