@@ -301,7 +301,6 @@ const Hcc = ({ year }) => {
                       </div>
                     </Popover>
                   )}
-                  {/* <Nav.Item as="li" className="nav-item mx-4">
                     {flagTagActive ? (
                       <div>
                         <div className={visitStyles.flags}>
@@ -330,7 +329,6 @@ const Hcc = ({ year }) => {
                         </div>
                       </div>
                     ) : null}
-                  </Nav.Item> */}
                 </Nav>
               </div>
             </div>
