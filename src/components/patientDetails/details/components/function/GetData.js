@@ -175,6 +175,7 @@ export const getPatientDetails = async (
         res.dateOfServices?.map((res) => {
           dosList.push(res.date);
         });
+        if(res.isShow != false){
         hccDisArray.push({
           actualDescription: res.actualDescription,
           capturedSections: res.capturedSections,
@@ -197,6 +198,7 @@ export const getPatientDetails = async (
           notes: res.notes,
           hyperlinks: res?.hyperlinks,
         });
+      }
       });
 
       result?.nonHccDiseases?.map((res, index) => {
