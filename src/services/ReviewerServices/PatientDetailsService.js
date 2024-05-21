@@ -32,7 +32,7 @@ export async function PatientDetailsNew(patientId,year,dos) {
    }
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndointProduction}dbservice/patient/compute/get?`+apiurl,
+      `${ENDPOINTS?.apiEndoint}dbservice/patient/compute/get?`+apiurl,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -152,7 +152,7 @@ export async function DosWiseList(patientId,year) {
   var apiurl = `dbservice/patient/compute/get/alldos?patientId=${patientId}&processedYear=${year}` 
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndointProduction}`+apiurl,
+      `${ENDPOINTS?.apiEndoint}`+apiurl,
       {
         headers: {
           Authorization: `Bearer ${token}`,

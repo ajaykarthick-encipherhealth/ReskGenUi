@@ -293,7 +293,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
     // var patientId = "eh-20203";
     try {
       const result = await axios.get(
-        ENDPOINTS.apiEndointProduction +
+        ENDPOINTS.apiEndoint +
           `dbservice/patient/compute/get/allyear?patientId=${patientId}`
       );
       var dosResonse = result.data.response;
