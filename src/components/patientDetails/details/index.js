@@ -189,6 +189,8 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [workListPatientId, setWorkListPatientId] = useState(null);
   const [isFileCheck, setIsFileCheck] = useState(false);
+  const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
+
 
   const flagPostList = getFlagsData?.response?.map((item) => ({
     value: item?.id,
@@ -315,7 +317,9 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
           dosYearArr[0].value
         )
       );
+      setIsSpinnerLoading(false);
     } catch (e) {
+      setIsSpinnerLoading(true);
       setIsLoading(false);
     }
   };
@@ -1942,7 +1946,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                 </div>
               </div>
             ) : null}
-            {sectionColorList?.loading == true ? (
+            {isSpinnerLoading ? (
               <SpinnerDots />
             ) : (
               <div
