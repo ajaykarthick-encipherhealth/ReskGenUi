@@ -3,7 +3,7 @@ import ENDPOINTS from "../utility/enpoints";
 
 export const NotificationList = async (Id) => {
   const token = localStorage.getItem("token");
-  const userId= localStorage.getItem("userId");
+  const userId = localStorage.getItem("userId");
   try {
     const response = await axios.get(
       `

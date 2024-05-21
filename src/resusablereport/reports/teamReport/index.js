@@ -44,6 +44,11 @@ import dayjs from "dayjs";
 import { getFlag, getFlags } from "../../../components/reuseableFunctions";
 import { connect } from "react-redux";
 import SpinnerDots from "../../../components/spinner";
+import ContentGroupCard from "../../../mainStream/components/cards/contentGroupCard";
+import SubCard from "../../../mainStream/components/cards/subcard";
+import MiniCards from "../../../mainStream/components/miniCards";
+import Flags from "../../../mainStream/components/flagCount";
+import AllocationCount from "../../../mainStream/components/allocationCount";
 
 const TeamReport = ({
   // setModal,
@@ -191,7 +196,20 @@ const TeamReport = ({
       bg: "#FDD2CE",
     },
   ];
-
+  const subCardData = [
+    {
+      title: "No of charts",
+      value: reportListAll?.response?.totalElements,
+    },
+    {
+      title: "Avg RAF score",
+      value: reportListAll?.rafAverage?.toFixed(4),
+    },
+    {
+      title: "HCC Count",
+      value: reportListAll?.totalHccCount,
+    },
+  ];
   const auditstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
       rowData?.auditDeclinedNotes
@@ -373,7 +391,16 @@ const TeamReport = ({
     const clickedData = reportListAll?.response?.response?.data?.[id];
     gotoPatientDetails(clickedData);
   };
-
+  const allocationCountData = [
+    {
+      title: "Supervisor",
+      allocationCount: reportListAll?.supervisorAllocationCount,
+    },
+    {
+      title: "Reviewer",
+      allocationCount: reportListAll?.reviewerAllocationCount,
+    },
+  ];
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
   }, [selectedRows]);
@@ -433,161 +460,43 @@ const TeamReport = ({
                         <div className="col-xl-6">
                           <div className={styles.cardContainer}>
                             {reportListAll?.response?.response?.data?.map((item, id) => (
-                              <div key={id} className={styles.card}>
-                                <div
-                                  className={styles.contentGroup}
-                                  // onClick={handleCardRowClick}
-                                  style={{ cursor: "pointer" }}
-                                >
-                                  <div className={styles.inputContainer}>
-                                    <input
-                                      type="checkbox"
-                                      onChange={() => {
-                                        handleRowCheckboxChange(item);
-                                      }}
-                                      className={TableStyle.customChecked}
-                                      checked={selectedRows?.some(
-                                        (selectedRow) =>
-                                          selectedRow.patientId ===
-                                          item.patientId
-                                      )}
-                                    />
-                                  </div>
-                                  <div
-                                    className={`col-xl-12 ${styles.checkSep}`}
-                                    onClick={() => handleTableRowClick(id)}
-                                  >
-                                    <div className="d-flex justify-content-between align-items-center pb-1">
-                                      <div
-                                        className={`col-xl-6 ${styles.pName}`}
-                                      >
-                                        {item.patientName
-                                          ? item.patientName
-                                          : "---"}
-                                      </div>
-                                      <div
-                                        className={`col-xl-6 ${styles.dataContainer}`}
-                                      >
-                                        <span className={styles.raf}>
-                                          <Tooltip
-                                            title={"Raf Score"}
-                                            placement="bottom"
-                                          >
-                                            {" "}
-                                            {item.rafSum ? item.rafSum : "---"}
-                                          </Tooltip>
-                                        </span>
-                                        <span className={styles.avatarAlign}>
-                                          {item?.flag ? (
-                                            getFlags(item.flag)
-                                          ) : (
-                                            <div>{SVGICON?.emptyFlag}</div>
-                                          )}
-                                        </span>
-                                        <span className={styles.avatarAlign}>
-                                          {auditstatusBodyTemplate(item)}
-                                        </span>
-                                        <span>
-                                          {processstatusBodyTemplate(item)}
-                                        </span>
-                                      </div>
-                                    </div>
-
-                                    <div className="d-flex justify-content-around align-items-center pb-1">
-                                      <div
-                                        className={`col-xl-2 ${styles.headText}`}
-                                        // onClick={() => handleTableRowClick(id)}
-                                      >
-                                        {item.patientId ? item.patientId : ""}
-                                      </div>
-                                      <div
-                                        className={`col-xl-2 ${styles.headText}`}
-                                      >
-                                        HCC
-                                      </div>
-                                      <div
-                                        className={`col-xl-4 ${styles.headText}`}
-                                      >
-                                        SUPERVISOR
-                                      </div>
-                                      <div
-                                        className={`col-xl-4 ${styles.headText}`}
-                                      >
-                                        REVIEWER
-                                      </div>
-                                    </div>
-                                    <div className="d-flex justify-content-around align-items-center">
-                                      <div
-                                        className={`col-xl-2 ${styles.text}`}
-                                      >
-                                        {dateFormate(
-                                          dayjs,
-                                          item?.processedDate
-                                        )}
-                                      </div>
-                                      <div
-                                        className={`col-xl-2 ${styles.text}`}
-                                      >
-                                        {item.validDiseaseCount
-                                          ? item.validDiseaseCount
-                                          : "---"}
-                                      </div>
-                                      <div
-                                        className={`col-xl-4 ${styles.text}`}
-                                      >
-                                        {item.auditedByFirstName ||
-                                        item.auditedByLastName ||
-                                        item.auditedByProfileImage ? (
-                                          <div className="d-flex align-items-center">
-                                            <span
-                                              className={styles.avatarAlign}
-                                            >
-                                              {renderUserPrfoileAvatar(
-                                                item.auditedByFirstName,
-                                                item.auditedByLastName,
-                                                item.auditedByProfileImage,
-                                                "header"
-                                              )}
-                                            </span>
-                                            <span>
-                                              {item.auditedByFirstName}{" "}
-                                              {item.auditedByLastName}
-                                            </span>
-                                          </div>
-                                        ) : (
-                                          <div>---</div>
-                                        )}
-                                      </div>
-                                      <div
-                                        className={`col-xl-4 ${styles.text}`}
-                                      >
-                                        {item.patientAllocatedFirstName ||
-                                        item.patientAllocatedLastName ||
-                                        item.patientAllocatedProfileImage ? (
-                                          <div className="d-flex align-items-center">
-                                            <span
-                                              className={styles.avatarAlign}
-                                            >
-                                              {renderUserPrfoileAvatar(
-                                                item.patientAllocatedFirstName,
-                                                item.patientAllocatedLastName,
-                                                item.patientAllocatedProfileImage,
-                                                "header"
-                                              )}
-                                            </span>
-                                            <span>
-                                              {item.patientAllocatedFirstName}{" "}
-                                              {item.patientAllocatedLastName}
-                                            </span>
-                                          </div>
-                                        ) : (
-                                          <div>---</div>
-                                        )}
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
+                               <ContentGroupCard
+                               content={reportListAll?.response?.data}
+                               key={id}
+                               item={item}
+                               flag={item?.flag}
+                               page={page}
+                               handleRowCheckboxChange={
+                                 handleRowCheckboxChange
+                               }
+                               selectedRows={selectedRows}
+                               handleTableRowClick={handleTableRowClick}
+                               auditstatusBodyTemplate={auditstatusBodyTemplate(
+                                 item
+                               )}
+                               processstatusBodyTemplate={processstatusBodyTemplate(
+                                 item
+                               )}
+                               rafSum={item.rafSum}
+                               patientName={item.patientName}
+                               processedDate={item?.processedDate}
+                               patientId={item?.patientId}
+                               validDiseaseCount={item?.validDiseaseCount}
+                               auditedByFirstName={item?.auditedByFirstName}
+                               auditedByLastName={item?.auditedByLastName}
+                               auditedByProfileImage={
+                                 item?.auditedByProfileImage
+                               }
+                               patientAllocatedFirstName={
+                                 item?.patientAllocatedFirstName
+                               }
+                               patientAllocatedLastName={
+                                 item?.patientAllocatedLastName
+                               }
+                               patientAllocatedProfileImage={
+                                 item?.patientAllocatedProfileImage
+                               }
+                             />
                             ))}
                           </div>
                         </div>
@@ -595,33 +504,17 @@ const TeamReport = ({
                     )}
 
                     <div className={`col-xl-6 ${styles.cardSeperation}`}>
-                      <div className={styles.cardContainer}>
+                    <div className={styles.cardContainer}>
                         <div className={styles.card1}>
                           <div className={styles.summaryText}>Summary</div>
-                          <div className="col-xl-12  d-flex mt-4">
-                            <div className={`col-xl-4 ${styles.subCard}`}>
-                              <div>
-                                <div>No of charts</div>
-                                <h4>
-                                  {reportListAll?.response?.response?.totalElements}
-                                </h4>
-                              </div>
-                            </div>
-
-                            <div className={`col-xl-4 ${styles.subCard}`}>
-                              {" "}
-                              <div>
-                                <div>Avg RAF score</div>
-                                <h4>{reportListAll?.response?.rafAverage?.toFixed(4)}</h4>
-                              </div>
-                            </div>
-                            <div className={`col-xl-4 ${styles.subCard}`}>
-                              {" "}
-                              <div>
-                                <div>HCC Count</div>
-                                <h4>{reportListAll?.response?.totalHccCount}</h4>
-                              </div>
-                            </div>
+                          <div className="col-xl-12 d-flex mt-4">
+                            {subCardData.map((card, index) => (
+                              <SubCard
+                                key={index}
+                                title={card.title}
+                                value={card.value}
+                              />
+                            ))}
                           </div>
                           <div className={` pt-2 ${styles.summaryText}`}>
                             Overall Status
@@ -629,165 +522,32 @@ const TeamReport = ({
                           <div className="col-xl-12  d-flex mt-2">
                             <Row className={styles.carddiv}>
                               {card1Data?.map((data) => (
-                                <Col
-                                  span={5}
-                                  style={{
-                                    backgroundColor: data.bg,
-                                  }}
-                                  className={styles.colData}
-                                >
-                                  <div className={styles.header}>
-                                    <Image
-                                      src={data?.icon}
-                                      className={styles.Img}
-                                    />
-                                    <div className={styles.heading}>
-                                      {data.title}
-                                    </div>
-                                  </div>
-
-                                  <h4>{data?.charts ? data?.charts : "0"}</h4>
-                                </Col>
+                                <MiniCards
+                                  backgroundColor={data.bg}
+                                  icon={data?.icon}
+                                  title={data.title}
+                                  charts={data.charts}
+                                  styles={styles}
+                                />
                               ))}
                             </Row>
                           </div>
                           <div className="col-xl-12  d-flex mt-1">
-                            <div className={`col-xl-4 ${styles.flags}`}>
-                              <div className={styles.cardHead}>Flags</div>
-                              {getFlagsData?.response.map((flagItem) => (
-                                <div
-                                  className={styles.contentGroups}
-                                  key={flagItem.id}
-                                >
-                                  <div>
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="23"
-                                      height="23"
-                                      viewBox="0 0 800 800"
-                                      fill={flagItem?.flagColour}
-                                    >
-                                      <path
-                                        d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
-                                        stroke="#000"
-                                        stroke-width="10"
-                                      />
-                                    </svg>
-                                    <span style={{fontSize:"12px"}}>{flagItem?.flagName
-                                      ? flagItem?.flagName.replaceAll("_", " ")
-                                      : ""}</span>
-                                  </div>
-                                  <div className={styles.count}>
-                                    {flagItem.count?flagItem.count:0}
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                            <div className={`col-xl-4 ${styles.flags}`}>
-                              <div className={styles.cardHead}>
-                                <div> Supervisor </div>
-                                <div className={styles.contentOverFlow}>
-                                  {reportListAll?.response?.supervisorAllocationCount?.map(
-                                    (item) => (
-                                      <div
-                                        className={styles.contentAuditor}
-                                        key={item.id}
-                                      >
-                                        <div className={styles.avatar}>
-                                          {item.userNameDTO?.firstName ||
-                                          item?.userNameDTO?.lastName ||
-                                          item?.userNameDTO?.profileImageUrl ? (
-                                            <>
-                                              <span
-                                                className={styles.avatarAlign}
-                                              >
-                                                {renderUserPrfoileAvatar(
-                                                  item.userNameDTO?.firstName,
-                                                  item?.userNameDTO?.lastName,
-                                                  item?.userNameDTO
-                                                    ?.profileImageUrl,
-                                                  "header"
-                                                )}
-                                              </span>
-                                              <span
-                                                className={styles.smallText}
-                                              >
-                                                {item.userNameDTO?.firstName}{" "}
-                                                {item?.userNameDTO?.lastName}
-                                              </span>
-                                            </>
-                                          ) : (
-                                            <div className={styles.emptyData}>
-                                              ---
-                                            </div>
-                                          )}
-                                        </div>
-                                        <div className={styles.count}>
-                                          {item.count}
-                                        </div>
-                                      </div>
-                                    )
-                                  )}
-                                  {(!reportListAll?.response?.supervisorAllocationCount ||
-                                    reportListAll?.response?.supervisorAllocationCount
-                                      .length === 0) && (
-                                    <div
-                                      className="d-flex justify-content-center align-items-center"
-                                      style={{ height: "200px" }}
-                                    >
-                                      <Empty />{" "}
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                            <div className={`col-xl-4 ${styles.flags}`}>
-                              <div className={`${styles.cardHead}`}>
-                                <div>Reviewer</div>
-                                <div className={styles.contentOverFlow}>
-                                  {!reportListAll?.response?.reviewerAllocationCount
-                                    .length === 0 ? (
-                                    reportListAll?.response?.reviewerAllocationCount?.map(
-                                      (item) => (
-                                        <div
-                                          className={styles.contentAuditor}
-                                          key={item.id}
-                                        >
-                                          <div className={styles.avatar}>
-                                            <span
-                                              className={styles.avatarAlign}
-                                            >
-                                              {renderUserPrfoileAvatar(
-                                                item.userNameDTO?.firstName,
-                                                item?.userNameDTO?.lastName,
-                                                item?.userNameDTO
-                                                  ?.profileImageUrl,
-                                                "header"
-                                              )}
-                                            </span>
-                                            <span className={styles.smallText}>
-                                              {item.userNameDTO?.firstName}{" "}
-                                              {item?.userNameDTO?.lastName}
-                                            </span>
-                                          </div>
-
-                                          <div className={styles.count}>
-                                            {item.count}
-                                          </div>
-                                        </div>
-                                      )
-                                    )
-                                  ) : (
-                                    <div
-                                      className="d-flex justify-content-center align-items-center"
-                                      style={{ height: "200px" }}
-                                    >
-                                      <Empty />{" "}
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
+                            <Flags
+                              flagsData={getFlagsData?.response}
+                              styles={styles}
+                            />
+                            {allocationCountData.map((item, index) => (
+                              <AllocationCount
+                                key={index}
+                                title={item.title}
+                                allocationCount={item.allocationCount}
+                                renderUserPrfoileAvatar={
+                                  renderUserPrfoileAvatar
+                                }
+                                styles={styles}
+                              />
+                            ))}
                           </div>
                         </div>
                       </div>

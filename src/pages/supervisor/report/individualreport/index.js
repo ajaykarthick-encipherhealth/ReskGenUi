@@ -138,7 +138,7 @@ const IndividualReceiverReport = () => {
         (item) => item?._id === id
       );
 
-      setReportInfo(!isSentReport ? reportdata[0] : sentdata[0]);
+      // setReportInfo(!isSentReport ? reportdata[0] : sentdata[0]);
     }
   }, [reportDatas, sentReportDatas, isSentReport]);
 

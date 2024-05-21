@@ -1,10 +1,22 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import styles from "../../../resusablereport/reports/report.module.css";
-import { Row, Empty, notification } from "antd";
+import styles from "../report.module.css";
+import {
+  Checkbox,
+  Popover,
+  Col,
+  Row,
+  Tooltip,
+  Empty,
+  notification,
+} from "antd";
+
 import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
 import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
 import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
+import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
+import AuditedDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
+
 import declineIcon from "../../.../../../images/trackingImages/DeclineTrack.png";
 import reAuditIcon from "../../.../../../images/trackingImages/AuditPending.png";
 import auditHoldIcon from "../../.../../../images/trackingImages/AuditHoldTrack.png";
@@ -12,24 +24,30 @@ import auditedIcon from "../../.../../../images/trackingImages/AuditedTrack.png"
 import reeAuditIcon from "../../.../../../images/trackingImages/reAuditTrack.png";
 import notAudited from "../../.../../../images/trackingImages/NotAuditedTrack.png";
 import auditDeclined from "../../.../../../images/trackingImages/AuditDeclined.png";
+import { Paginator } from "primereact/paginator";
 import TableStyle from "../../../components/table/table.module.css";
-import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
+
+import {
+  renderUserPrfoileAvatar,
+  dateFormate,
+} from "../../../components/headerFilters/functions";
 import { selectedRow } from "../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
+import dayjs from "dayjs";
+import { getFlag, getFlags } from "../../../components/reuseableFunctions";
 import { connect } from "react-redux";
 import SpinnerDots from "../../../components/spinner";
 import ContentGroupCard from "../../../mainStream/components/cards/contentGroupCard";
-import AllocationCount from "../../../mainStream/components/allocationCount";
-import Flags from "../../../mainStream/components/flagCount";
-import MiniCards from "../../../mainStream/components/miniCards";
-import Pagination from "../../components/pagination";
 import SubCard from "../../../mainStream/components/cards/subcard";
+import MiniCards from "../../../mainStream/components/miniCards";
+import Flags from "../../../mainStream/components/flagCount";
+import AllocationCount from "../../../mainStream/components/allocationCount";
 import {
   auditstatusBodyTemplate,
   processstatusBodyTemplate,
 } from "../../components/chartUtils";
 
-const InitialCard = ({
+const TeamReport = ({
   patientDetails,
   paginationFirst,
   ReportPatientDetails,
@@ -41,13 +59,16 @@ const InitialCard = ({
   reportListAll,
   page,
   getFlagsData,
+  isAdmin,
   loader,
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
   const handleHeaderCheckboxChange = () => {
     setSelectAll(!selectAll);
-    const updatedRows = selectAll ? [] : reportListAll?.response?.data;
+    const updatedRows = selectAll
+      ? []
+      : reportListAll?.response?.response?.data;
     setSelectedRows(updatedRows);
   };
 
@@ -72,8 +93,9 @@ const InitialCard = ({
       id: 1,
       icon: Completed,
       title: "Completed",
-      charts: reportListAll?.processedStatusCount?.processedStatus
-        ? reportListAll?.processedStatusCount?.processedStatus.COMPLETED
+      charts: reportListAll?.response?.processedStatusCount?.processedStatus
+        ? reportListAll?.response?.processedStatusCount?.processedStatus
+            .COMPLETED
         : "0",
       bg: "#CCFFD1",
     },
@@ -81,8 +103,8 @@ const InitialCard = ({
       id: 2,
       icon: Pending,
       title: "Pending",
-      charts: reportListAll?.processedStatusCount?.processedStatus
-        ? reportListAll?.processedStatusCount?.processedStatus.PENDING
+      charts: reportListAll?.response?.processedStatusCount?.processedStatus
+        ? reportListAll?.response?.processedStatusCount?.processedStatus.PENDING
         : "0",
 
       bg: "#CCE9FF",
@@ -91,8 +113,8 @@ const InitialCard = ({
       id: 3,
       icon: Hold,
       title: "Hold",
-      charts: reportListAll?.processedStatusCount?.processedStatus
-        ? reportListAll?.processedStatusCount?.processedStatus.HOLD
+      charts: reportListAll?.response?.processedStatusCount?.processedStatus
+        ? reportListAll?.response?.processedStatusCount?.processedStatus.HOLD
         : "0",
 
       bg: "#DACEFD",
@@ -101,8 +123,9 @@ const InitialCard = ({
       id: 4,
       icon: declineIcon,
       title: "Decline",
-      charts: reportListAll?.processedStatusCount?.processedStatus
-        ? reportListAll?.processedStatusCount?.processedStatus.DECLINED
+      charts: reportListAll?.response?.processedStatusCount?.processedStatus
+        ? reportListAll?.response?.processedStatusCount?.processedStatus
+            .DECLINED
         : "0",
       bg: "#FAD1D1",
     },
@@ -110,8 +133,8 @@ const InitialCard = ({
       id: 5,
       icon: auditedIcon,
       title: "Audited",
-      charts: reportListAll?.processedStatusCount?.auditedStatus
-        ? reportListAll?.processedStatusCount?.auditedStatus.AUDITED
+      charts: reportListAll?.response?.processedStatusCount?.auditedStatus
+        ? reportListAll?.response?.processedStatusCount?.auditedStatus.AUDITED
         : "0",
 
       bg: "#DBEEF0",
@@ -120,8 +143,8 @@ const InitialCard = ({
       id: 6,
       icon: notAudited,
       title: "Not Audited",
-      charts: reportListAll?.processedStatusCount?.auditedStatus
-        ? reportListAll?.processedStatusCount?.auditedStatus.NOT_AUDIT
+      charts: reportListAll?.response?.processedStatusCount?.auditedStatus
+        ? reportListAll?.response?.processedStatusCount?.auditedStatus.NOT_AUDIT
         : "0",
 
       bg: "#FBE7D0",
@@ -130,8 +153,8 @@ const InitialCard = ({
       id: 7,
       icon: reeAuditIcon,
       title: "Re Audit",
-      charts: reportListAll?.processedStatusCount?.auditedStatus
-        ? reportListAll?.processedStatusCount?.auditedStatus.REAUDIT
+      charts: reportListAll?.response?.processedStatusCount?.auditedStatus
+        ? reportListAll?.response?.processedStatusCount?.auditedStatus.REAUDIT
         : "0",
 
       bg: "#FFDBB8",
@@ -140,8 +163,8 @@ const InitialCard = ({
       id: 8,
       icon: reAuditIcon,
       title: "Audit pending",
-      charts: reportListAll?.processedStatusCount?.auditedStatus
-        ? reportListAll?.processedStatusCount?.auditedStatus.PENDING
+      charts: reportListAll?.response?.processedStatusCount?.auditedStatus
+        ? reportListAll?.response?.processedStatusCount?.auditedStatus.PENDING
         : "0",
 
       bg: "#F3D8E5",
@@ -150,8 +173,8 @@ const InitialCard = ({
       id: 9,
       icon: auditHoldIcon,
       title: "Audit hold",
-      charts: reportListAll?.processedStatusCount?.auditedStatus
-        ? reportListAll?.processedStatusCount?.auditedStatus.AUDITHOLD
+      charts: reportListAll?.response?.processedStatusCount?.auditedStatus
+        ? reportListAll?.response?.processedStatusCount?.auditedStatus.AUDITHOLD
         : "0",
 
       bg: "#FFF2CC",
@@ -160,14 +183,27 @@ const InitialCard = ({
       id: 10,
       icon: auditDeclined,
       title: "Audit decline",
-      charts: reportListAll?.processedStatusCount?.auditedStatus
-        ? reportListAll?.processedStatusCount?.auditedStatus.DECLINED
+      charts: reportListAll?.response?.processedStatusCount?.auditedStatus
+        ? reportListAll?.response?.processedStatusCount?.auditedStatus.DECLINED
         : "0",
 
       bg: "#FDD2CE",
     },
   ];
-
+  const subCardData = [
+    {
+      title: "No of charts",
+      value: reportListAll?.response?.response?.totalElements,
+    },
+    {
+      title: "Avg RAF score",
+      value: reportListAll?.response?.rafAverage?.toFixed(4),
+    },
+    {
+      title: "HCC Count",
+      value: reportListAll?.response?.totalHccCount,
+    },
+  ];
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
 
@@ -188,35 +224,19 @@ const InitialCard = ({
   };
 
   const handleTableRowClick = (id) => {
-    const clickedData = reportListAll?.response?.data?.[id];
+    const clickedData = reportListAll?.response?.response?.data?.[id];
     gotoPatientDetails(clickedData);
   };
-
-  const subCardData = [
-    {
-      title: "No of charts",
-      value: reportListAll?.response?.totalElements,
-    },
-    {
-      title: "Avg RAF score",
-      value: reportListAll?.rafAverage?.toFixed(4),
-    },
-    {
-      title: "HCC Count",
-      value: reportListAll?.totalHccCount,
-    },
-  ];
   const allocationCountData = [
     {
       title: "Supervisor",
-      allocationCount: reportListAll?.supervisorAllocationCount,
+      allocationCount: reportListAll?.response?.supervisorAllocationCount,
     },
     {
       title: "Reviewer",
-      allocationCount: reportListAll?.reviewerAllocationCount,
+      allocationCount: reportListAll?.response?.reviewerAllocationCount,
     },
   ];
-
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
   }, [selectedRows]);
@@ -224,7 +244,7 @@ const InitialCard = ({
     <>
       <div>
         <div className="content-body">
-          {loader ? (
+          {!reportListAll?.response?.response?.data ? (
             <SpinnerDots />
           ) : (
             <div className={`container-fluid py-4 px-2`}>
@@ -236,7 +256,7 @@ const InitialCard = ({
                 }}
               >
                 {" "}
-                {reportListAll?.response?.data?.length > 0 && (
+                {reportListAll?.response?.response?.data?.length > 0 && (
                   <>
                     <div>
                       <input
@@ -258,7 +278,7 @@ const InitialCard = ({
               <div className="row">
                 <div>
                   <div className=" col-xl-12 d-flex">
-                    {reportListAll?.response?.data?.length === 0 ? (
+                    {reportListAll?.response?.response?.data?.length === 0 ? (
                       <div
                         className={`col-xl-6 ${styles.card}`}
                         style={{
@@ -273,45 +293,47 @@ const InitialCard = ({
                       <>
                         <div className="col-xl-6">
                           <div className={styles.cardContainer}>
-                            {reportListAll?.response?.data?.map((item, id) => (
-                              <ContentGroupCard
-                                content={reportListAll?.response?.data}
-                                key={id}
-                                item={item}
-                                flag={item?.flag}
-                                page={page}
-                                handleRowCheckboxChange={
-                                  handleRowCheckboxChange
-                                }
-                                selectedRows={selectedRows}
-                                handleTableRowClick={handleTableRowClick}
-                                auditstatusBodyTemplate={auditstatusBodyTemplate(
-                                  item
-                                )}
-                                processstatusBodyTemplate={processstatusBodyTemplate(
-                                  item
-                                )}
-                                rafSum={item.rafSum}
-                                patientName={item.patientName}
-                                processedDate={item?.processedDate}
-                                patientId={item?.patientId}
-                                validDiseaseCount={item?.validDiseaseCount}
-                                auditedByFirstName={item?.auditedByFirstName}
-                                auditedByLastName={item?.auditedByLastName}
-                                auditedByProfileImage={
-                                  item?.auditedByProfileImage
-                                }
-                                patientAllocatedFirstName={
-                                  item?.patientAllocatedFirstName
-                                }
-                                patientAllocatedLastName={
-                                  item?.patientAllocatedLastName
-                                }
-                                patientAllocatedProfileImage={
-                                  item?.patientAllocatedProfileImage
-                                }
-                              />
-                            ))}
+                            {reportListAll?.response?.response?.data?.map(
+                              (item, id) => (
+                                <ContentGroupCard
+                                  content={reportListAll?.response?.data}
+                                  key={id}
+                                  item={item}
+                                  flag={item?.flag}
+                                  page={page}
+                                  handleRowCheckboxChange={
+                                    handleRowCheckboxChange
+                                  }
+                                  selectedRows={selectedRows}
+                                  handleTableRowClick={handleTableRowClick}
+                                  auditstatusBodyTemplate={auditstatusBodyTemplate(
+                                    item
+                                  )}
+                                  processstatusBodyTemplate={processstatusBodyTemplate(
+                                    item
+                                  )}
+                                  rafSum={item.rafSum}
+                                  patientName={item.patientName}
+                                  processedDate={item?.processedDate}
+                                  patientId={item?.patientId}
+                                  validDiseaseCount={item?.validDiseaseCount}
+                                  auditedByFirstName={item?.auditedByFirstName}
+                                  auditedByLastName={item?.auditedByLastName}
+                                  auditedByProfileImage={
+                                    item?.auditedByProfileImage
+                                  }
+                                  patientAllocatedFirstName={
+                                    item?.patientAllocatedFirstName
+                                  }
+                                  patientAllocatedLastName={
+                                    item?.patientAllocatedLastName
+                                  }
+                                  patientAllocatedProfileImage={
+                                    item?.patientAllocatedProfileImage
+                                  }
+                                />
+                              )
+                            )}
                           </div>
                         </div>
                       </>
@@ -373,11 +395,18 @@ const InitialCard = ({
           )}
         </div>
       </div>
-      <Pagination
-        first={paginationFirst}
-        totalRecords={ReportPatientDetails?.response?.totalElements}
-        onPageChange={onPageChange}
-      />
+
+      <div className="pagination-container">
+        <Paginator
+          first={paginationFirst}
+          rows={8}
+          totalRecords={ReportPatientDetails?.response?.response?.totalElements}
+          onPageChange={onPageChange}
+        />
+        <div className="total-pages">
+          Total count: {ReportPatientDetails?.response?.response?.totalElements}
+        </div>
+      </div>
     </>
   );
 };
@@ -385,4 +414,4 @@ const InitialCard = ({
 const enhancer = connect((state) => ({
   getFlagsData: state?.reviewer?.workQueue?.flags?.data,
 }));
-export default enhancer(InitialCard);
+export default enhancer(TeamReport);

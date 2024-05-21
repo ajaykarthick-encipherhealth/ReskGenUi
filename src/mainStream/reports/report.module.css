@@ -125,7 +125,7 @@
   justify-content: flex-end;
   align-items: center;
   position: relative;
-  right: 45px;
+  right: 56px;
 }
 .headText {
   font-size: 12px;
@@ -532,4 +532,14 @@
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   height: 873px;
+}
+.exportDisable {
+  width: 100px;
+  height: 40px;
+  text-align: center;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  margin-right: 10px;
+  border-radius: 8px;
 }

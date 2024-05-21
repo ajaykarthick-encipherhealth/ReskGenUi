@@ -1,6 +1,6 @@
 import React from "react";
 
-const OverallReportsSection = ({ totalReports, styles}) => {
+const OverallReportsSection = ({ totalReports, styles }) => {
   return (
     <div className={`col-xl-3 ${styles.sentSubCard}`}>
       <div>
@@ -11,7 +11,7 @@ const OverallReportsSection = ({ totalReports, styles}) => {
   );
 };
 
-const OverallUsersSection = ({ totalUsers,styles }) => {
+const OverallUsersSection = ({ totalUsers, styles }) => {
   return (
     <div className={`col-xl-3 ${styles.sentSubCard}`}>
       <div>
@@ -24,8 +24,8 @@ const OverallUsersSection = ({ totalUsers,styles }) => {
 
 const AccessCountSection = ({ data, styles }) => {
   return (
-<>
-{data?.map((item, index) => (
+    <>
+      {data?.map((item, index) => (
         <React.Fragment key={index}>
           {item._id === "READ" && (
             <div className={`col-xl-3 ${styles.readSubCard}`}>
@@ -45,9 +45,7 @@ const AccessCountSection = ({ data, styles }) => {
           )}
         </React.Fragment>
       ))}
-</>
-     
-
+    </>
   );
 };
 
