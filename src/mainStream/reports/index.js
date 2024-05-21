@@ -236,22 +236,10 @@ const Reports = ({
         )
       );
     } else if (activeTab === "Audit") {
-      // dispatch(
-      //   getReportDetails(
-      //     pageNo,
-      //     selectedDateRanges?.AuditReport?.from,
-      //     selectedDateRanges?.AuditReport?.to,
-      //     coderSearchString ? coderSearchString : "",
-      //     selectedOptions?.reviewerStatus
-      //       ? selectedOptions?.reviewerStatus
-      //       : "",
-      //     sort
-      //   )
-      // );
       auditReport({
         pagenum: pageNo,
-        startDate: selectedDateRanges?.AuditReport?.from,
-        endDate: selectedDateRanges?.AuditReport?.to,
+        startDate: selectedDateRanges?.Audit?.from,
+        endDate: selectedDateRanges?.Audit?.to,
         search: coderSearchString ? coderSearchString : "",
         filter: selectedOptions?.reviewerStatus
           ? selectedOptions?.reviewerStatus
@@ -259,16 +247,6 @@ const Reports = ({
         sort: sort,
       });
     } else if (activeTab === "Team") {
-      // dispatch(
-      //   getTeamReportDetails(
-      //     teamPageNo,
-      //     selectedDateRanges?.TeamReport?.from,
-      //     selectedDateRanges?.TeamReport?.to,
-      //     coderSearchString ? coderSearchString : "",
-      //     sort
-      //   )
-      // );
-
       teamReport({
         pagenum: teamPageNo,
         startDate: selectedDateRanges?.Team?.from,
