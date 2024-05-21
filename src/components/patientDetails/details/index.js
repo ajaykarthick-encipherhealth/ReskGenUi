@@ -257,15 +257,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
     setLocalOrgId(orgId);
     setLocalTenantId(tenId);
     setLocalUserId(uId);
-    setLocalPatientId(selectPatientId ? selectPatientId?.patirntId : patientId);
-    if (patientDetailsResult?.result?.response?.processedYear) {
-      dispatch(
-        getPatientDosList(
-          selectPatientId ? selectPatientId?.patirntId : patientId,
-          patientDetailsResult?.result?.response?.processedYear
-        )
-      );
-    }
+    setLocalPatientId(selectPatientId ? selectPatientId?.patirntId : patientId);  
     getPatientDetails(
       selectPatientId ? selectPatientId?.patirntId : patientId,
       orgId,
@@ -311,6 +303,12 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
       setSelectedDosValue(dosYearArr[0].value);
       setDosYear(dosYearArr);
       setIsLoadingDos(false);
+        dispatch(
+          getPatientDosList(
+            selectPatientId ? selectPatientId?.patirntId : patientId,
+            dosYearArr[0].value
+          )
+        );
       dispatch(
         getPatientDetailsResultNew(
           selectPatientId ? selectPatientId?.patirntId : patientId,
