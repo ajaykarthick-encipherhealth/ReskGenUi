@@ -258,12 +258,6 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
     setLocalTenantId(tenId);
     setLocalUserId(uId);
     setLocalPatientId(selectPatientId ? selectPatientId?.patirntId : patientId);
-
-    getPatientDetails(
-      selectPatientId ? selectPatientId?.patirntId : patientId,
-      orgId,
-      tenId
-    );
     if (patientDetailsResult?.result?.response?.processedYear) {
       dispatch(
         getPatientDosList(
@@ -272,6 +266,12 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
         )
       );
     }
+    getPatientDetails(
+      selectPatientId ? selectPatientId?.patirntId : patientId,
+      orgId,
+      tenId
+    );
+    
   }, [patientDetailsResult?.result?.response]);
 
   useEffect(() => {
