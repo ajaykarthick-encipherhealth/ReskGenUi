@@ -100,6 +100,26 @@ const Hcc = ({ year }) => {
     }
     setPopoverVisible(false);
   };
+  // useEffect(() => {
+  //     var dosList = [];
+  //     const testArray =[
+  //       "2023-02-02",
+  //       "2023-03-02",
+  //       "2023-04-02",
+  //     ]
+  //     testArray?.map((res,index) => {
+  //      var dosLable = (
+  //           <>
+  //             <div className="d-flex">
+  //               <span className={styles.dosLable}>{moment(res).format("MM-MM-YYYY")}</span>
+  //               <Image src={(index == 1 || index == 4) ?Completed : index == 2 ? Hold : Pending } className={styles.dosStatusIcon} />
+  //             </div>
+  //           </>
+  //         )
+  //       dosList.push({ value: res, label: dosLable });
+  //     });
+  //     setDosSummariesList(dosList)
+  // }, []);
 
   useEffect(() => {
     if (patientDosResult?.result?.response) {
@@ -128,7 +148,7 @@ const Hcc = ({ year }) => {
   const handleOptions = (value) => {
     console.log(moment(value).format("YYYY-MM-DD"));
     const patientId = localStorage.getItem("patientId");
-    dispatch(getPatientDetailsResultNew(patientId,format("YYYY-MM-DD") + "T00:00:00.000Z"));
+    dispatch(getPatientDetailsResultNew(patientId,null,moment(value).format("YYYY-MM-DD")+"T00:00:00.000Z"));
   };
   const handleChangePageNumber = async (value) => {
     setPopoverVisible(false);
