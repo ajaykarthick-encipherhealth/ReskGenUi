@@ -10,18 +10,13 @@ import {
   Empty,
   notification,
 } from "antd";
-import { extractLatestData } from "../../../pages/supervisor/auditing";
-import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
-import NotAudited from "../../../../src/images/trackingImages/NotAuditedTrack.png";
-import AuditHold from "../../../../src/images/trackingImages/AuditHoldTrack.png";
-import ReAudit from "../../../../src/images/trackingImages/reAuditTrack.png";
-import AuditPending from "../../../../src/images/trackingImages/AuditPending.png";
+
 import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
 import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
 import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
 import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
 import AuditedDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
-import Abort from "../../../../src/images/trackingImages/Abort.png";
+
 import declineIcon from "../../.../../../images/trackingImages/DeclineTrack.png";
 import reAuditIcon from "../../.../../../images/trackingImages/AuditPending.png";
 import auditHoldIcon from "../../.../../../images/trackingImages/AuditHoldTrack.png";
@@ -31,9 +26,7 @@ import notAudited from "../../.../../../images/trackingImages/NotAuditedTrack.pn
 import auditDeclined from "../../.../../../images/trackingImages/AuditDeclined.png";
 import { Paginator } from "primereact/paginator";
 import TableStyle from "../../../components/table/table.module.css";
-import { useSelector } from "react-redux";
-import Image from "next/image";
-import { SVGICON } from "../../../jsx/constant/theme";
+
 import {
   renderUserPrfoileAvatar,
   dateFormate,
@@ -49,35 +42,33 @@ import SubCard from "../../../mainStream/components/cards/subcard";
 import MiniCards from "../../../mainStream/components/miniCards";
 import Flags from "../../../mainStream/components/flagCount";
 import AllocationCount from "../../../mainStream/components/allocationCount";
+import {
+  auditstatusBodyTemplate,
+  processstatusBodyTemplate,
+} from "../../components/chartUtils";
 
 const TeamReport = ({
-  // setModal,
-  // modal,
   patientDetails,
   paginationFirst,
   ReportPatientDetails,
   onPageChange,
-  // comments,
-  // setComments,
   selectedRows,
   setSelectedRows,
   selectAll,
   setSelectAll,
-  // sortOrder,
-  // setSortOrder,
-  // setSort,
   reportListAll,
   page,
   getFlagsData,
   isAdmin,
-  loader
+  loader,
 }) => {
-
   const dispatch = useDispatch();
   const navigate = useRouter();
   const handleHeaderCheckboxChange = () => {
     setSelectAll(!selectAll);
-    const updatedRows = selectAll ? [] : reportListAll?.response?.response?.data;
+    const updatedRows = selectAll
+      ? []
+      : reportListAll?.response?.response?.data;
     setSelectedRows(updatedRows);
   };
 
@@ -103,7 +94,8 @@ const TeamReport = ({
       icon: Completed,
       title: "Completed",
       charts: reportListAll?.response?.processedStatusCount?.processedStatus
-        ? reportListAll?.response?.processedStatusCount?.processedStatus.COMPLETED
+        ? reportListAll?.response?.processedStatusCount?.processedStatus
+            .COMPLETED
         : "0",
       bg: "#CCFFD1",
     },
@@ -132,7 +124,8 @@ const TeamReport = ({
       icon: declineIcon,
       title: "Decline",
       charts: reportListAll?.response?.processedStatusCount?.processedStatus
-        ? reportListAll?.response?.processedStatusCount?.processedStatus.DECLINED
+        ? reportListAll?.response?.processedStatusCount?.processedStatus
+            .DECLINED
         : "0",
       bg: "#FAD1D1",
     },
@@ -211,176 +204,18 @@ const TeamReport = ({
       value: reportListAll?.response?.totalHccCount,
     },
   ];
-  const auditstatusBodyTemplate = (rowData) => {
-    const declinedDataFromAudit = extractLatestData(
-      rowData?.auditDeclinedNotes
-    );
-
-    const declinedDataFromDeclined = extractLatestData(
-      rowData?.auditDeclinedNotes
-    );
-
-    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
-    switch (rowData.auditedStatus) {
-      case "AUDIT_PENDING":
-        return (
-          <Popover placement="bottom" title="Status: AUDIT PENDING">
-            <span className="patient-status">
-              <Image src={AuditPending} className={styles.imgSize} />
-            </span>
-          </Popover>
-        );
-
-      case "AUDITHOLD":
-        return (
-          <Popover placement="bottom" title=" Status: AUDIT HOLD">
-            <span className="patient-status">
-              <Image src={AuditHold} className={styles.imgSize} />
-            </span>
-          </Popover>
-        );
-      case "REAUDIT":
-        return (
-          <Popover placement="bottom" title=" Status: REAUDIT">
-            <span className="patient-status">
-              <Image src={ReAudit} className={styles.imgSize} />
-            </span>
-          </Popover>
-        );
-      case "AUDITED":
-        return (
-          <Popover placement="bottom" title=" Status: AUDITED">
-            <span className="patient-status">
-              <Image src={AuditedTrack} className={styles.imgSize} />
-            </span>
-          </Popover>
-        );
-      case "AUDITED":
-        return (
-          <span className="patient-status">
-            <Image src={AuditedTrack} className={styles.imgSize} />
-          </span>
-        );
-
-      case "NOT_AUDIT":
-        return (
-          <Popover placement="bottom" title=" Status: NOT AUDIT">
-            <span className="patient-status">
-              <Image src={NotAudited} className={styles.imgSize} />
-            </span>
-          </Popover>
-        );
-      case "AUDIT_DECLINED":
-        return (
-          <Popover
-            placement="bottom"
-            title=" Status: AUDIT DECLINED"
-            content={`Reason: ${declinedData ? declinedData : "---"}`}
-          >
-            <span className="patient-status">
-              <Image src={AuditedDeclineTrack} className={styles.imgSize} />
-            </span>
-          </Popover>
-        );
-      case null:
-        return <span className="patient-status">---</span>;
-    }
-  };
-  const processstatusBodyTemplate = (rowData) => {
-    const declinedDataFromAudit = extractLatestData(
-      rowData?.auditDeclinedNotes
-    );
-
-    const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
-
-    const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
-    if (!rowData?.processedStatus) {
-      return null;
-    }
-    switch (rowData?.processedStatus) {
-      case "COMPLETED":
-        return (
-          <Popover placement="bottom" title="Status: COMPLETED">
-            <span className={`patient-status ${styles.textCenter}`}>
-              <Image src={Completed} className={styles.imgSize} />
-            </span>
-          </Popover>
-        );
-
-      case "PENDING":
-        return (
-          <Popover placement="bottom" title="Status: PENDING">
-            <span className={`patient-status ${styles.textCenter}`}>
-              <Image src={Pending} className={styles.imgSize} />
-            </span>
-          </Popover>
-        );
-
-      case "DECLINED":
-        return (
-          <Popover
-            placement="bottom"
-            title="Status: DECLINED"
-            content={`Reason: ${declinedData ? declinedData : "---"}`}
-          >
-            <span className={`patient-status ${styles.textCenter}`}>
-              <Image src={Declined} className={styles.imgSize} />
-            </span>
-          </Popover>
-        );
-
-      case "NOTCOMPUTED":
-        return (
-          <Popover placement="bottom" title="Status: NOT COMPUTED">
-            <span className={`patient-status ${styles.textCenter}`}>
-              <Image src={Pending} className={styles.imgSize} />
-            </span>
-          </Popover>
-        );
-      case "COMPUTED":
-        return (
-          <Popover placement="bottom" title="Status: PENDING">
-            <span className={`patient-status ${styles.textCenter}`}>
-              <Image src={Pending} className={styles.imgSize} />
-            </span>
-          </Popover>
-        );
-      case "HOLD":
-        return (
-          <Popover placement="bottom" title="Status: HOLD">
-            <span className={`patient-status ${styles.textCenter}`}>
-              <Image src={Hold} className={styles.imgSize} />
-            </span>
-          </Popover>
-        );
-      case "ABORTED_BY_CRON":
-        return (
-          <Popover placement="bottom" title="Status: ABORTED BY CRON">
-            <span className={`patient-status ${styles.textCenter}`}>
-              <Image src={Abort} className={styles.imgSize} />
-            </span>
-          </Popover>
-        );
-      case null:
-        return (
-          <Popover placement="bottom" title="Status: PENDING">
-            <span className={`patient-status ${styles.textCenter}`}>
-              <Image src={Pending} className={styles.imgSize} />
-            </span>
-          </Popover>
-        );
-    }
-  };
-
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
 
     if (data?.processedStatus === "COMPLETED") {
       const controller = new AbortController();
-      const currentRole=localStorage.getItem("userRole");
+      const currentRole = localStorage.getItem("userRole");
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
-      navigate.push({ pathname: `/${currentRole}/patients/details`, query: page });
+      navigate.push({
+        pathname: `/${currentRole}/patients/details`,
+        query: page,
+      });
     } else {
       notification.warning({
         message: data?.patientId + " file not processed. Please wait.",
@@ -412,9 +247,7 @@ const TeamReport = ({
           {!reportListAll?.response?.response?.data ? (
             <SpinnerDots />
           ) : (
-
             <div className={`container-fluid py-4 px-2`}>
-
               <div
                 style={{
                   display: "flex",
@@ -460,52 +293,54 @@ const TeamReport = ({
                       <>
                         <div className="col-xl-6">
                           <div className={styles.cardContainer}>
-                            {reportListAll?.response?.response?.data?.map((item, id) => (
-                               <ContentGroupCard
-                               content={reportListAll?.response?.data}
-                               key={id}
-                               item={item}
-                               flag={item?.flag}
-                               page={page}
-                               handleRowCheckboxChange={
-                                 handleRowCheckboxChange
-                               }
-                               selectedRows={selectedRows}
-                               handleTableRowClick={handleTableRowClick}
-                               auditstatusBodyTemplate={auditstatusBodyTemplate(
-                                 item
-                               )}
-                               processstatusBodyTemplate={processstatusBodyTemplate(
-                                 item
-                               )}
-                               rafSum={item.rafSum}
-                               patientName={item.patientName}
-                               processedDate={item?.processedDate}
-                               patientId={item?.patientId}
-                               validDiseaseCount={item?.validDiseaseCount}
-                               auditedByFirstName={item?.auditedByFirstName}
-                               auditedByLastName={item?.auditedByLastName}
-                               auditedByProfileImage={
-                                 item?.auditedByProfileImage
-                               }
-                               patientAllocatedFirstName={
-                                 item?.patientAllocatedFirstName
-                               }
-                               patientAllocatedLastName={
-                                 item?.patientAllocatedLastName
-                               }
-                               patientAllocatedProfileImage={
-                                 item?.patientAllocatedProfileImage
-                               }
-                             />
-                            ))}
+                            {reportListAll?.response?.response?.data?.map(
+                              (item, id) => (
+                                <ContentGroupCard
+                                  content={reportListAll?.response?.data}
+                                  key={id}
+                                  item={item}
+                                  flag={item?.flag}
+                                  page={page}
+                                  handleRowCheckboxChange={
+                                    handleRowCheckboxChange
+                                  }
+                                  selectedRows={selectedRows}
+                                  handleTableRowClick={handleTableRowClick}
+                                  auditstatusBodyTemplate={auditstatusBodyTemplate(
+                                    item
+                                  )}
+                                  processstatusBodyTemplate={processstatusBodyTemplate(
+                                    item
+                                  )}
+                                  rafSum={item.rafSum}
+                                  patientName={item.patientName}
+                                  processedDate={item?.processedDate}
+                                  patientId={item?.patientId}
+                                  validDiseaseCount={item?.validDiseaseCount}
+                                  auditedByFirstName={item?.auditedByFirstName}
+                                  auditedByLastName={item?.auditedByLastName}
+                                  auditedByProfileImage={
+                                    item?.auditedByProfileImage
+                                  }
+                                  patientAllocatedFirstName={
+                                    item?.patientAllocatedFirstName
+                                  }
+                                  patientAllocatedLastName={
+                                    item?.patientAllocatedLastName
+                                  }
+                                  patientAllocatedProfileImage={
+                                    item?.patientAllocatedProfileImage
+                                  }
+                                />
+                              )
+                            )}
                           </div>
                         </div>
                       </>
                     )}
 
                     <div className={`col-xl-6 ${styles.cardSeperation}`}>
-                    <div className={styles.cardContainer}>
+                      <div className={styles.cardContainer}>
                         <div className={styles.card1}>
                           <div className={styles.summaryText}>Summary</div>
                           <div className="col-xl-12 d-flex mt-4">

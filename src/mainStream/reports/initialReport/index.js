@@ -1,19 +1,10 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import styles from "../../../resusablereport/reports/report.module.css";
-import { Popover, Row, Empty, notification } from "antd";
-import { extractLatestData } from "../../../pages/supervisor/auditing";
-import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
-import NotAudited from "../../../../src/images/trackingImages/NotAuditedTrack.png";
-import AuditHold from "../../../../src/images/trackingImages/AuditHoldTrack.png";
-import ReAudit from "../../../../src/images/trackingImages/reAuditTrack.png";
-import AuditPending from "../../../../src/images/trackingImages/AuditPending.png";
+import { Row, Empty, notification } from "antd";
 import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
 import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
 import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
-import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
-import AuditedDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
-import Abort from "../../../../src/images/trackingImages/Abort.png";
 import declineIcon from "../../.../../../images/trackingImages/DeclineTrack.png";
 import reAuditIcon from "../../.../../../images/trackingImages/AuditPending.png";
 import auditHoldIcon from "../../.../../../images/trackingImages/AuditHoldTrack.png";
@@ -21,176 +12,22 @@ import auditedIcon from "../../.../../../images/trackingImages/AuditedTrack.png"
 import reeAuditIcon from "../../.../../../images/trackingImages/reAuditTrack.png";
 import notAudited from "../../.../../../images/trackingImages/NotAuditedTrack.png";
 import auditDeclined from "../../.../../../images/trackingImages/AuditDeclined.png";
-
 import TableStyle from "../../../components/table/table.module.css";
-import Image from "next/image";
 import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
 import { selectedRow } from "../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
 import { connect } from "react-redux";
 import SpinnerDots from "../../../components/spinner";
 import ContentGroupCard from "../../../mainStream/components/cards/contentGroupCard";
-
 import AllocationCount from "../../../mainStream/components/allocationCount";
 import Flags from "../../../mainStream/components/flagCount";
 import MiniCards from "../../../mainStream/components/miniCards";
 import Pagination from "../../components/pagination";
 import SubCard from "../../../mainStream/components/cards/subcard";
-export const auditstatusBodyTemplate = (rowData) => {
-  const declinedDataFromAudit = extractLatestData(rowData?.auditDeclinedNotes);
-  const declinedDataFromDeclined = extractLatestData(
-    rowData?.auditDeclinedNotes
-  );
-
-  const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
-  switch (rowData.auditedStatus) {
-    case "AUDIT_PENDING":
-      return (
-        <Popover placement="bottom" title="Status: AUDIT PENDING">
-          <span className="patient-status">
-            <Image src={AuditPending} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-
-    case "AUDITHOLD":
-      return (
-        <Popover placement="bottom" title=" Status: AUDIT HOLD">
-          <span className="patient-status">
-            <Image src={AuditHold} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-    case "REAUDIT":
-      return (
-        <Popover placement="bottom" title=" Status: REAUDIT">
-          <span className="patient-status">
-            <Image src={ReAudit} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-    case "AUDITED":
-      return (
-        <Popover placement="bottom" title=" Status: AUDITED">
-          <span className="patient-status">
-            <Image src={AuditedTrack} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-    case "AUDITED":
-      return (
-        <span className="patient-status">
-          <Image src={AuditedTrack} className={styles.imgSize} />
-        </span>
-      );
-
-    case "NOT_AUDIT":
-      return (
-        <Popover placement="bottom" title=" Status: NOT AUDIT">
-          <span className="patient-status">
-            <Image src={NotAudited} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-    case "AUDIT_DECLINED":
-      return (
-        <Popover
-          placement="bottom"
-          title=" Status: AUDIT DECLINED"
-          content={`Reason: ${declinedData ? declinedData : "---"}`}
-        >
-          <span className="patient-status">
-            <Image src={AuditedDeclineTrack} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-    case null:
-      return <span className="patient-status">---</span>;
-  }
-};
-export const processstatusBodyTemplate = (rowData) => {
-  const declinedDataFromAudit = extractLatestData(rowData?.auditDeclinedNotes);
-
-  const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
-
-  const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
-  if (!rowData?.processedStatus) {
-    return null;
-  }
-  switch (rowData?.processedStatus) {
-    case "COMPLETED":
-      return (
-        <Popover placement="bottom" title="Status: COMPLETED">
-          <span className={`patient-status ${styles.textCenter}`}>
-            <Image src={Completed} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-
-    case "PENDING":
-      return (
-        <Popover placement="bottom" title="Status: PENDING">
-          <span className={`patient-status ${styles.textCenter}`}>
-            <Image src={Pending} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-
-    case "DECLINED":
-      return (
-        <Popover
-          placement="bottom"
-          title="Status: DECLINED"
-          content={`Reason: ${declinedData ? declinedData : "---"}`}
-        >
-          <span className={`patient-status ${styles.textCenter}`}>
-            <Image src={Declined} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-
-    case "NOTCOMPUTED":
-      return (
-        <Popover placement="bottom" title="Status: NOT COMPUTED">
-          <span className={`patient-status ${styles.textCenter}`}>
-            <Image src={Pending} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-    case "COMPUTED":
-      return (
-        <Popover placement="bottom" title="Status: PENDING">
-          <span className={`patient-status ${styles.textCenter}`}>
-            <Image src={Pending} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-    case "HOLD":
-      return (
-        <Popover placement="bottom" title="Status: HOLD">
-          <span className={`patient-status ${styles.textCenter}`}>
-            <Image src={Hold} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-    case "ABORTED_BY_CRON":
-      return (
-        <Popover placement="bottom" title="Status: ABORTED BY CRON">
-          <span className={`patient-status ${styles.textCenter}`}>
-            <Image src={Abort} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-    case null:
-      return (
-        <Popover placement="bottom" title="Status: PENDING">
-          <span className={`patient-status ${styles.textCenter}`}>
-            <Image src={Pending} className={styles.imgSize} />
-          </span>
-        </Popover>
-      );
-  }
-};
+import {
+  auditstatusBodyTemplate,
+  processstatusBodyTemplate,
+} from "../../components/chartUtils";
 
 const InitialCard = ({
   patientDetails,
@@ -213,7 +50,7 @@ const InitialCard = ({
     const updatedRows = selectAll ? [] : reportListAll?.response?.data;
     setSelectedRows(updatedRows);
   };
-  console.log(reportListAll?.response?.data?.length, "t");
+
   const handleRowCheckboxChange = (row) => {
     const isSelected = selectedRows?.some(
       (selectedRow) => selectedRow.patientId === row?.patientId

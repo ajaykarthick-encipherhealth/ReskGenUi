@@ -233,7 +233,6 @@ const Reports = ({
         sort: sort,
       });
     } else if (reportActiveTab === "Admin") {
-      console.log(selectedOptions);
       dispatch(
         getReportDetails(
           pageNo,

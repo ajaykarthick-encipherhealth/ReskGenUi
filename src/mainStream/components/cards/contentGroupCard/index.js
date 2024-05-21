@@ -32,7 +32,7 @@ const ContentGroupCard = ({
   patientAllocatedLastName,
   patientAllocatedProfileImage,
   content,
-  page
+  page,
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -63,9 +63,6 @@ const ContentGroupCard = ({
   };
 
   const handleTableRowClick = (id) => {
-    console.log('handleTableRowClick - id:', id);
-    console.log('handleTableRowClick - content:', content);
-
     const clickedData = content.find((item) => item.patientId === id);
     if (clickedData) {
       gotoPatientDetails(clickedData);

@@ -1,5 +1,5 @@
 import React from "react";
-const TabSwitcher = ({ activeTab, handleTabs, styles}) => {
+const TabSwitcher = ({ activeTab, handleTabs, styles }) => {
   return (
     <div className={styles.userContainer}>
       <div className={styles.user}>
