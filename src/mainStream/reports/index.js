@@ -589,8 +589,7 @@ const Reports = ({
                             </div>
                           </div>
                         ))}
-                        {console.log(reportActiveTab)}
-                       
+
                         <div
                           className={`col-xl-${
                             selectedData?.length === 0 && reportActiveTab==="Audit" ||
