@@ -29,6 +29,7 @@ import { reducer as searchReducer } from "./search";
 import { reducer as physicianReducer } from "./physician/dashboard";
 import { reducer as reportReducer } from "./reviewer/report";
 import { reducer as supervisorReportReducer } from "./supervisor/report";
+import { reducer as adminReportReducer } from "./admin/report";
 
 const reducers = combineReducers({
   // old reducers
@@ -63,6 +64,9 @@ const reducers = combineReducers({
   }),
   supervisor: combineReducers({
     report: supervisorReportReducer,
+  }),
+  admin: combineReducers({
+    report: adminReportReducer,
   }),
   search: searchReducer,
   physician: combineReducers({

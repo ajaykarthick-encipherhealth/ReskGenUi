@@ -641,7 +641,17 @@ const Reports = ({
                                 setIsModalVisible(true);
                                 dispatch(selectedReport(null));
                               }}
-                              className={styles.export}
+                              className={`${
+                                rowsLength?.length > 0 ||
+                                rowsLength?.data?.length > 0
+                                  ? styles.export
+                                  : styles.exportDisable
+                              } ${
+                                rowsLength?.length === 0 &&
+                                !rowsLength?.data?.length
+                                  ? styles.disabled
+                                  : ""
+                              }`}
                               disabled={
                                 rowsLength?.length > 0 ||
                                 rowsLength?.data?.length > 0
@@ -657,7 +667,12 @@ const Reports = ({
                                 padding: "10px",
                               }}
                             >
-                              <ExportImg />
+                              {rowsLength?.length > 0 ||
+                              rowsLength?.data?.length > 0 ? (
+                                <ExportImg />
+                              ) : (
+                                SVGICON.exportDisable
+                              )}
                               Export
                             </button>
                           </Tooltip>
