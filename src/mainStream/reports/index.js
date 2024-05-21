@@ -166,12 +166,12 @@ const Reports = ({
   const handleTabs = (name) => {
     setSelectedDates(null);
     setSelecteddateRanges([]);
-    localStorage.setItem("activeTab", name);
+
     dispatch(getActiveTab(name));
     setSearch();
     setSearchVal([]);
     setReportActiveTab(name);
-    localStorage.setItem("activeTab", name);
+ 
     if (name !== "Admin") {
       setSelectedData([]);
       setSelectAllCheckBoxes(false);
@@ -210,10 +210,6 @@ const Reports = ({
       (item) => item.field === "initialSearch"
     )?.search;
     setIsLoading(false);
-    const activeTabFromStorage = localStorage.getItem("activeTab");
-
-    const activeTab = activeTabFromStorage ? activeTabFromStorage : "Reviewer";
-    dispatch(getActiveTab(activeTab));
 
     if (reportActiveTab === "Sent") {
       sentReport({
@@ -526,6 +522,7 @@ const Reports = ({
                           </div>
                         </div>
                       </div>
+
                       {selectedData?.length > 0 &&
                         selectedData?.map((info) => (
                           <div className="col-xl-2">
@@ -612,7 +609,7 @@ const Reports = ({
                           reportActiveTab === "Team"
                             ? "8"
                             : reportActiveTab === "Reviewer"
-                            ? "8"
+                            ? "6"
                             : "2"
                         } d-flex justify-content-${
                           (reportActiveTab === "Audit" ||
@@ -661,12 +658,7 @@ const Reports = ({
                                 rowsLength?.data?.length > 0
                                   ? styles.export
                                   : styles.exportDisable
-                              } ${
-                                rowsLength?.length === 0 &&
-                                !rowsLength?.data?.length
-                                  ? styles.disabled
-                                  : ""
-                              }`}
+                              } `}
                               disabled={
                                 rowsLength?.length > 0 ||
                                 rowsLength?.data?.length > 0
