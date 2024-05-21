@@ -589,11 +589,13 @@ const Reports = ({
                             </div>
                           </div>
                         ))}
+                        {console.log(reportActiveTab)}
+                       
                         <div
                           className={`col-xl-${
-                            selectedData?.length === 0 || reportActiveTab==="Audit" ||
-                            reportActiveTab==="Team" ? "8" : "2"
-                          } d-flex justify-content-${(reportActiveTab==="Audit" || reportActiveTab==="Team" )&&"end"}`}
+                            selectedData?.length === 0 && reportActiveTab==="Audit" ||
+                            reportActiveTab==="Team" ? "8" : reportActiveTab==="Reviewer"?"6":"2"
+                          } d-flex justify-content-${(reportActiveTab==="Audit" || reportActiveTab==="Team" ||  reportActiveTab==="Reviewer")&&"end"}`}
                           >
                           {reportActiveTab === "Admin" && (
                           <div
@@ -612,8 +614,9 @@ const Reports = ({
                             />
                           </div>
                           )}
+                        
                           {!reportActiveTab || reportActiveTab === "Admin" || reportActiveTab==="Audit" ||
-                          reportActiveTab==="Team"? (
+                          reportActiveTab==="Team" ||  reportActiveTab==="Reviewer"? (
                             <Tooltip
                               title={
                                 rowsLength?.length === 0
@@ -648,7 +651,7 @@ const Reports = ({
                           ) : null}
                         </div>
 
-                      {!reportActiveTab || reportActiveTab === "Reviewer" ? (
+                      {/* {!reportActiveTab || reportActiveTab === "Reviewer" ? (
                         <div className="col-xl-6">
                           <div className="row flr">
                             <Tooltip
@@ -692,7 +695,7 @@ const Reports = ({
                             </Tooltip>
                           </div>
                         </div>
-                      ) : null}
+                      ) : null} */}
                     </div>
                   </div>
                 </div>
