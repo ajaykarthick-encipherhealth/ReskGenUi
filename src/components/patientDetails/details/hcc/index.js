@@ -26,7 +26,7 @@ import Image from "next/image";
 
 const { Option } = Select;
 
-const Hcc = ({ year }) => {
+const Hcc = ({ year ,setIsLoading}) => {
   const dispatch = useDispatch();
   const patientDosResult = useSelector(
     (state) => state?.ReviewerReducers?.patientDosList
@@ -165,6 +165,7 @@ const Hcc = ({ year }) => {
     }, 10000);
   }, [activeMeatTitle]);
   const handleOptions = (value) => {
+    setIsLoading(true);
     setSelectDosValue(value);
     const patientId = localStorage.getItem("patientId");
     if(value){

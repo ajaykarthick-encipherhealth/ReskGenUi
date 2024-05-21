@@ -2568,6 +2568,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                               <Hcc
                                 patientHccResult={patientDocumentResult}
                                 year={dosYearDefalutSelect}
+                                setIsLoading={setIsLoading}
                               />
                             ) : activeTab == 2 ? (
                               <NonHcc
