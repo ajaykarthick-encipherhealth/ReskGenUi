@@ -280,9 +280,9 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
             patientDetailsResult?.result?.response?.fileDetailDTO?.azureBlobPath
           )
         );
-        dispatch(
-          getDosPageNumber(patientDetailsResult?.result?.response?.fileId)
-        );
+        // dispatch(
+        //   getDosPageNumber(patientDetailsResult?.result?.response?.fileId)
+        // );
         setIsFileCheck(true);
       }
     }
@@ -317,7 +317,10 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
           dosYearArr[0].value
         )
       );
-      setIsSpinnerLoading(false);
+      dispatch(
+        getDosPageNumber(selectPatientId ? selectPatientId?.patirntId : patientId, dosYearArr[0].value)
+      );
+      // setIsSpinnerLoading(false);
     } catch (e) {
       setIsSpinnerLoading(true);
       setIsLoading(false);
@@ -894,6 +897,9 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
         getFlagListLastDetails(patientId, result.processedYear);
         setIsLoading(false);
         setPatientResultReload(true);
+        if(patientId == result.patientId){
+          setIsSpinnerLoading(false);
+        }
       } else {
         setPatientResultReload(true);
         setIsLoading(false);
@@ -988,6 +994,9 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
       )
     );
     dispatch(getPatientDetailsResultNew(localPatientId, e.value));
+    dispatch(
+      getDosPageNumber(localPatientId, e.value)
+    );
   };
 
   const submitSuggestedHcc = async (notes) => {

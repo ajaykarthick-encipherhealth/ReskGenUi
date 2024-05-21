@@ -84,7 +84,7 @@ export async function MeatQuery(dos,patientId) {
   const orgId = localStorage.getItem("orgId");
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/meatquery/getMeatQueryList?dosYear=${dos}&patientId=${patientId}`,
+      `${ENDPOINTS?.apiEndoint}dbservice/meatquery/getMeatQueryList?processedYear=${dos}&patientId=${patientId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -131,11 +131,11 @@ export async function HccFileDeatils(fileId) {
   } catch (err) {
   }
 }
-export async function DosPageNumber(fileId) {
+export async function DosPageNumber(patientId,year) {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/pageNumber/startAndStopPageNo?fileId=${fileId}`,
+      `${ENDPOINTS?.apiEndoint}dbservice/patient/compute/get/alldossummaries?patientId=${patientId}&processedYear=${year}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

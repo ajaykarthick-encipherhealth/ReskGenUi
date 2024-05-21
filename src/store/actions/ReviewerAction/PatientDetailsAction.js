@@ -185,7 +185,7 @@ import { PatientDetails,MeatQuery,SectionColor ,HccFileDeatils,DosPageNumber,Rad
     };
   };
 
-  export const getDosPageNumber = (fileId) => {
+  export const getDosPageNumber = (patientId,year) => {
     return (dispatch) => {
       dispatch({
         type: GET_DOS_PAGE,
@@ -194,7 +194,7 @@ import { PatientDetails,MeatQuery,SectionColor ,HccFileDeatils,DosPageNumber,Rad
         },
       });
       try {
-        DosPageNumber(fileId).then((response) => {
+        DosPageNumber(patientId,year).then((response) => {
           dispatch({
             type: GET_DOS_PAGE,
             payload: {
