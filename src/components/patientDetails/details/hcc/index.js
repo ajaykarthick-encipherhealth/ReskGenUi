@@ -148,7 +148,7 @@ const Hcc = ({ year }) => {
   const handleOptions = (value) => {
     console.log(moment(value).format("YYYY-MM-DD"));
     const patientId = localStorage.getItem("patientId");
-    dispatch(getPatientDetailsResultNew(patientId,null,moment(value).format("YYYY-MM-DD")+"T00:00:00.000Z"));
+    dispatch(getPatientDetailsResultNew(patientId,null,moment(value).format("YYYY-MM-DD")));
   };
   const handleChangePageNumber = async (value) => {
     setPopoverVisible(false);
