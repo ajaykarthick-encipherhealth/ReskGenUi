@@ -8,7 +8,7 @@ import Meat from "./meat";
 import RafScore from "./raf";
 import MeatQuery from "./meatQuery";
 import File from "./file";
-import { Button, Dropdown, Popover, Select, Menu, Tooltip ,Badge} from "antd";
+import { Button, Dropdown, Popover, Select, Menu, Tooltip, Badge } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faClose } from "@fortawesome/free-solid-svg-icons";
 import styles from "../hcc/styles.module.css";
@@ -18,7 +18,10 @@ import Completed from "../../../../../src/images/trackingImages/CompletedTrack.p
 import Pending from "../../../../../src/images/trackingImages/PendingTrack.png";
 import Hold from "../../../../../src/images/trackingImages/HoldTrack.png";
 import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
-import { getPatientDetailsResultNew, getPatientDosList } from "../../../../store/actions/ReviewerAction/PatientDetailsAction";
+import {
+  getPatientDetailsResultNew,
+  getPatientDosList,
+} from "../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import Image from "next/image";
 
 const { Option } = Select;
@@ -124,21 +127,31 @@ const Hcc = ({ year }) => {
   useEffect(() => {
     if (patientDosResult?.result?.response) {
       var dosList = [];
-      patientDosResult?.result?.response?.map((res,index) => {
-       var dosLable = (
-            <>
-              <div className="d-flex">
-                <span className={styles.dosLable}>{moment(res).format("MM-MM-YYYY")}</span>
-                <Image src={(index == 1 || index == 4) ?Completed : index == 2 ? Hold : Pending } className={styles.dosStatusIcon} />
-              </div>
-            </>
-          )
+      patientDosResult?.result?.response?.map((res, index) => {
+        var dosLable = (
+          <>
+            <div className="d-flex">
+              <span className={styles.dosLable}>
+                {moment(res).format("MM-MM-YYYY")}
+              </span>
+              <Image
+                src={
+                  index == 1 || index == 4
+                    ? Completed
+                    : index == 2
+                    ? Hold
+                    : Pending
+                }
+                className={styles.dosStatusIcon}
+              />
+            </div>
+          </>
+        );
         dosList.push({ value: res, label: dosLable });
       });
-      setDosSummariesList(dosList)
+      setDosSummariesList(dosList);
     }
   }, [patientDosResult?.result?.response]);
-
 
   useEffect(() => {
     setTimeout(() => {
@@ -146,9 +159,14 @@ const Hcc = ({ year }) => {
     }, 10000);
   }, [activeMeatTitle]);
   const handleOptions = (value) => {
-    console.log(moment(value).format("YYYY-MM-DD"));
     const patientId = localStorage.getItem("patientId");
-    dispatch(getPatientDetailsResultNew(patientId,null,moment(value).format("YYYY-MM-DD")));
+    dispatch(
+      getPatientDetailsResultNew(
+        patientId,
+        null,
+        moment(value).format("YYYY-MM-DD")
+      )
+    );
   };
   const handleChangePageNumber = async (value) => {
     setPopoverVisible(false);
@@ -213,8 +231,7 @@ const Hcc = ({ year }) => {
                       className={visitStyles.navColor}
                       onClick={() => selectTab(1)}
                     >
-                                                                                      File
-
+                      File
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item as="li" className="nav-item">
@@ -322,34 +339,30 @@ const Hcc = ({ year }) => {
                       </div>
                     </Popover>
                   )}
-                    {flagTagActive ? (
-                      <div>
+                  {flagTagActive ? (
+                    <div>
+                      <div className={visitStyles.flags}>
                         <div className={visitStyles.flags}>
-                          <div className={visitStyles.flags}>
-                            <span className={visitStyles.hccFlag}></span>
-                            <span className={visitStyles.flagCodes}>HCC</span>
-                          </div>
-                          <div className={visitStyles.flags}>
-                            <span className={visitStyles.suggestedFlag}></span>
-                            <span className={visitStyles.flagCodes}>
-                              SUGGESTED
-                            </span>
-                          </div>
-                          <div className={visitStyles.flags}>
-                            <span className={visitStyles.deleteFlag}></span>
-                            <span className={visitStyles.flagCodes}>
-                              DELETED
-                            </span>
-                          </div>
-                          <div className={visitStyles.flags}>
-                            <span className={visitStyles.nonhccFlag}></span>
-                            <span className={visitStyles.flagCodes}>
-                              NON HCC
-                            </span>
-                          </div>
+                          <span className={visitStyles.hccFlag}></span>
+                          <span className={visitStyles.flagCodes}>HCC</span>
+                        </div>
+                        <div className={visitStyles.flags}>
+                          <span className={visitStyles.suggestedFlag}></span>
+                          <span className={visitStyles.flagCodes}>
+                            SUGGESTED
+                          </span>
+                        </div>
+                        <div className={visitStyles.flags}>
+                          <span className={visitStyles.deleteFlag}></span>
+                          <span className={visitStyles.flagCodes}>DELETED</span>
+                        </div>
+                        <div className={visitStyles.flags}>
+                          <span className={visitStyles.nonhccFlag}></span>
+                          <span className={visitStyles.flagCodes}>NON HCC</span>
                         </div>
                       </div>
-                    ) : null}
+                    </div>
+                  ) : null}
                 </Nav>
               </div>
             </div>
