@@ -132,7 +132,7 @@ const Hcc = ({ year }) => {
           <>
             <div className="d-flex">
               <span className={styles.dosLable}>
-                {moment(res).format("MM-MM-YYYY")}
+                {moment(res).format("MM-DD-YYYY")}
               </span>
               <Image
                 src={
