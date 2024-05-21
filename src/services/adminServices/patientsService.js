@@ -21,7 +21,7 @@ export const PatientsList = async (
   try {
     const response = await axios.get(
       `  ${
-        ENDPOINTS?.apiEndoint
+        ENDPOINTS?.apiEndointProduction
       }dbservice/patient/admin/computation/filter?page=${pageNo}&size=15&userId=${uId}&isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${filteredStatus}&searchString=${search}&createdStartDate=${createdStartDate}&createdEndDate=${createdEndDate}&patientCreatedBy=${
         selAllocatedBy === "All" ? "" : selAllocatedBy
       }&patientAllocatedTo=${

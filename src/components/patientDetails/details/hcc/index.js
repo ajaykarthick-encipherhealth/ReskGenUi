@@ -8,7 +8,7 @@ import Meat from "./meat";
 import RafScore from "./raf";
 import MeatQuery from "./meatQuery";
 import File from "./file";
-import { Button, Dropdown, Popover, Select, Menu, Tooltip } from "antd";
+import { Button, Dropdown, Popover, Select, Menu, Tooltip ,Badge} from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faClose } from "@fortawesome/free-solid-svg-icons";
 import styles from "../hcc/styles.module.css";
@@ -18,7 +18,7 @@ import Completed from "../../../../../src/images/trackingImages/CompletedTrack.p
 import Pending from "../../../../../src/images/trackingImages/PendingTrack.png";
 import Hold from "../../../../../src/images/trackingImages/HoldTrack.png";
 import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
-import { getPatientDosList } from "../../../../store/actions/ReviewerAction/PatientDetailsAction";
+import { getPatientDetailsResultNew, getPatientDosList } from "../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import Image from "next/image";
 
 const { Option } = Select;
@@ -128,7 +128,7 @@ const Hcc = ({ year }) => {
   const handleOptions = (value) => {
     console.log(moment(value).format("YYYY-MM-DD"));
     const patientId = localStorage.getItem("patientId");
-    dispatch(getPatientDosList(patientId, moment(value).format("YYYY-MM-DD")));
+    dispatch(getPatientDetailsResultNew(patientId,format("YYYY-MM-DD") + "T00:00:00.000Z"));
   };
   const handleChangePageNumber = async (value) => {
     setPopoverVisible(false);
@@ -193,7 +193,8 @@ const Hcc = ({ year }) => {
                       className={visitStyles.navColor}
                       onClick={() => selectTab(1)}
                     >
-                      File
+                                                                                      File
+
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item as="li" className="nav-item">

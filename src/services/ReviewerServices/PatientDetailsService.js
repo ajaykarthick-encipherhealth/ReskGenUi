@@ -23,10 +23,13 @@ export async function PatientDetails(patientId,year) {
   }
 }
 
-export async function PatientDetailsNew(patientId,year) {
+export async function PatientDetailsNew(patientId,year,dos) {
   const token = localStorage.getItem("token");
   const orgId = localStorage.getItem("orgId");
    var apiurl = `patientId=${patientId}&processedYear=${year}` 
+   if(dos){
+    apiurl = `patientId=${patientId}&dateOfService=${dos}` 
+   }
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndointProduction}dbservice/patient/compute/get?`+apiurl,

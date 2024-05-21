@@ -429,6 +429,9 @@ export const handleSubmitValidNotes = async ({
   if (isValidAction.name == "Move to HCC" && isValidAction.title == "DELETED") {
     apiURL = "dbservice/update/move/deletedtovalid";
   }
+  if (isValidAction.name == "Move to Hcc" && isValidAction.title == "NONHCC") {
+    apiURL = "dbservice/update/move/invalidtovalid";
+  }
   try {
     var patientId = localStorage.getItem("patientId");
     var userId = localStorage.getItem("userId");
@@ -765,7 +768,7 @@ export const getCaptureSectionBackgroundMeatNew = (
   setSelectMeatResult,
   meatresult
 ) => {
-  return value.map((res) => {
+  return value?.map((res) => {
     const result = captureSectionMatching?.filter(
       (res2) => res2.sectionName === res.header
     );

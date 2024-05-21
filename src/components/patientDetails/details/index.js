@@ -79,15 +79,15 @@ export const navigetPageDetails = async (
   var orgId = localStorage.getItem("orgId");
   if (pageTitle == "HCC" && patientId) {
     setActiveTab(1);
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
-    );
-    if (response.data) {
-      var result = response.data.response;
-      setPatientDocumentResult(result);
-    }
-    setActiveTab(1);
+    // const response = await axios.get(
+    //   ENDPOINTS.apiEndoint +
+    //     `dbservice/patient/compute/get?patientid=${patientId}&orgid=${orgId}`
+    // );
+    // if (response.data) {
+    //   var result = response.data.response;
+    //   setPatientDocumentResult(result);
+    // }
+    // setActiveTab(1);
   }
   if (pageTitle == "NON HCC") {
     setActiveTab(2);
@@ -267,7 +267,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
     if (patientDetailsResult?.result?.response?.processedYear) {
       dispatch(
         getPatientDosList(
-          "eh-20203",
+          selectPatientId ? selectPatientId?.patirntId : patientId,
           patientDetailsResult?.result?.response?.processedYear
         )
       );
@@ -295,8 +295,8 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   }, [patientDetailsResult?.result?.response?.fileDetailDTO?.azureBlobPath]);
 
   const getAllProcessYear = async () => {
-    // const patientId = localStorage.getItem("patientId");
-    var patientId = "eh-20203";
+    const patientId = localStorage.getItem("patientId");
+    // var patientId = "eh-20203";
     try {
       const result = await axios.get(
         ENDPOINTS.apiEndointProduction +
@@ -725,7 +725,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const dosOnChange = async (e) => {
     setPatientResultReload(false);
     setIsLoading(true);
-    dispatch(getPatientDetailsResultNew("eh-20203", e.value));
+    dispatch(getPatientDetailsResultNew(localPatientId, e.value));
   };
 
   const submitSuggestedHcc = async (notes) => {

@@ -146,7 +146,8 @@ export const getPatientDetails = async (
   sectionColorList,
   setAllDisList,
   setComboDiseaseCodesList,
-  setDosSummariesList
+  setDosSummariesList,
+  setNonHccDiseasesList
 ) => {
   if (patientDetailsResult?.result?.response) {
     var result = patientDetailsResult?.result?.response;
@@ -199,15 +200,29 @@ export const getPatientDetails = async (
       });
 
       result?.nonHccDiseases?.map((res, index) => {
+        var providerList = [];
+        res.providerNames?.map((res) => {
+          providerList.push(res);
+        });
         nonHccDisArray.push({
           actualDescription: res.actualDescription,
           capturedSections: res.capturedSections,
           diagnosisCode: res.diagnosisCode,
           encounterDate: res.encounterDate,
-          encounterDateSplit: res.dateOfServices,
+          encounterDateSplit:  res.dateOfServices,
           isManuallyAdded: res.isManuallyAdded,
           isHccValid: res.isHccValid,
           defaultPosition: res.defaultPosition,
+          providerName: providerList,
+          dbDescription: res.dbDescription,
+          isMostSpecific: res.isMostSpecific,
+          children: res.children,
+          dbDescription: res.dbDescription,
+          isCmsHcc: res.isCmsHcc,
+          isRxHcc: res.isRxHcc,
+          providerDeatils: res.provider,
+          isComboCode: res.isComboCode,
+          notes: res.notes,
           hyperlinks: res?.hyperlinks,
         });
       });
@@ -300,13 +315,12 @@ export const getPatientDetails = async (
             hyperlinks: res?.hyperlinks,
           });
       });
-
       setNewValidDiseaseList && setNewValidDiseaseList(hccDisArray);
       setSuggestedHccList && setSuggestedHccList(suggestListAll);
+      setNonHccDiseasesList&& setNonHccDiseasesList(nonHccDisArray);
       setDeletedHccList && setDeletedHccList(deleteHccList);
       setComboDiseaseCodesList && setComboDiseaseCodesList(combiDisArray);
       setDosSummariesList && setDosSummariesList(result?.dosSummaries);
-
       var capturedSectionsColorsMatching = [];
       var capturedSectionsArr = [];
 
