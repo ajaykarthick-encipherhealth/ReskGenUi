@@ -319,24 +319,310 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
       );
     } catch (e) {
       setIsLoading(false);
-    }  };
+    }
+  };
 
   const getPatientIdDetails = async (patientId, flagFirstData) => {
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint + `dbservice/patient/get?patientId=${patientId}`
-    );
-    setPatienIdDetails(response.data.response);
-    var result = response.data.response;
-    var data = [
-      {
-        id: result?.patientId,
-        name: result?.patientName,
-      },
-    ];
-    setSelectedRowsId(data);
-    const menu = (
-      <Menu>
-        {result?.processedStatus != "HOLD" ? (
+    try {
+      const response = await axios.get(
+        ENDPOINTS.apiEndoint + `dbservice/patient/get?patientId=${patientId}`
+      );
+      setPatienIdDetails(response.data.response);
+      var result = response.data.response;
+      var data = [
+        {
+          id: result?.patientId,
+          name: result?.patientName,
+        },
+      ];
+      setSelectedRowsId(data);
+      const menu = (
+        <Menu>
+          {result?.processedStatus != "HOLD" ? (
+            <Menu.Item
+              key="1"
+              onClick={() => {
+                handleActionClick("HOLD");
+                setMenuIsOpen(false);
+              }}
+            >
+              <div className="patient-status">
+                <span className={`badge hold-text`}>HOLD</span>
+              </div>
+            </Menu.Item>
+          ) : null}
+          {result?.processedStatus != "PENDING" &&
+          result?.processedStatus != "COMPUTED" ? (
+            <Menu.Item
+              key="2"
+              onClick={() => {
+                handleActionClick("PENDING");
+                setMenuIsOpen(false);
+              }}
+            >
+              <div className="patient-status">
+                <span className={`badge processing-text`}>PENDING</span>
+              </div>
+            </Menu.Item>
+          ) : null}
+          {result?.processedStatus != "DECLINED" ? (
+            <Menu.Item
+              key="3"
+              disabled={flagFirstData?.flag !== undefined ? false : true}
+              onClick={() => {
+                handleActionClick("DECLINE");
+                setMenuIsOpen(false);
+              }}
+            >
+              <Tooltip
+                title={
+                  flagFirstData?.flag === undefined &&
+                  "Add flag to disable Decline"
+                }
+              >
+                <div className="patient-status">
+                  <span
+                    className={`badge failed-text`}
+                    style={{ color: "red" }}
+                  >
+                    DECLINE
+                  </span>
+                </div>
+              </Tooltip>
+            </Menu.Item>
+          ) : null}
+
+          {result?.processedStatus != "COMPLETED" ? (
+            <Menu.Item
+              key="4"
+              onClick={() => {
+                handleActionClick("COMPLETE");
+                setMenuIsOpen(false);
+              }}
+            >
+              <div className="patient-status">
+                <span className={`badge processed-text`}>COMPLETED</span>
+              </div>
+            </Menu.Item>
+          ) : null}
+        </Menu>
+      );
+
+      const menu2 = (
+        <Menu>
+          {result?.processedStatus != "HOLD" ? (
+            <Menu.Item
+              key="1"
+              onClick={() => {
+                handleActionClick("HOLD");
+                setMenuIsOpen(false);
+              }}
+            >
+              <div className="patient-status">
+                <span className={`badge hold-text`}>HOLD</span>
+              </div>
+            </Menu.Item>
+          ) : null}
+          {result?.processedStatus != "PENDING" ? (
+            <Menu.Item
+              key="2"
+              onClick={() => {
+                handleActionClick("PENDING");
+                setMenuIsOpen(false);
+              }}
+            >
+              <div className="patient-status">
+                <span className={`badge processing-text`}>PENDING</span>
+              </div>
+            </Menu.Item>
+          ) : null}
+          {result?.processedStatus != "DECLINE" ? (
+            <Menu.Item
+              key="3"
+              onClick={() => {
+                handleActionClick("DECLINE");
+                setMenuIsOpen(false);
+              }}
+              disabled={flagFirstData?.flag !== undefined ? false : true}
+            >
+              <Tooltip
+                title={
+                  flagFirstData?.flag === undefined &&
+                  "Add flag to disable Decline"
+                }
+              >
+                <div className="patient-status">
+                  <span
+                    className={`badge failed-text`}
+                    style={{ color: "red" }}
+                  >
+                    DECLINED
+                  </span>
+                </div>
+              </Tooltip>
+            </Menu.Item>
+          ) : null}
+
+          {result?.processedStatus != "COMPLETE" ? (
+            <Menu.Item
+              key="4"
+              onClick={() => {
+                handleActionClick("COMPLETE");
+                setMenuIsOpen(false);
+              }}
+            >
+              <div className="patient-status">
+                <span className={`badge processed-text`}>COMPLETED</span>
+              </div>
+            </Menu.Item>
+          ) : null}
+          <Menu.Item
+            key="5"
+            onClick={() => {
+              handleActionClick("ADD RADIOLOGY");
+              setMenuIsOpen(false);
+            }}
+          >
+            <div className="patient-status">
+              <span className={`badge  ${visitStyles.add_text}`}>
+                + ADD RADIOLOGY
+              </span>
+            </div>
+          </Menu.Item>
+        </Menu>
+      );
+      const menu3 = (
+        <Menu>
+          {result?.processedStatus != "HOLD" ? (
+            <Menu.Item
+              key="1"
+              onClick={() => {
+                handleActionClick("HOLD");
+                setMenuIsOpen(false);
+              }}
+            >
+              <div className="patient-status">
+                <span className={`badge hold-text`}>HOLD</span>
+              </div>
+            </Menu.Item>
+          ) : null}
+          {result?.processedStatus != "PENDING" ? (
+            <Menu.Item
+              key="2"
+              onClick={() => {
+                handleActionClick("PENDING");
+                setMenuIsOpen(false);
+              }}
+            >
+              <div className="patient-status">
+                <span className={`badge processing-text`}>PENDING</span>
+              </div>
+            </Menu.Item>
+          ) : null}
+          {result?.processedStatus != "DECLINE" ? (
+            <Menu.Item
+              key="3"
+              onClick={() => {
+                handleActionClick("DECLINE");
+                setMenuIsOpen(false);
+              }}
+              disabled={flagFirstData?.flag !== undefined ? false : true}
+            >
+              <Tooltip
+                title={
+                  flagFirstData?.flag === undefined &&
+                  "Add flag to disable Decline"
+                }
+              >
+                <div className="patient-status">
+                  <span
+                    className={`badge failed-text`}
+                    style={{ color: "red" }}
+                  >
+                    DECLINE
+                  </span>
+                </div>
+              </Tooltip>
+            </Menu.Item>
+          ) : null}
+
+          {result?.processedStatus != "COMPLETE" ? (
+            <Menu.Item
+              key="4"
+              onClick={() => {
+                handleActionClick("COMPLETE");
+                setMenuIsOpen(false);
+              }}
+            >
+              <div className="patient-status">
+                <span className={`badge processed-text`}>COMPLETED</span>
+              </div>
+            </Menu.Item>
+          ) : null}
+          <Menu.Item
+            key="5"
+            onClick={() => {
+              handleActionClick("ADD LAB");
+              setMenuIsOpen(false);
+            }}
+          >
+            <div className="patient-status">
+              <span className={`badge  ${visitStyles.add_text}`}>
+                + ADD LAB
+              </span>
+            </div>
+          </Menu.Item>
+        </Menu>
+      );
+      const menu4 = (
+        <Menu>
+          {result?.allocatedOn == null && (
+            <Menu.Item
+              key="4"
+              onClick={() => {
+                allocatePatient();
+                setMenuIsOpen(false);
+              }}
+            >
+              <div className="patient-status">
+                <span className={`badge processed-text`}>ALLOCATE</span>
+              </div>
+            </Menu.Item>
+          )}
+          <Menu.Item
+            key="5"
+            onClick={() => {
+              handleActionClick("ADD RADIOLOGY");
+              setMenuIsOpen(false);
+            }}
+          >
+            <div className="patient-status">
+              <span className={`badge  ${visitStyles.add_text}`}>
+                + ADD RADIOLOGY
+              </span>
+            </div>
+          </Menu.Item>
+          <Menu.Item
+            key="6"
+            onClick={() => {
+              handleActionClick("ADD LAB");
+              setMenuIsOpen(false);
+            }}
+          >
+            <div className="patient-status">
+              <span className={`badge processing-text`}>+ ADD LAB</span>
+            </div>
+          </Menu.Item>
+        </Menu>
+      );
+
+      setActionItems(menu);
+      setActionItems2(menu2);
+      setActionItems3(menu3);
+      setAdminActionItems(menu4);
+    } catch (e) {
+      const menu = (
+        <Menu>
           <Menu.Item
             key="1"
             onClick={() => {
@@ -348,9 +634,6 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
               <span className={`badge hold-text`}>HOLD</span>
             </div>
           </Menu.Item>
-        ) : null}
-        {result?.processedStatus != "PENDING" &&
-        result?.processedStatus != "COMPUTED" ? (
           <Menu.Item
             key="2"
             onClick={() => {
@@ -362,8 +645,6 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
               <span className={`badge processing-text`}>PENDING</span>
             </div>
           </Menu.Item>
-        ) : null}
-        {result?.processedStatus != "DECLINED" ? (
           <Menu.Item
             key="3"
             disabled={flagFirstData?.flag !== undefined ? false : true}
@@ -385,9 +666,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
               </div>
             </Tooltip>
           </Menu.Item>
-        ) : null}
 
-        {result?.processedStatus != "COMPLETED" ? (
           <Menu.Item
             key="4"
             onClick={() => {
@@ -399,13 +678,11 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
               <span className={`badge processed-text`}>COMPLETED</span>
             </div>
           </Menu.Item>
-        ) : null}
-      </Menu>
-    );
+        </Menu>
+      );
 
-    const menu2 = (
-      <Menu>
-        {result?.processedStatus != "HOLD" ? (
+      const menu2 = (
+        <Menu>
           <Menu.Item
             key="1"
             onClick={() => {
@@ -417,8 +694,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
               <span className={`badge hold-text`}>HOLD</span>
             </div>
           </Menu.Item>
-        ) : null}
-        {result?.processedStatus != "PENDING" ? (
+
           <Menu.Item
             key="2"
             onClick={() => {
@@ -430,8 +706,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
               <span className={`badge processing-text`}>PENDING</span>
             </div>
           </Menu.Item>
-        ) : null}
-        {result?.processedStatus != "DECLINE" ? (
+
           <Menu.Item
             key="3"
             onClick={() => {
@@ -453,9 +728,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
               </div>
             </Tooltip>
           </Menu.Item>
-        ) : null}
 
-        {result?.processedStatus != "COMPLETE" ? (
           <Menu.Item
             key="4"
             onClick={() => {
@@ -467,25 +740,23 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
               <span className={`badge processed-text`}>COMPLETED</span>
             </div>
           </Menu.Item>
-        ) : null}
-        <Menu.Item
-          key="5"
-          onClick={() => {
-            handleActionClick("ADD RADIOLOGY");
-            setMenuIsOpen(false);
-          }}
-        >
-          <div className="patient-status">
-            <span className={`badge  ${visitStyles.add_text}`}>
-              + ADD RADIOLOGY
-            </span>
-          </div>
-        </Menu.Item>
-      </Menu>
-    );
-    const menu3 = (
-      <Menu>
-        {result?.processedStatus != "HOLD" ? (
+          <Menu.Item
+            key="5"
+            onClick={() => {
+              handleActionClick("ADD RADIOLOGY");
+              setMenuIsOpen(false);
+            }}
+          >
+            <div className="patient-status">
+              <span className={`badge  ${visitStyles.add_text}`}>
+                + ADD RADIOLOGY
+              </span>
+            </div>
+          </Menu.Item>
+        </Menu>
+      );
+      const menu3 = (
+        <Menu>
           <Menu.Item
             key="1"
             onClick={() => {
@@ -497,8 +768,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
               <span className={`badge hold-text`}>HOLD</span>
             </div>
           </Menu.Item>
-        ) : null}
-        {result?.processedStatus != "PENDING" ? (
+
           <Menu.Item
             key="2"
             onClick={() => {
@@ -510,8 +780,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
               <span className={`badge processing-text`}>PENDING</span>
             </div>
           </Menu.Item>
-        ) : null}
-        {result?.processedStatus != "DECLINE" ? (
+
           <Menu.Item
             key="3"
             onClick={() => {
@@ -533,9 +802,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
               </div>
             </Tooltip>
           </Menu.Item>
-        ) : null}
 
-        {result?.processedStatus != "COMPLETE" ? (
           <Menu.Item
             key="4"
             onClick={() => {
@@ -547,23 +814,10 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
               <span className={`badge processed-text`}>COMPLETED</span>
             </div>
           </Menu.Item>
-        ) : null}
-        <Menu.Item
-          key="5"
-          onClick={() => {
-            handleActionClick("ADD LAB");
-            setMenuIsOpen(false);
-          }}
-        >
-          <div className="patient-status">
-            <span className={`badge  ${visitStyles.add_text}`}>+ ADD LAB</span>
-          </div>
-        </Menu.Item>
-      </Menu>
-    );
-    const menu4 = (
-      <Menu>
-        {result?.allocatedOn == null && (
+        </Menu>
+      );
+      const menu4 = (
+        <Menu>
           <Menu.Item
             key="4"
             onClick={() => {
@@ -575,38 +829,38 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
               <span className={`badge processed-text`}>ALLOCATE</span>
             </div>
           </Menu.Item>
-        )}
-        <Menu.Item
-          key="5"
-          onClick={() => {
-            handleActionClick("ADD RADIOLOGY");
-            setMenuIsOpen(false);
-          }}
-        >
-          <div className="patient-status">
-            <span className={`badge  ${visitStyles.add_text}`}>
-              + ADD RADIOLOGY
-            </span>
-          </div>
-        </Menu.Item>
-        <Menu.Item
-          key="6"
-          onClick={() => {
-            handleActionClick("ADD LAB");
-            setMenuIsOpen(false);
-          }}
-        >
-          <div className="patient-status">
-            <span className={`badge processing-text`}>+ ADD LAB</span>
-          </div>
-        </Menu.Item>
-      </Menu>
-    );
+          <Menu.Item
+            key="5"
+            onClick={() => {
+              handleActionClick("ADD RADIOLOGY");
+              setMenuIsOpen(false);
+            }}
+          >
+            <div className="patient-status">
+              <span className={`badge  ${visitStyles.add_text}`}>
+                + ADD RADIOLOGY
+              </span>
+            </div>
+          </Menu.Item>
+          <Menu.Item
+            key="6"
+            onClick={() => {
+              handleActionClick("ADD LAB");
+              setMenuIsOpen(false);
+            }}
+          >
+            <div className="patient-status">
+              <span className={`badge processing-text`}>+ ADD LAB</span>
+            </div>
+          </Menu.Item>
+        </Menu>
+      );
 
-    setActionItems(menu);
-    setActionItems2(menu2);
-    setActionItems3(menu3);
-    setAdminActionItems(menu4);
+      setActionItems(menu);
+      setActionItems2(menu2);
+      setActionItems3(menu3);
+      setAdminActionItems(menu4);
+    }
   };
 
   const statuses = ["PENDING", "COMPLETED", "HOLD", "DECLINED"];
@@ -1671,20 +1925,19 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
 
   return (
     <>
-     
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
         <NavBar />
         <div className={visitStyles.headerFixed}>
           <div class="content-body">
-          {isLoading ? (
-        <div className={styles.overlay_style}>
-          <div className={styles.overlay__inner_style}>
-            <div className={styles.overlay__content_style}>
-              <span className={styles.spinner_style}></span>
-            </div>
-          </div>
-        </div>
-      ) : null}
+            {isLoading ? (
+              <div className={styles.overlay_style}>
+                <div className={styles.overlay__inner_style}>
+                  <div className={styles.overlay__content_style}>
+                    <span className={styles.spinner_style}></span>
+                  </div>
+                </div>
+              </div>
+            ) : null}
             {sectionColorList?.loading == true ? (
               <SpinnerDots />
             ) : (
@@ -2302,22 +2555,22 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                         </div>
 
                         <div className={`${visitStyles.secondContainer}`}>
-                            <>
-                              {activeTab == 1 ? (
-                                <Hcc
-                                  patientHccResult={patientDocumentResult}
-                                  year={dosYearDefalutSelect}
-                                />
-                              ) : activeTab == 2 ? (
-                                <NonHcc
-                                  patientNonHccResult={patientDocumentResult}
-                                />
-                              ) : activeTab == 3 ? (
-                                <Radiology />
-                              ) : (
-                                <Lab />
-                              )}
-                            </>
+                          <>
+                            {activeTab == 1 ? (
+                              <Hcc
+                                patientHccResult={patientDocumentResult}
+                                year={dosYearDefalutSelect}
+                              />
+                            ) : activeTab == 2 ? (
+                              <NonHcc
+                                patientNonHccResult={patientDocumentResult}
+                              />
+                            ) : activeTab == 3 ? (
+                              <Radiology />
+                            ) : (
+                              <Lab />
+                            )}
+                          </>
                         </div>
 
                         <div className={`${visitStyles.thirdContainer}`}>
