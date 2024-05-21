@@ -37,7 +37,7 @@ import {
 import TeamReport from "./teamReport";
 
 const statusOptions = [
-  { label: "All", value: "ALL" },
+  { label: "All", value: "" },
   { label: "Completed", value: "COMPLETED" },
   { label: "Pending", value: "PENDING" },
   { label: "Declined", value: "DECLINED" },
@@ -78,7 +78,7 @@ const Reports = ({
   // const TeamReportDetails = useSelector(
   //   (state) => state.AuditReport?.teamDetails
   // );
-  console.log(selectUserList, "jhj");
+
   const [isLoading, setIsLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
@@ -271,8 +271,8 @@ const Reports = ({
 
       teamReport({
         pagenum: teamPageNo,
-        startDate: selectedDateRanges?.TeamReport?.from,
-        endDate: selectedDateRanges?.TeamReport?.to,
+        startDate: selectedDateRanges?.Team?.from,
+        endDate: selectedDateRanges?.Team?.to,
         search: coderSearchString ? coderSearchString : "",
         sort: sort,
       });
@@ -426,7 +426,7 @@ const Reports = ({
       options: optionsUser,
     },
   ];
-  console.log(auditeReportLoading, "admin");
+
   return (
     <div>
       <Header />
@@ -611,12 +611,13 @@ const Reports = ({
                             </div>
                           </div>
                         ))}
-                      {reportActiveTab === "Admin" && (
                         <div
                           className={`col-xl-${
-                            selectedData?.length === 0 ? "8" : "2"
-                          } d-flex`}
-                        >
+                            selectedData?.length === 0 || reportActiveTab==="Audit" ||
+                            reportActiveTab==="Team" ? "8" : "2"
+                          } d-flex justify-content-${(reportActiveTab==="Audit" || reportActiveTab==="Team" )&&"end"}`}
+                          >
+                          {reportActiveTab === "Admin" && (
                           <div
                             className={`col-xl-${
                               selectedData?.length === 0 ? "10" : "0"
@@ -632,7 +633,9 @@ const Reports = ({
                               setSelectedData={setSelectedData}
                             />
                           </div>
-                          {!reportActiveTab || reportActiveTab === "Admin" ? (
+                          )}
+                          {!reportActiveTab || reportActiveTab === "Admin" || reportActiveTab==="Audit" ||
+                          reportActiveTab==="Team"? (
                             <Tooltip
                               title={
                                 rowsLength?.length === 0
@@ -666,7 +669,6 @@ const Reports = ({
                             </Tooltip>
                           ) : null}
                         </div>
-                      )}
 
                       {!reportActiveTab || reportActiveTab === "Reviewer" ? (
                         <div className="col-xl-6">
