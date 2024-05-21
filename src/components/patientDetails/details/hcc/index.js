@@ -31,6 +31,9 @@ const Hcc = ({ year }) => {
   const patientDosResult = useSelector(
     (state) => state?.ReviewerReducers?.patientDosList
   );
+  const patientDetailsResult = useSelector(
+    (state) => state?.ReviewerReducers?.patientDetails
+  );
   const [activeTabHead, setActiveTabHead] = useState(1);
   const [flagTagActive, setFlagTagActive] = useState(false);
   const [popoverVisible, setPopoverVisible] = useState(false);
@@ -40,6 +43,8 @@ const Hcc = ({ year }) => {
   const [search, setSearch] = useState();
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [dosSummariesList, setDosSummariesList] = useState([]);
+  const [selectDosValue, setSelectDosValue] = useState([]);
+
 
   const handleActionClick = () => {};
 
@@ -126,6 +131,7 @@ const Hcc = ({ year }) => {
 
   useEffect(() => {
     if (patientDosResult?.result?.response) {
+      setSelectDosValue([]);
       var dosList = [];
       patientDosResult?.result?.response?.map((res, index) => {
         var dosLable = (
@@ -159,14 +165,26 @@ const Hcc = ({ year }) => {
     }, 10000);
   }, [activeMeatTitle]);
   const handleOptions = (value) => {
+    setSelectDosValue(value);
     const patientId = localStorage.getItem("patientId");
-    dispatch(
-      getPatientDetailsResultNew(
-        patientId,
-        null,
-        moment(value).format("YYYY-MM-DD")
-      )
-    );
+    if(value){
+      dispatch(
+        getPatientDetailsResultNew(
+          patientId,
+          null,
+          moment(value).format("YYYY-MM-DD")
+        )
+      );
+    }else{
+      dispatch(
+        getPatientDetailsResultNew(
+          patientId,
+          patientDetailsResult?.result?.response?.processedYear,
+          null
+        )
+      );
+    }
+   
   };
   const handleChangePageNumber = async (value) => {
     setPopoverVisible(false);
@@ -290,6 +308,8 @@ const Hcc = ({ year }) => {
                       placeholder="Select DOS"
                       onChange={handleOptions}
                       className="dosSelect"
+                      allowClear
+                      value={selectDosValue}
                     >
                       {dosSummariesList?.map((data) => (
                         <Option key={data?.value} value={data?.value}>

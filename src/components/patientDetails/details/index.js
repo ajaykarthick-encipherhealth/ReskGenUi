@@ -977,6 +977,12 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const dosOnChange = async (e) => {
     setPatientResultReload(false);
     setIsLoading(true);
+    dispatch(
+      getPatientDosList(
+        localPatientId,
+        e.value
+      )
+    );
     dispatch(getPatientDetailsResultNew(localPatientId, e.value));
   };
 
