@@ -2160,9 +2160,9 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                       >
                         <div className={`${visitStyles.rafscoreheader} `}>
                           <label>Score</label>
-                          {patientDetails?.rafScore != null ? (
+                          {patientDetails.rafScore?.score != null ? (
                             <h6 className="ageDtails">
-                              {(patientDetails.rafScore?.score).toFixed(3)}
+                              {(patientDetails.rafScore?.score)?.toFixed(3)}
                             </h6>
                           ) : (
                             <h6 className="ageDtails">0.00</h6>
