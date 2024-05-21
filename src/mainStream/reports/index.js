@@ -11,7 +11,7 @@ import { Modal, DatePicker, Tooltip } from "antd";
 import ExportImg from "../../images/svg/Export";
 import { debounce } from "../../../src/pages/admin/reports/Export";
 import { disableFutureDate } from "../../components/headerFilters/functions";
-import { patientDetails } from "../../stores/authflow/actions";
+import { checkAutoLogin, patientDetails } from "../../stores/authflow/actions";
 import { connect, useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import InitialCard from "../../mainStream/reports/initialReport";
@@ -63,7 +63,7 @@ const Reports = ({
   auditReport,
   TeamReportDetails,
   teamReport,
-  auditeReportLoading
+  auditeReportLoading,
 }) => {
   const dispatch = useDispatch();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
@@ -73,7 +73,7 @@ const Reports = ({
     (state) => state.report?.details
   );
   const selectUserList = useSelector(
-    (state) => state?.AdminDashboardReducers?.selectedUsers
+    (state) => state?.adminReport?.selectedUsers
   );
   // const TeamReportDetails = useSelector(
   //   (state) => state.AuditReport?.teamDetails
@@ -218,6 +218,7 @@ const Reports = ({
         sort: sort,
       });
     } else if (activeTab === "Admin") {
+      console.log(selectedOptions);
       dispatch(
         getReportDetails(
           pageNo,
@@ -317,7 +318,7 @@ const Reports = ({
     const nameString = name?.split(" ").join("");
     setSelectedOptions((prevOptions) => ({
       ...prevOptions,
-      [nameString]: selectedOption?.value,
+      [nameString]: selectedOption,
     }));
   };
 
@@ -370,7 +371,7 @@ const Reports = ({
   const tabs = getTabsForRole(currentRole);
 
   useEffect(() => {
-    if (selectedOptions?.UserRole?.label) {
+    if (selectedOptions?.UserRole?.value) {
       dispatch(getSelectUserListReport(selectedOptions?.UserRole?.value));
     }
   }, [selectedOptions?.UserRole]);
@@ -380,7 +381,6 @@ const Reports = ({
       value: res.userName,
       label: res.firstName + " " + res.lastName,
     })) || [];
-
   if (optionsUser.length > 0) {
     optionsUser.unshift({ value: "", label: "All" });
   }
@@ -531,7 +531,7 @@ const Reports = ({
                                 {info?.isSelect ? (
                                   <Select
                                     onChange={(selectedOption) => {
-                                      dosOnChange(selectedOption, info.name);
+                                      dosOnChange(selectedOption, info?.name);
                                     }}
                                     options={
                                       info?.name === "User"
@@ -590,13 +590,23 @@ const Reports = ({
                           </div>
                         ))}
 
-                        <div
-                          className={`col-xl-${
-                            selectedData?.length === 0 && reportActiveTab==="Audit" ||
-                            reportActiveTab==="Team" ? "8" : reportActiveTab==="Reviewer"?"6":"2"
-                          } d-flex justify-content-${(reportActiveTab==="Audit" || reportActiveTab==="Team" ||  reportActiveTab==="Reviewer")&&"end"}`}
-                          >
-                          {reportActiveTab === "Admin" && (
+                      <div
+                        className={`col-xl-${
+                          selectedData?.length === 0 ||
+                          reportActiveTab === "Audit" ||
+                          reportActiveTab === "Team"
+                            ? "8"
+                            : reportActiveTab === "Reviewer"
+                            ? "8"
+                            : "2"
+                        } d-flex justify-content-${
+                          (reportActiveTab === "Audit" ||
+                            reportActiveTab === "Team" ||
+                            reportActiveTab === "Reviewer") &&
+                          "end"
+                        }`}
+                      >
+                        {reportActiveTab === "Admin" && (
                           <div
                             className={`col-xl-${
                               selectedData?.length === 0 ? "10" : "0"
@@ -612,43 +622,47 @@ const Reports = ({
                               setSelectedData={setSelectedData}
                             />
                           </div>
-                          )}
-                        
-                          {!reportActiveTab || reportActiveTab === "Admin" || reportActiveTab==="Audit" ||
-                          reportActiveTab==="Team" ||  reportActiveTab==="Reviewer"? (
-                            <Tooltip
-                              title={
-                                rowsLength?.length === 0
-                                  ? "Select report to export"
-                                  : ""
+                        )}
+
+                        {!reportActiveTab ||
+                        reportActiveTab === "Admin" ||
+                        reportActiveTab === "Audit" ||
+                        reportActiveTab === "Team" ||
+                        reportActiveTab === "Reviewer" ? (
+                          <Tooltip
+                            title={
+                              rowsLength?.length === 0
+                                ? "Select report to export"
+                                : ""
+                            }
+                          >
+                            <button
+                              onClick={() => {
+                                setIsModalVisible(true);
+                                dispatch(selectedReport(null));
+                              }}
+                              className={styles.export}
+                              disabled={
+                                rowsLength?.length > 0 ||
+                                rowsLength?.data?.length > 0
+                                  ? false
+                                  : true
                               }
-                            >
-                              <button
-                                onClick={() => {
-                                  setIsModalVisible(true);
-                                  dispatch(selectedReport(null));
-                                }}
-                                className={styles.export}
-                                disabled={
+                              style={{
+                                color:
                                   rowsLength?.length > 0 ||
                                   rowsLength?.data?.length > 0
-                                    ? false
-                                    : true
-                                }
-                                style={{
-                                  color:
-                                    rowsLength?.length > 0 ||
-                                    rowsLength?.data?.length > 0
-                                      ? "#04306f"
-                                      : "inherit",
-                                }}
-                              >
-                                <ExportImg />
-                                Export
-                              </button>
-                            </Tooltip>
-                          ) : null}
-                        </div>
+                                    ? "#04306f"
+                                    : "inherit",
+                                padding: "10px",
+                              }}
+                            >
+                              <ExportImg />
+                              Export
+                            </button>
+                          </Tooltip>
+                        ) : null}
+                      </div>
 
                       {/* {!reportActiveTab || reportActiveTab === "Reviewer" ? (
                         <div className="col-xl-6">
@@ -868,7 +882,7 @@ const enhancer = connect(
     sentReport: reviewerAction.sentReport,
     receivedReport: reviewerAction.receivedReport,
     teamReport: supervisorAction.teamReport,
-    auditReport: supervisorAction.auditReport
+    auditReport: supervisorAction.auditReport,
   }
 );
 export default enhancer(Reports);
