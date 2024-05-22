@@ -300,9 +300,9 @@ const HccCards = ({
                             {cardTitle == "SUGGESTED" ||
                             cardTitle == "DELETED" ? (
                               <>
-                                {"VALID" ? (
+                                {data.defaultPosition == "VALID" ? (
                                   <span
-                                    className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange} mx-2`}
+                                    className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange} mx-2`}
                                   ></span>
                                 ) : data.defaultPosition == "INVALID" ? (
                                   <span
