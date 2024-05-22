@@ -239,8 +239,8 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
 
   useEffect(() => {
     getAllProcessYear();
-    const patientId = localStorage.getItem("patientId");
-    dispatch(getAllSectionColor());
+    // const patientId = localStorage.getItem("patientId");
+    // dispatch(getAllSectionColor());
     // dispatch(
     //   getPatientDetailsResult(
     //     selectPatientId ? selectPatientId?.patirntId : patientId
@@ -304,15 +304,15 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
       setDosYearDefalutSelect(dosYearArr[0]);
       setSelectedDosValue(dosYearArr[0].value);
       setDosYear(dosYearArr);
-      setIsLoadingDos(false);
-        dispatch(
-          getPatientDosList(
-            selectPatientId ? selectPatientId?.patirntId : patientId,
-            dosYearArr[0].value
-          )
-        );
+      setIsLoadingDos(false);       
       dispatch(
         getPatientDetailsResultNew(
+          selectPatientId ? selectPatientId?.patirntId : patientId,
+          dosYearArr[0].value
+        )
+      );
+      dispatch(
+        getPatientDosList(
           selectPatientId ? selectPatientId?.patirntId : patientId,
           dosYearArr[0].value
         )
@@ -873,6 +873,9 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
     setHccValidCount(0);
     if (patientDetailsResult?.result?.response) {
       var result = patientDetailsResult?.result?.response;
+      if(patientId == result.patientId){
+        setIsSpinnerLoading(false);
+      }
       dispatch(getMeatQueryList(result?.processedYear, patientId));
       setPatientDocumentResult(result);
       setPatientDetails(result);
@@ -896,10 +899,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
         setNewValidDiseaseList(validDisArray);
         // getFlagListLastDetails(patientId, result.processedYear);
         setIsLoading(false);
-        setPatientResultReload(true);
-        if(patientId == result.patientId){
-          setIsSpinnerLoading(false);
-        }
+        setPatientResultReload(true);      
       } else {
         setPatientResultReload(true);
         setIsLoading(false);
@@ -1958,9 +1958,9 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                 </div>
               </div>
             ) : null}
-            {sectionColorList?.loading == true ? (
+            {/* {sectionColorList?.loading == true ? (
               <SpinnerDots />
-            ) : (
+            ) : ( */}
               <div
                 className={`container-fluid ${visitStyles.container_fluid_patient}`}
               >
@@ -3380,7 +3380,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                   ) : null}
                 </div>
               </div>
-            )}
+            {/* )} */}
             {/* <Footer/> */}
           </div>}
         </div>

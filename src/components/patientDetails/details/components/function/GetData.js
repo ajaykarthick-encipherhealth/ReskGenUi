@@ -380,17 +380,17 @@ export const getPatientDetails = async (
         });
       });
 
-      var sectionColorResult = sectionColorList.result?.response;
+      // var sectionColorResult = sectionColorList.result?.response;
 
-      let sectionColorResultMatch = sectionColorResult?.filter((o1) =>
-        dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
-      );
-      let sectionColorResultNotMatch = dublicateSectionArr.filter(
-        (o1) => !sectionColorResult?.some((o2) => o1.name === o2.sectionName)
-      );
+      // let sectionColorResultMatch = sectionColorResult?.filter((o1) =>
+      //   dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
+      // );
+      // let sectionColorResultNotMatch = dublicateSectionArr.filter(
+      //   (o1) => !sectionColorResult?.some((o2) => o1.name === o2.sectionName)
+      // );
 
       var notMatchColorArray = [];
-      sectionColorResultNotMatch?.map((res, index) => {
+      dublicateSectionArr?.map((res, index) => {
         var radomColorcode = stringToColour(res.name);
         var randomColorChangeShadow = radomColorcode + 33;
         notMatchColorArray.push({
@@ -398,7 +398,7 @@ export const getPatientDetails = async (
           backgroundColor: randomColorChangeShadow,
           sectionColor: radomColorcode,
         });
-        submitSectionColors(res.name, radomColorcode, randomColorChangeShadow);
+        // submitSectionColors(res.name, radomColorcode, randomColorChangeShadow);
       });
 
       var encounterDateColorsMatching = [];
@@ -550,14 +550,14 @@ export const getPatientDetails = async (
       }
       });
 
-      let sectionColorResultMatchMeat = sectionColorResult?.filter((o1) =>
-        meatHeaderList.some((o2) => o1.sectionName === o2.name)
-      );
-      let sectionColorResultNotMatchMeat = meatHeaderList.filter(
-        (o1) => !sectionColorResult?.some((o2) => o1.name === o2.sectionName)
-      );
+      // let sectionColorResultMatchMeat = sectionColorResult?.filter((o1) =>
+      //   meatHeaderList.some((o2) => o1.sectionName === o2.name)
+      // );
+      // let sectionColorResultNotMatchMeat = meatHeaderList.filter(
+      //   (o1) => !sectionColorResult?.some((o2) => o1.name === o2.sectionName)
+      // );
       var notMatchColorArrayMeat = [];
-      sectionColorResultNotMatchMeat?.map((res, index) => {
+      meatHeaderList?.map((res, index) => {
         var radomColorcode = stringToColour(res.name);
         var randomColorChangeShadow = radomColorcode + 33;
         notMatchColorArrayMeat.push({
@@ -565,19 +565,19 @@ export const getPatientDetails = async (
           backgroundColor: randomColorChangeShadow,
           sectionColor: radomColorcode,
         });
-        submitSectionColors(
-          res.name,
-          radomColorcode,
-          randomColorChangeShadow
-        );
+        // submitSectionColors(
+        //   res.name,
+        //   radomColorcode,
+        //   randomColorChangeShadow
+        // );
       });
 
       var newArrayColorMatchs = [];
       newArrayColorMatchs = [
-        ...sectionColorResult,
-        ...sectionColorResultMatch,
+        // ...sectionColorResult,
+        // ...sectionColorResultMatch,
         ...notMatchColorArray,
-        ...sectionColorResultMatchMeat,
+        // ...sectionColorResultMatchMeat,
         ...notMatchColorArrayMeat,
       ];
 
