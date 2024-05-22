@@ -1942,11 +1942,12 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
 
   return (
     <>
-     {isSpinnerLoading ?
-      <SpinnerDots />:
+    
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
         <NavBar />
         <div className={visitStyles.headerFixed}>
+        {isSpinnerLoading ?
+      <SpinnerDots />:
           <div class="content-body">
             {isLoading ? (
               <div className={styles.overlay_style}>
@@ -3381,9 +3382,9 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
               </div>
             )}
             {/* <Footer/> */}
-          </div>
+          </div>}
         </div>
-      </div>}
+      </div>
 
       {confirmAuditModal ? (
         <div className={visitStyles.completedModal}>
