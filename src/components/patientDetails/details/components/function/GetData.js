@@ -229,7 +229,7 @@ export const getPatientDetails = async (
         });
       });
 
-      result?.suggestedDisease?.map((res, index) => {
+      result?.suggestedHccDiseases?.map((res, index) => {
         if (res.isShow != false) {
           var providerList = [];
           var dosList = [];
@@ -360,7 +360,7 @@ export const getPatientDetails = async (
             diagnosisCode: res?.diagnosisCode,
           });
         });
-        res.providerNames?.map((res2, index) => {
+        res.providerName?.map((res2, index) => {
           if (res2) {
             capturedSectionsArr?.push({
               name: res2,
@@ -419,7 +419,7 @@ export const getPatientDetails = async (
         });
       });
 
-      result?.suggestedDiseases?.map((res) => {
+      result?.suggestedHccDiseases?.map((res) => {
         res?.dateOfServices.map((res2) => {
           encounterDateArr.push({
             name: res2,
