@@ -1942,6 +1942,8 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
 
   return (
     <>
+     {isSpinnerLoading ?
+      <SpinnerDots />:
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
         <NavBar />
         <div className={visitStyles.headerFixed}>
@@ -1955,7 +1957,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                 </div>
               </div>
             ) : null}
-            {isSpinnerLoading ? (
+            {sectionColorList?.loading == true ? (
               <SpinnerDots />
             ) : (
               <div
@@ -3381,7 +3383,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
             {/* <Footer/> */}
           </div>
         </div>
-      </div>
+      </div>}
 
       {confirmAuditModal ? (
         <div className={visitStyles.completedModal}>
