@@ -329,18 +329,18 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
 
   const getPatientIdDetails = async (patientId, flagFirstData) => {
     try {
-      const response = await axios.get(
-        ENDPOINTS.apiEndoint + `dbservice/patient/get?patientId=${patientId}`
-      );
-      setPatienIdDetails(response.data.response);
-      var result = response.data.response;
-      var data = [
-        {
-          id: result?.patientId,
-          name: result?.patientName,
-        },
-      ];
-      setSelectedRowsId(data);
+      // // const response = await axios.get(
+      // //   ENDPOINTS.apiEndoint + `dbservice/patient/get?patientId=${patientId}`
+      // // );
+      // setPatienIdDetails(response.data.response);
+      // var result = response.data.response;
+      // var data = [
+      //   {
+      //     id: result?.patientId,
+      //     name: result?.patientName,
+      //   },
+      // ];
+      // setSelectedRowsId(data);
       const menu = (
         <Menu>
           {result?.processedStatus != "HOLD" ? (
@@ -894,7 +894,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
           isRxHcc: rxHcc.length > 0 ? rxHcc.length : 0,
         });
         setNewValidDiseaseList(validDisArray);
-        getFlagListLastDetails(patientId, result.processedYear);
+        // getFlagListLastDetails(patientId, result.processedYear);
         setIsLoading(false);
         setPatientResultReload(true);
         if(patientId == result.patientId){

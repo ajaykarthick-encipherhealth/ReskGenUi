@@ -506,6 +506,7 @@ export const getPatientDetails = async (
             hyperlinks: res?.hyperlinks,
           });
         } else {
+          if(res.isShow != false){
           var providerList = [];
           var dosList = [];
           res.providerNames?.map((res) => {
@@ -546,6 +547,7 @@ export const getPatientDetails = async (
             hyperlinks: res?.hyperlinks,
           });
         }
+      }
       });
 
       let sectionColorResultMatchMeat = sectionColorResult?.filter((o1) =>
