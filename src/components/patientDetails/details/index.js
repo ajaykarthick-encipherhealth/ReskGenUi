@@ -873,6 +873,9 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
     setHccValidCount(0);
     if (patientDetailsResult?.result?.response) {
       var result = patientDetailsResult?.result?.response;
+      if(patientId == result.patientId){
+        setIsSpinnerLoading(false);
+      }
       dispatch(getMeatQueryList(result?.processedYear, patientId));
       setPatientDocumentResult(result);
       setPatientDetails(result);
@@ -896,10 +899,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
         setNewValidDiseaseList(validDisArray);
         // getFlagListLastDetails(patientId, result.processedYear);
         setIsLoading(false);
-        setPatientResultReload(true);
-        if(patientId == result.patientId){
-          setIsSpinnerLoading(false);
-        }
+        setPatientResultReload(true);      
       } else {
         setPatientResultReload(true);
         setIsLoading(false);
