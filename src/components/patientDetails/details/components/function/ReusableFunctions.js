@@ -19,7 +19,6 @@ export const getEncounterDateBackground = ({
   patientDocumentResult,
   selectMeatResult,
   datas,
-  dosSummariesList,
 }) => {
   return value?.map((res) => {
     const result = encounterDateMatching.filter((res2) => res2.name == res);
