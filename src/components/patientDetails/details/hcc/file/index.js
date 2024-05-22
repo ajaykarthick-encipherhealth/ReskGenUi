@@ -186,32 +186,7 @@ const File = ({
   };
 
   const getFileDosPageNumber = async () => {
-    var result = fileDosPageNumberList?.result;
-    var groupPageNumber = [];
-    var groupEncounterDate = [];
-    for (var key in result?.response) {
-      var optionArray = [];
-      var optionPage = [];
-      var pageNumbervalue = result.response[key];
-      for (var key2 in pageNumbervalue) {
-        var startPage = key2 == "first" ? pageNumbervalue[key2] : null;
-        var keyValue = key2 == "first" ? "Start - " : "End - ";
-        optionArray.push({
-          label: keyValue + " " + pageNumbervalue[key2],
-          value: pageNumbervalue[key2] + "," + moment(key).format("MM/DD"),
-        });
-        if (startPage) {
-          optionPage.push({
-            pageNumber: startPage,
-          });
-        }
-      }
-      groupPageNumber.push({
-        label: moment(key).format("MM-DD-YYYY"),
-        options: optionArray,
-      });
-    }
-    setPageNumberOptions(groupPageNumber);
+    setPageNumberOptions(fileDosPageNumberList?.result?.response);
   };
 
  

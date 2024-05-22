@@ -109,21 +109,21 @@ const Combo = ({ activeComboTree }) => {
 
   const dosSummariesList = [
     {
-      "dos": "2023-09-30",
-      "startPageNumber": 4,
-      "endPageNumber": 4
+      dos: "2023-09-30",
+      startPageNumber: 4,
+      endPageNumber: 4,
     },
     {
-      "dos": "2023-03-29",
-      "startPageNumber": 5,
-      "endPageNumber": 10
+      dos: "2023-03-29",
+      startPageNumber: 5,
+      endPageNumber: 10,
     },
     {
-      "dos": "2023-10-11",
-      "startPageNumber": 1,
-      "endPageNumber": 3
-    }
-  ]
+      dos: "2023-10-11",
+      startPageNumber: 1,
+      endPageNumber: 3,
+    },
+  ];
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -161,122 +161,12 @@ const Combo = ({ activeComboTree }) => {
     );
   }, [patientDetailsResult]);
 
-  // useEffect(() => {
-  //   let patientId = localStorage.getItem("patientId");
-  //   setLocalPatientId(patientId);
-  //   getPatientDetails();
-  // }, [patientDetailsResult]);
-
   useEffect(() => {
     if (hccFileDetails?.result?.response) {
       setSelectFileURL(hccFileDetails?.result?.response);
     }
   }, [hccFileDetails]);
 
-  useEffect(() => {
-    if (findFileKeyword) {
-      setTimeout(() => {
-        setFileModalHeader(fileModalTitle);
-        if (fileInitialPage != null) {
-          setTargetPages(
-            (targetPage) =>
-              targetPage.pageIndex === fileInitialPage ||
-              targetPage.pageIndex === fileInitialPage + 1 ||
-              targetPage.pageIndex === fileInitialPage + 2
-          );
-        } else {
-          setTargetPages(null);
-        }
-        highlight({
-          keyword: findFileKeyword,
-        });
-        setTimeout(() => {
-          setFileLoading(false);
-        }, 1000);
-      }, 1000);
-    }
-  }, [fileInitialPage, findFileKeyword, fileModalTitle]);
-
-  // const getPatientDetails = async () => {
-  //   if (patientDetailsResult?.result?.response) {
-  //     let result = patientDetailsResult?.result?.response;
-  //     setPatientDocumentResult(result);
-  //     if (result?.comboDisease) {
-  //       let combiDisArray = [];
-  //       if (result?.comboDisease) {
-  //         result?.comboDisease.map((res, index) => {
-  //           let providerList = [];
-  //           // res.providers?.map((res, index) => {
-  //           //   providerList.push(res.providerName);
-  //           // });
-  //           res.providerNames?.map((res2) => {
-  //             providerList.push(res2);
-  //           });
-  //           const encounterDatearray = res?.encounterDate?.split(",");
-  //           combiDisArray.push({
-  //             addOnCode: res.addOnCode,
-  //             addOnCodeTwo: res.addOnCodeTwo,
-  //             addOnCodeThree: res.addOnCodeThree,
-  //             addOnCodes: [res.addOnCode, res.addOnCodeTwo, res.addOnCodeThree],
-  //             diagnosisCodeCombo: res.diagnosisCodeCombo,
-  //             diseaseName: res.diseaseName,
-  //             diagnosisCode: res.diagnosisCode,
-  //             encounterDate: res.encounterDate,
-  //             encounterDateSplit: encounterDatearray,
-  //             providerName: providerList,
-  //             providers: res.provider ? res.providers : res.provider,
-  //             ruleType: res.ruleType,
-  //             capturedSections: res.capturedSections,
-  //             children: res.children ? res.children : [],
-  //             expanded: true,
-  //             hyperlinks:res?.hyperlinks
-  //           });
-  //         });
-  //       }
-  //       setPatientFileDTO(result?.fileDetailDTO);
-  //       setComboDiseaseCodesList(combiDisArray);
-  //       const COLORS3 = [
-  //         "encounterDateTag1",
-  //         "encounterDateTag2",
-  //         "encounterDateTag3",
-  //         "encounterDateTag4",
-  //         "encounterDateTag5",
-  //         "encounterDateTag6",
-  //         "encounterDateTag7",
-  //         "encounterDateTag8",
-  //         "encounterDateTag9",
-  //         "encounterDateTag10",
-  //       ];
-  //       let encounterDateColorsMatching = [];
-  //       let encounterDateArr = [];
-
-  //       result?.comboDisease?.map((res) => {
-  //         const array = res?.encounterDate?.split(",");
-  //         array?.map((res2) => {
-  //           encounterDateArr?.push({
-  //             name: res2,
-  //           });
-  //         });
-  //       });
-  //       let encounterDateArrDublicatesRemove = getUniqueListBy(
-  //         encounterDateArr,
-  //         "name"
-  //       );
-  //       encounterDateArrDublicatesRemove.map((res, index) => {
-  //         encounterDateColorsMatching.push({
-  //           name: res.name,
-  //           colors: COLORS3[index],
-  //         });
-  //       });
-  //       setEncounterDateMatching(encounterDateColorsMatching);
-  //       setCaptureSectionMatching(sectionColorList.result?.response);
-  //     }
-  //   }
-  // };
-
-  function getUniqueListBy(arr, key) {
-    return [...new Map(arr.map((item) => [item[key], item])).values()];
-  }
 
   const confirmComboInvalid = () =>
     new Promise((resolve) => {
@@ -330,166 +220,6 @@ const Combo = ({ activeComboTree }) => {
     setFileLoading(false);
   };
 
-  const findValueDocuments = async (
-    value,
-    disDescription,
-    headerNames,
-    encounterDate,
-    actualDescription,
-    diagnosisCode
-  ) => {
-    setFileLoading(true);
-    let fileId = patientFileDTO.fileId;
-    const encounterDatesValue = encounterDate.split(",");
-    let splitPoint = actualDescription;
-    let pageNumber = null;
-    let data = {
-      fileId: fileId,
-      header: headerNames,
-      dos: encounterDatesValue,
-      stringFileWord: splitPoint,
-      diagnosisCode: diagnosisCode,
-    };
-    try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/pageNumber`,
-        data
-      );
-      let result = response.data.response;
-      if (response?.data?.status == "SUCCESS") {
-        pageNumber = result?.second[0] ? result?.second[0] : null;
-        if (!result?.first) {
-          splitPoint = headerNames;
-        }
-        if (pageNumber == fileInitialPage) {
-          setFileLoading(false);
-          notification.warning({
-            message: "This detail also same page",
-            placement: "top",
-            duration: 1,
-          });
-        }
-        setSearch({
-          value: splitPoint,
-          page: pageNumber,
-          headers: false,
-          headerContent: headerNames,
-        });
-        setFileInitialPage(pageNumber);
-      } else {
-        splitPoint = headerNames;
-        setFileInitialPage(null);
-      }
-      setTargetPages(
-        (targetPage) =>
-          targetPage.pageIndex === pageNumber ||
-          targetPage.pageIndex === pageNumber + 1 ||
-          targetPage.pageIndex === pageNumber + 2
-      );
-      setFindFileKeyword(splitPoint);
-      if (findFileKeyword == splitPoint) {
-        setFileLoading(false);
-      }
-    } catch (error) {
-      splitPoint = headerNames;
-      if (findFileKeyword == headerNames) {
-        setFileLoading(false);
-      }
-      setSearch({
-        value: splitPoint,
-        headers: true,
-        headerContent: headerNames,
-      });
-      setFindFileKeyword(splitPoint);
-      setFileInitialPage(null);
-    }
-  };
-
-  const findValueDocument = async (
-    value,
-    disDescription,
-    headerNames,
-    encounterDate,
-    actualDescription,
-    diagnosisCode
-  ) => {
-    setIsModalOpenCaptureSection(true);
-    let headerName =
-      patientDocumentResult.patientId +
-      " / " +
-      patientDocumentResult.patientName +
-      " / " +
-      diagnosisCode +
-      " - (" +
-      headerNames +
-      ")";
-    setFileModalTitle(headerName);
-    setFileLoading(true);
-    let fileId = patientFileDTO.fileId;
-    const encounterDatesValue = encounterDate.split(",");
-    let splitPoint;
-    let pageNumber = null;
-    let data = {
-      fileId: fileId,
-      header: headerNames,
-      dos: encounterDatesValue,
-      stringFileWord: actualDescription,
-      diagnosisCode: diagnosisCode,
-    };
-    try {
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint + `dbservice/pageNumber/latest`,
-        data
-      );
-      let result = response.data.response;
-      if (response?.data?.status == "SUCCESS") {
-        pageNumber = result?.pageNumber - 1 ? result?.pageNumber - 1 : null;
-        splitPoint = result?.searchString;
-        if (result == null) {
-          return findValueDocuments(
-            value,
-            disDescription,
-            headerNames,
-            encounterDate,
-            actualDescription,
-            diagnosisCode
-          );
-        }
-        if (pageNumber == fileInitialPage) {
-          setFileLoading(false);
-          notification.warning({
-            message: "This detail also same page",
-            placement: "top",
-            duration: 1,
-          });
-        }
-        setSearch({
-          value: splitPoint,
-          page: result?.pageNumber,
-          headers: false,
-          headerContent: headerNames,
-        });
-        setFileInitialPage(pageNumber);
-      } else {
-        splitPoint = headerNames;
-        setFileInitialPage(null);
-      }
-      setTargetPages((targetPage) => {
-        targetPage.pageIndex === pageNumber;
-      });
-      setFindFileKeyword(splitPoint);
-      if (findFileKeyword == splitPoint) {
-        setFileLoading(false);
-      }
-    } catch (error) {
-      splitPoint = headerNames;
-      if (findFileKeyword == headerNames) {
-        setFileLoading(false);
-      }
-      setFindFileKeyword(splitPoint);
-      setFileInitialPage(null);
-    }
-  };
   const handleChangeSuggested = async (e) => {
     const key = e.target.name;
     const value = e.target.value;
@@ -510,83 +240,6 @@ const Combo = ({ activeComboTree }) => {
 
     return output;
   }
-
-  // const getCaptureSectionBackgroundFile = (
-  //   value,
-  //   encounterDate,
-  //   actualDescription,
-  //   diagnosisCode
-  // ) => {
-  //   let dublicateCaptureDelete = removeDuplicates(value);
-  //   return dublicateCaptureDelete.map((res) => {
-  //     const result = captureSectionMatching.filter(
-  //       (res2) => res2.sectionName == res
-  //     );
-  //     let backColor = result[0]?.backgroundColor;
-  //     let textColor = result[0]?.sectionColor;
-  //     let disCode = result[0]?.diagnosisCode;
-  //     let headerNames = result[0]?.sectionName;
-  //     let sectionMapArr = (
-  //       <span
-  //         onClick={() =>
-  //           findValueDocument(
-  //             disCode,
-  //             res,
-  //             headerNames,
-  //             encounterDate,
-  //             actualDescription,
-  //             diagnosisCode
-  //           )
-  //         }
-  //         style={{ backgroundColor: backColor, color: textColor }}
-  //         className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
-  //       >
-  //         {res}
-  //       </span>
-  //     );
-  //     return sectionMapArr;
-  //   });
-  // };
-
-  // const getCaptureSectionBackground = (
-  //   value,
-  //   documentPlace,
-  //   encounterDate,
-  //   actualDescription,
-  //   testModal,
-  //   diagnosisCode
-  // ) => {
-  //   let dublicateCaptureDelete = removeDuplicates(value);
-  //   return dublicateCaptureDelete.map((res) => {
-  //     const result = captureSectionMatching.filter(
-  //       (res2) => res2.sectionName == res
-  //     );
-  //     let backColor = result[0]?.backgroundColor;
-  //     let textColor = result[0]?.sectionColor;
-  //     let disCode = diagnosisCode;
-  //     let headerNames = result[0]?.sectionName;
-
-  //     let sectionMapArr = (
-  //       <span
-  //         onClick={() =>
-  //           findValueDocument(
-  //             disCode,
-  //             actualDescription,
-  //             headerNames,
-  //             encounterDate,
-  //             actualDescription,
-  //             disCode
-  //           )
-  //         }
-  //         style={{ backgroundColor: backColor, color: textColor }}
-  //         className={`cr-pointer mt-2 text-start ${visitStyles.captureheader}`}
-  //       >
-  //         {res}
-  //       </span>
-  //     );
-  //     return sectionMapArr;
-  //   });
-  // };
 
   const addComboCode = () => {
     setIsAddComboCode(true);
@@ -789,7 +442,8 @@ const Combo = ({ activeComboTree }) => {
                                     setFileModalHeader: setFileModalHeader,
                                     patientDocumentResult:
                                       patientDocumentResult,
-                                      dosSummariesList:dosSummariesList
+                                    fileDosPageNumberList:
+                                      fileDosPageNumberList,
                                   })}
                                 </div>
                                 <div

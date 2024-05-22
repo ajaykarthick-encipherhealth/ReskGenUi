@@ -26,7 +26,7 @@ import Image from "next/image";
 
 const { Option } = Select;
 
-const Hcc = ({ year ,setIsLoading}) => {
+const Hcc = ({ year, setIsLoading }) => {
   const dispatch = useDispatch();
   const patientDosResult = useSelector(
     (state) => state?.ReviewerReducers?.patientDosList
@@ -46,7 +46,7 @@ const Hcc = ({ year ,setIsLoading}) => {
   const [selectDosValue, setSelectDosValue] = useState([]);
 
 
-  const handleActionClick = () => {};
+  const handleActionClick = () => { };
 
   const dropdownMenu = (
     <Menu>
@@ -145,8 +145,8 @@ const Hcc = ({ year ,setIsLoading}) => {
                   index == 1 || index == 4
                     ? Completed
                     : index == 2
-                    ? Hold
-                    : Pending
+                      ? Hold
+                      : Pending
                 }
                 className={styles.dosStatusIcon}
               />
@@ -168,7 +168,7 @@ const Hcc = ({ year ,setIsLoading}) => {
     setIsLoading(true);
     setSelectDosValue(value);
     const patientId = localStorage.getItem("patientId");
-    if(value){
+    if (value) {
       dispatch(
         getPatientDetailsResultNew(
           patientId,
@@ -176,7 +176,7 @@ const Hcc = ({ year ,setIsLoading}) => {
           moment(value).format("YYYY-MM-DD")
         )
       );
-    }else{
+    } else {
       dispatch(
         getPatientDetailsResultNew(
           patientId,
@@ -185,21 +185,19 @@ const Hcc = ({ year ,setIsLoading}) => {
         )
       );
     }
-   
+
   };
   const handleChangePageNumber = async (value) => {
-    setPopoverVisible(false);
-    var str_array = value.split(",");
-    var pageNumber = str_array[0];
+    // setPopoverVisible(false);
     setSearch({
       value: "",
-      page: pageNumber,
+      page: value,
     });
   };
   const PopContent = (
     <div className={styles.innerPop}>
       <div className={styles.displayDiv}>
-        {/* <div className={styles.closeContainer}>
+        <div className={styles.closeContainer}>
           <FontAwesomeIcon
             icon={faClose}
             style={{
@@ -209,27 +207,35 @@ const Hcc = ({ year ,setIsLoading}) => {
             className={styles.close_icon}
             onClick={() => setPopoverVisible(false)}
           />
-        </div> */}
+        </div>
         {pageNumberOptions
           ? pageNumberOptions?.map((data) => (
-              <div className={styles.hoverDiv}>
-                <div className={`row ${styles.selectDetailsContainer}`}>
-                  <div className="col-xl-3">
-                    <span className={styles.selectHead}>{data.label}</span>
-                  </div>
-                  {data?.options.map((data2) => (
-                    <div className={`col-xl-3 ${styles.selectDetailsDiv}`}>
-                      <span
-                        onClick={() => handleChangePageNumber(data2.value)}
-                        className={styles.selectDetails}
-                      >
-                        {data2?.label}
-                      </span>
-                    </div>
-                  ))}
+            <div className={styles.hoverDiv}>
+              <div className={`row ${styles.selectDetailsContainer}`}>
+                <div className="col-xl-3">
+                  <span className={styles.selectHead}>{moment(data.dos).format("MM-DD-YYYY")}</span>
+                </div>
+                <div className={`col-xl-3 ${styles.selectDetailsDiv}`}>
+                  <span
+                    onClick={() => handleChangePageNumber(data.startPageNumber)}
+                    className={styles.selectDetails}
+                  >
+                    Start -  {data?.startPageNumber}
+                  </span>
+
+                </div>
+                <div className={`col-xl-3 ${styles.selectDetailsDiv}`}>
+
+                  <span
+                    onClick={() => handleChangePageNumber(data.endPagNumber)}
+                    className={styles.selectDetails}
+                  >
+                    End - {data?.endPagNumber}
+                  </span>
                 </div>
               </div>
-            ))
+            </div>
+          ))
           : null}
       </div>
     </div>
@@ -339,13 +345,13 @@ const Hcc = ({ year ,setIsLoading}) => {
                   </Nav.Item>
                   {activeTabHead == 1 && (
                     <Popover
-                      // open={popoverVisible}
+                      open={popoverVisible}
                       content={PopContent}
                       placement="bottom"
                       trigger={"click"}
-                      // onOpenChange={() => setPopoverVisible(false)}
+                      onOpenChange={() => setPopoverVisible(false)}
                     >
-                      <div className={styles.dosContainer}>
+                      <div className={styles.dosContainer} onClick={() => { setPopoverVisible(true) }}>
                         <span className={styles.dosPageNumber}>
                           Select Dos Page Number
                         </span>

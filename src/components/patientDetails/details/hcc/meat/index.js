@@ -401,11 +401,11 @@ const Meat = ({ activeMeatTitle, year }) => {
                             fileDosPageNumberList: fileDosPageNumberList,
                             setIsModalOpenValidCodes: setIsModalOpen,
                             setSearch: setSearch,
-                            setFileModalHeader: setMeatModalTitle,
+                            setFileModalHeader: setFileModalHeader,
                             patientDocumentResult: patientDocumentResult,
                             selectMeatResult: setSelectMeatResult,
                             datas: item,
-                            dosSummariesList:dosSummariesList
+                            fileDosPageNumberList:fileDosPageNumberList
                           })}
                         </div>
                       </div>

@@ -29,7 +29,7 @@ export const getEncounterDateBackground = ({
         onClick={() =>
           getEncounterDetails(
             res,
-            dosSummariesList,
+            fileDosPageNumberList,
             setIsModalOpenValidCodes,
             setSearch,
             setFileModalHeader,
@@ -55,7 +55,7 @@ export const getEncounterDateBackground = ({
 
 const getEncounterDetails = async (
   date,
-  dosSummariesList,
+  fileDosPageNumberList,
   setIsModalOpenValidCodes,
   setSearch,
   setFileModalHeader,
@@ -64,10 +64,9 @@ const getEncounterDetails = async (
   datas
 ) => {
   selectMeatResult ? selectMeatResult(datas) : "";
-  const findPageNumber = dosSummariesList.filter(
+  const findPageNumber = fileDosPageNumberList?.result?.response?.filter(
     (i) =>
-      moment(i.dos.date).format("MM-DD-YYYY") ===
-      moment(date).format("MM-DD-YYYY")
+      moment(i.dos).format("MM-DD-YYYY") === moment(date).format("MM-DD-YYYY")
   );
   if (findPageNumber.length != 0) {
     if (setIsModalOpenValidCodes) {
@@ -82,7 +81,7 @@ const getEncounterDetails = async (
       setFileModalHeader(headerName);
     }
     setSearch({
-      value: "DOS: " + moment(findPageNumber[0]?.dos).format("MM/DD/YYYY"),
+      value: moment(findPageNumber[0]?.dos).format("MM/DD/YYYY"),
       page: findPageNumber[0]?.startPageNumber,
     });
   }
@@ -287,7 +286,7 @@ export const getCaptureSectionBackgroundFile = (
       //   {res}
       // </span>
     );
-    if(res != ""){
+    if (res != "") {
       return sectionMapArr;
     }
   });
@@ -801,7 +800,7 @@ export const getCaptureSectionBackgroundMeatNew = (
         {res.header}
       </span>
     );
-    if(res.header != ""){
+    if (res.header != "") {
       return sectionMapArr;
     }
   });
