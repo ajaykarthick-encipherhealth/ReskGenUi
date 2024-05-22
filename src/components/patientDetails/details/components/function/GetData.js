@@ -452,6 +452,11 @@ export const getPatientDetails = async (
       var nonHccMeatListArr = [];
 
       result?.meatCriteria?.map((res, index) => {
+        res.providerNames?.map((res) => {
+          meatMoniterHead.push({
+            name: res,
+          });
+        });
           res?.monitorHyperLink?.map((res2, index) => {
             meatMoniterHead.push({
               name: res2.header,
