@@ -119,17 +119,17 @@ export const getPatientLabDetails = async (
           });
         });
 
-        var sectionColorResult = sectionColorList.result?.response;
+        // var sectionColorResult = sectionColorList.result?.response;
 
-        let sectionColorResultMatch = sectionColorResult.filter((o1) =>
-          dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
-        );
-        let sectionColorResultNotMatch = dublicateSectionArr.filter(
-          (o1) => !sectionColorResult.some((o2) => o1.name === o2.sectionName)
-        );
+        // let sectionColorResultMatch = sectionColorResult.filter((o1) =>
+        //   dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
+        // );
+        // let sectionColorResultNotMatch = dublicateSectionArr.filter(
+        //   (o1) => !sectionColorResult.some((o2) => o1.name === o2.sectionName)
+        // );
 
         var notMatchColorArray = [];
-        sectionColorResultNotMatch?.map((res, index) => {
+        dublicateSectionArr?.map((res, index) => {
           var radomColorcode = stringToColour(res.name);
           var randomColorChangeShadow = radomColorcode + 33;
           notMatchColorArray.push({
@@ -146,8 +146,8 @@ export const getPatientLabDetails = async (
 
         var newArrayColorMatchs = [];
         newArrayColorMatchs = [
-          ...sectionColorResult,
-          ...sectionColorResultMatch,
+          // ...sectionColorResult,
+          // ...sectionColorResultMatch,
           ...notMatchColorArray,
         ];
 
