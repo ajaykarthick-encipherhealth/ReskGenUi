@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch,connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faClose,
@@ -15,7 +15,6 @@ import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import { Popover, notification } from "antd";
 import { Button } from "react-bootstrap";
 import styles from "../../hcc/styles.module.css";
-import { getPatientDetailsResult } from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import PdfViewer from "../../PdfViewerComponent";
 import AddHccForm from "../../components/addHccForm";
 import EditHccForm from "../../components/editHccForm";
@@ -30,17 +29,12 @@ const File = ({
   setActiveTabHead,
   setActiveMeatTitle,
   setActiveComboTree,
+  patientDetailsResult,
+  hccFileDetails
 }) => {
   const dispatch = useDispatch();
-
-  const patientDetailsResult = useSelector(
-    (state) => state?.ReviewerReducers?.patientDetails
-  );
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
-  );
-  const hccFileDetails = useSelector(
-    (state) => state?.ReviewerReducers?.hccFileDetails
   );
   const radiologyFileDetails = useSelector(
     (state) => state?.ReviewerReducers?.radiologyFileDetails
@@ -108,8 +102,8 @@ const File = ({
   }, [patientDetailsResult]);
 
   useEffect(() => {
-    if (hccFileDetails?.result?.response) {
-      setSelectFileURL(hccFileDetails?.result?.response);
+    if (hccFileDetails?.data?.response) {
+      setSelectFileURL(hccFileDetails?.data?.response);
     }
     if (radiologyFileDetails?.result?.response) {
       setSelectFileURLRadiology(radiologyFileDetails?.result?.response);
@@ -173,11 +167,6 @@ const File = ({
       }
       setHccVersionDetails(value);
     }
-  };
-
-  const getPatientDetailsReload = async (patientId) => {
-    dispatch(getPatientDetailsResult(patientId));
-    setFileLoading(false);
   };
 
   const getFileDosPageNumber = async () => {
@@ -340,7 +329,6 @@ const File = ({
         handleCloseModal={handleCloseModal}
         setFileLoading={setFileLoading}
         setConfirmNotesModalValid={setConfirmNotesModalValid}
-        getPatientDetailsReload={getPatientDetailsReload}
         isValidAction={isValidAction}
         selectDisDetails={selectDisDetails}
       />
@@ -348,4 +336,10 @@ const File = ({
   );
 };
 
-export default File;
+const enhancer = connect(
+  (state) => ({
+    patientDetailsResult :state?.patientDetails?.details?.patientResult,
+    hccFileDetails :state?.patientDetails?.details?.hccFileResult,
+  }),
+);
+export default enhancer(File);

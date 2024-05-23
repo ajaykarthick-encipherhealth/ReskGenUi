@@ -5,7 +5,7 @@ import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import "react-vertical-timeline-component/style.min.css";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch,connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsAlt, faPen } from "@fortawesome/free-solid-svg-icons";
 import { Popconfirm, Popover, Input, Space, Form ,Select} from "antd";
@@ -16,7 +16,6 @@ import { useRouter } from "next/navigation";
 import { Tooltip } from "antd";
 import Spinner from "../../../../../components/loadingSpinner";
 import styles from "../styles.module.css";
-import { getPatientDetailsResult } from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import CamboTree from "../org";
 import PdfViewer from "../../PdfViewerComponent";
 import RegularButton from "../../../../../components/button";
@@ -29,27 +28,15 @@ import {
   getProviderNameList,
 } from "../../components/function/ReusableFunctions";
 import { getPatientDetails } from "../../components/function/GetData";
-
+import { actions as detailsActions } from "../../../../../stores/patient/details";
 const { Option } = Select;
 
-const Meat = ({ activeMeatTitle, year }) => {
+const Meat = ({ activeMeatTitle, year,patientDetailsResult ,getpatientDetailsData,hccFileDetails,fileDosPageNumberList}) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
-  let searchKeywords = [];
-  const patientDetailsResult = useSelector(
-    (state) => state?.ReviewerReducers?.patientDetails
-  );
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
   );
-  const hccFileDetails = useSelector(
-    (state) => state?.ReviewerReducers?.hccFileDetails
-  );
-
-  const fileDosPageNumberList = useSelector(
-    (state) => state?.ReviewerReducers.dosPageNumberList
-  );
-
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const { toolbarPluginInstance } = defaultLayoutPluginInstance;
   const { searchPluginInstance } = toolbarPluginInstance;
@@ -178,8 +165,8 @@ const Meat = ({ activeMeatTitle, year }) => {
   }, [patientDetailsResult]);
 
   useEffect(() => {
-    if (hccFileDetails?.result?.response) {
-      setSelectFileURL(hccFileDetails?.result?.response);
+    if (hccFileDetails?.data?.response) {
+      setSelectFileURL(hccFileDetails?.data?.response);
     }
   }, [hccFileDetails]);
 
@@ -291,7 +278,7 @@ const Meat = ({ activeMeatTitle, year }) => {
         getResponePopup(res);
         setEditData(null);
         setMeatEdit(false);
-        dispatch(getPatientDetailsResult(patientId));
+        getpatientDetailsData(patientId,patientDetailsResult?.data?.response?.processedYear,patientDetailsResult?.data?.response?.dateOfService);
       }
     } catch (error) {
       console.log(error);
@@ -405,7 +392,6 @@ const Meat = ({ activeMeatTitle, year }) => {
                             patientDocumentResult: patientDocumentResult,
                             selectMeatResult: setSelectMeatResult,
                             datas: item,
-                            fileDosPageNumberList:fileDosPageNumberList
                           })}
                         </div>
                       </div>
@@ -1459,4 +1445,14 @@ const Meat = ({ activeMeatTitle, year }) => {
   );
 };
 
-export default Meat;
+const enhancer = connect(
+  (state) => ({
+    patientDetailsResult :state?.patientDetails?.details?.patientResult,
+    hccFileDetails :state?.patientDetails?.details?.hccFileResult,
+    fileDosPageNumberList:state?.patientDetails?.details?.dosPageNumberResult,
+  }),
+  {
+    getpatientDetailsData:detailsActions.patientDetailsAction
+  }
+);
+export default enhancer(Meat);

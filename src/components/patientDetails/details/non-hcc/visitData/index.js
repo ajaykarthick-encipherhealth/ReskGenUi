@@ -1,17 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { notification } from "antd";
-import { Offcanvas } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch,connect } from "react-redux";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import Spinner from "../../../../../components/loadingSpinner";
 import styles from "../../hcc/styles.module.css";
-import { getPatientDetailsResult } from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import PdfViewer from "../../PdfViewerComponent";
-import HccCards from "../../components/HCC";
 import ModelIndex from "../../components/model/Index";
 import { getPatientDetails } from "../../components/function/GetData";
 import NonHccCards from "../../components/NONHCC";
@@ -20,16 +13,12 @@ const VisitData = ({
   setActiveTabHead,
   setActiveMeatTitle,
   setActiveComboTree,
+  patientDetailsResult,
+  hccFileDetails
 }) => {
   const dispatch = useDispatch();
-  const patientDetailsResult = useSelector(
-    (state) => state?.ReviewerReducers?.patientDetails
-  );
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
-  );
-  const hccFileDetails = useSelector(
-    (state) => state?.ReviewerReducers?.hccFileDetails
   );
   const radiologyFileDetails = useSelector(
     (state) => state?.ReviewerReducers?.radiologyFileDetails
@@ -99,8 +88,8 @@ const VisitData = ({
   }, [patientDetailsResult]);
 
   useEffect(() => {
-    if (hccFileDetails?.result?.response) {
-      setSelectFileURL(hccFileDetails?.result?.response);
+    if (hccFileDetails?.data?.response) {
+      setSelectFileURL(hccFileDetails?.data?.response);
     }
     if (radiologyFileDetails?.result?.response) {
       setSelectFileURLRadiology(radiologyFileDetails?.result?.response);
@@ -164,16 +153,6 @@ const VisitData = ({
       }
       setHccVersionDetails(value);
     }
-  };
-
-  const getPatientDetailsReload = async (patientId) => {
-    dispatch(getPatientDetailsResult(patientId));
-  };
-
-  const showErrorMessage = () => {
-    setOpens(false);
-    notification.destroy();
-    notification.info({ message: "Tree Not Available", duration: 1 });
   };
 
   const modalOpenValidContent = (
@@ -452,4 +431,10 @@ const VisitData = ({
   );
 };
 
-export default VisitData;
+const enhancer = connect(
+  (state) => ({
+    patientDetailsResult :state?.patientDetails?.details?.patientResult,
+    hccFileDetails :state?.patientDetails?.details?.hccFileResult,
+  }),
+);
+export default enhancer(VisitData);

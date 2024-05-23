@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector,connect } from "react-redux";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { Modal } from "antd";
 import { getPatientLabDetails } from "../../components/function/GetDataLab";
@@ -9,13 +9,7 @@ import LabCards from "../../components/LAB";
 import PdfViewer from "../../PdfViewerComponent";
 import ModelIndex from "../../components/model/Index";
 
-const VisitData = ({ setActiveTabHead, setActiveMeatTitle }) => {
-  const labDetailsResult = useSelector(
-    (state) => state?.ReviewerReducers?.labDeatils
-  );
-  const labFile = useSelector(
-    (state) => state?.ReviewerReducers?.labFileDetails
-  );
+const VisitData = ({ setActiveTabHead, setActiveMeatTitle ,labDetailsResult,labFile}) => {
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
   );
@@ -57,14 +51,14 @@ const VisitData = ({ setActiveTabHead, setActiveMeatTitle }) => {
   useEffect(() => {
     setLabReportFile([]);
     getLabReportFiles();
-  }, [labFile?.result?.response]);
+  }, [labFile?.data?.response]);
 
   const getLabReportFiles = async (fileId, tenId) => {
     if (
-      labFile?.result?.response &&
-      labDetailsResult?.result?.response?.patientId
+      labFile?.data?.response &&
+      labDetailsResult?.data?.response?.patientId
     ) {
-      setLabReportFile(labFile?.result?.response);
+      setLabReportFile(labFile?.data?.response);
     }
   };
 
@@ -391,4 +385,10 @@ const VisitData = ({ setActiveTabHead, setActiveMeatTitle }) => {
   );
 };
 
-export default VisitData;
+const enhancer = connect(
+  (state) => ({
+    labDetailsResult :state?.patientDetails?.details?.labResult,
+    labFile :state?.patientDetails?.details?.labFileResult,
+  }),
+);
+export default enhancer(VisitData);

@@ -5,7 +5,8 @@ const PdfViewer = ({ src, searchQuery, pageNumber, headers }) => {
   const [iframeSrc, setIframeSrc] = useState("");
 
   useEffect(() => {
-    if (src) {
+    console.log(src)
+    if (!Array.isArray(src)) {
       const pdfUrl = encodeURIComponent(src);
       let searchUrl = `${ENDPOINTS.PdfViewer}?file=${pdfUrl}`;
       // let searchUrl = `https://pdffile.javagcai.com/web/viewer.html?file=${pdfUrl}`;

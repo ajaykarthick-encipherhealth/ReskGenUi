@@ -55,15 +55,10 @@ import ReviwerWorkList from "./components/reviwerWorklist";
 import SupervisorWorkList from "./components/supervisorWorklist";
 import AdminWorkList from "./components/adminWorklist";
 import {
-  getPatientDetailsResult,
-  getMeatQueryList,
   getAllSectionColor,
-  getHccFileDetails,
-  getDosPageNumber,
-  getPatientDosList,
-  getPatientDetailsResultNew,
 } from "../../../store/actions/ReviewerAction/PatientDetailsAction";
 import { actions as workflowActions } from "../../../stores/reviewer/workqueue";
+import { actions as detailsActions } from "../../../stores/patient/details";
 import styles from "../details/hcc/styles.module.css";
 
 export const navigetPageDetails = async (
@@ -101,13 +96,22 @@ export const navigetPageDetails = async (
   }
   setIsLoading(false);
 };
-const Details = ({ workFgetFlagsowData, getFlagsData }) => {
+const Details = ({
+  workFgetFlagsowData,
+  getFlagsData,
+  patientDetailsResult,
+  getpatientDetailsData,
+  getPatientHccFile,
+  getPatientDosList,
+  getDosPageNumber,
+  getMeatQueryList
+}) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
-  const patientDetailsResult = useSelector(
-    (state) => state?.ReviewerReducers?.patientDetails
-  );
+  // const patientDetailsResult = useSelector(
+  //   (state) => state?.ReviewerReducers?.patientDetails
+  // );
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
   );
@@ -191,7 +195,6 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const [isFileCheck, setIsFileCheck] = useState(false);
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
 
-
   const flagPostList = getFlagsData?.response?.map((item) => ({
     value: item?.id,
     label: (
@@ -239,13 +242,6 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
 
   useEffect(() => {
     getAllProcessYear();
-    // const patientId = localStorage.getItem("patientId");
-    // dispatch(getAllSectionColor());
-    // dispatch(
-    //   getPatientDetailsResult(
-    //     selectPatientId ? selectPatientId?.patirntId : patientId
-    //   )
-    // );
   }, []);
 
   useEffect(() => {
@@ -259,34 +255,28 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
     setLocalOrgId(orgId);
     setLocalTenantId(tenId);
     setLocalUserId(uId);
-    setLocalPatientId(selectPatientId ? selectPatientId?.patirntId : patientId);  
+    setLocalPatientId(selectPatientId ? selectPatientId?.patirntId : patientId);
     getPatientDetails(
       selectPatientId ? selectPatientId?.patirntId : patientId,
       orgId,
       tenId
     );
-    
-  }, [patientDetailsResult?.result?.response]);
+  }, [patientDetailsResult?.data?.response]);
 
   useEffect(() => {
-    if (patientDetailsResult?.result?.response?.fileId) {
+    if (patientDetailsResult?.data?.response?.fileId) {
       const patientId = localStorage.getItem("patientId");
       if (
         isFileCheck == false &&
-        patientId == patientDetailsResult?.result?.response.patientId
+        patientId == patientDetailsResult?.data?.response.patientId
       ) {
-        dispatch(
-          getHccFileDetails(
-            patientDetailsResult?.result?.response?.fileDetailDTO?.azureBlobPath
-          )
+        getPatientHccFile(
+          patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath
         );
-        // dispatch(
-        //   getDosPageNumber(patientDetailsResult?.result?.response?.fileId)
-        // );
         setIsFileCheck(true);
       }
     }
-  }, [patientDetailsResult?.result?.response?.fileDetailDTO?.azureBlobPath]);
+  }, [patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath]);
 
   const getAllProcessYear = async () => {
     const patientId = localStorage.getItem("patientId");
@@ -304,23 +294,20 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
       setDosYearDefalutSelect(dosYearArr[0]);
       setSelectedDosValue(dosYearArr[0].value);
       setDosYear(dosYearArr);
-      setIsLoadingDos(false);       
-      dispatch(
-        getPatientDetailsResultNew(
+      setIsLoadingDos(false);
+      getpatientDetailsData(
+        selectPatientId ? selectPatientId?.patirntId : patientId,
+        dosYearArr[0].value,
+        null
+      );
+      getPatientDosList(
+        selectPatientId ? selectPatientId?.patirntId : patientId,
+        dosYearArr[0].value
+      );
+        getDosPageNumber(
           selectPatientId ? selectPatientId?.patirntId : patientId,
           dosYearArr[0].value
         )
-      );
-      dispatch(
-        getPatientDosList(
-          selectPatientId ? selectPatientId?.patirntId : patientId,
-          dosYearArr[0].value
-        )
-      );
-      dispatch(
-        getDosPageNumber(selectPatientId ? selectPatientId?.patirntId : patientId, dosYearArr[0].value)
-      );
-      // setIsSpinnerLoading(false);
     } catch (e) {
       setIsSpinnerLoading(true);
       setIsLoading(false);
@@ -871,12 +858,12 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const statuses = ["PENDING", "COMPLETED", "HOLD", "DECLINED"];
   const getPatientDetails = async (patientId) => {
     setHccValidCount(0);
-    if (patientDetailsResult?.result?.response) {
-      var result = patientDetailsResult?.result?.response;
-      if(patientId == result.patientId){
+    if (patientDetailsResult?.data?.response) {
+      var result = patientDetailsResult?.data?.response;
+      if (patientId == result.patientId) {
         setIsSpinnerLoading(false);
       }
-      dispatch(getMeatQueryList(result?.processedYear, patientId));
+      getMeatQueryList(patientId,result?.processedYear);
       setPatientDocumentResult(result);
       setPatientDetails(result);
       if (result.hccDiseases != null) {
@@ -899,17 +886,12 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
         setNewValidDiseaseList(validDisArray);
         // getFlagListLastDetails(patientId, result.processedYear);
         setIsLoading(false);
-        setPatientResultReload(true);      
+        setPatientResultReload(true);
       } else {
         setPatientResultReload(true);
         setIsLoading(false);
       }
     }
-  };
-  const getPatientDetailsYear = async (year) => {
-    setSelectedDosValue(year);
-    setIsModalComments(false);
-    dispatch(getPatientDetailsResult(localPatientId, year));
   };
 
   const handleCloseModal = () => {
@@ -987,16 +969,8 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
   const dosOnChange = async (e) => {
     setPatientResultReload(false);
     setIsLoading(true);
-    dispatch(
-      getPatientDosList(
-        localPatientId,
-        e.value
-      )
-    );
-    dispatch(getPatientDetailsResultNew(localPatientId, e.value));
-    dispatch(
-      getDosPageNumber(localPatientId, e.value)
-    );
+    getPatientDosList(localPatientId, e.value);
+    getpatientDetailsData(localPatientId, e.value, null);
   };
 
   const submitSuggestedHcc = async (notes) => {
@@ -1169,7 +1143,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
     var userData = {
       userId: localUserId,
     };
-    var resultData = patientDetailsResult?.result?.response;
+    var resultData = patientDetailsResult?.data?.response;
     var postData = { ...userData, ...resultData };
     try {
       const response = await axios.post(
@@ -1942,28 +1916,26 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
 
   return (
     <>
-    
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
         <NavBar />
         <div className={visitStyles.headerFixed}>
-        {isSpinnerLoading ?
-      <SpinnerDots />:
-          <div class="content-body">
-            {isLoading ? (
-              <div className={styles.overlay_style}>
-                <div className={styles.overlay__inner_style}>
-                  <div className={styles.overlay__content_style}>
-                    <span className={styles.spinner_style}></span>
+          {isSpinnerLoading ? (
+            <SpinnerDots />
+          ) : (
+            <div class="content-body">
+              {isLoading ? (
+                <div className={styles.overlay_style}>
+                  <div className={styles.overlay__inner_style}>
+                    <div className={styles.overlay__content_style}>
+                      <span className={styles.spinner_style}></span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ) : null}
-            {/* {sectionColorList?.loading == true ? (
+              ) : null}
+              {/* {sectionColorList?.loading == true ? (
               <SpinnerDots />
             ) : ( */}
-              <div
-                className={`container-fluid ${visitStyles.container_fluid_patient}`}
-              >
+              <div className={`${visitStyles.container_fluid_patient}`}>
                 <div className="row patient-file-container">
                   <div className="col-xl-12">
                     <div className="row">
@@ -2174,7 +2146,7 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                           <label>Score</label>
                           {patientDetails.rafScore?.score != null ? (
                             <h6 className="ageDtails">
-                              {(patientDetails.rafScore?.score)?.toFixed(3)}
+                              {patientDetails.rafScore?.score?.toFixed(3)}
                             </h6>
                           ) : (
                             <h6 className="ageDtails">0.00</h6>
@@ -3380,9 +3352,10 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
                   ) : null}
                 </div>
               </div>
-            {/* )} */}
-            {/* <Footer/> */}
-          </div>}
+              {/* )} */}
+              {/* <Footer/> */}
+            </div>
+          )}
         </div>
       </div>
 
@@ -3414,9 +3387,15 @@ const Details = ({ workFgetFlagsowData, getFlagsData }) => {
 const enhancer = connect(
   (state) => ({
     getFlagsData: state?.reviewer?.workQueue?.flags?.data,
+    patientDetailsResult: state?.patientDetails?.details?.patientResult,
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,
+    getpatientDetailsData: detailsActions.patientDetailsAction,
+    getPatientHccFile: detailsActions.patientHccFileAction,
+    getPatientDosList: detailsActions.dosDeatilsAction,
+    getDosPageNumber:detailsActions.dosPageNumberAction,
+    getMeatQueryList:detailsActions.meatQueryAction
   }
 );
 export default enhancer(Details);

@@ -3,6 +3,8 @@
   overflow: hidden;
   padding-top: 55px !important;
   background-color: #fff !important;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 .container_fluid {
   background-color: #f0f6fe !important;
@@ -1047,7 +1049,6 @@
 .validColor {
   color: #04b700;
   padding: 0 5px;
- 
 }
 .nonhccFlag {
   height: 13px;
@@ -1060,7 +1061,6 @@
 .invalidColor {
   color: #fada5e;
   padding: 0 5px;
-
 }
 
 .suggestedFlag {
@@ -1074,7 +1074,6 @@
 .suggestedColor {
   color: #ff9209;
   padding: 0 5px;
-
 }
 .deleteFlag {
   height: 13px;
@@ -1087,7 +1086,6 @@
 .deletedColor {
   color: #be3144;
   padding: 1px 5px;
-
 }
 .completedColor {
   color: #00bc13;

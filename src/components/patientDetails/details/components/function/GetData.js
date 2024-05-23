@@ -149,8 +149,8 @@ export const getPatientDetails = async (
   setDosSummariesList,
   setNonHccDiseasesList
 ) => {
-  if (patientDetailsResult?.result?.response) {
-    var result = patientDetailsResult?.result?.response;
+  if (patientDetailsResult?.data?.response) {
+    var result = patientDetailsResult?.data?.response;
   // if (NewResponse) {
   //   var result = NewResponse.response;
     setPatientDocumentResult(result);
@@ -592,17 +592,17 @@ export const getPatientDetails = async (
       setAllDisList &&
         setAllDisList([...hccDisArray, ...deleteHccList, ...suggestListAll]);
 
-      if (result.suggestRadiology != null) {
-        if (result.suggestRadiology.length != 0) {
-          getPatientDetailsRadiologyYear(orgId, dispatch);
-        }
-      }
+      // if (result.suggestRadiology != null) {
+      //   if (result.suggestRadiology.length != 0) {
+      //     getPatientDetailsRadiologyYear(orgId, dispatch);
+      //   }
+      // }
 
-      if (result.suggestLab != null) {
-        if (result.suggestLab.length != 0) {
-          getLabReportDetailsInititalLoad(orgId, dispatch);
-        }
-      }
+      // if (result.suggestLab != null) {
+      //   if (result.suggestLab.length != 0) {
+      //     getLabReportDetailsInititalLoad(orgId, dispatch);
+      //   }
+      // }
     }
   }
 };

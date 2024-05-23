@@ -28,12 +28,14 @@ import { reducer as updatedPatientsReducer} from './reviewer/workqueue';
 import { reducer as searchReducer } from "./search";
 import { reducer as physicianReducer } from "./physician/dashboard"
 import { reducer as reportReducer } from "./reviewer/report"
+import { reducer as patientDeatilsReducer } from "./patient/details"
+
 const reducers = combineReducers({
   // old reducers
   sideMenu: toggleMenu,
   posts: PostsReducer,
   auth: AuthReducer,
-  patientDetails: PatientStore,
+  // patientDetails: PatientStore,
   workFlow: DashboardReducer,
   report: ReportReducer,
   AuditReport: AuditReportReducer,
@@ -62,6 +64,9 @@ const reducers = combineReducers({
   search: searchReducer,
   physician: combineReducers({
     dashboard : physicianReducer
+  }),
+  patientDetails: combineReducers({
+    details : patientDeatilsReducer
   })
 });
 

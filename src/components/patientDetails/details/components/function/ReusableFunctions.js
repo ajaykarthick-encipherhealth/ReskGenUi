@@ -7,7 +7,6 @@ import visitStyles from "../../../../../styles/visitdata.module.css";
 import styles from "../HCC/styles.module.css";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
-import { getPatientDetailsResult } from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 
 export const getEncounterDateBackground = ({
   value,
@@ -63,7 +62,7 @@ const getEncounterDetails = async (
   datas
 ) => {
   selectMeatResult ? selectMeatResult(datas) : "";
-  const findPageNumber = fileDosPageNumberList?.result?.response?.filter(
+  const findPageNumber = fileDosPageNumberList?.data?.response?.filter(
     (i) =>
       moment(i.dos).format("MM-DD-YYYY") === moment(date).format("MM-DD-YYYY")
   );
@@ -392,7 +391,8 @@ export const handleSubmitValidNotes = async ({
   getPatientDetailsReload,
   isValidAction,
   selectDisDetails,
-  dispatch,
+  getpatientDetailsData,
+  patientDetailsResult
 }) => {
   setFileLoading(true);
   setConfirmNotesModalValid(false);
@@ -456,8 +456,7 @@ export const handleSubmitValidNotes = async ({
         placement: "top",
         duration: 1,
       });
-      dispatch(getPatientDetailsResult(patientId));
-    } else {
+      getpatientDetailsData(patientId,patientDetailsResult?.data?.response?.processedYear,patientDetailsResult?.data?.response?.dateOfService);    } else {
       setFileLoading(false);
       notification.error({
         message: result.response,

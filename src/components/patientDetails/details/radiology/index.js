@@ -1,23 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Tab, Nav } from "react-bootstrap";
-import { useSelector, useDispatch } from "react-redux";
+import {connect } from "react-redux";
 import visitStyles from "../../../../styles/visitdata.module.css";
 import VisitData from "./visitData";
 import File from "./file";
 import Combo from "./combo";
 import Meat from "./meat";
-import {
-  getRadiologyDetails,
-  getRadiologyFileDetails,
-} from "../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import SpinnerDots from "../../../../components/spinner";
+import { actions as detailsActions } from "../../../../stores/patient/details";
 
-const Radiology = ({}) => {
+
+const Radiology = ({getRadiologyDetails,getRadiologyFileDetails,radiologyDetailsResult}) => {
   const [isLoading, setIsLoading] = useState(true);
-  const dispatch = useDispatch();
-  const radiologyDetailsResult = useSelector(
-    (state) => state?.ReviewerReducers?.radiologyDeatils
-  );
   const [activeTabHead, setActiveTabHead] = useState(1);
   const [activeMeatTitle, setActiveMeatTitle] = useState(null);
 
@@ -30,22 +24,20 @@ const Radiology = ({}) => {
 
   useEffect(() => {
     const patientId = localStorage.getItem("patientId");
-    dispatch(getRadiologyDetails(patientId));
+    getRadiologyDetails(patientId)
   }, []);
 
   useEffect(() => {
-    if (radiologyDetailsResult?.result?.response) {
-      if (radiologyDetailsResult?.result?.response?.radiologyFileDetail) {
-        dispatch(
+    if (radiologyDetailsResult?.data?.response) {
+      if (radiologyDetailsResult?.data?.response?.radiologyFileDetail) {
           getRadiologyFileDetails(
-            radiologyDetailsResult?.result?.response?.radiologyFileDetail[0]
+            radiologyDetailsResult?.data?.response?.radiologyFileDetail[0]
               .azureBlobPath
           )
-        );
         setIsLoading(true);
       }
     }
-  }, [radiologyDetailsResult?.result?.response]);
+  }, [radiologyDetailsResult?.data?.response]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -146,4 +138,14 @@ const Radiology = ({}) => {
   );
 };
 
-export default Radiology;
+
+const enhancer = connect(
+  (state) => ({
+    radiologyDetailsResult :state?.patientDetails?.details?.radiologyResult
+  }),
+  {
+    getRadiologyDetails:detailsActions.radiologyDetailsAction,
+    getRadiologyFileDetails:detailsActions.radiologyFileAction,
+  }
+);
+export default enhancer(Radiology);

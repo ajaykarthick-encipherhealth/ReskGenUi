@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Badge } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useSelector,connect } from "react-redux";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsAlt } from "@fortawesome/free-solid-svg-icons";
@@ -9,13 +9,7 @@ import { Modal } from "antd";
 import PdfViewer from "../../PdfViewerComponent";
 import { getPatientLabDetails } from "../../components/function/GetDataLab";
 
-const Meat = ({}) => {
-  const labDetailsResult = useSelector(
-    (state) => state?.ReviewerReducers?.labDeatils
-  );
-  const labFile = useSelector(
-    (state) => state?.ReviewerReducers?.labFileDetails
-  );
+const Meat = ({labDetailsResult,labFile}) => {
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
   );
@@ -53,14 +47,14 @@ const Meat = ({}) => {
   useEffect(() => {
     setLabReportFile([]);
     getLabReportFiles();
-  }, [labFile?.result?.response]);
+  }, [labFile?.data?.response]);
 
   const getLabReportFiles = async (fileId, tenId) => {
     if (
-      labFile?.result?.response &&
-      labDetailsResult?.result?.response?.patientId
+      labFile?.data?.response &&
+      labDetailsResult?.data?.response?.patientId
     ) {
-      setLabReportFile(labFile?.result?.response);
+      setLabReportFile(labFile?.data?.response);
     }
   };
 
@@ -603,4 +597,10 @@ const Meat = ({}) => {
   );
 };
 
-export default Meat;
+const enhancer = connect(
+  (state) => ({
+    labDetailsResult :state?.patientDetails?.details?.labResult,
+    labFile :state?.patientDetails?.details?.labFileResult,
+  }),
+);
+export default enhancer(Meat);

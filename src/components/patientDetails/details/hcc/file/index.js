@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch ,connect} from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faClose,
@@ -11,11 +11,9 @@ import {
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import { Popover, notification } from "antd";
 import { Button } from "react-bootstrap";
 import styles from "../styles.module.css";
-import { getPatientDetailsResult } from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import PdfViewer from "../../PdfViewerComponent";
 import AddHccForm from "../../components/addHccForm";
 import EditHccForm from "../../components/editHccForm";
@@ -26,6 +24,8 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { onDragEnd } from "../../components/function/ReusableFunctions";
 
 const File = ({
+  patientDetailsResult,
+  hccFileDetails,
   popoverVisible,
   setPopoverVisible,
   year,
@@ -34,27 +34,18 @@ const File = ({
   setActiveComboTree,
   pageNumberOptions, 
   setPageNumberOptions,
-  search, setSearch
+  search, setSearch,
+  fileDosPageNumberList
 }) => {
   const dispatch = useDispatch();
-
-  const patientDetailsResult = useSelector(
-    (state) => state?.ReviewerReducers?.patientDetails
-  );
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
-  );
-  const hccFileDetails = useSelector(
-    (state) => state?.ReviewerReducers?.hccFileDetails
   );
   const radiologyFileDetails = useSelector(
     (state) => state?.ReviewerReducers?.radiologyFileDetails
   );
   const labFileDetails = useSelector(
     (state) => state?.ReviewerReducers?.labFileDetails
-  );
-  const fileDosPageNumberList = useSelector(
-    (state) => state?.ReviewerReducers.dosPageNumberList
   );
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
@@ -108,8 +99,8 @@ const File = ({
   }, [patientDetailsResult]);
 
   useEffect(() => {
-    if (hccFileDetails?.result?.response) {
-      setSelectFileURL(hccFileDetails?.result?.response);
+    if (hccFileDetails?.data?.response) {
+      setSelectFileURL(hccFileDetails?.data?.response);
     }
     if (radiologyFileDetails?.result?.response) {
       setSelectFileURLRadiology(radiologyFileDetails?.result?.response);
@@ -175,18 +166,13 @@ const File = ({
     }
   };
 
-  const getPatientDetailsReload = async (patientId) => {
-    dispatch(getPatientDetailsResult(patientId));
-    setFileLoading(false);
-  };
-
   const addValidCodeFile = async (event) => {
     setIsFileFormShow(true);
     setValidated(false);
   };
 
   const getFileDosPageNumber = async () => {
-    setPageNumberOptions(fileDosPageNumberList?.result?.response);
+    setPageNumberOptions(fileDosPageNumberList?.data?.response);
   };
 
  
@@ -489,7 +475,6 @@ const File = ({
         handleCloseModal={handleCloseModal}
         setFileLoading={setFileLoading}
         setConfirmNotesModalValid={setConfirmNotesModalValid}
-        getPatientDetailsReload={getPatientDetailsReload}
         isValidAction={isValidAction}
         selectDisDetails={selectDisDetails}
       />
@@ -533,4 +518,12 @@ const File = ({
   );
 };
 
-export default File;
+const enhancer = connect(
+  (state) => ({
+    patientDetailsResult :state?.patientDetails?.details?.patientResult,
+    hccFileDetails :state?.patientDetails?.details?.hccFileResult,
+    fileDosPageNumberList:state?.patientDetails?.details?.dosPageNumberResult,
+
+  }),
+);
+export default enhancer(File);

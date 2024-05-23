@@ -5,7 +5,7 @@ import visitStyles from "../../../../../styles/visitdata.module.css";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import moment from "moment";
 import "react-vertical-timeline-component/style.min.css";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch,connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPlus,
@@ -19,7 +19,6 @@ import Form from "react-bootstrap/Form";
 import Spinner from "../../../../../components/loadingSpinner";
 import styles from "../styles.module.css";
 import { manuallyAddComboCode } from "../../../../../services/PatientsListSevice";
-import { getPatientDetailsResult } from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import CamboTree from "../org";
 import PdfViewer from "../../PdfViewerComponent";
 import {
@@ -28,6 +27,8 @@ import {
   getProviderNameList,
 } from "../../components/function/ReusableFunctions";
 import { getPatientDetails } from "../../components/function/GetData";
+import { actions as detailsActions } from "../../../../../stores/patient/details";
+
 const addOnCodeColor = [
   "magenta",
   "red",
@@ -39,22 +40,11 @@ const addOnCodeColor = [
   "geekblue",
   "purple",
 ];
-const Combo = ({ activeComboTree }) => {
+const Combo = ({ activeComboTree,patientDetailsResult ,getpatientDetailsData,hccFileDetails,fileDosPageNumberList}) => {
   const dispatch = useDispatch();
-  const patientDetailsResult = useSelector(
-    (state) => state?.ReviewerReducers?.patientDetails
-  );
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
   );
-  const hccFileDetails = useSelector(
-    (state) => state?.ReviewerReducers?.hccFileDetails
-  );
-
-  const fileDosPageNumberList = useSelector(
-    (state) => state?.ReviewerReducers.dosPageNumberList
-  );
-
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
   const { toolbarPluginInstance } = defaultLayoutPluginInstance;
   const { searchPluginInstance } = toolbarPluginInstance;
@@ -162,8 +152,8 @@ const Combo = ({ activeComboTree }) => {
   }, [patientDetailsResult]);
 
   useEffect(() => {
-    if (hccFileDetails?.result?.response) {
-      setSelectFileURL(hccFileDetails?.result?.response);
+    if (hccFileDetails?.data?.response) {
+      setSelectFileURL(hccFileDetails?.data?.response);
     }
   }, [hccFileDetails]);
 
@@ -226,21 +216,6 @@ const Combo = ({ activeComboTree }) => {
     setInputValue({ ...inputValue, [key]: value });
   };
 
-  const getPatientDetailsReload = async (patientId) => {
-    dispatch(getPatientDetailsResult(patientId));
-  };
-
-  function removeDuplicates(array) {
-    let output = [];
-    if (array) {
-      for (let item of array) {
-        if (!output.includes(item)) output.push(item);
-      }
-    }
-
-    return output;
-  }
-
   const addComboCode = () => {
     setIsAddComboCode(true);
   };
@@ -264,7 +239,7 @@ const Combo = ({ activeComboTree }) => {
           placement: "top",
           duration: 1,
         });
-        getPatientDetailsReload(localPatientId);
+        getpatientDetailsData(patientId,patientDetailsResult?.data?.response?.processedYear,patientDetailsResult?.data?.response?.dateOfService);
       }
 
       setValidated(true);
@@ -442,8 +417,6 @@ const Combo = ({ activeComboTree }) => {
                                     setFileModalHeader: setFileModalHeader,
                                     patientDocumentResult:
                                       patientDocumentResult,
-                                    fileDosPageNumberList:
-                                      fileDosPageNumberList,
                                   })}
                                 </div>
                                 <div
@@ -851,5 +824,15 @@ const Combo = ({ activeComboTree }) => {
     </>
   );
 };
+const enhancer = connect(
+  (state) => ({
+    patientDetailsResult :state?.patientDetails?.details?.patientResult,
+    hccFileDetails :state?.patientDetails?.details?.hccFileResult,
+    fileDosPageNumberList:state?.patientDetails?.details?.dosPageNumberResult,
 
-export default Combo;
+  }),
+  {
+    getpatientDetailsData:detailsActions.patientDetailsAction
+  }
+);
+export default enhancer(Combo);

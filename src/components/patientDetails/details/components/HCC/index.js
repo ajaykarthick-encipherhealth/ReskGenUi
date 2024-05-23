@@ -20,10 +20,12 @@ import {
   getProviderNameList,
   moveToAnotherAction,
 } from "../function/ReusableFunctions";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, connect } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
 import ModelIndex from "../model/Index";
 import ENDPOINTS from "../../../../../utility/enpoints";
+import { actions as detailsActions } from "../../../../../stores/patient/details";
+
 
 const HccCards = ({
   list,
@@ -57,12 +59,10 @@ const HccCards = ({
   setIsValidAction,
   provided,
   isVisitData,
+  fileDosPageNumberList
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
-  );
-  const fileDosPageNumberList = useSelector(
-    (state) => state?.ReviewerReducers.dosPageNumberList
   );
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
@@ -738,4 +738,9 @@ const HccCards = ({
   );
 };
 
-export default HccCards;
+const enhancer = connect(
+  (state) => ({
+    fileDosPageNumberList:state?.patientDetails?.details?.dosPageNumberResult,
+  }),
+);
+export default enhancer(HccCards);

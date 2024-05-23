@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector,connect } from "react-redux";
 import Select from "react-select";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { getPatientRadiologyDetails } from "../../components/function/GetDataRadiology";
@@ -13,13 +13,7 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import RadiologyCards from "../../components/RADIOLOGY";
 import ModelIndex from "../../components/model/Index";
 
-const File = ({ setActiveTabHead, setActiveMeatTitle }) => {
-  const radiologyDetailsResult = useSelector(
-    (state) => state?.ReviewerReducers?.radiologyDeatils
-  );
-  const radiologyFile = useSelector(
-    (state) => state?.ReviewerReducers?.radiologyFileDetails
-  );
+const File = ({ setActiveTabHead, setActiveMeatTitle,radiologyDetailsResult,radiologyFile }) => {
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
   );
@@ -76,14 +70,14 @@ const File = ({ setActiveTabHead, setActiveMeatTitle }) => {
   useEffect(() => {
     setSelectFileURLRadiology([]);
     getPatientPdfFileRadiology();
-  }, [radiologyFile?.result?.response]);
+  }, [radiologyFile?.data?.response]);
 
   const getPatientPdfFileRadiology = async (fileId, tenId) => {
     if (
-      radiologyFile?.result?.response &&
-      radiologyDetailsResult?.result?.response?.patientId
+      radiologyFile?.data?.response &&
+      radiologyDetailsResult?.data?.response?.patientId
     ) {
-      setSelectFileURLRadiology(radiologyFile?.result?.response);
+      setSelectFileURLRadiology(radiologyFile?.data?.response);
     }
   };
 
@@ -343,5 +337,10 @@ const File = ({ setActiveTabHead, setActiveMeatTitle }) => {
     </>
   );
 };
-
-export default File;
+const enhancer = connect(
+  (state) => ({
+    radiologyDetailsResult :state?.patientDetails?.details?.radiologyResult,
+    radiologyFile :state?.patientDetails?.details?.radiologyFileResult,
+  }),
+);
+export default enhancer(File);

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Badge } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useSelector,connect } from "react-redux";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsAlt } from "@fortawesome/free-solid-svg-icons";
@@ -9,15 +9,9 @@ import { Modal } from "antd";
 import PdfViewer from "../../PdfViewerComponent";
 import { getPatientRadiologyDetails } from "../../components/function/GetDataRadiology";
 
-const Meat = ({}) => {
-  const radiologyDetailsResult = useSelector(
-    (state) => state?.ReviewerReducers?.radiologyDeatils
-  );
+const Meat = ({radiologyDetailsResult,radiologyFile}) => {
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
-  );
-  const radiologyFile = useSelector(
-    (state) => state?.ReviewerReducers?.radiologyFileDetails
   );
   const [meatCriteriaList, setMeatCriteriaList] = useState([]);
   const [invalidMeatCriteriaList, setInvalidMeatCriteriaList] = useState([]);
@@ -58,14 +52,14 @@ const Meat = ({}) => {
   useEffect(() => {
     setSelectFileURLRadiology([]);
     getPatientPdfFileRadiology();
-  }, [radiologyFile?.result?.response]);
+  }, [radiologyFile?.result?.data]);
 
   const getPatientPdfFileRadiology = async (fileId, tenId) => {
     if (
-      radiologyFile?.result?.response &&
-      radiologyDetailsResult?.result?.response?.patientId
+      radiologyFile?.data?.response &&
+      radiologyDetailsResult?.result?.data?.patientId
     ) {
-      setSelectFileURLRadiology(radiologyFile?.result?.response);
+      setSelectFileURLRadiology(radiologyFile?.data?.response);
     }
   };
 
@@ -615,4 +609,10 @@ const Meat = ({}) => {
   );
 };
 
-export default Meat;
+const enhancer = connect(
+  (state) => ({
+    radiologyDetailsResult :state?.patientDetails?.details?.radiologyResult,
+    radiologyFile :state?.patientDetails?.details?.radiologyFileResult,
+  }),
+);
+export default enhancer(Meat);

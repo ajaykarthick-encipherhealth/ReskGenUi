@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Empty, Popover } from "antd";
-import { useSelector, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import style from "./styles.module.css";
 import TableStyle from "../../../../../components/table/table.module.css";
 
-const RafScore = ({}) => {
-  const rafScoreList = useSelector(
-    (state) =>
-      state?.ReviewerReducers?.patientDetails?.result?.response?.rafScore
-  );
+const RafScore = ({patientDetailsResult}) => {
+  const rafScoreList =patientDetailsResult?.data?.response?.rafScore
   const [rafScoreData, setRafScoreData] = useState([]);
 
   function getRafDetails(dxCode, version) {
@@ -227,4 +224,9 @@ const RafScore = ({}) => {
   );
 };
 
-export default RafScore;
+const enhancer = connect(
+  (state) => ({
+    patientDetailsResult :state?.patientDetails?.details?.patientResult
+  }),
+);
+export default enhancer(RafScore);

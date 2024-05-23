@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch,connect } from "react-redux";
 import { notification } from "antd";
 import { Select } from "antd";
 import { Button, Form, Input, Space, DatePicker, Switch } from "antd";
@@ -7,13 +7,12 @@ import moment from "moment";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import styles from "../../hcc/styles.module.css";
-import {
-  getMeatQueryList,
-  getPatientDetailsResult,
-} from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import RegularButton from "../../../../../components/button";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import SelectButton from "../../../../../components/btnSelect";
+import { actions as detailsActions } from "../../../../../stores/patient/details";
+import path from "path";
+
 
 const { TextArea } = Input;
 
@@ -25,12 +24,11 @@ const AddHccForm = ({
   isAddHccForm,
   diagnosisCode,
   setIsAddHccForm,
+  patientDetailsResult,
+  getpatientDetailsData
 }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const patientDetailsResult = useSelector(
-    (state) => state?.ReviewerReducers?.patientDetails
-  );
   const [isMeatForm, setIsMeatForm] = useState(false);
   const [addValidCodeCheck, setAddValidCodeCheck] = useState(null);
   const [hccFormDetails, setHccFormDetails] = useState(null);
@@ -96,7 +94,7 @@ const AddHccForm = ({
       isFilled.includes("T"));
     var dataFormat = {
       patientId: patientId,
-      year: patientDetailsResult?.result?.response?.dos,
+      year: patientDetailsResult?.data?.response?.dos,
       meatDetail: { ...form, ...isFormValidate },
       diseaseFormat: hccFormDetails,
     };
@@ -119,13 +117,7 @@ const AddHccForm = ({
           placement: "top",
           duration: 1,
         });
-        dispatch(getPatientDetailsResult(patientId));
-        dispatch(
-          getMeatQueryList(
-            patientDetailsResult?.result?.response?.dos,
-            patientId
-          )
-        );
+        getpatientDetailsData(patientId,patientDetailsResult?.data?.response?.processedYear,patientDetailsResult?.data?.response?.dateOfService);
       } else {
       }
     } catch (e) {}
@@ -264,7 +256,6 @@ const AddHccForm = ({
     }
     // handleActivice(meatDetail);
   }, [isFormValidate, meatDetail]);
-  console.log(isFormValidate, "isFormValidate");
   return (
     <>
       <div className={styles.formTitleContaniner}>
@@ -698,4 +689,12 @@ const AddHccForm = ({
   );
 };
 
-export default AddHccForm;
+const enhancer = connect(
+  (state) => ({
+    patientDetailsResult :state?.patientDetails?.details?.patientResult
+  }),
+  {
+    getpatientDetailsData:detailsActions.patientDetailsAction
+  }
+);
+export default enhancer(AddHccForm);

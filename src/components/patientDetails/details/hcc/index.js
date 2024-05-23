@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Tab, Nav } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector,connect } from "react-redux";
 import visitStyles from "../../../../styles/visitdata.module.css";
 import VisitData from "./visitData";
 import Combo from "./combo";
@@ -18,22 +18,15 @@ import Completed from "../../../../../src/images/trackingImages/CompletedTrack.p
 import Pending from "../../../../../src/images/trackingImages/PendingTrack.png";
 import Hold from "../../../../../src/images/trackingImages/HoldTrack.png";
 import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
-import {
-  getPatientDetailsResultNew,
-  getPatientDosList,
-} from "../../../../store/actions/ReviewerAction/PatientDetailsAction";
+import { actions as detailsActions } from "../../../../stores/patient/details";
+import warning from "../../../../images/svg/warning.svg";
+
 import Image from "next/image";
 
 const { Option } = Select;
 
-const Hcc = ({ year, setIsLoading }) => {
+const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,patientDosResult }) => {
   const dispatch = useDispatch();
-  const patientDosResult = useSelector(
-    (state) => state?.ReviewerReducers?.patientDosList
-  );
-  const patientDetailsResult = useSelector(
-    (state) => state?.ReviewerReducers?.patientDetails
-  );
   const [activeTabHead, setActiveTabHead] = useState(1);
   const [flagTagActive, setFlagTagActive] = useState(false);
   const [popoverVisible, setPopoverVisible] = useState(false);
@@ -108,32 +101,11 @@ const Hcc = ({ year, setIsLoading }) => {
     }
     setPopoverVisible(false);
   };
-  // useEffect(() => {
-  //     var dosList = [];
-  //     const testArray =[
-  //       "2023-02-02",
-  //       "2023-03-02",
-  //       "2023-04-02",
-  //     ]
-  //     testArray?.map((res,index) => {
-  //      var dosLable = (
-  //           <>
-  //             <div className="d-flex">
-  //               <span className={styles.dosLable}>{moment(res).format("MM-MM-YYYY")}</span>
-  //               <Image src={(index == 1 || index == 4) ?Completed : index == 2 ? Hold : Pending } className={styles.dosStatusIcon} />
-  //             </div>
-  //           </>
-  //         )
-  //       dosList.push({ value: res, label: dosLable });
-  //     });
-  //     setDosSummariesList(dosList)
-  // }, []);
-
   useEffect(() => {
-    if (patientDosResult?.result?.response) {
+    if (patientDosResult?.data?.response) {
       setSelectDosValue([]);
       var dosList = [];
-      patientDosResult?.result?.response?.map((res, index) => {
+      patientDosResult?.data?.response?.map((res, index) => {
         var dosLable = (
           <>
             <div className="d-flex">
@@ -157,7 +129,7 @@ const Hcc = ({ year, setIsLoading }) => {
       });
       setDosSummariesList(dosList);
     }
-  }, [patientDosResult?.result?.response]);
+  }, [patientDosResult?.data?.response]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -169,21 +141,17 @@ const Hcc = ({ year, setIsLoading }) => {
     setSelectDosValue(value);
     const patientId = localStorage.getItem("patientId");
     if (value) {
-      dispatch(
-        getPatientDetailsResultNew(
+        getpatientDetailsData(
           patientId,
           null,
           moment(value).format("YYYY-MM-DD")
         )
-      );
     } else {
-      dispatch(
-        getPatientDetailsResultNew(
+        getpatientDetailsData(
           patientId,
-          patientDetailsResult?.result?.response?.processedYear,
+          patientDetailsResult?.data?.response?.processedYear,
           null
         )
-      );
     }
 
   };
@@ -368,7 +336,12 @@ const Hcc = ({ year, setIsLoading }) => {
                   )}
                   {flagTagActive ? (
                     <div>
-                      <div className={visitStyles.flags}>
+                       <div
+            >
+              <Popover
+                content={
+                  <>
+                    <div className={visitStyles.flags}>
                         <div className={visitStyles.flags}>
                           <span className={visitStyles.hccFlag}></span>
                           <span className={visitStyles.flagCodes}>HCC</span>
@@ -388,6 +361,37 @@ const Hcc = ({ year, setIsLoading }) => {
                           <span className={visitStyles.flagCodes}>NON HCC</span>
                         </div>
                       </div>
+                  </>
+                }
+                trigger={["click"]}
+                placement="bottom"
+              >
+                <Image
+                  src={warning}
+                  style={{ cursor: "pointer" }}
+                />
+              </Popover>
+            </div>
+                      {/* <div className={visitStyles.flags}>
+                        <div className={visitStyles.flags}>
+                          <span className={visitStyles.hccFlag}></span>
+                          <span className={visitStyles.flagCodes}>HCC</span>
+                        </div>
+                        <div className={visitStyles.flags}>
+                          <span className={visitStyles.suggestedFlag}></span>
+                          <span className={visitStyles.flagCodes}>
+                            SUGGESTED
+                          </span>
+                        </div>
+                        <div className={visitStyles.flags}>
+                          <span className={visitStyles.deleteFlag}></span>
+                          <span className={visitStyles.flagCodes}>DELETED</span>
+                        </div>
+                        <div className={visitStyles.flags}>
+                          <span className={visitStyles.nonhccFlag}></span>
+                          <span className={visitStyles.flagCodes}>NON HCC</span>
+                        </div>
+                      </div> */}
                     </div>
                   ) : null}
                 </Nav>
@@ -436,4 +440,14 @@ const Hcc = ({ year, setIsLoading }) => {
   );
 };
 
-export default Hcc;
+
+const enhancer = connect(
+  (state) => ({
+    patientDetailsResult :state?.patientDetails?.details?.patientResult,
+    patientDosResult:state?.patientDetails?.details?.dosResult,
+  }),
+  {
+    getpatientDetailsData:detailsActions.patientDetailsAction
+  }
+);
+export default enhancer(Hcc);

@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Tab, Nav } from "react-bootstrap";
-import { useSelector, useDispatch } from "react-redux";
+import {connect} from "react-redux";
 import visitStyles from "../../../../styles/visitdata.module.css";
 import VisitData from "./visitData";
 import File from "./file";
 import Meat from "./meat";
-import {
-  getLabDetails,
-  getLabFileDetails,
-} from "../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import SpinnerDots from "../../../../components/spinner";
+import { actions as detailsActions } from "../../../../stores/patient/details";
 
-const Lab = ({}) => {
+
+const Lab = ({  getLabDetails,getLabFileDetails,labDetailsResult}) => {
   const [isLoading, setIsLoading] = useState(true);
-  const dispatch = useDispatch();
   const [activeTabHead, setActiveTabHead] = useState(1);
   const [activeMeatTitle, setActiveMeatTitle] = useState(null);
 
@@ -26,8 +23,20 @@ const Lab = ({}) => {
 
   useEffect(() => {
     const patientId = localStorage.getItem("patientId");
-    dispatch(getLabDetails(patientId));
+    getLabDetails(patientId);
   }, []);
+
+  useEffect(() => {
+    if (labDetailsResult?.data?.response) {
+      if (labDetailsResult?.data?.response?.labFileDetail) {
+          getLabFileDetails(
+            labDetailsResult?.data?.response?.labFileDetail[0]
+              .azureBlobPath
+          )
+        setIsLoading(true);
+      }
+    }
+  }, [labDetailsResult?.data?.response]);
 
   return (
     <>
@@ -108,4 +117,13 @@ const Lab = ({}) => {
   );
 };
 
-export default Lab;
+const enhancer = connect(
+  (state) => ({
+    labDetailsResult :state?.patientDetails?.details?.labResult,
+    }),
+  {
+    getLabDetails:detailsActions.labDetailsAction,
+    getLabFileDetails:detailsActions.labFileAction,
+  }
+);
+export default enhancer(Lab);
