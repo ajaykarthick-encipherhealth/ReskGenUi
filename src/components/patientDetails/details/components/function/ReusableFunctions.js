@@ -179,10 +179,11 @@ const newFindValueDocument = (
       duration: 1,
     });
   }
+  var splitSpace=data?.substring?.replace(/\s{2,}/g,' ').replace(/['"]+/g, '');
   setSearch({
-    value: data?.substring,
+    value: splitSpace,
     page: data?.pageNumber,
-    headers: false,
+    headers: true,
     headerContent: data?.header,
   });
   if (documentPlace === "Lab" || documentPlace === "Radio") {
