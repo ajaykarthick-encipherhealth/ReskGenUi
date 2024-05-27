@@ -197,6 +197,7 @@ export const getPatientDetails = async (
           isComboCode: res.isComboCode,
           notes: res.notes,
           hyperlinks: res?.hyperlinks,
+          suspectType:res.suspectType
         });
       }
       });
@@ -226,6 +227,7 @@ export const getPatientDetails = async (
           isComboCode: res.isComboCode,
           notes: res.notes,
           hyperlinks: res?.hyperlinks,
+          suspectType:res.suspectType
         });
       });
 
@@ -258,6 +260,8 @@ export const getPatientDetails = async (
             providerDeatils: res.provider,
             notes: res.notes,
             hyperlinks: res?.hyperlinks,
+            suspectType:res.suspectType
+
           });
         }
       });
@@ -285,6 +289,8 @@ export const getPatientDetails = async (
             isComboCode: res.isComboCode,
             notes: res.notes,
             hyperlinks: res?.hyperlinks,
+            suspectType:res.suspectType
+
           });
         }
       });

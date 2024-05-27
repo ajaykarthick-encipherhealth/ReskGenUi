@@ -10,6 +10,7 @@ import {
   faPen,
   faEllipsisVertical,
   faBook,
+  faCircle
 } from "@fortawesome/free-solid-svg-icons";
 import { SVGICON } from "../../../../../jsx/constant/theme";
 import { QuestionCircleOutlined, CloseOutlined } from "@ant-design/icons";
@@ -18,6 +19,7 @@ import {
   getEncounterDateBackground,
   getMeatFound,
   getProviderNameList,
+  getSuspectTypes,
   moveToAnotherAction,
 } from "../function/ReusableFunctions";
 import { useSelector, connect } from "react-redux";
@@ -297,6 +299,16 @@ const HccCards = ({
                           </div>
                           {/* {data.defaultPosition} */}
                           <div className="d-flex">
+                            {data.suspectType.length !=0 &&
+                             <> {getSuspectTypes(data.diagnosisCode,data.suspectType)}</>
+                            }
+                            
+                          {/* <div>
+                                <FontAwesomeIcon
+                                  icon={faCircle}
+                                  className={styles.suspectCircle}
+                                 />
+                              </div> */}
                             {cardTitle == "SUGGESTED" ||
                             cardTitle == "DELETED" ? (
                               <>

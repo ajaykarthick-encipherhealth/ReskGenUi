@@ -2,7 +2,7 @@ import { CalendarOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tooltip, notification, Popover } from "antd";
 import moment from "moment";
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
+import { faCircleUser, faCircle } from "@fortawesome/free-solid-svg-icons";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import styles from "../HCC/styles.module.css";
 import axios from "../../../../../utility/axiosConfig";
@@ -155,11 +155,15 @@ const newFindValueDocument = (
   setFileInitialPage,
   diagnosisCode,
   setSelectMeatResult,
-  meatresult
+  meatresult,
+  setSelectHyperlink,
+  value
 ) => {
   console.log(data);
   setFileLoading(true);
   setSelectMeatResult && setSelectMeatResult(meatresult);
+  setSelectHyperlink &&
+    setSelectHyperlink({ allHeaderResult: value, selectHeaderResult: data });
   var headerName = patientDocumentResult
     ? patientDocumentResult.patientId +
       " / " +
@@ -179,7 +183,9 @@ const newFindValueDocument = (
       duration: 1,
     });
   }
-  var splitSpace=data?.substring?.replace(/\s{2,}/g,' ').replace(/['"]+/g, '');
+  var splitSpace = data?.substring
+    ?.replace(/\s{2,}/g, " ")
+    .replace(/['"]+/g, "");
   setSearch({
     value: splitSpace,
     page: data?.pageNumber,
@@ -393,7 +399,7 @@ export const handleSubmitValidNotes = async ({
   isValidAction,
   selectDisDetails,
   getpatientDetailsData,
-  patientDetailsResult
+  patientDetailsResult,
 }) => {
   setFileLoading(true);
   setConfirmNotesModalValid(false);
@@ -457,7 +463,12 @@ export const handleSubmitValidNotes = async ({
         placement: "top",
         duration: 1,
       });
-      getpatientDetailsData(patientId,patientDetailsResult?.data?.response?.processedYear,patientDetailsResult?.data?.response?.dateOfService);    } else {
+      getpatientDetailsData(
+        patientId,
+        patientDetailsResult?.data?.response?.processedYear,
+        patientDetailsResult?.data?.response?.dateOfService
+      );
+    } else {
       setFileLoading(false);
       notification.error({
         message: result.response,
@@ -764,9 +775,12 @@ export const getCaptureSectionBackgroundMeatNew = (
   setFileInitialPage,
   diagnosisCode,
   setSelectMeatResult,
-  meatresult
+  meatresult,
+  setSelectHyperlink,
+  meatTitle
 ) => {
-  return value?.map((res) => {
+  var dublicateCaptureRemove = removeDuplicatesArray(value);
+  return dublicateCaptureRemove?.map((res) => {
     const result = captureSectionMatching?.filter(
       (res2) => res2.sectionName === res.header
     );
@@ -774,6 +788,22 @@ export const getCaptureSectionBackgroundMeatNew = (
     var textColor = result[0]?.sectionColor;
     var headerNames = result[0]?.sectionName;
     var sectionMapArr = (
+      //   <Popover
+      //   placement="topLeft"
+      //   title={res?.header}
+      //   content={
+      //     <>
+      //       <div className={styles.subStringContainer}>
+      //         <div>
+      //           <span className={styles.substringHead}>
+      //             Document Word
+      //           </span>
+      //         </div>
+      //         {res?.substring}
+      //       </div>
+      //     </>
+      //   }
+      // >
       <span
         onClick={() =>
           newFindValueDocument(
@@ -790,7 +820,9 @@ export const getCaptureSectionBackgroundMeatNew = (
             setFileInitialPage,
             diagnosisCode,
             setSelectMeatResult,
-            meatresult
+            meatresult,
+            setSelectHyperlink,
+            value
           )
         }
         style={{ backgroundColor: backColor, color: textColor }}
@@ -798,6 +830,7 @@ export const getCaptureSectionBackgroundMeatNew = (
       >
         {res.header}
       </span>
+      // </Popover>
     );
     if (res.header != "") {
       return sectionMapArr;
@@ -805,6 +838,49 @@ export const getCaptureSectionBackgroundMeatNew = (
   });
 };
 
+export function removeDuplicatesArray(arr) {
+  if (arr) {
+    const headers = arr.map(({ header }) => header);
+    const filtered = arr.filter(
+      ({ header }, index) => !headers.includes(header, index + 1)
+    );
+    return filtered;
+  }
+}
+
+export const getSuspectTypes = (title,value) => {
+  var popOver = (
+    <Popover
+     className="suspectContainer"
+      placement="top"
+      // title="Suspect Type"
+      content={
+        <>
+         <span className={styles.suspectHeader}>
+            SUSPECT TYPE
+          </span>
+            {value?.map((res) => {
+              return (
+                <div className={styles.subStringContainer}>
+                  <div>
+                    <span className={styles.suspectCircleLable}>
+                      {res}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+        </>
+      }
+    >
+      <div>
+        <FontAwesomeIcon icon={faCircle} className={styles.suspectCircle} />
+      </div>
+    </Popover>
+  );
+
+  return popOver;
+};
 const ReusableFunctions = () => {
   return <></>;
 };
