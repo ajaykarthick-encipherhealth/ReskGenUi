@@ -20,7 +20,7 @@ import {
   getProviderNameList,
   moveToAnotherAction,
 } from "../function/ReusableFunctions";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, connect } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
 import ModelIndex from "../model/Index";
 import ENDPOINTS from "../../../../../utility/enpoints";
@@ -57,13 +57,14 @@ const NonHccCards = ({
   setIsValidAction,
   provided,
   isVisitData,
+  fileDosPageNumberList
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
   );
-  const fileDosPageNumberList = useSelector(
-    (state) => state?.ReviewerReducers.dosPageNumberList
-  );
+  // const fileDosPageNumberList = useSelector(
+  //   (state) => state?.ReviewerReducers.dosPageNumberList
+  // );
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
   const [openContent, setOpenContent] = useState(null);
@@ -73,6 +74,8 @@ const NonHccCards = ({
     searchString: "",
     pagenumber: "",
   });
+  const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
+  const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null)
 
   return (
     <>
@@ -184,7 +187,6 @@ const NonHccCards = ({
                       setSearch: setSearch,
                       setFileModalHeader: setFileModalHeader,
                       patientDocumentResult: patientDocumentResult,
-                      fileDosPageNumberList: fileDosPageNumberList,
                     })}
                   </div>
                   <div className={`${visitStyles.encounterAndSectionHeader}`}>
@@ -206,7 +208,11 @@ const NonHccCards = ({
                       fileInitialPage,
                       setFileInitialPage,
                       data?.hyperlinks,
-                      encounterDateMatching
+                      encounterDateMatching,
+                      setIsMulitpleHeader,
+                      isMulitpleHeader,
+                      setIsMulitpleHeadeCode,
+                      isMulitpleHeaderCode
                     )}
                   </div>
                 </div>
@@ -229,4 +235,9 @@ const NonHccCards = ({
   );
 };
 
-export default NonHccCards;
+const enhancer = connect(
+  (state) => ({
+    fileDosPageNumberList:state?.patientDetails?.details?.dosPageNumberResult,
+  }),
+);
+export default enhancer(NonHccCards);

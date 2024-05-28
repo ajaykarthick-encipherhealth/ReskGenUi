@@ -19,35 +19,107 @@ export const getEncounterDateBackground = ({
   selectMeatResult,
   datas,
 }) => {
-  return value?.map((res) => {
+  return value?.map((res, index) => {
     const result = encounterDateMatching.filter((res2) => res2.name == res);
     var backColor = result[0]?.colors;
-    var sectionMapArr = res ? (
-      <span
-        onClick={() =>
-          getEncounterDetails(
-            res,
-            fileDosPageNumberList,
-            setIsModalOpenValidCodes,
-            setSearch,
-            setFileModalHeader,
-            patientDocumentResult,
-            selectMeatResult,
-            datas,
-            patientDocumentResult
-          )
-        }
-        className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
-      >
-        <i>
-          <CalendarOutlined className={visitStyles.calenderIcon} />
-        </i>
-        {moment(res).format("MMM DD")}
-      </span>
-    ) : (
-      ""
-    );
-    return sectionMapArr;
+    if (index < 2) {
+      var sectionMapArr = res ? (
+        <span
+          onClick={() =>
+            getEncounterDetails(
+              res,
+              fileDosPageNumberList,
+              setIsModalOpenValidCodes,
+              setSearch,
+              setFileModalHeader,
+              patientDocumentResult,
+              selectMeatResult,
+              datas,
+              patientDocumentResult
+            )
+          }
+          style={{
+            borderColor: stringToColour(res) + 33,
+            color: stringToColour(res),
+            border: "1px solid",
+          }}
+          className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate}`}
+        >
+          <i>
+            <CalendarOutlined
+              className={visitStyles.calenderIconNew}
+              style={{
+                size: 10,
+                color: stringToColour(res),
+              }}
+            />
+          </i>
+          {moment(res).format("MMM DD")}
+        </span>
+      ) : (
+        ""
+      );
+      return sectionMapArr;
+    } else if (value.length - 2 == index) {
+      var sectionMapArr = (
+        <Popover
+          content={
+            <>
+              {value?.map((item, i) =>
+                i > 1 ? (
+                  <span
+                    onClick={() =>
+                      getEncounterDetails(
+                        res,
+                        fileDosPageNumberList,
+                        setIsModalOpenValidCodes,
+                        setSearch,
+                        setFileModalHeader,
+                        patientDocumentResult,
+                        selectMeatResult,
+                        datas,
+                        patientDocumentResult
+                      )
+                    }
+                    style={{
+                      borderColor: stringToColour(item) + 33,
+                      color: stringToColour(item),
+                      border: "1px solid",
+                    }}
+                    className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate}`}
+                  >
+                    <i>
+                      <CalendarOutlined
+                        className={visitStyles.calenderIcon}
+                        style={{
+                          size: 10,
+                          color: stringToColour(item),
+                        }}
+                      />
+                    </i>
+                    {moment(item).format("MMM DD")}
+                  </span>
+                ) : null
+              )}
+            </>
+          }
+          trigger={["click"]}
+          placement="bottom"
+        >
+          <span
+            style={{
+              background: "#a0b1a0",
+              color: "#fff",
+            }}
+            className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+          >
+            {value.length - 2}+
+          </span>
+        </Popover>
+      );
+
+      return sectionMapArr;
+    }
   });
 };
 
@@ -225,10 +297,14 @@ export const getCaptureSectionBackgroundFile = (
   fileInitialPage,
   setFileInitialPage,
   hyperlinks,
-  encounterDateMatching
+  encounterDateMatching,
+  setIsMulitpleHeader,
+  isMulitpleHeader,
+  setIsMulitpleHeadeCode,
+  isMulitpleHeaderCode
 ) => {
   var dublicateCaptureDelete = removeDuplicates(value);
-  return dublicateCaptureDelete.map((res) => {
+  return dublicateCaptureDelete.map((res, index) => {
     const result = captureSectionMatching?.filter(
       (res2) => res2.sectionName === res
     );
@@ -238,60 +314,96 @@ export const getCaptureSectionBackgroundFile = (
     var backColor = result[0]?.backgroundColor;
     var textColor = result[0]?.sectionColor;
     var headerNames = result[0]?.sectionName;
-    var sectionMapArr = (
-      <Popover
-        placement="bottom"
-        content={getHeaderHyperlink(
-          headerResult,
-          encounterDateMatching,
-          documentPlace,
-          setSearch,
-          setFileLoading,
-          setIsModalOpenLab,
-          setIsModalOpenRadiology,
-          setIsModalOpenValidCodes,
-          setFileModalHeader,
-          patientDocumentResult,
-          fileInitialPage,
-          setFileInitialPage,
-          diagnosisCode
-        )}
-      >
-        <span
-          style={{ backgroundColor: backColor, color: textColor }}
-          className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
+    if (index < 2) {
+      var sectionMapArr = (
+        <Popover
+          placement="bottom"
+          content={getHeaderHyperlink(
+            headerResult,
+            encounterDateMatching,
+            documentPlace,
+            setSearch,
+            setFileLoading,
+            setIsModalOpenLab,
+            setIsModalOpenRadiology,
+            setIsModalOpenValidCodes,
+            setFileModalHeader,
+            patientDocumentResult,
+            fileInitialPage,
+            setFileInitialPage,
+            diagnosisCode
+          )}
         >
-          {res}
-        </span>
-      </Popover>
-      // <span
-      //   onClick={() =>
-      //     findValueDocument({
-      //       res,
-      //       headerNames,
-      //       encounterDate,
-      //       actualDescription,
-      //       diagnosisCode,
-      //       documentPlace,
-      //       setSearch,
-      //       setFileLoading,
-      //       setIsModalOpenLab,
-      //       setIsModalOpenRadiology,
-      //       setIsModalOpenValidCodes,
-      //       setFileModalHeader,
-      //       fileId,
-      //       patientDocumentResult,
-      //       fileInitialPage,
-      //       setFileInitialPage,
-      //     })
-      //   }
-      //   style={{ backgroundColor: backColor, color: textColor }}
-      //   className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
-      // >
-      //   {res}
-      // </span>
-    );
-    if (res != "") {
+          <span
+            style={{ backgroundColor: backColor, color: textColor }}
+            className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
+          >
+            {res}
+          </span>
+        </Popover>       
+      );
+      if (res != "") {
+        return sectionMapArr;
+      }
+    } else if (dublicateCaptureDelete.length - 1 == index) {
+      var sectionMapArr = (
+        <>
+          {dublicateCaptureDelete?.map((item, i) =>
+            i > 1 ? (
+              <Popover
+                placement="bottom"
+                content={getHeaderHyperlink(
+                  headerResult,
+                  encounterDateMatching,
+                  documentPlace,
+                  setSearch,
+                  setFileLoading,
+                  setIsModalOpenLab,
+                  setIsModalOpenRadiology,
+                  setIsModalOpenValidCodes,
+                  setFileModalHeader,
+                  patientDocumentResult,
+                  fileInitialPage,
+                  setFileInitialPage,
+                  diagnosisCode
+                )}
+              >
+                {isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode && (
+                  <span
+                    style={{
+                      background: stringToColour(item) + 33,
+                      color: stringToColour(item),
+                    }}
+                    className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
+                  >
+                    {item}
+                  </span>
+                )}
+              </Popover>
+            ) : null
+          )}
+
+          <span
+            style={{ backgroundColor:(isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode) ? "#f35f5f" : "#b3b3ec", color: "#fff" }}
+            className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+            onClick={() => {
+              setIsMulitpleHeader(
+                isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode
+                  ? false
+                  : true
+              ),
+                setIsMulitpleHeadeCode(diagnosisCode);
+            }}
+          >
+            {isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode ? (
+              "X"
+            ) : (
+              <>{dublicateCaptureDelete.length - 2}+</>
+            )}
+          </span>
+        </>
+      );
+
       return sectionMapArr;
     }
   });
@@ -359,7 +471,7 @@ export function removeDuplicates(array) {
 
 export const getProviderNameList = ({ data, captureSectionMatching }) => {
   var dublicateCaptureDelete = removeDuplicates(data);
-  return dublicateCaptureDelete.map((res) => {
+  return dublicateCaptureDelete.map((res, index) => {
     const result = captureSectionMatching.filter(
       (res2) => res2.sectionName == res
     );
@@ -369,26 +481,71 @@ export const getProviderNameList = ({ data, captureSectionMatching }) => {
         : result[0]?.backgroundColor;
     var textColor =
       result[0]?.sectionColor == "#efeff0" ? "#000" : result[0]?.sectionColor;
-    var sectionMapArr = (
-      <span
-        className={`mt-2 text-start ${visitStyles.provider_name}`}
-        style={{ backgroundColor: backColor, color: textColor }}
-      >
-        <i>
-          {" "}
-          <FontAwesomeIcon
-            icon={faCircleUser}
-            style={{
-              size: 10,
-              color: textColor,
-            }}
-          />
-        </i>
-        {res}
-      </span>
-      // </Popover>
-    );
-    return sectionMapArr;
+    if (index < 2) {
+      var sectionMapArr = (
+        <span
+          className={`mt-2 text-start ${visitStyles.provider_name}`}
+          style={{ backgroundColor: backColor, color: textColor }}
+        >
+          <i>
+            {" "}
+            <FontAwesomeIcon
+              icon={faCircleUser}
+              style={{
+                size: 10,
+                color: textColor,
+              }}
+            />
+          </i>
+          {res}
+        </span>
+      );
+      return sectionMapArr;
+    } else if (dublicateCaptureDelete.length - 2 == index) {
+      var sectionMapArr = (
+        <Popover
+          content={
+            <>
+              {dublicateCaptureDelete?.map((item, i) =>
+                i > 1 ? (
+                  <span
+                    className={`mt-2 text-start ${visitStyles.provider_name}`}
+                    style={{
+                      backgroundColor: stringToColour(item) + 33,
+                      color: stringToColour(item),
+                    }}
+                  >
+                    <i>
+                      {" "}
+                      <FontAwesomeIcon
+                        icon={faCircleUser}
+                        style={{
+                          size: 10,
+                          color: stringToColour(item),
+                        }}
+                      />
+                    </i>
+                    {item}
+                  </span>
+                ) : null
+              )}
+            </>
+          }
+          trigger={["click"]}
+          placement="bottom"
+        >
+          <span
+            style={{  background: "#a6cfa6",
+            color: "#fff", }}
+            className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+          >
+            {dublicateCaptureDelete.length - 2}+
+          </span>
+        </Popover>
+      );
+
+      return sectionMapArr;
+    }
   });
 };
 export const handleSubmitValidNotes = async ({
@@ -848,30 +1005,32 @@ export function removeDuplicatesArray(arr) {
   }
 }
 
-export const getSuspectTypes = (title,value) => {
+export const getSuspectTypes = (title, value) => {
   var popOver = (
     <Popover
-     className="suspectContainer"
+      className="suspectContainer"
       placement="top"
       // title="Suspect Type"
       content={
         <>
-         <span className={styles.suspectHeader}>
-            SUSPECT TYPE
-          </span>
-            {value?.map((res) => {
-              return (
-                <div className={styles.subStringContainer}>
-                  <div className={styles.suspectTypeDiv}>
-                    <span
-                     style={{ backgroundColor: stringToColour(res)+22, color: stringToColour(res)}}
-                     className={styles.suspectCircleLable}>
-                      {res}
-                    </span>
-                  </div>
+          <span className={styles.suspectHeader}>SUSPECT TYPE</span>
+          {value?.map((res) => {
+            return (
+              <div className={styles.subStringContainer}>
+                <div className={styles.suspectTypeDiv}>
+                  <span
+                    style={{
+                      backgroundColor: stringToColour(res) + 22,
+                      color: stringToColour(res),
+                    }}
+                    className={styles.suspectCircleLable}
+                  >
+                    {res}
+                  </span>
                 </div>
-              );
-            })}
+              </div>
+            );
+          })}
         </>
       }
     >

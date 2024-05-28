@@ -359,6 +359,9 @@
   font-size: 12px;
   color: #2d383aaa !important;
 }
+.calenderIconNew {
+  font-size: 12px;
+}
 
 .captureheader {
   background: rgba(194, 54, 83, 0.2);
@@ -1465,7 +1468,7 @@
 }
 
 .hoverActiveHcc {
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
 }
 .file_name_listcontainer {
   background: #eefcfd;
