@@ -1,32 +1,35 @@
+import React from "react";
+import style from "./style.module.css";
 
-
-import React from 'react';
-import style from './style.module.css'
-
-const TableRisk = ({ data ,subheader }) => {
+const TableRisk = ({ data, subheader }) => {
   return (
     <div className="d-flex mt-3">
-      <div className="w-100" style={{ border: "1px solid #A4CAF9", boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 5px" }}>
-        <table className="table table-bordered" >
-          
-          
+      <div
+        className="w-100"
+        style={{
+          border: "1px solid #A4CAF9",
+          boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 5px",
+        }}
+      >
+        <table className="table table-bordered">
           <td colSpan="4" className={style.head}>
             <span className={style.code}>A26.7</span>
-            
-            -Erysipelothrix sepsis</td>
-       
-            
-            <tr>
-              <th colSpan="3"> CMS HCC</th>
-              <th colSpan="2">RX HCC</th>
-            </tr>
-         
-          <tbody>
+            -Erysipelothrix sepsis
+          </td>
+
           <tr>
-          {subheader.map((item, index) => (
-            <td key={index} scope="row">{item.label}</td>
-          ))}
-        </tr>
+            <th colSpan="3"> CMS HCC</th>
+            <th colSpan="2">RX HCC</th>
+          </tr>
+
+          <tbody>
+            <tr>
+              {subheader.map((item, index) => (
+                <td key={index} scope="row">
+                  {item.label}
+                </td>
+              ))}
+            </tr>
             {data.map((item, index) => (
               <tr key={index}>
                 <td scope="row">{item.year}</td>
@@ -44,4 +47,3 @@ const TableRisk = ({ data ,subheader }) => {
 };
 
 export default TableRisk;
-

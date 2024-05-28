@@ -518,14 +518,14 @@ const Header = ({
                             open={popoverVisible}
                             onOpenChange={() => setPopoverVisible(true)}
                           >
-                            {/* <Button className={styles.codeBtn}>
+                            <Button className={styles.codeBtn}>
                               <div style={{ margin: " -7px 0 0 -25px" }}>
                                 <CodeIcon />
                               </div>
                               <div style={{ margin: " -6px 0 0 -7px" }}>
                                 Codes
                               </div>
-                            </Button> */}
+                            </Button>
                           </Popover>
                         )}
 

@@ -14533,7 +14533,7 @@ input[type="number"] {
   height: 45px;
   display:flex;
   align-items: center;
-  border-radius: 4px;
+  border-radius: 7px;
   font-size: 13px;
  
 }
@@ -14566,4 +14566,8 @@ input[type="number"] {
 .ant-select-outlined.ant-select-status-error:not(.ant-select-customize-input)
   .ant-select-selector {
   border: 1px solid #d9d9d9;
+}
+
+.tablehead .table th{
+  padding:0px 0px !important;
 }

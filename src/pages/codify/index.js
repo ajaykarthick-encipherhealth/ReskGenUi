@@ -1,26 +1,21 @@
 "use client";
 import { useState, useEffect } from "react";
+import { actions as dashbaordActions } from "../../stores/codify/dashboard";
+import { connect } from "react-redux";
 import { Button } from "antd";
 import {
   FilterOutlined,
   SearchOutlined,
-  CaretDownOutlined,
   ArrowRightOutlined,
 } from "@ant-design/icons";
 import style from "./style.module.css";
 import { Collapse } from "antd";
 import Tables from "../../components/tablecodify";
 import Riskadjustment from "../riskadjustment";
-import CodifyButton from "../../components/codifyButton";
 import Codes from "../codes";
-import { actions as dashbaordActions } from "../../stores/codify/dashboard";
-import { connect } from "react-redux";
-import Code from "../indexes";
 
 const Codify = ({ codifyData }) => {
-  const [showButtons, setShowButtons] = useState(false);
   const [showAlphabets, setShowAlphabets] = useState(false);
-  const [hideContent, setHideContent] = useState(false);
   const [currentButton, setCurrentButton] = useState("Both");
   const [activeButton, setActiveButton] = useState("ICD-10");
   const [activeAlphabet, setActiveAlphabet] = useState("");
@@ -29,54 +24,32 @@ const Codify = ({ codifyData }) => {
   const [loading, setLoading] = useState(false);
 
   const handleRiskAdjustment = () => {
-    setShowButtons(false);
-    setHideContent(true);
     setActiveButton("Risk Adjustment");
     setShowAlphabets(false);
   };
   const handleButtonClick = () => {
-    setHideContent(false);
     setActiveButton("ICD-10");
   };
   const handleAlphabetClick = (alphabet) => {
     setActiveAlphabet(alphabet);
-   
   };
   const handleInputChange = (e) => {
     setSearchInput(e.target.value);
-   
   };
 
   const fetch = async () => {
-
     setLoading(true);
     const treeData = await codifyData({ diseases: searchInput });
     if (treeData?.status == "SUCCESS") {
       setData(treeData?.response);
     }
-    setLoading(false); 
-    console.log(treeData, "treeData");
-  
+    setLoading(false);
   };
 
   const handleSearch = () => {
     fetch();
-    console.log("Search clicked with input:", searchInput);
   };
 
-  const buttons = [
-    "I10",
-    "D48.113",
-    "D48.114",
-    "D48.115",
-    "D48.116",
-    "D48.117",
-    "D48.118",
-    "I10",
-    "D48.113",
-    "D48.114",
-    "D48.115",
-  ];
   const alphabets = [
     "A",
     "B",
@@ -106,9 +79,7 @@ const Codify = ({ codifyData }) => {
     "Z",
   ];
 
-  const onChange = (key) => {
-    console.log(key);
-  };
+  const onChange = (key) => {};
 
   const columns = [
     {
@@ -212,88 +183,75 @@ const Codify = ({ codifyData }) => {
           />
         </div>
       )}
-      {!hideContent ? (
-        <div className="row">
-          <div className="p-3 d-flex gap-3">
-            <input
-              className={style.input}
-              type="text"
-              placeholder="Keywords, codes or code range between codes"
-              value={searchInput}
-              onChange={handleInputChange}
-            />
-            <div className="">
-              <Button
-                className={style.search}
-                icon={<SearchOutlined className={style.btncolor} />}
-                onClick={handleSearch}
-              />
-            </div>
-          </div>
 
-          <div className="d-flex gap-2 px-3 ">
-            <CodifyButton
-              label={"Both"}
-              className={currentButton === "Both" ? style.both : style.code}
-              onClick={() => setCurrentButton("Both")}
-            />
-            <CodifyButton
-              label={"Codes"}
-              className={currentButton === "Codes" ? style.both : style.code}
-              onClick={() => setCurrentButton("Codes")}
-            />
-            <CodifyButton
-              label={"Indexes"}
-              className={currentButton === "Indexes" ? style.both : style.code}
-              onClick={() => setCurrentButton("Indexes")}
-            />
-          </div>
-          {currentButton == "Both" && (
-            <div>
-              <div className="p-3 d-flex gap-3 ">
-                <div className={style.p}>Recent searches</div>
-                <CaretDownOutlined
-                  style={{ fontSize: "20px" }}
-                  onClick={() => setShowButtons(!showButtons)}
-                />
-              </div>
-              {showButtons && (
-                <div className="d-flex gap-2 p-2 flex-wrap ">
-                  {buttons.map((name, index) => (
-                    <Button className={style.btnborder} key={index}>
-                      {name}
-                    </Button>
-                  ))}
-                </div>
-              )}
-              <div className="p-2 mt-3 collapsestyle">
-                <Collapse
-                  onChange={onChange}
-                  expandIconPosition={"end"}
-                  className={style.collapse}
-                  pagination={false}
-                  items={items}
-                />
-              </div>
-              <div className="p-2 mt-2">
-                <Collapse
-                  onChange={onChange}
-                  expandIconPosition={"end"}
-                  className={style.collapse}
-                  pagination={false}
-                  items={items}
+      <div className="row">
+        {activeButton === "ICD-10" && (
+          <>
+            <div className="p-3 d-flex gap-3">
+              <input
+                className={style.input}
+                type="text"
+                placeholder="Keywords, codes or code range between codes"
+                value={searchInput}
+                onChange={handleInputChange}
+              />
+              <div className="">
+                <Button
+                  className={style.search}
+                  icon={<SearchOutlined className={style.btncolor} />}
+                  onClick={handleSearch}
                 />
               </div>
             </div>
-          )}
-          {currentButton == "Codes" && (
-            <Codes searchInput={searchInput} data={data} loading={loading} setCurrentButton={setCurrentButton} />
-          )}
-          {currentButton == "Indexes" && <Code/>}
-        </div>
-      ) : (
-        <Riskadjustment />
-      )}
+            <div className="d-flex gap-2 px-3 ">
+              <Button
+                className={currentButton === "Both" ? style.both : style.code}
+                onClick={() => setCurrentButton("Both")}
+              >
+                Both
+              </Button>
+              <Button
+                className={currentButton === "Codes" ? style.both : style.code}
+                onClick={() => setCurrentButton("Codes")}
+              >
+                Codes
+              </Button>
+            </div>
+            {currentButton == "Both" && (
+              <div>
+                <div className="p-2 mt-3 collapsestyle">
+                  <Collapse
+                    onChange={onChange}
+                    expandIconPosition={"end"}
+                    className={style.collapse}
+                    pagination={false}
+                    items={items}
+                  />
+                </div>
+                <div className="p-2 mt-2">
+                  <Collapse
+                    onChange={onChange}
+                    expandIconPosition={"end"}
+                    className={style.collapse}
+                    pagination={false}
+                    items={items}
+                  />
+                </div>
+              </div>
+            )}
+            {currentButton == "Codes" && (
+              <Codes
+                searchInput={searchInput}
+                data={data}
+                loading={loading}
+                setCurrentButton={setCurrentButton}
+              />
+            )}
+          </>
+        )}
+      </div>
+
+      {activeButton === "Risk Adjustment" && <Riskadjustment />}
     </div>
   );
 };

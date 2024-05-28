@@ -31,16 +31,7 @@ const createReducer = (actionType) =>
     },
     initialState
   );
-
-
-  const getUsersDetailsLoading=(type) => handleActions(
-  {
-    [type.START]: () => true,
-    [type.SUCCEEDED]: () => false,
-    [type.FAILED]: () => false,
-  },
-  false
-);
+  
 const dashbaordReducer = combineReducers({
   
   codify:createReducer(codifyAction),

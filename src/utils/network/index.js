@@ -16,18 +16,6 @@ export async function requestPortal(url, options) {
   return fetch(actualUrl, actualOptions).then(checkStatus);
 }
 
-export async function requestApiPortal(url, options) {
-  const token = await getStorage(tokenKey);
-  const actualUrl = `${ENDPOINTS.localApi}${url}`;
-  const actualOptions = {
-    ...options,
-    headers: {
-      Authorization: `${"Bearer" + " " + token}`,
-      "Content-Type": "application/json",
-    },
-  };
-  return fetch(actualUrl, actualOptions).then(checkStatus);
-}
 
 export async function requestExternal(url, options, path) {
   const actualUrl = `${ENDPOINTS.apiEndoint}${url}`;

@@ -4,28 +4,30 @@ import { Button, DatePicker, Input, Space } from "antd";
 import TableRisk from "../../components/tableRisk";
 
 const Riskadjustment = () => {
-const [code,setCode]=useState("")
+  const [code, setCode] = useState("");
 
   const subheader = [
-    { label: 'Year' },
-    { label: 'PACE/ESRD v21 (Yes/No)' },
-    { label: 'V22 (Yes/No)' },
-    { label: 'V24 (Yes/No)' },
-    { label: 'V05 (Yes/No)' },
+    { label: "Year", value: "year" },
+    { label: "PACE/ESRD v21 (Yes/No)", value: "pace" },
+    { label: "V22 (Yes/No)", value: "v22" },
+    { label: "V24 (Yes/No)", value: "v24" },
+    { label: "V05 (Yes/No)", value: "v05" },
   ];
-
   const data = [
-    { year: '2021', pace_esrd_v21: '2(Yes)', v22: '2(Yes)', v24: '2(Yes)',v05:'2(Yes)' },
-    
-  ]
-  const handleCode = (e) =>{
-    setCode(e.target.value)
-    console.log(code,"code")
-  }
-
-  const onChange = (date, dateString) => {
-    console.log(date, dateString);
+    {
+      year: "2021",
+      pace_esrd_v21: "2(Yes)",
+      v22: "2(Yes)",
+      v24: "2(Yes)",
+      v05: "2(Yes)",
+    },
+  ];
+  const handleCode = (e) => {
+    setCode(e.target.value);
   };
+
+  const onChange = (date, dateString) => {};
+  const handleSearchClick = () => {};
 
   return (
     <div className="container-fluid">
@@ -33,7 +35,6 @@ const [code,setCode]=useState("")
         <div className="col-6">
           <div className={style.text}>Year</div>
           <div className="mt-1">
-           
             <DatePicker
               className={style.year}
               onChange={onChange}
@@ -43,12 +44,14 @@ const [code,setCode]=useState("")
           </div>
         </div>
         <div className="col-6 ">
-          <div className={style.text1}>
-            Diagnosis Code
-            </div>
-            <div className="mt-1 d-flex justify-content-end">
-              <Input className={style.input} placeholder="Basic usage" value={code} onChange={handleCode} />
-          
+          <div className={style.text1}>Diagnosis Code</div>
+          <div className="mt-1 d-flex justify-content-end">
+            <Input
+              className={style.input}
+              placeholder="Basic usage"
+              value={code}
+              onChange={handleCode}
+            />
           </div>
         </div>
       </div>
@@ -62,17 +65,15 @@ const [code,setCode]=useState("")
           style={{
             border: "1px solid gray",
             marginTop: "10px",
-            
           }}
         ></textarea>
       </div>
       <div className="d-flex align-items-center justify-content-center mt-4 ">
-        <Button className={style.btn}>
+        <Button className={style.btn} onClick={handleSearchClick}>
           <div className={style.search}>Search</div>
         </Button>
       </div>
-      <TableRisk data ={data} subheader={subheader}/>
-      
+      <TableRisk data={data} subheader={subheader} />
     </div>
   );
 };

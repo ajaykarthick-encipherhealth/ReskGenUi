@@ -1,21 +1,10 @@
-import {requestApiPortal} from "../../../utils/network"
+import { requestPortal } from "../../../utils/network";
 
-
-
-export const codify = async ({ diseases})  => {
-  console.log(diseases,"diseases")
-  // http://localhost:9003/controlzen/getDiags?q=Cholera
+export const codify = async ({ diseases }) => {
   const options = {
     method: "GET",
   };
-  const url = `q=${diseases}`
-  const data = await requestApiPortal(`controlzen/getDiags?${url}`,
-  options
-);
+  const url = `q=${diseases}`;
+  const data = await requestPortal(`management/getDiags?${url}`, options);
   return data;
-
 };
-
-
-
-
