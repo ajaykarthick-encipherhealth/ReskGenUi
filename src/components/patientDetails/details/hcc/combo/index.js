@@ -96,24 +96,8 @@ const Combo = ({ activeComboTree,patientDetailsResult ,getpatientDetailsData,hcc
   const [listPageNumber, setListPageNumber] = useState([]);
   const [fileLoading, setFileLoading] = useState(false);
   const [search, setSearch] = useState(false);
-
-  const dosSummariesList = [
-    {
-      dos: "2023-09-30",
-      startPageNumber: 4,
-      endPageNumber: 4,
-    },
-    {
-      dos: "2023-03-29",
-      startPageNumber: 5,
-      endPageNumber: 10,
-    },
-    {
-      dos: "2023-10-11",
-      startPageNumber: 1,
-      endPageNumber: 3,
-    },
-  ];
+  const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
+  const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null)
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -426,7 +410,7 @@ const Combo = ({ activeComboTree,patientDetailsResult ,getpatientDetailsData,hcc
                                     item?.capturedSections,
                                     item?.encounterDate,
                                     item?.actualDescription,
-                                    item?.diagnosisCode,
+                                    item?.diagnosisCodeCombo,
                                     item?.getPlace,
                                     captureSectionMatching,
                                     setSearch,
@@ -440,7 +424,11 @@ const Combo = ({ activeComboTree,patientDetailsResult ,getpatientDetailsData,hcc
                                     fileInitialPage,
                                     setFileInitialPage,
                                     item?.hyperlinks,
-                                    encounterDateMatching
+                                    encounterDateMatching,
+                                    setIsMulitpleHeader,
+                                    isMulitpleHeader,
+                                    setIsMulitpleHeadeCode,
+                                    isMulitpleHeaderCode
                                   )}
                                   {/* {getCaptureSectionBackground(
                                     item.capturedSections,
@@ -686,7 +674,7 @@ const Combo = ({ activeComboTree,patientDetailsResult ,getpatientDetailsData,hcc
                                         item?.capturedSections,
                                         item?.encounterDate,
                                         item?.actualDescription,
-                                        item?.diagnosisCode,
+                                        item?.diagnosisCodeCombo,
                                         item?.getPlace,
                                         captureSectionMatching,
                                         setSearch,
@@ -700,7 +688,11 @@ const Combo = ({ activeComboTree,patientDetailsResult ,getpatientDetailsData,hcc
                                         fileInitialPage,
                                         setFileInitialPage,
                                         item?.hyperlinks,
-                                        encounterDateMatching
+                                        encounterDateMatching,
+                                        setIsMulitpleHeader,
+                                        isMulitpleHeader,
+                                        setIsMulitpleHeadeCode,
+                                        isMulitpleHeaderCode
                                       )}
                                     </div>
                                   </div>
