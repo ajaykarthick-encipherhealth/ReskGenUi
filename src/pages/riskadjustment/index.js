@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import style from "./style.module.css";
 import { Button, DatePicker, Input, Space } from "antd";
 import TableRisk from "../../components/tableRisk";
+import data  from './data.json'
 
 const Riskadjustment = () => {
   const [code, setCode] = useState("");
@@ -13,15 +14,6 @@ const Riskadjustment = () => {
     { label: "V22 (Yes/No)", value: "v22" },
     { label: "V24 (Yes/No)", value: "v24" },
     { label: "V05 (Yes/No)", value: "v05" },
-  ];
-  const data = [
-    {
-      year: "2021",
-      pace_esrd_v21: "2(Yes)",
-      v22: "2(Yes)",
-      v24: "2(Yes)",
-      v05: "2(Yes)",
-    },
   ];
   const handleCode = (e) => {
     setCode(e.target.value);
@@ -74,7 +66,7 @@ const Riskadjustment = () => {
           <div className={style.search}>Search</div>
         </Button>
       </div>
-      <TableRisk data={data} subheader={subheader} />
+      <TableRisk data={data?.response?.tabledata} subheader={subheader} />
     </div>
   );
 };

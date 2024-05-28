@@ -6,7 +6,7 @@ const Tables = (props) => {
    const {data,columns}=props
   return (
     <div>
-      <Table  className ={style.table}columns={columns} dataSource={data} size="middle" />
+      <Table columns={columns} dataSource={data} size="middle" />
     </div>
   )
 }
