@@ -862,8 +862,10 @@ export const getSuspectTypes = (title,value) => {
             {value?.map((res) => {
               return (
                 <div className={styles.subStringContainer}>
-                  <div>
-                    <span className={styles.suspectCircleLable}>
+                  <div className={styles.suspectTypeDiv}>
+                    <span
+                     style={{ backgroundColor: stringToColour(res)+22, color: stringToColour(res)}}
+                     className={styles.suspectCircleLable}>
                       {res}
                     </span>
                   </div>
@@ -880,6 +882,19 @@ export const getSuspectTypes = (title,value) => {
   );
 
   return popOver;
+};
+
+const stringToColour = (str) => {
+  let hash = 0;
+  str?.split("").forEach((char) => {
+    hash = char.charCodeAt(0) + ((hash << 5) - hash);
+  });
+  let colour = "#";
+  for (let i = 0; i < 3; i++) {
+    const value = (hash >> (i * 8)) & 0xff;
+    colour += value.toString(16).padStart(2, "0");
+  }
+  return colour;
 };
 const ReusableFunctions = () => {
   return <></>;

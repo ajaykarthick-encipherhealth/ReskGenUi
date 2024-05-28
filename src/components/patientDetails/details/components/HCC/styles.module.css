@@ -435,10 +435,13 @@
   cursor: pointer;
 }
 .suspectCircleLable {
-  color: rgba(0, 0, 0, 0.88);
   font-weight: 600;
   border-bottom: none;
-  padding: 0;
+  border-radius: 5px;
+  width: inherit;
+  display: block;
+  text-align: center;
+  font-size: 12px;
 }
 .suspectHeader {
   color: rgba(0, 0, 0, 0.88);
@@ -447,4 +450,7 @@
   margin-bottom: 5px;
   display: flex;
   justify-content: center;
+}
+.suspectTypeDiv {
+  padding: 10px;
 }
