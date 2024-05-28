@@ -26,13 +26,14 @@ const TableRisk = ({ data, subheader }) => {
                 </td>
               ))}
             </tr>
+            
             {data?.map((item, index) => (
               <tr key={index}>
-                <td scope="row">{item.year}</td>
-                <td>{item.pace_esrd_v21}</td>
-                <td>{item.v22}</td>
-                <td>{item.v24}</td>
-                <td>{item.v05}</td>
+                <td scope="row">{item?.year}</td>
+                <td>{item?.pace_esrd_v21}</td>
+                <td>{item?.v22}</td>
+                <td>{item?.v24}</td>
+                <td>{item?.v05}</td>
               </tr>
             ))}
           </tbody>

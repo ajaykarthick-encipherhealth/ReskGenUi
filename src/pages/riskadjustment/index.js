@@ -28,9 +28,11 @@ const Riskadjustment = () => {
   };
 
   const onChange = (date, dateString) => {
-    setSelectedYear();
+    setSelectedYear(date);
   }; 
-  const handleSearchClick = () => {};// Future use case 
+  const handleSearchClick = () => {
+
+  };// Future use case 
 
   return (
     <div className="container-fluid">
