@@ -14538,7 +14538,7 @@ input[type="number"] {
  
 }
 .collapsestyle .ant-collapse-item{
-  border-bottom: none!important;
+  border-bottom: none !important;
 }
 .tablestyle .table th:first-child{
   border-radius:0px 0px 0px 0px !important
@@ -14552,14 +14552,14 @@ input[type="number"] {
   height:200px !important;
 }
 .ant-pagination .ant-pagination-mini  .ant-table-pagination .ant-table-pagination-right{
-  margin:0px 0px!important;
+  margin:0px 0px !important;
 }
 
 
 .antdstyle .ant-tree .ant-tree-treenode {
   display: flex;
   align-items: flex-start;
-  padding: 6px!important;
+  padding: 6px !important;
   outline: none;
   width: 90% !important;
 }

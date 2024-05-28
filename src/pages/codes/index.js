@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import style from "./style.module.css";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { CarryOutOutlined } from "@ant-design/icons";
-import { Tree } from "antd";
+import { Empty, Tree } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
 
 const Codes = ({ data, loading, setCurrentButton }) => {
-  const onSelect = (selectedKeys, info) => {};
+  const onSelect = (selectedKeys, info) => {}; //Future use
+
   const handleArrowClick = () => {
     setCurrentButton("Both");
   };
@@ -25,10 +26,7 @@ const Codes = ({ data, loading, setCurrentButton }) => {
   return (
     <>
       <div className="d-flex gap-1 mt-3">
-        <ArrowLeftOutlined
-          style={{ fontSize: "18px" }}
-          onClick={handleArrowClick}
-        />
+        <ArrowLeftOutlined className={style.arrow} onClick={handleArrowClick} />
         <div className={style.head}>Result from CogentAI for I10</div>
       </div>
       <div className="d-flex justify-content-center">
@@ -48,7 +46,8 @@ const Codes = ({ data, loading, setCurrentButton }) => {
         <div className={style.box}>
           <div className={style.head}>110-Essential(primary) hypertension</div>
           <div className={`${style.table} tablestyle`}>
-            <table class="table table-bordered">
+            {tableData && tableData.length >0 ?(
+              <table className ="table table-bordered tablehead">
               <tr>
                 <th
                   className="tablehead"
@@ -59,17 +58,11 @@ const Codes = ({ data, loading, setCurrentButton }) => {
                 >
                   Include
                 </th>
-                <th style={{ background: "#004CB8" }}>Exclude1</th>
-                <th
-                  style={{
-                    background: "#993300",
-                  }}
-                >
-                  Exclude2
-                </th>
+                <th className={style.header2}>Exclude1</th>
+                <th className={style.header3}>Exclude2</th>
               </tr>
               <tbody>
-                {tableData.map((rowData, index) => (
+                {tableData?.map((rowData, index) => (
                   <tr key={index}>
                     <td style={{ textWrap: "wrap" }}>{rowData.include}</td>
                     <td style={{ textWrap: "wrap" }}>{rowData.exclude1}</td>
@@ -78,6 +71,10 @@ const Codes = ({ data, loading, setCurrentButton }) => {
                 ))}
               </tbody>
             </table>
+            ):(
+              <Empty/>
+              )}
+            
           </div>
         </div>
       </div>

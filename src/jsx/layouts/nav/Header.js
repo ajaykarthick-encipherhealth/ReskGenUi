@@ -504,8 +504,8 @@ const Header = ({
                   <div className="header-profile2 cr-pointer">
                     <div className="nav-link i-false" as="div">
                       <div className="header-info2 d-flex align-items-center">
-                      <div className="" style={{ paddingRight: "15px", marginTop: "8px" }}>
-                          <CreditCardOutlined style={{ fontSize: "23px", color: "#241571" }} onClick={showDrawer} /></div>
+                      <div className={styles.codify} >
+                          <CreditCardOutlined className={styles.lapicon} onClick={showDrawer} /></div>
                         <Drawer title="CODES" onClose={onClosed} open={opened} size={"large"}>
                           <Codify/>
                         </Drawer>

@@ -1,80 +1,71 @@
-.btn{
-    background-color: #241571;
-    color:white;
-    border-color: #241571;
-    text-wrap: wrap;
+.btn {
+  background-color: #241571;
+  color: white;
+  border-color: #241571;
+  text-wrap: wrap;
 }
-.button{
-    background-color: #F0F6FE;
-    border-color: #F0F6FE;
-    color:black;
-    text-wrap: wrap;
-    
+.button {
+  background-color: #f0f6fe;
+  border-color: #f0f6fe;
+  color: black;
+  text-wrap: wrap;
 }
-.input{
-    width:98%;
-    height:40px;
-    padding:14px;
+.input {
+  width: 98%;
+  height: 40px;
+  padding: 14px;
 }
-.search{
-    /* position:relative!important;
-    left:20px!important; */
-    background-color: #241571;
-     width:40px!important;
-    height:40px!important;
+.search {
+  background-color: #241571;
+  width: 40px !important;
+  height: 40px !important;
 }
-.btncolor{
-    color:white;
-    font-size: 25px!important;
-    
-    
+.btncolor {
+  color: white;
+  font-size: 25px !important;
 }
-.both{
-    background-color: #241571;
-    color:white;
-    border-color: #241571;
+.both {
+  background-color: #241571;
+  color: white;
+  border-color: #241571;
 }
-.code{
-    background-color: #F0F6FE;
-    color:black;
-    border-color: #F0F6FE;
+.code {
+  background-color: #f0f6fe;
+  color: black;
+  border-color: #f0f6fe;
 }
-.p{
-    font-size: 17px;
+.p {
+  font-size: 17px;
 }
 
-
-.btnborder{
-    border-color: #b3bfce!important;
+.btnborder {
+  border-color: #b3bfce !important;
 }
-.alphabets{
-    background-color: #F0F6FE ;
-    border-color:  #F0F6FE;
-    color:black;
-    font-weight: 500;
-  
+.alphabets {
+  background-color: #f0f6fe;
+  border-color: #f0f6fe;
+  color: black;
+  font-weight: 500;
 }
-.arrow{
-    position:relative!important;
-    left:5px!important;
-    background-color: #241571;
-    width:5%!important;
-    height:32px!important;
-
+.arrow {
+  position: relative !important;
+  left: 5px !important;
+  background-color: #241571;
+  width: 5% !important;
+  height: 32px !important;
 }
-.arrowcolor{
-    font-size: 15px!important;
-    color:#F0F6FE;
-    padding: 5px   ;
-    
+.arrowcolor {
+  font-size: 15px !important;
+  color: #f0f6fe;
+  padding: 5px;
 }
-.hidden{
-    display:none;
+.hidden {
+  display: none;
 }
-.collapse{
-    border: 1px solid #A4CAF9;
+.collapse {
+  border: 1px solid #a4caf9;
 }
 .alphabetContainer {
-    display: flex;
-    flex-wrap: wrap;
-  }
+  display: flex;
+  flex-wrap: wrap;
+}

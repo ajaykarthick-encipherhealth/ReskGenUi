@@ -5,11 +5,7 @@ const TableRisk = ({ data, subheader }) => {
   return (
     <div className="d-flex mt-3">
       <div
-        className="w-100"
-        style={{
-          border: "1px solid #A4CAF9",
-          boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 5px",
-        }}
+        className={`${style.header} w-100`}
       >
         <table className="table table-bordered">
           <td colSpan="4" className={style.head}>
@@ -24,13 +20,13 @@ const TableRisk = ({ data, subheader }) => {
 
           <tbody>
             <tr>
-              {subheader.map((item, index) => (
+              {subheader?.map((item, index) => (
                 <td key={index} scope="row">
                   {item.label}
                 </td>
               ))}
             </tr>
-            {data.map((item, index) => (
+            {data?.map((item, index) => (
               <tr key={index}>
                 <td scope="row">{item.year}</td>
                 <td>{item.pace_esrd_v21}</td>

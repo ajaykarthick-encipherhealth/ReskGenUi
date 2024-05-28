@@ -1,8 +1,11 @@
-.head{
-    padding:2px;
-    font-size: 17px!important;
-    
+.head {
+  padding: 2px;
+  font-size: 17px !important;
 }
-.code{
-    color:#04306F;
+.code {
+  color: #04306f;
+}
+.header {
+  border: 1px solid #a4caf9;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
 }

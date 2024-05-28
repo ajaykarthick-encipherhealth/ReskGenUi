@@ -5,6 +5,7 @@ import TableRisk from "../../components/tableRisk";
 
 const Riskadjustment = () => {
   const [code, setCode] = useState("");
+  const [selectedYear, setSelectedYear] = useState(null);
 
   const subheader = [
     { label: "Year", value: "year" },
@@ -26,8 +27,10 @@ const Riskadjustment = () => {
     setCode(e.target.value);
   };
 
-  const onChange = (date, dateString) => {};
-  const handleSearchClick = () => {};
+  const onChange = (date, dateString) => {
+    setSelectedYear();
+  }; 
+  const handleSearchClick = () => {};// Future use case 
 
   return (
     <div className="container-fluid">
@@ -40,6 +43,7 @@ const Riskadjustment = () => {
               onChange={onChange}
               picker="year"
               placeholder="Year"
+              value={selectedYear}
             />
           </div>
         </div>
@@ -58,15 +62,10 @@ const Riskadjustment = () => {
       <div className="col-12 mt-4">
         <div className={style.text}> Description</div>
         <textarea
-          className="form-control"
+          className= {`${style.textarea } form-control` }
           id="exampleFormControlTextarea1"
           placeholder="Description"
-          rows="3"
-          style={{
-            border: "1px solid gray",
-            marginTop: "10px",
-          }}
-        ></textarea>
+          rows="3"></textarea>
       </div>
       <div className="d-flex align-items-center justify-content-center mt-4 ">
         <Button className={style.btn} onClick={handleSearchClick}>

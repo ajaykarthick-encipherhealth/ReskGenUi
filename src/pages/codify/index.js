@@ -18,7 +18,7 @@ const Codify = ({ codifyData }) => {
   const [showAlphabets, setShowAlphabets] = useState(false);
   const [currentButton, setCurrentButton] = useState("Both");
   const [activeButton, setActiveButton] = useState("ICD-10");
-  const [activeAlphabet, setActiveAlphabet] = useState("");
+  const [activeAlphabet, setActiveAlphabet] = useState(null);
   const [searchInput, setSearchInput] = useState("");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -79,7 +79,7 @@ const Codify = ({ codifyData }) => {
     "Z",
   ];
 
-  const onChange = (key) => {};
+  const onChange = (key) => {}; // Future use case for onChange
 
   const columns = [
     {
@@ -176,14 +176,12 @@ const Codify = ({ codifyData }) => {
               </Button>
             </div>
           ))}
-
           <Button
             className={style.arrow}
             icon={<ArrowRightOutlined className={style.arrowcolor} />}
           />
         </div>
       )}
-
       <div className="row">
         {activeButton === "ICD-10" && (
           <>

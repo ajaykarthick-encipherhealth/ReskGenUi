@@ -1,6 +1,6 @@
 import React from 'react'
-import { Divider, Table } from 'antd';
-import style from './style.module.css'
+import {  Table } from 'antd';
+
 
 const Tables = (props) => {
    const {data,columns}=props
