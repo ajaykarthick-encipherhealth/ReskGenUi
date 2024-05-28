@@ -1,0 +1,31 @@
+.text {
+  font-size: 17px;
+  font-weight: 500;
+  display: flex;
+  gap: 9px;
+}
+
+.head{
+    font-weight: 600;
+    padding:10px;
+    font-size: 17px;
+}
+.box{
+    border: 1px solid #A4CAF9;
+    box-shadow:rgba(0, 0, 0, 0.35) 0px 5px 5px ;
+    border-radius: 7px;
+    height:300px;
+    width:600px;
+   
+
+}
+.table{
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 10px;
+    
+}
+
+  
+
+
