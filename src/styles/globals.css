@@ -14529,11 +14529,12 @@ input[type="number"] {
   width: 100% !important;
   border: 1px  solid #a4caf9 !important;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
-  height: 45px;
+  height: 53px;
   display:flex;
   align-items: center;
   border-radius: 7px;
-  font-size: 13px;
+  font-size: 15px;
+  font-weight: 600;
 }
 .collapsestyle .ant-collapse-item{
   border-bottom: none !important;
@@ -14564,3 +14565,18 @@ input[type="number"] {
 .tablehead .table th{
   padding:0px 0px !important;
 }
+.ant-tree-show-line .ant-tree-switcher {
+  background: transparent;
+  font-size: 20px;
+  display:flex;
+}
+.ant-tree-show-line .ant-tree-indent-unit:before{
+  border-inline-end: 1px solid black !important;
+}
+.ant-tree .ant-tree-switcher-leaf-line:before {
+   border-inline-end: 1px solid black !important;
+}
+.ant-tree .ant-tree-switcher-leaf-line:after {
+    border-bottom: 1px solid black !important;  
+}
+

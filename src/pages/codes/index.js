@@ -27,7 +27,7 @@ const Codes = ({ data, loading, setCurrentButton }) => {
     <>
       <div className="d-flex gap-1 mt-3">
         <ArrowLeftOutlined className={style.arrow} onClick={handleArrowClick} />
-        <div className={style.head}>Result from CogentAI for I10</div>
+        <div className={style.head}>Result from CogentAI</div>
       </div>
       <div className="d-flex justify-content-center">
         {loading && (

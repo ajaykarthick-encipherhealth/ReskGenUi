@@ -47,8 +47,16 @@ const Codify = ({ codifyData }) => {
   };
 
   const handleSearch = () => {
+
     fetch();
   };
+
+
+  function handleKeyDown(event) {
+    if (event.keyCode === 13) {
+      fetch();
+    }
+  }
 
   const alphabets = [
     "A",
@@ -192,6 +200,7 @@ const Codify = ({ codifyData }) => {
                 placeholder="Keywords, codes or code range between codes"
                 value={searchInput}
                 onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
               />
               <div className="">
                 <Button
