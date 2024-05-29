@@ -1,0 +1,71 @@
+.btn {
+  background-color: #241571;
+  color: white;
+  border-color: #241571;
+  text-wrap: wrap;
+}
+.button {
+  background-color: #f0f6fe;
+  border-color: #f0f6fe;
+  color: black;
+  text-wrap: wrap;
+}
+.input {
+  width: 98%;
+  height: 40px;
+  padding: 14px;
+}
+.search {
+  background-color: #241571;
+  width: 40px !important;
+  height: 40px !important;
+}
+.btncolor {
+  color: white;
+  font-size: 25px !important;
+}
+.both {
+  background-color: #241571;
+  color: white;
+  border-color: #241571;
+}
+.code {
+  background-color: #f0f6fe;
+  color: black;
+  border-color: #f0f6fe;
+}
+.p {
+  font-size: 17px;
+}
+
+.btnborder {
+  border-color: #b3bfce !important;
+}
+.alphabets {
+  background-color: #f0f6fe;
+  border-color: #f0f6fe;
+  color: black;
+  font-weight: 500;
+}
+.arrow {
+  position: relative !important;
+  left: 5px !important;
+  background-color: #241571;
+  width: 5% !important;
+  height: 32px !important;
+}
+.arrowcolor {
+  font-size: 15px !important;
+  color: #f0f6fe;
+  padding: 5px;
+}
+.hidden {
+  display: none;
+}
+.collapse {
+  border: 1px solid #a4caf9;
+}
+.alphabetContainer {
+  display: flex;
+  flex-wrap: wrap;
+}

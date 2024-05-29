@@ -23,3 +23,14 @@
   background-color: #6c9ddd;
   color: #fff;
 }
+
+.both{
+  background-color: #241571;
+  color:white;
+  border-color: #241571;
+}
+.code{
+  background-color: #F0F6FE;
+  color:black;
+  border-color: #F0F6FE;
+}

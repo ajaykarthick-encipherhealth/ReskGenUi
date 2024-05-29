@@ -24,6 +24,7 @@ import {
   DownOutlined,
   SettingOutlined,
   CloseOutlined,
+  CreditCardOutlined,
 } from "@ant-design/icons";
 import styles from "../../../styles/file-managemnt.module.css";
 import { IMAGES } from "../../constant/theme";
@@ -62,6 +63,7 @@ import {
   logoutAllDevice,
 } from "../../../stores/authflow/actions";
 import { actions as dashbaordActions } from "../../../stores/reviewer/dashboard";
+import Codify from "../../../pages/codify";
 
 const btnItems = [
   {
@@ -126,6 +128,14 @@ const Header = ({
   const [openContent, setOpenContent] = useState(false);
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [searchVal, setSearchVal] = useState("");
+  const [opened, setOpened] = useState(false);
+  const showDrawer = () => {
+    setOpened(true);
+  };
+  const onClosed = () => {
+    setOpened(false);
+  };
+
 
   const getStatus = (data) => {
     const isCMS = data?.cmsHcc_model_category_V24_for_2023_payment_year;
@@ -494,6 +504,11 @@ const Header = ({
                   <div className="header-profile2 cr-pointer">
                     <div className="nav-link i-false" as="div">
                       <div className="header-info2 d-flex align-items-center">
+                      <div className={styles.codify} >
+                          <CreditCardOutlined className={styles.lapicon} onClick={showDrawer} /></div>
+                        <Drawer title="CODES" onClose={onClosed} open={opened} size={"large"}>
+                          <Codify/>
+                        </Drawer>
                         {/* NOTE i remove userRole !== "admin" logic because PRAVIN told me to show admin also, so if Logesh ask anything to this please tell him like this*/}
                         {userRole !== "tenant" && (
                           <Popover

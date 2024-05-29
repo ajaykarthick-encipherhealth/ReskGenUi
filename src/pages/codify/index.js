@@ -1,0 +1,269 @@
+"use client";
+import { useState, useEffect } from "react";
+import { actions as dashbaordActions } from "../../stores/codify/dashboard";
+import { connect } from "react-redux";
+import { Button } from "antd";
+import {
+  FilterOutlined,
+  SearchOutlined,
+  ArrowRightOutlined,
+} from "@ant-design/icons";
+import style from "./style.module.css";
+import { Collapse } from "antd";
+import Tables from "../../components/tablecodify";
+import Riskadjustment from "../riskadjustment";
+import Codes from "../codes";
+
+const Codify = ({ codifyData }) => {
+  const [showAlphabets, setShowAlphabets] = useState(false);
+  const [currentButton, setCurrentButton] = useState("Both");
+  const [activeButton, setActiveButton] = useState("ICD-10");
+  const [activeAlphabet, setActiveAlphabet] = useState(null);
+  const [searchInput, setSearchInput] = useState("");
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const handleRiskAdjustment = () => {
+    setActiveButton("Risk Adjustment");
+    setShowAlphabets(false);
+  };
+  const handleButtonClick = () => {
+    setActiveButton("ICD-10");
+  };
+  const handleAlphabetClick = (alphabet) => {
+    setActiveAlphabet(alphabet);
+  };
+  const handleInputChange = (e) => {
+    setSearchInput(e.target.value);
+  };
+
+  const fetch = async () => {
+    setLoading(true);
+    const treeData = await codifyData({ diseases: searchInput });
+    if (treeData?.status == "SUCCESS") {
+      setData(treeData?.response);
+    }
+    setLoading(false);
+  };
+
+  const handleSearch = () => {
+
+    fetch();
+  };
+
+
+  function handleKeyDown(event) {
+    if (event.keyCode === 13) {
+      fetch();
+    }
+  }
+
+  const alphabets = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z",
+  ];
+
+  const onChange = (key) => {}; // Future use case for onChange
+
+  const columns = [
+    {
+      title: "Code",
+      dataIndex: "code",
+    },
+    {
+      title: "Description",
+      dataIndex: "Description",
+    },
+  ];
+  const datas = [
+    {
+      key: "1",
+      code: "A41.154",
+      Description: "Sepsis due to  Acinetobcater baumannii",
+    },
+    {
+      key: "2",
+      code: "A41.154",
+      Description: "Sepsis due to  Acinetobcater baumannii",
+    },
+    {
+      key: "3",
+      code: "A41.154",
+      Description: "Sepsis due to  Acinetobcater baumannii",
+    },
+    {
+      key: "4",
+      code: "A41.154",
+      Description: "Sepsis due to  Acinetobcater baumannii",
+    },
+    {
+      key: "5",
+      code: "A41.154",
+      Description: "Sepsis due to  Acinetobcater baumannii",
+    },
+  ];
+
+  const items = [
+    {
+      key: "1",
+      label:
+        " Updates to the ICD-10-CM coding system have been implemented-2024",
+      children: (
+        <div>
+          <Tables data={datas} columns={columns} />
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <div className="container-fluid">
+      <div className="row  mt-3 px-1">
+        <div className="col-11">
+          <div className="d-flex gap-2">
+            <Button
+              className={activeButton === "ICD-10" ? style.btn : style.button}
+              onClick={handleButtonClick}
+            >
+              ICD-10
+            </Button>
+            <Button
+              className={
+                activeButton === "Risk Adjustment" ? style.btn : style.button
+              }
+              onClick={handleRiskAdjustment}
+            >
+              Risk Adjustment
+            </Button>
+          </div>
+        </div>
+        <div className="col-1">
+          <div className="d-flex justify-content-center">
+            <FilterOutlined
+              style={{ fontSize: "20px" }}
+              onClick={() => setShowAlphabets(!showAlphabets)}
+            />
+          </div>
+        </div>
+      </div>
+      {showAlphabets && (
+        <div className="d-flex gap-1 p-2 flex-wrap">
+          {alphabets.map((name, index) => (
+            <div onClick={() => handleAlphabetClick(name)}>
+              <Button
+                className={
+                  activeAlphabet === name ? style.btn : style.alphabets
+                }
+                key={index}
+              >
+                {name}
+              </Button>
+            </div>
+          ))}
+          <Button
+            className={style.arrow}
+            icon={<ArrowRightOutlined className={style.arrowcolor} />}
+          />
+        </div>
+      )}
+      <div className="row">
+        {activeButton === "ICD-10" && (
+          <>
+            <div className="p-3 d-flex gap-3">
+              <input
+                className={style.input}
+                type="text"
+                placeholder="Keywords, codes or code range between codes"
+                value={searchInput}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+              />
+              <div className="">
+                <Button
+                  className={style.search}
+                  icon={<SearchOutlined className={style.btncolor} />}
+                  onClick={handleSearch}
+                />
+              </div>
+            </div>
+            <div className="d-flex gap-2 px-3 ">
+              <Button
+                className={currentButton === "Both" ? style.both : style.code}
+                onClick={() => setCurrentButton("Both")}
+              >
+                Both
+              </Button>
+              <Button
+                className={currentButton === "Codes" ? style.both : style.code}
+                onClick={() => setCurrentButton("Codes")}
+              >
+                Codes
+              </Button>
+            </div>
+            {currentButton == "Both" && (
+              <div>
+                <div className="p-2 mt-3 collapsestyle">
+                  <Collapse
+                    onChange={onChange}
+                    expandIconPosition={"end"}
+                    className={style.collapse}
+                    pagination={false}
+                    items={items}
+                  />
+                </div>
+                <div className="p-2 mt-2">
+                  <Collapse
+                    onChange={onChange}
+                    expandIconPosition={"end"}
+                    className={style.collapse}
+                    pagination={false}
+                    items={items}
+                  />
+                </div>
+              </div>
+            )}
+            {currentButton == "Codes" && (
+              <Codes
+                searchInput={searchInput}
+                data={data}
+                loading={loading}
+                setCurrentButton={setCurrentButton}
+              />
+            )}
+          </>
+        )}
+      </div>
+
+      {activeButton === "Risk Adjustment" && <Riskadjustment />}
+    </div>
+  );
+};
+
+const enhancer = connect((state) => ({ state }), {
+  codifyData: dashbaordActions.codifyAction,
+});
+export default enhancer(Codify);
