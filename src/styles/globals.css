@@ -13763,7 +13763,6 @@ overflow: scroll;
   box-shadow: none !important;
   width: 180px !important;
   padding: 0px !important;
-  height: 35px !important;
 }
 
 .auditBtnHcc button.ant-btn.ant-btn-compact-first-item {
@@ -13804,7 +13803,6 @@ overflow: scroll;
   box-shadow: none !important;
   width: 180px !important;
   padding: 0px !important;
-  height: 35px !important;
 }
 
 .declineBtnHcc button.ant-btn.ant-btn-compact-first-item {
@@ -13844,7 +13842,6 @@ overflow: scroll;
   box-shadow: none !important;
   width: 180px !important;
   padding: 0px !important;
-  height: 35px !important;
 }
 .reauditBtnHcc button.ant-btn.ant-btn-compact-first-item {
   color: #964b00 !important;
@@ -13883,7 +13880,6 @@ overflow: scroll;
   box-shadow: none !important;
   width: 180px !important;
   padding: 0px !important;
-  height: 35px !important;
 }
 .auditHoldBtnHcc button.ant-btn.ant-btn-compact-first-item {
   color: #ce9900 !important;
@@ -13922,7 +13918,6 @@ overflow: scroll;
   box-shadow: none !important;
   width: 180px !important;
   padding: 0px !important;
-  height: 35px !important;
 }
 
 .auditPendingBtnHcc button.ant-btn.ant-btn-compact-first-item {

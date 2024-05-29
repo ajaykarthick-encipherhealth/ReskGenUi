@@ -1,6 +1,6 @@
 import { requestPortal } from "../../../utils/network";
 
-export async function patientDetails(patientId,processedYear,dos) {
+export async function patientDetails(patientId,processedYear,dos,setIsSpinnerLoading) {
   const options = {
     method: "GET",
   };
@@ -8,9 +8,26 @@ export async function patientDetails(patientId,processedYear,dos) {
   if(dos){
     url = `patientId=${patientId}&dateOfService=${dos}` 
   }
+  try {
+    const data = await requestPortal(
+      `dbservice/patient/compute/get?${url}
+    `,
+      options
+    );
+    return data;
+  } catch (error) {
+    setIsSpinnerLoading(false);
+  }
+ 
+}
+
+export async function patientIdDetails(patientId) {
+  const orgId = localStorage.getItem("orgId");
+  const options = {
+    method: "GET",
+  };
   const data = await requestPortal(
-    `dbservice/patient/compute/get?${url}
-  `,
+    `dbservice/patient/get?patientId=${patientId}`,
     options
   );
   return data;

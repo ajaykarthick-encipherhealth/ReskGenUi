@@ -210,7 +210,7 @@
 
 .actionbtnContainer {
   position: relative;
-  right: 60px;
+  right: 70px;
   padding-top: 1.25rem;
 }
 .backArrowBtn {
@@ -1461,10 +1461,21 @@
 }
 
 .dosSelectPicker > div:nth-child(3) {
-  height: 35px !important;
+  height: 46px !important;
+  margin-top: -10px;
+  width: 110px;
+  z-index: 99999999;
+  border: 1px solid #e7dddd !important;
 }
 .dosSelectPicker > .css-13cymwt-control {
   min-height: 35px !important;
+}
+.dosSelectPicker > div:nth-child(3):hover {
+  height: 46px !important;
+  margin-top: -10px;
+  width: 110px;
+  z-index: 99999999;
+  border: 1px solid #e7dddd !important;
 }
 
 .hoverActiveHcc {
@@ -1777,4 +1788,14 @@
     height: 30px !important;
     margin: 30px 0px 0px 10px !important;
   }
+}
+.custom_select_type {
+  border: none !important;
+  border-radius: 12px;
+  width: 100px !important;
+  height: 45px;
+  margin-right: 10px;
+  background: #f3f3ff !important;
+  position: relative;
+  right: 70px;
 }

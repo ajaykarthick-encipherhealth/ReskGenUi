@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { dosDeatilsAction, dosPageNumberAction, labDetailsAction, labFileAction, meatQueryAction, patientDetailsAction,patientHccFileAction, radiologyDetailsAction, radiologyFileAction } from "./actions";
+import { dosDeatilsAction, dosPageNumberAction, labDetailsAction, labFileAction, meatQueryAction, patientDetailsAction,patientHccFileAction, patientIdDetailsAction, radiologyDetailsAction, radiologyFileAction } from "./actions";
 
 const initialState = {
   loading: true,
@@ -32,6 +32,7 @@ const createReducer = (actionType) =>
 
 const patientDetailsReducer = combineReducers({
   patientResult:createReducer(patientDetailsAction),
+  patientIdResult:createReducer(patientIdDetailsAction),
   hccFileResult:createReducer(patientHccFileAction),
   dosResult:createReducer(dosDeatilsAction),
   dosPageNumberResult:createReducer(dosPageNumberAction),

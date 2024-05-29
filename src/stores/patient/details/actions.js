@@ -5,6 +5,10 @@ export const patientDetailsAction = createActionThunk(
   "PATIENT_DETAILS",
   network.patientDetails
 );
+export const patientIdDetailsAction = createActionThunk(
+  "PATIENT_ID_DETAILS",
+  network.patientIdDetails
+);
 export const patientHccFileAction = createActionThunk(
   "PATIENT_HCC_FILE",
   network.patientHccFile
