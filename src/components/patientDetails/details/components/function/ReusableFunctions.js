@@ -279,6 +279,13 @@ const newFindValueDocument = (
   setFileLoading(false);
 };
 
+const truncateString = (str, num) => {
+  if (str.length > num) {
+    return str.slice(0, num) + "...";
+  }
+  return str;
+};
+
 export const getCaptureSectionBackgroundFile = (
   value,
   encounterDate,
@@ -318,29 +325,34 @@ export const getCaptureSectionBackgroundFile = (
       var sectionMapArr = (
         <Popover
           placement="bottom"
-          content={getHeaderHyperlink(
-            headerResult,
-            encounterDateMatching,
-            documentPlace,
-            setSearch,
-            setFileLoading,
-            setIsModalOpenLab,
-            setIsModalOpenRadiology,
-            setIsModalOpenValidCodes,
-            setFileModalHeader,
-            patientDocumentResult,
-            fileInitialPage,
-            setFileInitialPage,
-            diagnosisCode
-          )}
+          content={
+            <>
+              {res?.length > 30 && <div>{res}</div>}
+              {getHeaderHyperlink(
+                headerResult,
+                encounterDateMatching,
+                documentPlace,
+                setSearch,
+                setFileLoading,
+                setIsModalOpenLab,
+                setIsModalOpenRadiology,
+                setIsModalOpenValidCodes,
+                setFileModalHeader,
+                patientDocumentResult,
+                fileInitialPage,
+                setFileInitialPage,
+                diagnosisCode
+              )}
+            </>
+          }
         >
           <span
             style={{ backgroundColor: backColor, color: textColor }}
-            className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
+            className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} truncate-text`}
           >
-            {res}
+            {truncateString(res, 30)}
           </span>
-        </Popover>       
+        </Popover>
       );
       if (res != "") {
         return sectionMapArr;
@@ -384,7 +396,13 @@ export const getCaptureSectionBackgroundFile = (
           )}
 
           <span
-            style={{ backgroundColor:(isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode) ? "#f35f5f" : "#b3b3ec", color: "#fff" }}
+            style={{
+              backgroundColor:
+                isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode
+                  ? "#f35f5f"
+                  : "#b3b3ec",
+              color: "#fff",
+            }}
             className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
             onClick={() => {
               setIsMulitpleHeader(
@@ -535,8 +553,7 @@ export const getProviderNameList = ({ data, captureSectionMatching }) => {
           placement="bottom"
         >
           <span
-            style={{  background: "#a6cfa6",
-            color: "#fff", }}
+            style={{ background: "#a6cfa6", color: "#fff" }}
             className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
           >
             {dublicateCaptureDelete.length - 2}+
