@@ -21,14 +21,18 @@ const Comments = ({ setOpen, open, patientDetailsResult }) => {
   const [commentsTrigger, setCommentsTrigger] = useState(false);
   const [validated, setValidated] = useState(false);
   const [localPatientId, setLocalPatientId] = useState("");
-
+  const [userDetails, setUserDetails] = useState("");
   const getCommentsList = async () => {
-    console.log(patientDetailsResult);
+    const yearData = patientDetailsResult?.data?.response;
+
     const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/comment?patientId=${patientDetailsResult?.data?.response?.patientId}&year=${patientDetailsResult?.data?.response?.processedYear}`
+      `${ENDPOINTS.apiEndoint}dbservice/comment?patientId=${
+        patientDetailsResult?.data?.response?.patientId
+      }&processedYear=${yearData?.processedYear || ""}&dateOfService=${
+        yearData?.dateOfService || ""
+      }`
     );
-    setCommentList(response.data.response);
+    setCommentList(response.data.response, "test");
     setFilterDataLoading(false);
   };
 
@@ -37,16 +41,17 @@ const Comments = ({ setOpen, open, patientDetailsResult }) => {
     event.preventDefault();
     if (form.checkValidity() === true) {
       setCommentsTrigger(true);
-      const orgId = localStorage.getItem("orgId");
+      // const orgId = localStorage.getItem("orgId");
       var dataFormatSuggested = {
         patientId: patientDetailsResult?.data?.response?.patientId,
-        orgId: orgId,
+        // orgId: orgId,
         comment: inputValue.comments,
         processedYear: patientDetailsResult?.data?.response?.processedYear,
+        dateOfService: patientDetailsResult?.data?.response?.dateOfService,
       };
       const response = await axios.post(
         ENDPOINTS.apiEndoint + `dbservice/comment`,
-        [dataFormatSuggested]
+        dataFormatSuggested
       );
       var result = response.data;
       if (result.status == "SUCCESS") {
@@ -67,16 +72,17 @@ const Comments = ({ setOpen, open, patientDetailsResult }) => {
   const handleEnterText = async (event) => {
     if (event.charCode == 13) {
       if (inputValue.comments.trim() != "") {
-        const orgId = localStorage.getItem("orgId");
+        // const orgId = localStorage.getItem("orgId");
         var dataFormatSuggested = {
           patientId: patientDetailsResult?.data?.response?.patientId,
-          orgId: orgId,
+          // orgId: orgId,
           comment: inputValue.comments,
           processedYear: patientDetailsResult?.data?.response?.processedYear,
+          dateOfService: patientDetailsResult?.data?.response?.dateOfService,
         };
         const response = await axios.post(
           ENDPOINTS.apiEndoint + `dbservice/comment`,
-          [dataFormatSuggested]
+          dataFormatSuggested
         );
         var result = response.data;
         if (result.status == "SUCCESS") {
@@ -210,6 +216,7 @@ const Comments = ({ setOpen, open, patientDetailsResult }) => {
               </div>
             </div>
           </Form>
+
           {commentList.map((data, index) => (
             <div className={visitStyles.comments_card}>
               <div className={`${visitStyles.commentNameHead}`}>
@@ -222,8 +229,21 @@ const Comments = ({ setOpen, open, patientDetailsResult }) => {
                       renderUserDetails(data.commentCreatedBy)
                     }
                   >
-                    <Avatar className={visitStyles.timeLineUsername}>
+                    {/* <Avatar className={visitStyles.timeLineUsername}>
                       {splitUserName(data?.commentCreatedBy)}
+                    </Avatar> */}
+                    <Avatar
+                      className={
+                        !data?.createdByDetails?.profileImageUrl &&
+                        visitStyles.timeLineUsername
+                      }
+                      src={data?.createdByDetails?.profileImageUrl}
+                    >
+                      {!data?.createdByDetails?.profileImageUrl &&
+                        splitUserName(
+                          data?.createdByDetails?.firstName ||
+                            data?.createdByDetails?.lastName
+                        )}
                     </Avatar>
                   </Popover>
                 </Tooltip>
