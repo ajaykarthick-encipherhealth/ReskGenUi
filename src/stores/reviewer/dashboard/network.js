@@ -40,7 +40,7 @@ export const accuracy = async ({ btn, month, year, isAdmin = false }) => {
   const data = await requestPortal(
     `dbservice/accuracyscore/${url}
   `,
-    options
+   options 
   );
   return data;
 };
