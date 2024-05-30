@@ -32,7 +32,7 @@ const Comments = ({ setOpen, open, patientDetailsResult }) => {
         yearData?.dateOfService || ""
       }`
     );
-    setCommentList(response.data.response, "test");
+    setCommentList(response.data.response);
     setFilterDataLoading(false);
   };
 
