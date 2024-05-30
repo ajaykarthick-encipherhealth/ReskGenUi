@@ -438,3 +438,8 @@
   margin-right: 35px;
   margin-top: -6px;
 }
+.pageNumberHyperlink {
+  color: #7575c9;
+  border-bottom: 1px solid;
+  margin-left: 5px;
+}

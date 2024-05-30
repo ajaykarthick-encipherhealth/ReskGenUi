@@ -110,7 +110,9 @@ const Meat = ({
 
   useEffect(() => {
     const result = selectHyperlink?.allHeaderResult?.filter(
-      (res2) => res2.substring != selectHyperlink?.selectHeaderResult?.substring && res2.header === selectHyperlink?.selectHeaderResult?.header
+      (res2) =>
+        res2.substring != selectHyperlink?.selectHeaderResult?.substring &&
+        res2.header === selectHyperlink?.selectHeaderResult?.header
     );
     setSelectOtherHyperlink(result);
   }, [selectHyperlink]);
@@ -234,9 +236,9 @@ const Meat = ({
     }
   };
 
-  const getDisTitlePopover = (title, value, subString) => {
+  const getDisTitlePopover = (title, value, subString,result) => {
     var popOver = "";
-    var dublicateRemove = removeDuplicatesArray(subString);
+    // var dublicateRemove = removeDuplicatesArray(subString);
     if (value) {
       popOver = (
         <Popover
@@ -245,12 +247,16 @@ const Meat = ({
           content={
             <>
               <div>{value}</div>
-              {dublicateRemove?.map((res) => {
+              {subString?.map((res) => {
                 return (
                   <div className={styles.subStringContainer}>
                     <div>
                       <span className={styles.substringHead}>
-                        {res.header} (Document Word)
+                        {res.header} (Document Word) 
+                        <a className={styles.pageNumberHyperlink} onClick={() => gotoPageNumber(res,result,subString)}>
+                          ({res.pageNumber})
+                        </a>
+                        
                       </span>
                     </div>
                     {res.substring}
@@ -269,6 +275,36 @@ const Meat = ({
       );
     }
     return popOver;
+  };
+
+  const gotoPageNumber = (data,result,value) => {
+    setSelectHyperlink({ allHeaderResult: value, selectHeaderResult: data });
+    var splitSpace = data?.substring
+      ?.replace(/\s{2,}/g, " ")
+      .replace(/['"]+/g, "");
+    setSearch({
+      value: splitSpace,
+      page: data?.pageNumber,
+      headers: true,
+      headerContent: data?.header,
+    });
+    setIsModalOpen(true);
+    setSelectMeatResult(result)
+    var headerName = patientDetailsResult
+    ? patientDetailsResult?.data?.response?.patientId +
+      " / " +
+      patientDetailsResult?.data?.response?.patientName +
+      " / " +
+      result.diagnosisCode +
+      " - (" +
+      result?.diseaseName +
+      ")"  +
+      " / (" +
+      data?.header +
+      ")"
+    : "";
+  setFileModalHeader(headerName);
+
   };
 
   const onFinishFailed = (form) => {};
@@ -394,7 +430,8 @@ const Meat = ({
                         {getDisTitlePopover(
                           "Monitor",
                           item.monitorAspect,
-                          item.monitorHyperLink
+                          item.monitorHyperLink,
+                          item
                         )}
                         <div>
                           {getCaptureSectionBackgroundMeatNew(
@@ -429,7 +466,8 @@ const Meat = ({
                         {getDisTitlePopover(
                           "Evaluate",
                           item.evaluateAspect,
-                          item.evaluateHyperLink
+                          item.evaluateHyperLink,
+                          item
                         )}
                         <div>
                           {getCaptureSectionBackgroundMeatNew(
@@ -464,7 +502,8 @@ const Meat = ({
                         {getDisTitlePopover(
                           "Assessment",
                           item.assessmentAspect,
-                          item.assessmentHyperLink
+                          item.assessmentHyperLink,
+                          item
                         )}
                         <div>
                           {getCaptureSectionBackgroundMeatNew(
@@ -499,7 +538,8 @@ const Meat = ({
                         {getDisTitlePopover(
                           "Treatment",
                           item.treatmentAspect,
-                          item.treatmentHyperLink
+                          item.treatmentHyperLink,
+                          item
                         )}
                         <div>
                           {getCaptureSectionBackgroundMeatNew(
@@ -904,32 +944,33 @@ const Meat = ({
           title={[
             <div className={styles.selectHyperheader}>
               {fileModalHeader}
-              {selectOtherHyperlink?.length != 0 &&
-              <div className={styles.stillIssueContainer}>
-                <Popover
-                  placement="bottom"
-                  title="Secondary"
-                  content={getCaptureSectionBackgroundMeatNew(
-                    selectOtherHyperlink,
-                    captureSectionMatching,
-                    "hcc",
-                    setSearch,
-                    setFileLoading,
-                    setIsModalOpenLab,
-                    setIsModalOpenRadiology,
-                    setIsModalOpen,
-                    setFileModalHeader,
-                    patientDocumentResult,
-                    fileInitialPage,
-                    setFileInitialPage,
-                    selectMeatResult.diagnosisCode,
-                    setSelectMeatResult,
-                    selectMeatResult,
-                  )}
-                >
-                  <Button type="primary">Still Hyperlink Issue</Button>
-                </Popover>
-              </div>}
+              {selectOtherHyperlink?.length != 0 && (
+                <div className={styles.stillIssueContainer}>
+                  <Popover
+                    placement="bottom"
+                    title="Secondary"
+                    content={getCaptureSectionBackgroundMeatNew(
+                      selectOtherHyperlink,
+                      captureSectionMatching,
+                      "hcc",
+                      setSearch,
+                      setFileLoading,
+                      setIsModalOpenLab,
+                      setIsModalOpenRadiology,
+                      setIsModalOpen,
+                      setFileModalHeader,
+                      patientDocumentResult,
+                      fileInitialPage,
+                      setFileInitialPage,
+                      selectMeatResult.diagnosisCode,
+                      setSelectMeatResult,
+                      selectMeatResult
+                    )}
+                  >
+                    <Button type="primary">Still Hyperlink Issue</Button>
+                  </Popover>
+                </div>
+              )}
             </div>,
           ]}
           // title="Pdf Test"
@@ -1040,7 +1081,8 @@ const Meat = ({
                         {getDisTitlePopover(
                           "Monitor",
                           selectMeatResult?.monitorAspect,
-                          selectMeatResult.monitorHyperLink
+                          selectMeatResult.monitorHyperLink,
+                          selectMeatResult
                         )}
                         <div>
                           {getCaptureSectionBackgroundMeatNew(
@@ -1085,7 +1127,8 @@ const Meat = ({
                         {getDisTitlePopover(
                           "Evaluate",
                           selectMeatResult?.evaluateAspect,
-                          selectMeatResult.evaluateHyperLink
+                          selectMeatResult.evaluateHyperLink,
+                          selectMeatResult
                         )}
                         <div>
                           {getCaptureSectionBackgroundMeatNew(
@@ -1130,7 +1173,8 @@ const Meat = ({
                         {getDisTitlePopover(
                           "Assesssment",
                           selectMeatResult?.assessmentAspect,
-                          selectMeatResult.assessmentHyperLink
+                          selectMeatResult.assessmentHyperLink,
+                          selectMeatResult
                         )}
                         <div>
                           {getCaptureSectionBackgroundMeatNew(
@@ -1174,7 +1218,8 @@ const Meat = ({
                         {getDisTitlePopover(
                           "Treatment",
                           selectMeatResult?.treatmentAspect,
-                          selectMeatResult.treatmentHyperLink
+                          selectMeatResult.treatmentHyperLink,
+                          selectMeatResult
                         )}
                         <div>
                           {getCaptureSectionBackgroundMeatNew(
