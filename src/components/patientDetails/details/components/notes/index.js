@@ -20,23 +20,30 @@ const Notes = ({ setOpen, open, patientDetailsResult }) => {
   const [filterDataLoading, setFilterDataLoading] = useState(true);
   const [commentsTrigger, setCommentsTrigger] = useState(false);
   const [validated, setValidated] = useState(false);
+  const [userDetails, setUserDetails] = useState();
   const [localPatientId, setLocalPatientId] = useState("");
 
   const handleSubmitNotes = async (event) => {
     const form = event.currentTarget;
     event.preventDefault();
+    const yearData = patientDetailsResult?.data?.response;
     if (form.checkValidity() === true) {
       setCommentsTrigger(true);
       const orgId = localStorage.getItem("orgId");
       var dataFormatSuggested = {
-        patientId: patientDetailsResult?.data?.response?.patientId,
-        orgId: orgId,
-        notes: inputValue.comments,
-        year: patientDetailsResult?.data?.response?.processedYear,
+        patientId: yearData?.patientId,
+        // orgId: orgId,
+        note: inputValue.comments,
+        processedYear: yearData?.processedYear
+          ? yearData?.processedYear
+          : yearData?.dateOfService
+          ? yearData?.dateOfService
+          : "",
+        // dateOfService: yearData?.dateOfService ? yearData?.dateOfService : ""
       };
       const response = await axios.post(
         ENDPOINTS.apiEndoint + `dbservice/notes`,
-        [dataFormatSuggested]
+        dataFormatSuggested
       );
       var result = response.data;
       if (result.status == "SUCCESS") {
@@ -55,18 +62,24 @@ const Notes = ({ setOpen, open, patientDetailsResult }) => {
   };
 
   const handleEnterTextNotes = async (event) => {
+    const yearData = patientDetailsResult?.data?.response;
     if (event.charCode == 13) {
       if (inputValue.comments.trim() != "") {
         const orgId = localStorage.getItem("orgId");
         var dataFormatSuggested = {
-          patientId: patientDetailsResult?.data?.response?.patientId,
-          orgId: orgId,
-          notes: inputValue.comments,
-          year: patientDetailsResult?.data?.response?.processedYear,
+          patientId: yearData?.patientId,
+          // orgId: orgId,
+          note: inputValue.comments,
+          processedYear: yearData?.processedYear
+            ? yearData?.processedYear
+            : yearData?.dateOfService
+            ? yearData?.dateOfService
+            : "",
+          // dateOfService: yearData?.dateOfService ? yearData?.dateOfService : ""
         };
         const response = await axios.post(
           ENDPOINTS.apiEndoint + `dbservice/notes`,
-          [dataFormatSuggested]
+          dataFormatSuggested
         );
         var result = response.data;
         if (result.status == "SUCCESS") {
@@ -84,9 +97,16 @@ const Notes = ({ setOpen, open, patientDetailsResult }) => {
   };
 
   const getNotesList = async () => {
+    const yearData = patientDetailsResult?.data?.response;
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `dbservice/notes?patientId=${patientDetailsResult?.data?.response?.patientId}&year=${patientDetailsResult?.data?.response?.processedYear}`
+        `dbservice/notes?patientId=${
+          patientDetailsResult?.data?.response?.patientId
+        }&processedYear=${
+          yearData?.processedYear ? yearData?.processedYear : ""
+        }&dateOfService=${
+          yearData?.dateOfService ? yearData?.dateOfService : ""
+        }`
     );
     setNotesList(response.data.response);
     setFilterDataLoading(false);
@@ -178,57 +198,65 @@ const Notes = ({ setOpen, open, patientDetailsResult }) => {
         </button>
       </div>
       <div className="offcanvas-body">
-          <div className="container-fluid">
-            <Form noValidate validated={validated} onSubmit={handleSubmitNotes}>
-              <div className="row">
-                <div className={`col-xl-12 ${visitStyles.textareaContainer}`}>
-                  <textarea
-                    className={visitStyles.commentsFormControl}
-                    rows="5"
-                    required
-                    id="comments"
-                    name="comments"
-                    placeholder="Add Notes"
-                    onChange={handleChange}
-                    onKeyPress={handleEnterTextNotes}
-                    type="submit"
-                    value={inputValue.comments}
-                  ></textarea>
-                  <Button
-                    type="submit"
-                    disabled={commentsTrigger}
-                    className={visitStyles.commentSendIcon}
+        <div className="container-fluid">
+          <Form noValidate validated={validated} onSubmit={handleSubmitNotes}>
+            <div className="row">
+              <div className={`col-xl-12 ${visitStyles.textareaContainer}`}>
+                <textarea
+                  className={visitStyles.commentsFormControl}
+                  rows="5"
+                  required
+                  id="comments"
+                  name="comments"
+                  placeholder="Add Notes"
+                  onChange={handleChange}
+                  onKeyPress={handleEnterTextNotes}
+                  type="submit"
+                  value={inputValue.comments}
+                ></textarea>
+                <Button
+                  type="submit"
+                  disabled={commentsTrigger}
+                  className={visitStyles.commentSendIcon}
+                >
+                  {SVGICON.sentMessageIcon}
+                </Button>
+              </div>
+            </div>
+          </Form>
+          {notesList?.map((data, index) => (
+            <div className={visitStyles.comments_card}>
+              <div className={`${visitStyles.commentNameHead}`}>
+                <span className={visitStyles.commentsName}>{data?.note}</span>
+                <Tooltip placement="bottom" title={data?.createdBy}>
+                  <Popover
+                    placement="bottom"
+                    content={userDetails}
+                    onOpenChange={() => renderUserDetails(createdBy)}
                   >
-                    {SVGICON.sentMessageIcon}
-                  </Button>
-                </div>
-              </div>
-            </Form>
-            {notesList.map((data, index) => (
-              <div className={visitStyles.comments_card}>
-                <div className={`${visitStyles.commentNameHead}`}>
-                  <span className={visitStyles.commentsName}>{data.notes}</span>
-                  <Tooltip placement="bottom" title={data.notesCreatedBy}>
-                    <Popover
-                      placement="bottom"
-                      content={userDetails}
-                      onOpenChange={() =>
-                        renderUserDetails(data.notesCreatedBy)
+                    <Avatar
+                      className={
+                        !data?.createdByDetails?.profileImageUrl &&
+                        visitStyles.timeLineUsername
                       }
+                      src={data?.createdByDetails?.profileImageUrl}
                     >
-                      <Avatar className={visitStyles.timeLineUsername}>
-                        {splitUserName(data?.notesCreatedBy)}
-                      </Avatar>
-                    </Popover>
-                  </Tooltip>
-                </div>
-                <span className={visitStyles.commentsTime}>
-                  {moment(data.notesCreatedAt).format("MM-DD-YYYY hh:mm:A")}
-                </span>
+                      {!data?.createdByDetails?.profileImageUrl &&
+                        splitUserName(
+                          data?.createdByDetails?.firstName ||
+                            data?.createdByDetails?.lastName
+                        )}
+                    </Avatar>
+                  </Popover>
+                </Tooltip>
               </div>
-            ))}
-          </div>
+              <span className={visitStyles.commentsTime}>
+                {moment(data?.createdDate).format("MM-DD-YYYY hh:mm:A")}
+              </span>
+            </div>
+          ))}
         </div>
+      </div>
     </Offcanvas>
   );
 };
