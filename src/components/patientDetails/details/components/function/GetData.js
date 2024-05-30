@@ -201,6 +201,7 @@ export const getPatientDetails = async (
         });
       }
       });
+      console.log(hccDisArray)
 
       result?.nonHccDiseases?.map((res, index) => {
         var providerList = [];

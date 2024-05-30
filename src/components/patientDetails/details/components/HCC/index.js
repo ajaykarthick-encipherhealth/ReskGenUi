@@ -10,7 +10,7 @@ import {
   faPen,
   faEllipsisVertical,
   faBook,
-  faCircle
+  faCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { SVGICON } from "../../../../../jsx/constant/theme";
 import { QuestionCircleOutlined, CloseOutlined } from "@ant-design/icons";
@@ -27,7 +27,6 @@ import { Draggable } from "react-beautiful-dnd";
 import ModelIndex from "../model/Index";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
-
 
 const HccCards = ({
   list,
@@ -61,7 +60,7 @@ const HccCards = ({
   setIsValidAction,
   provided,
   isVisitData,
-  fileDosPageNumberList
+  fileDosPageNumberList,
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -76,9 +75,7 @@ const HccCards = ({
     pagenumber: "",
   });
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
-  const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null)
-
-
+  const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
 
   const PopContentHccVersion = (
     <div className={styles.innerPop}>
@@ -188,11 +185,17 @@ const HccCards = ({
                           </div>
                           {/* {data.defaultPosition} */}
                           <div className="d-flex">
-                            {data.suspectType.length !=0 &&
-                             <> {getSuspectTypes(data.diagnosisCode,data.suspectType)}</>
-                            }
-                            
-                          {/* <div>
+                            {data.suspectType.length != 0 && (
+                              <>
+                                {" "}
+                                {getSuspectTypes(
+                                  data.diagnosisCode,
+                                  data.suspectType
+                                )}
+                              </>
+                            )}
+
+                            {/* <div>
                                 <FontAwesomeIcon
                                   icon={faCircle}
                                   className={styles.suspectCircle}
@@ -453,7 +456,37 @@ const HccCards = ({
                                 patientDocumentResult: patientDocumentResult,
                               })}
                             </div>
-                          
+                            {data.providerName.length == 0 && (
+                              <div
+                                className={`${visitStyles.encounterAndSectionHeader}`}
+                              >
+                                {getCaptureSectionBackgroundFile(
+                                  data?.capturedSections,
+                                  data?.encounterDate,
+                                  data?.actualDescription,
+                                  data?.diagnosisCode,
+                                  data?.getPlace,
+                                  captureSectionMatching,
+                                  setSearch,
+                                  setFileLoading,
+                                  setIsModalOpenLab,
+                                  setIsModalOpenRadiology,
+                                  setIsModalOpenValidCodes,
+                                  setFileModalHeader,
+                                  fileId,
+                                  patientDocumentResult,
+                                  fileInitialPage,
+                                  setFileInitialPage,
+                                  data?.hyperlinks,
+                                  encounterDateMatching,
+                                  setIsMulitpleHeader,
+                                  isMulitpleHeader,
+                                  setIsMulitpleHeadeCode,
+                                  isMulitpleHeaderCode,
+                                  data.dbDescription
+                                )}
+                              </div>
+                            )}
                           </div>
                           <div
                             className={`${visitStyles.encounterAndSectionHeader}`}
@@ -590,35 +623,37 @@ const HccCards = ({
                             ) : null}
                           </div>
                         </div>
-                        <div
-                              className={`${visitStyles.encounterAndSectionHeader}`}
-                            >
-                              {getCaptureSectionBackgroundFile(
-                                data?.capturedSections,
-                                data?.encounterDate,
-                                data?.actualDescription,
-                                data?.diagnosisCode,
-                                data?.getPlace,
-                                captureSectionMatching,
-                                setSearch,
-                                setFileLoading,
-                                setIsModalOpenLab,
-                                setIsModalOpenRadiology,
-                                setIsModalOpenValidCodes,
-                                setFileModalHeader,
-                                fileId,
-                                patientDocumentResult,
-                                fileInitialPage,
-                                setFileInitialPage,
-                                data?.hyperlinks,
-                                encounterDateMatching,
-                                setIsMulitpleHeader,
-                                isMulitpleHeader,
-                                setIsMulitpleHeadeCode,
-                                isMulitpleHeaderCode,
-                                data.dbDescription
-                              )}
-                            </div>
+                        {data.providerName.length != 0 && (
+                          <div
+                            className={`${visitStyles.encounterAndSectionHeader}`}
+                          >
+                            {getCaptureSectionBackgroundFile(
+                              data?.capturedSections,
+                              data?.encounterDate,
+                              data?.actualDescription,
+                              data?.diagnosisCode,
+                              data?.getPlace,
+                              captureSectionMatching,
+                              setSearch,
+                              setFileLoading,
+                              setIsModalOpenLab,
+                              setIsModalOpenRadiology,
+                              setIsModalOpenValidCodes,
+                              setFileModalHeader,
+                              fileId,
+                              patientDocumentResult,
+                              fileInitialPage,
+                              setFileInitialPage,
+                              data?.hyperlinks,
+                              encounterDateMatching,
+                              setIsMulitpleHeader,
+                              isMulitpleHeader,
+                              setIsMulitpleHeadeCode,
+                              isMulitpleHeaderCode,
+                              data.dbDescription
+                            )}
+                          </div>
+                        )}
                       </div>
                     );
                   }}
@@ -644,9 +679,7 @@ const HccCards = ({
   );
 };
 
-const enhancer = connect(
-  (state) => ({
-    fileDosPageNumberList:state?.patientDetails?.details?.dosPageNumberResult,
-  }),
-);
+const enhancer = connect((state) => ({
+  fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
+}));
 export default enhancer(HccCards);

@@ -440,6 +440,6 @@
 }
 .pageNumberHyperlink {
   color: #7575c9;
-  border-bottom: 1px solid;
+  border-bottom: 1px solid #7575c9;
   margin-left: 5px;
 }
