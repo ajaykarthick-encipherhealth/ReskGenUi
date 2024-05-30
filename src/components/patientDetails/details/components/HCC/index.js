@@ -615,7 +615,8 @@ const HccCards = ({
                                 setIsMulitpleHeader,
                                 isMulitpleHeader,
                                 setIsMulitpleHeadeCode,
-                                isMulitpleHeaderCode
+                                isMulitpleHeaderCode,
+                                data.dbDescription
                               )}
                             </div>
                       </div>

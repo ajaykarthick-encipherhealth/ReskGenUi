@@ -172,7 +172,8 @@ export const getHeaderHyperlink = (
   setFileInitialPage,
   diagnosisCode,
   setSelectMeatResult,
-  meatresult
+  meatresult,
+  diseaseName
 ) => {
   return value?.map((res) => {
     const result = encounterDateMatching.filter(
@@ -196,7 +197,10 @@ export const getHeaderHyperlink = (
             setFileInitialPage,
             diagnosisCode,
             setSelectMeatResult,
-            meatresult
+            meatresult,
+            "",
+            "",
+            diseaseName
           )
         }
         className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
@@ -229,19 +233,24 @@ const newFindValueDocument = (
   setSelectMeatResult,
   meatresult,
   setSelectHyperlink,
-  value
+  value,
+  diseaseName
 ) => {
   console.log(data);
   setFileLoading(true);
   setSelectMeatResult && setSelectMeatResult(meatresult);
   setSelectHyperlink &&
     setSelectHyperlink({ allHeaderResult: value, selectHeaderResult: data });
+    var disName = diseaseName? diseaseName :meatresult?.diseaseName;
   var headerName = patientDocumentResult
     ? patientDocumentResult.patientId +
       " / " +
       patientDocumentResult.patientName +
       " / " +
       diagnosisCode +
+      " - (" +
+      disName +
+      ")"  +
       " - (" +
       data?.header +
       ")"
@@ -308,7 +317,8 @@ export const getCaptureSectionBackgroundFile = (
   setIsMulitpleHeader,
   isMulitpleHeader,
   setIsMulitpleHeadeCode,
-  isMulitpleHeaderCode
+  isMulitpleHeaderCode,
+  diseaseName
 ) => {
   var dublicateCaptureDelete = removeDuplicates(value);
   return dublicateCaptureDelete.map((res, index) => {
@@ -341,7 +351,10 @@ export const getCaptureSectionBackgroundFile = (
                 patientDocumentResult,
                 fileInitialPage,
                 setFileInitialPage,
-                diagnosisCode
+                diagnosisCode,
+                "",
+                "",
+                diseaseName
               )}
             </>
           }
