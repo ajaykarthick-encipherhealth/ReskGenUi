@@ -62,18 +62,24 @@ const Notes = ({ setOpen, open, patientDetailsResult }) => {
   };
 
   const handleEnterTextNotes = async (event) => {
+    const yearData = patientDetailsResult?.data?.response;
     if (event.charCode == 13) {
       if (inputValue.comments.trim() != "") {
         const orgId = localStorage.getItem("orgId");
         var dataFormatSuggested = {
-          patientId: patientDetailsResult?.data?.response?.patientId,
-          orgId: orgId,
-          notes: inputValue.comments,
-          year: patientDetailsResult?.data?.response?.processedYear,
+          patientId: yearData?.patientId,
+          // orgId: orgId,
+          note: inputValue.comments,
+          processedYear: yearData?.processedYear
+            ? yearData?.processedYear
+            : yearData?.dateOfService
+            ? yearData?.dateOfService
+            : "",
+          // dateOfService: yearData?.dateOfService ? yearData?.dateOfService : ""
         };
         const response = await axios.post(
           ENDPOINTS.apiEndoint + `dbservice/notes`,
-          [dataFormatSuggested]
+          dataFormatSuggested
         );
         var result = response.data;
         if (result.status == "SUCCESS") {
