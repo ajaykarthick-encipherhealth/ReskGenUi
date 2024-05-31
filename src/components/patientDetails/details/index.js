@@ -92,7 +92,6 @@ const Details = ({
   getFlagDetailsData,
   flagsDetailsResult
 }) => {
-  console.log(flagsDetailsResult)
   const navigate = useRouter();
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
