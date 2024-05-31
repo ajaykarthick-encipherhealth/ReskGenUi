@@ -15,6 +15,8 @@ function UploadFile({ title }) {
               className="input"
               type="file"
               accept=".png,.jpg,.jpeg"
+              webkitdirectory="true" 
+              multiple
             />
             {title}
           </label>

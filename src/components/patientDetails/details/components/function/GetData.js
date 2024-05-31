@@ -4,6 +4,7 @@ import {
 } from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
+import { stringToColour } from "./ReusableFunctions";
 import NewResponse from "./newresponse.json";
 
 export const COLORS = [
@@ -42,18 +43,21 @@ export const COLORS3 = [
   "encounterDateTag10",
 ];
 
-const stringToColour = (str) => {
-  let hash = 0;
-  str?.split("").forEach((char) => {
-    hash = char.charCodeAt(0) + ((hash << 5) - hash);
-  });
-  let colour = "#";
-  for (let i = 0; i < 3; i++) {
-    const value = (hash >> (i * 8)) & 0xff;
-    colour += value.toString(16).padStart(2, "0");
-  }
-  return colour;
-};
+// const stringToColour = (str) => {
+//   let hash = 0;
+//   str?.split("").forEach((char) => {
+//     hash = char.charCodeAt(0) + ((hash << 5) - hash);
+//   });
+//   let colour = "#";
+//   for (let i = 0; i < 3; i++) {
+//     const value = (hash >> (i * 8)) & 0xff;
+//     colour += value.toString(16).padStart(2, "0");
+//   }
+//   if(str.toLocaleLowerCase() === "plan"){
+//      colour = "#536cdf"
+//   }
+//   return colour;
+// };
 
 const submitSectionColors = async (
   sectionName,
@@ -182,19 +186,19 @@ export const getPatientDetails = async (
           diagnosisCode: res.diagnosisCode,
           encounterDate: res.encounterDate,
           encounterDateSplit:  res.dateOfServices,
-          isManuallyAdded: res.isManuallyAdded,
+          isManuallyAdded: getStateIndicators(res.stateIndicators,"MANUALLY_ADDED"),
           isHccValid: res.isHccValid,
           defaultPosition: res.defaultPosition,
           providerName: providerList,
           dbDescription: res.dbDescription,
-          isMostSpecific: res.isMostSpecific,
+          isMostSpecific: getStateIndicators(res.stateIndicators,"MOST_SPECIFIC"),
           children: res.children,
           getPlace: "Hcc",
           dbDescription: res.dbDescription,
           isCmsHcc: res.isCmsHcc,
           isRxHcc: res.isRxHcc,
           providerDeatils: res.provider,
-          isComboCode: res.isComboCode,
+          isComboCode: getStateIndicators(res.stateIndicators,"COMBO_CODE"),
           notes: res.notes,
           hyperlinks: res?.hyperlinks,
           suspectType:res.suspectType
@@ -213,18 +217,18 @@ export const getPatientDetails = async (
           diagnosisCode: res.diagnosisCode,
           encounterDate: res.encounterDate,
           encounterDateSplit:  res.dateOfServices,
-          isManuallyAdded: res.isManuallyAdded,
+          isManuallyAdded: getStateIndicators(res.stateIndicators,"MANUALLY_ADDED"),
           isHccValid: res.isHccValid,
           defaultPosition: res.defaultPosition,
           providerName: providerList,
           dbDescription: res.dbDescription,
-          isMostSpecific: res.isMostSpecific,
+          isMostSpecific: getStateIndicators(res.stateIndicators,"MOST_SPECIFIC"),
           children: res.children,
           dbDescription: res.dbDescription,
           isCmsHcc: res.isCmsHcc,
           isRxHcc: res.isRxHcc,
           providerDeatils: res.provider,
-          isComboCode: res.isComboCode,
+          isComboCode: getStateIndicators(res.stateIndicators,"COMBO_CODE"),
           notes: res.notes,
           hyperlinks: res?.hyperlinks,
           suspectType:res.suspectType
@@ -253,10 +257,11 @@ export const getPatientDetails = async (
             defaultPosition: res.defaultPosition,
             providerName: providerList,
             children: res.children ? res.children : [],
-            isMostSpecific: res.isMostSpecific,
+            isMostSpecific: getStateIndicators(res.stateIndicators,"MOST_SPECIFIC"),
             isCmsHcc: res.isCmsHcc,
             isRxHcc: res.isRxHcc,
-            isComboCode: res.isComboCode,
+            isManuallyAdded: getStateIndicators(res.stateIndicators,"MANUALLY_ADDED"),
+            isComboCode: getStateIndicators(res.stateIndicators,"COMBO_CODE"),
             providerDeatils: res.provider,
             notes: res.notes,
             hyperlinks: res?.hyperlinks,
@@ -280,13 +285,14 @@ export const getPatientDetails = async (
             diagnosisCode: res.diagnosisCode,
             encounterDate: res.encounterDate,
             encounterDateSplit: res.dateOfServices,
-            isManuallyAdded: res.isManuallyAdded,
+            isManuallyAdded: getStateIndicators(res.stateIndicators,"MANUALLY_ADDED"),
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
             providerName: providerList,
             isCmsHcc: res.isCmsHcc,
             isRxHcc: res.isRxHcc,
-            isComboCode: res.isComboCode,
+            isComboCode: getStateIndicators(res.stateIndicators,"COMBO_CODE"),
+            isMostSpecific: getStateIndicators(res.stateIndicators,"MOST_SPECIFIC"),
             notes: res.notes,
             hyperlinks: res?.hyperlinks,
             suspectType:res.suspectType
@@ -612,6 +618,13 @@ export const getPatientDetails = async (
     }
   }
 };
+
+const getStateIndicators=(data,state)=>{
+  const result = data?.some(item => 
+    item === state
+  )
+  return result;
+}
 
 const GetData = () => {
   return <></>;

@@ -194,6 +194,29 @@ const HccCards = ({
                                 )}
                               </>
                             )}
+                            {data.isMostSpecific == true && (
+                                    <>
+                                      <div
+                                        className={visitStyles.tree_icon}
+                                        style={{ background: "#c7f3c6" }}
+                                        onClick={() => {
+                                          setOpens(true);
+                                          setCombiTree([
+                                            { ...data, expanded: true },
+                                          ]);
+                                        }}
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={faSitemap}
+                                          style={{
+                                            size: 8,
+                                            color: "#088f39",
+                                          }}
+                                        />
+                                      </div>
+                                   
+                                    </>
+                                  )}
 
                             {/* <div>
                                 <FontAwesomeIcon
@@ -223,6 +246,7 @@ const HccCards = ({
                                 ) : null}
                               </>
                             ) : null}
+
 
                             <Popover
                               placement="left"
@@ -337,7 +361,7 @@ const HccCards = ({
                                       </div>
                                     }
                                   </Popconfirm>
-                                  {data.isMostSpecific == true && (
+                                  {/* {data.isMostSpecific == true && (
                                     <div className="cr-pointer d-flex">
                                       <div
                                         className={visitStyles.close_icon}
@@ -361,7 +385,7 @@ const HccCards = ({
                                         Combo Tree View
                                       </div>
                                     </div>
-                                  )}
+                                  )} */}
                                   {data.notes && (
                                     <div className="cr-pointer px-1 mr-1">
                                       <Popover
@@ -456,7 +480,7 @@ const HccCards = ({
                                 patientDocumentResult: patientDocumentResult,
                               })}
                             </div>
-                            {data.providerName.length == 0 && (
+                            {(data.providerName.length == 0) && (
                               <div
                                 className={`${visitStyles.encounterAndSectionHeader}`}
                               >
@@ -569,6 +593,8 @@ const HccCards = ({
                                 )}
                               </div>
                             </div>
+                            {data.providerName.length == 0 && (
+                            <>
                             <div
                               className={`${visitStyles.encounterAndSectionHeader}`}
                             >
@@ -593,6 +619,8 @@ const HccCards = ({
                                 Combo
                               </Badge>
                             ) : null}
+                        
+                            </>)}
 
                             {data.getPlace == "Insulin" ? (
                               <span
@@ -624,7 +652,8 @@ const HccCards = ({
                           </div>
                         </div>
                         {data.providerName.length != 0 && (
-                          <div
+                          <div className="d-flex justify-content-between">
+                                <div
                             className={`${visitStyles.encounterAndSectionHeader}`}
                           >
                             {getCaptureSectionBackgroundFile(
@@ -653,6 +682,32 @@ const HccCards = ({
                               data.dbDescription
                             )}
                           </div>
+                                <div
+                              className={`${visitStyles.encounterAndSectionHeader}`}
+                            >
+                              {data.isManuallyAdded == true ? (
+                                <Badge
+                                  className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                >
+                                  Manually Added
+                                </Badge>
+                              ) : null}
+                            </div>
+                            {data.isComboCode == true ? (
+                              <Badge
+                                className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                onClick={() => {
+                                  setActiveTabHead(3);
+                                  setActiveComboTree({
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}
+                              >
+                                Combo
+                              </Badge>
+                            ) : null}
+                            </div>
+                      
                         )}
                       </div>
                     );

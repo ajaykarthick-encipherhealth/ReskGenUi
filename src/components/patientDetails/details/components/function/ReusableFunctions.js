@@ -70,7 +70,7 @@ export const getEncounterDateBackground = ({
                   <span
                     onClick={() =>
                       getEncounterDetails(
-                        res,
+                        item,
                         fileDosPageNumberList,
                         setIsModalOpenValidCodes,
                         setSearch,
@@ -241,7 +241,7 @@ const newFindValueDocument = (
   setSelectMeatResult && setSelectMeatResult(meatresult);
   setSelectHyperlink &&
     setSelectHyperlink({ allHeaderResult: value, selectHeaderResult: data });
-    var disName = diseaseName? diseaseName :meatresult?.diseaseName;
+  var disName = diseaseName ? diseaseName : meatresult?.diseaseName;
   var headerName = patientDocumentResult
     ? patientDocumentResult.patientId +
       " / " +
@@ -250,7 +250,7 @@ const newFindValueDocument = (
       diagnosisCode +
       " - (" +
       disName +
-      ")"  +
+      ")" +
       " - (" +
       data?.header +
       ")"
@@ -332,15 +332,12 @@ export const getCaptureSectionBackgroundFile = (
     var textColor = result[0]?.sectionColor;
     var headerNames = result[0]?.sectionName;
     if (index < 2) {
-      var sectionMapArr = (
-        <Popover
-          placement="bottom"
-          content={
-            <>
-              {res?.length > 30 && <div>{res}</div>}
-              {getHeaderHyperlink(
-                headerResult,
-                encounterDateMatching,
+      if (headerResult?.length == 1) {
+        var sectionMapArr = (
+          <span
+            onClick={() =>
+              newFindValueDocument(
+                headerResult[0],
                 documentPlace,
                 setSearch,
                 setFileLoading,
@@ -354,30 +351,28 @@ export const getCaptureSectionBackgroundFile = (
                 diagnosisCode,
                 "",
                 "",
+                "",
+                "",
                 diseaseName
-              )}
-            </>
-          }
-        >
-          <span
+              )
+            }
             style={{ backgroundColor: backColor, color: textColor }}
             className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} truncate-text`}
           >
             {truncateString(res, 30)}
           </span>
-        </Popover>
-      );
-      if (res != "") {
-        return sectionMapArr;
-      }
-    } else if (dublicateCaptureDelete.length - 1 == index) {
-      var sectionMapArr = (
-        <>
-          {dublicateCaptureDelete?.map((item, i) =>
-            i > 1 ? (
-              <Popover
-                placement="bottom"
-                content={getHeaderHyperlink(
+        );
+        if (res != "") {
+          return sectionMapArr;
+        }
+      } else {
+        var sectionMapArr = (
+          <Popover
+            placement="bottom"
+            content={
+              <>
+                {res?.length > 30 && <div>{res}</div>}
+                {getHeaderHyperlink(
                   headerResult,
                   encounterDateMatching,
                   documentPlace,
@@ -390,52 +385,162 @@ export const getCaptureSectionBackgroundFile = (
                   patientDocumentResult,
                   fileInitialPage,
                   setFileInitialPage,
-                  diagnosisCode
+                  diagnosisCode,
+                  "",
+                  "",
+                  diseaseName
                 )}
-              >
-                {isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode && (
-                  <span
-                    style={{
-                      background: stringToColour(item) + 33,
-                      color: stringToColour(item),
-                    }}
-                    className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
-                  >
-                    {item}
-                  </span>
-                )}
-              </Popover>
-            ) : null
-          )}
-
-          <span
-            style={{
-              backgroundColor:
-                isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode
-                  ? "#f35f5f"
-                  : "#b3b3ec",
-              color: "#fff",
-            }}
-            className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
-            onClick={() => {
-              setIsMulitpleHeader(
-                isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode
-                  ? false
-                  : true
-              ),
-                setIsMulitpleHeadeCode(diagnosisCode);
-            }}
+              </>
+            }
           >
-            {isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode ? (
-              "X"
-            ) : (
-              <>{dublicateCaptureDelete.length - 2}+</>
+            <span
+              style={{ backgroundColor: backColor, color: textColor }}
+              className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} truncate-text`}
+            >
+              {truncateString(res, 30)}
+            </span>
+          </Popover>
+        );
+        if (res != "") {
+          return sectionMapArr;
+        }
+      }
+    } else if (dublicateCaptureDelete.length - 1 == index) {
+      if(headerResult.length == 1){
+        var sectionMapArr = (
+          <>
+            {dublicateCaptureDelete?.map((item, i) =>
+              i > 1 ? (
+                  <>
+                  {isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode && (
+                    <span 
+                    onClick={() =>
+                      newFindValueDocument(
+                        findSectionHyperlink(hyperlinks, item)[0],
+                        documentPlace,
+                        setSearch,
+                        setFileLoading,
+                        setIsModalOpenLab,
+                        setIsModalOpenRadiology,
+                        setIsModalOpenValidCodes,
+                        setFileModalHeader,
+                        patientDocumentResult,
+                        fileInitialPage,
+                        setFileInitialPage,
+                        diagnosisCode,
+                        "",
+                        "",
+                        "",
+                        "",
+                        diseaseName
+                      )
+                    } 
+                      style={{
+                        background: stringToColour(item) + 33,
+                        color: stringToColour(item),
+                      }}
+                      className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
+                    >
+                      {item}
+                    </span>
+                  )}
+                  </>
+              ) : null
             )}
-          </span>
-        </>
-      );
-
-      return sectionMapArr;
+  
+            <span
+              style={{
+                backgroundColor:
+                  isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode
+                    ? "#f35f5f"
+                    : "#b3b3ec",
+                color: "#fff",
+              }}
+              className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+              onClick={() => {
+                setIsMulitpleHeader(
+                  isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode
+                    ? false
+                    : true
+                ),
+                  setIsMulitpleHeadeCode(diagnosisCode);
+              }}
+            >
+              {isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode ? (
+                "X"
+              ) : (
+                <>{dublicateCaptureDelete.length - 2}+</>
+              )}
+            </span>
+          </>
+        );
+        return sectionMapArr;
+      }else{
+        var sectionMapArr = (
+          <>
+            {dublicateCaptureDelete?.map((item, i) =>
+              i > 1 ? (
+                <Popover
+                  placement="bottom"
+                  content={getHeaderHyperlink(
+                    findSectionHyperlink(hyperlinks, item),
+                    encounterDateMatching,
+                    documentPlace,
+                    setSearch,
+                    setFileLoading,
+                    setIsModalOpenLab,
+                    setIsModalOpenRadiology,
+                    setIsModalOpenValidCodes,
+                    setFileModalHeader,
+                    patientDocumentResult,
+                    fileInitialPage,
+                    setFileInitialPage,
+                    diagnosisCode
+                  )}
+                >
+                  {isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode && (
+                    <span
+                      style={{
+                        background: stringToColour(item) + 33,
+                        color: stringToColour(item),
+                      }}
+                      className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
+                    >
+                      {item}
+                    </span>
+                  )}
+                </Popover>
+              ) : null
+            )}
+  
+            <span
+              style={{
+                backgroundColor:
+                  isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode
+                    ? "#f35f5f"
+                    : "#b3b3ec",
+                color: "#fff",
+              }}
+              className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+              onClick={() => {
+                setIsMulitpleHeader(
+                  isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode
+                    ? false
+                    : true
+                ),
+                  setIsMulitpleHeadeCode(diagnosisCode);
+              }}
+            >
+              {isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode ? (
+                "X"
+              ) : (
+                <>{dublicateCaptureDelete.length - 2}+</>
+              )}
+            </span>
+          </>
+        );
+        return sectionMapArr;
+      }
     }
   });
 };
@@ -626,17 +731,20 @@ export const handleSubmitValidNotes = async ({
   }
   try {
     var patientId = localStorage.getItem("patientId");
-    var userId = localStorage.getItem("userId");
+    var userId = localStorage.getItem("orgId");
+    var orgId = localStorage.getItem("orgId");
     var dataFormatSuggested = {
       userId: userId,
       patientId: patientId,
+      orgId:orgId,
+      fileId: selectDisDetails.fileId,
       diagnosisCode: selectDisDetails.diagnosisCode,
       actualDescription: selectDisDetails.actualDescription,
       dbDescription: selectDisDetails.dbDescription,
-      notes: values.reason,
-      dos: selectDisDetails.dos,
-      encounterDate: selectDisDetails.encounterDate,
-      capturedSections: selectDisDetails.capturedSections,
+      reason: values.reason,
+      dos: selectDisDetails.processedYear,
+      dateOfService: selectDisDetails.dateOfService,
+      chartProcessType: selectDisDetails.dateOfService ? "DOS" : "YEAR",
     };
     const response = await axios.put(
       ENDPOINTS.apiEndoint + apiURL,
@@ -889,7 +997,9 @@ export const onDragEnd = (
   if (selectObject) {
     var title =
       selectObject.diagnosisCode + " - " + selectObject.actualDescription;
-    selectObject.dos = patientDetailsResult?.result?.response?.dos;
+    selectObject.processedYear = patientDetailsResult?.data?.response?.processedYear;
+    selectObject.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
+    selectObject.fileId= patientDetailsResult?.data?.response?.fileId,
     setSelectDiseasesName(title);
     setSelectDisDetails(selectObject);
   }
@@ -1073,7 +1183,7 @@ export const getSuspectTypes = (title, value) => {
   return popOver;
 };
 
-const stringToColour = (str) => {
+export const stringToColour = (str) => {
   let hash = 0;
   str?.split("").forEach((char) => {
     hash = char.charCodeAt(0) + ((hash << 5) - hash);
@@ -1083,7 +1193,19 @@ const stringToColour = (str) => {
     const value = (hash >> (i * 8)) & 0xff;
     colour += value.toString(16).padStart(2, "0");
   }
+  if(str.toLocaleLowerCase() === "plan"){
+    colour = "#7e00ff"
+ }
   return colour;
+};
+
+const findSectionHyperlink = (hyperlinks, header) => {
+  const headerResult = hyperlinks?.filter((res2) => res2.header === header);
+  return headerResult;
+};
+const findDosHyperlink = (hyperlinks, date) => {
+  const headerResult = hyperlinks?.filter((res2) => res2.dos === date);
+  return headerResult[0]?.dos;
 };
 const ReusableFunctions = () => {
   return <></>;

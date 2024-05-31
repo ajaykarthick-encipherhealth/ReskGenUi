@@ -101,5 +101,17 @@ export async function meatQuery(patientId,year,dos) {
   );
   return data;
 }
+export async function getFlagsList(patientId,year,dos) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/flagdetails/get?patientId=${patientId}&processedYear=${year || ""}&dateOfService=${
+      dos || ""
+    }`,
+    options
+  );
+  return data;
+}
 
 

@@ -18,12 +18,7 @@ import {
   faAngleDoubleLeft,
   faFile,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  Avatar,
-  Tooltip,
-  Select,
-  Badge,
-} from "antd";
+import { Avatar, Tooltip, Select, Badge, notification } from "antd";
 import { IMAGES, SVGICON } from "../../../jsx/constant/theme";
 import { Button, Offcanvas } from "react-bootstrap";
 import Image from "next/image";
@@ -46,6 +41,7 @@ import Comments from "./components/comments";
 import Notes from "./components/notes";
 import Flag from "./components/flag";
 import StatusAction from "./components/statusAction";
+import { handleCopyToClipboard } from "../../commonFunctions";
 
 export const navigetPageDetails = async (
   pageTitle,
@@ -93,8 +89,9 @@ const Details = ({
   getMeatQueryList,
   getPatientIdData,
   patientIdDetailsData,
+  getFlagDetailsData,
+  flagsDetailsResult
 }) => {
-  // console.log(patientIdDetailsData)
   const navigate = useRouter();
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -137,6 +134,7 @@ const Details = ({
   const [workListPatientId, setWorkListPatientId] = useState(null);
   const [isFileCheck, setIsFileCheck] = useState(false);
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     getAllProcessYear();
@@ -244,6 +242,7 @@ const Details = ({
           isRxHcc: rxHcc.length > 0 ? rxHcc.length : 0,
         });
         setNewValidDiseaseList(validDisArray);
+        getFlagDetailsData(patientId,result.processedYear,result.dateOfService)
         // getFlagListLastDetails(patientId, result.processedYear);
         setIsLoading(false);
         setPatientResultReload(true);
@@ -261,7 +260,7 @@ const Details = ({
   };
 
   const dosOnChange = async (e) => {
-    setDosYearDefalutSelect(e)
+    setDosYearDefalutSelect(e);
     setPatientResultReload(false);
     setIsLoading(true);
     getPatientDosList(localPatientId, e);
@@ -331,7 +330,7 @@ const Details = ({
 
   const getPatientListToDetails = (userId, orgId, tenantId) => {
     setIsLoading(true);
-    getpatientDetailsData(userId, selectedDosValue, null,setIsLoading);
+    getpatientDetailsData(userId, selectedDosValue, null, setIsLoading);
     getPatientIdData(userId);
     setLocalPatientId(userId);
   };
@@ -538,8 +537,17 @@ const Details = ({
                                   title={patientDocumentResult.patientId}
                                 >
                                   <h6
+                                    onClick={() =>
+                                      handleCopyToClipboard({
+                                        text: patientDocumentResult.patientId,
+                                        setCopied: setCopied,
+                                      })
+                                    }
                                     className="ageDtails"
-                                    style={{ paddingLeft: "25px" }}
+                                    style={{
+                                      paddingLeft: "25px",
+                                      cursor: "pointer",
+                                    }}
                                   >
                                     {patientDocumentResult.patientId}
                                   </h6>
@@ -554,7 +562,7 @@ const Details = ({
                                   title={patientDocumentResult.patientId}
                                 >
                                   <h6 className="ageDtails">
-                                    {patientDocumentResult.patientName}
+                                    {patientDocumentResult.patientId}
                                   </h6>
                                 </Tooltip>
                               </div>
@@ -828,15 +836,16 @@ const Details = ({
                             <div className="col-xl-12 col-sm-12">
                               {!isLoadingDos ? (
                                 <>
-                                 <Select
-                  value={
-                    dosYearDefalutSelect
-                  }
-                  onChange={(e) => dosOnChange(e)}
-                  className={`custom_select_type ${visitStyles.custom_select_type}`}
-                  options={dosYear}
-                  style={{ backgroundColor: "#F3F3FF", width: "120px" }}
-                />
+                                  <Select
+                                    value={dosYearDefalutSelect}
+                                    onChange={(e) => dosOnChange(e)}
+                                    className={`custom_select_type ${visitStyles.custom_select_type}`}
+                                    options={dosYear}
+                                    style={{
+                                      backgroundColor: "#F3F3FF",
+                                      width: "120px",
+                                    }}
+                                  />
                                   {/* <Select
                                     onChange={(e) => dosOnChange(e)}
                                     options={dosYear}
@@ -980,7 +989,7 @@ const Details = ({
                                     >
                                       {data.name === "Flag" ? (
                                         <Badge
-                                          count={5}
+                                          count={flagsDetailsResult?.response?.length}
                                           style={{
                                             background: "#04306f",
                                             margin: "-2px",
@@ -1068,7 +1077,6 @@ const Details = ({
         </div>
       </div>
 
-      
       {flagContainerActive == "Comments" && (
         <Comments
           setOpen={setFlagContainerActive}
@@ -1096,6 +1104,8 @@ const enhancer = connect(
     getFlagsData: state?.reviewer?.workQueue?.flags?.data,
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     patientIdDetailsData: state?.patientDetails.details?.patientIdResult,
+    flagsDetailsResult: state?.patientDetails.details?.flagsDetailsResult.data,
+
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,
@@ -1106,6 +1116,7 @@ const enhancer = connect(
     getMeatQueryList: detailsActions.meatQueryAction,
     getMeatQueryList: detailsActions.meatQueryAction,
     getPatientIdData: detailsActions.patientIdDetailsAction,
+    getFlagDetailsData: detailsActions.getFlagDetailsAction,
   }
 );
 export default enhancer(Details);

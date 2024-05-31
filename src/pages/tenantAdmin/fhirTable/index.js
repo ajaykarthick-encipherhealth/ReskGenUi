@@ -284,9 +284,11 @@ const Index = () => {
   const [filteredCOder, setFilteredCoder] = useState([]);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [uploadType, setUploadType] = useState('')
 
-  const handleUploadButtonClick = () => {
+  const handleUploadButtonClick = (e) => {
     setIsDrawerOpen(!isDrawerOpen);
+    setUploadType(e.target.name)
   };
 
   const onPageChange = (e) => {
@@ -322,7 +324,7 @@ const Index = () => {
                 <div className="">
                   <div className="card-body p-0">
                     <div className="table-responsive active-projects task-table">
-                      <div className="d-flex" style={{width:"98%",margin:"auto"}}>
+                      <div className="d-flex justify-content-between" style={{width:"98%",margin:"auto"}}>
                         <div className="d-flex">
                           <div className="col-lg-4 mx-2">
                             <label>Search by Name or ID</label>
@@ -374,12 +376,21 @@ const Index = () => {
                             </div>
                           </div>
                         </div>
+                        <div className="d-flex mx-1">
+                        <div
+                          className={styles.btnContainer}
+                          name="upload trigger"
+                          onClick={handleUploadButtonClick}
+                        >
+                          <RegularButton name={"Upload Trigger"} width={"150px"}/>
+                        </div>
                         <div
                           className={styles.btnContainer}
                           onClick={handleUploadButtonClick}
+                          name="upload"
                         >
                           <RegularButton name={"Upload"} />
-                        </div>
+                        </div></div>
                       </div>
 
                       <div
@@ -452,6 +463,8 @@ const Index = () => {
                           <FhirDrawer
                             isDrawerOpen={isDrawerOpen}
                             setIsDrawerOpen={setIsDrawerOpen}
+                            uploadType={uploadType}
+                            setUploadType={setUploadType}
                           />
                         )}
                       </div>

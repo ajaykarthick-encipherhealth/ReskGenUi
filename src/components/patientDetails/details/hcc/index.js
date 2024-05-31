@@ -106,6 +106,7 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
       setSelectDosValue([]);
       var dosList = [];
       patientDosResult?.data?.response?.map((res, index) => {
+        if(res){
         var dosLable = (
           <>
             <div className="d-flex">
@@ -126,6 +127,7 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
           </>
         );
         dosList.push({ value: res, label: dosLable });
+      }
       });
       setDosSummariesList(dosList);
     }

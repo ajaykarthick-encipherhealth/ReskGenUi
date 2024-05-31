@@ -7,7 +7,7 @@ const RegularButton = ({ type, name, onClick, width, method,loading, disabled,ht
       className={`btn mx-1 ${
         type === "outline" ? Style.outer : Style.btnColor
       }`}
-      
+      name={name?.toLowerCase()}
       onClick={onClick}
       style={{ width: width }}
       type={method == "reset" ? "reset" : "submit"}

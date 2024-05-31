@@ -14516,6 +14516,7 @@ input[type="number"] {
   width: 165px !important;
   text-align: center;
 }
+
 .ant-menu-light.ant-menu-inline .ant-menu-sub.ant-menu-inline{
 background-color: white !important;
 }
@@ -14538,4 +14539,7 @@ background-color: white !important;
 }
 .directCodeSwitch .ant-switch-inner{
   background: #0dcaf0 !important;
+}
+.ant-upload {
+  width: 100%;
 }

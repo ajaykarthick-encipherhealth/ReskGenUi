@@ -431,6 +431,8 @@
   float: right;
   margin-right: 5px;
   height: 20px;
+  width: 85px;
+  padding: 5px;
 }
 .isComboCode {
   background: #e7cff1 !important;
@@ -444,6 +446,8 @@
   margin-right: 5px;
   height: 20px;
   cursor: pointer;
+  width: 45px;
+  padding: 5px;
 }
 
 .close_icon {
@@ -460,6 +464,26 @@
   justify-content: center;
 }
 .close_icon svg {
+  text-align: center;
+  display: flex;
+  font-size: 10px;
+  /* padding-top: 2px;
+  margin: 2px 0px 0px 3px; */
+}
+.tree_icon {
+  width: 20px;
+  height: 18px;
+  border-radius: 4px;
+  background: #fee1e1;
+  text-align: center;
+  margin-right: 3px;
+  margin-top: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tree_icon svg {
   text-align: center;
   display: flex;
   font-size: 10px;
