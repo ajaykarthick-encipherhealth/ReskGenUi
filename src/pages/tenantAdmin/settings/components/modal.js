@@ -3,7 +3,8 @@ import React from "react";
 
 const ModalPop = ({ openModal, content,setOpenModal }) => {
   return (
-    <Modal open={openModal} footer={false} onCancel={()=>setOpenModal(false)}>
+    <Modal open={openModal} footer={false} onCancel={()=>setOpenModal(false)}
+    width={700}>
       {content}
     </Modal>
   );

@@ -59,6 +59,13 @@
   box-shadow: none !important;
   border-radius: 10px !important;
 }
+.selector2 {
+  width: 200px !important;
+  margin-left: 5px !important;
+  height: 45px !important;
+  box-shadow: none !important;
+  border-radius: 10px !important;
+}
 .picker {
   width: 150px !important;
   margin-left: 5px !important;

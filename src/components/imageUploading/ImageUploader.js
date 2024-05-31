@@ -60,7 +60,7 @@ const ImageUploader = ({ setOpenUploader, setOpenContent,height, isFolderUplaod 
             <div className="d-flex justify-content-center">
               <Image src={upload} alt="Image" />
             </div>
-            {isFolderUplaod?"Upload File":"Upload Profile"}
+            {isFolderUplaod?"Upload a File":"Upload Profile"}
           </div>
         </div>
       </label>
