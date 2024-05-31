@@ -26,3 +26,13 @@ export const getResponePopup = (res) => {
       break;
   }
 };
+
+
+export const getYears = () => {
+  const currentYear = new Date().getFullYear();
+  let year = [];
+  for (let i = 2016; i < currentYear + 1; i++) {
+     year.push({label: i, value: i})
+  }
+  return year;
+}

@@ -14516,3 +14516,6 @@ input[type="number"] {
   width: 165px !important;
   text-align: center;
 }
+.ant-upload {
+  width: 100%;
+}

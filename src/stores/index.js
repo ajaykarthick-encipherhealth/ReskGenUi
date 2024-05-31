@@ -29,6 +29,7 @@ import { reducer as searchReducer } from "./search";
 import { reducer as physicianReducer } from "./physician/dashboard"
 import { reducer as reportReducer } from "./reviewer/report"
 import { reducer as patientDeatilsReducer } from "./patient/details"
+import { reducer as tenantAdminReducer } from "./tenantAdmin"
 
 const reducers = combineReducers({
   // old reducers
@@ -67,7 +68,8 @@ const reducers = combineReducers({
   }),
   patientDetails: combineReducers({
     details : patientDeatilsReducer
-  })
+  }),
+  tenantAdmin: tenantAdminReducer,
 });
 
 const middlewares = [thunkMiddleware, promiseMiddleware];
