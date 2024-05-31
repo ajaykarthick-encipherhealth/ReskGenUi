@@ -18,12 +18,7 @@ import {
   faAngleDoubleLeft,
   faFile,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  Avatar,
-  Tooltip,
-  Select,
-  Badge,
-} from "antd";
+import { Avatar, Tooltip, Select, Badge, notification } from "antd";
 import { IMAGES, SVGICON } from "../../../jsx/constant/theme";
 import { Button, Offcanvas } from "react-bootstrap";
 import Image from "next/image";
@@ -46,6 +41,7 @@ import Comments from "./components/comments";
 import Notes from "./components/notes";
 import Flag from "./components/flag";
 import StatusAction from "./components/statusAction";
+import { handleCopyToClipboard } from "../../commonFunctions";
 
 export const navigetPageDetails = async (
   pageTitle,
@@ -137,6 +133,7 @@ const Details = ({
   const [workListPatientId, setWorkListPatientId] = useState(null);
   const [isFileCheck, setIsFileCheck] = useState(false);
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     getAllProcessYear();
@@ -261,7 +258,7 @@ const Details = ({
   };
 
   const dosOnChange = async (e) => {
-    setDosYearDefalutSelect(e)
+    setDosYearDefalutSelect(e);
     setPatientResultReload(false);
     setIsLoading(true);
     getPatientDosList(localPatientId, e);
@@ -331,7 +328,7 @@ const Details = ({
 
   const getPatientListToDetails = (userId, orgId, tenantId) => {
     setIsLoading(true);
-    getpatientDetailsData(userId, selectedDosValue, null,setIsLoading);
+    getpatientDetailsData(userId, selectedDosValue, null, setIsLoading);
     getPatientIdData(userId);
     setLocalPatientId(userId);
   };
@@ -538,8 +535,17 @@ const Details = ({
                                   title={patientDocumentResult.patientId}
                                 >
                                   <h6
+                                    onClick={() =>
+                                      handleCopyToClipboard({
+                                        text: patientDocumentResult.patientId,
+                                        setCopied: setCopied,
+                                      })
+                                    }
                                     className="ageDtails"
-                                    style={{ paddingLeft: "25px" }}
+                                    style={{
+                                      paddingLeft: "25px",
+                                      cursor: "pointer",
+                                    }}
                                   >
                                     {patientDocumentResult.patientId}
                                   </h6>
@@ -554,7 +560,7 @@ const Details = ({
                                   title={patientDocumentResult.patientId}
                                 >
                                   <h6 className="ageDtails">
-                                    {patientDocumentResult.patientName}
+                                    {patientDocumentResult.patientId}
                                   </h6>
                                 </Tooltip>
                               </div>
@@ -828,15 +834,16 @@ const Details = ({
                             <div className="col-xl-12 col-sm-12">
                               {!isLoadingDos ? (
                                 <>
-                                 <Select
-                  value={
-                    dosYearDefalutSelect
-                  }
-                  onChange={(e) => dosOnChange(e)}
-                  className={`custom_select_type ${visitStyles.custom_select_type}`}
-                  options={dosYear}
-                  style={{ backgroundColor: "#F3F3FF", width: "120px" }}
-                />
+                                  <Select
+                                    value={dosYearDefalutSelect}
+                                    onChange={(e) => dosOnChange(e)}
+                                    className={`custom_select_type ${visitStyles.custom_select_type}`}
+                                    options={dosYear}
+                                    style={{
+                                      backgroundColor: "#F3F3FF",
+                                      width: "120px",
+                                    }}
+                                  />
                                   {/* <Select
                                     onChange={(e) => dosOnChange(e)}
                                     options={dosYear}
@@ -1068,7 +1075,6 @@ const Details = ({
         </div>
       </div>
 
-      
       {flagContainerActive == "Comments" && (
         <Comments
           setOpen={setFlagContainerActive}
