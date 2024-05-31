@@ -327,8 +327,8 @@ const Header = ({
       router.push("/reviewer/dashboard");
     } else if (key === "supervisor") {
       router.push("/supervisor/dashboard");
-    } else if (key === "tenant") {
-      router.push("/tenant/fhirTable");
+    } else if (key === "tenant_admin") {
+      router.push("/tenant_admin/fhirTable");
     } else if (key === "ehr") {
       router.push("/ehr/patients");
     }
@@ -341,7 +341,7 @@ const Header = ({
         return PhysicanMenuList;
       case "supervisor":
         return L2AuditorMenuList;
-      case "tenant":
+      case "tenant_admin":
         return ProviderMenuList;
       case "ehr":
         return EHRMenuList;
@@ -495,7 +495,7 @@ const Header = ({
                     <div className="nav-link i-false" as="div">
                       <div className="header-info2 d-flex align-items-center">
                         {/* NOTE i remove userRole !== "admin" logic because PRAVIN told me to show admin also, so if Logesh ask anything to this please tell him like this*/}
-                        {userRole !== "tenant" && (
+                        {userRole !== "tenant_admin" && (
                           <Popover
                             content={PopContent}
                             placement="bottom"
@@ -541,7 +541,7 @@ const Header = ({
                           </Tooltip>
                         )}
 
-                        {userRole === "tenant" && (
+                        {userRole === "tenant_admin" && (
                           <div
                             className="chatheaderIcon"
                             onClick={() => router.push("/tenantAdmin/settings")}
@@ -675,7 +675,7 @@ const Header = ({
                                         ? "Reviewer"
                                         : currentRole == "supervisor"
                                         ? "Supervisor"
-                                        : currentRole == "tenant"
+                                        : currentRole == "tenant_admin"
                                         ? "Tenant Admin"
                                         : currentRole == "ehr"
                                         ? "EHR"
@@ -765,7 +765,7 @@ const Header = ({
                                 ? "Reviewer"
                                 : currentRole == "supervisor"
                                 ? "Supervisor"
-                                : currentRole == "tenant"
+                                : currentRole == "tenant_admin"
                                 ? "Tenant"
                                 : currentRole == "ehr"
                                 ? "EHR"
