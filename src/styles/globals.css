@@ -14527,3 +14527,15 @@ background-color: white !important;
   color:white !important;
   background-color: #04306f !important;
 }
+.switch .ant-switch-handle:before{
+  background: black !important;
+}
+.switch .ant-switch-inner{
+  background: #d3d3d3 !important;
+}
+.directCodeSwitch .ant-switch-handle:before{
+  background: #008CBA !important;
+}
+.directCodeSwitch .ant-switch-inner{
+  background: #0dcaf0 !important;
+}

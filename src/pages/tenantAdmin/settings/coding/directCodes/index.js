@@ -1,14 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import Style from "../../style.module.css";
 import RegularButton from "../../../../../components/button";
+import { Switch } from "antd";
+import FileUploader from "../../components/fileUploader";
+import ModalPop from "../../components/modal";
 
-const DirectCodes
- = () => {
+const DirectCodes = () => {
+  const [openModal,setOpenModal]=useState(false)
+  const onChange = (checked) => {
+    console.log(`switch to ${checked}`);
+  };
+  const content=(
+    <>
+    conetnt</>
+  )
   return (
     <>
       <div className="p-3" style={{ height: "80vh" }}>
         <div className="d-flex justify-content-between">
           <div className={Style.title}>Direct Codes</div>
+        </div>
+        <div>
+          <div className="d-flex justify-content-between mt-4">
+            <div>Do You Have Direct Codes</div>
+            <div className="d-flex justify-content-between">
+              <Switch
+                defaultChecked={true}
+                className="directCodeSwitch"
+                onChange={onChange}
+              />
+              <div className={`mx-2 text-${"info"}`}>Yes</div>
+            </div>
+          </div>
+         <FileUploader setOpenModal={setOpenModal}/>
         </div>
       </div>
       <div className="text-end p-3">
@@ -22,9 +46,9 @@ const DirectCodes
           onClick={() => console.log("Save Changes")}
         />
       </div>
+     <ModalPop openModal={openModal} content={content} setOpenModal={setOpenModal}/>
     </>
   );
 };
 
-export default DirectCodes
-;
+export default DirectCodes;

@@ -104,7 +104,7 @@ const Settings = () => {
             </div>
             <div
               className="border rounded-3 mx-4 border-bottom-2"
-              style={{ height: "90vh", width: "100%" }}
+              style={{ height: "100%", width: "100%" }}
             >
               {activePage == "Chat_Audit_Config" && <ChatAuditConfig />}
               {activePage == "Flag_Config" && <FlagConfig />}
