@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useSelector, useDispatch,connect } from "react-redux";
+import { useSelector, useDispatch, connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { notification } from "antd";
@@ -27,7 +27,8 @@ const VisitData = ({
   setActiveMeatTitle,
   setActiveComboTree,
   patientDetailsResult,
-  hccFileDetails
+  hccFileDetails,
+  year,
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -116,8 +117,8 @@ const VisitData = ({
     var title = code + " - " + data.actualDescription;
     data.processedYear = patientDetailsResult?.data?.response?.processedYear;
     data.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
-    data.fileId= patientDetailsResult?.data?.response?.fileId,
-    setSelectDiseasesName(title);
+    (data.fileId = patientDetailsResult?.data?.response?.fileId),
+      setSelectDiseasesName(title);
     setSelectDisDetails(data);
   };
 
@@ -147,7 +148,11 @@ const VisitData = ({
     );
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `dbservice/hccdisease/icd10mappingForDisease?year=${patientDetailsResult?.result?.response?.dos}&diagnosisCode=${code}`
+        `dbservice/hccdisease/icd10mappingForDisease?year=${
+          patientDetailsResult?.result?.response?.dos
+            ? patientDetailsResult?.result?.response?.dos
+            : year.value
+        }&diagnosisCode=${code}`
     );
     if (response.data) {
       var value = [];
@@ -763,10 +768,8 @@ const VisitData = ({
   );
 };
 
-const enhancer = connect(
-  (state) => ({
-    patientDetailsResult :state?.patientDetails?.details?.patientResult,
-    hccFileDetails :state?.patientDetails?.details?.hccFileResult,
-  }),
-);
+const enhancer = connect((state) => ({
+  patientDetailsResult: state?.patientDetails?.details?.patientResult,
+  hccFileDetails: state?.patientDetails?.details?.hccFileResult,
+}));
 export default enhancer(VisitData);
