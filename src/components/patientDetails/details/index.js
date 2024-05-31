@@ -18,7 +18,7 @@ import {
   faAngleDoubleLeft,
   faFile,
 } from "@fortawesome/free-solid-svg-icons";
-import { Avatar, Tooltip, Select, Badge } from "antd";
+import { Avatar, Tooltip, Select, Badge, notification } from "antd";
 import { IMAGES, SVGICON } from "../../../jsx/constant/theme";
 import { Button, Offcanvas } from "react-bootstrap";
 import Image from "next/image";
@@ -41,6 +41,7 @@ import Comments from "./components/comments";
 import Notes from "./components/notes";
 import Flag from "./components/flag";
 import StatusAction from "./components/statusAction";
+import { handleCopyToClipboard } from "../../commonFunctions";
 
 export const navigetPageDetails = async (
   pageTitle,
@@ -133,6 +134,7 @@ const Details = ({
   const [isFileCheck, setIsFileCheck] = useState(false);
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
   const [showTerminal, setShowTerminal] = useState(false);
+  const [copied, setCopied] = useState(false);
   useEffect(() => {
     getAllProcessYear();
   }, []);
@@ -536,8 +538,17 @@ const Details = ({
                                   title={patientDocumentResult.patientId}
                                 >
                                   <h6
+                                    onClick={() =>
+                                      handleCopyToClipboard({
+                                        text: patientDocumentResult.patientId,
+                                        setCopied: setCopied,
+                                      })
+                                    }
                                     className="ageDtails"
-                                    style={{ paddingLeft: "25px" }}
+                                    style={{
+                                      paddingLeft: "25px",
+                                      cursor: "pointer",
+                                    }}
                                   >
                                     {patientDocumentResult.patientId}
                                   </h6>
@@ -552,7 +563,7 @@ const Details = ({
                                   title={patientDocumentResult.patientId}
                                 >
                                   <h6 className="ageDtails">
-                                    {patientDocumentResult.patientName}
+                                    {patientDocumentResult.patientId}
                                   </h6>
                                 </Tooltip>
                               </div>

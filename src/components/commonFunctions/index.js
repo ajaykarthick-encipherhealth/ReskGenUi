@@ -1,3 +1,4 @@
+import { notification } from "antd";
 import Style from "./style.module.css";
 
 export const getButtonStatus = (value) => {
@@ -14,7 +15,7 @@ export const getButtonStatus = (value) => {
           <>Approved</>
         </div>
       );
-      case "decline":
+    case "decline":
       return (
         <div className={`${Style.status} ${Style.decline}`}>
           <>Decline</>
@@ -23,4 +24,12 @@ export const getButtonStatus = (value) => {
     default:
       return <>Test</>;
   }
+};
+export const handleCopyToClipboard = ({ text, setCopied }) => {
+  navigator.clipboard.writeText(text);
+  setCopied(true);
+  notification.success({
+    message: "Copied to clipboard",
+    placement: "topRight",
+  });
 };
