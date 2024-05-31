@@ -1,19 +1,30 @@
 import React, { useState } from "react";
 import style from "./style.module.css";
-import { Button, DatePicker, Input, Space } from "antd";
+import { actions as dashbaordActions } from "../../stores/codify/dashboard";
+import { connect } from "react-redux";
+import { Button, DatePicker, Empty, Input, Space, Spin } from "antd";
 import TableRisk from "../../components/tableRisk";
-import data  from './data.json'
+import YearPicker from "../../components/yearpicker";
+import { CloseCircleOutlined,CheckCircleOutlined } from "@ant-design/icons";
 
-const RiskAdjustment = () => {
+
+const RiskAdjustment = ({ RiskAdjustmentData, loading, setLoading }) => {
   const [code, setCode] = useState("");
-  const [selectedYear, setSelectedYear] = useState(null);
+ 
+  const [data, setData] = useState([]);
+  const [year, setYear] = useState();
+  const [selectedYear, setSelectedYear] = useState(currentDate);
+  const currentDate = new Date();
 
   const subheader = [
     { label: "Year", value: "year" },
-    { label: "PACE/ESRD v21 (Yes/No)", value: "pace" },
-    { label: "V22 (Yes/No)", value: "v22" },
-    { label: "V24 (Yes/No)", value: "v24" },
-    { label: "V05 (Yes/No)", value: "v05" },
+    { label: "ESRD/v21 ", value: "cmsHccEsrdModelCategoryV21Payment" },
+    { label: "ESRD/v24 ", value: "cmsHccEsrdModelCategoryV24Payment" },
+    { label: "V22 ", value: "cmsHccModelCategoryV22Payment" },
+    { label: "V24 ", value: "cmsHccModelCategoryV24Payment" },
+    { label: "V08 ", value: "rxHccModelCategoryV08Payment" },
+    { label: "V05 ", value: "rxHccModelCategoryV05Payment" },
+    {label:"V08",value:"rxHccModelCategoryV08Payment"}
   ];
   const handleCode = (e) => {
     setCode(e.target.value);
@@ -21,10 +32,75 @@ const RiskAdjustment = () => {
 
   const onChange = (date, dateString) => {
     setSelectedYear(date);
-  }; 
+  };
+ 
   const handleSearchClick = () => {
+    setLoading(true)
+    fetch();
+  };
 
-  };// Future use case 
+  const fetch = async () => {
+    const riskData = await RiskAdjustmentData({
+      year: selectedYear,
+      code: code,
+    });
+
+    if (riskData?.status == "SUCCESS")
+      setLoading(false)
+    setData({
+      ...data,
+      year: riskData?.response?.year,
+      diagnosisCode: riskData?.response?.diagnosisCode,
+      description: riskData?.response?.description,
+      cmsHccEsrdModelCategoryV24Payment:
+        riskData?.response?.cmsHccEsrdModelCategoryV24Payment === "Yes" ? (
+          <CheckCircleOutlined style={{color:"green", fontSize:"20px"}} />
+        ) : (
+          <CloseCircleOutlined style={{color:"red", fontSize:"20px"} }/>
+        ),
+      cmsHccModelCategoryV22Payment:
+        riskData?.response?.cmsHccModelCategoryV22Payment === "Yes" ? (
+          <CheckCircleOutlined style={{color:"green", fontSize:"20px"}}/>
+        ) : (
+          <CloseCircleOutlined style={{color:"red", fontSize:"20px"} } />
+        ),
+      cmsHccModelCategoryV24Payment:
+        riskData?.response?.cmsHccModelCategoryV24Payment === "Yes" ? (
+          <CheckCircleOutlined  style={{color:"green", fontSize:"20px"}}/>
+        ) : (
+          <CloseCircleOutlined style={{color:"red", fontSize:"20px"} } />
+        ),
+      cmsHccEsrdModelCategoryV21Payment:
+        riskData?.response?.cmsHccEsrdModelCategoryV21Payment === "Yes" ? (
+          <CheckCircleOutlined style={{color:"green", fontSize:"20px"}} />
+        ) : (
+          <CloseCircleOutlined style={{color:"red", fontSize:"20px"} } />
+        ),
+      rxHccModelCategoryV08Payment:
+        riskData?.response?.rxHccModelCategoryV08Payment === "Yes" ? (
+          <CheckCircleOutlined style={{color:"green", fontSize:"20px"}} />
+        ) : (
+          <CloseCircleOutlined style={{color:"red", fontSize:"20px"} } />
+        ),
+      rxHccModelCategoryV05Payment:
+        riskData?.response?.rxHccModelCategoryV05Payment === "Yes" ? (
+          <CheckCircleOutlined style={{color:"green", fontSize:"20px"}} />
+        ) : (
+          <CloseCircleOutlined style={{color:"red", fontSize:"20px"} }/>
+        ),
+        rxHccModelCategoryV08Payment:
+        riskData?.response?.rxHccModelCategoryV08Payment === "Yes" ? (
+          <CheckCircleOutlined style={{color:"green", fontSize:"20px"}} />
+        ) : (
+          <CloseCircleOutlined style={{color:"red", fontSize:"20px"} }/>
+        ),
+    });
+  };
+
+  const handleYearChange = (date, dateString) => {
+    setYear(date);
+    setSelectedYear(dateString);
+  };
 
   return (
     <div className="container-fluid">
@@ -32,12 +108,11 @@ const RiskAdjustment = () => {
         <div className="col-6">
           <div className={style.text}>Year</div>
           <div className="mt-1">
-            <DatePicker
+            <YearPicker
               className={style.year}
-              onChange={onChange}
-              picker="year"
-              placeholder="Year"
-              value={selectedYear}
+              onChangeYear={handleYearChange}
+              val1={year}
+              hideMonth={true}
             />
           </div>
         </div>
@@ -56,19 +131,26 @@ const RiskAdjustment = () => {
       <div className="col-12 mt-4">
         <div className={style.text}> Description</div>
         <textarea
-          className= {`${style.textarea } form-control` }
-          id="exampleFormControlTextarea1"
+          className={`${style.textarea} `}
+         
           placeholder="Description"
-          rows="3"></textarea>
+          rows="3"
+        ></textarea>
       </div>
       <div className="d-flex align-items-center justify-content-center mt-4 ">
         <Button className={style.btn} onClick={handleSearchClick}>
           <div className={style.search}>Search</div>
         </Button>
       </div>
-      <TableRisk data={data?.response?.tabledata} subheader={subheader} />
+      <div className="d-flex justify-content-center">
+        {loading && <Spin size="large" />}
+      </div>
+      {data?.year ?<TableRisk data={data} subheader={subheader} /> :selectedYear && <Empty/>}
     </div>
   );
 };
 
-export default RiskAdjustment;
+const enhancer = connect((state) => ({ state }), {
+  RiskAdjustmentData: dashbaordActions.riskadjustmentAction,
+});
+export default enhancer(RiskAdjustment);

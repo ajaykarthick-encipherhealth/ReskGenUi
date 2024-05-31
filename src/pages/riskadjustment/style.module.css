@@ -35,4 +35,6 @@
 .textarea{
     border:1px solid gray;
     margin-top:10px ;
+    width: 100%;
+    border-radius: 5px;
 }

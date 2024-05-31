@@ -14534,7 +14534,7 @@ input[type="number"] {
   align-items: center;
   border-radius: 7px;
   font-size: 15px;
-  font-weight: 600;
+  
 }
 .collapsestyle .ant-collapse-item{
   border-bottom: none !important;
@@ -14543,7 +14543,8 @@ input[type="number"] {
   border-radius:0px 0px 0px 0px !important
 }
 .tablestyle .table th:last-child {
-  border-radius:0px 0px 0px 0px !important
+  border-radius:0px 0px 0px 0px !important;
+  padding:0px 0px;
 }
 .tablestyle .table{
   height:200px !important;
@@ -14565,6 +14566,7 @@ input[type="number"] {
 .tablehead .table th{
   padding:0px 0px !important;
 }
+
 .ant-tree-show-line .ant-tree-switcher {
   background: transparent;
   font-size: 20px;
@@ -14579,4 +14581,27 @@ input[type="number"] {
 .ant-tree .ant-tree-switcher-leaf-line:after {
     border-bottom: 1px solid black !important;  
 }
-
+.ant-tree-iconEle{
+  border: 2px solid #a4caf9 !important;
+  background:#a4caf9 !important;
+  border-radius:5px !important;
+  font-size:13px !important;
+  font-weight:400 !important;
+  padding:0px !important  
+}
+.ant-drawer-content {
+  height: 100% !important;
+  overflow-y: scroll !important;
+}
+.ant-tree-title{
+  padding: 10px !important;
+}
+.table th, .table td{
+  border:1px solid #a4caf9;
+}
+.table tbody tr td{
+  border:1px solid #a4caf9 !important;
+}
+.ant-spin-nested-loading {
+  border:1px solid #a4caf9;
+}
