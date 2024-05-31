@@ -182,19 +182,19 @@ export const getPatientDetails = async (
           diagnosisCode: res.diagnosisCode,
           encounterDate: res.encounterDate,
           encounterDateSplit:  res.dateOfServices,
-          isManuallyAdded: res.isManuallyAdded,
+          isManuallyAdded: getStateIndicators(res.stateIndicators,"MANUALLY_ADDED"),
           isHccValid: res.isHccValid,
           defaultPosition: res.defaultPosition,
           providerName: providerList,
           dbDescription: res.dbDescription,
-          isMostSpecific: res.isMostSpecific,
+          isMostSpecific: getStateIndicators(res.stateIndicators,"MOST_SPECIFIC"),
           children: res.children,
           getPlace: "Hcc",
           dbDescription: res.dbDescription,
           isCmsHcc: res.isCmsHcc,
           isRxHcc: res.isRxHcc,
           providerDeatils: res.provider,
-          isComboCode: res.isComboCode,
+          isComboCode: getStateIndicators(res.stateIndicators,"COMBO_CODE"),
           notes: res.notes,
           hyperlinks: res?.hyperlinks,
           suspectType:res.suspectType
@@ -213,18 +213,18 @@ export const getPatientDetails = async (
           diagnosisCode: res.diagnosisCode,
           encounterDate: res.encounterDate,
           encounterDateSplit:  res.dateOfServices,
-          isManuallyAdded: res.isManuallyAdded,
+          isManuallyAdded: getStateIndicators(res.stateIndicators,"MANUALLY_ADDED"),
           isHccValid: res.isHccValid,
           defaultPosition: res.defaultPosition,
           providerName: providerList,
           dbDescription: res.dbDescription,
-          isMostSpecific: res.isMostSpecific,
+          isMostSpecific: getStateIndicators(res.stateIndicators,"MOST_SPECIFIC"),
           children: res.children,
           dbDescription: res.dbDescription,
           isCmsHcc: res.isCmsHcc,
           isRxHcc: res.isRxHcc,
           providerDeatils: res.provider,
-          isComboCode: res.isComboCode,
+          isComboCode: getStateIndicators(res.stateIndicators,"COMBO_CODE"),
           notes: res.notes,
           hyperlinks: res?.hyperlinks,
           suspectType:res.suspectType
@@ -253,10 +253,11 @@ export const getPatientDetails = async (
             defaultPosition: res.defaultPosition,
             providerName: providerList,
             children: res.children ? res.children : [],
-            isMostSpecific: res.isMostSpecific,
+            isMostSpecific: getStateIndicators(res.stateIndicators,"MOST_SPECIFIC"),
             isCmsHcc: res.isCmsHcc,
             isRxHcc: res.isRxHcc,
-            isComboCode: res.isComboCode,
+            isManuallyAdded: getStateIndicators(res.stateIndicators,"MANUALLY_ADDED"),
+            isComboCode: getStateIndicators(res.stateIndicators,"COMBO_CODE"),
             providerDeatils: res.provider,
             notes: res.notes,
             hyperlinks: res?.hyperlinks,
@@ -280,13 +281,14 @@ export const getPatientDetails = async (
             diagnosisCode: res.diagnosisCode,
             encounterDate: res.encounterDate,
             encounterDateSplit: res.dateOfServices,
-            isManuallyAdded: res.isManuallyAdded,
+            isManuallyAdded: getStateIndicators(res.stateIndicators,"MANUALLY_ADDED"),
             isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
             providerName: providerList,
             isCmsHcc: res.isCmsHcc,
             isRxHcc: res.isRxHcc,
-            isComboCode: res.isComboCode,
+            isComboCode: getStateIndicators(res.stateIndicators,"COMBO_CODE"),
+            isMostSpecific: getStateIndicators(res.stateIndicators,"MOST_SPECIFIC"),
             notes: res.notes,
             hyperlinks: res?.hyperlinks,
             suspectType:res.suspectType
@@ -612,6 +614,13 @@ export const getPatientDetails = async (
     }
   }
 };
+
+const getStateIndicators=(data,state)=>{
+  const result = data?.some(item => 
+    item === state
+  )
+  return result;
+}
 
 const GetData = () => {
   return <></>;
