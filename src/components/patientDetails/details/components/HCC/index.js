@@ -719,6 +719,7 @@ const HccCards = ({
           <span className="d-none">{provided?.placeholder}</span>
         </div>
       )}
+      
       <ModelIndex
         title={"Edit"}
         openState={openEdit}
