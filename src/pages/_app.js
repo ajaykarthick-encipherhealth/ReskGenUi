@@ -15,7 +15,7 @@ import { refreshToken } from "../stores/authflow/actions";
 
 config.autoAddCss = false;
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps, showFooter }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const [showTerminal, setShowTerminal] = useState(false);
@@ -119,7 +119,7 @@ function MyApp({ Component, pageProps }) {
       <Provider store={store}>
         {showTerminal && <AICHAT openMsg={true} />}
         <Component {...pageProps} />
-        {showTerminal && <Footer />}
+        {showFooter && showTerminal && <Footer />}
       </Provider>
     </PrimeReactProvider>
   );

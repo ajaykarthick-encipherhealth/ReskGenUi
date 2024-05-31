@@ -18,12 +18,7 @@ import {
   faAngleDoubleLeft,
   faFile,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  Avatar,
-  Tooltip,
-  Select,
-  Badge,
-} from "antd";
+import { Avatar, Tooltip, Select, Badge } from "antd";
 import { IMAGES, SVGICON } from "../../../jsx/constant/theme";
 import { Button, Offcanvas } from "react-bootstrap";
 import Image from "next/image";
@@ -137,7 +132,7 @@ const Details = ({
   const [workListPatientId, setWorkListPatientId] = useState(null);
   const [isFileCheck, setIsFileCheck] = useState(false);
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
-
+  const [showTerminal, setShowTerminal] = useState(false);
   useEffect(() => {
     getAllProcessYear();
   }, []);
@@ -261,7 +256,7 @@ const Details = ({
   };
 
   const dosOnChange = async (e) => {
-    setDosYearDefalutSelect(e)
+    setDosYearDefalutSelect(e);
     setPatientResultReload(false);
     setIsLoading(true);
     getPatientDosList(localPatientId, e);
@@ -331,7 +326,7 @@ const Details = ({
 
   const getPatientListToDetails = (userId, orgId, tenantId) => {
     setIsLoading(true);
-    getpatientDetailsData(userId, selectedDosValue, null,setIsLoading);
+    getpatientDetailsData(userId, selectedDosValue, null, setIsLoading);
     getPatientIdData(userId);
     setLocalPatientId(userId);
   };
@@ -477,6 +472,9 @@ const Details = ({
         setScreenWidth(width);
       });
     }
+  }, []);
+  useEffect(() => {
+    setShowTerminal(false);
   }, []);
 
   return (
@@ -828,15 +826,16 @@ const Details = ({
                             <div className="col-xl-12 col-sm-12">
                               {!isLoadingDos ? (
                                 <>
-                                 <Select
-                  value={
-                    dosYearDefalutSelect
-                  }
-                  onChange={(e) => dosOnChange(e)}
-                  className={`custom_select_type ${visitStyles.custom_select_type}`}
-                  options={dosYear}
-                  style={{ backgroundColor: "#F3F3FF", width: "120px" }}
-                />
+                                  <Select
+                                    value={dosYearDefalutSelect}
+                                    onChange={(e) => dosOnChange(e)}
+                                    className={`custom_select_type ${visitStyles.custom_select_type}`}
+                                    options={dosYear}
+                                    style={{
+                                      backgroundColor: "#F3F3FF",
+                                      width: "120px",
+                                    }}
+                                  />
                                   {/* <Select
                                     onChange={(e) => dosOnChange(e)}
                                     options={dosYear}
@@ -1061,14 +1060,13 @@ const Details = ({
                   </Offcanvas>
                 </div>
               </div>
-              {/* )} */}
+
               {/* <Footer/> */}
             </div>
           )}
         </div>
       </div>
 
-      
       {flagContainerActive == "Comments" && (
         <Comments
           setOpen={setFlagContainerActive}
