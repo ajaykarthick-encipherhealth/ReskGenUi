@@ -61,6 +61,7 @@ const Flag = ({ setOpen, open, patientDetailsResult,getFlagsData ,getFlagDetails
         comment: inputValue.comments,
         processedYear: patientDetailsResult?.data?.response?.processedYear,
         dateOfService: patientDetailsResult?.data?.response?.dateOfService,
+        flagId: inputValue.flagId
       };
       try {
         const response = await axios.post(

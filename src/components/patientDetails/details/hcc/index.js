@@ -420,10 +420,11 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
                   setActiveTabHead={setActiveTabHead}
                   setActiveMeatTitle={setActiveMeatTitle}
                   setActiveComboTree={setActiveComboTree}
+                  year={year}
                 />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={3}>
-                <Combo activeComboTree={activeComboTree} />
+                <Combo activeComboTree={activeComboTree} year={year}/>
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={4}>
                 <Meat activeMeatTitle={activeMeatTitle} year={year} />
