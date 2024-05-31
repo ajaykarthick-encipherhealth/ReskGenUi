@@ -5,10 +5,18 @@ import Style from "./style.module.css";
 import RegularButtonWithIcon from "../../../components/buttonWithIcon";
 import ConfigIcon from "../../../images/svg/settingsIcons/config";
 import Fire from "../../../images/svg/settingsIcons/fihr";
-import Configuration from "./configuration";
 import EmrFhir from "./emrFihr";
-import { Breadcrumb, Layout, Menu, theme } from "antd";
-const { Header, Content, Footer, Sider } = Layout;
+import { Layout, Menu } from "antd";
+import ChatAuditConfig from "./configuration/chatAuditConfig";
+import FlagConfig from "./configuration/flagConfig";
+import FileProcessingConfig from "./configuration/fileProcessungConfig";
+import MedicalCoding from "./coding/medicalCoding";
+import Insulin from "./coding/insulin";
+import DirectCodes from "./coding/directCodes";
+import HealthMetricConfig from "./coding/healthMetricConfig";
+import ComorbidConditions from "./coding/comorbidConditions";
+import CriticalConditions from "./coding/criticalConditions";
+const { Sider } = Layout;
 
 const menuList = [
   {
@@ -17,46 +25,46 @@ const menuList = [
     label: `Configuration`,
     children: [
       {
-        key: "Chat Audit Config",
+        key: "Chat_Audit_Config",
         label: "Chat Audit Config",
       },
       {
-        key: "Flag Config",
+        key: "Flag_Config",
         label: "Flag Config",
       },
       {
-        key: "File Processing Config",
+        key: "File_Processing_Config",
         label: "File Processing Config",
       },
     ],
   },
   {
-    key: `Coding Guidelines`,
+    key: `Coding_Guidelines`,
     icon: <ConfigIcon />,
     label: `Coding Guidelines`,
     children: [
       {
-        key: "Medical Coding",
+        key: "Medical_Coding",
         label: "Medical Coding",
       },
       {
-        key: "Insulin Medications",
+        key: "Insulin_Medications",
         label: "Insulin Medications",
       },
       {
-        key: "Direct Codes",
+        key: "Direct_Codes",
         label: "Direct Codes",
       },
       {
-        key: "Health Metric Config",
+        key: "Health_Metric_Config",
         label: "Health Metric Config",
       },
       {
-        key: "Comorbid Conditions",
+        key: "Comorbid_Conditions",
         label: "Comorbid Conditions",
       },
       {
-        key: "Critical Conditions",
+        key: "Critical_Conditions",
         label: "Critical Conditions",
       },
     ],
@@ -67,60 +75,49 @@ const menuList = [
     label: `EMR-FHIR`,
   },
 ];
-const tabMenu = [
-  {
-    name: "Configuration",
-    isActiveIcon: <ConfigIcon active={true} />,
-    icon: <ConfigIcon />,
-    subMenu: [
-      {
-        id: 1,
-        title: "Chat Audit Config",
-      },
-      {
-        id: 2,
-        title: "Flag Config",
-      },
-      {
-        id: 3,
-        title: "File Processing Config",
-      },
-    ],
-  },
-  { name: "EMR-FHIR", icon: <Fire />, isActiveIcon: <Fire active={true} /> },
-];
+
 const Settings = () => {
-  const [activePage, setActivePage] = useState(tabMenu[0].name);
+  const [activePage, setActivePage] = useState("Chat_Audit_Config");
+  const handleMenuClick = (e) => {
+    setActivePage(e.key);
+  };
+
   return (
-    <div style={{ backgroundColor: "#F0F6FE" }}>
+    <div>
       <HeaderFile />
       <div className={Style.headerContainer}>
         <div className={`${Style.title} mb-2`}>Settings</div>
         <Card>
-          <div className="d-flex justify-between pt-2">
-            <div className="w-[40%]">
-              <Layout>
-                <Sider width={250}>
+          <div className="d-flex py-4">
+            <div style={{ width: "20%" }}>
+              <Layout style={{ background: "#fff" }}>
+                <Sider width={250} style={{ background: "#fff" }}>
                   <Menu
                     mode="inline"
-                    defaultSelectedKeys={["Chat Audit Config"]}
+                    defaultSelectedKeys={["Chat_Audit_Config"]}
                     defaultOpenKeys={["Configuration"]}
-                    style={{
-                      height: "100%",
-                      width: "100%",
-                    }}
                     items={menuList}
-                    onChange={(value)=>{console.log(value)}}
+                    onClick={handleMenuClick}
                   />
                 </Sider>
               </Layout>
             </div>
             <div
-              className="w-[60%] border rounded-3 mx-4 border-bottom-2"
-              style={{ height: "90vh" }}
+              className="border rounded-3 mx-4 border-bottom-2"
+              style={{ height: "90vh", width: "100%" }}
             >
-              {activePage == tabMenu[0].name && <Configuration />}
-              {activePage == tabMenu[1].name && <EmrFhir />}
+              {activePage == "Chat_Audit_Config" && <ChatAuditConfig />}
+              {activePage == "Flag_Config" && <FlagConfig />}
+              {activePage == "File_Processing_Config" && <FileProcessingConfig />}
+
+              {activePage == "Medical_Coding" && <MedicalCoding />}
+              {activePage == "Insulin_Medications" && <Insulin />}
+              {activePage == "Direct_Codes" && <DirectCodes />}
+              {activePage == "Health_Metric_Config" && <HealthMetricConfig />}
+              {activePage == "Comorbid_Conditions" && <ComorbidConditions />}
+              {activePage == "Critical_Conditions" && <CriticalConditions />}
+
+              {activePage == "EMR-FHIR" && <EmrFhir />}
             </div>
           </div>
         </Card>
