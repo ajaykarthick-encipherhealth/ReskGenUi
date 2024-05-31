@@ -14516,6 +14516,30 @@ input[type="number"] {
   width: 165px !important;
   text-align: center;
 }
+
+.ant-menu-light.ant-menu-inline .ant-menu-sub.ant-menu-inline{
+background-color: white !important;
+}
+.ant-menu-light .ant-menu-submenu-selected >.ant-menu-submenu-title{
+  color:black !important;
+  background-color: transparent !important;
+}
+.ant-menu-light .ant-menu-item-selected{
+  color:white !important;
+  background-color: #04306f !important;
+}
+.switch .ant-switch-handle:before{
+  background: black !important;
+}
+.switch .ant-switch-inner{
+  background: #d3d3d3 !important;
+}
+.directCodeSwitch .ant-switch-handle:before{
+  background: #008CBA !important;
+}
+.directCodeSwitch .ant-switch-inner{
+  background: #0dcaf0 !important;
+}
 .ant-upload {
   width: 100%;
 }

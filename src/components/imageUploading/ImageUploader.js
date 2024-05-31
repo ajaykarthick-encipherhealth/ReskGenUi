@@ -5,7 +5,7 @@ import styles from "./styles.module.css";
 import upload from "../../images/fihr/upload.png";
 import { preSendURl } from "../../stores/authflow/actions";
 
-const ImageUploader = ({ setOpenUploader, setOpenContent }) => {
+const ImageUploader = ({ setOpenUploader, setOpenContent,height, isFolderUplaod }) => {
   const fileInputRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -30,7 +30,9 @@ const ImageUploader = ({ setOpenUploader, setOpenContent }) => {
                 type: file.type,
               }
             );
-            dispatch(preSendURl(type, croppedFile));
+            if (!isFolderUplaod) {
+              dispatch(preSendURl(type, croppedFile));
+            }
             setOpenUploader(false);
           }, file.type);
         };
@@ -42,18 +44,24 @@ const ImageUploader = ({ setOpenUploader, setOpenContent }) => {
 
   return (
     <div className={styles.cover}>
-      <label>
+      <label style={{ height: height }}>
         <input
           className="input"
-          type="file"
+          type={"file"}
           onChange={handleChange}
           ref={fileInputRef}
-          accept=".png,.jpg,.jpeg"
+          name="file" 
+          multiple
+          accept={isFolderUplaod?".xl,.csv":".png,.jpg,.jpeg"}
         />
 
-        <div className={styles.videoflex}>
-          <Image src={upload} alt="Image" />
-          Upload Profile
+        <div className={styles.videoflex} style={{ height: height }}>
+          <div>
+            <div className="d-flex justify-content-center">
+              <Image src={upload} alt="Image" />
+            </div>
+            {isFolderUplaod?"Upload a File":"Upload Profile"}
+          </div>
         </div>
       </label>
     </div>
