@@ -416,7 +416,7 @@ export const getCaptureSectionBackgroundFile = (
                     <span 
                     onClick={() =>
                       newFindValueDocument(
-                        findSectionHyperlink(hyperlinks, item),
+                        findSectionHyperlink(hyperlinks, item)[0],
                         documentPlace,
                         setSearch,
                         setFileLoading,
@@ -731,17 +731,20 @@ export const handleSubmitValidNotes = async ({
   }
   try {
     var patientId = localStorage.getItem("patientId");
-    var userId = localStorage.getItem("userId");
+    var userId = localStorage.getItem("orgId");
+    var orgId = localStorage.getItem("orgId");
     var dataFormatSuggested = {
       userId: userId,
       patientId: patientId,
+      orgId:orgId,
+      fileId: selectDisDetails.fileId,
       diagnosisCode: selectDisDetails.diagnosisCode,
       actualDescription: selectDisDetails.actualDescription,
       dbDescription: selectDisDetails.dbDescription,
-      notes: values.reason,
-      dos: selectDisDetails.dos,
-      encounterDate: selectDisDetails.encounterDate,
-      capturedSections: selectDisDetails.capturedSections,
+      reason: values.reason,
+      dos: selectDisDetails.processedYear,
+      dateOfService: selectDisDetails.dateOfService,
+      chartProcessType: selectDisDetails.dateOfService ? "DOS" : "YEAR",
     };
     const response = await axios.put(
       ENDPOINTS.apiEndoint + apiURL,
@@ -994,7 +997,9 @@ export const onDragEnd = (
   if (selectObject) {
     var title =
       selectObject.diagnosisCode + " - " + selectObject.actualDescription;
-    selectObject.dos = patientDetailsResult?.result?.response?.dos;
+    selectObject.processedYear = patientDetailsResult?.data?.response?.processedYear;
+    selectObject.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
+    selectObject.fileId= patientDetailsResult?.data?.response?.fileId,
     setSelectDiseasesName(title);
     setSelectDisDetails(selectObject);
   }
@@ -1196,7 +1201,7 @@ export const stringToColour = (str) => {
 
 const findSectionHyperlink = (hyperlinks, header) => {
   const headerResult = hyperlinks?.filter((res2) => res2.header === header);
-  return headerResult[0];
+  return headerResult;
 };
 const findDosHyperlink = (hyperlinks, date) => {
   const headerResult = hyperlinks?.filter((res2) => res2.dos === date);

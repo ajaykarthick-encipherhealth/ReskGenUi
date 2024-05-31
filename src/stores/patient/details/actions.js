@@ -41,3 +41,7 @@ export const labFileAction = createActionThunk(
   "LAB_FILE_DETAILS",
   network.patientHccFile
 );
+export const getFlagDetailsAction = createActionThunk(
+  "GET_FLAG_DETAILS",
+  network.getFlagsList
+);

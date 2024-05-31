@@ -89,8 +89,10 @@ const Details = ({
   getMeatQueryList,
   getPatientIdData,
   patientIdDetailsData,
+  getFlagDetailsData,
+  flagsDetailsResult
 }) => {
-  // console.log(patientIdDetailsData)
+  console.log(flagsDetailsResult)
   const navigate = useRouter();
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -241,6 +243,7 @@ const Details = ({
           isRxHcc: rxHcc.length > 0 ? rxHcc.length : 0,
         });
         setNewValidDiseaseList(validDisArray);
+        getFlagDetailsData(patientId,result.processedYear,result.dateOfService)
         // getFlagListLastDetails(patientId, result.processedYear);
         setIsLoading(false);
         setPatientResultReload(true);
@@ -987,7 +990,7 @@ const Details = ({
                                     >
                                       {data.name === "Flag" ? (
                                         <Badge
-                                          count={5}
+                                          count={flagsDetailsResult?.response?.length}
                                           style={{
                                             background: "#04306f",
                                             margin: "-2px",
@@ -1102,6 +1105,8 @@ const enhancer = connect(
     getFlagsData: state?.reviewer?.workQueue?.flags?.data,
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     patientIdDetailsData: state?.patientDetails.details?.patientIdResult,
+    flagsDetailsResult: state?.patientDetails.details?.flagsDetailsResult.data,
+
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,
@@ -1112,6 +1117,7 @@ const enhancer = connect(
     getMeatQueryList: detailsActions.meatQueryAction,
     getMeatQueryList: detailsActions.meatQueryAction,
     getPatientIdData: detailsActions.patientIdDetailsAction,
+    getFlagDetailsData: detailsActions.getFlagDetailsAction,
   }
 );
 export default enhancer(Details);
