@@ -4,7 +4,7 @@ import { Button, DatePicker, Input, Space } from "antd";
 import TableRisk from "../../components/tableRisk";
 import data  from './data.json'
 
-const Riskadjustment = () => {
+const RiskAdjustment = () => {
   const [code, setCode] = useState("");
   const [selectedYear, setSelectedYear] = useState(null);
 
@@ -71,4 +71,4 @@ const Riskadjustment = () => {
   );
 };
 
-export default Riskadjustment;
+export default RiskAdjustment;

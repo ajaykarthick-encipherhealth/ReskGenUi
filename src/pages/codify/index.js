@@ -11,8 +11,8 @@ import {
 import style from "./style.module.css";
 import { Collapse } from "antd";
 import Tables from "../../components/tablecodify";
-import Riskadjustment from "../riskadjustment";
 import Codes from "../codes";
+import RiskAdjustment from "../riskadjustment";
 
 const Codify = ({ codifyData }) => {
   const [showAlphabets, setShowAlphabets] = useState(false);
@@ -258,7 +258,7 @@ const Codify = ({ codifyData }) => {
         )}
       </div>
 
-      {activeButton === "Risk Adjustment" && <Riskadjustment />}
+      {activeButton === "Risk Adjustment" && <RiskAdjustment />}
     </div>
   );
 };
