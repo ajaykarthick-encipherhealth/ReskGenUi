@@ -11,9 +11,10 @@ import moment from "moment";
 import { SVGICON } from "../../../../../jsx/constant/theme";
 import { connect } from "react-redux";
 import Select from "react-select";
+import { actions as detailsActions } from "../../../../../stores/patient/details";
 
 
-const Flag = ({ setOpen, open, patientDetailsResult,getFlagsData }) => {
+const Flag = ({ setOpen, open, patientDetailsResult,getFlagsData ,getFlagDetailsData,flagsDetailsResult}) => {
   const [inputValue, setInputValue] = useState({
     patientId: "",
     comments: "",
@@ -23,6 +24,7 @@ const Flag = ({ setOpen, open, patientDetailsResult,getFlagsData }) => {
   const [commentsTrigger, setCommentsTrigger] = useState(false);
   const [validated, setValidated] = useState(false);
   const [localPatientId, setLocalPatientId] = useState("");
+  const [userDetails, setUserDetails] = useState("");
 
   const flagPostList = getFlagsData?.response?.map((item) => ({
     value: item?.id,
@@ -47,14 +49,6 @@ const Flag = ({ setOpen, open, patientDetailsResult,getFlagsData }) => {
     name: item?.flagName,
   }));
 
-  const getFlagList = async () => {
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/flagdetails/get?patientId=${patientDetailsResult?.data?.response?.patientId}&processedYear=${patientDetailsResult?.data?.response?.processedYear}`
-    );
-    setFlagResultList(response.data.response);
-    setFilterDataLoading(false);
-  };
 
   const handleSubmitFlag = async (event) => {
     const form = event.currentTarget;
@@ -63,10 +57,10 @@ const Flag = ({ setOpen, open, patientDetailsResult,getFlagsData }) => {
       setCommentsTrigger(true);
       const orgId = localStorage.getItem("orgId");
       var dataFormatSuggested = {
-        "flagId":"dc44fa22-c406-489e-a1a9-f529c4a82579",
-        "patientId":"V2-TEST-023",
-        "processedYear":2023,
-        "comment":"Test Comment"
+        patientId: patientDetailsResult?.data?.response?.patientId,
+        comment: inputValue.comments,
+        processedYear: patientDetailsResult?.data?.response?.processedYear,
+        dateOfService: patientDetailsResult?.data?.response?.dateOfService,
       };
       try {
         const response = await axios.post(
@@ -81,7 +75,7 @@ const Flag = ({ setOpen, open, patientDetailsResult,getFlagsData }) => {
               placement: "top",
               duration: 1,
             });
-            getFlagList();
+            getFlagDetailsData(patientDetailsResult?.data?.response?.patientId,patientDetailsResult?.data?.response?.processedYear,patientDetailsResult?.data?.response?.dateOfService)
             setCommentsTrigger(false);
             setIsModalComments(false);
           } else {
@@ -152,6 +146,7 @@ const Flag = ({ setOpen, open, patientDetailsResult,getFlagsData }) => {
   };
 
   const handleChangeFlag = async (e) => {
+    console.log(e)
     setInputValue({
       ...inputValue,
       ["flagId"]: e.value,
@@ -163,7 +158,6 @@ const Flag = ({ setOpen, open, patientDetailsResult,getFlagsData }) => {
   useEffect(() => {
     const patientId = localStorage.getItem("patientId");
     setLocalPatientId(patientId);
-    getFlagList();
   }, []);
 
   return (
@@ -228,7 +222,7 @@ const Flag = ({ setOpen, open, patientDetailsResult,getFlagsData }) => {
             </div>
           </Form>
 
-          {flagResultList.map((data, index) => (
+          {flagsDetailsResult?.response?.map((data, index) => (
             <div className={visitStyles.comments_card} key={index}>
               <div className={`${visitStyles.commentNameHead}`}>
                 <span className={visitStyles.commentsName}>
@@ -253,23 +247,23 @@ const Flag = ({ setOpen, open, patientDetailsResult,getFlagsData }) => {
                     </>
                   )}
                 </span>
-                <Tooltip placement="bottom" title={data.commentCreatedBy}>
+                <Tooltip placement="bottom" title={data?.patientFlagDTO?.createdBy}>
                   <Popover
                     placement="bottom"
                     content={userDetails}
                     onOpenChange={() =>
-                      renderUserDetails(data.commentCreatedBy)
+                      renderUserDetails(data?.patientFlagDTO?.createdBy)
                     }
                   >
                     <Avatar className={visitStyles.timeLineUsername}>
-                      {splitUserName(data?.commentCreatedBy)}
+                      {splitUserName(data?.patientFlagDTO?.createdBy)}
                     </Avatar>
                   </Popover>
                 </Tooltip>
               </div>
-              <span className={visitStyles.commentsDesc}>{data.comments}</span>
+              <span className={visitStyles.commentsDesc}>{data?.patientFlagDTO?.comment}</span>
               <span className={visitStyles.commentsTime}>
-                {moment(data.commentCreatedAt).format("MM-DD-YYYY hh:mm:A")}
+                {moment(data?.patientFlagDTO?.createdDate).format("MM-DD-YYYY hh:mm:A")}
               </span>
             </div>
           ))}
@@ -282,6 +276,11 @@ const Flag = ({ setOpen, open, patientDetailsResult,getFlagsData }) => {
 const enhancer = connect((state) => ({
   patientDetailsResult: state?.patientDetails?.details?.patientResult,
   getFlagsData: state?.reviewer?.workQueue?.flags?.data,
+  flagsDetailsResult: state?.patientDetails.details?.flagsDetailsResult.data,
 
-}));
+}),
+{
+  getFlagDetailsData: detailsActions.getFlagDetailsAction,
+}
+);
 export default enhancer(Flag);

@@ -4,6 +4,7 @@ import {
 } from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
+import { stringToColour } from "./ReusableFunctions";
 import NewResponse from "./newresponse.json";
 
 export const COLORS = [
@@ -42,18 +43,21 @@ export const COLORS3 = [
   "encounterDateTag10",
 ];
 
-const stringToColour = (str) => {
-  let hash = 0;
-  str?.split("").forEach((char) => {
-    hash = char.charCodeAt(0) + ((hash << 5) - hash);
-  });
-  let colour = "#";
-  for (let i = 0; i < 3; i++) {
-    const value = (hash >> (i * 8)) & 0xff;
-    colour += value.toString(16).padStart(2, "0");
-  }
-  return colour;
-};
+// const stringToColour = (str) => {
+//   let hash = 0;
+//   str?.split("").forEach((char) => {
+//     hash = char.charCodeAt(0) + ((hash << 5) - hash);
+//   });
+//   let colour = "#";
+//   for (let i = 0; i < 3; i++) {
+//     const value = (hash >> (i * 8)) & 0xff;
+//     colour += value.toString(16).padStart(2, "0");
+//   }
+//   if(str.toLocaleLowerCase() === "plan"){
+//      colour = "#536cdf"
+//   }
+//   return colour;
+// };
 
 const submitSectionColors = async (
   sectionName,

@@ -113,9 +113,11 @@ const File = ({
   useEffect(() => {
     getFileDosPageNumber();
   }, [fileDosPageNumberList]);
-  const onchangeValid = (code, data) => {
+   const onchangeValid = (code, data) => {
     var title = code + " - " + data.actualDescription;
-    data.dos = patientDetailsResult?.result?.response?.dos;
+    data.processedYear = patientDetailsResult?.data?.response?.processedYear;
+    data.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
+    data.fileId= patientDetailsResult?.data?.response?.fileId,
     setSelectDiseasesName(title);
     setSelectDisDetails(data);
   };
