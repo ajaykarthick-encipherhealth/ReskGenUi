@@ -638,7 +638,7 @@ const Reports = ({
                           </div>
                         )}
                       </div>
-                      <div
+                      {ReportPatientDetails?.response?.response?.data?.length === 0  ? null :   <div
                         className="d-flex justify-content-end "
                         style={{ marginBottom: "-40px" }}
                       >
@@ -690,7 +690,8 @@ const Reports = ({
                             </button>
                           </Tooltip>
                         ) : null}
-                      </div>
+                      </div>  }
+                    
                     </div>
                   </div>
                 </div>
