@@ -286,14 +286,14 @@ const ReviewerReport = ({
           </Popover>
         );
 
-      case "PENDING":
-        return (
-          <Popover placement="bottom" title="Status: PENDING">
-            <span className={`patient-status ${styles.textCenter}`}>
-              <Image src={Pending} className={styles.imgSize} />
-            </span>
-          </Popover>
-        );
+      // case "PENDING":
+      //   return (
+      //     <Popover placement="bottom" title="Status: PENDING">
+      //       <span className={`patient-status ${styles.textCenter}`}>
+      //         <Image src={Pending} className={styles.imgSize} />
+      //       </span>
+      //     </Popover>
+      //   );
 
       case "DECLINED":
         return (
@@ -316,14 +316,14 @@ const ReviewerReport = ({
             </span>
           </Popover>
         );
-      case "COMPUTED":
-        return (
-          <Popover placement="bottom" title="Status: PENDING">
-            <span className={`patient-status ${styles.textCenter}`}>
-              <Image src={Pending} className={styles.imgSize} />
-            </span>
-          </Popover>
-        );
+      // case "COMPUTED":
+      //   return (
+      //     <Popover placement="bottom" title="Status: PENDING">
+      //       <span className={`patient-status ${styles.textCenter}`}>
+      //         <Image src={Pending} className={styles.imgSize} />
+      //       </span>
+      //     </Popover>
+      //   );
       case "HOLD":
         return (
           <Popover placement="bottom" title="Status: HOLD">
@@ -340,6 +340,8 @@ const ReviewerReport = ({
             </span>
           </Popover>
         );
+      case "COMPUTED":
+      case "PENDING":
       case null:
         return (
           <Popover placement="bottom" title="Status: PENDING">
@@ -421,7 +423,7 @@ const ReviewerReport = ({
                       <div
                         className={`col-xl-6 ${styles.card}`}
                         style={{
-                          height:"100%",
+                          height: "100%",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
@@ -430,187 +432,175 @@ const ReviewerReport = ({
                         <Empty />
                       </div>
                     ) : (
-                      <>
-                        <div className="col-xl-6">
-                          <div className={styles.cardContainer}>
-                            {reportListAll?.response?.data?.map((item, id) => (
-                              <div key={id} className={styles.card}>
+                      <div className="col-xl-6">
+                        <div className={styles.cardContainer}>
+                          {reportListAll?.response?.data?.map((item, id) => (
+                            <div key={id} className={styles.card}>
+                              <div
+                                className={styles.contentGroup}
+                                // onClick={handleCardRowClick}
+                                style={{ cursor: "pointer" }}
+                              >
+                                <div className={styles.inputContainer}>
+                                  <input
+                                    type="checkbox"
+                                    onChange={() => {
+                                      handleRowCheckboxChange(item);
+                                    }}
+                                    className={TableStyle.customChecked}
+                                    checked={selectedRows?.some(
+                                      (selectedRow) =>
+                                        selectedRow.patientId === item.patientId
+                                    )}
+                                  />
+                                </div>
                                 <div
-                                  className={styles.contentGroup}
-                                  // onClick={handleCardRowClick}
-                                  style={{ cursor: "pointer" }}
+                                  className={`col-xl-12 ${styles.checkSep}`}
+                                  onClick={() => handleTableRowClick(id)}
                                 >
-                                  <div className={styles.inputContainer}>
-                                    <input
-                                      type="checkbox"
-                                      onChange={() => {
-                                        handleRowCheckboxChange(item);
-                                      }}
-                                      className={TableStyle.customChecked}
-                                      checked={selectedRows?.some(
-                                        (selectedRow) =>
-                                          selectedRow.patientId ===
-                                          item.patientId
-                                      )}
-                                    />
-                                  </div>
-                                  <div
-                                    className={`col-xl-12 ${styles.checkSep}`}
-                                    onClick={() => handleTableRowClick(id)}
-                                  >
-                                    <div className="d-flex justify-content-between align-items-center pb-1">
-                                      <div
-                                        className={`col-xl-6 ${styles.pName}`}
-                                      >
-                                        {item.patientName
-                                          ? item.patientName
-                                          : "---"}
-                                      </div>
-
-                                      <div
-                                        className={`col-xl-6 ${styles.dataContainer}`}
-                                      >
-                                        <span className={styles.raf}>
-                                          <Tooltip
-                                            title={"Raf Score"}
-                                            placement="bottom"
-                                          >
-                                            {" "}
-                                            {item.rafSum ? item.rafSum : "---"}
-                                          </Tooltip>
-                                        </span>
-                                        <span className={styles.avatarAlign}>
-                                          {item?.flag ? (
-                                            getFlags(item.flag)
-                                          ) : (
-                                            <div>{SVGICON?.emptyFlag}</div>
-                                          )}
-                                        </span>
-                                        <span className={styles.avatarAlign}>
-                                          {auditstatusBodyTemplate(item)}
-                                        </span>
-                                        <span>
-                                          {processstatusBodyTemplate(item)}
-                                        </span>
-                                      </div>
+                                  <div className="d-flex justify-content-between align-items-center pb-1">
+                                    <div className={`col-xl-6 ${styles.pName}`}>
+                                      {item.patientName
+                                        ? item.patientName
+                                        : "---"}
                                     </div>
 
-                                    <div className="d-flex justify-content-around align-items-center pb-1">
-                                      <Tooltip
-                                        title={"Patient Id"}
-                                        placement="bottom"
-                                      >
-                                        <div
-                                          className={`col-xl-2 ${styles.headText}`}
-                                          // onClick={() => handleTableRowClick(id)}
+                                    <div
+                                      className={`col-xl-6 ${styles.dataContainer}`}
+                                    >
+                                      <span className={styles.raf}>
+                                        <Tooltip
+                                          title={"Raf Score"}
+                                          placement="bottom"
                                         >
-                                          {item.patientId ? item.patientId : ""}
-                                        </div>
-                                      </Tooltip>
+                                          {" "}
+                                          {item.rafSum ? item.rafSum : "---"}
+                                        </Tooltip>
+                                      </span>
+                                      <span className={styles.avatarAlign}>
+                                        {item?.flag ? (
+                                          getFlags(item.flag)
+                                        ) : (
+                                          <div>{SVGICON?.emptyFlag}</div>
+                                        )}
+                                      </span>
+                                      <span className={styles.avatarAlign}>
+                                        {auditstatusBodyTemplate(item)}
+                                      </span>
+                                      <span>
+                                        {processstatusBodyTemplate(item)}
+                                      </span>
+                                    </div>
+                                  </div>
 
+                                  <div className="d-flex justify-content-around align-items-center pb-1">
+                                    <Tooltip
+                                      title={"Patient Id"}
+                                      placement="bottom"
+                                    >
                                       <div
                                         className={`col-xl-2 ${styles.headText}`}
+                                        // onClick={() => handleTableRowClick(id)}
                                       >
-                                        HCC
+                                        {item.patientId ? item.patientId : ""}
                                       </div>
-                                      <div
-                                        className={`col-xl-4 ${styles.headText}`}
-                                      >
-                                        SUPERVISOR
-                                      </div>
-                                      <div
-                                        className={`col-xl-4 ${styles.headText}`}
-                                      >
-                                        REVIEWER
-                                      </div>
-                                    </div>
-                                    <div className="d-flex justify-content-around align-items-center">
-                                      <Tooltip
-                                        title={"Completed Date"}
-                                        placement="bottom"
-                                      >
-                                        <div
-                                          className={`col-xl-2 ${styles.text}`}
-                                        >
-                                          {dateFormate(
-                                            dayjs,
-                                            item?.processedDate
-                                          )}
-                                        </div>
-                                      </Tooltip>
+                                    </Tooltip>
 
+                                    <div
+                                      className={`col-xl-2 ${styles.headText}`}
+                                    >
+                                      HCC
+                                    </div>
+                                    <div
+                                      className={`col-xl-4 ${styles.headText}`}
+                                    >
+                                      SUPERVISOR
+                                    </div>
+                                    <div
+                                      className={`col-xl-4 ${styles.headText}`}
+                                    >
+                                      REVIEWER
+                                    </div>
+                                  </div>
+                                  <div className="d-flex justify-content-around align-items-center">
+                                    <Tooltip
+                                      title={"Completed Date"}
+                                      placement="bottom"
+                                    >
                                       <div
                                         className={`col-xl-2 ${styles.text}`}
                                       >
-                                        {item.validDiseaseCount
-                                          ? item.validDiseaseCount
-                                          : "---"}
-                                      </div>
-                                      <div
-                                        className={`col-xl-4 ${styles.text}`}
-                                      >
-                                        {item.auditedByFirstName ||
-                                        item.auditedByLastName ||
-                                        item.auditedByProfileImage ? (
-                                          <div className="d-flex align-items-center">
-                                            <span
-                                              className={styles.avatarAlign}
-                                            >
-                                              {renderUserPrfoileAvatar(
-                                                item.auditedByFirstName,
-                                                item.auditedByLastName,
-                                                item.auditedByProfileImage,
-                                                "header"
-                                              )}
-                                            </span>
-                                            <span>
-                                              {item.auditedByFirstName}{" "}
-                                              {item.auditedByLastName}
-                                            </span>
-                                          </div>
-                                        ) : (
-                                          <div>---</div>
+                                        {dateFormate(
+                                          dayjs,
+                                          item?.processedDate
                                         )}
                                       </div>
-                                      <div
-                                        className={`col-xl-4 ${styles.text}`}
-                                      >
-                                        {item.patientAllocatedFirstName ||
-                                        item.patientAllocatedLastName ||
-                                        item.patientAllocatedProfileImage ? (
-                                          <div className="d-flex align-items-center">
-                                            <span
-                                              className={styles.avatarAlign}
-                                            >
-                                              {renderUserPrfoileAvatar(
-                                                item.patientAllocatedFirstName,
-                                                item.patientAllocatedLastName,
-                                                item.patientAllocatedProfileImage,
-                                                "header"
-                                              )}
-                                            </span>
-                                            <span>
-                                              {item.patientAllocatedFirstName}{" "}
-                                              {item.patientAllocatedLastName}
-                                            </span>
-                                          </div>
-                                        ) : (
-                                          <div>---</div>
-                                        )}
-                                      </div>
+                                    </Tooltip>
+
+                                    <div className={`col-xl-2 ${styles.text}`}>
+                                      {item.validDiseaseCount
+                                        ? item.validDiseaseCount
+                                        : "---"}
+                                    </div>
+                                    <div className={`col-xl-4 ${styles.text}`}>
+                                      {item.auditedByFirstName ||
+                                      item.auditedByLastName ||
+                                      item.auditedByProfileImage ? (
+                                        <div className="d-flex align-items-center">
+                                          <span className={styles.avatarAlign}>
+                                            {renderUserPrfoileAvatar(
+                                              item.auditedByFirstName,
+                                              item.auditedByLastName,
+                                              item.auditedByProfileImage,
+                                              "header"
+                                            )}
+                                          </span>
+                                          <span>
+                                            {item.auditedByFirstName}{" "}
+                                            {item.auditedByLastName}
+                                          </span>
+                                        </div>
+                                      ) : (
+                                        <div>---</div>
+                                      )}
+                                    </div>
+                                    <div className={`col-xl-4 ${styles.text}`}>
+                                      {item.patientAllocatedFirstName ||
+                                      item.patientAllocatedLastName ||
+                                      item.patientAllocatedProfileImage ? (
+                                        <div className="d-flex align-items-center">
+                                          <span className={styles.avatarAlign}>
+                                            {renderUserPrfoileAvatar(
+                                              item.patientAllocatedFirstName,
+                                              item.patientAllocatedLastName,
+                                              item.patientAllocatedProfileImage,
+                                              "header"
+                                            )}
+                                          </span>
+                                          <span>
+                                            {item.patientAllocatedFirstName}{" "}
+                                            {item.patientAllocatedLastName}
+                                          </span>
+                                        </div>
+                                      ) : (
+                                        <div>---</div>
+                                      )}
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            ))}
-                          </div>
+                            </div>
+                          ))}
                         </div>
-                      </>
+                      </div>
                     )}
 
                     <div className={`col-xl-6 ${styles.cardSeperation}`}>
                       <div className={styles.cardContainer}>
-                        <div className={styles.card1} style={{height:"100%"}}>
+                        <div
+                          className={styles.card1}
+                          style={{ height: "100%" }}
+                        >
                           <div className={styles.summaryText}>Summary</div>
                           <div className="col-xl-12  d-flex mt-1">
                             <div className={`col-xl-4 ${styles.subCard}`}>
@@ -641,22 +631,18 @@ const ReviewerReport = ({
                             Overall Status
                           </div>
 
-                          <div className="container mb-4" style={{marginTop:"0px"}}>
+                          <div
+                            className="container mb-4"
+                            style={{ marginTop: "0px" }}
+                          >
                             <div className="row g-3">
                               {card1Data?.map((data) => (
                                 <div key={data?.id} className={`col-3`}>
                                   <div
                                     style={{
                                       backgroundColor: data.bg,
-                                      display: "flex",
-                                      flexDirection: "column",
-                                      height:"85px",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      margin: "auto",
-                                      borderRadius: "10px",
-                                      padding: "10px 0 0px 0",
                                     }}
+                                    className={styles.reportDiv}
                                   >
                                     <div className="d-flex">
                                       <Image
@@ -677,14 +663,7 @@ const ReviewerReport = ({
                             </div>
                           </div>
 
-                          <div className="col-xl-12  d-flex" style={{
-                            height:"270px",
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            margin: "auto",
-                          }}>
+                          <div className={`col-xl-12 ${styles.reportDiv2}`}>
                             <div className={`col-xl-4 ${styles.flags}`}>
                               <div className={styles.cardHead}>Flags</div>
                               <div className={styles.contentOverFlow}>
