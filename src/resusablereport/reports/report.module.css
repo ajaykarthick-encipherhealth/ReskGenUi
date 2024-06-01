@@ -486,7 +486,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .readSubCard {
-  height: 100%;
+  height: 100px;
   padding: 10px;
   text-align: center;
   background-color: #ebd4f7;
