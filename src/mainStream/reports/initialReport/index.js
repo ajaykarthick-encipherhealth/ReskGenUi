@@ -321,7 +321,7 @@ const InitialCard = ({
                       <div className={styles.cardContainer}>
                         <div className={styles.card1}>
                           <div className={styles.summaryText}>Summary</div>
-                          <div className="col-xl-12 d-flex mt-4">
+                          <div className="col-xl-12 d-flex mt-0">
                             {subCardData.map((card, index) => (
                               <SubCard
                                 key={index}
@@ -333,8 +333,11 @@ const InitialCard = ({
                           <div className={` pt-2 ${styles.summaryText}`}>
                             Overall Status
                           </div>
-                          <div className="col-xl-12  d-flex mt-2">
-                            <Row className={styles.carddiv}>
+                          <div
+                            className="container mb-4"
+                            style={{ marginTop: "0px" }}
+                          >
+                            <div className="row g-3">
                               {card1Data?.map((data) => (
                                 <MiniCards
                                   backgroundColor={data.bg}
@@ -344,11 +347,11 @@ const InitialCard = ({
                                   styles={styles}
                                 />
                               ))}
-                            </Row>
+                            </div>
                           </div>
                           <div className="col-xl-12  d-flex mt-1">
                             <Flags
-                              flagsData={getFlagsData?.response}
+                              reportListAll={reportListAll}
                               styles={styles}
                             />
                             {allocationCountData.map((item, index) => (
