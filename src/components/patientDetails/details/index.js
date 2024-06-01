@@ -134,8 +134,8 @@ const Details = ({
   const [workListPatientId, setWorkListPatientId] = useState(null);
   const [isFileCheck, setIsFileCheck] = useState(false);
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
+  const [showTerminal, setShowTerminal] = useState(false);
   const [copied, setCopied] = useState(false);
-
   useEffect(() => {
     getAllProcessYear();
   }, []);
@@ -476,6 +476,9 @@ const Details = ({
         setScreenWidth(width);
       });
     }
+  }, []);
+  useEffect(() => {
+    setShowTerminal(false);
   }, []);
 
   return (
@@ -1070,7 +1073,7 @@ const Details = ({
                   </Offcanvas>
                 </div>
               </div>
-              {/* )} */}
+
               {/* <Footer/> */}
             </div>
           )}
