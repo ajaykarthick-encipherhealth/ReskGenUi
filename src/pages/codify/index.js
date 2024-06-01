@@ -14,7 +14,7 @@ import Tables from "../../components/tablecodify";
 import Codes from "../codes";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
-import RiskAdjustment from "../riskadjustment";
+import Riskadjustment from "../../components/riskadjustment";
 
 const Codify = ({ codifyData, codesData }) => {
   const [showAlphabets, setShowAlphabets] = useState(false);
@@ -230,7 +230,7 @@ const Codify = ({ codifyData, codesData }) => {
         )}
       </div>
 
-      {activeButton === "Risk Adjustment" && <RiskAdjustment loading={loading}setLoading={setLoading}  />}
+      {activeButton === "Risk Adjustment" && <Riskadjustment loading={loading}setLoading={setLoading}  />}
     </div>
   );
 };

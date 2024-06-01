@@ -3,8 +3,8 @@ import style from "./style.module.css";
 import { actions as dashbaordActions } from "../../stores/codify/dashboard";
 import { connect } from "react-redux";
 import { Button, DatePicker, Empty, Input, Space, Spin } from "antd";
-import TableRisk from "../../components/tableRisk";
-import YearPicker from "../../components/yearpicker";
+import TableRisk from "../tableRisk";
+import YearPicker from "../yearpicker";
 import { CloseCircleOutlined,CheckCircleOutlined } from "@ant-design/icons";
 
 
