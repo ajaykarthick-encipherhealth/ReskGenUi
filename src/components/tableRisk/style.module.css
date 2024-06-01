@@ -1,13 +1,12 @@
 .head {
   padding: 2px;
   font-size: 20px !important;
-  
 }
 .code {
   color: #04306f;
 }
 .header {
   border: 1px solid #a4caf9;
-  height:222px;
+  height: 222px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 2px 2px;
 }

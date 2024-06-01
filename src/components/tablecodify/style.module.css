@@ -10,7 +10,7 @@
     font-size: 17px;
   }
   .box {
-    border: 1px solid #a4caf9;
+    border: 1px solid #0F6ADB;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
     border-radius: 7px;
     height: 300px;
@@ -23,7 +23,7 @@
       font-size: 18px;
   }
   .header2{
-      background:#004CB8 ;
+      background:#0F6ADB ;
       color:white;
     
   }
@@ -34,11 +34,11 @@
       text-wrap: wrap;
   }
   .card{
-    border: 1px solid #a4caf9;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
+    border: 1px solid #0F6ADB;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 1px 2px;
     border-radius: 7px;
     padding:8px;
-    width: 100%; 
+    width: 90%; 
   }
   .codes{
     font-size: 15px;
@@ -46,9 +46,17 @@
     padding:2px;
   }
   .list{
-    padding:20px;
+    width:90%;
   }
-  /* .tables{
-    border: 1px solid #a4caf9;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
-  } */
+ .code{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+ }
+ .card2{
+  border: 1px solid #0F6ADB;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 1px 2px;
+    border-radius: 7px;
+    padding:8px;
+ }

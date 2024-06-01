@@ -37,14 +37,14 @@ const Tables = (props) => {
     },
   ];
   return (
-    <div>
+    <div className={style.code}>
       <div className="d-flex justify-content-center">
         {loading && <Spin size="large" />}
       </div>
       {(codeData?.excludes1 || codeData?.inclusionTerm) && (
         <div className={`${style.card} mt-2`}>
           <div className={style.head}>
-            {codeData?.name} {codeData?.desc}
+            {codeData?.name}-{codeData?.desc}
           </div>
           <div className={`${style.tables}mt-3`}>
             <Table
@@ -88,18 +88,15 @@ const Tables = (props) => {
           </div> */}
         </div>
       )}
-
       <div className={style.list}>
         {codeData?.children?.map((s, i) => (
-          <div key={i}>
-            <div onClick={() => handleViewTable(s)}>
-              <p className={`${style.card} mt-3`}>
+         <div key={i} onClick={() => handleViewTable(s)}>
+              <p className= {`${style.card2} mt-3`}>
                 <ArrowRightOutlined />
                 <span className={style.codes}>{s.name} </span>
                 <span>- {s.desc}</span>
               </p>
             </div>
-          </div>
         ))}
       </div>
     </div>

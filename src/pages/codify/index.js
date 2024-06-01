@@ -7,16 +7,15 @@ import {
   FilterOutlined,
   SearchOutlined,
   ArrowRightOutlined,
+  CaretDownOutlined,
 } from "@ant-design/icons";
 import style from "./style.module.css";
-import { Collapse } from "antd";
 import Tables from "../../components/tablecodify";
 import Codes from "../codes";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import Riskadjustment from "../../components/riskadjustment";
 
 const Codify = ({ codifyData, codesData }) => {
+  const [showButtons, setShowButtons] = useState(false);
   const [showAlphabets, setShowAlphabets] = useState(false);
   const [currentButton, setCurrentButton] = useState("Codes");
   const [activeButton, setActiveButton] = useState("ICD-10");
@@ -29,6 +28,7 @@ const Codify = ({ codifyData, codesData }) => {
   const handleRiskAdjustment = () => {
     setActiveButton("Risk Adjustment");
     setShowAlphabets(false);
+    setShowButtons(false);
   };
   const handleButtonClick = () => {
     setActiveButton("ICD-10");
@@ -44,7 +44,7 @@ const Codify = ({ codifyData, codesData }) => {
     const treeNode = {
       title: (
         <div className="d-flex gap-1">
-          <span  className={style.name}>{name}</span> 
+          <span className={style.name}>{name}</span>
           <span className={style.desc}>-{desc}</span>
         </div>
       ),
@@ -108,6 +108,7 @@ const Codify = ({ codifyData, codesData }) => {
     "Y",
     "Z",
   ];
+  const buttons = ["I10", "D48.113", "D48.114", "D48.115", "D48.116"];
 
   const onChange = (key) => {}; // Future use case for onChange
 
@@ -128,11 +129,11 @@ const Codify = ({ codifyData, codesData }) => {
   };
   useEffect(() => {
     if (!searchInput.length) {
-      setData(null)
+      setData(null);
       setCodeData(null);
     }
   }, [searchInput]);
-  console.log(data,"data")
+  console.log(data, "data");
   return (
     <div className="container-fluid">
       <div className="row  mt-3 px-1">
@@ -220,7 +221,24 @@ const Codify = ({ codifyData, codesData }) => {
               </Button>
             </div>
 
-            {currentButton == "Codes" && data?.length &&(
+            <div className="p-3 d-flex gap-3 ">
+              <div className={style.p}>Recent searches</div>
+              <CaretDownOutlined
+                style={{ fontSize: "20px" }}
+                onClick={() => setShowButtons(!showButtons)}
+              />
+            </div>
+            {showButtons && (
+              <div className="d-flex gap-3  flex-wrap mx-2">
+                {buttons.map((name, index) => (
+                  <Button className={style.btnborder} key={index}>
+                    {name}
+                  </Button>
+                ))}
+              </div>
+            )}
+
+            {currentButton == "Codes" && data?.length && (
               <Codes
                 searchInput={searchInput}
                 data={data}
@@ -229,13 +247,26 @@ const Codify = ({ codifyData, codesData }) => {
               />
             )}
             {currentButton == "Description" && (
-              <Tables setCodeData={setCodeData} loading={loading} codeData={codeData} setLoading={setLoading} />
+              <Tables
+                setCodeData={setCodeData}
+                loading={loading}
+                codeData={codeData}
+                setLoading={setLoading}
+              />
             )}
           </>
         )}
       </div>
 
-      {activeButton === "Risk Adjustment" && <Riskadjustment activeButton={activeButton} setActiveButton={setActiveButton} loading={loading}setLoading={setLoading}  />}
+      {activeButton === "Risk Adjustment" && (
+        <Riskadjustment
+          activeButton={activeButton}
+          setActiveButton={setActiveButton}
+          setSearchInput={setSearchInput}
+          loading={loading}
+          setLoading={setLoading}
+        />
+      )}
     </div>
   );
 };

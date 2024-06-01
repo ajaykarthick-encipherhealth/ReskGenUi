@@ -3,12 +3,11 @@ import style from "./style.module.css";
 import { Empty, Tree } from "antd";
 import { Spin } from "antd";
 
-const Codes = ({ data, loading}) => {
+const Codes = ({ data, loading }) => {
   const onSelect = (selectedKeys, info) => {}; //Future use
 
   return (
     <>
-      <div className="d-flex gap-1 mt-3"></div>
       <div className="d-flex justify-content-center">
         {loading && <Spin size="large" />}
       </div>

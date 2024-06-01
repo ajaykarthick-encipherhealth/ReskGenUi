@@ -1,11 +1,12 @@
 import React from "react";
 import style from "./style.module.css";
 
-const TableRisk = ({ data, subheader,activeButton,setActiveButton }) => {
+const TableRisk = ({ data, subheader,activeButton,setActiveButton,setSearchInput }) => {
 
   const handleHeaderClick = () => {
     console.log("clicked");
     setActiveButton("ICD-10");
+    setSearchInput(data?.diagnosisCode); 
   };
   return (
     <div className="d-flex mt-3">

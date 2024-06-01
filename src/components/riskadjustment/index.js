@@ -5,12 +5,18 @@ import { connect } from "react-redux";
 import { Button, DatePicker, Empty, Input, Space, Spin } from "antd";
 import TableRisk from "../tableRisk";
 import YearPicker from "../yearpicker";
-import { CloseCircleOutlined,CheckCircleOutlined } from "@ant-design/icons";
+import { CloseCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
 
-
-const RiskAdjustment = ({ RiskAdjustmentData, loading, setLoading ,activeButton,setActiveButton}) => {
+const RiskAdjustment = ({
+  RiskAdjustmentData,
+  loading,
+  setLoading,
+  activeButton,
+  setActiveButton,
+  setSearchInput,
+}) => {
+  
   const [code, setCode] = useState("");
- 
   const [data, setData] = useState([]);
   const [year, setYear] = useState();
   const [selectedYear, setSelectedYear] = useState(currentDate);
@@ -24,7 +30,7 @@ const RiskAdjustment = ({ RiskAdjustmentData, loading, setLoading ,activeButton,
     { label: "V24 ", value: "cmsHccModelCategoryV24Payment" },
     { label: "V08 ", value: "rxHccModelCategoryV08Payment" },
     { label: "V05 ", value: "rxHccModelCategoryV05Payment" },
-    {label:"V08",value:"rxHccModelCategoryV08Payment"}
+    { label: "V08", value: "rxHccModelCategoryV08Payment" },
   ];
   const handleCode = (e) => {
     setCode(e.target.value);
@@ -33,9 +39,9 @@ const RiskAdjustment = ({ RiskAdjustmentData, loading, setLoading ,activeButton,
   const onChange = (date, dateString) => {
     setSelectedYear(date);
   };
- 
+
   const handleSearchClick = () => {
-    setLoading(true)
+    setLoading(true);
     fetch();
   };
 
@@ -45,8 +51,7 @@ const RiskAdjustment = ({ RiskAdjustmentData, loading, setLoading ,activeButton,
       code: code,
     });
 
-    if (riskData?.status == "SUCCESS")
-      setLoading(false)
+    if (riskData?.status == "SUCCESS") setLoading(false);
     setData({
       ...data,
       year: riskData?.response?.year,
@@ -56,17 +61,17 @@ const RiskAdjustment = ({ RiskAdjustmentData, loading, setLoading ,activeButton,
         riskData?.response?.cmsHccEsrdModelCategoryV24Payment === "Yes" ? (
           <CheckCircleOutlined className="text-success lead" />
         ) : (
-          <CloseCircleOutlined className="text-danger lead"/>
+          <CloseCircleOutlined className="text-danger lead" />
         ),
       cmsHccModelCategoryV22Payment:
         riskData?.response?.cmsHccModelCategoryV22Payment === "Yes" ? (
-          <CheckCircleOutlined className="text-success lead"/>
+          <CheckCircleOutlined className="text-success lead" />
         ) : (
           <CloseCircleOutlined className="text-danger lead" />
         ),
       cmsHccModelCategoryV24Payment:
         riskData?.response?.cmsHccModelCategoryV24Payment === "Yes" ? (
-          <CheckCircleOutlined  className="text-success lead"/>
+          <CheckCircleOutlined className="text-success lead" />
         ) : (
           <CloseCircleOutlined className="text-danger lead" />
         ),
@@ -74,7 +79,7 @@ const RiskAdjustment = ({ RiskAdjustmentData, loading, setLoading ,activeButton,
         riskData?.response?.cmsHccEsrdModelCategoryV21Payment === "Yes" ? (
           <CheckCircleOutlined className="text-success lead" />
         ) : (
-          <CloseCircleOutlined className="text-danger lead"  />
+          <CloseCircleOutlined className="text-danger lead" />
         ),
       rxHccModelCategoryV08Payment:
         riskData?.response?.rxHccModelCategoryV08Payment === "Yes" ? (
@@ -86,13 +91,13 @@ const RiskAdjustment = ({ RiskAdjustmentData, loading, setLoading ,activeButton,
         riskData?.response?.rxHccModelCategoryV05Payment === "Yes" ? (
           <CheckCircleOutlined className="text-success lead " />
         ) : (
-          <CloseCircleOutlined className="text-danger lead"/>
+          <CloseCircleOutlined className="text-danger lead" />
         ),
-        rxHccModelCategoryV08Payment:
+      rxHccModelCategoryV08Payment:
         riskData?.response?.rxHccModelCategoryV08Payment === "Yes" ? (
           <CheckCircleOutlined className="text-success lead" />
         ) : (
-          <CloseCircleOutlined className="text-danger lead"/>
+          <CloseCircleOutlined className="text-danger lead" />
         ),
     });
   };
@@ -132,7 +137,6 @@ const RiskAdjustment = ({ RiskAdjustmentData, loading, setLoading ,activeButton,
         <div className={style.text}> Description</div>
         <textarea
           className={`${style.textarea} `}
-         
           placeholder="Description"
           rows="3"
         ></textarea>
@@ -144,9 +148,18 @@ const RiskAdjustment = ({ RiskAdjustmentData, loading, setLoading ,activeButton,
       </div>
       <div className="d-flex justify-content-center mt-4">
         {loading && <Spin size="large" />}
-        </div>
-      {data?.year ?<TableRisk activeButton={activeButton} setActiveButton={setActiveButton}  data={data} subheader={subheader} /> :selectedYear && <Empty/>}
-     
+      </div>
+      {data?.year ? (
+        <TableRisk
+          activeButton={activeButton}
+          setActiveButton={setActiveButton}
+          setSearchInput={setSearchInput}
+          data={data}
+          subheader={subheader}
+        />
+      ) : (
+        selectedYear && <Empty />
+      )}
     </div>
   );
 };
