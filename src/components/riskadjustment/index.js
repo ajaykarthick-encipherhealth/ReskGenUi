@@ -8,7 +8,7 @@ import YearPicker from "../yearpicker";
 import { CloseCircleOutlined,CheckCircleOutlined } from "@ant-design/icons";
 
 
-const RiskAdjustment = ({ RiskAdjustmentData, loading, setLoading }) => {
+const RiskAdjustment = ({ RiskAdjustmentData, loading, setLoading ,activeButton,setActiveButton}) => {
   const [code, setCode] = useState("");
  
   const [data, setData] = useState([]);
@@ -54,45 +54,45 @@ const RiskAdjustment = ({ RiskAdjustmentData, loading, setLoading }) => {
       description: riskData?.response?.description,
       cmsHccEsrdModelCategoryV24Payment:
         riskData?.response?.cmsHccEsrdModelCategoryV24Payment === "Yes" ? (
-          <CheckCircleOutlined style={{color:"green", fontSize:"20px"}} />
+          <CheckCircleOutlined className="text-success lead" />
         ) : (
-          <CloseCircleOutlined style={{color:"red", fontSize:"20px"} }/>
+          <CloseCircleOutlined className="text-danger lead"/>
         ),
       cmsHccModelCategoryV22Payment:
         riskData?.response?.cmsHccModelCategoryV22Payment === "Yes" ? (
-          <CheckCircleOutlined style={{color:"green", fontSize:"20px"}}/>
+          <CheckCircleOutlined className="text-success lead"/>
         ) : (
-          <CloseCircleOutlined style={{color:"red", fontSize:"20px"} } />
+          <CloseCircleOutlined className="text-danger lead" />
         ),
       cmsHccModelCategoryV24Payment:
         riskData?.response?.cmsHccModelCategoryV24Payment === "Yes" ? (
-          <CheckCircleOutlined  style={{color:"green", fontSize:"20px"}}/>
+          <CheckCircleOutlined  className="text-success lead"/>
         ) : (
-          <CloseCircleOutlined style={{color:"red", fontSize:"20px"} } />
+          <CloseCircleOutlined className="text-danger lead" />
         ),
       cmsHccEsrdModelCategoryV21Payment:
         riskData?.response?.cmsHccEsrdModelCategoryV21Payment === "Yes" ? (
-          <CheckCircleOutlined style={{color:"green", fontSize:"20px"}} />
+          <CheckCircleOutlined className="text-success lead" />
         ) : (
-          <CloseCircleOutlined style={{color:"red", fontSize:"20px"} } />
+          <CloseCircleOutlined className="text-danger lead"  />
         ),
       rxHccModelCategoryV08Payment:
         riskData?.response?.rxHccModelCategoryV08Payment === "Yes" ? (
-          <CheckCircleOutlined style={{color:"green", fontSize:"20px"}} />
+          <CheckCircleOutlined className="text-success lead" />
         ) : (
-          <CloseCircleOutlined style={{color:"red", fontSize:"20px"} } />
+          <CloseCircleOutlined className="text-danger lead" />
         ),
       rxHccModelCategoryV05Payment:
         riskData?.response?.rxHccModelCategoryV05Payment === "Yes" ? (
-          <CheckCircleOutlined style={{color:"green", fontSize:"20px"}} />
+          <CheckCircleOutlined className="text-success lead " />
         ) : (
-          <CloseCircleOutlined style={{color:"red", fontSize:"20px"} }/>
+          <CloseCircleOutlined className="text-danger lead"/>
         ),
         rxHccModelCategoryV08Payment:
         riskData?.response?.rxHccModelCategoryV08Payment === "Yes" ? (
-          <CheckCircleOutlined style={{color:"green", fontSize:"20px"}} />
+          <CheckCircleOutlined className="text-success lead" />
         ) : (
-          <CloseCircleOutlined style={{color:"red", fontSize:"20px"} }/>
+          <CloseCircleOutlined className="text-danger lead"/>
         ),
     });
   };
@@ -145,7 +145,7 @@ const RiskAdjustment = ({ RiskAdjustmentData, loading, setLoading }) => {
       <div className="d-flex justify-content-center">
         {loading && <Spin size="large" />}
       </div>
-      {data?.year ?<TableRisk data={data} subheader={subheader} /> :selectedYear && <Empty/>}
+      {data?.year ?<TableRisk activeButton={activeButton} setActiveButton={setActiveButton}  data={data} subheader={subheader} /> :selectedYear && <Empty/>}
     </div>
   );
 };

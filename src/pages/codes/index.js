@@ -3,7 +3,7 @@ import style from "./style.module.css";
 import { Empty, Tree } from "antd";
 import { Spin } from "antd";
 
-const Codes = ({ data, loading, setCurrentButton }) => {
+const Codes = ({ data, loading}) => {
   const onSelect = (selectedKeys, info) => {}; //Future use
 
   return (

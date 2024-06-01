@@ -1,13 +1,18 @@
 import React from "react";
 import style from "./style.module.css";
 
-const TableRisk = ({ data, subheader }) => {
+const TableRisk = ({ data, subheader,activeButton,setActiveButton }) => {
+
+  const handleHeaderClick = () => {
+    console.log("clicked");
+    setActiveButton("ICD-10");
+  };
   return (
     <div className="d-flex mt-3">
       <div className={`${style.header} w-100`}>
         <table className="table table-bordered">
-          <td colSpan={6} className={style.head}>
-            <span className={style.code}>
+          <td colSpan={12} className={style.head}>
+            <span className={style.code}  onClick={()=>handleHeaderClick()}>
               {data?.diagnosisCode}-{data?.description}
             </span>
           </td>
@@ -18,7 +23,7 @@ const TableRisk = ({ data, subheader }) => {
            
             <tr>
               {subheader?.map((item, index) => (
-                <td key={index} scope="row" >
+                <td key={index} scope="row" > 
                   {item.label}
                 </td>
               ))}

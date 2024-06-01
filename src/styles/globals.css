@@ -14605,3 +14605,11 @@ input[type="number"] {
 .ant-spin-nested-loading {
   border:1px solid #a4caf9;
 }
+.ant-tree-show-line .ant-tree-indent-unit {
+  position: relative;
+  height: 150%  !important;
+}
+.ant-tree-switcher-leaf-line{
+  height: 150%  !important;
+
+}

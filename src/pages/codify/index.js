@@ -230,7 +230,7 @@ const Codify = ({ codifyData, codesData }) => {
         )}
       </div>
 
-      {activeButton === "Risk Adjustment" && <Riskadjustment loading={loading}setLoading={setLoading}  />}
+      {activeButton === "Risk Adjustment" && <Riskadjustment activeButton={activeButton} setActiveButton={setActiveButton} loading={loading}setLoading={setLoading}  />}
     </div>
   );
 };
