@@ -261,7 +261,7 @@ const HeaderFilters = ({
                   // value={defaultSelectValue2}
                   onChange={(selectedOption) => {
                     setSelectedOption2(selectedOption?.value);
-                    console.log("stetrd");
+                    if(setSelectedManger)
                     setSelectedManger("");
                   }}
                   options={selectOptions2}
