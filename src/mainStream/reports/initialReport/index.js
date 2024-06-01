@@ -220,6 +220,7 @@ const InitialCard = ({
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
   }, [selectedRows]);
+
   return (
     <>
       <div>
@@ -376,6 +377,7 @@ const InitialCard = ({
           )}
         </div>
       </div>
+
       <Pagination
         first={paginationFirst}
         totalRecords={ReportPatientDetails?.response?.totalElements}
