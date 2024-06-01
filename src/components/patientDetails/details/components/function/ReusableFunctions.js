@@ -90,7 +90,7 @@ export const getEncounterDateBackground = ({
                   >
                     <i>
                       <CalendarOutlined
-                        className={visitStyles.calenderIcon}
+                        className={visitStyles.calenderIconNew}
                         style={{
                           size: 10,
                           color: stringToColour(item),
@@ -203,10 +203,15 @@ export const getHeaderHyperlink = (
             diseaseName
           )
         }
-        className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate} ${backColor}`}
+        style={{
+          borderColor: stringToColour(res?.dateOfService) + 33,
+          color: stringToColour(res?.dateOfService),
+          border: "1px solid",
+        }}
+        className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate}`}
       >
         <i>
-          <CalendarOutlined className={visitStyles.calenderIcon} />
+          <CalendarOutlined className={visitStyles.calenderIconNew} />
         </i>
         {moment(res?.dateOfService).format("MMM DD")}
       </span>
@@ -1123,9 +1128,9 @@ export const getCaptureSectionBackgroundMeatNew = (
           )
         }
         style={{ backgroundColor: backColor, color: textColor }}
-        className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
-      >
-        {res.header}
+        className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} truncate-text`}
+        >
+          {truncateString(res.header, 30)}
       </span>
       // </Popover>
     );
