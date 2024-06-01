@@ -428,7 +428,8 @@ const Combo = ({ activeComboTree,patientDetailsResult ,getpatientDetailsData,hcc
                                     setIsMulitpleHeader,
                                     isMulitpleHeader,
                                     setIsMulitpleHeadeCode,
-                                    isMulitpleHeaderCode
+                                    isMulitpleHeaderCode,
+                                    item.diseaseName
                                   )}
                                   {/* {getCaptureSectionBackground(
                                     item.capturedSections,
@@ -692,7 +693,8 @@ const Combo = ({ activeComboTree,patientDetailsResult ,getpatientDetailsData,hcc
                                         setIsMulitpleHeader,
                                         isMulitpleHeader,
                                         setIsMulitpleHeadeCode,
-                                        isMulitpleHeaderCode
+                                        isMulitpleHeaderCode,
+                                        item.diseaseName
                                       )}
                                     </div>
                                   </div>
