@@ -21,6 +21,7 @@ import Export from "../../resusablereport/reports/Export";
 import { actions as workflowActions } from "../../stores/reviewer/workqueue";
 import { actions as reviewerAction } from "../../stores/reviewer/report";
 import { actions as supervisorAction } from "../../stores/supervisor/report";
+import { action as adminAction } from "../../stores/admin/report";
 
 import {
   selectedReport,
@@ -60,6 +61,8 @@ const Reports = ({
   TeamReportDetails,
   teamReport,
   auditeReportLoading,
+  AdminReportDetails,
+  adminReport,
 }) => {
   const dispatch = useDispatch();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
@@ -171,7 +174,7 @@ const Reports = ({
     setSearch();
     setSearchVal([]);
     setReportActiveTab(name);
- 
+
     if (name !== "Admin") {
       setSelectedData([]);
       setSelectAllCheckBoxes(false);
@@ -415,7 +418,6 @@ const Reports = ({
       options: optionsUser,
     },
   ];
-
   return (
     <div>
       <Header />
@@ -635,7 +637,11 @@ const Reports = ({
                             />
                           </div>
                         )}
-
+                      </div>
+                      {ReportPatientDetails?.response?.response?.data?.length === 0  ? null :   <div
+                        className="d-flex justify-content-end "
+                        style={{ marginBottom: "-40px" }}
+                      >
                         {!reportActiveTab ||
                         reportActiveTab === "Admin" ||
                         reportActiveTab === "Audit" ||
@@ -684,7 +690,8 @@ const Reports = ({
                             </button>
                           </Tooltip>
                         ) : null}
-                      </div>
+                      </div>  }
+                    
                     </div>
                   </div>
                 </div>
@@ -851,6 +858,7 @@ const enhancer = connect(
     supervisorReportDetails: state?.supervisor?.report?.auditReport,
     auditeReportLoading: state?.supervisor?.report?.auditeReportLoading,
     TeamReportDetails: state?.supervisor?.report?.teamReport,
+    AdminReportDetails: state?.admin?.report?.admin,
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,
