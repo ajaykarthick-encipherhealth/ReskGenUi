@@ -12,6 +12,7 @@ import AuditedDeclineTrack from "../../../src/images/trackingImages/AuditDecline
 import Abort from "../../../src/images/trackingImages/Abort.png";
 import Image from "next/image";
 import { Popover } from "antd";
+import styles from "../reports/report.module.css"
 
 export const colors = {
   A: "#8A2BE2",
