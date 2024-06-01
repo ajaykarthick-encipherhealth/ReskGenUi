@@ -178,20 +178,16 @@ const Reports = ({
       setSelectAllCheckBoxes(false);
     }
   };
-  useEffect(() => {
-    const role =
-      typeof window !== "undefined" ? localStorage.getItem("userRole") : null;
-    setCurrentRole(activeTab);
-  });
+  // useEffect(() => {
+  //   const role =
+  //     typeof window !== "undefined" ? localStorage.getItem("userRole") : null;
+  //   setCurrentRole(activeTab);
+  // });
 
   useEffect(() => {
     workFgetFlagsowData();
   }, []);
 
-  useEffect(() => {
-    const role = activeTab
-
-  }, []);
   useEffect(() => {
     const coderSearchString = searchVal.find(
       (item) => item.field === "initialSearch"
