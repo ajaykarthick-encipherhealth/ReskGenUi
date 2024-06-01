@@ -175,7 +175,7 @@ const Reports = ({
     setSearch();
     setSearchVal([]);
     // setactiveTab(name);
-    setReportActiveTab(name);
+    // setReportActiveTab(name);
     if (name !== "Admin") {
       setSelectedData([]);
       setSelectAllCheckBoxes(false);
