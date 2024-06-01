@@ -237,6 +237,7 @@ const Meat = ({
   };
 
   const getDisTitlePopover = (title, value, subString,result) => {
+    console.log(subString)
     var popOver = "";
     // var dublicateRemove = removeDuplicatesArray(subString);
     if (value) {
@@ -248,6 +249,7 @@ const Meat = ({
             <>
               <div>{value}</div>
               {subString?.map((res) => {
+                if(res?.header){
                 return (
                   <div className={styles.subStringContainer}>
                     <div>
@@ -262,6 +264,7 @@ const Meat = ({
                     {res.substring}
                   </div>
                 );
+              }
               })}
             </>
           }

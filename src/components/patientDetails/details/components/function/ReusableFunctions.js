@@ -1123,9 +1123,9 @@ export const getCaptureSectionBackgroundMeatNew = (
           )
         }
         style={{ backgroundColor: backColor, color: textColor }}
-        className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
-      >
-        {res.header}
+        className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} truncate-text`}
+        >
+          {truncateString(res.header, 30)}
       </span>
       // </Popover>
     );
