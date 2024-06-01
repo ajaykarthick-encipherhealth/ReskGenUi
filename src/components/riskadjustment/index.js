@@ -142,10 +142,11 @@ const RiskAdjustment = ({ RiskAdjustmentData, loading, setLoading ,activeButton,
           <div className={style.search}>Search</div>
         </Button>
       </div>
-      <div className="d-flex justify-content-center">
+      <div className="d-flex justify-content-center mt-4">
         {loading && <Spin size="large" />}
-      </div>
+        </div>
       {data?.year ?<TableRisk activeButton={activeButton} setActiveButton={setActiveButton}  data={data} subheader={subheader} /> :selectedYear && <Empty/>}
+     
     </div>
   );
 };

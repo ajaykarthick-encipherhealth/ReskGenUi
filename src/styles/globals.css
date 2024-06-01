@@ -14603,7 +14603,7 @@ input[type="number"] {
   border:1px solid #a4caf9 !important;
 }
 .ant-spin-nested-loading {
-  border:1px solid #a4caf9;
+  border:1px solid #f0f0f0;
 }
 .ant-tree-show-line .ant-tree-indent-unit {
   position: relative;

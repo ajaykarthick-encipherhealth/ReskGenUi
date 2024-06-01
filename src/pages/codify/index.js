@@ -42,7 +42,12 @@ const Codify = ({ codifyData, codesData }) => {
   const convertToAntdTreeData = (node) => {
     const { name, desc, children, requiredCharacter } = node;
     const treeNode = {
-      title: `${name}: ${desc}`,
+      title: (
+        <div className="d-flex gap-1">
+          <span  className={style.name}>{name}</span> 
+          <span className={style.desc}>-{desc}</span>
+        </div>
+      ),
       key: name,
       icon: requiredCharacter,
       children: children ? children.map(convertToAntdTreeData) : [],
