@@ -237,9 +237,7 @@ const Meat = ({
   };
 
   const getDisTitlePopover = (title, value, subString,result) => {
-    console.log(subString)
     var popOver = "";
-    // var dublicateRemove = removeDuplicatesArray(subString);
     if (value) {
       popOver = (
         <Popover
