@@ -67,15 +67,16 @@ const Reports = ({
   const dispatch = useDispatch();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
   const rowsLength = useSelector((state) => state?.report?.row);
-  // const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
+  const activeTab=useSelector(state=>state.AuditReport.activetab)
+
   const AdminReportPatientDetails = useSelector(
     (state) => state.report?.details
   );
   const selectUserList = useSelector(
     (state) => state?.adminReport?.selectedUsers
   );
-  const [reportActiveTab, setReportActiveTab] = useState(""); // Local state for active tab
-  const [userRole, setUserRole] = useState("");
+  const [reportActiveTab, setactiveTab] = useState(activeTab); // Local state for active tab
+  const [userRole, setUserRole] = useState(activeTab);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
@@ -173,48 +174,30 @@ const Reports = ({
     dispatch(getActiveTab(name));
     setSearch();
     setSearchVal([]);
-    setReportActiveTab(name);
-
+    // setactiveTab(name);
+    // setReportActiveTab(name);
     if (name !== "Admin") {
       setSelectedData([]);
       setSelectAllCheckBoxes(false);
     }
   };
-  useEffect(() => {
-    const role =
-      typeof window !== "undefined" ? localStorage.getItem("userRole") : null;
-    setCurrentRole(role);
-  });
+  // useEffect(() => {
+  //   const role =
+  //     typeof window !== "undefined" ? localStorage.getItem("userRole") : null;
+  //   setCurrentRole(activeTab);
+  // });
 
   useEffect(() => {
     workFgetFlagsowData();
   }, []);
 
   useEffect(() => {
-    const role = localStorage.getItem("userRole");
-    setUserRole(role);
-
-    switch (role) {
-      case "reviewer":
-        setReportActiveTab("Reviewer");
-        break;
-      case "admin":
-        setReportActiveTab("Admin");
-        break;
-      case "supervisor":
-        setReportActiveTab("Audit");
-        break;
-      default:
-        setReportActiveTab("Reviewer");
-    }
-  }, []);
-  useEffect(() => {
     const coderSearchString = searchVal.find(
       (item) => item.field === "initialSearch"
     )?.search;
     setIsLoading(false);
 
-    if (reportActiveTab === "Sent") {
+    if (activeTab === "Sent") {
       sentReport({
         pagenum: sentPageNo,
         startDate: selectedDateRanges?.Sent?.from,
@@ -222,7 +205,7 @@ const Reports = ({
         search: coderSearchString ? coderSearchString : "",
         sort: sort,
       });
-    } else if (reportActiveTab === "Received") {
+    } else if (activeTab === "Received") {
       receivedReport({
         pagenum: receivedPageNo,
         startDate: selectedDateRanges?.Received?.from,
@@ -230,7 +213,7 @@ const Reports = ({
         search: coderSearchString ? coderSearchString : "",
         sort: sort,
       });
-    } else if (reportActiveTab === "Admin") {
+    } else if (activeTab === "Admin") {
       dispatch(
         getReportDetails(
           pageNo,
@@ -248,7 +231,7 @@ const Reports = ({
             : ""
         )
       );
-    } else if (reportActiveTab === "Audit") {
+    } else if (activeTab === "Audit") {
       auditReport({
         pagenum: pageNo,
         startDate: selectedDateRanges?.Audit?.from,
@@ -259,7 +242,7 @@ const Reports = ({
           : "",
         sort: sort,
       });
-    } else if (reportActiveTab === "Team") {
+    } else if (activeTab === "Team") {
       teamReport({
         pagenum: teamPageNo,
         startDate: selectedDateRanges?.Team?.from,
@@ -267,7 +250,7 @@ const Reports = ({
         search: coderSearchString ? coderSearchString : "",
         sort: sort,
       });
-    } else
+    } else if(activeTab === "Reviewer"){
       reviewerReport({
         pagenum: pageNo,
         startDate: selectedDateRanges?.Reviewer?.from,
@@ -276,7 +259,7 @@ const Reports = ({
         filter: selectedOptions?.reviewerStatus,
         sort: sort,
       });
-
+    }
     if (ExportResponse) {
       setIsModalVisible(false);
     }
@@ -289,6 +272,7 @@ const Reports = ({
     searchVal,
     selectedOptions,
     selectedDateRanges,
+    activeTab
   ]);
 
   useEffect(() => {
@@ -302,14 +286,14 @@ const Reports = ({
   useEffect(() => {
     const page = new URLSearchParams(window.location.search).get("page");
     const limit = new URLSearchParams(window.location.search).get("limit");
-    if (reportActiveTab === "Received" && page) {
+    if (activeTab === "Received" && page) {
       setReceivedPageNo(page);
       setPaginationReceivedFirst(limit);
-    } else if (reportActiveTab === "Sent" && page) {
+    } else if (activeTab === "Sent" && page) {
       setSentPageNo(page);
       setPaginationSentFirst(limit);
     }
-  }, [reportActiveTab]);
+  }, [activeTab]);
 
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
@@ -373,16 +357,16 @@ const Reports = ({
 
   const getTabsForRole = (role) => {
     switch (role) {
-      case "reviewer":
+      case "Reviewer":
         return ["Reviewer", "Sent", "Received"];
-      case "admin":
+      case "Admin":
         return ["Admin", "Sent", "Received"];
       default:
         return ["Audit", "Team", "Sent", "Received"];
     }
   };
 
-  const tabs = getTabsForRole(userRole);
+  const tabs = getTabsForRole(activeTab);
 
   useEffect(() => {
     if (selectedOptions?.UserRole?.value) {
@@ -402,14 +386,14 @@ const Reports = ({
     {
       id: 1,
       name: "Status",
-      isSelect: !reportActiveTab || reportActiveTab === "Admin" ? true : false,
+      isSelect: !activeTab || activeTab === "Admin" ? true : false,
       options: statusOptions,
     },
     {
       id: 2,
       name: "User Role",
       isSelect: true,
-      options: !reportActiveTab || reportActiveTab === "Admin" ? options : null,
+      options: !activeTab || activeTab === "Admin" ? options : null,
     },
     {
       id: 3,
@@ -427,7 +411,7 @@ const Reports = ({
             <div className="col-xl-12">
               <div>
                 <Tab
-                  activeTab={reportActiveTab}
+                  activeTab={activeTab}
                   handleTabs={handleTabs}
                   tabs={tabs}
                 />
@@ -468,7 +452,7 @@ const Reports = ({
                         </div>
                       </div>
 
-                      {!reportActiveTab || reportActiveTab === "Reviewer" ? (
+                      {!activeTab || activeTab === "Reviewer" ? (
                         <div className="col-xl-2">
                           <div className="d-flex w-100">
                             <label className="labelStyle d-flex m-auto">
@@ -506,14 +490,14 @@ const Reports = ({
                               }}
                               value={
                                 selectedDates
-                                  ? selectedDates[reportActiveTab]
+                                  ? selectedDates[activeTab]
                                   : undefined
                               }
                               onChange={(date, dateString) =>
                                 handleCoderPicker(
                                   date,
                                   dateString,
-                                  reportActiveTab
+                                  activeTab
                                 )
                               }
                               disabledDate={(current) =>
@@ -607,20 +591,20 @@ const Reports = ({
                       <div
                         className={`col-xl-${
                           selectedData?.length === 0 ||
-                          reportActiveTab === "Audit" ||
-                          reportActiveTab === "Team"
+                          activeTab === "Audit" ||
+                          activeTab === "Team"
                             ? "8"
-                            : reportActiveTab === "Reviewer"
+                            : activeTab === "Reviewer"
                             ? "6"
                             : "2"
                         } d-flex justify-content-${
-                          (reportActiveTab === "Audit" ||
-                            reportActiveTab === "Team" ||
-                            reportActiveTab === "Reviewer") &&
+                          (activeTab === "Audit" ||
+                            activeTab === "Team" ||
+                            activeTab === "Reviewer") &&
                           "end"
                         }`}
                       >
-                        {reportActiveTab === "Admin" && (
+                        {activeTab === "Admin" && (
                           <div
                             className={`col-xl-${
                               selectedData?.length === 0 ? "10" : "0"
@@ -637,16 +621,17 @@ const Reports = ({
                             />
                           </div>
                         )}
+
                       </div>
                       {ReportPatientDetails?.response?.response?.data?.length === 0  ? null :   <div
                         className="d-flex justify-content-end "
                         style={{ marginBottom: "-40px" }}
                       >
-                        {!reportActiveTab ||
-                        reportActiveTab === "Admin" ||
-                        reportActiveTab === "Audit" ||
-                        reportActiveTab === "Team" ||
-                        reportActiveTab === "Reviewer" ? (
+                         {!activeTab ||
+                        activeTab === "Admin" ||
+                        activeTab === "Audit" ||
+                        activeTab === "Team" ||
+                        activeTab === "Reviewer" ? (
                           <Tooltip
                             title={
                               rowsLength?.length === 0
@@ -697,8 +682,8 @@ const Reports = ({
                 </div>
 
                 <div>
-                  {(reportActiveTab === "Reviewer" ||
-                    reportActiveTab === "Admin") && (
+                  {(activeTab === "Reviewer" ||
+                    activeTab === "Admin") && (
                     <div>
                       <InitialCard
                         setModal={setModal}
@@ -723,8 +708,8 @@ const Reports = ({
                       />
                     </div>
                   )}
-                  {(reportActiveTab === "Team" ||
-                    reportActiveTab === "Audit") && (
+                  {(activeTab === "Team" ||
+                    activeTab === "Audit") && (
                     <TeamReport
                       setModal={setModal}
                       modal={modal}
@@ -747,7 +732,7 @@ const Reports = ({
                       loader={auditeReportLoading}
                     />
                   )}
-                  {reportActiveTab === "Sent" && (
+                  {activeTab === "Sent" && (
                     <div>
                       <SentReport
                         paginationFirst={paginationSentFirst}
@@ -765,7 +750,7 @@ const Reports = ({
                       />
                     </div>
                   )}
-                  {reportActiveTab === "Received" && (
+                  {activeTab === "Received" && (
                     <div>
                       <ReceivedReport
                         paginationFirst={paginationReceivedFirst}
