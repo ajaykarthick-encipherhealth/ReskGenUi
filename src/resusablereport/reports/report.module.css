@@ -161,6 +161,7 @@
   font-weight: 600;
   font-family: manrope;
   color: black;
+  margin-bottom: 10px;
 }
 .subCard {
   height: 75px;
@@ -207,13 +208,13 @@
   transform: translateX(-50%);
 } */
 .flags {
-  width: 243p;
-  height: 310px;
+  /* width: 2px; */
+  height: 260px;
   border-radius: 10px;
   background-color: #e1edfe;
   margin-right: 5px;
   padding: 10px;
-  overflow: scroll;
+  /* overflow-y: scroll; */
 }
 .flag {
   width: 209px;
@@ -232,8 +233,9 @@
   border-radius: 50%;
   color: white;
   text-align: center;
-  padding: 3px;
+  padding: 5px;
   margin-right: 10px;
+  font-size: 14px !important;
 }
 .contentGroups {
   display: flex;
@@ -484,7 +486,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .readSubCard {
-  height: 100px;
+  height: 100%;
   padding: 10px;
   text-align: center;
   background-color: #ebd4f7;
@@ -506,8 +508,8 @@
   align-items: center;
 }
 .contentOverFlow {
-  height: 255px;
-  overflow: scroll;
+  height: 90%;
+  overflow-y: scroll;
 }
 .card3 {
   padding: 10px;

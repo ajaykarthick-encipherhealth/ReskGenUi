@@ -378,6 +378,7 @@ const ReviewerReport = ({
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
   }, [selectedRows]);
+
   return (
     <>
       <div>
@@ -420,6 +421,7 @@ const ReviewerReport = ({
                       <div
                         className={`col-xl-6 ${styles.card}`}
                         style={{
+                          height:"100%",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
@@ -608,9 +610,9 @@ const ReviewerReport = ({
 
                     <div className={`col-xl-6 ${styles.cardSeperation}`}>
                       <div className={styles.cardContainer}>
-                        <div className={styles.card1}>
+                        <div className={styles.card1} style={{height:"100%"}}>
                           <div className={styles.summaryText}>Summary</div>
-                          <div className="col-xl-12  d-flex mt-4">
+                          <div className="col-xl-12  d-flex mt-1">
                             <div className={`col-xl-4 ${styles.subCard}`}>
                               <div>
                                 <div>No of charts</div>
@@ -635,71 +637,101 @@ const ReviewerReport = ({
                               </div>
                             </div>
                           </div>
-                          <div className={` pt-2 ${styles.summaryText}`}>
+                          <div className={`pt-2 ${styles.summaryText}`}>
                             Overall Status
                           </div>
-                          <div className="col-xl-12  d-flex mt-2">
-                            <Row className={styles.carddiv}>
+
+                          <div className="container mb-4" style={{marginTop:"0px"}}>
+                            <div className="row g-3">
                               {card1Data?.map((data) => (
-                                <Col
-                                  span={5}
-                                  style={{
-                                    backgroundColor: data.bg,
-                                  }}
-                                  className={styles.colData}
-                                >
-                                  <div className={styles.header}>
-                                    <Image
-                                      src={data?.icon}
-                                      className={styles.Img}
-                                    />
-                                    <div className={styles.heading}>
-                                      {data.title}
+                                <div key={data?.id} className={`col-3`}>
+                                  <div
+                                    style={{
+                                      backgroundColor: data.bg,
+                                      display: "flex",
+                                      flexDirection: "column",
+                                      height:"85px",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      margin: "auto",
+                                      borderRadius: "10px",
+                                      padding: "10px 0 0px 0",
+                                    }}
+                                  >
+                                    <div className="d-flex">
+                                      <Image
+                                        src={data?.icon}
+                                        className={styles.Img}
+                                      />
+                                      <div className="px-2">{data.title}</div>
+                                    </div>
+
+                                    <div>
+                                      <h4>
+                                        {data?.charts ? data?.charts : "0"}
+                                      </h4>
                                     </div>
                                   </div>
-
-                                  <h4>{data?.charts ? data?.charts : "0"}</h4>
-                                </Col>
+                                </div>
                               ))}
-                            </Row>
+                            </div>
                           </div>
-                          <div className="col-xl-12  d-flex mt-1">
+
+                          <div className="col-xl-12  d-flex" style={{
+                            height:"270px",
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            margin: "auto",
+                          }}>
                             <div className={`col-xl-4 ${styles.flags}`}>
                               <div className={styles.cardHead}>Flags</div>
                               <div className={styles.contentOverFlow}>
-                                {getFlagsData?.response.map((flagItem) => (
-                                  <div
-                                    className={styles.contentGroups}
-                                    key={flagItem.id}
-                                  >
-                                    <div>
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="23"
-                                        height="23"
-                                        viewBox="0 0 800 800"
-                                        fill={flagItem?.flagColour}
-                                      >
-                                        <path
-                                          d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
-                                          stroke="#000"
-                                          stroke-width="10"
-                                        />
-                                      </svg>
-                                      <span style={{ fontSize: "12px" }}>
-                                        {flagItem?.flagName
-                                          ? flagItem?.flagName.replaceAll(
-                                              "_",
-                                              " "
-                                            )
-                                          : ""}
-                                      </span>
+                                {reportListAll?.flagIdCountDTOs?.map(
+                                  (flagItem) => (
+                                    <div
+                                      className={styles.contentGroups}
+                                      key={flagItem?.flagDetail?.id}
+                                    >
+                                      <div>
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="23"
+                                          height="23"
+                                          viewBox="0 0 800 800"
+                                          fill={
+                                            flagItem?.flagDetail?.flagColour
+                                              ? flagItem?.flagDetail?.flagColour
+                                              : "transparent"
+                                          }
+                                        >
+                                          <path
+                                            d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
+                                            stroke="#000"
+                                            stroke-width="10"
+                                          />
+                                        </svg>
+                                        <span
+                                          style={{
+                                            fontSize: "12px",
+                                            paddingLeft: "10px",
+                                          }}
+                                        >
+                                          {flagItem?.flagDetail?.flagName
+                                            ? flagItem?.flagDetail?.flagName.replaceAll(
+                                                "_",
+                                                " "
+                                              )
+                                            : "---"}
+                                        </span>
+                                      </div>
+                                      <div className={styles.count}>
+                                        {flagItem.count ? flagItem.count : 0}
+                                      </div>
                                     </div>
-                                    <div className={styles.count}>
-                                      {flagItem.count ? flagItem.count : 0}
-                                    </div>
-                                  </div>
-                                ))}
+                                  )
+                                )}
                               </div>
                             </div>
                             <div className={`col-xl-4 ${styles.flags}`}>
@@ -713,32 +745,24 @@ const ReviewerReport = ({
                                         key={item.id}
                                       >
                                         <div className={styles.avatar}>
+                                          <span className={styles.avatarAlign}>
+                                            {renderUserPrfoileAvatar(
+                                              item.userNameDTO?.firstName,
+                                              item?.userNameDTO?.lastName,
+                                              item?.userNameDTO
+                                                ?.profileImageUrl,
+                                              "header"
+                                            )}
+                                          </span>
                                           {item.userNameDTO?.firstName ||
                                           item?.userNameDTO?.lastName ||
                                           item?.userNameDTO?.profileImageUrl ? (
-                                            <>
-                                              <span
-                                                className={styles.avatarAlign}
-                                              >
-                                                {renderUserPrfoileAvatar(
-                                                  item.userNameDTO?.firstName,
-                                                  item?.userNameDTO?.lastName,
-                                                  item?.userNameDTO
-                                                    ?.profileImageUrl,
-                                                  "header"
-                                                )}
-                                              </span>
-                                              <span
-                                                className={styles.smallText}
-                                              >
-                                                {item.userNameDTO?.firstName}{" "}
-                                                {item?.userNameDTO?.lastName}
-                                              </span>
-                                            </>
+                                            <span className={styles.smallText}>
+                                              {item.userNameDTO?.firstName}{" "}
+                                              {item?.userNameDTO?.lastName}
+                                            </span>
                                           ) : (
-                                            <div className={styles.emptyData}>
-                                              ---
-                                            </div>
+                                            <div>---</div>
                                           )}
                                         </div>
                                         <div className={styles.count}>
@@ -762,49 +786,54 @@ const ReviewerReport = ({
                             </div>
                             <div className={`col-xl-4 ${styles.flags}`}>
                               <div className={`${styles.cardHead}`}>
-                                <div>Reviewer</div>
-                                <div className={styles.contentOverFlow}>
-                                  {reportListAll?.reviewerAllocationCount
-                                    .length > 0 ? (
-                                    reportListAll?.reviewerAllocationCount?.map(
-                                      (item) => (
-                                        <div
-                                          className={styles.contentAuditor}
-                                          key={item.id}
-                                        >
-                                          <div className={styles.avatar}>
-                                            <span
-                                              className={styles.avatarAlign}
-                                            >
-                                              {renderUserPrfoileAvatar(
-                                                item.userNameDTO?.firstName,
-                                                item?.userNameDTO?.lastName,
-                                                item?.userNameDTO
-                                                  ?.profileImageUrl,
-                                                "header"
-                                              )}
-                                            </span>
-                                            <span className={styles.smallText}>
-                                              {item.userNameDTO?.firstName}{" "}
-                                              {item?.userNameDTO?.lastName}
-                                            </span>
-                                          </div>
-
-                                          <div className={styles.count}>
-                                            {item.count}
-                                          </div>
+                                Reviewer
+                              </div>
+                              <div className={styles.contentOverFlow}>
+                                {reportListAll?.reviewerAllocationCount.length >
+                                0 ? (
+                                  reportListAll?.reviewerAllocationCount?.map(
+                                    (item) => (
+                                      <div
+                                        className={styles.contentAuditor}
+                                        key={item.id}
+                                      >
+                                        <div className={styles.avatar}>
+                                          <span className={styles.avatarAlign}>
+                                            {renderUserPrfoileAvatar(
+                                              item.userNameDTO?.firstName,
+                                              item?.userNameDTO?.lastName,
+                                              item?.userNameDTO
+                                                ?.profileImageUrl,
+                                              "header"
+                                            )}
+                                          </span>
+                                          <span className={styles.smallText}>
+                                            {item.userNameDTO?.firstName ||
+                                            item?.userNameDTO?.lastName ? (
+                                              <span>
+                                                {item.userNameDTO?.firstName}
+                                                {item?.userNameDTO?.lastName}
+                                              </span>
+                                            ) : (
+                                              "---"
+                                            )}
+                                          </span>
                                         </div>
-                                      )
+
+                                        <div className={styles.count}>
+                                          {item.count}
+                                        </div>
+                                      </div>
                                     )
-                                  ) : (
-                                    <div
-                                      className="d-flex justify-content-center align-items-center"
-                                      style={{ height: "200px" }}
-                                    >
-                                      <Empty />
-                                    </div>
-                                  )}
-                                </div>
+                                  )
+                                ) : (
+                                  <div
+                                    className="d-flex justify-content-center align-items-center"
+                                    style={{ height: "200px" }}
+                                  >
+                                    <Empty />
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </div>
