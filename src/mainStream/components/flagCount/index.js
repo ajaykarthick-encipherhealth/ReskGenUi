@@ -22,10 +22,14 @@ const Flags = ({ flagsData, styles }) => {
                 />
               </svg>
               <span style={{ fontSize: "12px" }}>
-                {flagItem?.flagName ? flagItem?.flagName.replaceAll("_", " ") : ""}
+                {flagItem?.flagName
+                  ? flagItem?.flagName.replaceAll("_", " ")
+                  : ""}
               </span>
             </div>
-            <div className={styles.count}>{flagItem.count ? flagItem.count : 0}</div>
+            <div className={styles.count}>
+              {flagItem.count ? flagItem.count : 0}
+            </div>
           </div>
         ))}
       </div>

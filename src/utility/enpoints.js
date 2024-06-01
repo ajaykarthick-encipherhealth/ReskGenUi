@@ -6,5 +6,6 @@ const ENDPOINTS = {
   isShow: false,
   PdfViewer: "https://viewer.cogentai.encipherhealth.com/web/viewer.html",
   isLocalEdit:true,
+  localApi:"http://localhost:9003/",
 };
 export default ENDPOINTS;

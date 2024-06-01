@@ -11,7 +11,7 @@ import { Modal, DatePicker, Tooltip } from "antd";
 import ExportImg from "../../images/svg/Export";
 import { debounce } from "../../../src/pages/admin/reports/Export";
 import { disableFutureDate } from "../../components/headerFilters/functions";
-import { patientDetails } from "../../stores/authflow/actions";
+import { checkAutoLogin, patientDetails } from "../../stores/authflow/actions";
 import { connect, useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import InitialCard from "../../mainStream/reports/initialReport";
@@ -20,17 +20,30 @@ import ReceivedReport from "../../mainStream/reports/receivedReport";
 import Export from "../../resusablereport/reports/Export";
 import { actions as workflowActions } from "../../stores/reviewer/workqueue";
 import { actions as reviewerAction } from "../../stores/reviewer/report";
-import { selectedReport } from "../../store/actions/adminAction/ReportActions";
+import { actions as supervisorAction } from "../../stores/supervisor/report";
+
+import {
+  selectedReport,
+  getReportDetails,
+  getSelectUserListReport,
+} from "../../store/actions/adminAction/ReportActions";
 import Tab from "../components/tags";
+import MoreFilter from "../../resusablereport/reports/MoreFilter";
+import { SVGICON } from "../../jsx/constant/theme";
+import TeamReport from "./teamReport";
 
 const statusOptions = [
-  { label: "All", value: "ALL" },
+  { label: "All", value: "" },
   { label: "Completed", value: "COMPLETED" },
   { label: "Pending", value: "PENDING" },
   { label: "Declined", value: "DECLINED" },
   { label: "Hold", value: "HOLD" },
 ];
-
+const options = [
+  { value: "", label: "All" },
+  { value: "REVIEWER", label: "REVIEWER" },
+  { value: "SUPERVISOR", label: "SUPERVISOR" },
+];
 const Reports = ({
   workFgetFlagsowData,
   reviewerReport,
@@ -42,11 +55,24 @@ const Reports = ({
   receivedReport,
   receivedLoader,
   sentLoader,
+  supervisorReportDetails,
+  auditReport,
+  TeamReportDetails,
+  teamReport,
+  auditeReportLoading,
 }) => {
   const dispatch = useDispatch();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
   const rowsLength = useSelector((state) => state?.report?.row);
-  const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
+  // const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
+  const AdminReportPatientDetails = useSelector(
+    (state) => state.report?.details
+  );
+  const selectUserList = useSelector(
+    (state) => state?.adminReport?.selectedUsers
+  );
+  const [reportActiveTab, setReportActiveTab] = useState(""); // Local state for active tab
+  const [userRole, setUserRole] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
@@ -70,6 +96,11 @@ const Reports = ({
   const [search, setSearch] = useState();
   const { RangePicker } = DatePicker;
   const [selectedDateRanges, setSelecteddateRanges] = useState([]);
+  const [currentRole, setCurrentRole] = useState("");
+  const [selectedData, setSelectedData] = useState([]);
+  const [selectAllCheckBoxes, setSelectAllCheckBoxes] = useState(false);
+  const [teamPageNo, setTeamPageNo] = useState(0);
+  const [paginationTeamFirst, setPaginationTeamFirst] = useState(0);
 
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -135,25 +166,52 @@ const Reports = ({
   const handleTabs = (name) => {
     setSelectedDates(null);
     setSelecteddateRanges([]);
-    localStorage.setItem("activeTab", name);
+
     dispatch(getActiveTab(name));
     setSearch();
     setSearchVal([]);
+    setReportActiveTab(name);
+ 
+    if (name !== "Admin") {
+      setSelectedData([]);
+      setSelectAllCheckBoxes(false);
+    }
   };
+  useEffect(() => {
+    const role =
+      typeof window !== "undefined" ? localStorage.getItem("userRole") : null;
+    setCurrentRole(role);
+  });
 
   useEffect(() => {
     workFgetFlagsowData();
+  }, []);
+
+  useEffect(() => {
+    const role = localStorage.getItem("userRole");
+    setUserRole(role);
+
+    switch (role) {
+      case "reviewer":
+        setReportActiveTab("Reviewer");
+        break;
+      case "admin":
+        setReportActiveTab("Admin");
+        break;
+      case "supervisor":
+        setReportActiveTab("Audit");
+        break;
+      default:
+        setReportActiveTab("Reviewer");
+    }
   }, []);
   useEffect(() => {
     const coderSearchString = searchVal.find(
       (item) => item.field === "initialSearch"
     )?.search;
     setIsLoading(false);
-    const activeTabFromStorage = localStorage.getItem("activeTab");
-    const activeTab = activeTabFromStorage ? activeTabFromStorage : "Reviewer";
-    dispatch(getActiveTab(activeTab));
 
-    if (activeTab === "Sent") {
+    if (reportActiveTab === "Sent") {
       sentReport({
         pagenum: sentPageNo,
         startDate: selectedDateRanges?.Sent?.from,
@@ -161,7 +219,7 @@ const Reports = ({
         search: coderSearchString ? coderSearchString : "",
         sort: sort,
       });
-    } else if (activeTab === "Received") {
+    } else if (reportActiveTab === "Received") {
       receivedReport({
         pagenum: receivedPageNo,
         startDate: selectedDateRanges?.Received?.from,
@@ -169,7 +227,44 @@ const Reports = ({
         search: coderSearchString ? coderSearchString : "",
         sort: sort,
       });
-    } else {
+    } else if (reportActiveTab === "Admin") {
+      dispatch(
+        getReportDetails(
+          pageNo,
+          selectedDateRanges?.Admin?.from,
+          selectedDateRanges?.Admin?.to,
+          coderSearchString ? coderSearchString : "",
+          selectedOptions?.Status?.value,
+          selectedOptions?.UserRole?.value
+            ? selectedOptions?.UserRole?.value
+            : "",
+          sort,
+          selectedOptions?.User?.value &&
+            selectedOptions?.UserRole?.value !== "All"
+            ? selectedOptions?.User?.value
+            : ""
+        )
+      );
+    } else if (reportActiveTab === "Audit") {
+      auditReport({
+        pagenum: pageNo,
+        startDate: selectedDateRanges?.Audit?.from,
+        endDate: selectedDateRanges?.Audit?.to,
+        search: coderSearchString ? coderSearchString : "",
+        filter: selectedOptions?.reviewerStatus
+          ? selectedOptions?.reviewerStatus
+          : "",
+        sort: sort,
+      });
+    } else if (reportActiveTab === "Team") {
+      teamReport({
+        pagenum: teamPageNo,
+        startDate: selectedDateRanges?.Team?.from,
+        endDate: selectedDateRanges?.Team?.to,
+        search: coderSearchString ? coderSearchString : "",
+        sort: sort,
+      });
+    } else
       reviewerReport({
         pagenum: pageNo,
         startDate: selectedDateRanges?.Reviewer?.from,
@@ -178,7 +273,6 @@ const Reports = ({
         filter: selectedOptions?.reviewerStatus,
         sort: sort,
       });
-    }
 
     if (ExportResponse) {
       setIsModalVisible(false);
@@ -197,6 +291,10 @@ const Reports = ({
   useEffect(() => {
     setFilteredCoder(ReportPatientDetails?.response);
   }, [ReportPatientDetails]);
+
+  useEffect(() => {
+    setFilteredCoder(AdminReportPatientDetails?.response);
+  }, [AdminReportPatientDetails]);
 
   useEffect(() => {
     const page = new URLSearchParams(window.location.search).get("page");
@@ -229,34 +327,26 @@ const Reports = ({
     const nameString = name?.split(" ").join("");
     setSelectedOptions((prevOptions) => ({
       ...prevOptions,
-      [nameString]: selectedOption?.value,
+      [nameString]: selectedOption,
     }));
   };
 
   const debouncedSearch = useCallback(
-    debounce(
-      (
-        text,
-
-        setSearchVal,
-        field
-      ) => {
-        setSearchVal((prev) => {
-          const existingIndex = prev.findIndex((item) => item.field === field);
-          if (existingIndex !== -1) {
-            return prev.map((item, index) => {
-              if (index === existingIndex) {
-                return { ...item, search: text };
-              }
-              return item;
-            });
-          } else {
-            return [...prev, { search: text, field: field }];
-          }
-        });
-      },
-      700
-    ),
+    debounce((text, setSearchVal, field) => {
+      setSearchVal((prev) => {
+        const existingIndex = prev.findIndex((item) => item.field === field);
+        if (existingIndex !== -1) {
+          return prev.map((item, index) => {
+            if (index === existingIndex) {
+              return { ...item, search: text };
+            }
+            return item;
+          });
+        } else {
+          return [...prev, { search: text, field: field }];
+        }
+      });
+    }, 700),
     []
   );
   const filterChangePatientId = (event) => {
@@ -273,7 +363,59 @@ const Reports = ({
     const field = event.target.name;
     debouncedSearch(value, setSearchVal, field);
   };
-  console.log(receivedLoader, "se");
+  const onTeamPageChange = (e) => {
+    setPaginationTeamFirst(e.first);
+    setTeamPageNo(e.page);
+  };
+
+  const getTabsForRole = (role) => {
+    switch (role) {
+      case "reviewer":
+        return ["Reviewer", "Sent", "Received"];
+      case "admin":
+        return ["Admin", "Sent", "Received"];
+      default:
+        return ["Audit", "Team", "Sent", "Received"];
+    }
+  };
+
+  const tabs = getTabsForRole(userRole);
+
+  useEffect(() => {
+    if (selectedOptions?.UserRole?.value) {
+      dispatch(getSelectUserListReport(selectedOptions?.UserRole?.value));
+    }
+  }, [selectedOptions?.UserRole]);
+
+  const optionsUser =
+    selectUserList?.data?.response?.map((res) => ({
+      value: res.userName,
+      label: res.firstName + " " + res.lastName,
+    })) || [];
+  if (optionsUser.length > 0) {
+    optionsUser.unshift({ value: "", label: "All" });
+  }
+  const checkedList = [
+    {
+      id: 1,
+      name: "Status",
+      isSelect: !reportActiveTab || reportActiveTab === "Admin" ? true : false,
+      options: statusOptions,
+    },
+    {
+      id: 2,
+      name: "User Role",
+      isSelect: true,
+      options: !reportActiveTab || reportActiveTab === "Admin" ? options : null,
+    },
+    {
+      id: 3,
+      name: "User",
+      isSelect: true,
+      options: optionsUser,
+    },
+  ];
+
   return (
     <div>
       <Header />
@@ -285,8 +427,9 @@ const Reports = ({
                 <Tab
                   activeTab={reportActiveTab}
                   handleTabs={handleTabs}
-                  tabs={["Reviewer", "Sent", "Received"]}
+                  tabs={tabs}
                 />
+
                 <div className="tbl-caption  align-items-center">
                   <div className="tbl-caption  align-items-center">
                     <div className={`row filter-contain mt-4 mb-0`}>
@@ -342,7 +485,6 @@ const Reports = ({
                                 className={`custom-react-select`}
                                 isSearchable={false}
                               />
-                              {/* )} */}
                             </div>
                           </div>
                         </div>
@@ -381,43 +523,175 @@ const Reports = ({
                         </div>
                       </div>
 
-                      {!reportActiveTab || reportActiveTab === "Reviewer" ? (
-                        <div className="col-xl-6">
-                          <div className="row flr">
-                            <Tooltip
-                              title={
-                                rowsLength?.length === 0
-                                  ? "Select report to export"
-                                  : ""
+                      {selectedData?.length > 0 &&
+                        selectedData?.map((info) => (
+                          <div className="col-xl-2">
+                            <div className="d-flex w-100">
+                              {info?.name && (
+                                <label className="labelStyle d-flex m-auto">
+                                  {" "}
+                                  {info.name}
+                                </label>
+                              )}
+                              <div className="form-group has-search2 w-100">
+                                {info?.isSearch && (
+                                  <FontAwesomeIcon
+                                    className="fa fa-search form-control-feedback"
+                                    icon={faSearch}
+                                  />
+                                )}
+                                {info?.isSelect ? (
+                                  <Select
+                                    onChange={(selectedOption) => {
+                                      dosOnChange(selectedOption, info?.name);
+                                    }}
+                                    options={
+                                      info?.name === "User"
+                                        ? optionsUser
+                                        : info?.options
+                                    }
+                                    className={`custom-react-select`}
+                                    isSearchable={false}
+                                    value={selectedOptions[info?.name]}
+                                  />
+                                ) : info?.isRangePikcer ? (
+                                  <RangePicker
+                                    style={{
+                                      borderRadius: "0 5px 5px 0",
+                                      width: "100%",
+                                    }}
+                                    value={
+                                      selectedDates
+                                        ? selectedDates[info?.name]
+                                        : undefined
+                                    }
+                                    onChange={(date, dateString) =>
+                                      handleCoderPicker(
+                                        date,
+                                        dateString,
+                                        info?.name
+                                      )
+                                    }
+                                    disabledDate={(current) =>
+                                      disableFutureDate(current)
+                                    }
+                                    className="newReportPicker"
+                                  />
+                                ) : (
+                                  info?.isSearch && (
+                                    <InputText
+                                      name={info?.name}
+                                      type="text"
+                                      onChange={(e) => filterChangePatientId(e)}
+                                      className="form-control new-form-control reportInput"
+                                      placeholder="Search"
+                                      maxLength={25}
+                                      value={search?.searchVal}
+                                      onKeyDown={(e) => {
+                                        // Prevent input of backslash ("\")
+                                        if (e.key === "\\") {
+                                          e.preventDefault();
+                                        }
+                                      }}
+                                    />
+                                  )
+                                )}
+                                {/* )} */}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+
+                      <div
+                        className={`col-xl-${
+                          selectedData?.length === 0 ||
+                          reportActiveTab === "Audit" ||
+                          reportActiveTab === "Team"
+                            ? "8"
+                            : reportActiveTab === "Reviewer"
+                            ? "6"
+                            : "2"
+                        } d-flex justify-content-${
+                          (reportActiveTab === "Audit" ||
+                            reportActiveTab === "Team" ||
+                            reportActiveTab === "Reviewer") &&
+                          "end"
+                        }`}
+                      >
+                        {reportActiveTab === "Admin" && (
+                          <div
+                            className={`col-xl-${
+                              selectedData?.length === 0 ? "10" : "0"
+                            } mx-${
+                              selectedData?.length === 0 ? "4" : "0"
+                            } py-2 mx-2`}
+                          >
+                            <MoreFilter
+                              checkedList={checkedList}
+                              selectAll={selectAllCheckBoxes}
+                              setSelectAll={setSelectAllCheckBoxes}
+                              selectedData={selectedData}
+                              setSelectedData={setSelectedData}
+                            />
+                          </div>
+                        )}
+
+                        {!reportActiveTab ||
+                        reportActiveTab === "Admin" ||
+                        reportActiveTab === "Audit" ||
+                        reportActiveTab === "Team" ||
+                        reportActiveTab === "Reviewer" ? (
+                          <Tooltip
+                            title={
+                              rowsLength?.length === 0
+                                ? "Select report to export"
+                                : ""
+                            }
+                          >
+                            <button
+                              onClick={() => {
+                                setIsModalVisible(true);
+                                dispatch(selectedReport(null));
+                              }}
+                              className={`${
+                                rowsLength?.length > 0 ||
+                                rowsLength?.data?.length > 0
+                                  ? styles.export
+                                  : styles.exportDisable
+                              } `}
+                              disabled={
+                                rowsLength?.length > 0 ||
+                                rowsLength?.data?.length > 0
+                                  ? false
+                                  : true
                               }
-                            >
-                              <button
-                                onClick={() => {
-                                  setIsModalVisible(true);
-                                  dispatch(selectedReport(null));
-                                }}
-                                className={styles.export}
-                                disabled={
+                              style={{
+                                color:
                                   rowsLength?.length > 0 ||
                                   rowsLength?.data?.length > 0
-                                    ? false
-                                    : true
-                                }
-                                style={{ color: "#04306f" }}
-                              >
+                                    ? "#04306f"
+                                    : "inherit",
+                                padding: "10px",
+                              }}
+                            >
+                              {rowsLength?.length > 0 ||
+                              rowsLength?.data?.length > 0 ? (
                                 <ExportImg />
-                                Export
-                              </button>
-                            </Tooltip>
-                          </div>
-                        </div>
-                      ) : null}
+                              ) : (
+                                SVGICON.exportDisable
+                              )}
+                              Export
+                            </button>
+                          </Tooltip>
+                        ) : null}
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 <div>
-                  {reportActiveTab === "Reviewer" && (
+                  {(reportActiveTab === "Reviewer" ||
+                    reportActiveTab === "Admin") && (
                     <div>
                       <InitialCard
                         setModal={setModal}
@@ -441,6 +715,30 @@ const Reports = ({
                         loader={reviewerLoader}
                       />
                     </div>
+                  )}
+                  {(reportActiveTab === "Team" ||
+                    reportActiveTab === "Audit") && (
+                    <TeamReport
+                      setModal={setModal}
+                      modal={modal}
+                      reportListAll={TeamReportDetails?.data}
+                      paginationFirst={paginationTeamFirst}
+                      ReportPatientDetails={TeamReportDetails?.data}
+                      onPageChange={onTeamPageChange}
+                      comments={comments}
+                      setComments={setComments}
+                      patientDetails={patientDetails}
+                      setSelectedRows={setSelectedRows}
+                      selectedRows={selectedRows}
+                      setSelectAll={setSelectAll}
+                      selectAll={selectAll}
+                      setSortOrder={setCoderSortOrder}
+                      sortOrder={coderSortOrder}
+                      setSort={setSort}
+                      gotoPatientDetails={gotoPatientDetails}
+                      page={{ teamPageNo, paginationTeamFirst }}
+                      loader={auditeReportLoading}
+                    />
                   )}
                   {reportActiveTab === "Sent" && (
                     <div>
@@ -550,12 +848,17 @@ const enhancer = connect(
     sentLoader: state?.reviewer?.report?.senntLoader,
     ReceivedReportDetails: state?.reviewer?.report?.received,
     receivedLoader: state?.reviewer?.report?.receivedLoader,
+    supervisorReportDetails: state?.supervisor?.report?.auditReport,
+    auditeReportLoading: state?.supervisor?.report?.auditeReportLoading,
+    TeamReportDetails: state?.supervisor?.report?.teamReport,
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,
     reviewerReport: reviewerAction.reviewerReport,
     sentReport: reviewerAction.sentReport,
     receivedReport: reviewerAction.receivedReport,
+    teamReport: supervisorAction.teamReport,
+    auditReport: supervisorAction.auditReport,
   }
 );
 export default enhancer(Reports);

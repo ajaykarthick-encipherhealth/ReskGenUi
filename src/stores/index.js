@@ -24,8 +24,13 @@ import { ReviewerReducers } from "../store/reducers/ReviewerReducers/ReviewerRed
 import { AuthReducer, PatientStore } from "./authflow/reducers";
 
 import { reducer as UpdateDashboardReducer } from "./reviewer/dashboard";
-import { reducer as updatedPatientsReducer} from './reviewer/workqueue';
+import { reducer as updatedPatientsReducer } from "./reviewer/workqueue";
 import { reducer as searchReducer } from "./search";
+import { reducer as physicianReducer } from "./physician/dashboard";
+import { reducer as reportReducer } from "./reviewer/report";
+import { reducer as supervisorReportReducer } from "./supervisor/report";
+import { reducer as adminReportReducer } from "./admin/report";
+
 import { reducer as physicianReducer } from "./physician/dashboard"
 import { reducer as reportReducer } from "./reviewer/report"
 import { reducer as patientDeatilsReducer } from "./patient/details"
@@ -59,8 +64,14 @@ const reducers = combineReducers({
 
   reviewer: combineReducers({
     dashboard: UpdateDashboardReducer,
-    workQueue:updatedPatientsReducer,
-    report: reportReducer
+    workQueue: updatedPatientsReducer,
+    report: reportReducer,
+  }),
+  supervisor: combineReducers({
+    report: supervisorReportReducer,
+  }),
+  admin: combineReducers({
+    report: adminReportReducer,
   }),
   search: searchReducer,
   physician: combineReducers({

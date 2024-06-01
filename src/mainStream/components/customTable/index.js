@@ -43,7 +43,9 @@ const CustomTable = ({ data, styles, head2, head1, color }) => {
           {!data || data.length === 0 ? (
             <tr style={{}}>
               <td colSpan="2" style={{ textAlign: "center" }}>
-                <Empty style={{ height: "90px" }} />{" "}
+                <div>
+                  <Empty style={{ height: "112px" }} />{" "}
+                </div>
               </td>
             </tr>
           ) : (

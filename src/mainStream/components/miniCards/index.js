@@ -7,17 +7,18 @@ function MiniCards({ backgroundColor, icon, title, charts, styles }) {
       span={5}
       style={{
         backgroundColor,
-        height:"80px"
+        height: "80px",
       }}
       className={styles.colData}
-
     >
-      <div className={` d-flex align-items-center justify-content-center ${styles.header}`}>
-        <Image src={icon} className={`m-1 ${styles.Img}`}  />
-        <div className={`m-1 text-center ${styles.heading}`} >{title}</div>
+      <div
+        className={` d-flex align-items-center justify-content-center ${styles.header}`}
+      >
+        <Image src={icon} className={`m-1 ${styles.Img}`} />
+        <div className={`m-1 text-center ${styles.heading}`}>{title}</div>
       </div>
 
-      <h4 style={{textAlign:"center"}}>{charts ? charts : "0"}</h4>
+      <h4 style={{ textAlign: "center" }}>{charts ? charts : "0"}</h4>
     </Col>
   );
 }

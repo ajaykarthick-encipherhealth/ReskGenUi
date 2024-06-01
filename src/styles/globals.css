@@ -14512,6 +14512,70 @@ input[type="number"] {
 .newReportPicker > .ant-picker-input > input {
   font-size: 12px !important;
 }
+.antdstyle .ant-tree .ant-tree-treenode {
+  display: flex;
+  align-items: flex-start;
+  padding: 0 0 4px 0;
+  outline: none;
+  width: 90% !important;
+}
+
+.antdstyle .ant-tree-node-content-wrapper {
+  width: 100% !important;
+  border: 1px  solid #a4caf9 !important;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
+  height: 53px;
+  display:flex;
+  align-items: center;
+  border-radius: 7px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.collapsestyle .ant-collapse-item{
+  border-bottom: none !important;
+}
+.tablestyle .table th:first-child{
+  border-radius:0px 0px 0px 0px !important
+}
+.tablestyle .table th:last-child {
+  border-radius:0px 0px 0px 0px !important
+}
+.tablestyle .table{
+  height:200px !important;
+}
+.ant-pagination .ant-pagination-mini  .ant-table-pagination .ant-table-pagination-right{
+  margin:0px 0px !important;
+}
+.antdstyle .ant-tree .ant-tree-treenode {
+  display: flex;
+  align-items: flex-start;
+  padding: 6px !important;
+  outline: none;
+  width: 90% !important;
+}
+.ant-select-outlined.ant-select-status-error:not(.ant-select-customize-input)
+  .ant-select-selector {
+  border: 1px solid #d9d9d9;
+}
+.tablehead .table th{
+  padding:0px 0px !important;
+}
+.ant-tree-show-line .ant-tree-switcher {
+  background: transparent;
+  font-size: 20px;
+  display:flex;
+}
+.ant-tree-show-line .ant-tree-indent-unit:before{
+  border-inline-end: 1px solid black !important;
+}
+.ant-tree .ant-tree-switcher-leaf-line:before {
+   border-inline-end: 1px solid black !important;
+}
+.ant-tree .ant-tree-switcher-leaf-line:after {
+    border-bottom: 1px solid black !important;  
+}
+
+
 .dosSelect > .ant-select-selector {
   width: 165px !important;
   text-align: center;

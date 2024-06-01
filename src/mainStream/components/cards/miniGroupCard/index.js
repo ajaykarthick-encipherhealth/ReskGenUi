@@ -19,7 +19,7 @@ const CardComponent = ({
   const handleDateFormat = (date) => {
     return dayjs(date).format("MM-DD-YYYY");
   };
-  console.log(data, "data");
+
   return (
     <div className={styles.cardContainer}>
       {data?.length > 0 ? (

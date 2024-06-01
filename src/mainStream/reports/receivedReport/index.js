@@ -133,7 +133,9 @@ const ReceivedReport = ({
                               )
                             )
                           ) : (
-                            <Empty />
+                            <div className={styles.card}>
+                              <Empty />
+                            </div>
                           )}
                         </div>
                       </div>
