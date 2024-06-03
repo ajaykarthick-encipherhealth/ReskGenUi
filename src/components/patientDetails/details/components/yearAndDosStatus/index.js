@@ -7,9 +7,6 @@ import visitStyles from "../../../../../styles/visitdata.module.css";
 import { Modal, Tooltip, notification, Dropdown, Menu } from "antd";
 import { connect } from "react-redux";
 import { DownOutlined } from "@ant-design/icons";
-import AddLabForm from "../addLabForm";
-import AddRadiologyForm from "../addRadiologyForm";
-import AllocateModal from "../../../../../pages/admin/allocateduser/allocate";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 
 const YearAndDosStatus = ({
@@ -27,18 +24,11 @@ const YearAndDosStatus = ({
   const [actionItems, setActionItems] = useState([]);
   const [actionItems2, setActionItems2] = useState([]);
   const [actionItems3, setActionItems3] = useState([]);
-  const [adminActionItems, setAdminActionItems] = useState([]);
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [patienIdDetails, setPatienIdDetails] = useState("");
   const [confirmAuditModal, setConfirmAuditModal] = useState(false);
   const [isValidAction, setIsValidAction] = useState("");
-  const [addPatient, setAddPatient] = useState(false);
-  const [labReportSlider, setLapReportSlider] = useState(false);
   const [flagFirstData, setFlagFirstData] = useState([]);
-  const [allocateModal, setAllocateModal] = useState(false);
-  const [selectedRowsId, setSelectedRowsId] = useState([]);
-  const [allocateClicked, setAllocateClicked] = useState(false);
-  const [selectedChart, setSelectedChart] = useState([]);
   const [confirmCompleteModal, setConfirmCompleteModal] = useState(false);
   const [activeTab, setActiveTab] = useState(1);
   const [confirmNotesModal, setConfirmNotesModal] = useState(false);
@@ -132,13 +122,6 @@ const YearAndDosStatus = ({
   };
 
   const getPatientIdDetails = async (result) => {
-    var data = [
-      {
-        id: result?.patientId,
-        name: result?.patientName,
-      },
-    ];
-    setSelectedRowsId(data);
     const menu = (
       <Menu>
         {result?.processedStatus != "HOLD" ? (
@@ -199,7 +182,6 @@ const YearAndDosStatus = ({
         ) : null}
       </Menu>
     );
-
     const menu2 = (
       <Menu>
         {result?.processedStatus != "HOLD" ? (
@@ -350,51 +332,9 @@ const YearAndDosStatus = ({
         </Menu.Item>
       </Menu>
     );
-    const menu4 = (
-      <Menu>
-        {result?.allocatedOn == null && (
-          <Menu.Item
-            key="4"
-            onClick={() => {
-              allocatePatient();
-              setMenuIsOpen(false);
-            }}
-          >
-            <div className="patient-status">
-              <span className={`badge processed-text`}>ALLOCATE</span>
-            </div>
-          </Menu.Item>
-        )}
-        <Menu.Item
-          key="5"
-          onClick={() => {
-            handleActionClick("ADD RADIOLOGY");
-            setMenuIsOpen(false);
-          }}
-        >
-          <div className="patient-status">
-            <span className={`badge  ${visitStyles.add_text}`}>
-              + ADD RADIOLOGY
-            </span>
-          </div>
-        </Menu.Item>
-        <Menu.Item
-          key="6"
-          onClick={() => {
-            handleActionClick("ADD LAB");
-            setMenuIsOpen(false);
-          }}
-        >
-          <div className="patient-status">
-            <span className={`badge processing-text`}>+ ADD LAB</span>
-          </div>
-        </Menu.Item>
-      </Menu>
-    );
     setActionItems(menu);
     setActionItems2(menu2);
     setActionItems3(menu3);
-    setAdminActionItems(menu4);
   };
   const handleActionClick = (value) => {
     if (value == "HOLD") {
@@ -412,23 +352,6 @@ const YearAndDosStatus = ({
     if (value == "COMPLETE") {
       setConfirmCompleteModal(true);
     }
-    if (value == "ADD RADIOLOGY") {
-      addPatientFile();
-    }
-    if (value == "ADD LAB") {
-      addLabReport();
-    }
-  };
-
-  const addPatientFile = (data) => {
-    setAddPatient(true);
-  };
-  const addLabReport = (data) => {
-    setLapReportSlider(true);
-  };
-
-  const allocatePatient = () => {
-    setAllocateModal(true);
   };
 
   const handleCloseModal = () => {
@@ -755,17 +678,6 @@ const YearAndDosStatus = ({
           ></Modal>
         </div>
       ) : null}
-      <AllocateModal
-        open={allocateModal}
-        setOpen={setAllocateModal}
-        selectedRowsId={selectedRowsId}
-        setAllocateClicked={setAllocateClicked}
-        setSelectedRowsId={setSelectedRowsId}
-        setSelectedChart={setSelectedChart}
-        selectedChart={selectedChart}
-      />
-      <AddLabForm setOpen={setLapReportSlider} open={labReportSlider} />
-      <AddRadiologyForm setOpen={setAddPatient} open={addPatient} />
     </>
   );
 };
