@@ -4,9 +4,18 @@ import RegularButton from "../../../../button";
 import style from '../../../../../components/button/style.module.css'
 
 const Provider = ({ handleForm, handleSelectChnage, handleDateRange }) => {
-  const [form] = Form.useForm();
+  const [form2] = Form.useForm();
+  const onFinish=(values)=>{
+    handleForm(values, "provider")
+  }
+  const providerInfoList = [
+    { value: "authorizedProvider", label: "Authorized Provider" },
+    { value: "noCredential", label: "No Credential" },
+    { value: "unAuthorizeProvider", label: "UnAuthorize Provider" },
+    { value: "unSigned", label: "Un Signed" },
+  ];
   return (
-    <Form form={form} onFinish={(val) => handleForm(val, "provider")}>
+    <Form form={form2} onFinish={onFinish}>
       <Row gutter={24}>
         <Col span={12}>
           <Form.Item name="provider">
@@ -26,11 +35,12 @@ const Provider = ({ handleForm, handleSelectChnage, handleDateRange }) => {
             <label htmlFor="">Provider Info</label>
             <Select
               placeholder="Provider Info"
-              options={[]}
+              options={providerInfoList}
               className={style.inputField}
               onChange={(selOption) =>
                 handleSelectChnage(selOption, "providerInfo")
               }
+              allowClear={true}
             />
           </Form.Item>
         </Col>
