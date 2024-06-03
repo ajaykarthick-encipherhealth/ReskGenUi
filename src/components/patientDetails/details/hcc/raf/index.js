@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Empty, Popover } from "antd";
+import {Popover } from "antd";
 import { connect } from "react-redux";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import style from "./styles.module.css";
-import TableStyle from "../../../../../components/table/table.module.css";
 
 const RafScore = ({patientDetailsResult}) => {
   const rafScoreList =patientDetailsResult?.data?.response?.rafScore
@@ -171,15 +170,15 @@ const RafScore = ({patientDetailsResult}) => {
                   <div className={style.titleHead}>
                     <div className="row">
                       <div className="col-xl-6">V24 score</div>
-                      <div className="col-xl-6">V24Score(67%)</div>
+                      <div className="col-xl-6">V24Score({rafScoreList?.rafVersionDTO.v24Percentage}%)</div>
                     </div>
                   </div>
                   <div className={style.detailsHead}>
                     <div className="row">
-                      <div className="col-xl-6">{rafScoreList?.v24Score}</div>
+                      <div className="col-xl-6">{rafScoreList?.rafVersionDTO?.v24Score}</div>
                       <div className="col-xl-6">
                         {" "}
-                        {rafScoreList?.v24Score70Percent?.toFixed(3)}
+                        {rafScoreList?.rafVersionDTO?.v24PercentageScore}
                       </div>
                     </div>
                   </div>
@@ -188,14 +187,14 @@ const RafScore = ({patientDetailsResult}) => {
                   <div className={style.titleHead}>
                     <div className="row">
                       <div className="col-xl-6">V28 score</div>
-                      <div className="col-xl-6">V28Score(33%)</div>
+                      <div className="col-xl-6">V28Score({rafScoreList?.rafVersionDTO.v28Percentage}%)</div>
                     </div>
                   </div>
                   <div className={style.detailsHead}>
                     <div className="row">
-                      <div className="col-xl-6">{rafScoreList?.v28Score}</div>
+                      <div className="col-xl-6">{rafScoreList?.rafVersionDTO?.v28Score}</div>
                       <div className="col-xl-6">
-                        {rafScoreList?.v28Score30Percent?.toFixed(3)}
+                        {rafScoreList?.rafVersionDTO?.v28PercentageScore}
                       </div>
                     </div>
                   </div>
@@ -210,7 +209,7 @@ const RafScore = ({patientDetailsResult}) => {
                     <div className="row">
                       <div className="col-xl-12 text-center">
                         {" "}
-                        {rafScoreList?.score?.toFixed(3)}
+                        {rafScoreList?.rafVersionDTO?.overAllScore}
                       </div>
                     </div>
                   </div>
