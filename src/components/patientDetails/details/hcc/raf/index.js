@@ -180,7 +180,7 @@ const RafScore = ({ patientDetailsResult }) => {
                     <div className="row">
                       <div className="col-xl-6">V28 score</div>
                       <div className="col-xl-6">
-                        V28Score({rafScoreList?.rafVersionDTO.v28Percentage}%)
+                        V28Score({rafScoreList?.rafVersionDTO?.v28Percentage}%)
                       </div>
                     </div>
                   </div>
