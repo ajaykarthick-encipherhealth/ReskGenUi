@@ -24,68 +24,66 @@ const Tables = (props) => {
       <div className="d-flex justify-content-center">
         {loading && <Spin size="large" />}
       </div>
-      {(codeData?.excludes1 || codeData?.inclusionTerm || codeData?.name ) && (  
+      {(codeData?.excludes1 || codeData?.inclusionTerm || codeData?.name) && (
         <div className={`${style.card} mt-2`}>
           <div className={style.head}>
             {codeData?.name}-{codeData?.desc}
           </div>
 
-            <div class="card-group" >
-              <div class="card">
-                <div class="card-body" style={{ padding: "0" ,border:"1px solid gray"}}>
-                  <h5
-                    style={{
-                      background: "green",
-                      display: "flex",
-                      justifyContent: "center",
-                      color: "white",
-                    }}
-                    class="card-title"
-                  >
-                   Include
-                  </h5>
-                  <p class="card-text"  style={{padding:"10px"}}>{codeData?.inclusionTerm?codeData?.inclusionTerm:<Empty/>}</p>
-                </div>
-              </div>
-              <div class="card">
-                <div class="card-body" style={{ padding: "0" ,border:"1px solid gray"}}>
-                  <h5
-                    style={{
-                      background: "#0f6adb",
-                      display: "flex",
-                      justifyContent: "center",
-                      color: "white",
-                    }}
-                    class="card-title"
-                  >
-                    Exclude1
-                  </h5>
-                  <p class="card-text"  style={{padding:"10px"}}>{codeData?.excludes1?codeData?.excludes1:<Empty/>}</p>
-                </div>
-              </div>
-              <div class="card">
-                <div class="card-body" style={{ padding: "0",border:"1px solid gray" }}>
-                  <h5
-                    style={{
-                      background: "#993300",
-                      display: "flex",
-                      justifyContent: "center",
-                      color: "white",
-                    }}
-                    class="card-title"
-                  >
-                    Exclude2
-                  </h5>
-                  <p class="card-text"  style={{padding:"10px"}}>{codeData?.excludes2?codeData?.excludes2:<Empty/> } </p>
-                </div>
+          <div className="card-group">
+            <div className="card">
+              <div className="card-body border border-secondary p-0">
+                <h5 className="card-title bg-success text-white d-flex justify-content-center">
+                  Include
+                </h5>
+                <p
+                  className="card-text "
+                  style={{ height: "160px", padding: "10px" }}
+                >
+                  {codeData?.inclusionTerm ? (
+                    codeData?.inclusionTerm
+                  ) : (
+                    <Empty />
+                  )}
+                </p>
               </div>
             </div>
+            <div className="card">
+              <div className="card-body border border-secondary p-0">
+                <h5
+                  class="card-title  bg- text-white d-flex justify-content-center"
+                  style={{ background: "blue" }}
+                >
+                  Exclude1
+                </h5>
+                <p
+                  className="card-text"
+                  style={{ height: "160px", padding: "10px" }}
+                >
+                  {codeData?.excludes1 ? codeData?.excludes1 : <Empty />}
+                </p>
+              </div>
+            </div>
+            <div className="card">
+              <div className="card-body border border-secondary p-0 ">
+                <h5 class="card-title bg-danger text-white d-flex justify-content-center">
+                  Exclude2
+                </h5>
+                <p
+                  className="card-text "
+                  style={{ height: "160px", padding: "10px" }}
+                >
+                  {codeData?.excludes2 ? codeData?.excludes2 : <Empty />}{" "}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       )}
       <div className={style.list}>
         {codeData?.children?.map((s, i) => (
           <div key={i} onClick={() => handleViewTable(s)}>
-            <p className={`${style.card2} mt-3`}>
+            <p class={`${style.card2} mt-3`}>
               <ArrowRightOutlined />
               <span className={style.codes}>{s.name} </span>
               <span>- {s.desc}</span>

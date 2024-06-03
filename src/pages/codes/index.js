@@ -4,29 +4,20 @@ import { Empty, Tree } from "antd";
 import { Spin } from "antd";
 
 const Codes = ({ data, loading }) => {
-  const topOfPageRef = useRef(null);
-
+  const topRef = useRef(null);
   const scrollToTop = () => {
-    if (topOfPageRef.current) {
-      topOfPageRef.current.scrollIntoView({
-        top: 0,
-        left: 0,
-        behavior: "smooth",
-      });
-    }
+    topRef.current.scrollIntoView({ behavior: "smooth", bottom:0 });
   };
 
-  useEffect(() => {
-    scrollToTop();
-  }, [data]);
   return (
     <>
-      <div ref={topOfPageRef} />
+      <div ref={topRef} />
       <div className="d-flex justify-content-center">
         {loading && <Spin size="large" />}
       </div>
-      <div className="mt-3 antdstyle">
+      <div className="mt-3 antdstyle" > 
         <Tree
+        onClick={scrollToTop}
           showLine={true}
           defaultExpandedKeys={["0-0-0"]}
           treeData={data}

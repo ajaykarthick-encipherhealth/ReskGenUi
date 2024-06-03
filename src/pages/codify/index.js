@@ -134,12 +134,18 @@ const Codify = ({ codifyData, codesData }) => {
     }
     setLoading(false);
   };
-  useEffect(() => {
-    if (!searchInput.length) {
-      setData(null);
-      setCodeData(null);
-    }
-  }, [searchInput]);
+ useEffect(() => {
+  if (!searchInput.length) {
+    setData(null);
+    setCodeData(null);
+    setNoData(false); 
+  } else if (data && data.length === 0) {
+    setNoData(true);
+  } else {
+    setNoData(false)
+  }
+}, [searchInput, data]); 
+
 
   return (
     <div className="container-fluid">
@@ -254,7 +260,7 @@ const Codify = ({ codifyData, codesData }) => {
             ) : (
               <></>
             )}
-            {noData && <Empty></Empty>}
+            {noData && <p className="d-flex justify-content-center">"Uh oh! It seems there might be a typo. Please review your spelling or try a different keyword."</p>}
             {currentButton == "Description" && (
               <Tables
                 setCodeData={setCodeData}

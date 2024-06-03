@@ -64,4 +64,12 @@
   border: 1px solid black;
   margin: 0 19px;
 }
+.cardbody{
+  border:1px solid gray;
+  padding:0;
+}
+.cards{
+  height:200px !important;
+  padding:0;
+}
 
