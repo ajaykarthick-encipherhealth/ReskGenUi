@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { actions as dashbaordActions } from "../../stores/codify/dashboard";
 import { connect } from "react-redux";
-import { Button } from "antd";
+import { Button, Empty } from "antd";
 import {
   FilterOutlined,
   SearchOutlined,
@@ -24,6 +24,7 @@ const Codify = ({ codifyData, codesData }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [codeData, setCodeData] = useState([]);
+  const [noData, setNoData] = useState(false);
 
   const handleRiskAdjustment = () => {
     setActiveButton("Risk Adjustment");
@@ -63,9 +64,16 @@ const Codify = ({ codifyData, codesData }) => {
     let treeData = await codifyData({ diseases: searchInput });
 
     if (treeData?.status == "SUCCESS") {
+       console.log(treeData,"response")
       let temp = convertICDStructureToTreeData(treeData?.response);
+      if (!treeData?.response?.length) {
+        setNoData(true);
+      }
+      else{
+        setNoData(false);
+      }
+     
       setData(temp);
-      
     }
     setLoading(false);
   };
@@ -81,7 +89,6 @@ const Codify = ({ codifyData, codesData }) => {
     }
   }
   console.log(data, "data");
-  
 
   const alphabets = [
     "A",
@@ -136,7 +143,7 @@ const Codify = ({ codifyData, codesData }) => {
       setCodeData(null);
     }
   }, [searchInput]);
-
+console.log(noData,"noData")
   return (
     <div className="container-fluid">
       <div className="row  mt-3 px-1">
@@ -240,14 +247,19 @@ const Codify = ({ codifyData, codesData }) => {
                 ))}
               </div>
             )}
-            {currentButton == "Codes" && data?.length && (
+            {currentButton == "Codes" && data?.length ? (
               <Codes
                 searchInput={searchInput}
                 data={data}
                 loading={loading}
                 setCurrentButton={setCurrentButton}
               />
+            ) : (
+              <></>
             )}
+            {
+              noData && <Empty></Empty>
+            }
             {currentButton == "Description" && (
               <Tables
                 setCodeData={setCodeData}

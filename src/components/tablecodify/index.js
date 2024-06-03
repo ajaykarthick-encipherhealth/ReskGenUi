@@ -48,59 +48,56 @@ const Tables = (props) => {
             {codeData?.name}-{codeData?.desc}
           </div>
 
-          <div class="card-group" style={{ border: "1px solid gray" }}>
-            <div
-              class="card"
-              style={{ border: "1px solid gray  ", margin: "0" }}
-            >
-              <div class="card-body" style={{ padding: "0" }}>
-                <h5
-                  style={{
-                    background: "#6A8D20;",
-                    display: "flex",
-                    justifyContent: "center",
-                    color: "white",
-                  }}
-                  class="card-title"
-                >
-                  Include
-                </h5>
-                <p class="card-text">{codeData?.inclusionTerm?codeData?.inclusionTerm:<Empty/>} </p>
+            <div class="card-group" >
+              <div class="card">
+                <div class="card-body" style={{ padding: "0" ,border:"1px solid gray"}}>
+                  <h5
+                    style={{
+                      background: "green",
+                      display: "flex",
+                      justifyContent: "center",
+                      color: "white",
+                    }}
+                    class="card-title"
+                  >
+                   Include
+                  </h5>
+                  <p class="card-text"  style={{padding:"10px"}}>{codeData?.inclusionTerm?codeData?.inclusionTerm:<Empty/>}</p>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-body" style={{ padding: "0" ,border:"1px solid gray"}}>
+                  <h5
+                    style={{
+                      background: "#0f6adb",
+                      display: "flex",
+                      justifyContent: "center",
+                      color: "white",
+                    }}
+                    class="card-title"
+                  >
+                    Exclude1
+                  </h5>
+                  <p class="card-text"  style={{padding:"10px"}}>{codeData?.excludes1?codeData?.excludes1:<Empty/>}</p>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-body" style={{ padding: "0",border:"1px solid gray" }}>
+                  <h5
+                    style={{
+                      background: "#993300",
+                      display: "flex",
+                      justifyContent: "center",
+                      color: "white",
+                    }}
+                    class="card-title"
+                  >
+                    Exclude2
+                  </h5>
+                  <p class="card-text"  style={{padding:"10px"}}>{codeData?.excludes2?codeData?.excludes2:<Empty/> } </p>
+                </div>
               </div>
             </div>
-            <div class="card">
-              <div class="card-body" style={{ padding: "0" }}>
-                <h5
-                  style={{
-                    background: "#0f6adb",
-                    display: "flex",
-                    justifyContent: "center",
-                    color: "white",
-                  }}
-                  class="card-title"
-                >
-                  Exclude1
-                </h5>
-                <p class="card-text">{codeData?.excludes1?codeData?.excludes1:<Empty/>}</p>
-              </div>
-            </div>
-            <div class="card">
-              <div class="card-body" style={{ padding: "0" }}>
-                <h5
-                  style={{
-                    background: "993300",
-                    display: "flex",
-                    justifyContent: "center",
-                    color: "white",
-                  }}
-                  class="card-title"
-                >
-                  Exclude2
-                </h5>
-                <p class="card-text">{codeData?.excludes2?codeData?.excludes2 :<Empty/> } </p>
-              </div>
-            </div>
-          </div>
         </div>
       )}
       <div className={style.list}>
