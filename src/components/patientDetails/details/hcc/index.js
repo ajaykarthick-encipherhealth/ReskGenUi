@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Tab, Nav } from "react-bootstrap";
-import { useDispatch, useSelector,connect } from "react-redux";
+import { useDispatch, useSelector, connect } from "react-redux";
 import visitStyles from "../../../../styles/visitdata.module.css";
 import VisitData from "./visitData";
 import Combo from "./combo";
@@ -19,13 +19,28 @@ import Pending from "../../../../../src/images/trackingImages/PendingTrack.png";
 import Hold from "../../../../../src/images/trackingImages/HoldTrack.png";
 import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
 import { actions as detailsActions } from "../../../../stores/patient/details";
-import warning from "../../../../images/svg/warning.svg";
 
+import AuditedTrack from "../../../../../src/images/trackingImages/AuditedTrack.png";
+import NotAudited from "../../../../../src/images/trackingImages/NotAuditedTrack.png";
+import AuditHold from "../../../../../src/images/trackingImages/AuditHoldTrack.png";
+import ReAudit from "../../../../../src/images/trackingImages/reAuditTrack.png";
+import AuditPending from "../../../../../src/images/trackingImages/AuditPending.png";
+import AuditedDeclineTrack from "../../../../../src/images/trackingImages/AuditDeclined.png";
+import Abort from "../../../../../src/images/trackingImages/Abort.png";
+
+import warning from "../../../../images/svg/warning.svg";
 import Image from "next/image";
+import YearAndDosStatus from "../components/yearAndDosStatus";
 
 const { Option } = Select;
 
-const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,patientDosResult }) => {
+const Hcc = ({
+  year,
+  setIsLoading,
+  patientDetailsResult,
+  getpatientDetailsData,
+  patientDosResult,
+}) => {
   const dispatch = useDispatch();
   const [activeTabHead, setActiveTabHead] = useState(1);
   const [flagTagActive, setFlagTagActive] = useState(false);
@@ -37,55 +52,6 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [dosSummariesList, setDosSummariesList] = useState([]);
   const [selectDosValue, setSelectDosValue] = useState([]);
-
-
-  const handleActionClick = () => { };
-
-  const dropdownMenu = (
-    <Menu>
-      <Menu.Item key="1">
-        <div className="patient-status">
-          <span className={`badge hold-text`}>HOLD</span>
-        </div>
-      </Menu.Item>
-      <Menu.Item
-        key="2"
-        onClick={() => {
-          handleActionClick("PENDING");
-          setMenuIsOpen(false);
-        }}
-      >
-        <div className="patient-status">
-          <span className={`badge processing-text`}>PENDING</span>
-        </div>
-      </Menu.Item>
-      <Menu.Item
-        key="3"
-        onClick={() => {
-          handleActionClick("DECLINE");
-          setMenuIsOpen(false);
-        }}
-      >
-        <div className="patient-status">
-          <span className={`badge failed-text`} style={{ color: "red" }}>
-            DECLINE
-          </span>
-        </div>
-      </Menu.Item>
-
-      <Menu.Item
-        key="4"
-        onClick={() => {
-          handleActionClick("COMPLETE");
-          setMenuIsOpen(false);
-        }}
-      >
-        <div className="patient-status">
-          <span className={`badge processed-text`}>COMPLETED</span>
-        </div>
-      </Menu.Item>
-    </Menu>
-  );
 
   const selectTab = (num) => {
     setFlagTagActive(false);
@@ -101,35 +67,157 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
     }
     setPopoverVisible(false);
   };
+
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case "COMPLETED":
+        return (
+          <Tooltip placement="bottom" title="COMPLETED">
+            <Image
+              src={Completed}
+              style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            />
+          </Tooltip>
+        );
+
+      case "PENDING":
+        return (
+          <Tooltip placement="bottom" title="PENDING">
+            <Image
+              src={Pending}
+              style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            />
+          </Tooltip>
+        );
+
+      case "DECLINED":
+        return (
+          <Tooltip placement="bottom" title="DECLINED">
+            <Image
+              src={Declined}
+              style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            />
+          </Tooltip>
+        );
+
+      case "NOTCOMPUTED":
+        return (
+          <Tooltip placement="bottom" title="NOT COMPUTED">
+            <Image
+              src={Pending}
+              style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            />
+          </Tooltip>
+        );
+      case "COMPUTED":
+        return (
+          <Tooltip placement="bottom" title="PENDING">
+            <Image
+              src={Pending}
+              style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            />
+          </Tooltip>
+        );
+      case "HOLD":
+        return (
+          <Tooltip placement="bottom" title="HOLD">
+            <Image
+              src={Hold}
+              style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            />
+          </Tooltip>
+        );
+      case "ABORTED_BY_CRON":
+        return (
+          <Tooltip placement="bottom" title="ABORTED BY CRON">
+            <Image
+              src={Abort}
+              style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            />
+          </Tooltip>
+        );
+      case "AUDIT_PENDING":
+        return (
+          <Tooltip placement="bottom" title="AUDIT PENDING">
+            <Image
+              src={AuditPending}
+              style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            />
+          </Tooltip>
+        );
+
+      case "AUDITHOLD":
+        return (
+          <Tooltip placement="bottom" title=" AUDIT HOLD">
+            <Image
+              src={AuditHold}
+              style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            />
+          </Tooltip>
+        );
+      case "REAUDIT":
+        return (
+          <Tooltip placement="bottom" title=" REAUDIT">
+            <Image
+              src={ReAudit}
+              style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            />
+          </Tooltip>
+        );
+      case "AUDITED":
+        return (
+          <Tooltip placement="bottom" title=" AUDITED">
+            <Image
+              src={AuditedTrack}
+              style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            />
+          </Tooltip>
+        );
+      case "NOT_AUDIT":
+        return (
+          <Tooltip placement="bottom" title=" NOT AUDIT">
+            <Image
+              src={NotAudited}
+              style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            />
+          </Tooltip>
+        );
+      case "AUDIT_DECLINED":
+        return (
+          <Tooltip placement="bottom" title=" AUDIT DECLINED">
+            <Image
+              src={AuditedDeclineTrack}
+              style={{ height: "20px", width: "20px", marginTop: "4px" }}
+            />
+          </Tooltip>
+        );
+      case null:
+        return <div className="patient-status"></div>;
+    }
+  };
   useEffect(() => {
     if (patientDosResult?.data?.response) {
       setSelectDosValue([]);
       var dosList = [];
       patientDosResult?.data?.response?.map((res, index) => {
-        if(res){
-        var dosLable = (
-          <>
-            <div className="d-flex">
-              <span className={styles.dosLable}>
-                {moment(res).format("MM-DD-YYYY")}
-              </span>
-              <Image
-                src={
-                  index == 1 || index == 4
-                    ? Completed
-                    : index == 2
-                      ? Hold
-                      : Pending
-                }
-                className={styles.dosStatusIcon}
-              />
-            </div>
-          </>
-        );
-        dosList.push({ value: res, label: dosLable });
-      }
+        if (res) {
+          var dosLable = (
+            <>
+              <div className="d-flex justify-content-between">
+                <span className={styles.dosLable}>
+                  {moment(res.dateOfService).format("MM-DD-YYYY")}
+                </span>
+                {getStatusIcon(res.processedStatus)}
+              </div>
+            </>
+          );
+          dosList.push({ value: res.dateOfService, label: dosLable });
+        }
       });
       setDosSummariesList(dosList);
+      if (patientDetailsResult?.data?.response?.dateOfService) {
+        setSelectDosValue(patientDetailsResult?.data?.response?.dateOfService);
+      }
     }
   }, [patientDosResult?.data?.response]);
 
@@ -143,19 +231,18 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
     setSelectDosValue(value);
     const patientId = localStorage.getItem("patientId");
     if (value) {
-        getpatientDetailsData(
-          patientId,
-          null,
-          moment(value).format("YYYY-MM-DD")
-        )
+      getpatientDetailsData(
+        patientId,
+        null,
+        moment(value).format("YYYY-MM-DD")
+      );
     } else {
-        getpatientDetailsData(
-          patientId,
-          patientDetailsResult?.data?.response?.processedYear,
-          null
-        )
+      getpatientDetailsData(
+        patientId,
+        patientDetailsResult?.data?.response?.processedYear,
+        null
+      );
     }
-
   };
   const handleChangePageNumber = async (value) => {
     // setPopoverVisible(false);
@@ -180,32 +267,34 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
         </div>
         {pageNumberOptions
           ? pageNumberOptions?.map((data) => (
-            <div className={styles.hoverDiv}>
-              <div className={`row ${styles.selectDetailsContainer}`}>
-                <div className="col-xl-3">
-                  <span className={styles.selectHead}>{moment(data.dos).format("MM-DD-YYYY")}</span>
-                </div>
-                <div className={`col-xl-3 ${styles.selectDetailsDiv}`}>
-                  <span
-                    onClick={() => handleChangePageNumber(data.startPageNumber)}
-                    className={styles.selectDetails}
-                  >
-                    Start -  {data?.startPageNumber}
-                  </span>
-
-                </div>
-                <div className={`col-xl-3 ${styles.selectDetailsDiv}`}>
-
-                  <span
-                    onClick={() => handleChangePageNumber(data.endPagNumber)}
-                    className={styles.selectDetails}
-                  >
-                    End - {data?.endPagNumber}
-                  </span>
+              <div className={styles.hoverDiv}>
+                <div className={`row ${styles.selectDetailsContainer}`}>
+                  <div className="col-xl-3">
+                    <span className={styles.selectHead}>
+                      {moment(data.dos).format("MM-DD-YYYY")}
+                    </span>
+                  </div>
+                  <div className={`col-xl-3 ${styles.selectDetailsDiv}`}>
+                    <span
+                      onClick={() =>
+                        handleChangePageNumber(data.startPageNumber)
+                      }
+                      className={styles.selectDetails}
+                    >
+                      Start - {data?.startPageNumber}
+                    </span>
+                  </div>
+                  <div className={`col-xl-3 ${styles.selectDetailsDiv}`}>
+                    <span
+                      onClick={() => handleChangePageNumber(data.endPagNumber)}
+                      className={styles.selectDetails}
+                    >
+                      End - {data?.endPagNumber}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            ))
           : null}
       </div>
     </div>
@@ -296,22 +385,7 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
                     </Select>
                   </Nav.Item>
                   <Nav.Item as="li" className="nav-item mx-2">
-                    <Dropdown
-                      overlay={dropdownMenu}
-                      onVisibleChange={(v) => setMenuIsOpen(v)}
-                      visible={menuIsOpen}
-                      className={`pendingBtn ${visitStyles.completedBtnHcc}`}
-                    >
-                      <Button
-                        type="primary"
-                        className={`pendingBtn ${visitStyles.completedBtnHcc}`}
-                      >
-                        <span>PENDING</span>
-                        <span style={{ marginLeft: "10px" }}>
-                          <DownOutlined />
-                        </span>
-                      </Button>
-                    </Dropdown>
+                    <YearAndDosStatus setIsLoading={setIsLoading} />
                   </Nav.Item>
                   {activeTabHead == 1 && (
                     <Popover
@@ -321,7 +395,12 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
                       trigger={"click"}
                       onOpenChange={() => setPopoverVisible(false)}
                     >
-                      <div className={styles.dosContainer} onClick={() => { setPopoverVisible(true) }}>
+                      <div
+                        className={styles.dosContainer}
+                        onClick={() => {
+                          setPopoverVisible(true);
+                        }}
+                      >
                         <span className={styles.dosPageNumber}>
                           Select Dos Page Number
                         </span>
@@ -338,42 +417,50 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
                   )}
                   {flagTagActive ? (
                     <div>
-                       <div
-            >
-              <Popover
-                content={
-                  <>
-                    <div className={visitStyles.flags}>
-                        <div className={visitStyles.flags}>
-                          <span className={visitStyles.hccFlag}></span>
-                          <span className={visitStyles.flagCodes}>HCC</span>
-                        </div>
-                        <div className={visitStyles.flags}>
-                          <span className={visitStyles.suggestedFlag}></span>
-                          <span className={visitStyles.flagCodes}>
-                            SUGGESTED
-                          </span>
-                        </div>
-                        <div className={visitStyles.flags}>
-                          <span className={visitStyles.deleteFlag}></span>
-                          <span className={visitStyles.flagCodes}>DELETED</span>
-                        </div>
-                        <div className={visitStyles.flags}>
-                          <span className={visitStyles.nonhccFlag}></span>
-                          <span className={visitStyles.flagCodes}>NON HCC</span>
-                        </div>
+                      <div>
+                        <Popover
+                          content={
+                            <>
+                              <div className={visitStyles.flags}>
+                                <div className={visitStyles.flags}>
+                                  <span className={visitStyles.hccFlag}></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    HCC
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span
+                                    className={visitStyles.suggestedFlag}
+                                  ></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    SUGGESTED
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span
+                                    className={visitStyles.deleteFlag}
+                                  ></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    DELETED
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span
+                                    className={visitStyles.nonhccFlag}
+                                  ></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    NON HCC
+                                  </span>
+                                </div>
+                              </div>
+                            </>
+                          }
+                          trigger={["click"]}
+                          placement="bottom"
+                        >
+                          <Image src={warning} style={{ cursor: "pointer" }} />
+                        </Popover>
                       </div>
-                  </>
-                }
-                trigger={["click"]}
-                placement="bottom"
-              >
-                <Image
-                  src={warning}
-                  style={{ cursor: "pointer" }}
-                />
-              </Popover>
-            </div>
                       {/* <div className={visitStyles.flags}>
                         <div className={visitStyles.flags}>
                           <span className={visitStyles.hccFlag}></span>
@@ -424,7 +511,7 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
                 />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={3}>
-                <Combo activeComboTree={activeComboTree} year={year}/>
+                <Combo activeComboTree={activeComboTree} year={year} />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={4}>
                 <Meat activeMeatTitle={activeMeatTitle} year={year} />
@@ -443,14 +530,13 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
   );
 };
 
-
 const enhancer = connect(
   (state) => ({
-    patientDetailsResult :state?.patientDetails?.details?.patientResult,
-    patientDosResult:state?.patientDetails?.details?.dosResult,
+    patientDetailsResult: state?.patientDetails?.details?.patientResult,
+    patientDosResult: state?.patientDetails?.details?.dosResult,
   }),
   {
-    getpatientDetailsData:detailsActions.patientDetailsAction
+    getpatientDetailsData: detailsActions.patientDetailsAction,
   }
 );
 export default enhancer(Hcc);
