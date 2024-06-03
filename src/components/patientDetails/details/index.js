@@ -1117,7 +1117,6 @@ const enhancer = connect(
     getPatientDosList: detailsActions.dosDeatilsAction,
     getDosPageNumber: detailsActions.dosPageNumberAction,
     getMeatQueryList: detailsActions.meatQueryAction,
-    getMeatQueryList: detailsActions.meatQueryAction,
     getPatientIdData: detailsActions.patientIdDetailsAction,
     getFlagDetailsData: detailsActions.getFlagDetailsAction,
   }

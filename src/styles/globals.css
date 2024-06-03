@@ -14522,29 +14522,32 @@ input[type="number"] {
 
 .antdstyle .ant-tree-node-content-wrapper {
   width: 100% !important;
-  border: 1px  solid #a4caf9 !important;
+  border: 1px solid #a4caf9 !important;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
   height: 53px;
-  display:flex;
+  display: flex;
   align-items: center;
   border-radius: 7px;
   font-size: 15px;
   font-weight: 600;
 }
-.collapsestyle .ant-collapse-item{
+.collapsestyle .ant-collapse-item {
   border-bottom: none !important;
 }
-.tablestyle .table th:first-child{
-  border-radius:0px 0px 0px 0px !important
+.tablestyle .table th:first-child {
+  border-radius: 0px 0px 0px 0px !important;
 }
 .tablestyle .table th:last-child {
-  border-radius:0px 0px 0px 0px !important
+  border-radius: 0px 0px 0px 0px !important;
 }
-.tablestyle .table{
-  height:200px !important;
+.tablestyle .table {
+  height: 200px !important;
 }
-.ant-pagination .ant-pagination-mini  .ant-table-pagination .ant-table-pagination-right{
-  margin:0px 0px !important;
+.ant-pagination
+  .ant-pagination-mini
+  .ant-table-pagination
+  .ant-table-pagination-right {
+  margin: 0px 0px !important;
 }
 .antdstyle .ant-tree .ant-tree-treenode {
   display: flex;
@@ -14557,51 +14560,50 @@ input[type="number"] {
   .ant-select-selector {
   border: 1px solid #d9d9d9;
 }
-.tablehead .table th{
-  padding:0px 0px !important;
+.tablehead .table th {
+  padding: 0px 0px !important;
 }
 .ant-tree-show-line .ant-tree-switcher {
   background: transparent;
   font-size: 20px;
-  display:flex;
+  display: flex;
 }
-.ant-tree-show-line .ant-tree-indent-unit:before{
+.ant-tree-show-line .ant-tree-indent-unit:before {
   border-inline-end: 1px solid black !important;
 }
 .ant-tree .ant-tree-switcher-leaf-line:before {
-   border-inline-end: 1px solid black !important;
+  border-inline-end: 1px solid black !important;
 }
 .ant-tree .ant-tree-switcher-leaf-line:after {
-    border-bottom: 1px solid black !important;  
+  border-bottom: 1px solid black !important;
 }
 
-
 .dosSelect > .ant-select-selector {
-  width: 165px !important;
+  width: 150px !important;
   text-align: center;
 }
 
-.ant-menu-light.ant-menu-inline .ant-menu-sub.ant-menu-inline{
-background-color: white !important;
+.ant-menu-light.ant-menu-inline .ant-menu-sub.ant-menu-inline {
+  background-color: white !important;
 }
-.ant-menu-light .ant-menu-submenu-selected >.ant-menu-submenu-title{
-  color:black !important;
+.ant-menu-light .ant-menu-submenu-selected > .ant-menu-submenu-title {
+  color: black !important;
   background-color: transparent !important;
 }
-.ant-menu-light .ant-menu-item-selected{
-  color:white !important;
+.ant-menu-light .ant-menu-item-selected {
+  color: white !important;
   background-color: #04306f !important;
 }
-.switch .ant-switch-handle:before{
+.switch .ant-switch-handle:before {
   background: black !important;
 }
-.switch .ant-switch-inner{
+.switch .ant-switch-inner {
   background: #d3d3d3 !important;
 }
-.directCodeSwitch .ant-switch-handle:before{
-  background: #008CBA !important;
+.directCodeSwitch .ant-switch-handle:before {
+  background: #008cba !important;
 }
-.directCodeSwitch .ant-switch-inner{
+.directCodeSwitch .ant-switch-inner {
   background: #0dcaf0 !important;
 }
 .ant-upload {

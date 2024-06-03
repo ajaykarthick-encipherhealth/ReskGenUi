@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Tab, Nav } from "react-bootstrap";
-import { useDispatch, useSelector,connect } from "react-redux";
+import { useDispatch, useSelector, connect } from "react-redux";
 import visitStyles from "../../../../styles/visitdata.module.css";
 import VisitData from "./visitData";
 import Combo from "./combo";
@@ -13,19 +13,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faClose } from "@fortawesome/free-solid-svg-icons";
 import styles from "../hcc/styles.module.css";
 import moment from "moment";
-import { DownOutlined } from "@ant-design/icons";
-import Completed from "../../../../../src/images/trackingImages/CompletedTrack.png";
-import Pending from "../../../../../src/images/trackingImages/PendingTrack.png";
-import Hold from "../../../../../src/images/trackingImages/HoldTrack.png";
-import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
 import { actions as detailsActions } from "../../../../stores/patient/details";
 import warning from "../../../../images/svg/warning.svg";
-
 import Image from "next/image";
+import YearAndDosStatus from "../components/yearAndDosStatus";
+import { getStatusIcon, selectTab } from "../../../reuseableFunctions";
 
 const { Option } = Select;
 
-const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,patientDosResult }) => {
+const Hcc = ({
+  year,
+  setIsLoading,
+  patientDetailsResult,
+  getpatientDetailsData,
+  patientDosResult,
+}) => {
   const dispatch = useDispatch();
   const [activeTabHead, setActiveTabHead] = useState(1);
   const [flagTagActive, setFlagTagActive] = useState(false);
@@ -38,98 +40,29 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
   const [dosSummariesList, setDosSummariesList] = useState([]);
   const [selectDosValue, setSelectDosValue] = useState([]);
 
-
-  const handleActionClick = () => { };
-
-  const dropdownMenu = (
-    <Menu>
-      <Menu.Item key="1">
-        <div className="patient-status">
-          <span className={`badge hold-text`}>HOLD</span>
-        </div>
-      </Menu.Item>
-      <Menu.Item
-        key="2"
-        onClick={() => {
-          handleActionClick("PENDING");
-          setMenuIsOpen(false);
-        }}
-      >
-        <div className="patient-status">
-          <span className={`badge processing-text`}>PENDING</span>
-        </div>
-      </Menu.Item>
-      <Menu.Item
-        key="3"
-        onClick={() => {
-          handleActionClick("DECLINE");
-          setMenuIsOpen(false);
-        }}
-      >
-        <div className="patient-status">
-          <span className={`badge failed-text`} style={{ color: "red" }}>
-            DECLINE
-          </span>
-        </div>
-      </Menu.Item>
-
-      <Menu.Item
-        key="4"
-        onClick={() => {
-          handleActionClick("COMPLETE");
-          setMenuIsOpen(false);
-        }}
-      >
-        <div className="patient-status">
-          <span className={`badge processed-text`}>COMPLETED</span>
-        </div>
-      </Menu.Item>
-    </Menu>
-  );
-
-  const selectTab = (num) => {
-    setFlagTagActive(false);
-    setActiveTabHead(num);
-    if (num == 2) {
-      setFlagTagActive(true);
-    }
-    if (num == 4) {
-      setActiveMeatTitle(null);
-    }
-    if (num == 3) {
-      setActiveComboTree(null);
-    }
-    setPopoverVisible(false);
-  };
   useEffect(() => {
     if (patientDosResult?.data?.response) {
       setSelectDosValue([]);
       var dosList = [];
       patientDosResult?.data?.response?.map((res, index) => {
-        if(res){
-        var dosLable = (
-          <>
-            <div className="d-flex">
-              <span className={styles.dosLable}>
-                {moment(res).format("MM-DD-YYYY")}
-              </span>
-              <Image
-                src={
-                  index == 1 || index == 4
-                    ? Completed
-                    : index == 2
-                      ? Hold
-                      : Pending
-                }
-                className={styles.dosStatusIcon}
-              />
-            </div>
-          </>
-        );
-        dosList.push({ value: res, label: dosLable });
-      }
+        if (res) {
+          var dosLable = (
+            <>
+              <div className="d-flex justify-content-between">
+                <span className={styles.dosLable}>
+                  {moment(res.dateOfService).format("MM-DD-YYYY")}
+                </span>
+                {getStatusIcon(res.processedStatus)}
+              </div>
+            </>
+          );
+          dosList.push({ value: res.dateOfService, label: dosLable });
+        }
       });
       setDosSummariesList(dosList);
+      if (patientDetailsResult?.data?.response?.dateOfService) {
+        setSelectDosValue(patientDetailsResult?.data?.response?.dateOfService);
+      }
     }
   }, [patientDosResult?.data?.response]);
 
@@ -143,19 +76,18 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
     setSelectDosValue(value);
     const patientId = localStorage.getItem("patientId");
     if (value) {
-        getpatientDetailsData(
-          patientId,
-          null,
-          moment(value).format("YYYY-MM-DD")
-        )
+      getpatientDetailsData(
+        patientId,
+        null,
+        moment(value).format("YYYY-MM-DD")
+      );
     } else {
-        getpatientDetailsData(
-          patientId,
-          patientDetailsResult?.data?.response?.processedYear,
-          null
-        )
+      getpatientDetailsData(
+        patientId,
+        patientDetailsResult?.data?.response?.processedYear,
+        null
+      );
     }
-
   };
   const handleChangePageNumber = async (value) => {
     // setPopoverVisible(false);
@@ -180,32 +112,34 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
         </div>
         {pageNumberOptions
           ? pageNumberOptions?.map((data) => (
-            <div className={styles.hoverDiv}>
-              <div className={`row ${styles.selectDetailsContainer}`}>
-                <div className="col-xl-3">
-                  <span className={styles.selectHead}>{moment(data.dos).format("MM-DD-YYYY")}</span>
-                </div>
-                <div className={`col-xl-3 ${styles.selectDetailsDiv}`}>
-                  <span
-                    onClick={() => handleChangePageNumber(data.startPageNumber)}
-                    className={styles.selectDetails}
-                  >
-                    Start -  {data?.startPageNumber}
-                  </span>
-
-                </div>
-                <div className={`col-xl-3 ${styles.selectDetailsDiv}`}>
-
-                  <span
-                    onClick={() => handleChangePageNumber(data.endPagNumber)}
-                    className={styles.selectDetails}
-                  >
-                    End - {data?.endPagNumber}
-                  </span>
+              <div className={styles.hoverDiv}>
+                <div className={`row ${styles.selectDetailsContainer}`}>
+                  <div className="col-xl-3">
+                    <span className={styles.selectHead}>
+                      {moment(data.dos).format("MM-DD-YYYY")}
+                    </span>
+                  </div>
+                  <div className={`col-xl-3 ${styles.selectDetailsDiv}`}>
+                    <span
+                      onClick={() =>
+                        handleChangePageNumber(data.startPageNumber)
+                      }
+                      className={styles.selectDetails}
+                    >
+                      Start - {data?.startPageNumber}
+                    </span>
+                  </div>
+                  <div className={`col-xl-3 ${styles.selectDetailsDiv}`}>
+                    <span
+                      onClick={() => handleChangePageNumber(data.endPagNumber)}
+                      className={styles.selectDetails}
+                    >
+                      End - {data?.endPagNumber}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            ))
           : null}
       </div>
     </div>
@@ -224,7 +158,7 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
                       to="#my-posts"
                       eventKey={1}
                       className={visitStyles.navColor}
-                      onClick={() => selectTab(1)}
+                      onClick={() => selectTab(1,setFlagTagActive,setActiveTabHead,setActiveComboTree,setPopoverVisible)}
                     >
                       File
                     </Nav.Link>
@@ -235,7 +169,7 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
                       eventKey={2}
                       className={visitStyles.navColor}
                       activeClassName={visitStyles.activeLink}
-                      onClick={() => selectTab(2)}
+                      onClick={() => selectTab(2,setFlagTagActive,setActiveTabHead,setActiveComboTree,setPopoverVisible)}
                     >
                       Visit Data
                     </Nav.Link>
@@ -245,7 +179,7 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
                       to="#my-posts"
                       eventKey={3}
                       className={visitStyles.navColor}
-                      onClick={() => selectTab(3)}
+                      onClick={() => selectTab(3,setFlagTagActive,setActiveTabHead,setActiveComboTree,setPopoverVisible)}
                     >
                       Combination Codes
                     </Nav.Link>
@@ -255,7 +189,7 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
                       to="#my-posts"
                       eventKey={4}
                       className={visitStyles.navColor}
-                      onClick={() => selectTab(4)}
+                      onClick={() => selectTab(4,setFlagTagActive,setActiveTabHead,setActiveComboTree,setPopoverVisible)}
                     >
                       MEAT Criteria
                     </Nav.Link>
@@ -265,7 +199,7 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
                       to="#my-posts"
                       eventKey={5}
                       className={visitStyles.navColor}
-                      onClick={() => selectTab(5)}
+                      onClick={() => selectTab(5,setFlagTagActive,setActiveTabHead,setActiveComboTree,setPopoverVisible)}
                     >
                       RAF Score
                     </Nav.Link>
@@ -275,7 +209,7 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
                       to="#my-posts"
                       eventKey={6}
                       className={visitStyles.navColor}
-                      onClick={() => selectTab(6)}
+                      onClick={() => selectTab(6,setFlagTagActive,setActiveTabHead,setActiveComboTree,setPopoverVisible)}
                     >
                       Query
                     </Nav.Link>
@@ -296,22 +230,7 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
                     </Select>
                   </Nav.Item>
                   <Nav.Item as="li" className="nav-item mx-2">
-                    <Dropdown
-                      overlay={dropdownMenu}
-                      onVisibleChange={(v) => setMenuIsOpen(v)}
-                      visible={menuIsOpen}
-                      className={`pendingBtn ${visitStyles.completedBtnHcc}`}
-                    >
-                      <Button
-                        type="primary"
-                        className={`pendingBtn ${visitStyles.completedBtnHcc}`}
-                      >
-                        <span>PENDING</span>
-                        <span style={{ marginLeft: "10px" }}>
-                          <DownOutlined />
-                        </span>
-                      </Button>
-                    </Dropdown>
+                    <YearAndDosStatus setIsLoading={setIsLoading} />
                   </Nav.Item>
                   {activeTabHead == 1 && (
                     <Popover
@@ -321,7 +240,12 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
                       trigger={"click"}
                       onOpenChange={() => setPopoverVisible(false)}
                     >
-                      <div className={styles.dosContainer} onClick={() => { setPopoverVisible(true) }}>
+                      <div
+                        className={styles.dosContainer}
+                        onClick={() => {
+                          setPopoverVisible(true);
+                        }}
+                      >
                         <span className={styles.dosPageNumber}>
                           Select Dos Page Number
                         </span>
@@ -338,42 +262,50 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
                   )}
                   {flagTagActive ? (
                     <div>
-                       <div
-            >
-              <Popover
-                content={
-                  <>
-                    <div className={visitStyles.flags}>
-                        <div className={visitStyles.flags}>
-                          <span className={visitStyles.hccFlag}></span>
-                          <span className={visitStyles.flagCodes}>HCC</span>
-                        </div>
-                        <div className={visitStyles.flags}>
-                          <span className={visitStyles.suggestedFlag}></span>
-                          <span className={visitStyles.flagCodes}>
-                            SUGGESTED
-                          </span>
-                        </div>
-                        <div className={visitStyles.flags}>
-                          <span className={visitStyles.deleteFlag}></span>
-                          <span className={visitStyles.flagCodes}>DELETED</span>
-                        </div>
-                        <div className={visitStyles.flags}>
-                          <span className={visitStyles.nonhccFlag}></span>
-                          <span className={visitStyles.flagCodes}>NON HCC</span>
-                        </div>
+                      <div>
+                        <Popover
+                          content={
+                            <>
+                              <div className={visitStyles.flags}>
+                                <div className={visitStyles.flags}>
+                                  <span className={visitStyles.hccFlag}></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    HCC
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span
+                                    className={visitStyles.suggestedFlag}
+                                  ></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    SUGGESTED
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span
+                                    className={visitStyles.deleteFlag}
+                                  ></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    DELETED
+                                  </span>
+                                </div>
+                                <div className={visitStyles.flags}>
+                                  <span
+                                    className={visitStyles.nonhccFlag}
+                                  ></span>
+                                  <span className={visitStyles.flagCodes}>
+                                    NON HCC
+                                  </span>
+                                </div>
+                              </div>
+                            </>
+                          }
+                          trigger={["click"]}
+                          placement="bottom"
+                        >
+                          <Image src={warning} style={{ cursor: "pointer" }} />
+                        </Popover>
                       </div>
-                  </>
-                }
-                trigger={["click"]}
-                placement="bottom"
-              >
-                <Image
-                  src={warning}
-                  style={{ cursor: "pointer" }}
-                />
-              </Popover>
-            </div>
                       {/* <div className={visitStyles.flags}>
                         <div className={visitStyles.flags}>
                           <span className={visitStyles.hccFlag}></span>
@@ -424,7 +356,7 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
                 />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={3}>
-                <Combo activeComboTree={activeComboTree} year={year}/>
+                <Combo activeComboTree={activeComboTree} year={year} />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={4}>
                 <Meat activeMeatTitle={activeMeatTitle} year={year} />
@@ -443,14 +375,13 @@ const Hcc = ({ year, setIsLoading,patientDetailsResult,getpatientDetailsData,pat
   );
 };
 
-
 const enhancer = connect(
   (state) => ({
-    patientDetailsResult :state?.patientDetails?.details?.patientResult,
-    patientDosResult:state?.patientDetails?.details?.dosResult,
+    patientDetailsResult: state?.patientDetails?.details?.patientResult,
+    patientDosResult: state?.patientDetails?.details?.dosResult,
   }),
   {
-    getpatientDetailsData:detailsActions.patientDetailsAction
+    getpatientDetailsData: detailsActions.patientDetailsAction,
   }
 );
 export default enhancer(Hcc);

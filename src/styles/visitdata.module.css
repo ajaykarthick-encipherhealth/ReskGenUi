@@ -1435,6 +1435,7 @@
   border: none !important;
   box-shadow: none !important;
   width: 170px !important;
+  padding: 3px;
   /* height: 35px !important; */
 }
 
@@ -1822,4 +1823,8 @@
   background: #f3f3ff !important;
   position: relative;
   right: 70px;
+}
+.yearactionbtnContainer > button {
+  height: 32px !important;
+  margin-bottom: 5px;
 }
