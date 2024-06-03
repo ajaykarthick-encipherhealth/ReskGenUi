@@ -500,14 +500,14 @@ export const getStatusIcon = (status) => {
       return <div className="patient-status"></div>;
   }
 };
-export const selectTab = (num,setFlagTagActive,setActiveTabHead,setActiveComboTree,setPopoverVisible) => {
+export const selectTab = (num,setFlagTagActive,setActiveTabHead,setActiveComboTree,setPopoverVisible,setActiveMeatTitle) => {
   setFlagTagActive(false);
   setActiveTabHead(num);
   if (num == 2) {
     setFlagTagActive(true);
   }
   if (num == 4) {
-    setActiveMeatTitle(null);
+    setActiveMeatTitle && setActiveMeatTitle(null);
   }
   if (num == 3) {
     setActiveComboTree(null);
