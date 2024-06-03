@@ -25,7 +25,7 @@ const RafScore = ({patientDetailsResult}) => {
     var rafScroeArray = [];
     rafScoreList?.scoreOutputDTOList?.map((res) => {
       res?.dx_hccs.map((res2) => {
-        if (res?.hcc_model.version == "v24_2022" && res2?.dx_name) {
+        if (res?.hcc_model.version == "V24" && res2?.dx_name) {
           rafScroeArray.push({
             version: res.hcc_model.version,
             dx_name: res2.dx_name,
@@ -91,21 +91,21 @@ const RafScore = ({patientDetailsResult}) => {
                           }
                         >
                           <div className="col-xl-3">
-                            {getRafDetails(item.dx_name, "v24_2022")?.map(
+                            {getRafDetails(item.dx_name, "V24")?.map(
                               (item) => (
                                 <div>{item.hcc_name}</div>
                               )
                             )}
                           </div>
                           <div className="col-xl-3">
-                            {getRafDetails(item.dx_name, "v24_2022")?.map(
+                            {getRafDetails(item.dx_name, "V24")?.map(
                               (item) => (
                                 <div>{item.hcc_raf}</div>
                               )
                             )}
                           </div>
                           <div className="col-xl-6  text-center">
-                            {getRafDetails(item.dx_name, "v24_2022")?.map(
+                            {getRafDetails(item.dx_name, "V24")?.map(
                               (item) => (
                                 <div>${item.premium}</div>
                               )
@@ -135,21 +135,21 @@ const RafScore = ({patientDetailsResult}) => {
                           }
                         >
                           <div className="col-xl-3">
-                            {getRafDetails(item.dx_name, "v28_2023")?.map(
+                            {getRafDetails(item.dx_name, "V28")?.map(
                               (item) => (
                                 <div>{item.hcc_name}</div>
                               )
                             )}
                           </div>
                           <div className="col-xl-3">
-                            {getRafDetails(item.dx_name, "v28_2023")?.map(
+                            {getRafDetails(item.dx_name, "V28")?.map(
                               (item) => (
                                 <div>{item.hcc_raf}</div>
                               )
                             )}
                           </div>
                           <div className="col-xl-6 text-center">
-                            {getRafDetails(item.dx_name, "v28_2023")?.map(
+                            {getRafDetails(item.dx_name, "V28")?.map(
                               (item) => (
                                 <div>${item.premium}</div>
                               )
