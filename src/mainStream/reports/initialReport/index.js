@@ -274,7 +274,7 @@ const InitialCard = ({
                           {reportListAll?.response?.data?.map((item, id) => (
                             <ContentGroupCard
                               content={reportListAll?.response?.data}
-                              key={id}
+                              key={item?.id}
                               item={item}
                               flag={item?.flag}
                               page={page}

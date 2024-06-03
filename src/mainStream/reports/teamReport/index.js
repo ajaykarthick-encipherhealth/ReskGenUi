@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import styles from "../report.module.css";
 import { Row, Empty, notification } from "antd";
-
 import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
 import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
 import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
@@ -15,7 +14,6 @@ import notAudited from "../../.../../../images/trackingImages/NotAuditedTrack.pn
 import auditDeclined from "../../.../../../images/trackingImages/AuditDeclined.png";
 import { Paginator } from "primereact/paginator";
 import TableStyle from "../../../components/table/table.module.css";
-
 import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
 import { selectedRow } from "../../../store/actions/ReportActions";
 import { useDispatch, connect } from "react-redux";

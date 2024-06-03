@@ -27,7 +27,7 @@ const Flags = ({ reportListAll, styles }) => {
                   <path
                     d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
                     stroke="#000"
-                    stroke-width="10"
+                    strokeWidth="10"
                   />
                 </svg>
                 <span

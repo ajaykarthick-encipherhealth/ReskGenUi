@@ -405,260 +405,257 @@ const Reports = ({
 
                 <div className="tbl-caption  align-items-center">
                   <div className="tbl-caption  align-items-center">
-                    <div className={`row filter-contain mt-4 mb-0`}>
-                      <div className="col-xl-2">
-                        <div className="d-flex w-100">
-                          <label className="labelStyle d-flex m-auto">
-                            {" "}
-                            Search
-                          </label>
-                          <div className="form-group has-search2 w-100">
-                            <FontAwesomeIcon
-                              className="fa fa-search form-control-feedback"
-                              icon={faSearch}
-                            />
-
-                            <InputText
-                              name="initialSearch"
-                              type="text"
-                              onChange={(e) => filterChangePatientId(e)}
-                              className="form-control new-form-control reportInput"
-                              placeholder="Search"
-                              maxLength={25}
-                              value={search ? search?.searchVal : ""}
-                              onKeyDown={(e) => {
-                                // Prevent input of backslash ("\")
-                                if (e.key === "\\") {
-                                  e.preventDefault();
-                                }
-                              }}
-                            />
-
-                            {/* )} */}
-                          </div>
-                        </div>
-                      </div>
-
-                      {!activeTab || activeTab === "Reviewer" ? (
-                        <div className="col-xl-2">
-                          <div className="d-flex w-100">
-                            <label className="labelStyle d-flex m-auto">
-                              {" "}
-                              Status
-                            </label>
-                            <div className="form-group has-search w-100">
-                              <Select
-                                onChange={(selectedOption) => {
-                                  dosOnChange(
-                                    selectedOption,
-                                    "reviewer Status"
-                                  );
-                                }}
-                                options={statusOptions}
-                                className={`custom-react-select`}
-                                isSearchable={false}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      ) : null}
-
-                      <div className="col-xl-2 d-flex">
-                        <div className="d-flex w-100">
-                          <label className="labelStyle d-flex m-auto">
-                            {" "}
-                            Date
-                          </label>
-                          <div>
-                            <RangePicker
-                              style={{
-                                borderRadius: "0 5px 5px 0",
-                                width: "100%",
-                              }}
-                              value={
-                                selectedDates
-                                  ? selectedDates[activeTab]
-                                  : undefined
-                              }
-                              onChange={(date, dateString) =>
-                                handleCoderPicker(date, dateString, activeTab)
-                              }
-                              disabledDate={(current) =>
-                                disableFutureDate(current)
-                              }
-                              className="newReportPicker"
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      {selectedData?.length > 0 &&
-                        selectedData?.map((info) => (
-                          <div className="col-xl-2" key={info.id}>
+                    <div className={`row filter-contain mt-4 mb-0 d-flex`}>
+                      <div className="col-xl-10 d-flex">
+                        <div className={`w-100 row mb-0 d-flex`}>
+                          <div className="col-xl-2">
                             <div className="d-flex w-100">
-                              {info?.name && (
-                                <label className="labelStyle d-flex m-auto">
-                                  {" "}
-                                  {info.name}
-                                </label>
-                              )}
+                              <label className="labelStyle d-flex m-auto p-2">
+                                {" "}
+                                Search
+                              </label>
                               <div className="form-group has-search2 w-100">
-                                {info?.isSearch && (
-                                  <FontAwesomeIcon
-                                    className="fa fa-search form-control-feedback"
-                                    icon={faSearch}
-                                  />
-                                )}
-                                {info?.isSelect && (
-                                  <Select
-                                    onChange={(selectedOption) => {
-                                      dosOnChange(selectedOption, info?.name);
-                                    }}
-                                    options={
-                                      info?.name === "User"
-                                        ? optionsUser
-                                        : info?.options
-                                    }
-                                    className={`custom-react-select`}
-                                    isSearchable={false}
-                                    value={selectedOptions[info?.name]}
-                                  />
-                                )}
-                                {info?.isRangePikcer && (
-                                  <RangePicker
-                                    style={{
-                                      borderRadius: "0 5px 5px 0",
-                                      width: "100%",
-                                    }}
-                                    value={
-                                      selectedDates
-                                        ? selectedDates[info?.name]
-                                        : undefined
-                                    }
-                                    onChange={(date, dateString) =>
-                                      handleCoderPicker(
-                                        date,
-                                        dateString,
-                                        info?.name
-                                      )
-                                    }
-                                    disabledDate={(current) =>
-                                      disableFutureDate(current)
-                                    }
-                                    className="newReportPicker"
-                                  />
-                                )}
+                                <FontAwesomeIcon
+                                  className="fa fa-search form-control-feedback"
+                                  icon={faSearch}
+                                />
 
-                                {info?.isSearch && (
-                                  <InputText
-                                    name={info?.name}
-                                    type="text"
-                                    onChange={(e) => filterChangePatientId(e)}
-                                    className="form-control new-form-control reportInput"
-                                    placeholder="Search"
-                                    maxLength={25}
-                                    value={search?.searchVal}
-                                    onKeyDown={(e) => {
-                                      // Prevent input of backslash ("\")
-                                      if (e.key === "\\") {
-                                        e.preventDefault();
-                                      }
-                                    }}
-                                  />
-                                )}
+                                <InputText
+                                  name="initialSearch"
+                                  type="text"
+                                  onChange={(e) => filterChangePatientId(e)}
+                                  className="form-control new-form-control reportInput"
+                                  placeholder="Search"
+                                  maxLength={25}
+                                  value={search ? search?.searchVal : ""}
+                                  onKeyDown={(e) => {
+                                    // Prevent input of backslash ("\")
+                                    if (e.key === "\\") {
+                                      e.preventDefault();
+                                    }
+                                  }}
+                                />
+
                                 {/* )} */}
                               </div>
                             </div>
                           </div>
-                        ))}
+
+                          {!activeTab || activeTab === "Reviewer" ? (
+                            <div className="col-xl-2">
+                              <div className="d-flex w-100">
+                                <label className="labelStyle d-flex m-auto  p-2">
+                                  {" "}
+                                  Status
+                                </label>
+                                <div className="form-group has-search w-100">
+                                  <Select
+                                    onChange={(selectedOption) => {
+                                      dosOnChange(
+                                        selectedOption,
+                                        "reviewer Status"
+                                      );
+                                    }}
+                                    options={statusOptions}
+                                    className={`custom-react-select`}
+                                    isSearchable={false}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          ) : null}
+
+                          <div className="col-xl-2 d-flex">
+                            <div className="d-flex w-100">
+                              <label className="labelStyle d-flex m-auto p-2">
+                                {" "}
+                                Date
+                              </label>
+                              <div>
+                                <RangePicker
+                                  style={{
+                                    borderRadius: "0 5px 5px 0",
+                                    width: "100%",
+                                  }}
+                                  value={
+                                    selectedDates
+                                      ? selectedDates[activeTab]
+                                      : undefined
+                                  }
+                                  onChange={(date, dateString) =>
+                                    handleCoderPicker(
+                                      date,
+                                      dateString,
+                                      activeTab
+                                    )
+                                  }
+                                  disabledDate={(current) =>
+                                    disableFutureDate(current)
+                                  }
+                                  className="newReportPicker"
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          {selectedData?.length > 0 &&
+                            selectedData?.map((info) => (
+                              <div className="col-xl-2" key={info.id}>
+                                <div className="d-flex w-100">
+                                  {info?.name && (
+                                    <label className="labelStyle d-flex m-auto p-2">
+                                      {" "}
+                                      {info.name}
+                                    </label>
+                                  )}
+                                  <div className="form-group has-search2 w-100">
+                                    {info?.isSearch && (
+                                      <FontAwesomeIcon
+                                        className="fa fa-search form-control-feedback"
+                                        icon={faSearch}
+                                      />
+                                    )}
+                                    {info?.isSelect && (
+                                      <Select
+                                        onChange={(selectedOption) => {
+                                          dosOnChange(
+                                            selectedOption,
+                                            info?.name
+                                          );
+                                        }}
+                                        options={
+                                          info?.name === "User"
+                                            ? optionsUser
+                                            : info?.options
+                                        }
+                                        className={`custom-react-select`}
+                                        isSearchable={false}
+                                        value={selectedOptions[info?.name]}
+                                      />
+                                    )}
+                                    {info?.isRangePikcer && (
+                                      <RangePicker
+                                        style={{
+                                          borderRadius: "0 5px 5px 0",
+                                          width: "100%",
+                                        }}
+                                        value={
+                                          selectedDates
+                                            ? selectedDates[info?.name]
+                                            : undefined
+                                        }
+                                        onChange={(date, dateString) =>
+                                          handleCoderPicker(
+                                            date,
+                                            dateString,
+                                            info?.name
+                                          )
+                                        }
+                                        disabledDate={(current) =>
+                                          disableFutureDate(current)
+                                        }
+                                        className="newReportPicker"
+                                      />
+                                    )}
+
+                                    {info?.isSearch && (
+                                      <InputText
+                                        name={info?.name}
+                                        type="text"
+                                        onChange={(e) =>
+                                          filterChangePatientId(e)
+                                        }
+                                        className="form-control new-form-control reportInput"
+                                        placeholder="Search"
+                                        maxLength={25}
+                                        value={search?.searchVal}
+                                        onKeyDown={(e) => {
+                                          // Prevent input of backslash ("\")
+                                          if (e.key === "\\") {
+                                            e.preventDefault();
+                                          }
+                                        }}
+                                      />
+                                    )}
+                                    {/* )} */}
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
 
                       <div
-                        className={`col-xl-${
-                          selectedData?.length === 0 ||
-                          activeTab === "Audit" ||
-                          activeTab === "Team"
-                            ? "8"
-                            : activeTab === "Reviewer"
-                            ? "6"
-                            : "2"
-                        } d-flex justify-content-${
-                          (activeTab === "Audit" ||
-                            activeTab === "Team" ||
-                            activeTab === "Reviewer") &&
-                          "end"
-                        }`}
+                        className={`
+                      col-xl-2
+                        d-flex justify-content-end`}
                       >
-                        {activeTab === "Admin" && (
-                          <div
-                            className={`col-xl-${
-                              selectedData?.length === 0 ? "10" : "0"
-                            } mx-${
-                              selectedData?.length === 0 ? "4" : "0"
-                            } py-2 mx-2`}
-                          >
-                            <MoreFilter
-                              checkedList={checkedList}
-                              selectAll={selectAllCheckBoxes}
-                              setSelectAll={setSelectAllCheckBoxes}
-                              selectedData={selectedData}
-                              setSelectedData={setSelectedData}
-                            />
-                          </div>
-                        )}
-                      </div>
-                      {ReportPatientDetails?.response?.response?.data
-                        ?.length === 0 ? null : (
-                        <div
-                          className="d-flex justify-content-end "
-                          style={{ marginBottom: "-40px" }}
-                        >
-                          {!activeTab ||
+                        <div>
+                          {activeTab === "Admin" && (
+                            <div
+                              className={`col-xl-${
+                                selectedData?.length === 0 ? "10" : "0"
+                              }py-2`}
+                            >
+                              <MoreFilter
+                                checkedList={checkedList}
+                                selectAll={selectAllCheckBoxes}
+                                setSelectAll={setSelectAllCheckBoxes}
+                                selectedData={selectedData}
+                                setSelectedData={setSelectedData}
+                              />
+                            </div>
+                          )}
+                        </div>
+
+                        {(!activeTab ||
                           activeTab === "Admin" ||
                           activeTab === "Audit" ||
                           activeTab === "Team" ||
-                          activeTab === "Reviewer" ? (
-                            <Tooltip
-                              title={
-                                rowsLength?.length === 0
-                                  ? "Select report to export"
-                                  : ""
+                          activeTab === "Reviewer") && (
+                          <Tooltip
+                            title={
+                              rowsLength?.length === 0
+                                ? "Select report to export"
+                                : ""
+                            }
+                          >
+                            <button
+                              onClick={() => {
+                                setIsModalVisible(true);
+                                dispatch(selectedReport(null));
+                              }}
+                              className={`${
+                                rowsLength?.length > 0 ||
+                                rowsLength?.data?.length > 0
+                                  ? styles.export
+                                  : styles.exportDisable
+                              } `}
+                              disabled={
+                                rowsLength?.data?.length > 0 ? false : true
                               }
-                            >
-                              <button
-                                onClick={() => {
-                                  setIsModalVisible(true);
-                                  dispatch(selectedReport(null));
-                                }}
-                                className={`${
+                              style={{
+                                color:
                                   rowsLength?.length > 0 ||
                                   rowsLength?.data?.length > 0
-                                    ? styles.export
-                                    : styles.exportDisable
-                                } `}
-                                disabled={
-                                  rowsLength?.data?.length > 0 ? false : true
-                                }
-                                style={{
-                                  color:
-                                    rowsLength?.length > 0 ||
-                                    rowsLength?.data?.length > 0
-                                      ? "#04306f"
-                                      : "inherit",
-                                  padding: "10px",
-                                }}
-                              >
-                                {rowsLength?.length > 0 ||
-                                rowsLength?.data?.length > 0 ? (
-                                  <ExportImg />
-                                ) : (
-                                  SVGICON.exportDisable
-                                )}
-                                Export
-                              </button>
-                            </Tooltip>
-                          ) : null}
-                        </div>
-                      )}
+                                    ? "#04306f"
+                                    : "inherit",
+                                display: "flex",
+                                padding: "10px",
+                                margin: "-10px 0 0 10px",
+                              }}
+                            >
+                              {rowsLength?.length > 0 ||
+                              rowsLength?.data?.length > 0 ? (
+                                <ExportImg />
+                              ) : (
+                                SVGICON.exportDisable
+                              )}
+                              <span style={{ marginTop: "-3px" }}>Export</span>
+                            </button>
+                          </Tooltip>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
