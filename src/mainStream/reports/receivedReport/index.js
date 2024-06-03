@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styles from "../../../resusablereport/reports/report.module.css";
+import styles from "../report.module.css";
 import { useRouter } from "next/router";
 import ReactECharts from "echarts-for-react";
 import SpinnerDots from "../../../components/spinner";
@@ -34,8 +34,6 @@ const ReceivedReport = ({
   const dispatch = useDispatch();
   const [reportActiveTab, setReportActiveTab] = useState("Supervisor");
   const [selectedCardIndex, setSelectedCardIndex] = useState(0);
-  const [openEdit, setOpenEdit] = useState(false);
-  const [selectedRows, setSelectedRows] = useState([]);
 
   useEffect(() => {
     if (details?.reportStatusDTOList && details?.reportStatusDTOList > 0) {
@@ -111,149 +109,144 @@ const ReceivedReport = ({
                   <SpinnerDots />
                 ) : (
                   <div className=" col-xl-12 d-flex">
-                    <>
-                      <div className="col-xl-5">
-                        <div>
-                          {details?.reportStatusDTOList.content.length > 0 ? (
-                            details?.reportStatusDTOList.content.map(
-                              (item, index) => (
-                                <GroupCard
-                                  key={index}
-                                  data={details?.reportStatusDTOList.content}
-                                  selectedCardIndex={selectedCardIndex}
-                                  handleReceiverReport={handleReceiverReport}
-                                  setSelectedRows={setSelectedRows}
-                                  dispatch={dispatch}
-                                  selectedReport={selectedReport}
-                                  setOpenEdit={setOpenEdit}
-                                  styles={styles}
-                                  item={item}
-                                  index={index}
-                                />
-                              )
+                    <div className="col-xl-5">
+                      <div style={{ height: "100%" }}>
+                        {details?.reportStatusDTOList.content.length > 0 ? (
+                          details?.reportStatusDTOList.content.map(
+                            (item, index) => (
+                              <GroupCard
+                                key={item?.id}
+                                data={details?.reportStatusDTOList.content}
+                                handleReceiverReport={handleReceiverReport}
+                                dispatch={dispatch}
+                                selectedReport={selectedReport}
+                                styles={styles}
+                                item={item}
+                                index={index}
+                              />
                             )
-                          ) : (
-                            <div className={styles.card}>
-                              <Empty />
-                            </div>
-                          )}
-                        </div>
+                          )
+                        ) : (
+                          <div className={`col-xl-12 ${styles.emptyCard}`}>
+                            <Empty />
+                          </div>
+                        )}
                       </div>
-                      <div className="col-xl-7" style={{ marginLeft: "10px" }}>
-                        <div className={styles.cardContainer}>
-                          <div className={styles.card2}>
-                            <div className={styles.summaryText}>Summary</div>
-                            <div className="col-xl-12  d-flex mt-4">
-                              <OverallReportsSection
-                                totalReports={
-                                  details?.reportStatusDTOList?.totalElements
-                                }
-                                styles={styles}
-                              />
-                              <OverallUsersSection
-                                totalUsers={details?.overAllUsersCount}
-                                styles={styles}
-                              />
+                    </div>
+                    <div className="col-xl-7" style={{ marginLeft: "10px" }}>
+                      <div className={styles.cardContainer}>
+                        <div className={styles.card2}>
+                          <div className={styles.summaryText}>Summary</div>
+                          <div className="col-xl-12  d-flex mt-4">
+                            <OverallReportsSection
+                              totalReports={
+                                details?.reportStatusDTOList?.totalElements
+                              }
+                              styles={styles}
+                            />
+                            <OverallUsersSection
+                              totalUsers={details?.overAllUsersCount}
+                              styles={styles}
+                            />
 
-                              <AccessCountSection
-                                data={details?.reportCountResponseByAccessDTO}
-                                styles={styles}
-                              />
-                            </div>
+                            <AccessCountSection
+                              data={details?.reportCountResponseByAccessDTO}
+                              styles={styles}
+                            />
+                          </div>
 
-                            <div
-                              className={styles.summaryText}
-                              style={{ marginTop: "10px" }}
-                            >
-                              Overall Chart
-                            </div>
+                          <div
+                            className={styles.summaryText}
+                            style={{ marginTop: "10px" }}
+                          >
+                            Overall Chart
+                          </div>
 
-                            <div
-                              className={` ${styles.card3} justify-content-between p-2 m-2`}
-                            >
-                              <div>
-                                <div style={{ width: "100%" }}>
-                                  <div
-                                    className={styles.summaryText}
-                                    style={{ paddingLeft: "10px" }}
-                                  >
-                                    Report Type
-                                  </div>
-                                  <div className="row">
-                                    <div className="col-md-6">
-                                      <ReactECharts
-                                        option={options}
-                                        style={{ height: "230px" }}
-                                      />
-                                    </div>
-                                    <div className="col-md-6">
-                                      <CustomTable
-                                        data={countValues}
-                                        head1={"Type"}
-                                        head2={"Count"}
-                                        color={color}
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div
-                              className={` ${styles.card4} justify-content-between p-2 m-2`}
-                            >
-                              <div className="d-flex justify-content-between mb-5">
+                          <div
+                            className={` ${styles.card3} justify-content-between p-2 m-2`}
+                          >
+                            <div>
+                              <div style={{ width: "100%" }}>
                                 <div
                                   className={styles.summaryText}
                                   style={{ paddingLeft: "10px" }}
                                 >
-                                  Users
+                                  Report Type
                                 </div>
-
-                                <TabSwitcher
-                                  activeTab={reportActiveTab}
-                                  handleTabs={handleTabs}
-                                  styles={styles}
-                                />
-                              </div>
-                              <div style={{ width: "100%" }}>
                                 <div className="row">
                                   <div className="col-md-6">
                                     <ReactECharts
-                                      option={selectedChartOption}
+                                      option={options}
                                       style={{ height: "230px" }}
                                     />
                                   </div>
                                   <div className="col-md-6">
-                                    {reportActiveTab === "Supervisor" ? (
-                                      <div
-                                        style={{
-                                          height: "200px",
-                                          overflow: "scroll",
-                                        }}
-                                      >
-                                        <CustomTable
-                                          data={data}
-                                          styles={styles}
-                                          head1={"Supervisor"}
-                                          head2={"Count"}
-                                        />
-                                      </div>
-                                    ) : (
+                                    <CustomTable
+                                      data={countValues}
+                                      head1={"Type"}
+                                      head2={"Count"}
+                                      color={color}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            className={` ${styles.card4} justify-content-between p-2 m-2`}
+                          >
+                            <div className="d-flex justify-content-between mb-5">
+                              <div
+                                className={styles.summaryText}
+                                style={{ paddingLeft: "10px" }}
+                              >
+                                Users
+                              </div>
+
+                              <TabSwitcher
+                                activeTab={reportActiveTab}
+                                handleTabs={handleTabs}
+                                styles={styles}
+                              />
+                            </div>
+                            <div style={{ width: "100%" }}>
+                              <div className="row">
+                                <div className="col-md-6">
+                                  <ReactECharts
+                                    option={selectedChartOption}
+                                    style={{ height: "230px" }}
+                                  />
+                                </div>
+                                <div className="col-md-6">
+                                  {reportActiveTab === "Supervisor" ? (
+                                    <div
+                                      style={{
+                                        height: "200px",
+                                        overflow: "scroll",
+                                      }}
+                                    >
                                       <CustomTable
-                                        data={datas}
+                                        data={data}
                                         styles={styles}
-                                        head1={"Admin"}
+                                        head1={"Supervisor"}
                                         head2={"Count"}
                                       />
-                                    )}
-                                  </div>
+                                    </div>
+                                  ) : (
+                                    <CustomTable
+                                      data={datas}
+                                      styles={styles}
+                                      head1={"Admin"}
+                                      head2={"Count"}
+                                    />
+                                  )}
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </>
+                    </div>
                   </div>
                 )}
               </div>

@@ -3,14 +3,7 @@ import { Empty, Popover, Avatar } from "antd";
 import dayjs from "dayjs";
 import { renderUserPrfoileAvatar } from "../../../../components/headerFilters/functions";
 
-const GroupCard = ({
-  data,
-  selectedCardIndex,
-  handleReceiverReport,
-  styles,
-  item,
-  index,
-}) => {
+const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
   const handleDateFormat = (date) => {
     return dayjs(date).format("MM-DD-YYYY");
   };
@@ -27,15 +20,14 @@ const GroupCard = ({
         return null;
     }
   };
+
   return (
     <div className={styles.cardContainer}>
       {data?.length > 0 ? (
         <div
           key={index}
           style={{ marginBottom: "10px" }}
-          className={`${styles.card} ${
-            index === selectedCardIndex ? styles.selectedCard : ""
-          }`}
+          className={`${styles.card} ${styles.selectedCard}`}
           onClick={() => handleReceiverReport(item)}
         >
           <div className={styles.contentGroup}>

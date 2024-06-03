@@ -1,22 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import styles from "../report.module.css";
-import {
-  Checkbox,
-  Popover,
-  Col,
-  Row,
-  Tooltip,
-  Empty,
-  notification,
-} from "antd";
+import { Row, Empty, notification } from "antd";
 
 import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
 import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
 import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
-import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
-import AuditedDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
-
 import declineIcon from "../../.../../../images/trackingImages/DeclineTrack.png";
 import reAuditIcon from "../../.../../../images/trackingImages/AuditPending.png";
 import auditHoldIcon from "../../.../../../images/trackingImages/AuditHoldTrack.png";
@@ -27,15 +16,9 @@ import auditDeclined from "../../.../../../images/trackingImages/AuditDeclined.p
 import { Paginator } from "primereact/paginator";
 import TableStyle from "../../../components/table/table.module.css";
 
-import {
-  renderUserPrfoileAvatar,
-  dateFormate,
-} from "../../../components/headerFilters/functions";
+import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
 import { selectedRow } from "../../../store/actions/ReportActions";
-import { useDispatch } from "react-redux";
-import dayjs from "dayjs";
-import { getFlag, getFlags } from "../../../components/reuseableFunctions";
-import { connect } from "react-redux";
+import { useDispatch, connect } from "react-redux";
 import SpinnerDots from "../../../components/spinner";
 import ContentGroupCard from "../../../mainStream/components/cards/contentGroupCard";
 import SubCard from "../../../mainStream/components/cards/subcard";
@@ -244,7 +227,7 @@ const TeamReport = ({
     <>
       <div>
         <div className="content-body">
-          {!reportListAll?.response?.response?.data ? (
+          {loader ? (
             <SpinnerDots />
           ) : (
             <div className={`container-fluid py-4 px-2`}>
@@ -277,66 +260,57 @@ const TeamReport = ({
               </div>
               <div className="row">
                 <div>
-                  <div className=" col-xl-12 d-flex">
+                  <div className=" col-xl-12 d-flex" style={{ height: "100%" }}>
                     {reportListAll?.response?.response?.data?.length === 0 ? (
-                      <div
-                        className={`col-xl-6 ${styles.card}`}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
+                      <div className={`col-xl-6 ${styles.emptyCard}`}>
                         <Empty />
                       </div>
                     ) : (
-                      <>
-                        <div className="col-xl-6">
-                          <div className={styles.cardContainer}>
-                            {reportListAll?.response?.response?.data?.map(
-                              (item, id) => (
-                                <ContentGroupCard
-                                  content={reportListAll?.response?.data}
-                                  key={id}
-                                  item={item}
-                                  flag={item?.flag}
-                                  page={page}
-                                  handleRowCheckboxChange={
-                                    handleRowCheckboxChange
-                                  }
-                                  selectedRows={selectedRows}
-                                  handleTableRowClick={handleTableRowClick}
-                                  auditstatusBodyTemplate={auditstatusBodyTemplate(
-                                    item
-                                  )}
-                                  processstatusBodyTemplate={processstatusBodyTemplate(
-                                    item
-                                  )}
-                                  rafSum={item.rafSum}
-                                  patientName={item.patientName}
-                                  processedDate={item?.processedDate}
-                                  patientId={item?.patientId}
-                                  validDiseaseCount={item?.validDiseaseCount}
-                                  auditedByFirstName={item?.auditedByFirstName}
-                                  auditedByLastName={item?.auditedByLastName}
-                                  auditedByProfileImage={
-                                    item?.auditedByProfileImage
-                                  }
-                                  patientAllocatedFirstName={
-                                    item?.patientAllocatedFirstName
-                                  }
-                                  patientAllocatedLastName={
-                                    item?.patientAllocatedLastName
-                                  }
-                                  patientAllocatedProfileImage={
-                                    item?.patientAllocatedProfileImage
-                                  }
-                                />
-                              )
-                            )}
-                          </div>
+                      <div className="col-xl-6">
+                        <div className={styles.cardContainer}>
+                          {reportListAll?.response?.response?.data?.map(
+                            (item, id) => (
+                              <ContentGroupCard
+                                content={reportListAll?.response?.data}
+                                key={id}
+                                item={item}
+                                flag={item?.flag}
+                                page={page}
+                                handleRowCheckboxChange={
+                                  handleRowCheckboxChange
+                                }
+                                selectedRows={selectedRows}
+                                handleTableRowClick={handleTableRowClick}
+                                auditstatusBodyTemplate={auditstatusBodyTemplate(
+                                  item
+                                )}
+                                processstatusBodyTemplate={processstatusBodyTemplate(
+                                  item
+                                )}
+                                rafSum={item.rafSum}
+                                patientName={item.patientName}
+                                processedDate={item?.processedDate}
+                                patientId={item?.patientId}
+                                validDiseaseCount={item?.validDiseaseCount}
+                                auditedByFirstName={item?.auditedByFirstName}
+                                auditedByLastName={item?.auditedByLastName}
+                                auditedByProfileImage={
+                                  item?.auditedByProfileImage
+                                }
+                                patientAllocatedFirstName={
+                                  item?.patientAllocatedFirstName
+                                }
+                                patientAllocatedLastName={
+                                  item?.patientAllocatedLastName
+                                }
+                                patientAllocatedProfileImage={
+                                  item?.patientAllocatedProfileImage
+                                }
+                              />
+                            )
+                          )}
                         </div>
-                      </>
+                      </div>
                     )}
 
                     <div className={`col-xl-6 ${styles.cardSeperation}`}>
@@ -359,6 +333,7 @@ const TeamReport = ({
                             <Row className={styles.carddiv}>
                               {card1Data?.map((data) => (
                                 <MiniCards
+                                  key={data?.id}
                                   backgroundColor={data.bg}
                                   icon={data?.icon}
                                   title={data.title}

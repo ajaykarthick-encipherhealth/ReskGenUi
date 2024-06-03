@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
-import styles from "../../../resusablereport/reports/report.module.css";
-import { Row, Empty, notification } from "antd";
+import styles from "../report.module.css";
+import { Empty, notification } from "antd";
 import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
 import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
 import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
@@ -15,8 +15,7 @@ import auditDeclined from "../../.../../../images/trackingImages/AuditDeclined.p
 import TableStyle from "../../../components/table/table.module.css";
 import { renderUserPrfoileAvatar } from "../../../components/headerFilters/functions";
 import { selectedRow } from "../../../store/actions/ReportActions";
-import { useDispatch } from "react-redux";
-import { connect } from "react-redux";
+import { useDispatch, connect } from "react-redux";
 import SpinnerDots from "../../../components/spinner";
 import ContentGroupCard from "../../../mainStream/components/cards/contentGroupCard";
 import AllocationCount from "../../../mainStream/components/allocationCount";
@@ -40,7 +39,6 @@ const InitialCard = ({
   setSelectAll,
   reportListAll,
   page,
-  getFlagsData,
   loader,
 }) => {
   const dispatch = useDispatch();
@@ -271,51 +269,47 @@ const InitialCard = ({
                         <Empty />
                       </div>
                     ) : (
-                      <>
-                        <div className="col-xl-6">
-                          <div className={styles.cardContainer}>
-                            {reportListAll?.response?.data?.map((item, id) => (
-                              <ContentGroupCard
-                                content={reportListAll?.response?.data}
-                                key={id}
-                                item={item}
-                                flag={item?.flag}
-                                page={page}
-                                handleRowCheckboxChange={
-                                  handleRowCheckboxChange
-                                }
-                                selectedRows={selectedRows}
-                                handleTableRowClick={handleTableRowClick}
-                                auditstatusBodyTemplate={auditstatusBodyTemplate(
-                                  item
-                                )}
-                                processstatusBodyTemplate={processstatusBodyTemplate(
-                                  item
-                                )}
-                                rafSum={item.rafSum}
-                                patientName={item.patientName}
-                                processedDate={item?.processedDate}
-                                patientId={item?.patientId}
-                                validDiseaseCount={item?.validDiseaseCount}
-                                auditedByFirstName={item?.auditedByFirstName}
-                                auditedByLastName={item?.auditedByLastName}
-                                auditedByProfileImage={
-                                  item?.auditedByProfileImage
-                                }
-                                patientAllocatedFirstName={
-                                  item?.patientAllocatedFirstName
-                                }
-                                patientAllocatedLastName={
-                                  item?.patientAllocatedLastName
-                                }
-                                patientAllocatedProfileImage={
-                                  item?.patientAllocatedProfileImage
-                                }
-                              />
-                            ))}
-                          </div>
+                      <div className="col-xl-6">
+                        <div className={styles.cardContainer}>
+                          {reportListAll?.response?.data?.map((item, id) => (
+                            <ContentGroupCard
+                              content={reportListAll?.response?.data}
+                              key={id}
+                              item={item}
+                              flag={item?.flag}
+                              page={page}
+                              handleRowCheckboxChange={handleRowCheckboxChange}
+                              selectedRows={selectedRows}
+                              handleTableRowClick={handleTableRowClick}
+                              auditstatusBodyTemplate={auditstatusBodyTemplate(
+                                item
+                              )}
+                              processstatusBodyTemplate={processstatusBodyTemplate(
+                                item
+                              )}
+                              rafSum={item.rafSum}
+                              patientName={item.patientName}
+                              processedDate={item?.processedDate}
+                              patientId={item?.patientId}
+                              validDiseaseCount={item?.validDiseaseCount}
+                              auditedByFirstName={item?.auditedByFirstName}
+                              auditedByLastName={item?.auditedByLastName}
+                              auditedByProfileImage={
+                                item?.auditedByProfileImage
+                              }
+                              patientAllocatedFirstName={
+                                item?.patientAllocatedFirstName
+                              }
+                              patientAllocatedLastName={
+                                item?.patientAllocatedLastName
+                              }
+                              patientAllocatedProfileImage={
+                                item?.patientAllocatedProfileImage
+                              }
+                            />
+                          ))}
                         </div>
-                      </>
+                      </div>
                     )}
 
                     <div className={`col-xl-6 ${styles.cardSeperation}`}>
@@ -325,7 +319,7 @@ const InitialCard = ({
                           <div className="col-xl-12 d-flex mt-0">
                             {subCardData.map((card, index) => (
                               <SubCard
-                                key={index}
+                                key={card?.id}
                                 title={card.title}
                                 value={card.value}
                               />
@@ -341,6 +335,7 @@ const InitialCard = ({
                             <div className="row g-3">
                               {card1Data?.map((data) => (
                                 <MiniCards
+                                  key={data?.id}
                                   backgroundColor={data.bg}
                                   icon={data?.icon}
                                   title={data.title}
@@ -357,9 +352,9 @@ const InitialCard = ({
                             />
                             {allocationCountData.map((item, index) => (
                               <AllocationCount
-                                key={index}
-                                title={item.title}
-                                allocationCount={item.allocationCount}
+                                key={item?.id}
+                                title={item?.title}
+                                allocationCount={item?.allocationCount}
                                 renderUserPrfoileAvatar={
                                   renderUserPrfoileAvatar
                                 }
