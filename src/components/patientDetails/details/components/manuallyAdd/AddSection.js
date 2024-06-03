@@ -2,14 +2,19 @@ import { Col, DatePicker, Form, Input, Row, Select } from "antd";
 import React from "react";
 import RegularButton from "../../../../button";
 
-const AddSection = ({ handleForm, handleSelectChnage, handleDateRange,setMeatDisplay }) => {
+const AddSection = ({
+  handleForm,
+  handleSelectChnage,
+  handleDateRange,
+  setMeatDisplay,
+}) => {
   const [form] = Form.useForm();
-  const handleFinish=(value)=>{
-    handleForm(value, "addSection")
-    setMeatDisplay(true)
-  }
+  const handleFinish = (value) => {
+    handleForm(value, "addSection");
+    setMeatDisplay(true);
+  };
   return (
-    <Form form={form} onFinish={(val) => handleForm(val, "addSection")}>
+    <Form form={form} onFinish={handleFinish}>
       <Row gutter={24}>
         <Col span={12}>
           <Form.Item name="section" rules={[(require = true)]}>
@@ -30,8 +35,6 @@ const AddSection = ({ handleForm, handleSelectChnage, handleDateRange,setMeatDis
             />
           </Form.Item>
         </Col>
-      </Row>
-      <Row gutter={24}>
         <Col span={12}>
           <Form.Item name="reference" rules={[(require = true)]}>
             <label htmlFor="">Referance</label>

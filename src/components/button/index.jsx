@@ -2,6 +2,7 @@ import React from "react";
 import Style from "./style.module.css";
 
 const RegularButton = ({ type, name, onClick, width, method,loading, disabled,htmlType }) => {
+  console.log(htmlType)
   return (
     <button
       className={`btn mx-1 ${
@@ -12,7 +13,7 @@ const RegularButton = ({ type, name, onClick, width, method,loading, disabled,ht
       style={{ width: width }}
       type={method == "reset" ? "reset" : "submit"}
       disabled={disabled}
-      htmlType={htmlType}
+      htmlType={htmlType && htmlType}
     >
       {loading?"Loading...":name}
     </button>

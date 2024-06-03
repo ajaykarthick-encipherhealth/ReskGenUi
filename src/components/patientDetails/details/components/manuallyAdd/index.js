@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CloseOutlined } from "@ant-design/icons";
-import { DatePicker, Form, Input, Row, Select, Switch, Col } from "antd";
+import { Button, Form, Input, Select, Switch } from "antd";
 import RegularButton from "../../../../button";
 import Provider from "./Provider";
 import AddSection from "./AddSection";
@@ -18,16 +18,19 @@ const ManuallyAdd = ({ handleCloseModal, setIsFileFormShow }) => {
   });
   const [selectedOpt, setSelectedOpt] = useState();
   const [selectedDates, setSelectedDates] = useState();
-  const handleSelectChnage = (val, field) => {
-    form.setFieldValue({ dos: val });
-    setSelectedOpt(([field] = val));
+
+  const handleSelectChange = (val, field) => {
+    form.setFieldsValue({ [field]: val });
+    setSelectedOpt({ [field]: val });
   };
+
   const handleDateRange = (val, field) => {
-    setSelectedDates(([field] = val));
+    setSelectedDates({ [field]: val });
   };
-  const handleForm = (values, type) => {
+
+  const handleForm = (values,type) => {
     setIsFileFormShow(false);
-    console.log(([type] = values));
+    console.log("Success:", [values]=type);
   };
   return (
     <>
@@ -42,89 +45,129 @@ const ManuallyAdd = ({ handleCloseModal, setIsFileFormShow }) => {
           <CloseOutlined />
         </div>
       </div>
-      <label htmlFor="">Provider</label>
-      <div className="border border-[#06439D] rounded w-100 h-50 p-4">
-        <Provider
-          handleForm={handleForm}
-          handleSelectChange={handleSelectChnage}
-          handleDateRange={handleDateRange}
-        />
-      </div>
-      <Form form={form} onFinish={(val) => handleForm(val, "entireForm")}>
-        {!meatDisplay ? (
-          <>
-            <Form.Item name="code">
-              <label htmlFor="">Code</label>
-              <Input
-                placeholder="Code"
-                //   onChange={(e) => handleInputChnage(e, "code")}
-              />
-            </Form.Item>
-            <Form.Item name="description">
-              <label htmlFor="">Description</label>
-              <Input
-                placeholder="Description"
-                //   onChange={(e) => handleInputChnage(e, "description")}
-              />
-            </Form.Item>
-            <Form.Item name="dos">
-              <label htmlFor="">DOS</label>
-              <Select
-                placeholder="DOS"
-                onChange={(selOption) => handleSelectChnage(selOption, "dos")}
-              />
-            </Form.Item>
 
-            <Form.Item name="npi">
-              <div className="d-flex">
-                <label htmlFor="">Provider NPI</label>
-                <div className="mx-2">
-                  <Switch />
-                </div>
-              </div>
-            </Form.Item>
+      <Form name="basic" onFinish={(value)=>handleForm(value,"entireform")} autoComplete="off">
+        <Form.Item name="code"  rules={[{ required: true}]}>
+          <label htmlFor="">Code</label>
+          <Input
+            placeholder="Code"
+            //   onChange={(e) => handleInputChnage(e, "code")}
+          />
+        </Form.Item>
+        <Form.Item name="description"  rules={[{ required: true}]}>
+          <label htmlFor="">Description</label>
+          <Input
+            placeholder="Description"
+            //   onChange={(e) => handleInputChnage(e, "description")}
+          />
+        </Form.Item>
+        <Form.Item name="dos" >
+          <label htmlFor="">DOS</label>
+          <Select
+            placeholder="DOS"
+            onChange={(selOption) => handleSelectChange(selOption, "dos")}
+          />
+        </Form.Item>
+        <Form.Item name="npi">
+          <div className="d-flex">
+            <label htmlFor="">Provider NPI</label>
+            <div className="mx-2">
+              <Switch />
+            </div>
+          </div>
+        </Form.Item>
+        <Form.Item>
+          <label htmlFor="">Provider</label>
+          <div className="border border-[#06439D] rounded w-100 h-50 p-4">
+            <Provider
+              handleForm={handleForm}
+              handleSelectChnage={handleSelectChange}
+              handleDateRange={handleDateRange}
+            />
+          </div>
 
-            <label htmlFor="">Provider</label>
-            <div className="border border-[#06439D] rounded w-100 h-50 p-4">
-              <Provider
-                handleForm={handleForm}
-                handleSelectChnage={handleSelectChnage}
-                handleDateRange={handleDateRange}
-              />
+          <label htmlFor="">Add Section</label>
+          <div className="border rounded w-100 h-50 p-4">
+            <AddSection
+              handleForm={handleForm}
+              handleSelectChnage={handleSelectChange}
+              handleDateRange={handleDateRange}
+              setMeatDisplay={setMeatDisplay}
+            />
+          </div>
+
+          <label htmlFor="">Meat</label>
+          <div className="d-flex">
+            <label htmlFor="">Active Header</label>
+            <div className="mx-2">
+              <Switch />
             </div>
-            <label htmlFor="">Add Section</label>
-            <div className="border rounded w-100 h-50 p-4">
-              <AddSection
-                handleForm={handleForm}
-                handleSelectChnage={handleSelectChnage}
-                handleDateRange={handleDateRange}
-                setMeatDisplay={setMeatDisplay}
-              />
-            </div>
-          </>
-        ) : (
-          <>
-            <label htmlFor="">Meat</label>
-            <div className="d-flex">
-              <label htmlFor="">Active Header</label>
-              <div className="mx-2">
-                <Switch />
-              </div>
-            </div>
-            <div className="d-flex justify-content-center mb-2">
-              {" "}
-              <SelectButton
-                select={selectMeat}
-                setSelect={setSelectMeat}
-                completed={isFilled}
-              />
-            </div>
-            <div className="border rounded w-100 h-50 p-4">
-              <MeatSection />
-            </div>
-          </>
-        )}
+          </div>
+          <div className="d-flex justify-content-center mb-2">
+            {" "}
+            <SelectButton
+              select={selectMeat}
+              setSelect={setSelectMeat}
+              completed={isFilled}
+            />
+          </div>
+          <div className="border rounded w-100 h-50 p-4">
+            <MeatSection
+              handleForm={handleForm}
+              handleSelectChnage={handleSelectChange}
+              handleDateRange={handleDateRange}
+              setMeatDisplay={setMeatDisplay}
+            />
+          </div>
+        </Form.Item>
+        <Form.Item>
+          <div className="w-80 d-flex justify-content-center my-2">
+            <RegularButton htmlType="submit" name="Save" width="30%" />
+          </div>
+        </Form.Item>
       </Form>
+      {/* <Form name="basic" onFinish={handleForm} autoComplete="off">
+      <Form.Item name="code"  rules={[{ required: true}]}>
+          <label htmlFor="">Code</label>
+          <Input
+            placeholder="Code"
+            //   onChange={(e) => handleInputChnage(e, "code")}
+          />
+        </Form.Item>
+        <Form.Item name="description"  rules={[{ required: true}]}>
+          <label htmlFor="">Description</label>
+          <Input
+            placeholder="Description"
+            //   onChange={(e) => handleInputChnage(e, "description")}
+          />
+        </Form.Item>
+        <Form.Item name="dos" >
+          <label htmlFor="">DOS</label>
+          <Select
+            placeholder="DOS"
+            onChange={(selOption) => handleSelectChange(selOption, "dos")}
+          />
+        </Form.Item>
+        <Form.Item name="npi">
+          <div className="d-flex">
+            <label htmlFor="">Provider NPI</label>
+            <div className="mx-2">
+              <Switch />
+            </div>
+          </div>
+        </Form.Item>
+
+        <Form.Item
+          wrapperCol={{
+            offset: 8,
+            span: 16,
+          }}
+        >
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form> */}
     </>
   );
 };
