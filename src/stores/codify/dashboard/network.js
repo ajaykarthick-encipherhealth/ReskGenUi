@@ -9,24 +9,23 @@ export const codify = async ({ diseases }) => {
   return data;
 };
 
-
-export const codes = async({code}) =>{
+export const codes = async ({ code }) => {
   const options = {
     method: "GET",
   };
   const url = `q=${code}`;
   const data = await requestPortal(`management/getDiagDetails?${url}`, options);
   return data;
+};
 
-}
-
-
-export const riskadjustment = async({year,code}) =>{
+export const riskadjustment = async ({ year, code }) => {
   const options = {
     method: "GET",
   };
   const url = `year=${year}&code=${code}`;
-  const data = await requestPortal(`management/getRiskAdjustmentForYear?${url}`, options);
+  const data = await requestPortal(
+    `management/getRiskAdjustmentForYear?${url}`,
+    options
+  );
   return data;
-
-}
+};

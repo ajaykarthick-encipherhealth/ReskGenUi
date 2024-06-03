@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import style from "./style.module.css";
 import { actions as dashbaordActions } from "../../stores/codify/dashboard";
 import { connect } from "react-redux";
@@ -21,8 +21,6 @@ const RiskAdjustment = ({
   const [selectedYear, setSelectedYear] = useState(currentDate);
   const [errorMessage, setErrorMessage] = useState("");
   const currentDate = new Date();
-
-
 
   const subheader = [
     { label: "Year", value: "year" },
@@ -60,8 +58,7 @@ const RiskAdjustment = ({
       code: code,
     });
 
-    if (riskData?.status == "SUCCESS") 
-      setLoading(false);
+    if (riskData?.status == "SUCCESS") setLoading(false);
     const keys = Object.keys(riskData?.response || {});
     setData({
       ...data,
@@ -113,8 +110,7 @@ const RiskAdjustment = ({
         ),
     });
   };
- console.log(data,"code")
- 
+
   const handleYearChange = (date, dateString) => {
     setYear(date);
     setSelectedYear(dateString);
@@ -170,7 +166,7 @@ const RiskAdjustment = ({
       <div className="d-flex justify-content-center mt-4">
         {loading && <Spin size="large" />}
       </div>
-      {data?.year ?  (
+      {data?.year ? (
         <TableRisk
           activeButton={activeButton}
           setActiveButton={setActiveButton}

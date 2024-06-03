@@ -64,15 +64,13 @@ const Codify = ({ codifyData, codesData }) => {
     let treeData = await codifyData({ diseases: searchInput });
 
     if (treeData?.status == "SUCCESS") {
-       console.log(treeData,"response")
       let temp = convertICDStructureToTreeData(treeData?.response);
       if (!treeData?.response?.length) {
         setNoData(true);
-      }
-      else{
+      } else {
         setNoData(false);
       }
-     
+
       setData(temp);
     }
     setLoading(false);
@@ -88,7 +86,6 @@ const Codify = ({ codifyData, codesData }) => {
       fetchcode();
     }
   }
-  console.log(data, "data");
 
   const alphabets = [
     "A",
@@ -143,7 +140,7 @@ const Codify = ({ codifyData, codesData }) => {
       setCodeData(null);
     }
   }, [searchInput]);
-console.log(noData,"noData")
+
   return (
     <div className="container-fluid">
       <div className="row  mt-3 px-1">
@@ -257,9 +254,7 @@ console.log(noData,"noData")
             ) : (
               <></>
             )}
-            {
-              noData && <Empty></Empty>
-            }
+            {noData && <Empty></Empty>}
             {currentButton == "Description" && (
               <Tables
                 setCodeData={setCodeData}

@@ -19,24 +19,6 @@ const Tables = (props) => {
     setLoading(false);
   };
 
-  const columns = [
-    {
-      title: "Include",
-      dataIndex: "inclusionTerm",
-      key: "inclusionTerm",
-    },
-    {
-      title: "Exclude 1",
-      dataIndex: "excludes1",
-      key: "excludes1",
-    },
-    {
-      title: "Exclude 2",
-      dataIndex: "excludes2",
-      key: "excludes2",
-    },
-  ];
-  console.log(codeData,"codeData")
   return (
     <div className={style.code}>
       <div className="d-flex justify-content-center">

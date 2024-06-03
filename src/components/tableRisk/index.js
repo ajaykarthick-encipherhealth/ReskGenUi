@@ -4,7 +4,6 @@ import style from "./style.module.css";
 const TableRisk = ({ data, subheader,activeButton,setActiveButton,setSearchInput }) => {
 
   const handleHeaderClick = () => {
-    console.log("clicked");
     setActiveButton("ICD-10");
     setSearchInput(data?.diagnosisCode); 
   };
