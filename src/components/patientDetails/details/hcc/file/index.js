@@ -22,6 +22,7 @@ import ModelIndex from "../../components/model/Index";
 import { getPatientDetails } from "../../components/function/GetData";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { onDragEnd } from "../../components/function/ReusableFunctions";
+import ManuallyAdd from "../../components/manuallyAdd";
 
 const File = ({
   patientDetailsResult,
@@ -329,12 +330,13 @@ const File = ({
           </div>
           {isFileFormShow ? (
             <div className="col-xl-5">
-              <AddHccForm
+              {/* <AddHccForm
                 handleCloseModal={handleCloseModal}
                 isAddHccForm={isAddHccForm}
                 setIsAddHccForm={setIsAddHccForm}
                 isMeatNew={true}
-              />
+              /> */}
+              <ManuallyAdd handleCloseModal={handleCloseModal} setIsFileFormShow={setIsFileFormShow} />
             </div>
           ) : null}
           {!isFileFormShow ? (
