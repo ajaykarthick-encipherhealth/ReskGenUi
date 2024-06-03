@@ -65,6 +65,7 @@ const Codify = ({ codifyData, codesData }) => {
     if (treeData?.status == "SUCCESS") {
       let temp = convertICDStructureToTreeData(treeData?.response);
       setData(temp);
+      
     }
     setLoading(false);
   };
@@ -79,6 +80,8 @@ const Codify = ({ codifyData, codesData }) => {
       fetchcode();
     }
   }
+  console.log(data, "data");
+  
 
   const alphabets = [
     "A",
@@ -133,7 +136,7 @@ const Codify = ({ codifyData, codesData }) => {
       setCodeData(null);
     }
   }, [searchInput]);
-  console.log(data, "data");
+
   return (
     <div className="container-fluid">
       <div className="row  mt-3 px-1">
@@ -237,7 +240,6 @@ const Codify = ({ codifyData, codesData }) => {
                 ))}
               </div>
             )}
-
             {currentButton == "Codes" && data?.length && (
               <Codes
                 searchInput={searchInput}

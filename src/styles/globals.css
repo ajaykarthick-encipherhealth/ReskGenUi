@@ -14610,3 +14610,7 @@ input[type="number"] {
 .ant-tree-switcher-leaf-line{
   height: 150%  !important;
 }
+.card{
+  margin:0  !important;
+  border:1px solid gray !important
+}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import style from "./style.module.css";
 import { actions as dashbaordActions } from "../../stores/codify/dashboard";
 import { connect } from "react-redux";
@@ -15,12 +15,14 @@ const RiskAdjustment = ({
   setActiveButton,
   setSearchInput,
 }) => {
-  
   const [code, setCode] = useState("");
   const [data, setData] = useState([]);
   const [year, setYear] = useState();
   const [selectedYear, setSelectedYear] = useState(currentDate);
+  const [errorMessage, setErrorMessage] = useState("");
   const currentDate = new Date();
+
+
 
   const subheader = [
     { label: "Year", value: "year" },
@@ -33,7 +35,14 @@ const RiskAdjustment = ({
     { label: "V08", value: "rxHccModelCategoryV08Payment" },
   ];
   const handleCode = (e) => {
-    setCode(e.target.value);
+    const inputValue = e.target.value;
+    const regex = /^[a-zA-Z0-9.]*$/;
+    if (regex.test(inputValue)) {
+      setCode(inputValue);
+      setErrorMessage(null);
+    } else {
+      setErrorMessage("Only characters and dots are allowed");
+    }
   };
 
   const onChange = (date, dateString) => {
@@ -51,9 +60,12 @@ const RiskAdjustment = ({
       code: code,
     });
 
-    if (riskData?.status == "SUCCESS") setLoading(false);
+    if (riskData?.status == "SUCCESS") 
+      setLoading(false);
+    const keys = Object.keys(riskData?.response || {});
     setData({
       ...data,
+      responseKeys: keys,
       year: riskData?.response?.year,
       diagnosisCode: riskData?.response?.diagnosisCode,
       description: riskData?.response?.description,
@@ -101,12 +113,18 @@ const RiskAdjustment = ({
         ),
     });
   };
-
+ console.log(data,"code")
+ 
   const handleYearChange = (date, dateString) => {
     setYear(date);
     setSelectedYear(dateString);
   };
-
+  useEffect(() => {
+    if (!code?.length) {
+      setSelectedYear(null);
+      setCode(null);
+    }
+  }, [code]);
   return (
     <div className="container-fluid">
       <div className="row mt-3 ">
@@ -131,6 +149,9 @@ const RiskAdjustment = ({
               onChange={handleCode}
             />
           </div>
+          {errorMessage && (
+            <div className="text-danger ml-2">{errorMessage}</div>
+          )}
         </div>
       </div>
       <div className="col-12 mt-4">
@@ -149,7 +170,7 @@ const RiskAdjustment = ({
       <div className="d-flex justify-content-center mt-4">
         {loading && <Spin size="large" />}
       </div>
-      {data?.year ? (
+      {data?.year ?  (
         <TableRisk
           activeButton={activeButton}
           setActiveButton={setActiveButton}
