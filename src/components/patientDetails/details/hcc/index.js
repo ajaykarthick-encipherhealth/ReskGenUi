@@ -13,24 +13,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faClose } from "@fortawesome/free-solid-svg-icons";
 import styles from "../hcc/styles.module.css";
 import moment from "moment";
-import { DownOutlined } from "@ant-design/icons";
-import Completed from "../../../../../src/images/trackingImages/CompletedTrack.png";
-import Pending from "../../../../../src/images/trackingImages/PendingTrack.png";
-import Hold from "../../../../../src/images/trackingImages/HoldTrack.png";
-import Declined from "../../../../../src/images/trackingImages/DeclineTrack.png";
 import { actions as detailsActions } from "../../../../stores/patient/details";
-
-import AuditedTrack from "../../../../../src/images/trackingImages/AuditedTrack.png";
-import NotAudited from "../../../../../src/images/trackingImages/NotAuditedTrack.png";
-import AuditHold from "../../../../../src/images/trackingImages/AuditHoldTrack.png";
-import ReAudit from "../../../../../src/images/trackingImages/reAuditTrack.png";
-import AuditPending from "../../../../../src/images/trackingImages/AuditPending.png";
-import AuditedDeclineTrack from "../../../../../src/images/trackingImages/AuditDeclined.png";
-import Abort from "../../../../../src/images/trackingImages/Abort.png";
-
 import warning from "../../../../images/svg/warning.svg";
 import Image from "next/image";
 import YearAndDosStatus from "../components/yearAndDosStatus";
+import { getStatusIcon, selectTab } from "../../../reuseableFunctions";
 
 const { Option } = Select;
 
@@ -53,148 +40,6 @@ const Hcc = ({
   const [dosSummariesList, setDosSummariesList] = useState([]);
   const [selectDosValue, setSelectDosValue] = useState([]);
 
-  const selectTab = (num) => {
-    setFlagTagActive(false);
-    setActiveTabHead(num);
-    if (num == 2) {
-      setFlagTagActive(true);
-    }
-    if (num == 4) {
-      setActiveMeatTitle(null);
-    }
-    if (num == 3) {
-      setActiveComboTree(null);
-    }
-    setPopoverVisible(false);
-  };
-
-  const getStatusIcon = (status) => {
-    switch (status) {
-      case "COMPLETED":
-        return (
-          <Tooltip placement="bottom" title="COMPLETED">
-            <Image
-              src={Completed}
-              style={{ height: "20px", width: "20px", marginTop: "4px" }}
-            />
-          </Tooltip>
-        );
-
-      case "PENDING":
-        return (
-          <Tooltip placement="bottom" title="PENDING">
-            <Image
-              src={Pending}
-              style={{ height: "20px", width: "20px", marginTop: "4px" }}
-            />
-          </Tooltip>
-        );
-
-      case "DECLINED":
-        return (
-          <Tooltip placement="bottom" title="DECLINED">
-            <Image
-              src={Declined}
-              style={{ height: "20px", width: "20px", marginTop: "4px" }}
-            />
-          </Tooltip>
-        );
-
-      case "NOTCOMPUTED":
-        return (
-          <Tooltip placement="bottom" title="NOT COMPUTED">
-            <Image
-              src={Pending}
-              style={{ height: "20px", width: "20px", marginTop: "4px" }}
-            />
-          </Tooltip>
-        );
-      case "COMPUTED":
-        return (
-          <Tooltip placement="bottom" title="PENDING">
-            <Image
-              src={Pending}
-              style={{ height: "20px", width: "20px", marginTop: "4px" }}
-            />
-          </Tooltip>
-        );
-      case "HOLD":
-        return (
-          <Tooltip placement="bottom" title="HOLD">
-            <Image
-              src={Hold}
-              style={{ height: "20px", width: "20px", marginTop: "4px" }}
-            />
-          </Tooltip>
-        );
-      case "ABORTED_BY_CRON":
-        return (
-          <Tooltip placement="bottom" title="ABORTED BY CRON">
-            <Image
-              src={Abort}
-              style={{ height: "20px", width: "20px", marginTop: "4px" }}
-            />
-          </Tooltip>
-        );
-      case "AUDIT_PENDING":
-        return (
-          <Tooltip placement="bottom" title="AUDIT PENDING">
-            <Image
-              src={AuditPending}
-              style={{ height: "20px", width: "20px", marginTop: "4px" }}
-            />
-          </Tooltip>
-        );
-
-      case "AUDITHOLD":
-        return (
-          <Tooltip placement="bottom" title=" AUDIT HOLD">
-            <Image
-              src={AuditHold}
-              style={{ height: "20px", width: "20px", marginTop: "4px" }}
-            />
-          </Tooltip>
-        );
-      case "REAUDIT":
-        return (
-          <Tooltip placement="bottom" title=" REAUDIT">
-            <Image
-              src={ReAudit}
-              style={{ height: "20px", width: "20px", marginTop: "4px" }}
-            />
-          </Tooltip>
-        );
-      case "AUDITED":
-        return (
-          <Tooltip placement="bottom" title=" AUDITED">
-            <Image
-              src={AuditedTrack}
-              style={{ height: "20px", width: "20px", marginTop: "4px" }}
-            />
-          </Tooltip>
-        );
-      case "NOT_AUDIT":
-        return (
-          <Tooltip placement="bottom" title=" NOT AUDIT">
-            <Image
-              src={NotAudited}
-              style={{ height: "20px", width: "20px", marginTop: "4px" }}
-            />
-          </Tooltip>
-        );
-      case "AUDIT_DECLINED":
-        return (
-          <Tooltip placement="bottom" title=" AUDIT DECLINED">
-            <Image
-              src={AuditedDeclineTrack}
-              style={{ height: "20px", width: "20px", marginTop: "4px" }}
-            />
-          </Tooltip>
-        );
-      case null:
-        return <div className="patient-status"></div>;
-    }
-  };
   useEffect(() => {
     if (patientDosResult?.data?.response) {
       setSelectDosValue([]);
@@ -313,7 +158,7 @@ const Hcc = ({
                       to="#my-posts"
                       eventKey={1}
                       className={visitStyles.navColor}
-                      onClick={() => selectTab(1)}
+                      onClick={() => selectTab(1,setFlagTagActive,setActiveTabHead,setActiveComboTree,setPopoverVisible)}
                     >
                       File
                     </Nav.Link>
@@ -324,7 +169,7 @@ const Hcc = ({
                       eventKey={2}
                       className={visitStyles.navColor}
                       activeClassName={visitStyles.activeLink}
-                      onClick={() => selectTab(2)}
+                      onClick={() => selectTab(2,setFlagTagActive,setActiveTabHead,setActiveComboTree,setPopoverVisible)}
                     >
                       Visit Data
                     </Nav.Link>
@@ -334,7 +179,7 @@ const Hcc = ({
                       to="#my-posts"
                       eventKey={3}
                       className={visitStyles.navColor}
-                      onClick={() => selectTab(3)}
+                      onClick={() => selectTab(3,setFlagTagActive,setActiveTabHead,setActiveComboTree,setPopoverVisible)}
                     >
                       Combination Codes
                     </Nav.Link>
@@ -344,7 +189,7 @@ const Hcc = ({
                       to="#my-posts"
                       eventKey={4}
                       className={visitStyles.navColor}
-                      onClick={() => selectTab(4)}
+                      onClick={() => selectTab(4,setFlagTagActive,setActiveTabHead,setActiveComboTree,setPopoverVisible)}
                     >
                       MEAT Criteria
                     </Nav.Link>
@@ -354,7 +199,7 @@ const Hcc = ({
                       to="#my-posts"
                       eventKey={5}
                       className={visitStyles.navColor}
-                      onClick={() => selectTab(5)}
+                      onClick={() => selectTab(5,setFlagTagActive,setActiveTabHead,setActiveComboTree,setPopoverVisible)}
                     >
                       RAF Score
                     </Nav.Link>
@@ -364,7 +209,7 @@ const Hcc = ({
                       to="#my-posts"
                       eventKey={6}
                       className={visitStyles.navColor}
-                      onClick={() => selectTab(6)}
+                      onClick={() => selectTab(6,setFlagTagActive,setActiveTabHead,setActiveComboTree,setPopoverVisible)}
                     >
                       Query
                     </Nav.Link>
