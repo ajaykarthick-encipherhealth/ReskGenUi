@@ -741,7 +741,7 @@ export const handleSubmitValidNotes = async ({
     var dataFormatSuggested = {
       patientId: patientId,
       diagnosisCode: selectDisDetails.diagnosisCode,
-      actualDescription: selectDisDetails.actualDescription,
+      description: selectDisDetails.actualDescription,
       dbDescription: selectDisDetails.dbDescription,
       reason: values.reason,
       processedYear: selectDisDetails.processedYear,
