@@ -71,7 +71,6 @@ const ManuallyAdd = ({
           setProviderDetails(initalForm);
         }
       } catch (e) {
-        console.log(e);
         setProviderDetails(null);
         notification.error({
           message: e?.message,
