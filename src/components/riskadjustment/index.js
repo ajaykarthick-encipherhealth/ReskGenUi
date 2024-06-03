@@ -155,7 +155,7 @@ const RiskAdjustment = ({
         <textarea
           className={`${style.textarea} `}
           placeholder="Description"
-          rows="3"
+          rows="6"
         ></textarea>
       </div>
       <div className="d-flex align-items-center justify-content-center mt-4 ">

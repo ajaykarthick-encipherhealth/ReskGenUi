@@ -6,19 +6,31 @@ import { Spin } from "antd";
 const Codes = ({ data, loading }) => {
   const topRef = useRef(null);
   const scrollToTop = () => {
-    topRef.current.scrollIntoView({ behavior: "smooth", bottom:0 });
+    topRef.current.scrollIntoView({ behavior: "smooth", top:25 });
   };
+  const handleExpand = (expandedKeys, { node }) => {
+   
+    const nodeElement = document.querySelector(`[title="${node.title}"]`);
+    if (nodeElement) {
+      const parentElement = treeRef.current;
+     
+      const offsetTop = nodeElement.offsetTop;
+    
+      parentElement.scrollTo({ top: offsetTop, behavior: 'smooth' });
+    }
+  }
 
   return (
     <>
-      <div ref={topRef} />
       <div className="d-flex justify-content-center">
         {loading && <Spin size="large" />}
       </div>
-      <div className="mt-3 antdstyle" > 
+      <div className="mt-3 antdstyle" ref={topRef} > 
         <Tree
-        onClick={scrollToTop}
+        // onSelect={scrollToTop}
+        // onClick={scrollToTop}
           showLine={true}
+          onExpand={handleExpand}
           defaultExpandedKeys={["0-0-0"]}
           treeData={data}
           showIcon={true}

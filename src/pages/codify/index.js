@@ -33,6 +33,7 @@ const Codify = ({ codifyData, codesData }) => {
   };
   const handleButtonClick = () => {
     setActiveButton("ICD-10");
+    setSearchInput(null);
   };
   const handleAlphabetClick = (alphabet) => {
     setActiveAlphabet(alphabet);
@@ -62,7 +63,6 @@ const Codify = ({ codifyData, codesData }) => {
   const fetch = async () => {
     setLoading(true);
     let treeData = await codifyData({ diseases: searchInput });
-
     if (treeData?.status == "SUCCESS") {
       let temp = convertICDStructureToTreeData(treeData?.response);
       if (!treeData?.response?.length) {
@@ -70,10 +70,9 @@ const Codify = ({ codifyData, codesData }) => {
       } else {
         setNoData(false);
       }
-
       setData(temp);
     }
-    setLoading(false);
+    setLoading(false) ;
   };
 
   const handleSearch = () => {
@@ -87,34 +86,34 @@ const Codify = ({ codifyData, codesData }) => {
     }
   }
 
-  const alphabets = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "U",
-    "V",
-    "W",
-    "X",
-    "Y",
-    "Z",
-  ];
+  // const alphabets = [
+  //   "A",
+  //   "B",
+  //   "C",
+  //   "D",
+  //   "E",
+  //   "F",
+  //   "G",
+  //   "H",
+  //   "I",
+  //   "J",
+  //   "K",
+  //   "L",
+  //   "M",
+  //   "N",
+  //   "O",
+  //   "P",
+  //   "Q",
+  //   "R",
+  //   "S",
+  //   "T",
+  //   "U",
+  //   "V",
+  //   "W",
+  //   "X",
+  //   "Y",
+  //   "Z",
+  // ];
   const buttons = ["I10", "D48.113", "D48.114", "D48.115", "D48.116"];
 
   const onChange = (key) => {}; // Future use case for onChange
@@ -134,18 +133,18 @@ const Codify = ({ codifyData, codesData }) => {
     }
     setLoading(false);
   };
- useEffect(() => {
-  if (!searchInput.length) {
-    setData(null);
-    setCodeData(null);
-    setNoData(false); 
-  } else if (data && data.length === 0) {
-    setNoData(true);
-  } else {
-    setNoData(false)
-  }
-}, [searchInput, data]); 
-
+  useEffect(() => {
+    if (!searchInput?.length) {
+      setData(null);
+      setCodeData(null);
+      setNoData(false);
+    } else if (data && data.length === 0) {
+      setNoData(true);
+      // setSearchInput(null)
+    } else {
+      setNoData(false);
+    }
+  }, [searchInput, data]);
 
   return (
     <div className="container-fluid">
@@ -168,16 +167,16 @@ const Codify = ({ codifyData, codesData }) => {
             </Button>
           </div>
         </div>
-        <div className="col-1">
+        {/* <div className="col-1">
           <div className="d-flex justify-content-center">
             <FilterOutlined
               style={{ fontSize: "20px" }}
               onClick={() => setShowAlphabets(!showAlphabets)}
             />
           </div>
-        </div>
+        </div> */}
       </div>
-      {showAlphabets && (
+      {/* {showAlphabets && (
         <div className="d-flex gap-1 p-2 flex-wrap">
           {alphabets.map((name, index) => (
             <div onClick={() => handleAlphabetClick(name)}>
@@ -196,7 +195,7 @@ const Codify = ({ codifyData, codesData }) => {
             icon={<ArrowRightOutlined className={style.arrowcolor} />}
           />
         </div>
-      )}
+      )} */}
       <div className="row">
         {activeButton === "ICD-10" && (
           <>
@@ -260,7 +259,12 @@ const Codify = ({ codifyData, codesData }) => {
             ) : (
               <></>
             )}
-            {noData && <p className="d-flex justify-content-center">"Uh oh! It seems there might be a typo. Please review your spelling or try a different keyword."</p>}
+            {noData && (
+              <p className="d-flex justify-content-center">
+                "Uh oh! It seems there might be a typo. Please review your
+                spelling or try a different keyword."
+              </p>
+            )}
             {currentButton == "Description" && (
               <Tables
                 setCodeData={setCodeData}
