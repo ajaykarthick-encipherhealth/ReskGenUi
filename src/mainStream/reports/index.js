@@ -11,9 +11,8 @@ import { Modal, DatePicker, Tooltip } from "antd";
 import ExportImg from "../../images/svg/Export";
 import { debounce } from "../../../src/pages/admin/reports/Export";
 import { disableFutureDate } from "../../components/headerFilters/functions";
-import { checkAutoLogin, patientDetails } from "../../stores/authflow/actions";
-import { connect, useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { patientDetails } from "../../stores/authflow/actions";
+import { connect, useDispatch, useSelector } from "react-redux";
 import InitialCard from "../../mainStream/reports/initialReport";
 import SentReport from "../../mainStream/reports/sentReport";
 import ReceivedReport from "../../mainStream/reports/receivedReport";
@@ -21,7 +20,6 @@ import Export from "../../resusablereport/reports/Export";
 import { actions as workflowActions } from "../../stores/reviewer/workqueue";
 import { actions as reviewerAction } from "../../stores/reviewer/report";
 import { actions as supervisorAction } from "../../stores/supervisor/report";
-import { action as adminAction } from "../../stores/admin/report";
 
 import {
   selectedReport,
@@ -56,18 +54,15 @@ const Reports = ({
   receivedReport,
   receivedLoader,
   sentLoader,
-  supervisorReportDetails,
   auditReport,
   TeamReportDetails,
   teamReport,
   auditeReportLoading,
-  AdminReportDetails,
-  adminReport,
 }) => {
   const dispatch = useDispatch();
   const ExportResponse = useSelector((state) => state.report?.exportRes);
   const rowsLength = useSelector((state) => state?.report?.row);
-  const activeTab=useSelector(state=>state.AuditReport.activetab)
+  const activeTab = useSelector((state) => state.AuditReport.activetab);
 
   const AdminReportPatientDetails = useSelector(
     (state) => state.report?.details
@@ -75,9 +70,7 @@ const Reports = ({
   const selectUserList = useSelector(
     (state) => state?.adminReport?.selectedUsers
   );
-  const [reportActiveTab, setactiveTab] = useState(activeTab); // Local state for active tab
   const [userRole, setUserRole] = useState(activeTab);
-  const [isLoading, setIsLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredCOder, setFilteredCoder] = useState([]);
   const [comments, setComments] = useState();
@@ -100,7 +93,6 @@ const Reports = ({
   const [search, setSearch] = useState();
   const { RangePicker } = DatePicker;
   const [selectedDateRanges, setSelecteddateRanges] = useState([]);
-  const [currentRole, setCurrentRole] = useState("");
   const [selectedData, setSelectedData] = useState([]);
   const [selectAllCheckBoxes, setSelectAllCheckBoxes] = useState(false);
   const [teamPageNo, setTeamPageNo] = useState(0);
@@ -174,18 +166,11 @@ const Reports = ({
     dispatch(getActiveTab(name));
     setSearch();
     setSearchVal([]);
-    // setactiveTab(name);
-    // setReportActiveTab(name);
     if (name !== "Admin") {
       setSelectedData([]);
       setSelectAllCheckBoxes(false);
     }
   };
-  // useEffect(() => {
-  //   const role =
-  //     typeof window !== "undefined" ? localStorage.getItem("userRole") : null;
-  //   setCurrentRole(activeTab);
-  // });
 
   useEffect(() => {
     workFgetFlagsowData();
@@ -195,7 +180,6 @@ const Reports = ({
     const coderSearchString = searchVal.find(
       (item) => item.field === "initialSearch"
     )?.search;
-    setIsLoading(false);
 
     if (activeTab === "Sent") {
       sentReport({
@@ -250,7 +234,7 @@ const Reports = ({
         search: coderSearchString ? coderSearchString : "",
         sort: sort,
       });
-    } else if(activeTab === "Reviewer"){
+    } else if (activeTab === "Reviewer") {
       reviewerReport({
         pagenum: pageNo,
         startDate: selectedDateRanges?.Reviewer?.from,
@@ -272,7 +256,7 @@ const Reports = ({
     searchVal,
     selectedOptions,
     selectedDateRanges,
-    activeTab
+    activeTab,
   ]);
 
   useEffect(() => {
@@ -293,6 +277,7 @@ const Reports = ({
       setSentPageNo(page);
       setPaginationSentFirst(limit);
     }
+    setUserRole(localStorage.getItem("userRole"));
   }, [activeTab]);
 
   const gotoPatientDetails = (data) => {
@@ -357,16 +342,18 @@ const Reports = ({
 
   const getTabsForRole = (role) => {
     switch (role) {
-      case "Reviewer":
+      case "reviewer":
         return ["Reviewer", "Sent", "Received"];
-      case "Admin":
+      case "admin":
         return ["Admin", "Sent", "Received"];
-      default:
+      case "supervisor":
         return ["Audit", "Team", "Sent", "Received"];
+      default:
+        return [];
     }
   };
 
-  const tabs = getTabsForRole(activeTab);
+  const tabs = getTabsForRole(userRole);
 
   useEffect(() => {
     if (selectedOptions?.UserRole?.value) {
@@ -425,7 +412,7 @@ const Reports = ({
                             {" "}
                             Search
                           </label>
-                          <div class="form-group has-search2 w-100">
+                          <div className="form-group has-search2 w-100">
                             <FontAwesomeIcon
                               className="fa fa-search form-control-feedback"
                               icon={faSearch}
@@ -459,7 +446,7 @@ const Reports = ({
                               {" "}
                               Status
                             </label>
-                            <div class="form-group has-search w-100">
+                            <div className="form-group has-search w-100">
                               <Select
                                 onChange={(selectedOption) => {
                                   dosOnChange(
@@ -494,11 +481,7 @@ const Reports = ({
                                   : undefined
                               }
                               onChange={(date, dateString) =>
-                                handleCoderPicker(
-                                  date,
-                                  dateString,
-                                  activeTab
-                                )
+                                handleCoderPicker(date, dateString, activeTab)
                               }
                               disabledDate={(current) =>
                                 disableFutureDate(current)
@@ -511,7 +494,7 @@ const Reports = ({
 
                       {selectedData?.length > 0 &&
                         selectedData?.map((info) => (
-                          <div className="col-xl-2">
+                          <div className="col-xl-2" key={info.id}>
                             <div className="d-flex w-100">
                               {info?.name && (
                                 <label className="labelStyle d-flex m-auto">
@@ -526,7 +509,7 @@ const Reports = ({
                                     icon={faSearch}
                                   />
                                 )}
-                                {info?.isSelect ? (
+                                {info?.isSelect && (
                                   <Select
                                     onChange={(selectedOption) => {
                                       dosOnChange(selectedOption, info?.name);
@@ -540,7 +523,8 @@ const Reports = ({
                                     isSearchable={false}
                                     value={selectedOptions[info?.name]}
                                   />
-                                ) : info?.isRangePikcer ? (
+                                )}
+                                {info?.isRangePikcer && (
                                   <RangePicker
                                     style={{
                                       borderRadius: "0 5px 5px 0",
@@ -563,24 +547,24 @@ const Reports = ({
                                     }
                                     className="newReportPicker"
                                   />
-                                ) : (
-                                  info?.isSearch && (
-                                    <InputText
-                                      name={info?.name}
-                                      type="text"
-                                      onChange={(e) => filterChangePatientId(e)}
-                                      className="form-control new-form-control reportInput"
-                                      placeholder="Search"
-                                      maxLength={25}
-                                      value={search?.searchVal}
-                                      onKeyDown={(e) => {
-                                        // Prevent input of backslash ("\")
-                                        if (e.key === "\\") {
-                                          e.preventDefault();
-                                        }
-                                      }}
-                                    />
-                                  )
+                                )}
+
+                                {info?.isSearch && (
+                                  <InputText
+                                    name={info?.name}
+                                    type="text"
+                                    onChange={(e) => filterChangePatientId(e)}
+                                    className="form-control new-form-control reportInput"
+                                    placeholder="Search"
+                                    maxLength={25}
+                                    value={search?.searchVal}
+                                    onKeyDown={(e) => {
+                                      // Prevent input of backslash ("\")
+                                      if (e.key === "\\") {
+                                        e.preventDefault();
+                                      }
+                                    }}
+                                  />
                                 )}
                                 {/* )} */}
                               </div>
@@ -621,69 +605,66 @@ const Reports = ({
                             />
                           </div>
                         )}
-
                       </div>
-                      {ReportPatientDetails?.response?.response?.data?.length === 0  ? null :   <div
-                        className="d-flex justify-content-end "
-                        style={{ marginBottom: "-40px" }}
-                      >
-                         {!activeTab ||
-                        activeTab === "Admin" ||
-                        activeTab === "Audit" ||
-                        activeTab === "Team" ||
-                        activeTab === "Reviewer" ? (
-                          <Tooltip
-                            title={
-                              rowsLength?.length === 0
-                                ? "Select report to export"
-                                : ""
-                            }
-                          >
-                            <button
-                              onClick={() => {
-                                setIsModalVisible(true);
-                                dispatch(selectedReport(null));
-                              }}
-                              className={`${
-                                rowsLength?.length > 0 ||
-                                rowsLength?.data?.length > 0
-                                  ? styles.export
-                                  : styles.exportDisable
-                              } `}
-                              disabled={
-                                rowsLength?.length > 0 ||
-                                rowsLength?.data?.length > 0
-                                  ? false
-                                  : true
+                      {ReportPatientDetails?.response?.response?.data
+                        ?.length === 0 ? null : (
+                        <div
+                          className="d-flex justify-content-end "
+                          style={{ marginBottom: "-40px" }}
+                        >
+                          {!activeTab ||
+                          activeTab === "Admin" ||
+                          activeTab === "Audit" ||
+                          activeTab === "Team" ||
+                          activeTab === "Reviewer" ? (
+                            <Tooltip
+                              title={
+                                rowsLength?.length === 0
+                                  ? "Select report to export"
+                                  : ""
                               }
-                              style={{
-                                color:
+                            >
+                              <button
+                                onClick={() => {
+                                  setIsModalVisible(true);
+                                  dispatch(selectedReport(null));
+                                }}
+                                className={`${
                                   rowsLength?.length > 0 ||
                                   rowsLength?.data?.length > 0
-                                    ? "#04306f"
-                                    : "inherit",
-                                padding: "10px",
-                              }}
-                            >
-                              {rowsLength?.length > 0 ||
-                              rowsLength?.data?.length > 0 ? (
-                                <ExportImg />
-                              ) : (
-                                SVGICON.exportDisable
-                              )}
-                              Export
-                            </button>
-                          </Tooltip>
-                        ) : null}
-                      </div>  }
-                    
+                                    ? styles.export
+                                    : styles.exportDisable
+                                } `}
+                                disabled={
+                                  rowsLength?.data?.length > 0 ? false : true
+                                }
+                                style={{
+                                  color:
+                                    rowsLength?.length > 0 ||
+                                    rowsLength?.data?.length > 0
+                                      ? "#04306f"
+                                      : "inherit",
+                                  padding: "10px",
+                                }}
+                              >
+                                {rowsLength?.length > 0 ||
+                                rowsLength?.data?.length > 0 ? (
+                                  <ExportImg />
+                                ) : (
+                                  SVGICON.exportDisable
+                                )}
+                                Export
+                              </button>
+                            </Tooltip>
+                          ) : null}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
 
                 <div>
-                  {(activeTab === "Reviewer" ||
-                    activeTab === "Admin") && (
+                  {(activeTab === "Reviewer" || activeTab === "Admin") && (
                     <div>
                       <InitialCard
                         setModal={setModal}
@@ -708,8 +689,7 @@ const Reports = ({
                       />
                     </div>
                   )}
-                  {(activeTab === "Team" ||
-                    activeTab === "Audit") && (
+                  {(activeTab === "Team" || activeTab === "Audit") && (
                     <TeamReport
                       setModal={setModal}
                       modal={modal}

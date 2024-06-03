@@ -61,7 +61,16 @@
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
+.emptyCard{
+  background: #ffff !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
 .card h2 {
   margin-top: 0;
 }
@@ -161,7 +170,7 @@
   font-weight: 600;
   font-family: manrope;
   color: black;
-  margin-top: -10px;
+  margin-bottom: 10px;
 }
 .subCard {
   height: 75px;
@@ -169,7 +178,7 @@
   text-align: center;
   background-color: #e1edfe;
   border-radius: 10px;
-  margin:-15px 3px 10px 0;
+  margin-right: 3px;
 }
 .sentSubCard {
   height: 100px;
@@ -208,13 +217,13 @@
   transform: translateX(-50%);
 } */
 .flags {
-  width: 243p;
-  height: 310px;
+  /* width: 2px; */
+  height: 260px;
   border-radius: 10px;
   background-color: #e1edfe;
   margin-right: 5px;
   padding: 10px;
-  overflow: scroll;
+  /* overflow-y: scroll; */
 }
 .flag {
   width: 209px;
@@ -233,8 +242,9 @@
   border-radius: 50%;
   color: white;
   text-align: center;
-  padding: 3px;
+  padding: 5px;
   margin-right: 10px;
+  font-size: 14px !important;
 }
 .contentGroups {
   display: flex;
@@ -507,7 +517,7 @@
   align-items: center;
 }
 .contentOverFlow {
-  height: 255px;
+  height: 90%;
   overflow-y: scroll;
 }
 .card3 {
@@ -524,7 +534,7 @@
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 360px;
+  height: 395px;
 }
 .card2 {
   padding: 20px;
@@ -532,25 +542,16 @@
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 873px;
+  height: 908px;
 }
-.exportDisable {
-  width: 100px;
-  height: 40px;
-  text-align: center;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  margin-right: 10px;
-  border-radius: 8px;
-}
+
 .reportDiv{
   display: flex;
   flex-direction: column;
   height:85px;
   align-items: center;
   justify-content: center;
-  margin: 0 10px 10px 0;
+  margin: auto;
   border-radius: 10px;
   padding: 10px 0 0px 0;
 }
@@ -562,4 +563,14 @@
   align-items: center;
   justify-content: center;
   margin: auto;
+}
+.exportDisable {
+  width: 100px;
+  height: 40px;
+  text-align: center;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  margin-right: 10px;
+  border-radius: 8px;
 }
