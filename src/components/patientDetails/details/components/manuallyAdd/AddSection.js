@@ -22,6 +22,7 @@ const AddSection = ({
             <label htmlFor="">Section</label>
             <Select
               placeholder="Section"
+              options={[]}
               className={style.inputField}
               onChange={(selOption) => handleSelectChnage(selOption, "section")}
             />
@@ -60,10 +61,10 @@ const AddSection = ({
 
       <Form.Item>
         <div className="w-80 d-flex justify-content-center my-2">
+          <RegularButton type="outline" name="Cancel" width="30%" />
           <Button htmlType="submit" className={style.submitBtn}>
             Next
           </Button>
-          <RegularButton type="outline" name="Cancel" width="30%" />
         </div>
       </Form.Item>
     </Form>

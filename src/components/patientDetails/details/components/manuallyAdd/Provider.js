@@ -67,8 +67,8 @@ const Provider = ({ handleForm, handleSelectChnage, handleDateRange }) => {
 
       <Form.Item>
         <div className="w-80 d-flex justify-content-center my-2">
-          <Button htmlType="submit" className={style.submitBtn}>Submit</Button>
           <RegularButton type="outline" name="Clear" width="30%" />
+          <Button htmlType="submit" className={style.submitBtn}>Submit</Button>
         </div>
       </Form.Item>
     </Form>
