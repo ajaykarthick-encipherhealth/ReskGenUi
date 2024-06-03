@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {Popover } from "antd";
+import { Popover } from "antd";
 import { connect } from "react-redux";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import style from "./styles.module.css";
 
-const RafScore = ({patientDetailsResult}) => {
-  const rafScoreList =patientDetailsResult?.data?.response?.rafScore
+const RafScore = ({ patientDetailsResult }) => {
+  const rafScoreList = patientDetailsResult?.data?.response?.rafScore;
   const [rafScoreData, setRafScoreData] = useState([]);
 
   function getRafDetails(dxCode, version) {
@@ -90,25 +90,19 @@ const RafScore = ({patientDetailsResult}) => {
                           }
                         >
                           <div className="col-xl-3">
-                            {getRafDetails(item.dx_name, "V24")?.map(
-                              (item) => (
-                                <div>{item.hcc_name}</div>
-                              )
-                            )}
+                            {getRafDetails(item.dx_name, "V24")?.map((item) => (
+                              <div>{item.hcc_name}</div>
+                            ))}
                           </div>
                           <div className="col-xl-3">
-                            {getRafDetails(item.dx_name, "V24")?.map(
-                              (item) => (
-                                <div>{item.hcc_raf}</div>
-                              )
-                            )}
+                            {getRafDetails(item.dx_name, "V24")?.map((item) => (
+                              <div>{item.hcc_raf}</div>
+                            ))}
                           </div>
                           <div className="col-xl-6  text-center">
-                            {getRafDetails(item.dx_name, "V24")?.map(
-                              (item) => (
-                                <div>${item.premium}</div>
-                              )
-                            )}
+                            {getRafDetails(item.dx_name, "V24")?.map((item) => (
+                              <div>${item.premium}</div>
+                            ))}
                           </div>
                         </div>
                       </div>
@@ -134,25 +128,19 @@ const RafScore = ({patientDetailsResult}) => {
                           }
                         >
                           <div className="col-xl-3">
-                            {getRafDetails(item.dx_name, "V28")?.map(
-                              (item) => (
-                                <div>{item.hcc_name}</div>
-                              )
-                            )}
+                            {getRafDetails(item.dx_name, "V28")?.map((item) => (
+                              <div>{item.hcc_name}</div>
+                            ))}
                           </div>
                           <div className="col-xl-3">
-                            {getRafDetails(item.dx_name, "V28")?.map(
-                              (item) => (
-                                <div>{item.hcc_raf}</div>
-                              )
-                            )}
+                            {getRafDetails(item.dx_name, "V28")?.map((item) => (
+                              <div>{item.hcc_raf}</div>
+                            ))}
                           </div>
                           <div className="col-xl-6 text-center">
-                            {getRafDetails(item.dx_name, "V28")?.map(
-                              (item) => (
-                                <div>${item.premium}</div>
-                              )
-                            )}
+                            {getRafDetails(item.dx_name, "V28")?.map((item) => (
+                              <div>${item.premium}</div>
+                            ))}
                           </div>
                         </div>
                       </div>
@@ -170,12 +158,16 @@ const RafScore = ({patientDetailsResult}) => {
                   <div className={style.titleHead}>
                     <div className="row">
                       <div className="col-xl-6">V24 score</div>
-                      <div className="col-xl-6">V24Score({rafScoreList?.rafVersionDTO.v24Percentage}%)</div>
+                      <div className="col-xl-6">
+                        V24Score({rafScoreList?.rafVersionDTO.v24Percentage}%)
+                      </div>
                     </div>
                   </div>
                   <div className={style.detailsHead}>
                     <div className="row">
-                      <div className="col-xl-6">{rafScoreList?.rafVersionDTO?.v24Score}</div>
+                      <div className="col-xl-6">
+                        {rafScoreList?.rafVersionDTO?.v24Score}
+                      </div>
                       <div className="col-xl-6">
                         {" "}
                         {rafScoreList?.rafVersionDTO?.v24PercentageScore}
@@ -187,12 +179,16 @@ const RafScore = ({patientDetailsResult}) => {
                   <div className={style.titleHead}>
                     <div className="row">
                       <div className="col-xl-6">V28 score</div>
-                      <div className="col-xl-6">V28Score({rafScoreList?.rafVersionDTO.v28Percentage}%)</div>
+                      <div className="col-xl-6">
+                        V28Score({rafScoreList?.rafVersionDTO.v28Percentage}%)
+                      </div>
                     </div>
                   </div>
                   <div className={style.detailsHead}>
                     <div className="row">
-                      <div className="col-xl-6">{rafScoreList?.rafVersionDTO?.v28Score}</div>
+                      <div className="col-xl-6">
+                        {rafScoreList?.rafVersionDTO?.v28Score}
+                      </div>
                       <div className="col-xl-6">
                         {rafScoreList?.rafVersionDTO?.v28PercentageScore}
                       </div>
@@ -223,9 +219,7 @@ const RafScore = ({patientDetailsResult}) => {
   );
 };
 
-const enhancer = connect(
-  (state) => ({
-    patientDetailsResult :state?.patientDetails?.details?.patientResult
-  }),
-);
+const enhancer = connect((state) => ({
+  patientDetailsResult: state?.patientDetails?.details?.patientResult,
+}));
 export default enhancer(RafScore);
