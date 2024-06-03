@@ -411,7 +411,7 @@ export const getCaptureSectionBackgroundFile = (
         }
       }
     } else if (dublicateCaptureDelete.length - 1 == index) {
-      if(headerResult.length == 1){
+      if(headerResult?.length == 1){
         var sectionMapArr = (
           <>
             {dublicateCaptureDelete?.map((item, i) =>
