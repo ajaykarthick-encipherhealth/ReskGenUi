@@ -328,7 +328,7 @@ const File = ({
             </div>
           </div>
           {isFileFormShow ? (
-            <div className="col-xl-4">
+            <div className="col-xl-5">
               <AddHccForm
                 handleCloseModal={handleCloseModal}
                 isAddHccForm={isAddHccForm}
