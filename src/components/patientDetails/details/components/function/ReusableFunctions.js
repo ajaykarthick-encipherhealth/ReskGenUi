@@ -60,7 +60,7 @@ export const getEncounterDateBackground = ({
         ""
       );
       return sectionMapArr;
-    } else if (value.length - 2 == index) {
+    } else if (value.length - 1 == index) {
       var sectionMapArr = (
         <Popover
           content={
@@ -642,7 +642,7 @@ export const getProviderNameList = ({ data, captureSectionMatching }) => {
         </span>
       );
       return sectionMapArr;
-    } else if (dublicateCaptureDelete.length - 2 == index) {
+    } else if (dublicateCaptureDelete.length - 1 == index) {
       var sectionMapArr = (
         <Popover
           content={
