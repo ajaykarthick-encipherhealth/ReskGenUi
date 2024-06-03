@@ -33,7 +33,6 @@ const ReceivedReport = ({
 }) => {
   const dispatch = useDispatch();
   const [reportActiveTab, setReportActiveTab] = useState("Supervisor");
-  const [selectedCardIndex, setSelectedCardIndex] = useState(0);
 
   useEffect(() => {
     if (details?.reportStatusDTOList && details?.reportStatusDTOList > 0) {

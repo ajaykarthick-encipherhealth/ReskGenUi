@@ -25,7 +25,6 @@ const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
     <div className={styles.cardContainer}>
       {data?.length > 0 ? (
         <div
-          key={index}
           style={{ marginBottom: "10px" }}
           className={`${styles.card} ${styles.selectedCard}`}
           onClick={() => handleReceiverReport(item)}

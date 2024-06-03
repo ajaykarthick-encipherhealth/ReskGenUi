@@ -1,5 +1,4 @@
 import React from "react";
-import { Col } from "antd";
 import Image from "next/image";
 function MiniCards({ backgroundColor, icon, title, charts, styles }) {
   return (

@@ -141,9 +141,6 @@
   color: #04306f;
   font-family: Manrope;
 }
-.text {
-  font-size: 14px;
-}
 .pName {
   font-size: 16px;
   font-weight: 500px;
@@ -381,8 +378,8 @@
   width: 70% !important;
 }
 .text {
-  font-size: 18px;
   font-weight: 500;
+  font-size: 14px;
 }
 .reportInput {
   background-color: #ebf3fe;
