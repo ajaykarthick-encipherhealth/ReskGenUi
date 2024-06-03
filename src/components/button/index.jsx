@@ -13,7 +13,7 @@ const RegularButton = ({ type, name, onClick, width, method,loading, disabled,ht
       style={{ width: width }}
       type={method == "reset" ? "reset" : "submit"}
       disabled={disabled}
-      htmlType={htmlType && htmlType}
+      htmlType={htmlType ?htmlType:""}
     >
       {loading?"Loading...":name}
     </button>

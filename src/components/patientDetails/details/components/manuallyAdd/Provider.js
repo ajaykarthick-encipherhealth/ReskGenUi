@@ -1,6 +1,7 @@
 import React from "react";
-import { Col, DatePicker, Form, Input, Row, Select } from "antd";
+import { Button, Col, DatePicker, Form, Input, Row, Select } from "antd";
 import RegularButton from "../../../../button";
+import style from '../../../../../components/button/style.module.css'
 
 const Provider = ({ handleForm, handleSelectChnage, handleDateRange }) => {
   const [form] = Form.useForm();
@@ -11,6 +12,7 @@ const Provider = ({ handleForm, handleSelectChnage, handleDateRange }) => {
           <Form.Item name="provider">
             <label htmlFor="">Provider</label>
             <Select
+             className={style.inputField}
               placeholder="Provider"
               options={[]}
               onChange={(selOption) =>
@@ -25,6 +27,7 @@ const Provider = ({ handleForm, handleSelectChnage, handleDateRange }) => {
             <Select
               placeholder="Provider Info"
               options={[]}
+              className={style.inputField}
               onChange={(selOption) =>
                 handleSelectChnage(selOption, "providerInfo")
               }
@@ -38,6 +41,7 @@ const Provider = ({ handleForm, handleSelectChnage, handleDateRange }) => {
               onChange={(date, dateString) => {
                 handleDateRange(dateString, "encounterDate");
               }}
+              className={style.picker}
             />
           </Form.Item>
         </Col>
@@ -63,7 +67,7 @@ const Provider = ({ handleForm, handleSelectChnage, handleDateRange }) => {
 
       <Form.Item>
         <div className="w-80 d-flex justify-content-center my-2">
-          <RegularButton htmlType="submit" name="Submit" width="30%" />
+          <Button htmlType="submit" className={style.submitBtn}>Submit</Button>
           <RegularButton type="outline" name="Clear" width="30%" />
         </div>
       </Form.Item>

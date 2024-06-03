@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { CloseOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Select, Switch } from "antd";
-import RegularButton from "../../../../button";
 import Provider from "./Provider";
 import AddSection from "./AddSection";
 import MeatSection from "./MeatSection";
 import SelectButton from "../../../../btnSelect";
+import style from '../../../../../components/button/style.module.css'
+
 
 const ManuallyAdd = ({ handleCloseModal, setIsFileFormShow }) => {
   const [form] = Form.useForm();
@@ -35,7 +36,7 @@ const ManuallyAdd = ({ handleCloseModal, setIsFileFormShow }) => {
   return (
     <>
       <div className="d-flex justify-content-between mb-4">
-        <div> Add Valid Code </div>
+        <div className="font-bold text-[16px]"> Add Valid Code </div>
         <div
           className="cr-pointer"
           onClick={() => {
@@ -51,6 +52,7 @@ const ManuallyAdd = ({ handleCloseModal, setIsFileFormShow }) => {
           <label htmlFor="">Code</label>
           <Input
             placeholder="Code"
+           
             //   onChange={(e) => handleInputChnage(e, "code")}
           />
         </Form.Item>
@@ -65,19 +67,20 @@ const ManuallyAdd = ({ handleCloseModal, setIsFileFormShow }) => {
           <label htmlFor="">DOS</label>
           <Select
             placeholder="DOS"
+            className={style.inputField}
             onChange={(selOption) => handleSelectChange(selOption, "dos")}
           />
         </Form.Item>
-        <Form.Item name="npi">
+        {/* <Form.Item name="npi"> */}
           <div className="d-flex">
-            <label htmlFor="">Provider NPI</label>
-            <div className="mx-2">
+            <div className={style.subHeader}>Provider NPI</div>
+            <div className="mx-2 mt-2">
               <Switch />
             </div>
           </div>
-        </Form.Item>
+        {/* </Form.Item> */}
         <Form.Item>
-          <label htmlFor="">Provider</label>
+          <div className={style.subHeader}>Provider</div>
           <div className="border border-[#06439D] rounded w-100 h-50 p-4">
             <Provider
               handleForm={handleForm}
@@ -86,7 +89,7 @@ const ManuallyAdd = ({ handleCloseModal, setIsFileFormShow }) => {
             />
           </div>
 
-          <label htmlFor="">Add Section</label>
+          <div className={style.subHeader}>Add Section</div>
           <div className="border rounded w-100 h-50 p-4">
             <AddSection
               handleForm={handleForm}
@@ -96,9 +99,9 @@ const ManuallyAdd = ({ handleCloseModal, setIsFileFormShow }) => {
             />
           </div>
 
-          <label htmlFor="">Meat</label>
+          <div className={style.subHeader}>Meat</div>
           <div className="d-flex">
-            <label htmlFor="">Active Header</label>
+            <label htmlFor="" >Active Header</label>
             <div className="mx-2">
               <Switch />
             </div>
@@ -122,52 +125,10 @@ const ManuallyAdd = ({ handleCloseModal, setIsFileFormShow }) => {
         </Form.Item>
         <Form.Item>
           <div className="w-80 d-flex justify-content-center my-2">
-            <RegularButton htmlType="submit" name="Save" width="30%" />
+            <Button htmlType="submit" className={style.submitBtn}>Save</Button>
           </div>
         </Form.Item>
       </Form>
-      {/* <Form name="basic" onFinish={handleForm} autoComplete="off">
-      <Form.Item name="code"  rules={[{ required: true}]}>
-          <label htmlFor="">Code</label>
-          <Input
-            placeholder="Code"
-            //   onChange={(e) => handleInputChnage(e, "code")}
-          />
-        </Form.Item>
-        <Form.Item name="description"  rules={[{ required: true}]}>
-          <label htmlFor="">Description</label>
-          <Input
-            placeholder="Description"
-            //   onChange={(e) => handleInputChnage(e, "description")}
-          />
-        </Form.Item>
-        <Form.Item name="dos" >
-          <label htmlFor="">DOS</label>
-          <Select
-            placeholder="DOS"
-            onChange={(selOption) => handleSelectChange(selOption, "dos")}
-          />
-        </Form.Item>
-        <Form.Item name="npi">
-          <div className="d-flex">
-            <label htmlFor="">Provider NPI</label>
-            <div className="mx-2">
-              <Switch />
-            </div>
-          </div>
-        </Form.Item>
-
-        <Form.Item
-          wrapperCol={{
-            offset: 8,
-            span: 16,
-          }}
-        >
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form> */}
     </>
   );
 };

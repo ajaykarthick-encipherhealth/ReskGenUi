@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { Col, DatePicker, Form, Input, Row, Select } from "antd";
+import React from "react";
+import { Button, Col, DatePicker, Form, Input, Row, Select } from "antd";
 import RegularButton from "../../../../button";
+import style from '../../../../../components/button/style.module.css'
 
 const MeatSection = ({ handleForm, handleSelectChnage, handleDateRange }) => {
   const [form] = Form.useForm();
@@ -11,6 +12,7 @@ const MeatSection = ({ handleForm, handleSelectChnage, handleDateRange }) => {
           <Form.Item name="monitorHeader" rules={[(require = true)]}>
             <label htmlFor="">Monitor Header</label>
             <Select
+             className={style.inputField}
               placeholder="Monitor Header"
               onChange={(selOption) => handleSelectChnage(selOption, "section")}
             />
@@ -21,6 +23,7 @@ const MeatSection = ({ handleForm, handleSelectChnage, handleDateRange }) => {
             <label htmlFor="">Monitor</label>
             <Select
               placeholder="Monitor"
+              className={style.inputField}
               onChange={(selOption) => handleSelectChnage(selOption, "section")}
             />
           </Form.Item>
@@ -32,6 +35,7 @@ const MeatSection = ({ handleForm, handleSelectChnage, handleDateRange }) => {
               onChange={(date, dateString) => {
                 handleDateRange(dateString, "encounterDate");
               }}
+              className={style.picker}
             />
           </Form.Item>
         </Col>
@@ -57,7 +61,7 @@ const MeatSection = ({ handleForm, handleSelectChnage, handleDateRange }) => {
 
       <Form.Item>
         <div className="w-80 d-flex justify-content-center my-2">
-          <RegularButton htmlType="submit" name="Submit" width="30%" />
+          <Button htmlType="submit" className={style.submitBtn} >Submit</Button>
           <RegularButton type="outline" name="Clear" width="30%" />
         </div>
       </Form.Item>

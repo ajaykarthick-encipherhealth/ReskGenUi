@@ -336,7 +336,9 @@ const File = ({
                 setIsAddHccForm={setIsAddHccForm}
                 isMeatNew={true}
               /> */}
+              <div style={{height:"70vh",overflowY:"scroll"}}>
               <ManuallyAdd handleCloseModal={handleCloseModal} setIsFileFormShow={setIsFileFormShow} />
+              </div>
             </div>
           ) : null}
           {!isFileFormShow ? (

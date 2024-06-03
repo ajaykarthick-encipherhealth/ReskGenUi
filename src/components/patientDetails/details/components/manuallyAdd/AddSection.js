@@ -1,6 +1,7 @@
-import { Col, DatePicker, Form, Input, Row, Select } from "antd";
+import { Button, Col, DatePicker, Form, Input, Row, Select } from "antd";
 import React from "react";
 import RegularButton from "../../../../button";
+import style from "../../../../../components/button/style.module.css";
 
 const AddSection = ({
   handleForm,
@@ -21,6 +22,7 @@ const AddSection = ({
             <label htmlFor="">Section</label>
             <Select
               placeholder="Section"
+              className={style.inputField}
               onChange={(selOption) => handleSelectChnage(selOption, "section")}
             />
           </Form.Item>
@@ -29,6 +31,7 @@ const AddSection = ({
           <Form.Item name="encounterDate" rules={[(require = true)]}>
             <label htmlFor="">Encounter Date</label>
             <DatePicker
+              className={style.picker}
               onChange={(date, dateString) => {
                 handleDateRange(dateString, "encounterDate");
               }}
@@ -57,7 +60,9 @@ const AddSection = ({
 
       <Form.Item>
         <div className="w-80 d-flex justify-content-center my-2">
-          <RegularButton htmlType="submit" name="Next" width="30%" />
+          <Button htmlType="submit" className={style.submitBtn}>
+            Next
+          </Button>
           <RegularButton type="outline" name="Cancel" width="30%" />
         </div>
       </Form.Item>
