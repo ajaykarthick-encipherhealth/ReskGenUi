@@ -199,7 +199,7 @@ const Hcc = ({
                       to="#my-posts"
                       eventKey={5}
                       className={visitStyles.navColor}
-                      onClick={() => selectTab(5,setFlagTagActive,setActiveTabHead,setActiveComboTree,setPopoverVisible)}
+                      onClick={() => selectTab(5,setFlagTagActive,setActiveTabHead,setActiveComboTree,setPopoverVisible,setActiveMeatTitle)}
                     >
                       RAF Score
                     </Nav.Link>

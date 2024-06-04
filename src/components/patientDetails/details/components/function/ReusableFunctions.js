@@ -411,48 +411,49 @@ export const getCaptureSectionBackgroundFile = (
         }
       }
     } else if (dublicateCaptureDelete.length - 1 == index) {
-      if(headerResult?.length == 1){
+      if (headerResult?.length == 1) {
         var sectionMapArr = (
           <>
             {dublicateCaptureDelete?.map((item, i) =>
               i > 1 ? (
-                  <>
-                  {isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode && (
-                    <span 
-                    onClick={() =>
-                      newFindValueDocument(
-                        findSectionHyperlink(hyperlinks, item)[0],
-                        documentPlace,
-                        setSearch,
-                        setFileLoading,
-                        setIsModalOpenLab,
-                        setIsModalOpenRadiology,
-                        setIsModalOpenValidCodes,
-                        setFileModalHeader,
-                        patientDocumentResult,
-                        fileInitialPage,
-                        setFileInitialPage,
-                        diagnosisCode,
-                        "",
-                        "",
-                        "",
-                        "",
-                        diseaseName
-                      )
-                    } 
-                      style={{
-                        background: stringToColour(item) + 33,
-                        color: stringToColour(item),
-                      }}
-                      className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
-                    >
-                      {item}
-                    </span>
-                  )}
-                  </>
+                <>
+                  {isMulitpleHeader &&
+                    diagnosisCode == isMulitpleHeaderCode && (
+                      <span
+                        onClick={() =>
+                          newFindValueDocument(
+                            findSectionHyperlink(hyperlinks, item)[0],
+                            documentPlace,
+                            setSearch,
+                            setFileLoading,
+                            setIsModalOpenLab,
+                            setIsModalOpenRadiology,
+                            setIsModalOpenValidCodes,
+                            setFileModalHeader,
+                            patientDocumentResult,
+                            fileInitialPage,
+                            setFileInitialPage,
+                            diagnosisCode,
+                            "",
+                            "",
+                            "",
+                            "",
+                            diseaseName
+                          )
+                        }
+                        style={{
+                          background: stringToColour(item) + 33,
+                          color: stringToColour(item),
+                        }}
+                        className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
+                      >
+                        {item}
+                      </span>
+                    )}
+                </>
               ) : null
             )}
-  
+
             <span
               style={{
                 backgroundColor:
@@ -480,7 +481,7 @@ export const getCaptureSectionBackgroundFile = (
           </>
         );
         return sectionMapArr;
-      }else{
+      } else {
         var sectionMapArr = (
           <>
             {dublicateCaptureDelete?.map((item, i) =>
@@ -503,21 +504,22 @@ export const getCaptureSectionBackgroundFile = (
                     diagnosisCode
                   )}
                 >
-                  {isMulitpleHeader && diagnosisCode == isMulitpleHeaderCode && (
-                    <span
-                      style={{
-                        background: stringToColour(item) + 33,
-                        color: stringToColour(item),
-                      }}
-                      className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
-                    >
-                      {item}
-                    </span>
-                  )}
+                  {isMulitpleHeader &&
+                    diagnosisCode == isMulitpleHeaderCode && (
+                      <span
+                        style={{
+                          background: stringToColour(item) + 33,
+                          color: stringToColour(item),
+                        }}
+                        className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor}`}
+                      >
+                        {item}
+                      </span>
+                    )}
                 </Popover>
               ) : null
             )}
-  
+
             <span
               style={{
                 backgroundColor:
@@ -705,51 +707,48 @@ export const handleSubmitValidNotes = async ({
     isValidAction.name == "Move to Suggested" &&
     isValidAction.title == "HCC"
   ) {
-    apiURL = "dbservice/update/move/validtosuggested";
+    apiURL = "management/disease/move/validtosuggested";
   }
   if (isValidAction.name == "Move to Deleted" && isValidAction.title == "HCC") {
-    apiURL = "dbservice/update/move/validtodeleted";
+    apiURL = "management/disease/move/validtodeleted";
   }
   if (
     isValidAction.name == "Move to Deleted" &&
     isValidAction.title == "SUGGESTED"
   ) {
-    apiURL = "dbservice/update/move/suggestedtodeleted";
+    apiURL = "management/disease/move/suggestedtodeleted";
   }
   if (
     isValidAction.name == "Move to HCC" &&
     isValidAction.title == "SUGGESTED"
   ) {
-    apiURL = "dbservice/update/move/suggestedtovalid";
+    apiURL = "management/disease/move/suggestedtovalid";
   }
   if (
     isValidAction.name == "Move to Suggested" &&
     isValidAction.title == "DELETED"
   ) {
-    apiURL = "dbservice/update/move/deletedtoSuggested";
+    apiURL = "management/disease/move/deletedtoSuggested";
   }
   if (isValidAction.name == "Move to HCC" && isValidAction.title == "DELETED") {
-    apiURL = "dbservice/update/move/deletedtovalid";
+    apiURL = "management/disease/move/deletedtovalid";
   }
   if (isValidAction.name == "Move to Hcc" && isValidAction.title == "NONHCC") {
-    apiURL = "dbservice/update/move/invalidtovalid";
+    apiURL = "management/disease/move/invalidtovalid";
   }
   try {
     var patientId = localStorage.getItem("patientId");
-    var userId = localStorage.getItem("orgId");
-    var orgId = localStorage.getItem("orgId");
     var dataFormatSuggested = {
-      userId: userId,
       patientId: patientId,
-      orgId:orgId,
-      fileId: selectDisDetails.fileId,
       diagnosisCode: selectDisDetails.diagnosisCode,
-      actualDescription: selectDisDetails.actualDescription,
+      description: selectDisDetails.actualDescription,
       dbDescription: selectDisDetails.dbDescription,
       reason: values.reason,
-      dos: selectDisDetails.processedYear,
+      processedYear: selectDisDetails.processedYear,
       dateOfService: selectDisDetails.dateOfService,
-      chartProcessType: selectDisDetails.dateOfService ? "DOS" : "YEAR",
+      chartProcessType: selectDisDetails.dateOfService
+        ? "DATE_OF_SERVICE"
+        : "YEAR",
     };
     const response = await axios.put(
       ENDPOINTS.apiEndoint + apiURL,
@@ -1002,10 +1001,12 @@ export const onDragEnd = (
   if (selectObject) {
     var title =
       selectObject.diagnosisCode + " - " + selectObject.actualDescription;
-    selectObject.processedYear = patientDetailsResult?.data?.response?.processedYear;
-    selectObject.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
-    selectObject.fileId= patientDetailsResult?.data?.response?.fileId,
-    setSelectDiseasesName(title);
+    selectObject.processedYear =
+      patientDetailsResult?.data?.response?.processedYear;
+    selectObject.dateOfService =
+      patientDetailsResult?.data?.response?.dateOfService;
+    (selectObject.fileId = patientDetailsResult?.data?.response?.fileId),
+      setSelectDiseasesName(title);
     setSelectDisDetails(selectObject);
   }
   switch (textJoin) {
@@ -1129,8 +1130,8 @@ export const getCaptureSectionBackgroundMeatNew = (
         }
         style={{ backgroundColor: backColor, color: textColor }}
         className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} truncate-text`}
-        >
-          {truncateString(res.header, 30)}
+      >
+        {truncateString(res.header, 30)}
       </span>
       // </Popover>
     );
@@ -1198,9 +1199,9 @@ export const stringToColour = (str) => {
     const value = (hash >> (i * 8)) & 0xff;
     colour += value.toString(16).padStart(2, "0");
   }
-  if(str.toLocaleLowerCase() === "plan"){
-    colour = "#7e00ff"
- }
+  if (str.toLocaleLowerCase() === "plan") {
+    colour = "#7e00ff";
+  }
   return colour;
 };
 
