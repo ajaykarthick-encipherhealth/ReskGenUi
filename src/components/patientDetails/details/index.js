@@ -223,7 +223,6 @@ const Details = ({
       }
       getMeatQueryList(patientId, result?.processedYear);
       setPatientDocumentResult(result);
-      console.log(result)
       setPatientDetails(result);
       if (result.hccDiseases != null) {
         var validDisArray = [];
