@@ -21,6 +21,7 @@ import {
   moveToAnotherAction,
   onDragEnd,
 } from "../../components/function/ReusableFunctions";
+import ManuallyAdd from "../../components/manuallyAdd";
 
 const VisitData = ({
   setActiveTabHead,
@@ -728,7 +729,7 @@ const VisitData = ({
         className="offcanvas-end"
         placement="end"
       >
-        <div className="offcanvas-header">
+        {/* <div className="offcanvas-header">
           <h5 className="modal-title" id="#gridSystemModal">
             Add Valid Code
           </h5>
@@ -749,6 +750,12 @@ const VisitData = ({
               />
             </div>
           </div>
+        </div> */}
+        <div className="p-4" style={{ overflowY: "scroll" }}>
+          <ManuallyAdd
+            handleCloseModal={handleCloseModal}
+            setIsFileFormShow={setIsModalOpenValid}
+          />
         </div>
       </Offcanvas>
 
