@@ -2,33 +2,38 @@
 import { useState, useEffect } from "react";
 import { actions as dashbaordActions } from "../../stores/codify/dashboard";
 import { connect } from "react-redux";
-import { Button } from "antd";
+import { Button, Empty } from "antd";
 import {
   FilterOutlined,
   SearchOutlined,
   ArrowRightOutlined,
+  CaretDownOutlined,
 } from "@ant-design/icons";
 import style from "./style.module.css";
-import { Collapse } from "antd";
 import Tables from "../../components/tablecodify";
 import Codes from "../codes";
-import RiskAdjustment from "../riskadjustment";
+import Riskadjustment from "../../components/riskadjustment";
 
-const Codify = ({ codifyData }) => {
+const Codify = ({ codifyData, codesData }) => {
+  const [showButtons, setShowButtons] = useState(false);
   const [showAlphabets, setShowAlphabets] = useState(false);
-  const [currentButton, setCurrentButton] = useState("Both");
+  const [currentButton, setCurrentButton] = useState("Codes");
   const [activeButton, setActiveButton] = useState("ICD-10");
   const [activeAlphabet, setActiveAlphabet] = useState(null);
   const [searchInput, setSearchInput] = useState("");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [codeData, setCodeData] = useState([]);
+  const [noData, setNoData] = useState(false);
 
   const handleRiskAdjustment = () => {
     setActiveButton("Risk Adjustment");
     setShowAlphabets(false);
+    setShowButtons(false);
   };
   const handleButtonClick = () => {
     setActiveButton("ICD-10");
+    setSearchInput(null);
   };
   const handleAlphabetClick = (alphabet) => {
     setActiveAlphabet(alphabet);
@@ -36,109 +41,110 @@ const Codify = ({ codifyData }) => {
   const handleInputChange = (e) => {
     setSearchInput(e.target.value);
   };
+  const convertToAntdTreeData = (node) => {
+    const { name, desc, children, requiredCharacter } = node;
+    const treeNode = {
+      title: (
+        <div className="d-flex gap-1">
+          <span className={style.name}>{name}</span>
+          <span className={style.desc}>-{desc}</span>
+        </div>
+      ),
+      key: name,
+      icon: requiredCharacter,
+      children: children ? children.map(convertToAntdTreeData) : [],
+    };
+    return treeNode;
+  };
 
+  const convertICDStructureToTreeData = (icdStructure) => {
+    return icdStructure?.map(convertToAntdTreeData);
+  };
   const fetch = async () => {
     setLoading(true);
-    const treeData = await codifyData({ diseases: searchInput });
+    let treeData = await codifyData({ diseases: searchInput });
     if (treeData?.status == "SUCCESS") {
-      setData(treeData?.response);
+      let temp = convertICDStructureToTreeData(treeData?.response);
+      if (!treeData?.response?.length) {
+        setNoData(true);
+      } else {
+        setNoData(false);
+      }
+      setData(temp);
     }
-    setLoading(false);
+    setLoading(false) ;
   };
 
   const handleSearch = () => {
-
     fetch();
   };
-
 
   function handleKeyDown(event) {
     if (event.keyCode === 13) {
       fetch();
+      fetchcode();
     }
   }
 
-  const alphabets = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "U",
-    "V",
-    "W",
-    "X",
-    "Y",
-    "Z",
-  ];
+  // const alphabets = [
+  //   "A",
+  //   "B",
+  //   "C",
+  //   "D",
+  //   "E",
+  //   "F",
+  //   "G",
+  //   "H",
+  //   "I",
+  //   "J",
+  //   "K",
+  //   "L",
+  //   "M",
+  //   "N",
+  //   "O",
+  //   "P",
+  //   "Q",
+  //   "R",
+  //   "S",
+  //   "T",
+  //   "U",
+  //   "V",
+  //   "W",
+  //   "X",
+  //   "Y",
+  //   "Z",
+  // ];
+  const buttons = ["I10", "D48.113", "D48.114", "D48.115", "D48.116"];
 
   const onChange = (key) => {}; // Future use case for onChange
 
-  const columns = [
-    {
-      title: "Code",
-      dataIndex: "code",
-    },
-    {
-      title: "Description",
-      dataIndex: "Description",
-    },
-  ];
-  const datas = [
-    {
-      key: "1",
-      code: "A41.154",
-      Description: "Sepsis due to  Acinetobcater baumannii",
-    },
-    {
-      key: "2",
-      code: "A41.154",
-      Description: "Sepsis due to  Acinetobcater baumannii",
-    },
-    {
-      key: "3",
-      code: "A41.154",
-      Description: "Sepsis due to  Acinetobcater baumannii",
-    },
-    {
-      key: "4",
-      code: "A41.154",
-      Description: "Sepsis due to  Acinetobcater baumannii",
-    },
-    {
-      key: "5",
-      code: "A41.154",
-      Description: "Sepsis due to  Acinetobcater baumannii",
-    },
-  ];
-
-  const items = [
-    {
-      key: "1",
-      label:
-        " Updates to the ICD-10-CM coding system have been implemented-2024",
-      children: (
-        <div>
-          <Tables data={datas} columns={columns} />
-        </div>
-      ),
-    },
-  ];
+  const fetchcode = async () => {
+    setLoading(true);
+    const tableData = await codesData({ code: searchInput });
+    if (tableData?.status == "SUCCESS") {
+      setCodeData({
+        ...codeData,
+        name: tableData?.response?.name,
+        desc: tableData?.response?.desc,
+        excludes1: tableData?.response?.excludes1,
+        children: tableData?.response?.children,
+        inclusionTerm: tableData?.response?.inclusionTerm,
+      });
+    }
+    setLoading(false);
+  };
+  useEffect(() => {
+    if (!searchInput?.length) {
+      setData(null);
+      setCodeData(null);
+      setNoData(false);
+    } else if (data && data.length === 0) {
+      setNoData(true);
+      // setSearchInput(null)
+    } else {
+      setNoData(false);
+    }
+  }, [searchInput, data]);
 
   return (
     <div className="container-fluid">
@@ -161,16 +167,16 @@ const Codify = ({ codifyData }) => {
             </Button>
           </div>
         </div>
-        <div className="col-1">
+        {/* <div className="col-1">
           <div className="d-flex justify-content-center">
             <FilterOutlined
               style={{ fontSize: "20px" }}
               onClick={() => setShowAlphabets(!showAlphabets)}
             />
           </div>
-        </div>
+        </div> */}
       </div>
-      {showAlphabets && (
+      {/* {showAlphabets && (
         <div className="d-flex gap-1 p-2 flex-wrap">
           {alphabets.map((name, index) => (
             <div onClick={() => handleAlphabetClick(name)}>
@@ -189,7 +195,7 @@ const Codify = ({ codifyData }) => {
             icon={<ArrowRightOutlined className={style.arrowcolor} />}
           />
         </div>
-      )}
+      )} */}
       <div className="row">
         {activeButton === "ICD-10" && (
           <>
@@ -212,58 +218,80 @@ const Codify = ({ codifyData }) => {
             </div>
             <div className="d-flex gap-2 px-3 ">
               <Button
-                className={currentButton === "Both" ? style.both : style.code}
-                onClick={() => setCurrentButton("Both")}
-              >
-                Both
-              </Button>
-              <Button
                 className={currentButton === "Codes" ? style.both : style.code}
                 onClick={() => setCurrentButton("Codes")}
+              >
+                Tree View
+              </Button>
+              <Button
+                className={
+                  currentButton === "Description" ? style.both : style.code
+                }
+                onClick={() => setCurrentButton("Description")}
               >
                 Codes
               </Button>
             </div>
-            {currentButton == "Both" && (
-              <div>
-                <div className="p-2 mt-3 collapsestyle">
-                  <Collapse
-                    onChange={onChange}
-                    expandIconPosition={"end"}
-                    className={style.collapse}
-                    pagination={false}
-                    items={items}
-                  />
-                </div>
-                <div className="p-2 mt-2">
-                  <Collapse
-                    onChange={onChange}
-                    expandIconPosition={"end"}
-                    className={style.collapse}
-                    pagination={false}
-                    items={items}
-                  />
-                </div>
+
+            <div className="p-3 d-flex gap-3 ">
+              <div className={style.p}>Recent searches</div>
+              <CaretDownOutlined
+                style={{ fontSize: "20px" }}
+                onClick={() => setShowButtons(!showButtons)}
+              />
+            </div>
+            {showButtons && (
+              <div className="d-flex gap-3  flex-wrap mx-2">
+                {buttons.map((name, index) => (
+                  <Button className={style.btnborder} key={index}>
+                    {name}
+                  </Button>
+                ))}
               </div>
             )}
-            {currentButton == "Codes" && (
+            {currentButton == "Codes" && data?.length ? (
               <Codes
                 searchInput={searchInput}
                 data={data}
                 loading={loading}
                 setCurrentButton={setCurrentButton}
               />
+            ) : (
+              <></>
+            )}
+            {noData && (
+              <p className="d-flex justify-content-center">
+                "Uh oh! It seems there might be a typo. Please review your
+                spelling or try a different keyword."
+              </p>
+            )}
+            {currentButton == "Description" && (
+              <Tables
+                setCodeData={setCodeData}
+                loading={loading}
+                codeData={codeData}
+                setLoading={setLoading}
+              />
             )}
           </>
         )}
       </div>
 
-      {activeButton === "Risk Adjustment" && <RiskAdjustment />}
+      {activeButton === "Risk Adjustment" && (
+        <Riskadjustment
+          activeButton={activeButton}
+          setActiveButton={setActiveButton}
+          setSearchInput={setSearchInput}
+          loading={loading}
+          setLoading={setLoading}
+        />
+      )}
     </div>
   );
 };
 
 const enhancer = connect((state) => ({ state }), {
   codifyData: dashbaordActions.codifyAction,
+  codesData: dashbaordActions.codesAction,
 });
 export default enhancer(Codify);

@@ -1,41 +1,44 @@
 import React from "react";
 import style from "./style.module.css";
 
-const TableRisk = ({ data, subheader }) => {
+const TableRisk = ({ data, subheader,activeButton,setActiveButton,setSearchInput }) => {
+
+  const handleHeaderClick = () => {
+    setActiveButton("ICD-10");
+    setSearchInput(data?.diagnosisCode); 
+  };
   return (
     <div className="d-flex mt-3">
-      <div
-        className={`${style.header} w-100`}
-      >
+      <div className={`${style.header} w-100`}>
         <table className="table table-bordered">
-          <td colSpan="4" className={style.head}>
-            <span className={style.code}>A26.7</span>
-            -Erysipelothrix sepsis
+          <td colSpan={12} className={style.head}>
+            <span className={style.code}  onClick={()=>handleHeaderClick()}>
+              {data?.diagnosisCode}-{data?.description}
+            </span>
           </td>
-
-          <tr>
-            <th colSpan="3"> CMS HCC</th>
-            <th colSpan="2">RX HCC</th>
+          <tr className="tablerow">
+            <th className = "tablehead"colSpan={6}> CMS HCC</th>
+            <th colSpan={2}>RX HCC</th>
           </tr>
-
-          <tbody>
+           
             <tr>
               {subheader?.map((item, index) => (
-                <td key={index} scope="row">
+                <td key={index} scope="row" > 
                   {item.label}
                 </td>
               ))}
             </tr>
-            
-            {data?.map((item, index) => (
-              <tr key={index}>
-                <td scope="row">{item?.year}</td>
-                <td>{item?.pace_esrd_v21}</td>
-                <td>{item?.v22}</td>
-                <td>{item?.v24}</td>
-                <td>{item?.v05}</td>
-              </tr>
-            ))}
+            <tbody className="tablebody">
+              <tr >
+              <td className="tablerow" scope="row">{data?.year}</td>
+              <td>{data?.cmsHccEsrdModelCategoryV24Payment}</td>
+              <td>{data?.cmsHccEsrdModelCategoryV24Payment}</td>
+              <td>{data?.cmsHccModelCategoryV24Payment}</td>
+              <td>{data?.cmsHccModelCategoryV22Payment}</td>
+              <td>{data?.rxHccModelCategoryV08Payment}</td>
+              <td>{data?.rxHccModelCategoryV05Payment}</td>
+              <td>{data?.rxHccModelCategoryV08Payment}</td>
+            </tr>
           </tbody>
         </table>
       </div>

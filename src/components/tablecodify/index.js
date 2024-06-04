@@ -1,14 +1,98 @@
-import React from 'react'
-import {  Table } from 'antd';
-
+import React, { useState } from "react";
+import style from "./style.module.css";
+import { Empty, Spin, Table } from "antd";
+import { ArrowRightOutlined } from "@ant-design/icons";
 
 const Tables = (props) => {
-   const {data,columns}=props
-  return (
-    <div>
-      <Table columns={columns} dataSource={data} size="middle" />
-    </div>
-  )
-}
+  const { codeData, setCodeData, loading, setLoading } = props;
 
-export default Tables
+  const handleViewTable = (tableData) => {
+    setLoading(true);
+    setCodeData({
+      ...codeData,
+      name: tableData?.name,
+      desc: tableData?.desc,
+      excludes1: tableData?.excludes1,
+      children: tableData?.children,
+      inclusionTerm: tableData?.inclusionTerm,
+    });
+    setLoading(false);
+  };
+
+  return (
+    <div className={style.code}>
+      <div className="d-flex justify-content-center">
+        {loading && <Spin size="large" />}
+      </div>
+      {(codeData?.excludes1 || codeData?.inclusionTerm || codeData?.name) && (
+        <div className={`${style.card} mt-2`}>
+          <div className={style.head}>
+            {codeData?.name}-{codeData?.desc}
+          </div>
+
+          <div className="card-group">
+            <div className="card">
+              <div className="card-body border border-secondary p-0">
+                <h5 className="card-title bg-success text-white d-flex justify-content-center">
+                  Include
+                </h5>
+                <p
+                  className="card-text "
+                  style={{ height: "160px", padding: "10px" }}
+                >
+                  {codeData?.inclusionTerm ? (
+                    codeData?.inclusionTerm
+                  ) : (
+                    <Empty />
+                  )}
+                </p>
+              </div>
+            </div>
+            <div className="card">
+              <div className="card-body border border-secondary p-0">
+                <h5
+                  class="card-title  bg- text-white d-flex justify-content-center"
+                  style={{ background: "blue" }}
+                >
+                  Exclude1
+                </h5>
+                <p
+                  className="card-text"
+                  style={{ height: "160px", padding: "10px" }}
+                >
+                  {codeData?.excludes1 ? codeData?.excludes1 : <Empty />}
+                </p>
+              </div>
+            </div>
+            <div className="card">
+              <div className="card-body border border-secondary p-0 ">
+                <h5 class="card-title bg-danger text-white d-flex justify-content-center">
+                  Exclude2
+                </h5>
+                <p
+                  className="card-text "
+                  style={{ height: "160px", padding: "10px" }}
+                >
+                  {codeData?.excludes2 ? codeData?.excludes2 : <Empty />}{" "}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      <div className={style.list}>
+        {codeData?.children?.map((s, i) => (
+          <div key={i} onClick={() => handleViewTable(s)}>
+            <p class={`${style.card2} mt-3`}>
+              <ArrowRightOutlined />
+              <span className={style.codes}>{s.name} </span>
+              <span>- {s.desc}</span>
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Tables;
