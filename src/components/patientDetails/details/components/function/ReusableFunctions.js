@@ -699,9 +699,11 @@ export const handleSubmitValidNotes = async ({
   selectDisDetails,
   getpatientDetailsData,
   patientDetailsResult,
+  handleCloseModal
 }) => {
   setFileLoading(true);
   setConfirmNotesModalValid(false);
+  handleCloseModal();
   var apiURL = "";
   if (
     isValidAction.name == "Move to Suggested" &&
@@ -735,6 +737,12 @@ export const handleSubmitValidNotes = async ({
   }
   if (isValidAction.name == "Move to Hcc" && isValidAction.title == "NONHCC") {
     apiURL = "management/disease/move/invalidtovalid";
+  }
+  if (isValidAction.name == "Move to Deleted" && isValidAction.title == "COMBO") {
+    apiURL = "management/disease/move/combovalidtodeleted";
+  }
+  if (isValidAction.name == "Move to valid" && isValidAction.title == "COMBO") {
+    apiURL = "management/disease/move/combodeletedtovalid";
   }
   try {
     var patientId = localStorage.getItem("patientId");

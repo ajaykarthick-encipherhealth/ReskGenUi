@@ -17,6 +17,8 @@
 .code {
   font-size: 14px;
   text-align: left;
+  display: flex;
+  justify-content: space-between;
 }
 .codeAlign {
   font-size: 12px;
