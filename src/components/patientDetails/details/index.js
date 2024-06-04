@@ -223,6 +223,7 @@ const Details = ({
       }
       getMeatQueryList(patientId, result?.processedYear);
       setPatientDocumentResult(result);
+      console.log(result)
       setPatientDetails(result);
       if (result.hccDiseases != null) {
         var validDisArray = [];
@@ -720,9 +721,9 @@ const Details = ({
                       >
                         <div className={`${visitStyles.rafscoreheader} `}>
                           <label>Score</label>
-                          {patientDetails.rafScore?.score != null ? (
+                          {patientDetails.rafScore?.rafVersionDTO?.overAllScore != null ? (
                             <h6 className="ageDtails">
-                              {patientDetails.rafScore?.score?.toFixed(3)}
+                              {patientDetails.rafScore?.rafVersionDTO?.overAllScore?.toFixed(3)}
                             </h6>
                           ) : (
                             <h6 className="ageDtails">0.00</h6>
