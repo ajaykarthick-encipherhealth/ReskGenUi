@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { OrganizationChart } from "primereact/organizationchart";
 import Style from "./style.module.css";
-import { Popover, Tag, Tooltip } from "antd";
+import { Popconfirm, Popover, Tag, Tooltip } from "antd";
 import Tree from "./data.json";
 import Header from "../../../../../jsx/layouts/nav/Header";
 import { Card } from "react-bootstrap";
@@ -12,8 +12,11 @@ import { CalendarOutlined } from "@ant-design/icons";
 import moment from "moment";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
+import { faCircleUser, faArrowsAlt } from "@fortawesome/free-solid-svg-icons";
 import SpinnerDots from "../../../../../components/spinner";
+import ModelIndex from "../../components/model/Index";
+import { moveToAnotherAction } from "../../components/function/ReusableFunctions";
+import { connect } from "react-redux";
 
 const addOnCodeColor = [
   "magenta",
@@ -27,11 +30,17 @@ const addOnCodeColor = [
   "purple",
 ];
 
-const CamboTree = ({ tree }) => {
+const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
   const [background, setBackground] = useState([]);
   const [trees, setTrees] = useState(Tree);
   const [isLoading, setLoading] = useState(tree);
   const [zoom, setZoom] = useState({ width: 350, height: 185 });
+  const [selectDiseasesName, setSelectDiseasesName] = useState("");
+  const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
+  const [isValidAction, setIsValidAction] = useState("");
+  const [selectDisDetails, setSelectDisDetails] = useState(false);
+  const [fileLoading, setFileLoading] = useState(false);
+
   const getBackgroundColor = async () => {
     try {
       const response = await axios.get(
@@ -248,6 +257,39 @@ const CamboTree = ({ tree }) => {
     });
   };
 
+  const confirmComboDelete = () => {
+    moveToAnotherAction(
+      setConfirmNotesModalValid,
+      setIsValidAction,
+      "Move to Deleted",
+      selectDisDetails.diseaseSource == "HCC_DISEASES"
+        ? "HCC"
+        : selectDisDetails.diseaseSource == "SUGGESTED_HCC_DISEASES"
+        ? "SUGGESTED"
+        : "COMBO"
+    );
+  };
+  const onchangeCombo = (data, code, diseaseSource) => {
+    var title =
+      code + " - " + data.actualDescription
+        ? data.actualDescription
+        : data.diseaseName;
+    data.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
+    data.processedYear = patientDetailsResult?.data?.response?.processedYear;
+    data.dbDescription = data.actualDescription
+      ? data.actualDescription
+      : data.diseaseName;
+    (data.fileId = patientDetailsResult?.data?.response?.fileId),
+      setSelectDiseasesName(title);
+    setSelectDisDetails(data);
+  };
+
+  const handleCloseModal = () => {
+    setConfirmNotesModalValid(false);
+    setOpens(false);
+    setCombiTree([]);
+  };
+
   useEffect(() => {
     getBackgroundColor();
   }, []);
@@ -270,9 +312,40 @@ const CamboTree = ({ tree }) => {
         style={{ width: zoom.width, height: zoom.width < 300 ? "auto" : 185 }}
       >
         <div className={Style.code}>
-          {node.diagnosisCodeCombo
-            ? node.diagnosisCodeCombo
-            : node.diagnosisCode}
+          <div>
+            {node.diagnosisCodeCombo
+              ? node.diagnosisCodeCombo
+              : node.diagnosisCode}
+          </div>
+          <div>
+            <Popconfirm
+              title="You want move to Delete?"
+              description={node.diseaseName}
+              onConfirm={confirmComboDelete}
+              placement="leftTop"
+              okText="Yes"
+              cancelText="No"
+              onOpenChange={() =>
+                onchangeCombo(
+                  node,
+                  node.diagnosisCodeCombo
+                    ? node.diagnosisCodeCombo
+                    : node.diagnosisCode,
+                  node.diseaseSource
+                )
+              }
+            >
+              <div className={visitStyles.close_icon}>
+                <FontAwesomeIcon
+                  icon={faArrowsAlt}
+                  style={{
+                    size: 8,
+                    color: "#a80404",
+                  }}
+                />
+              </div>
+            </Popconfirm>
+          </div>
         </div>
         <Tooltip
           title={node.diseaseName ? node.diseaseName : node.actualDescription}
@@ -313,21 +386,38 @@ const CamboTree = ({ tree }) => {
   }, []);
 
   return (
-    <div style={{ backgroundColor: "#fbfdff" }}>
-      <button className="btns-primary btn-app-primary mx-1" onClick={zoomOut}>
-        zoom-in
-      </button>
-      <button className="btns-primary btn-app-outline-primary" onClick={zoomIn}>
-        zoom-out
-      </button>
-      <div className={`overflow-x-auto ${Style.chart}`}>
-        {isLoading ? (
-          <SpinnerDots />
-        ) : (
-          <OrganizationChart value={trees} nodeTemplate={nodeTemplate} />
-        )}
+    <>
+      <div style={{ backgroundColor: "#fbfdff" }}>
+        <button className="btns-primary btn-app-primary mx-1" onClick={zoomOut}>
+          zoom-in
+        </button>
+        <button
+          className="btns-primary btn-app-outline-primary"
+          onClick={zoomIn}
+        >
+          zoom-out
+        </button>
+        <div className={`overflow-x-auto ${Style.chart}`}>
+          {isLoading ? (
+            <SpinnerDots />
+          ) : (
+            <OrganizationChart value={trees} nodeTemplate={nodeTemplate} />
+          )}
+        </div>
       </div>
-    </div>
+      <ModelIndex
+        title={selectDiseasesName}
+        openState={confirmNotesModalValid}
+        setFileLoading={setFileLoading}
+        handleCloseModal={handleCloseModal}
+        setConfirmNotesModalValid={setConfirmNotesModalValid}
+        isValidAction={isValidAction}
+        selectDisDetails={selectDisDetails}
+      />
+    </>
   );
 };
-export default CamboTree;
+const enhancer = connect((state) => ({
+  patientDetailsResult: state?.patientDetails?.details?.patientResult,
+}));
+export default enhancer(CamboTree);
