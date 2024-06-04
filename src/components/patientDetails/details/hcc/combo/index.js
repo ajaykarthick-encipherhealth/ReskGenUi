@@ -225,6 +225,7 @@ const Combo = ({
               addComboCode={addComboCode}
               setConfirmNotesModalValid ={setConfirmNotesModalValid}
               setIsValidAction ={setIsValidAction}
+              patientDocumentResult={patientDocumentResult}
             />
           </div>
 
@@ -249,6 +250,7 @@ const Combo = ({
               isAddComboCode={false}
               setConfirmNotesModalValid ={setConfirmNotesModalValid}
               setIsValidAction ={setIsValidAction}
+              patientDocumentResult={patientDocumentResult}
             />
           </div>
         </div>
@@ -286,6 +288,7 @@ const Combo = ({
                   addComboCode={addComboCode}
                   setConfirmNotesModalValid ={setConfirmNotesModalValid}
                   setIsValidAction ={setIsValidAction}
+                  patientDocumentResult={patientDocumentResult}
                 />
               </div>
               <div className="col-xl-7">
