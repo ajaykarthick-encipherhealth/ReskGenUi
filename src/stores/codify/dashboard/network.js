@@ -1,4 +1,6 @@
 import { requestPortal } from "../../../utils/network";
+import { apirequestPortal } from "../../../utils/network";
+
 
 export const codify = async ({ diseases }) => {
   const options = {
@@ -23,9 +25,18 @@ export const riskadjustment = async ({ year, code }) => {
     method: "GET",
   };
   const url = `year=${year}&code=${code}`;
-  const data = await requestPortal(
-    `management/getRiskAdjustmentForYear?${url}`,
+  const data = await apirequestPortal(
+    `controlzen/getRiskAdjustmentForYear?${url}`,
     options
   );
+  return data;
+};
+
+export const searches = async ({ username }) => {
+  const options = {
+    method: "GET",
+  };
+  const url = `q=${username}`;
+  const data = await apirequestPortal(`controlzen/recentSearches?${url}`, options);
   return data;
 };

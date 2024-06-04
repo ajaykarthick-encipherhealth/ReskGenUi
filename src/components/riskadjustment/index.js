@@ -59,56 +59,9 @@ const RiskAdjustment = ({
     });
 
     if (riskData?.status == "SUCCESS") setLoading(false);
+    console.log(riskData,"riskData")
     const keys = Object.keys(riskData?.response || {});
-    setData({
-      ...data,
-      responseKeys: keys,
-      year: riskData?.response?.year,
-      diagnosisCode: riskData?.response?.diagnosisCode,
-      description: riskData?.response?.description,
-      cmsHccEsrdModelCategoryV24Payment:
-        riskData?.response?.cmsHccEsrdModelCategoryV24Payment === "Yes" ? (
-          <CheckCircleOutlined className="text-success lead" />
-        ) : (
-          <CloseCircleOutlined className="text-danger lead" />
-        ),
-      cmsHccModelCategoryV22Payment:
-        riskData?.response?.cmsHccModelCategoryV22Payment === "Yes" ? (
-          <CheckCircleOutlined className="text-success lead" />
-        ) : (
-          <CloseCircleOutlined className="text-danger lead" />
-        ),
-      cmsHccModelCategoryV24Payment:
-        riskData?.response?.cmsHccModelCategoryV24Payment === "Yes" ? (
-          <CheckCircleOutlined className="text-success lead" />
-        ) : (
-          <CloseCircleOutlined className="text-danger lead" />
-        ),
-      cmsHccEsrdModelCategoryV21Payment:
-        riskData?.response?.cmsHccEsrdModelCategoryV21Payment === "Yes" ? (
-          <CheckCircleOutlined className="text-success lead" />
-        ) : (
-          <CloseCircleOutlined className="text-danger lead" />
-        ),
-      rxHccModelCategoryV08Payment:
-        riskData?.response?.rxHccModelCategoryV08Payment === "Yes" ? (
-          <CheckCircleOutlined className="text-success lead" />
-        ) : (
-          <CloseCircleOutlined className="text-danger lead" />
-        ),
-      rxHccModelCategoryV05Payment:
-        riskData?.response?.rxHccModelCategoryV05Payment === "Yes" ? (
-          <CheckCircleOutlined className="text-success lead " />
-        ) : (
-          <CloseCircleOutlined className="text-danger lead" />
-        ),
-      rxHccModelCategoryV08Payment:
-        riskData?.response?.rxHccModelCategoryV08Payment === "Yes" ? (
-          <CheckCircleOutlined className="text-success lead" />
-        ) : (
-          <CloseCircleOutlined className="text-danger lead" />
-        ),
-    });
+    setData(riskData?.response)
   };
 
   const handleYearChange = (date, dateString) => {
@@ -155,7 +108,7 @@ const RiskAdjustment = ({
         <textarea
           className={`${style.textarea} `}
           placeholder="Description"
-          rows="6"
+          rows="2"
         ></textarea>
       </div>
       <div className="d-flex align-items-center justify-content-center mt-4 ">
@@ -166,7 +119,7 @@ const RiskAdjustment = ({
       <div className="d-flex justify-content-center mt-4">
         {loading && <Spin size="large" />}
       </div>
-      {data?.year ? (
+      {/* {data?.year ?  ( */}
         <TableRisk
           activeButton={activeButton}
           setActiveButton={setActiveButton}
@@ -174,11 +127,11 @@ const RiskAdjustment = ({
           data={data}
           subheader={subheader}
         />
-      ) : (
-        selectedYear && <Empty />
-      )}
+      {/* ) : (
+        selectedYear  && <Empty />
+      )}  */}
     </div>
-  );
+  );  
 };
 
 const enhancer = connect((state) => ({ state }), {
