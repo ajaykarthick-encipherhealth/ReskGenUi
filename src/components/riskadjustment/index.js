@@ -22,16 +22,8 @@ const RiskAdjustment = ({
   const [errorMessage, setErrorMessage] = useState("");
   const currentDate = new Date();
 
-  const subheader = [
-    { label: "Year", value: "year" },
-    { label: "ESRD/v21 ", value: "cmsHccEsrdModelCategoryV21Payment" },
-    { label: "ESRD/v24 ", value: "cmsHccEsrdModelCategoryV24Payment" },
-    { label: "V22 ", value: "cmsHccModelCategoryV22Payment" },
-    { label: "V24 ", value: "cmsHccModelCategoryV24Payment" },
-    { label: "V08 ", value: "rxHccModelCategoryV08Payment" },
-    { label: "V05 ", value: "rxHccModelCategoryV05Payment" },
-    { label: "V08", value: "rxHccModelCategoryV08Payment" },
-  ];
+
+
   const handleCode = (e) => {
     const inputValue = e.target.value;
     const regex = /^[a-zA-Z0-9.]*$/;
@@ -57,11 +49,8 @@ const RiskAdjustment = ({
       year: selectedYear,
       code: code,
     });
-
     if (riskData?.status == "SUCCESS") setLoading(false);
-    console.log(riskData,"riskData")
-    const keys = Object.keys(riskData?.response || {});
-    setData(riskData?.response)
+    setData(riskData?.response);
   };
 
   const handleYearChange = (date, dateString) => {
@@ -119,19 +108,19 @@ const RiskAdjustment = ({
       <div className="d-flex justify-content-center mt-4">
         {loading && <Spin size="large" />}
       </div>
-      {/* {data?.year ?  ( */}
+      {data?.[0]?.year ? (
         <TableRisk
           activeButton={activeButton}
           setActiveButton={setActiveButton}
           setSearchInput={setSearchInput}
           data={data}
-          subheader={subheader}
         />
-      {/* ) : (
-        selectedYear  && <Empty />
-      )}  */}
+      ) : (
+        ""
+        // selectedYear  && <Empty />
+      )}
     </div>
-  );  
+  );
 };
 
 const enhancer = connect((state) => ({ state }), {

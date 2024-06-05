@@ -13,8 +13,9 @@ import style from "./style.module.css";
 import Tables from "../../components/tablecodify";
 import Codes from "../codes";
 import Riskadjustment from "../../components/riskadjustment";
+import { Select } from "antd";
 
-const Codify = ({ codifyData, codesData, recentsearch }) => {
+const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   const [showButtons, setShowButtons] = useState(false);
   const [showAlphabets, setShowAlphabets] = useState(false);
   const [currentButton, setCurrentButton] = useState("Codes");
@@ -26,6 +27,7 @@ const Codify = ({ codifyData, codesData, recentsearch }) => {
   const [codeData, setCodeData] = useState([]);
   const [noData, setNoData] = useState(false);
   const [searches, setSearches] = useState([]);
+  const [options, setOptions] = useState([]);
 
   const handleRiskAdjustment = () => {
     setActiveButton("Risk Adjustment");
@@ -39,8 +41,11 @@ const Codify = ({ codifyData, codesData, recentsearch }) => {
   const handleAlphabetClick = (alphabet) => {
     setActiveAlphabet(alphabet);
   };
-  const handleInputChange = (e) => {
-    setSearchInput(e.target.value);
+  const handleInputChange = (value) => {
+    fetch()
+    fetchcode();
+    setSearchInput(value);
+    
   };
   const convertToAntdTreeData = (node) => {
     const { name, desc, children, requiredCharacter } = node;
@@ -78,6 +83,7 @@ const Codify = ({ codifyData, codesData, recentsearch }) => {
 
   const handleSearch = () => {
     fetch();
+    fetchcode();
   };
 
   function handleKeyDown(event) {
@@ -88,7 +94,7 @@ const Codify = ({ codifyData, codesData, recentsearch }) => {
   }
   const searchfetch = async () => {
     let searchData = await recentsearch({});
-    if (searchData?.status === "SUCCESS") {
+     if (searchData?.status === "SUCCESS") {
       const filteredSearches = searchData?.response
         .filter((item) => item.searchFrom === "TREE_VIEW")
         .map((item) => item.searchedCode);
@@ -96,10 +102,43 @@ const Codify = ({ codifyData, codesData, recentsearch }) => {
     }
   };
 
-  useEffect(() => {
-    searchfetch();
-  }, []);
+  const codefetch = async () => {
+    let searchData = await recentsearch({});
+    if (searchData?.status === "SUCCESS") {
+      const codesearch = searchData?.response
+        .filter((item) => item.searchFrom === "CODES")
+        .map((item) => item.searchedCode);
+      setSearches(codesearch);
+    }
+  };
 
+  useEffect(() => {
+    if (currentButton === "Codes") {
+      searchfetch();
+    } else if (currentButton === "Description") {
+      codefetch();
+    }
+  }, [currentButton]);
+
+  const completeFetch = async () => {
+    let completedData = await completeData({ codes: searchInput });
+    console.log(completedData?.response?.displayStrings, "completedData");
+
+    if (completedData?.status === "SUCCESS") {
+      const displayCodeOptions = completedData?.response?.displayStrings?.map(
+        (x) => ({
+          value: x[0],
+          // label: `${x[0]} - ${x[1]}`,
+          label:x[0],
+        })
+      );
+      setOptions(displayCodeOptions);
+    }
+  };
+
+  useEffect(() => {
+    completeFetch();
+  },[]);
   // const alphabets = [
   //   "A",
   //   "B",
@@ -159,6 +198,14 @@ const Codify = ({ codifyData, codesData, recentsearch }) => {
     }
   }, [searchInput, data]);
 
+  const onSearch = (value) => {
+    // FUTURE USE
+  };
+
+  const filterOption = (input, option) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+
+
   return (
     <div className="container-fluid">
       <div className="row  mt-3 px-1">
@@ -213,13 +260,24 @@ const Codify = ({ codifyData, codesData, recentsearch }) => {
         {activeButton === "ICD-10" && (
           <>
             <div className="p-3 d-flex gap-3">
-              <input
+              {/* <input
                 className={style.input}
                 type="text"
                 placeholder="Keywords, codes or code range between codes"
                 value={searchInput}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
+              /> */}
+              <Select
+                onSearch={onSearch}
+                filterOption={filterOption}
+                placeholder="Keywords, codes or code range between codes"
+                optionFilterProp="children"
+                value={searchInput}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+                showSearch
+                options={options}
               />
               <div className="">
                 <Button
@@ -255,6 +313,15 @@ const Codify = ({ codifyData, codesData, recentsearch }) => {
             </div>
 
             {showButtons && currentButton === "Codes" && (
+              <div className="d-flex gap-3  flex-wrap mx-2">
+                {searches.map((search, index) => (
+                  <Button className={style.btnborder} key={index}>
+                    {search}
+                  </Button>
+                ))}
+              </div>
+            )}
+            {showButtons && currentButton === "Description" && (
               <div className="d-flex gap-3  flex-wrap mx-2">
                 {searches.map((search, index) => (
                   <Button className={style.btnborder} key={index}>
@@ -308,5 +375,6 @@ const enhancer = connect((state) => ({ state }), {
   codifyData: dashbaordActions.codifyAction,
   codesData: dashbaordActions.codesAction,
   recentsearch: dashbaordActions.searchesAction,
+  completeData: dashbaordActions.autoCompleteAction,
 });
 export default enhancer(Codify);

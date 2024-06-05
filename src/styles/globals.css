@@ -14597,9 +14597,7 @@ input[type="number"] {
 .table th, .table td{
   border:1px solid #a4caf9;
 }
-.table tbody tr td{
-  border:1px solid #a4caf9 !important;
-}
+
 .ant-spin-nested-loading {
   border:1px solid #f0f0f0;
 }
@@ -14613,4 +14611,9 @@ input[type="number"] {
 .card{
   margin:0  !important;
   /* border:1px solid gray !important */
+}
+.ant-select-single {
+    font-size: 14px;
+    height: 42px !important;
+    width: 100% !important;
 }

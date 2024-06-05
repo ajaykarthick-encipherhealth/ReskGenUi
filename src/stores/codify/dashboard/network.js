@@ -40,3 +40,12 @@ export const searches = async ({ username }) => {
   const data = await apirequestPortal(`controlzen/recentSearches?${url}`, options);
   return data;
 };
+
+export const autocomplete = async ({ code }) => {
+  const options = {
+    method: "GET",
+  };
+  const url = `q=${codes}`;
+  const data = await apirequestPortal(`controlzen/autocomplete?${url}`, options);
+  return data;
+};

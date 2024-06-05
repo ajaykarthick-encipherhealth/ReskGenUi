@@ -21,3 +21,9 @@ export const  searchesAction = createActionThunk(
   " RECENT SEARCHES ",
   network.searches
 );
+
+
+export const  autoCompleteAction = createActionThunk(
+  " AUTO COMPLETE ",
+  network.autocomplete
+);
