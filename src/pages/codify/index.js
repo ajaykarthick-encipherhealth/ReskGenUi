@@ -14,6 +14,31 @@ import Tables from "../../components/tablecodify";
 import Codes from "../codes";
 import Riskadjustment from "../../components/riskadjustment";
 import { Select } from "antd";
+import { AutoComplete, Input } from "antd";
+
+const getRandomInt = (max, min = 0) =>
+  Math.floor(Math.random() * (max - min + 1)) + min;
+
+const searchResult = (query) =>
+  new Array(getRandomInt(5))
+    .join(".")
+    .split(".")
+    .map((_, idx) => {
+      const category = `${query}${idx}`;
+      return {
+        value: category,
+        label: (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <span>{category}</span>
+          </div>
+        ),
+      };
+    });
 
 const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   const [showButtons, setShowButtons] = useState(false);
@@ -41,9 +66,14 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   const handleAlphabetClick = (alphabet) => {
     setActiveAlphabet(alphabet);
   };
-  const handleInputChange = (value) => {
-    fetch();
-    fetchcode();
+  const handleInputChange = (e) => {
+    setSearchInput(e.target.value);
+  };
+  const handleSearch = (value) => {
+    setOptions(value ? searchResult(value) : []);
+    completeFetch();
+  };
+  const onSelect = (value) => {
     setSearchInput(value);
   };
   const convertToAntdTreeData = (node) => {
@@ -65,7 +95,8 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   const convertICDStructureToTreeData = (icdStructure) => {
     return icdStructure?.map(convertToAntdTreeData);
   };
-  const fetch = async () => {
+
+  const fetchTreeData = async () => {
     setLoading(true);
     let treeData = await codifyData({ diseases: searchInput });
     if (treeData?.status == "SUCCESS") {
@@ -80,19 +111,18 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
     setLoading(false);
   };
 
-  const handleSearch = () => {
-    fetch();
-    fetchcode();
-  };
-
   function handleKeyDown(event) {
     if (event.keyCode === 13) {
-      fetch();
-      fetchcode();
+      fetchTreeData();
+      fetchCodeData();
     }
   }
-  const searchfetch = async () => {
-    let searchData = await recentsearch({});
+  const handleSearchButton = () => {
+    fetchTreeData();
+    fetchCodeData();
+  };
+  const recentSearchTreeView = async () => {
+    let searchData = await recentsearch();
     if (searchData?.status === "SUCCESS") {
       const filteredSearches = searchData?.response
         .filter((item) => item.searchFrom === "TREE_VIEW")
@@ -101,7 +131,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
     }
   };
 
-  const codefetch = async () => {
+  const recentSearchTreeCode = async () => {
     let searchData = await recentsearch({});
     if (searchData?.status === "SUCCESS") {
       const codesearch = searchData?.response
@@ -111,21 +141,12 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
     }
   };
 
-  useEffect(() => {
-    if (currentButton === "Codes") {
-      searchfetch();
-    } else if (currentButton === "Description") {
-      codefetch();
-    }
-  }, [currentButton]);
-
   const completeFetch = async () => {
     let completedData = await completeData({ codes: searchInput });
     if (completedData?.status === "SUCCESS") {
       const displayCodeOptions = completedData?.response?.displayStrings?.map(
         (x) => ({
           value: x[0],
-          // label: `${x[0]} - ${x[1]}`,
           label: x[0],
         })
       );
@@ -133,9 +154,6 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
     }
   };
 
-  useEffect(() => {
-    completeFetch();
-  }, []);
   // const alphabets = [
   //   "A",
   //   "B",
@@ -165,9 +183,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   //   "Z",
   // ];
 
-  const onChange = (key) => {}; // Future use case for onChange
-
-  const fetchcode = async () => {
+  const fetchCodeData = async () => {
     setLoading(true);
     const tableData = await codesData({ code: searchInput });
     if (tableData?.status == "SUCCESS") {
@@ -175,7 +191,9 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
         ...codeData,
         name: tableData?.response?.name,
         desc: tableData?.response?.desc,
+        includes: tableData?.response?.includes,
         excludes1: tableData?.response?.excludes1,
+        excludes2: tableData?.response?.excludes2,
         children: tableData?.response?.children,
         inclusionTerm: tableData?.response?.inclusionTerm,
       });
@@ -189,18 +207,10 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
       setNoData(false);
     } else if (data && data.length === 0) {
       setNoData(true);
-      // setSearchInput(null)
     } else {
       setNoData(false);
     }
   }, [searchInput, data]);
-
-  const onSearch = (value) => {
-    // FUTURE USE
-  };
-
-  const filterOption = (input, option) =>
-    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
   return (
     <div className="container-fluid">
@@ -264,7 +274,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
               /> */}
-              <Select
+              {/* <Select
                 onSearch={onSearch}
                 filterOption={filterOption}
                 placeholder="Keywords, codes or code range between codes"
@@ -274,12 +284,31 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
                 onKeyDown={handleKeyDown}
                 showSearch
                 options={options}
-              />
+              /> */}
+              <AutoComplete
+                popupMatchSelectWidth={252}
+                style={{
+                  width: 200,
+                }}
+                options={options}
+                onSelect={onSelect}
+                onSearch={handleSearch}
+                size="large"
+              >
+                <Input
+                  // size="large"
+                  placeholder="Keywords, codes or code range between codes"
+                  // enterButton
+                  value={searchInput}
+                  onChange={handleInputChange}
+                  onKeyDown={handleKeyDown}
+                />
+              </AutoComplete>
               <div className="">
                 <Button
                   className={style.search}
                   icon={<SearchOutlined className={style.btncolor} />}
-                  onClick={handleSearch}
+                  onClick={handleSearchButton}
                 />
               </div>
             </div>
@@ -304,7 +333,11 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
               <div className={style.p}>Recent searches</div>
               <CaretDownOutlined
                 style={{ fontSize: "20px" }}
-                onClick={() => setShowButtons(!showButtons)}
+                onClick={() => {
+                  setShowButtons(!showButtons);
+                  recentSearchTreeView();
+                  recentSearchTreeCode();
+                }}
               />
             </div>
 

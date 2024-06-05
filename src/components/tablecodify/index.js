@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import style from "./style.module.css";
-import { Empty, Spin, Table } from "antd";
+import { Empty, Spin } from "antd";
 import { ArrowRightOutlined } from "@ant-design/icons";
 
 const Tables = (props) => {
@@ -8,14 +8,18 @@ const Tables = (props) => {
 
   const handleViewTable = (tableData) => {
     setLoading(true);
+
     setCodeData({
       ...codeData,
       name: tableData?.name,
       desc: tableData?.desc,
+      includes: tableData?.includes,
       excludes1: tableData?.excludes1,
+      excludes2: tableData?.excludes2,
       children: tableData?.children,
       inclusionTerm: tableData?.inclusionTerm,
     });
+
     setLoading(false);
   };
 
@@ -24,11 +28,15 @@ const Tables = (props) => {
       <div className="d-flex justify-content-center">
         {loading && <Spin size="large" />}
       </div>
-      {(codeData?.excludes1 || codeData?.inclusionTerm || codeData?.name) && (
+      {(codeData?.excludes1 ||
+        codeData?.includes ||
+        codeData?.name ||
+        codeData?.excludes2) && (
         <div className={`${style.card} mt-2`}>
           <div className={style.head}>
             {codeData?.name}-{codeData?.desc}
           </div>
+          <div className={style.inclusionTerm}>{codeData?.inclusionTerm}</div>
 
           <div className="card-group">
             <div className="card">
@@ -40,11 +48,7 @@ const Tables = (props) => {
                   className="card-text "
                   style={{ height: "160px", padding: "10px" }}
                 >
-                  {codeData?.inclusionTerm ? (
-                    codeData?.inclusionTerm
-                  ) : (
-                    <Empty />
-                  )}
+                  {codeData?.includes ? codeData?.includes : <Empty />}
                 </p>
               </div>
             </div>
@@ -92,6 +96,7 @@ const Tables = (props) => {
         ))}
       </div>
     </div>
+  
   );
 };
 

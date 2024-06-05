@@ -29,7 +29,6 @@ const TableRisk = ({
   const arrays = data?.map((x) => ({
     key4: Object.keys(x).filter((key) => key.includes("Payment")),
   }));
- 
 
   return (
     <div>
@@ -42,13 +41,28 @@ const TableRisk = ({
           {data?.[0]?.description}
         </div>
         <div className="d-flex justify-content-center">
-          <table className="table table-bordered " style={{width:"90%"}}>
+          <table className="table table-bordered " style={{ width: "90%" }}>
             <thead>
               <tr>
                 <th rowSpan={2}>year</th>
-                <th style={{fontWeight:"600"}}colSpan={keysArray?.[0]?.key1?.length}>ESRD/PACE</th>
-                <th style={{fontWeight:"600"}} colSpan={keysArray?.[0]?.key2?.length}>CMS HCC</th>
-                <th  style={{fontWeight:"600"}}  colSpan={keysArray?.[0]?.key3?.length}>RX HCC</th>
+                <th
+                  style={{ fontWeight: "600" }}
+                  colSpan={keysArray?.[0]?.key1?.length}
+                >
+                  ESRD/PACE
+                </th>
+                <th
+                  style={{ fontWeight: "600" }}
+                  colSpan={keysArray?.[0]?.key2?.length}
+                >
+                  CMS HCC
+                </th>
+                <th
+                  style={{ fontWeight: "600" }}
+                  colSpan={keysArray?.[0]?.key3?.length}
+                >
+                  RX HCC
+                </th>
               </tr>
               <tr>
                 {keysArray?.[0]?.key1?.map((a) => {
@@ -70,7 +84,7 @@ const TableRisk = ({
                     {keysArray?.[0]?.key1?.map((key) => {
                       return (
                         <td>
-                          {x[key] ? x[key] : "--"} {" "}
+                          {x[key] ? x[key] : "--"}{" "}
                           {x[key + "Payment"] === "Yes" ? (
                             <CheckCircleOutlined className="text-success lead" />
                           ) : (
