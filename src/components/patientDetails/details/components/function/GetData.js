@@ -332,6 +332,7 @@ export const getPatientDetails = async (
             children: res.children ? res.children : [],
             expanded: true,
             hyperlinks: res?.hyperlinks,
+            dateOfServices:res.dateOfServices,
           });
       });
       setNewValidDiseaseList && setNewValidDiseaseList(hccDisArray);
@@ -567,6 +568,7 @@ export const getPatientDetails = async (
             encounterDate: res.encounterDate,
             encounterDateSplit:  res.dateOfService,
             hyperlinks: res?.hyperlinks,
+            dateOfServices:res.dateOfServices,
           });
         }
       }
@@ -611,6 +613,7 @@ export const getPatientDetails = async (
             encounterDate: res.encounterDate,
             encounterDateSplit:  res.dateOfService,
             hyperlinks: res?.hyperlinks,
+            dateOfServices:res.dateOfServices,
           });
       });
 

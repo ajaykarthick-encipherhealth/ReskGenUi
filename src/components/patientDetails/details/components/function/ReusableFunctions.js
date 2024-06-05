@@ -754,7 +754,7 @@ export const handleSubmitValidNotes = async ({
     var patientId = localStorage.getItem("patientId");
     var dataFormatSuggested = {
       patientId: patientId,
-      diagnosisCode: selectDisDetails.diagnosisCode,
+      diagnosisCode: selectDisDetails.diagnosisCode ? selectDisDetails.diagnosisCode :selectDisDetails.diagnosisCodeCombo,
       description: selectDisDetails.actualDescription,
       dbDescription: selectDisDetails.dbDescription,
       reason: values.reason,
