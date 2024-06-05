@@ -88,7 +88,8 @@ const ModelIndex = ({
                       getpatientDetailsData,
                       patientDetailsResult,
                       getLabDetails,
-                      getRadiologyDetails
+                      getRadiologyDetails,
+                      handleCloseModal
                     });
                     form.resetFields();
                   }}

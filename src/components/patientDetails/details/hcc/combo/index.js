@@ -1,62 +1,35 @@
 import React, { useState, useEffect } from "react";
-import axios from "../../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
-import moment from "moment";
-import "react-vertical-timeline-component/style.min.css";
-import { useSelector, useDispatch,connect } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPlus,
-  faArrowsAlt,
-  faSitemap,
-} from "@fortawesome/free-solid-svg-icons";
-import { Popconfirm, notification, Tag, Modal } from "antd";
-import { SVGICON } from "../../../../../jsx/constant/theme";
+import { useSelector, useDispatch, connect } from "react-redux";
+import { notification, Tag, Modal } from "antd";
 import { Button, Offcanvas } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import Spinner from "../../../../../components/loadingSpinner";
 import styles from "../styles.module.css";
 import { manuallyAddComboCode } from "../../../../../services/PatientsListSevice";
 import CamboTree from "../org";
 import PdfViewer from "../../PdfViewerComponent";
-import {
-  getCaptureSectionBackgroundFile,
-  getEncounterDateBackground,
-  getProviderNameList,
-} from "../../components/function/ReusableFunctions";
 import { getPatientDetails } from "../../components/function/GetData";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
+import ComboCard from "../../components/COMBO";
+import ModelIndex from "../../components/model/Index";
 
-const addOnCodeColor = [
-  "magenta",
-  "red",
-  "volcano",
-  "orange",
-  "gold",
-  "cyan",
-  "blue",
-  "geekblue",
-  "purple",
-];
-const Combo = ({ activeComboTree,patientDetailsResult ,getpatientDetailsData,hccFileDetails,fileDosPageNumberList}) => {
+const Combo = ({
+  activeComboTree,
+  patientDetailsResult,
+  getpatientDetailsData,
+  hccFileDetails,
+  fileDosPageNumberList,
+}) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
   );
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
-  const { toolbarPluginInstance } = defaultLayoutPluginInstance;
-  const { searchPluginInstance } = toolbarPluginInstance;
-  const { highlight } = searchPluginInstance;
-  const { setTargetPages } = searchPluginInstance;
   const [isModalOpenCaptureSection, setIsModalOpenCaptureSection] =
     useState(false);
   const [comboDiseaseCodesList, setComboDiseaseCodesList] = useState([]);
   const [invalidComboDiseaseCodesList, setInvalidComboDiseaseCodesList] =
     useState([]);
   const [selectDiseasesName, setSelectDiseasesName] = useState("");
-  const [selectCode, setSelectCode] = useState("");
   const [patientDocumentResult, setPatientDocumentResult] = useState([]);
   const [selectFileURL, setSelectFileURL] = useState([]);
   const [validated, setValidated] = useState(false);
@@ -84,20 +57,15 @@ const Combo = ({ activeComboTree,patientDetailsResult ,getpatientDetailsData,hcc
     comboCode: "",
     additionalCode: "",
   });
-  const [localPatientId, setLocalPatientId] = useState("");
   const [captureSectionMatching, setCaptureSectionMatching] = useState([]);
   const [encounterDateMatching, setEncounterDateMatching] = useState([]);
   const [fileModalHeader, setFileModalHeader] = useState("");
-  const [patientFileDTO, setPatientFileDTO] = useState("");
-  const [fileInitialPage, setFileInitialPage] = useState(null);
-  const [findFileKeyword, setFindFileKeyword] = useState("");
-  const [fileModalTitle, setFileModalTitle] = useState("");
   const [isAddComboCode, setIsAddComboCode] = useState(false);
-  const [listPageNumber, setListPageNumber] = useState([]);
   const [fileLoading, setFileLoading] = useState(false);
   const [search, setSearch] = useState(false);
-  const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
-  const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null)
+  const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
+  const [isValidAction, setIsValidAction] = useState("");
+  const [selectDisDetails, setSelectDisDetails] = useState('');
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -141,56 +109,24 @@ const Combo = ({ activeComboTree,patientDetailsResult ,getpatientDetailsData,hcc
     }
   }, [hccFileDetails]);
 
-
-  const confirmComboInvalid = () =>
-    new Promise((resolve) => {
-      comboMoveInvalidConfirm();
-      setTimeout(() => resolve(null), 1000);
-    });
-
-  const confirmComboValid = () =>
-    new Promise((resolve) => {
-      comboMoveValidConfirm();
-      setTimeout(() => resolve(null), 1000);
-    });
   const onchangeCombo = (data, code) => {
-    setSelectDiseasesName(data);
-    setSelectCode(code);
+    var title = data.diagnosisCodeCombo;
+  data.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
+  data.processedYear = patientDetailsResult?.data?.response?.processedYear;
+  data.dbDescription = data.actualDescription
+    ? data.actualDescription
+    : data.diseaseName;
+  (data.fileId = patientDetailsResult?.data?.response?.fileId),
+    setSelectDiseasesName(title);
+  setSelectDisDetails(data);
   };
 
-  const comboMoveInvalidConfirm = () => {
-    const result = comboDiseaseCodesList.filter(
-      (res) => res.diseaseName != selectDiseasesName
-    );
-    const result2 = comboDiseaseCodesList.filter(
-      (res) => res.diseaseName == selectDiseasesName
-    );
-    setComboDiseaseCodesList(result);
-    let namePush = [];
-    namePush.push({ name: selectCode + " - " + selectDiseasesName });
-    let newArray = [];
-    newArray = [...invalidComboDiseaseCodesList, ...result2];
-    setInvalidComboDiseaseCodesList(newArray);
-  };
-
-  const comboMoveValidConfirm = () => {
-    const result = invalidComboDiseaseCodesList.filter(
-      (res) => res.diseaseName != selectDiseasesName
-    );
-    setInvalidComboDiseaseCodesList(result);
-    const result2 = invalidComboDiseaseCodesList.filter(
-      (res) => res.diseaseName == selectDiseasesName
-    );
-    let newArray = [];
-    newArray = [...comboDiseaseCodesList, ...result2];
-    setComboDiseaseCodesList(newArray);
-  };
 
   const handleCloseModal = () => {
+    setConfirmNotesModalValid(false);
     setValidated(false);
     setIsModalOpenCaptureSection(false);
     setIsAddComboCode(false);
-    setFindFileKeyword(null);
     setFileLoading(false);
   };
 
@@ -209,7 +145,7 @@ const Combo = ({ activeComboTree,patientDetailsResult ,getpatientDetailsData,hcc
     event.preventDefault();
     if (form.checkValidity() === true) {
       let updateDataformat = {
-        patientId: localPatientId,
+        patientId: patientDetailsResult?.data?.response?.patientId,
         dosYear: "",
         comboCode: inputValue.comboCode,
         additionalCode: inputValue.additionalCode,
@@ -223,7 +159,11 @@ const Combo = ({ activeComboTree,patientDetailsResult ,getpatientDetailsData,hcc
           placement: "top",
           duration: 1,
         });
-        getpatientDetailsData(patientId,patientDetailsResult?.data?.response?.processedYear,patientDetailsResult?.data?.response?.dateOfService);
+        getpatientDetailsData(
+          patientDetailsResult?.data?.response?.patientId,
+          patientDetailsResult?.data?.response?.processedYear,
+          patientDetailsResult?.data?.response?.dateOfService
+        );
       }
 
       setValidated(true);
@@ -267,263 +207,51 @@ const Combo = ({ activeComboTree,patientDetailsResult ,getpatientDetailsData,hcc
             <div className={`${visitStyles.comboTitle}`}>
               <span>VALID CODES </span>
             </div>
-            <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
-              <div className={visitStyles.combo_head_card}>
-                <div className="row">
-                  <div className="col-xl-3">
-                    <label htmlFor="combo">Combo Codes</label>
-                  </div>
-                  <div className="col-xl-3">
-                    <label htmlFor="additional">Additional Codes</label>
-                  </div>
-                  <div className="col-xl-5">
-                    <label htmlFor="description">Description</label>
-                  </div>
-                  <div className="col-xl-1">
-                    <div className="d-flex justify-content-center">
-                      <button
-                        onClick={() => addComboCode()}
-                        className={visitStyles.combo_add_btn}
-                      >
-                        <FontAwesomeIcon
-                          icon={faPlus}
-                          style={{
-                            color: "#fff",
-                            size: 12,
-                          }}
-                        />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {comboDiseaseCodesList?.length != 0 ? (
-                <div className={visitStyles.container}>
-                  <div className={visitStyles.hccStickey_head}>
-                    {comboDiseaseCodesList?.map((item) => {
-                      return (
-                        <div
-                          className={visitStyles.combo_details_card}
-                          key={item?.id}
-                        >
-                          <div className="row">
-                            <div className="col-xl-3 d-grid">
-                              <span className="font-bold">
-                                {item.diagnosisCodeCombo}
-                              </span>
-                            </div>
-                            <div className="col-xl-3">
-                              {item.addOnCodes?.map(
-                                (addCombo, index) =>
-                                  addCombo && (
-                                    <span
-                                      className="font-bold"
-                                      key={addOnCodeColor[index]}
-                                    >
-                                      <Tag color={addOnCodeColor[index]}>
-                                        {addCombo}
-                                      </Tag>
-                                    </span>
-                                  )
-                              )}
-                            </div>
-                            <div className="col-xl-5">
-                              <span>{item.diseaseName}</span>
-                            </div>
-                            <div className="col-xl-1">
-                              <div>
-                                <Popconfirm
-                                  title="You want move to Invalid?"
-                                  description={item.diseaseName}
-                                  onConfirm={confirmComboInvalid}
-                                  placement="leftTop"
-                                  okText="Yes"
-                                  cancelText="No"
-                                  onOpenChange={() =>
-                                    onchangeCombo(
-                                      item.diseaseName,
-                                      item.addOnCode
-                                    )
-                                  }
-                                >
-                                  <div className={visitStyles.close_icon}>
-                                    <FontAwesomeIcon
-                                      icon={faArrowsAlt}
-                                      style={{
-                                        size: 8,
-                                        color: "#a80404",
-                                      }}
-                                    />
-                                  </div>
-                                </Popconfirm>
-                              </div>
-
-                              <div
-                                className={visitStyles.close_icon}
-                                style={{ background: "#c7f3c6" }}
-                                onClick={() => {
-                                  setOpens(true);
-                                  setCombiTree([{ ...item, expanded: true }]);
-                                }}
-                              >
-                                <FontAwesomeIcon
-                                  icon={faSitemap}
-                                  style={{
-                                    size: 8,
-                                    color: "#088f39",
-                                  }}
-                                />
-                              </div>
-                            </div>
-                            <div className={styles.comboDetailsHeaders}>
-                              <div>
-                                <div
-                                  className={`${visitStyles.encounterAndSectionHeader}`}
-                                >
-                                  {getProviderNameList({
-                                    data: item?.providerName,
-                                    captureSectionMatching:
-                                      captureSectionMatching,
-                                  })}
-                                </div>
-                                <div
-                                  className={`${visitStyles.encounterAndSectionHeader}`}
-                                >
-                                  {getEncounterDateBackground({
-                                    value: item?.encounterDateSplit,
-                                    encounterDateMatching:
-                                      encounterDateMatching,
-                                    fileDosPageNumberList:
-                                      fileDosPageNumberList,
-                                    setIsModalOpenValidCodes:
-                                      setIsModalOpenCaptureSection,
-                                    setSearch: setSearch,
-                                    setFileModalHeader: setFileModalHeader,
-                                    patientDocumentResult:
-                                      patientDocumentResult,
-                                  })}
-                                </div>
-                                <div
-                                  className={`${visitStyles.encounterAndSectionHeader}`}
-                                >
-                                  {getCaptureSectionBackgroundFile(
-                                    item?.capturedSections,
-                                    item?.encounterDate,
-                                    item?.actualDescription,
-                                    item?.diagnosisCodeCombo,
-                                    item?.getPlace,
-                                    captureSectionMatching,
-                                    setSearch,
-                                    setFileLoading,
-                                    "",
-                                    "",
-                                    setIsModalOpenCaptureSection,
-                                    setFileModalHeader,
-                                    "",
-                                    patientDocumentResult,
-                                    fileInitialPage,
-                                    setFileInitialPage,
-                                    item?.hyperlinks,
-                                    encounterDateMatching,
-                                    setIsMulitpleHeader,
-                                    isMulitpleHeader,
-                                    setIsMulitpleHeadeCode,
-                                    isMulitpleHeaderCode,
-                                    item.diseaseName
-                                  )}
-                                  {/* {getCaptureSectionBackground(
-                                    item.capturedSections,
-                                    "COMBO",
-                                    item.encounterDate,
-                                    item.diseaseName,
-                                    null,
-                                    item.diagnosisCodeCombo
-                                  )} */}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              ) : null}
-
-              {comboDiseaseCodesList?.length == 0 ? (
-                <div>
-                  <span className="no-patient-data">No Combination Codes</span>
-                </div>
-              ) : null}
-            </div>
+            <ComboCard
+              list={comboDiseaseCodesList}
+              captureSectionMatching={captureSectionMatching}
+              encounterDateMatching={encounterDateMatching}
+              okText="OK"
+              cancelText="Cancel"
+              popConfirmTitle="You want move to delete?"
+              setOpens={setOpens}
+              setCombiTree={setCombiTree}
+              setSearch={setSearch}
+              setFileLoading={setFileLoading}
+              setFileModalHeader={setFileModalHeader}
+              onchangeCombo={onchangeCombo}
+              setIsModalOpenCaptureSection={setIsModalOpenCaptureSection}
+              isAddComboCode={true}
+              addComboCode={addComboCode}
+              setConfirmNotesModalValid ={setConfirmNotesModalValid}
+              setIsValidAction ={setIsValidAction}
+              patientDocumentResult={patientDocumentResult}
+            />
           </div>
 
           <div className="col-xl-6">
             <div className={`${visitStyles.comboTitle}`}>
               <span>DELETED COMBO CODES </span>
             </div>
-            <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
-              <div className={visitStyles.combo_head_card}>
-                <div className="row">
-                  <div className="col-xl-3">
-                    <label htmlFor="combo">Combo Codes</label>
-                  </div>
-                  <div className="col-xl-3">
-                    <label htmlFor="additional">Additional Codes</label>
-                  </div>
-                  <div className="col-xl-5">
-                    <label htmlFor="description">Description</label>
-                  </div>
-                </div>
-              </div>
-              {invalidComboDiseaseCodesList?.length != 0 ? (
-                <div className={visitStyles.container}>
-                  <div className={visitStyles.hccStickey_head}>
-                    {invalidComboDiseaseCodesList?.map((item) => {
-                      return (
-                        <div className={visitStyles.combo_details_card}>
-                          <div className="row">
-                            <div className="col-xl-3">
-                              <span className="font-bold">
-                                {item.diagnosisCodeCombo}
-                              </span>
-                            </div>
-                            <div className="col-xl-3">
-                              <span className="font-bold">
-                                {item.addOnCode}
-                              </span>
-                            </div>
-                            <div className="col-xl-5">
-                              <span>{item.diseaseName}</span>
-                            </div>
-                            <div className="col-xl-1 comboclose">
-                              <Popconfirm
-                                title="You want move to Valid?"
-                                description={item.diseaseName}
-                                onConfirm={confirmComboValid}
-                                placement="leftTop"
-                                okText="Yes"
-                                cancelText="No"
-                                onOpenChange={() =>
-                                  onchangeCombo(
-                                    item.diseaseName,
-                                    item.addOnCode
-                                  )
-                                }
-                              >
-                                <div className={visitStyles.tick_icon}>
-                                  {SVGICON.tickIcon}
-                                </div>
-                              </Popconfirm>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              ) : null}
-            </div>
+            <ComboCard
+              list={invalidComboDiseaseCodesList}
+              captureSectionMatching={captureSectionMatching}
+              encounterDateMatching={encounterDateMatching}
+              okText="OK"
+              cancelText="Cancel"
+              popConfirmTitle="You want move to valid?"
+              setOpens={setOpens}
+              setCombiTree={setCombiTree}
+              setSearch={setSearch}
+              setFileLoading={setFileLoading}
+              setFileModalHeader={setFileModalHeader}
+              onchangeCombo={onchangeCombo}
+              setIsModalOpenCaptureSection={setIsModalOpenCaptureSection}
+              isAddComboCode={false}
+              setConfirmNotesModalValid ={setConfirmNotesModalValid}
+              setIsValidAction ={setIsValidAction}
+              patientDocumentResult={patientDocumentResult}
+            />
           </div>
         </div>
       </div>
@@ -542,171 +270,26 @@ const Combo = ({ activeComboTree,patientDetailsResult ,getpatientDetailsData,hcc
           <div className="section-container">
             <div className="row">
               <div className="col-xl-5">
-                <div
-                  className={`my-post-content  ${visitStyles.comboContainer3}`}
-                >
-                  <div className={visitStyles.combo_head_card}>
-                    <div className="row">
-                      <div className="col-xl-3">
-                        <label htmlFor="combo">Combo Codes</label>
-                      </div>
-                      <div className="col-xl-3">
-                        <label htmlFor="additional">Additional Codes</label>
-                      </div>
-                      <div className="col-xl-5">
-                        <label htmlFor="description">Description</label>
-                      </div>
-                      <div className="col-xl-1"></div>
-                    </div>
-                  </div>
-                  {comboDiseaseCodesList?.length != 0 ? (
-                    <div className={visitStyles.container}>
-                      <div className={visitStyles.hccStickey_head}>
-                        {comboDiseaseCodesList?.map((item) => {
-                          return (
-                            <div
-                              className={visitStyles.combo_details_card}
-                              key={item?.id}
-                            >
-                              <div className="row">
-                                <div className="col-xl-3 d-grid">
-                                  <span className="font-bold">
-                                    {item.diagnosisCodeCombo}
-                                  </span>
-                                </div>
-                                <div className="col-xl-3">
-                                  {item.addOnCodes?.map(
-                                    (addCombo, index) =>
-                                      addCombo && (
-                                        <span
-                                          className="font-bold"
-                                          key={addOnCodeColor[index]}
-                                        >
-                                          <Tag color={addOnCodeColor[index]}>
-                                            {addCombo}
-                                          </Tag>
-                                        </span>
-                                      )
-                                  )}
-                                </div>
-                                <div className="col-xl-5">
-                                  <span>{item.diseaseName}</span>
-                                </div>
-                                <div className="col-xl-1">
-                                  <div>
-                                    <Popconfirm
-                                      title="You want move to Invalid?"
-                                      description={item.diseaseName}
-                                      onConfirm={confirmComboInvalid}
-                                      placement="leftTop"
-                                      okText="Yes"
-                                      cancelText="No"
-                                      onOpenChange={() =>
-                                        onchangeCombo(
-                                          item.diseaseName,
-                                          item.addOnCode
-                                        )
-                                      }
-                                    >
-                                      <div className={visitStyles.close_icon}>
-                                        <FontAwesomeIcon
-                                          icon={faArrowsAlt}
-                                          style={{
-                                            size: 8,
-                                            color: "#a80404",
-                                          }}
-                                        />
-                                      </div>
-                                    </Popconfirm>
-                                  </div>
-
-                                  <div
-                                    className={visitStyles.close_icon}
-                                    style={{ background: "#c7f3c6" }}
-                                    onClick={() => {
-                                      setOpens(true);
-                                      setCombiTree([
-                                        { ...item, expanded: true },
-                                      ]);
-                                    }}
-                                  >
-                                    <FontAwesomeIcon
-                                      icon={faSitemap}
-                                      style={{
-                                        size: 8,
-                                        color: "#088f39",
-                                      }}
-                                    />
-                                  </div>
-                                </div>
-                                <div className={styles.comboDetailsHeaders}>
-                                  <div>
-                                    <div
-                                      className={`${visitStyles.encounterAndSectionHeader}`}
-                                    >
-                                      {getProviderNameList({
-                                        data: item?.providerName,
-                                        captureSectionMatching:
-                                          captureSectionMatching,
-                                      })}
-                                    </div>
-                                    <div
-                                      className={`${visitStyles.encounterAndSectionHeader}`}
-                                    >
-                                      {getEncounterDateBackground({
-                                        value: item?.encounterDateSplit,
-                                        encounterDateMatching:
-                                          encounterDateMatching,
-                                        fileDosPageNumberList:
-                                          fileDosPageNumberList,
-                                        setIsModalOpenValidCodes:
-                                          setIsModalOpenCaptureSection,
-
-                                        setSearch: setSearch,
-                                        setFileModalHeader: setFileModalHeader,
-                                        patientDocumentResult:
-                                          patientDocumentResult,
-                                      })}
-                                    </div>
-                                    <div
-                                      className={`${visitStyles.encounterAndSectionHeader}`}
-                                    >
-                                      {getCaptureSectionBackgroundFile(
-                                        item?.capturedSections,
-                                        item?.encounterDate,
-                                        item?.actualDescription,
-                                        item?.diagnosisCodeCombo,
-                                        item?.getPlace,
-                                        captureSectionMatching,
-                                        setSearch,
-                                        setFileLoading,
-                                        "",
-                                        "",
-                                        setIsModalOpenCaptureSection,
-                                        setFileModalHeader,
-                                        "",
-                                        patientDocumentResult,
-                                        fileInitialPage,
-                                        setFileInitialPage,
-                                        item?.hyperlinks,
-                                        encounterDateMatching,
-                                        setIsMulitpleHeader,
-                                        isMulitpleHeader,
-                                        setIsMulitpleHeadeCode,
-                                        isMulitpleHeaderCode,
-                                        item.diseaseName
-                                      )}
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  ) : null}
-                </div>
+                <ComboCard
+                  list={comboDiseaseCodesList}
+                  captureSectionMatching={captureSectionMatching}
+                  encounterDateMatching={encounterDateMatching}
+                  okText="OK"
+                  cancelText="Cancel"
+                  popConfirmTitle="You want move to delete?"
+                  setOpens={setOpens}
+                  setCombiTree={setCombiTree}
+                  setSearch={setSearch}
+                  setFileLoading={setFileLoading}
+                  setFileModalHeader={setFileModalHeader}
+                  onchangeCombo={onchangeCombo}
+                  setIsModalOpenCaptureSection={setIsModalOpenCaptureSection}
+                  isAddComboCode={false}
+                  addComboCode={addComboCode}
+                  setConfirmNotesModalValid ={setConfirmNotesModalValid}
+                  setIsValidAction ={setIsValidAction}
+                  patientDocumentResult={patientDocumentResult}
+                />
               </div>
               <div className="col-xl-7">
                 {selectFileURL && (
@@ -733,11 +316,25 @@ const Combo = ({ activeComboTree,patientDetailsResult ,getpatientDetailsData,hcc
           onCancel={() => setOpens(false)}
           footer={null}
         >
-          <CamboTree tree={combiTree} />
+          <CamboTree
+            tree={combiTree}
+            setOpens={setOpens}
+            setCombiTree={setCombiTree}
+          />
         </Modal>
       ) : (
         opens && showErrorMessage()
       )}
+        <ModelIndex
+        title={selectDiseasesName}
+        openState={confirmNotesModalValid}
+        setFileLoading={setFileLoading}
+        handleCloseModal={handleCloseModal}
+        setConfirmNotesModalValid={setConfirmNotesModalValid}
+        isValidAction={isValidAction}
+        selectDisDetails={selectDisDetails}
+      />
+
       <Offcanvas
         onHide={handleCloseModal}
         show={isAddComboCode}
@@ -820,13 +417,12 @@ const Combo = ({ activeComboTree,patientDetailsResult ,getpatientDetailsData,hcc
 };
 const enhancer = connect(
   (state) => ({
-    patientDetailsResult :state?.patientDetails?.details?.patientResult,
-    hccFileDetails :state?.patientDetails?.details?.hccFileResult,
-    fileDosPageNumberList:state?.patientDetails?.details?.dosPageNumberResult,
-
+    patientDetailsResult: state?.patientDetails?.details?.patientResult,
+    hccFileDetails: state?.patientDetails?.details?.hccFileResult,
+    fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
   }),
   {
-    getpatientDetailsData:detailsActions.patientDetailsAction
+    getpatientDetailsData: detailsActions.patientDetailsAction,
   }
 );
 export default enhancer(Combo);
