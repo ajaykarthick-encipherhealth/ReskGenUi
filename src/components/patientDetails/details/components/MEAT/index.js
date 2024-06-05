@@ -9,7 +9,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {
   getCaptureSectionBackgroundMeatNew,
-  getDisTitlePopover,
   getEncounterDateBackground,
   getProviderNameList,
   moveToAnotherAction,
@@ -41,7 +40,8 @@ const MeatCard = ({
   setEditData,
   setMeatEdit,
   addMeatQuery,
-  onchangeMeat
+  onchangeMeat,
+  getDisTitlePopover
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);

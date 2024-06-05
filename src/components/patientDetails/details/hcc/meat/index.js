@@ -284,6 +284,7 @@ const Meat = ({
         setEditData={setEditData}
         setMeatEdit={setMeatEdit}
         addMeatQuery={addMeatQuery}
+        getDisTitlePopover={getDisTitlePopover}
       />
      
       {deletedMeatList?.length != 0 && 
@@ -315,6 +316,7 @@ const Meat = ({
         setEditData={setEditData}
         setMeatEdit={setMeatEdit}
         addMeatQuery={addMeatQuery}
+        getDisTitlePopover={getDisTitlePopover}
       />
         </>
       }
