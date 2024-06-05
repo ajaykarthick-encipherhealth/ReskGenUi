@@ -75,7 +75,7 @@ const MeatCard = ({
             </div>
           </div>
         </div>
-          <div className={visitStyles.container}>
+          <div className={visitStyles.meatcontainer}>
             <div className={visitStyles.hccStickey_head}>
               {list?.map((item) => {
                 return (

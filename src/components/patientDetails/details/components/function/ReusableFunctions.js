@@ -759,7 +759,7 @@ export const handleSubmitValidNotes = async ({
       dbDescription: selectDisDetails.dbDescription,
       reason: values.reason,
       processedYear: selectDisDetails.processedYear,
-      dateOfService: selectDisDetails.dateOfService,
+      dateOfServices: selectDisDetails.dateOfServices,
       chartProcessType: selectDisDetails.dateOfService
         ? "DATE_OF_SERVICE"
         : "YEAR",
@@ -772,7 +772,7 @@ export const handleSubmitValidNotes = async ({
     if (result.status == "SUCCESS") {
       setFileLoading(false);
       notification.success({
-        message: result.message,
+        message: result.response,
         placement: "top",
         duration: 1,
       });

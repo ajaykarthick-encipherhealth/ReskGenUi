@@ -1828,3 +1828,15 @@
   height: 32px !important;
   margin-bottom: 5px;
 }
+.meatcontainer {
+  max-height: 64vh;
+  overflow: hidden;
+}
+.meatcontainer::-webkit-scrollbar {
+  width: 4px;
+  background: transparent;
+}
+.meatcontainer:hover {
+  overflow-y: scroll;
+  position: inherit;
+}
