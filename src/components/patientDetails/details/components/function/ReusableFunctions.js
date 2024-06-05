@@ -744,6 +744,12 @@ export const handleSubmitValidNotes = async ({
   if (isValidAction.name == "Move to valid" && isValidAction.title == "COMBO") {
     apiURL = "management/disease/move/combodeletedtovalid";
   }
+  if (isValidAction.name == "Move to Deleted" && isValidAction.title == "MEAT") {
+    apiURL = "management/disease/move/meatvalidtodeleted";
+  }
+  if (isValidAction.name == "Move to valid" && isValidAction.title == "MEAT") {
+    apiURL = "management/disease/move/meatdeletedtovalid";
+  }
   try {
     var patientId = localStorage.getItem("patientId");
     var dataFormatSuggested = {
@@ -1217,9 +1223,46 @@ const findSectionHyperlink = (hyperlinks, header) => {
   const headerResult = hyperlinks?.filter((res2) => res2.header === header);
   return headerResult;
 };
-const findDosHyperlink = (hyperlinks, date) => {
-  const headerResult = hyperlinks?.filter((res2) => res2.dos === date);
-  return headerResult[0]?.dos;
+export const getDisTitlePopover = (title, value, subString,result) => {
+  var popOver = "";
+  if (value) {
+    popOver = (
+      <Popover
+        placement="top"
+        title={title}
+        content={
+          <>
+            <div>{value}</div>
+            {subString?.map((res) => {
+              if(res?.header){
+              return (
+                <div className={styles.subStringContainer}>
+                  <div>
+                    <span className={styles.substringHead}>
+                      {res.header} (Document Word) 
+                      <a className={styles.pageNumberHyperlink}>
+                        ({res.pageNumber})
+                      </a>
+                      
+                    </span>
+                  </div>
+                  {res.substring}
+                </div>
+              );
+            }
+            })}
+          </>
+        }
+      >
+        <span className="meat-name-details">{value}</span>
+      </Popover>
+    );
+  } else {
+    popOver = (
+      <span className="meat-name-details text-center font-bold">-</span>
+    );
+  }
+  return popOver;
 };
 const ReusableFunctions = () => {
   return <></>;
