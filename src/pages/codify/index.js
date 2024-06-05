@@ -187,6 +187,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
     setLoading(true);
     const tableData = await codesData({ code: searchInput });
     if (tableData?.status == "SUCCESS") {
+      console.log(tableData?.response?.children,"children: tableData?.response?.children,")
       setCodeData({
         ...codeData,
         name: tableData?.response?.name,
@@ -200,6 +201,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
     }
     setLoading(false);
   };
+ 
   useEffect(() => {
     if (!searchInput?.length) {
       setData(null);
@@ -359,7 +361,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
                 ))}
               </div>
             )}
-            {currentButton == "Codes" && data?.length ? (
+            {currentButton == "Codes" && data?.length ?  (
               <Codes
                 searchInput={searchInput}
                 data={data}
