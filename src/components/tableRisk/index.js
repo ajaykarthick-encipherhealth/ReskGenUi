@@ -26,13 +26,10 @@ const TableRisk = ({
       (key) => key.includes("rxHccModel") && !key.includes("Payment")
     ),
   }));
-  console.log(keysArray, "keysArray");
-
   const arrays = data?.map((x) => ({
     key4: Object.keys(x).filter((key) => key.includes("Payment")),
   }));
-  console.log(arrays, "arrays");
-  console.log(data, "data");
+ 
 
   return (
     <div>
@@ -49,9 +46,9 @@ const TableRisk = ({
             <thead>
               <tr>
                 <th rowSpan={2}>year</th>
-                <th colSpan={keysArray?.[0]?.key1?.length}>ESRD/PACE</th>
-                <th colSpan={keysArray?.[0]?.key2?.length}>CMS HCC</th>
-                <th colSpan={keysArray?.[0]?.key3?.length}>RX HCC</th>
+                <th style={{fontWeight:"600"}}colSpan={keysArray?.[0]?.key1?.length}>ESRD/PACE</th>
+                <th style={{fontWeight:"600"}} colSpan={keysArray?.[0]?.key2?.length}>CMS HCC</th>
+                <th  style={{fontWeight:"600"}}  colSpan={keysArray?.[0]?.key3?.length}>RX HCC</th>
               </tr>
               <tr>
                 {keysArray?.[0]?.key1?.map((a) => {

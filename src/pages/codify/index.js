@@ -42,10 +42,9 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
     setActiveAlphabet(alphabet);
   };
   const handleInputChange = (value) => {
-    fetch()
+    fetch();
     fetchcode();
     setSearchInput(value);
-    
   };
   const convertToAntdTreeData = (node) => {
     const { name, desc, children, requiredCharacter } = node;
@@ -94,7 +93,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   }
   const searchfetch = async () => {
     let searchData = await recentsearch({});
-     if (searchData?.status === "SUCCESS") {
+    if (searchData?.status === "SUCCESS") {
       const filteredSearches = searchData?.response
         .filter((item) => item.searchFrom === "TREE_VIEW")
         .map((item) => item.searchedCode);
@@ -122,14 +121,12 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
 
   const completeFetch = async () => {
     let completedData = await completeData({ codes: searchInput });
-    console.log(completedData?.response?.displayStrings, "completedData");
-
     if (completedData?.status === "SUCCESS") {
       const displayCodeOptions = completedData?.response?.displayStrings?.map(
         (x) => ({
           value: x[0],
           // label: `${x[0]} - ${x[1]}`,
-          label:x[0],
+          label: x[0],
         })
       );
       setOptions(displayCodeOptions);
@@ -138,7 +135,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
 
   useEffect(() => {
     completeFetch();
-  },[]);
+  }, []);
   // const alphabets = [
   //   "A",
   //   "B",
@@ -204,7 +201,6 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
 
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
-
 
   return (
     <div className="container-fluid">
