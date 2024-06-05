@@ -229,7 +229,7 @@ const HccCards = ({
                               <>
                                 {data.defaultPosition == "VALID" ? (
                                   <span
-                                    className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange} mx-2`}
+                                    className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}
                                   ></span>
                                 ) : data.defaultPosition == "INVALID" ? (
                                   <span
@@ -436,7 +436,7 @@ const HccCards = ({
                                   )}
                                 </>
                               )}
-                              className="cr-pointer"
+                              className={styles.ellipsBtn}
                             >
                               <div
                                 onClick={() => {
