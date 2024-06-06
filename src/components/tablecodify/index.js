@@ -18,10 +18,12 @@ const Tables = (props) => {
       excludes2: tableData?.excludes2,
       children: tableData?.children,
       inclusionTerm: tableData?.inclusionTerm,
+      useAdditionalCode:tableData?.useAdditionalCode,
     });
 
     setLoading(false);
   };
+  console.log(codeData,"codeData")
 
   return (
     <div className={style.code}>
@@ -75,15 +77,19 @@ const Tables = (props) => {
                 </h5>
                 <p
                   className="card-text "
-                  style={{ height: "160px", padding: "10px",overflow:"scroll"}}
+                  style={{ height: "160px", padding: "10px",overflow:"scroll",scrollbarwidth:"none"}}
                 >
                   {codeData?.excludes2 ? codeData?.excludes2 : <Empty />}{" "}
                 </p>
               </div>
             </div>
+            {(codeData?.useAdditionalCode)&&(
+            <div><span className={style.head}>Additional Codes:</span>{codeData?.useAdditionalCode}</div>
+            )}
           </div>
         </div>
       )}
+      
       <div className={style.list}>
         {codeData?.children?.map((s, i) => (
           <div key={i} onClick={() => handleViewTable(s)}>

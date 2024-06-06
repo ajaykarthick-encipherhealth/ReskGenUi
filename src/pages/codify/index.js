@@ -215,10 +215,13 @@ useEffect(()=>{
         excludes2: tableData?.response?.excludes2,
         children: tableData?.response?.children,
         inclusionTerm: tableData?.response?.inclusionTerm,
+        useAdditionalCode:tableData?.response?.useAdditionalCode,
       });
+     
     }
     setLoading(false);
   };
+  
  
   useEffect(() => {
     if (!searchInput?.length) {
