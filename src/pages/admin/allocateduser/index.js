@@ -99,7 +99,8 @@ export default function Patient() {
     selectedOption
   ) => {
     const uId = localStorage.getItem("userId");
-    let resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=${uId}&computationStart=${
+    const orgId = localStorage.getItem("orgId");
+    let resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=${uId}&organizationId=${orgId}&computationStart=${
       startDate ? startDate : ""
     }&computationEnd=${
       endDate ? endDate : ""
@@ -134,9 +135,10 @@ export default function Patient() {
   const getAllCheckList = async (sort) => {
     setIsLoading(true);
     const uId = localStorage.getItem("userId");
+    const orgId = localStorage.getItem("orgId");
     let resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${
       batchCount ? batchCount : pageSize
-    }&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
+    }&userId=${uId}&organizationId=${orgId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
       sort?.sortDir
     }&sortfield=${sort?.sortField}&priority=${
       selectedOption ? selectedOption : ""
@@ -242,7 +244,7 @@ export default function Patient() {
   const getAuditL2List = async (pageNo, searchString) => {
     let orgId = localStorage.getItem("orgId");
     let tenantid = localStorage.getItem("tenantId");
-    let resoureUrl = `dbservice/l2audit?orgid=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}`;
+    let resoureUrl = `dbservice/l2audit?organizationId=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       let resultMap = [];
