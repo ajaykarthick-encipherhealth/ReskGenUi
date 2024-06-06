@@ -41,7 +41,7 @@ const intialValues = {
   mobileNumber: "",
   confirmPassword: "",
 };
-const UserList = ({getAllOrganizationList,organizationList}) => {
+const UserList = ({ getAllOrganizationList, organizationList }) => {
   const dispatch = useDispatch();
   const usersData = useSelector((state) => state.adminUsers.usersData);
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -76,8 +76,6 @@ const UserList = ({getAllOrganizationList,organizationList}) => {
   });
   const [selectOrgList, setSelectedOrgList] = useState("");
   const [orgAllList, setOrgAllList] = useState("");
-
-
 
   const addUserForm = () => {
     setValidated(false);
@@ -205,24 +203,20 @@ const UserList = ({getAllOrganizationList,organizationList}) => {
       setFormData(intialValues);
     }, 750);
   }, [addUser]);
-  useEffect(() => {
-   console.log(selectOrgList)
-  }, [selectOrgList]);
+  useEffect(() => {}, [selectOrgList]);
   useEffect(() => {
     getAllOrganizationList();
   }, []);
   useEffect(() => {
-    var orgListArray = [
-      { value: "ALL", label: "ALL" },
-    ];
+    var orgListArray = [{ value: "ALL", label: "ALL" }];
     organizationList?.response?.map((res) => {
       orgListArray.push({
-        value: res.id, label:res.name
-      })
-    })
+        value: res.id,
+        label: res.name,
+      });
+    });
     setOrgAllList(orgListArray);
-    console.log(organizationList)
-   }, [organizationList]);
+  }, [organizationList]);
 
   // const onRoleChange = (value) => {
   //   // console.log(value);
@@ -285,8 +279,6 @@ const UserList = ({getAllOrganizationList,organizationList}) => {
                         clear={clear}
                         addBtn={true}
                         disable="Yes"
-                     
-
                       />
                     </div>
                     <div
@@ -667,10 +659,9 @@ const UserList = ({getAllOrganizationList,organizationList}) => {
   );
 };
 
-
 const enhancer = connect(
   (state) => ({
-    organizationList:  state?.tenantAdmin?.allOrganization?.data,
+    organizationList: state?.tenantAdmin?.allOrganization?.data,
   }),
   {
     getAllOrganizationList: dashboardAction.getAllOrganizationAction,
