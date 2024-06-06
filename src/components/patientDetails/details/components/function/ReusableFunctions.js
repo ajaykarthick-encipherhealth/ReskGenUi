@@ -744,16 +744,22 @@ export const handleSubmitValidNotes = async ({
   if (isValidAction.name == "Move to valid" && isValidAction.title == "COMBO") {
     apiURL = "management/disease/move/combodeletedtovalid";
   }
+  if (isValidAction.name == "Move to Deleted" && isValidAction.title == "MEAT") {
+    apiURL = "management/disease/move/meatvalidtodeleted";
+  }
+  if (isValidAction.name == "Move to valid" && isValidAction.title == "MEAT") {
+    apiURL = "management/disease/move/meatdeletedtovalid";
+  }
   try {
     var patientId = localStorage.getItem("patientId");
     var dataFormatSuggested = {
       patientId: patientId,
-      diagnosisCode: selectDisDetails.diagnosisCode,
+      diagnosisCode: selectDisDetails.diagnosisCode ? selectDisDetails.diagnosisCode :selectDisDetails.diagnosisCodeCombo,
       description: selectDisDetails.actualDescription,
       dbDescription: selectDisDetails.dbDescription,
       reason: values.reason,
       processedYear: selectDisDetails.processedYear,
-      dateOfService: selectDisDetails.dateOfService,
+      dateOfServices: selectDisDetails.dateOfServices,
       chartProcessType: selectDisDetails.dateOfService
         ? "DATE_OF_SERVICE"
         : "YEAR",
@@ -766,7 +772,7 @@ export const handleSubmitValidNotes = async ({
     if (result.status == "SUCCESS") {
       setFileLoading(false);
       notification.success({
-        message: result.message,
+        message: result.response,
         placement: "top",
         duration: 1,
       });
@@ -1216,10 +1222,6 @@ export const stringToColour = (str) => {
 const findSectionHyperlink = (hyperlinks, header) => {
   const headerResult = hyperlinks?.filter((res2) => res2.header === header);
   return headerResult;
-};
-const findDosHyperlink = (hyperlinks, date) => {
-  const headerResult = hyperlinks?.filter((res2) => res2.dos === date);
-  return headerResult[0]?.dos;
 };
 const ReusableFunctions = () => {
   return <></>;

@@ -431,8 +431,8 @@
   font-size: 16px;
   position: relative;
   bottom: 0px;
+  cursor: initial;
   right: 5px;
-  cursor: pointer;
 }
 .suspectCircleLable {
   font-weight: 600;
@@ -453,4 +453,23 @@
 }
 .suspectTypeDiv {
   padding: 10px;
+}
+.selectHyperheader {
+  display: flex;
+  justify-content: space-between;
+}
+.stillIssueContainer {
+  margin-right: 35px;
+  margin-top: -6px;
+}
+.pageNumberHyperlink {
+  color: #7575c9;
+  border-bottom: 1px solid #7575c9;
+  margin-left: 5px;
+}
+.ellipsBtn {
+  cursor: pointer;
+  width: 10px;
+  height: 10px;
+  text-align: center;
 }
