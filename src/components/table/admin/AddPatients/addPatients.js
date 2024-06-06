@@ -34,8 +34,14 @@ function AddPatientListTable({
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data?.patientId);
+      var role = localStorage.getItem("role")
+      if(role == "tenant_admin"){
+        navigate.push({ pathname: "/tenantAdmin/patients/details", query: page });
+      }else{
+        navigate.push({ pathname: "/admin/patients/details", query: page });
+      }
       // localStorage.setItem('paginations', JSON.stringify(page))
-      navigate.push({ pathname: "/admin/patients/details", query: page });
+      
     } else {
       notification.warning({
         message: data.patientId + " file not processed. Please wait.",

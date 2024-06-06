@@ -360,6 +360,22 @@ const Details = ({
           : "/admin/patients";
         navigate.push(url);
       }
+    }else if(user && user.toLowerCase() === "tenant_admin"){
+      if (user && user.toLowerCase() === "tenant_admin") {
+        const { user: _, ...queryWithoutUser } = navigate.query;
+        const queryString = new URLSearchParams(queryWithoutUser).toString();
+        if (navigate.query.isTenantAdminTracking) {
+          const url = queryString
+            ? `/tenantAdmin/tracking?${queryString}`
+            : "/tenantAdmin/tracking";
+          navigate.push(url);
+        } else {
+          const url = queryString
+            ? `/tenantAdmin/patients?${queryString}`
+            : "/tenantAdmin/patients";
+          navigate.push(url);
+        }
+      }
     } else if (user && user.toLowerCase() === "supervisor") {
       const { user: _, ...queryWithoutUser } = navigate.query;
       const queryString = new URLSearchParams(queryWithoutUser).toString();

@@ -277,6 +277,7 @@ export const generateOptionsList = (items) => {
   if (!items?.data) {
     return [{ label: "Loading...", value: "", isDisabled: true }];
   } else {
+    if(items?.data?.data?.response){
     const options = [
       { label: "All", value: ""},
       ...items?.data?.data?.response?.map((item) => ({
@@ -289,6 +290,12 @@ export const generateOptionsList = (items) => {
       })),
     ].filter(Boolean);
     return options;
+  }else{
+    const options = [
+      { label: "All", value: ""},
+    ];
+    return options;
+  }
     // }
   }
 };

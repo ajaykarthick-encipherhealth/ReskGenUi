@@ -612,23 +612,16 @@ export function removeDuplicates(array) {
   return output;
 }
 
-export const getProviderNameList = ({ data, captureSectionMatching }) => {
-  var dublicateCaptureDelete = removeDuplicates(data);
-  return dublicateCaptureDelete.map((res, index) => {
-    const result = captureSectionMatching.filter(
-      (res2) => res2.sectionName == res
-    );
-    var backColor =
-      result[0]?.backgroundColor == "#efeff033"
-        ? "#54548d33"
-        : result[0]?.backgroundColor;
-    var textColor =
-      result[0]?.sectionColor == "#efeff0" ? "#000" : result[0]?.sectionColor;
+export const getProviderNameList = ({ data }) => {
+  return data.map((res, index) => {
     if (index < 2) {
       var sectionMapArr = (
         <span
           className={`mt-2 text-start ${visitStyles.provider_name}`}
-          style={{ backgroundColor: backColor, color: textColor }}
+          style={{
+            backgroundColor: stringToColour(res) + 33,
+            color: stringToColour(res),
+          }}
         >
           <i>
             {" "}
@@ -636,7 +629,7 @@ export const getProviderNameList = ({ data, captureSectionMatching }) => {
               icon={faCircleUser}
               style={{
                 size: 10,
-                color: textColor,
+                color:stringToColour(res),
               }}
             />
           </i>
@@ -644,12 +637,12 @@ export const getProviderNameList = ({ data, captureSectionMatching }) => {
         </span>
       );
       return sectionMapArr;
-    } else if (dublicateCaptureDelete.length - 1 == index) {
+    } else if (data.length - 1 == index) {
       var sectionMapArr = (
         <Popover
           content={
             <>
-              {dublicateCaptureDelete?.map((item, i) =>
+              {data?.map((item, i) =>
                 i > 1 ? (
                   <span
                     className={`mt-2 text-start ${visitStyles.provider_name}`}
@@ -681,7 +674,7 @@ export const getProviderNameList = ({ data, captureSectionMatching }) => {
             style={{ background: "#a6cfa6", color: "#fff" }}
             className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
           >
-            {dublicateCaptureDelete.length - 2}+
+            {data.length - 2}+
           </span>
         </Popover>
       );
@@ -1142,7 +1135,10 @@ export const getCaptureSectionBackgroundMeatNew = (
             value
           )
         }
-        style={{ backgroundColor: backColor, color: textColor }}
+        style={{
+          backgroundColor: stringToColour(res.header) + 33,
+          color: stringToColour(res.header),
+        }}
         className={`cr-pointer mt-2 text-start ${visitStyles.captureheader} ${backColor} truncate-text`}
       >
         {truncateString(res.header, 30)}
@@ -1215,6 +1211,9 @@ export const stringToColour = (str) => {
   }
   if (str.toLocaleLowerCase() === "plan") {
     colour = "#7e00ff";
+  }
+  if (str.toLocaleLowerCase() === "examination") {
+    colour = "#9eb875";
   }
   return colour;
 };
