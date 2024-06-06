@@ -81,16 +81,7 @@ export default function Login() {
                   src={IMAGES.loginPageLogo1}
                   style={{ display: "block", margin: "0 auto" }}
                 />
-                <div
-                  className="company-name"
-                  style={{
-                    position: "absolute",
-                    bottom: "39%",
-                    left: "60%",
-                    transform: "translateX(-49%)",
-                    fontStyle: "italic"
-                  }}
-                >
+                <div className="company-name">
                   Encipher health private limited
                 </div>
               </div>
