@@ -637,12 +637,12 @@ export const getProviderNameList = ({ data }) => {
         </span>
       );
       return sectionMapArr;
-    } else if (dublicateCaptureDelete.length - 1 == index) {
+    } else if (data.length - 1 == index) {
       var sectionMapArr = (
         <Popover
           content={
             <>
-              {dublicateCaptureDelete?.map((item, i) =>
+              {data?.map((item, i) =>
                 i > 1 ? (
                   <span
                     className={`mt-2 text-start ${visitStyles.provider_name}`}
@@ -674,7 +674,7 @@ export const getProviderNameList = ({ data }) => {
             style={{ background: "#a6cfa6", color: "#fff" }}
             className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
           >
-            {dublicateCaptureDelete.length - 2}+
+            {data.length - 2}+
           </span>
         </Popover>
       );
