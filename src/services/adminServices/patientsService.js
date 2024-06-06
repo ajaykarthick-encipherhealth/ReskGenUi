@@ -16,13 +16,15 @@ export const PatientsList = async (
 ) => {
   const token = localStorage.getItem("token");
   const uId = localStorage.getItem("userId");
+  const orgId = localStorage.getItem("orgId");
+
 
   const filteredStatus = status === undefined ? "" : status;
   try {
     const response = await axios.get(
       `  ${
         ENDPOINTS?.apiEndoint
-      }dbservice/patient/admin/computation/filter?page=${pageNo}&size=15&userId=${uId}&isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${filteredStatus}&searchString=${search}&createdStartDate=${createdStartDate}&createdEndDate=${createdEndDate}&patientCreatedBy=${
+      }dbservice/patient/admin/computation/filter?page=${pageNo}&size=15&userId=${uId}&organizationId=${orgId}&isAllocation=false&computationStart=${computationStart}&computationEnd=${computationEnd}&status=${filteredStatus}&searchString=${search}&createdStartDate=${createdStartDate}&createdEndDate=${createdEndDate}&patientCreatedBy=${
         selAllocatedBy === "All" ? "" : selAllocatedBy
       }&patientAllocatedTo=${
         selAllocatedTo === "All" ? "" : selAllocatedTo
@@ -46,7 +48,7 @@ export const PatientsList = async (
 export const TrackingList = async (datas) => {
   const token = localStorage.getItem("token");
   const uId = localStorage.getItem("userId");
-
+  const orgId = localStorage.getItem("orgId");
   const filteredStatus =
     datas?.selectedOption === undefined ? "" : datas?.selectedOption;
   const filteredDStart =
@@ -56,7 +58,7 @@ export const TrackingList = async (datas) => {
     const response = await axios.get(
       `  ${
         ENDPOINTS?.apiEndoint
-      }dbservice/patient/admin/filter?userId=${uId}&page=${
+      }dbservice/patient/admin/filter?userId=${uId}&organizationId=${orgId}&page=${
         datas?.pageNo
       }&size=15&processedStatus=${filteredStatus}&dueDateStart=${filteredDStart}&dueDateEnd=${
         datas?.dueDateEnd
