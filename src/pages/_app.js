@@ -118,14 +118,14 @@ function MyApp({ Component, pageProps }) {
     "/reviewer/patients/details",
     "/supervisor/patients/details",
   ];
-  const shouldShowFooter = !hideFooterPaths.includes(router.pathname);
+  const showFooter = !hideFooterPaths.includes(router.pathname);
 
   return (
     <PrimeReactProvider>
       <Provider store={store}>
         {showTerminal && <AICHAT openMsg={true} />}
         <Component {...pageProps} />
-        {shouldShowFooter && showTerminal && <Footer />}
+        {showFooter && showTerminal && <Footer />}
       </Provider>
     </PrimeReactProvider>
   );
