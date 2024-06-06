@@ -151,13 +151,21 @@ const HeaderFilters = ({
   selectReportOptions,
   value,
   setSelectedManger,
+
+  // selectOrg
+  selectlabelOrg,
+  isSelectOrg,
+  setSelectedOptionOrg,
+  selectOptionsOrg,
+  defaultSelectValueOrg,
+  selectedValueOrg,
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
   let columnClass;
   if (addUser) {
     if (addBtn) {
-      columnClass = "col-xl-4";
+      columnClass = isSelectOrg ? "col-xl-2" : "col-xl-4" ;
     } else {
       columnClass = "col-xl-1";
     }
@@ -205,6 +213,7 @@ const HeaderFilters = ({
               />
             </div>
           )}
+           
           {isNextCreatedBySelector && (
             <div
               className={defaultSize}
@@ -253,6 +262,7 @@ const HeaderFilters = ({
               </div>
             </div>
           )}
+          
           {selectOptions2 && (
             <div className={defaultSize}>
               <label className={styles.label}>{selectlabel2}</label>
@@ -292,6 +302,25 @@ const HeaderFilters = ({
                   className="custom-react-select"
                   options={selectOptions3}
                   style={{ backgroundColor: "#F3F3FF", width: "20px" }}
+                />
+              </div>
+            </div>
+          )}
+          {isSelectOrg && (
+            <div className={defaultSize}>
+              <label className={styles.label}>{selectlabelOrg}</label>
+              <div class="form-group has-search">
+                <Select
+                  value={defaultSelectValueOrg ? defaultSelectValueOrg : ""}
+                  onChange={(selectOrg) => {
+                    setSelectedOptionOrg(selectOrg);
+                    if (selectOrg?.label === "All") {
+                      setSelectedOptionOrg(null);
+                    }
+                  }}
+                  options={selectOptionsOrg}
+                  className="custom-react-select"
+                  isSearchable={false}
                 />
               </div>
             </div>

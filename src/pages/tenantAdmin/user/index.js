@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { Offcanvas } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { Form, Input, Button, Select, Row, Col, notification } from "antd";
@@ -16,6 +16,8 @@ import {
   encyptingPass,
   getValidatePassword,
 } from "../../../components/headerFilters/functions";
+import { actions as dashboardAction } from "../../../stores/tenantAdmin/dashboard";
+
 const { Option } = Select;
 const options3 = [
   { value: "ALL", label: "ALL" },
@@ -39,7 +41,7 @@ const intialValues = {
   mobileNumber: "",
   confirmPassword: "",
 };
-const UserList = () => {
+const UserList = ({getAllOrganizationList,organizationList}) => {
   const dispatch = useDispatch();
   const usersData = useSelector((state) => state.adminUsers.usersData);
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -72,6 +74,10 @@ const UserList = () => {
     patientId: "",
     patientName: "",
   });
+  const [selectOrgList, setSelectedOrgList] = useState("");
+  const [orgAllList, setOrgAllList] = useState("");
+
+
 
   const addUserForm = () => {
     setValidated(false);
@@ -199,6 +205,24 @@ const UserList = () => {
       setFormData(intialValues);
     }, 750);
   }, [addUser]);
+  useEffect(() => {
+   console.log(selectOrgList)
+  }, [selectOrgList]);
+  useEffect(() => {
+    getAllOrganizationList();
+  }, []);
+  useEffect(() => {
+    var orgListArray = [
+      { value: "ALL", label: "ALL" },
+    ];
+    organizationList?.response?.map((res) => {
+      orgListArray.push({
+        value: res.id, label:res.name
+      })
+    })
+    setOrgAllList(orgListArray);
+    console.log(organizationList)
+   }, [organizationList]);
 
   // const onRoleChange = (value) => {
   //   // console.log(value);
@@ -236,6 +260,13 @@ const UserList = () => {
                         defaultSelectValue2={""}
                         setSelectedOption2={setRole}
                         selectedValue2={role}
+                        // selectOrg
+                        selectlabelOrg="Select Organization"
+                        isSelectOrg={true}
+                        setSelectedOptionOrg={setSelectedOrgList}
+                        selectOptionsOrg={orgAllList}
+                        defaultSelectValueOrg={""}
+                        selectedValueOrg={selectOrgList}
                         // computation date
                         pickerlabel="Created date Range"
                         selectedDates={selectedDates}
@@ -254,6 +285,8 @@ const UserList = () => {
                         clear={clear}
                         addBtn={true}
                         disable="Yes"
+                     
+
                       />
                     </div>
                     <div
@@ -634,4 +667,13 @@ const UserList = () => {
   );
 };
 
-export default UserList;
+
+const enhancer = connect(
+  (state) => ({
+    organizationList:  state?.tenantAdmin?.allOrganization?.data,
+  }),
+  {
+    getAllOrganizationList: dashboardAction.getAllOrganizationAction,
+  }
+);
+export default enhancer(UserList);

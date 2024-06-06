@@ -1,9 +1,8 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
 import {
-  batchUpload
+  getAllOrganizationAction
 } from "./actions";
-import { getAllOrganizationAction } from "./dashboard/actions";
 
 const initialState = {
   loading: true,
@@ -35,9 +34,7 @@ const createReducer = (actionType) =>
   );
 
 const searchReducer = combineReducers({
-  batchUpload: createReducer(batchUpload),
   allOrganization: createReducer(getAllOrganizationAction),
-  
 });
 
 export default searchReducer;
