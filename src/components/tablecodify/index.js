@@ -46,7 +46,7 @@ const Tables = (props) => {
                 </h5>
                 <p
                   className="card-text "
-                  style={{ height: "160px", padding: "10px" }}
+                  style={{ height: "160px", padding: "10px",overflow:"scroll" }}
                 >
                   {codeData?.includes ? codeData?.includes : <Empty />}
                 </p>
@@ -62,7 +62,7 @@ const Tables = (props) => {
                 </h5>
                 <p
                   className="card-text"
-                  style={{ height: "160px", padding: "10px" }}
+                  style={{ height: "160px", padding: "10px",overflow:"scroll" }}
                 >
                   {codeData?.excludes1 ? codeData?.excludes1 : <Empty />}
                 </p>
@@ -75,7 +75,7 @@ const Tables = (props) => {
                 </h5>
                 <p
                   className="card-text "
-                  style={{ height: "160px", padding: "10px" }}
+                  style={{ height: "160px", padding: "10px",overflow:"scroll"}}
                 >
                   {codeData?.excludes2 ? codeData?.excludes2 : <Empty />}{" "}
                 </p>

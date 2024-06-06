@@ -42,12 +42,12 @@ const TableRisk = ({
           <table className="table table-bordered ">
             <thead style={{ height: "70px" }}>
               <tr>
-                <th>
-                  {" "}
-                  style=
+                <th  style=
                   {{
                     fontWeight: "600",
-                  }}
+                  }}>
+                  
+                 
                   year
                 </th>
                 {/* <th style={{fontWeight:"600"}}colSpan={keysArray?.[0]?.key1?.length}>ESRD/PACE</th>

@@ -71,14 +71,23 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   };
   const handleSearch = (value) => {
     setOptions(value ? searchResult(value) : []);
-    completeFetch();
+   
   };
   const onSelect = (value) => {
     setSearchInput(value);
+    
+  };
+useEffect(()=>{
+  if(searchInput.length>=3){
     fetchTreeData();
     fetchCodeData();
-  };
+  }
+  
+},[searchInput])
 
+useEffect(()=>{
+  completeFetch();
+},[searchInput])
 
   const convertToAntdTreeData = (node) => {
     const { name, desc, children, requiredCharacter } = node;
@@ -151,7 +160,13 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
       const displayCodeOptions = completedData?.response?.displayStrings?.map(
         (x) => ({
           value: x[0],
-          label: x[0],
+          // label: x[0],
+          label: (
+            <div className="d-flex gap-1">
+              <span className={style.name}>{x[0]}</span>
+              <span className={style.desc}>-{x[1]}</span>
+            </div>
+          ),
         })
       );
       setOptions(displayCodeOptions);
