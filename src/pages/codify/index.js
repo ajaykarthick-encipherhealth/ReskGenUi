@@ -75,7 +75,11 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   };
   const onSelect = (value) => {
     setSearchInput(value);
+    fetchTreeData();
+    fetchCodeData();
   };
+
+
   const convertToAntdTreeData = (node) => {
     const { name, desc, children, requiredCharacter } = node;
     const treeNode = {
@@ -142,7 +146,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   };
 
   const completeFetch = async () => {
-    let completedData = await completeData({ codes: searchInput });
+    let completedData = await completeData({ code: searchInput })
     if (completedData?.status === "SUCCESS") {
       const displayCodeOptions = completedData?.response?.displayStrings?.map(
         (x) => ({
@@ -187,7 +191,6 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
     setLoading(true);
     const tableData = await codesData({ code: searchInput });
     if (tableData?.status == "SUCCESS") {
-      console.log(tableData?.response?.children,"children: tableData?.response?.children,")
       setCodeData({
         ...codeData,
         name: tableData?.response?.name,

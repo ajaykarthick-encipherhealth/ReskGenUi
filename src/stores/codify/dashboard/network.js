@@ -1,7 +1,6 @@
 import { requestPortal } from "../../../utils/network";
 import { apirequestPortal } from "../../../utils/network";
 
-
 export const codify = async ({ diseases }) => {
   const options = {
     method: "GET",
@@ -36,7 +35,7 @@ export const searches = async ({ username }) => {
   const options = {
     method: "GET",
   };
-  
+
   const data = await requestPortal("dbservice/getRecentSearches", options);
   return data;
 };
@@ -45,7 +44,11 @@ export const autocomplete = async ({ code }) => {
   const options = {
     method: "GET",
   };
-  const url = `q=${codes}`;
-  const data = await apirequestPortal(`controlzen/autocomplete?${url}`, options);
+  
+  const url = `q=${code}`;
+  const data = await requestPortal(
+    `management/autocomplete?q=${code}`,
+    options
+  );
   return data;
 };

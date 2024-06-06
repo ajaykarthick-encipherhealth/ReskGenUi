@@ -22,7 +22,7 @@ const Tables = (props) => {
 
     setLoading(false);
   };
-console.log( codeData?.children," {codeData?.children")
+
   return (
     <div className={style.code}>
       <div className="d-flex justify-content-center">
@@ -85,20 +85,15 @@ console.log( codeData?.children," {codeData?.children")
         </div>
       )}
       <div className={style.list}>
-      {codeData?.children.length > 0 ? (
-  codeData.children.map((s, i) => (
-    <div key={i} onClick={() => handleViewTable(s)}>
-      <p className={`${style.card2} mt-3`}>
-        <ArrowRightOutlined />
-        <span className={style.codes}>{s.name} </span>
-        <span>- {s.desc}</span>
-      </p>
-    </div>
-  ))
-) : (
-  <Empty/>
-)}
-
+        {codeData?.children?.map((s, i) => (
+          <div key={i} onClick={() => handleViewTable(s)}>
+            <p class={`${style.card2} mt-3`}>
+              <ArrowRightOutlined />
+              <span className={style.codes}>{s.name} </span>
+              <span>- {s.desc}</span>
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   

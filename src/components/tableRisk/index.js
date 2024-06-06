@@ -14,20 +14,18 @@ const TableRisk = ({
     setSearchInput(data?.[0]?.diagnosisCode);
   };
 
-  const keysArray = data?.map((s) => ({
-    year: s.year,
-    key1: Object.keys(s).filter(
-      (key) => key.includes("Esrd") && !key.includes("Payment")
+  // const keysArray = data?.map((s) => ({
+  //   year: s.year,
+  //   key1: Object.keys(s).filter((key) => key.includes("Esrd")),
+  //   key2: Object.keys(s).filter((key) => key.includes("cmsHccModel")),
+  //   key3: Object.keys(s).filter((key) => key.includes("rxHccModel")),
+  // }));
+
+  const keyArray = data?.map((s) => ({
+    allKeys: Object.keys(s).filter(
+      (key) =>
+        key.includes("cms") || key.includes("rx") || key.includes("Payment")
     ),
-    key2: Object.keys(s).filter(
-      (key) => key.includes("cmsHccModel") && !key.includes("Payment")
-    ),
-    key3: Object.keys(s).filter(
-      (key) => key.includes("rxHccModel") && !key.includes("Payment")
-    ),
-  }));
-  const arrays = data?.map((x) => ({
-    key4: Object.keys(x).filter((key) => key.includes("Payment")),
   }));
 
   return (
@@ -40,81 +38,55 @@ const TableRisk = ({
           <span className={style.code}>{data?.[0]?.diagnosisCode}-</span>
           {data?.[0]?.description}
         </div>
-        <div className="d-flex justify-content-center">
-          <table className="table table-bordered " style={{ width: "90%" }}>
-            <thead>
+        <div style={{ overflowX: "auto" }}>
+          <table className="table table-bordered ">
+            <thead style={{ height: "70px" }}>
               <tr>
-                <th rowSpan={2}>year</th>
-                <th
-                  style={{ fontWeight: "600" }}
-                  colSpan={keysArray?.[0]?.key1?.length}
-                >
-                  ESRD/PACE
+                <th>
+                  {" "}
+                  style=
+                  {{
+                    fontWeight: "600",
+                  }}
+                  year
                 </th>
-                <th
-                  style={{ fontWeight: "600" }}
-                  colSpan={keysArray?.[0]?.key2?.length}
-                >
-                  CMS HCC
-                </th>
-                <th
-                  style={{ fontWeight: "600" }}
-                  colSpan={keysArray?.[0]?.key3?.length}
-                >
-                  RX HCC
-                </th>
-              </tr>
-              <tr>
-                {keysArray?.[0]?.key1?.map((a) => {
-                  return <th key={"sd"}>{a.slice(-3)}</th>;
+                {/* <th style={{fontWeight:"600"}}colSpan={keysArray?.[0]?.key1?.length}>ESRD/PACE</th>
+                <th style={{fontWeight:"600"}} colSpan={keysArray?.[0]?.key2?.length}>CMS HCC</th>
+                <th  style={{fontWeight:"600"}}  colSpan={keysArray?.[0]?.key3?.length}>RX HCC</th> */}
+
+                {keyArray?.[0]?.allKeys?.map((a) => {
+                  return (
+                    <th
+                      style={{
+                        fontWeight: "600",
+                      }}
+                    >
+                      {a}
+                    </th>
+                  );
                 })}
-                {keysArray?.[0]?.key2?.map((a) => {
-                  return <th>{a.slice(-3)}</th>;
+                {/* {keysArray?.[0]?.key2?.map((a) => {
+                  return <th>{a}</th>;
                 })}
                 {keysArray?.[0]?.key3?.map((a) => {
-                  return <th>{a.slice(-3)}</th>;
-                })}
+                  return <th>{a}</th>;
+                })} */}
               </tr>
             </thead>
             <tbody>
               {data?.map?.((x) => {
                 return (
-                  <tr>
+                  <tr style={{ height: "150px" }}>
                     <td>{x.year}</td>
-                    {keysArray?.[0]?.key1?.map((key) => {
+                    {keyArray?.[0]?.allKeys?.map((key) => {
                       return (
                         <td>
                           {x[key] ? x[key] : "--"}{" "}
-                          {x[key + "Payment"] === "Yes" ? (
+                          {/* {x[key + "Payment"] === "Yes" ? (
                             <CheckCircleOutlined className="text-success lead" />
                           ) : (
                             <CloseCircleOutlined className="text-danger lead" />
-                          )}
-                        </td>
-                      );
-                    })}
-
-                    {keysArray?.[0]?.key2?.map((key) => {
-                      return (
-                        <td>
-                          {x[key] ? x[key] : "--"}{" "}
-                          {x[key + "Payment"] === "Yes" ? (
-                            <CheckCircleOutlined className="text-success lead" />
-                          ) : (
-                            <CloseCircleOutlined className="text-danger lead" />
-                          )}
-                        </td>
-                      );
-                    })}
-                    {keysArray?.[0]?.key3?.map((key) => {
-                      return (
-                        <td>
-                          {x[key] ? x[key] : "--"}{" "}
-                          {x[key + "Payment"] === "Yes" ? (
-                            <CheckCircleOutlined className="text-success lead" />
-                          ) : (
-                            <CloseCircleOutlined className="text-danger lead" />
-                          )}
+                          )} */}
                         </td>
                       );
                     })}
@@ -124,166 +96,6 @@ const TableRisk = ({
             </tbody>
           </table>
         </div>
-        {/* <div className="row gap-2 mx-2">
-            <div
-              className="col-2 d-flex justify-content-center   "
-              style={{
-                border: "1px solid #04306F",
-                padding: "3px",
-                borderRadius: "10px",
-              }}
-            >
-              <span style={{ fontSize: "16px", fontWeight: "600" }}> Year</span>
-            </div>
-            <div
-              className="col-2 d-flex justify-content-center "
-              style={{
-                border: "1px solid  #04306F",
-                padding: "3px",
-                borderRadius: "10px",
-              }}
-            >
-              <span style={{ fontSize: "16px", fontWeight: "600" }}>
-                ESRD/PACE
-              </span>
-            </div>
-            <div
-              className="col-5 d-flex justify-content-center"
-              style={{
-                border: "1px solid  #04306F",
-                padding: "3px",
-                borderRadius: "10px",
-              }}
-            >
-              <span style={{ fontSize: "16px", fontWeight: "600" }}>CMS HCC</span>
-            </div>
-            <div
-              className="col-2 d-flex justify-content-center "
-              style={{
-                border: "1px solid  #04306F",
-                padding: "3px",
-                borderRadius: "10px",
-              }}
-            >
-              <span style={{ fontSize: "16px", fontWeight: "600" }}> RX HCC</span>
-            </div>
-          </div> */}
-        {/* <div className="row  mx-2 gap-2">
-            <div
-              className="col-2 mt-2"
-              style={{
-                border: "1px solid #04306F",
-                padding: "3px",
-                borderRadius: "10px",
-                height: "200px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              {data?.[0]?.year}
-            </div>
-            <div
-              className="col-2 mt-2"
-              style={{
-                border: "1px solid #04306F",
-                padding: "3px",
-                borderRadius: "10px",
-                height: "200px",
-              }}
-            >
-              <div
-                className="d-flex justify-content-around gap-2 "
-                style={{
-                  background: "#BAD5FD",
-                  borderRadius: "10px",
-                  padding: "5px",
-                }}
-              >
-                <div>V21 </div>
-                <div> V22</div>
-              </div>
-
-              <div className="d-flex justify-content-center align-items-center ">
-                <div>18</div>
-                <Divider
-                  type="vertical"
-                  style={{ height: "150px", color: "black" }}
-                />
-                <div>18</div>
-              </div>
-            </div>
-            <div
-              className="col-5 mt-2"
-              style={{
-                border: "1px solid #04306F",
-                padding: "3px",
-                borderRadius: "10px",
-                height: "200px",
-              }}
-            >
-              <div
-                className="d-flex justify-content-around gap-2 "
-                style={{
-                  background: "#BAD5FD",
-                  borderRadius: "10px",
-                  padding: "5px",
-                }}
-              >
-                <div>V21 </div>
-                <div> V22</div>
-                <div>V21 </div>
-                <div> V22</div>
-              </div>
-              <div className="d-flex justify-content-evenly align-items-center">
-                <div>18</div>
-                <Divider
-                  type="vertical"
-                  style={{ height: "150px", color: "black" }}
-                />
-                <div>18</div>
-                <Divider
-                  type="vertical"
-                  style={{ height: "150px", color: "black" }}
-                />
-                <div>18</div>
-                <Divider
-                  type="vertical"
-                  style={{ height: "150px", color: "black" }}
-                />
-                <div>18</div>
-              </div>
-            </div>
-            <div
-              className="col-2 mt-2"
-              style={{
-                border: "1px solid #04306F",
-                padding: "3px",
-                borderRadius: "10px",
-                height: "200px",
-              }}
-            >
-              <div
-                className="d-flex justify-content-around gap-2 "
-                style={{
-                  background: "#BAD5FD",
-                  borderRadius: "10px",
-                  padding: "5px",
-                }}
-              >
-                <div>V21 </div>
-                <div> V22</div>
-              </div>
-              <div className="d-flex justify-content-center align-items-center">
-                <div>18</div>
-                <Divider
-                  type="vertical"
-                  style={{ height: "150px", color: "black" }}
-                />
-                <div>18</div>
-              </div>
-            </div>
-          </div> */}
       </div>
     </div>
   );
