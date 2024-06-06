@@ -15,7 +15,7 @@ import { refreshToken } from "../stores/authflow/actions";
 
 config.autoAddCss = false;
 
-function MyApp({ Component, pageProps, showFooter }) {
+function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const [showTerminal, setShowTerminal] = useState(false);
@@ -113,13 +113,19 @@ function MyApp({ Component, pageProps, showFooter }) {
     //   router.replace("/_error");
     // }
   }, [showTerminal]);
+  const hideFooterPaths = [
+    "/admin/patients/details",
+    "/reviewer/patients/details",
+    "/supervisor/patients/details",
+  ];
+  const shouldShowFooter = !hideFooterPaths.includes(router.pathname);
 
   return (
     <PrimeReactProvider>
       <Provider store={store}>
         {showTerminal && <AICHAT openMsg={true} />}
         <Component {...pageProps} />
-        {showFooter && showTerminal && <Footer />}
+        {shouldShowFooter && showTerminal && <Footer />}
       </Provider>
     </PrimeReactProvider>
   );
