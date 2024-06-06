@@ -1,0 +1,9 @@
+.container {
+  padding-top: 55px !important;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.header {
+  display: flex;
+  justify-content: center;
+}

@@ -460,13 +460,19 @@ const Header = ({
                   {menuList.map((data, index) => {
                     const queryString = window.location.search;
                     const urlParams = new URLSearchParams(queryString);
-                    const encodedParams = urlParams.get("isAdminTracking");
+                    let encodedParams = null;
+                    if(currentRole == "tenant_admin"){
+                      encodedParams = urlParams.get("isTenantAdminTracking");
+                    }else{
+                      encodedParams = urlParams.get("isAdminTracking");
+                    }
+
 
                     return (
                       <li
                         className={` ${
                           stateActive === data.to ||
-                          (currentRole === "admin" && encodedParams
+                          ((currentRole === "admin" || currentRole === "tenant_admin") && encodedParams
                             ? stateActive === data.childRoute3
                             : stateActive === data.childRoute) ||
                           stateActive === data.childRoute2

@@ -34,7 +34,14 @@ function TrackingTable({
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data?.patientId);
-      navigate.push({pathname: "/admin/patients/details", query:{...page, isAdminTracking: true}})
+      var role = localStorage.getItem("role")
+      if(role == "tenant_admin"){
+        navigate.push({ pathname: "/tenantAdmin/patients/details",query:{...page, isTenantAdminTracking: true}});
+
+      }else{
+        navigate.push({pathname: "/admin/patients/details", query:{...page, isAdminTracking: true}})
+
+      }
     } else {
       notification.warning({
         message: data.patientId + " file not processed. Please wait.",
