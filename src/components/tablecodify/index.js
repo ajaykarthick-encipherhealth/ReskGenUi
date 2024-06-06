@@ -23,7 +23,7 @@ const Tables = (props) => {
 
     setLoading(false);
   };
-  console.log(codeData,"codeData")
+  
 
   return (
     <div className={style.code}>
