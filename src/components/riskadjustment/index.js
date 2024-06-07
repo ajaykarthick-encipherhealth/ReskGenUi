@@ -22,6 +22,11 @@ const RiskAdjustment = ({
   const [errorMessage, setErrorMessage] = useState("");
   const currentDate = new Date();
 
+  const disabledDate = (date) => {
+    const year = date.year();
+    return year < 2016 || year > 2024;
+
+  };
 
 
   const handleCode = (e) => {
@@ -77,6 +82,7 @@ const RiskAdjustment = ({
               onChangeYear={handleYearChange}
               val1={year}
               hideMonth={true}
+              disabledDate={disabledDate}
             />
             {errorMessage && (
             <div className="text-danger ml-2">{errorMessage}</div>
@@ -123,7 +129,6 @@ const RiskAdjustment = ({
         />
       ) : (
         ""
-        // selectedYear  && <Empty />
       )}
     </div>
   );

@@ -7,9 +7,7 @@ import {
 } from "@ant-design/icons";
 
 const TableRisk = ({
-  data,
-  subheader,
-  activeButton,
+  data, 
   setActiveButton,
   setSearchInput,
 }) => {
@@ -17,14 +15,6 @@ const TableRisk = ({
     setActiveButton("ICD-10");
     setSearchInput(data?.[0]?.diagnosisCode);
   };
-
-  // const keysArray = data?.map((s) => ({
-  //   year: s.year,
-  //   key1: Object.keys(s).filter((key) => key.includes("Esrd")),
-  //   key2: Object.keys(s).filter((key) => key.includes("cmsHccModel")),
-  //   key3: Object.keys(s).filter((key) => key.includes("rxHccModel")),
-  // }));
-
   const keyArray = data?.map((s) => ({
     allKeys: Object.keys(s).filter(
       (key) =>
@@ -53,9 +43,6 @@ const TableRisk = ({
                 >
                   year
                 </th>
-                {/* <th style={{fontWeight:"600"}}colSpan={keysArray?.[0]?.key1?.length}>ESRD/PACE</th>
-                <th style={{fontWeight:"600"}} colSpan={keysArray?.[0]?.key2?.length}>CMS HCC</th>
-                <th  style={{fontWeight:"600"}}  colSpan={keysArray?.[0]?.key3?.length}>RX HCC</th> */}
 
                 {keyArray?.[0]?.allKeys?.map((a) => {
                   return (
@@ -68,28 +55,17 @@ const TableRisk = ({
                     </th>
                   );
                 })}
-                {/* {keysArray?.[0]?.key2?.map((a) => {
-                  return <th>{a}</th>;
-                })}
-                {keysArray?.[0]?.key3?.map((a) => {
-                  return <th>{a}</th>;
-                })} */}
               </tr>
             </thead>
             <tbody>
-              {data?.map?.((x) => {
+              {data?.map?.((item) => {
                 return (
                   <tr style={{ height: "150px" }}>
-                    <td>{x.year}</td>
+                    <td>{item.year}</td>
                     {keyArray?.[0]?.allKeys?.map((key) => {
                       return (
                         <td>
-                          {x[key] ? x[key] : "--"}{" "}
-                          {/* {x[key + "Payment"] === "Yes" ? (
-                            <CheckCircleOutlined className="text-success lead" />
-                          ) : (
-                            <CloseCircleOutlined className="text-danger lead" />
-                          )} */}
+                          {item[key] ? item[key] : "--"}
                         </td>
                       );
                     })}

@@ -152,6 +152,7 @@ useEffect(()=>{
 
   const completeFetch = async () => {
     let completedData = await completeData({ code: searchInput })
+    setLoading(true);
     if (completedData?.status === "SUCCESS") {
       const displayCodeOptions = completedData?.response?.displayStrings?.map(
         (x) => ({
@@ -167,38 +168,10 @@ useEffect(()=>{
       );
       setOptions(displayCodeOptions);
     }
+    setLoading(false);
   };
 
-  // const alphabets = [
-  //   "A",
-  //   "B",
-  //   "C",
-  //   "D",
-  //   "E",
-  //   "F",
-  //   "G",
-  //   "H",
-  //   "I",
-  //   "J",
-  //   "K",
-  //   "L",
-  //   "M",
-  //   "N",
-  //   "O",
-  //   "P",
-  //   "Q",
-  //   "R",
-  //   "S",
-  //   "T",
-  //   "U",
-  //   "V",
-  //   "W",
-  //   "X",
-  //   "Y",
-  //   "Z",
-  // ];
-
-  const fetchCodeData = async (value) => {
+   const fetchCodeData = async (value) => {
     setLoading(true);
     const tableData = await codesData({ code: value?value:searchInput });
     if (tableData?.status == "SUCCESS") {
@@ -254,35 +227,7 @@ useEffect(()=>{
             </Button>
           </div>
         </div>
-        {/* <div className="col-1">
-          <div className="d-flex justify-content-center">
-            <FilterOutlined
-              style={{ fontSize: "20px" }}
-              onClick={() => setShowAlphabets(!showAlphabets)}
-            />
-          </div>
-        </div> */}
       </div>
-      {/* {showAlphabets && (
-        <div className="d-flex gap-1 p-2 flex-wrap">
-          {alphabets.map((name, index) => (
-            <div onClick={() => handleAlphabetClick(name)}>
-              <Button
-                className={
-                  activeAlphabet === name ? style.btn : style.alphabets
-                }
-                key={index}
-              >
-                {name}
-              </Button>
-            </div>
-          ))}
-          <Button
-            className={style.arrow}
-            icon={<ArrowRightOutlined className={style.arrowcolor} />}
-          />
-        </div>
-      )} */}
       <div className="row">
         {activeButton === "ICD-10" && (
           <>
@@ -294,17 +239,6 @@ useEffect(()=>{
                 value={searchInput}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
-              /> */}
-              {/* <Select
-                onSearch={onSearch}
-                filterOption={filterOption}
-                placeholder="Keywords, codes or code range between codes"
-                optionFilterProp="children"
-                value={searchInput}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
-                showSearch
-                options={options}
               /> */}
               <AutoComplete
                 popupMatchSelectWidth={252}
