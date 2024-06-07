@@ -738,18 +738,18 @@ export const handleSubmitValidNotes = async ({
     apiURL = "management/disease/move/combodeletedtovalid";
   }
   if (isValidAction.name == "Move to Deleted" && isValidAction.title == "MEAT") {
-    apiURL = "management/disease/move/meatvalidtodeleted";
+    apiURL = "management/meat/move/invalidtovalid";
   }
   if (isValidAction.name == "Move to valid" && isValidAction.title == "MEAT") {
-    apiURL = "management/disease/move/meatdeletedtovalid";
+    apiURL = "management/disease/move/deletedtovalid";
   }
   try {
     var patientId = localStorage.getItem("patientId");
     var dataFormatSuggested = {
       patientId: patientId,
       diagnosisCode: selectDisDetails.diagnosisCode ? selectDisDetails.diagnosisCode :selectDisDetails.diagnosisCodeCombo,
-      description: selectDisDetails.actualDescription,
-      dbDescription: selectDisDetails.dbDescription,
+      // description: selectDisDetails.actualDescription,
+      // dbDescription: selectDisDetails.dbDescription,
       reason: values.reason,
       processedYear: selectDisDetails.processedYear,
       dateOfServices: selectDisDetails.dateOfServices,
