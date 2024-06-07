@@ -1,14 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import style from "./style.module.css";
-import { Empty, Spin } from "antd";
-import { ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons";
+import { Button, Empty, Spin } from "antd";
+import {
+  ArrowRightOutlined,
+  ArrowLeftOutlined,
+  CopyOutlined,
+  CheckOutlined,
+} from "@ant-design/icons";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 const Tables = (props) => {
-  const { codeData, setCodeData, loading, setLoading } = props;
-  const [childIndex, setChildIndex] = useState(-1);
+  const {
+    codeData,
+    setCodeData,
+    loading,
+    setLoading,
+  } = props;
+
+  const [isCopied, setCopied] = useState(false);
+  const [previousCode, setPreviousCode] = useState();
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setCopied(false);
+    }, 3000);
+    return () => clearTimeout(timeout);
+  }, [isCopied]);
 
   const handleViewTable = (tableData, index) => {
     setLoading(true);
+    setPreviousCode({
+      ...previousCode,
+      name: codeData?.name,
+      desc: codeData?.desc,
+      includes: codeData?.includes,
+      excludes1: codeData?.excludes1,
+      excludes2: codeData?.excludes2,
+      children: codeData?.children,
+      inclusionTerm: codeData?.inclusionTerm,
+      useAdditionalCode: codeData?.useAdditionalCode,
+      requiredCharacter: codeData?.requiredCharacter,
+    });
     setCodeData({
       ...codeData,
       name: tableData?.name,
@@ -22,22 +54,20 @@ const Tables = (props) => {
       requiredCharacter: tableData?.requiredCharacter,
     });
     setLoading(false);
-    setChildIndex(index);
   };
 
   const handleBack = () => {
-    if (childIndex > 0) {
-      const newIndex = childIndex -1;
-      console.log(newIndex,"newIndex")
-      handleViewTable(codeData?.children[newIndex], newIndex);
-    }
-
+    setCodeData(previousCode);
   };
+
 
   return (
     <>
-      <div className={style.arrowleft}> <ArrowLeftOutlined onClick={handleBack}/>Back</div>
-        <div className={style.code}>
+      <div className={style.arrowleft}>
+        <ArrowLeftOutlined onClick={handleBack} />
+        Back
+      </div>
+      <div className={style.code}>
         <div className="d-flex justify-content-center">
           {loading && <Spin size="large" />}
         </div>
@@ -49,7 +79,7 @@ const Tables = (props) => {
                 <span className={style.term}>
                   {codeData?.requiredCharacter}
                 </span>
-                : Additional {codeData?.requiredCharacter}Digit Required  
+                : Additional {codeData?.requiredCharacter}Digit Required
               </div>
             </div>
           </div>
@@ -62,6 +92,12 @@ const Tables = (props) => {
           <div className={`${style.card} mt-2`}>
             <div className={style.head}>
               {codeData?.name}-{codeData?.desc}
+              <CopyToClipboard
+                text={`${codeData?.name} - ${codeData?.desc}`}
+                onCopy={() => setCopied(true)}
+              >
+                {isCopied ? <CheckOutlined /> : <CopyOutlined />}
+              </CopyToClipboard>
             </div>
             <div className={style.inclusionTerm}>{codeData?.inclusionTerm}</div>
 
@@ -135,7 +171,9 @@ const Tables = (props) => {
           {codeData?.children?.map((s, i) => (
             <div key={i} onClick={() => handleViewTable(s, i)}>
               <p class={`${style.card2} mt-3`}>
-                <span className={style.term}>{codeData?.requiredCharacter}</span>
+                <span className={style.term}>
+                  {codeData?.requiredCharacter}
+                </span>
                 <ArrowRightOutlined />
                 <span className={style.codes}>{s.name} </span>
                 <span>- {s.desc}</span>

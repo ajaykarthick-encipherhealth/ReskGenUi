@@ -319,7 +319,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
                 onSelect={handleTreeViewClick}
               />
             ) : (
-              <></>
+              <div></div>
             )}
             {noData && (
               <p className="d-flex justify-content-center">
@@ -333,6 +333,8 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
                 loading={loading}
                 codeData={codeData}
                 setLoading={setLoading}
+                setSearchInput={setSearchInput}
+                searchInput={searchInput}
               />
             )}
           </>
