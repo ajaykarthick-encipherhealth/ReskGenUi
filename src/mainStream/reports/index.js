@@ -465,13 +465,13 @@ const Reports = ({
                             </div>
                           ) : null}
 
-                          <div className="col-xl-2 d-flex">
+                          <div className="col-xl-3 d-flex">
                             <div className="d-flex w-100">
-                              <label className="labelStyle d-flex m-auto p-2">
+                              <label className="labelStyle d-flex  p-2">
                                 {" "}
                                 Date
                               </label>
-                              <div>
+                              <div >
                                 <RangePicker
                                   style={{
                                     borderRadius: "0 5px 5px 0",
@@ -534,7 +534,8 @@ const Reports = ({
                                       />
                                     )}
                                     {info?.isRangePikcer && (
-                                      <RangePicker
+                                      <div className="dateRangeSize">
+                                          <RangePicker
                                         style={{
                                           borderRadius: "0 5px 5px 0",
                                           width: "100%",
@@ -556,6 +557,8 @@ const Reports = ({
                                         }
                                         className="newReportPicker"
                                       />
+                                      </div>
+                                    
                                     )}
 
                                     {info?.isSearch && (
@@ -631,9 +634,7 @@ const Reports = ({
                                   ? styles.export
                                   : styles.exportDisable
                               } `}
-                              disabled={
-                                rowsLength?.data?.length > 0 ? false : true
-                              }
+                              disabled={rowsLength?.length > 0 ? false : true}
                               style={{
                                 color:
                                   rowsLength?.length > 0 ||

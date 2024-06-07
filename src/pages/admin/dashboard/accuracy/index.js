@@ -604,6 +604,7 @@ const Accuracy = () => {
                   bgColor="#E6EEFF"
                   val={month}
                   val1={year}
+                  
                 />
               </div>
               <div className={styles.btnScroller}>

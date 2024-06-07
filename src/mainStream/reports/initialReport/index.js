@@ -372,12 +372,13 @@ const InitialCard = ({
           )}
         </div>
       </div>
-
-      <Pagination
-        first={paginationFirst}
-        totalRecords={ReportPatientDetails?.response?.totalElements}
-        onPageChange={onPageChange}
-      />
+      {reportListAll?.response?.data?.length > 0 ? (
+        <Pagination
+          first={paginationFirst}
+          totalRecords={reportListAll?.response?.totalElements}
+          onPageChange={onPageChange}
+        />
+      ) : null}
     </>
   );
 };

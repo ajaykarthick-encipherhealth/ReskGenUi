@@ -283,12 +283,14 @@ const SentReport = ({
           </div>
         </div>
       </div>
+      {details?.receivedReportDTOList?.data?.length > 0 ? (
+        <Pagination
+          first={paginationFirst}
+          totalRecords={details?.receivedReportDTOList?.totalElements}
+          onPageChange={onSentPageChange}
+        />
+      ) : null}
 
-      <Pagination
-        first={paginationFirst}
-        totalRecords={details?.receivedReportDTOList?.totalElements}
-        onPageChange={onSentPageChange}
-      />
       {openEdit && (
         <Export
           isModalVisible={openEdit}
