@@ -15,9 +15,12 @@ const YearPicker = ({
   val1,
   hideMonth,
   className,
+  disabledDate,
 }) => {
   const currentDate = dayjs().format("MM");
   const currentYearDate = dayjs().format("DD/MM/YYYY");
+
+ 
 
   return (
     <>
@@ -30,6 +33,7 @@ const YearPicker = ({
           className={hideMonth ? className :`${styles.picker} pickerChnages ` }
           style={{ backgroundColor: bgColor }}
           suffixIcon={<Image src={arrow} />}
+          disabledDate={disabledDate}
         />
       </div>
 
