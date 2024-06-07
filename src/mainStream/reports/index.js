@@ -634,9 +634,7 @@ const Reports = ({
                                   ? styles.export
                                   : styles.exportDisable
                               } `}
-                              disabled={
-                                rowsLength?.data?.length > 0 ? false : true
-                              }
+                              disabled={rowsLength?.length > 0 ? false : true}
                               style={{
                                 color:
                                   rowsLength?.length > 0 ||

@@ -253,12 +253,12 @@ const ReceivedReport = ({
           </div>
         </div>
       </div>
-
-      <Pagination
+{details?.reportStatusDTOList.content.length > 0  ?   <Pagination
         first={paginationFirst}
         totalRecords={details?.reportStatusDTOList?.totalElements}
         onPageChange={onPageChange}
-      />
+      /> : null}
+     
     </>
   );
 };

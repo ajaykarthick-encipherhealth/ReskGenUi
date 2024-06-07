@@ -30,7 +30,7 @@ export async function sentApi({
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/reportdetails/sent?pageNo=${pagenum}&size=7&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&sortfield=${
+    `dbservice/reportdetails/sent?pageNo=${pagenum}&size=8&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&sortfield=${
       sort.sortField || ""
     }&sortdirection=${sort.sortDir || ""}
   `,
@@ -50,7 +50,7 @@ export async function receivedApi({
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/reportdetails/received?pageNo=${pagenum}&size=7&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}
+    `dbservice/reportdetails/received?pageNo=${pagenum}&size=8&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}
   `,
     options
   );
