@@ -100,9 +100,9 @@ useEffect(()=>{
     return icdStructure?.map(convertToAntdTreeData);
   };
 
-  const fetchTreeData = async () => {
+  const fetchTreeData = async (value) => {
     setLoading(true);
-    let treeData = await codifyData({ diseases: searchInput });
+    let treeData = await codifyData({diseases: value?value:searchInput  });
     if (treeData?.status == "SUCCESS") {
       let temp = convertICDStructureToTreeData(treeData?.response);
       if (!treeData?.response?.length) {
