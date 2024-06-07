@@ -14320,9 +14320,9 @@ input[type="number"] {
 .background-white {
   background: #fff;
 }
-.pickerChnages > .ant-picker-input:hover > .ant-picker-clear {
+/* .pickerChnages > .ant-picker-input:hover > .ant-picker-clear {
   display: none !important;
-}
+} */
 .monthPickerChnages > .ant-picker-dropdown .ant-picker-header-view {
   display: none !important;
 }
@@ -14613,13 +14613,18 @@ input[type="number"] {
   position: absolute;
   bottom: 40%;
   left: 62%;
-  transform: translateX(-50%); 
+  transform: translateX(-50%);
   font-style: italic;
   font-size: 13px;
-  color: #043069; 
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); 
-  letter-spacing: 0.5px; 
-  font-weight: 500; 
-  font-family: "Arial", sans-serif; 
-  white-space: nowrap; 
+  color: #043069;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  letter-spacing: 0.5px;
+  font-weight: 500;
+  font-family: "Arial", sans-serif;
+  white-space: nowrap;
+}
+:where(.css-dev-only-do-not-override-1b0bdye).ant-picker-dropdown
+  .ant-picker-header {
+  width: 82% !important;
+  margin-left: 20px;
 }
