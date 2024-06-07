@@ -72,8 +72,8 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
 
   const [dueDateStart, setDueDateStart] = useState(dueStartDate);
   const [dueDateEnd, setDueDateEnd] = useState(dueEndDate);
-  const [processedStart, setProcessedStart] = useState(processedStart);
-  const [processedEnd, setProcessedEnd] = useState(processedEnd);
+  const [processedStart, setProcessedStart] = useState("");
+  const [processedEnd, setProcessedEnd] = useState("");
   const [statusSelectedValue, setStausSelectedValue] = useState(
     filteratedDashboardData?.status
       ? filteratedDashboardData?.status.toUpperCase()
