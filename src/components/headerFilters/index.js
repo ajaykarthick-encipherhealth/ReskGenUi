@@ -151,13 +151,21 @@ const HeaderFilters = ({
   selectReportOptions,
   value,
   setSelectedManger,
+
+  // selectOrg
+  selectlabelOrg,
+  isSelectOrg,
+  setSelectedOptionOrg,
+  selectOptionsOrg,
+  defaultSelectValueOrg,
+  selectedValueOrg,
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
   let columnClass;
   if (addUser) {
     if (addBtn) {
-      columnClass = "col-xl-4";
+      columnClass = isSelectOrg ? "col-xl-2" : "col-xl-4";
     } else {
       columnClass = "col-xl-1";
     }
@@ -205,6 +213,7 @@ const HeaderFilters = ({
               />
             </div>
           )}
+
           {isNextCreatedBySelector && (
             <div
               className={defaultSize}
@@ -241,7 +250,7 @@ const HeaderFilters = ({
                   value={defaultSelectValue2 ? defaultSelectValue2 : ""}
                   onChange={(selectedOption) => {
                     setSelectedOption2(selectedOption);
-                    setSelectedManger("")
+                    setSelectedManger("");
                     if (selectedOption?.label === "All") {
                       setSelectedOption3(null);
                     }
@@ -253,6 +262,7 @@ const HeaderFilters = ({
               </div>
             </div>
           )}
+
           {selectOptions2 && (
             <div className={defaultSize}>
               <label className={styles.label}>{selectlabel2}</label>
@@ -261,8 +271,7 @@ const HeaderFilters = ({
                   // value={defaultSelectValue2}
                   onChange={(selectedOption) => {
                     setSelectedOption2(selectedOption?.value);
-                    if(setSelectedManger)
-                    setSelectedManger("");
+                    if (setSelectedManger) setSelectedManger("");
                   }}
                   options={selectOptions2}
                   // placeholder={defaultSelectValue2}
@@ -296,23 +305,22 @@ const HeaderFilters = ({
               </div>
             </div>
           )}
-          {isRangePicker && (
+          {isSelectOrg && (
             <div className={defaultSize}>
-              <DateRangePicker
-                selectedDates={selectedDates}
-                pickerlabel={pickerlabel}
-                defaultStartDate={defaultStartDate}
-                defaultEndDate={defaultEndDate}
-                setStartDate={setStartDate}
-                setEndDate={setEndDate}
-                activeTab={activeTab}
-                setSelectedDates={setSelectedDates}
-                setReceivedStartDate={setReceivedStartDate}
-                setReceivedEndDate={setReceivedEndDate}
-                setCoderStartDate={setCoderStartDate}
-                setCoderEndDate={setCoderEndDate}
-                disabled={disable != "Yes" ? true : false}
-              />
+              <label className={styles.label}>{selectlabelOrg}</label>
+              <div class="form-group has-search">
+                <Select
+                  onChange={(selectOrg) => {
+                    setSelectedOptionOrg(selectOrg);
+                    if (selectOrg?.label === "All") {
+                      setSelectedOptionOrg(null);
+                    }
+                  }}
+                  options={selectOptionsOrg}
+                  className="custom-react-select"
+                  isSearchable={false}
+                />
+              </div>
             </div>
           )}
 
@@ -502,6 +510,25 @@ const HeaderFilters = ({
                     placeholder={defaultAllocatedBy}
                   />
                 </div>
+              </div>
+            )}
+            {isRangePicker && (
+              <div className={defaultSize}>
+                <DateRangePicker
+                  selectedDates={selectedDates}
+                  pickerlabel={pickerlabel}
+                  defaultStartDate={defaultStartDate}
+                  defaultEndDate={defaultEndDate}
+                  setStartDate={setStartDate}
+                  setEndDate={setEndDate}
+                  activeTab={activeTab}
+                  setSelectedDates={setSelectedDates}
+                  setReceivedStartDate={setReceivedStartDate}
+                  setReceivedEndDate={setReceivedEndDate}
+                  setCoderStartDate={setCoderStartDate}
+                  setCoderEndDate={setCoderEndDate}
+                  disabled={disable != "Yes" ? true : false}
+                />
               </div>
             )}
             {isAllocatedToSelector && (

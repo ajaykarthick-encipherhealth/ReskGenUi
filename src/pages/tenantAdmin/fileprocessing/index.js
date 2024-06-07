@@ -8,13 +8,16 @@ import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import Header from "../../../jsx/layouts/nav/Header";
 import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
-import FileProcessingTable from "../../../components/table/admin/FileProcessing/FileProcessing";
 import FileUploading from "./FileUploading";
 import Addpatients from "./Addpatiens";
 import { getPatients } from "../../../store/actions/adminAction/patientsActions";
 import { patientDetails } from "../../../stores/authflow/actions";
+import FileProcessingTable from "../../../components/table/tenantTable/FileProcessing/FileProcessing";
+import HeaderFilters from "../../../components/headerFilters";
+import { connect } from "react-redux";
+import { actions as tenantAdminAction } from "../../../stores/tenantAdmin";
 
-export default function Patient() {
+const Patient= ({ getAllOrganizationList, organizationList }) => {
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingBtn, setIsLoadingBtn] = useState(false);
@@ -45,6 +48,9 @@ export default function Patient() {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const navigate = useRouter();
+  const [selectOrgList, setSelectedOrgList] = useState("");
+  const [orgAllList, setOrgAllList] = useState([]);
+
   useEffect(() => {
     let tenId = localStorage.getItem("tenantId");
     let uId = localStorage.getItem("userId");
@@ -318,6 +324,25 @@ export default function Patient() {
     setSelectFileRadiology(null);
   };
 
+
+  useEffect(() => {
+    if(!organizationList?.response){
+      getAllOrganizationList();
+    }
+  }, []);
+  
+  useEffect(() => {
+    var orgListArray = [{ value: "ALL", label: "ALL" }];
+    organizationList?.response?.map((res) => {
+      orgListArray.push({
+        value: res.id,
+        label: res.name,
+      });
+    });
+    setOrgAllList(orgListArray);
+  }, [organizationList]);
+
+  
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -330,9 +355,16 @@ export default function Patient() {
                   <div className="card-body p-0">
                     <div className="table-responsive active-projects task-table">
                       <div className="tbl-caption  align-items-center">
-                        <div className="row filter-contain"></div>
+                      <HeaderFilters
+                        // selectOrg
+                        selectlabelOrg="Select Organization"
+                        isSelectOrg={true}
+                        setSelectedOptionOrg={setSelectedOrgList}
+                        selectOptionsOrg={orgAllList}
+                        defaultSelectValueOrg={""}
+                        selectedValueOrg={selectOrgList}                       
+                      />
                       </div>
-
                       <div
                         id="task-tbl_wrapper"
                         className="dataTables_wrapper no-footer"
@@ -347,6 +379,7 @@ export default function Patient() {
                             gotoPatientDetails={gotoPatientDetails}
                             patientDetails={patientDetails}
                             loading={tableLoading}
+                            selectOrgList={selectOrgList}
                           />
                         )}
                       </div>
@@ -379,3 +412,13 @@ export default function Patient() {
     </>
   );
 }
+
+const enhancer = connect(
+  (state) => ({
+    organizationList: state?.tenantAdmin?.allOrganization?.data,
+  }),
+  {
+    getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
+  }
+);
+export default enhancer(Patient);

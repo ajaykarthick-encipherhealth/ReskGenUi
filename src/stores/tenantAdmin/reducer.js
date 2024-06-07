@@ -1,7 +1,11 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
 import {
-  batchUpload
+  batchUpload,
+  getAllOrganizationAction,
+  getAllPatientAction,
+  getAllTrackingAction,
+  getAllUsersAction
 } from "./actions";
 
 const initialState = {
@@ -35,6 +39,12 @@ const createReducer = (actionType) =>
 
 const searchReducer = combineReducers({
   batchUpload: createReducer(batchUpload),
+  allOrganization: createReducer(getAllOrganizationAction),
+  allUsers: createReducer(getAllUsersAction),
+  allPatients:createReducer(getAllPatientAction),
+  allTracking:createReducer(getAllTrackingAction)
+
+  
 });
 
 export default searchReducer;

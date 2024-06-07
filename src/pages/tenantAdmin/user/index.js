@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { Offcanvas } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { Form, Input, Button, Select, Row, Col, notification } from "antd";
 import styles from "../../../styles/auth.module.css";
 import ENDPOINTS from "../../../utility/enpoints";
 import axios from "../../../utility/axiosConfig";
-import AdminList from "../../../components/table/admin/adminList/adminList";
 import Header from "../../../jsx/layouts/nav/Header";
 import HeaderFilters from "../../../components/headerFilters";
 import { getUsers } from "../../../store/actions/adminAction/usersAction";
@@ -16,6 +15,9 @@ import {
   encyptingPass,
   getValidatePassword,
 } from "../../../components/headerFilters/functions";
+import { actions as tenantAdminAction } from "../../../stores/tenantAdmin";
+import UsersList from "../../../components/table/tenantTable/usersList/usersList";
+
 const { Option } = Select;
 const options3 = [
   { value: "ALL", label: "ALL" },
@@ -39,7 +41,8 @@ const intialValues = {
   mobileNumber: "",
   confirmPassword: "",
 };
-const UserList = () => {
+const UserList = ({ getAllOrganizationList, organizationList,getAllUsersList,usersList }) => {
+  console.log(usersList)
   const dispatch = useDispatch();
   const usersData = useSelector((state) => state.adminUsers.usersData);
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -72,6 +75,8 @@ const UserList = () => {
     patientId: "",
     patientName: "",
   });
+  const [selectOrgList, setSelectedOrgList] = useState("");
+  const [orgAllList, setOrgAllList] = useState("");
 
   const addUserForm = () => {
     setValidated(false);
@@ -84,7 +89,7 @@ const UserList = () => {
   const handleSubmit = async (userFormData) => {
     const encrptedData = encyptingPass(userFormData?.password);
     userFormData.tenantId = localTenantId;
-    userFormData.organizationId = localOrgId;
+    userFormData.organizationId = userFormData.orgId;
     userFormData.role = [userFormData?.role];
     userFormData.password = encrptedData?.pass;
     userFormData.passwordIv = encrptedData.iv;
@@ -157,11 +162,11 @@ const UserList = () => {
   };
 
   useEffect(() => {
-    if (usersData) {
-      setUserListAll(usersData);
-      setTotalElements(usersData?.data?.response?.totalElements);
+    if (usersList?.data?.response) {
+      setUserListAll(usersList?.data);
+      setTotalElements(usersList?.data?.response?.totalElements);
     }
-  }, [usersData]);
+  }, [usersList]);
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
     var uId = localStorage.getItem("userId");
@@ -171,17 +176,15 @@ const UserList = () => {
     setLocalUserId(uId);
     setLocalOrgId(orgId);
     setUseAdd(false);
-    dispatch(
-      getUsers({
-        pageCount,
-        search,
-        startDate,
-        endDate,
-        status,
-        role,
-        sort,
-      })
-    );
+    getAllUsersList({
+      pageCount,
+      search,
+      startDate,
+      endDate,
+      status,
+      role,
+      orgId:selectOrgList?.value,
+    })
   }, [
     pageCount,
     search,
@@ -192,13 +195,29 @@ const UserList = () => {
     sort,
     useAdd,
     clear,
+    selectOrgList
   ]);
 
   useEffect(() => {
     setTimeout(() => {
       setFormData(intialValues);
     }, 750);
-  }, [addUser]);
+  }, [addUser])
+
+  useEffect(() => {
+    getAllOrganizationList();
+  }, []);
+  
+  useEffect(() => {
+    var orgListArray = [{ value: "ALL", label: "ALL" }];
+    organizationList?.response?.map((res) => {
+      orgListArray.push({
+        value: res.id,
+        label: res.name,
+      });
+    });
+    setOrgAllList(orgListArray);
+  }, [organizationList]);
 
   // const onRoleChange = (value) => {
   //   // console.log(value);
@@ -236,6 +255,13 @@ const UserList = () => {
                         defaultSelectValue2={""}
                         setSelectedOption2={setRole}
                         selectedValue2={role}
+                        // selectOrg
+                        selectlabelOrg="Select Organization"
+                        isSelectOrg={true}
+                        setSelectedOptionOrg={setSelectedOrgList}
+                        selectOptionsOrg={orgAllList}
+                        defaultSelectValueOrg={""}
+                        selectedValueOrg={selectOrgList}
                         // computation date
                         pickerlabel="Created date Range"
                         selectedDates={selectedDates}
@@ -260,8 +286,8 @@ const UserList = () => {
                       id="task-tbl_wrapper"
                       className="dataTables_wrapper no-footer"
                     >
-                      <AdminList
-                        userList={userListAll?.data?.response?.content}
+                      <UsersList
+                        userList={usersList?.response?.content}
                         switchHandler={switchHandler}
                         setPageCount={setPageCount}
                         sortOrder={sortOrder}
@@ -428,8 +454,24 @@ const UserList = () => {
                       </div>
                     </Form.Item>
                   </Col>
-                </Row>
-                <Row gutter={16}>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Select Organization"
+                      name="orgId"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please select Organization!",
+                        },
+                      ]}
+                    >
+                      <Select
+                        placeholder="Select"
+                        options={orgAllList}
+                        style={{ height: "42px" }}
+                      />
+                    </Form.Item>
+                  </Col>
                   <Col span={12}>
                     <Form.Item
                       label="Email"
@@ -475,8 +517,6 @@ const UserList = () => {
                       </div>
                     </Form.Item>
                   </Col>
-                </Row>
-                <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item
                       label="Mobile Number"
@@ -519,6 +559,9 @@ const UserList = () => {
                         style={{ height: "42px" }}
                       >
                         <Select.Option value="ADMIN">ADMIN</Select.Option>
+                        <Select.Option value="TENANT_ADMIN">
+                        TENANT_ADMIN
+                        </Select.Option>
                         <Select.Option value="REVIEWER">REVIEWER</Select.Option>
                         <Select.Option value="SUPERVISOR">
                           SUPERVISOR
@@ -527,7 +570,7 @@ const UserList = () => {
                           ADMIN TECHNICAL SUPPORT
                         </Select.Option>
                         <Select.Option value="L2AUDITOR">
-                          ADMIN MEDICAL CODER
+                          TENANT_ADMIN
                         </Select.Option>
                       </Select>
                     </Form.Item>
@@ -634,4 +677,15 @@ const UserList = () => {
   );
 };
 
-export default UserList;
+const enhancer = connect(
+  (state) => ({
+    organizationList: state?.tenantAdmin?.allOrganization?.data,
+    usersList: state?.tenantAdmin?.allUsers,
+  }),
+  {
+    getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
+    getAllUsersList: tenantAdminAction.getAllUsersAction,
+
+  }
+);
+export default enhancer(UserList);

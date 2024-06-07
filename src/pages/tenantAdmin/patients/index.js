@@ -10,19 +10,22 @@ import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { Spin, notification } from "antd";
 import { Paginator } from "primereact/paginator";
 import visitStyles from "../../../styles/visitdata.module.css";
-import AddPatientListTable from "../../../components/table/admin/AddPatients/addPatients";
 import { getPatients } from "../../../store/actions/adminAction/patientsActions";
 import FileUploading from "../fileprocessing/FileUploading";
 import Addpatients from "../fileprocessing/Addpatiens";
 import SpinnerDots from "../../../components/spinner";
 import { LoadingOutlined } from "@ant-design/icons";
-import { eventStreming } from "../../../components/table/admin/FileProcessing/FileProcessing";
 import HeaderFilters from "../../../components/headerFilters";
 import {
   generateOptionsList,
   validateYear,
 } from "../../../components/headerFilters/functions";
 import { patientDetails } from "../../../stores/authflow/actions";
+import { actions as tenantAdminAction } from "../../../stores/tenantAdmin";
+import { connect } from "react-redux";
+import AddPatientListTable from "../../../components/table/tenantTable/AddPatients/addPatients";
+import { eventStreming } from "../../../components/table/tenantTable/FileProcessing/FileProcessing";
+
 
 const bullets = [
   {
@@ -51,7 +54,7 @@ const statusOptions = [
   { label: "NOT COMPUTED", value: "0", status: 0 },
 ];
 
-export default function Patient() {
+const Patient = ({ getAllOrganizationList, organizationList ,getAllPatients,allPatientList}) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -100,6 +103,8 @@ export default function Patient() {
 
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
   const [errors, setErrors] = useState({ year: "" });
+  const [selectOrgList, setSelectedOrgList] = useState("");
+  const [orgAllList, setOrgAllList] = useState([]);
 
   useEffect(() => {
     if (window !== "undefined") {
@@ -122,9 +127,7 @@ export default function Patient() {
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-
-    dispatch(
-      getPatients(
+      getAllPatients(
         pageNo,
         computedStartDate,
         computedEndDate,
@@ -135,9 +138,9 @@ export default function Patient() {
         selAllocatedTo,
         selAllocatedBy,
         selCreatedBy,
-        sort
+        sort,
+        orgId = selectOrgList?.value
       )
-    );
   }, [
     pageNo,
     computedStartDate,
@@ -150,13 +153,31 @@ export default function Patient() {
     selAllocatedBy,
     selCreatedBy,
     sort,
+    selectOrgList
   ]);
 
   useEffect(() => {
-    if (response?.response) {
-      getAllList(response?.response);
+    if (allPatientList?.data?.response) {
+      getAllList(allPatientList?.data?.response);
     }
-  }, [parsedData, response, pageNo, pageSize]);
+  }, [parsedData, allPatientList, pageNo, pageSize]);
+
+  useEffect(() => {
+    if(!organizationList?.response){
+      getAllOrganizationList();
+    }
+  }, []);
+  
+  useEffect(() => {
+    var orgListArray = [{ value: "ALL", label: "ALL" }];
+    organizationList?.response?.map((res) => {
+      orgListArray.push({
+        value: res.id,
+        label: res.name,
+      });
+    });
+    setOrgAllList(orgListArray);
+  }, [organizationList]);
 
   const getAllList = (info) => {
     if (info) {
@@ -264,66 +285,46 @@ export default function Patient() {
     setValidated(true);
   };
 
-  const handleSubmitPatientId = async (event) => {
-    const form = event.currentTarget;
-    event.preventDefault();
-    inputValuePatientId.allocatedBy = localUserId;
-    inputValuePatientId.computing = 0;
-    // inputValuePatientId.allocatedUserId = localUserId;
-
-    if (form.checkValidity() === true) {
+  const handleSubmitPatientId = async (form) => {
+    var orgId = selectOrgList?.value
+    form.allocatedBy = localUserId;
+    form.computing = 0;
       try {
         setIsLoadingBtn(true);
         const response = await axios.post(
           ENDPOINTS.apiEndoint + `dbservice/patient`,
-          inputValuePatientId
+          form
         );
-        if (response?.status == 200) {
-          // if (response.data.message == "patient Already Present") {
-          //   setIsLoadingBtn(false);
-          //   notification.warning({
-          //     message: "Patient ID Already Present",
-          //     duration: 1,
-          //   });
-          // } else {
-          //   notification.success({
-          //     message: "Patient ID Created Successfully!",
-          //     duration: 1,
-          //   });
-          dispatch(
-            getPatients(
-              pageNo,
-              computedStartDate,
-              computedEndDate,
-              selectedOption,
-              search,
-              completedStartDate,
-              completedEndDate,
-              selAllocatedTo,
-              selAllocatedBy,
-              selCreatedBy,
-              sort
-            )
-          );
+        if (response?.data?.status == "SUCCESS") {
+          getAllPatients(
+            pageNo,
+            computedStartDate,
+            computedEndDate,
+            selectedOption,
+            search,
+            completedStartDate,
+            completedEndDate,
+            selAllocatedTo,
+            selAllocatedBy,
+            selCreatedBy,
+            sort,
+            orgId
+          )
           setAddPatientId(false);
           setIsLoadingBtn(false);
           notification.success({
-            message: response?.data?.message,
+            message: "tets",
             duration: 1,
           });
-          // }
         } else {
           setIsLoadingBtn(false);
         }
-        // setAddPatientId(false);
-        getAllList(response?.response);
       } catch (Err) {
         notification.error({
           message: Err?.response?.data?.message,
           duration: 1,
         });
       }
-    }
 
     setValidated(true);
   };
@@ -452,22 +453,21 @@ export default function Patient() {
       notification.success({
         message: "Patient File Upload Successfully!",
       });
-      // navigate.push("/admin/file-processing");
-      dispatch(
-        getPatients(
-          pageNo,
-          computedStartDate,
-          computedEndDate,
-          selectedOption,
-          search,
-          completedStartDate,
-          completedEndDate,
-          selAllocatedTo,
-          selAllocatedBy,
-          selCreatedBy,
-          sort
-        )
-      );
+      var orgId=  selectOrgList?.value;
+      getAllPatients(
+        pageNo,
+        computedStartDate,
+        computedEndDate,
+        selectedOption,
+        search,
+        completedStartDate,
+        completedEndDate,
+        selAllocatedTo,
+        selAllocatedBy,
+        selCreatedBy,
+        sort,
+        orgId = selectOrgList?.value
+      )
       eventStreming(
         ENDPOINTS,
         setParsedData,
@@ -536,7 +536,7 @@ export default function Patient() {
     setPageNo(e.page);
     setPageSize(e.rows);
     setTableLoading(true);
-    getAllList(response?.response);
+    getAllList(allPatientList?.data?.response);
   };
   return (
     <>
@@ -598,6 +598,13 @@ export default function Patient() {
                             isNextRow={true}
                             btnTitle="Add Patient"
                             atCorner={true}
+                             // selectOrg
+                             selectlabelOrg="Select Organization"
+                             isSelectOrg={true}
+                             setSelectedOptionOrg={setSelectedOrgList}
+                             selectOptionsOrg={orgAllList}
+                             defaultSelectValueOrg={""}
+                             selectedValueOrg={selectOrgList}
                           />
                         </div>
                       </div>
@@ -662,8 +669,22 @@ export default function Patient() {
           handleSubmitPatientId={handleSubmitPatientId}
           handleChangePatientId={handleChangePatientId}
           isLoadingBtn={isLoadingBtn}
+          orgAllList={orgAllList}
         />
       </div>
     </>
   );
 }
+
+const enhancer = connect(
+  (state) => ({
+    organizationList: state?.tenantAdmin?.allOrganization?.data,
+    allPatientList: state?.tenantAdmin?.allPatients,
+
+  }),
+  {
+    getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
+    getAllPatients:tenantAdminAction.getAllPatientAction,
+  }
+);
+export default enhancer(Patient);
