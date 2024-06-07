@@ -620,7 +620,6 @@ const Reports = ({
                                 : ""
                             }
                           >
-                            {}
                             <button
                               onClick={() => {
                                 setIsModalVisible(true);
