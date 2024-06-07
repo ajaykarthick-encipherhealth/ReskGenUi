@@ -286,6 +286,7 @@ const Patient = ({ getAllOrganizationList, organizationList ,getAllPatients,allP
   };
 
   const handleSubmitPatientId = async (form) => {
+    var orgId = selectOrgList?.value
     form.allocatedBy = localUserId;
     form.computing = 0;
       try {
@@ -295,24 +296,24 @@ const Patient = ({ getAllOrganizationList, organizationList ,getAllPatients,allP
           form
         );
         if (response?.data?.status == "SUCCESS") {
-          // getAllPatients(
-          //   pageNo,
-          //   computedStartDate,
-          //   computedEndDate,
-          //   selectedOption,
-          //   search,
-          //   completedStartDate,
-          //   completedEndDate,
-          //   selAllocatedTo,
-          //   selAllocatedBy,
-          //   selCreatedBy,
-          //   sort,
-          //   orgId = selectOrgList?.value
-          // )
+          getAllPatients(
+            pageNo,
+            computedStartDate,
+            computedEndDate,
+            selectedOption,
+            search,
+            completedStartDate,
+            completedEndDate,
+            selAllocatedTo,
+            selAllocatedBy,
+            selCreatedBy,
+            sort,
+            orgId
+          )
           setAddPatientId(false);
           setIsLoadingBtn(false);
           notification.success({
-            message: response?.data?.message,
+            message: "tets",
             duration: 1,
           });
         } else {

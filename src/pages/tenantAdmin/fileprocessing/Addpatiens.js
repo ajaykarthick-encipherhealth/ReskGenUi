@@ -76,7 +76,7 @@ const Addpatients = ({
                   rules={[
                     {
                       required: true,
-                      message: "Please enter your patientId!",
+                      message: "Please enter patientId!",
                     },
                   ]}
                 >
