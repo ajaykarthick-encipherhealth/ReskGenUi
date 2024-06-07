@@ -14623,3 +14623,9 @@ input[type="number"] {
   font-family: "Arial", sans-serif; 
   white-space: nowrap; 
 }
+:where(.css-dev-only-do-not-override-1b0bdye).ant-picker-dropdown
+  .ant-picker-header {
+  width: 82% !important;
+  margin-left: 20px;
+}
+
