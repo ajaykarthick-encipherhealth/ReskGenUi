@@ -8,6 +8,8 @@ import { getChatReply } from "../../store/actions/DashboardActions";
 import { renderUserPrfoile } from "../headerFilters/functions";
 import styles from "./styles.module.css";
 import { IMAGES } from "../../jsx/constant/theme";
+import { faComments } from "@fortawesome/free-regular-svg-icons"; // Import the desired icon
+import { faTimesCircle } from "@fortawesome/free-solid-svg-icons"; // Import the close icon if needed
 
 const AICHAT = ({ openMsg, offMsg }) => {
   const dispatch = useDispatch();
@@ -56,9 +58,9 @@ const AICHAT = ({ openMsg, offMsg }) => {
         onClick={() => setActiveChat(activeChat ? false : true)}
       >
         {activeChat ? (
-          <Image src={IMAGES.aiCloseChat} />
+          <FontAwesomeIcon icon={faTimesCircle} color="white" />
         ) : (
-          <Image src={IMAGES.aiChatIcon} />
+          <FontAwesomeIcon icon={faComments} color="white" />
         )}
       </button>
       {activeChat && (
