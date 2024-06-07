@@ -103,7 +103,12 @@ const auditStatusOptions = [
   { label: "AUDIT DECLINED", value: "AUDIT_DECLINED", status: 0 },
 ];
 
-const Patient = ({ getAllOrganizationList, organizationList,getAllTrackingList,trackingList}) => {
+const Patient = ({
+  getAllOrganizationList,
+  organizationList,
+  getAllTrackingList,
+  trackingList,
+}) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
   const filteredList = useSelector((state) => state.auth.filterList);
@@ -165,16 +170,19 @@ const Patient = ({ getAllOrganizationList, organizationList,getAllTrackingList,t
   const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
 
   useEffect(() => {
-   
     if (window !== "undefined") {
-      setIsLoading(true)
+      setIsLoading(true);
       if (navigate) {
-        setPageNo(navigate?.query?.pageNo?navigate?.query?.pageNo:0)
-        setPaginationFirst(navigate?.query?.paginationFirst?navigate?.query?.paginationFirst:0)
+        setPageNo(navigate?.query?.pageNo ? navigate?.query?.pageNo : 0);
+        setPaginationFirst(
+          navigate?.query?.paginationFirst
+            ? navigate?.query?.paginationFirst
+            : 0
+        );
       }
     }
-    setIsLoading(false)
-  }, [navigate])
+    setIsLoading(false);
+  }, [navigate]);
 
   useEffect(() => {
     const datas = {
@@ -209,11 +217,15 @@ const Patient = ({ getAllOrganizationList, organizationList,getAllTrackingList,t
         ? auditSelAllocatedTo?.value
         : "",
       sort,
-      selectOrgId: clear ? "" : (selectOrgList && selectOrgList?.value != "ALL") ? selectOrgList?.value : "",
+      selectOrgId: clear
+        ? ""
+        : selectOrgList && selectOrgList?.value != "ALL"
+        ? selectOrgList?.value
+        : "",
     };
-    setIsLoading(true)
+    setIsLoading(true);
     getAllTrackingList(datas);
-    setIsLoading(false)
+    setIsLoading(false);
   }, [
     pageNo,
     dueDateStart,
@@ -235,14 +247,14 @@ const Patient = ({ getAllOrganizationList, organizationList,getAllTrackingList,t
     auditSelAllocatedTo,
     sort,
     clear,
-    selectOrgList
+    selectOrgList,
   ]);
 
   useEffect(() => {
     if (trackingList?.data?.response) {
-      setIsLoading(true)
+      setIsLoading(true);
       getAllList(trackingList?.data?.response);
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }, [parsedData, trackingList, pageNo, pageSize]);
 
@@ -320,7 +332,7 @@ const Patient = ({ getAllOrganizationList, organizationList,getAllTrackingList,t
     }
   };
 
-   const processstatusBodyTemplate = (rowData) => {
+  const processstatusBodyTemplate = (rowData) => {
     const declinedDataFromAudit = extractLatestData(
       rowData?.auditDeclinedNotes
     );
@@ -525,11 +537,11 @@ const Patient = ({ getAllOrganizationList, organizationList,getAllTrackingList,t
   };
 
   useEffect(() => {
-    if(!organizationList?.response){
+    if (!organizationList?.response) {
       getAllOrganizationList();
     }
   }, []);
-  
+
   useEffect(() => {
     var orgListArray = [{ value: "ALL", label: "ALL" }];
     organizationList?.response?.map((res) => {
@@ -540,7 +552,6 @@ const Patient = ({ getAllOrganizationList, organizationList,getAllTrackingList,t
     });
     setOrgAllList(orgListArray);
   }, [organizationList]);
-
 
   return (
     <>
@@ -678,7 +689,7 @@ const Patient = ({ getAllOrganizationList, organizationList,getAllTrackingList,t
                               setSortOrder={setAllocatedSortOrder}
                               sortOrder={allocatedSortOrder}
                               setSort={setSort}
-                              page={{pageNo, paginationFirst}}
+                              page={{ pageNo, paginationFirst }}
                             />
                             <div>
                               <div className="pagination-container">
@@ -706,7 +717,7 @@ const Patient = ({ getAllOrganizationList, organizationList,getAllTrackingList,t
       </div>
     </>
   );
-}
+};
 const enhancer = connect(
   (state) => ({
     organizationList: state?.tenantAdmin?.allOrganization?.data,
@@ -715,7 +726,6 @@ const enhancer = connect(
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
     getAllTrackingList: tenantAdminAction.getAllTrackingAction,
-
   }
 );
 export default enhancer(Patient);
