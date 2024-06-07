@@ -6,6 +6,9 @@
 .classThead > tr > th {
   color: #fff !important;
 }
+.tenantAdminclassThead > tr > th {
+  color: #fff !important;
+}
 .classTTotalhead {
   color: #fff !important;
 }
@@ -19,8 +22,14 @@
 .classThead > :first-child {
   border-radius: 10px 0 0 10px !important;
 }
+.tenantAdminclassThead > :first-child {
+  border-radius: 10px 0 0 10px !important;
+}
 .bodytable > td:last-child,
 .classThead > :last-child {
+  border-radius: 10px 0 0 10px !important;
+}
+.tenantAdminclassThead > :last-child {
   border-radius: 10px 0 0 10px !important;
 }
 
@@ -48,6 +57,11 @@
   position: sticky;
   top: 0;
   z-index: 1;
+}
+.tenantAdminclassThead {
+  background-color: #fafcff;
+  position: sticky;
+  top: 0;
 }
 
 .classTable &::-webkit-scrollbar {

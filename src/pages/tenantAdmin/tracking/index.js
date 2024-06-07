@@ -14,7 +14,7 @@ import visitStyles from "../../../styles/visitdata.module.css";
 import SpinnerDots from "../../../components/spinner";
 import { LoadingOutlined } from "@ant-design/icons";
 import HeaderFilters from "./headerFilters";
-import TrackingTable from "../../../components/table/admin/trackingList";
+import TrackingTable from "../../../components/table/tenantTable/trackingList";
 import { getTrackingList } from "../../../store/actions/adminAction/patientsActions";
 import { generateOptionsList } from "../../../components/headerFilters/functions";
 import DailyTask from "./dailytask";
@@ -34,6 +34,9 @@ import Image from "next/image";
 import { extractLatestData } from "../../supervisor/auditing";
 import { patientDetails } from "../../../stores/authflow/actions";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin";
+import Legends from "../../../components/legends";
+import warning from "../../../images/svg/warning.svg";
+import stylesReport from "../../../pages/reviewer/report/report.module.css";
 
 const bullets = [
   {
@@ -164,6 +167,8 @@ const Patient = ({
   const [selectOrgList, setSelectedOrgList] = useState("");
   const [orgAllList, setOrgAllList] = useState([]);
   const [defaultOrgValue, setDefaultOrgValue] = useState(null);
+  const [trackInput, setTrackInput] = useState("");
+
 
   // new changes
 
@@ -633,7 +638,7 @@ const Patient = ({
                             bullets={bullets}
                             isNextRow={true}
                             defaultShow={true}
-                            defaultSize={"col-xl-2"}
+                            defaultSize={"col-xl-3"}
                             auditStatusOptions={auditStatusOptions}
                             setAuditSelectedOption={setAuditSelectedOption}
                             setStartDate6={setAuditedDueStartDate}
@@ -664,10 +669,93 @@ const Patient = ({
                             orgAllList={orgAllList}
                             setSelectedOrgList={setSelectedOrgList}
                             selectOrgList={selectOrgList}
+                            setTrackInput={setTrackInput}
+                            trackInput={trackInput}
                           />
                         </div>
                         <div className="col-xl-2">
                           <DailyTask trackChart={trackChart} />
+                          <div
+                            className={`${bullets ? "col-xl-12" : "col-xl-4"}`}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              paddingRight: "20px",
+                            }}
+                          >
+                            {bullets && (
+                              <div
+                                // className={`${bullets ? "col-xl-1" : "col-xl-4"}`}
+                                style={{
+                                  margin: "30px 0 0 10px",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                <Popover
+                                  content={
+                                    <>
+                                      <Legends
+                                        bullets={bullets}
+                                        display="block"
+                                        padding="0 0px 10px 0"
+                                      />
+                                      {bullets?.length > 0 &&
+                                        bullets?.map((data) => (
+                                          <div style={{ marginBottom: "10px" }}>
+                                            <Image
+                                              src={data.src}
+                                              width={20}
+                                              height={30}
+                                            />
+                                            <span style={{ marginLeft: "5px" }}>
+                                              {data?.name}
+                                            </span>
+                                          </div>
+                                        ))}
+                                    </>
+                                  }
+                                  trigger={["click"]}
+                                  placement="bottom"
+                                >
+                                  <Image src={warning} />
+                                </Popover>
+                              </div>
+                            )}
+                            <div
+                              style={{ marginTop: "30px", width: "100px" }}
+                              className={`${bullets ? "col-xl-2" : "col-xl-4"}`}
+                              onClick={() => {
+                                setClear(true);
+                                setDueDateStart([]);
+                                setDueDateEnd([]);
+                                setAuditedStartDate([]);
+                                setAuditedEnsDate([]);
+                                setAllocatedStartDate([]);
+                                setAllocatedEndDate([]);
+                                setAuditedDueStartDate([]);
+                                setAuditedDueEndDate([]);
+                                setSearchTextValue("");
+                                setSelectedDates([]);
+                                setSelectedDates2([]);
+                                setSelectedDates3([]);
+                                setSelectedDates4([]);
+                                setSelectedDates5([]);
+                                setSelAllocatedTo("");
+                                setAuditSelAllocatedTo("");
+                                SetSelectedOption("");
+                                setAuditSelectedOption("");
+                                setSelAllocatedBy("");
+                                setSelAuditAllocatedBy("");
+                                setTrackInput("");
+                              }}
+                            >
+                              <button
+                                className={`${stylesReport.filterBtn} mx-3`}
+                              >
+                                Clear
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       </div>
 
