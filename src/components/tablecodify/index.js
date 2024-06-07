@@ -47,7 +47,6 @@ const Tables = (props) => {
               Related Symbols
               <div className={style.digit}>
                 <span className={style.term}>
-                  {" "}
                   {codeData?.requiredCharacter}
                 </span>
                 : Additional {codeData?.requiredCharacter}Digit Required{" "}
@@ -136,6 +135,7 @@ const Tables = (props) => {
           {codeData?.children?.map((s, i) => (
             <div key={i} onClick={() => handleViewTable(s, i)}>
               <p class={`${style.card2} mt-3`}>
+                <span className={style.term}>{codeData?.requiredCharacter}</span>
                 <ArrowRightOutlined />
                 <span className={style.codes}>{s.name} </span>
                 <span>- {s.desc}</span>
