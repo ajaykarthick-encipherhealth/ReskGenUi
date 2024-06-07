@@ -328,7 +328,7 @@ const TeamReport = ({
                             Overall Status
                           </div>
                           <div className="col-xl-12  d-flex mt-2">
-                            <Row className={styles.carddiv}>
+                            <div className="row g-3">
                               {card1Data?.map((data) => (
                                 <MiniCards
                                   key={data?.id}
@@ -339,7 +339,7 @@ const TeamReport = ({
                                   styles={styles}
                                 />
                               ))}
-                            </Row>
+                            </div>
                           </div>
                           <div className="col-xl-12  d-flex mt-1">
                             <Flags
@@ -368,18 +368,22 @@ const TeamReport = ({
           )}
         </div>
       </div>
-
-      <div className="pagination-container">
-        <Paginator
-          first={paginationFirst}
-          rows={8}
-          totalRecords={ReportPatientDetails?.response?.response?.totalElements}
-          onPageChange={onPageChange}
-        />
-        <div className="total-pages">
-          Total count: {ReportPatientDetails?.response?.response?.totalElements}
+      {reportListAll?.response?.response?.data?.length > 0 ? (
+        <div className="pagination-container">
+          <Paginator
+            first={paginationFirst}
+            rows={8}
+            totalRecords={
+              ReportPatientDetails?.response?.response?.totalElements
+            }
+            onPageChange={onPageChange}
+          />
+          <div className="total-pages">
+            Total count:{" "}
+            {ReportPatientDetails?.response?.response?.totalElements}
+          </div>
         </div>
-      </div>
+      ) : null}
     </>
   );
 };
