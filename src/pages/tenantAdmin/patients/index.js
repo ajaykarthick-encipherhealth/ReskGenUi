@@ -453,7 +453,7 @@ const Patient = ({ getAllOrganizationList, organizationList ,getAllPatients,allP
       notification.success({
         message: "Patient File Upload Successfully!",
       });
-      // navigate.push("/admin/file-processing");
+      var orgId=  selectOrgList?.value;
       getAllPatients(
         pageNo,
         computedStartDate,
