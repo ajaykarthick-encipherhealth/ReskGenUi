@@ -568,7 +568,7 @@ export default function Patient() {
                             defaultEndDate={""}
                             setStartDate={setComputedStartDate}
                             setEndDate={setComputedEndDate}
-                            isRangePicker={true}
+                            isRangePickerUsers={true}
                             disable="Yes"
                             selectedDates={selecteddates}
                             setSelectedDates={setSelectedDates}
