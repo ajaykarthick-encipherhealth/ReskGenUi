@@ -45,7 +45,6 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   const [showAlphabets, setShowAlphabets] = useState(false);
   const [currentButton, setCurrentButton] = useState("Codes");
   const [activeButton, setActiveButton] = useState("ICD-10");
-  const [activeAlphabet, setActiveAlphabet] = useState(null);
   const [searchInput, setSearchInput] = useState("");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -56,15 +55,11 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
 
   const handleRiskAdjustment = () => {
     setActiveButton("Risk Adjustment");
-    setShowAlphabets(false);
     setShowButtons(false);
   };
   const handleButtonClick = () => {
     setActiveButton("ICD-10");
     setSearchInput(null);
-  };
-  const handleAlphabetClick = (alphabet) => {
-    setActiveAlphabet(alphabet);
   };
   const handleInputChange = (e) => {
     setSearchInput(e.target.value);
