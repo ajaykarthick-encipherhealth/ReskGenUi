@@ -364,6 +364,7 @@ const UserList = () => {
             setAddUser(false);
             setRoleValue([]);
             setRole("");
+            form.resetFields();
           }}
           className="offcanvas-end offcanvas-md-size"
           placement="end"
@@ -391,8 +392,8 @@ const UserList = () => {
                 onFinish={onFinish}
                 labelCol={{ span: 24 }}
                 wrapperCol={{ span: 24 }}
+                autoComplete="off"
               >
-                {" "}
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item
@@ -406,8 +407,10 @@ const UserList = () => {
                       ]}
                     >
                       <div>
-                        {" "}
-                        <Input placeholder="Enter first name" />
+                        <Input
+                          placeholder="Enter first name"
+                          autoComplete="off"
+                        />
                       </div>
                     </Form.Item>
                   </Col>
@@ -423,8 +426,10 @@ const UserList = () => {
                       ]}
                     >
                       <div>
-                        {" "}
-                        <Input placeholder="Enter last name" />
+                        <Input
+                          placeholder="Enter last name"
+                          autoComplete="off"
+                        />
                       </div>
                     </Form.Item>
                   </Col>
@@ -443,8 +448,7 @@ const UserList = () => {
                       ]}
                     >
                       <div>
-                        {" "}
-                        <Input placeholder="Enter email" />
+                        <Input placeholder="Enter email" autoComplete="off" />
                       </div>
                     </Form.Item>
                   </Col>
@@ -470,8 +474,10 @@ const UserList = () => {
                       ]}
                     >
                       <div>
-                        {" "}
-                        <Input placeholder="Enter user name" />
+                        <Input
+                          placeholder="Enter user name"
+                          autoComplete="off"
+                        />
                       </div>
                     </Form.Item>
                   </Col>
@@ -494,10 +500,10 @@ const UserList = () => {
                       ]}
                     >
                       <div>
-                        {" "}
                         <Input
                           type="number"
                           placeholder="Enter mobile number"
+                          autoComplete="off"
                         />
                       </div>
                     </Form.Item>
@@ -514,7 +520,6 @@ const UserList = () => {
                     >
                       <Select
                         placeholder="Select role"
-                        // onChange={onRoleChange}
                         allowClear
                         style={{ height: "42px" }}
                       >
@@ -533,11 +538,15 @@ const UserList = () => {
                     </Form.Item>
                   </Col>
                 </Row>
+
+                <input type="password" style={{ display: "none" }} />
+
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item
                       label="Password"
                       name="password"
+                      dependencies={["password"]}
                       rules={[
                         {
                           required: true,
@@ -560,9 +569,12 @@ const UserList = () => {
                       ]}
                     >
                       <div className="confirmPass">
+                        {/* Hidden dummy password input to prevent autocomplete */}
+                        <input type="password" style={{ display: "none" }} />
                         <Input.Password
-                          style={{ height: "42px" }}
+                          // style={{ height: "42px" }}
                           placeholder="Enter password"
+                          autoComplete="new-password"
                         />
                       </div>
                     </Form.Item>
@@ -590,12 +602,14 @@ const UserList = () => {
                       ]}
                     >
                       <div className="confirmPass">
-                        {" "}
+                        {/* Hidden dummy password input to prevent autocomplete */}
+                        <input type="password" style={{ display: "none" }} />
                         <Input.Password
-                          style={{
-                            height: "42px",
-                          }}
-                          placeholder="Re enter the password"
+                          // style={{
+                          //   height: "42px",
+                          // }}
+                          placeholder="Re-enter the password"
+                          autoComplete="new-password"
                         />
                       </div>
                     </Form.Item>
