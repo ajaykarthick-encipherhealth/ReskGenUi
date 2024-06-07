@@ -14,7 +14,7 @@ import Tables from "../../components/tablecodify";
 import Codes from "../codes";
 import Riskadjustment from "../../components/riskadjustment";
 
-const Codify = ({ codifyData, codesData }) => {
+const Codify = ({ codifyData, codesData, recentsearch }) => {
   const [showButtons, setShowButtons] = useState(false);
   const [showAlphabets, setShowAlphabets] = useState(false);
   const [currentButton, setCurrentButton] = useState("Codes");
@@ -25,6 +25,7 @@ const Codify = ({ codifyData, codesData }) => {
   const [loading, setLoading] = useState(false);
   const [codeData, setCodeData] = useState([]);
   const [noData, setNoData] = useState(false);
+  const [searches, setSearches] = useState([]);
 
   const handleRiskAdjustment = () => {
     setActiveButton("Risk Adjustment");
@@ -72,7 +73,7 @@ const Codify = ({ codifyData, codesData }) => {
       }
       setData(temp);
     }
-    setLoading(false) ;
+    setLoading(false);
   };
 
   const handleSearch = () => {
@@ -85,6 +86,19 @@ const Codify = ({ codifyData, codesData }) => {
       fetchcode();
     }
   }
+  const searchfetch = async () => {
+    let searchData = await recentsearch({});
+    if (searchData?.status === "SUCCESS") {
+      const filteredSearches = searchData?.response
+        .filter((item) => item.searchFrom === "TREE_VIEW")
+        .map((item) => item.searchedCode);
+      setSearches(filteredSearches);
+    }
+  };
+
+  useEffect(() => {
+    searchfetch();
+  }, []);
 
   // const alphabets = [
   //   "A",
@@ -114,7 +128,6 @@ const Codify = ({ codifyData, codesData }) => {
   //   "Y",
   //   "Z",
   // ];
-  const buttons = ["I10", "D48.113", "D48.114", "D48.115", "D48.116"];
 
   const onChange = (key) => {}; // Future use case for onChange
 
@@ -240,11 +253,12 @@ const Codify = ({ codifyData, codesData }) => {
                 onClick={() => setShowButtons(!showButtons)}
               />
             </div>
-            {showButtons && (
+
+            {showButtons && currentButton === "Codes" && (
               <div className="d-flex gap-3  flex-wrap mx-2">
-                {buttons.map((name, index) => (
+                {searches.map((search, index) => (
                   <Button className={style.btnborder} key={index}>
-                    {name}
+                    {search}
                   </Button>
                 ))}
               </div>
@@ -293,5 +307,6 @@ const Codify = ({ codifyData, codesData }) => {
 const enhancer = connect((state) => ({ state }), {
   codifyData: dashbaordActions.codifyAction,
   codesData: dashbaordActions.codesAction,
+  recentsearch: dashbaordActions.searchesAction,
 });
 export default enhancer(Codify);

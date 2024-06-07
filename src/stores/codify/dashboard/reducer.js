@@ -4,6 +4,7 @@ import { handleActions } from "redux-actions";
 import { codifyAction } from "./actions";
 import {codesAction} from "./actions";
 import { riskadjustmentAction } from "./actions";
+import {searchesAction} from "./actions";
 
 const initialState = {
   loading: true,
@@ -39,6 +40,7 @@ const dashbaordReducer = combineReducers({
   codify:createReducer(codifyAction),
   codes:createReducer(codesAction),
   riskadjustment:createReducer(riskadjustmentAction),
+  searches:createReducer(searchesAction),
 });
 
 export default dashbaordReducer;

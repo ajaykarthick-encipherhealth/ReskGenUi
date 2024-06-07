@@ -16,3 +16,8 @@ export const riskadjustmentAction = createActionThunk(
   "RISK ADJUSTMENT",
   network.riskadjustment
 );
+
+export const  searchesAction = createActionThunk(
+  " RECENT SEARCHES ",
+  network.searches
+);
