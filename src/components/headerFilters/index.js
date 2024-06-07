@@ -159,6 +159,7 @@ const HeaderFilters = ({
   selectOptionsOrg,
   defaultSelectValueOrg,
   selectedValueOrg,
+  isRangePickerUsers
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
@@ -323,6 +324,25 @@ const HeaderFilters = ({
               </div>
             </div>
           )}
+           {isRangePickerUsers && (
+              <div className={defaultSize}>
+                <DateRangePicker
+                  selectedDates={selectedDates}
+                  pickerlabel={pickerlabel}
+                  defaultStartDate={defaultStartDate}
+                  defaultEndDate={defaultEndDate}
+                  setStartDate={setStartDate}
+                  setEndDate={setEndDate}
+                  activeTab={activeTab}
+                  setSelectedDates={setSelectedDates}
+                  setReceivedStartDate={setReceivedStartDate}
+                  setReceivedEndDate={setReceivedEndDate}
+                  setCoderStartDate={setCoderStartDate}
+                  setCoderEndDate={setCoderEndDate}
+                  disabled={disable != "Yes" ? true : false}
+                />
+              </div>
+            )}
 
           {isRangeTimePicker && (
             <>
