@@ -72,8 +72,8 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
 
   const [dueDateStart, setDueDateStart] = useState(dueStartDate);
   const [dueDateEnd, setDueDateEnd] = useState(dueEndDate);
-  const [processedStart, setProcessedStart] = useState("");
-  const [processedEnd, setProcessedEnd] = useState("");
+  const [processedStart, setProcessedStart] = useState(processedStart);
+  const [processedEnd, setProcessedEnd] = useState(processedEnd);
   const [statusSelectedValue, setStausSelectedValue] = useState(
     filteratedDashboardData?.status
       ? filteratedDashboardData?.status.toUpperCase()
@@ -126,8 +126,17 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
       selectedPriority,
       searchTextValue
     );
-  }, [filteratedDashboardData, pageNo, sort, selectedPriority, searchTextValue,dueDateStart,statusSelectedValue]);
-
+  }, [
+    filteratedDashboardData,
+    pageNo,
+    sort,
+    selectedPriority,
+    searchTextValue,
+    dueDateStart,
+    processedStart,
+    processedEnd,
+    statusSelectedValue,
+  ]);
 
   useEffect(() => {
     if (patientsListFilter) {
@@ -325,7 +334,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
   };
 
   const handleDatePickerChangeProcesseDate = (dateString) => {
-    if (dateString[0] != "") {
+    if (dateString[0] !== "") {
       let convertStartDate =
         moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
       let convertEndDate =
@@ -337,6 +346,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
       setProcessedEnd("");
     }
   };
+
   const processstatusBodyTemplate = (rowData) => {
     const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
 
@@ -511,8 +521,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
                               style={{
                                 margin: "30px 0 0 10px",
                                 cursor: "pointer",
-                                width:"100px"
-
+                                width: "100px",
                               }}
                               onClick={() => setShowFilters(!showFilters)}
                             >
