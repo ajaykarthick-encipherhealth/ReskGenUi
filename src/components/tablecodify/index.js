@@ -49,7 +49,7 @@ const Tables = (props) => {
                 <span className={style.term}>
                   {codeData?.requiredCharacter}
                 </span>
-                : Additional {codeData?.requiredCharacter}Digit Required{" "}
+                : Additional {codeData?.requiredCharacter}Digit Required  
               </div>
             </div>
           </div>

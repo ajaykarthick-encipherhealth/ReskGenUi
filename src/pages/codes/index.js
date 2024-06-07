@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
-import style from "./style.module.css";
 import { Empty, Tree } from "antd";
 import { Spin } from "antd";
 
-const Codes = ({ data, loading }) => {
+const Codes = ({ data, loading,onSelect }) => {
   const topRef = useRef(null);
   const scrollToTop = () => {
     topRef.current.scrollIntoView({ behavior: "smooth", top:25 });
@@ -34,6 +33,7 @@ const Codes = ({ data, loading }) => {
           defaultExpandedKeys={["0-0-0"]}
           treeData={data}
           showIcon={true}
+          onSelect={(value)=>{onSelect(value)}}
         />
       </div>
     </>

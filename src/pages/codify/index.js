@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { actions as dashbaordActions } from "../../stores/codify/dashboard";
 import { connect } from "react-redux";
 import { Button, Empty } from "antd";
@@ -64,21 +64,25 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   const handleInputChange = (e) => {
     setSearchInput(e.target.value);
   };
+
   const handleSearch = (value) => {
     setOptions(value ? searchResult(value) : []);
-   
   };
   const onSelect = (value) => {
     setSearchInput(value);
     fetchTreeData(value);
     fetchCodeData(value);
-    
   };
-
-
-useEffect(()=>{
-  completeFetch();
-},[searchInput])
+  const handleTreeViewClick = (value) => {
+    setSearchInput(value?.[0]);
+    setCurrentButton("Description");
+    // let input = document.getElementById("input-search");
+    // input.innerHTML = value;
+    fetchCodeData(value);
+  };
+  useEffect(() => {
+    completeFetch();
+  }, [searchInput]);
 
   const convertToAntdTreeData = (node) => {
     const { name, desc, children, requiredCharacter } = node;
@@ -102,7 +106,7 @@ useEffect(()=>{
 
   const fetchTreeData = async (value) => {
     setLoading(true);
-    let treeData = await codifyData({diseases: value?value:searchInput  });
+    let treeData = await codifyData({ diseases: value ? value : searchInput });
     if (treeData?.status == "SUCCESS") {
       let temp = convertICDStructureToTreeData(treeData?.response);
       if (!treeData?.response?.length) {
@@ -146,7 +150,7 @@ useEffect(()=>{
   };
 
   const completeFetch = async () => {
-    let completedData = await completeData({ code: searchInput })
+    let completedData = await completeData({ code: searchInput });
     setLoading(true);
     if (completedData?.status === "SUCCESS") {
       const displayCodeOptions = completedData?.response?.displayStrings?.map(
@@ -166,9 +170,9 @@ useEffect(()=>{
     setLoading(false);
   };
 
-   const fetchCodeData = async (value) => {
+  const fetchCodeData = async (value) => {
     setLoading(true);
-    const tableData = await codesData({ code: value?value:searchInput });
+    const tableData = await codesData({ code: value ? value : searchInput });
     if (tableData?.status == "SUCCESS") {
       setCodeData({
         ...codeData,
@@ -179,16 +183,13 @@ useEffect(()=>{
         excludes2: tableData?.response?.excludes2,
         children: tableData?.response?.children,
         inclusionTerm: tableData?.response?.inclusionTerm,
-        useAdditionalCode:tableData?.response?.useAdditionalCode,
-        requiredCharacter:tableData?.response?.requiredCharacter,
+        useAdditionalCode: tableData?.response?.useAdditionalCode,
+        requiredCharacter: tableData?.response?.requiredCharacter,
       });
-     
     }
     setLoading(false);
   };
-  console.log(codeData,"codeData")
-  
- 
+
   useEffect(() => {
     if (!searchInput?.length) {
       setData(null);
@@ -244,6 +245,9 @@ useEffect(()=>{
                 onSelect={onSelect}
                 onSearch={handleSearch}
                 size="large"
+                // id={"input-search"}
+                // key={searchInput}
+                value={searchInput}
               >
                 <Input
                   // size="large"
@@ -309,12 +313,13 @@ useEffect(()=>{
                 ))}
               </div>
             )}
-            {currentButton == "Codes" && data?.length ?  (
+            {currentButton == "Codes" && data?.length ? (
               <Codes
                 searchInput={searchInput}
                 data={data}
                 loading={loading}
                 setCurrentButton={setCurrentButton}
+                onSelect={handleTreeViewClick}
               />
             ) : (
               <></>
