@@ -75,15 +75,11 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   };
   const onSelect = (value) => {
     setSearchInput(value);
+    fetchTreeData(value);
+    fetchCodeData(value);
     
   };
-useEffect(()=>{
-  if(searchInput.length>=3){
-    fetchTreeData();
-    fetchCodeData();
-  }
-  
-},[searchInput])
+
 
 useEffect(()=>{
   completeFetch();
@@ -202,9 +198,9 @@ useEffect(()=>{
   //   "Z",
   // ];
 
-  const fetchCodeData = async () => {
+  const fetchCodeData = async (value) => {
     setLoading(true);
-    const tableData = await codesData({ code: searchInput });
+    const tableData = await codesData({ code: value?value:searchInput });
     if (tableData?.status == "SUCCESS") {
       setCodeData({
         ...codeData,
@@ -216,11 +212,13 @@ useEffect(()=>{
         children: tableData?.response?.children,
         inclusionTerm: tableData?.response?.inclusionTerm,
         useAdditionalCode:tableData?.response?.useAdditionalCode,
+        requiredCharacter:tableData?.response?.requiredCharacter,
       });
      
     }
     setLoading(false);
   };
+  console.log(codeData,"codeData")
   
  
   useEffect(() => {

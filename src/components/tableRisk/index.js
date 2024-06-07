@@ -1,6 +1,10 @@
 import React from "react";
 import style from "./style.module.css";
-import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  ArrowLeftOutlined,
+} from "@ant-design/icons";
 
 const TableRisk = ({
   data,
@@ -42,12 +46,11 @@ const TableRisk = ({
           <table className="table table-bordered ">
             <thead style={{ height: "70px" }}>
               <tr>
-                <th  style=
-                  {{
+                <th
+                  style={{
                     fontWeight: "600",
-                  }}>
-                  
-                 
+                  }}
+                >
                   year
                 </th>
                 {/* <th style={{fontWeight:"600"}}colSpan={keysArray?.[0]?.key1?.length}>ESRD/PACE</th>

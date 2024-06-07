@@ -41,7 +41,10 @@ const RiskAdjustment = ({
 
   const handleSearchClick = () => {
     setLoading(true);
-    fetch();
+    if(code || selectedYear ?.length){
+      fetch();
+    }
+    
   };
 
   const fetch = async () => {
@@ -75,6 +78,9 @@ const RiskAdjustment = ({
               val1={year}
               hideMonth={true}
             />
+            {errorMessage && (
+            <div className="text-danger ml-2">{errorMessage}</div>
+          )}
           </div>
         </div>
         <div className="col-6 ">
