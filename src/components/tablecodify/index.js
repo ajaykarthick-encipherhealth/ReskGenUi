@@ -5,7 +5,7 @@ import { ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons";
 
 const Tables = (props) => {
   const { codeData, setCodeData, loading, setLoading } = props;
-  // const [childIndex, setChildIndex] = useState(-1);
+  const [childIndex, setChildIndex] = useState(-1);
 
   const handleViewTable = (tableData, index) => {
     setLoading(true);
@@ -22,21 +22,21 @@ const Tables = (props) => {
       requiredCharacter: tableData?.requiredCharacter,
     });
     setLoading(false);
-    // setChildIndex(index);
+    setChildIndex(index);
   };
 
-  // const handleBack = () => {
-  //   if (childIndex > 0) {
-  //     const newIndex = childIndex -1;
-  //     console.log(newIndex,"newIndex")
-  //     handleViewTable(codeData?.children[newIndex], newIndex);
-  //   }
+  const handleBack = () => {
+    if (childIndex > 0) {
+      const newIndex = childIndex -1;
+      console.log(newIndex,"newIndex")
+      handleViewTable(codeData?.children[newIndex], newIndex);
+    }
 
-  // };
+  };
 
   return (
     <>
-      {/* <div className={style.arrowleft}> <ArrowLeftOutlined onClick={handleBack}/>Back</div> */}
+      <div className={style.arrowleft}> <ArrowLeftOutlined onClick={handleBack}/>Back</div>
         <div className={style.code}>
         <div className="d-flex justify-content-center">
           {loading && <Spin size="large" />}

@@ -237,10 +237,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
                 onKeyDown={handleKeyDown}
               /> */}
               <AutoComplete
-                popupMatchSelectWidth={252}
-                style={{
-                  width: 200,
-                }}
+                popupMatchSelectWidth={640}
                 options={options}
                 onSelect={onSelect}
                 onSearch={handleSearch}
