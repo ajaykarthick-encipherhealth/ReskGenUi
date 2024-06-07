@@ -128,6 +128,10 @@ const HeaderFilters = ({
   setSelectedDates5,
   auditallocatedToOptoons,
   auditSelAllocatedTo,
+// selectorgList
+  orgAllList,
+  setSelectedOrgList,
+  selectOrgList
 }) => {
   const dispatch = useDispatch();
   const [trackInput, setTrackInput] = useState("");
@@ -456,9 +460,32 @@ const HeaderFilters = ({
                 </div>
               </div>
             )}
+            {isSelector ? (
+              <div
+                className={defaultSize}
+                onClick={() => {
+                  dispatch(getFilters("auditAllocatedBy"));
+                }}
+              >
+                <label className={styles.label}>{"Select Organization"}</label>
+                <div class="form-group has-search">
+                  <Select
+                    value={clear ? "" : selectOrgList}
+                    onChange={(selectedOption) => {
+                      setSelectedOrgList(selectedOption);
+                      setClear(false);
+                    }}
+                    options={orgAllList}
+                    className="custom-react-select"
+                    isSearchable={false}
+                    placeholder={defaultAllocatedBy}
+                  />
+                </div>
+              </div>
+            ) : null}
             <div
-              className={`${bullets ? "col-xl-2" : "col-xl-4"}`}
-              style={{ display: "flex", alignItems: "center" }}
+              className={`${bullets ? "col-xl-12" : "col-xl-4"}`}
+              style={{ display: "flex", alignItems: "center",justifyContent:'flex-end' ,paddingRight:'20px'}}
             >
               {bullets && (
                 <div

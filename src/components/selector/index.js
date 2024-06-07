@@ -7,7 +7,10 @@ const Selector = ({
   setSelectedOption,
   selectOptions,
   isClose = false,
+  selectDefaultValue,
+  setDefaultValue
 }) => {
+  console.log(selectDefaultValue)
   return (
     <div>
       <label style={{ marginLeft: "10px" }}>{selectlabel}</label>
@@ -19,7 +22,9 @@ const Selector = ({
           isClearable={isClose}
           onChange={(value) => {
             handleSelector(value, setSelectedOption);
+            setDefaultValue && setDefaultValue(value)
           }}
+          value={selectDefaultValue}
         />
       </div>
     </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, connect } from "react-redux";
 import Image from "next/image";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { DatePicker, Empty, Tooltip } from "antd";
@@ -31,6 +31,8 @@ import { getFilters } from "../../../stores/authflow/actions";
 import AllocateModal from "./allocate";
 import { debounce } from "../../../components/input";
 import { useCallback } from "react";
+import { actions as tenantAdminAction } from "../../../stores/tenantAdmin";
+
 
 const { RangePicker } = DatePicker;
 const statusOption = [
@@ -41,7 +43,7 @@ const statusOption = [
   { value: "LOW", label: "LOW" },
 ];
 
-export default function Patient() {
+const Patient = ({ getAllOrganizationList, organizationList}) => {
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [addPatientId, setAddPatientId] = useState(false);
@@ -85,6 +87,10 @@ export default function Patient() {
   const [endDate, setEndDate] = useState();
   const [searchStr, setSearchStr] = useState("");
   const dispatch = useDispatch();
+  const [selectOrgList, setSelectedOrgList] = useState("");
+  const [orgAllList, setOrgAllList] = useState([]);
+  const [defaultOrgValue, setDefaultOrgValue] = useState(null);
+
 
   const getAllList = async (
     pageNo = 0,
@@ -95,10 +101,15 @@ export default function Patient() {
     status = 2,
     search,
     sort,
-    selectedOption
+    selectedOption,
+    selectOrgList
   ) => {
     const uId = localStorage.getItem("userId");
-    let resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=${uId}&computationStart=${
+    var orgId = "";
+    if(selectOrgList){
+      orgId=  selectOrgList == "ALL" ? "" : selectOrgList
+    }
+    let resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=${uId}&organizationId=${orgId}&computationStart=${
       startDate ? startDate : ""
     }&computationEnd=${
       endDate ? endDate : ""
@@ -191,7 +202,9 @@ export default function Patient() {
     setTableLoading(true);
   };
   const selectTabClick = (number) => {
-    setSearchString("");
+    setDefaultOrgValue(null);
+    setSelectedOrgList(null);
+    setSearchStr("");
     setPaginationFirst(0);
     setIsLoading(true);
     setActiveTab(number);
@@ -209,11 +222,12 @@ export default function Patient() {
     }
   };
   const searchFunction = (search, activeTab) => {
+    setSearchStr(search);
     if (activeTab === 1) {
       setSearchStr(search);
     } else {
       if (!isPatientList) {
-        getAuditL2List(pageNo, search);
+        // getAuditL2List(pageNo, search);
       } else {
         getL2PatientList(l2selectUser, pageNoL2Patient, sort, search);
       }
@@ -238,8 +252,11 @@ export default function Patient() {
     }
   };
 
-  const getAuditL2List = async (pageNo, searchString) => {
-    let orgId = localStorage.getItem("orgId");
+  const getAuditL2List = async (pageNo, searchString,selectOrgList) => {
+    var orgId= "";
+    if(selectOrgList){
+      orgId=  selectOrgList == "ALL" ? "" : selectOrgList
+    }
     let tenantid = localStorage.getItem("tenantId");
     let resoureUrl = `dbservice/l2audit?orgid=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
@@ -295,7 +312,8 @@ export default function Patient() {
         2,
         searchStr,
         sort,
-        selectedOption
+        selectedOption,
+        selectOrgList
       );
     }
   }, [
@@ -307,6 +325,7 @@ export default function Patient() {
     endDate,
     searchStr,
     selectedOption,
+    selectOrgList
   ]);
 
   const renderRows = () => {
@@ -502,6 +521,36 @@ export default function Patient() {
   useEffect(() => {
     dispatch(getFilters("patientAllocated"));
   }, []);
+
+  useEffect(() => {
+    console.log(selectOrgList)
+    if (!isPatientList) {
+      getAuditL2List(pageNo, searchStr,selectOrgList);
+    }
+  }, [
+    selectOrgList,
+    searchStr
+  ]);
+
+
+  useEffect(() => {
+    if(!organizationList?.response){
+      getAllOrganizationList();
+    }
+  }, []);
+  
+  useEffect(() => {
+    var orgListArray = [{ value: "ALL", label: "ALL" }];
+    organizationList?.response?.map((res) => {
+      orgListArray.push({
+        value: res.id,
+        label: res.name,
+      });
+    });
+    setOrgAllList(orgListArray);
+  }, [organizationList]);
+
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -562,6 +611,20 @@ export default function Patient() {
                               </div>
                             </div>
                           </div>
+                          {(activeTab == 1 || !isPatientList && activeTab == 2) &&
+                          <div className="col-xl-2">
+                                <div>
+                                  <Selector
+                                    selectlabel={"Select Organization"}
+                                    setSelectedOption={setSelectedOrgList}
+                                    selectOptions={orgAllList}
+                                    selectDefaultValue={defaultOrgValue}
+                                    setDefaultValue={setDefaultOrgValue}
+                                    // isClose={true}
+                                  />
+                                </div>
+                              </div>
+}
 
                           {!isPatientList && activeTab == 1 ? (
                             <>
@@ -594,6 +657,7 @@ export default function Patient() {
                                   />
                                 </div>
                               </div>
+                           
                               <div className="col-xl-2">
                                 <label>Batch Count</label>
                                 <div class="form-group d-flex">
@@ -668,7 +732,7 @@ export default function Patient() {
                             className={
                               isPatientList && activeTab == 2
                                 ? `col-xl-6 mt-4 ${TableStyle.allocateBtn}`
-                                : `col-xl-4 mt-4 ${TableStyle.allocateBtn}`
+                                : `col-xl-2  ${TableStyle.allocateBtn}`
                             }
                           >
                             {isPatientList || activeTab === 1 ? (
@@ -974,3 +1038,14 @@ export default function Patient() {
     </>
   );
 }
+
+const enhancer = connect(
+  (state) => ({
+    organizationList: state?.tenantAdmin?.allOrganization?.data,
+  }),
+  {
+    getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
+
+  }
+);
+export default enhancer(Patient);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
-import { useSelector } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import styles from "../../../pages/supervisor/dashboard/styles.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -33,6 +33,8 @@ import Abort from "../../../../src/images/trackingImages/Abort.png";
 import Image from "next/image";
 import { extractLatestData } from "../../supervisor/auditing";
 import { patientDetails } from "../../../stores/authflow/actions";
+import { actions as tenantAdminAction } from "../../../stores/tenantAdmin";
+
 const bullets = [
   {
     title: "Processed Status",
@@ -101,7 +103,7 @@ const auditStatusOptions = [
   { label: "AUDIT DECLINED", value: "AUDIT_DECLINED", status: 0 },
 ];
 
-export default function Patient() {
+const Patient = ({ getAllOrganizationList, organizationList,getAllTrackingList,trackingList}) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
   const filteredList = useSelector((state) => state.auth.filterList);
@@ -154,6 +156,9 @@ export default function Patient() {
   const [selectedDates3, setSelectedDates3] = useState();
   const [selectedDates4, setSelectedDates4] = useState();
   const [selectedDates5, setSelectedDates5] = useState();
+  const [selectOrgList, setSelectedOrgList] = useState("");
+  const [orgAllList, setOrgAllList] = useState([]);
+  const [defaultOrgValue, setDefaultOrgValue] = useState(null);
 
   // new changes
 
@@ -204,9 +209,10 @@ export default function Patient() {
         ? auditSelAllocatedTo?.value
         : "",
       sort,
+      selectOrgId: clear ? "" : (selectOrgList && selectOrgList?.value != "ALL") ? selectOrgList?.value : "",
     };
     setIsLoading(true)
-    dispatch(getTrackingList(datas));
+    getAllTrackingList(datas);
     setIsLoading(false)
   }, [
     pageNo,
@@ -229,15 +235,16 @@ export default function Patient() {
     auditSelAllocatedTo,
     sort,
     clear,
+    selectOrgList
   ]);
 
   useEffect(() => {
-    if (response?.response) {
+    if (trackingList?.data?.response) {
       setIsLoading(true)
-      getAllList(response?.response);
+      getAllList(trackingList?.data?.response);
       setIsLoading(false)
     }
-  }, [parsedData, response, pageNo, pageSize]);
+  }, [parsedData, trackingList, pageNo, pageSize]);
 
   const getAllList = (info) => {
     if (info) {
@@ -516,6 +523,25 @@ export default function Patient() {
     setTableLoading(true);
     getAllList(response?.response);
   };
+
+  useEffect(() => {
+    if(!organizationList?.response){
+      getAllOrganizationList();
+    }
+  }, []);
+  
+  useEffect(() => {
+    var orgListArray = [{ value: "ALL", label: "ALL" }];
+    organizationList?.response?.map((res) => {
+      orgListArray.push({
+        value: res.id,
+        label: res.name,
+      });
+    });
+    setOrgAllList(orgListArray);
+  }, [organizationList]);
+
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -624,6 +650,9 @@ export default function Patient() {
                             selector2value={auditSelAllocatedTo}
                             selectorValue={selAllocatedTo}
                             auditSelAllocatedTo={auditSelAllocatedTo}
+                            orgAllList={orgAllList}
+                            setSelectedOrgList={setSelectedOrgList}
+                            selectOrgList={selectOrgList}
                           />
                         </div>
                         <div className="col-xl-2">
@@ -678,3 +707,15 @@ export default function Patient() {
     </>
   );
 }
+const enhancer = connect(
+  (state) => ({
+    organizationList: state?.tenantAdmin?.allOrganization?.data,
+    trackingList: state?.tenantAdmin?.allTracking,
+  }),
+  {
+    getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
+    getAllTrackingList: tenantAdminAction.getAllTrackingAction,
+
+  }
+);
+export default enhancer(Patient);

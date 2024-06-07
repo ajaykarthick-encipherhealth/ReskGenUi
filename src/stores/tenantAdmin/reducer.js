@@ -4,6 +4,7 @@ import {
   batchUpload,
   getAllOrganizationAction,
   getAllPatientAction,
+  getAllTrackingAction,
   getAllUsersAction
 } from "./actions";
 
@@ -40,7 +41,8 @@ const searchReducer = combineReducers({
   batchUpload: createReducer(batchUpload),
   allOrganization: createReducer(getAllOrganizationAction),
   allUsers: createReducer(getAllUsersAction),
-  allPatients:createReducer(getAllPatientAction)
+  allPatients:createReducer(getAllPatientAction),
+  allTracking:createReducer(getAllTrackingAction)
 
   
 });
