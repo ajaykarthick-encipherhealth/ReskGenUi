@@ -26,9 +26,8 @@ export const eventStreming = (
 ) => {
   const id = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
-  const orgId = localStorage.getItem("orgId");
   const sse = new EventSource(
-    `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}&organizationId=`
+    `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}`
   );
 
   const fileStatusEventListener = (event) => {
@@ -123,7 +122,7 @@ const stageChartMap = {
   QUERY_CONDITIONS_FOUND_FAILED: 8,
   FINISHED: 9,
 };
-function FileProcessingTable({ patinetListAll, loading }) {
+function FileProcessingTable({ patinetListAll, loading ,selectOrgList}) {
   const dispatch = useDispatch();
   const [stepperVisible, setStepperVisible] = useState(
     Array(patinetListAll?.length).fill(false)
@@ -162,7 +161,11 @@ function FileProcessingTable({ patinetListAll, loading }) {
   useEffect(() => {
     const id = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
-    const orgId = localStorage.getItem("orgId");
+    var orgId = "";
+    console.log(selectOrgList)
+    if(selectOrgList?.value){
+      orgId=  selectOrgList?.value == "ALL" ? "" : selectOrgList?.value
+    }
     let isFinished = false;
     const sse = new EventSource(
       `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}&organizationId=${orgId}`
@@ -198,7 +201,7 @@ function FileProcessingTable({ patinetListAll, loading }) {
       sse.removeEventListener("file-status-event", fileStatusEventListener);
       sse.close();
     };
-  }, [activeId]);
+  }, [activeId,selectOrgList]);
 
   useEffect(() => {
     if (activeId && parsedData) {
@@ -566,6 +569,12 @@ function FileProcessingTable({ patinetListAll, loading }) {
       </tr>
     ));
   };
+
+
+  useEffect(() => {  
+    console.log(selectOrgList.value)
+   
+  }, [selectOrgList]);
 
   return (
     <div className={TableStyle.classContaineer}>
