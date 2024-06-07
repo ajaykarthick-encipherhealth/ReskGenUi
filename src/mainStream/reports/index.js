@@ -467,7 +467,7 @@ const Reports = ({
 
                           <div className="col-xl-3 d-flex">
                             <div className="d-flex w-100">
-                              <label className="labelStyle d-flex m-auto p-2">
+                              <label className="labelStyle d-flex  p-2">
                                 {" "}
                                 Date
                               </label>
