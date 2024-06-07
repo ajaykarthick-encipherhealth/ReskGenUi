@@ -44,14 +44,14 @@ const TableRisk = ({
                   year
                 </th>
 
-                {keyArray?.[0]?.allKeys?.map((a) => {
+                {keyArray?.[0]?.allKeys?.map((data) => {
                   return (
                     <th
                       style={{
                         fontWeight: "600",
                       }}
                     >
-                      {a}
+                      {data}
                     </th>
                   );
                 })}

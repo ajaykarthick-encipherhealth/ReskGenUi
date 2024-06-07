@@ -8,6 +8,8 @@
   font-weight: 600;
   padding: 2px;
   font-size: 17px;
+  display: flex;
+  justify-content: space-between;
 }
 .box {
   border: 1px solid #0f6adb;
@@ -87,19 +89,22 @@
 }
 .digit{
   font-weight: 600;
-  font-size: 13px;
+  font-size: 14px;
 }
 .term{
-  border:1px solid #0f6adb;
-  background:#0f6adb;
+  border:1px solid #241571;
+  background:#241571;
   color:white;
   border-radius: 50%;
   padding:2px;
   font-size: 12px;
+  font-weight: 600;
+  
 }
 .arrowleft{
   font-size: 16px;
   display: flex;
   gap:6px;
   margin-top:10px;
+  padding-right: 20px;
 }
