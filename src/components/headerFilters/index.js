@@ -533,7 +533,7 @@ const HeaderFilters = ({
               </div>
             )}
             {isRangePicker && (
-              <div className={defaultSize}>
+              <div className={defaultSize}  style={{ position: "relative", right:"20px" }}>
                 <DateRangePicker
                   selectedDates={selectedDates}
                   pickerlabel={pickerlabel}

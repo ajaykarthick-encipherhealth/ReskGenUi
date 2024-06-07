@@ -101,7 +101,7 @@ const HeaderFilters = ({
   tracking,
   selectorField,
   defaultShow = false,
-  defaultSize = "col-xl-2",
+  defaultSize = "col-xl-4",
   setAuditSelAllocatedTo,
   isAuditAllocatedToSelector,
   auditAllocatedToOptoons,
@@ -131,10 +131,11 @@ const HeaderFilters = ({
 // selectorgList
   orgAllList,
   setSelectedOrgList,
-  selectOrgList
+  selectOrgList,
+  setTrackInput,
+  trackInput
 }) => {
   const dispatch = useDispatch();
-  const [trackInput, setTrackInput] = useState("");
 
   return (
     <>
@@ -157,7 +158,7 @@ const HeaderFilters = ({
                     setSelAllocatedTo(selectedOption);
                   }}
                   options={allocatedToOptoons}
-                  className="custom-react-select"
+                  className="custom-react-select-tenant"
                   isSearchable={false}
                   // placeholder={defaultAllocateTo}
                 />
@@ -182,7 +183,7 @@ const HeaderFilters = ({
                     setAuditSelAllocatedTo(selectedOption);
                   }}
                   options={auditallocatedToOptoons}
-                  className="custom-react-select"
+                  className="custom-react-select-tenant"
                   isSearchable={false}
                   placeholder={defaultAllocateTo}
                 />
@@ -278,13 +279,19 @@ const HeaderFilters = ({
                   }}
                   options={selectOptions2}
                   placeholder={defaultSelectValue2?.label}
-                  className="custom-react-select"
+                  className="custom-react-select-tenant"
                   isSearchable={false}
                 />
               </div>
             </div>
           )}
 
+        </div>
+      </div>
+      {defaultShow && (
+        <div style={{ marginTop: "50px" }}>
+          <div className="row filter-contain"  style={{ width: "100%" }}>
+            
           {isSelector ? (
             <div className={defaultSize}>
               <label className={styles.label}>Processed Status</label>
@@ -296,7 +303,7 @@ const HeaderFilters = ({
                     setClear(false);
                   }}
                   options={selectOptions}
-                  className="custom-react-select"
+                  className="custom-react-select-tenant"
                   isSearchable={false}
                 />
               </div>
@@ -315,17 +322,12 @@ const HeaderFilters = ({
                     setClear(false);
                   }}
                   options={auditStatusOptions}
-                  className="custom-react-select"
+                  className="custom-react-select-tenant"
                   isSearchable={false}
                 />
               </div>
             </div>
           ) : null}
-        </div>
-      </div>
-      {defaultShow && (
-        <div style={{ marginTop: "50px" }}>
-          <div className="row filter-contain">
             {isRangePicker && (
               <div className={defaultSize}>
                 <label className={styles.label}>{"Reviewer Due Date"}</label>
@@ -389,6 +391,15 @@ const HeaderFilters = ({
                 </div>
               </>
             )}
+           
+         
+          </div>
+        </div>
+      )}
+        {defaultShow && (
+        <div style={{ marginTop: "30px" }}>
+          <div className="row filter-contain"  style={{ width: "100%" }}>
+        
             {isAllocatedBySelector && (
               <div
                 className={defaultSize}
@@ -407,7 +418,7 @@ const HeaderFilters = ({
                       setClear(false);
                     }}
                     options={allocatedByOptoons}
-                    className="custom-react-select"
+                    className="custom-react-select-tenant"
                     isSearchable={false}
                     placeholder={defaultAllocatedBy}
                   />
@@ -431,7 +442,7 @@ const HeaderFilters = ({
                       setClear(false);
                     }}
                     options={auditAllocatedByOptoons}
-                    className="custom-react-select"
+                    className="custom-react-select-tenant"
                     isSearchable={false}
                     placeholder={defaultAllocatedBy}
                   />
@@ -476,79 +487,14 @@ const HeaderFilters = ({
                       setClear(false);
                     }}
                     options={orgAllList}
-                    className="custom-react-select"
+                    className="custom-react-select-tenant"
                     isSearchable={false}
                     placeholder={defaultAllocatedBy}
                   />
                 </div>
               </div>
             ) : null}
-            <div
-              className={`${bullets ? "col-xl-12" : "col-xl-4"}`}
-              style={{ display: "flex", alignItems: "center",justifyContent:'flex-end' ,paddingRight:'20px'}}
-            >
-              {bullets && (
-                <div
-                  // className={`${bullets ? "col-xl-1" : "col-xl-4"}`}
-                  style={{ margin: "30px 0 0 10px", cursor: "pointer" }}
-                >
-                  <Popover
-                    content={
-                      <>
-                        <Legends
-                          bullets={bullets}
-                          display="block"
-                          padding="0 0px 10px 0"
-                        />
-                        {badges?.length > 0 &&
-                          badges?.map((data) => (
-                            <div style={{ marginBottom: "10px" }}>
-                              <Image src={data.src} width={20} height={30} />
-                              <span style={{ marginLeft: "5px" }}>
-                                {data?.name}
-                              </span>
-                            </div>
-                          ))}
-                      </>
-                    }
-                    trigger={["click"]}
-                    placement="bottom"
-                  >
-                    <Image src={warning} />
-                  </Popover>
-                </div>
-              )}
-              <div
-                style={{ marginTop: "30px", width: "100px" }}
-                className={`${bullets ? "col-xl-2" : "col-xl-4"}`}
-                onClick={() => {
-                  setClear(true);
-                  setStartDate([]);
-                  setEndDate([]);
-                  setStartDate4([]);
-                  setEndDate4([]);
-                  setStartDate5([]);
-                  setEndDate5([]);
-                  setStartDate6([]);
-                  setEndDate6([]);
-                  setSearch("");
-                  setSelectedDates([]);
-                  setSelectedDates2([]);
-                  setSelectedDates3([]);
-                  setSelectedDates4([]);
-                  setSelectedDates5([]);
-                  setSelAllocatedTo("");
-                  setAuditSelAllocatedTo("");
-                  setSelectedOption("");
-                  setAuditSelectedOption("");
-                  setSelAllocatedBy("");
-                  setSelAuditAllocatedBy("");
-                  setTrackInput("");
-                }}
-              >
-                <button className={`${styles.filterBtn} mx-3`}>Clear</button>
-              </div>
-            </div>
+         
           </div>
         </div>
       )}

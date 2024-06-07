@@ -10,7 +10,6 @@ const Selector = ({
   selectDefaultValue,
   setDefaultValue
 }) => {
-  console.log(selectDefaultValue)
   return (
     <div>
       <label style={{ marginLeft: "10px" }}>{selectlabel}</label>

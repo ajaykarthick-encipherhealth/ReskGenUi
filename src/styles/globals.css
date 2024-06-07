@@ -14181,7 +14181,7 @@ overflow: scroll;
 }
 .css-b62m3t-container {
   border: 1px solid #e6e6e6;
-  border-radius: 5px !important;
+  border-radius: 8px !important;
 }
 .addUserSelector {
   border: 1px solid #e6e6e6 !important;
@@ -14608,6 +14608,56 @@ input[type="number"] {
 }
 .ant-upload {
   width: 100%;
+}
+
+.custom-react-select-tenant {
+  border-radius: 8px !important;
+  background: #fff !important;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
+  height: 42px !important;
+  flex-shrink: 0;
+  border: none !important;
+  width: 100% !important;
+}
+
+.custom-react-select-tenant > div:nth-child(4) > div {
+  background-color: #fff;
+}
+
+.custom-react-select-tenant > div:nth-child(4) > div > div {
+  background-color: #fff;
+  cursor: pointer;
+  -webkit-transition: all 0.5s;
+  -ms-transition: all 0.5s;
+  transition: all 0.5s;
+}
+
+.custom-react-select-tenant > div:nth-child(4) > div > div:hover {
+  background-color: var(--rgba-primary-1);
+  color: #000;
+}
+
+.custom-react-select-tenant > div:nth-child(3) {
+  height: 42px !important;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  border: none !important;
+}
+
+.custom-react-select-tenant > div:nth-child(4) {
+  border-radius: 10px;
+  min-width: 150px;
+  overflow: hidden;
+  box-shadow: 0px 10px 40px 0px rgba(21, 50, 93, 0.1);
+}
+
+.custom-react-select-tenant > div > div:first-child div {
+  font-size: 14px;
+  color: #6e6e6e;
+}
+
+.custom-react-select-tenant > div > div:nth-child(2) > span {
+  display: none;
 }
 .company-name {
   position: absolute;
