@@ -17,8 +17,8 @@ const Codes = ({ data, loading,onSelect,onExpand ,expandedKeys}) => {
             treeData={data}
             showIcon={true}
             onSelect={(value)=>{onSelect(value)}}
-            // onExpand={onExpand}
-            // expandedKeys={expandedKeys}
+            onExpand={onExpand}
+            expandedKeys={expandedKeys}
             
           />
       </div>
