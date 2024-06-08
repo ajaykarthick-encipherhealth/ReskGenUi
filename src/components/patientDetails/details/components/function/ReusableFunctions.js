@@ -103,7 +103,7 @@ export const getEncounterDateBackground = ({
               )}
             </>
           }
-          trigger={["click"]}
+          trigger={["hover"]}
           placement="bottom"
         >
           <span
@@ -629,7 +629,7 @@ export const getProviderNameList = ({ data }) => {
               icon={faCircleUser}
               style={{
                 size: 10,
-                color:stringToColour(res),
+                color: stringToColour(res),
               }}
             />
           </i>
@@ -692,7 +692,7 @@ export const handleSubmitValidNotes = async ({
   selectDisDetails,
   getpatientDetailsData,
   patientDetailsResult,
-  handleCloseModal
+  handleCloseModal,
 }) => {
   setFileLoading(true);
   setConfirmNotesModalValid(false);
@@ -731,13 +731,19 @@ export const handleSubmitValidNotes = async ({
   if (isValidAction.name == "Move to Hcc" && isValidAction.title == "NONHCC") {
     apiURL = "management/disease/move/invalidtovalid";
   }
-  if (isValidAction.name == "Move to Deleted" && isValidAction.title == "COMBO") {
+  if (
+    isValidAction.name == "Move to Deleted" &&
+    isValidAction.title == "COMBO"
+  ) {
     apiURL = "management/disease/move/combovalidtodeleted";
   }
   if (isValidAction.name == "Move to valid" && isValidAction.title == "COMBO") {
     apiURL = "management/disease/move/combodeletedtovalid";
   }
-  if (isValidAction.name == "Move to Deleted" && isValidAction.title == "MEAT") {
+  if (
+    isValidAction.name == "Move to Deleted" &&
+    isValidAction.title == "MEAT"
+  ) {
     apiURL = "management/meat/move/invalidtovalid";
   }
   if (isValidAction.name == "Move to valid" && isValidAction.title == "MEAT") {
@@ -747,7 +753,9 @@ export const handleSubmitValidNotes = async ({
     var patientId = localStorage.getItem("patientId");
     var dataFormatSuggested = {
       patientId: patientId,
-      diagnosisCode: selectDisDetails.diagnosisCode ? selectDisDetails.diagnosisCode :selectDisDetails.diagnosisCodeCombo,
+      diagnosisCode: selectDisDetails.diagnosisCode
+        ? selectDisDetails.diagnosisCode
+        : selectDisDetails.diagnosisCodeCombo,
       // description: selectDisDetails.actualDescription,
       // dbDescription: selectDisDetails.dbDescription,
       reason: values.reason,
