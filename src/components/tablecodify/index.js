@@ -49,7 +49,6 @@ const Tables = (props) => {
       useAdditionalCode: tableData?.useAdditionalCode,
       requiredCharacter: tableData?.requiredCharacter,
     });
-    console.log(tableData, "tableData");
     setLoading(false);
   };
 
@@ -63,11 +62,6 @@ const Tables = (props) => {
         <ArrowLeftOutlined onClick={handleBack} />
         Back
       </div>
-
-      {/* <div className={style.arrowleft}>
-        <ArrowLeftOutlined onClick={handleNext} />
-        next
-      </div> */}
       <div className={style.code}>
         <div className="d-flex justify-content-center">
           {loading && <Spin size="large" />}
@@ -85,7 +79,6 @@ const Tables = (props) => {
             </div>
           </div>
         )}
-
         {(codeData?.excludes1 ||
           codeData?.includes ||
           codeData?.name ||
@@ -167,7 +160,6 @@ const Tables = (props) => {
             )}
           </div>
         )}
-
         <div className={style.list}>
           {codeData?.children?.map((s, i) => (
             <div key={i} onClick={() => handleViewTable(s, i)}>
@@ -175,7 +167,6 @@ const Tables = (props) => {
                 {s?.requiredCharacter && (
                   <span className={style.term}>{s.requiredCharacter}</span>
                 )}
-
                 <ArrowRightOutlined />
                 <span className={style.codes}>{s.name} </span>
                 <span>- {s.desc}</span>
