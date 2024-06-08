@@ -23,7 +23,6 @@ const YearPicker = ({
         <DatePicker
           onChange={onChangeYear}
           picker={"year"}
-          allowClear
           value={dayjs(val1 ? val1 : currentYearDate, "YYYY")}
           format={"YYYY"}
           className={`${styles.picker} pickerChnages`}
