@@ -166,7 +166,7 @@ const HeaderFilters = ({
   let columnClass;
   if (addUser) {
     if (addBtn) {
-      columnClass = isSelectOrg ? "col-xl-2" : "col-xl-6";
+      columnClass = isSelectOrg ? "col-xl-2" : "col-xl-4";
     } else {
       columnClass = "col-xl-1";
     }
