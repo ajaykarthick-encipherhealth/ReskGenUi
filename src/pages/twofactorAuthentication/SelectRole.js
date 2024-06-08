@@ -6,7 +6,10 @@ import { IMAGES } from "../../jsx/constant/theme";
 import LoginBack from "../../images/logo/login-back.jpg";
 import styles from "../../styles/auth.module.css";
 import RegularButton from "../../components/button";
-import { checkDeviceLogin, logoutAllDevice } from "../../stores/authflow/actions";
+import {
+  checkDeviceLogin,
+  logoutAllDevice,
+} from "../../stores/authflow/actions";
 
 const SelectRole = () => {
   const router = useRouter();
@@ -15,10 +18,10 @@ const SelectRole = () => {
   const [role, setRole] = useState();
   const [decodedParams, setDecodedParams] = useState();
   const [confirmModal, setConfirmModal] = useState(false);
-  const [loading,setLoading]=useState(false)
+  const [loading, setLoading] = useState(false);
   const rolesList = role?.slice().reverse();
   const items = [
-    {value: "physician", label: "PHYSICIAN"},
+    { value: "physician", label: "PHYSICIAN" },
     ...(rolesList?.length > 0
       ? rolesList?.map((info) => ({
           value: info,
@@ -54,7 +57,10 @@ const SelectRole = () => {
       reviewer: { userRole: "reviewer", route: "/reviewer/dashboard" },
       supervisor: { userRole: "supervisor", route: "/supervisor/dashboard" },
       provider: { userRole: "provider", route: "/provider/fhirTable" },
-      tenant_admin: { userRole: "tenant_admin", route: "/tenantAdmin/fhirTable" },
+      tenant_admin: {
+        userRole: "tenant_admin",
+        route: "/tenantAdmin/fhirTable",
+      },
       physician: { userRole: "physician", route: "/physicians/dashboard" },
       // physician: { userRole: "physician", route: "/physician/dashboard" },
     };
@@ -62,7 +68,7 @@ const SelectRole = () => {
     if (selectedRoleInfo && !roleError) {
       localStorage.setItem("userRole", selectedRoleInfo?.userRole);
       localStorage.setItem("role", selectedRole);
-      setLoading(true)
+      setLoading(true);
       router?.push(selectedRoleInfo?.route);
     }
   };
@@ -104,6 +110,9 @@ const SelectRole = () => {
               <div className="login-content">
                 <p className="sub-title"></p>
                 <Image className="login-logo" src={IMAGES.loginPageLogo1} />
+                <div className="company-name">
+                  Encipher health private limited
+                </div>
               </div>
             </div>
           </div>
@@ -155,7 +164,12 @@ const SelectRole = () => {
                     name="BACK"
                     width="240px"
                   />
-                  <RegularButton type="submit" name="NEXT" width="240px" loading={loading} />
+                  <RegularButton
+                    type="submit"
+                    name="NEXT"
+                    width="240px"
+                    loading={loading}
+                  />
                 </div>
               </form>
             </div>
