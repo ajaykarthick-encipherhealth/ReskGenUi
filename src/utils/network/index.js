@@ -16,7 +16,6 @@ export async function requestPortal(url, options) {
   return fetch(actualUrl, actualOptions).then(checkStatus);
 }
 
-
 export async function requestExternal(url, options, path) {
   const actualUrl = `${ENDPOINTS.apiEndoint}${url}`;
   const actualOptions = {

@@ -14313,9 +14313,9 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type="number"] {
+/* input[type="number"] {
   -moz-appearance: textfield;
-}
+} */
 
 .background-white {
   background: #fff;
@@ -14524,12 +14524,11 @@ input[type="number"] {
   width: 100% !important;
   border: 1px solid #a4caf9 !important;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
-  height: 53px;
+  height: 45px;
   display: flex;
   align-items: center;
   border-radius: 7px;
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 13px; 
 }
 .collapsestyle .ant-collapse-item {
   border-bottom: none !important;
@@ -14577,7 +14576,51 @@ input[type="number"] {
 .ant-tree .ant-tree-switcher-leaf-line:after {
   border-bottom: 1px solid black !important;
 }
+.ant-tree-iconEle{
+  
+  
+  border:1px solid #241571!important;
+  background:#241571!important;
+  color:white !important;
+  border-radius: 50% !important;
+  padding:2px;
+  font-size: 12px;
+  font-weight:600 !important;
+  padding:0px !important 
+}
+.ant-drawer-content {
+  height: 100% !important;
+  overflow-y: scroll !important;
+}
+.ant-tree-title{
+  padding: 10px !important;
+}
+.table th, .table td{
+  border:1px solid #a4caf9;
+}
 
+.ant-spin-nested-loading {
+  border:1px solid #f0f0f0;
+}
+.ant-tree-show-line .ant-tree-indent-unit {
+  position: relative;
+  height: 150%  !important;
+}
+.ant-tree-switcher-leaf-line{
+  height: 150%  !important;
+}
+.card{
+  margin:0  !important;
+  /* border:1px solid gray !important */
+}
+.ant-select-single {
+    font-size: 14px;
+    height: 42px !important;
+    width: 100% !important;
+}
+.card-text {
+  scrollbar-width: none;
+}
 .dosSelect > .ant-select-selector {
   width: 150px !important;
   text-align: center;

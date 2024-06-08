@@ -136,7 +136,6 @@ const Header = ({
     setOpened(false);
   };
 
-
   const getStatus = (data) => {
     const isCMS = data?.cmsHcc_model_category_V24_for_2023_payment_year;
     const isRX = data?.rxHcc_model_category_V08_for_2023_payment_year;
@@ -510,10 +509,20 @@ const Header = ({
                   <div className="header-profile2 cr-pointer">
                     <div className="nav-link i-false" as="div">
                       <div className="header-info2 d-flex align-items-center">
-                      <div className={styles.codify} >
-                          <CreditCardOutlined className={styles.lapicon} onClick={showDrawer} /></div>
-                        <Drawer title="CODES" onClose={onClosed} open={opened} size={"large"}>
-                          <Codify/>
+                        <div className={styles.codify}>
+                          <CreditCardOutlined
+                            className={styles.lapicon}
+                            onClick={showDrawer}
+                          />
+                        </div>
+                        <Drawer
+                          title="CODES"
+                          onClose={onClosed}
+                          open={opened}
+                          size={"large"}
+                          destroyOnClose={true}
+                        >
+                          <Codify />
                         </Drawer>
                         {/* NOTE i remove userRole !== "admin" logic because PRAVIN told me to show admin also, so if Logesh ask anything to this please tell him like this*/}
                         {userRole !== "tenant_admin" && (
@@ -627,7 +636,6 @@ const Header = ({
                             open={openContent}
                             content={
                               <div className={styles.popDIv}>
-                               
                                 <div className={styles.closeContainer2}>
                                   <CloseCircleOutlined
                                     onClick={() => setOpenContent(false)}

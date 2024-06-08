@@ -38,6 +38,7 @@
     "react-bootstrap": "^2.7.4",
     "react-chat-widget": "^3.1.4",
     "react-circular-progressbar": "^2.1.0",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
     "react-facebook-loading": "^0.6.2",
     "react-form-stepper": "^2.0.3",
