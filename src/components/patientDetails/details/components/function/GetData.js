@@ -4,6 +4,8 @@ import {
 } from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
+import { stringToColour } from "./ReusableFunctions";
+import NewResponse from "./newresponse.json";
 
 export const COLORS = [
   "bg-bg-seven",
@@ -41,18 +43,21 @@ export const COLORS3 = [
   "encounterDateTag10",
 ];
 
-const stringToColour = (str) => {
-  let hash = 0;
-  str?.split("").forEach((char) => {
-    hash = char.charCodeAt(0) + ((hash << 5) - hash);
-  });
-  let colour = "#";
-  for (let i = 0; i < 3; i++) {
-    const value = (hash >> (i * 8)) & 0xff;
-    colour += value.toString(16).padStart(2, "0");
-  }
-  return colour;
-};
+// const stringToColour = (str) => {
+//   let hash = 0;
+//   str?.split("").forEach((char) => {
+//     hash = char.charCodeAt(0) + ((hash << 5) - hash);
+//   });
+//   let colour = "#";
+//   for (let i = 0; i < 3; i++) {
+//     const value = (hash >> (i * 8)) & 0xff;
+//     colour += value.toString(16).padStart(2, "0");
+//   }
+//   if(str.toLocaleLowerCase() === "plan"){
+//      colour = "#536cdf"
+//   }
+//   return colour;
+// };
 
 const submitSectionColors = async (
   sectionName,
@@ -143,309 +148,173 @@ export const getPatientDetails = async (
   patientDetailsResult,
   dispatch,
   sectionColorList,
-  setAllDisList
+  setAllDisList,
+  setComboDiseaseCodesList,
+  setDosSummariesList,
+  setNonHccDiseasesList,
+  setDeletedMeatList
 ) => {
-  if (patientDetailsResult?.result?.response) {
-    var result = patientDetailsResult?.result?.response;
+  if (patientDetailsResult?.data?.response) {
+    var result = patientDetailsResult?.data?.response;
+  // if (NewResponse) {
+  //   var result = NewResponse.response;
     setPatientDocumentResult(result);
-    if (result.validDisease != null) {
-      var validDis = "";
-      var invalidDis = "";
-      var comboDis = "";
-      var meatCri = "";
-      var dosYearArr = [];
-      var rafScore = null;
-      var validDiseaseNewRes = [];
-      var invalidDiseaseNewRes = [];
-      var unMatchRes = [];
-
-      var suggestRadiologyList = [];
-      var suggestLabList = [];
-
+    if (result.hccDiseases != null) {
+      var hccDisArray = [];
+      var nonHccDisArray = [];
       var suggestListAll = [];
-
       var deleteHccList = [];
+      var combiDisArray = [];
+      var meatHeaderList = [];
+      var deletedmeatListArr = [];
+      var rafScore = [];
 
-      if (result.rafScore != null) {
-        rafScore = result.rafScore;
+      if (result.scoreDetailVersionDTO != null) {
+        rafScore = result.scoreDetailVersionDTO;
       }
-
-      validDis = result.validDisease;
-      validDiseaseNewRes = result?.validDisease;
-      // invalidDiseaseNewRes =validDisArray;
-      var validDisArray = [];
-
-      validDiseaseNewRes?.map((res, index) => {
-        const encounterDatearray = res?.encounterDate?.split(",");
+      result?.hccDiseases?.map((res, index) => {
         var providerList = [];
-
-        res.provider?.map((res, index) => {
-          providerList.push(res?.providerName);
+        var dosList = [];
+        res.providerNames?.map((res) => {
+          providerList.push(res);
         });
-
-        if (res.isShow != false) {
-          validDisArray.push({
-            actualDescription: res.actualDescription,
-            capturedSections: res.capturedSections,
-            diagnosisCode: res.diagnosisCode,
-            encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
-            isManuallyAdded: res.isManuallyAdded,
-            isHccValid: res.isHccValid,
-            defaultPosition: res.defaultPosition,
-            providerName: providerList,
-            dbDescription: res.dbDescription,
-            isMostSpecific: res.isMostSpecific,
-            children: res.children,
-            getPlace: "Hcc",
-            dbDescription: res.dbDescription,
-            isCmsHcc: res.isCmsHcc,
-            isRxHcc: res.isRxHcc,
-            providerDeatils: res.provider,
-            isComboCode: res.isComboCode,
-            notes: res.notes
-          });
-        }
-      });
-
-      if (result?.insulinDisease) {
-        const encounterDatearray = result?.insulinDisease?.dos?.split(",");
-        validDisArray.push({
-          actualDescription: result?.insulinDisease?.description,
-          capturedSections: [result?.insulinDisease?.section],
-          diagnosisCode: result?.insulinDisease?.code,
-          encounterDate: result?.insulinDisease?.dos,
-          encounterDateSplit: encounterDatearray,
-          getPlace: "Insulin",
-          isHccValid: true,
-          defaultPosition: null,
-          dbDescription: result?.insulinDisease?.dbDescription,
+        res.dateOfServices?.map((res) => {
+          dosList.push(res.date);
         });
-      }
-
-      result?.invalidDisease?.map((res, index) => {
-        const encounterDatearray = res?.encounterDate?.split(",");
-        invalidDiseaseNewRes.push({
+        if(res.isShow != false){
+        hccDisArray.push({
           actualDescription: res.actualDescription,
           capturedSections: res.capturedSections,
           diagnosisCode: res.diagnosisCode,
           encounterDate: res.encounterDate,
-          encounterDateSplit: encounterDatearray,
-          isManuallyAdded: res.isManuallyAdded,
+          encounterDateSplit:  res.dateOfServices,
+          isManuallyAdded: getStateIndicators(res.stateIndicators,"MANUALLY_ADDED"),
           isHccValid: res.isHccValid,
           defaultPosition: res.defaultPosition,
+          providerName: providerList,
+          dbDescription: res.dbDescription,
+          isMostSpecific: getStateIndicators(res.stateIndicators,"MOST_SPECIFIC"),
+          children: res.children,
+          getPlace: "Hcc",
+          isCmsHcc: res.isCmsHcc,
+          isRxHcc: res.isRxHcc,
+          providerDeatils: res.provider,
+          isComboCode: getStateIndicators(res.stateIndicators,"COMBO_CODE"),
+          notes: res.notes,
+          hyperlinks: res?.hyperlinks,
+          suspectType:res.suspectType,
+          dateOfServices:res.dateOfServices,
+        });
+      }
+      });
+
+      result?.nonHccDiseases?.map((res, index) => {
+        var providerList = [];
+        res.providerNames?.map((res) => {
+          providerList.push(res);
+        });
+        nonHccDisArray.push({
+          actualDescription: res.actualDescription,
+          capturedSections: res.capturedSections,
+          diagnosisCode: res.diagnosisCode,
+          encounterDate: res.encounterDate,
+          encounterDateSplit:  res.dateOfServices,
+          isManuallyAdded: getStateIndicators(res.stateIndicators,"MANUALLY_ADDED"),
+          isHccValid: res.isHccValid,
+          defaultPosition: res.defaultPosition,
+          providerName: providerList,
+          dbDescription: res.dbDescription,
+          isMostSpecific: getStateIndicators(res.stateIndicators,"MOST_SPECIFIC"),
+          children: res.children,
+          isCmsHcc: res.isCmsHcc,
+          isRxHcc: res.isRxHcc,
+          providerDeatils: res.provider,
+          isComboCode: getStateIndicators(res.stateIndicators,"COMBO_CODE"),
+          notes: res.notes,
+          hyperlinks: res?.hyperlinks,
+          suspectType:res.suspectType,
+          dateOfServices:res.dateOfServices,
         });
       });
 
-      if (result.deletedDiseases != null) {
-        result.deletedDiseases.map((res, index) => {
-          if (res.isShow != false) {
-            const encounterDatearray = res?.encounterDate?.split(",");
-            var providerList = [];
-            res.provider?.map((res, index) => {
-              providerList.push(res.providerName);
-            });
-            deleteHccList.push({
-              actualDescription: res.actualDescription,
-              dbDescription: res.dbDescription,
-              capturedSections: res.capturedSections,
-              diagnosisCode: res.diagnosisCode,
-              encounterDate: res.encounterDate,
-              encounterDateSplit: encounterDatearray,
-              isManuallyAdded: res.isManuallyAdded,
-              isHccValid: res.isHccValid,
-              defaultPosition: res.defaultPosition,
-              providerName: providerList,
-              isCmsHcc: res.isCmsHcc,
-              isRxHcc: res.isRxHcc,
-              isComboCode: res.isComboCode,
-              notes: res.notes
-            });
-          }
-        });
-      }
-      if (result.suggestRadiology != null) {
-        suggestRadiologyList = result.suggestRadiology;
-        suggestRadiologyList.map((res, index) => {
-          const encounterDatearray = res?.encounterDate?.split(",");
+      result?.suggestedHccDiseases?.map((res, index) => {
+        if (res.isShow != false) {
           var providerList = [];
-
-          res?.provider?.map((res2, index) => {
-            providerList.push(res2.providerName);
+          var dosList = [];
+          res.providerNames?.map((res) => {
+            providerList.push(res);
+          });
+          res.dateOfServices?.map((res) => {
+            dosList.push(res.date);
           });
           suggestListAll.push({
             actualDescription: res.actualDescription,
+            diagnosisCodeFinding: res.diagnosisCode,
+            isHccValid: res.isHccValid,
             capturedSections: res.capturedSections,
             diagnosisCode: res.diagnosisCode,
             encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
-            getPlace: "Radio",
-            isHccValid: true,
+            encounterDateSplit:  res.dateOfServices,
+            getPlace: "Hcc",
             defaultPosition: res.defaultPosition,
             providerName: providerList,
             children: res.children ? res.children : [],
-            isMostSpecific: res.isMostSpecific,
+            isMostSpecific: getStateIndicators(res.stateIndicators,"MOST_SPECIFIC"),
             isCmsHcc: res.isCmsHcc,
             isRxHcc: res.isRxHcc,
-            isComboCode: res.isComboCode,
+            isManuallyAdded: getStateIndicators(res.stateIndicators,"MANUALLY_ADDED"),
+            isComboCode: getStateIndicators(res.stateIndicators,"COMBO_CODE"),
             providerDeatils: res.provider,
-            notes: res.notes
-          });
-        });
+            notes: res.notes,
+            hyperlinks: res?.hyperlinks,
+            suspectType:res.suspectType,
+            dateOfServices:res.dateOfServices,
+            dbDescription: res.dbDescription,
 
-        if (result.suggestRadiologyCombo != null) {
-          result.suggestRadiologyCombo.map((res, index) => {
-            var providerList = [];
-
-            res.providers?.map((res2, index) => {
-              providerList.push(res2.providerName);
-            });
-            const encounterDatearray = res?.encounterDate?.split(",");
-            suggestListAll.push({
-              actualDescription: res.diseaseName,
-              capturedSections: res.capturedSections,
-              diagnosisCode: res.diagnosisCodeCombo,
-              encounterDate: res.encounterDate,
-              encounterDateSplit: encounterDatearray,
-              getPlace: "Radio-combo",
-              isHccValid: true,
-              providerName: providerList,
-              isCmsHcc: res.isCmsHcc,
-              isRxHcc: res.isRxHcc,
-              isComboCode: res.isComboCode,
-              providerDeatils: res.provider,
-              notes: res.notes
-              // defaultPosition:res.defaultPosition
-            });
           });
         }
-      }
+      });
 
-      if (result.suggestLab != null) {
-        // getLabReportDetails(orgId,tenId)
-        suggestLabList = result.suggestLab;
-        suggestLabList.map((res, index) => {
-          var providerList = [];
-
-          res?.provider?.map((res2, index) => {
-            providerList.push(res2.providerName);
-          });
+      result?.deletedDiseases?.map((res, index) => {
+        if (res.isShow != false) {
           const encounterDatearray = res?.encounterDate?.split(",");
-          suggestListAll.push({
+          var providerList = [];
+          res.providerNames?.map((res) => {
+            providerList.push(res);
+          });
+          deleteHccList.push({
             actualDescription: res.actualDescription,
+            dbDescription: res.dbDescription,
             capturedSections: res.capturedSections,
             diagnosisCode: res.diagnosisCode,
             encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
-            getPlace: "Lab",
-            isHccValid: true,
+            encounterDateSplit: res.dateOfServices,
+            isManuallyAdded: getStateIndicators(res.stateIndicators,"MANUALLY_ADDED"),
+            isHccValid: res.isHccValid,
             defaultPosition: res.defaultPosition,
             providerName: providerList,
             isCmsHcc: res.isCmsHcc,
             isRxHcc: res.isRxHcc,
-            isComboCode: res.isComboCode,
-            providerDeatils: res.provider,
-            notes: res.notes
-          });
-        });
-      }
-      if (result.unMatchedDisease != null) {
-        unMatchRes = result.unMatchedDisease;
-        unMatchRes.map((res, index) => {
-          if (res.isShow != false) {
-            const encounterDatearray = res?.encounterDate?.split(",");
-            var providerList = [];
+            isComboCode: getStateIndicators(res.stateIndicators,"COMBO_CODE"),
+            isMostSpecific: getStateIndicators(res.stateIndicators,"MOST_SPECIFIC"),
+            notes: res.notes,
+            hyperlinks: res?.hyperlinks,
+            suspectType:res.suspectType,
+            dateOfServices:res.dateOfServices,
 
-            res?.provider?.map((res, index) => {
-              providerList.push(res.providerName);
-            });
-            suggestListAll.push({
-              actualDescription: res.actualDescription,
-              diagnosisCodeFinding: res.diagnosisCode,
-              isHccValid: res.isHccValid,
-              capturedSections: res.capturedSections,
-              diagnosisCode: res.diagnosisCode,
-              encounterDate: res.encounterDate,
-              encounterDateSplit: encounterDatearray,
-              getPlace: "Hcc",
-              defaultPosition: res.defaultPosition,
-              providerName: providerList,
-              children: res.children ? res.children : [],
-              isMostSpecific: res.isMostSpecific,
-              isCmsHcc: res.isCmsHcc,
-              isRxHcc: res.isRxHcc,
-              isComboCode: res.isComboCode,
-              providerDeatils: res.provider,
-              notes: res.notes
-            });
-          }
-        });
-      }
-      if (result?.suggestLabInReport) {
-        result?.suggestLabInReport?.map((res, index) => {
+          });
+        }
+      });
+
+      result?.comboDisease?.map((res, index) => {
           var providerList = [];
-
-          res?.provider?.map((res2, index) => {
-            providerList.push(res2?.providerName);
+          var dosList = [];
+          res.providerNames?.map((res) => {
+            providerList.push(res);
           });
-          const encounterDatearray = res?.encounterDate?.split(",");
-          suggestListAll.push({
-            actualDescription: res.actualDescription,
-            capturedSections: res.capturedSections,
-            diagnosisCode: res.diagnosisCode,
-            encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
-            getPlace: "Hcc",
-            isHccValid: true,
-            defaultPosition: res.defaultPosition,
-            providerName: providerList,
-            isCmsHcc: res.isCmsHcc,
-            isRxHcc: res.isRxHcc,
-            isComboCode: res.isComboCode,
-            providerDeatils: res.provider,
-            notes: res.notes
+          res.dateOfServices?.map((res) => {
+            dosList.push(res.date);
           });
-        });
-      }
-      if (result?.suggestRadiologyInReport) {
-        result?.suggestRadiologyInReport?.map((res, index) => {
-          var providerList = [];
-
-          res?.provider?.map((res2, index) => {
-            providerList.push(res2.providerName);
-          });
-          const encounterDatearray = res?.encounterDate?.split(",");
-          suggestListAll.push({
-            actualDescription: res.actualDescription,
-            capturedSections: res.capturedSections,
-            diagnosisCode: res.diagnosisCode,
-            encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
-            getPlace: "Hcc",
-            isHccValid: true,
-            defaultPosition: res.defaultPosition,
-            providerName: providerList,
-            isCmsHcc: res.isCmsHcc,
-            isRxHcc: res.isRxHcc,
-            isComboCode: res.isComboCode,
-            providerDeatils: res.provider,
-            notes: res.notes
-          });
-        });
-      }
-
-      invalidDis = result.invalidDisease;
-      comboDis = result.comboDisease;
-      meatCri = result.meatCriteria;
-
-      var combiDisArray = [];
-      if (result.comboDisease) {
-        comboDis.map((res, index) => {
-          var providerList = [];
-          res.providers?.map((res, index) => {
-            providerList.push(res.providerName);
-          });
-          const encounterDatearray = res?.encounterDate?.split(",");
           combiDisArray.push({
             addOnCode: res.addOnCode,
             addOnCodeTwo: res.addOnCodeTwo,
@@ -455,37 +324,27 @@ export const getPatientDetails = async (
             diseaseName: res.diseaseName,
             diagnosisCode: res.diagnosisCode,
             encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
+            encounterDateSplit:  res.dateOfServices,
             providerName: providerList,
             providers: res.provider ? res.providers : res.provider,
             ruleType: res.ruleType,
             capturedSections: res.capturedSections,
             children: res.children ? res.children : [],
             expanded: true,
+            hyperlinks: res?.hyperlinks,
+            dateOfServices:res.dateOfServices,
           });
-        });
-      }
-
-      // validDiseaseNewRes = validDiseaseNew[2019]
-
-      var invalidDiseasesArray = [];
-      var validDiseasesArray = [];
-
-      for (var key in invalidDis) {
-        invalidDiseasesArray.push({ name: invalidDis[key] });
-      }
-      for (var key in validDis) {
-        validDiseasesArray.push({ name: validDis[key] });
-      }
-
-      setNewValidDiseaseList(validDisArray);
-      setSuggestedHccList(suggestListAll);
-      setDeletedHccList(deleteHccList);
-
+      });
+      setNewValidDiseaseList && setNewValidDiseaseList(hccDisArray);
+      setSuggestedHccList && setSuggestedHccList(suggestListAll);
+      setNonHccDiseasesList&& setNonHccDiseasesList(nonHccDisArray);
+      setDeletedHccList && setDeletedHccList(deleteHccList);
+      setComboDiseaseCodesList && setComboDiseaseCodesList(combiDisArray);
+      setDosSummariesList && setDosSummariesList(result?.dosSummaries);
       var capturedSectionsColorsMatching = [];
       var capturedSectionsArr = [];
 
-      validDiseaseNewRes?.map((res) => {
+      result?.hccDiseases?.map((res) => {
         res.capturedSections?.map((res2, index) => {
           capturedSectionsArr?.push({
             name: res2,
@@ -494,16 +353,16 @@ export const getPatientDetails = async (
         });
       });
 
-      validDiseaseNewRes?.map((res) => {
-        res.provider?.map((res2, index) => {
+      result?.hccDiseases?.map((res) => {
+        res.providerNames?.map((res2, index) => {
           capturedSectionsArr?.push({
-            name: res2?.providerName,
+            name: res2,
             diagnosisCode: res?.diagnosisCode,
           });
         });
       });
 
-      invalidDiseaseNewRes.map((res) => {
+      nonHccDisArray.map((res) => {
         res.capturedSections.map((res2, index) => {
           capturedSectionsArr.push({
             name: res2,
@@ -519,7 +378,6 @@ export const getPatientDetails = async (
             diagnosisCode: res?.diagnosisCode,
           });
         });
-
         res.providerName?.map((res2, index) => {
           if (res2) {
             capturedSectionsArr?.push({
@@ -529,13 +387,6 @@ export const getPatientDetails = async (
           }
         });
       });
-
-      if (result?.insulinDisease) {
-        capturedSectionsArr?.push({
-          name: result?.insulinDisease?.section,
-          diagnosisCode: result?.insulinDisease?.code,
-        });
-      }
 
       var dublicateSectionArr = getUniqueListBy(capturedSectionsArr, "name");
 
@@ -547,17 +398,17 @@ export const getPatientDetails = async (
         });
       });
 
-      var sectionColorResult = sectionColorList.result?.response;
+      // var sectionColorResult = sectionColorList.result?.response;
 
-      let sectionColorResultMatch = sectionColorResult?.filter((o1) =>
-        dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
-      );
-      let sectionColorResultNotMatch = dublicateSectionArr.filter(
-        (o1) => !sectionColorResult?.some((o2) => o1.name === o2.sectionName)
-      );
+      // let sectionColorResultMatch = sectionColorResult?.filter((o1) =>
+      //   dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
+      // );
+      // let sectionColorResultNotMatch = dublicateSectionArr.filter(
+      //   (o1) => !sectionColorResult?.some((o2) => o1.name === o2.sectionName)
+      // );
 
       var notMatchColorArray = [];
-      sectionColorResultNotMatch?.map((res, index) => {
+      dublicateSectionArr?.map((res, index) => {
         var radomColorcode = stringToColour(res.name);
         var randomColorChangeShadow = radomColorcode + 33;
         notMatchColorArray.push({
@@ -565,78 +416,34 @@ export const getPatientDetails = async (
           backgroundColor: randomColorChangeShadow,
           sectionColor: radomColorcode,
         });
-        submitSectionColors(res.name, radomColorcode, randomColorChangeShadow);
+        // submitSectionColors(res.name, radomColorcode, randomColorChangeShadow);
       });
 
       var encounterDateColorsMatching = [];
       var encounterDateArr = [];
 
-      validDiseaseNewRes.map((res) => {
-        const array = res?.encounterDate?.split(",");
-        array?.map((res2) => {
+      result?.hccDiseases?.map((res) => {
+        res?.dateOfServices.map((res2) => {
+          encounterDateArr.push({
+            name: res2,
+          });
+        });
+      });
+      result?.nonHccDiseases?.map((res) => {
+        res?.dateOfServices.map((res2) => {
           encounterDateArr.push({
             name: res2,
           });
         });
       });
 
-      result?.invalidDisease.map((res) => {
-        const array = res?.encounterDate?.split(",");
-        array?.map((res2) => {
+      result?.suggestedHccDiseases?.map((res) => {
+        res?.dateOfServices.map((res2) => {
           encounterDateArr.push({
             name: res2,
           });
         });
       });
-
-      result?.unMatchedDisease?.map((res) => {
-        const array = res?.encounterDate?.split(",");
-        array?.map((res2) => {
-          encounterDateArr.push({
-            name: res2,
-          });
-        });
-      });
-      result?.suggestRadiology?.map((res) => {
-        const array = res?.encounterDate?.split(",");
-        array?.map((res2) => {
-          encounterDateArr.push({
-            name: res2,
-          });
-        });
-      });
-
-      result?.suggestLab?.map((res) => {
-        const array = res?.encounterDate.split(",");
-        array.map((res2) => {
-          encounterDateArr?.push({
-            name: res2,
-          });
-        });
-      });
-
-      result?.suggestLabInReport?.map((res) => {
-        const array = res?.encounterDate?.split(",");
-        array?.map((res2) => {
-          encounterDateArr.push({
-            name: res2,
-          });
-        });
-      });
-      result?.suggestRadiologyInReport?.map((res) => {
-        const array = res?.encounterDate?.split(",");
-        array?.map((res2) => {
-          encounterDateArr.push({
-            name: res2,
-          });
-        });
-      });
-
-      if (result?.insulinDisease) {
-        encounterDateArr.push({
-          name: result?.insulinDisease?.dos,
-        });
-      }
 
       var encounterDateArrDublicatesRemove = getUniqueListBy(
         encounterDateArr,
@@ -662,50 +469,33 @@ export const getPatientDetails = async (
       var dublicateRemoveSecondArr = [];
       var nonHccMeatListArr = [];
 
-      var meatHeaderList = [];
-
-      meatCri?.map((res, index) => {
-        if (
-          res.monitorCapturedFromHeader != "" &&
-          res.monitorCapturedFromHeader != null
-        ) {
+      result?.meatCriteria?.map((res, index) => {
+        res.providerNames?.map((res) => {
           meatMoniterHead.push({
-            header: res.monitorCapturedFromHeader.toLowerCase(),
+            name: res,
           });
-        }
-        if (
-          res.evaluateCapturedFromHeader != "" &&
-          res.evaluateCapturedFromHeader != null
-        ) {
-          meatEvaluteHead.push({
-            header: res.evaluateCapturedFromHeader.toLowerCase(),
+        });
+          res?.monitorHyperLink?.map((res2, index) => {
+            meatMoniterHead.push({
+              name: res2.header,
+            });
           });
-        }
-        if (
-          res.assessmentCapturedFromHeader != "" &&
-          res.assessmentCapturedFromHeader != null
-        ) {
-          meatAssesmentHead.push({
-            header: res.assessmentCapturedFromHeader.toLowerCase(),
+          res?.evaluateHyperLink?.map((res2, index) => {
+            meatMoniterHead.push({
+              name: res2.header,
+            });
           });
-        }
-        if (
-          res.treatmentCapturedFromHeader != "" &&
-          res.treatmentCapturedFromHeader != null
-        ) {
-          meatTreatMentHead.push({
-            header: res.treatmentCapturedFromHeader.toLowerCase(),
+          res?.assessmentHyperLink?.map((res2, index) => {
+            meatMoniterHead.push({
+              name:res2.header,
+            });
           });
-        }
-        var newArray = [];
-        newArray = [
-          ...allMeatHead,
-          ...meatMoniterHead,
-          ...meatEvaluteHead,
-          ...meatAssesmentHead,
-          ...meatTreatMentHead,
-        ];
-        var dublicateRemoveArr = getUniqueListBy(newArray, "header");
+          res?.treatmentHyperLink?.map((res2, index) => {
+            meatMoniterHead.push({
+              name: res2.header,
+            });
+          });
+        var dublicateRemoveArr = getUniqueListBy(meatMoniterHead, "name");
         dublicateRemoveArr.map((res3, index) => {
           allMeatHeadColor.push({
             header: res3.header,
@@ -717,7 +507,7 @@ export const getPatientDetails = async (
         dublicateRemoveSecondArr = getUniqueListBy(allMeatHeadColor, "header");
       });
 
-      meatCri?.map((res, index) => {
+      result?.meatCriteria?.map((res, index) => {
         if (res.category == "Invalid") {
           nonHccMeatListArr.push({
             diagnosisCode: res.diagnosisCode,
@@ -735,24 +525,38 @@ export const getPatientDetails = async (
             treatment: res.treatment,
             isMeatCriteriaPresent: res.isMeatCriteriaPresent,
             category: res.category,
-            encounterDate: res.encounterDate,
+            encounterDate: res.dateOfService,
+            hyperlinks: res?.hyperlinks,
           });
         } else {
+          if(res.isShow != false){
           var providerList = [];
-          res?.visitDetailsDTO?.providerSet?.map((res, index) => {
-            providerList.push(res.providerName);
+          var dosList = [];
+          res.providerNames?.map((res) => {
+            providerList.push(res);
           });
-          const encounterDatearray = res?.encounterDate?.split(",");
-
+          res.dateOfService?.map((res) => {
+            dosList.push(res.date);
+          });
+          var monitorHyperLink = [];
+          if (res?.monitorHyperLink) {
+            res.monitorHyperLink?.map((res, index) => {
+              (res.value = res.header), (res.label = res.header);
+              monitorHyperLink.push(res);
+            });
+          }
           meatListArr.push({
             diagnosisCode: res.diagnosisCode,
             diseaseName: res.diseaseName,
-            monitorCapturedFromHeader: res.monitorCapturedFromHeader,
-            assessmentCapturedFromHeader: res.assessmentCapturedFromHeader,
-            evaluateCapturedFromHeader: res.evaluateCapturedFromHeader,
-            treatmentCapturedFromHeader: res.treatmentCapturedFromHeader,
+            monitorAspect: res.monitorAspect,
+            monitorHyperLink: monitorHyperLink,
+            assessmentAspect: res.assessmentAspect,
+            assessmentHyperLink: res.assessmentHyperLink,
+            evaluateAspect: res.evaluateAspect,
+            evaluateHyperLink: res.evaluateHyperLink,
+            treatmentAspect: res.treatmentAspect,
+            treatmentHyperLink: res.treatmentHyperLink,
             providerName: providerList,
-
             monitorColor: COLORS[index],
             meatColor: COLORS[index],
             assessment: res.assessment,
@@ -762,70 +566,119 @@ export const getPatientDetails = async (
             isMeatCriteriaPresent: res.isMeatCriteriaPresent,
             category: res.category,
             encounterDate: res.encounterDate,
-            encounterDateSplit: encounterDatearray,
+            encounterDateSplit:  res.dateOfService,
+            hyperlinks: res?.hyperlinks,
+            dateOfServices:res.dateOfServices,
           });
         }
+      }
+      });
+      result?.deletedMeatCriteria?.map((res, index) => {
+       
+          var providerList = [];
+          var dosList = [];
+          res.providerNames?.map((res) => {
+            providerList.push(res);
+          });
+          res.dateOfService?.map((res) => {
+            dosList.push(res.date);
+          });
+          var monitorHyperLink = [];
+          if (res?.monitorHyperLink) {
+            res.monitorHyperLink?.map((res, index) => {
+              (res.value = res.header), (res.label = res.header);
+              monitorHyperLink.push(res);
+            });
+          }
+          deletedmeatListArr.push({
+            diagnosisCode: res.diagnosisCode,
+            diseaseName: res.diseaseName,
+            monitorAspect: res.monitorAspect,
+            monitorHyperLink: monitorHyperLink,
+            assessmentAspect: res.assessmentAspect,
+            assessmentHyperLink: res.assessmentHyperLink,
+            evaluateAspect: res.evaluateAspect,
+            evaluateHyperLink: res.evaluateHyperLink,
+            treatmentAspect: res.treatmentAspect,
+            treatmentHyperLink: res.treatmentHyperLink,
+            providerName: providerList,
+            monitorColor: COLORS[index],
+            meatColor: COLORS[index],
+            assessment: res.assessment,
+            monitor: res.monitor,
+            evaluate: res.evaluate,
+            treatment: res.treatment,
+            isMeatCriteriaPresent: res.isMeatCriteriaPresent,
+            category: res.category,
+            encounterDate: res.encounterDate,
+            encounterDateSplit:  res.dateOfService,
+            hyperlinks: res?.hyperlinks,
+            dateOfServices:res.dateOfServices,
+          });
       });
 
-      let sectionColorResultMatchMeat = sectionColorResult?.filter((o1) =>
-        meatHeaderList.some((o2) => o1.sectionName === o2.header)
-      );
-      let sectionColorResultNotMatchMeat = meatHeaderList.filter(
-        (o1) => !sectionColorResult?.some((o2) => o1.header === o2.sectionName)
-      );
-
+      // let sectionColorResultMatchMeat = sectionColorResult?.filter((o1) =>
+      //   meatHeaderList.some((o2) => o1.sectionName === o2.name)
+      // );
+      // let sectionColorResultNotMatchMeat = meatHeaderList.filter(
+      //   (o1) => !sectionColorResult?.some((o2) => o1.name === o2.sectionName)
+      // );
       var notMatchColorArrayMeat = [];
-      sectionColorResultNotMatchMeat?.map((res, index) => {
-        var radomColorcode = stringToColour(res.header);
+      meatHeaderList?.map((res, index) => {
+        var radomColorcode = stringToColour(res.name);
         var randomColorChangeShadow = radomColorcode + 33;
         notMatchColorArrayMeat.push({
-          sectionName: res.header,
+          sectionName: res.name,
           backgroundColor: randomColorChangeShadow,
           sectionColor: radomColorcode,
         });
-        submitSectionColors(
-          res.header,
-          radomColorcode,
-          randomColorChangeShadow
-        );
+        // submitSectionColors(
+        //   res.name,
+        //   radomColorcode,
+        //   randomColorChangeShadow
+        // );
       });
 
       var newArrayColorMatchs = [];
       newArrayColorMatchs = [
-        ...sectionColorResult,
-        ...sectionColorResultMatch,
+        // ...sectionColorResult,
+        // ...sectionColorResultMatch,
         ...notMatchColorArray,
-        ...sectionColorResultMatchMeat,
+        // ...sectionColorResultMatchMeat,
         ...notMatchColorArrayMeat,
       ];
 
       setCaptureSectionMatching(newArrayColorMatchs);
 
-      setMeatCriteriaList(meatListArr);
-      if(setAllDisList){
-      setAllDisList([...validDisArray,...deleteHccList,...suggestListAll])
-      }
+      setMeatCriteriaList && setMeatCriteriaList(meatListArr);
+      setDeletedMeatList && setDeletedMeatList(deletedmeatListArr);
+      setAllDisList &&
+        setAllDisList([...hccDisArray, ...deleteHccList, ...suggestListAll]);
 
-      if (result.suggestRadiology != null) {
-        if (result.suggestRadiology.length != 0) {
-          getPatientDetailsRadiologyYear(orgId, dispatch);
-        }
-      }
+      // if (result.suggestRadiology != null) {
+      //   if (result.suggestRadiology.length != 0) {
+      //     getPatientDetailsRadiologyYear(orgId, dispatch);
+      //   }
+      // }
 
-      if (result.suggestLab != null) {
-        if (result.suggestLab.length != 0) {
-          getLabReportDetailsInititalLoad(orgId, dispatch);
-        }
-      }
+      // if (result.suggestLab != null) {
+      //   if (result.suggestLab.length != 0) {
+      //     getLabReportDetailsInititalLoad(orgId, dispatch);
+      //   }
+      // }
     }
   }
 };
 
+const getStateIndicators=(data,state)=>{
+  const result = data?.some(item => 
+    item === state
+  )
+  return result;
+}
 
 const GetData = () => {
-  return (
-   <></>
-  )
-}
+  return <></>;
+};
 
 export default GetData;

@@ -19,7 +19,7 @@ import { useSelector } from "react-redux";
 export default function Login() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const loginResponse=useSelector(state=>state.auth.mfa)
+  const loginResponse = useSelector((state) => state.auth.mfa);
   const [enteredEmail, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   let errorsObj = { email: "", password: "" };
@@ -71,9 +71,19 @@ export default function Login() {
               className="account-info-area"
               style={{ backgroundImage: "url(" + { LoginBack } + ")" }}
             >
-              <div className="login-content">
+              <div
+                className="login-content"
+                style={{ position: "relative", textAlign: "center" }}
+              >
                 <p className="sub-title"></p>
-                <Image className="login-logo" src={IMAGES.loginPageLogo1} />
+                <Image
+                  className="login-logo"
+                  src={IMAGES.loginPageLogo1}
+                  style={{ display: "block", margin: "0 auto" }}
+                />
+                <div className="company-name">
+                  Encipher health private limited
+                </div>
               </div>
             </div>
           </div>
@@ -135,7 +145,12 @@ export default function Login() {
                   )}
                 </div>
                 <div className="text-center mb-4">
-                  <RegularButton type="submit" name="LOGIN" width="100%" loading={loginResponse?.loading} />
+                  <RegularButton
+                    type="submit"
+                    name="LOGIN"
+                    width="100%"
+                    loading={loginResponse?.loading}
+                  />
                 </div>
               </form>
             </div>

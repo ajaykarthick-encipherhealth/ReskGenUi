@@ -13,12 +13,13 @@ export const UsersList = async ({
   sort,
 }) => {
   const token = localStorage.getItem("token");
+  const orgId = localStorage.getItem("orgId");
   const selectedStatus = status === "ALL" ? "" : status;
   try {
     const response = await axios.get(
       ` ${
         ENDPOINTS?.apiEndoint
-      }dbservice/user/admin/filter?page=${pageCount}&size=15&searchString=${search}&createdDateStart=${startDate}&createdDateEnd=${endDate}&isEnabled=${selectedStatus}&role=${role}&sortdirection=${
+      }dbservice/user/admin/filter?page=${pageCount}&size=15&searchString=${search}&organizationId=${orgId}&createdDateStart=${startDate}&createdDateEnd=${endDate}&isEnabled=${selectedStatus}&role=${role}&sortdirection=${
         sort?.sortDir ? sort?.sortDir : ""
       }&sortfield=${sort?.sortField ? sort?.sortField : ""}`,
       {

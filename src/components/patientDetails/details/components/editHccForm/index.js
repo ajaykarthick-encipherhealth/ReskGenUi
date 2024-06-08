@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch,connect } from "react-redux";
 import { notification } from "antd";
 import { Select, Modal } from "antd";
 import { Button, Form, Input, Space, DatePicker } from "antd";
@@ -7,9 +7,9 @@ import moment from "moment";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import styles from "../../hcc/styles.module.css";
-import { getPatientDetailsResult } from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import RegularButton from "../../../../../components/button";
 import visitStyles from "../../../../../styles/visitdata.module.css";
+import { actions as detailsActions } from "../../../../../stores/patient/details";
 
 const { TextArea } = Input;
 
@@ -20,12 +20,11 @@ const EditHccForm = ({
   isEditHccForm,
   setIsEditHccForm,
   formEditPlace,
+  patientDetailsResult,
+  getpatientDetailsData
 }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const patientDetailsResult = useSelector(
-    (state) => state?.ReviewerReducers?.patientDetails
-  );
   const [addValidCodeCheck, setAddValidCodeCheck] = useState(true);
   const [providerNameList, setProviderNameList] = useState([]);
   const [selectProviderNameList, setSelectProviderNameList] = useState([]);
@@ -63,7 +62,7 @@ const EditHccForm = ({
         patientId: patientId,
         oldDiagnosisCode: formValues.diagnosisCode,
         newDiagnosisCode: form.diagnosisCode,
-        year: patientDetailsResult?.result.response?.dos,
+        year: patientDetailsResult?.data.response?.dos,
         capturedSections: form.sections,
         provider: providerGet,
         encounterDate: dateList.join(", "),
@@ -85,7 +84,7 @@ const EditHccForm = ({
             placement: "top",
             duration: 1,
           });
-          dispatch(getPatientDetailsResult(patientId));
+          getpatientDetailsData(patientId,patientDetailsResult?.data?.response?.processedYear,patientDetailsResult?.data?.response?.dateOfService);
         } else {
         }
       } catch (e) {}
@@ -476,5 +475,12 @@ const EditHccForm = ({
     </>
   );
 };
-
-export default EditHccForm;
+const enhancer = connect(
+  (state) => ({
+    patientDetailsResult :state?.patientDetails?.details?.patientResult
+  }),
+  {
+    getpatientDetailsData:detailsActions.patientDetailsAction
+  }
+);
+export default enhancer(EditHccForm);

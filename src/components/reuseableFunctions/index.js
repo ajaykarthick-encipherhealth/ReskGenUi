@@ -1,7 +1,19 @@
 import React from "react";
+import { Tooltip } from "antd";
+import Image from "next/image";
 import visitStyles from "../../../src/styles/visitdata.module.css";
 import { SVGICON } from "../../jsx/constant/theme";
-import { Tooltip } from "antd";
+import Completed from "../../images/trackingImages/CompletedTrack.png";
+import Pending from "../../images/trackingImages/PendingTrack.png";
+import Hold from "../../images/trackingImages/HoldTrack.png";
+import Declined from "../../images/trackingImages/DeclineTrack.png";
+import AuditedTrack from "../../images/trackingImages/AuditedTrack.png";
+import NotAudited from "../../images/trackingImages/NotAuditedTrack.png";
+import AuditHold from "../../images/trackingImages/AuditHoldTrack.png";
+import ReAudit from "../../images/trackingImages/reAuditTrack.png";
+import AuditPending from "../../images/trackingImages/AuditPending.png";
+import AuditedDeclineTrack from "../../images/trackingImages/AuditDeclined.png";
+import Abort from "../../images/trackingImages/Abort.png";
 export const getFlag = (data) => {
   switch (data.flags) {
     case "PATIENT_NAME_MISSED":
@@ -360,4 +372,145 @@ export const getFlags = (data) => {
         </Tooltip>
       );
   }
+};
+export const getStatusIcon = (status) => {
+  switch (status) {
+    case "COMPLETED":
+      return (
+        <Tooltip placement="bottom" title="COMPLETED">
+          <Image
+            src={Completed}
+            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+          />
+        </Tooltip>
+      );
+
+    case "PENDING":
+      return (
+        <Tooltip placement="bottom" title="PENDING">
+          <Image
+            src={Pending}
+            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+          />
+        </Tooltip>
+      );
+
+    case "DECLINED":
+      return (
+        <Tooltip placement="bottom" title="DECLINED">
+          <Image
+            src={Declined}
+            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+          />
+        </Tooltip>
+      );
+
+    case "NOTCOMPUTED":
+      return (
+        <Tooltip placement="bottom" title="NOT COMPUTED">
+          <Image
+            src={Pending}
+            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+          />
+        </Tooltip>
+      );
+    case "COMPUTED":
+      return (
+        <Tooltip placement="bottom" title="PENDING">
+          <Image
+            src={Pending}
+            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+          />
+        </Tooltip>
+      );
+    case "HOLD":
+      return (
+        <Tooltip placement="bottom" title="HOLD">
+          <Image
+            src={Hold}
+            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+          />
+        </Tooltip>
+      );
+    case "ABORTED_BY_CRON":
+      return (
+        <Tooltip placement="bottom" title="ABORTED BY CRON">
+          <Image
+            src={Abort}
+            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+          />
+        </Tooltip>
+      );
+    case "AUDIT_PENDING":
+      return (
+        <Tooltip placement="bottom" title="AUDIT PENDING">
+          <Image
+            src={AuditPending}
+            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+          />
+        </Tooltip>
+      );
+
+    case "AUDITHOLD":
+      return (
+        <Tooltip placement="bottom" title=" AUDIT HOLD">
+          <Image
+            src={AuditHold}
+            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+          />
+        </Tooltip>
+      );
+    case "REAUDIT":
+      return (
+        <Tooltip placement="bottom" title=" REAUDIT">
+          <Image
+            src={ReAudit}
+            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+          />
+        </Tooltip>
+      );
+    case "AUDITED":
+      return (
+        <Tooltip placement="bottom" title=" AUDITED">
+          <Image
+            src={AuditedTrack}
+            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+          />
+        </Tooltip>
+      );
+    case "NOT_AUDIT":
+      return (
+        <Tooltip placement="bottom" title=" NOT AUDIT">
+          <Image
+            src={NotAudited}
+            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+          />
+        </Tooltip>
+      );
+    case "AUDIT_DECLINED":
+      return (
+        <Tooltip placement="bottom" title=" AUDIT DECLINED">
+          <Image
+            src={AuditedDeclineTrack}
+            style={{ height: "20px", width: "20px", marginTop: "4px" }}
+          />
+        </Tooltip>
+      );
+    case null:
+      return <div className="patient-status"></div>;
+  }
+};
+export const selectTab = (num,setFlagTagActive,setActiveTabHead,setActiveComboTree,setPopoverVisible,setActiveMeatTitle) => {
+  setFlagTagActive(false);
+  setActiveTabHead(num);
+  if (num == 2) {
+    setFlagTagActive(true);
+  }
+  if (num == 4) {
+    setActiveMeatTitle && setActiveMeatTitle(null);
+  }
+  if (num == 3) {
+    setActiveComboTree(null);
+  }
+  setPopoverVisible(false);
 };

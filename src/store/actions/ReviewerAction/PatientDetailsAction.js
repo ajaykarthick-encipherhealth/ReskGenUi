@@ -1,4 +1,4 @@
-import { PatientDetails,MeatQuery,SectionColor ,HccFileDeatils,DosPageNumber,RadiologyDeatils,LabDeatils} from "../../../services/ReviewerServices/PatientDetailsService";
+import { PatientDetails,MeatQuery,SectionColor ,HccFileDeatils,DosPageNumber,RadiologyDeatils,LabDeatils, DosWiseList, PatientDetailsNew} from "../../../services/ReviewerServices/PatientDetailsService";
 
   export const GET_PATIENT_DETAILS = "GET_PATIENT_DETAILS";
   export const GET_MEAT_QUERY = "GET_MEAT_QUERY";
@@ -9,6 +9,8 @@ import { PatientDetails,MeatQuery,SectionColor ,HccFileDeatils,DosPageNumber,Rad
   export const GET_RADIOLOGY_FILE = "GET_RADIOLOGY_FILE";
   export const GET_LAB_DETAILS = "GET_LAB_DETAILS";
   export const GET_LAB_FILE = "GET_LAB_FILE";
+  export const GET_DOS_LIST = "GET_DOS_LIST";
+
 
 
   
@@ -22,6 +24,31 @@ import { PatientDetails,MeatQuery,SectionColor ,HccFileDeatils,DosPageNumber,Rad
       });
       try {
         PatientDetails(patientid,year).then((response) => {
+          dispatch({
+            type: GET_PATIENT_DETAILS,
+            payload: {
+              result: response,
+              loading: false,
+            },
+          });
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+  };
+
+  
+  export const getPatientDetailsResultNew = (patientid,year,dos) => {
+    return (dispatch) => {
+      dispatch({
+        type: GET_PATIENT_DETAILS,
+        payload: {
+          loading: true,
+        },
+      });
+      try {
+        PatientDetailsNew(patientid,year,dos).then((response) => {
           dispatch({
             type: GET_PATIENT_DETAILS,
             payload: {
@@ -158,7 +185,7 @@ import { PatientDetails,MeatQuery,SectionColor ,HccFileDeatils,DosPageNumber,Rad
     };
   };
 
-  export const getDosPageNumber = (fileId) => {
+  export const getDosPageNumber = (patientId,year) => {
     return (dispatch) => {
       dispatch({
         type: GET_DOS_PAGE,
@@ -167,7 +194,7 @@ import { PatientDetails,MeatQuery,SectionColor ,HccFileDeatils,DosPageNumber,Rad
         },
       });
       try {
-        DosPageNumber(fileId).then((response) => {
+        DosPageNumber(patientId,year).then((response) => {
           dispatch({
             type: GET_DOS_PAGE,
             payload: {
@@ -218,6 +245,30 @@ import { PatientDetails,MeatQuery,SectionColor ,HccFileDeatils,DosPageNumber,Rad
         HccFileDeatils(fileId).then((response) => {
           dispatch({
             type: GET_LAB_FILE,
+            payload: {
+              result: response,
+              loading: false,
+            },
+          });
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+  };
+
+  export const getPatientDosList = (patientid,year) => {
+    return (dispatch) => {
+      dispatch({
+        type: GET_DOS_LIST,
+        payload: {
+          loading: true,
+        },
+      });
+      try {
+        DosWiseList(patientid,year).then((response) => {
+          dispatch({
+            type: GET_DOS_LIST,
             payload: {
               result: response,
               loading: false,

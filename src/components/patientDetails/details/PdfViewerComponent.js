@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import ENDPOINTS from "../../../utility/enpoints";
 
-const PdfViewer = ({ src, searchQuery, pageNumber, headers }) => {
+const PdfViewer = ({ src, searchQuery, pageNumber, headers,headerContent }) => {
   const [iframeSrc, setIframeSrc] = useState("");
 
   useEffect(() => {
-    if (src) {
+    if (!Array.isArray(src)) {
       const pdfUrl = encodeURIComponent(src);
       let searchUrl = `${ENDPOINTS.PdfViewer}?file=${pdfUrl}`;
       // let searchUrl = `https://pdffile.javagcai.com/web/viewer.html?file=${pdfUrl}`;
-      if (searchQuery || pageNumber) {
+      if (searchQuery || pageNumber || headerContent) {
         const queryParams = [];
         if (searchQuery) {
           const encodedSearchQuery = encodeURIComponent(`${searchQuery}`);
@@ -20,12 +20,14 @@ const PdfViewer = ({ src, searchQuery, pageNumber, headers }) => {
         if (pageNumber) {
           queryParams.push(`page=${pageNumber}`);
         }
+        if(headerContent){
+          queryParams.push(`headerContent=${headerContent}`)
+        }
         searchUrl += `#${queryParams.join("&")}`;
       }
-
       setIframeSrc(searchUrl);
     }
-  }, [src, searchQuery, pageNumber]);
+  }, [src, searchQuery, pageNumber,headerContent]);
   return (
     <>
       <div style={{height:"70vh",overflow:"hidden"}}>

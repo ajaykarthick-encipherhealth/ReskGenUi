@@ -7,10 +7,7 @@ import visitStyles from "../../../../../styles/visitdata.module.css";
 import styles from "../HCC/styles.module.css";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
-import {
-  getPatientDetailsResult,
-  getRadiologyDetails,
-} from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
+
 
 export const getEncounterDateBackground = ({
   value,
@@ -259,6 +256,7 @@ export const handleSubmitValidNotes = async ({
   isValidAction,
   selectDisDetails,
   dispatch,
+  getRadiologyDetails
 }) => {
   setFileLoading(true);
   setConfirmNotesModalValid(false);
@@ -337,16 +335,8 @@ export const handleSubmitValidNotes = async ({
         message: result.message,
         placement: "top",
         duration: 1,
-      });
-      if (
-        isValidAction.title == "HCC" ||
-        isValidAction.title == "SUGGESTED" ||
-        isValidAction.title == "DELETED"
-      ) {
-        dispatch(getPatientDetailsResult(patientId));
-      } else {
-        dispatch(getRadiologyDetails(patientId));
-      }
+      });    
+      getRadiologyDetails(patientId);
     } else {
       setFileLoading(false);
       notification.error({

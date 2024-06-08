@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { notification } from "antd";
@@ -9,7 +9,6 @@ import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import Spinner from "../../../../../components/loadingSpinner";
 import styles from "../styles.module.css";
-import { getPatientDetailsResult } from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import AddMeatQuery from "../../components/addMeatQuery";
 import AddHccForm from "../../components/addHccForm";
 import PdfViewer from "../../PdfViewerComponent";
@@ -22,21 +21,19 @@ import {
   moveToAnotherAction,
   onDragEnd,
 } from "../../components/function/ReusableFunctions";
+import ManuallyAdd from "../../components/manuallyAdd";
 
 const VisitData = ({
   setActiveTabHead,
   setActiveMeatTitle,
   setActiveComboTree,
+  patientDetailsResult,
+  hccFileDetails,
+  year,
 }) => {
   const dispatch = useDispatch();
-  const patientDetailsResult = useSelector(
-    (state) => state?.ReviewerReducers?.patientDetails
-  );
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
-  );
-  const hccFileDetails = useSelector(
-    (state) => state?.ReviewerReducers?.hccFileDetails
   );
   const radiologyFileDetails = useSelector(
     (state) => state?.ReviewerReducers?.radiologyFileDetails
@@ -106,8 +103,8 @@ const VisitData = ({
   }, [patientDetailsResult]);
 
   useEffect(() => {
-    if (hccFileDetails?.result?.response) {
-      setSelectFileURL(hccFileDetails?.result?.response);
+    if (hccFileDetails?.data?.response) {
+      setSelectFileURL(hccFileDetails?.data?.response);
     }
     if (radiologyFileDetails?.result?.response) {
       setSelectFileURLRadiology(radiologyFileDetails?.result?.response);
@@ -119,8 +116,10 @@ const VisitData = ({
 
   const onchangeValid = (code, data) => {
     var title = code + " - " + data.actualDescription;
-    data.dos = patientDetailsResult?.result?.response?.dos;
-    setSelectDiseasesName(title);
+    data.processedYear = patientDetailsResult?.data?.response?.processedYear;
+    data.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
+    (data.fileId = patientDetailsResult?.data?.response?.fileId),
+      setSelectDiseasesName(title);
     setSelectDisDetails(data);
   };
 
@@ -150,7 +149,11 @@ const VisitData = ({
     );
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `dbservice/hccdisease/icd10mappingForDisease?year=${patientDetailsResult?.result?.response?.dos}&diagnosisCode=${code}`
+        `dbservice/hccdisease/icd10mappingForDisease?year=${
+          patientDetailsResult?.result?.response?.dos
+            ? patientDetailsResult?.result?.response?.dos
+            : year.value
+        }&diagnosisCode=${code}`
     );
     if (response.data) {
       var value = [];
@@ -171,10 +174,6 @@ const VisitData = ({
       }
       setHccVersionDetails(value);
     }
-  };
-
-  const getPatientDetailsReload = async (patientId) => {
-    dispatch(getPatientDetailsResult(patientId));
   };
 
   const showErrorMessage = () => {
@@ -730,7 +729,7 @@ const VisitData = ({
         className="offcanvas-end"
         placement="end"
       >
-        <div className="offcanvas-header">
+        {/* <div className="offcanvas-header">
           <h5 className="modal-title" id="#gridSystemModal">
             Add Valid Code
           </h5>
@@ -751,6 +750,12 @@ const VisitData = ({
               />
             </div>
           </div>
+        </div> */}
+        <div className="p-4" style={{ overflowY: "scroll" }}>
+          <ManuallyAdd
+            handleCloseModal={handleCloseModal}
+            setIsFileFormShow={setIsModalOpenValid}
+          />
         </div>
       </Offcanvas>
 
@@ -770,4 +775,8 @@ const VisitData = ({
   );
 };
 
-export default VisitData;
+const enhancer = connect((state) => ({
+  patientDetailsResult: state?.patientDetails?.details?.patientResult,
+  hccFileDetails: state?.patientDetails?.details?.hccFileResult,
+}));
+export default enhancer(VisitData);

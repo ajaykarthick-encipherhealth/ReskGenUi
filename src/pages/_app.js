@@ -113,13 +113,19 @@ function MyApp({ Component, pageProps }) {
     //   router.replace("/_error");
     // }
   }, [showTerminal]);
+  const hideFooterPaths = [
+    "/admin/patients/details",
+    "/reviewer/patients/details",
+    "/supervisor/patients/details",
+  ];
+  const showFooter = !hideFooterPaths.includes(router.pathname);
 
   return (
     <PrimeReactProvider>
       <Provider store={store}>
         {showTerminal && <AICHAT openMsg={true} />}
         <Component {...pageProps} />
-        {showTerminal && <Footer />}
+        {showFooter && showTerminal && <Footer />}
       </Provider>
     </PrimeReactProvider>
   );

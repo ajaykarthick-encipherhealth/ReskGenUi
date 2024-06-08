@@ -1,0 +1,4877 @@
+{
+  "status": "SUCCESS",
+  "message": "Success!!",
+  "response": {
+    "id": "394bc0a7-e01d-4d1d-85c1-89a6065b4cf6",
+    "patientId": "eh-20203",
+    "patientName": "Essie A Steele",
+    "dateOfService": null,
+    "mrNumber": null,
+    "dob": null,
+    "gender": null,
+    "fileId": null,
+    "processedYear": 2023,
+    "processedStatus": null,
+    "processDate": null,
+    "patientRecordNotes": null,
+    "hccDiseases": [
+      {
+        "diagnosisCode": "E1140",
+        "actualDescription": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+        "dbDescription": "Type 2 diabetes mellitus with diabetic neuropathy, unspecified",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": false,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I252",
+        "actualDescription": "Old myocardial infarction",
+        "dbDescription": "Old myocardial infarction",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-07-14",
+          "2023-05-25",
+          "2023-09-24"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Old myocardial infarction",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Old MI (myocardial infarction)",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Old MI (myocardial infarction),",
+            "dateOfService": "2023-07-14"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Old MI (myocardial infarction)",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Old MI (myocardial infarction)",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Old MI (myocardial infarction)",
+            "dateOfService": "2023-09-24"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "E1142",
+        "actualDescription": "Diabetic peripheral neuropathy",
+        "dbDescription": "Type 2 diabetes mellitus with diabetic polyneuropathy",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Diabetic peripheral neuropathy",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Diabetic peripheral neuropathy",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Diabetic peripheral neuropathy",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Diabetic peripheral neuropathy,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["COMBO_CODE"],
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I110",
+        "actualDescription": "Hypertensive heart disease with congestive heart failure",
+        "dbDescription": "Hypertensive heart disease with heart failure",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Hypertensive heart disease with congestive heart failure",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Hypertensive heart disease with congestive heart failure",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Hypertensive heart disease with congestive heart failure",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Hypertensive heart disease with congestive heart failure",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Hypertensive heart disease with congestive heart failure,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["CHILDREN_EXPANDED"],
+        "isShow": false,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "E1122",
+        "actualDescription": "Diabetes with CKD (Type 2)",
+        "dbDescription": "Type 2 diabetes mellitus with diabetic chronic kidney disease",
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-01-16", "2023-05-25", "2023-10-08"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 35,
+            "substring": "Diabetes with CKD (Type 2)",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 26,
+            "substring": "5. Diabetes with CKD (Type 2) -",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 7,
+            "substring": "3. Diabetes with CKD (Type 2) -",
+            "dateOfService": "2023-10-08"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Paul Kilpatrick, PA"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["COMBO_CODE"],
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I5030",
+        "actualDescription": "Unspecified diastolic heart failure",
+        "dbDescription": "Unspecified diastolic (congestive) heart failure",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Unspecified diastolic heart failure",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Unspecified diastolic heart failure",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Unspecified diastolic heart failure",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Unspecified diastolic heart failure",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Unspecified diastolic heart failure,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I129",
+        "actualDescription": "Hypertensive CKD Stage 1-4 or uns stage",
+        "dbDescription": "Hypertensive chronic kidney disease with stage 1 through stage 4 chronic kidney disease, or unspecified chronic kidney disease",
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-10-08"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 7,
+            "substring": "8. Hypertensive CKD Stage 1-4 or uns stage -",
+            "dateOfService": "2023-10-08"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Paul Kilpatrick, PA"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["CHILDREN_EXPANDED"],
+        "isShow": false,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "E039",
+        "actualDescription": "Hypothyroidism",
+        "dbDescription": "Hypothyroidism, unspecified",
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-10-08",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 35,
+            "substring": "Hypothyroidism",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Hypothyroidism",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 18,
+            "substring": "Hypothyroidism",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 26,
+            "substring": "4. Hypothyroidism -",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Hypothyroidism",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 7,
+            "substring": "2. Hypothyroidism -",
+            "dateOfService": "2023-10-08"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Hypothyroidism,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I259",
+        "actualDescription": "Chronic ischemic heart disease, unspecified",
+        "dbDescription": "Chronic ischemic heart disease, unspecified",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Chronic ischemic heart disease, unspecified",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Chronic ischemic heart disease, unspecified",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Chronic ischemic heart disease, unspecified",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Chronic ischemic heart disease, unspecified",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Chronic ischemic heart disease, unspecified,",
+            "dateOfService": "2023-07-14"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Ischemic heart disease, chronic (IHD)",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Ischemic heart disease, chronic (IHD)",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Ischemic heart disease, chronic (IHD)",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Ischemic heart disease, chronic (IHD)",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Ischemic heart disease, chronic (IHD),",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "K219",
+        "actualDescription": "GERD",
+        "dbDescription": "Gastro-esophageal reflux disease without esophagitis",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-09-24",
+          "2023-07-14",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-10-08"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "GERD",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "GERD",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "GERD,",
+            "dateOfService": "2023-07-14"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "GERD",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 18,
+            "substring": "Gastroesophageal reflux disease without esophagitis",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 26,
+            "substring": "9. Gastroesophageal reflux disease without esophagitis -",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 7,
+            "substring": "11. Gastroesophageal reflux disease without esophagitis -",
+            "dateOfService": "2023-10-08"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "J45991",
+        "actualDescription": "Cough variant asthma",
+        "dbDescription": "Cough variant asthma",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Cough variant asthma",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Cough variant asthma",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Cough variant asthma",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Cough variant asthma",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Cough variant asthma,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "J449",
+        "actualDescription": "Chronic obstructive pulmonary disease, unspecified",
+        "dbDescription": "Chronic obstructive pulmonary disease, unspecified",
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-05-25",
+          "2023-06-21",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 35,
+            "substring": "Chronic obstructive pulmonary disease, unspecified",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 26,
+            "substring": "1. Chronic obstructive pulmonary disease, unspecified - (Primary)",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Chronic obstructive asthma, unspecified",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "COPD, Chronic obstructive asthma, unspecified",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "COPD, Chronic obstructive asthma, unspecified",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "COPD, Chronic obstructive asthma, unspecified,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["COMBO_CODE"],
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "F339",
+        "actualDescription": "Major depressive disorder, recurrent episode, unspecified",
+        "dbDescription": "Major depressive disorder, recurrent, unspecified",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": ["2023-05-25", "2023-09-24", "2023-07-14"],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Major depressive disorder, recurrent episode, unspecified",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Major depressive disorder, recurrent episode, unspecified",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Major depressive disorder, recurrent episode, unspecified,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": false,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "F331",
+        "actualDescription": "Major depression, recurrent, moderate",
+        "dbDescription": "Major depressive disorder, recurrent, moderate",
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-01-16", "2023-06-21", "2023-10-08"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 35,
+            "substring": "Major depression, recurrent, moderate",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Major depressive disorder, recurrent episode, unspecified",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 18,
+            "substring": "Major depression, recurrent, moderate",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 7,
+            "substring": "1. Major depression, recurrent, moderate - (Primary)",
+            "dateOfService": "2023-10-08"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Paul Kilpatrick, PA"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "E139",
+        "actualDescription": "Other specified diabetes mellitus without complications",
+        "dbDescription": "Other specified diabetes mellitus without complications",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Other specified diabetes mellitus without complications",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Other specified diabetes mellitus without complications",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Other specified diabetes mellitus without complications",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Other specified diabetes mellitus without complications",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Other specified diabetes mellitus without complications,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": false,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I10",
+        "actualDescription": "Hypertension, Unsp (HTN)",
+        "dbDescription": "Essential (primary) hypertension",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14",
+          "2023-01-16"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Hypertension, Unsp (HTN)",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Hypertension, Unsp (HTN)",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Hypertension, Unsp (HTN)",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Hypertension, Unsp (HTN),",
+            "dateOfService": "2023-07-14"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Unspecified essential hypertension",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Unspecified essential hypertension",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Unspecified essential hypertension",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Essential (primary) hypertension",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Essential (primary) hypertension",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Essential (primary) hypertension",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Essential (primary) hypertension",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Essential (primary) hypertension,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": false,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "G63",
+        "actualDescription": "Peripheral Neuropathy in diseases classified elsewhere",
+        "dbDescription": "Polyneuropathy in diseases classified elsewhere",
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-01-16"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 35,
+            "substring": "Peripheral Neuropathy in diseases classified elsewhere",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Paul Kilpatrick, PA"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["COMBO_CODE"],
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I700",
+        "actualDescription": "Atherosclerosis of aorta",
+        "dbDescription": "Atherosclerosis of aorta",
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 35,
+            "substring": "Atherosclerosis of aorta",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Atherosclerosis of aorta",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 26,
+            "substring": "3. Atherosclerosis of aorta -",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Atherosclerosis of aorta",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Atherosclerosis of aorta,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I1310",
+        "actualDescription": "Hypertensive heart and chronic kidney disease without heart failure, with stage 1 through stage 4 chronic kidney disease, or unspecified chronic kidney disease",
+        "dbDescription": "Hypertensive heart and chronic kidney disease without heart failure, with stage 1 through stage 4 chronic kidney disease, or unspecified chronic kidney disease",
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-01-16"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 35,
+            "substring": "Hypertensive heart and chronic kidney disease without heart failure, with stage 1 through stage 4 chronic kidney disease, or unspecified chronic kidney disease",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Paul Kilpatrick, PA"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["CHILDREN_EXPANDED"],
+        "isShow": false,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": false
+        }
+      }
+    ],
+    "nonHccDiseases": [
+      {
+        "diagnosisCode": "M1990",
+        "actualDescription": "Osteoarthrosis, unsp site (DJD)",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Osteoarthrosis, unsp site (DJD)",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Osteoarthrosis, unsp site (DJD)",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Osteoarthrosis, unsp site (DJD)",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Osteoarthrosis, unsp site (DJD)",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Osteoarthrosis, unsp site (DJD),",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "UNMATCHED_DISEASE",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "Z23",
+        "actualDescription": "Encounter for administration of vaccine",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-10-08"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 7,
+            "substring": "9. Encounter for administration of vaccine -",
+            "dateOfService": "2023-10-08"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Paul Kilpatrick, PA"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "UNMATCHED_DISEASE",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "R609",
+        "actualDescription": "Pedal edema",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-05-25", "2023-07-14"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 26,
+            "substring": "2. Pedal edema -",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 15,
+            "substring": "2. Lower extremity edema -",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Sarah Bou Nader, MD", "Paul Kilpatrick, PA"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "UNMATCHED_DISEASE",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "M159",
+        "actualDescription": "Polyosteoarthritis, unspecified",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Polyosteoarthritis, unspecified",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Polyosteoarthritis, unspecified",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Polyosteoarthritis, unspecified",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Polyosteoarthritis, unspecified",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Polyosteoarthritis, unspecified,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "UNMATCHED_DISEASE",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "M419",
+        "actualDescription": "Scoliosis (and kyphoscoliosis), idiopathic",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Scoliosis (and kyphoscoliosis), idiopathic",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Scoliosis (and kyphoscoliosis), idiopathic",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Scoliosis (and kyphoscoliosis), idiopathic",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Scoliosis (and kyphoscoliosis), idiopathic",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Scoliosis (and kyphoscoliosis), idiopathic,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "UNMATCHED_DISEASE",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "E780",
+        "actualDescription": "Hypercholesterolemia",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14",
+          "2023-01-16",
+          "2023-10-08"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Hypercholesterolemia",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Hypercholesterolemia",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Hypercholesterolemia",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Hypercholesterolemia,",
+            "dateOfService": "2023-07-14"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 35,
+            "substring": "Hypercholesteremia",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 26,
+            "substring": "7. Hypercholesteremia -",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 7,
+            "substring": "4. Hypercholesteremia -",
+            "dateOfService": "2023-10-08"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "UNMATCHED_DISEASE",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "M545",
+        "actualDescription": "Back arthralgia",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-07-14"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 15,
+            "substring": "1. Back arthralgia - (Primary)",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Sarah Bou Nader, MD"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "UNMATCHED_DISEASE",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "M54",
+        "actualDescription": "Dorsalgia",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-06-21"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 18,
+            "substring": "Dorsalgia",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Paul Kilpatrick, PA"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "UNMATCHED_DISEASE",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "C4479",
+        "actualDescription": "Squamous cell skin cancer, multiple sites",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-09-24", "2023-10-08"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 12,
+            "substring": "Squamous cell skin cancer, multiple sites - (Primary)",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 7,
+            "substring": "12. Squamous cell skin cancer, multiple sites -",
+            "dateOfService": "2023-10-08"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Paul Kilpatrick, PA", "Aurindom Narayan, M.D."],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "UNMATCHED_DISEASE",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "L813",
+        "actualDescription": "Senile purpura",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 35,
+            "substring": "Senile purpura",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Senile purpura",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Senile purpura",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Senile purpura",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Senile purpura,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "UNMATCHED_DISEASE",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "R52",
+        "actualDescription": "Pain",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Subjective", "Screenings"],
+        "dateOfServices": ["2023-09-24"],
+        "hyperlinks": [
+          {
+            "header": "Subjective",
+            "pageNumber": 10,
+            "substring": "Pt is in Pain.",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Screenings",
+            "pageNumber": 12,
+            "substring": "PAIN ASSESSMENT Are you experiencing pain? Yes",
+            "dateOfService": "2023-09-24"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Aurindom Narayan, M.D."],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "UNMATCHED_DISEASE",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "E55",
+        "actualDescription": "Vitamin D deficiency",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-10-08",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 35,
+            "substring": "Vitamin D deficiency",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Vitamin D deficiency",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 26,
+            "substring": "8. Vitamin D deficiency -",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Vitamin D deficiency",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 7,
+            "substring": "5. Vitamin D deficiency -",
+            "dateOfService": "2023-10-08"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Vitamin D deficiency,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "UNMATCHED_DISEASE",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "F419",
+        "actualDescription": "Chronic anxiety",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-10-08"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 7,
+            "substring": "7. Chronic anxiety -",
+            "dateOfService": "2023-10-08"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Paul Kilpatrick, PA"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "UNMATCHED_DISEASE",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "Z6832",
+        "actualDescription": "BMI 32.0-32.9,adult",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-10-08"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 7,
+            "substring": "13. BMI 32.0-32.9,adult -",
+            "dateOfService": "2023-10-08"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Paul Kilpatrick, PA"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "UNMATCHED_DISEASE",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "Z6834",
+        "actualDescription": "BMI 34.0-34.9, adult",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-09-24", "2023-07-14"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 12,
+            "substring": "BMI 34.0-34.9,adult - .",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 15,
+            "substring": "3. Body mass index (BMI) 34.0-34.9, adult - .",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Sarah Bou Nader, MD", "Aurindom Narayan, M.D."],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "UNMATCHED_DISEASE",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "M609",
+        "actualDescription": "Myalgia and myositis, unsp",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Myalgia and myositis, unsp",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Myalgia and myositis, unsp",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Myalgia and myositis, unsp",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Myalgia and myositis, unsp",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Myalgia and myositis, unsp,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "UNMATCHED_DISEASE",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "Z6836",
+        "actualDescription": "BMI 36.0-36.9, adult",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-06-21"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 18,
+            "substring": "BMI 36.0-36.9,adult",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Paul Kilpatrick, PA"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "UNMATCHED_DISEASE",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "Z6835",
+        "actualDescription": "BMI 35.0-35.9,adult",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-05-25"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 26,
+            "substring": "10. BMI 35.0-35.9,adult -",
+            "dateOfService": "2023-05-25"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Paul Kilpatrick, PA"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "UNMATCHED_DISEASE",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "E569",
+        "actualDescription": "Vitamin deficiency",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": ["2023-05-25"],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Vitamin deficiency",
+            "dateOfService": "2023-05-25"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Paul Kilpatrick, PA"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "UNMATCHED_DISEASE",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "N183",
+        "actualDescription": "CKD, stage 3a (eGFR between 45 and 59)",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-05-25", "2023-10-08"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 26,
+            "substring": "6. CKD, stage 3a (eGFR between 45 and 59) -",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 7,
+            "substring": "6. CKD, stage 3a (eGFR between 45 and 59) -",
+            "dateOfService": "2023-10-08"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Paul Kilpatrick, PA"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "UNMATCHED_DISEASE",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I5189",
+        "actualDescription": "Diastolic dysfunction",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Diastolic dysfunction",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Diastolic dysfunction",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Diastolic dysfunction",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Diastolic dysfunction",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Diastolic dysfunction.",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "UNMATCHED_DISEASE",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "M5442",
+        "actualDescription": "Lumbago with sciatica, left side",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-10-08"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 7,
+            "substring": "10. Lumbago with sciatica, left side -",
+            "dateOfService": "2023-10-08"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Paul Kilpatrick, PA"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "UNMATCHED_DISEASE",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "E1359",
+        "actualDescription": "Other specified diabetes mellitus with other circulatory complications",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-07-14",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-06-21",
+          "2023-01-16"
+        ],
+        "hyperlinks": [],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["COMBO_CODE"],
+        "isShow": true,
+        "diseaseSource": "VALID_DISEASE",
+        "suspectType": ["HYPERLINK_MISSING"],
+        "diseaseAudit": {
+          "aiSources": [],
+          "codeSource": null,
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I130",
+        "actualDescription": "Hypertensive heart and chronic kidney disease with heart failure and stage 1 through stage 4 chronic kidney disease, or unspecified chronic kidney disease",
+        "dbDescription": null,
+        "notes": null,
+        "capturedSections": ["Assessment", "Medical History"],
+        "dateOfServices": [
+          "2023-07-14",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-10-08",
+          "2023-06-21",
+          "2023-01-16"
+        ],
+        "hyperlinks": [],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["COMBO_CODE"],
+        "isShow": true,
+        "diseaseSource": "VALID_DISEASE",
+        "suspectType": ["HYPERLINK_MISSING"],
+        "diseaseAudit": {
+          "aiSources": [],
+          "codeSource": null,
+          "directConfirmation": false
+        }
+      }
+    ],
+    "deletedDiseases": [
+      {
+        "diagnosisCode": "E1140",
+        "actualDescription": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+        "dbDescription": "Type 2 diabetes mellitus with diabetic neuropathy, unspecified",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": false,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I252",
+        "actualDescription": "Old myocardial infarction",
+        "dbDescription": "Old myocardial infarction",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-07-14",
+          "2023-05-25",
+          "2023-09-24"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Old myocardial infarction",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Old MI (myocardial infarction)",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Old MI (myocardial infarction),",
+            "dateOfService": "2023-07-14"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Old MI (myocardial infarction)",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Old MI (myocardial infarction)",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Old MI (myocardial infarction)",
+            "dateOfService": "2023-09-24"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "E1142",
+        "actualDescription": "Diabetic peripheral neuropathy",
+        "dbDescription": "Type 2 diabetes mellitus with diabetic polyneuropathy",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Diabetic peripheral neuropathy",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Diabetic peripheral neuropathy",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Diabetic peripheral neuropathy",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Diabetic peripheral neuropathy,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["COMBO_CODE"],
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I110",
+        "actualDescription": "Hypertensive heart disease with congestive heart failure",
+        "dbDescription": "Hypertensive heart disease with heart failure",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Hypertensive heart disease with congestive heart failure",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Hypertensive heart disease with congestive heart failure",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Hypertensive heart disease with congestive heart failure",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Hypertensive heart disease with congestive heart failure",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Hypertensive heart disease with congestive heart failure,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["CHILDREN_EXPANDED"],
+        "isShow": false,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "E1122",
+        "actualDescription": "Diabetes with CKD (Type 2)",
+        "dbDescription": "Type 2 diabetes mellitus with diabetic chronic kidney disease",
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-01-16", "2023-05-25", "2023-10-08"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 35,
+            "substring": "Diabetes with CKD (Type 2)",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 26,
+            "substring": "5. Diabetes with CKD (Type 2) -",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 7,
+            "substring": "3. Diabetes with CKD (Type 2) -",
+            "dateOfService": "2023-10-08"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Paul Kilpatrick, PA"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["COMBO_CODE"],
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I5030",
+        "actualDescription": "Unspecified diastolic heart failure",
+        "dbDescription": "Unspecified diastolic (congestive) heart failure",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Unspecified diastolic heart failure",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Unspecified diastolic heart failure",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Unspecified diastolic heart failure",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Unspecified diastolic heart failure",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Unspecified diastolic heart failure,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I129",
+        "actualDescription": "Hypertensive CKD Stage 1-4 or uns stage",
+        "dbDescription": "Hypertensive chronic kidney disease with stage 1 through stage 4 chronic kidney disease, or unspecified chronic kidney disease",
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-10-08"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 7,
+            "substring": "8. Hypertensive CKD Stage 1-4 or uns stage -",
+            "dateOfService": "2023-10-08"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Paul Kilpatrick, PA"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["CHILDREN_EXPANDED"],
+        "isShow": false,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      }
+    ],
+    "suggestedDisease": [
+      {
+        "diagnosisCode": "E1140",
+        "actualDescription": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+        "dbDescription": "Type 2 diabetes mellitus with diabetic neuropathy, unspecified",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": false,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I252",
+        "actualDescription": "Old myocardial infarction",
+        "dbDescription": "Old myocardial infarction",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-07-14",
+          "2023-05-25",
+          "2023-09-24"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Old myocardial infarction",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Old MI (myocardial infarction)",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Old MI (myocardial infarction),",
+            "dateOfService": "2023-07-14"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Old MI (myocardial infarction)",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Old MI (myocardial infarction)",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Old MI (myocardial infarction)",
+            "dateOfService": "2023-09-24"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "E1142",
+        "actualDescription": "Diabetic peripheral neuropathy",
+        "dbDescription": "Type 2 diabetes mellitus with diabetic polyneuropathy",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Diabetic peripheral neuropathy",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Diabetic peripheral neuropathy",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Diabetic peripheral neuropathy",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Diabetic peripheral neuropathy,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["COMBO_CODE"],
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "RULE_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I110",
+        "actualDescription": "Hypertensive heart disease with congestive heart failure",
+        "dbDescription": "Hypertensive heart disease with heart failure",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Hypertensive heart disease with congestive heart failure",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Hypertensive heart disease with congestive heart failure",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Hypertensive heart disease with congestive heart failure",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Hypertensive heart disease with congestive heart failure",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Hypertensive heart disease with congestive heart failure,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["CHILDREN_EXPANDED"],
+        "isShow": false,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "E1122",
+        "actualDescription": "Diabetes with CKD (Type 2)",
+        "dbDescription": "Type 2 diabetes mellitus with diabetic chronic kidney disease",
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-01-16", "2023-05-25", "2023-10-08"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 35,
+            "substring": "Diabetes with CKD (Type 2)",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 26,
+            "substring": "5. Diabetes with CKD (Type 2) -",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Assessment",
+            "pageNumber": 7,
+            "substring": "3. Diabetes with CKD (Type 2) -",
+            "dateOfService": "2023-10-08"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Paul Kilpatrick, PA"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["COMBO_CODE"],
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I5030",
+        "actualDescription": "Unspecified diastolic heart failure",
+        "dbDescription": "Unspecified diastolic (congestive) heart failure",
+        "notes": null,
+        "capturedSections": ["Medical History"],
+        "dateOfServices": [
+          "2023-01-16",
+          "2023-06-21",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-07-14"
+        ],
+        "hyperlinks": [
+          {
+            "header": "Medical History",
+            "pageNumber": 29,
+            "substring": "Unspecified diastolic heart failure",
+            "dateOfService": "2023-01-16"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Unspecified diastolic heart failure",
+            "dateOfService": "2023-06-21"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 20,
+            "substring": "Unspecified diastolic heart failure",
+            "dateOfService": "2023-05-25"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Unspecified diastolic heart failure",
+            "dateOfService": "2023-09-24"
+          },
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Unspecified diastolic heart failure,",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": null,
+        "isShow": true,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      },
+      {
+        "diagnosisCode": "I129",
+        "actualDescription": "Hypertensive CKD Stage 1-4 or uns stage",
+        "dbDescription": "Hypertensive chronic kidney disease with stage 1 through stage 4 chronic kidney disease, or unspecified chronic kidney disease",
+        "notes": null,
+        "capturedSections": ["Assessment"],
+        "dateOfServices": ["2023-10-08"],
+        "hyperlinks": [
+          {
+            "header": "Assessment",
+            "pageNumber": 7,
+            "substring": "8. Hypertensive CKD Stage 1-4 or uns stage -",
+            "dateOfService": "2023-10-08"
+          }
+        ],
+        "manuallyAddedDetails": null,
+        "defaultPosition": null,
+        "actionEventAuditId": null,
+        "providerNames": ["Paul Kilpatrick, PA"],
+        "formedCodes": [],
+        "children": [],
+        "stateIndicators": ["CHILDREN_EXPANDED"],
+        "isShow": false,
+        "diseaseSource": "HCC_DISEASES",
+        "suspectType": [],
+        "diseaseAudit": {
+          "aiSources": ["COGG_4_TURBO_1106"],
+          "codeSource": "AI_ENGINE",
+          "directConfirmation": false
+        }
+      }
+    ],
+    "comboDisease": [
+      {
+        "diseaseName": "Other specified diabetes mellitus with other circulatory complications",
+        "diagnosisCodeCombo": "E1359",
+        "addOnCode": null,
+        "addOnCodeTwo": null,
+        "addOnCodeThree": null,
+        "capturedSections": ["Medical History"],
+        "providers": null,
+        "encounterDate": null,
+        "formedCodes": ["E139", "I10"],
+        "expanded": null,
+        "children": [
+          {
+            "diagnosisCode": "E139",
+            "actualDescription": "Other specified diabetes mellitus without complications",
+            "dbDescription": "Other specified diabetes mellitus without complications",
+            "providerNames": [
+              "Sarah Bou Nader, MD",
+              "Paul Kilpatrick, PA",
+              "Aurindom Narayan, M.D."
+            ],
+            "capturedSections": ["Medical History"],
+            "dateOfServices": [
+              "2023-01-16T18:30:00.000+00:00",
+              "2023-06-21T18:30:00.000+00:00",
+              "2023-05-25T18:30:00.000+00:00",
+              "2023-09-24T18:30:00.000+00:00",
+              "2023-07-14T18:30:00.000+00:00"
+            ],
+            "hyperlinks": [
+              {
+                "header": "Medical History",
+                "pageNumber": 29,
+                "substring": "Other specified diabetes mellitus without complications",
+                "dateOfService": "2023-01-16T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 16,
+                "substring": "Other specified diabetes mellitus without complications",
+                "dateOfService": "2023-06-21T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 20,
+                "substring": "Other specified diabetes mellitus without complications",
+                "dateOfService": "2023-05-25T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 10,
+                "substring": "Other specified diabetes mellitus without complications",
+                "dateOfService": "2023-09-24T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 13,
+                "substring": "Other specified diabetes mellitus without complications,",
+                "dateOfService": "2023-07-14T18:30:00.000+00:00"
+              }
+            ],
+            "diseaseSource": "HCC_DISEASES",
+            "suspectType": [],
+            "isShow": false,
+            "uniqueIds": [100041, 100098, 100071, 100115, 100022],
+            "diseaseAudit": {
+              "aiSources": ["COGG_4_TURBO_1106"],
+              "codeSource": "RULE_ENGINE",
+              "directConfirmation": false
+            }
+          },
+          {
+            "diagnosisCode": "I10",
+            "actualDescription": "Hypertension, Unsp (HTN)",
+            "dbDescription": "Essential (primary) hypertension",
+            "providerNames": [
+              "Sarah Bou Nader, MD",
+              "Paul Kilpatrick, PA",
+              "Aurindom Narayan, M.D."
+            ],
+            "capturedSections": ["Medical History"],
+            "dateOfServices": [
+              "2023-06-21T18:30:00.000+00:00",
+              "2023-05-25T18:30:00.000+00:00",
+              "2023-09-24T18:30:00.000+00:00",
+              "2023-07-14T18:30:00.000+00:00",
+              "2023-01-16T18:30:00.000+00:00"
+            ],
+            "hyperlinks": [
+              {
+                "header": "Medical History",
+                "pageNumber": 16,
+                "substring": "Hypertension, Unsp (HTN)",
+                "dateOfService": "2023-06-21T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 20,
+                "substring": "Hypertension, Unsp (HTN)",
+                "dateOfService": "2023-05-25T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 10,
+                "substring": "Hypertension, Unsp (HTN)",
+                "dateOfService": "2023-09-24T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 13,
+                "substring": "Hypertension, Unsp (HTN),",
+                "dateOfService": "2023-07-14T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 29,
+                "substring": "Unspecified essential hypertension",
+                "dateOfService": "2023-01-16T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 20,
+                "substring": "Unspecified essential hypertension",
+                "dateOfService": "2023-05-25T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 10,
+                "substring": "Unspecified essential hypertension",
+                "dateOfService": "2023-09-24T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 29,
+                "substring": "Essential (primary) hypertension",
+                "dateOfService": "2023-01-16T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 16,
+                "substring": "Essential (primary) hypertension",
+                "dateOfService": "2023-06-21T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 20,
+                "substring": "Essential (primary) hypertension",
+                "dateOfService": "2023-05-25T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 10,
+                "substring": "Essential (primary) hypertension",
+                "dateOfService": "2023-09-24T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 13,
+                "substring": "Essential (primary) hypertension,",
+                "dateOfService": "2023-07-14T18:30:00.000+00:00"
+              }
+            ],
+            "diseaseSource": "HCC_DISEASES",
+            "suspectType": [],
+            "isShow": false,
+            "uniqueIds": [
+              100091, 100059, 100126, 100005, 100029, 100056, 100112, 100037,
+              100096, 100067, 100127, 100025
+            ],
+            "diseaseAudit": {
+              "aiSources": ["COGG_4_TURBO_1106"],
+              "codeSource": "AI_ENGINE",
+              "directConfirmation": false
+            }
+          }
+        ],
+        "ruleType": null
+      },
+      {
+        "diseaseName": "Diabetic peripheral neuropathy",
+        "diagnosisCodeCombo": "E1142",
+        "addOnCode": null,
+        "addOnCodeTwo": null,
+        "addOnCodeThree": null,
+        "capturedSections": ["Medical History"],
+        "providers": null,
+        "encounterDate": null,
+        "formedCodes": null,
+        "expanded": null,
+        "children": null,
+        "ruleType": null
+      },
+      {
+        "diseaseName": "Hypertensive heart and chronic kidney disease with heart failure and stage 1 through stage 4 chronic kidney disease, or unspecified chronic kidney disease",
+        "diagnosisCodeCombo": "I130",
+        "addOnCode": "I5030",
+        "addOnCodeTwo": null,
+        "addOnCodeThree": null,
+        "capturedSections": ["Assessment", "Medical History"],
+        "providers": null,
+        "encounterDate": null,
+        "formedCodes": ["I110", "I129"],
+        "expanded": null,
+        "children": [
+          {
+            "diseaseName": "Hypertensive heart disease with heart failure",
+            "diagnosisCodeCombo": "I110",
+            "addOnCode": "I5030",
+            "ruleType": "COMBINATION_RULE_ENGINE",
+            "dateOfServices": [
+              "2023-07-14T18:30:00.000+00:00",
+              "2023-05-25T18:30:00.000+00:00",
+              "2023-09-24T18:30:00.000+00:00",
+              "2023-06-21T18:30:00.000+00:00",
+              "2023-01-16T18:30:00.000+00:00"
+            ],
+            "hyperlinks": [
+              {
+                "header": "Medical History",
+                "pageNumber": 29,
+                "substring": "Unspecified diastolic heart failure",
+                "dateOfService": "2023-01-16T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 16,
+                "substring": "Unspecified diastolic heart failure",
+                "dateOfService": "2023-06-21T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 20,
+                "substring": "Unspecified diastolic heart failure",
+                "dateOfService": "2023-05-25T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 10,
+                "substring": "Unspecified diastolic heart failure",
+                "dateOfService": "2023-09-24T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 13,
+                "substring": "Unspecified diastolic heart failure,",
+                "dateOfService": "2023-07-14T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 16,
+                "substring": "Hypertension, Unsp (HTN)",
+                "dateOfService": "2023-06-21T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 20,
+                "substring": "Hypertension, Unsp (HTN)",
+                "dateOfService": "2023-05-25T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 10,
+                "substring": "Hypertension, Unsp (HTN)",
+                "dateOfService": "2023-09-24T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 13,
+                "substring": "Hypertension, Unsp (HTN),",
+                "dateOfService": "2023-07-14T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 29,
+                "substring": "Unspecified essential hypertension",
+                "dateOfService": "2023-01-16T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 20,
+                "substring": "Unspecified essential hypertension",
+                "dateOfService": "2023-05-25T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 10,
+                "substring": "Unspecified essential hypertension",
+                "dateOfService": "2023-09-24T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 29,
+                "substring": "Essential (primary) hypertension",
+                "dateOfService": "2023-01-16T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 16,
+                "substring": "Essential (primary) hypertension",
+                "dateOfService": "2023-06-21T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 20,
+                "substring": "Essential (primary) hypertension",
+                "dateOfService": "2023-05-25T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 10,
+                "substring": "Essential (primary) hypertension",
+                "dateOfService": "2023-09-24T18:30:00.000+00:00"
+              },
+              {
+                "header": "Medical History",
+                "pageNumber": 13,
+                "substring": "Essential (primary) hypertension,",
+                "dateOfService": "2023-07-14T18:30:00.000+00:00"
+              }
+            ],
+            "providerNames": [
+              "Sarah Bou Nader, MD",
+              "Paul Kilpatrick, PA",
+              "Aurindom Narayan, M.D."
+            ],
+            "capturedSections": ["Medical History"],
+            "formedCodes": ["I10", "I5030"],
+            "children": [
+              {
+                "diagnosisCode": "I10",
+                "actualDescription": "Hypertension, Unsp (HTN)",
+                "dbDescription": "Essential (primary) hypertension",
+                "providerNames": [
+                  "Sarah Bou Nader, MD",
+                  "Paul Kilpatrick, PA",
+                  "Aurindom Narayan, M.D."
+                ],
+                "capturedSections": ["Medical History"],
+                "dateOfServices": [
+                  "2023-06-21T18:30:00.000+00:00",
+                  "2023-05-25T18:30:00.000+00:00",
+                  "2023-09-24T18:30:00.000+00:00",
+                  "2023-07-14T18:30:00.000+00:00",
+                  "2023-01-16T18:30:00.000+00:00"
+                ],
+                "hyperlinks": [
+                  {
+                    "header": "Medical History",
+                    "pageNumber": 16,
+                    "substring": "Hypertension, Unsp (HTN)",
+                    "dateOfService": "2023-06-21T18:30:00.000+00:00"
+                  },
+                  {
+                    "header": "Medical History",
+                    "pageNumber": 20,
+                    "substring": "Hypertension, Unsp (HTN)",
+                    "dateOfService": "2023-05-25T18:30:00.000+00:00"
+                  },
+                  {
+                    "header": "Medical History",
+                    "pageNumber": 10,
+                    "substring": "Hypertension, Unsp (HTN)",
+                    "dateOfService": "2023-09-24T18:30:00.000+00:00"
+                  },
+                  {
+                    "header": "Medical History",
+                    "pageNumber": 13,
+                    "substring": "Hypertension, Unsp (HTN),",
+                    "dateOfService": "2023-07-14T18:30:00.000+00:00"
+                  },
+                  {
+                    "header": "Medical History",
+                    "pageNumber": 29,
+                    "substring": "Unspecified essential hypertension",
+                    "dateOfService": "2023-01-16T18:30:00.000+00:00"
+                  },
+                  {
+                    "header": "Medical History",
+                    "pageNumber": 20,
+                    "substring": "Unspecified essential hypertension",
+                    "dateOfService": "2023-05-25T18:30:00.000+00:00"
+                  },
+                  {
+                    "header": "Medical History",
+                    "pageNumber": 10,
+                    "substring": "Unspecified essential hypertension",
+                    "dateOfService": "2023-09-24T18:30:00.000+00:00"
+                  },
+                  {
+                    "header": "Medical History",
+                    "pageNumber": 29,
+                    "substring": "Essential (primary) hypertension",
+                    "dateOfService": "2023-01-16T18:30:00.000+00:00"
+                  },
+                  {
+                    "header": "Medical History",
+                    "pageNumber": 16,
+                    "substring": "Essential (primary) hypertension",
+                    "dateOfService": "2023-06-21T18:30:00.000+00:00"
+                  },
+                  {
+                    "header": "Medical History",
+                    "pageNumber": 20,
+                    "substring": "Essential (primary) hypertension",
+                    "dateOfService": "2023-05-25T18:30:00.000+00:00"
+                  },
+                  {
+                    "header": "Medical History",
+                    "pageNumber": 10,
+                    "substring": "Essential (primary) hypertension",
+                    "dateOfService": "2023-09-24T18:30:00.000+00:00"
+                  },
+                  {
+                    "header": "Medical History",
+                    "pageNumber": 13,
+                    "substring": "Essential (primary) hypertension,",
+                    "dateOfService": "2023-07-14T18:30:00.000+00:00"
+                  }
+                ],
+                "diseaseSource": "HCC_DISEASES",
+                "suspectType": [],
+                "isShow": false,
+                "uniqueIds": [
+                  100091, 100059, 100126, 100005, 100029, 100056, 100112,
+                  100037, 100096, 100067, 100127, 100025
+                ],
+                "diseaseAudit": {
+                  "aiSources": ["COGG_4_TURBO_1106"],
+                  "codeSource": "AI_ENGINE",
+                  "directConfirmation": false
+                }
+              },
+              {
+                "diagnosisCode": "I5030",
+                "actualDescription": "Unspecified diastolic heart failure",
+                "dbDescription": "Unspecified diastolic (congestive) heart failure",
+                "providerNames": [
+                  "Sarah Bou Nader, MD",
+                  "Paul Kilpatrick, PA",
+                  "Aurindom Narayan, M.D."
+                ],
+                "capturedSections": ["Medical History"],
+                "dateOfServices": [
+                  "2023-01-16T18:30:00.000+00:00",
+                  "2023-06-21T18:30:00.000+00:00",
+                  "2023-05-25T18:30:00.000+00:00",
+                  "2023-09-24T18:30:00.000+00:00",
+                  "2023-07-14T18:30:00.000+00:00"
+                ],
+                "hyperlinks": [
+                  {
+                    "header": "Medical History",
+                    "pageNumber": 29,
+                    "substring": "Unspecified diastolic heart failure",
+                    "dateOfService": "2023-01-16T18:30:00.000+00:00"
+                  },
+                  {
+                    "header": "Medical History",
+                    "pageNumber": 16,
+                    "substring": "Unspecified diastolic heart failure",
+                    "dateOfService": "2023-06-21T18:30:00.000+00:00"
+                  },
+                  {
+                    "header": "Medical History",
+                    "pageNumber": 20,
+                    "substring": "Unspecified diastolic heart failure",
+                    "dateOfService": "2023-05-25T18:30:00.000+00:00"
+                  },
+                  {
+                    "header": "Medical History",
+                    "pageNumber": 10,
+                    "substring": "Unspecified diastolic heart failure",
+                    "dateOfService": "2023-09-24T18:30:00.000+00:00"
+                  },
+                  {
+                    "header": "Medical History",
+                    "pageNumber": 13,
+                    "substring": "Unspecified diastolic heart failure,",
+                    "dateOfService": "2023-07-14T18:30:00.000+00:00"
+                  }
+                ],
+                "diseaseSource": "HCC_DISEASES",
+                "suspectType": [],
+                "uniqueIds": [100027, 100086, 100054, 100119, 100000],
+                "diseaseAudit": {
+                  "aiSources": ["COGG_4_TURBO_1106"],
+                  "codeSource": "AI_ENGINE",
+                  "directConfirmation": false
+                }
+              }
+            ]
+          },
+          {
+            "diseaseName": "Hypertensive CKD Stage 1-4 or uns stage",
+            "diagnosisCodeCombo": "I129",
+            "ruleType": "DIRECT_COMBINATION_RULE_ENGINE",
+            "dateOfServices": ["2023-10-08T18:30:00.000+00:00"],
+            "hyperlinks": [
+              {
+                "header": "Assessment",
+                "pageNumber": 7,
+                "substring": "8. Hypertensive CKD Stage 1-4 or uns stage -",
+                "dateOfService": "2023-10-08T18:30:00.000+00:00"
+              }
+            ],
+            "providerNames": ["Paul Kilpatrick, PA"],
+            "capturedSections": ["Assessment"]
+          }
+        ],
+        "ruleType": null
+      },
+      {
+        "diseaseName": "Diabetes with CKD (Type 2)",
+        "diagnosisCodeCombo": "E1122",
+        "addOnCode": null,
+        "addOnCodeTwo": null,
+        "addOnCodeThree": null,
+        "capturedSections": ["Assessment"],
+        "providers": null,
+        "encounterDate": null,
+        "formedCodes": null,
+        "expanded": null,
+        "children": null,
+        "ruleType": null
+      },
+      {
+        "diseaseName": "Chronic obstructive pulmonary disease, unspecified",
+        "diagnosisCodeCombo": "J449",
+        "addOnCode": null,
+        "addOnCodeTwo": null,
+        "addOnCodeThree": null,
+        "capturedSections": ["Assessment"],
+        "providers": null,
+        "encounterDate": null,
+        "formedCodes": null,
+        "expanded": null,
+        "children": null,
+        "ruleType": null
+      },
+      {
+        "diseaseName": "Peripheral Neuropathy in diseases classified elsewhere",
+        "diagnosisCodeCombo": "G63",
+        "addOnCode": null,
+        "addOnCodeTwo": null,
+        "addOnCodeThree": null,
+        "capturedSections": ["Assessment"],
+        "providers": null,
+        "encounterDate": null,
+        "formedCodes": null,
+        "expanded": null,
+        "children": null,
+        "ruleType": null
+      }
+    ],
+    "meatCriteria": [
+      {
+        "diseaseName": "Diabetic peripheral neuropathy",
+        "diagnosisCode": "E1142",
+        "providerNames": [],
+        "dateOfService": ["2023-06-21"],
+        "isMeatCriteriaPresent": true,
+        "monitorAspect": "Patient has a history of Diabetic peripheral neuropathy",
+        "monitorHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Diabetic peripheral neuropathy",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "evaluateAspect": "Patient has a history of Diabetic peripheral neuropathy",
+        "evaluateHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Diabetic peripheral neuropathy",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "assessmentAspect": "Patient has a history of Diabetic peripheral neuropathy",
+        "assessmentHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Diabetic peripheral neuropathy",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "treatmentAspect": "No specific treatment mentioned for Diabetic peripheral neuropathy",
+        "treatmentHyperLink": [
+          {
+            "header": "",
+            "pageNumber": 0,
+            "substring": "",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "isShow": true,
+        "encounterDate": null,
+        "radiology": null,
+        "lab": null,
+        "isManuallyAdded": null,
+        "manuallyAddedAt": null,
+        "visitDetailsDTO": null,
+        "monitorCapturedFromHeader": null,
+        "monitor": null,
+        "evaluateCapturedFromHeader": null,
+        "evaluate": null,
+        "assessmentCapturedFromHeader": null,
+        "assessment": null,
+        "treatmentCapturedFromHeader": null,
+        "treatment": null
+      },
+      {
+        "diseaseName": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+        "diagnosisCode": "E1140",
+        "providerNames": [],
+        "dateOfService": ["2023-06-21"],
+        "isMeatCriteriaPresent": true,
+        "monitorAspect": "Patient has a history of Diabetes with neurological manifestations",
+        "monitorHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "evaluateAspect": "Patient has a history of Diabetes with neurological manifestations",
+        "evaluateHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "assessmentAspect": "Patient has a history of Diabetes with neurological manifestations",
+        "assessmentHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "treatmentAspect": "No specific treatment mentioned for Diabetes with neurological manifestations",
+        "treatmentHyperLink": [
+          {
+            "header": "",
+            "pageNumber": 0,
+            "substring": "",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "isShow": true,
+        "encounterDate": null,
+        "radiology": null,
+        "lab": null,
+        "isManuallyAdded": null,
+        "manuallyAddedAt": null,
+        "visitDetailsDTO": null,
+        "monitorCapturedFromHeader": null,
+        "monitor": null,
+        "evaluateCapturedFromHeader": null,
+        "evaluate": null,
+        "assessmentCapturedFromHeader": null,
+        "assessment": null,
+        "treatmentCapturedFromHeader": null,
+        "treatment": null
+      },
+      {
+        "diseaseName": "Hypertensive heart and chronic kidney disease with heart failure and stage 1 through stage 4 chronic kidney disease, or unspecified chronic kidney disease",
+        "diagnosisCode": "I130",
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "dateOfService": [
+          "2023-07-14",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-10-08",
+          "2023-06-21",
+          "2023-01-16"
+        ],
+        "isMeatCriteriaPresent": true,
+        "monitorAspect": "mild decrease renal function, will monitor, avoid NSAIDS",
+        "monitorHyperLink": [
+          {
+            "header": "Notes",
+            "pageNumber": 34,
+            "substring": "mild decrease renal function, will monitor, avoid NSAIDS",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "evaluateAspect": "eGFR 54 L (Ref Range: >59 mL/min/1.73)",
+        "evaluateHyperLink": [
+          {
+            "header": "Lab:Comp. Metabolic Panel (14) (Labcorp)",
+            "pageNumber": 34,
+            "substring": "eGFR 54 L (Ref Range: >59 mL/min/1.73)",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "assessmentAspect": "Refill Metoprolol Tartrate Tablet, 25 MG, 1 tablet with food, Orally, Twice a day, 90 days, 180 Tablet, Refills 1; Refill Furosemide Tablet, 20 MG, 1 tablet, Orally, Once a day, 30 days, 30 Tablet, Refills 0, Notes: PRN",
+        "assessmentHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 36,
+            "substring": "Refill Metoprolol Tartrate Tablet, 25 MG, 1 tablet with food, Orally, Twice a day, 90 days, 180 Tablet, Refills 1; Refill Furosemide Tablet, 20 MG, 1 tablet, Orally, Once a day, 30 days, 30 Tablet, Refills 0, Notes: PRN",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "treatmentAspect": "Refill Metoprolol Tartrate Tablet, 25 MG, 1 tablet with food, Orally, Twice a day, 90 days, 180 Tablet, Refills 1; Refill Furosemide Tablet, 20 MG, 1 tablet, Orally, Once a day, 30 days, 30 Tablet, Refills 0, Notes: PRN",
+        "treatmentHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 36,
+            "substring": "Refill Metoprolol Tartrate Tablet, 25 MG, 1 tablet with food, Orally, Twice a day, 90 days, 180 Tablet, Refills 1; Refill Furosemide Tablet, 20 MG, 1 tablet, Orally, Once a day, 30 days, 30 Tablet, Refills 0, Notes: PRN",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "isShow": true,
+        "encounterDate": null,
+        "radiology": null,
+        "lab": null,
+        "isManuallyAdded": null,
+        "manuallyAddedAt": null,
+        "visitDetailsDTO": null,
+        "monitorCapturedFromHeader": null,
+        "monitor": null,
+        "evaluateCapturedFromHeader": null,
+        "evaluate": null,
+        "assessmentCapturedFromHeader": null,
+        "assessment": null,
+        "treatmentCapturedFromHeader": null,
+        "treatment": null
+      },
+      {
+        "diseaseName": "Peripheral Neuropathy in diseases classified elsewhere",
+        "diagnosisCode": "G63",
+        "providerNames": [],
+        "dateOfService": ["2023-01-16"],
+        "isMeatCriteriaPresent": true,
+        "monitorAspect": "Continue Gabapentin Capsule, 300 MG, 1 capsule, Orally, Three Times a day",
+        "monitorHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 36,
+            "substring": "Continue Gabapentin Capsule, 300 MG, 1 capsule, Orally, Three Times a day",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "evaluateAspect": "No specific evaluation mentioned",
+        "evaluateHyperLink": [
+          {
+            "header": "",
+            "pageNumber": 0,
+            "substring": "",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "assessmentAspect": "Continue Gabapentin Capsule, 300 MG, 1 capsule, Orally, Three Times a day",
+        "assessmentHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 36,
+            "substring": "Continue Gabapentin Capsule, 300 MG, 1 capsule, Orally, Three Times a day",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "treatmentAspect": "Continue Gabapentin Capsule, 300 MG, 1 capsule, Orally, Three Times a day",
+        "treatmentHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 36,
+            "substring": "Continue Gabapentin Capsule, 300 MG, 1 capsule, Orally, Three Times a day",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "isShow": true,
+        "encounterDate": null,
+        "radiology": null,
+        "lab": null,
+        "isManuallyAdded": null,
+        "manuallyAddedAt": null,
+        "visitDetailsDTO": null,
+        "monitorCapturedFromHeader": null,
+        "monitor": null,
+        "evaluateCapturedFromHeader": null,
+        "evaluate": null,
+        "assessmentCapturedFromHeader": null,
+        "assessment": null,
+        "treatmentCapturedFromHeader": null,
+        "treatment": null
+      },
+      {
+        "diseaseName": "Hypertensive heart disease with congestive heart failure",
+        "diagnosisCode": "I110",
+        "providerNames": [],
+        "dateOfService": ["2023-07-14"],
+        "isMeatCriteriaPresent": true,
+        "monitorAspect": "Patient has a history of Hypertensive heart disease with congestive heart failure",
+        "monitorHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Hypertensive heart disease with congestive heart failure",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "evaluateAspect": "",
+        "evaluateHyperLink": [
+          {
+            "header": "",
+            "pageNumber": 0,
+            "substring": "",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "assessmentAspect": "Patient has a history of Hypertensive heart disease with congestive heart failure",
+        "assessmentHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Hypertensive heart disease with congestive heart failure",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "treatmentAspect": "Patient is taking Furosemide 40 MG Tablet 1 tablet Orally Once a day, Notes: PRN",
+        "treatmentHyperLink": [
+          {
+            "header": "Medications",
+            "pageNumber": 13,
+            "substring": "Taking Furosemide 40 MG Tablet 1 tablet Orally Once a day, Notes: PRN",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "isShow": false,
+        "encounterDate": null,
+        "radiology": null,
+        "lab": null,
+        "isManuallyAdded": null,
+        "manuallyAddedAt": null,
+        "visitDetailsDTO": null,
+        "monitorCapturedFromHeader": null,
+        "monitor": null,
+        "evaluateCapturedFromHeader": null,
+        "evaluate": null,
+        "assessmentCapturedFromHeader": null,
+        "assessment": null,
+        "treatmentCapturedFromHeader": null,
+        "treatment": null
+      },
+      {
+        "diseaseName": "Diabetes with CKD (Type 2)",
+        "diagnosisCode": "E1122",
+        "providerNames": [],
+        "dateOfService": ["2023-01-16"],
+        "isMeatCriteriaPresent": true,
+        "monitorAspect": "Hemoglobin A1c 5.9 H (Ref Range: 4.8-5.6 %)",
+        "monitorHyperLink": [
+          {
+            "header": "Lab:Hemoglobin A1c (Labcorp)",
+            "pageNumber": 31,
+            "substring": "Hemoglobin A1c 5.9 H (Ref Range: 4.8-5.6 %)",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "evaluateAspect": "Glucose, Serum 112 H (Ref Range: 70-99 mg/dL)",
+        "evaluateHyperLink": [
+          {
+            "header": "Lab:Comp. Metabolic Panel (14) (Labcorp)",
+            "pageNumber": 34,
+            "substring": "Glucose, Serum 112 H (Ref Range: 70-99 mg/dL)",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "assessmentAspect": "LAB: Hemoglobin A1c (Labcorp) (Ordered for 05/17/2023)",
+        "assessmentHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 36,
+            "substring": "LAB: Hemoglobin A1c (Labcorp) (Ordered for 05/17/2023)",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "treatmentAspect": "LAB: Hemoglobin A1c (Labcorp) (Ordered for 05/17/2023)",
+        "treatmentHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 36,
+            "substring": "LAB: Hemoglobin A1c (Labcorp) (Ordered for 05/17/2023)",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "isShow": true,
+        "encounterDate": null,
+        "radiology": null,
+        "lab": null,
+        "isManuallyAdded": null,
+        "manuallyAddedAt": null,
+        "visitDetailsDTO": null,
+        "monitorCapturedFromHeader": null,
+        "monitor": null,
+        "evaluateCapturedFromHeader": null,
+        "evaluate": null,
+        "assessmentCapturedFromHeader": null,
+        "assessment": null,
+        "treatmentCapturedFromHeader": null,
+        "treatment": null
+      },
+      {
+        "diseaseName": "Old myocardial infarction",
+        "diagnosisCode": "I252",
+        "providerNames": [],
+        "dateOfService": ["2023-06-21"],
+        "isMeatCriteriaPresent": true,
+        "monitorAspect": "Patient has a history of Old myocardial infarction",
+        "monitorHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Old MI (myocardial infarction)",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "evaluateAspect": "Patient has a history of Old myocardial infarction",
+        "evaluateHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Old MI (myocardial infarction)",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "assessmentAspect": "Patient has a history of Old myocardial infarction",
+        "assessmentHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Old MI (myocardial infarction)",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "treatmentAspect": "No specific treatment mentioned for Old myocardial infarction",
+        "treatmentHyperLink": [
+          {
+            "header": "",
+            "pageNumber": 0,
+            "substring": "",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "isShow": true,
+        "encounterDate": null,
+        "radiology": null,
+        "lab": null,
+        "isManuallyAdded": null,
+        "manuallyAddedAt": null,
+        "visitDetailsDTO": null,
+        "monitorCapturedFromHeader": null,
+        "monitor": null,
+        "evaluateCapturedFromHeader": null,
+        "evaluate": null,
+        "assessmentCapturedFromHeader": null,
+        "assessment": null,
+        "treatmentCapturedFromHeader": null,
+        "treatment": null
+      },
+      {
+        "diseaseName": "Other specified diabetes mellitus with other circulatory complications",
+        "diagnosisCode": "E1359",
+        "providerNames": [
+          "Sarah Bou Nader, MD",
+          "Paul Kilpatrick, PA",
+          "Aurindom Narayan, M.D."
+        ],
+        "dateOfService": [
+          "2023-07-14",
+          "2023-05-25",
+          "2023-09-24",
+          "2023-06-21",
+          "2023-01-16"
+        ],
+        "isMeatCriteriaPresent": true,
+        "monitorAspect": "Patient has a history of Other specified diabetes mellitus without complications",
+        "monitorHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Other specified diabetes mellitus without complications",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "evaluateAspect": "Patient has a history of Hypertension, Unsp (HTN)",
+        "evaluateHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Hypertension, Unsp (HTN)",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "assessmentAspect": "Patient has a history of Other specified diabetes mellitus without complications",
+        "assessmentHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Other specified diabetes mellitus without complications",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "treatmentAspect": "No specific treatment mentioned for Hypertension, Unsp (HTN)",
+        "treatmentHyperLink": [
+          {
+            "header": "",
+            "pageNumber": 0,
+            "substring": "",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "isShow": true,
+        "encounterDate": null,
+        "radiology": null,
+        "lab": null,
+        "isManuallyAdded": null,
+        "manuallyAddedAt": null,
+        "visitDetailsDTO": null,
+        "monitorCapturedFromHeader": null,
+        "monitor": null,
+        "evaluateCapturedFromHeader": null,
+        "evaluate": null,
+        "assessmentCapturedFromHeader": null,
+        "assessment": null,
+        "treatmentCapturedFromHeader": null,
+        "treatment": null
+      },
+      {
+        "diseaseName": "Hypertension, Unsp (HTN)",
+        "diagnosisCode": "I10",
+        "providerNames": [],
+        "dateOfService": ["2023-06-21"],
+        "isMeatCriteriaPresent": true,
+        "monitorAspect": "Patient has a history of Hypertension, Unsp (HTN)",
+        "monitorHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Hypertension, Unsp (HTN)",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "evaluateAspect": "Patient has a history of Hypertension, Unsp (HTN)",
+        "evaluateHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Hypertension, Unsp (HTN)",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "assessmentAspect": "Patient has a history of Hypertension, Unsp (HTN)",
+        "assessmentHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Hypertension, Unsp (HTN)",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "treatmentAspect": "No specific treatment mentioned for Hypertension, Unsp (HTN)",
+        "treatmentHyperLink": [
+          {
+            "header": "",
+            "pageNumber": 0,
+            "substring": "",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "isShow": false,
+        "encounterDate": null,
+        "radiology": null,
+        "lab": null,
+        "isManuallyAdded": null,
+        "manuallyAddedAt": null,
+        "visitDetailsDTO": null,
+        "monitorCapturedFromHeader": null,
+        "monitor": null,
+        "evaluateCapturedFromHeader": null,
+        "evaluate": null,
+        "assessmentCapturedFromHeader": null,
+        "assessment": null,
+        "treatmentCapturedFromHeader": null,
+        "treatment": null
+      },
+      {
+        "diseaseName": "Major depression, recurrent, moderate",
+        "diagnosisCode": "F331",
+        "providerNames": [],
+        "dateOfService": ["2023-01-16"],
+        "isMeatCriteriaPresent": true,
+        "monitorAspect": "Patient denies chest pain, palpitations, or nausea",
+        "monitorHyperLink": [
+          {
+            "header": "HPI",
+            "pageNumber": 28,
+            "substring": "Patient denies chest pain, palpitations, or nausea",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "evaluateAspect": "Complains of depression",
+        "evaluateHyperLink": [
+          {
+            "header": "Established ROS",
+            "pageNumber": 29,
+            "substring": "Psychological: Complains of depression",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "assessmentAspect": "Continue Escitalopram Oxalate Tablet, 20 MG, 1 tablet in the morning, Orally, Once a day, Notes: E-Forcse Database Reviewed",
+        "assessmentHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 36,
+            "substring": "Continue Escitalopram Oxalate Tablet, 20 MG, 1 tablet in the morning, Orally, Once a day, Notes: E-Forcse Database Reviewed",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "treatmentAspect": "Continue Escitalopram Oxalate Tablet, 20 MG, 1 tablet in the morning, Orally, Once a day, Notes: E-Forcse Database Reviewed",
+        "treatmentHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 36,
+            "substring": "Continue Escitalopram Oxalate Tablet, 20 MG, 1 tablet in the morning, Orally, Once a day, Notes: E-Forcse Database Reviewed",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "isShow": false,
+        "encounterDate": null,
+        "radiology": null,
+        "lab": null,
+        "isManuallyAdded": null,
+        "manuallyAddedAt": null,
+        "visitDetailsDTO": null,
+        "monitorCapturedFromHeader": null,
+        "monitor": null,
+        "evaluateCapturedFromHeader": null,
+        "evaluate": null,
+        "assessmentCapturedFromHeader": null,
+        "assessment": null,
+        "treatmentCapturedFromHeader": null,
+        "treatment": null
+      },
+      {
+        "diseaseName": "Ischemic heart disease, chronic (IHD)",
+        "diagnosisCode": "I259",
+        "providerNames": [],
+        "dateOfService": ["2023-06-21"],
+        "isMeatCriteriaPresent": true,
+        "monitorAspect": "Patient has a history of Ischemic heart disease, chronic (IHD)",
+        "monitorHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Ischemic heart disease, chronic (IHD)",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "evaluateAspect": "Patient has a history of Ischemic heart disease, chronic (IHD)",
+        "evaluateHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Ischemic heart disease, chronic (IHD)",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "assessmentAspect": "Patient has a history of Ischemic heart disease, chronic (IHD)",
+        "assessmentHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Ischemic heart disease, chronic (IHD)",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "treatmentAspect": "No specific treatment mentioned for Ischemic heart disease, chronic (IHD)",
+        "treatmentHyperLink": [
+          {
+            "header": "",
+            "pageNumber": 0,
+            "substring": "",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "isShow": true,
+        "encounterDate": null,
+        "radiology": null,
+        "lab": null,
+        "isManuallyAdded": null,
+        "manuallyAddedAt": null,
+        "visitDetailsDTO": null,
+        "monitorCapturedFromHeader": null,
+        "monitor": null,
+        "evaluateCapturedFromHeader": null,
+        "evaluate": null,
+        "assessmentCapturedFromHeader": null,
+        "assessment": null,
+        "treatmentCapturedFromHeader": null,
+        "treatment": null
+      },
+      {
+        "diseaseName": "Atherosclerosis of aorta",
+        "diagnosisCode": "I700",
+        "providerNames": [],
+        "dateOfService": ["2023-01-16"],
+        "isMeatCriteriaPresent": true,
+        "monitorAspect": "Patient on a statin medication",
+        "monitorHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 36,
+            "substring": "Patient on a statin medication",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "evaluateAspect": "No specific evaluation mentioned",
+        "evaluateHyperLink": [
+          {
+            "header": "",
+            "pageNumber": 0,
+            "substring": "",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "assessmentAspect": "Patient on a statin medication",
+        "assessmentHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 36,
+            "substring": "Patient on a statin medication",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "treatmentAspect": "Patient on a statin medication",
+        "treatmentHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 36,
+            "substring": "Patient on a statin medication",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "isShow": true,
+        "encounterDate": null,
+        "radiology": null,
+        "lab": null,
+        "isManuallyAdded": null,
+        "manuallyAddedAt": null,
+        "visitDetailsDTO": null,
+        "monitorCapturedFromHeader": null,
+        "monitor": null,
+        "evaluateCapturedFromHeader": null,
+        "evaluate": null,
+        "assessmentCapturedFromHeader": null,
+        "assessment": null,
+        "treatmentCapturedFromHeader": null,
+        "treatment": null
+      },
+      {
+        "diseaseName": "Gastroesophageal reflux disease without esophagitis",
+        "diagnosisCode": "K219",
+        "providerNames": [],
+        "dateOfService": ["2023-06-21"],
+        "isMeatCriteriaPresent": true,
+        "monitorAspect": "Patient is taking Omeprazole for GERD",
+        "monitorHyperLink": [
+          {
+            "header": "Medications",
+            "pageNumber": 17,
+            "substring": "Taking Omeprazole 40 MG Tablet Delayed Release",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "evaluateAspect": "Patient is taking Omeprazole for GERD",
+        "evaluateHyperLink": [
+          {
+            "header": "Medications",
+            "pageNumber": 17,
+            "substring": "Taking Omeprazole 40 MG Tablet Delayed Release",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "assessmentAspect": "Patient is taking Omeprazole for GERD",
+        "assessmentHyperLink": [
+          {
+            "header": "Medications",
+            "pageNumber": 17,
+            "substring": "Taking Omeprazole 40 MG Tablet Delayed Release",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "treatmentAspect": "Refill Omeprazole Tablet Delayed Release, 40 MG",
+        "treatmentHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 18,
+            "substring": "Refill Omeprazole Tablet Delayed Release, 40 MG",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "isShow": true,
+        "encounterDate": null,
+        "radiology": null,
+        "lab": null,
+        "isManuallyAdded": null,
+        "manuallyAddedAt": null,
+        "visitDetailsDTO": null,
+        "monitorCapturedFromHeader": null,
+        "monitor": null,
+        "evaluateCapturedFromHeader": null,
+        "evaluate": null,
+        "assessmentCapturedFromHeader": null,
+        "assessment": null,
+        "treatmentCapturedFromHeader": null,
+        "treatment": null
+      },
+      {
+        "diseaseName": "Chronic obstructive pulmonary disease, unspecified",
+        "diagnosisCode": "J449",
+        "providerNames": [],
+        "dateOfService": ["2023-01-16"],
+        "isMeatCriteriaPresent": true,
+        "monitorAspect": "Continue Fluticasone-Salmeterol Aerosol Powder Breath Activated, 500-50 MCG/ACT, 1 puff, Inhalation, Twice a day",
+        "monitorHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 36,
+            "substring": "Continue Fluticasone-Salmeterol Aerosol Powder Breath Activated, 500-50 MCG/ACT, 1 puff, Inhalation, Twice a day",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "evaluateAspect": "Denies coughing, wheezing, Shortness of breath, or pain on inspiration",
+        "evaluateHyperLink": [
+          {
+            "header": "Established ROS",
+            "pageNumber": 29,
+            "substring": "Pulmonary: Denies coughing, wheezing, Shortness of breath, or pain on inspiration",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "assessmentAspect": "Continue Fluticasone-Salmeterol Aerosol Powder Breath Activated, 500-50 MCG/ACT, 1 puff, Inhalation, Twice a day",
+        "assessmentHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 36,
+            "substring": "Continue Fluticasone-Salmeterol Aerosol Powder Breath Activated, 500-50 MCG/ACT, 1 puff, Inhalation, Twice a day",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "treatmentAspect": "Continue Fluticasone-Salmeterol Aerosol Powder Breath Activated, 500-50 MCG/ACT, 1 puff, Inhalation, Twice a day",
+        "treatmentHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 36,
+            "substring": "Continue Fluticasone-Salmeterol Aerosol Powder Breath Activated, 500-50 MCG/ACT, 1 puff, Inhalation, Twice a day",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "isShow": true,
+        "encounterDate": null,
+        "radiology": null,
+        "lab": null,
+        "isManuallyAdded": null,
+        "manuallyAddedAt": null,
+        "visitDetailsDTO": null,
+        "monitorCapturedFromHeader": null,
+        "monitor": null,
+        "evaluateCapturedFromHeader": null,
+        "evaluate": null,
+        "assessmentCapturedFromHeader": null,
+        "assessment": null,
+        "treatmentCapturedFromHeader": null,
+        "treatment": null
+      },
+      {
+        "diseaseName": "Hypertensive CKD Stage 1-4 or uns stage",
+        "diagnosisCode": "I129",
+        "providerNames": [],
+        "dateOfService": ["2023-10-08"],
+        "isMeatCriteriaPresent": true,
+        "monitorAspect": "We will recheck the patient's Creatine and GFR periodically",
+        "monitorHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 7,
+            "substring": "We will recheck the patient's Creatine and GFR periodically.",
+            "dateOfService": "2023-10-08"
+          }
+        ],
+        "evaluateAspect": "Classification of renal failure is Stage 3b",
+        "evaluateHyperLink": [
+          {
+            "header": "Chronic kidney disease",
+            "pageNumber": 1,
+            "substring": "Classification of renal failure is Stage 3b.",
+            "dateOfService": "2023-10-08"
+          }
+        ],
+        "assessmentAspect": "Patient is advised not to use any type of NSAIDS which includes Over the counter Motrin, Aleve and Ibuprofen",
+        "assessmentHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 7,
+            "substring": "Patient is advised not to use any type of NSAIDS which includes Over the counter Motrin, Aleve and Ibuprofen.",
+            "dateOfService": "2023-10-08"
+          }
+        ],
+        "treatmentAspect": "Refill Metoprolol Tartrate Tablet, 25 MG, 1 tablet with food, Orally, Twice a day; Refill Potassium Chloride ER Tablet Extended Release, 10 MEQ, 2 tablets with food, Orally, Twice a day",
+        "treatmentHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 7,
+            "substring": "Refill Metoprolol Tartrate Tablet, 25 MG, 1 tablet with food, Orally, Twice a day; Refill Potassium Chloride ER Tablet Extended Release, 10 MEQ, 2 tablets with food, Orally, Twice a day.",
+            "dateOfService": "2023-10-08"
+          }
+        ],
+        "isShow": false,
+        "encounterDate": null,
+        "radiology": null,
+        "lab": null,
+        "isManuallyAdded": null,
+        "manuallyAddedAt": null,
+        "visitDetailsDTO": null,
+        "monitorCapturedFromHeader": null,
+        "monitor": null,
+        "evaluateCapturedFromHeader": null,
+        "evaluate": null,
+        "assessmentCapturedFromHeader": null,
+        "assessment": null,
+        "treatmentCapturedFromHeader": null,
+        "treatment": null
+      },
+      {
+        "diseaseName": "Hypothyroidism",
+        "diagnosisCode": "E039",
+        "providerNames": [],
+        "dateOfService": ["2023-01-16"],
+        "isMeatCriteriaPresent": true,
+        "monitorAspect": "Continue Levothyroxine Sodium Tablet, 100 MCG, 1 tablet, Orally, Once a day",
+        "monitorHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 36,
+            "substring": "Continue Levothyroxine Sodium Tablet, 100 MCG, 1 tablet, Orally, Once a day",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "evaluateAspect": "TSH 1.270 (Ref Range: 0.450-4.500 uIU/mL), T4,Free(Direct) 1.44 (Ref Range: 0.82-1.77 ng/dL)",
+        "evaluateHyperLink": [
+          {
+            "header": "Lab:TSH+Free T4 (Labcorp)",
+            "pageNumber": 33,
+            "substring": "TSH 1.270 (Ref Range: 0.450-4.500 uIU/mL), T4,Free(Direct) 1.44 (Ref Range: 0.82-1.77 ng/dL)",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "assessmentAspect": "Continue Levothyroxine Sodium Tablet, 100 MCG, 1 tablet, Orally, Once a day",
+        "assessmentHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 36,
+            "substring": "Continue Levothyroxine Sodium Tablet, 100 MCG, 1 tablet, Orally, Once a day",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "treatmentAspect": "Continue Levothyroxine Sodium Tablet, 100 MCG, 1 tablet, Orally, Once a day",
+        "treatmentHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 36,
+            "substring": "Continue Levothyroxine Sodium Tablet, 100 MCG, 1 tablet, Orally, Once a day",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "isShow": true,
+        "encounterDate": null,
+        "radiology": null,
+        "lab": null,
+        "isManuallyAdded": null,
+        "manuallyAddedAt": null,
+        "visitDetailsDTO": null,
+        "monitorCapturedFromHeader": null,
+        "monitor": null,
+        "evaluateCapturedFromHeader": null,
+        "evaluate": null,
+        "assessmentCapturedFromHeader": null,
+        "assessment": null,
+        "treatmentCapturedFromHeader": null,
+        "treatment": null
+      },
+      {
+        "diseaseName": "Hypertensive heart and chronic kidney disease without heart failure, with stage 1 through stage 4 chronic kidney disease, or unspecified chronic kidney disease",
+        "diagnosisCode": "I1310",
+        "providerNames": [],
+        "dateOfService": ["2023-01-16"],
+        "isMeatCriteriaPresent": true,
+        "monitorAspect": "mild decrease renal function, will monitor, avoid NSAIDS",
+        "monitorHyperLink": [
+          {
+            "header": "Notes",
+            "pageNumber": 34,
+            "substring": "mild decrease renal function, will monitor, avoid NSAIDS",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "evaluateAspect": "eGFR 54 L (Ref Range: >59 mL/min/1.73)",
+        "evaluateHyperLink": [
+          {
+            "header": "Lab:Comp. Metabolic Panel (14) (Labcorp)",
+            "pageNumber": 34,
+            "substring": "eGFR 54 L (Ref Range: >59 mL/min/1.73)",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "assessmentAspect": "Refill Metoprolol Tartrate Tablet, 25 MG, 1 tablet with food, Orally, Twice a day, 90 days, 180 Tablet, Refills 1; Refill Furosemide Tablet, 20 MG, 1 tablet, Orally, Once a day, 30 days, 30 Tablet, Refills 0, Notes: PRN",
+        "assessmentHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 36,
+            "substring": "Refill Metoprolol Tartrate Tablet, 25 MG, 1 tablet with food, Orally, Twice a day, 90 days, 180 Tablet, Refills 1; Refill Furosemide Tablet, 20 MG, 1 tablet, Orally, Once a day, 30 days, 30 Tablet, Refills 0, Notes: PRN",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "treatmentAspect": "Refill Metoprolol Tartrate Tablet, 25 MG, 1 tablet with food, Orally, Twice a day, 90 days, 180 Tablet, Refills 1; Refill Furosemide Tablet, 20 MG, 1 tablet, Orally, Once a day, 30 days, 30 Tablet, Refills 0, Notes: PRN",
+        "treatmentHyperLink": [
+          {
+            "header": "Plan",
+            "pageNumber": 36,
+            "substring": "Refill Metoprolol Tartrate Tablet, 25 MG, 1 tablet with food, Orally, Twice a day, 90 days, 180 Tablet, Refills 1; Refill Furosemide Tablet, 20 MG, 1 tablet, Orally, Once a day, 30 days, 30 Tablet, Refills 0, Notes: PRN",
+            "dateOfService": "2023-01-16"
+          }
+        ],
+        "isShow": false,
+        "encounterDate": null,
+        "radiology": null,
+        "lab": null,
+        "isManuallyAdded": null,
+        "manuallyAddedAt": null,
+        "visitDetailsDTO": null,
+        "monitorCapturedFromHeader": null,
+        "monitor": null,
+        "evaluateCapturedFromHeader": null,
+        "evaluate": null,
+        "assessmentCapturedFromHeader": null,
+        "assessment": null,
+        "treatmentCapturedFromHeader": null,
+        "treatment": null
+      },
+      {
+        "diseaseName": "Other specified diabetes mellitus without complications",
+        "diagnosisCode": "E139",
+        "providerNames": [],
+        "dateOfService": ["2023-07-14"],
+        "isMeatCriteriaPresent": true,
+        "monitorAspect": "Patient has a history of Other specified diabetes mellitus without complications",
+        "monitorHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Other specified diabetes mellitus without complications",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "evaluateAspect": "",
+        "evaluateHyperLink": [
+          {
+            "header": "",
+            "pageNumber": 0,
+            "substring": "",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "assessmentAspect": "Patient has a history of Other specified diabetes mellitus without complications",
+        "assessmentHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 13,
+            "substring": "Other specified diabetes mellitus without complications",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "treatmentAspect": "",
+        "treatmentHyperLink": [
+          {
+            "header": "",
+            "pageNumber": 0,
+            "substring": "",
+            "dateOfService": "2023-07-14"
+          }
+        ],
+        "isShow": false,
+        "encounterDate": null,
+        "radiology": null,
+        "lab": null,
+        "isManuallyAdded": null,
+        "manuallyAddedAt": null,
+        "visitDetailsDTO": null,
+        "monitorCapturedFromHeader": null,
+        "monitor": null,
+        "evaluateCapturedFromHeader": null,
+        "evaluate": null,
+        "assessmentCapturedFromHeader": null,
+        "assessment": null,
+        "treatmentCapturedFromHeader": null,
+        "treatment": null
+      },
+      {
+        "diseaseName": "Major depressive disorder, recurrent episode, unspecified",
+        "diagnosisCode": "F339",
+        "providerNames": [],
+        "dateOfService": ["2023-09-24"],
+        "isMeatCriteriaPresent": true,
+        "monitorAspect": "Patient taking Escitalopram Oxalate 20 MG Tablet 1 tablet in the morning Orally Once a day",
+        "monitorHyperLink": [
+          {
+            "header": "Medications",
+            "pageNumber": 11,
+            "substring": "Taking Escitalopram Oxalate 20 MG Tablet 1 tablet in the morning Orally Once a day",
+            "dateOfService": "2023-09-24"
+          }
+        ],
+        "evaluateAspect": "Patient has a history of Major depressive disorder, recurrent episode, unspecified",
+        "evaluateHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Major depressive disorder, recurrent episode, unspecified",
+            "dateOfService": "2023-09-24"
+          }
+        ],
+        "assessmentAspect": "Patient has a history of Major depressive disorder, recurrent episode, unspecified",
+        "assessmentHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Major depressive disorder, recurrent episode, unspecified",
+            "dateOfService": "2023-09-24"
+          }
+        ],
+        "treatmentAspect": "Patient taking Escitalopram Oxalate 20 MG Tablet 1 tablet in the morning Orally Once a day",
+        "treatmentHyperLink": [
+          {
+            "header": "Medications",
+            "pageNumber": 11,
+            "substring": "Taking Escitalopram Oxalate 20 MG Tablet 1 tablet in the morning Orally Once a day",
+            "dateOfService": "2023-09-24"
+          }
+        ],
+        "isShow": false,
+        "encounterDate": null,
+        "radiology": null,
+        "lab": null,
+        "isManuallyAdded": null,
+        "manuallyAddedAt": null,
+        "visitDetailsDTO": null,
+        "monitorCapturedFromHeader": null,
+        "monitor": null,
+        "evaluateCapturedFromHeader": null,
+        "evaluate": null,
+        "assessmentCapturedFromHeader": null,
+        "assessment": null,
+        "treatmentCapturedFromHeader": null,
+        "treatment": null
+      },
+      {
+        "diseaseName": "Cough variant asthma",
+        "diagnosisCode": "J45991",
+        "providerNames": [],
+        "dateOfService": ["2023-09-24"],
+        "isMeatCriteriaPresent": true,
+        "monitorAspect": "Patient using Nebulizer with supplies (DX: COPD) Four times a day",
+        "monitorHyperLink": [
+          {
+            "header": "Medications",
+            "pageNumber": 11,
+            "substring": "Taking Nebulizer - Device with supplies (DX: COPD) Four times a day",
+            "dateOfService": "2023-09-24"
+          }
+        ],
+        "evaluateAspect": "Patient denies hemoptysis, pain with inspiration",
+        "evaluateHyperLink": [
+          {
+            "header": "ROS",
+            "pageNumber": 10,
+            "substring": "Patient denies hemoptysis, pain with inspiration",
+            "dateOfService": "2023-09-24"
+          }
+        ],
+        "assessmentAspect": "Patient has a history of cough variant asthma",
+        "assessmentHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 10,
+            "substring": "Cough variant asthma",
+            "dateOfService": "2023-09-24"
+          }
+        ],
+        "treatmentAspect": "Patient taking Fluticasone-Salmeterol 500-50 MCG/ACT Aerosol Powder Breath Activated 1 puff Inhalation Twice a day",
+        "treatmentHyperLink": [
+          {
+            "header": "Medications",
+            "pageNumber": 11,
+            "substring": "Taking Fluticasone-Salmeterol 500-50 MCG/ACT Aerosol Powder Breath Activated 1 puff Inhalation Twice a day",
+            "dateOfService": "2023-09-24"
+          }
+        ],
+        "isShow": true,
+        "encounterDate": null,
+        "radiology": null,
+        "lab": null,
+        "isManuallyAdded": null,
+        "manuallyAddedAt": null,
+        "visitDetailsDTO": null,
+        "monitorCapturedFromHeader": null,
+        "monitor": null,
+        "evaluateCapturedFromHeader": null,
+        "evaluate": null,
+        "assessmentCapturedFromHeader": null,
+        "assessment": null,
+        "treatmentCapturedFromHeader": null,
+        "treatment": null
+      },
+      {
+        "diseaseName": "Unspecified diastolic heart failure",
+        "diagnosisCode": "I5030",
+        "providerNames": [],
+        "dateOfService": ["2023-06-21"],
+        "isMeatCriteriaPresent": true,
+        "monitorAspect": "Patient has a history of Unspecified diastolic heart failure",
+        "monitorHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Unspecified diastolic heart failure",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "evaluateAspect": "Patient has a history of Unspecified diastolic heart failure",
+        "evaluateHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Unspecified diastolic heart failure",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "assessmentAspect": "Patient has a history of Unspecified diastolic heart failure",
+        "assessmentHyperLink": [
+          {
+            "header": "Medical History",
+            "pageNumber": 16,
+            "substring": "Unspecified diastolic heart failure",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "treatmentAspect": "No specific treatment mentioned for Unspecified diastolic heart failure",
+        "treatmentHyperLink": [
+          {
+            "header": "",
+            "pageNumber": 0,
+            "substring": "",
+            "dateOfService": "2023-06-21"
+          }
+        ],
+        "isShow": true,
+        "encounterDate": null,
+        "radiology": null,
+        "lab": null,
+        "isManuallyAdded": null,
+        "manuallyAddedAt": null,
+        "visitDetailsDTO": null,
+        "monitorCapturedFromHeader": null,
+        "monitor": null,
+        "evaluateCapturedFromHeader": null,
+        "evaluate": null,
+        "assessmentCapturedFromHeader": null,
+        "assessment": null,
+        "treatmentCapturedFromHeader": null,
+        "treatment": null
+      }
+    ],
+    "encounterYears": [2021, 2022, 2023],
+    "rafScore": null,
+    "flag": null,
+    "meatQuery": null,
+    "provider": null,
+    "pageNumber": []
+  }
+}

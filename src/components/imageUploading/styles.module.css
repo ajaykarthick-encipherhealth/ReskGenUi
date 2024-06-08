@@ -15,18 +15,14 @@
   place-items: center;
   background-color: transparent;
   border-radius: 10px;
-  cursor: pointer;
   font-weight: 700;
   font-size: 14px;
   color: #888888;
   align-items: center;
   border: 2px dashed #ccc;
   padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: auto;
+  display: flex;
   justify-content: center;
-  border-radius: 8px;
 }
 
 .VideoInput_video {

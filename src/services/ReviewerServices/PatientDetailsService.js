@@ -23,6 +23,28 @@ export async function PatientDetails(patientId,year) {
   }
 }
 
+export async function PatientDetailsNew(patientId,year,dos) {
+  const token = localStorage.getItem("token");
+  const orgId = localStorage.getItem("orgId");
+   var apiurl = `patientId=${patientId}&processedYear=${year}` 
+   if(dos){
+    apiurl = `patientId=${patientId}&dateOfService=${dos}` 
+   }
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/patient/compute/get?`+apiurl,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+  }
+}
+
+
 export async function RadiologyDeatils(patientId) {
   const token = localStorage.getItem("token");
   const orgId = localStorage.getItem("orgId");
@@ -62,7 +84,7 @@ export async function MeatQuery(dos,patientId) {
   const orgId = localStorage.getItem("orgId");
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/meatquery/getMeatQueryList?dosYear=${dos}&patientId=${patientId}`,
+      `${ENDPOINTS?.apiEndoint}dbservice/meatquery/getMeatQueryList?processedYear=${dos}&patientId=${patientId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -109,11 +131,28 @@ export async function HccFileDeatils(fileId) {
   } catch (err) {
   }
 }
-export async function DosPageNumber(fileId) {
+export async function DosPageNumber(patientId,year) {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/pageNumber/startAndStopPageNo?fileId=${fileId}`,
+      `${ENDPOINTS?.apiEndoint}dbservice/patient/compute/get/alldossummaries?patientId=${patientId}&processedYear=${year}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+  }
+}
+
+export async function DosWiseList(patientId,year) {
+  const token = localStorage.getItem("token");
+  var apiurl = `dbservice/patient/compute/get/alldos?patientId=${patientId}&processedYear=${year}` 
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}`+apiurl,
       {
         headers: {
           Authorization: `Bearer ${token}`,

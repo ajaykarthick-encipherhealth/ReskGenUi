@@ -1,422 +1,24 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Tab, Nav, Badge } from "react-bootstrap";
-import axios from "../../../../../utility/axiosConfig";
-import ENDPOINTS from "../../../../../utility/enpoints";
+import React, { useState, useEffect } from "react";
+import { useSelector, connect } from "react-redux";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { InputText } from "primereact/inputtext";
-import { Viewer, Worker, ProgressBar } from "@react-pdf-viewer/core";
-import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import moment, { months } from "moment";
-import "react-vertical-timeline-component/style.min.css";
-import { highlightPlugin } from "@react-pdf-viewer/highlight";
-import { useSelector, useDispatch } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faClose,
-  faCheck,
-  faAdd,
-  faInfo,
-  faUser,
-  faSearch,
-  faCheckCircle,
-  faArrowLeft,
-  faPlus,
-  faUserCircle,
-  faVenusMars,
-  faCalendarAlt,
-  faIdCardClip,
-  faCog,
-  faClock,
-  faArrowsAlt,
-  faCalendar,
-  faCircle,
-  faCircleUp,
-  faSitemap,
-  faCircleUser,
-  faTrash,
-  faAngleDown,
-} from "@fortawesome/free-solid-svg-icons";
-import { CalendarOutlined } from "@ant-design/icons";
-import {
-  QuestionCircleOutlined,
-  CheckCircleOutlined,
-  InfoCircleOutlined,
-} from "@ant-design/icons";
-import {
-  Popconfirm,
-  Select,
-  Popover,
-  Menu,
-  DatePicker,
-  Dropdown,
-  Tag,
-  message,
-} from "antd";
-import { IMAGES, SVGICON } from "../../../../../jsx/constant/theme";
+import { SVGICON } from "../../../../../jsx/constant/theme";
 import { Modal } from "antd";
-import { Button } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
-import { Offcanvas } from "react-bootstrap";
-import { notification } from "antd";
-import { useRouter } from "next/navigation";
-import { Avatar, Tooltip } from "antd";
-import Spinner from "../../../../../components/loadingSpinner";
 import styles from "../styles.module.css";
-import {
-  getFilePageNumber,
-  getMeatQueryList,
-  submitMeatQuery,
-  updateMeatQuery,
-  getProviderDetails,
-  manuallyAddComboCode,
-  deleteMeatQuery,
-  getProviderEncounterDetails,
-} from "../../../../../services/PatientsListSevice";
-import { getPatientDetailsResult } from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
-import CamboTree from "../org";
 import AddMeatQuery from "../../components/addMeatQuery";
 
-const { Option } = Select;
-const addOnCodeColor = [
-  "magenta",
-  "red",
-  "volcano",
-  "orange",
-  "gold",
-  "cyan",
-  "blue",
-  "geekblue",
-  "purple",
-];
-const MeatQuery = ({}) => {
-  const navigate = useRouter();
-  const dispatch = useDispatch();
-  let searchKeywords = [];
-  const patientDetailsResult = useSelector(
-    (state) => state?.ReviewerReducers?.patientDetails
-  );
-  const meatQueryDetails = useSelector(
-    (state) => state?.ReviewerReducers?.meatQueryList
-  );
-
-
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
-  const { toolbarPluginInstance } = defaultLayoutPluginInstance;
-  const { searchPluginInstance } = toolbarPluginInstance;
-  const { highlight } = searchPluginInstance;
-  const { setTargetPages } = searchPluginInstance;
-
-  // setTargetPages((targetPage) => targetPage.pageIndex === 0);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isFileFormShow, setIsFileFormShow] = useState(false);
-  const [isModalOpenValid, setIsModalOpenValid] = useState(false);
-  const [isModalOpenValidCodes, setIsModalOpenValidCodes] = useState(false);
-  const [isModalOpenCaptureSection, setIsModalOpenCaptureSection] =
-    useState(false);
-  const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
-  const [confirmNotesModalInValid, setConfirmNotesModalInValid] =
-    useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingSection, setIsLoadingSection] = useState(true);
-  const [invalidDiseasesList, setInvalidDiseasesList] = useState([]);
-  const [invalidMoveDiseasesList, setInvalidMoveDiseasesList] = useState([]);
-  const [comboDiseaseCodesList, setComboDiseaseCodesList] = useState([]);
-  const [invalidComboDiseaseCodesList, setInvalidComboDiseaseCodesList] =
-    useState([]);
-
-  const [validDiseasesList, setValidDiseasesList] = useState([]);
-  const [selectDiseasesName, setSelectDiseasesName] = useState("");
-  const [meatCriteriaList, setMeatCriteriaList] = useState([]);
-  const [invalidMeatCriteriaList, setInvalidMeatCriteriaList] = useState([]);
-  const [selectCode, setSelectCode] = useState("");
-  const [dosYear, setDosYear] = useState("");
-  const [dosYearRadiology, setDosYearRadiology] = useState("");
-  const [dosYearDefalutSelect, setDosYearDefalutSelect] = useState("");
-  const [dosYearDefalutSelectRadiology, setDosYearDefalutSelectRadiology] =
-    useState("");
-  const [radiologyFileDetailCheck, setRadiologyFileDetailCheck] =
-    useState(false);
-  const [localOrgId, setLocalOrgId] = useState("");
-  const [localTenantId, setLocalTenantId] = useState("");
-  const [selectMeatFileId, setSelectMeatFileId] = useState("");
-  const [selectMeatName, setSelectMeatName] = useState("");
-  const [sectionList, setSectionList] = useState([]);
-  const [patientDocumentResult, setPatientDocumentResult] = useState([]);
-  const [selectFileURL, setSelectFileURL] = useState([]);
-  const [selectFileURLValid, setSelectFileURLValid] = useState([]);
-  const [validated, setValidated] = useState(false);
-  const [rafScore, setRAFScore] = useState([]);
-  const [patientDetails, setPatientDetails] = useState([]);
-  const [patientDetailsRadiology, setPatientDetailsRadiology] = useState([]);
-  const [opens, setOpens] = useState(false);
-  const [rafHccList, setRafScoreHccList] = useState([]);
-  const [isMatchBtn, setIsMatchBtn] = useState(false);
-  const [matchHccList, setMatchHccList] = useState([]);
-  const [newValidDiseaseList, setNewValidDiseaseList] = useState([]);
-  const [newInValidDiseaseList, setInNewValidDiseaseList] = useState([]);
-  const [unMatchResList, setNewUnMatchHccList] = useState([]);
-  const [meatColorCodeList, setMeatColorCodeList] = useState([]);
-  const [combiTree, setCombiTree] = useState({});
-  const [dbDescriptionRes, setDbDescriptionRes] = useState([]);
-
-  const [openPopover, setOpenPopover] = useState(false);
-
-  const [activeTab, setActiveTab] = useState(1);
-  const [activeTabHead, setActiveTabHead] = useState("file");
-  const [selectFileURLRadiology, setSelectFileURLRadiology] = useState([]);
-  const [isModalOpenRadiology, setIsModalOpenRadiology] = useState(false);
-  const [isModalOpenLab, setIsModalOpenLab] = useState(false);
-
-  const [radiologyResCheck, setRadiologyResCheck] = useState(false);
-  const [radiologyFileProcessing, setRadiologyFileProcessing] = useState(
-    "Please wait file processing..."
-  );
-
-  const [isLoadingBtn, setIsLoadingBtn] = useState(false);
-  const [addPatient, setAddPatient] = useState(false);
-  const [labReportSlider, setLapReportSlider] = useState(false);
-  const [inputValue, setInputValue] = useState({
-    year: "",
-    name: "",
-    patientId: "",
-    notes: "",
-    diagnosisCode: "",
-    actualDescription: "",
-    capturedSections: "",
-    encodedDate: "",
-    flag: "",
-    comments: "",
-    description: "",
-    queryReason: "",
-    providerName: "",
-    imagingTestHeader: "",
-    headerName: "",
-    queryComment: "",
-    reason: "",
-    diagnosisCodeQuery: "",
-    comboCode: "",
-    additionalCode: "",
-  });
-  const [inputValueMeat, setInputValueMeat] = useState({
-    year: "",
-    diseaseName: "",
-    diagnosisCode: "",
-    isMeatCriteriaPresent: true,
-    monitorCapturedFromHeader: "",
-    monitor: "",
-    evaluateCapturedFromHeader: "",
-    evaluate: "",
-    assessmentCapturedFromHeader: "",
-    assessment: "",
-    treatment: "",
-    treatmentCapturedFromHeader: "",
-    encounterDate: "",
-    radiology: false,
-    lab: false,
-    isManuallyAdded: true,
-    reason: "",
-    actualDescription: "",
-  });
-
-  const [selectFileRadiology, setSelectFileRadiology] = useState(null);
-  const [selectLabReportFile, setSelectLabReportFile] = useState(null);
-
-  const [localUserId, setLocalUserId] = useState("");
-  const [localPatientId, setLocalPatientId] = useState("");
-
-  const [validHccDetails, setvalidHccDetails] = useState("");
-  const [validLocalFileDownloadAndView, setValidLocalFileDownloadAndView] =
-    useState([]);
-
-  const [unMatchListNonHcc, setUnmatchListNonHcc] = useState([]);
-  const [comboDiseaseCodesListNonHcc, setComboDiseaseCodesListNonHcc] =
-    useState([]);
-  const [meatCriteriaListNonHcc, setMeatCriteriaListNonHcc] = useState([]);
-  const [yearOfServiceList, setYearOfServiceList] = useState([]);
-  const [isLoadingDos, setIsLoadingDos] = useState(true);
-  const [suggestedModal, setSuggestedModal] = useState(false);
-  const [suggesteSelectValue, setSuggestedSelectValue] = useState("");
-  const [suggesteSelectCode, setSuggestedSelectCode] = useState("");
-  const [selectedDosValue, setSelectedDosValue] = useState("");
-  const [suggestedBtnTitle, setSuggestedBtnTitle] = useState("Add");
-  const [selectInvalidDetails, setSelectInvalidDetails] = useState(false);
-  const [selectActiveCode, setSelectActiveCode] = useState("");
-  const [labReportValidList, setLabReportValidList] = useState([]);
-  const [labReportMeatList, setLabReportMeatList] = useState([]);
-  const [labReportFile, setLabReportFile] = useState([]);
-  const [suggestedHccList, setSuggestedHccList] = useState([]);
-  const [suggestedNonHccList, setSuggestedNonHccList] = useState([]);
-  const [nonHccActiveCodes, setNonHccActiveCodes] = useState(false);
-  const [radiologyFileDateofServieList, setFileRadiologyDateofServiceList] =
-    useState([]);
-  const [radiologyFileDateDefaulteSelect, setRadiologyFileDateDefaulteSelect] =
-    useState("");
-  const [radiologyResult, setRadiologyResult] = useState("");
-  const [radiologyResultStatus, setRadiologyResultStatus] = useState(false);
-  const [labResultStatus, setLabResultStatus] = useState(false);
-  const [labFileDateofServieList, setFileLabDateofServiceList] = useState([]);
-  const [labFileDateDefaulteSelect, setLabFileDateDefaulteSelect] =
-    useState("");
-  const [saveBtnTitle, setSaveBtnTitle] = useState("Save");
-  const [completedBtnTitle, setCompleteBtnTitle] = useState("Complete");
-  const [declineBtnTitle, setDeclineBtnTitle] = useState("Decline");
-
-  const [buttonClicked, setButtonClicked] = useState(false);
-  const [isAddButtonClicked, setIsAddButtonClicked] = useState(false);
-  const [isValidAction, setIsValidAction] = useState("");
-  const [deletedHccList, setDeletedHccList] = useState([]);
-  const [isModalComments, setIsModalComments] = useState(false);
-  const [flagContainerActive, setFlagContainerActive] = useState("");
-  const [flagTagActive, setFlagTagActive] = useState(false);
-  const [addValidCodeCheck, setAddValidCodeCheck] = useState(null);
-  const [confirmCompleteModal, setConfirmCompleteModal] = useState(false);
-  const [userDetails, setUserDetails] = useState("");
-  const [captureSectionMatching, setCaptureSectionMatching] = useState([]);
-  const [encounterDateMatching, setEncounterDateMatching] = useState([]);
-  const [fileModalHeader, setFileModalHeader] = useState("");
-  const [dragFileDate, setdragFileDate] = useState(false);
-  const [inputValueFileDate, setInputValueFileDate] = useState("");
-  const [patientFileDTO, setPatientFileDTO] = useState("");
-  const [fileInitialPage, setFileInitialPage] = useState(null);
-  const [findFileKeyword, setFindFileKeyword] = useState("");
-  const [fileModalTitle, setFileModalTitle] = useState("");
+const MeatQuery = ({patientDetailsResult,meatQueryDetails}) => {
   const [isMeatQueryModal, setIsMeatQueryModal] = useState(false);
   const [meatQueriedDetailsModal, setMeatQueriedDetailsModal] = useState(false);
-  const [meatQueriedDetailsShow, setMeatQueriedDetailsShow] = useState(true);
-  const [isDosSelect, setIsDosSelect] = useState(true);
-  const [pageNumberOptions, setPageNumberOptions] = useState([]);
-  const [fileDosPageNumber, setFileDosPageNumber] = useState(0);
   const [selectPreviousCode, setSelectPreviousCode] = useState(null);
   const [meatQueryList, setMeatQueryList] = useState([]);
   const [meatQueryListPrevious, setMeatQueryListPrevious] = useState([]);
   const [meatQueryResult, setMeatQueryResult] = useState([]);
-  const [meatQueryUpdate, setMeatQueryUpdate] = useState(false);
-  const [providerDetails, setProviderDetails] = useState("");
-  const [isAddComboCode, setIsAddComboCode] = useState(false);
-  const [comboCodeTree, setComboCodeTree] = useState(true);
-  const [listPageNumber, setListPageNumber] = useState([]);
-  const [activeTabNumber, setActiveTabNumber] = useState(0);
-  const [meatModalTitle, setMeatModalTitle] = useState("");
-  const [fileLoading, setFileLoading] = useState(false);
-  const [selectMeatResult, setSelectMeatResult] = useState(null);
-  const [formErr, setFormErr] = useState({
-    providername: "",
-    quickQuery: "",
-    imagingQuery: "",
-    queryReason: "",
-    description: "",
-  });
-  const [providerNameEcnounterList, setProviderNameEcnounterList] = useState(
-    []
-  );
-  const [popoverVisible, setPopoverVisible] = useState(false);
-  const [hccVersionDetails, setHccVersionDetails] = useState(null);
-  const [selectProviderInfo, setSelectProviderInfo] = useState(null);
-  const [hccFormTab, setHccFormTab] = useState("HCCFORM");
   const [queryFormValues, setQueryFormValues] = useState(false);
 
-
-  const handleChange = async (e) => {
-    const key = e.target.name;
-    if (key == "diagnosisCodeQuery") {
-      getFindValidDiagnosisCode(e.target.value);
-    }
-    if (key == "diagnosisCode") {
-      getFindValidDiagnosisCode(e.target.value);
-    }
-    if (key == "encodedDate") {
-      setInputValueFileDate(e.target.value);
-    }
-    const value = e.target.value;
-    setInputValue({ ...inputValue, [key]: value });
-  };
-
-  const [isDocumentLoaded, setDocumentLoaded] = React.useState(false);
-  const handleDocumentLoad = () => {
-    setDocumentLoaded(true);
-  };
-
-  useEffect(() => {
-    var orgId = localStorage.getItem("orgId");
-    var tenId = localStorage.getItem("tenantId");
-    var patientId = localStorage.getItem("patientId");
-    var uId = localStorage.getItem("userId");
-    setLocalUserId(uId);
-    setLocalPatientId(patientId);
-    setLocalOrgId(orgId);
-    setLocalTenantId(tenId);
-    getPatientDetails(patientId, orgId, tenId);
-
-    var dotLoading = (
-      <div className={visitStyles.loadingFileHeader}>
-        <Spinner />
-      </div>
-    );
-    setUserDetails(dotLoading);
-    setvalidHccDetails(dotLoading);
-  }, [patientDetailsResult]);
-
-  const getPatientDetails = async (
-    patientId,
-    orgId,
-    tenId,
-    fileloadCondition
-  ) => {
-    var result = patientDetailsResult?.result?.response;
-    if (result?.dos) {
-      //   var result2 = await getMeatQueryList(result?.dos, localPatientId);
-      //   setMeatQueryList(result2.response);
-    }
-  };
-
-  const handleCloseForm = () => {
-    setIsAddButtonClicked(false);
-    // Add any additional logic for closing the form if needed
-  };
-
   const handleCloseModal = () => {
-    setHccFormTab("HCCFORM");
-    setAddValidCodeCheck(null);
-    setValidated(false);
-    setIsModalOpen(false);
-    setIsModalOpenValid(false);
-    setConfirmNotesModalValid(false);
-    setConfirmNotesModalInValid(false);
-    setIsModalOpenRadiology(false);
-    setSuggestedModal(false);
-    setIsModalOpenValidCodes(false);
-    setIsModalOpenCaptureSection(false);
-    setIsAddButtonClicked(false);
-    setIsAddButtonClicked(false);
-    setIsModalComments(false);
-    setFlagContainerActive("");
-    setConfirmCompleteModal(false);
-    setIsModalOpenLab(false);
-    setIsFileFormShow(false);
     setIsMeatQueryModal(false);
     setMeatQueriedDetailsModal(false);
-    setIsAddComboCode(false);
-    setFindFileKeyword(null);
-    setFileLoading(false);
-    setActiveTabNumber(activeTabNumber == null ? 0 : null);
-  };
-
-  const getFindValidDiagnosisCode = async (value) => {
-    const response = await axios.get(
-      ENDPOINTS.apiEndoint +
-        `dbservice/icddisease/finddiseasebycode?diseasecode=${value}`
-    );
-    if (response.data) {
-      if (response.data == "ICD disease not found") {
-        setAddValidCodeCheck(false);
-      } else {
-        setAddValidCodeCheck(true);
-        inputValue.actualDescription = "adakd dvasdv";
-      }
-    }
-
-    inputValue.actualDescription = "adakd dvasdv";
   };
 
   const addMeatQuery = (value, condition) => {
@@ -425,135 +27,12 @@ const MeatQuery = ({}) => {
   };
 
   const meatQueriedComments = (value) => {
-    console.log(value)
     setMeatQueryResult(value);
     setMeatQueriedDetailsModal(true);
-    setMeatQueriedDetailsShow(false);
-  };
-
-  const headersList = [
-    { value: "A/P", label: "A/P" },
-    { value: "PMH", label: "PMH" },
-    { value: "HPI", label: "HPI" },
-    { value: "Physical Exam", label: "Physical Exam" },
-    { value: "VITALS", label: "VITALS" },
-    { value: "OTHERS", label: "OTHERS" },
-  ];
-
-  const queryReasons = [
-    { value: "Diagnosis Not Supported", label: "Diagnosis Not Supported" },
-    { value: "H/o condition", label: "H/o condition" },
-    { value: "MEAT not Sufficient", label: "MEAT not Sufficient" },
-    { value: "Imaging Query", label: "Imaging Query" },
-    { value: "More Specific Diagnosis", label: "More Specific Diagnosis" },
-    { value: "OTHERS", label: "OTHERS" },
-  ];
-  const imagingtest = [
-    { value: "X-ray", label: "X-ray" },
-    { value: "CT Scan", label: "CT Scan" },
-    { value: "MRI", label: "MRI" },
-    { value: "Ultrasound", label: "Ultrasound" },
-    { value: "PET Scan", label: "PT Scan " },
-    { value: "Mammography", label: "Mammography" },
-    { value: "Fluoroscopy", label: "Fluoroscopy" },
-    { value: "Bone Densitometry", label: "Bone Densitometry" },
-    { value: "Nuclear Medicine Imaging", label: "Nuclear Medicine Imaging" },
-    { value: "Angiography", label: "Angiography" },
-    { value: "Myelography", label: "Myelography" },
-    { value: "Arthrogram", label: "Arthrogram" },
-    { value: "Barium Swallow/Test", label: "Barium Swallow/Test" },
-    { value: "Hysterosalpingography", label: "Hysterosalpingography" },
-    { value: "Fistulogram", label: "Fistulogram" },
-    { value: "Cholangiography", label: "Cholangiography" },
-    { value: "Sialography", label: "Sialography" },
-    { value: "Discography", label: "Discography" },
-    { value: "Lymphangiography", label: "Lymphangiography" },
-    { value: "Intravenous Pyelogram", label: "Intravenous Pyelogram" },
-    { value: "OTHERS", label: "OTHERS" },
-  ];
-
-  const handleSubmitMeatQuery = async (event) => {
-    const form = event.currentTarget;
-    event.preventDefault();
-    if (
-      inputValue?.providerName === "" ||
-      inputValue?.headerName === "" ||
-      inputValue?.imagingTestHeader === "" ||
-      inputValue?.queryReason === "" ||
-      inputValue?.description === "" ||
-      inputValue?.reason
-    ) {
-      let errors = {
-        providername:
-          inputValue?.providerName === "" ? "Please enter provider name" : "",
-        quickQuery:
-          inputValue?.headerName === "" ? "Please select quick query" : "",
-        imagingQuery:
-          inputValue?.imagingTestHeader === ""
-            ? "Please select imaging query"
-            : "",
-        queryReason:
-          inputValue?.queryReason === "" ? "Please select quick reason" : "",
-        description:
-          inputValue?.description === "" ? "Please enter description" : "",
-      };
-
-      setFormErr(errors);
-    } else {
-      if (form.checkValidity() === true) {
-        var dataformat = {
-          patientId: localPatientId,
-          diagnosisCode: inputValue.diagnosisCodeQuery,
-          queryReason: inputValue.queryReason,
-          Reason: inputValue.reason,
-          providerName: inputValue.providerName,
-          imagingTestHeader: inputValue.imagingTestHeader,
-          headerName: inputValue.headerName,
-          dosYear: selectedDosValue,
-          description: inputValue.description,
-        };
-        var result = await submitMeatQuery(dataformat);
-        if (result.status == "SUCCESS") {
-          setMeatQueryResult(result.response);
-          inputValue.queryComment = result.response.queryComment;
-          setIsMeatQueryModal(false);
-          notification.success({
-            message: result.message,
-            placement: "top",
-            duration: 1,
-          });
-          setMeatQueriedDetailsModal(true);
-          setMeatQueriedDetailsShow(true);
-          var result = await getMeatQueryList(selectedDosValue, localPatientId);
-          setMeatQueryList(result.response);
-        }
-      }
-    }
-  };
-  const updateMeatQueryComments = async () => {
-    var updateDataformat = {
-      patientId: localPatientId,
-      diagnosisCode: inputValue.diagnosisCodeQuery,
-      dos: selectedDosValue,
-      queryComment: inputValue.queryComment,
-    };
-    var result = await updateMeatQuery(updateDataformat);
-    if (result.status == "SUCCESS") {
-      setMeatQueryResult(result.response);
-      setIsMeatQueryModal(false);
-      notification.success({
-        message: result.message,
-        placement: "top",
-        duration: 1,
-      });
-      setMeatQueriedDetailsModal(false);
-      setMeatQueriedDetailsShow(false);
-    } else {
-    }
-  };
+  }; 
 
   const getPreviousData = (code, action) => {
-    const result = meatQueryDetails?.result?.response.filter(
+    const result = meatQueryDetails?.data?.response.filter(
       (res) => res.diagnosisCode == code && res.currentQuery != true
     );
     setSelectPreviousCode(code);
@@ -563,31 +42,19 @@ const MeatQuery = ({}) => {
     });
     setMeatQueryListPrevious(querySort);
   };
-
-  const handleSelect = (value, title) => {
-    setInputValue({ ...inputValue, [title]: value });
-  };
-
-  const emailSplitFunction = (email) => {
-    if (meatQueriedDetailsModal) {
-      let emailSplit = email?.split("@");
-      return emailSplit[0].charAt(0).toUpperCase() + emailSplit[0].slice(1);
-    }
-  };
-
-  const confirmMeatQuery = async (code) => {
-    var result = await deleteMeatQuery(localPatientId, code);
-    if (result.status == "SUCCESS") {
-      var result = await getMeatQueryList(selectedDosValue, localPatientId);
-      setMeatQueryList(result.response);
-      notification.success({
-        message: result.message,
-        placement: "top",
-        duration: 1,
-      });
-    } else {
-    }
-  };
+  // const confirmMeatQuery = async (code) => {
+  //   var result = await deleteMeatQuery(localPatientId, code);
+  //   if (result.status == "SUCCESS") {
+  //     var result = await getMeatQueryList(selectedDosValue, localPatientId);
+  //     setMeatQueryList(result.response);
+  //     notification.success({
+  //       message: result.message,
+  //       placement: "top",
+  //       duration: 1,
+  //     });
+  //   } else {
+  //   }
+  // };
 
   return (
     <>
@@ -617,10 +84,10 @@ const MeatQuery = ({}) => {
             </div>
           </div>
         </div>
-        {meatQueryDetails?.result?.response?.length != 0 ? (
+        {meatQueryDetails?.data?.response?.length != 0 ? (
           <div className={visitStyles.container}>
             <div className={visitStyles.hccStickey_head}>
-              {meatQueryDetails?.result?.response?.map((item) => (
+              {meatQueryDetails?.data?.response?.map((item) => (
                 <>
                   {item.currentQuery == true ? (
                     <div className={`${visitStyles.meat_details_card}`}>
@@ -772,7 +239,7 @@ const MeatQuery = ({}) => {
           </div>
         ) : null}
       </div>  
-    <AddMeatQuery queryFormValues={queryFormValues} handleCloseModal={handleCloseModal} isMeatQueryModal={isMeatQueryModal} setIsMeatQueryModal={setIsMeatQueryModal} meatEditQueryRes={inputValue}/>
+    <AddMeatQuery queryFormValues={queryFormValues} handleCloseModal={handleCloseModal} isMeatQueryModal={isMeatQueryModal} setIsMeatQueryModal={setIsMeatQueryModal}/>
 
       <Modal
         title="Meat Queried Details"
@@ -801,33 +268,12 @@ const MeatQuery = ({}) => {
                   <span className={styles.meatQueried_head}>
                     Dear Dr {meatQueryResult.providerName}
                   </span>
-                  {!meatQueriedDetailsShow ? (
                     <p className={styles.meatQueried_details}>
                       {meatQueryResult.queryComment}
-                    </p>
-                  ) : (
-                    <textarea
-                      className={`${styles.queryTextarea}`}
-                      id="queryComment"
-                      name="queryComment"
-                      onChange={handleChange}
-                      rows="5"
-                      value={inputValue.queryComment}
-                    ></textarea>
-                  )}
+                    </p>                 
                 </div>
               </div>
             </div>
-            {meatQueriedDetailsShow ? (
-              <div className={styles.meat_queryfooterBtn}>
-                <button
-                  className={styles.meat_querySaveBtn}
-                  onClick={() => updateMeatQueryComments(false)}
-                >
-                  Save
-                </button>
-              </div>
-            ) : null}
           </div>
         </div>
       </Modal>
@@ -835,4 +281,10 @@ const MeatQuery = ({}) => {
   );
 };
 
-export default MeatQuery;
+const enhancer = connect(
+  (state) => ({
+    patientDetailsResult :state?.patientDetails?.details?.result,
+    meatQueryDetails :state?.patientDetails?.details?.meatQueryResult,
+  })
+);
+export default enhancer(MeatQuery);

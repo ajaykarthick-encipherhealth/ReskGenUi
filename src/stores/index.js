@@ -21,22 +21,24 @@ import { PhysicianDashboardReducer } from "../store/reducers/physicianReducers/D
 import { PhysicianComparisonReducer } from "../store/reducers/physicianReducers/ComparisionReducer";
 import { TanantAdminService } from "../store/reducers/tanantAdminReducers/fihrReducers";
 import { ReviewerReducers } from "../store/reducers/ReviewerReducers/ReviewerReducers";
-import { AuthReducer, PatientStore } from "./authflow/reducers";
+import { AuthReducer} from "./authflow/reducers";
 
 import { reducer as UpdateDashboardReducer } from "./reviewer/dashboard";
 import { reducer as updatedPatientsReducer } from "./reviewer/workqueue";
 import { reducer as searchReducer } from "./search";
 import { reducer as physicianReducer } from "./physician/dashboard";
 import { reducer as reportReducer } from "./reviewer/report";
-import { reducer as supervisorReportReducer } from "./supervisor/report";
-import { reducer as adminReportReducer } from "./admin/report";
+import { reducer as updatedReportReducer } from "./supervisor/report";
+import { reducer as updatedAdminReportReducer } from "./admin/report";
+import { reducer as patientDeatilsReducer } from "./patient/details"
+import { reducer as tenantAdminReducer } from "./tenantAdmin"
 
 const reducers = combineReducers({
   // old reducers
   sideMenu: toggleMenu,
   posts: PostsReducer,
   auth: AuthReducer,
-  patientDetails: PatientStore,
+  // patientDetails: PatientStore,
   workFlow: DashboardReducer,
   report: ReportReducer,
   AuditReport: AuditReportReducer,
@@ -63,15 +65,19 @@ const reducers = combineReducers({
     report: reportReducer,
   }),
   supervisor: combineReducers({
-    report: supervisorReportReducer,
+    report: updatedReportReducer,
   }),
   admin: combineReducers({
-    report: adminReportReducer,
+    report: updatedAdminReportReducer,
   }),
   search: searchReducer,
   physician: combineReducers({
-    dashboard: physicianReducer,
+    dashboard : physicianReducer
   }),
+  patientDetails: combineReducers({
+    details : patientDeatilsReducer
+  }),
+  tenantAdmin: tenantAdminReducer,
 });
 
 const middlewares = [thunkMiddleware, promiseMiddleware];

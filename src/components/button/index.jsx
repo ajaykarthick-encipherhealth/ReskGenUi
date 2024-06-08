@@ -1,17 +1,18 @@
 import React from "react";
 import Style from "./style.module.css";
 
-const RegularButton = ({ type, name, onClick, width, method,loading, disabled }) => {
+const RegularButton = ({ type, name, onClick, width, method,loading, disabled,htmlType }) => {
   return (
     <button
       className={`btn mx-1 ${
         type === "outline" ? Style.outer : Style.btnColor
       }`}
-      
-      onClick={onClick}
+      name={name?.toLowerCase()}
+      onClick={!htmlType && onClick}
       style={{ width: width }}
       type={method == "reset" ? "reset" : "submit"}
       disabled={disabled}
+      htmlType={htmlType}
     >
       {loading?"Loading...":name}
     </button>

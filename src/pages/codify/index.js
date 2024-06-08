@@ -202,6 +202,14 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
     }
   }, [searchInput, data]);
 
+  const [expandedKeys, setExpandedKeys] = useState(['0-0-0', '0-0-1']);  
+  const [autoExpandParent, setAutoExpandParent] = useState(true);
+  const onExpand = (expandedKeysValue) => {
+    console.log('onExpand', expandedKeysValue);
+    setExpandedKeys(expandedKeysValue);
+    setAutoExpandParent(false);
+  };
+
   return (
     <div className="container-fluid">
       <div className="row  mt-3 px-1">
@@ -317,6 +325,8 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
                 loading={loading}
                 setCurrentButton={setCurrentButton}
                 onSelect={handleTreeViewClick}
+                onExpand={onExpand}
+                autoExpandParent={autoExpandParent}
               />
             ) : (
               <div></div>

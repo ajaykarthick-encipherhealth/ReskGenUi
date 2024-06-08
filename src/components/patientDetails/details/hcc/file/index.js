@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch ,connect} from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faClose,
@@ -11,11 +11,9 @@ import {
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import { Popover, notification } from "antd";
 import { Button } from "react-bootstrap";
 import styles from "../styles.module.css";
-import { getPatientDetailsResult } from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import PdfViewer from "../../PdfViewerComponent";
 import AddHccForm from "../../components/addHccForm";
 import EditHccForm from "../../components/editHccForm";
@@ -24,35 +22,31 @@ import ModelIndex from "../../components/model/Index";
 import { getPatientDetails } from "../../components/function/GetData";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { onDragEnd } from "../../components/function/ReusableFunctions";
-
+import ManuallyAdd from "../../components/manuallyAdd";
 
 const File = ({
+  patientDetailsResult,
+  hccFileDetails,
   popoverVisible,
   setPopoverVisible,
   year,
   setActiveTabHead,
   setActiveMeatTitle,
   setActiveComboTree,
+  pageNumberOptions, 
+  setPageNumberOptions,
+  search, setSearch,
+  fileDosPageNumberList
 }) => {
   const dispatch = useDispatch();
-
-  const patientDetailsResult = useSelector(
-    (state) => state?.ReviewerReducers?.patientDetails
-  );
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
-  );
-  const hccFileDetails = useSelector(
-    (state) => state?.ReviewerReducers?.hccFileDetails
   );
   const radiologyFileDetails = useSelector(
     (state) => state?.ReviewerReducers?.radiologyFileDetails
   );
   const labFileDetails = useSelector(
     (state) => state?.ReviewerReducers?.labFileDetails
-  );
-  const fileDosPageNumberList = useSelector(
-    (state) => state?.ReviewerReducers.dosPageNumberList
   );
   const [isFileFormShow, setIsFileFormShow] = useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
@@ -75,16 +69,15 @@ const File = ({
   const [captureSectionMatching, setCaptureSectionMatching] = useState([]);
   const [encounterDateMatching, setEncounterDateMatching] = useState([]);
   const [fileModalHeader, setFileModalHeader] = useState("");
-  const [pageNumberOptions, setPageNumberOptions] = useState([]);
+  // const [pageNumberOptions, setPageNumberOptions] = useState([]);
   const [fileLoading, setFileLoading] = useState(false);
   const [hccVersionDetails, setHccVersionDetails] = useState(null);
-  const [search, setSearch] = useState();
+  // const [search, setSearch] = useState();
   const [isAddHccForm, setIsAddHccForm] = useState(false);
   const [isEditHccForm, setIsEditHccForm] = useState(false);
   const [formValues, setFormValues] = useState(false);
   const [formEditPlace, setFormEditPlace] = useState("");
   const [allDisList, setAllDisList] = useState([]);
-
 
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
@@ -107,8 +100,8 @@ const File = ({
   }, [patientDetailsResult]);
 
   useEffect(() => {
-    if (hccFileDetails?.result?.response) {
-      setSelectFileURL(hccFileDetails?.result?.response);
+    if (hccFileDetails?.data?.response) {
+      setSelectFileURL(hccFileDetails?.data?.response);
     }
     if (radiologyFileDetails?.result?.response) {
       setSelectFileURLRadiology(radiologyFileDetails?.result?.response);
@@ -121,9 +114,11 @@ const File = ({
   useEffect(() => {
     getFileDosPageNumber();
   }, [fileDosPageNumberList]);
-  const onchangeValid = (code, data) => {
+   const onchangeValid = (code, data) => {
     var title = code + " - " + data.actualDescription;
-    data.dos = patientDetailsResult?.result?.response?.dos;
+    data.processedYear = patientDetailsResult?.data?.response?.processedYear;
+    data.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
+    data.fileId= patientDetailsResult?.data?.response?.fileId,
     setSelectDiseasesName(title);
     setSelectDisDetails(data);
   };
@@ -151,7 +146,7 @@ const File = ({
 
     const response = await axios.get(
       ENDPOINTS.apiEndoint +
-        `dbservice/hccdisease/icd10mappingForDisease?year=${patientDetailsResult?.result?.response?.dos}&diagnosisCode=${code}`
+        `dbservice/hccdisease/icd10mappingForDisease?year=${year.value}&diagnosisCode=${code}`
     );
     if (response.data) {
       var value = [];
@@ -174,97 +169,21 @@ const File = ({
     }
   };
 
-  const getPatientDetailsReload = async (patientId) => {
-    dispatch(getPatientDetailsResult(patientId));
-    setFileLoading(false);
-  };
-
   const addValidCodeFile = async (event) => {
     setIsFileFormShow(true);
     setValidated(false);
   };
 
   const getFileDosPageNumber = async () => {
-    var result = fileDosPageNumberList?.result;
-    var groupPageNumber = [];
-    var groupEncounterDate = [];
-    for (var key in result?.response) {
-      var optionArray = [];
-      var optionPage = [];
-      var pageNumbervalue = result.response[key];
-      for (var key2 in pageNumbervalue) {
-        var startPage = key2 == "first" ? pageNumbervalue[key2] : null;
-        var keyValue = key2 == "first" ? "Start - " : "End - ";
-        optionArray.push({
-          label: keyValue + " " + pageNumbervalue[key2],
-          value: pageNumbervalue[key2] + "," + moment(key).format("MM/DD"),
-        });
-        if (startPage) {
-          optionPage.push({
-            pageNumber: startPage,
-          });
-        }
-      }
-      groupPageNumber.push({
-        label: moment(key).format("MM-DD-YYYY"),
-        options: optionArray,
-      });
-    }
-    setPageNumberOptions(groupPageNumber);
+    setPageNumberOptions(fileDosPageNumberList?.data?.response);
   };
 
-  const handleChangePageNumber = async (value) => {
-    setPopoverVisible(false);
-    var str_array = value.split(",");
-    var pageNumber = str_array[0];
-    setSearch({
-      value: "",
-      page: pageNumber,
-    });
-  };
+ 
   const showErrorMessage = () => {
     setOpens(false);
     notification.destroy();
     notification.info({ message: "Tree Not Available", duration: 1 });
   };
-  const PopContent = (
-    <div className={styles.innerPop}>
-      <div className={styles.displayDiv}>
-        <div className={styles.closeContainer}>
-          <FontAwesomeIcon
-            icon={faClose}
-            style={{
-              size: 5,
-              color: "#fff",
-            }}
-            className={styles.close_icon}
-            onClick={() => setPopoverVisible(false)}
-          />
-        </div>
-        {pageNumberOptions
-          ? pageNumberOptions?.map((data) => (
-              <div className={styles.hoverDiv}>
-                <div className={`row ${styles.selectDetailsContainer}`}>
-                  <div className="col-xl-3">
-                    <span className={styles.selectHead}>{data.label}</span>
-                  </div>
-                  {data?.options.map((data2) => (
-                    <div className={`col-xl-3 ${styles.selectDetailsDiv}`}>
-                      <span
-                        onClick={() => handleChangePageNumber(data2.value)}
-                        className={styles.selectDetails}
-                      >
-                        {data2?.label}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))
-          : null}
-      </div>
-    </div>
-  );
 
   return (
     <>
@@ -277,7 +196,7 @@ const File = ({
           </div>
         </div>
       ) : null}
-        <DragDropContext
+      <DragDropContext
         onDragEnd={(result) =>
           onDragEnd(
             result,
@@ -358,21 +277,23 @@ const File = ({
               </Droppable>
             </div>
           ) : null}
-          <div className={isFileFormShow ? "col-xl-1" : "d-none"}>
-            <Button
-              onClick={() => handleCloseModal()}
-              className={`ms-2 ${visitStyles.backArrowBtn}`}
-            >
-              <FontAwesomeIcon
-                icon={faArrowLeft}
-                style={{
-                  color: "rgb(38 50 107)",
-                }}
-              />
-            </Button>
-          </div>
-          <div className={isFileFormShow ? "col-xl-7" : "col-xl-6"}>
-            <Popover
+          {isFileFormShow && (
+            <div className={"col-xl-1"}>
+              <Button
+                onClick={() => handleCloseModal()}
+                className={`ms-2 ${visitStyles.backArrowBtn}`}
+              >
+                <FontAwesomeIcon
+                  icon={faArrowLeft}
+                  style={{
+                    color: "rgb(38 50 107)",
+                  }}
+                />
+              </Button>
+            </div>
+          )}
+          <div className={"col-xl-6"}>
+            {/* <Popover
               open={popoverVisible}
               content={PopContent}
               placement="bottom"
@@ -391,7 +312,7 @@ const File = ({
                   }}
                 />
               </div>
-            </Popover>
+            </Popover> */}
             <div className="card-body p-0">
               {hccFileDetails?.loading != true ? (
                 <>
@@ -408,13 +329,16 @@ const File = ({
             </div>
           </div>
           {isFileFormShow ? (
-            <div className="col-xl-4">
-              <AddHccForm
+            <div className="col-xl-5">
+              {/* <AddHccForm
                 handleCloseModal={handleCloseModal}
                 isAddHccForm={isAddHccForm}
                 setIsAddHccForm={setIsAddHccForm}
                 isMeatNew={true}
-              />
+              /> */}
+              <div style={{height:"70vh",overflowY:"scroll"}}>
+              <ManuallyAdd handleCloseModal={handleCloseModal} setIsFileFormShow={setIsFileFormShow} />
+              </div>
             </div>
           ) : null}
           {!isFileFormShow ? (
@@ -557,7 +481,6 @@ const File = ({
         handleCloseModal={handleCloseModal}
         setFileLoading={setFileLoading}
         setConfirmNotesModalValid={setConfirmNotesModalValid}
-        getPatientDetailsReload={getPatientDetailsReload}
         isValidAction={isValidAction}
         selectDisDetails={selectDisDetails}
       />
@@ -601,4 +524,12 @@ const File = ({
   );
 };
 
-export default File;
+const enhancer = connect(
+  (state) => ({
+    patientDetailsResult :state?.patientDetails?.details?.patientResult,
+    hccFileDetails :state?.patientDetails?.details?.hccFileResult,
+    fileDosPageNumberList:state?.patientDetails?.details?.dosPageNumberResult,
+
+  }),
+);
+export default enhancer(File);

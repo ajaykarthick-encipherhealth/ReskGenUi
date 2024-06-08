@@ -54,7 +54,7 @@ const SelectRole = () => {
       reviewer: { userRole: "reviewer", route: "/reviewer/dashboard" },
       supervisor: { userRole: "supervisor", route: "/supervisor/dashboard" },
       provider: { userRole: "provider", route: "/provider/fhirTable" },
-      provider: { userRole: "tenant", route: "/tenantAdmin/fhirTable" },
+      tenant_admin: { userRole: "tenant_admin", route: "/tenantAdmin/fhirTable" },
       physician: { userRole: "physician", route: "/physicians/dashboard" },
       // physician: { userRole: "physician", route: "/physician/dashboard" },
     };
@@ -66,6 +66,7 @@ const SelectRole = () => {
       router?.push(selectedRoleInfo?.route);
     }
   };
+
   useEffect(() => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);

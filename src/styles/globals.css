@@ -13763,7 +13763,6 @@ overflow: scroll;
   box-shadow: none !important;
   width: 180px !important;
   padding: 0px !important;
-  height: 35px !important;
 }
 
 .auditBtnHcc button.ant-btn.ant-btn-compact-first-item {
@@ -13804,7 +13803,6 @@ overflow: scroll;
   box-shadow: none !important;
   width: 180px !important;
   padding: 0px !important;
-  height: 35px !important;
 }
 
 .declineBtnHcc button.ant-btn.ant-btn-compact-first-item {
@@ -13844,7 +13842,6 @@ overflow: scroll;
   box-shadow: none !important;
   width: 180px !important;
   padding: 0px !important;
-  height: 35px !important;
 }
 .reauditBtnHcc button.ant-btn.ant-btn-compact-first-item {
   color: #964b00 !important;
@@ -13883,7 +13880,6 @@ overflow: scroll;
   box-shadow: none !important;
   width: 180px !important;
   padding: 0px !important;
-  height: 35px !important;
 }
 .auditHoldBtnHcc button.ant-btn.ant-btn-compact-first-item {
   color: #ce9900 !important;
@@ -13922,7 +13918,6 @@ overflow: scroll;
   box-shadow: none !important;
   width: 180px !important;
   padding: 0px !important;
-  height: 35px !important;
 }
 
 .auditPendingBtnHcc button.ant-btn.ant-btn-compact-first-item {
@@ -14186,7 +14181,7 @@ overflow: scroll;
 }
 .css-b62m3t-container {
   border: 1px solid #e6e6e6;
-  border-radius: 5px !important;
+  border-radius: 8px !important;
 }
 .addUserSelector {
   border: 1px solid #e6e6e6 !important;
@@ -14318,16 +14313,16 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type="number"] {
+/* input[type="number"] {
   -moz-appearance: textfield;
-}
+} */
 
 .background-white {
   background: #fff;
 }
-.pickerChnages > .ant-picker-input:hover > .ant-picker-clear {
+/* .pickerChnages > .ant-picker-input:hover > .ant-picker-clear {
   display: none !important;
-}
+} */
 .monthPickerChnages > .ant-picker-dropdown .ant-picker-header-view {
   display: none !important;
 }
@@ -14480,7 +14475,7 @@ input[type="number"] {
 }
 .confirmPass > span > input {
   border: 1px solid red;
-  margin-top: -5px !important;
+  background-color: transparent;
 }
 .save-sm-btn {
   border-radius: 0.375rem;
@@ -14527,29 +14522,31 @@ input[type="number"] {
 
 .antdstyle .ant-tree-node-content-wrapper {
   width: 100% !important;
-  border: 1px  solid #a4caf9 !important;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 2px 2px;
-  height: 40px;
-  display:flex;
+  border: 1px solid #a4caf9 !important;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
+  height: 53px;
+  display: flex;
   align-items: center;
   border-radius: 7px;
   font-size: 13px; 
 }
-.collapsestyle .ant-collapse-item{
+.collapsestyle .ant-collapse-item {
   border-bottom: none !important;
 }
-.tablestyle .table th:first-child{
-  border-radius:0px 0px 0px 0px !important
+.tablestyle .table th:first-child {
+  border-radius: 0px 0px 0px 0px !important;
 }
 .tablestyle .table th:last-child {
-  border-radius:0px 0px 0px 0px !important;
-  padding:0px 0px;
+  border-radius: 0px 0px 0px 0px !important;
 }
-.tablestyle .table{
-  height:200px !important;
+.tablestyle .table {
+  height: 200px !important;
 }
-.ant-pagination .ant-pagination-mini  .ant-table-pagination .ant-table-pagination-right{
-  margin:0px 0px !important;
+.ant-pagination
+  .ant-pagination-mini
+  .ant-table-pagination
+  .ant-table-pagination-right {
+  margin: 0px 0px !important;
 }
 .antdstyle .ant-tree .ant-tree-treenode {
   display: flex;
@@ -14562,22 +14559,22 @@ input[type="number"] {
   .ant-select-selector {
   border: 1px solid #d9d9d9;
 }
-.tablehead .table th{
-  padding:0px 0px !important;
+.tablehead .table th {
+  padding: 0px 0px !important;
 }
 .ant-tree-show-line .ant-tree-switcher {
   background: transparent;
   font-size: 20px;
-  display:flex;
+  display: flex;
 }
-.ant-tree-show-line .ant-tree-indent-unit:before{
+.ant-tree-show-line .ant-tree-indent-unit:before {
   border-inline-end: 1px solid black !important;
 }
 .ant-tree .ant-tree-switcher-leaf-line:before {
-   border-inline-end: 1px solid black !important;
+  border-inline-end: 1px solid black !important;
 }
 .ant-tree .ant-tree-switcher-leaf-line:after {
-    border-bottom: 1px solid black !important;  
+  border-bottom: 1px solid black !important;
 }
 .ant-tree-iconEle{
   
@@ -14623,4 +14620,104 @@ input[type="number"] {
 }
 .card-text {
   scrollbar-width: none;
+}
+.dosSelect > .ant-select-selector {
+  width: 150px !important;
+  text-align: center;
+}
+
+.ant-menu-light.ant-menu-inline .ant-menu-sub.ant-menu-inline {
+  background-color: white !important;
+}
+.ant-menu-light .ant-menu-submenu-selected > .ant-menu-submenu-title {
+  color: black !important;
+  background-color: transparent !important;
+}
+.ant-menu-light .ant-menu-item-selected {
+  color: white !important;
+  background-color: #04306f !important;
+}
+.switch .ant-switch-handle:before {
+  background: black !important;
+}
+.switch .ant-switch-inner {
+  background: #d3d3d3 !important;
+}
+.directCodeSwitch .ant-switch-handle:before {
+  background: #008cba !important;
+}
+.directCodeSwitch .ant-switch-inner {
+  background: #0dcaf0 !important;
+}
+.ant-upload {
+  width: 100%;
+}
+
+.custom-react-select-tenant {
+  border-radius: 8px !important;
+  background: #fff !important;
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08) !important;
+  height: 42px !important;
+  flex-shrink: 0;
+  border: none !important;
+  width: 100% !important;
+}
+
+.custom-react-select-tenant > div:nth-child(4) > div {
+  background-color: #fff;
+}
+
+.custom-react-select-tenant > div:nth-child(4) > div > div {
+  background-color: #fff;
+  cursor: pointer;
+  -webkit-transition: all 0.5s;
+  -ms-transition: all 0.5s;
+  transition: all 0.5s;
+}
+
+.custom-react-select-tenant > div:nth-child(4) > div > div:hover {
+  background-color: var(--rgba-primary-1);
+  color: #000;
+}
+
+.custom-react-select-tenant > div:nth-child(3) {
+  height: 42px !important;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  border: none !important;
+}
+
+.custom-react-select-tenant > div:nth-child(4) {
+  border-radius: 10px;
+  min-width: 150px;
+  overflow: hidden;
+  box-shadow: 0px 10px 40px 0px rgba(21, 50, 93, 0.1);
+}
+
+.custom-react-select-tenant > div > div:first-child div {
+  font-size: 14px;
+  color: #6e6e6e;
+}
+
+.custom-react-select-tenant > div > div:nth-child(2) > span {
+  display: none;
+}
+.company-name {
+  position: absolute;
+  bottom: 40%;
+  left: 62%;
+  transform: translateX(-50%);
+  font-style: italic;
+  font-size: 13px;
+  color: #043069;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  letter-spacing: 0.5px;
+  font-weight: 500;
+  font-family: "Arial", sans-serif;
+  white-space: nowrap;
+}
+:where(.css-dev-only-do-not-override-1b0bdye).ant-picker-dropdown
+  .ant-picker-header {
+  width: 82% !important;
+  margin-left: 20px;
 }

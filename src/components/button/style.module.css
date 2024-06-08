@@ -34,3 +34,24 @@
   color:black;
   border-color: #F0F6FE;
 }
+.submitBtn{
+ height:45px;
+  background:#04306f;
+  color:white;
+  width:30%;
+}
+.subHeader{
+  font-weight: 500;
+  font-size: 18px;
+  margin:10px 0 10px 0;
+}
+.inputField{
+  height:42px;
+}
+.picker,
+.picker:hover,
+.picker:focus,
+.picker:active{
+  border:1px solid #d9d9d9 !important;
+  box-shadow: none !important;
+}

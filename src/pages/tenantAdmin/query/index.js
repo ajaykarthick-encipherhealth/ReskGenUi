@@ -5,6 +5,7 @@ import styles from "./styles.module.css";
 import visitStyles from "../../../styles/visitdata.module.css";
 import Header from "../../../jsx/layouts/nav/Header";
 import { SVGICON } from "../../../jsx/constant/theme";
+import moment from "moment";
 
 const Query = () => {
   const [meatQueryList, setMeatQueryList] = useState([]);
@@ -177,7 +178,7 @@ const Query = () => {
                                   </div>
                                   <div className="col-xl-2 d-grid">
                                     <span className="meat-name-details">
-                                      {moment(item.createdAt).format(
+                                      {moment(item.createdAt)?.format(
                                         "MM-DD-YYYY & HH:MM:SS"
                                       )}
                                     </span>

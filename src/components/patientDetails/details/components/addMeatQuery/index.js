@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch,connect } from "react-redux";
 import { Modal } from "antd";
 import { Button } from "react-bootstrap";
 import { Offcanvas } from "react-bootstrap";
@@ -13,9 +13,9 @@ import {
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import styles from "../../hcc/styles.module.css";
-import { getMeatQueryList } from "../../../../../store/actions/ReviewerAction/PatientDetailsAction";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import RegularButton from "../../../../../components/button";
+import { actions as detailsActions } from "../../../../../stores/patient/details";
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -26,12 +26,10 @@ const AddMeatQuery = ({
   setIsMeatQueryModal,
   meatEditQueryRes,
   queryFormValues,
+  patientDetailsResult
 }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const patientDetailsResult = useSelector(
-    (state) => state?.ReviewerReducers?.patientDetails
-  );
   const [meatQueryResult, setMeatQueryResult] = useState([]);
   const [meatQueryUpdate, setMeatQueryUpdate] = useState(false);
   const [addValidCodeCheck, setAddValidCodeCheck] = useState(null);
@@ -87,7 +85,7 @@ const AddMeatQuery = ({
     var patientId = localStorage.getItem("patientId");
     var dataformat = {
       patientId: patientId,
-      dosYear: patientDetailsResult?.result?.response?.dos,
+      dosYear: patientDetailsResult?.data?.response?.dos,
       diagnosisCode: form.diagnosisCode,
       queryReason: form.queryReason,
       providerName: form.providerName,
@@ -102,9 +100,7 @@ const AddMeatQuery = ({
       inputValue.queryComment = result.response.queryComment;
       setMeatQueryResult(result.response);
       setMeatQueriedDetailsModal(true);
-      dispatch(
-        getMeatQueryList(patientDetailsResult?.result?.response?.dos, patientId)
-      );
+        getMeatQueryList(patientId,patientDetailsResult?.data?.response?.dos)
     }
   };
 
@@ -113,7 +109,7 @@ const AddMeatQuery = ({
     var updateDataformat = {
       patientId: patientId,
       diagnosisCode: formInitialValues?.diagnosisCode,
-      dos: patientDetailsResult?.result?.response?.dos,
+      dos: patientDetailsResult?.data?.response?.dos,
       queryComment: inputValue.queryComment,
     };
     var result = await updateMeatQuery(updateDataformat);
@@ -417,7 +413,7 @@ const AddMeatQuery = ({
                   <p className={styles.meatQueried_details}>
                     We've identified the following details that may pertain to
                     records associated with{" "}
-                    <b>{patientDetailsResult?.result?.response?.patientName}</b>
+                    <b>{patientDetailsResult?.data?.response?.patientName}</b>
                     .
                   </p>
                 </div>
@@ -457,4 +453,13 @@ const AddMeatQuery = ({
   );
 };
 
-export default AddMeatQuery;
+const enhancer = connect(
+  (state) => ({
+    patientDetailsResult :state?.patientDetails?.details?.result
+  }),
+  {
+    getMeatQueryList:detailsActions.meatQueryAction
+
+  }
+);
+export default enhancer(AddMeatQuery);

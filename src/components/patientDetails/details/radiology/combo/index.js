@@ -1,31 +1,18 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { connect } from "react-redux";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
-import moment, { months } from "moment";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCircleUser,
   faPlus,
   faArrowsAlt,
   faSitemap,
 } from "@fortawesome/free-solid-svg-icons";
-import { CalendarOutlined } from "@ant-design/icons";
 import { Popconfirm, Divider, Popover, Menu, DatePicker, Dropdown } from "antd";
 import { IMAGES, SVGICON } from "../../../../../jsx/constant/theme";
 import { Modal } from "antd";
-import { useRouter } from "next/navigation";
 import CamboTree from "../../hcc/org";
 
-const Combo = ({}) => {
-  const radiologyDetailsResult = useSelector(
-    (state) => state?.ReviewerReducers?.radiologyDeatils
-  );
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
-  const { toolbarPluginInstance } = defaultLayoutPluginInstance;
-  const { searchPluginInstance } = toolbarPluginInstance;
-  const { highlight } = searchPluginInstance;
+const Combo = ({radiologyDetailsResult}) => {
   const [comboDiseaseCodesList, setComboDiseaseCodesList] = useState([]);
   const [invalidComboDiseaseCodesList, setInvalidComboDiseaseCodesList] =
     useState([]);
@@ -44,8 +31,8 @@ const Combo = ({}) => {
     }, [radiologyDetailsResult]);
 
   const getPatientDetailsRadiologyYear = async () => {
-    if (radiologyDetailsResult?.result?.response) {
-      var result = radiologyDetailsResult?.result?.response;
+    if (radiologyDetailsResult?.data?.response) {
+      var result = radiologyDetailsResult?.data?.response;
       if (result.validDisease != null) {
         var comboDis = "";
         var dosYearArr = [];
@@ -104,15 +91,6 @@ const Combo = ({}) => {
     var newArray = [];
     newArray = [...comboDiseaseCodesList, ...result2];
     setComboDiseaseCodesList(newArray);
-  };
-  const findValueDocument = (value, disDescription) => {
-    var splitPoint = disDescription.substring(" ", 40);
-
-    highlight({
-      keyword: splitPoint,
-      // matchCase: true,
-      // wholeWords:true
-    });
   };
 
   const addValidDiseases = () => {
@@ -334,4 +312,10 @@ const Combo = ({}) => {
   );
 };
 
-export default Combo;
+const enhancer = connect(
+  (state) => ({
+    radiologyDetailsResult :state?.patientDetails?.details?.radiologyResult,
+    radiologyFile :state?.patientDetails?.details?.radiologyFileResult,
+  }),
+);
+export default enhancer(Combo);

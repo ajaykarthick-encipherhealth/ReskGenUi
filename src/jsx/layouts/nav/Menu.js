@@ -173,16 +173,50 @@ export const L2AuditorMenuList = [
 ];
 export const ProviderMenuList = [
   {
+    title: "Dashboard",
+    iconStyle: SVGICON.dashboardIcon,
+    to: "/tenantAdmin/dashboard",
+    // childRoute: "/fhirTable/details",
+  },
+  {
+    title: "Users",
+    iconStyle: SVGICON.adminUser,
+    to: "/tenantAdmin/user",
+  },
+  {
+    title: "Patients",
+    iconStyle: SVGICON.patientListIcon,
+    to: "/tenantAdmin/patients",
+    childRoute: "/tenantAdmin/patients/details",
+  },
+  // {
+  //   title: "Query",
+  //   iconStyle: SVGICON.dashboardIcon,
+  //   to: "/tenantAdmin/query",
+  //   // childRoute: "/fhirTable/details",
+  // },
+  {
     title: "Patients Sync",
     iconStyle: SVGICON.adminUser,
     to: "/tenantAdmin/fhirTable",
     childRoute: "/fhirTable/details",
   },
-  // {
-  //   title: "Settings",
-  //   iconStyle: SVGICON.settingsIcon,
-  //   to: "/tenantAdmin/settings",
-  // },
+  {
+    title: "File Processing",
+    iconStyle: SVGICON.Usermanagement,
+    to: "/tenantAdmin/fileprocessing",
+  },
+  {
+    title: "Patient Allocate",
+    iconStyle: SVGICON.Allocation,
+    to: "/tenantAdmin/allocateduser",
+  },
+  {
+    title: "Tracking",
+    iconStyle: SVGICON.Tracking,
+    to: "/tenantAdmin/tracking",
+    childRoute3: "/tenantAdmin/patients/details",
+  },
 ];
 export const EHRMenuList = [
   {

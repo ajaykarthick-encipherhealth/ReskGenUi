@@ -61,7 +61,16 @@
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
+.emptyCard{
+  background: #ffff !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
 .card h2 {
   margin-top: 0;
 }
@@ -132,9 +141,6 @@
   color: #04306f;
   font-family: Manrope;
 }
-.text {
-  font-size: 14px;
-}
 .pName {
   font-size: 16px;
   font-weight: 500px;
@@ -161,6 +167,7 @@
   font-weight: 600;
   font-family: manrope;
   color: black;
+  margin-bottom: 10px;
 }
 .subCard {
   height: 75px;
@@ -207,13 +214,13 @@
   transform: translateX(-50%);
 } */
 .flags {
-  width: 243p;
-  height: 310px;
+  /* width: 2px; */
+  height: 260px;
   border-radius: 10px;
   background-color: #e1edfe;
   margin-right: 5px;
   padding: 10px;
-  overflow: scroll;
+  /* overflow-y: scroll; */
 }
 .flag {
   width: 209px;
@@ -232,8 +239,9 @@
   border-radius: 50%;
   color: white;
   text-align: center;
-  padding: 3px;
+  padding: 5px;
   margin-right: 10px;
+  font-size: 14px !important;
 }
 .contentGroups {
   display: flex;
@@ -370,8 +378,8 @@
   width: 70% !important;
 }
 .text {
-  font-size: 18px;
   font-weight: 500;
+  font-size: 14px;
 }
 .reportInput {
   background-color: #ebf3fe;
@@ -506,8 +514,8 @@
   align-items: center;
 }
 .contentOverFlow {
-  height: 255px;
-  overflow: scroll;
+  height: 90%;
+  overflow-y: scroll;
 }
 .card3 {
   padding: 10px;
@@ -523,7 +531,7 @@
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 360px;
+  height: 395px;
 }
 .card2 {
   padding: 20px;
@@ -531,7 +539,27 @@
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 873px;
+  height: 908px;
+}
+
+.reportDiv{
+  display: flex;
+  flex-direction: column;
+  height:85px;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  border-radius: 10px;
+  padding: 10px 0 0px 0;
+}
+
+.reportDiv2{
+  display: flex;
+  flex-direction: row;
+  height:275px;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
 }
 .exportDisable {
   width: 100px;

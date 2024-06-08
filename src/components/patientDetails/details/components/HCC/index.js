@@ -10,6 +10,7 @@ import {
   faPen,
   faEllipsisVertical,
   faBook,
+  faCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { SVGICON } from "../../../../../jsx/constant/theme";
 import { QuestionCircleOutlined, CloseOutlined } from "@ant-design/icons";
@@ -18,12 +19,14 @@ import {
   getEncounterDateBackground,
   getMeatFound,
   getProviderNameList,
+  getSuspectTypes,
   moveToAnotherAction,
 } from "../function/ReusableFunctions";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, connect } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
 import ModelIndex from "../model/Index";
 import ENDPOINTS from "../../../../../utility/enpoints";
+import { actions as detailsActions } from "../../../../../stores/patient/details";
 
 const HccCards = ({
   list,
@@ -57,12 +60,10 @@ const HccCards = ({
   setIsValidAction,
   provided,
   isVisitData,
+  fileDosPageNumberList,
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
-  );
-  const fileDosPageNumberList = useSelector(
-    (state) => state?.ReviewerReducers.dosPageNumberList
   );
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
@@ -73,6 +74,9 @@ const HccCards = ({
     searchString: "",
     pagenumber: "",
   });
+  const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
+  const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
+
   const PopContentHccVersion = (
     <div className={styles.innerPop}>
       <div className={styles.displayDiv}>
@@ -181,12 +185,51 @@ const HccCards = ({
                           </div>
                           {/* {data.defaultPosition} */}
                           <div className="d-flex">
+                            {data.suspectType.length != 0 && (
+                              <>
+                                {" "}
+                                {getSuspectTypes(
+                                  data.diagnosisCode,
+                                  data.suspectType
+                                )}
+                              </>
+                            )}
+                            {data.isMostSpecific == true && (
+                                    <>
+                                      <div
+                                        className={visitStyles.tree_icon}
+                                        style={{ background: "#c7f3c6" }}
+                                        onClick={() => {
+                                          setOpens(true);
+                                          setCombiTree([
+                                            { ...data, expanded: true },
+                                          ]);
+                                        }}
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={faSitemap}
+                                          style={{
+                                            size: 8,
+                                            color: "#088f39",
+                                          }}
+                                        />
+                                      </div>
+                                   
+                                    </>
+                                  )}
+
+                            {/* <div>
+                                <FontAwesomeIcon
+                                  icon={faCircle}
+                                  className={styles.suspectCircle}
+                                 />
+                              </div> */}
                             {cardTitle == "SUGGESTED" ||
                             cardTitle == "DELETED" ? (
                               <>
-                                {"VALID" ? (
+                                {data.defaultPosition == "VALID" ? (
                                   <span
-                                    className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange} mx-2`}
+                                    className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}
                                   ></span>
                                 ) : data.defaultPosition == "INVALID" ? (
                                   <span
@@ -203,6 +246,7 @@ const HccCards = ({
                                 ) : null}
                               </>
                             ) : null}
+
 
                             <Popover
                               placement="left"
@@ -317,7 +361,7 @@ const HccCards = ({
                                       </div>
                                     }
                                   </Popconfirm>
-                                  {data.isMostSpecific == true && (
+                                  {/* {data.isMostSpecific == true && (
                                     <div className="cr-pointer d-flex">
                                       <div
                                         className={visitStyles.close_icon}
@@ -341,7 +385,7 @@ const HccCards = ({
                                         Combo Tree View
                                       </div>
                                     </div>
-                                  )}
+                                  )} */}
                                   {data.notes && (
                                     <div className="cr-pointer px-1 mr-1">
                                       <Popover
@@ -392,7 +436,7 @@ const HccCards = ({
                                   )}
                                 </>
                               )}
-                              className="cr-pointer"
+                              className={styles.ellipsBtn}
                             >
                               <div
                                 onClick={() => {
@@ -436,28 +480,37 @@ const HccCards = ({
                                 patientDocumentResult: patientDocumentResult,
                               })}
                             </div>
-                            <div
-                              className={`${visitStyles.encounterAndSectionHeader}`}
-                            >
-                              {getCaptureSectionBackgroundFile(
-                                data?.capturedSections,
-                                data?.encounterDate,
-                                data?.actualDescription,
-                                data?.diagnosisCode,
-                                data?.getPlace,
-                                captureSectionMatching,
-                                setSearch,
-                                setFileLoading,
-                                setIsModalOpenLab,
-                                setIsModalOpenRadiology,
-                                setIsModalOpenValidCodes,
-                                setFileModalHeader,
-                                fileId,
-                                patientDocumentResult,
-                                fileInitialPage,
-                                setFileInitialPage
-                              )}
-                            </div>
+                            {(data.providerName.length == 0) && (
+                              <div
+                                className={`${visitStyles.encounterAndSectionHeader}`}
+                              >
+                                {getCaptureSectionBackgroundFile(
+                                  data?.capturedSections,
+                                  data?.encounterDate,
+                                  data?.actualDescription,
+                                  data?.diagnosisCode,
+                                  data?.getPlace,
+                                  captureSectionMatching,
+                                  setSearch,
+                                  setFileLoading,
+                                  setIsModalOpenLab,
+                                  setIsModalOpenRadiology,
+                                  setIsModalOpenValidCodes,
+                                  setFileModalHeader,
+                                  fileId,
+                                  patientDocumentResult,
+                                  fileInitialPage,
+                                  setFileInitialPage,
+                                  data?.hyperlinks,
+                                  encounterDateMatching,
+                                  setIsMulitpleHeader,
+                                  isMulitpleHeader,
+                                  setIsMulitpleHeadeCode,
+                                  isMulitpleHeaderCode,
+                                  data.dbDescription
+                                )}
+                              </div>
+                            )}
                           </div>
                           <div
                             className={`${visitStyles.encounterAndSectionHeader}`}
@@ -540,6 +593,8 @@ const HccCards = ({
                                 )}
                               </div>
                             </div>
+                            {data.providerName.length == 0 && (
+                            <>
                             <div
                               className={`${visitStyles.encounterAndSectionHeader}`}
                             >
@@ -564,6 +619,8 @@ const HccCards = ({
                                 Combo
                               </Badge>
                             ) : null}
+                        
+                            </>)}
 
                             {data.getPlace == "Insulin" ? (
                               <span
@@ -594,6 +651,64 @@ const HccCards = ({
                             ) : null}
                           </div>
                         </div>
+                        {data.providerName.length != 0 && (
+                          <div className="d-flex justify-content-between">
+                                <div
+                            className={`${visitStyles.encounterAndSectionHeader}`}
+                          >
+                            {getCaptureSectionBackgroundFile(
+                              data?.capturedSections,
+                              data?.encounterDate,
+                              data?.actualDescription,
+                              data?.diagnosisCode,
+                              data?.getPlace,
+                              captureSectionMatching,
+                              setSearch,
+                              setFileLoading,
+                              setIsModalOpenLab,
+                              setIsModalOpenRadiology,
+                              setIsModalOpenValidCodes,
+                              setFileModalHeader,
+                              fileId,
+                              patientDocumentResult,
+                              fileInitialPage,
+                              setFileInitialPage,
+                              data?.hyperlinks,
+                              encounterDateMatching,
+                              setIsMulitpleHeader,
+                              isMulitpleHeader,
+                              setIsMulitpleHeadeCode,
+                              isMulitpleHeaderCode,
+                              data.dbDescription
+                            )}
+                          </div>
+                                <div
+                              className={`${visitStyles.encounterAndSectionHeader}`}
+                            >
+                              {data.isManuallyAdded == true ? (
+                                <Badge
+                                  className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                >
+                                  Manually Added
+                                </Badge>
+                              ) : null}
+                            </div>
+                            {data.isComboCode == true ? (
+                              <Badge
+                                className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                onClick={() => {
+                                  setActiveTabHead(3);
+                                  setActiveComboTree({
+                                    diagnosisCode: data?.diagnosisCode,
+                                  });
+                                }}
+                              >
+                                Combo
+                              </Badge>
+                            ) : null}
+                            </div>
+                      
+                        )}
                       </div>
                     );
                   }}
@@ -604,6 +719,7 @@ const HccCards = ({
           <span className="d-none">{provided?.placeholder}</span>
         </div>
       )}
+      
       <ModelIndex
         title={"Edit"}
         openState={openEdit}
@@ -619,4 +735,7 @@ const HccCards = ({
   );
 };
 
-export default HccCards;
+const enhancer = connect((state) => ({
+  fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
+}));
+export default enhancer(HccCards);

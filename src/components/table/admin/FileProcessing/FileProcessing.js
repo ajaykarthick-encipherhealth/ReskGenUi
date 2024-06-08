@@ -26,8 +26,9 @@ export const eventStreming = (
 ) => {
   const id = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
+  const orgId = localStorage.getItem("orgId");
   const sse = new EventSource(
-    `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}`
+    `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}&organizationId=`
   );
 
   const fileStatusEventListener = (event) => {
@@ -161,9 +162,10 @@ function FileProcessingTable({ patinetListAll, loading }) {
   useEffect(() => {
     const id = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
+    const orgId = localStorage.getItem("orgId");
     let isFinished = false;
     const sse = new EventSource(
-      `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}`
+      `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}&organizationId=${orgId}`
     );
 
     const fileStatusEventListener = (event) => {

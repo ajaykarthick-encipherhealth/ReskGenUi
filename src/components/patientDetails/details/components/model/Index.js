@@ -4,8 +4,10 @@ import { Button } from "react-bootstrap";
 import CamboTree from "../../hcc/org";
 import PdfViewer from "../../PdfViewerComponent";
 import { handleSubmitValidNotes } from "../function/ReusableFunctions";
-import { useDispatch } from "react-redux";
+import { useDispatch,connect } from "react-redux";
 import EditForm from "./EditForm";
+import { actions as detailsActions } from "../../../../../stores/patient/details";
+
 
 const ModelIndex = ({
   validated,
@@ -27,7 +29,11 @@ const ModelIndex = ({
   initialValues,
   setInitialValues,
   setOpenContent,
-  selectedData
+  selectedData,
+  getpatientDetailsData,
+  patientDetailsResult,
+  getRadiologyDetails,
+  getLabDetails
 }) => {
   const [form] = Form.useForm();
   const { TextArea } = Input;
@@ -79,7 +85,11 @@ const ModelIndex = ({
                       getPatientDetailsReload,
                       isValidAction,
                       selectDisDetails,
-                      dispatch,
+                      getpatientDetailsData,
+                      patientDetailsResult,
+                      getLabDetails,
+                      getRadiologyDetails,
+                      handleCloseModal
                     });
                     form.resetFields();
                   }}
@@ -140,4 +150,15 @@ const ModelIndex = ({
   );
 };
 
-export default ModelIndex;
+const enhancer = connect(
+  (state) => ({
+    patientDetailsResult :state?.patientDetails?.details?.patientResult
+  }),
+  {
+    getpatientDetailsData:detailsActions.patientDetailsAction,
+    getRadiologyDetails:detailsActions.radiologyDetailsAction,
+    getLabDetails:detailsActions.labDetailsAction,
+
+  }
+);
+export default enhancer(ModelIndex);

@@ -14,8 +14,8 @@ export const getPatientLabDetails = async (
   setAllDisList,
   setDeletedDiseasesList
 ) => {
-  if (labDetailsResult?.result?.response) {
-    var resultTest = labDetailsResult?.result?.response;
+  if (labDetailsResult?.data?.response) {
+    var resultTest = labDetailsResult?.data?.response;
     setPatientLabDetails && setPatientLabDetails(resultTest);
     var dosYearArrFile = [];
     var fileDatesArr = [];
@@ -107,6 +107,11 @@ export const getPatientLabDetails = async (
               diagnosisCode: res.diagnosisCode,
             });
           });
+          res.provider?.map((res, index) => {
+            capturedSectionsArr.push({
+              name: res.providerName,
+            });
+          });
         });
 
         var dublicateSectionArr = getUniqueListBy(capturedSectionsArr, "name");
@@ -119,17 +124,17 @@ export const getPatientLabDetails = async (
           });
         });
 
-        var sectionColorResult = sectionColorList.result?.response;
+        // var sectionColorResult = sectionColorList.result?.response;
 
-        let sectionColorResultMatch = sectionColorResult.filter((o1) =>
-          dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
-        );
-        let sectionColorResultNotMatch = dublicateSectionArr.filter(
-          (o1) => !sectionColorResult.some((o2) => o1.name === o2.sectionName)
-        );
+        // let sectionColorResultMatch = sectionColorResult.filter((o1) =>
+        //   dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
+        // );
+        // let sectionColorResultNotMatch = dublicateSectionArr.filter(
+        //   (o1) => !sectionColorResult.some((o2) => o1.name === o2.sectionName)
+        // );
 
         var notMatchColorArray = [];
-        sectionColorResultNotMatch?.map((res, index) => {
+        dublicateSectionArr?.map((res, index) => {
           var radomColorcode = stringToColour(res.name);
           var randomColorChangeShadow = radomColorcode + 33;
           notMatchColorArray.push({
@@ -146,8 +151,8 @@ export const getPatientLabDetails = async (
 
         var newArrayColorMatchs = [];
         newArrayColorMatchs = [
-          ...sectionColorResult,
-          ...sectionColorResultMatch,
+          // ...sectionColorResult,
+          // ...sectionColorResultMatch,
           ...notMatchColorArray,
         ];
 
@@ -215,3 +220,15 @@ export const getPatientLabDetails = async (
 function getUniqueListBy(arr, key) {
   return [...new Map(arr.map((item) => [item[key], item])).values()];
 }
+const stringToColour = (str) => {
+  let hash = 0;
+  str?.split("").forEach((char) => {
+    hash = char.charCodeAt(0) + ((hash << 5) - hash);
+  });
+  let colour = "#";
+  for (let i = 0; i < 3; i++) {
+    const value = (hash >> (i * 8)) & 0xff;
+    colour += value.toString(16).padStart(2, "0");
+  }
+  return colour;
+};

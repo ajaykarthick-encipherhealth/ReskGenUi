@@ -15,8 +15,8 @@ export const getPatientRadiologyDetails = async (
   setDeletedDiseasesList
 ) => {
   var patientId = localStorage.getItem("patientId");
-  if (radiologyDetailsResult?.result?.response) {
-    var result = radiologyDetailsResult?.result?.response;
+  if (radiologyDetailsResult?.data?.response) {
+    var result = radiologyDetailsResult?.data?.response;
     setPatientDetailsRadiology(result);
     if (result.radiologyFileDetail != null) {
       if (result.radiologyFileDetail.length != 0) {
@@ -161,6 +161,11 @@ export const getPatientRadiologyDetails = async (
             diagnosisCode: res.diagnosisCode,
           });
         });
+        res.provider?.map((res, index) => {
+          capturedSectionsArr.push({
+            name: res.providerName,
+          });
+        });
       });
 
       var dublicateSectionArr = getUniqueListBy(capturedSectionsArr, "name");
@@ -172,17 +177,17 @@ export const getPatientRadiologyDetails = async (
           colors: COLORS2[index],
         });
       });
-      var sectionColorResult = sectionColorList.result?.response;
+      // var sectionColorResult = sectionColorList.result?.response;
 
-      let sectionColorResultMatch = sectionColorResult.filter((o1) =>
-        dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
-      );
-      let sectionColorResultNotMatch = dublicateSectionArr.filter(
-        (o1) => !sectionColorResult.some((o2) => o1.name === o2.sectionName)
-      );
+      // let sectionColorResultMatch = sectionColorResult.filter((o1) =>
+      //   dublicateSectionArr.some((o2) => o1.sectionName === o2.name)
+      // );
+      // let sectionColorResultNotMatch = dublicateSectionArr.filter(
+      //   (o1) => !sectionColorResult.some((o2) => o1.name === o2.sectionName)
+      // );
 
       var notMatchColorArray = [];
-      sectionColorResultNotMatch?.map((res, index) => {
+      dublicateSectionArr?.map((res, index) => {
         var radomColorcode = stringToColour(res.name);
         var randomColorChangeShadow = radomColorcode + 33;
         notMatchColorArray.push({
@@ -194,8 +199,8 @@ export const getPatientRadiologyDetails = async (
 
       var newArrayColorMatchs = [];
       newArrayColorMatchs = [
-        ...sectionColorResult,
-        ...sectionColorResultMatch,
+        // ...sectionColorResult,
+        // ...sectionColorResultMatch,
         ...notMatchColorArray,
       ];
 
@@ -264,3 +269,16 @@ export const getPatientRadiologyDetails = async (
 function getUniqueListBy(arr, key) {
   return [...new Map(arr.map((item) => [item[key], item])).values()];
 }
+
+const stringToColour = (str) => {
+  let hash = 0;
+  str?.split("").forEach((char) => {
+    hash = char.charCodeAt(0) + ((hash << 5) - hash);
+  });
+  let colour = "#";
+  for (let i = 0; i < 3; i++) {
+    const value = (hash >> (i * 8)) & 0xff;
+    colour += value.toString(16).padStart(2, "0");
+  }
+  return colour;
+};

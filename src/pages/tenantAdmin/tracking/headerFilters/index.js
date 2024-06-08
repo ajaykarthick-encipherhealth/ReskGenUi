@@ -1,0 +1,505 @@
+import React, { useState } from "react";
+import Select from "react-select";
+import { DatePicker, Popover } from "antd";
+import Image from "next/image";
+import styles from "../../../../pages/reviewer/report/report.module.css";
+import warning from "../../../../images/svg/warning.svg";
+import { useDispatch } from "react-redux";
+import Legends from "../../../../components/legends";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { InputText } from "primereact/inputtext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  disableFutureDate,
+  handleRnagePicker2,
+  searchFunction,
+} from "../../../../components/headerFilters/functions";
+import InputField from "../../../../components/input";
+import { getFilters } from "../../../../stores/authflow/actions";
+
+const { RangePicker } = DatePicker;
+const HeaderFilters = ({
+  // for search
+  setSearch,
+  isSearch,
+  searchlabel,
+  searchValue,
+  search,
+  // for report
+  setSentSearch,
+  setReceivedSearch,
+  setCoderSearch,
+
+  // for select
+  selectlabel,
+  isSelector,
+  setSelectedOption,
+  selectOptions,
+  defaultSelectValue1,
+
+  // if has 2 selectors
+  selectlabel2,
+  defaultSelectValue2,
+  selectOptions2,
+  setSelectedOption2,
+
+  // for picker
+  pickerlabel,
+  activeTab,
+  selectedDates,
+  setSelectedDates,
+  defaultStartDate,
+  defaultEndDate,
+  setStartDate,
+  setEndDate,
+  isRangePicker,
+  disabled,
+  // for report
+  setReceivedStartDate,
+  setReceivedEndDate,
+  setCoderStartDate,
+  setCoderEndDate,
+
+  // if has 2 pickers
+  isAnotherPicker,
+
+  // if has allocated date picker
+  pickerlabe3,
+  setStartDate3,
+  setEndDate3,
+  isAnotherPicker2,
+
+  // if has audited date oicker
+  pickerlabe4,
+  setStartDate4,
+  setEndDate4,
+
+  // if has audited allocated date oicker
+  pickerlabe5,
+  setStartDate5,
+  setEndDate5,
+  isAnotherPicker5,
+
+  setStartDate6,
+  setEndDate6,
+  // allocatedBY
+  isAllocatedBySelector,
+  allocatedBylabel,
+  allocatedByOptoons,
+  setSelAllocatedBy,
+  defaultAllocatedBy,
+
+  // allocatedTo
+  isAllocatedToSelector,
+  allocatedTolabel,
+  allocatedToOptoons,
+  setSelAllocatedTo,
+  defaultAllocateTo,
+  bullets,
+  badges,
+  disable,
+  tracking,
+  selectorField,
+  defaultShow = false,
+  defaultSize = "col-xl-4",
+  setAuditSelAllocatedTo,
+  isAuditAllocatedToSelector,
+  auditAllocatedToOptoons,
+  auditStatusOptions,
+  setAuditSelectedOption,
+  auditAllocatedByOptoons,
+  setSelAuditAllocatedBy,
+  clear,
+  setClear,
+  selectorValue,
+  selector2Value,
+  selector3Value,
+  selector4value,
+  selector5value,
+  selector6value,
+  selector7value,
+  selectedDates2,
+  selectedDates3,
+  selectedDates4,
+  selectedDates5,
+  setSelectedDates2,
+  setSelectedDates3,
+  setSelectedDates4,
+  setSelectedDates5,
+  auditallocatedToOptoons,
+  auditSelAllocatedTo,
+// selectorgList
+  orgAllList,
+  setSelectedOrgList,
+  selectOrgList,
+  setTrackInput,
+  trackInput
+}) => {
+  const dispatch = useDispatch();
+
+  return (
+    <>
+      <div style={{ display: "flex" }}>
+        <div className="row filter-contain" style={{ width: "100%" }}>
+          {isAllocatedToSelector && (
+            <div
+              className={defaultSize}
+              style={{ zIndex: tracking && "2" }}
+              onClick={() => {
+                dispatch(getFilters("patientAllocated"));
+              }}
+            >
+              <label className={styles.label}>Reviewer</label>
+              <div class="form-group has-search">
+                <Select
+                  value={selectorValue ? selectorValue : ""}
+                  onChange={(selectedOption) => {
+                    setClear(false);
+                    setSelAllocatedTo(selectedOption);
+                  }}
+                  options={allocatedToOptoons}
+                  className="custom-react-select-tenant"
+                  isSearchable={false}
+                  // placeholder={defaultAllocateTo}
+                />
+              </div>
+            </div>
+          )}
+
+          {isAuditAllocatedToSelector && (
+            <div
+              className={defaultSize}
+              style={{ zIndex: tracking && "2" }}
+              onClick={() => {
+                dispatch(getFilters("auditedAssigned"));
+              }}
+            >
+              <label className={styles.label}>Supervisor</label>
+              <div class="form-group has-search">
+                <Select
+                  value={auditSelAllocatedTo ? auditSelAllocatedTo : ""}
+                  onChange={(selectedOption) => {
+                    setClear(false);
+                    setAuditSelAllocatedTo(selectedOption);
+                  }}
+                  options={auditallocatedToOptoons}
+                  className="custom-react-select-tenant"
+                  isSearchable={false}
+                  placeholder={defaultAllocateTo}
+                />
+              </div>
+            </div>
+          )}
+
+          <div className={defaultSize}>
+            <label className={styles.label}>{pickerlabe4}</label>
+            <div className="dateRangeSize">
+              <RangePicker
+                value={clear ? "" : selectedDates}
+                format="YYYY-MM-DD"
+                onCalendarChange={(val) => setSelectedDates(val)}
+                onChange={(date, dateString) => {
+                  handleRnagePicker2({
+                    date,
+                    dateString,
+                    setStartDate4,
+                    setEndDate4,
+                  });
+
+                  setClear(false);
+                }}
+                disabledDate={(current) => disableFutureDate(current)}
+                onCalendarClose={() => {
+                  setSelectedDates([]);
+                }}
+              />
+            </div>
+          </div>
+
+          {isAnotherPicker5 && (
+            <>
+              <div className={defaultSize}>
+                <label className={styles.label}>{pickerlabe5}</label>
+                <div className="dateRangeSize">
+                  <RangePicker
+                    value={clear ? ["", ""] : selectedDates2}
+                    format="YYYY-MM-DD"
+                    onCalendarChange={(val) => setSelectedDates2(val)}
+                    onChange={(date, dateString) => {
+                      handleRnagePicker2({
+                        date,
+                        dateString,
+                        setStartDate5,
+                        setEndDate5,
+                      });
+
+                      setClear(false);
+                    }}
+                    disabledDate={(current) => disableFutureDate(current)}
+                  />
+                </div>
+              </div>
+            </>
+          )}
+
+          {isAnotherPicker2 && (
+            <>
+              <div className={defaultSize}>
+                <label className={styles.label}>{pickerlabe3}</label>
+                <div className="dateRangeSize">
+                  <RangePicker
+                    value={clear ? ["", ""] : selectedDates3}
+                    format="YYYY-MM-DD"
+                    onCalendarChange={(val) => setSelectedDates3(val)}
+                    onChange={(date, dateString) => {
+                      handleRnagePicker2({
+                        date,
+                        dateString,
+                        setStartDate3,
+                        setEndDate3,
+                      });
+
+                      setClear(false);
+                    }}
+                  />
+                </div>
+              </div>
+            </>
+          )}
+
+          {selectOptions2 && (
+            <div className={defaultSize}>
+              <label className={styles.label}>{selectlabel2}</label>
+              <div class="form-group has-search">
+                <Select
+                  value={clear ? "" : selector3Value}
+                  onChange={(selectedOption) => {
+                    setSelectedOption2(selectedOption);
+                    setClear(false);
+                  }}
+                  options={selectOptions2}
+                  placeholder={defaultSelectValue2?.label}
+                  className="custom-react-select-tenant"
+                  isSearchable={false}
+                />
+              </div>
+            </div>
+          )}
+
+        </div>
+      </div>
+      {defaultShow && (
+        <div style={{ marginTop: "50px" }}>
+          <div className="row filter-contain"  style={{ width: "100%" }}>
+            
+          {isSelector ? (
+            <div className={defaultSize}>
+              <label className={styles.label}>Processed Status</label>
+              <div class="form-group has-search">
+                <Select
+                  value={clear ? "" : selector4value}
+                  onChange={(selectedOption) => {
+                    setSelectedOption(selectedOption);
+                    setClear(false);
+                  }}
+                  options={selectOptions}
+                  className="custom-react-select-tenant"
+                  isSearchable={false}
+                />
+              </div>
+            </div>
+          ) : null}
+
+          {isSelector ? (
+            <div className={defaultSize}>
+              {" "}
+              <label className={styles.label}>Audit Status</label>
+              <div class="form-group has-search">
+                <Select
+                  value={clear ? "" : selector5value}
+                  onChange={(selectedOption) => {
+                    setAuditSelectedOption(selectedOption);
+                    setClear(false);
+                  }}
+                  options={auditStatusOptions}
+                  className="custom-react-select-tenant"
+                  isSearchable={false}
+                />
+              </div>
+            </div>
+          ) : null}
+            {isRangePicker && (
+              <div className={defaultSize}>
+                <label className={styles.label}>{"Reviewer Due Date"}</label>
+                <div className="dateRangeSize">
+                  <RangePicker
+                    value={clear ? ["", ""] : selectedDates4}
+                    format="YYYY-MM-DD"
+                    onCalendarChange={(val) => setSelectedDates4(val)}
+                    onChange={(date, dateString) => {
+                      handleRnagePicker2({
+                        date,
+                        dateString,
+                        setStartDate,
+                        setEndDate,
+                      });
+                      setClear(false);
+                    }}
+                  />
+                </div>
+                {/* <DateRangePicker
+                  selectedDates={clear ? "" : selectedDates}
+                  pickerlabel={"Reviewer Due Date"}
+                  defaultStartDate={defaultStartDate}
+                  defaultEndDate={defaultEndDate}
+                  setStartDate={setStartDate}
+                  setEndDate={setEndDate}
+                  activeTab={activeTab}
+                  setSelectedDates={setSelectedDates}
+                  setReceivedStartDate={setReceivedStartDate}
+                  setReceivedEndDate={setReceivedEndDate}
+                  setCoderStartDate={setCoderStartDate}
+                  setCoderEndDate={setCoderEndDate}
+                  disabled={disable != "Yes" && true}
+                /> */}
+              </div>
+            )}
+
+            {isAnotherPicker && (
+              <>
+                <div className={defaultSize}>
+                  <label className={styles.label}>
+                    {"Supervisor Due Date"}
+                  </label>
+                  <div className="dateRangeSize">
+                    <RangePicker
+                      value={clear ? ["", ""] : selectedDates5}
+                      format="YYYY-MM-DD"
+                      onCalendarChange={(val) => setSelectedDates5(val)}
+                      onChange={(date, dateString) => {
+                        handleRnagePicker2({
+                          date,
+                          dateString,
+                          setStartDate6,
+                          setEndDate6,
+                        });
+
+                        setClear(false);
+                      }}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+           
+         
+          </div>
+        </div>
+      )}
+        {defaultShow && (
+        <div style={{ marginTop: "30px" }}>
+          <div className="row filter-contain"  style={{ width: "100%" }}>
+        
+            {isAllocatedBySelector && (
+              <div
+                className={defaultSize}
+                onClick={() => {
+                  dispatch(
+                    getFilters(selectorField ? selectorField : "allocatedBy")
+                  );
+                }}
+              >
+                <label className={styles.label}>{allocatedBylabel}</label>
+                <div class="form-group has-search">
+                  <Select
+                    value={clear ? "" : selector6value}
+                    onChange={(selectedOption) => {
+                      setSelAllocatedBy(selectedOption);
+                      setClear(false);
+                    }}
+                    options={allocatedByOptoons}
+                    className="custom-react-select-tenant"
+                    isSearchable={false}
+                    placeholder={defaultAllocatedBy}
+                  />
+                </div>
+              </div>
+            )}
+
+            {isSelector ? (
+              <div
+                className={defaultSize}
+                onClick={() => {
+                  dispatch(getFilters("auditAllocatedBy"));
+                }}
+              >
+                <label className={styles.label}>{"Audit Allocated By"}</label>
+                <div class="form-group has-search">
+                  <Select
+                    value={clear ? "" : selector7value}
+                    onChange={(selectedOption) => {
+                      setSelAuditAllocatedBy(selectedOption);
+                      setClear(false);
+                    }}
+                    options={auditAllocatedByOptoons}
+                    className="custom-react-select-tenant"
+                    isSearchable={false}
+                    placeholder={defaultAllocatedBy}
+                  />
+                </div>
+              </div>
+            ) : null}
+
+            {isSearch && (
+              <div className={defaultSize} onClick={() => setClear(false)}>
+                {" "}
+                <label style={{ marginLeft: "8px" }}>{searchlabel}</label>
+                <div class="form-group has-search">
+                  <InputField
+                    isSearch={true}
+                    placeholder="Search"
+                    inputValue={search}
+                    setInputValue={setSearch}
+                    delay={1000}
+                    type="text"
+                    isDisabled={false}
+                    isInputFiled={false}
+                    isTracking={true}
+                    trackInput={trackInput}
+                    setTrackInput={setTrackInput}
+                  />
+                </div>
+              </div>
+            )}
+            {isSelector ? (
+              <div
+                className={defaultSize}
+                onClick={() => {
+                  dispatch(getFilters("auditAllocatedBy"));
+                }}
+              >
+                <label className={styles.label}>{"Select Organization"}</label>
+                <div class="form-group has-search">
+                  <Select
+                    value={clear ? "" : selectOrgList}
+                    onChange={(selectedOption) => {
+                      setSelectedOrgList(selectedOption);
+                      setClear(false);
+                    }}
+                    options={orgAllList}
+                    className="custom-react-select-tenant"
+                    isSearchable={false}
+                    placeholder={defaultAllocatedBy}
+                  />
+                </div>
+              </div>
+            ) : null}
+         
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+export default HeaderFilters;

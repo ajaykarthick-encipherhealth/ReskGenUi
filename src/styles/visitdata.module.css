@@ -3,6 +3,8 @@
   overflow: hidden;
   padding-top: 55px !important;
   background-color: #fff !important;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 .container_fluid {
   background-color: #f0f6fe !important;
@@ -208,7 +210,7 @@
 
 .actionbtnContainer {
   position: relative;
-  right: 60px;
+  right: 70px;
   padding-top: 1.25rem;
 }
 .backArrowBtn {
@@ -357,6 +359,9 @@
   font-size: 12px;
   color: #2d383aaa !important;
 }
+.calenderIconNew {
+  font-size: 12px;
+}
 
 .captureheader {
   background: rgba(194, 54, 83, 0.2);
@@ -426,6 +431,8 @@
   float: right;
   margin-right: 5px;
   height: 20px;
+  width: 85px;
+  padding: 5px;
 }
 .isComboCode {
   background: #e7cff1 !important;
@@ -439,6 +446,8 @@
   margin-right: 5px;
   height: 20px;
   cursor: pointer;
+  width: 45px;
+  padding: 5px;
 }
 
 .close_icon {
@@ -455,6 +464,26 @@
   justify-content: center;
 }
 .close_icon svg {
+  text-align: center;
+  display: flex;
+  font-size: 10px;
+  /* padding-top: 2px;
+  margin: 2px 0px 0px 3px; */
+}
+.tree_icon {
+  width: 20px;
+  height: 18px;
+  border-radius: 4px;
+  background: #fee1e1;
+  text-align: center;
+  margin-right: 3px;
+  margin-top: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tree_icon svg {
   text-align: center;
   display: flex;
   font-size: 10px;
@@ -799,13 +828,13 @@
   margin-right: 5px;
 }
 .flagCodes {
-  margin-right: 15px;
+  margin-right: 20px;
   color: #000;
   font-size: 11px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  margin-top: 1px;
+  margin-top: 4px;
 }
 .nameList {
   color: #221c1c;
@@ -1037,57 +1066,53 @@
   background-color: #46c263;
 }
 .hccFlag {
-  height: 13px;
-  width: 13px;
+  height: 15px;
+  width: 14px;
   background: #04b700;
   margin-right: 3px;
-  margin-top: 2px;
+  margin-top: 4px;
   border-radius: 2px;
 }
 .validColor {
   color: #04b700;
   padding: 0 5px;
- 
 }
 .nonhccFlag {
-  height: 13px;
-  width: 13px;
+  height: 15px;
+  width: 14px;
   background: #fada5e;
   margin-right: 3px;
-  margin-top: 2px;
+  margin-top: 5px;
   border-radius: 2px;
 }
 .invalidColor {
   color: #fada5e;
   padding: 0 5px;
-
 }
 
 .suggestedFlag {
-  height: 13px;
-  width: 13px;
+  height: 15px;
+  width: 14px;
   background: #ff9209;
   margin-right: 3px;
-  margin-top: 2px;
+  margin-top: 5px;
   border-radius: 2px;
 }
 .suggestedColor {
   color: #ff9209;
   padding: 0 5px;
-
 }
 .deleteFlag {
-  height: 13px;
-  width: 13px;
+  height: 15px;
+  width: 14px;
   background: #be3144;
   margin-right: 3px;
-  margin-top: 2px;
+  margin-top: 5px;
   border-radius: 2px;
 }
 .deletedColor {
   color: #be3144;
   padding: 1px 5px;
-
 }
 .completedColor {
   color: #00bc13;
@@ -1410,6 +1435,7 @@
   border: none !important;
   box-shadow: none !important;
   width: 170px !important;
+  padding: 3px;
   /* height: 35px !important; */
 }
 
@@ -1460,14 +1486,25 @@
 }
 
 .dosSelectPicker > div:nth-child(3) {
-  height: 35px !important;
+  height: 46px !important;
+  margin-top: -10px;
+  width: 110px;
+  z-index: 99999999;
+  border: 1px solid #e7dddd !important;
 }
 .dosSelectPicker > .css-13cymwt-control {
   min-height: 35px !important;
 }
+.dosSelectPicker > div:nth-child(3):hover {
+  height: 46px !important;
+  margin-top: -10px;
+  width: 110px;
+  z-index: 99999999;
+  border: 1px solid #e7dddd !important;
+}
 
 .hoverActiveHcc {
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
 }
 .file_name_listcontainer {
   background: #eefcfd;
@@ -1776,4 +1813,30 @@
     height: 30px !important;
     margin: 30px 0px 0px 10px !important;
   }
+}
+.custom_select_type {
+  border: none !important;
+  border-radius: 12px;
+  width: 100px !important;
+  height: 45px;
+  margin-right: 10px;
+  background: #f3f3ff !important;
+  position: relative;
+  right: 70px;
+}
+.yearactionbtnContainer > button {
+  height: 32px !important;
+  margin-bottom: 5px;
+}
+.meatcontainer {
+  max-height: 64vh;
+  overflow: hidden;
+}
+.meatcontainer::-webkit-scrollbar {
+  width: 4px;
+  background: transparent;
+}
+.meatcontainer:hover {
+  overflow-y: scroll;
+  position: inherit;
 }

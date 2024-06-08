@@ -286,14 +286,14 @@ const ReviewerReport = ({
           </Popover>
         );
 
-      case "PENDING":
-        return (
-          <Popover placement="bottom" title="Status: PENDING">
-            <span className={`patient-status ${styles.textCenter}`}>
-              <Image src={Pending} className={styles.imgSize} />
-            </span>
-          </Popover>
-        );
+      // case "PENDING":
+      //   return (
+      //     <Popover placement="bottom" title="Status: PENDING">
+      //       <span className={`patient-status ${styles.textCenter}`}>
+      //         <Image src={Pending} className={styles.imgSize} />
+      //       </span>
+      //     </Popover>
+      //   );
 
       case "DECLINED":
         return (
@@ -316,14 +316,14 @@ const ReviewerReport = ({
             </span>
           </Popover>
         );
-      case "COMPUTED":
-        return (
-          <Popover placement="bottom" title="Status: PENDING">
-            <span className={`patient-status ${styles.textCenter}`}>
-              <Image src={Pending} className={styles.imgSize} />
-            </span>
-          </Popover>
-        );
+      // case "COMPUTED":
+      //   return (
+      //     <Popover placement="bottom" title="Status: PENDING">
+      //       <span className={`patient-status ${styles.textCenter}`}>
+      //         <Image src={Pending} className={styles.imgSize} />
+      //       </span>
+      //     </Popover>
+      //   );
       case "HOLD":
         return (
           <Popover placement="bottom" title="Status: HOLD">
@@ -340,6 +340,8 @@ const ReviewerReport = ({
             </span>
           </Popover>
         );
+      case "COMPUTED":
+      case "PENDING":
       case null:
         return (
           <Popover placement="bottom" title="Status: PENDING">
@@ -378,6 +380,7 @@ const ReviewerReport = ({
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
   }, [selectedRows]);
+
   return (
     <>
       <div>
@@ -420,6 +423,7 @@ const ReviewerReport = ({
                       <div
                         className={`col-xl-6 ${styles.card}`}
                         style={{
+                          height: "100%",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
@@ -428,189 +432,177 @@ const ReviewerReport = ({
                         <Empty />
                       </div>
                     ) : (
-                      <>
-                        <div className="col-xl-6">
-                          <div className={styles.cardContainer}>
-                            {reportListAll?.response?.data?.map((item, id) => (
-                              <div key={id} className={styles.card}>
+                      <div className="col-xl-6">
+                        <div className={styles.cardContainer}>
+                          {reportListAll?.response?.data?.map((item, id) => (
+                            <div key={id} className={styles.card}>
+                              <div
+                                className={styles.contentGroup}
+                                // onClick={handleCardRowClick}
+                                style={{ cursor: "pointer" }}
+                              >
+                                <div className={styles.inputContainer}>
+                                  <input
+                                    type="checkbox"
+                                    onChange={() => {
+                                      handleRowCheckboxChange(item);
+                                    }}
+                                    className={TableStyle.customChecked}
+                                    checked={selectedRows?.some(
+                                      (selectedRow) =>
+                                        selectedRow.patientId === item.patientId
+                                    )}
+                                  />
+                                </div>
                                 <div
-                                  className={styles.contentGroup}
-                                  // onClick={handleCardRowClick}
-                                  style={{ cursor: "pointer" }}
+                                  className={`col-xl-12 ${styles.checkSep}`}
+                                  onClick={() => handleTableRowClick(id)}
                                 >
-                                  <div className={styles.inputContainer}>
-                                    <input
-                                      type="checkbox"
-                                      onChange={() => {
-                                        handleRowCheckboxChange(item);
-                                      }}
-                                      className={TableStyle.customChecked}
-                                      checked={selectedRows?.some(
-                                        (selectedRow) =>
-                                          selectedRow.patientId ===
-                                          item.patientId
-                                      )}
-                                    />
-                                  </div>
-                                  <div
-                                    className={`col-xl-12 ${styles.checkSep}`}
-                                    onClick={() => handleTableRowClick(id)}
-                                  >
-                                    <div className="d-flex justify-content-between align-items-center pb-1">
-                                      <div
-                                        className={`col-xl-6 ${styles.pName}`}
-                                      >
-                                        {item.patientName
-                                          ? item.patientName
-                                          : "---"}
-                                      </div>
-
-                                      <div
-                                        className={`col-xl-6 ${styles.dataContainer}`}
-                                      >
-                                        <span className={styles.raf}>
-                                          <Tooltip
-                                            title={"Raf Score"}
-                                            placement="bottom"
-                                          >
-                                            {" "}
-                                            {item.rafSum ? item.rafSum : "---"}
-                                          </Tooltip>
-                                        </span>
-                                        <span className={styles.avatarAlign}>
-                                          {item?.flag ? (
-                                            getFlags(item.flag)
-                                          ) : (
-                                            <div>{SVGICON?.emptyFlag}</div>
-                                          )}
-                                        </span>
-                                        <span className={styles.avatarAlign}>
-                                          {auditstatusBodyTemplate(item)}
-                                        </span>
-                                        <span>
-                                          {processstatusBodyTemplate(item)}
-                                        </span>
-                                      </div>
+                                  <div className="d-flex justify-content-between align-items-center pb-1">
+                                    <div className={`col-xl-6 ${styles.pName}`}>
+                                      {item.patientName
+                                        ? item.patientName
+                                        : "---"}
                                     </div>
 
-                                    <div className="d-flex justify-content-around align-items-center pb-1">
-                                      <Tooltip
-                                        title={"Patient Id"}
-                                        placement="bottom"
-                                      >
-                                        <div
-                                          className={`col-xl-2 ${styles.headText}`}
-                                          // onClick={() => handleTableRowClick(id)}
+                                    <div
+                                      className={`col-xl-6 ${styles.dataContainer}`}
+                                    >
+                                      <span className={styles.raf}>
+                                        <Tooltip
+                                          title={"Raf Score"}
+                                          placement="bottom"
                                         >
-                                          {item.patientId ? item.patientId : ""}
-                                        </div>
-                                      </Tooltip>
+                                          {" "}
+                                          {item.rafSum ? item.rafSum : "---"}
+                                        </Tooltip>
+                                      </span>
+                                      <span className={styles.avatarAlign}>
+                                        {item?.flag ? (
+                                          getFlags(item.flag)
+                                        ) : (
+                                          <div>{SVGICON?.emptyFlag}</div>
+                                        )}
+                                      </span>
+                                      <span className={styles.avatarAlign}>
+                                        {auditstatusBodyTemplate(item)}
+                                      </span>
+                                      <span>
+                                        {processstatusBodyTemplate(item)}
+                                      </span>
+                                    </div>
+                                  </div>
 
+                                  <div className="d-flex justify-content-around align-items-center pb-1">
+                                    <Tooltip
+                                      title={"Patient Id"}
+                                      placement="bottom"
+                                    >
                                       <div
                                         className={`col-xl-2 ${styles.headText}`}
+                                        // onClick={() => handleTableRowClick(id)}
                                       >
-                                        HCC
+                                        {item.patientId ? item.patientId : ""}
                                       </div>
-                                      <div
-                                        className={`col-xl-4 ${styles.headText}`}
-                                      >
-                                        SUPERVISOR
-                                      </div>
-                                      <div
-                                        className={`col-xl-4 ${styles.headText}`}
-                                      >
-                                        REVIEWER
-                                      </div>
-                                    </div>
-                                    <div className="d-flex justify-content-around align-items-center">
-                                      <Tooltip
-                                        title={"Completed Date"}
-                                        placement="bottom"
-                                      >
-                                        <div
-                                          className={`col-xl-2 ${styles.text}`}
-                                        >
-                                          {dateFormate(
-                                            dayjs,
-                                            item?.processedDate
-                                          )}
-                                        </div>
-                                      </Tooltip>
+                                    </Tooltip>
 
+                                    <div
+                                      className={`col-xl-2 ${styles.headText}`}
+                                    >
+                                      HCC
+                                    </div>
+                                    <div
+                                      className={`col-xl-4 ${styles.headText}`}
+                                    >
+                                      SUPERVISOR
+                                    </div>
+                                    <div
+                                      className={`col-xl-4 ${styles.headText}`}
+                                    >
+                                      REVIEWER
+                                    </div>
+                                  </div>
+                                  <div className="d-flex justify-content-around align-items-center">
+                                    <Tooltip
+                                      title={"Completed Date"}
+                                      placement="bottom"
+                                    >
                                       <div
                                         className={`col-xl-2 ${styles.text}`}
                                       >
-                                        {item.validDiseaseCount
-                                          ? item.validDiseaseCount
-                                          : "---"}
-                                      </div>
-                                      <div
-                                        className={`col-xl-4 ${styles.text}`}
-                                      >
-                                        {item.auditedByFirstName ||
-                                        item.auditedByLastName ||
-                                        item.auditedByProfileImage ? (
-                                          <div className="d-flex align-items-center">
-                                            <span
-                                              className={styles.avatarAlign}
-                                            >
-                                              {renderUserPrfoileAvatar(
-                                                item.auditedByFirstName,
-                                                item.auditedByLastName,
-                                                item.auditedByProfileImage,
-                                                "header"
-                                              )}
-                                            </span>
-                                            <span>
-                                              {item.auditedByFirstName}{" "}
-                                              {item.auditedByLastName}
-                                            </span>
-                                          </div>
-                                        ) : (
-                                          <div>---</div>
+                                        {dateFormate(
+                                          dayjs,
+                                          item?.processedDate
                                         )}
                                       </div>
-                                      <div
-                                        className={`col-xl-4 ${styles.text}`}
-                                      >
-                                        {item.patientAllocatedFirstName ||
-                                        item.patientAllocatedLastName ||
-                                        item.patientAllocatedProfileImage ? (
-                                          <div className="d-flex align-items-center">
-                                            <span
-                                              className={styles.avatarAlign}
-                                            >
-                                              {renderUserPrfoileAvatar(
-                                                item.patientAllocatedFirstName,
-                                                item.patientAllocatedLastName,
-                                                item.patientAllocatedProfileImage,
-                                                "header"
-                                              )}
-                                            </span>
-                                            <span>
-                                              {item.patientAllocatedFirstName}{" "}
-                                              {item.patientAllocatedLastName}
-                                            </span>
-                                          </div>
-                                        ) : (
-                                          <div>---</div>
-                                        )}
-                                      </div>
+                                    </Tooltip>
+
+                                    <div className={`col-xl-2 ${styles.text}`}>
+                                      {item.validDiseaseCount
+                                        ? item.validDiseaseCount
+                                        : "---"}
+                                    </div>
+                                    <div className={`col-xl-4 ${styles.text}`}>
+                                      {item.auditedByFirstName ||
+                                      item.auditedByLastName ||
+                                      item.auditedByProfileImage ? (
+                                        <div className="d-flex align-items-center">
+                                          <span className={styles.avatarAlign}>
+                                            {renderUserPrfoileAvatar(
+                                              item.auditedByFirstName,
+                                              item.auditedByLastName,
+                                              item.auditedByProfileImage,
+                                              "header"
+                                            )}
+                                          </span>
+                                          <span>
+                                            {item.auditedByFirstName}{" "}
+                                            {item.auditedByLastName}
+                                          </span>
+                                        </div>
+                                      ) : (
+                                        <div>---</div>
+                                      )}
+                                    </div>
+                                    <div className={`col-xl-4 ${styles.text}`}>
+                                      {item.patientAllocatedFirstName ||
+                                      item.patientAllocatedLastName ||
+                                      item.patientAllocatedProfileImage ? (
+                                        <div className="d-flex align-items-center">
+                                          <span className={styles.avatarAlign}>
+                                            {renderUserPrfoileAvatar(
+                                              item.patientAllocatedFirstName,
+                                              item.patientAllocatedLastName,
+                                              item.patientAllocatedProfileImage,
+                                              "header"
+                                            )}
+                                          </span>
+                                          <span>
+                                            {item.patientAllocatedFirstName}{" "}
+                                            {item.patientAllocatedLastName}
+                                          </span>
+                                        </div>
+                                      ) : (
+                                        <div>---</div>
+                                      )}
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            ))}
-                          </div>
+                            </div>
+                          ))}
                         </div>
-                      </>
+                      </div>
                     )}
 
                     <div className={`col-xl-6 ${styles.cardSeperation}`}>
                       <div className={styles.cardContainer}>
-                        <div className={styles.card1}>
+                        <div
+                          className={styles.card1}
+                          style={{ height: "100%" }}
+                        >
                           <div className={styles.summaryText}>Summary</div>
-                          <div className="col-xl-12  d-flex mt-4">
+                          <div className="col-xl-12  d-flex mt-1">
                             <div className={`col-xl-4 ${styles.subCard}`}>
                               <div>
                                 <div>No of charts</div>
@@ -635,71 +627,90 @@ const ReviewerReport = ({
                               </div>
                             </div>
                           </div>
-                          <div className={` pt-2 ${styles.summaryText}`}>
+                          <div className={`pt-2 ${styles.summaryText}`}>
                             Overall Status
                           </div>
-                          <div className="col-xl-12  d-flex mt-2">
-                            <Row className={styles.carddiv}>
+
+                          <div
+                            className="container mb-4"
+                            style={{ marginTop: "0px" }}
+                          >
+                            <div className="row g-3">
                               {card1Data?.map((data) => (
-                                <Col
-                                  span={5}
-                                  style={{
-                                    backgroundColor: data.bg,
-                                  }}
-                                  className={styles.colData}
-                                >
-                                  <div className={styles.header}>
-                                    <Image
-                                      src={data?.icon}
-                                      className={styles.Img}
-                                    />
-                                    <div className={styles.heading}>
-                                      {data.title}
+                                <div key={data?.id} className={`col-3`}>
+                                  <div
+                                    style={{
+                                      backgroundColor: data.bg,
+                                    }}
+                                    className={styles.reportDiv}
+                                  >
+                                    <div className="d-flex">
+                                      <Image
+                                        src={data?.icon}
+                                        className={styles.Img}
+                                      />
+                                      <div className="px-2">{data.title}</div>
+                                    </div>
+
+                                    <div>
+                                      <h4>
+                                        {data?.charts ? data?.charts : "0"}
+                                      </h4>
                                     </div>
                                   </div>
-
-                                  <h4>{data?.charts ? data?.charts : "0"}</h4>
-                                </Col>
+                                </div>
                               ))}
-                            </Row>
+                            </div>
                           </div>
-                          <div className="col-xl-12  d-flex mt-1">
+
+                          <div className={`col-xl-12 ${styles.reportDiv2}`}>
                             <div className={`col-xl-4 ${styles.flags}`}>
                               <div className={styles.cardHead}>Flags</div>
                               <div className={styles.contentOverFlow}>
-                                {getFlagsData?.response.map((flagItem) => (
-                                  <div
-                                    className={styles.contentGroups}
-                                    key={flagItem.id}
-                                  >
-                                    <div>
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="23"
-                                        height="23"
-                                        viewBox="0 0 800 800"
-                                        fill={flagItem?.flagColour}
-                                      >
-                                        <path
-                                          d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
-                                          stroke="#000"
-                                          stroke-width="10"
-                                        />
-                                      </svg>
-                                      <span style={{ fontSize: "12px" }}>
-                                        {flagItem?.flagName
-                                          ? flagItem?.flagName.replaceAll(
-                                              "_",
-                                              " "
-                                            )
-                                          : ""}
-                                      </span>
+                                {reportListAll?.flagIdCountDTOs?.map(
+                                  (flagItem) => (
+                                    <div
+                                      className={styles.contentGroups}
+                                      key={flagItem?.flagDetail?.id}
+                                    >
+                                      <div>
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="23"
+                                          height="23"
+                                          viewBox="0 0 800 800"
+                                          fill={
+                                            flagItem?.flagDetail?.flagColour
+                                              ? flagItem?.flagDetail?.flagColour
+                                              : "transparent"
+                                          }
+                                        >
+                                          <path
+                                            d="M223 100V102H225H696.392L573.304 298.94L572.642 300L573.304 301.06L696.392 498H225H223V500V748H152V52H223V100Z"
+                                            stroke="#000"
+                                            stroke-width="10"
+                                          />
+                                        </svg>
+                                        <span
+                                          style={{
+                                            fontSize: "12px",
+                                            paddingLeft: "10px",
+                                          }}
+                                        >
+                                          {flagItem?.flagDetail?.flagName
+                                            ? flagItem?.flagDetail?.flagName.replaceAll(
+                                                "_",
+                                                " "
+                                              )
+                                            : "---"}
+                                        </span>
+                                      </div>
+                                      <div className={styles.count}>
+                                        {flagItem.count ? flagItem.count : 0}
+                                      </div>
                                     </div>
-                                    <div className={styles.count}>
-                                      {flagItem.count ? flagItem.count : 0}
-                                    </div>
-                                  </div>
-                                ))}
+                                  )
+                                )}
                               </div>
                             </div>
                             <div className={`col-xl-4 ${styles.flags}`}>
@@ -713,32 +724,24 @@ const ReviewerReport = ({
                                         key={item.id}
                                       >
                                         <div className={styles.avatar}>
+                                          <span className={styles.avatarAlign}>
+                                            {renderUserPrfoileAvatar(
+                                              item.userNameDTO?.firstName,
+                                              item?.userNameDTO?.lastName,
+                                              item?.userNameDTO
+                                                ?.profileImageUrl,
+                                              "header"
+                                            )}
+                                          </span>
                                           {item.userNameDTO?.firstName ||
                                           item?.userNameDTO?.lastName ||
                                           item?.userNameDTO?.profileImageUrl ? (
-                                            <>
-                                              <span
-                                                className={styles.avatarAlign}
-                                              >
-                                                {renderUserPrfoileAvatar(
-                                                  item.userNameDTO?.firstName,
-                                                  item?.userNameDTO?.lastName,
-                                                  item?.userNameDTO
-                                                    ?.profileImageUrl,
-                                                  "header"
-                                                )}
-                                              </span>
-                                              <span
-                                                className={styles.smallText}
-                                              >
-                                                {item.userNameDTO?.firstName}{" "}
-                                                {item?.userNameDTO?.lastName}
-                                              </span>
-                                            </>
+                                            <span className={styles.smallText}>
+                                              {item.userNameDTO?.firstName}{" "}
+                                              {item?.userNameDTO?.lastName}
+                                            </span>
                                           ) : (
-                                            <div className={styles.emptyData}>
-                                              ---
-                                            </div>
+                                            <div>---</div>
                                           )}
                                         </div>
                                         <div className={styles.count}>
@@ -762,49 +765,54 @@ const ReviewerReport = ({
                             </div>
                             <div className={`col-xl-4 ${styles.flags}`}>
                               <div className={`${styles.cardHead}`}>
-                                <div>Reviewer</div>
-                                <div className={styles.contentOverFlow}>
-                                  {reportListAll?.reviewerAllocationCount
-                                    .length > 0 ? (
-                                    reportListAll?.reviewerAllocationCount?.map(
-                                      (item) => (
-                                        <div
-                                          className={styles.contentAuditor}
-                                          key={item.id}
-                                        >
-                                          <div className={styles.avatar}>
-                                            <span
-                                              className={styles.avatarAlign}
-                                            >
-                                              {renderUserPrfoileAvatar(
-                                                item.userNameDTO?.firstName,
-                                                item?.userNameDTO?.lastName,
-                                                item?.userNameDTO
-                                                  ?.profileImageUrl,
-                                                "header"
-                                              )}
-                                            </span>
-                                            <span className={styles.smallText}>
-                                              {item.userNameDTO?.firstName}{" "}
-                                              {item?.userNameDTO?.lastName}
-                                            </span>
-                                          </div>
-
-                                          <div className={styles.count}>
-                                            {item.count}
-                                          </div>
+                                Reviewer
+                              </div>
+                              <div className={styles.contentOverFlow}>
+                                {reportListAll?.reviewerAllocationCount.length >
+                                0 ? (
+                                  reportListAll?.reviewerAllocationCount?.map(
+                                    (item) => (
+                                      <div
+                                        className={styles.contentAuditor}
+                                        key={item.id}
+                                      >
+                                        <div className={styles.avatar}>
+                                          <span className={styles.avatarAlign}>
+                                            {renderUserPrfoileAvatar(
+                                              item.userNameDTO?.firstName,
+                                              item?.userNameDTO?.lastName,
+                                              item?.userNameDTO
+                                                ?.profileImageUrl,
+                                              "header"
+                                            )}
+                                          </span>
+                                          <span className={styles.smallText}>
+                                            {item.userNameDTO?.firstName ||
+                                            item?.userNameDTO?.lastName ? (
+                                              <span>
+                                                {item.userNameDTO?.firstName}
+                                                {item?.userNameDTO?.lastName}
+                                              </span>
+                                            ) : (
+                                              "---"
+                                            )}
+                                          </span>
                                         </div>
-                                      )
+
+                                        <div className={styles.count}>
+                                          {item.count}
+                                        </div>
+                                      </div>
                                     )
-                                  ) : (
-                                    <div
-                                      className="d-flex justify-content-center align-items-center"
-                                      style={{ height: "200px" }}
-                                    >
-                                      <Empty />
-                                    </div>
-                                  )}
-                                </div>
+                                  )
+                                ) : (
+                                  <div
+                                    className="d-flex justify-content-center align-items-center"
+                                    style={{ height: "200px" }}
+                                  >
+                                    <Empty />
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </div>

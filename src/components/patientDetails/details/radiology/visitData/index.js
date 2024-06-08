@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector,connect } from "react-redux";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { Modal } from "antd";
 import { useRouter } from "next/navigation";
@@ -11,17 +11,11 @@ import RadiologyCards from "../../components/RADIOLOGY";
 import ModelIndex from "../../components/model/Index";
 import PdfViewer from "../../PdfViewerComponent";
 
-const VisitData = ({ setActiveTabHead, setActiveMeatTitle }) => {
+const VisitData = ({ setActiveTabHead, setActiveMeatTitle,radiologyDetailsResult,radiologyFile }) => {
   const navigate = useRouter();
   let searchKeywords = [];
-  const radiologyDetailsResult = useSelector(
-    (state) => state?.ReviewerReducers?.radiologyDeatils
-  );
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
-  );
-  const radiologyFile = useSelector(
-    (state) => state?.ReviewerReducers?.radiologyFileDetails
   );
   const [selectDiseasesName, setSelectDiseasesName] = useState("");
   const [selectMeatName, setSelectMeatName] = useState("");
@@ -69,14 +63,14 @@ const VisitData = ({ setActiveTabHead, setActiveMeatTitle }) => {
   useEffect(() => {
     setSelectFileURLRadiology([]);
     getPatientPdfFileRadiology();
-  }, [radiologyFile?.result?.response]);
+  }, [radiologyFile?.data?.response]);
 
   const getPatientPdfFileRadiology = async (fileId, tenId) => {
     if (
-      radiologyFile?.result?.response &&
-      radiologyDetailsResult?.result?.response?.patientId
+      radiologyFile?.data?.response &&
+      radiologyDetailsResult?.data?.response?.patientId
     ) {
-      setSelectFileURLRadiology(radiologyFile?.result?.response);
+      setSelectFileURLRadiology(radiologyFile?.data?.response);
     }
   };
 
@@ -525,4 +519,10 @@ const VisitData = ({ setActiveTabHead, setActiveMeatTitle }) => {
   );
 };
 
-export default VisitData;
+const enhancer = connect(
+  (state) => ({
+    radiologyDetailsResult :state?.patientDetails?.details?.radiologyResult,
+    radiologyFile :state?.patientDetails?.details?.radiologyFileResult,
+  }),
+);
+export default enhancer(VisitData);

@@ -339,17 +339,11 @@
   padding-left: 15px;
 }
 .dosContainer {
-  margin-top: -55px;
   border: 1px solid #e6e6e6 !important;
-  padding: 5px;
+  padding: 3px 0px;
   border-radius: 6px;
-  display: flex;
-  justify-content: space-between;
   cursor: pointer;
-  width: 280px;
-  margin-bottom: 10px;
-  float: right;
-  margin-right: -200px;
+  margin-bottom: 5px;
 }
 .dosContainer svg {
   padding-top: 1px;
@@ -416,4 +410,36 @@
 }
 .editAction > button {
   padding: 5px !important;
+}
+.dosStatusIcon {
+  width: 16%;
+  height: 16%;
+  margin-left: 15px;
+  margin-top: 5px;
+}
+.dosLable {
+  font-size: 14px;
+  font-weight: 600;
+}
+.substringHead {
+  color: rgba(0, 0, 0, 0.88);
+  font-weight: 600;
+  border-bottom: none;
+  padding: 0;
+}
+.subStringContainer {
+  margin-top: 10px;
+}
+.selectHyperheader {
+  display: flex;
+  justify-content: space-between;
+}
+.stillIssueContainer {
+  margin-right: 35px;
+  margin-top: -6px;
+}
+.pageNumberHyperlink {
+  color: #7575c9;
+  border-bottom: 1px solid #7575c9;
+  margin-left: 5px;
 }
