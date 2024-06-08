@@ -19,6 +19,7 @@ const Tables = (props) => {
 
   const [isCopied, setCopied] = useState(false);
   const [previousCode, setPreviousCode] = useState();
+  const[nextCode, setNextCode] = useState()
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -53,12 +54,28 @@ const Tables = (props) => {
       useAdditionalCode: tableData?.useAdditionalCode,
       requiredCharacter: tableData?.requiredCharacter,
     });
+    setNextCode({
+      ...nextCode,
+      name: codeData?.name,
+      desc: codeData?.desc,
+      includes: codeData ?.includes,
+      excludes1: tableData?.excludes1,
+      excludes2: tableData?.excludes2,
+      children: tableData?.children,
+      inclusionTerm: tableData?.inclusionTerm,
+      useAdditionalCode: tableData?.useAdditionalCode,
+      requiredCharacter: tableData?.requiredCharacter,
+    })
     setLoading(false);
   };
 
   const handleBack = () => {
     setCodeData(previousCode);
   };
+  const handleNext = ()=>{
+    setCodeData(nextCode);
+  }
+  console.log(nextCode,"nextCode")
 
 
   return (
@@ -67,6 +84,11 @@ const Tables = (props) => {
         <ArrowLeftOutlined onClick={handleBack} />
         Back
       </div>
+    
+      {/* <div className={style.arrowleft}>
+        <ArrowLeftOutlined onClick={handleNext} />
+        next
+      </div> */}
       <div className={style.code}>
         <div className="d-flex justify-content-center">
           {loading && <Spin size="large" />}

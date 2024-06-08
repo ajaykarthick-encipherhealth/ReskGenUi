@@ -2,7 +2,7 @@ import React  from "react";
 import { Empty, Tree } from "antd";
 import { Spin } from "antd";
 
-const Codes = ({ data, loading,onSelect }) => {
+const Codes = ({ data, loading,onSelect,onExpand ,expandedKeys}) => {
  
 
   return (
@@ -11,13 +11,15 @@ const Codes = ({ data, loading,onSelect }) => {
         {loading && <Spin size="large" />}
       </div>
       <div className="mt-3 antdstyle"> 
-        <Tree
-          showLine={true} 
-          defaultExpandedKeys={["0-0-0"]}
-          treeData={data}
-          showIcon={true}
-          onSelect={(value)=>{onSelect(value)}}
-        />
+          <Tree
+            showLine={true} 
+            defaultExpandedKeys={[name]}
+            treeData={data}
+            showIcon={true}
+            onSelect={(value)=>{onSelect(value)}}
+            onExpand={onExpand}
+            expandedKeys={expandedKeys}
+          />
       </div>
     </>
   );
