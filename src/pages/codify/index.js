@@ -11,7 +11,7 @@ import {
 } from "@ant-design/icons";
 import style from "./style.module.css";
 import Tables from "../../components/tablecodify";
-import Codes from "../codes";
+import Codes from "../../jsx/components/codes";
 import Riskadjustment from "../../components/riskadjustment";
 import { Select } from "antd";
 import { AutoComplete, Input } from "antd";
