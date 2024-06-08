@@ -10,16 +10,11 @@ import {
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
 const Tables = (props) => {
-  const {
-    codeData,
-    setCodeData,
-    loading,
-    setLoading,
-  } = props;
+  const { codeData, setCodeData, loading, setLoading } = props;
 
   const [isCopied, setCopied] = useState(false);
   const [previousCode, setPreviousCode] = useState();
-  const[nextCode, setNextCode] = useState()
+  const [nextCode, setNextCode] = useState();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -54,29 +49,13 @@ const Tables = (props) => {
       useAdditionalCode: tableData?.useAdditionalCode,
       requiredCharacter: tableData?.requiredCharacter,
     });
-    setNextCode({
-      ...nextCode,
-      name: codeData?.name,
-      desc: codeData?.desc,
-      includes: codeData ?.includes,
-      excludes1: tableData?.excludes1,
-      excludes2: tableData?.excludes2,
-      children: tableData?.children,
-      inclusionTerm: tableData?.inclusionTerm,
-      useAdditionalCode: tableData?.useAdditionalCode,
-      requiredCharacter: tableData?.requiredCharacter,
-    })
+    console.log(tableData, "tableData");
     setLoading(false);
   };
 
   const handleBack = () => {
     setCodeData(previousCode);
   };
-  const handleNext = ()=>{
-    setCodeData(nextCode);
-  }
-  console.log(nextCode,"nextCode")
-
 
   return (
     <>
@@ -84,7 +63,7 @@ const Tables = (props) => {
         <ArrowLeftOutlined onClick={handleBack} />
         Back
       </div>
-    
+
       {/* <div className={style.arrowleft}>
         <ArrowLeftOutlined onClick={handleNext} />
         next
@@ -193,9 +172,10 @@ const Tables = (props) => {
           {codeData?.children?.map((s, i) => (
             <div key={i} onClick={() => handleViewTable(s, i)}>
               <p class={`${style.card2} mt-3`}>
-                <span className={style.term}>
-                  {codeData?.requiredCharacter}
-                </span>
+                {s?.requiredCharacter && (
+                  <span className={style.term}>{s.requiredCharacter}</span>
+                )}
+
                 <ArrowRightOutlined />
                 <span className={style.codes}>{s.name} </span>
                 <span>- {s.desc}</span>
