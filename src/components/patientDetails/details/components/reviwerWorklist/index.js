@@ -42,6 +42,7 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
     );
     setOpenPicker(false);
     setOpenPicker2(false);
+    setShowCard(false);
     setPatientList(result?.response?.patientDTOList?.content);
     setTotalElements(result?.response?.patientDTOList?.totalElements);
     setFilterDataLoading(false);
@@ -57,6 +58,7 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
 
   const handleFilterClick = () => {
     setShowIcons(!showIcons);
+    setShowCard(false);
   };
   const closeFilterIcons = async () => {
     setShowIcons(false);
@@ -75,9 +77,12 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
     setPatientList(result?.response?.patientDTOList?.content);
     setTotalElements(result?.response?.patientDTOList?.totalElements);
   };
+  // const handleShowCard = () => {
+  //   setShowCard(!showCard);
+  //   setShowCard(true);
+  // };
   const handleShowCard = () => {
-    setShowCard(!showCard);
-    setShowCard(true);
+    setShowCard((prevShowCard) => !prevShowCard);
   };
 
   const getPatientListToDetails = (id) => {
@@ -112,7 +117,7 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
     setOpenPicker2(false);
   };
 
-  const statuses = ["ALL","PENDING", "COMPLETED", "HOLD", "DECLINED"];
+  const statuses = ["ALL", "PENDING", "COMPLETED", "HOLD", "DECLINED"];
 
   useEffect(() => {
     getWorkList();
@@ -210,6 +215,7 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
                     closeFilterIcons(false);
                     setOpenPicker(false);
                     setOpenPicker2(false);
+                    setShowCard(false);
                   }}
                 />
               ) : (
@@ -232,6 +238,7 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
                     onClick={() => {
                       setOpenPicker(!openPicker);
                       setOpenPicker2(false);
+                      setShowCard(false);
                     }}
                   >
                     {SVGICON.dateIcon}
@@ -243,6 +250,7 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
                     onClick={() => {
                       setOpenPicker2(!openPicker2);
                       setOpenPicker(false);
+                      setShowCard(false);
                     }}
                   >
                     {SVGICON.dateIcon}
@@ -314,16 +322,15 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
         )}
       </div>
       <div className={visitStyles.paginationContiner}>
-      <div className="patient-filte-page">
-        <Paginator
-          first={paginationFirst}
-          rows={15}
-          totalRecords={totalElements}
-          onPageChange={onPageChange}
-        />
+        <div className="patient-filte-page">
+          <Paginator
+            first={paginationFirst}
+            rows={15}
+            totalRecords={totalElements}
+            onPageChange={onPageChange}
+          />
+        </div>
       </div>
-      </div>
-   
     </>
   );
 };
