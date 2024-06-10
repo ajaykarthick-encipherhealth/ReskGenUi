@@ -114,4 +114,48 @@ export async function getFlagsList(patientId,year,dos) {
   return data;
 }
 
+export async function getProviderAndCaptured(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `dbservice/provider/getProviderAndCapturedSection`,
+    options
+  );
+  return data;
+}
 
+export async function isValideCode(code) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/icddisease/finddiseasebycode?diseasecode=${code}`,
+    options
+  );
+  return data;
+}
+
+export async function isCodePracent({code, patientId, dos, date}) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/find/diagnosiscode?diagnosisCode=${code}&patientId=${patientId}&dos=${dos}&date=${date}`,
+    options
+  );
+  return data;
+}
+
+export async function manuallyAddCode(obj) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `management/disease/add`,
+    options
+  );
+  return data;
+}

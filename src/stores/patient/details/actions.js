@@ -1,3 +1,4 @@
+import { createAction } from "redux-actions";
 import { createActionThunk } from "../../../utils/redux";
 import * as network from "./network";
 
@@ -44,4 +45,24 @@ export const labFileAction = createActionThunk(
 export const getFlagDetailsAction = createActionThunk(
   "GET_FLAG_DETAILS",
   network.getFlagsList
+);
+export const getProviderSection = createActionThunk(
+  "GET_PROVIDER",
+  network.getProviderAndCaptured
+);
+export const getValideCode = createActionThunk(
+  "GET_VALID_CODE",
+  network.isValideCode
+);
+
+export const isCodeAlready = createActionThunk(
+  "GET_VALID_CODE",
+  network.isCodePracent
+);
+
+export const getSelectedDos = createAction("GET_SELECTED_DOS");
+
+export const manuallyAdd = createActionThunk(
+  "MANUALLY_ADDED",
+  network.manuallyAddCode
 );

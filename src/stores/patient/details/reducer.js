@@ -1,6 +1,23 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { dosDeatilsAction, dosPageNumberAction, getFlagDetailsAction, labDetailsAction, labFileAction, meatQueryAction, patientDetailsAction,patientHccFileAction, patientIdDetailsAction, radiologyDetailsAction, radiologyFileAction } from "./actions";
+import {
+  dosDeatilsAction,
+  dosPageNumberAction,
+  getFlagDetailsAction,
+  getProviderSection,
+  labDetailsAction,
+  labFileAction,
+  meatQueryAction,
+  patientDetailsAction,
+  patientHccFileAction,
+  patientIdDetailsAction,
+  radiologyDetailsAction,
+  radiologyFileAction,
+  getValideCode,
+  isCodeAlready,
+  getSelectedDos,
+  manuallyAdd
+} from "./actions";
 
 const initialState = {
   loading: true,
@@ -30,18 +47,31 @@ const createReducer = (actionType) =>
     initialState
   );
 
+  const getSelectedDosDetails = handleActions(
+    {
+      [getSelectedDos.toString()]: (state, { payload }) => payload,
+    },
+    ''
+  );
+
 const patientDetailsReducer = combineReducers({
-  patientResult:createReducer(patientDetailsAction),
-  patientIdResult:createReducer(patientIdDetailsAction),
-  hccFileResult:createReducer(patientHccFileAction),
-  dosResult:createReducer(dosDeatilsAction),
-  dosPageNumberResult:createReducer(dosPageNumberAction),
-  meatQueryResult:createReducer(meatQueryAction),
-  radiologyResult:createReducer(radiologyDetailsAction),
-  radiologyFileResult:createReducer(radiologyFileAction),
-  labResult:createReducer(labDetailsAction),
-  labFileResult:createReducer(labFileAction),
-  flagsDetailsResult:createReducer(getFlagDetailsAction)
+  patientResult: createReducer(patientDetailsAction),
+  patientIdResult: createReducer(patientIdDetailsAction),
+  hccFileResult: createReducer(patientHccFileAction),
+  dosResult: createReducer(dosDeatilsAction),
+  dosPageNumberResult: createReducer(dosPageNumberAction),
+  meatQueryResult: createReducer(meatQueryAction),
+  radiologyResult: createReducer(radiologyDetailsAction),
+  radiologyFileResult: createReducer(radiologyFileAction),
+  labResult: createReducer(labDetailsAction),
+  labFileResult: createReducer(labFileAction),
+  flagsDetailsResult: createReducer(getFlagDetailsAction),
+  sectionDetails: createReducer(getProviderSection),
+  isCodeAlready: createReducer(isCodeAlready),
+  getValidCode: createReducer(getValideCode),
+  getSelectedDosDetails: getSelectedDosDetails,
+  manuallyAdd: createReducer(manuallyAdd)
 });
+
 
 export default patientDetailsReducer;

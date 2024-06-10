@@ -1,73 +1,83 @@
 import { Button, Col, DatePicker, Form, Input, Row, Select } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import RegularButton from "../../../../button";
 import style from "../../../../../components/button/style.module.css";
+import { disableFutureDate } from "../../../../headerFilters/functions";
+import moment from "moment";
 
 const AddSection = ({
-  handleForm,
-  handleSelectChnage,
-  handleDateRange,
-  setMeatDisplay,
+  id,
+  section,
+  selectMeat = "",
 }) => {
-  const [form] = Form.useForm();
-  const handleFinish = (value) => {
-    handleForm(value, "addSection");
-    setMeatDisplay(true);
-  };
   return (
-    <Form form={form} onFinish={handleFinish}>
-      <Row gutter={24}>
-        <Col span={12}>
-          <Form.Item name="section" rules={[(require = true)]}>
-            <label htmlFor="">Section</label>
-            <Select
-              placeholder="Section"
-              options={[]}
-              className={style.inputField}
-              onChange={(selOption) => handleSelectChnage(selOption, "section")}
-            />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item name="encounterDate" rules={[(require = true)]}>
-            <label htmlFor="">Encounter Date</label>
+    <div className="mx-2 p-3 pt-4 border rounded">
+      <div className="row ">
+        <div className="col-6">
+          <Form.Item
+            label={
+              <label>
+                Encounter Date <span style={{ color: "red" }}>*</span>
+              </label>
+            }
+            name={`encounterDate_${section?.replaceAll(" ", "-")}${
+              selectMeat ? "_" + selectMeat : selectMeat
+            }_${id}`}
+            rules={[
+              {
+                required: true,
+                message: "Please enter Encounter Date",
+              },
+            ]}
+          >
             <DatePicker
-              className={style.picker}
-              onChange={(date, dateString) => {
-                handleDateRange(dateString, "encounterDate");
-              }}
+              name="dos"
+              disabledDate={(current) => disableFutureDate(current)}
             />
           </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item name="reference" rules={[(require = true)]}>
-            <label htmlFor="">Referance</label>
-            <Input
-              placeholder="reference"
-              //   onChange={(e) => handleInputChnage(e, "description")}
-            />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item name="pageNumber" rules={[(require = true)]}>
-            <label htmlFor="">Page Number</label>
-            <Input
-              placeholder="Page Number"
-              //   onChange={(e) => handleInputChnage(e, "description")}
-            />
-          </Form.Item>
-        </Col>
-      </Row>
-
-      <Form.Item>
-        <div className="w-80 d-flex justify-content-center my-2">
-          <RegularButton type="outline" name="Cancel" width="30%" />
-          <Button htmlType="submit" className={style.submitBtn}>
-            Next
-          </Button>
         </div>
-      </Form.Item>
-    </Form>
+        <div className="col-6">
+          <Form.Item
+            label={
+              <label>
+                Page Number <span style={{ color: "red" }}>*</span>
+              </label>
+            }
+            name={`pageNumber_${section?.replaceAll(" ", "-")}${
+              selectMeat ? "_" + selectMeat : selectMeat
+            }_${id}`}
+            rules={[
+              {
+                required: true,
+                message: "Please enter Page Number",
+              },
+            ]}
+          >
+            <Input name="pageNumber" type="number" />
+          </Form.Item>
+        </div>
+        <div className="col-12">
+          <Form.Item
+            label={
+              <label>
+                Reference <span style={{ color: "red" }}>*</span>
+              </label>
+            }
+            name={`referance_${section?.replaceAll(" ", "-")}${
+              selectMeat ? "_" + selectMeat : selectMeat
+            }_${id}`}
+            rules={[
+              {
+                required: true,
+                message: "Please enter Referance",
+              },
+            ]}
+          >
+            <Input name="referance" />
+          </Form.Item>
+        </div>
+      </div>
+    </div>
   );
 };
 

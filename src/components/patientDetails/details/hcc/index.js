@@ -27,6 +27,7 @@ const Hcc = ({
   patientDetailsResult,
   getpatientDetailsData,
   patientDosResult,
+  getSelectedDos
 }) => {
   const dispatch = useDispatch();
   const [activeTabHead, setActiveTabHead] = useState(1);
@@ -74,6 +75,11 @@ const Hcc = ({
   const handleOptions = (value) => {
     setIsLoading(true);
     setSelectDosValue(value);
+    if (value) {
+      getSelectedDos(value)
+    } else {
+      getSelectedDos('')
+    }
     const patientId = localStorage.getItem("patientId");
     if (value) {
       getpatientDetailsData(
@@ -382,6 +388,7 @@ const enhancer = connect(
   }),
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,
+    getSelectedDos: detailsActions.getSelectedDos
   }
 );
 export default enhancer(Hcc);

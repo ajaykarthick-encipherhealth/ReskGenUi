@@ -1,7 +1,16 @@
 import React from "react";
 import Style from "./style.module.css";
 
-const RegularButton = ({ type, name, onClick, width, method,loading, disabled,htmlType }) => {
+const RegularButton = ({
+  type,
+  name,
+  onClick,
+  width,
+  method,
+  loading,
+  disabled,
+  htmlType,
+}) => {
   return (
     <button
       className={`btn mx-1 ${
@@ -10,11 +19,13 @@ const RegularButton = ({ type, name, onClick, width, method,loading, disabled,ht
       name={name?.toLowerCase()}
       onClick={!htmlType && onClick}
       style={{ width: width }}
-      type={method == "reset" ? "reset" : "submit"}
+      type={
+        method == "reset" ? "reset" : method == "button" ? "button" : "submit"
+      }
       disabled={disabled}
       htmlType={htmlType}
     >
-      {loading?"Loading...":name}
+      {loading ? "Loading..." : name}
     </button>
   );
 };
