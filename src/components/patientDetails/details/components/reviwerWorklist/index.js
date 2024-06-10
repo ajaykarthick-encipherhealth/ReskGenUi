@@ -77,10 +77,7 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
     setPatientList(result?.response?.patientDTOList?.content);
     setTotalElements(result?.response?.patientDTOList?.totalElements);
   };
-  // const handleShowCard = () => {
-  //   setShowCard(!showCard);
-  //   setShowCard(true);
-  // };
+
   const handleShowCard = () => {
     setShowCard((prevShowCard) => !prevShowCard);
   };
