@@ -22,6 +22,7 @@ const DailyTask = () => {
     REVIEWER: 0,
     SUPERVISOR: 0,
     ADMIN: 0,
+    TENANT_ADMIN: 0,
   });
 
   const bullets = [
@@ -36,6 +37,10 @@ const DailyTask = () => {
     {
       color: "#FA896B",
       name: "Admin",
+    },
+    {
+      color: "#06c213",
+      name: "Tenant Admin",
     },
   ];
 
@@ -113,6 +118,13 @@ const DailyTask = () => {
                 color: "#FA896B",
               },
             },
+            {
+              value: roles?.TENANT_ADMIN,
+              name: "Tenant Admin",
+              itemStyle: {
+                color: "#FA896B",
+              },
+            },
           ],
         },
         {
@@ -123,7 +135,10 @@ const DailyTask = () => {
             show: true,
             position: "center",
             formatter: `{b|${
-              roles?.REVIEWER + roles?.SUPERVISOR + roles?.ADMIN
+              roles?.REVIEWER +
+              roles?.SUPERVISOR +
+              roles?.ADMIN +
+              roles?.TENANT_ADMIN
             }}`,
             backgroundColor: "transparent",
 
@@ -141,7 +156,11 @@ const DailyTask = () => {
           },
           data: [
             {
-              value: roles?.REVIEWER + roles?.SUPERVISOR + roles?.ADMIN,
+              value:
+                roles?.REVIEWER +
+                roles?.SUPERVISOR +
+                roles?.ADMIN +
+                roles?.TENANT_ADMIN,
               name: "Total",
               itemStyle: {
                 color: "#fff",
@@ -222,7 +241,7 @@ const DailyTask = () => {
                         <Col span={12}>
                           <div
                             className={styles.container}
-                            style={{ width: "308%" }}
+                            style={{ width: "250%" }}
                           >
                             <ReactECharts
                               option={getChartOption(
@@ -238,7 +257,7 @@ const DailyTask = () => {
                           </div>
                         </Col>
                         <Col span={12} className={styles.headerTitle}>
-                          <div style={{ paddingLeft: "10px" }}>
+                          <div>
                             {bullets?.map((item) => {
                               return (
                                 <div className={styles.container}>
@@ -249,7 +268,9 @@ const DailyTask = () => {
                                         backgroundColor: item.color,
                                       }}
                                     ></div>
-                                    {item.name}
+                                    <span className={styles.userNameTitle}>
+                                      {item.name}
+                                    </span>
                                   </div>
                                   <div className={styles.subText}>
                                     {item.name === "Admin"
@@ -258,6 +279,8 @@ const DailyTask = () => {
                                       ? roles.SUPERVISOR
                                       : item.name === "Reviewer"
                                       ? roles.REVIEWER
+                                      : item.name === "Tenant Admin"
+                                      ? roles.TENANT_ADMIN
                                       : data.declined}
                                   </div>
                                 </div>
