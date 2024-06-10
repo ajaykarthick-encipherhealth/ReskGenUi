@@ -27,6 +27,27 @@ export async function workStatusApiAdmin(startDate = "", endDate = "", router) {
   }
 }
 
+export async function workStatusApiTenantAdmin(
+  startDate = "",
+  endDate = "",
+  router
+) {
+  const token = localStorage.getItem("token");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/admindashboard/overallchart?allocatedOnStartDate=${startDate}&allocatedOnEndDate=${endDate}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 // chnaged
 export const DailyTaskApi = async (date, router) => {
   const token = localStorage.getItem("token");
@@ -457,6 +478,24 @@ export const GetUserCount = async (role) => {
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/user/getusercountbyrole?organizationId=${orgId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const GetTenantAdminUserCount = async (role) => {
+  const token = localStorage.getItem("token");
+  const orgId = localStorage.getItem("orgId");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/user/getusercountbyrole`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

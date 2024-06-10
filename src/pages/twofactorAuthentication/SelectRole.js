@@ -59,7 +59,7 @@ const SelectRole = () => {
       provider: { userRole: "provider", route: "/provider/fhirTable" },
       tenant_admin: {
         userRole: "tenant_admin",
-        route: "/tenantAdmin/fhirTable",
+        route: "/tenantAdmin/dashboard",
       },
       physician: { userRole: "physician", route: "/physicians/dashboard" },
       // physician: { userRole: "physician", route: "/physician/dashboard" },
