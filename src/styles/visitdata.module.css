@@ -979,6 +979,17 @@
   margin: 0 !important;
   cursor: pointer;
 }
+.sideTabClose .sideNavLabelActiveComplete {
+  background: linear-gradient(95deg, #3a9b94 5.8%, #99ded9 92.76%) !important;
+  width: 50px !important;
+  text-align: center !important;
+  padding: 10px !important;
+  border-radius: 12px !important;
+  color: #221c1c !important;
+  font-size: 14px;
+  margin: 0 !important;
+  cursor: pointer;
+}
 
 .sideTabClose .sideNavLabel a {
   display: flex;
