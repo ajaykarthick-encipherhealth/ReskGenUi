@@ -78,10 +78,10 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   const handleTreeViewClick = (value) => {
     setSearchInput(value?.[0]);
     setCurrentButton("Description");
-    // let input = document.getElementById("input-search");
-    // input.innerHTML = value;
     fetchCodeData(value);
   };
+
+ 
 
   const onExpand = (expandedKeysValue) => {
     setExpandedKeys(expandedKeysValue);
@@ -157,8 +157,8 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   };
 
   const completeFetch = async () => {
-    let completedData = await completeData({ code: searchInput });
     setLoading(true);
+    let completedData = await completeData({ code: searchInput });
     if (completedData?.status === "SUCCESS") {
       const displayCodeOptions = completedData?.response?.displayStrings?.map(
         (x) => ({
@@ -209,7 +209,13 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
     }
   }, [searchInput, data]);
 
- 
+  const handleSearchClick = (value) => {
+   
+    setSearchInput(value); 
+    fetchTreeData(value); 
+    fetchCodeData(value);
+  };
+  
 
 
   return (
@@ -305,7 +311,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
             {showButtons && currentButton === "Codes" && (
               <div className="d-flex gap-3  flex-wrap mx-2">
                 {searches.map((search, index) => (
-                  <Button className={style.btnborder} key={index}>
+                  <Button className={style.btnborder} key={index} value={searchInput} onClick ={()=>handleSearchClick(search)}>
                     {search}
                   </Button>
                 ))}
@@ -330,6 +336,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
                 onExpand={onExpand}
                 autoExpandParent={autoExpandParent}
                 expandedKeys={expandedKeys}
+                setLoading={setLoading}
               />
             ) : (
               <div></div>

@@ -20,23 +20,33 @@ const YearPicker = ({
   const currentDate = dayjs().format("MM");
   const currentYearDate = dayjs().format("DD/MM/YYYY");
 
- 
-
   return (
     <>
       <div className={hideMonth ? "" :styles.pickerBox}>
+      {hideMonth ? (
+        <DatePicker
+          onChange={onChangeYear}
+          picker={"year"}
+          value={ val1 && dayjs(val1 ? val1 : currentDate, "YYYY")}
+          format={"YYYY"}
+          className={className}
+          suffixIcon={<Image src={arrow} />}
+          disabledDate={disabledDate}
+        />
+      ) : (
+        <div className={styles.pickerBox}>
         <DatePicker
           onChange={onChangeYear}
           picker={"year"}
           value={dayjs(val1 ? val1 : currentYearDate, "YYYY")}
           format={"YYYY"}
-          className={hideMonth ? className :`${styles.picker} pickerChnages ` }
+          className={`${styles.picker} pickerChnages`}
           style={{ backgroundColor: bgColor }}
           suffixIcon={<Image src={arrow} />}
-          disabledDate={disabledDate}
         />
       </div>
-
+      )}
+      </div>
       {type !== "Monthly" && !hideMonth && (
         <div style={{ marginRight: "10px" }}>
           <Select

@@ -14,7 +14,7 @@ const Tables = (props) => {
 
   const [isCopied, setCopied] = useState(false);
   const [previousCode, setPreviousCode] = useState();
-  const [nextCode, setNextCode] = useState();
+  const [hideButton, setHideButton] = useState(false);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -49,19 +49,22 @@ const Tables = (props) => {
       useAdditionalCode: tableData?.useAdditionalCode,
       requiredCharacter: tableData?.requiredCharacter,
     });
+    setHideButton(true);
     setLoading(false);
   };
 
   const handleBack = () => {
     setCodeData(previousCode);
+    setHideButton(false);
   };
 
   return (
     <>
-      <div className={style.arrowleft}>
-        <ArrowLeftOutlined onClick={handleBack} />
-        Back
-      </div>
+      {hideButton && (
+        <div className="mx-2" onClick={handleBack}>
+          <Button className={style.btn}>Back</Button>
+        </div>
+      )}
       <div className={style.code}>
         <div className="d-flex justify-content-center">
           {loading && <Spin size="large" />}

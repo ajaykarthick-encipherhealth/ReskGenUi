@@ -108,3 +108,8 @@
   margin-top:10px;
   padding-right: 20px;
 }
+.btn {
+  background-color: #241571;
+  color: white;
+  border-color: #241571;
+}
