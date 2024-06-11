@@ -131,6 +131,7 @@ const Header = ({
   const [opened, setOpened] = useState(false);
   const showDrawer = () => {
     setOpened(true);
+    setPopoverVisible(false);
   };
   const onClosed = () => {
     setOpened(false);
@@ -315,6 +316,7 @@ const Header = ({
   const notificationDrawer = async () => {
     setOpen(true);
     dispatch(getNotificationAlertClear([]));
+    setPopoverVisible(false);
   };
 
   const items = dropdownContent
@@ -402,6 +404,7 @@ const Header = ({
 
   const gotoChat = () => {
     setOpenMsg(true);
+    setPopoverVisible(false);
   };
   useEffect(() => {
     const userRoleLocal = localStorage.getItem("userRole");
