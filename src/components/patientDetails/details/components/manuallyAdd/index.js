@@ -178,24 +178,28 @@ const ManuallyAdd = ({
     try {
       const res = await getValidate(value);
       if (res.status == "SUCCESS") {
-        setValidCode("Valid Code");
-        const isCodeCheck = await isCodeAlready({
-          code: value,
-          patientId: await getStorage("patientId"),
-          dos: year.value,
-          date: getSelectedDos,
-        });
-        if (isCodeCheck?.response) {
-          setValidCode("Code Already Exist");
-        } else if (isCodeCheck?.response == false) {
-          setValidCode("Valid Code");
-          form.setFieldsValue({ description: res.response?.description });
-        }
+       getVerify(value, res)
       } else {
         setValidCode("Invalid Code");
       }
     } catch (error) {}
   };
+
+  const getVerify = async(value, res) => {
+    setValidCode("Valid Code");
+    const isCodeCheck = await isCodeAlready({
+      code: value,
+      patientId: await getStorage("patientId"),
+      dos: year.value,
+      date: getSelectedDos,
+    });
+    if (isCodeCheck?.response) {
+      setValidCode("Code Already Exist");
+    } else if (isCodeCheck?.response == false) {
+      setValidCode("Valid Code");
+      form.setFieldsValue({ description: res.response?.description });
+    }
+  }
 
   const handledSave = (form) => {
     const res = sectionCount.map((item, i) => ({
