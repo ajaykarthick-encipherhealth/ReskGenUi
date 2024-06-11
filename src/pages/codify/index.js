@@ -52,7 +52,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   const [noData, setNoData] = useState(false);
   const [searches, setSearches] = useState([]);
   const [options, setOptions] = useState([]);
-  const [expandedKeys, setExpandedKeys] = useState([]);  
+  const [expandedKeys, setExpandedKeys] = useState([]);
   const [autoExpandParent, setAutoExpandParent] = useState(true);
 
   const handleRiskAdjustment = () => {
@@ -208,15 +208,6 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
       setNoData(false);
     }
   }, [searchInput, data]);
-
-  const handleSearchClick = (value) => {
-   
-    setSearchInput(value); 
-    fetchTreeData(value); 
-    fetchCodeData(value);
-  };
-  
-
 
   return (
     <div className="container-fluid">

@@ -488,7 +488,7 @@ function FileProcessingTable({ patinetListAll, loading }) {
                 {mappedSteps?.map((step, index) => {
                   const findData =
                     selectedRowTime?.data &&
-                    selectedRowTime?.data?.find(
+                    selectedRowTime?.data?.response?.find(
                       (item) => item?.processStageChart === step?.info
                     );
 
@@ -496,7 +496,7 @@ function FileProcessingTable({ patinetListAll, loading }) {
                     <div key={index} className={TableStyle.innerProcessingDiv}>
                       {finished
                         ? "Loading..."
-                        : selectedRowTime?.data?.length > 0 &&
+                        : selectedRowTime?.data?.response?.length > 0 &&
                           (findData ? (
                             <span>
                               {findData?.createdDate &&
@@ -585,7 +585,7 @@ function FileProcessingTable({ patinetListAll, loading }) {
             <tr>
               <th>PATIENT ID</th>
               <th>PATIENT NAME</th>
-              <th style={{paddingLeft:"27%"}}>UPLOAD STATUS</th>
+              <th style={{ paddingLeft: "27%" }}>UPLOAD STATUS</th>
             </tr>
           </thead>
 

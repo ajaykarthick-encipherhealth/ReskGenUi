@@ -1,4 +1,4 @@
-import axios from '../../utility/axiosConfig'
+import axios from "../../utility/axiosConfig";
 import ENDPOINTS from "../../utility/enpoints";
 
 export const TEAM_CHART = "TEAM_CHART";
@@ -9,6 +9,29 @@ export const ACCURACY_WEEKLY = "ACCURACY_WEEKLY";
 export const ACCURACY_DAILY = "ACCURACY_DAILY";
 // chnaged
 export async function workStatusApiAdmin(startDate = "", endDate = "", router) {
+  const token = localStorage.getItem("token");
+  const orgId = localStorage.getItem("orgId");
+
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/admindashboard/overallchart?allocatedOnStartDate=${startDate}&allocatedOnEndDate=${endDate}&organizationId=${orgId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function workStatusApiTenantAdmin(
+  startDate = "",
+  endDate = "",
+  router
+) {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.get(
@@ -21,7 +44,7 @@ export async function workStatusApiAdmin(startDate = "", endDate = "", router) {
     );
     return response.data;
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 }
 
@@ -66,7 +89,7 @@ export const accuracyScore = async (btn, month, year, router) => {
     );
     return response.data;
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 };
 
@@ -89,7 +112,7 @@ export const CompletedScore = async (btn, date, month, year, router) => {
     );
     return response.data;
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 };
 
@@ -107,7 +130,7 @@ export const HoldStatus = async (router) => {
     );
     return response.data;
   } catch (err) {
-   console.log(err)
+    console.log(err);
   }
 };
 
@@ -148,7 +171,7 @@ export const CompletedScoreNew = async (btn, date, month, year, router) => {
     );
     return response.data;
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 };
 
@@ -213,7 +236,7 @@ export const UserByIndividual = async (router) => {
     );
     return response.data;
   } catch (err) {
-   console.log(err)
+    console.log(err);
   }
 };
 
@@ -445,11 +468,29 @@ export const CompletedStatus = async (
     );
     return response.data;
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 };
 
 export const GetUserCount = async (role) => {
+  const token = localStorage.getItem("token");
+  const orgId = localStorage.getItem("orgId");
+  try {
+    const response = await axios.get(
+      `${ENDPOINTS?.apiEndoint}dbservice/user/getusercountbyrole?organizationId=${orgId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const GetTenantAdminUserCount = async (role) => {
   const token = localStorage.getItem("token");
   const orgId = localStorage.getItem("orgId");
   try {
@@ -463,7 +504,7 @@ export const GetUserCount = async (role) => {
     );
     return response.data;
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 };
 
@@ -481,6 +522,6 @@ export const SelectUserList = async (role) => {
     );
     return response.data;
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
 };

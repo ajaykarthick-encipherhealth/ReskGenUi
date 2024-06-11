@@ -16,7 +16,8 @@ import { disableFutureDate, handleRnagePicker2 } from "./functions";
 import filter from "../../images/svg/filter.svg";
 import warning from "../../images/svg/warning.svg";
 import { getFilters } from "../../stores/authflow/actions";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 const { RangePicker } = DatePicker;
 
 const HeaderFilters = ({
@@ -159,7 +160,7 @@ const HeaderFilters = ({
   selectOptionsOrg,
   defaultSelectValueOrg,
   selectedValueOrg,
-  isRangePickerUsers
+  isRangePickerUsers,
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
@@ -324,25 +325,25 @@ const HeaderFilters = ({
               </div>
             </div>
           )}
-           {isRangePickerUsers && (
-              <div className={defaultSize}>
-                <DateRangePicker
-                  selectedDates={selectedDates}
-                  pickerlabel={pickerlabel}
-                  defaultStartDate={defaultStartDate}
-                  defaultEndDate={defaultEndDate}
-                  setStartDate={setStartDate}
-                  setEndDate={setEndDate}
-                  activeTab={activeTab}
-                  setSelectedDates={setSelectedDates}
-                  setReceivedStartDate={setReceivedStartDate}
-                  setReceivedEndDate={setReceivedEndDate}
-                  setCoderStartDate={setCoderStartDate}
-                  setCoderEndDate={setCoderEndDate}
-                  disabled={disable != "Yes" ? true : false}
-                />
-              </div>
-            )}
+          {isRangePickerUsers && (
+            <div className={defaultSize}>
+              <DateRangePicker
+                selectedDates={selectedDates}
+                pickerlabel={pickerlabel}
+                defaultStartDate={defaultStartDate}
+                defaultEndDate={defaultEndDate}
+                setStartDate={setStartDate}
+                setEndDate={setEndDate}
+                activeTab={activeTab}
+                setSelectedDates={setSelectedDates}
+                setReceivedStartDate={setReceivedStartDate}
+                setReceivedEndDate={setReceivedEndDate}
+                setCoderStartDate={setCoderStartDate}
+                setCoderEndDate={setCoderEndDate}
+                disabled={disable != "Yes" ? true : false}
+              />
+            </div>
+          )}
 
           {isRangeTimePicker && (
             <>
@@ -450,7 +451,7 @@ const HeaderFilters = ({
                 style={{ background: "#04306f" }}
                 className="btn btn-sm ms-2 flr width-max-content"
               >
-                + {btnTitle}
+                <FontAwesomeIcon icon={faPlus} /> {btnTitle}
               </Button>
             </div>
           )}
@@ -533,7 +534,10 @@ const HeaderFilters = ({
               </div>
             )}
             {isRangePicker && (
-              <div className={defaultSize}  style={{ position: "relative", right:"20px" }}>
+              <div
+                className={defaultSize}
+                style={{ position: "relative", right: "20px" }}
+              >
                 <DateRangePicker
                   selectedDates={selectedDates}
                   pickerlabel={pickerlabel}

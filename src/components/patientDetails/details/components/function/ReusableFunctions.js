@@ -2,7 +2,12 @@ import { CalendarOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Tooltip, notification, Popover } from "antd";
 import moment from "moment";
-import { faCircleUser, faCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleUser,
+  faCircle,
+  faTrashCan,
+  faPen,
+} from "@fortawesome/free-solid-svg-icons";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import styles from "../HCC/styles.module.css";
 import axios from "../../../../../utility/axiosConfig";
@@ -103,7 +108,7 @@ export const getEncounterDateBackground = ({
               )}
             </>
           }
-          trigger={["click"]}
+          trigger={["hover"]}
           placement="bottom"
         >
           <span
@@ -612,8 +617,90 @@ export function removeDuplicates(array) {
   return output;
 }
 
-export const getProviderNameList = ({ data }) => {
+export const getProviderNameManually = ({ data }) => {
   return data.map((res, index) => {
+    // if (index < 2) {
+    var sectionMapArr = (
+      <span
+        className={`mt-2 text-start ${visitStyles.provider_name_manually}`}
+        style={{
+          backgroundColor: stringToColour(res?.providerName) + 33,
+          color: stringToColour(res?.providerName),
+          fontSize: "16px",
+        }}
+      >
+        <i>
+          {" "}
+          <FontAwesomeIcon
+            icon={faCircleUser}
+            style={{
+              size: 20,
+              color: stringToColour(res?.providerName),
+            }}
+          />
+        </i>
+        {res?.providerName}
+      </span>
+    );
+    return sectionMapArr;
+  });
+};
+
+export const getSectionNameManually = ({ data, sectionDelete, sectionEdit }) => {
+  return data.map((res, index) => {
+    // if (index < 2) {
+    var sectionMapArr = (
+      <span
+        className={`mt-2 text-start ${visitStyles.provider_name_manually} cr-pointer`}
+        style={{
+          backgroundColor: stringToColour(res?.section) + 33,
+          color: stringToColour(res?.section),
+          fontSize: "16px",
+        }}
+      >
+        <Popover
+          trigger="click"
+          content={
+            <>
+              {res?.hyperlinks?.map((list) => (
+                <span className="p-2 border rounded mx-2">
+                  {list.dateOfService}
+                </span>
+              ))}
+            </>
+          }
+        >
+          {res?.section}{" "}
+        </Popover>
+        {/* <label
+          className="cr-pointer px-4 pe-2 pt-2"
+          onClick={() => sectionEdit(res)}
+        >
+          <FontAwesomeIcon icon={faPen} color="#04306f" />
+        </label> */}
+        <label
+          className="cr-pointer pt-2"
+          onClick={() => sectionDelete(res)}
+        >
+          <FontAwesomeIcon icon={faTrashCan} color="#04306f" />
+        </label>
+      </span>
+    );
+    return sectionMapArr;
+  });
+};
+export const getProviderNameList = ({ data, captureSectionMatching }) => {
+  var dublicateCaptureDelete = removeDuplicates(data);
+  return dublicateCaptureDelete.map((res, index) => {
+    const result = captureSectionMatching.filter(
+      (res2) => res2.sectionName == res
+    );
+    var backColor =
+      result[0]?.backgroundColor == "#efeff033"
+        ? "#54548d33"
+        : result[0]?.backgroundColor;
+    var textColor =
+      result[0]?.sectionColor == "#efeff0" ? "#000" : result[0]?.sectionColor;
     if (index < 2) {
       var sectionMapArr = (
         <span
@@ -629,7 +716,7 @@ export const getProviderNameList = ({ data }) => {
               icon={faCircleUser}
               style={{
                 size: 10,
-                color:stringToColour(res),
+                color: stringToColour(res),
               }}
             />
           </i>
@@ -683,6 +770,7 @@ export const getProviderNameList = ({ data }) => {
     }
   });
 };
+
 export const handleSubmitValidNotes = async ({
   values,
   setFileLoading,
@@ -692,7 +780,7 @@ export const handleSubmitValidNotes = async ({
   selectDisDetails,
   getpatientDetailsData,
   patientDetailsResult,
-  handleCloseModal
+  handleCloseModal,
 }) => {
   setFileLoading(true);
   setConfirmNotesModalValid(false);
@@ -731,13 +819,19 @@ export const handleSubmitValidNotes = async ({
   if (isValidAction.name == "Move to Hcc" && isValidAction.title == "NONHCC") {
     apiURL = "management/disease/move/invalidtovalid";
   }
-  if (isValidAction.name == "Move to Deleted" && isValidAction.title == "COMBO") {
+  if (
+    isValidAction.name == "Move to Deleted" &&
+    isValidAction.title == "COMBO"
+  ) {
     apiURL = "management/disease/move/combovalidtodeleted";
   }
   if (isValidAction.name == "Move to valid" && isValidAction.title == "COMBO") {
     apiURL = "management/disease/move/combodeletedtovalid";
   }
-  if (isValidAction.name == "Move to Deleted" && isValidAction.title == "MEAT") {
+  if (
+    isValidAction.name == "Move to Deleted" &&
+    isValidAction.title == "MEAT"
+  ) {
     apiURL = "management/meat/move/invalidtovalid";
   }
   if (isValidAction.name == "Move to valid" && isValidAction.title == "MEAT") {
@@ -747,7 +841,9 @@ export const handleSubmitValidNotes = async ({
     var patientId = localStorage.getItem("patientId");
     var dataFormatSuggested = {
       patientId: patientId,
-      diagnosisCode: selectDisDetails.diagnosisCode ? selectDisDetails.diagnosisCode :selectDisDetails.diagnosisCodeCombo,
+      diagnosisCode: selectDisDetails.diagnosisCode
+        ? selectDisDetails.diagnosisCode
+        : selectDisDetails.diagnosisCodeCombo,
       // description: selectDisDetails.actualDescription,
       // dbDescription: selectDisDetails.dbDescription,
       reason: values.reason,
@@ -1209,7 +1305,7 @@ export const stringToColour = (str) => {
     const value = (hash >> (i * 8)) & 0xff;
     colour += value.toString(16).padStart(2, "0");
   }
-  if (str.toLocaleLowerCase() === "plan") {
+  if (str?.toLocaleLowerCase() === "plan") {
     colour = "#7e00ff";
   }
   if (str.toLocaleLowerCase() === "examination") {

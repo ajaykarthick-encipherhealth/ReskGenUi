@@ -10,6 +10,7 @@ import {
   accuracyScoreNew,
   CompletedStatus,
   SelectUserList,
+  workStatusApiTenantAdmin,
 } from "../../../services/adminServices/DashboardService";
 
 export const WORKFLOWDATA = "WORKFLOWDATA";
@@ -43,6 +44,33 @@ export const getWorkFlow = (startDate = "", endDate = "", router) => {
     });
     try {
       workStatusApiAdmin(startDate, endDate, router).then((response) => {
+        dispatch({
+          type: WORKFLOWDATA,
+          payload: {
+            data: response,
+            loading: false,
+          },
+        });
+      });
+    } catch (err) {
+      console.log("dasff", err);
+    }
+  };
+};
+export const getWorkFlowTenantAdmin = (
+  startDate = "",
+  endDate = "",
+  router
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: WORKFLOWDATA,
+      payload: {
+        loading: true,
+      },
+    });
+    try {
+      workStatusApiTenantAdmin(startDate, endDate, router).then((response) => {
         dispatch({
           type: WORKFLOWDATA,
           payload: {
@@ -251,7 +279,7 @@ export const getCompletedStatus = (
   month,
   year,
   router,
-  selectUser, 
+  selectUser,
   role
 ) => {
   return (dispatch) => {

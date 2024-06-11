@@ -195,28 +195,25 @@ const HccCards = ({
                               </>
                             )}
                             {data.isMostSpecific == true && (
-                                    <>
-                                      <div
-                                        className={visitStyles.tree_icon}
-                                        style={{ background: "#c7f3c6" }}
-                                        onClick={() => {
-                                          setOpens(true);
-                                          setCombiTree([
-                                            { ...data, expanded: true },
-                                          ]);
-                                        }}
-                                      >
-                                        <FontAwesomeIcon
-                                          icon={faSitemap}
-                                          style={{
-                                            size: 8,
-                                            color: "#088f39",
-                                          }}
-                                        />
-                                      </div>
-                                   
-                                    </>
-                                  )}
+                              <>
+                                <div
+                                  className={visitStyles.tree_icon}
+                                  style={{ background: "#c7f3c6" }}
+                                  onClick={() => {
+                                    setOpens(true);
+                                    setCombiTree([{ ...data, expanded: true }]);
+                                  }}
+                                >
+                                  <FontAwesomeIcon
+                                    icon={faSitemap}
+                                    style={{
+                                      size: 8,
+                                      color: "#088f39",
+                                    }}
+                                  />
+                                </div>
+                              </>
+                            )}
 
                             {/* <div>
                                 <FontAwesomeIcon
@@ -246,7 +243,6 @@ const HccCards = ({
                                 ) : null}
                               </>
                             ) : null}
-
 
                             <Popover
                               placement="left"
@@ -480,7 +476,7 @@ const HccCards = ({
                                 patientDocumentResult: patientDocumentResult,
                               })}
                             </div>
-                            {(data.providerName.length == 0) && (
+                            {data.providerName.length == 0 && (
                               <div
                                 className={`${visitStyles.encounterAndSectionHeader}`}
                               >
@@ -594,33 +590,33 @@ const HccCards = ({
                               </div>
                             </div>
                             {data.providerName.length == 0 && (
-                            <>
-                            <div
-                              className={`${visitStyles.encounterAndSectionHeader}`}
-                            >
-                              {data.isManuallyAdded == true ? (
-                                <Badge
-                                  className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                              <>
+                                <div
+                                  className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
-                                  Manually Added
-                                </Badge>
-                              ) : null}
-                            </div>
-                            {data.isComboCode == true ? (
-                              <Badge
-                                className={`mt-2 text-start  ${visitStyles.isComboCode}`}
-                                onClick={() => {
-                                  setActiveTabHead(3);
-                                  setActiveComboTree({
-                                    diagnosisCode: data?.diagnosisCode,
-                                  });
-                                }}
-                              >
-                                Combo
-                              </Badge>
-                            ) : null}
-                        
-                            </>)}
+                                  {data.isManuallyAdded == true ? (
+                                    <Badge
+                                      className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                    >
+                                      Manually Added
+                                    </Badge>
+                                  ) : null}
+                                </div>
+                                {data.isComboCode == true ? (
+                                  <Badge
+                                    className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                    onClick={() => {
+                                      setActiveTabHead(3);
+                                      setActiveComboTree({
+                                        diagnosisCode: data?.diagnosisCode,
+                                      });
+                                    }}
+                                  >
+                                    Combo
+                                  </Badge>
+                                ) : null}
+                              </>
+                            )}
 
                             {data.getPlace == "Insulin" ? (
                               <span
@@ -653,36 +649,36 @@ const HccCards = ({
                         </div>
                         {data.providerName.length != 0 && (
                           <div className="d-flex justify-content-between">
-                                <div
-                            className={`${visitStyles.encounterAndSectionHeader}`}
-                          >
-                            {getCaptureSectionBackgroundFile(
-                              data?.capturedSections,
-                              data?.encounterDate,
-                              data?.actualDescription,
-                              data?.diagnosisCode,
-                              data?.getPlace,
-                              captureSectionMatching,
-                              setSearch,
-                              setFileLoading,
-                              setIsModalOpenLab,
-                              setIsModalOpenRadiology,
-                              setIsModalOpenValidCodes,
-                              setFileModalHeader,
-                              fileId,
-                              patientDocumentResult,
-                              fileInitialPage,
-                              setFileInitialPage,
-                              data?.hyperlinks,
-                              encounterDateMatching,
-                              setIsMulitpleHeader,
-                              isMulitpleHeader,
-                              setIsMulitpleHeadeCode,
-                              isMulitpleHeaderCode,
-                              data.dbDescription
-                            )}
-                          </div>
-                                <div
+                            <div
+                              className={`${visitStyles.encounterAndSectionHeader}`}
+                            >
+                              {getCaptureSectionBackgroundFile(
+                                data?.capturedSections,
+                                data?.encounterDate,
+                                data?.actualDescription,
+                                data?.diagnosisCode,
+                                data?.getPlace,
+                                captureSectionMatching,
+                                setSearch,
+                                setFileLoading,
+                                setIsModalOpenLab,
+                                setIsModalOpenRadiology,
+                                setIsModalOpenValidCodes,
+                                setFileModalHeader,
+                                fileId,
+                                patientDocumentResult,
+                                fileInitialPage,
+                                setFileInitialPage,
+                                data?.hyperlinks,
+                                encounterDateMatching,
+                                setIsMulitpleHeader,
+                                isMulitpleHeader,
+                                setIsMulitpleHeadeCode,
+                                isMulitpleHeaderCode,
+                                data.dbDescription
+                              )}
+                            </div>
+                            <div
                               className={`${visitStyles.encounterAndSectionHeader}`}
                             >
                               {data.isManuallyAdded == true ? (
@@ -706,8 +702,7 @@ const HccCards = ({
                                 Combo
                               </Badge>
                             ) : null}
-                            </div>
-                      
+                          </div>
                         )}
                       </div>
                     );
@@ -719,7 +714,7 @@ const HccCards = ({
           <span className="d-none">{provided?.placeholder}</span>
         </div>
       )}
-      
+
       <ModelIndex
         title={"Edit"}
         openState={openEdit}

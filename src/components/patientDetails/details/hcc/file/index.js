@@ -337,7 +337,7 @@ const File = ({
                 isMeatNew={true}
               /> */}
               <div style={{height:"70vh",overflowY:"scroll"}}>
-              <ManuallyAdd handleCloseModal={handleCloseModal} setIsFileFormShow={setIsFileFormShow} />
+              <ManuallyAdd handleCloseModal={handleCloseModal} setIsFileFormShow={setIsFileFormShow} year={year}/>
               </div>
             </div>
           ) : null}

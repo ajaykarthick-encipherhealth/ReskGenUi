@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch, connect } from "react-redux";
 import Link from "next/link";
 import Image from "next/image";
@@ -131,6 +131,7 @@ const Header = ({
   const [opened, setOpened] = useState(false);
   const showDrawer = () => {
     setOpened(true);
+    setPopoverVisible(false);
   };
   const onClosed = () => {
     setOpened(false);
@@ -315,6 +316,7 @@ const Header = ({
   const notificationDrawer = async () => {
     setOpen(true);
     dispatch(getNotificationAlertClear([]));
+    setPopoverVisible(false);
   };
 
   const items = dropdownContent
@@ -402,6 +404,7 @@ const Header = ({
 
   const gotoChat = () => {
     setOpenMsg(true);
+    setPopoverVisible(false);
   };
   useEffect(() => {
     const userRoleLocal = localStorage.getItem("userRole");
@@ -423,7 +426,9 @@ const Header = ({
   useEffect(() => {
     getTenentLogo();
   }, []);
-
+  const handleOpenChange = useCallback(() => {
+    setPopoverVisible(true);
+  }, []);
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -460,18 +465,19 @@ const Header = ({
                     const queryString = window.location.search;
                     const urlParams = new URLSearchParams(queryString);
                     let encodedParams = null;
-                    if(currentRole == "tenant_admin"){
+                    if (currentRole == "tenant_admin") {
                       encodedParams = urlParams.get("isTenantAdminTracking");
-                    }else{
+                    } else {
                       encodedParams = urlParams.get("isAdminTracking");
                     }
-
 
                     return (
                       <li
                         className={` ${
                           stateActive === data.to ||
-                          ((currentRole === "admin" || currentRole === "tenant_admin") && encodedParams
+                          ((currentRole === "admin" ||
+                            currentRole === "tenant_admin") &&
+                          encodedParams
                             ? stateActive === data.childRoute3
                             : stateActive === data.childRoute) ||
                           stateActive === data.childRoute2
@@ -524,14 +530,16 @@ const Header = ({
                         >
                           <Codify />
                         </Drawer>
-                        {/* NOTE i remove userRole !== "admin" logic because PRAVIN told me to show admin also, so if Logesh ask anything to this please tell him like this*/}
+                        {/* NOTE i remove userRole !== "admin" logic because PRAVIN
+                        told me to show admin also, so if Logesh ask anything to
+                        this please tell him like this */}
                         {userRole !== "tenant_admin" && (
                           <Popover
                             content={PopContent}
                             placement="bottom"
                             trigger={"click"}
                             open={popoverVisible}
-                            onOpenChange={() => setPopoverVisible(true)}
+                            onOpenChange={handleOpenChange}
                           >
                             <Button className={styles.codeBtn}>
                               <div style={{ margin: " -7px 0 0 -25px" }}>
@@ -543,7 +551,6 @@ const Header = ({
                             </Button>
                           </Popover>
                         )}
-
                         {userRole === "reviewer" && (
                           <Tooltip
                             title={` Quality : ${
@@ -570,7 +577,6 @@ const Header = ({
                             </div>
                           </Tooltip>
                         )}
-
                         {userRole === "tenant_admin" && (
                           <div
                             className="chatheaderIcon"
@@ -589,7 +595,6 @@ const Header = ({
                             />
                           </div>
                         )}
-
                         {tenentId != "7f41538e-2329-4ecc-890f-03c93cccb934" && (
                           <div
                             className="chatheaderIcon"
@@ -612,7 +617,6 @@ const Header = ({
                             </div>
                           </div>
                         )}
-
                         <div
                           className="notificationIcon"
                           onClick={() => notificationDrawer()}
@@ -629,7 +633,6 @@ const Header = ({
                             </div>
                           </Badge>
                         </div>
-
                         <div className="header-media d-flex">
                           <Popover
                             trigger="click"

@@ -122,7 +122,7 @@ const stageChartMap = {
   QUERY_CONDITIONS_FOUND_FAILED: 8,
   FINISHED: 9,
 };
-function FileProcessingTable({ patinetListAll, loading ,selectOrgList}) {
+function FileProcessingTable({ patinetListAll, loading, selectOrgList }) {
   const dispatch = useDispatch();
   const [stepperVisible, setStepperVisible] = useState(
     Array(patinetListAll?.length).fill(false)
@@ -162,9 +162,9 @@ function FileProcessingTable({ patinetListAll, loading ,selectOrgList}) {
     const id = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
     var orgId = "";
-    console.log(selectOrgList)
-    if(selectOrgList?.value){
-      orgId=  selectOrgList?.value == "ALL" ? "" : selectOrgList?.value
+    console.log(selectOrgList);
+    if (selectOrgList?.value) {
+      orgId = selectOrgList?.value == "ALL" ? "" : selectOrgList?.value;
     }
     let isFinished = false;
     const sse = new EventSource(
@@ -201,7 +201,7 @@ function FileProcessingTable({ patinetListAll, loading ,selectOrgList}) {
       sse.removeEventListener("file-status-event", fileStatusEventListener);
       sse.close();
     };
-  }, [activeId,selectOrgList]);
+  }, [activeId, selectOrgList]);
 
   useEffect(() => {
     if (activeId && parsedData) {
@@ -491,7 +491,7 @@ function FileProcessingTable({ patinetListAll, loading ,selectOrgList}) {
                 {mappedSteps?.map((step, index) => {
                   const findData =
                     selectedRowTime?.data &&
-                    selectedRowTime?.data?.find(
+                    selectedRowTime?.data?.response?.find(
                       (item) => item?.processStageChart === step?.info
                     );
 
@@ -499,7 +499,7 @@ function FileProcessingTable({ patinetListAll, loading ,selectOrgList}) {
                     <div key={index} className={TableStyle.innerProcessingDiv}>
                       {finished
                         ? "Loading..."
-                        : selectedRowTime?.data?.length > 0 &&
+                        : selectedRowTime?.data?.response?.length > 0 &&
                           (findData ? (
                             <span>
                               {findData?.createdDate &&
@@ -570,10 +570,8 @@ function FileProcessingTable({ patinetListAll, loading ,selectOrgList}) {
     ));
   };
 
-
-  useEffect(() => {  
-    console.log(selectOrgList.value)
-   
+  useEffect(() => {
+    console.log(selectOrgList.value);
   }, [selectOrgList]);
 
   return (
@@ -594,7 +592,7 @@ function FileProcessingTable({ patinetListAll, loading ,selectOrgList}) {
             <tr>
               <th>PATIENT ID</th>
               <th>PATIENT NAME</th>
-              <th style={{paddingLeft:"27%"}}>UPLOAD STATUS</th>
+              <th style={{ paddingLeft: "27%" }}>UPLOAD STATUS</th>
             </tr>
           </thead>
 

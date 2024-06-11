@@ -247,7 +247,7 @@ const UserList = () => {
                         pickerStartValue={startDate}
                         pickerEndValue={endDate}
                         isRangePickerUsers={true}
-                        addUser={true}
+                        addUser={false}
                         addUserForm={addUserForm}
                         btnTitle="Add User"
                         setClear={setClear}
