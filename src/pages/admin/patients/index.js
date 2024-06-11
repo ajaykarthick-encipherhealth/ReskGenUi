@@ -592,7 +592,7 @@ export default function Patient() {
                             selectorField="CreatedBy"
                             // defaultAllocatedBy={"All"}
                             setSelCreatedBy={setSelCreatedBy}
-                            addUser={true}
+                            addUser={false}
                             addUserForm={addPatientFormId}
                             bullets={bullets}
                             isNextRow={true}
