@@ -207,14 +207,14 @@ const Meat = ({
               <RegularButton
                 type=""
                 name="Save"
-                width="20%"
+                width="100px"
                 // onClick={handledSave}
               />
               {listOfSection?.length > 0 && (
                 <RegularButton
                   type="outline"
                   name="Cancel"
-                  width="20%"
+                  width="100px"
                   method={"button"}
                   onClick={() => setShowSection(true)}
                 />
@@ -229,14 +229,14 @@ const Meat = ({
             <RegularButton
               type="outline"
               name="Back"
-              width="20%"
+              width="100px"
               method={"button"}
               onClick={() => setMeatDisplay(false)}
             />
             <RegularButton
               type=""
               name="Submit"
-              width="20%"
+              width="100px"
               method={"button"}
               onClick={handleMeatSubmit}
               disabled={isMeat ? !(isMeat && isActive) : isMeat}
