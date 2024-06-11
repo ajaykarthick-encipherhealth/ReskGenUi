@@ -183,6 +183,7 @@ export const getPatientDetails = async (
         });
         if(res.isShow != false){
         hccDisArray.push({
+          ...res,
           actualDescription: res.actualDescription,
           capturedSections: res.capturedSections,
           diagnosisCode: res.diagnosisCode,
@@ -214,6 +215,7 @@ export const getPatientDetails = async (
           providerList.push(res);
         });
         nonHccDisArray.push({
+          ...res,
           actualDescription: res.actualDescription,
           capturedSections: res.capturedSections,
           diagnosisCode: res.diagnosisCode,
@@ -248,6 +250,7 @@ export const getPatientDetails = async (
             dosList.push(res.date);
           });
           suggestListAll.push({
+            ...res,
             actualDescription: res.actualDescription,
             diagnosisCodeFinding: res.diagnosisCode,
             isHccValid: res.isHccValid,
@@ -283,6 +286,7 @@ export const getPatientDetails = async (
             providerList.push(res);
           });
           deleteHccList.push({
+            ...res,
             actualDescription: res.actualDescription,
             dbDescription: res.dbDescription,
             capturedSections: res.capturedSections,

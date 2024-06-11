@@ -318,6 +318,16 @@
   justify-content: center;
   padding: 5px 5px;
 }
+.provider_name_manually {
+  font-weight: 600;
+  border-radius: 30px !important;
+  margin: 0px 0px 0px 5px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
 .un_provider_name {
   color: #ff0000cc !important;
   background: #ff00002e !important;
@@ -431,7 +441,6 @@
   float: right;
   margin-right: 5px;
   height: 20px;
-  width: 85px;
   padding: 5px;
 }
 .isComboCode {
