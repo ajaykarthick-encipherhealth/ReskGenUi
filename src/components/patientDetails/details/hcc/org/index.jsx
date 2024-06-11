@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { OrganizationChart } from "primereact/organizationchart";
 import Style from "./style.module.css";
-import { Popconfirm, Popover, Tag, Tooltip } from "antd";
+import { Badge, Popconfirm, Popover, Tag, Tooltip } from "antd";
 import Tree from "./data.json";
 import Header from "../../../../../jsx/layouts/nav/Header";
 import { Card } from "react-bootstrap";
@@ -298,14 +298,17 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
     setTrees(tree);
   }, [tree]);
 
+  const isMost = (most) => {
+    if (most.includes("MOST_SPECIFIC")) {
+      return (
+        <Badge className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}>
+          Most Specific
+        </Badge>
+      );
+    }
+  };
+
   const nodeTemplate = (node) => {
-    const provider = () => {
-      if (node?.providers) {
-        return node?.providers?.map((res) => res.providerName);
-      } else {
-        return node?.provider?.map((res) => res.providerName);
-      }
-    };
     return (
       <div
         className={Style.cards}
@@ -364,11 +367,17 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
               )
           )}
         </div>
+        <div className="d-flex justify-content-between">
         <div className="text-start">
           {getProviderNameList(
-            node.providerName ? node.providerName : provider()
+            node.providerNames ? node.providerNames : node.providerName
           )}
         </div>
+        <div className="">
+          {node.stateIndicators?.length > 0 ? isMost(node.stateIndicators) : ""}
+        </div>
+        </div>
+        
         <div className="text-start">
           {getEncounterDateBackground(node?.encounterDate)}
         </div>
