@@ -7,6 +7,7 @@ import visitStyles from "../../../styles/visitdata.module.css";
 import moment from "moment";
 import TableStyle from "../../../components/table/table.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CheckCircleOutlined } from "@ant-design/icons";
 import {
   faArrowLeft,
   faUserCircle,
@@ -90,7 +91,7 @@ const Details = ({
   getPatientIdData,
   patientIdDetailsData,
   getFlagDetailsData,
-  flagsDetailsResult
+  flagsDetailsResult,
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -136,6 +137,27 @@ const Details = ({
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
   const [showTerminal, setShowTerminal] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [completedTabs, setCompletedTabs] = useState([]);
+
+  const handleNavigation = (data) => {
+    // const response = true;
+
+    // if (response) {
+    //   setCompletedTabs((prevCompletedTabs) => [
+    //     ...prevCompletedTabs,
+    //     data.title,
+    //   ]);
+    // }
+
+    navigetPageDetails(
+      data.type,
+      setSideNavLabelActiveKey,
+      setPatientDocumentResult,
+      setActiveTab,
+      setIsLoadingDos,
+      setIsLoading
+    );
+  };
   useEffect(() => {
     getAllProcessYear();
   }, []);
@@ -242,7 +264,11 @@ const Details = ({
           isRxHcc: rxHcc.length > 0 ? rxHcc.length : 0,
         });
         setNewValidDiseaseList(validDisArray);
-        getFlagDetailsData(patientId,result.processedYear,result.dateOfService)
+        getFlagDetailsData(
+          patientId,
+          result.processedYear,
+          result.dateOfService
+        );
         // getFlagListLastDetails(patientId, result.processedYear);
         setIsLoading(false);
         setPatientResultReload(true);
@@ -360,7 +386,7 @@ const Details = ({
           : "/admin/patients";
         navigate.push(url);
       }
-    }else if(user && user.toLowerCase() === "tenant_admin"){
+    } else if (user && user.toLowerCase() === "tenant_admin") {
       if (user && user.toLowerCase() === "tenant_admin") {
         const { user: _, ...queryWithoutUser } = navigate.query;
         const queryString = new URLSearchParams(queryWithoutUser).toString();
@@ -736,9 +762,12 @@ const Details = ({
                       >
                         <div className={`${visitStyles.rafscoreheader} `}>
                           <label>Score</label>
-                          {patientDetails?.rafScore?.rafVersionDTO?.overAllScore != null ? (
+                          {patientDetails?.rafScore?.rafVersionDTO
+                            ?.overAllScore != null ? (
                             <h6 className="ageDtails">
-                              {patientDetails?.rafScore?.rafVersionDTO?.overAllScore?.toFixed(3)}
+                              {patientDetails?.rafScore?.rafVersionDTO?.overAllScore?.toFixed(
+                                3
+                              )}
                             </h6>
                           ) : (
                             <h6 className="ageDtails">0.00</h6>
@@ -928,7 +957,7 @@ const Details = ({
                                     </span>
                                   </div>
                                 </div>
-                                <ul>
+                                {/* <ul>
                                   {tabList.map((data, index) => (
                                     <Tooltip
                                       title={data.title}
@@ -964,6 +993,67 @@ const Details = ({
                                           </span>
                                         </a>
                                       </li>
+                                    </Tooltip>
+                                  ))}
+                                </ul> */}
+                                <ul>
+                                  {tabList.map((data, index) => (
+                                    <Tooltip
+                                      key={index}
+                                      title={data.title}
+                                      placement="right"
+                                    >
+                                      {completedTabs.includes ? (
+                                        <li
+                                          className={`${visitStyles.sideNavLabel}`}
+                                          onClick={() => handleNavigation(data)}
+                                        >
+                                          <a
+                                            className={`${
+                                              sideNavLabelActiveKey ===
+                                              data.title
+                                                ? visitStyles.sideNavLabelActive
+                                                : ""
+                                            }`}
+                                          >
+                                            <div className="menu-icon"></div>
+                                            <Image
+                                              src={data.iconStyle}
+                                              alt={data.title}
+                                            />
+                                            <span
+                                              className={`${visitStyles.sideNavText}`}
+                                            >
+                                              {data.title}
+                                            </span>
+                                          </a>
+                                        </li>
+                                      ) : (
+                                        <li
+                                          className={`${visitStyles.sideNavLabel}`}
+                                          onClick={() => handleNavigation(data)}
+                                        >
+                                          <a
+                                            className={`${
+                                              sideNavLabelActiveKey ===
+                                              data.title
+                                                ? visitStyles.sideNavLabelActiveComplete
+                                                : ""
+                                            }`}
+                                          >
+                                            <div className="menu-icon">
+                                              <CheckCircleOutlined
+                                                style={{ color: "green" }}
+                                              />
+                                            </div>
+                                            <span
+                                              className={`${visitStyles.sideNavText}`}
+                                            >
+                                              {data.title}
+                                            </span>
+                                          </a>
+                                        </li>
+                                      )}
                                     </Tooltip>
                                   ))}
                                 </ul>
@@ -1008,7 +1098,9 @@ const Details = ({
                                     >
                                       {data.name === "Flag" ? (
                                         <Badge
-                                          count={flagsDetailsResult?.response?.length}
+                                          count={
+                                            flagsDetailsResult?.response?.length
+                                          }
                                           style={{
                                             background: "#04306f",
                                             margin: "-2px",
@@ -1124,7 +1216,6 @@ const enhancer = connect(
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     patientIdDetailsData: state?.patientDetails.details?.patientIdResult,
     flagsDetailsResult: state?.patientDetails.details?.flagsDetailsResult.data,
-
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,
