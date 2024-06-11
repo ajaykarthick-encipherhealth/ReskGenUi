@@ -672,12 +672,12 @@ export const getSectionNameManually = ({ data, sectionDelete, sectionEdit }) => 
         >
           {res?.section}{" "}
         </Popover>
-        <label
+        {/* <label
           className="cr-pointer px-4 pe-2 pt-2"
           onClick={() => sectionEdit(res)}
         >
           <FontAwesomeIcon icon={faPen} color="#04306f" />
-        </label>
+        </label> */}
         <label
           className="cr-pointer pt-2"
           onClick={() => sectionDelete(res)}
