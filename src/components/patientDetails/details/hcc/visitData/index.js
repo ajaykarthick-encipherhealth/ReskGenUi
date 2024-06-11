@@ -279,10 +279,11 @@ const VisitData = ({
           </div>
           {isFileFormShow ? (
             <div className={`col-xl-4 ${styles.hccFormContainer}`}>
-              <AddHccForm
+              {/* <ManuallyAdd handleCloseModal={handleCloseModal} setIsFileFormShow={setIsFileFormShow} year={year}/> */}
+              {/* <AddHccForm
                 handleCloseModal={handleCloseModal}
                 isMeatNew={true}
-              />
+              /> */}
             </div>
           ) : null}
           {!isFileFormShow ? (
@@ -755,6 +756,7 @@ const VisitData = ({
           <ManuallyAdd
             handleCloseModal={handleCloseModal}
             setIsFileFormShow={setIsModalOpenValid}
+            year={year}
           />
         </div>
       </Offcanvas>

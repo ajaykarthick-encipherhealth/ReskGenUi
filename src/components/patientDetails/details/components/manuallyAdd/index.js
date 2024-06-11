@@ -42,6 +42,8 @@ const ManuallyAdd = ({
   getSelectedDos,
   getProviderSection,
   manuallyAdd,
+  getpatientDetailsData,
+  patientDetailsResult,
 }) => {
   const [form] = Form.useForm();
   const [isMeat, setIsMeat] = useState(false);
@@ -178,19 +180,19 @@ const ManuallyAdd = ({
     try {
       const res = await getValidate(value);
       if (res.status == "SUCCESS") {
-       getVerify(value, res)
+        getVerify(value, res);
       } else {
         setValidCode("Invalid Code");
       }
     } catch (error) {}
   };
 
-  const getVerify = async(value, res) => {
+  const getVerify = async (value, res) => {
     setValidCode("Valid Code");
     const isCodeCheck = await isCodeAlready({
       code: value,
       patientId: await getStorage("patientId"),
-      dos: year.value,
+      dos: year?.value,
       date: getSelectedDos,
     });
     if (isCodeCheck?.response) {
@@ -199,7 +201,7 @@ const ManuallyAdd = ({
       setValidCode("Valid Code");
       form.setFieldsValue({ description: res.response?.description });
     }
-  }
+  };
 
   const handledSave = (form) => {
     const res = sectionCount.map((item, i) => ({
@@ -470,8 +472,10 @@ const ManuallyAdd = ({
       try {
         const res = await manuallyAdd(data);
         if (res.status == "SUCCESS") {
-          getResponePopup(res)
+          getResponePopup(res);
           form.resetFields();
+          getPatient();
+
           setValidCode("");
           setProviderDetails([]);
           setCode("");
@@ -508,11 +512,18 @@ const ManuallyAdd = ({
           setSectionT("");
           setListOfSectionT([]);
           setShowSectionT(false);
-          setCapturedSectionsT([]);
+          setCapturedSectionsT([]);     
         }
-        console.log(res);
       } catch (error) {}
     }
+  };
+
+  const getPatient = async () => {
+    const res = await getpatientDetailsData(
+      patientDetailsResult?.data?.response?.patientId,
+      patientDetailsResult?.data?.response?.processedYear,
+      patientDetailsResult?.data?.response?.dateOfService
+    );
   };
 
   const sectionDelete = (item) => {
@@ -770,14 +781,14 @@ const ManuallyAdd = ({
                     <RegularButton
                       type=""
                       name="Save"
-                      width="20%"
+                      width="100px"
                       // onClick={handledSave}
                     />
                     {listOfSection.length > 0 && (
                       <RegularButton
                         type="outline"
                         name="Cancel"
-                        width="20%"
+                        width="100px"
                         method={"button"}
                         onClick={() => setShowSection(true)}
                       />
@@ -792,7 +803,7 @@ const ManuallyAdd = ({
                   <RegularButton
                     type=""
                     name="Next"
-                    width="30%"
+                    width="150px"
                     method={"button"}
                     onClick={() => setMeatDisplay(true)}
                   />
@@ -880,6 +891,7 @@ const enhancer = connect(
     getValidate: patientDetailsAction.getValideCode,
     isCodeAlready: patientDetailsAction.isCodeAlready,
     manuallyAdd: patientDetailsAction.manuallyAdd,
+    getpatientDetailsData: patientDetailsAction.patientDetailsAction,
   }
 );
 

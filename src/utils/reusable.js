@@ -4,22 +4,22 @@ export const getResponePopup = (res) => {
   switch (res?.data?.status ? res?.data?.status : res?.status) {
     case "USER_DEFINED_ERROR":
       return notification.warning({
-        description: res?.data?.message,
+        description: res?.data?.message ? res?.data?.message : res?.status,
         duration: 1,
       });
     case "SUCCESS":
       return notification.success({
-        description: res?.data?.message,
+        description: res?.data?.message ? res?.data?.message : res?.status,
         duration: 1,
       });
     case "FAILED":
       return notification.error({
-        description: res?.data?.message,
+        description: res?.data?.message ? res?.data?.message : res?.status,
         duration: 1,
       });
-      case "EXCEPTION":
+    case "EXCEPTION":
       return notification.error({
-        description: res?.data?.message,
+        description: res?.data?.message ? res?.data?.message : res?.status,
         duration: 1,
       });
     default:
@@ -27,12 +27,11 @@ export const getResponePopup = (res) => {
   }
 };
 
-
 export const getYears = () => {
   const currentYear = new Date().getFullYear();
   let year = [];
   for (let i = 2016; i < currentYear + 1; i++) {
-     year.push({label: i, value: i})
+    year.push({ label: i, value: i });
   }
   return year;
-}
+};
