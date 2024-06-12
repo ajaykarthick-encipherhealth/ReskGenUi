@@ -7,7 +7,7 @@ import visitStyles from "../../../styles/visitdata.module.css";
 import moment from "moment";
 import TableStyle from "../../../components/table/table.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CheckCircleOutlined } from "@ant-design/icons";
+
 import {
   faArrowLeft,
   faUserCircle,
@@ -44,7 +44,32 @@ import Flag from "./components/flag";
 import StatusAction from "./components/statusAction";
 import { handleCopyToClipboard } from "../../commonFunctions";
 import LogoLoader from "../../logoLoader";
-
+const tabList = [
+  {
+    title: "HCC",
+    type: "HCC",
+    iconStyle: IMAGES.visitDataHcc,
+    defaultComplete: true,
+  },
+  {
+    title: "NON HCC",
+    type: "NON HCC",
+    iconStyle: IMAGES.visitDataNonHcc,
+    defaultComplete: true,
+  },
+  {
+    title: "Radiology",
+    type: "Radiology",
+    iconStyle: IMAGES.visitDataRadioloy,
+    defaultComplete: false,
+  },
+  {
+    title: "Lab Report",
+    type: "Lab Report",
+    iconStyle: IMAGES.visitDataLabreport,
+    defaultComplete: false,
+  },
+];
 export const navigetPageDetails = async (
   pageTitle,
   setSideNavLabelActiveKey,
@@ -138,8 +163,9 @@ const Details = ({
   const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
   const [showTerminal, setShowTerminal] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [completedTabs, setCompletedTabs] = useState([]);
-
+  const [completedTabs, setCompletedTabs] = useState(
+    tabList.filter((tab) => tab.defaultComplete).map((tab) => tab.type)
+  );
   const handleNavigation = (data) => {
     // const response = true;
 
@@ -293,21 +319,6 @@ const Details = ({
     getPatientDosList(localPatientId, e);
     getpatientDetailsData(localPatientId, e, null, setIsLoading);
   };
-
-  const tabList = [
-    { title: "HCC", type: "HCC", iconStyle: IMAGES.visitDataHcc },
-    { title: "NON HCC", type: "NON HCC", iconStyle: IMAGES.visitDataNonHcc },
-    {
-      title: "Radiology",
-      type: "Radiology",
-      iconStyle: IMAGES.visitDataRadioloy,
-    },
-    {
-      title: "Lab Report",
-      type: "Lab Report",
-      iconStyle: IMAGES.visitDataLabreport,
-    },
-  ];
 
   const addComments = async (value) => {
     setFilterDataLoading(true);
@@ -996,57 +1007,65 @@ const Details = ({
                                       title={data.title}
                                       placement="right"
                                     >
-                                      {completedTabs.includes ? (
-                                        <li
-                                          className={`${visitStyles.sideNavLabel}`}
-                                          onClick={() => handleNavigation(data)}
+                                      <li
+                                        className={`${visitStyles.sideNavLabel}`}
+                                        onClick={() => handleNavigation(data)}
+                                      >
+                                        <a
+                                          className={`${
+                                            sideNavLabelActiveKey === data.title
+                                              ? visitStyles.sideNavLabelActive
+                                              : ""
+                                          }`}
                                         >
-                                          <a
-                                            className={`${
-                                              sideNavLabelActiveKey ===
-                                              data.title
-                                                ? visitStyles.sideNavLabelActive
-                                                : ""
-                                            }`}
-                                          >
-                                            <div className="menu-icon"></div>
-                                            <Image
-                                              src={data.iconStyle}
-                                              alt={data.title}
-                                            />
-                                            <span
-                                              className={`${visitStyles.sideNavText}`}
-                                            >
-                                              {data.title}
-                                            </span>
-                                          </a>
-                                        </li>
-                                      ) : (
-                                        <li
-                                          className={`${visitStyles.sideNavLabel}`}
-                                          onClick={() => handleNavigation(data)}
-                                        >
-                                          <a
-                                            className={`${
-                                              sideNavLabelActiveKey ===
-                                              data.title
-                                                ? visitStyles.sideNavLabelActiveComplete
-                                                : ""
-                                            }`}
-                                          >
+                                          {completedTabs.includes(data.type) ? (
                                             <div className="menu-icon">
-                                              <CheckCircleOutlined
-                                                style={{ color: "green" }}
+                                              <Badge
+                                                count={
+                                                  <svg
+                                                    width="20"
+                                                    height="20"
+                                                    viewBox="0 0 20 20"
+                                                    fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                  >
+                                                    <circle
+                                                      cx="10"
+                                                      cy="10"
+                                                      r="5"
+                                                      fill="green"
+                                                    />
+                                                  </svg>
+                                                }
+                                                style={{
+                                                  background: "transparent",
+                                                  margin: "8px",
+                                                }}
+                                                offset={[10, 10]}
+                                                size="large"
+                                              >
+                                                <Image
+                                                  src={data.iconStyle}
+                                                  alt={data.title}
+                                                />
+                                              </Badge>
+                                            </div>
+                                          ) : (
+                                            <div className="menu-icon">
+                                              <Image
+                                                src={data.iconStyle}
+                                                alt={data.title}
                                               />
                                             </div>
-                                            <span
-                                              className={`${visitStyles.sideNavText}`}
-                                            >
-                                              {data.title}
-                                            </span>
-                                          </a>
-                                        </li>
-                                      )}
+                                          )}
+
+                                          <span
+                                            className={`${visitStyles.sideNavText}`}
+                                          >
+                                            {data.title}
+                                          </span>
+                                        </a>
+                                      </li>
                                     </Tooltip>
                                   ))}
                                 </ul>
