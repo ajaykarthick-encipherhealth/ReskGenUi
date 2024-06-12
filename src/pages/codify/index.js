@@ -79,6 +79,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
     setExpandedKeys(expandedKeysValue);
     setAutoExpandParent(false);
   };
+  
   useEffect(() => {
     completeFetch();
   }, [searchInput]);
@@ -128,6 +129,13 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
     fetchTreeData();
     fetchCodeData();
   };
+
+  const handleSearchClick = (value)=>{
+    setSearchInput(value)
+    fetchTreeData(value);
+    fetchCodeData(value);
+
+  }
   const recentSearchTreeView = async () => {
     let searchData = await recentsearch();
     if (searchData?.status === "SUCCESS") {
@@ -307,7 +315,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
             {showButtons && currentButton === "Description" && (
               <div className="d-flex gap-3  flex-wrap mx-2">
                 {searches.map((search, index) => (
-                  <Button className={style.btnborder} key={index}>
+                  <Button className={style.btnborder} key={index} onClick={() => handleSearchClick(search)} value={searchInput}>
                     {search}
                   </Button>
                 ))}

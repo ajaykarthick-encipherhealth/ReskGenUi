@@ -83,6 +83,7 @@
   height: 50px;
   background: #e6eeff;
   margin-top: 10px;
+  padding-left: 8px;
 }
 .digit {
   font-weight: 600;
@@ -132,4 +133,12 @@
   margin-top: 5px;
   border-radius: 7px;
   padding:9px;
+}
+.excludes2 {
+  font-size: 16px;
+  color: red;
+  font-weight: 600;
+ }
+.para{
+  margin:0px;
 }

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { actions as dashbaordActions } from "../../stores/codify/dashboard";
+import { connect } from "react-redux";
 import style from "./style.module.css";
 import { Button, Empty, Spin } from "antd";
 import {
@@ -16,6 +18,9 @@ const Tables = (props) => {
     setLoading,
     setParentCode,
     parentCode,
+    codesData,
+    searchInput,
+    setSearchInput,
   } = props;
 
   const [isCopied, setCopied] = useState(false);
@@ -28,6 +33,38 @@ const Tables = (props) => {
     }, 3000);
     return () => clearTimeout(timeout);
   }, [isCopied]);
+
+  const fetchCodeData = async (value) => {
+    setLoading(true);
+    const tableData = await codesData({ code: value ? value : searchInput });
+    if (tableData?.status == "SUCCESS") {
+      setCodeData({
+        ...codeData,
+        name: tableData?.response?.childData?.name,
+        desc: tableData?.response?.childData?.desc,
+        includes: tableData?.response?.childData?.includes,
+        excludes1: tableData?.response?.childData?.excludes1,
+        excludes2: tableData?.response?.childData?.excludes2,
+        children: tableData?.response?.childData?.children,
+        inclusionTerm: tableData?.response?.childData?.inclusionTerm,
+        useAdditionalCode: tableData?.response?.childData?.useAdditionalCode,
+        requiredCharacter: tableData?.response?.childData?.requiredCharacter,
+      });
+      setParentCode({
+        ...parentCode,
+        name: tableData?.response?.parentData?.name,
+        desc: tableData?.response?.parentData?.desc,
+        includes: tableData?.response?.parentData?.includes,
+        excludes1: tableData?.response?.parentData?.excludes1,
+        excludes2: tableData?.response?.parentData?.excludes2,
+        children: tableData?.response?.parentData?.children,
+        inclusionTerm: tableData?.response?.parentData?.inclusionTerm,
+        useAdditionalCode: tableData?.response?.parentData?.useAdditionalCode,
+        requiredCharacter: tableData?.response?.parentData?.requiredCharacter,
+      });
+    }
+    setLoading(false);
+  };
 
   const handleViewTable = (tableData, index) => {
     setLoading(true);
@@ -55,8 +92,11 @@ const Tables = (props) => {
       useAdditionalCode: tableData?.useAdditionalCode,
       requiredCharacter: tableData?.requiredCharacter,
     });
+
     setHideButton(true);
     setLoading(false);
+    fetchCodeData(tableData?.name);
+    setSearchInput(tableData?.name);
   };
 
   const handleBack = () => {
@@ -94,7 +134,7 @@ const Tables = (props) => {
           codeData?.excludes2) && (
           <div className={`${style.card} mt-2`}>
             <div className={style.head}>
-              {codeData?.name}-{codeData?.desc}
+              {codeData?.name} - {codeData?.desc}
               <CopyToClipboard
                 text={`${codeData?.name} - ${codeData?.desc}`}
                 onCopy={() => setCopied(true)}
@@ -102,8 +142,13 @@ const Tables = (props) => {
                 {isCopied ? <CheckOutlined /> : <CopyOutlined />}
               </CopyToClipboard>
             </div>
-            <div className={style.inclusionTerm}>{codeData?.inclusionTerm}</div>
-             <div className="card-group">
+            <div className={style.inclusionTerm}>
+              {codeData?.inclusionTerm &&
+                codeData.inclusionTerm
+                  .split("\n")
+                  .map((line, index) => <p className = {style.para}key={index}>{line}</p>)}
+            </div>
+            <div className="card-group">
               <div className="card">
                 <div className="card-body border border-secondary p-0">
                   <h5 className="card-title bg-success text-white d-flex justify-content-center">
@@ -113,11 +158,17 @@ const Tables = (props) => {
                     className="card-text "
                     style={{
                       height: "160px",
-                      padding: "10px",
+                      padding: "4px",
                       overflow: "scroll",
                     }}
                   >
-                    {codeData?.includes ? codeData?.includes : <Empty />}
+                    {codeData?.includes ? (
+                      codeData.includes
+                        .split("\n")
+                        .map((data, index) => <p className = {style.para} key={index}>{data}</p>)
+                    ) : (
+                      <Empty />
+                    )}
                   </p>
                 </div>
               </div>
@@ -133,11 +184,17 @@ const Tables = (props) => {
                     className="card-text"
                     style={{
                       height: "160px",
-                      padding: "10px",
+                      padding: "4px",
                       overflow: "scroll",
                     }}
                   >
-                    {codeData?.excludes1 ? codeData?.excludes1 : <Empty />}
+                    {codeData?.excludes1 ? (
+                      codeData.excludes1
+                        .split("\n")
+                        .map((data, index) => <p className ={style.para} key={index}>{data}</p>)
+                    ) : (
+                      <Empty />
+                    )}
                   </p>
                 </div>
               </div>
@@ -150,52 +207,78 @@ const Tables = (props) => {
                     className="card-text "
                     style={{
                       height: "160px",
-                      padding: "10px",
+                      padding: "4px",
                       overflow: "scroll",
                       scrollbarwidth: "none",
                     }}
                   >
-                    {codeData?.excludes2 ? codeData?.excludes2 : <Empty />}{" "}
+                    {codeData?.excludes2 ? (
+                      codeData.excludes2
+                        .split("\n")
+                        .map((data, index) => <p className = {style.para} key={index}>{data}</p>)
+                    ) : (
+                      <Empty />
+                    )}
                   </p>
                 </div>
               </div>
             </div>
             {codeData?.useAdditionalCode && (
-              <div>
-                <span className={style.head}>Additional Codes:</span>
-                {codeData?.useAdditionalCode}
+              <div className="d-flex">
+                <span className={style.head}>Additional Codes</span>
+                {codeData?.useAdditionalCode &&
+                  codeData.useAdditionalCode
+                    .split("\n")
+                    .map((data, index) => <p className = {style.para} key={index}>{data}</p>)}
               </div>
             )}
           </div>
         )}
-        {(parentCode?.excludes1 ||
-          parentCode?.includes ||
-          parentCode?.name ||
-          parentCode?.desc ||
-          parentCode?.excludes2) && (
+        {( hideButton && 
+         
+          parentCode?.name
+          ) && (
           <div className={style.parent}>
-            {parentCode?.name && parentCode?.desc && (
+            {hideButton && parentCode?.name && parentCode?.desc && (
               <div className={style.head}>
-                Parent Code:
                 {parentCode?.name}-{parentCode?.desc}
               </div>
             )}
-            {parentCode?.includes && (
+            {hideButton && parentCode?.includes && (
               <div className=" mt-2 ">
-                <span className={style.includes}>Includes:</span>
-                {parentCode?.includes}
+                <span className={style.includes}>Includes</span>
+                {parentCode?.includes &&
+                  parentCode.includes
+                    ?.split("\n")
+                    .map((line, index) => <p className = {style.para} key={index}>{line}</p>)}
               </div>
             )}
-            {parentCode?.excludes1 && (
+            { hideButton && parentCode?.excludes1 && (
               <div className=" mt-2 ">
-                <span className={style.excludes}>Excludes1:</span>
-                {parentCode?.excludes1}
+                <span className={style.excludes}>Excludes1</span>
+                {parentCode?.excludes1 &&
+                  parentCode.excludes1
+                    ?.split("\n")
+                    .map((line, index) =>
+                      <p className = {style.para} key={index}>{line}</p>)}
               </div>
             )}
-            {parentCode?.useAdditionalCode && (
+            { hideButton && parentCode?.excludes2 && (
+              <div className=" mt-2 ">
+                <span className={style.excludes2}>Excludes2</span>
+                {parentCode?.excludes2 &&
+                  parentCode.excludes2
+                    ?.split("\n")
+                    .map((line, index) => <p className = {style.para} key={index}>{line}</p>)}
+              </div>
+            )}
+            {hideButton && parentCode?.useAdditionalCode && (
               <div className="mt-2">
-                <span className={style.codes}>Use additional Codes:</span>
-                {parentCode?.useAdditionalCode}
+                <span className={style.codes}>Use additional Codes</span>
+                {parentCode?.useAdditionalCode &&
+                  parentCode.useAdditionalCode
+                    ?.split("\n")
+                    .map((line, index) => <p className = {style.para}  key={index}>{line}</p>)}
               </div>
             )}
           </div>
@@ -219,4 +302,7 @@ const Tables = (props) => {
   );
 };
 
-export default Tables;
+const enhancer = connect((state) => ({ state }), {
+  codesData: dashbaordActions.codesAction,
+});
+export default enhancer(Tables);
