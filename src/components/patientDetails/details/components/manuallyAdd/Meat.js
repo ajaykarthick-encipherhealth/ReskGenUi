@@ -170,7 +170,6 @@ const Meat = ({
             <div className="pt-2">
               <div className="d-flex justify-content-between px-3">
                 <b>Section - {index + 1}</b>
-                {console.log(item)}
                 <label>
                   {index == 0 && (
                     <label

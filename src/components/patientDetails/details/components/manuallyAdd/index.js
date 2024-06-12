@@ -242,7 +242,7 @@ const ManuallyAdd = ({
       substring: forms[`referance_${section?.replaceAll(" ", "-")}_${i}`],
       pageNumber: forms[`pageNumber_${section?.replaceAll(" ", "-")}_${i}`],
     }));
-    setDiagnosisForm(form);
+    // setDiagnosisForm(form);
     setListOfSection((prev) => {
       const rese = prev?.map((item) => item.section == section);
       const re = rese.map((check, ind) => {
@@ -561,7 +561,7 @@ const ManuallyAdd = ({
   const handleMeatSubmit = async () => {
     const data = {
       patientId: await getStorage("patientId"),
-      diagnosisCode: diagnosisForm.diagnosisCode,
+      diagnosisCode: code,
       description: diagnosisForm.description,
       dbDescription: diagnosisForm.description,
       dateOfServices: diagnosisForm.dos,
@@ -680,96 +680,6 @@ const ManuallyAdd = ({
     setShowSection(false);
   };
 
-  // const sectionEditMeat = (item) => {
-  //   if (selectMeat == "M") {
-  //     item.hyperlinks?.map((list, i) => {
-  //       form.setFieldsValue({
-  //         [`${checkMeatType(selectMeat)}section`]: [{ lable: list.header, value: list.header }],
-  //         [`encounterDate_${item?.section?.replaceAll(
-  //           " ",
-  //           "-"
-  //         )}_${selectMeat}_${i}`]: list.dateOfService,
-  //         [`referance_${item?.section?.replaceAll(
-  //           " ",
-  //           "-"
-  //         )}_${selectMeat}_${i}`]: list.substring,
-  //         [`pageNumber_${item?.section?.replaceAll(
-  //           " ",
-  //           "-"
-  //         )}_${selectMeat}_${i}`]: list.pageNumber,
-  //       });
-  //       setSectionCountM(item.count);
-  //       setSectionM(list.header);
-  //     });
-  //     setShowSectionM(false);
-  //   } else if (selectMeat == "E") {
-  //     item.hyperlinks?.map((list, i) => {
-  //       form.setFieldsValue({
-  //         [`${checkMeatType(selectMeat)}section`]: [{ lable: list.header, value: list.header }],
-  //         [`encounterDate_${item?.section?.replaceAll(
-  //           " ",
-  //           "-"
-  //         )}_${selectMeat}_${i}`]: list.dateOfService,
-  //         [`referance_${item?.section?.replaceAll(
-  //           " ",
-  //           "-"
-  //         )}_${selectMeat}_${i}`]: list.substring,
-  //         [`pageNumber_${item?.section?.replaceAll(
-  //           " ",
-  //           "-"
-  //         )}_${selectMeat}_${i}`]: list.pageNumber,
-  //       });
-  //       setSectionCountE(item.count);
-  //       setSectionE(list.header);
-  //     });
-  //     setShowSectionE(false);
-  //   } else if (selectMeat == "A") {
-  //     item.hyperlinks?.map((list, i) => {
-  //       form.setFieldsValue({
-  //         [`${checkMeatType(selectMeat)}section`]: [{ lable: list.header, value: list.header }],
-  //         [`encounterDate_${item?.section?.replaceAll(
-  //           " ",
-  //           "-"
-  //         )}_${selectMeat}_${i}`]: list.dateOfService,
-  //         [`referance_${item?.section?.replaceAll(
-  //           " ",
-  //           "-"
-  //         )}_${selectMeat}_${i}`]: list.substring,
-  //         [`pageNumber_${item?.section?.replaceAll(
-  //           " ",
-  //           "-"
-  //         )}_${selectMeat}_${i}`]: list.pageNumber,
-  //       });
-  //       setSectionCountA(item.count);
-  //       setSectionA(list.header);
-  //     });
-  //     setShowSectionA(false);
-  //   } else if (selectMeat == "T") {
-  //     item.hyperlinks?.map((list, i) => {
-  //       form.setFieldsValue({
-  //         [`${checkMeatType(selectMeat)}section`]: [{ lable: list.header, value: list.header }],
-  //         [`encounterDate_${item?.section?.replaceAll(
-  //           " ",
-  //           "-"
-  //         )}_${selectMeat}_${i}`]: list.dateOfService,
-  //         [`referance_${item?.section?.replaceAll(
-  //           " ",
-  //           "-"
-  //         )}_${selectMeat}_${i}`]: list.substring,
-  //         [`pageNumber_${item?.section?.replaceAll(
-  //           " ",
-  //           "-"
-  //         )}_${selectMeat}_${i}`]: list.pageNumber,
-  //       });
-  //       setSectionCountT(item.count);
-  //       setSectionT(list.header);
-  //     });
-  //     setShowSectionT(false);
-  //   }
-  //   setIsEdit(true);
-  // };
-
-
   const setFormValues = (item, selectMeat, countSetter, headerSetter, showSectionSetter) => {
     item.hyperlinks?.map((list, i) => {
       form.setFieldsValue({
@@ -853,13 +763,14 @@ const ManuallyAdd = ({
                     value={code}
                     // className={styles.formControl}
                   />
-                </Form.Item>{" "}
-                {validCode == "Valid Code" ? (
+                </Form.Item> 
+                {validCode.length > 0 && 
+                (validCode == "Valid Code" ? (
                   <label className="text-success">Valid Code</label>
                 ) : (
                   validCode != "" && (
                     <label className="text-danger">{validCode}</label>
-                  )
+                  ))
                 )}
               </div>
               <div className="col-12">
