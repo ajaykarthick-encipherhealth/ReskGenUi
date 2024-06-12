@@ -179,9 +179,10 @@ const Tables = (props) => {
               
               <div className={style.head}>
                 Parent Code:
-                {parentCode?.requiredCharacter} {parentCode?.name}-
+                 {parentCode?.name}-
                 {parentCode?.desc}
               </div>
+              
             )}
             {parentCode?.includes && (
               <div className=" mt-2 ">
