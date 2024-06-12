@@ -107,7 +107,7 @@ const Tables = (props) => {
   return (
     <>
       {hideButton && (
-        <div className="mx-2" onClick={handleBack}>
+        <div className="m-2" onClick={handleBack}>
           <Button className={style.btn}>Back</Button>
         </div>
       )}
@@ -141,12 +141,6 @@ const Tables = (props) => {
               >
                 {isCopied ? <CheckOutlined /> : <CopyOutlined />}
               </CopyToClipboard>
-            </div>
-            <div className={style.inclusionTerm}>
-              {codeData?.inclusionTerm &&
-                codeData.inclusionTerm
-                  .split("\n")
-                  .map((line, index) => <p className = {style.para}key={index}>{line}</p>)}
             </div>
             <div className="card-group">
               <div className="card">
@@ -224,10 +218,19 @@ const Tables = (props) => {
               </div>
             </div>
             {codeData?.useAdditionalCode && (
-              <div >
-                <span className={style.head}>Additional Codes</span>
+              <div className="mt-2" >
+                <span className={style.add}>Use additional</span>
                 {codeData?.useAdditionalCode &&
                   codeData.useAdditionalCode
+                    .split("\n")
+                    .map((data, index) => <p className = {style.para} key={index}>{data}</p>)}
+              </div>
+            )}
+             {codeData?.inclusionTerm && (
+              <div className="mt-2" >
+                <span className={style.Inclusion}>Inclusion Term </span>
+                {codeData?.inclusionTerm &&
+                  codeData.inclusionTerm
                     .split("\n")
                     .map((data, index) => <p className = {style.para} key={index}>{data}</p>)}
               </div>
@@ -274,7 +277,7 @@ const Tables = (props) => {
             )}
             {hideButton && parentCode?.useAdditionalCode && (
               <div className="mt-2">
-                <span className={style.codes}>Use additional Codes</span>
+                <span className={style.add}>Use additional</span>
                 {parentCode?.useAdditionalCode &&
                   parentCode.useAdditionalCode
                     ?.split("\n")
