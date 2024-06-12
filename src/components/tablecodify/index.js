@@ -3,18 +3,24 @@ import style from "./style.module.css";
 import { Button, Empty, Spin } from "antd";
 import {
   ArrowRightOutlined,
-  ArrowLeftOutlined,
   CopyOutlined,
   CheckOutlined,
 } from "@ant-design/icons";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
 const Tables = (props) => {
-  const { codeData, setCodeData, loading, setLoading } = props;
+  const {
+    codeData,
+    setCodeData,
+    loading,
+    setLoading,
+    setParentCode,
+    parentCode,
+  } = props;
 
   const [isCopied, setCopied] = useState(false);
   const [previousCode, setPreviousCode] = useState();
-  const [nextCode, setNextCode] = useState();
+  const [hideButton, setHideButton] = useState(false);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -49,19 +55,22 @@ const Tables = (props) => {
       useAdditionalCode: tableData?.useAdditionalCode,
       requiredCharacter: tableData?.requiredCharacter,
     });
+    setHideButton(true);
     setLoading(false);
   };
 
   const handleBack = () => {
     setCodeData(previousCode);
+    setHideButton(false);
   };
 
   return (
     <>
-      <div className={style.arrowleft}>
-        <ArrowLeftOutlined onClick={handleBack} />
-        Back
-      </div>
+      {hideButton && (
+        <div className="mx-2" onClick={handleBack}>
+          <Button className={style.btn}>Back</Button>
+        </div>
+      )}
       <div className={style.code}>
         <div className="d-flex justify-content-center">
           {loading && <Spin size="large" />}
@@ -94,8 +103,7 @@ const Tables = (props) => {
               </CopyToClipboard>
             </div>
             <div className={style.inclusionTerm}>{codeData?.inclusionTerm}</div>
-
-            <div className="card-group">
+             <div className="card-group">
               <div className="card">
                 <div className="card-body border border-secondary p-0">
                   <h5 className="card-title bg-success text-white d-flex justify-content-center">
@@ -156,6 +164,38 @@ const Tables = (props) => {
               <div>
                 <span className={style.head}>Additional Codes:</span>
                 {codeData?.useAdditionalCode}
+              </div>
+            )}
+          </div>
+        )}
+        {(parentCode?.excludes1 ||
+          parentCode?.includes ||
+          parentCode?.name ||
+          parentCode?.desc ||
+          parentCode?.excludes2) && (
+          <div className={style.parent}>
+            {parentCode?.name && parentCode?.desc && (
+              <div className={style.head}>
+                Parent Code:
+                {parentCode?.name}-{parentCode?.desc}
+              </div>
+            )}
+            {parentCode?.includes && (
+              <div className=" mt-2 ">
+                <span className={style.includes}>Includes:</span>
+                {parentCode?.includes}
+              </div>
+            )}
+            {parentCode?.excludes1 && (
+              <div className=" mt-2 ">
+                <span className={style.excludes}>Excludes1:</span>
+                {parentCode?.excludes1}
+              </div>
+            )}
+            {parentCode?.useAdditionalCode && (
+              <div className="mt-2">
+                <span className={style.codes}>Use additional Codes:</span>
+                {parentCode?.useAdditionalCode}
               </div>
             )}
           </div>

@@ -54,7 +54,6 @@
   flex-wrap: wrap;
   flex-direction: column;
   align-items: center;
- 
 }
 .card2 {
   border: 1px solid #0f6adb;
@@ -67,44 +66,70 @@
   border: 1px solid black;
   margin: 0 19px;
 }
-.cardbody{
-  border:1px solid gray;
-  padding:0;
+.cardbody {
+  border: 1px solid gray;
+  padding: 0;
 }
-.cards{
-  height:200px !important;
-  padding:0;
+.cards {
+  height: 200px !important;
+  padding: 0;
 }
-.inclusionTerm{
+.inclusionTerm {
   font-size: 16px;
-  
 }
-.symbols{
-  border:1px solid #E6EEFF;
-  width:90%;
-  height:50px;
-  background:#E6EEFF;
-  margin-top:10px;
-
+.symbols {
+  border: 1px solid #e6eeff;
+  width: 90%;
+  height: 50px;
+  background: #e6eeff;
+  margin-top: 10px;
 }
-.digit{
+.digit {
   font-weight: 600;
   font-size: 14px;
 }
-.term{
-  border:1px solid #241571;
-  background:#241571;
-  color:white;
+.term {
+  border: 1px solid #241571;
+  background: #241571;
+  color: white;
   border-radius: 50%;
-  padding:2px;
+  padding: 2px;
   font-size: 12px;
   font-weight: 600;
-  
 }
-.arrowleft{
+.arrowleft {
   font-size: 16px;
   display: flex;
-  gap:6px;
-  margin-top:10px;
+  gap: 6px;
+  margin-top: 10px;
   padding-right: 20px;
+}
+.btn {
+  background-color: #241571;
+  color: white;
+  border-color: #241571;
+}
+.includes {
+  font-size: 17px;
+  color: green;
+  font-weight: 600;
+ 
+}
+.excludes {
+  font-size: 16px;
+  color: blue;
+  font-weight: 600;
+ 
+}
+.parent {
+  border: 1px solid #0f6adb;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 1px 2px;
+  min-height: 60px;
+  overflow: scroll;
+  width: 90%;
+  scrollbar-width: none;
+  padding: 3px;
+  margin-top: 5px;
+  border-radius: 7px;
+  padding:9px;
 }

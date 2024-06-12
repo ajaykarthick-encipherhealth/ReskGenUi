@@ -20,14 +20,15 @@ const RiskAdjustment = ({
   const [year, setYear] = useState();
   const [selectedYear, setSelectedYear] = useState(currentDate);
   const [errorMessage, setErrorMessage] = useState("");
+  const [codeErrorMessage, setCodeErrorMessage] = useState("");
+  const [yearErrorMessage, setYearErrorMessage] = useState("");
+  const [noData, setNoData] = useState("");
   const currentDate = new Date();
 
   const disabledDate = (date) => {
     const year = date.year();
     return year < 2016 || year > 2024;
-
   };
-
 
   const handleCode = (e) => {
     const inputValue = e.target.value;
@@ -35,21 +36,23 @@ const RiskAdjustment = ({
     if (regex.test(inputValue)) {
       setCode(inputValue);
       setErrorMessage(null);
+      setNoData(null);
+      setCodeErrorMessage(null);
     } else {
       setErrorMessage("Only characters and dots are allowed");
     }
   };
 
-  const onChange = (date, dateString) => {
-    setSelectedYear(date);
-  };
-
   const handleSearchClick = () => {
-    setLoading(true);
-    if(code || selectedYear ?.length){
+    if (!code && !selectedYear) {
+      setCodeErrorMessage("Please enter a Diagnosis Code");
+      setYearErrorMessage("Please select a Year");
+    } else {
+      setCodeErrorMessage("");
+      setYearErrorMessage("");
+      setLoading(true);
       fetch();
     }
-    
   };
 
   const fetch = async () => {
@@ -58,19 +61,27 @@ const RiskAdjustment = ({
       code: code,
     });
     if (riskData?.status == "SUCCESS") setLoading(false);
+    if (!riskData?.response?.length) {
+      setNoData(true);
+    } else {
+      setNoData(false);
+    }
+    setLoading(false);
+
     setData(riskData?.response);
   };
+  function handleKeyDown(event) {
+    if (event.keyCode === 13) {
+      fetch();
+    }
+  }
 
   const handleYearChange = (date, dateString) => {
     setYear(date);
     setSelectedYear(dateString);
+    setYearErrorMessage(null);
   };
-  useEffect(() => {
-    if (!code?.length) {
-      setSelectedYear(null);
-      setCode(null);
-    }
-  }, [code]);
+
   return (
     <div className="container-fluid">
       <div className="row mt-3 ">
@@ -84,9 +95,9 @@ const RiskAdjustment = ({
               hideMonth={true}
               disabledDate={disabledDate}
             />
-            {errorMessage && (
-            <div className="text-danger ml-2">{errorMessage}</div>
-          )}
+            {yearErrorMessage && (
+              <div className="text-danger ml-2">{yearErrorMessage}</div>
+            )}
           </div>
         </div>
         <div className="col-6 ">
@@ -97,8 +108,12 @@ const RiskAdjustment = ({
               placeholder="Basic usage"
               value={code}
               onChange={handleCode}
+              onKeyDown={handleKeyDown}
             />
           </div>
+          {codeErrorMessage && (
+            <div className="text-danger ml-2">{codeErrorMessage}</div>
+          )}
           {errorMessage && (
             <div className="text-danger ml-2">{errorMessage}</div>
           )}
@@ -120,6 +135,7 @@ const RiskAdjustment = ({
       <div className="d-flex justify-content-center mt-4">
         {loading && <Spin size="large" />}
       </div>
+
       {data?.[0]?.year ? (
         <TableRisk
           activeButton={activeButton}
@@ -130,6 +146,7 @@ const RiskAdjustment = ({
       ) : (
         ""
       )}
+      {noData && <Empty />}
     </div>
   );
 };

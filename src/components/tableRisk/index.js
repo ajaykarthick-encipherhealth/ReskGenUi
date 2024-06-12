@@ -1,16 +1,7 @@
 import React from "react";
 import style from "./style.module.css";
-import {
-  CheckCircleOutlined,
-  CloseCircleOutlined,
-  ArrowLeftOutlined,
-} from "@ant-design/icons";
 
-const TableRisk = ({
-  data, 
-  setActiveButton,
-  setSearchInput,
-}) => {
+const TableRisk = ({ data, setActiveButton, setSearchInput }) => {
   const handleHeaderClick = () => {
     setActiveButton("ICD-10");
     setSearchInput(data?.[0]?.diagnosisCode);
@@ -18,10 +9,12 @@ const TableRisk = ({
   const keyArray = data?.map((s) => ({
     allKeys: Object.keys(s).filter(
       (key) =>
-        key.includes("cms") || key.includes("rx") || key.includes("Payment")
+        key.includes("diagnosisCode") ||
+        key.includes("cms") ||
+        key.includes("rx") ||
+        key.includes("Payment")
     ),
   }));
-
   return (
     <div>
       <div className={style.card}>
@@ -40,10 +33,8 @@ const TableRisk = ({
                   style={{
                     fontWeight: "600",
                   }}
-                >
-                  year
+                >year
                 </th>
-
                 {keyArray?.[0]?.allKeys?.map((data) => {
                   return (
                     <th
@@ -63,11 +54,7 @@ const TableRisk = ({
                   <tr style={{ height: "150px" }}>
                     <td>{item.year}</td>
                     {keyArray?.[0]?.allKeys?.map((key) => {
-                      return (
-                        <td>
-                          {item[key] ? item[key] : "--"}
-                        </td>
-                      );
+                      return <td>{item[key] ? item[key] : "--"}</td>;
                     })}
                   </tr>
                 );

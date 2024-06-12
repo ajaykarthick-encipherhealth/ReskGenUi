@@ -3,17 +3,11 @@ import { useState, useEffect, use } from "react";
 import { actions as dashbaordActions } from "../../stores/codify/dashboard";
 import { connect } from "react-redux";
 import { Button, Empty } from "antd";
-import {
-  FilterOutlined,
-  SearchOutlined,
-  ArrowRightOutlined,
-  CaretDownOutlined,
-} from "@ant-design/icons";
+import { SearchOutlined, CaretDownOutlined } from "@ant-design/icons";
 import style from "./style.module.css";
 import Tables from "../../components/tablecodify";
 import Codes from "../../jsx/components/codes";
 import Riskadjustment from "../../components/riskadjustment";
-import { Select } from "antd";
 import { AutoComplete, Input } from "antd";
 
 const getRandomInt = (max, min = 0) =>
@@ -42,7 +36,6 @@ const searchResult = (query) =>
 
 const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   const [showButtons, setShowButtons] = useState(false);
-  const [showAlphabets, setShowAlphabets] = useState(false);
   const [currentButton, setCurrentButton] = useState("Codes");
   const [activeButton, setActiveButton] = useState("ICD-10");
   const [searchInput, setSearchInput] = useState("");
@@ -54,6 +47,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   const [options, setOptions] = useState([]);
   const [expandedKeys, setExpandedKeys] = useState([]);
   const [autoExpandParent, setAutoExpandParent] = useState(true);
+  const [parentCode, setParentCode] = useState([]);
 
   const handleRiskAdjustment = () => {
     setActiveButton("Risk Adjustment");
@@ -78,8 +72,6 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   const handleTreeViewClick = (value) => {
     setSearchInput(value?.[0]);
     setCurrentButton("Description");
-    // let input = document.getElementById("input-search");
-    // input.innerHTML = value;
     fetchCodeData(value);
   };
 
@@ -158,7 +150,6 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
 
   const completeFetch = async () => {
     let completedData = await completeData({ code: searchInput });
-    setLoading(true);
     if (completedData?.status === "SUCCESS") {
       const displayCodeOptions = completedData?.response?.displayStrings?.map(
         (x) => ({
@@ -183,15 +174,27 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
     if (tableData?.status == "SUCCESS") {
       setCodeData({
         ...codeData,
-        name: tableData?.response?.name,
-        desc: tableData?.response?.desc,
-        includes: tableData?.response?.includes,
-        excludes1: tableData?.response?.excludes1,
-        excludes2: tableData?.response?.excludes2,
-        children: tableData?.response?.children,
-        inclusionTerm: tableData?.response?.inclusionTerm,
-        useAdditionalCode: tableData?.response?.useAdditionalCode,
-        requiredCharacter: tableData?.response?.requiredCharacter,
+        name: tableData?.response?.childData?.name,
+        desc: tableData?.response?.childData?.desc,
+        includes: tableData?.response?.childData?.includes,
+        excludes1: tableData?.response?.childData?.excludes1,
+        excludes2: tableData?.response?.childData?.excludes2,
+        children: tableData?.response?.childData?.children,
+        inclusionTerm: tableData?.response?.childData?.inclusionTerm,
+        useAdditionalCode: tableData?.response?.childData?.useAdditionalCode,
+        requiredCharacter: tableData?.response?.childData?.requiredCharacter,
+      });
+      setParentCode({
+        ...parentCode,
+        name: tableData?.response?.parentData?.name,
+        desc: tableData?.response?.parentData?.desc,
+        includes: tableData?.response?.parentData?.includes,
+        excludes1: tableData?.response?.parentData?.excludes1,
+        excludes2: tableData?.response?.parentData?.excludes2,
+        children: tableData?.response?.parentData?.children,
+        inclusionTerm: tableData?.response?.parentData?.inclusionTerm,
+        useAdditionalCode: tableData?.response?.parentData?.useAdditionalCode,
+        requiredCharacter: tableData?.response?.parentData?.requiredCharacter,
       });
     }
     setLoading(false);
@@ -235,28 +238,16 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
         {activeButton === "ICD-10" && (
           <>
             <div className="p-3 d-flex gap-3">
-              {/* <input
-                className={style.input}
-                type="text"
-                placeholder="Keywords, codes or code range between codes"
-                value={searchInput}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
-              /> */}
               <AutoComplete
                 popupMatchSelectWidth={640}
                 options={options}
                 onSelect={onSelect}
                 onSearch={handleSearch}
                 size="large"
-                // id={"input-search"}
-                // key={searchInput}
                 value={searchInput}
               >
                 <Input
-                  // size="large"
                   placeholder="Keywords, codes or code range between codes"
-                  // enterButton
                   value={searchInput}
                   onChange={handleInputChange}
                   onKeyDown={handleKeyDown}
@@ -302,7 +293,12 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
             {showButtons && currentButton === "Codes" && (
               <div className="d-flex gap-3  flex-wrap mx-2">
                 {searches.map((search, index) => (
-                  <Button className={style.btnborder} key={index}>
+                  <Button
+                    className={style.btnborder}
+                    key={index}
+                    value={searchInput}
+                    onClick={() => handleSearchClick(search)}
+                  >
                     {search}
                   </Button>
                 ))}
@@ -327,6 +323,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
                 onExpand={onExpand}
                 autoExpandParent={autoExpandParent}
                 expandedKeys={expandedKeys}
+                setLoading={setLoading}
               />
             ) : (
               <div></div>
@@ -342,9 +339,11 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
                 setCodeData={setCodeData}
                 loading={loading}
                 codeData={codeData}
+                parentCode={parentCode}
                 setLoading={setLoading}
                 setSearchInput={setSearchInput}
                 searchInput={searchInput}
+                setParentCode={setParentCode}
               />
             )}
           </>
