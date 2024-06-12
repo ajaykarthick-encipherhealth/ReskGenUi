@@ -646,7 +646,11 @@ export const getProviderNameManually = ({ data }) => {
   });
 };
 
-export const getSectionNameManually = ({ data, sectionDelete, sectionEdit }) => {
+export const getSectionNameManually = ({
+  data,
+  sectionDelete,
+  sectionEdit,
+}) => {
   return data.map((res, index) => {
     // if (index < 2) {
     var sectionMapArr = (
@@ -678,10 +682,7 @@ export const getSectionNameManually = ({ data, sectionDelete, sectionEdit }) => 
         >
           <FontAwesomeIcon icon={faPen} color="#04306f" />
         </label> */}
-        <label
-          className="cr-pointer pt-2"
-          onClick={() => sectionDelete(res)}
-        >
+        <label className="cr-pointer pt-2" onClick={() => sectionDelete(res)}>
           <FontAwesomeIcon icon={faTrashCan} color="#04306f" />
         </label>
       </span>
@@ -846,7 +847,7 @@ export const handleSubmitValidNotes = async ({
         : selectDisDetails.diagnosisCodeCombo,
       // description: selectDisDetails.actualDescription,
       // dbDescription: selectDisDetails.dbDescription,
-      reason: values.reason,
+      reason: values?.reason,
       processedYear: selectDisDetails.processedYear,
       dateOfServices: selectDisDetails.dateOfServices,
       chartProcessType: selectDisDetails.dateOfService
@@ -1085,6 +1086,13 @@ export const moveToAnotherAction = (
       )
     );
   });
+
+export const moveToStrightAction = (setIsValidAction, name, title) => {
+  setIsValidAction({
+    name: name,
+    title: title,
+  });
+};
 
 export const onDragEnd = (
   result,

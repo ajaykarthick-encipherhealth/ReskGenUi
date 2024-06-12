@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
-import { useSelector, useDispatch ,connect} from "react-redux";
+import { useSelector, useDispatch, connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faClose,
@@ -23,6 +23,7 @@ import { getPatientDetails } from "../../components/function/GetData";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { onDragEnd } from "../../components/function/ReusableFunctions";
 import ManuallyAdd from "../../components/manuallyAdd";
+import LogoLoader from "../../../../logoLoader";
 
 const File = ({
   patientDetailsResult,
@@ -33,10 +34,11 @@ const File = ({
   setActiveTabHead,
   setActiveMeatTitle,
   setActiveComboTree,
-  pageNumberOptions, 
+  pageNumberOptions,
   setPageNumberOptions,
-  search, setSearch,
-  fileDosPageNumberList
+  search,
+  setSearch,
+  fileDosPageNumberList,
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -114,12 +116,12 @@ const File = ({
   useEffect(() => {
     getFileDosPageNumber();
   }, [fileDosPageNumberList]);
-   const onchangeValid = (code, data) => {
+  const onchangeValid = (code, data) => {
     var title = code + " - " + data.actualDescription;
     data.processedYear = patientDetailsResult?.data?.response?.processedYear;
     data.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
-    data.fileId= patientDetailsResult?.data?.response?.fileId,
-    setSelectDiseasesName(title);
+    (data.fileId = patientDetailsResult?.data?.response?.fileId),
+      setSelectDiseasesName(title);
     setSelectDisDetails(data);
   };
 
@@ -178,7 +180,6 @@ const File = ({
     setPageNumberOptions(fileDosPageNumberList?.data?.response);
   };
 
- 
   const showErrorMessage = () => {
     setOpens(false);
     notification.destroy();
@@ -187,15 +188,7 @@ const File = ({
 
   return (
     <>
-      {fileLoading ? (
-        <div className={styles.overlay_style}>
-          <div className={styles.overlay__inner_style}>
-            <div className={styles.overlay__content_style}>
-              <span className={styles.spinner_style}></span>
-            </div>
-          </div>
-        </div>
-      ) : null}
+      {fileLoading ? <LogoLoader /> : null}
       <DragDropContext
         onDragEnd={(result) =>
           onDragEnd(
@@ -336,8 +329,12 @@ const File = ({
                 setIsAddHccForm={setIsAddHccForm}
                 isMeatNew={true}
               /> */}
-              <div style={{height:"70vh",overflowY:"scroll"}}>
-              <ManuallyAdd handleCloseModal={handleCloseModal} setIsFileFormShow={setIsFileFormShow} year={year}/>
+              <div style={{ height: "70vh", overflowY: "scroll" }}>
+                <ManuallyAdd
+                  handleCloseModal={handleCloseModal}
+                  setIsFileFormShow={setIsFileFormShow}
+                  year={year}
+                />
               </div>
             </div>
           ) : null}
@@ -524,12 +521,9 @@ const File = ({
   );
 };
 
-const enhancer = connect(
-  (state) => ({
-    patientDetailsResult :state?.patientDetails?.details?.patientResult,
-    hccFileDetails :state?.patientDetails?.details?.hccFileResult,
-    fileDosPageNumberList:state?.patientDetails?.details?.dosPageNumberResult,
-
-  }),
-);
+const enhancer = connect((state) => ({
+  patientDetailsResult: state?.patientDetails?.details?.patientResult,
+  hccFileDetails: state?.patientDetails?.details?.hccFileResult,
+  fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
+}));
 export default enhancer(File);

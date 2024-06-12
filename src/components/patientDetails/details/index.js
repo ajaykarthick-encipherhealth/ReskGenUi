@@ -43,6 +43,7 @@ import Notes from "./components/notes";
 import Flag from "./components/flag";
 import StatusAction from "./components/statusAction";
 import { handleCopyToClipboard } from "../../commonFunctions";
+import LogoLoader from "../../logoLoader";
 
 export const navigetPageDetails = async (
   pageTitle,
@@ -529,18 +530,10 @@ const Details = ({
         <NavBar />
         <div className={visitStyles.headerFixed}>
           {isSpinnerLoading ? (
-            <SpinnerDots />
+            <LogoLoader />
           ) : (
             <div class="content-body">
-              {isLoading ? (
-                <div className={styles.overlay_style}>
-                  <div className={styles.overlay__inner_style}>
-                    <div className={styles.overlay__content_style}>
-                      <span className={styles.spinner_style}></span>
-                    </div>
-                  </div>
-                </div>
-              ) : null}
+              {isLoading ? <LogoLoader /> : null}
               {/* {sectionColorList?.loading == true ? (
               <SpinnerDots />
             ) : ( */}
