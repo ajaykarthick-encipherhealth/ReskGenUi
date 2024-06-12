@@ -27,6 +27,7 @@ import { Draggable } from "react-beautiful-dnd";
 import ModelIndex from "../model/Index";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
+import MovementIcon from "../movementIIcon";
 
 const HccCards = ({
   list,
@@ -243,6 +244,24 @@ const HccCards = ({
                                 ) : null}
                               </>
                             ) : null}
+
+                            <MovementIcon
+                              validAction={cardTitle == "HCC" ? false : true}
+                              suggestedAction={
+                                cardTitle == "SUGGESTED" ? false : true
+                              }
+                              deleteAction={
+                                cardTitle == "DELETED" ? false : true
+                              }
+                              setIsValidAction={setIsValidAction}
+                              cardTitle={cardTitle}
+                              setConfirmNotesModalValid={
+                                setConfirmNotesModalValid
+                              }
+                              onchangeValid={onchangeValid}
+                              result={data}
+                              setFileLoading={setFileLoading}
+                            />
 
                             <Popover
                               placement="left"

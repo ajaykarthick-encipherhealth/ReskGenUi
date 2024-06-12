@@ -22,6 +22,7 @@ import {
   onDragEnd,
 } from "../../components/function/ReusableFunctions";
 import ManuallyAdd from "../../components/manuallyAdd";
+import LogoLoader from "../../../../logoutToaster";
 
 const VisitData = ({
   setActiveTabHead,
@@ -434,15 +435,7 @@ const VisitData = ({
 
   return (
     <>
-      {fileLoading ? (
-        <div className={styles.overlay_style}>
-          <div className={styles.overlay__inner_style}>
-            <div className={styles.overlay__content_style}>
-              <span className={styles.spinner_style}></span>
-            </div>
-          </div>
-        </div>
-      ) : null}
+      {fileLoading ? <LogoLoader /> : null}
       <DragDropContext
         onDragEnd={(result) =>
           onDragEnd(

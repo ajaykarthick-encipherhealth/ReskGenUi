@@ -42,6 +42,7 @@ import Notes from "./components/notes";
 import Flag from "./components/flag";
 import StatusAction from "./components/statusAction";
 import { handleCopyToClipboard } from "../../commonFunctions";
+import LogoLoader from "../../logoutToaster";
 
 export const navigetPageDetails = async (
   pageTitle,
@@ -90,7 +91,7 @@ const Details = ({
   getPatientIdData,
   patientIdDetailsData,
   getFlagDetailsData,
-  flagsDetailsResult
+  flagsDetailsResult,
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -242,7 +243,11 @@ const Details = ({
           isRxHcc: rxHcc.length > 0 ? rxHcc.length : 0,
         });
         setNewValidDiseaseList(validDisArray);
-        getFlagDetailsData(patientId,result.processedYear,result.dateOfService)
+        getFlagDetailsData(
+          patientId,
+          result.processedYear,
+          result.dateOfService
+        );
         // getFlagListLastDetails(patientId, result.processedYear);
         setIsLoading(false);
         setPatientResultReload(true);
@@ -360,7 +365,7 @@ const Details = ({
           : "/admin/patients";
         navigate.push(url);
       }
-    }else if(user && user.toLowerCase() === "tenant_admin"){
+    } else if (user && user.toLowerCase() === "tenant_admin") {
       if (user && user.toLowerCase() === "tenant_admin") {
         const { user: _, ...queryWithoutUser } = navigate.query;
         const queryString = new URLSearchParams(queryWithoutUser).toString();
@@ -503,18 +508,10 @@ const Details = ({
         <NavBar />
         <div className={visitStyles.headerFixed}>
           {isSpinnerLoading ? (
-            <SpinnerDots />
+            <LogoLoader />
           ) : (
             <div class="content-body">
-              {isLoading ? (
-                <div className={styles.overlay_style}>
-                  <div className={styles.overlay__inner_style}>
-                    <div className={styles.overlay__content_style}>
-                      <span className={styles.spinner_style}></span>
-                    </div>
-                  </div>
-                </div>
-              ) : null}
+              {isLoading ? <LogoLoader /> : null}
               {/* {sectionColorList?.loading == true ? (
               <SpinnerDots />
             ) : ( */}
@@ -736,9 +733,12 @@ const Details = ({
                       >
                         <div className={`${visitStyles.rafscoreheader} `}>
                           <label>Score</label>
-                          {patientDetails?.rafScore?.rafVersionDTO?.overAllScore != null ? (
+                          {patientDetails?.rafScore?.rafVersionDTO
+                            ?.overAllScore != null ? (
                             <h6 className="ageDtails">
-                              {patientDetails?.rafScore?.rafVersionDTO?.overAllScore?.toFixed(3)}
+                              {patientDetails?.rafScore?.rafVersionDTO?.overAllScore?.toFixed(
+                                3
+                              )}
                             </h6>
                           ) : (
                             <h6 className="ageDtails">0.00</h6>
@@ -1008,7 +1008,9 @@ const Details = ({
                                     >
                                       {data.name === "Flag" ? (
                                         <Badge
-                                          count={flagsDetailsResult?.response?.length}
+                                          count={
+                                            flagsDetailsResult?.response?.length
+                                          }
                                           style={{
                                             background: "#04306f",
                                             margin: "-2px",
@@ -1124,7 +1126,6 @@ const enhancer = connect(
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     patientIdDetailsData: state?.patientDetails.details?.patientIdResult,
     flagsDetailsResult: state?.patientDetails.details?.flagsDetailsResult.data,
-
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,
