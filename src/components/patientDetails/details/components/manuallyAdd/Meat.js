@@ -10,6 +10,21 @@ import RegularButton from "../../../../button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
+export const checkMeatType = (e) => {
+  switch (e) {
+    case "M":
+      return "Monitor";
+    case "E":
+      return "Evaluation";
+    case "A":
+      return "Assessment";
+    case "T":
+      return "Treatment";
+    default:
+      break;
+  }
+};
+
 const Meat = ({
   listOfSection,
   getSelectedDos,
@@ -28,22 +43,12 @@ const Meat = ({
   isMeat,
   isActive,
   sectionDelete,
+  date,
+  isEdit,
+  sectionEdit,
+  handleEdit
 }) => {
-  const checkMeat = (e) => {
-    switch (e) {
-      case "M":
-        return "Monitor";
-      case "E":
-        return "Evaluation";
-      case "A":
-        return "Assessment";
-      case "T":
-        return "Treatment";
-
-      default:
-        break;
-    }
-  };
+ 
   return (
     <div>
       <div className="row">
@@ -51,11 +56,11 @@ const Meat = ({
           <Form.Item
             label={
               <label>
-                {checkMeat(selectMeat)} Aspect{" "}
+                {checkMeatType(selectMeat)} Aspect{" "}
                 <span style={{ color: "red" }}>*</span>
               </label>
             }
-            name={`${checkMeat(selectMeat)}Aspect`}
+            name={`${checkMeatType(selectMeat)}Aspect`}
             rules={[
               {
                 required: true,
@@ -63,7 +68,7 @@ const Meat = ({
               },
             ]}
           >
-            <Input name={`${checkMeat(selectMeat)}Aspect`} />
+            <Input name={`${checkMeatType(selectMeat)}Aspect`} />
           </Form.Item>
         </div>
         <div className="col-12">
@@ -128,6 +133,7 @@ const Meat = ({
                 {getSectionNameManually({
                   data: listOfSection,
                   sectionDelete,
+                  sectionEdit
                 })}
               </div>
             </div>
@@ -141,7 +147,7 @@ const Meat = ({
                   Section <span style={{ color: "red" }}>*</span>
                 </label>
               }
-              name={`${checkMeat(selectMeat)}section`}
+              name={`${checkMeatType(selectMeat)}section`}
               rules={[
                 {
                   required: true,
@@ -199,17 +205,28 @@ const Meat = ({
                 id={index}
                 section={section}
                 selectMeat={selectMeat}
+                date={date}
               />
             </div>
           ))}
           <Form.Item>
             <div className="d-flex justify-content-center mt-4">
-              <RegularButton
-                type=""
-                name="Save"
-                width="100px"
-                // onClick={handledSave}
-              />
+              {!isEdit ? (
+                <RegularButton
+                  type=""
+                  name="Save"
+                  width="100px"
+                  // onClick={handledSave}
+                />
+              ) : (
+                <RegularButton
+                  type=""
+                  method={"button"}
+                  name="Edit"
+                  width="100px"
+                  onClick={handleEdit}
+                />
+              )}
               {listOfSection?.length > 0 && (
                 <RegularButton
                   type="outline"

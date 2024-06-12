@@ -9,6 +9,7 @@ const AddSection = ({
   id,
   section,
   selectMeat = "",
+  date
 }) => {
   return (
     <div className="mx-2 p-3 pt-4 border rounded">
@@ -30,10 +31,7 @@ const AddSection = ({
               },
             ]}
           >
-            <DatePicker
-              name="dos"
-              disabledDate={(current) => disableFutureDate(current)}
-            />
+           <Select options={date} size="large" className={`ant_select_form hcc_form mb-2`} allowClear/>
           </Form.Item>
         </div>
         <div className="col-6">

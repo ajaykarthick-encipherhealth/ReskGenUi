@@ -28,7 +28,7 @@ import RegularButton from "../../../../button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
-import Meat from "./Meat";
+import Meat, { checkMeatType } from "./Meat";
 import { getResponePopup } from "../../../../../utils/reusable";
 const { Option } = Select;
 
@@ -84,6 +84,7 @@ const ManuallyAdd = ({
   const [listOfSectionT, setListOfSectionT] = useState([]);
   const [showSectionT, setShowSectionT] = useState(false);
   const [capturedSectionsT, setCapturedSectionsT] = useState([]);
+  const [isEdit, setIsEdit] = useState(false);
 
   const dosList = patientDosResult?.data?.response?.map(
     (item) =>
@@ -177,14 +178,18 @@ const ManuallyAdd = ({
   const handleCodeVaildate = async (e) => {
     const value = e.target.value;
     setCode(value);
-    try {
-      const res = await getValidate(value);
-      if (res.status == "SUCCESS") {
-        getVerify(value, res);
-      } else {
-        setValidCode("Invalid Code");
-      }
-    } catch (error) {}
+    if (value.length > 0) {
+      try {
+        const res = await getValidate(value);
+        if (res.status == "SUCCESS") {
+          getVerify(value, res);
+        } else {
+          setValidCode("Invalid Code");
+        }
+      } catch (error) {}
+    } else {
+      setValidCode("");
+    }
   };
 
   const getVerify = async (value, res) => {
@@ -208,7 +213,7 @@ const ManuallyAdd = ({
       header: section,
       dateOfService: form[`encounterDate_${section?.replaceAll(" ", "-")}_${i}`]
         ? moment(
-            form[`encounterDate_${section?.replaceAll(" ", "-")}_${i}`]["$d"]
+            form[`encounterDate_${section?.replaceAll(" ", "-")}_${i}`]
           ).format("YYYY-MM-DD")
         : "",
       substring: form[`referance_${section?.replaceAll(" ", "-")}_${i}`],
@@ -216,9 +221,119 @@ const ManuallyAdd = ({
     }));
     setDiagnosisForm(form);
     setListOfSection((prev) => {
-      return [...prev, ...[{ section: section, hyperlinks: res }]];
+      return [
+        ...prev,
+        ...[{ section: section, hyperlinks: res, count: sectionCount }],
+      ];
     });
-    console.log({ section: section, hyperlinks: res }, form, "testing");
+  };
+
+  const handledEdit = () => {
+    const forms = form.getFieldsValue();
+    const res = sectionCount.map((item, i) => ({
+      header: section,
+      dateOfService: forms[
+        `encounterDate_${section?.replaceAll(" ", "-")}_${i}`
+      ]
+        ? moment(
+            forms[`encounterDate_${section?.replaceAll(" ", "-")}_${i}`]
+          ).format("YYYY-MM-DD")
+        : "",
+      substring: forms[`referance_${section?.replaceAll(" ", "-")}_${i}`],
+      pageNumber: forms[`pageNumber_${section?.replaceAll(" ", "-")}_${i}`],
+    }));
+    setDiagnosisForm(form);
+    setListOfSection((prev) => {
+      const rese = prev?.map((item) => item.section == section);
+      const re = rese.map((check, ind) => {
+        if (check) {
+          return { section: section, hyperlinks: res, count: sectionCount };
+        } else {
+          return prev[ind];
+        }
+      });
+      return re;
+    });
+    setIsEdit(false);
+  };
+
+  const handledEditMeat = () => {
+    const forms = form.getFieldsValue();
+    const sections = {
+      M: sectionM,
+      E: sectionE,
+      A: sectionA,
+      T: sectionT,
+    };
+
+    const counts = {
+      M: sectionCountM,
+      E: sectionCountE,
+      A: sectionCountE,
+      T: sectionCountT,
+    };
+
+    const selectedSection = sections[selectMeat];
+    const selectedCount = counts[selectMeat];
+
+    const res = selectedCount.map((item, i) => ({
+      header: selectedSection,
+      dateOfService: forms[
+        `encounterDate_${selectedSection?.replaceAll(
+          " ",
+          "-"
+        )}_${selectMeat}_${i}`
+      ]
+        ? moment(
+            forms[
+              `encounterDate_${selectedSection?.replaceAll(
+                " ",
+                "-"
+              )}_${selectMeat}_${i}`
+            ]
+          ).format("YYYY-MM-DD")
+        : "",
+      substring:
+        forms[
+          `referance_${selectedSection?.replaceAll(
+            " ",
+            "-"
+          )}_${selectMeat}_${i}`
+        ],
+      pageNumber:
+        forms[
+          `pageNumber_${selectedSection?.replaceAll(
+            " ",
+            "-"
+          )}_${selectMeat}_${i}`
+        ],
+    }));
+
+    const setListOfSection = {
+      M: setListOfSectionM,
+      E: setListOfSectionE,
+      A: setListOfSectionA,
+      T: setListOfSectionT,
+    };
+
+    // setListOfSection[selectMeat]((prev) => [
+    //   ...prev,
+    //   ...[{ section: selectedSection, hyperlinks: res, count: selectedCount }],
+    // ]);
+
+    setListOfSection[selectMeat]((prev) => {
+      const rese = prev?.map((item) => item.section == selectedSection);
+      const re = rese.map((check, ind) => {
+        if (check) {
+          return { section: selectedSection, hyperlinks: res, count: selectedCount };
+        } else {
+          return prev[ind];
+        }
+      });
+      console.log(re);
+      return re;
+    });
+    setIsEdit(false);
   };
 
   const handledMeatSave = (form) => {
@@ -231,8 +346,8 @@ const ManuallyAdd = ({
 
     const counts = {
       M: sectionCountM,
-      E: sectionCountM,
-      A: sectionCountM,
+      E: sectionCountE,
+      A: sectionCountE,
       T: sectionCountT,
     };
 
@@ -253,7 +368,7 @@ const ManuallyAdd = ({
                 " ",
                 "-"
               )}_${selectMeat}_${i}`
-            ]["$d"]
+            ]
           ).format("YYYY-MM-DD")
         : "",
       substring:
@@ -281,7 +396,7 @@ const ManuallyAdd = ({
 
     setListOfSection[selectMeat]((prev) => [
       ...prev,
-      ...[{ section: selectedSection, hyperlinks: res }],
+      ...[{ section: selectedSection, hyperlinks: res, count: selectedCount }],
     ]);
   };
 
@@ -512,7 +627,7 @@ const ManuallyAdd = ({
           setSectionT("");
           setListOfSectionT([]);
           setShowSectionT(false);
-          setCapturedSectionsT([]);     
+          setCapturedSectionsT([]);
         }
       } catch (error) {}
     }
@@ -548,19 +663,147 @@ const ManuallyAdd = ({
   };
 
   const sectionEdit = (item) => {
-    const res = item.hyperlinks?.map((list, i) =>
+    item.hyperlinks?.map((list, i) => {
       form.setFieldsValue({
+        section: [{ lable: list.header, value: list.header }],
         [`encounterDate_${item?.section?.replaceAll(" ", "-")}_${i}`]:
           list.dateOfService,
         [`referance_${item?.section?.replaceAll(" ", "-")}_${i}`]:
           list.substring,
         [`pageNumber_${item?.section?.replaceAll(" ", "-")}_${i}`]:
           list.pageNumber,
-      })
-    );
-    setSection(item.section);
+      });
+      setSectionCount(item.count);
+      setSection(list.header);
+    });
+    setIsEdit(true);
     setShowSection(false);
   };
+
+  // const sectionEditMeat = (item) => {
+  //   if (selectMeat == "M") {
+  //     item.hyperlinks?.map((list, i) => {
+  //       form.setFieldsValue({
+  //         [`${checkMeatType(selectMeat)}section`]: [{ lable: list.header, value: list.header }],
+  //         [`encounterDate_${item?.section?.replaceAll(
+  //           " ",
+  //           "-"
+  //         )}_${selectMeat}_${i}`]: list.dateOfService,
+  //         [`referance_${item?.section?.replaceAll(
+  //           " ",
+  //           "-"
+  //         )}_${selectMeat}_${i}`]: list.substring,
+  //         [`pageNumber_${item?.section?.replaceAll(
+  //           " ",
+  //           "-"
+  //         )}_${selectMeat}_${i}`]: list.pageNumber,
+  //       });
+  //       setSectionCountM(item.count);
+  //       setSectionM(list.header);
+  //     });
+  //     setShowSectionM(false);
+  //   } else if (selectMeat == "E") {
+  //     item.hyperlinks?.map((list, i) => {
+  //       form.setFieldsValue({
+  //         [`${checkMeatType(selectMeat)}section`]: [{ lable: list.header, value: list.header }],
+  //         [`encounterDate_${item?.section?.replaceAll(
+  //           " ",
+  //           "-"
+  //         )}_${selectMeat}_${i}`]: list.dateOfService,
+  //         [`referance_${item?.section?.replaceAll(
+  //           " ",
+  //           "-"
+  //         )}_${selectMeat}_${i}`]: list.substring,
+  //         [`pageNumber_${item?.section?.replaceAll(
+  //           " ",
+  //           "-"
+  //         )}_${selectMeat}_${i}`]: list.pageNumber,
+  //       });
+  //       setSectionCountE(item.count);
+  //       setSectionE(list.header);
+  //     });
+  //     setShowSectionE(false);
+  //   } else if (selectMeat == "A") {
+  //     item.hyperlinks?.map((list, i) => {
+  //       form.setFieldsValue({
+  //         [`${checkMeatType(selectMeat)}section`]: [{ lable: list.header, value: list.header }],
+  //         [`encounterDate_${item?.section?.replaceAll(
+  //           " ",
+  //           "-"
+  //         )}_${selectMeat}_${i}`]: list.dateOfService,
+  //         [`referance_${item?.section?.replaceAll(
+  //           " ",
+  //           "-"
+  //         )}_${selectMeat}_${i}`]: list.substring,
+  //         [`pageNumber_${item?.section?.replaceAll(
+  //           " ",
+  //           "-"
+  //         )}_${selectMeat}_${i}`]: list.pageNumber,
+  //       });
+  //       setSectionCountA(item.count);
+  //       setSectionA(list.header);
+  //     });
+  //     setShowSectionA(false);
+  //   } else if (selectMeat == "T") {
+  //     item.hyperlinks?.map((list, i) => {
+  //       form.setFieldsValue({
+  //         [`${checkMeatType(selectMeat)}section`]: [{ lable: list.header, value: list.header }],
+  //         [`encounterDate_${item?.section?.replaceAll(
+  //           " ",
+  //           "-"
+  //         )}_${selectMeat}_${i}`]: list.dateOfService,
+  //         [`referance_${item?.section?.replaceAll(
+  //           " ",
+  //           "-"
+  //         )}_${selectMeat}_${i}`]: list.substring,
+  //         [`pageNumber_${item?.section?.replaceAll(
+  //           " ",
+  //           "-"
+  //         )}_${selectMeat}_${i}`]: list.pageNumber,
+  //       });
+  //       setSectionCountT(item.count);
+  //       setSectionT(list.header);
+  //     });
+  //     setShowSectionT(false);
+  //   }
+  //   setIsEdit(true);
+  // };
+
+
+  const setFormValues = (item, selectMeat, countSetter, headerSetter, showSectionSetter) => {
+    item.hyperlinks?.map((list, i) => {
+      form.setFieldsValue({
+        [`${checkMeatType(selectMeat)}section`]: [{ label: list.header, value: list.header }],
+        [`encounterDate_${item?.section?.replaceAll(" ", "-")}_${selectMeat}_${i}`]: list.dateOfService,
+        [`referance_${item?.section?.replaceAll(" ", "-")}_${selectMeat}_${i}`]: list.substring,
+        [`pageNumber_${item?.section?.replaceAll(" ", "-")}_${selectMeat}_${i}`]: list.pageNumber,
+      });
+      countSetter(item.count);
+      headerSetter(list.header);
+    });
+    showSectionSetter(false);
+  };
+  
+  const sectionEditMeat = (item) => {
+    switch (selectMeat) {
+      case "M":
+        setFormValues(item, selectMeat, setSectionCountM, setSectionM, setShowSectionM);
+        break;
+      case "E":
+        setFormValues(item, selectMeat, setSectionCountE, setSectionE, setShowSectionE);
+        break;
+      case "A":
+        setFormValues(item, selectMeat, setSectionCountA, setSectionA, setShowSectionA);
+        break;
+      case "T":
+        setFormValues(item, selectMeat, setSectionCountT, setSectionT, setShowSectionT);
+        break;
+      default:
+        break;
+    }
+    setIsEdit(true);
+  };
+  
   return (
     <>
       <div className="d-flex justify-content-between mb-4">
@@ -656,7 +899,6 @@ const ManuallyAdd = ({
                     mode="multiple"
                     maxTagCount="responsive"
                     className={`ant_select_form hcc_form mb-2`}
-                    placeholder="DOS"
                     onChange={(selOption, val) => {
                       handleSelectChange(selOption, "dos");
                     }}
@@ -684,7 +926,7 @@ const ManuallyAdd = ({
                 )}
               </div>
               <div className="col-12">
-                {listOfSection.length > 0 && (
+                {listOfSection?.length > 0 && (
                   <div className="py-4">
                     <div className="d-flex border-bottom align-items-end justify-content-between">
                       <div className={`${style.subHeader} mb-2`}>
@@ -695,7 +937,10 @@ const ManuallyAdd = ({
                           type=""
                           method={"button"}
                           name="Add"
-                          onClick={() => setShowSection(false)}
+                          onClick={() => {
+                            setShowSection(false);
+                            setIsEdit(false);
+                          }}
                         />
                       </div>
                     </div>
@@ -736,11 +981,10 @@ const ManuallyAdd = ({
             </div>
             {(listOfSection.length <= 0 || !showSection) && (
               <div className="border rounded">
-                {sectionCount.map((item, index) => (
+                {sectionCount?.map((item, index) => (
                   <div className="pt-2">
                     <div className="d-flex justify-content-between px-3">
                       <b>Section - {index + 1}</b>
-                      {console.log(item)}
                       <label>
                         {index == 0 && (
                           <label
@@ -755,7 +999,7 @@ const ManuallyAdd = ({
                             <FontAwesomeIcon icon={faPlus} color="#04306f" />
                           </label>
                         )}
-                        {sectionCount.length > 1 && (
+                        {sectionCount?.length > 1 && (
                           <label
                             className="cr-pointer"
                             onClick={() => {
@@ -773,24 +1017,46 @@ const ManuallyAdd = ({
                         )}
                       </label>
                     </div>
-                    <AddSection key={index} id={index} section={section} />
+                    <AddSection
+                      key={index}
+                      id={index}
+                      section={section}
+                      date={
+                        getSelectedDos
+                          ? [{ label: getSelectedDos, value: getSelectedDos }]
+                          : dosList
+                      }
+                    />
                   </div>
                 ))}
                 <Form.Item>
                   <div className="d-flex justify-content-center mt-4">
-                    <RegularButton
-                      type=""
-                      name="Save"
-                      width="100px"
-                      // onClick={handledSave}
-                    />
+                    {!isEdit ? (
+                      <RegularButton
+                        type=""
+                        name="Save"
+                        width="100px"
+                        // onClick={handledSave}
+                      />
+                    ) : (
+                      <RegularButton
+                        type=""
+                        method={"button"}
+                        name="Edit"
+                        width="100px"
+                        onClick={handledEdit}
+                      />
+                    )}
                     {listOfSection.length > 0 && (
                       <RegularButton
                         type="outline"
                         name="Cancel"
                         width="100px"
                         method={"button"}
-                        onClick={() => setShowSection(true)}
+                        onClick={() => {
+                          setShowSection(true);
+                          setSectionCount([1]);
+                        }}
                       />
                     )}
                   </div>
@@ -805,6 +1071,7 @@ const ManuallyAdd = ({
                     name="Next"
                     width="150px"
                     method={"button"}
+                    disabled={!(validCode == "Valid Code")}
                     onClick={() => setMeatDisplay(true)}
                   />
                 </div>
@@ -845,7 +1112,6 @@ const ManuallyAdd = ({
             layout="vertical"
             autoComplete="off"
             onFinish={(form) => {
-              console.log(form);
               handledMeatSave(form);
             }}
             onFinishFailed={() => {}}
@@ -872,6 +1138,14 @@ const ManuallyAdd = ({
                 listOfSectionT.length > 0
               }
               sectionDelete={sectionDeleteMeat}
+              date={
+                getSelectedDos
+                  ? [{ label: getSelectedDos, value: getSelectedDos }]
+                  : dosList
+              }
+              isEdit={isEdit}
+              sectionEdit={sectionEditMeat}
+              handleEdit={handledEditMeat}
             />
           </Form>
         </>
