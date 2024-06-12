@@ -74,8 +74,12 @@
   height: 200px !important;
   padding: 0;
 }
-.inclusionTerm {
+.Inclusion {
   font-size: 16px;
+  background-color: lightpink;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 2px;
 }
 .symbols {
   border: 1px solid #e6eeff;
@@ -83,6 +87,7 @@
   height: 50px;
   background: #e6eeff;
   margin-top: 10px;
+  padding-left: 8px;
 }
 .digit {
   font-weight: 600;
@@ -96,13 +101,6 @@
   padding: 2px;
   font-size: 12px;
   font-weight: 600;
-}
-.arrowleft {
-  font-size: 16px;
-  display: flex;
-  gap: 6px;
-  margin-top: 10px;
-  padding-right: 20px;
 }
 .btn {
   background-color: #241571;
@@ -132,4 +130,19 @@
   margin-top: 5px;
   border-radius: 7px;
   padding:9px;
+}
+.excludes2 {
+  font-size: 16px;
+  color: red;
+  font-weight: 600;
+ }
+.para{
+  margin:0px;
+}
+.add{
+  font-size: 15px;
+  font-weight: 600;
+  padding: 2px;
+  background-color: #FFCC99;
+  
 }
