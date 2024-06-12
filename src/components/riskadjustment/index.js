@@ -70,6 +70,11 @@ const RiskAdjustment = ({
 
     setData(riskData?.response);
   };
+  function handleKeyDown(event) {
+    if (event.keyCode === 13) {
+      fetch();
+    }
+  }
 
   const handleYearChange = (date, dateString) => {
     setYear(date);
@@ -103,6 +108,7 @@ const RiskAdjustment = ({
               placeholder="Basic usage"
               value={code}
               onChange={handleCode}
+              onKeyDown={handleKeyDown}
             />
           </div>
           {codeErrorMessage && (
