@@ -175,12 +175,14 @@ const Tables = (props) => {
           parentCode?.desc ||
           parentCode?.excludes2) && (
           <div className={style.parent}>
-            {parentCode?.name ||
-              (parentCode?.desc && (
-                <div className={style.head}>
-                  Parent Code: {parentCode?.name}-{parentCode?.desc}
-                </div>
-              ))}
+            {parentCode?.name && parentCode?.desc && (
+              
+              <div className={style.head}>
+                Parent Code:
+                {parentCode?.requiredCharacter} {parentCode?.name}-
+                {parentCode?.desc}
+              </div>
+            )}
             {parentCode?.includes && (
               <div className=" mt-2 ">
                 <span className={style.includes}>Includes:</span>

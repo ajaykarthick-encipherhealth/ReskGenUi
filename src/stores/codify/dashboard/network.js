@@ -15,7 +15,7 @@ export const codes = async ({ code }) => {
     method: "GET",
   };
   const url = `q=${code}`;
-  const data = await apirequestPortal(`controlzen/getDiagDetails2?${url}`, options);
+  const data = await requestPortal(`management/getDiagDetails?${url}`, options);
   return data;
 };
 

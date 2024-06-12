@@ -113,20 +113,23 @@
   font-size: 17px;
   color: green;
   font-weight: 600;
+ 
 }
 .excludes {
   font-size: 16px;
   color: blue;
   font-weight: 600;
+ 
 }
 .parent {
   border: 1px solid #0f6adb;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 1px 2px;
-  height: 250px;
+  min-height: 60px;
   overflow: scroll;
   width: 90%;
   scrollbar-width: none;
   padding: 3px;
   margin-top: 5px;
   border-radius: 7px;
+  padding:9px;
 }
