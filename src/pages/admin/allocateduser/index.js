@@ -527,8 +527,9 @@ export default function Patient() {
                                   style={{ width: "40px", height: "40px" }}
                                   className={reportStyles.filterBtn}
                                   onClick={() => {
-                                    setIsPatientList(false)
-                                    setAllocatedOption("")}}
+                                    setIsPatientList(false);
+                                    setAllocatedOption("");
+                                  }}
                                 >
                                   <Image src={leftArrow} />
                                 </button>
@@ -597,16 +598,16 @@ export default function Patient() {
                                   />
                                 </div>
                               </div>
-                              <div className="col-xl-2">
+                              {/* <div className="col-xl-2">
                                 <label>Batch Count</label>
                                 <div class="form-group d-flex">
                                   <InputText
                                     type="text"
                                     onChange={(e) => {
-                                      // setBatchCount(e.target.value);
-                                      // if (e.target.value.length <= 0) {
-                                      //   setFilterBatchCount(true);
-                                      // }
+                                      setBatchCount(e.target.value);
+                                      if (e.target.value.length <= 0) {
+                                        setFilterBatchCount(true);
+                                      }
                                       const inputValue = e.target.value.replace(
                                         /[^\d]/g,
                                         ""
@@ -635,7 +636,7 @@ export default function Patient() {
                                     Select
                                   </button>
                                 </div>
-                              </div>
+                              </div> */}
                             </>
                           ) : !isPatientList && activeTab == 2 ? (
                             <div className="col-xl-6"></div>
@@ -671,7 +672,7 @@ export default function Patient() {
                             className={
                               isPatientList && activeTab == 2
                                 ? `col-xl-6 mt-4 ${TableStyle.allocateBtn}`
-                                : `col-xl-4 mt-4 ${TableStyle.allocateBtn}`
+                                : `col-xl-6 mt-4 ${TableStyle.allocateBtn}`
                             }
                           >
                             {isPatientList || activeTab === 1 ? (
