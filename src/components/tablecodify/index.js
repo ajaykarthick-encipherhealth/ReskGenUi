@@ -103,8 +103,7 @@ const Tables = (props) => {
               </CopyToClipboard>
             </div>
             <div className={style.inclusionTerm}>{codeData?.inclusionTerm}</div>
-
-            <div className="card-group">
+             <div className="card-group">
               <div className="card">
                 <div className="card-body border border-secondary p-0">
                   <h5 className="card-title bg-success text-white d-flex justify-content-center">
@@ -176,13 +175,10 @@ const Tables = (props) => {
           parentCode?.excludes2) && (
           <div className={style.parent}>
             {parentCode?.name && parentCode?.desc && (
-              
               <div className={style.head}>
                 Parent Code:
-                 {parentCode?.name}-
-                {parentCode?.desc}
+                {parentCode?.name}-{parentCode?.desc}
               </div>
-              
             )}
             {parentCode?.includes && (
               <div className=" mt-2 ">
