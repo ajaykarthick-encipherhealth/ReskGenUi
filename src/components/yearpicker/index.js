@@ -38,6 +38,7 @@ const YearPicker = ({
         <DatePicker
           onChange={onChangeYear}
           picker={"year"}
+          allowClear={false}
           value={dayjs(val1 ? val1 : currentYearDate, "YYYY")}
           format={"YYYY"}
           className={`${styles.picker} pickerChnages`}
@@ -52,11 +53,15 @@ const YearPicker = ({
           <Select
             value={
               val
-                ? { label: val<10 ? `0${val}` : val, value: val }
+                ? { label: val < 10 ? `0${val}` : val, value: val }
                 : { label: currentDate, value: currentDate }
             }
             onChange={(e) => onChangeMonth(e)}
-            className={`${bgColor === '#F3F3FF'?'custom_MonthSelect2':'custom_MonthSelect'} ${styles.monthSelect}`}
+            className={`${
+              bgColor === "#F3F3FF"
+                ? "custom_MonthSelect2"
+                : "custom_MonthSelect"
+            } ${styles.monthSelect}`}
             options={monthNames?.map((item, index) => ({
               label: item,
               value: index + 1,
