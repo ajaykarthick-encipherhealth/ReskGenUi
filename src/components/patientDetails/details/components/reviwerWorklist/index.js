@@ -59,6 +59,8 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
   const handleFilterClick = () => {
     setShowIcons(!showIcons);
     setShowCard(false);
+    setOpenPicker(false);
+    setOpenPicker2(false);
   };
   const closeFilterIcons = async () => {
     setShowIcons(false);

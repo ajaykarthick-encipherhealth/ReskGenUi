@@ -77,6 +77,9 @@ const SupervisorWorkList = ({ localUserId, setWorkListPatientId }) => {
 
   const handleFilterClick = () => {
     setShowIcons(!showIcons);
+    setShowIcons(false);
+    setOpenPicker(false);
+    setOpenPicker2(false);
   };
   const closeFilterIcons = async () => {
     setShowIcons(false);
