@@ -7,7 +7,7 @@ import visitStyles from "../../../styles/visitdata.module.css";
 import moment from "moment";
 import TableStyle from "../../../components/table/table.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CheckOutlined } from "@ant-design/icons";
+
 import {
   faArrowLeft,
   faUserCircle,
@@ -319,33 +319,6 @@ const Details = ({
     getPatientDosList(localPatientId, e);
     getpatientDetailsData(localPatientId, e, null, setIsLoading);
   };
-
-  // const tabList = [
-  //   {
-  //     title: "HCC",
-  //     type: "HCC",
-  //     iconStyle: IMAGES.visitDataHcc,
-  //     defaultComplete: true,
-  //   },
-  //   {
-  //     title: "NON HCC",
-  //     type: "NON HCC",
-  //     iconStyle: IMAGES.visitDataNonHcc,
-  //     defaultComplete: true,
-  //   },
-  //   {
-  //     title: "Radiology",
-  //     type: "Radiology",
-  //     iconStyle: IMAGES.visitDataRadioloy,
-  //     defaultComplete: false,
-  //   },
-  //   {
-  //     title: "Lab Report",
-  //     type: "Lab Report",
-  //     iconStyle: IMAGES.visitDataLabreport,
-  //     defaultComplete: false,
-  //   },
-  // ];
 
   const addComments = async (value) => {
     setFilterDataLoading(true);
