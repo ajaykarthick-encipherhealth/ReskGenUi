@@ -672,7 +672,7 @@ export default function Patient() {
                             className={
                               isPatientList && activeTab == 2
                                 ? `col-xl-6 mt-4 ${TableStyle.allocateBtn}`
-                                : `col-xl-4 mt-4 ${TableStyle.allocateBtn}`
+                                : `col-xl-6 mt-4 ${TableStyle.allocateBtn}`
                             }
                           >
                             {isPatientList || activeTab === 1 ? (
