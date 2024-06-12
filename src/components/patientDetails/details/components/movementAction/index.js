@@ -13,7 +13,7 @@ import {
 } from "../function/ReusableFunctions";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 
-const MovementIcon = ({
+const MovementAction = ({
   validAction,
   suggestedAction,
   deleteAction,
@@ -146,4 +146,4 @@ const enhancer = connect(
     getpatientDetailsData: detailsActions.patientDetailsAction,
   }
 );
-export default enhancer(MovementIcon);
+export default enhancer(MovementAction);
