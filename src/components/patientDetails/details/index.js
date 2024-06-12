@@ -1039,7 +1039,7 @@ const Details = ({
                                                 }
                                                 style={{
                                                   background: "transparent",
-                                                  margin: "6px",
+                                                  margin: "8px",
                                                 }}
                                                 offset={[10, 10]}
                                                 size="large"
