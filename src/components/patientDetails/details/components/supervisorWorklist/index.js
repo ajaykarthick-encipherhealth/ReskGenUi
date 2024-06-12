@@ -87,6 +87,8 @@ const SupervisorWorkList = ({ localUserId, setWorkListPatientId }) => {
   const handleShowCard = () => {
     setShowCard(!showCard);
     setShowCard(true);
+    setOpenPicker(false);
+    setOpenPicker2(false);
   };
 
   const getPatientListToDetails = (id) => {
@@ -356,6 +358,7 @@ const SupervisorWorkList = ({ localUserId, setWorkListPatientId }) => {
                     closeFilterIcons(false);
                     setOpenPicker(false);
                     setOpenPicker2(false);
+                    setShowCard(false);
                   }}
                 />
               ) : (
@@ -378,6 +381,7 @@ const SupervisorWorkList = ({ localUserId, setWorkListPatientId }) => {
                     onClick={() => {
                       setOpenPicker(!openPicker);
                       setOpenPicker2(false);
+                      setShowCard(false);
                     }}
                   >
                     {SVGICON.dateIcon}
@@ -389,6 +393,7 @@ const SupervisorWorkList = ({ localUserId, setWorkListPatientId }) => {
                     onClick={() => {
                       setOpenPicker2(!openPicker2);
                       setOpenPicker(false);
+                      setShowCard(false);
                     }}
                   >
                     {SVGICON.dateIcon}
@@ -446,14 +451,14 @@ const SupervisorWorkList = ({ localUserId, setWorkListPatientId }) => {
         )}
       </div>
       <div className={visitStyles.paginationContiner}>
-      <div className="patient-filte-page">
-        <Paginator
-          first={paginationFirst}
-          rows={15}
-          totalRecords={totalElements}
-          onPageChange={onPageChange}
-        />
-      </div>
+        <div className="patient-filte-page">
+          <Paginator
+            first={paginationFirst}
+            rows={15}
+            totalRecords={totalElements}
+            onPageChange={onPageChange}
+          />
+        </div>
       </div>
     </>
   );

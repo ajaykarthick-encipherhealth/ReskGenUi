@@ -30,7 +30,11 @@ export function extractLatestData(notes) {
   return declinedData;
 }
 
-const AdminWorkList = ({ localUserId, setWorkListPatientId,setIsModalComments }) => {
+const AdminWorkList = ({
+  localUserId,
+  setWorkListPatientId,
+  setIsModalComments,
+}) => {
   const dispatch = useDispatch();
   const result = useSelector((state) => state.adminList.patients);
   const { RangePicker } = DatePicker;
@@ -82,11 +86,13 @@ const AdminWorkList = ({ localUserId, setWorkListPatientId,setIsModalComments })
   const handleShowCard = () => {
     setShowCard(!showCard);
     setShowCard(true);
+    setOpenPicker2(false);
+    setOpenPicker(false);
   };
 
   const getPatientListToDetails = (id) => {
     setWorkListPatientId(id);
-    setIsModalComments(false)
+    setIsModalComments(false);
   };
 
   const handleDatePickerChange = async (dateString) => {
@@ -280,6 +286,7 @@ const AdminWorkList = ({ localUserId, setWorkListPatientId,setIsModalComments })
                     closeFilterIcons(false);
                     setOpenPicker(false);
                     setOpenPicker2(false);
+                    setShowCard(false);
                   }}
                 />
               ) : (
@@ -302,6 +309,7 @@ const AdminWorkList = ({ localUserId, setWorkListPatientId,setIsModalComments })
                     onClick={() => {
                       setOpenPicker(!openPicker);
                       setOpenPicker2(false);
+                      setShowCard(false);
                     }}
                   >
                     {SVGICON.dateIcon}
@@ -313,6 +321,7 @@ const AdminWorkList = ({ localUserId, setWorkListPatientId,setIsModalComments })
                     onClick={() => {
                       setOpenPicker2(!openPicker2);
                       setOpenPicker(false);
+                      setShowCard(false);
                     }}
                   >
                     {SVGICON.dateIcon}
