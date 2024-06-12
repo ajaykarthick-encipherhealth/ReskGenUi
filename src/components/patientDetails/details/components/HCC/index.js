@@ -27,7 +27,7 @@ import { Draggable } from "react-beautiful-dnd";
 import ModelIndex from "../model/Index";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
-import MovementIcon from "../movementIIcon";
+import MovementIcon from "../movementAction";
 
 const HccCards = ({
   list,
