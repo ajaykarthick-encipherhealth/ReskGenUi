@@ -22,7 +22,7 @@ import {
   onDragEnd,
 } from "../../components/function/ReusableFunctions";
 import ManuallyAdd from "../../components/manuallyAdd";
-import LogoLoader from "../../../../logoutToaster";
+import LogoLoader from "../../../../logoLoader";
 
 const VisitData = ({
   setActiveTabHead,

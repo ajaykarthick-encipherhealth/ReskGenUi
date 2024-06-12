@@ -42,7 +42,7 @@ import Notes from "./components/notes";
 import Flag from "./components/flag";
 import StatusAction from "./components/statusAction";
 import { handleCopyToClipboard } from "../../commonFunctions";
-import LogoLoader from "../../logoutToaster";
+import LogoLoader from "../../logoLoader";
 
 export const navigetPageDetails = async (
   pageTitle,

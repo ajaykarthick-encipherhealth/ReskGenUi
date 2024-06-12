@@ -23,7 +23,7 @@ import { getPatientDetails } from "../../components/function/GetData";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { onDragEnd } from "../../components/function/ReusableFunctions";
 import ManuallyAdd from "../../components/manuallyAdd";
-import LogoLoader from "../../../../logoutToaster";
+import LogoLoader from "../../../../logoLoader";
 
 const File = ({
   patientDetailsResult,
