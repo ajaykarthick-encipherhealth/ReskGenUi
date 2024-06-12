@@ -224,7 +224,7 @@ const Tables = (props) => {
               </div>
             </div>
             {codeData?.useAdditionalCode && (
-              <div className="d-flex">
+              <div >
                 <span className={style.head}>Additional Codes</span>
                 {codeData?.useAdditionalCode &&
                   codeData.useAdditionalCode
