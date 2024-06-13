@@ -370,7 +370,7 @@ export const getPatientDetails = async (
             dateOfServices:res.dateOfServices,
           });
       });
-      console.log(result?.deletedComboDisease, "testing");
+
       setNewValidDiseaseList && setNewValidDiseaseList(hccDisArray);
       setSuggestedHccList && setSuggestedHccList(suggestListAll);
       setNonHccDiseasesList&& setNonHccDiseasesList(nonHccDisArray);

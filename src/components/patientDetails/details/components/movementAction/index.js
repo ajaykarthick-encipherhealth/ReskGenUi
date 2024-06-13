@@ -4,7 +4,7 @@ import styles from "./styles.module.css";
 import {
   CloseCircleFilled,
   CheckCircleFilled,
-  IssuesCloseOutlined,
+  RightCircleOutlined,
 } from "@ant-design/icons";
 import { Tooltip, Popconfirm } from "antd";
 import {
@@ -86,7 +86,7 @@ const MovementAction = ({
             okText="Yes"
             cancelText="No"
           >
-            <IssuesCloseOutlined
+            <RightCircleOutlined 
               className={styles.suggestedIcon}
               onClick={() => {
                 moveToStrightAction(
