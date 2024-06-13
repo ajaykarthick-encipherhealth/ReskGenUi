@@ -99,7 +99,9 @@ const Combo = ({
       dispatch,
       sectionColorList,
       "",
-      setComboDiseaseCodesList
+      setComboDiseaseCodesList,
+      "","","",
+      setInvalidComboDiseaseCodesList
     );
   }, [patientDetailsResult]);
 
@@ -120,7 +122,6 @@ const Combo = ({
     setSelectDiseasesName(title);
   setSelectDisDetails(data);
   };
-
 
   const handleCloseModal = () => {
     setConfirmNotesModalValid(false);
