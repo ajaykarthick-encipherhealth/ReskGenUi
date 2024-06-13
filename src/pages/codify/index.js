@@ -178,7 +178,6 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   const fetchCodeData = async (value) => {
     setLoading(true);
     const tableData = await codesData({ code: value ? value : searchInput });
-     console.log(tableData,"tabledata")
     if (tableData?.status == "SUCCESS") {
       setCodeData({
         ...codeData,

@@ -50,7 +50,6 @@ const Tables = (props) => {
         useAdditionalCode: tableData?.response?.childData?.useAdditionalCode,
         requiredCharacter: tableData?.response?.childData?.requiredCharacter,
       });
-      console.log("tableData", tableData);
       setParentCode(tableData?.response?.parentData);
     }
     setLoading(false);
