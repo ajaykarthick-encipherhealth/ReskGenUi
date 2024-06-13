@@ -246,7 +246,7 @@ const Tables = (props) => {
                     {data.name} - {data.desc}
                   </div>
                   {data?.includes && (
-                    <div className=" mt-2 ">
+                    <div>
                       <span className={style.includes}>Includes</span>
                       {data?.includes &&
                         data.includes?.split("\n").map((line, index) => (
