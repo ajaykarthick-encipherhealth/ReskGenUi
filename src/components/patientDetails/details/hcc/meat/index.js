@@ -205,7 +205,7 @@ const Meat = ({
             </>
           }
         >
-          <span className="">{value}</span>
+          <span style={{fontSize: 'smaller'}}>{value}</span>
         </Popover>
       );
     } else {

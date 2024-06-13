@@ -235,7 +235,7 @@ const UserList = () => {
                         selectOptions2={RoleList}
                         defaultSelectValue2={""}
                         setSelectedOption2={setRole}
-                        selectedValue2={role}
+                        selectedValue2={role} 
                         // computation date
                         pickerlabel="Created date Range"
                         selectedDates={selectedDates}

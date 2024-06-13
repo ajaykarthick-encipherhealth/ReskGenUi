@@ -11493,6 +11493,21 @@ span.meat-name-details {
   width: 190px;
 }
 
+span.meat-name-details_meat {
+  /* height: 120px; */
+  color: #000;
+  font-size: 13px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin-top: 3px;
+  height: 43px;
+  /* width: 190px; */
+}
+
 .bg-third {
   background-color: #c0b3e536 !important;
   font-size: 11px !important;
@@ -14615,7 +14630,7 @@ input::-webkit-inner-spin-button {
 .ant-select-single {
   font-size: 14px;
   /* height: 42px !important; */
-  width: 100% !important;
+  /* width: 100% !important; */
 }
 .card-text {
   scrollbar-width: none;
