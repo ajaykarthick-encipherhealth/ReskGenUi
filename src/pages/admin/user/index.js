@@ -515,16 +515,9 @@ const UserList = () => {
                       allowClear
                       style={{ height: "42px" }}
                     >
-                      <Select.Option value="ADMIN">ADMIN</Select.Option>
                       <Select.Option value="REVIEWER">REVIEWER</Select.Option>
                       <Select.Option value="SUPERVISOR">
                         SUPERVISOR
-                      </Select.Option>
-                      <Select.Option value="ADMIN_TECHNICAL_SUPPORT">
-                        ADMIN TECHNICAL SUPPORT
-                      </Select.Option>
-                      <Select.Option value="L2AUDITOR">
-                        ADMIN MEDICAL CODER
                       </Select.Option>
                     </Select>
                   </Form.Item>
@@ -552,7 +545,7 @@ const UserList = () => {
                             !/[A-Z]/.test(value)
                           ) {
                             return Promise.reject(
-                              "Please enter a password with both lowercase and uppercase characters."
+                              "Keep it strong! Your password must be case sensitive"
                             );
                           }
                           return Promise.resolve();
