@@ -50,18 +50,8 @@ const Tables = (props) => {
         useAdditionalCode: tableData?.response?.childData?.useAdditionalCode,
         requiredCharacter: tableData?.response?.childData?.requiredCharacter,
       });
-      setParentCode({
-        ...parentCode,
-        name: tableData?.response?.parentData?.name,
-        desc: tableData?.response?.parentData?.desc,
-        includes: tableData?.response?.parentData?.includes,
-        excludes1: tableData?.response?.parentData?.excludes1,
-        excludes2: tableData?.response?.parentData?.excludes2,
-        children: tableData?.response?.parentData?.children,
-        inclusionTerm: tableData?.response?.parentData?.inclusionTerm,
-        useAdditionalCode: tableData?.response?.parentData?.useAdditionalCode,
-        requiredCharacter: tableData?.response?.parentData?.requiredCharacter,
-      });
+      console.log("tableData", tableData);
+      setParentCode(tableData?.response?.parentData);
     }
     setLoading(false);
   };
@@ -105,7 +95,7 @@ const Tables = (props) => {
   };
 
   return (
-    <>
+    <div>
       {hideButton && (
         <div className="m-2" onClick={handleBack}>
           <Button className={style.btn}>Back</Button>
@@ -157,9 +147,11 @@ const Tables = (props) => {
                     }}
                   >
                     {codeData?.includes ? (
-                      codeData.includes
-                        .split("\n")
-                        .map((data, index) => <p className = {style.para} key={index}>{data}</p>)
+                      codeData.includes.split("\n").map((data, index) => (
+                        <p className={style.para} key={index}>
+                          {data}
+                        </p>
+                      ))
                     ) : (
                       <Empty />
                     )}
@@ -183,9 +175,11 @@ const Tables = (props) => {
                     }}
                   >
                     {codeData?.excludes1 ? (
-                      codeData.excludes1
-                        .split("\n")
-                        .map((data, index) => <p className ={style.para} key={index}>{data}</p>)
+                      codeData.excludes1.split("\n").map((data, index) => (
+                        <p className={style.para} key={index}>
+                          {data}
+                        </p>
+                      ))
                     ) : (
                       <Empty />
                     )}
@@ -207,9 +201,11 @@ const Tables = (props) => {
                     }}
                   >
                     {codeData?.excludes2 ? (
-                      codeData.excludes2
-                        .split("\n")
-                        .map((data, index) => <p className = {style.para} key={index}>{data}</p>)
+                      codeData.excludes2.split("\n").map((data, index) => (
+                        <p className={style.para} key={index}>
+                          {data}
+                        </p>
+                      ))
                     ) : (
                       <Empty />
                     )}
@@ -218,90 +214,104 @@ const Tables = (props) => {
               </div>
             </div>
             {codeData?.useAdditionalCode && (
-              <div className="mt-2" >
-                <span className={style.add}>Use additional</span>
-                {codeData?.useAdditionalCode &&
-                  codeData.useAdditionalCode
-                    .split("\n")
-                    .map((data, index) => <p className = {style.para} key={index}>{data}</p>)}
-              </div>
-            )}
-             {codeData?.inclusionTerm && (
-              <div className="mt-2" >
-                <span className={style.Inclusion}>Inclusion Term </span>
-                {codeData?.inclusionTerm &&
-                  codeData.inclusionTerm
-                    .split("\n")
-                    .map((data, index) => <p className = {style.para} key={index}>{data}</p>)}
-              </div>
-            )}
-          </div>
-        )}
-        {( hideButton && 
-         
-          parentCode?.name
-          ) && (
-          <div className={style.parent}>
-            {hideButton && parentCode?.name && parentCode?.desc && (
-              <div className={style.head}>
-                {parentCode?.name}-{parentCode?.desc}
-              </div>
-            )}
-            {hideButton && parentCode?.includes && (
-              <div className=" mt-2 ">
-                <span className={style.includes}>Includes</span>
-                {parentCode?.includes &&
-                  parentCode.includes
-                    ?.split("\n")
-                    .map((line, index) => <p className = {style.para} key={index}>{line}</p>)}
-              </div>
-            )}
-            { hideButton && parentCode?.excludes1 && (
-              <div className=" mt-2 ">
-                <span className={style.excludes}>Excludes1</span>
-                {parentCode?.excludes1 &&
-                  parentCode.excludes1
-                    ?.split("\n")
-                    .map((line, index) =>
-                      <p className = {style.para} key={index}>{line}</p>)}
-              </div>
-            )}
-            { hideButton && parentCode?.excludes2 && (
-              <div className=" mt-2 ">
-                <span className={style.excludes2}>Excludes2</span>
-                {parentCode?.excludes2 &&
-                  parentCode.excludes2
-                    ?.split("\n")
-                    .map((line, index) => <p className = {style.para} key={index}>{line}</p>)}
-              </div>
-            )}
-            {hideButton && parentCode?.useAdditionalCode && (
               <div className="mt-2">
                 <span className={style.add}>Use additional</span>
-                {parentCode?.useAdditionalCode &&
-                  parentCode.useAdditionalCode
-                    ?.split("\n")
-                    .map((line, index) => <p className = {style.para}  key={index}>{line}</p>)}
+                {codeData?.useAdditionalCode &&
+                  codeData.useAdditionalCode.split("\n").map((data, index) => (
+                    <p className={style.para} key={index}>
+                      {data}
+                    </p>
+                  ))}
+              </div>
+            )}
+            {codeData?.inclusionTerm && (
+              <div className="mt-2">
+                <span className={style.Inclusion}>Inclusion Term </span>
+                {codeData?.inclusionTerm &&
+                  codeData.inclusionTerm.split("\n").map((data, index) => (
+                    <p className={style.para} key={index}>
+                      {data}
+                    </p>
+                  ))}
               </div>
             )}
           </div>
         )}
-        <div className={style.list}>
-          {codeData?.children?.map((s, i) => (
-            <div key={i} onClick={() => handleViewTable(s, i)}>
-              <p class={`${style.card2} mt-3`}>
-                {s?.requiredCharacter && (
-                  <span className={style.term}>{s.requiredCharacter}</span>
-                )}
-                <ArrowRightOutlined />
-                <span className={style.codes}>{s.name} </span>
-                <span>- {s.desc}</span>
-              </p>
-            </div>
-          ))}
+        <div className={style.parent}>
+          {parentCode?.length && 
+            parentCode?.map((data) => {
+              return (
+                <>
+                  <div className={style.head}>
+                    {data.name} - {data.desc}
+                  </div>
+                  {data?.includes && (
+                    <div className=" mt-2 ">
+                      <span className={style.includes}>Includes</span>
+                      {data?.includes &&
+                        data.includes?.split("\n").map((line, index) => (
+                          <p className={style.para} key={index}>
+                            {line}
+                          </p>
+                        ))}
+                    </div>
+                  )}
+                  {data?.excludes && (
+                    <div className=" mt-2 ">
+                      <span className={style.excludes}>Excludes1</span>
+                      {data?.excludes1 &&
+                        data.excludes1?.split("\n").map((line, index) => (
+                          <p className={style.para} key={index}>
+                            {line}
+                          </p>
+                        ))}
+                    </div>
+                  )}
+
+                  {data?.excludes2 && (
+                    <div className=" mt-2 ">
+                      <span className={style.excludes2}>Excludes2</span>
+                      {data?.excludes2 &&
+                        data.excludes2?.split("\n").map((line, index) => (
+                          <p className={style.para} key={index}>
+                            {line}
+                          </p>
+                        ))}
+                    </div>
+                  )}
+                  {data?.useAdditionalCode && (
+                    <div className="mt-2">
+                      <span className={style.add}>Use additional</span>
+                      {data?.useAdditionalCode &&
+                        data.useAdditionalCode
+                          ?.split("\n")
+                          .map((line, index) => (
+                            <p className={style.para} key={index}>
+                              {line}
+                            </p>
+                          ))}
+                    </div>
+                  )}
+                </>
+              );
+            })}
+          <div className={style.list}>
+            {codeData?.children?.map((s, i) => (
+              <div key={i} onClick={() => handleViewTable(s, i)}>
+                <p class={`${style.card2} mt-3`}>
+                  {s?.requiredCharacter && (
+                    <span className={style.term}>{s.requiredCharacter}</span>
+                  )}
+                  <ArrowRightOutlined />
+                  <span className={style.codes}>{s.name} </span>
+                  <span>- {s.desc}</span>
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
