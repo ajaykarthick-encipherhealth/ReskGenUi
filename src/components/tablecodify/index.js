@@ -236,16 +236,18 @@ const Tables = (props) => {
             )}
           </div>
         )}
-        {parentCode?.length ? (
+        {parentCode?.[0]?.includes ||
+        parentCode?.[0]?.excludes1 ||
+        parentCode?.[0]?.excludes2 ? (
           <div className={style.parent}>
-            {parentCode?.length && 
+            {parentCode?.length &&
               parentCode?.map((data) => {
                 return (
                   <>
                     {(data?.includes || data?.excludes1 || data?.excludes2) && (
-                    <div className={style.head}>
-                      {data.name} - {data.desc}
-                    </div>
+                      <div className={style.head}>
+                        {data.name} - {data.desc}
+                      </div>
                     )}
                     {data?.includes && (
                       <div>
@@ -299,7 +301,7 @@ const Tables = (props) => {
               })}
           </div>
         ) : (
-          ""
+          <></>
         )}
         <div className={style.list}>
           {codeData?.children?.map((s, i) => (

@@ -9,7 +9,7 @@ const Codes = ({ data, loading, onSelect, onExpand, expandedKeys }) => {
   const scrollToTop = () => {
     topRef.current.scrollIntoView({ behavior: "smooth", top: 25 });
   };
-
+console.log(loading,"loading")
   return (
     <>
       <div className="d-flex justify-content-center">
