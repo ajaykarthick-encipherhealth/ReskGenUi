@@ -161,7 +161,7 @@ const MeatCard = ({
                       }
                       style={{
                         // background: "#eff5ff",
-                        background: "#fafcff",
+                        background: "#FAFDFF",
                         // background: "#ecf2fc" ,
                         padding: "10px",
                       }}
@@ -204,7 +204,7 @@ const MeatCard = ({
                       }
                       style={{
                         // background: "#f4f8ff",
-                        background: "#f4f8ff",
+                        background: "#F5FAFF",
                         // background: "#eff5ff",
                         padding: "10px",
                       }}
@@ -247,7 +247,7 @@ const MeatCard = ({
                       style={{
                         // background: "#fafcff",
                         // background: "#f4f8ff",
-                        background: "#eff5ff",
+                        background: "#F0F8FF",
                         padding: "10px",
                       }}
                     >
@@ -289,7 +289,7 @@ const MeatCard = ({
                       style={{
                         // background: "#fdfdff",
                         // background: "#fafcff",
-                        background: "#ecf2fc" ,
+                        background: "#EBF4FF" ,
                         padding: "10px",
                       }}
                     >
@@ -320,7 +320,7 @@ const MeatCard = ({
                         )}
                       </div>
                     </div>
-                    <div className="col-xl-1 meatclose" style={{background: "#ecf2fc"}}>
+                    <div className="col-xl-1 meatclose" style={{background: "#EBF4FF"}}>
                     <div
                       className="d-flex"
                       

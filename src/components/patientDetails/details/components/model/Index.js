@@ -49,7 +49,7 @@ const ModelIndex = ({
       closable={isEdit?false:true} 
       width={
         combiTree
-          ? "auto"
+          ? "90%"
           : labReportFile
           ? "80%"
           : setOpenEdit
@@ -67,9 +67,9 @@ const ModelIndex = ({
           headerContent={search?.headerContent}
         />
       )}
-      {modalOpenValidContent
+      {modalOpenValidContent 
         ? modalOpenValidContent
-        : !setOpenEdit && (
+        : !setOpenEdit &&  !combiTree &&  (
             <div className="offcanvas-body">
               <div className="container-fluid">
                 <Form
