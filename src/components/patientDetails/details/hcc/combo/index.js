@@ -129,6 +129,7 @@ const Combo = ({
     setIsModalOpenCaptureSection(false);
     setIsAddComboCode(false);
     setFileLoading(false);
+    setOpens(false)
   };
 
   const handleChangeSuggested = async (e) => {

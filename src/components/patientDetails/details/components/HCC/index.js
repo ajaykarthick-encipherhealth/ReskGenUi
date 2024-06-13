@@ -116,6 +116,7 @@ const HccCards = ({
   );
   const handleCloseModal = () => {
     setOpenEdit(false);
+    setOpens(false)
     setInitialValues({
       header: "",
       searchString: "",
