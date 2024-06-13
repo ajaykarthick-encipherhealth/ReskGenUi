@@ -479,9 +479,9 @@ const Meat = ({
                           )}
                         </div>
                       </div>
-                      <div className="col-2">
-                        <div className={visitStyles.meat_title_card2_meat}>
-                          <h3
+                      <div style={{width:"auto"}}>
+                        <div className={`${visitStyles.meat_title_card2_meat}`}>
+                          <span
                             className={`text-center ${
                               selectMeatResult?.isMeatCriteriaPresent === true
                                 ? "text-success"
@@ -489,7 +489,7 @@ const Meat = ({
                             }`}
                           >
                             M
-                          </h3>
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -531,9 +531,9 @@ const Meat = ({
                           )}
                         </div>
                       </div>
-                      <div className="col-2">
+                      <div style={{width:"auto"}}>
                         <div className={visitStyles.meat_title_card2_meat}>
-                          <h3
+                          <span
                             className={`text-center ${
                               selectMeatResult?.isMeatCriteriaPresent === true
                                 ? "text-success"
@@ -541,7 +541,7 @@ const Meat = ({
                             }`}
                           >
                             E
-                          </h3>
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -583,9 +583,9 @@ const Meat = ({
                           )}
                         </div>
                       </div>
-                      <div className="col-2">
+                      <div style={{width:"auto"}}>
                         <div className={visitStyles.meat_title_card2_meat}>
-                          <h3
+                          <span
                             className={`text-center ${
                               selectMeatResult?.isMeatCriteriaPresent === true
                                 ? "text-success"
@@ -593,7 +593,7 @@ const Meat = ({
                             }`}
                           >
                             A
-                          </h3>
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -635,9 +635,9 @@ const Meat = ({
                           )}
                         </div>
                       </div>
-                      <div className="col-2">
+                      <div style={{width:"auto"}}>
                         <div className={visitStyles.meat_title_card2_meat}>
-                          <h3
+                          <span
                             className={`text-center ${
                               selectMeatResult?.isMeatCriteriaPresent === true
                                 ? "text-success"
@@ -645,7 +645,7 @@ const Meat = ({
                             }`}
                           >
                             T
-                          </h3>
+                          </span>
                         </div>
                       </div>
                     </div>
