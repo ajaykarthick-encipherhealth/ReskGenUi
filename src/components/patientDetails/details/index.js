@@ -535,6 +535,13 @@ const Details = ({
     setShowTerminal(false);
   }, []);
 
+
+  const getMastData = (value) => {
+    if(value){
+      return value.split('').splice(0,3).join('') + "xxxx"
+    }
+  }
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -581,10 +588,10 @@ const Details = ({
                               <div className="col-xl-2 col-sm-12">
                                 <FontAwesomeIcon icon={faIdCardClip} />
                                 <label>Patient ID</label>
-                                <Tooltip
+                                {/* <Tooltip
                                   placement="bottom"
                                   title={patientDocumentResult.patientId}
-                                >
+                                > */}
                                   <h6
                                     onClick={() =>
                                       handleCopyToClipboard({
@@ -598,22 +605,22 @@ const Details = ({
                                       cursor: "pointer",
                                     }}
                                   >
-                                    {patientDocumentResult.patientId}
+                                    {getMastData(patientDocumentResult.patientId)} 
                                   </h6>
-                                </Tooltip>
+                                {/* </Tooltip> */}
                               </div>
                               <div className="col-xl-2 col-sm-12">
                                 <FontAwesomeIcon icon={faUserCircle} />
 
                                 <label>Patient Name</label>
-                                <Tooltip
+                                {/* <Tooltip
                                   placement="bottom"
                                   title={patientDocumentResult.patientId}
-                                >
+                                > */}
                                   <h6 className="ageDtails">
-                                    {patientDocumentResult.patientId}
+                                    {getMastData(patientDocumentResult.patientId)}  
                                   </h6>
-                                </Tooltip>
+                                {/* </Tooltip> */}
                               </div>
                               <div className="col-xl-2 col-sm-12">
                                 <FontAwesomeIcon icon={faFile} />

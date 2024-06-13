@@ -18,6 +18,7 @@ import warning from "../../../../images/svg/warning.svg";
 import Image from "next/image";
 import YearAndDosStatus from "../components/yearAndDosStatus";
 import { getStatusIcon, selectTab } from "../../../reuseableFunctions";
+import { getStorage } from "../../../../utils/storages";
 
 const { Option } = Select;
 
@@ -235,8 +236,10 @@ const Hcc = ({
                       ))}
                     </Select>
                   </Nav.Item>
+                  
                   <Nav.Item as="li" className="nav-item mx-2">
-                    <YearAndDosStatus setIsLoading={setIsLoading} />
+                  {localStorage.getItem('role') != "admin" && 
+                    <YearAndDosStatus setIsLoading={setIsLoading} />}
                   </Nav.Item>
                   {activeTabHead == 1 && (
                     <Popover
