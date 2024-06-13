@@ -3,10 +3,7 @@ import visitStyles from "../../../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Badge, Popconfirm, Popover, Tooltip, Tag } from "antd";
 import styles from "../../hcc/styles.module.css";
-import {
-  faArrowsAlt,
-  faPen,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowsAlt, faPen } from "@fortawesome/free-solid-svg-icons";
 import {
   getCaptureSectionBackgroundMeatNew,
   getEncounterDateBackground,
@@ -41,7 +38,7 @@ const MeatCard = ({
   setMeatEdit,
   addMeatQuery,
   onchangeMeat,
-  getDisTitlePopover
+  getDisTitlePopover,
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
@@ -49,25 +46,25 @@ const MeatCard = ({
 
   return (
     <>
-   <div className="my-post-content pt-3">
+      <div className="my-post-content pt-3">
         <div className={visitStyles.meat_head_card}>
           <div className="row">
-            <div className="col-xl-1">
+            <div className="col-xl-1 text-center text-uppercase">
               <label>Codes</label>
             </div>
-            <div className="col-xl-2">
+            <div className="col-xl-2 text-center text-uppercase">
               <label>Description</label>
             </div>
-            <div className="col-xl-2">
+            <div className="col-xl-2 text-center text-uppercase">
               <label>Monitor</label>
             </div>
-            <div className="col-xl-2">
+            <div className="col-xl-2 text-center text-uppercase">
               <label>Evaluation</label>
             </div>
-            <div className="col-xl-2">
+            <div className="col-xl-2 text-center text-uppercase">
               <label>Assessment</label>
             </div>
-            <div className="col-xl-2">
+            <div className="col-xl-2 text-center text-uppercase">
               <label>Treatment</label>
             </div>
             <div className="col-xl-1">
@@ -75,19 +72,23 @@ const MeatCard = ({
             </div>
           </div>
         </div>
-          <div className={visitStyles.meatcontainer}>
-            <div className={visitStyles.hccStickey_head}>
-              {list?.map((item) => {
-                return (
-                  <div
-                    className={
-                      item.isMeatCriteriaPresent === true
-                        ? `${visitStyles.meat_details_card}`
-                        : `${visitStyles.meat_details_card_false}`
-                    }
-                  >
-                    <div className="row">
-                      <div className="col-xl-3">
+        <div className={visitStyles.meatcontainer}>
+          <div className={visitStyles.hccStickey_head}>
+            {list?.map((item) => {
+              return (
+                <div
+                  className={
+                    item.isMeatCriteriaPresent === true
+                      ? `${visitStyles.meat_details_card_table}`
+                      : `${visitStyles.meat_details_card_false_table}`
+                  }
+                >
+                  <div className="row">
+                    <div className="col-xl-3 pe-0">
+                      <div
+                        className="rounded-start-2 p-3"
+                        // style={{ background: "#ecf2fc" }}
+                      >
                         <div className="row">
                           <div className="col-xl-4 d-grid">
                             <span className="meat-name-details font-bold">
@@ -145,216 +146,250 @@ const MeatCard = ({
                           })}
                         </div>
                       </div>
-
-                      <div
-                        className={
-                          activeMeatTitle?.header === "M" &&
-                          activeMeatTitle?.diagnosisCode?.replace(".", "") ==
-                            item?.diagnosisCode?.replace(".", "")
-                            ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
-                            : `col-xl-2 d-grid`
-                        }
-                      >
-                        {getDisTitlePopover(
-                          "Monitor",
-                          item.monitorAspect,
+                    </div>
+                    {/* <div
+                        className="rounded-start-2 p-3"
+                        
+                      > */}
+                    <div
+                      className={
+                        activeMeatTitle?.header === "M" &&
+                        activeMeatTitle?.diagnosisCode?.replace(".", "") ==
+                          item?.diagnosisCode?.replace(".", "")
+                          ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                          : `col-xl-2 d-grid`
+                      }
+                      style={{
+                        // background: "#eff5ff",
+                        background: "#fafcff",
+                        // background: "#ecf2fc" ,
+                        padding: "10px",
+                      }}
+                    >
+                      {getDisTitlePopover(
+                        "Monitor",
+                        item.monitorAspect,
+                        item.monitorHyperLink,
+                        item
+                      )}
+                      <div>
+                        {getCaptureSectionBackgroundMeatNew(
                           item.monitorHyperLink,
-                          item
+                          captureSectionMatching,
+                          "hcc",
+                          setSearch,
+                          setFileLoading,
+                          setIsModalOpenLab,
+                          setIsModalOpenRadiology,
+                          setIsModalOpen,
+                          setFileModalHeader,
+                          patientDocumentResult,
+                          fileInitialPage,
+                          setFileInitialPage,
+                          item.diagnosisCode,
+                          setSelectMeatResult,
+                          item,
+                          setSelectHyperlink
                         )}
-                        <div>
-                          {getCaptureSectionBackgroundMeatNew(
-                            item.monitorHyperLink,
-                            captureSectionMatching,
-                            "hcc",
-                            setSearch,
-                            setFileLoading,
-                            setIsModalOpenLab,
-                            setIsModalOpenRadiology,
-                            setIsModalOpen,
-                            setFileModalHeader,
-                            patientDocumentResult,
-                            fileInitialPage,
-                            setFileInitialPage,
-                            item.diagnosisCode,
-                            setSelectMeatResult,
-                            item,
-                            setSelectHyperlink
-                          )}
-                        </div>
-                      </div>
-                      <div
-                        className={
-                          activeMeatTitle?.header === "E" &&
-                          activeMeatTitle?.diagnosisCode?.replace(".", "") ==
-                            item?.diagnosisCode?.replace(".", "")
-                            ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
-                            : `col-xl-2 d-grid`
-                        }
-                      >
-                        {getDisTitlePopover(
-                          "Evaluate",
-                          item.evaluateAspect,
-                          item.evaluateHyperLink,
-                          item
-                        )}
-                        <div>
-                          {getCaptureSectionBackgroundMeatNew(
-                            item.evaluateHyperLink,
-                            captureSectionMatching,
-                            "hcc",
-                            setSearch,
-                            setFileLoading,
-                            setIsModalOpenLab,
-                            setIsModalOpenRadiology,
-                            setIsModalOpen,
-                            setFileModalHeader,
-                            patientDocumentResult,
-                            fileInitialPage,
-                            setFileInitialPage,
-                            item.diagnosisCode,
-                            setSelectMeatResult,
-                            item,
-                            setSelectHyperlink
-                          )}
-                        </div>
-                      </div>
-                      <div
-                        className={
-                          activeMeatTitle?.header === "A" &&
-                          activeMeatTitle?.diagnosisCode?.replace(".", "") ==
-                            item?.diagnosisCode?.replace(".", "")
-                            ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
-                            : `col-xl-2 d-grid`
-                        }
-                      >
-                        {getDisTitlePopover(
-                          "Assessment",
-                          item.assessmentAspect,
-                          item.assessmentHyperLink,
-                          item
-                        )}
-                        <div>
-                          {getCaptureSectionBackgroundMeatNew(
-                            item.assessmentHyperLink,
-                            captureSectionMatching,
-                            "hcc",
-                            setSearch,
-                            setFileLoading,
-                            setIsModalOpenLab,
-                            setIsModalOpenRadiology,
-                            setIsModalOpen,
-                            setFileModalHeader,
-                            patientDocumentResult,
-                            fileInitialPage,
-                            setFileInitialPage,
-                            item.diagnosisCode,
-                            setSelectMeatResult,
-                            item,
-                            setSelectHyperlink
-                          )}
-                        </div>
-                      </div>
-                      <div
-                        className={
-                          activeMeatTitle?.header === "T" &&
-                          activeMeatTitle?.diagnosisCode?.replace(".", "") ==
-                            item?.diagnosisCode?.replace(".", "")
-                            ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
-                            : `col-xl-2 d-grid`
-                        }
-                      >
-                        {getDisTitlePopover(
-                          "Treatment",
-                          item.treatmentAspect,
-                          item.treatmentHyperLink,
-                          item
-                        )}
-                        <div>
-                          {getCaptureSectionBackgroundMeatNew(
-                            item.treatmentHyperLink,
-                            captureSectionMatching,
-                            "hcc",
-                            setSearch,
-                            setFileLoading,
-                            setIsModalOpenLab,
-                            setIsModalOpenRadiology,
-                            setIsModalOpen,
-                            setFileModalHeader,
-                            patientDocumentResult,
-                            fileInitialPage,
-                            setFileInitialPage,
-                            item.diagnosisCode,
-                            setSelectMeatResult,
-                            item,
-                            setSelectHyperlink
-                          )}
-                        </div>
-                      </div>
-                      <div className="col-xl-1 meatclose">
-                        <Popconfirm
-                          title={popConfirmTitle}
-                          onConfirm={() =>
-                            moveToAnotherAction(
-                              setConfirmNotesModalValid,
-                              setIsValidAction,
-                              popConfirmTitle == "You want move to delete?" ? "Move to Deleted" : "Move to valid",
-                              "MEAT"
-                            )
-                          }
-                          placement="leftTop"
-                          okText={okText}
-                          cancelText={cancelText}
-                          onOpenChange={() =>
-                            onchangeMeat(item)
-                          }
-                        >
-                          <div className={visitStyles.close_icon}>
-                            <FontAwesomeIcon
-                              icon={faArrowsAlt}
-                              style={{ size: 8, color: "#a80404" }}
-                            />
-                          </div>
-                        </Popconfirm>
-                        <Tooltip title="Edit">
-                          <div
-                            className={visitStyles.edit_icon}
-                            onClick={() => {
-                              setMeatEdit(true);
-                              setEditData(item);
-                            }}
-                          >
-                            <FontAwesomeIcon
-                              icon={faPen}
-                              style={{ size: 8, color: "#706e70" }}
-                            />
-                          </div>
-                        </Tooltip>
-                        {item.isMeatCriteriaPresent === false ? (
-                          <div
-                            onClick={() => addMeatQuery(item, "Add")}
-                            className={visitStyles.add_meat_query}
-                          >
-                            {SVGICON.meatQueryIcon}
-                          </div>
-                        ) : null}
                       </div>
                     </div>
-                  </div>
-                );
-              })}
-              </div>
-              </div>
 
-              {list.length == 0 ? (
-                <div className="card combo-card">
-                  <div className="col-xl-12">
-                    <div>
-                      <span className="no-patient-data">NO DATA</span>
+                    <div
+                      className={
+                        activeMeatTitle?.header === "E" &&
+                        activeMeatTitle?.diagnosisCode?.replace(".", "") ==
+                          item?.diagnosisCode?.replace(".", "")
+                          ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                          : `col-xl-2 d-grid`
+                      }
+                      style={{
+                        // background: "#f4f8ff",
+                        background: "#f4f8ff",
+                        // background: "#eff5ff",
+                        padding: "10px",
+                      }}
+                    >
+                      {getDisTitlePopover(
+                        "Evaluate",
+                        item.evaluateAspect,
+                        item.evaluateHyperLink,
+                        item
+                      )}
+                      <div>
+                        {getCaptureSectionBackgroundMeatNew(
+                          item.evaluateHyperLink,
+                          captureSectionMatching,
+                          "hcc",
+                          setSearch,
+                          setFileLoading,
+                          setIsModalOpenLab,
+                          setIsModalOpenRadiology,
+                          setIsModalOpen,
+                          setFileModalHeader,
+                          patientDocumentResult,
+                          fileInitialPage,
+                          setFileInitialPage,
+                          item.diagnosisCode,
+                          setSelectMeatResult,
+                          item,
+                          setSelectHyperlink
+                        )}
+                      </div>
+                    </div>
+                    <div
+                      className={
+                        activeMeatTitle?.header === "A" &&
+                        activeMeatTitle?.diagnosisCode?.replace(".", "") ==
+                          item?.diagnosisCode?.replace(".", "")
+                          ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                          : `col-xl-2 d-grid`
+                      }
+                      style={{
+                        // background: "#fafcff",
+                        // background: "#f4f8ff",
+                        background: "#eff5ff",
+                        padding: "10px",
+                      }}
+                    >
+                      {getDisTitlePopover(
+                        "Assessment",
+                        item.assessmentAspect,
+                        item.assessmentHyperLink,
+                        item
+                      )}
+                      <div>
+                        {getCaptureSectionBackgroundMeatNew(
+                          item.assessmentHyperLink,
+                          captureSectionMatching,
+                          "hcc",
+                          setSearch,
+                          setFileLoading,
+                          setIsModalOpenLab,
+                          setIsModalOpenRadiology,
+                          setIsModalOpen,
+                          setFileModalHeader,
+                          patientDocumentResult,
+                          fileInitialPage,
+                          setFileInitialPage,
+                          item.diagnosisCode,
+                          setSelectMeatResult,
+                          item,
+                          setSelectHyperlink
+                        )}
+                      </div>
+                    </div>
+                    <div
+                      className={
+                        activeMeatTitle?.header === "T" &&
+                        activeMeatTitle?.diagnosisCode?.replace(".", "") ==
+                          item?.diagnosisCode?.replace(".", "")
+                          ? `col-xl-2 d-grid ${styles.meatHyperlinkActiveClass}`
+                          : `col-xl-2 d-grid`
+                      }
+                      style={{
+                        // background: "#fdfdff",
+                        // background: "#fafcff",
+                        background: "#ecf2fc" ,
+                        padding: "10px",
+                      }}
+                    >
+                      {getDisTitlePopover(
+                        "Treatment",
+                        item.treatmentAspect,
+                        item.treatmentHyperLink,
+                        item
+                      )}
+                      <div>
+                        {getCaptureSectionBackgroundMeatNew(
+                          item.treatmentHyperLink,
+                          captureSectionMatching,
+                          "hcc",
+                          setSearch,
+                          setFileLoading,
+                          setIsModalOpenLab,
+                          setIsModalOpenRadiology,
+                          setIsModalOpen,
+                          setFileModalHeader,
+                          patientDocumentResult,
+                          fileInitialPage,
+                          setFileInitialPage,
+                          item.diagnosisCode,
+                          setSelectMeatResult,
+                          item,
+                          setSelectHyperlink
+                        )}
+                      </div>
+                    </div>
+                    <div className="col-xl-1 meatclose" style={{background: "#ecf2fc"}}>
+                    <div
+                      className="d-flex"
+                      
+                    >
+                      <Popconfirm
+                        title={popConfirmTitle}
+                        onConfirm={() =>
+                          moveToAnotherAction(
+                            setConfirmNotesModalValid,
+                            setIsValidAction,
+                            popConfirmTitle == "You want move to delete?"
+                              ? "Move to Deleted"
+                              : "Move to valid",
+                            "MEAT"
+                          )
+                        }
+                        placement="leftTop"
+                        okText={okText}
+                        cancelText={cancelText}
+                        onOpenChange={() => onchangeMeat(item)}
+                      >
+                        <div className={visitStyles.close_icon}>
+                          <FontAwesomeIcon
+                            icon={faArrowsAlt}
+                            style={{ size: 8, color: "#a80404" }}
+                          />
+                        </div>
+                      </Popconfirm>
+                      <Tooltip title="Edit">
+                        <div
+                          className={visitStyles.edit_icon}
+                          onClick={() => {
+                            setMeatEdit(true);
+                            setEditData(item);
+                          }}
+                        >
+                          <FontAwesomeIcon
+                            icon={faPen}
+                            style={{ size: 8, color: "#706e70" }}
+                          />
+                        </div>
+                      </Tooltip>
+                      {item.isMeatCriteriaPresent === false ? (
+                        <div
+                          onClick={() => addMeatQuery(item, "Add")}
+                          className={visitStyles.add_meat_query}
+                        >
+                          {SVGICON.meatQueryIcon}
+                        </div>
+                      ) : null}
+                    </div>
                     </div>
                   </div>
                 </div>
-              ) : null}
+              );
+            })}
+          </div>
+        </div>
+
+        {list.length == 0 ? (
+          <div className="card combo-card">
+            <div className="col-xl-12">
+              <div>
+                <span className="no-patient-data">NO DATA</span>
               </div>
+            </div>
+          </div>
+        ) : null}
+      </div>
     </>
   );
 };

@@ -70,7 +70,6 @@ const Meat = ({
   const [selectDisDetails, setSelectDisDetails] = useState(false);
   const [deletedMeatList, setDeletedMeatList] = useState([]);
 
-
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
     var tenId = localStorage.getItem("tenantId");
@@ -91,8 +90,7 @@ const Meat = ({
       "",
       "",
       "",
-      setDeletedMeatList,
-      
+      setDeletedMeatList
     );
   }, [patientDetailsResult]);
 
@@ -177,7 +175,7 @@ const Meat = ({
     if (value) {
       popOver = (
         <Popover
-          placement="top"
+          placement="topLeft"
           title={title}
           content={
             <>
@@ -207,7 +205,7 @@ const Meat = ({
             </>
           }
         >
-          <span className="meat-name-details">{value}</span>
+          <span className="">{value}</span>
         </Popover>
       );
     } else {
@@ -286,40 +284,40 @@ const Meat = ({
         addMeatQuery={addMeatQuery}
         getDisTitlePopover={getDisTitlePopover}
       />
-     
-      {deletedMeatList?.length != 0 && 
+
+      {deletedMeatList?.length != 0 && (
         <>
-         <div className="invalid-combo">
-       <span>Deleted MeatCriteria</span>
-     </div>
-      <MeatCard
-        list={deletedMeatList}
-        captureSectionMatching={captureSectionMatching}
-        encounterDateMatching={encounterDateMatching}
-        okText="OK"
-        cancelText="Cancel"
-        popConfirmTitle="You want move to valid?"
-        setSearch={setSearch}
-        setFileLoading={setFileLoading}
-        setFileModalHeader={setFileModalHeader}
-        onchangeMeat={onchangeMeat}
-        setIsModalOpen={setIsModalOpen}
-        isAddComboCode={false}
-        setConfirmNotesModalValid={setConfirmNotesModalValid}
-        setIsValidAction={setIsValidAction}
-        patientDocumentResult={patientDocumentResult}
-        setSelectMeatResult={setSelectMeatResult}
-        activeMeatTitle={activeMeatTitle}
-        setIsModalOpenLab={setIsModalOpenLab}
-        setIsModalOpenRadiology={setIsModalOpenRadiology}
-        setSelectHyperlink={setSelectHyperlink}
-        setEditData={setEditData}
-        setMeatEdit={setMeatEdit}
-        addMeatQuery={addMeatQuery}
-        getDisTitlePopover={getDisTitlePopover}
-      />
+          <div className="invalid-combo">
+            <span>Deleted MeatCriteria</span>
+          </div>
+          <MeatCard
+            list={deletedMeatList}
+            captureSectionMatching={captureSectionMatching}
+            encounterDateMatching={encounterDateMatching}
+            okText="OK"
+            cancelText="Cancel"
+            popConfirmTitle="You want move to valid?"
+            setSearch={setSearch}
+            setFileLoading={setFileLoading}
+            setFileModalHeader={setFileModalHeader}
+            onchangeMeat={onchangeMeat}
+            setIsModalOpen={setIsModalOpen}
+            isAddComboCode={false}
+            setConfirmNotesModalValid={setConfirmNotesModalValid}
+            setIsValidAction={setIsValidAction}
+            patientDocumentResult={patientDocumentResult}
+            setSelectMeatResult={setSelectMeatResult}
+            activeMeatTitle={activeMeatTitle}
+            setIsModalOpenLab={setIsModalOpenLab}
+            setIsModalOpenRadiology={setIsModalOpenRadiology}
+            setSelectHyperlink={setSelectHyperlink}
+            setEditData={setEditData}
+            setMeatEdit={setMeatEdit}
+            addMeatQuery={addMeatQuery}
+            getDisTitlePopover={getDisTitlePopover}
+          />
         </>
-      }
+      )}
 
       {isModalOpen && (
         <Modal
@@ -369,25 +367,25 @@ const Meat = ({
             <div className="row">
               <div className="col-xl-4">
                 <div style={{ height: "90%", overflowY: "scroll" }}>
-                  <div className={visitStyles.meat_title_card2}>
-                    <div className="row">
-                      <div className="col-xl-6">
-                        <label>Codes</label>
-                      </div>
-                      <div className="col-xl-6">
-                        <label>Description</label>
-                      </div>
-                    </div>
-                  </div>
-
                   <div
                     className={
                       selectMeatResult?.isMeatCriteriaPresent === true
                         ? `${visitStyles.meat_details_card2}`
-                        : `${visitStyles.meat_details_card_false}`
+                        : `${visitStyles.meat_details_card_false_1}`
                     }
                   >
-                    <div className="row">
+                    <div className={visitStyles.meat_title_card2_meat}>
+                      <div className="row">
+                        <div className="col-xl-6">
+                          <label>Codes</label>
+                        </div>
+                        <div className="col-xl-6">
+                          <label>Description</label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="row p-2">
                       <div className="col-xl-6 d-grid">
                         <span className="font-bold">
                           {selectMeatResult?.diagnosisCode}
@@ -444,22 +442,16 @@ const Meat = ({
                       </div>
                     </div>
                   </div>
-                  <div className={visitStyles.meat_title_card2}>
-                    <div className="row">
-                      <div className="col-xl-12">
-                        <label>Monitor</label>
-                      </div>
-                    </div>
-                  </div>
+
                   <div
                     className={
                       selectMeatResult?.isMeatCriteriaPresent === true
                         ? `${visitStyles.meat_details_card2}`
-                        : `${visitStyles.meat_details_card_false}`
+                        : `${visitStyles.meat_details_card_false_1}`
                     }
                   >
-                    <div className="row">
-                      <div className="col-xl-12 d-grid">
+                    <div className="row p-2">
+                      <div className="col-10 d-grid">
                         {getDisTitlePopover(
                           "Monitor",
                           selectMeatResult?.monitorAspect,
@@ -487,25 +479,31 @@ const Meat = ({
                           )}
                         </div>
                       </div>
-                    </div>
-                  </div>
-
-                  <div className={visitStyles.meat_title_card2}>
-                    <div className="row">
-                      <div className="col-xl-12">
-                        <label>Evaluation</label>
+                      <div className="col-2">
+                        <div className={visitStyles.meat_title_card2_meat}>
+                          <h3
+                            className={`text-center ${
+                              selectMeatResult?.isMeatCriteriaPresent === true
+                                ? "text-success"
+                                : "text-danger"
+                            }`}
+                          >
+                            M
+                          </h3>
+                        </div>
                       </div>
                     </div>
                   </div>
+
                   <div
                     className={
                       selectMeatResult?.isMeatCriteriaPresent === true
                         ? `${visitStyles.meat_details_card2}`
-                        : `${visitStyles.meat_details_card_false}`
+                        : `${visitStyles.meat_details_card_false_1}`
                     }
                   >
-                    <div className="row">
-                      <div className="col-xl-12 d-grid">
+                    <div className="row p-2">
+                      <div className="col-10 d-grid">
                         {getDisTitlePopover(
                           "Evaluate",
                           selectMeatResult?.evaluateAspect,
@@ -533,25 +531,31 @@ const Meat = ({
                           )}
                         </div>
                       </div>
-                    </div>
-                  </div>
-
-                  <div className={visitStyles.meat_title_card2}>
-                    <div className="row">
-                      <div className="col-xl-12">
-                        <label>Assessment</label>
+                      <div className="col-2">
+                        <div className={visitStyles.meat_title_card2_meat}>
+                          <h3
+                            className={`text-center ${
+                              selectMeatResult?.isMeatCriteriaPresent === true
+                                ? "text-success"
+                                : "text-danger"
+                            }`}
+                          >
+                            E
+                          </h3>
+                        </div>
                       </div>
                     </div>
                   </div>
+
                   <div
                     className={
                       selectMeatResult?.isMeatCriteriaPresent === true
                         ? `${visitStyles.meat_details_card2}`
-                        : `${visitStyles.meat_details_card_false}`
+                        : `${visitStyles.meat_details_card_false_1}`
                     }
                   >
-                    <div className="row">
-                      <div className="col-xl-12 d-grid">
+                    <div className="row p-2">
+                      <div className="col-10 d-grid">
                         {getDisTitlePopover(
                           "Assesssment",
                           selectMeatResult?.assessmentAspect,
@@ -579,24 +583,31 @@ const Meat = ({
                           )}
                         </div>
                       </div>
-                    </div>
-                  </div>
-                  <div className={visitStyles.meat_title_card2}>
-                    <div className="row">
-                      <div className="col-xl-12">
-                        <label>Treatment</label>
+                      <div className="col-2">
+                        <div className={visitStyles.meat_title_card2_meat}>
+                          <h3
+                            className={`text-center ${
+                              selectMeatResult?.isMeatCriteriaPresent === true
+                                ? "text-success"
+                                : "text-danger"
+                            }`}
+                          >
+                            A
+                          </h3>
+                        </div>
                       </div>
                     </div>
                   </div>
+
                   <div
                     className={
                       selectMeatResult?.isMeatCriteriaPresent === true
                         ? `${visitStyles.meat_details_card2}`
-                        : `${visitStyles.meat_details_card_false}`
+                        : `${visitStyles.meat_details_card_false_1}`
                     }
                   >
-                    <div className="row">
-                      <div className="col-xl-12 d-grid">
+                    <div className="row p-2">
+                      <div className="col-10 d-grid">
                         {getDisTitlePopover(
                           "Treatment",
                           selectMeatResult?.treatmentAspect,
@@ -622,6 +633,19 @@ const Meat = ({
                             selectMeatResult,
                             setSelectHyperlink
                           )}
+                        </div>
+                      </div>
+                      <div className="col-2">
+                        <div className={visitStyles.meat_title_card2_meat}>
+                          <h3
+                            className={`text-center ${
+                              selectMeatResult?.isMeatCriteriaPresent === true
+                                ? "text-success"
+                                : "text-danger"
+                            }`}
+                          >
+                            T
+                          </h3>
                         </div>
                       </div>
                     </div>
