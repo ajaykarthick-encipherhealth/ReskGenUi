@@ -578,7 +578,7 @@ export const getPatientDetails = async (
       }
       });
       result?.deletedMeatCriteria?.map((res, index) => {
-       
+       if (res) {
           var providerList = [];
           var dosList = [];
           res.providerNames?.map((res) => {
@@ -619,7 +619,7 @@ export const getPatientDetails = async (
             hyperlinks: res?.hyperlinks,
             dateOfServices:res.dateOfServices,
           });
-      });
+      }});
 
       // let sectionColorResultMatchMeat = sectionColorResult?.filter((o1) =>
       //   meatHeaderList.some((o2) => o1.sectionName === o2.name)
