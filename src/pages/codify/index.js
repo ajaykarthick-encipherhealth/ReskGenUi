@@ -48,6 +48,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   const [expandedKeys, setExpandedKeys] = useState([]);
   const [autoExpandParent, setAutoExpandParent] = useState(true);
   const [parentCode, setParentCode] = useState([]);
+  const [hideButton, setHideButton] = useState(false);
 
   const handleRiskAdjustment = () => {
     setActiveButton("Risk Adjustment");
@@ -56,6 +57,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   const handleButtonClick = () => {
     setActiveButton("ICD-10");
     setSearchInput(null);
+    setParentCode(null)
   };
   const handleInputChange = (e) => {
     setSearchInput(e.target.value);
@@ -95,6 +97,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
     setSearchInput(value)
     fetchTreeData(value);
     fetchCodeData(value);
+    setHideButton(false);
 
   }
   
@@ -120,8 +123,8 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   };
 
   const fetchTreeData = async (value) => {
-    setLoading(true);
-    let treeData = await codifyData({ diseases: value ? value : searchInput });
+    setLoading(true)
+ ;   let treeData = await codifyData({ diseases: value ? value : searchInput });
     if (treeData?.status == "SUCCESS") {
       let temp = convertICDStructureToTreeData(treeData?.response);
       if (!treeData?.response?.length) {
@@ -263,7 +266,9 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
             <div className="d-flex gap-2 px-3 ">
               <Button
                 className={currentButton === "Codes" ? style.both : style.code}
-                onClick={() => setCurrentButton("Codes")}
+                onClick={() => {setCurrentButton("Codes")
+                  setHideButton(false);
+                }}
               >
                 Tree View
               </Button>
@@ -271,7 +276,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
                 className={
                   currentButton === "Description" ? style.both : style.code
                 }
-                onClick={() => setCurrentButton("Description")}
+                onClick={() => {setCurrentButton("Description"), setHideButton(false);}}
               >
                 Codes
               </Button>
@@ -343,6 +348,8 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
                 setSearchInput={setSearchInput}
                 searchInput={searchInput}
                 setParentCode={setParentCode}
+                hideButton={hideButton}
+                setHideButton={setHideButton}
               />
             )}
           </>
