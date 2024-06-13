@@ -200,9 +200,6 @@ const UserList = () => {
     }, 750);
   }, [addUser]);
 
-  // const onRoleChange = (value) => {
-  //   // console.log(value);
-  // };
   const onFinish = (values) => {
     handleSubmit(values);
   };
