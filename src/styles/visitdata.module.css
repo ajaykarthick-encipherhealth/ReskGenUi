@@ -638,8 +638,11 @@
 .meat_title_card2_meat {
   border-radius: 10px;
   background: #e1edfe;
-  padding: 5px 10px 2px 10px;
-  /* margin-bottom: 10px; */
+  height: auto;
+  padding: 10px 15px;
+  font-weight: 700;
+  font-size: 16px;
+  /* margi-bottom: 10px; */
   /* position: sticky; */
   top: 0;
   /* margin-top: 10px; */

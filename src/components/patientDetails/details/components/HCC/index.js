@@ -116,6 +116,7 @@ const HccCards = ({
   );
   const handleCloseModal = () => {
     setOpenEdit(false);
+    setOpens(false)
     setInitialValues({
       header: "",
       searchString: "",
@@ -128,6 +129,7 @@ const HccCards = ({
       {provided && (
         <div ref={provided?.innerRef} {...provided?.droppableProps}>
           {list?.map((data, i) => (
+            !data.isComboCode == true && // this condation we added for vignesh suggest to remove isCombo pracent 
             <>
               <li key={data?.id}>
                 <Draggable

@@ -133,6 +133,7 @@ const VisitData = ({
     setIsModalOpenLab(false);
     setIsFileFormShow(false);
     setFileLoading(false);
+    setOpens(false)
   };
 
   const addValidDiseases = () => {
