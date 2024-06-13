@@ -164,8 +164,6 @@ export const handleRnagePicker2 = ({
     return formattedDate;
   });
 
-  console.log("Formatted dates:", formattedDates);
-
   if (setStartDate && setEndDate) {
     setStartDate(formattedDates[0]);
     setEndDate(formattedDates[1]);
