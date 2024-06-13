@@ -256,7 +256,7 @@ const Tables = (props) => {
                         ))}
                     </div>
                   )}
-                  {data?.excludes && (
+                  {data?.excludes1 && (
                     <div className=" mt-2 ">
                       <span className={style.excludes}>Excludes1</span>
                       {data?.excludes1 &&
