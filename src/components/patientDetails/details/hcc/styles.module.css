@@ -398,7 +398,8 @@
   padding: 10px;
 }
 .meatHyperlinkActiveClass {
-  background: #e1edfe;
+  /* background: #e1edfe; */
+  border: 2px solid green;
   border-radius: 10px;
   padding: 10px;
 }

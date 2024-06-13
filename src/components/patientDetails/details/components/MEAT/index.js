@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Badge, Popconfirm, Popover, Tooltip, Tag } from "antd";
@@ -44,6 +44,11 @@ const MeatCard = ({
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
 
+const highlight = (code) => {
+  if (code == activeMeatTitle?.diagnosisCode) {
+    return true
+  }
+}
   return (
     <>
       <div className="my-post-content pt-3">
@@ -164,6 +169,7 @@ const MeatCard = ({
                         background: "#edf5ff",
                         // background: "#ecf2fc" ,
                         padding: "10px",
+                        
                       }}
                     >
                       {getDisTitlePopover(
