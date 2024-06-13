@@ -237,6 +237,7 @@ const Tables = (props) => {
             )}
           </div>
         )}
+        {parentCode?.length ?
         <div className={style.parent}>
           {parentCode?.length && 
             parentCode?.map((data) => {
@@ -309,7 +310,7 @@ const Tables = (props) => {
               </div>
             ))}
           </div>
-        </div>
+        </div>:""}
       </div>
     </div>
   );
