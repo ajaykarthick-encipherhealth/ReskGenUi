@@ -296,6 +296,7 @@ const Tables = (props) => {
                 </>
               );
             })}
+             </div>:""}
           <div className={style.list}>
             {codeData?.children?.map((s, i) => (
               <div key={i} onClick={() => handleViewTable(s, i)}>
@@ -310,7 +311,7 @@ const Tables = (props) => {
               </div>
             ))}
           </div>
-        </div>:""}
+       
       </div>
     </div>
   );
