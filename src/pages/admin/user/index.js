@@ -200,9 +200,6 @@ const UserList = () => {
     }, 750);
   }, [addUser]);
 
-  // const onRoleChange = (value) => {
-  //   // console.log(value);
-  // };
   const onFinish = (values) => {
     handleSubmit(values);
   };
@@ -235,7 +232,7 @@ const UserList = () => {
                         selectOptions2={RoleList}
                         defaultSelectValue2={""}
                         setSelectedOption2={setRole}
-                        selectedValue2={role} 
+                        selectedValue2={role}
                         // computation date
                         pickerlabel="Created date Range"
                         selectedDates={selectedDates}
@@ -523,16 +520,9 @@ const UserList = () => {
                         allowClear
                         style={{ height: "42px" }}
                       >
-                        <Select.Option value="ADMIN">ADMIN</Select.Option>
                         <Select.Option value="REVIEWER">REVIEWER</Select.Option>
                         <Select.Option value="SUPERVISOR">
                           SUPERVISOR
-                        </Select.Option>
-                        <Select.Option value="ADMIN_TECHNICAL_SUPPORT">
-                          ADMIN TECHNICAL SUPPORT
-                        </Select.Option>
-                        <Select.Option value="L2AUDITOR">
-                          ADMIN MEDICAL CODER
                         </Select.Option>
                       </Select>
                     </Form.Item>
@@ -560,7 +550,7 @@ const UserList = () => {
                               !/[A-Z]/.test(value)
                             ) {
                               return Promise.reject(
-                                "Please enter a password with both lowercase and uppercase characters."
+                                "Keep it strong! Your password must be case sensitive"
                               );
                             }
                             return Promise.resolve();
@@ -595,7 +585,7 @@ const UserList = () => {
                               return Promise.resolve();
                             }
                             return Promise.reject(
-                              "The two passwords do not match!"
+                              "Passwords do not match. Please verify and re-enter."
                             );
                           },
                         }),
