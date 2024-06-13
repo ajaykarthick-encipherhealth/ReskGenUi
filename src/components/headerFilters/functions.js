@@ -452,6 +452,7 @@ export const renderUserPrfoile = (
     return profileAvatar;
   }
 };
+
 export const renderUserPrfoileAvatar = (
   firstName,
   lastName,
