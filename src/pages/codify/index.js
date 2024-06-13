@@ -57,6 +57,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   const handleButtonClick = () => {
     setActiveButton("ICD-10");
     setSearchInput(null);
+    setParentCode(null)
   };
   const handleInputChange = (e) => {
     setSearchInput(e.target.value);
