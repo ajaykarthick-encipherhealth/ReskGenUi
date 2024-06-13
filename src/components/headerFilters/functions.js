@@ -139,6 +139,55 @@ export const handleRnagePicker = ({
 };
 
 // if has 2 rangepickers
+// export const handleRnagePicker2 = ({
+//   date,
+//   dateString,
+//   setStartDate,
+//   setEndDate,
+//   setStartDate2,
+//   setEndDate2,
+//   setStartDate3,
+//   setEndDate3,
+//   setStartDate4,
+//   setEndDate4,
+//   setStartDate5,
+//   setEndDate5,
+//   setStartDate6,
+//   setEndDate6,
+// }) => {
+//   const formattedDates = date?.map((date, index) => {
+//     const formattedDate =
+//       index === 1
+//         ? moment(date).format("YYYY-MM-DD") + "T23:59:59.999Z"
+//         : moment(date).format("YYYY-MM-DD") + "T00:00:00.000Z";
+//     return formattedDate;
+//   });
+//   if (setStartDate && setEndDate) {
+//     setStartDate(formattedDates[0]);
+//     setEndDate(formattedDates[1]);
+//   }
+//   if (setStartDate2 && setEndDate2) {
+//     setStartDate2(formattedDates[0]);
+//     setEndDate2(formattedDates[1]);
+//   }
+//   if (setStartDate3 && setEndDate3) {
+//     setStartDate3(formattedDates[0]);
+//     setEndDate3(formattedDates[1]);
+//   }
+//   if (setStartDate4 && setEndDate4) {
+//     setStartDate4(formattedDates[0]);
+//     setEndDate4(formattedDates[1]);
+//   }
+//   if (setStartDate5 && setEndDate5) {
+//     setStartDate5(formattedDates[0]);
+//     setEndDate5(formattedDates[1]);
+//   }
+//   if (setStartDate6 && setEndDate6) {
+//     setStartDate6(formattedDates[0]);
+//     setEndDate6(formattedDates[1]);
+//   }
+// };
+
 export const handleRnagePicker2 = ({
   date,
   dateString,
@@ -155,37 +204,54 @@ export const handleRnagePicker2 = ({
   setStartDate6,
   setEndDate6,
 }) => {
-  const formattedDates = dateString?.map((date, index) => {
-    const formattedDate =
-      index === 1
-        ? date && `${date}T23:59:59.999Z`
-        : date && `${date}T00:00:00.000Z`;
-    return formattedDate;
+  if (!date || date.length === 0) {
+    if (setStartDate) setStartDate("");
+    if (setEndDate) setEndDate("");
+    if (setStartDate2) setStartDate2("");
+    if (setEndDate2) setEndDate2("");
+    if (setStartDate3) setStartDate3("");
+    if (setEndDate3) setEndDate3("");
+    if (setStartDate4) setStartDate4("");
+    if (setEndDate4) setEndDate4("");
+    if (setStartDate5) setStartDate5("");
+    if (setEndDate5) setEndDate5("");
+    if (setStartDate6) setStartDate6("");
+    if (setEndDate6) setEndDate6("");
+    return;
+  }
+
+  const formattedDates = date.map((d, index) => {
+    if (!d) {
+      console.error("Error: date element is undefined or null at index", index);
+      return null;
+    }
+    return index === 1
+      ? moment.utc(d).format("YYYY-MM-DD") + "T23:59:59.000Z"
+      : moment.utc(d).format("YYYY-MM-DD") + "T00:00:00.000Z";
   });
-  if (setStartDate && setEndDate) {
-    setStartDate(formattedDates[0]);
-    setEndDate(formattedDates[1]);
+
+  if (!formattedDates[0] || !formattedDates[1]) {
+    console.error(
+      "Error: formattedDates elements are undefined or null",
+      formattedDates
+    );
+    return;
   }
-  if (setStartDate2 && setEndDate2) {
-    setStartDate2(formattedDates[0]);
-    setEndDate2(formattedDates[1]);
-  }
-  if (setStartDate3 && setEndDate3) {
-    setStartDate3(formattedDates[0]);
-    setEndDate3(formattedDates[1]);
-  }
-  if (setStartDate4 && setEndDate4) {
-    setStartDate4(formattedDates[0]);
-    setEndDate4(formattedDates[1]);
-  }
-  if (setStartDate5 && setEndDate5) {
-    setStartDate5(formattedDates[0]);
-    setEndDate5(formattedDates[1]);
-  }
-  if (setStartDate6 && setEndDate6) {
-    setStartDate6(formattedDates[0]);
-    setEndDate6(formattedDates[1]);
-  }
+
+  const setDates = (setStart, setEnd) => {
+    if (setStart && setEnd) {
+      setStart(formattedDates[0]);
+      setEnd(formattedDates[1]);
+    }
+  };
+
+  // Set dates for each pair of setStartDate and setEndDate
+  setDates(setStartDate, setEndDate);
+  setDates(setStartDate2, setEndDate2);
+  setDates(setStartDate3, setEndDate3);
+  setDates(setStartDate4, setEndDate4);
+  setDates(setStartDate5, setEndDate5);
+  setDates(setStartDate6, setEndDate6);
 };
 
 export const dateFormate = (dayjs, date) => {
@@ -277,25 +343,23 @@ export const generateOptionsList = (items) => {
   if (!items?.data) {
     return [{ label: "Loading...", value: "", isDisabled: true }];
   } else {
-    if(items?.data?.data?.response){
-    const options = [
-      { label: "All", value: ""},
-      ...items?.data?.data?.response?.map((item) => ({
-        label: (
-          <span>
-            {item?.firstName}&nbsp;&nbsp;{item?.lastName}
-          </span>
-        ),
-        value: item?.userName,
-      })),
-    ].filter(Boolean);
-    return options;
-  }else{
-    const options = [
-      { label: "All", value: ""},
-    ];
-    return options;
-  }
+    if (items?.data?.data?.response) {
+      const options = [
+        { label: "All", value: "" },
+        ...items?.data?.data?.response?.map((item) => ({
+          label: (
+            <span>
+              {item?.firstName}&nbsp;&nbsp;{item?.lastName}
+            </span>
+          ),
+          value: item?.userName,
+        })),
+      ].filter(Boolean);
+      return options;
+    } else {
+      const options = [{ label: "All", value: "" }];
+      return options;
+    }
     // }
   }
 };
@@ -304,7 +368,7 @@ export const generateOptionsLists = (items) => {
     return [{ label: "Loading...", value: "", isDisabled: true }];
   } else {
     const options = [
-      { label: "All", value: ""},
+      { label: "All", value: "" },
       ...items?.data?.data?.response?.map((item) => ({
         label: (
           <span>
