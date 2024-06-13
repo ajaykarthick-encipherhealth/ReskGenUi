@@ -209,7 +209,7 @@ const UserList = ({ getAllOrganizationList, organizationList,getAllUsersList,use
   }, []);
   
   useEffect(() => {
-    var orgListArray = [{ value: "ALL", label: "ALL" }];
+    var orgListArray = [];
     organizationList?.response?.map((res) => {
       orgListArray.push({
         value: res.id,

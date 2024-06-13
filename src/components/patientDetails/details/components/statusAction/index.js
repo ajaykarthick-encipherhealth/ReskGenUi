@@ -4,13 +4,7 @@ import Form from "react-bootstrap/Form";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import {
-  Modal,
-  Tooltip,
-  notification,
-  Dropdown,
-  Menu,
-} from "antd";
+import { Modal, Tooltip, notification, Dropdown, Menu } from "antd";
 import { connect } from "react-redux";
 import { DownOutlined } from "@ant-design/icons";
 import AddLabForm from "../addLabForm";
@@ -170,17 +164,17 @@ const StatusAction = ({
         {result?.processedStatus != "DECLINED" ? (
           <Menu.Item
             key="3"
-            disabled={flagFirstData?.flag !== undefined ? false : true}
+            // disabled={flagFirstData?.flag !== undefined ? false : true}
             onClick={() => {
               handleActionClick("DECLINE");
               setMenuIsOpen(false);
             }}
           >
             <Tooltip
-              title={
-                flagFirstData?.flag === undefined &&
-                "Add flag to disable Decline"
-              }
+            // title={
+            //   flagFirstData?.flag === undefined &&
+            //   "Add flag to disable Decline"
+            // }
             >
               <div className="patient-status">
                 <span className={`badge failed-text`} style={{ color: "red" }}>
@@ -513,38 +507,66 @@ const StatusAction = ({
     } catch (e) {}
   };
 
+  const statusCheck = (value) => {
+    switch (value) {
+      case "declineFunction":
+        return "DECLINED";
+      case "holdFunction":
+        return "HOLD";
+      case "pendingFunction":
+        return "PENDING";
+      case "complete":
+        return "COMPLETED";
+      case "reAuditFunction":
+        return "REAUDIT";
+      case "auditPendingFunction":
+        return "AUDIT_PENDING";
+      case "auditHoldFunction":
+        return "AUDITHOLD";
+      case "auditDeclineFunction":
+        return "AUDIT_DECLINED";
+      case "audited":
+        return "AUDITED";
+
+      default:
+        break;
+    }
+  };
+
   const updateStatus = async (action) => {
     var postData = {
-      orgId: localOrgId,
+      // orgId: localOrgId,
       patientId: localPatientId,
       notes: inputValue.notes,
-      dos: patientDetailsResult?.data?.response?.processedYear,
+      processedStatus: statusCheck(action),
+      // dos: patientDetailsResult?.data?.response?.processedYear,
     };
-    var apiURL = "";
-    if (action == "declineFunction") {
-      apiURL = "dbservice/patient/status/decline";
-    }
-    if (action == "holdFunction") {
-      apiURL = "dbservice/patient/status/hold";
-    }
-    if (action == "pendingFunction") {
-      apiURL = "dbservice/patient/status/pending";
-    }
-    if (action == "reAuditFunction") {
-      apiURL = "dbservice/patient/status/reaudit";
-    }
-    if (action == "auditPendingFunction") {
-      apiURL = "dbservice/patient/status/auditPending";
-    }
-    if (action == "auditHoldFunction") {
-      apiURL = "dbservice/patient/status/auditHold";
-    }
-    if (action == "auditDeclineFunction") {
-      apiURL = "dbservice/patient/status/auditDecline";
-    }
+
+    // var apiURL = "";
+    // if (action == "declineFunction") {
+    //   apiURL = "dbservice/patient/status/decline";
+    // }
+    // if (action == "holdFunction") {
+    //   apiURL = "dbservice/patient/status/hold";
+    // }
+    // if (action == "pendingFunction") {
+    //   apiURL = "dbservice/patient/status/pending";
+    // }
+    // if (action == "reAuditFunction") {
+    //   apiURL = "dbservice/patient/status/reaudit";
+    // }
+    // if (action == "auditPendingFunction") {
+    //   apiURL = "dbservice/patient/status/auditPending";
+    // }
+    // if (action == "auditHoldFunction") {
+    //   apiURL = "dbservice/patient/status/auditHold";
+    // }
+    // if (action == "auditDeclineFunction") {
+    //   apiURL = "dbservice/patient/status/auditDecline";
+    // }
     try {
       const response = await axios.post(
-        ENDPOINTS.apiEndoint + apiURL,
+        ENDPOINTS.apiEndoint + `dbservice/patient/status/overallstatus`,
         postData
       );
       var result = response.data;
@@ -554,10 +576,14 @@ const StatusAction = ({
           placement: "top",
           duration: 1,
         });
-        setConfirmNotesModal(false);
-        getPatientIdData(localPatientId);
-      } else {
       }
+      setConfirmNotesModal(false);
+      setConfirmCompleteModal(false);
+      setConfirmAuditModal(false)
+      getPatientIdData(localPatientId);
+      setInputValue({
+        notes: "",
+      });
     } catch (e) {}
   };
 
@@ -779,6 +805,7 @@ const StatusAction = ({
                     name="notes"
                     onChange={handleChange}
                     rows="5"
+                    value={inputValue.notes}
                   ></textarea>
                 </div>
               </div>
@@ -803,7 +830,7 @@ const StatusAction = ({
           <Modal
             title="Are you sure to complete this task?"
             open={true}
-            onOk={handleSubmitHccComplete}
+            onOk={() => updateStatus("complete")}
             onCancel={handleCloseModal}
           ></Modal>
         </div>
@@ -814,7 +841,7 @@ const StatusAction = ({
             title="Are you sure to audit this task?"
             open={true}
             centered
-            onOk={updateAudit}
+            onOk={() => updateStatus('audited')}
             onCancel={() => setConfirmAuditModal(false)}
           ></Modal>
         </div>
