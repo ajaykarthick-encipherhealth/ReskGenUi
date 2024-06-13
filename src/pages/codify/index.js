@@ -59,6 +59,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   };
   const handleInputChange = (e) => {
     setSearchInput(e.target.value);
+    setParentCode(null)
   };
 
   const handleSearch = (value) => {
