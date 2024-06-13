@@ -14615,7 +14615,7 @@ input::-webkit-inner-spin-button {
 .ant-select-single {
   font-size: 14px;
   /* height: 42px !important; */
-  width: 100% !important;
+  /* width: 100% !important; */
 }
 .card-text {
   scrollbar-width: none;
