@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { Button, DatePicker, Empty, Input, Space, Spin } from "antd";
 import TableRisk from "../tableRisk";
 import YearPicker from "../yearpicker";
-import { CloseCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
+
 
 const RiskAdjustment = ({
   RiskAdjustmentData,
@@ -47,6 +47,12 @@ const RiskAdjustment = ({
     if (!code && !selectedYear) {
       setCodeErrorMessage("Please enter a Diagnosis Code");
       setYearErrorMessage("Please select a Year");
+    } else if (!code) {
+      setCodeErrorMessage("Please enter a Diagnosis Code");
+      setYearErrorMessage(null);
+    } else if (!selectedYear) {
+      setYearErrorMessage("Please select a Year");
+      setCodeErrorMessage(null);
     } else {
       setCodeErrorMessage("");
       setYearErrorMessage("");
@@ -81,6 +87,17 @@ const RiskAdjustment = ({
     setSelectedYear(dateString);
     setYearErrorMessage(null);
   };
+
+  useEffect(() => {
+    if (!code?.length) {
+      setData(null);
+      setNoData(false);
+    } else if (data && data.length === 0) {
+      setNoData(true);
+    } else {
+      setNoData(false);
+    }
+  }, [code, data]);
 
   return (
     <div className="container-fluid">
@@ -119,14 +136,14 @@ const RiskAdjustment = ({
           )}
         </div>
       </div>
-      <div className="col-12 mt-4">
+      {/* <div className="col-12 mt-4">
         <div className={style.text}> Description</div>
         <textarea
           className={`${style.textarea} `}
           placeholder="Description"
           rows="2"
         ></textarea>
-      </div>
+      </div> */}
       <div className="d-flex align-items-center justify-content-center mt-4 ">
         <Button className={style.btn} onClick={handleSearchClick}>
           <div className={style.search}>Search</div>
@@ -136,7 +153,7 @@ const RiskAdjustment = ({
         {loading && <Spin size="large" />}
       </div>
 
-      {data?.[0]?.year ? (
+      {data?.[0]?.year && data?.length ? (
         <TableRisk
           activeButton={activeButton}
           setActiveButton={setActiveButton}

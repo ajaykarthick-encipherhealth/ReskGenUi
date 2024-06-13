@@ -1,4 +1,4 @@
-import React from "react";
+import React, {  useEffect } from "react";
 import style from "./style.module.css";
 
 const TableRisk = ({ data, setActiveButton, setSearchInput }) => {
@@ -15,6 +15,8 @@ const TableRisk = ({ data, setActiveButton, setSearchInput }) => {
         key.includes("Payment")
     ),
   }));
+
+
   return (
     <div>
       <div className={style.card}>

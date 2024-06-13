@@ -15,7 +15,7 @@ export const codes = async ({ code }) => {
     method: "GET",
   };
   const url = `q=${code}`;
-  const data = await requestPortal(`management/getDiagDetails?${url}`, options);
+  const data = await requestPortal(`dbservice/getDiagDetails?${url}`, options);
   return data;
 };
 

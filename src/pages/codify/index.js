@@ -59,6 +59,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   };
   const handleInputChange = (e) => {
     setSearchInput(e.target.value);
+    setParentCode(null)
   };
 
   const handleSearch = (value) => {
@@ -79,10 +80,24 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
     setExpandedKeys(expandedKeysValue);
     setAutoExpandParent(false);
   };
+  function handleKeyDown(event) {
+    if (event.keyCode === 13) {
+      fetchTreeData();
+      fetchCodeData();
+    }
+  }
+  const handleSearchButton = () => {
+    fetchTreeData();
+    fetchCodeData();
+  };
+
+  const handleSearchClick = (value)=>{
+    setSearchInput(value)
+    fetchTreeData(value);
+    fetchCodeData(value);
+
+  }
   
-  useEffect(() => {
-    completeFetch();
-  }, [searchInput]);
 
   const convertToAntdTreeData = (node) => {
     const { name, desc, children, requiredCharacter } = node;
@@ -119,23 +134,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
     setLoading(false);
   };
 
-  function handleKeyDown(event) {
-    if (event.keyCode === 13) {
-      fetchTreeData();
-      fetchCodeData();
-    }
-  }
-  const handleSearchButton = () => {
-    fetchTreeData();
-    fetchCodeData();
-  };
 
-  const handleSearchClick = (value)=>{
-    setSearchInput(value)
-    fetchTreeData(value);
-    fetchCodeData(value);
-
-  }
   const recentSearchTreeView = async () => {
     let searchData = await recentsearch();
     if (searchData?.status === "SUCCESS") {
@@ -192,21 +191,13 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
         useAdditionalCode: tableData?.response?.childData?.useAdditionalCode,
         requiredCharacter: tableData?.response?.childData?.requiredCharacter,
       });
-      setParentCode({
-        ...parentCode,
-        name: tableData?.response?.parentData?.name,
-        desc: tableData?.response?.parentData?.desc,
-        includes: tableData?.response?.parentData?.includes,
-        excludes1: tableData?.response?.parentData?.excludes1,
-        excludes2: tableData?.response?.parentData?.excludes2,
-        children: tableData?.response?.parentData?.children,
-        inclusionTerm: tableData?.response?.parentData?.inclusionTerm,
-        useAdditionalCode: tableData?.response?.parentData?.useAdditionalCode,
-        requiredCharacter: tableData?.response?.parentData?.requiredCharacter,
-      });
+      setParentCode(tableData?.response?.parentData);
     }
     setLoading(false);
   };
+  useEffect(() => {
+    completeFetch();
+  }, [searchInput]);
 
   useEffect(() => {
     if (!searchInput?.length) {
