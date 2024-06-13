@@ -150,7 +150,7 @@ const ComboCard = ({
                             </div>
                           </Popconfirm>
                         </div>
-
+                          {item?.children?.length > 0 && 
                         <div
                           className={visitStyles.close_icon}
                           style={{ background: "#c7f3c6" }}
@@ -166,7 +166,7 @@ const ComboCard = ({
                               color: "#088f39",
                             }}
                           />
-                        </div>
+                        </div>}
                       </div>
                       <div className={styles.comboDetailsHeaders}>
                         <div>
