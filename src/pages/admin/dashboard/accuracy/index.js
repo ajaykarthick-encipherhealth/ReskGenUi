@@ -363,6 +363,13 @@ const Accuracy = () => {
           color: "#BD83B8",
         },
         showSymbol: false,
+        label: {
+          show: true,
+          position: "top",
+          formatter: function (params) {
+            return (params?.data && currentBtn!=="Daily")?`${Math.round(params?.data)}%`:"";
+          },
+        },
       },
     ],
   };
