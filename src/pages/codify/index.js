@@ -266,7 +266,9 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
             <div className="d-flex gap-2 px-3 ">
               <Button
                 className={currentButton === "Codes" ? style.both : style.code}
-                onClick={() => setCurrentButton("Codes")}
+                onClick={() => {setCurrentButton("Codes")
+                  setHideButton(false);
+                }}
               >
                 Tree View
               </Button>
@@ -274,7 +276,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
                 className={
                   currentButton === "Description" ? style.both : style.code
                 }
-                onClick={() => setCurrentButton("Description")}
+                onClick={() => {setCurrentButton("Description"), setHideButton(false);}}
               >
                 Codes
               </Button>
