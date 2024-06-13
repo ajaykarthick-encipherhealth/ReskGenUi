@@ -48,6 +48,7 @@
 }
 .list {
   width: 90%;
+  margin-top: 9px;
 }
 .code {
   display: flex;
@@ -127,7 +128,7 @@
   width: 90%;
   scrollbar-width: none;
   padding: 3px;
-  margin-top: 5px;
+  margin-top: 10px;
   border-radius: 7px;
   padding:9px;
 }

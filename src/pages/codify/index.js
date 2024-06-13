@@ -48,6 +48,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   const [expandedKeys, setExpandedKeys] = useState([]);
   const [autoExpandParent, setAutoExpandParent] = useState(true);
   const [parentCode, setParentCode] = useState([]);
+  const [hideButton, setHideButton] = useState(false);
 
   const handleRiskAdjustment = () => {
     setActiveButton("Risk Adjustment");
@@ -95,6 +96,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
     setSearchInput(value)
     fetchTreeData(value);
     fetchCodeData(value);
+    setHideButton(false);
 
   }
   
@@ -120,8 +122,8 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   };
 
   const fetchTreeData = async (value) => {
-    setLoading(true);
-    let treeData = await codifyData({ diseases: value ? value : searchInput });
+    setLoading(true)
+ ;   let treeData = await codifyData({ diseases: value ? value : searchInput });
     if (treeData?.status == "SUCCESS") {
       let temp = convertICDStructureToTreeData(treeData?.response);
       if (!treeData?.response?.length) {
@@ -343,6 +345,8 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
                 setSearchInput={setSearchInput}
                 searchInput={searchInput}
                 setParentCode={setParentCode}
+                hideButton={hideButton}
+                setHideButton={setHideButton}
               />
             )}
           </>

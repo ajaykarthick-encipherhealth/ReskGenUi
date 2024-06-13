@@ -21,11 +21,13 @@ const Tables = (props) => {
     codesData,
     searchInput,
     setSearchInput,
+    setHideButton,
+    hideButton,
   } = props;
 
   const [isCopied, setCopied] = useState(false);
   const [previousCode, setPreviousCode] = useState();
-  const [hideButton, setHideButton] = useState(false);
+
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -91,7 +93,9 @@ const Tables = (props) => {
   const handleBack = () => {
     setCodeData(previousCode);
     setHideButton(false);
+
   };
+
 
   return (
     <div>
