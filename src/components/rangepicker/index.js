@@ -3,7 +3,7 @@ import React from "react";
 import dayjs from "dayjs";
 import {
   disableFutureDate,
-  handleRnagePicker,
+  handleRnagePicker2,
 } from "../headerFilters/functions";
 
 const { RangePicker } = DatePicker;
@@ -26,7 +26,7 @@ const DateRangePicker = ({
     <div>
       <label style={{ marginLeft: "8px" }}>{pickerlabel}</label>
       <div>
-        <RangePicker
+        {/* <RangePicker
           value={selectedDates ? selectedDates : ""}
           format="YYYY-MM-DD"
           onCalendarChange={(val) => setSelectedDates(val)}
@@ -54,6 +54,20 @@ const DateRangePicker = ({
           disabledDate={(current) => !disabled && disableFutureDate(current)}
           onCalendarClose={() => {
             setSelectedDates([]);
+          }}
+        /> */}
+        <RangePicker
+          value={selectedDates ? selectedDates : ""}
+          format="MM-DD-YYYY"
+          onCalendarChange={(val) => setSelectedDates(val)}
+          onChange={(date, dateString) => {
+            handleRnagePicker2({
+              date,
+              dateString,
+              setStartDate,
+              setEndDate,
+            });
+            // setClear(false);
           }}
         />
       </div>

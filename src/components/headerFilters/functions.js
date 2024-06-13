@@ -137,7 +137,6 @@ export const handleRnagePicker = ({
     setCoderEndDate(formattedDates[1]);
   }
 };
-
 // if has 2 rangepickers
 export const handleRnagePicker2 = ({
   date,
@@ -158,10 +157,13 @@ export const handleRnagePicker2 = ({
   const formattedDates = dateString?.map((date, index) => {
     const formattedDate =
       index === 1
-        ? date && `${date}T23:59:59.999Z`
-        : date && `${date}T00:00:00.000Z`;
+        ? date &&
+          `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
+        : date &&
+          `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
     return formattedDate;
   });
+
   if (setStartDate && setEndDate) {
     setStartDate(formattedDates[0]);
     setEndDate(formattedDates[1]);
@@ -277,25 +279,23 @@ export const generateOptionsList = (items) => {
   if (!items?.data) {
     return [{ label: "Loading...", value: "", isDisabled: true }];
   } else {
-    if(items?.data?.data?.response){
-    const options = [
-      { label: "All", value: ""},
-      ...items?.data?.data?.response?.map((item) => ({
-        label: (
-          <span>
-            {item?.firstName}&nbsp;&nbsp;{item?.lastName}
-          </span>
-        ),
-        value: item?.userName,
-      })),
-    ].filter(Boolean);
-    return options;
-  }else{
-    const options = [
-      { label: "All", value: ""},
-    ];
-    return options;
-  }
+    if (items?.data?.data?.response) {
+      const options = [
+        { label: "All", value: "" },
+        ...items?.data?.data?.response?.map((item) => ({
+          label: (
+            <span>
+              {item?.firstName}&nbsp;&nbsp;{item?.lastName}
+            </span>
+          ),
+          value: item?.userName,
+        })),
+      ].filter(Boolean);
+      return options;
+    } else {
+      const options = [{ label: "All", value: "" }];
+      return options;
+    }
     // }
   }
 };
@@ -304,7 +304,7 @@ export const generateOptionsLists = (items) => {
     return [{ label: "Loading...", value: "", isDisabled: true }];
   } else {
     const options = [
-      { label: "All", value: ""},
+      { label: "All", value: "" },
       ...items?.data?.data?.response?.map((item) => ({
         label: (
           <span>
@@ -388,6 +388,7 @@ export const renderUserPrfoile = (
     return profileAvatar;
   }
 };
+
 export const renderUserPrfoileAvatar = (
   firstName,
   lastName,

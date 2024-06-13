@@ -191,7 +191,7 @@ const HeaderFilters = ({
             <div className="dateRangeSize">
               <RangePicker
                 value={clear ? "" : selectedDates}
-                format="YYYY-MM-DD"
+                format="MM-DD-YYYY"
                 onCalendarChange={(val) => setSelectedDates(val)}
                 onChange={(date, dateString) => {
                   handleRnagePicker2({
@@ -218,7 +218,7 @@ const HeaderFilters = ({
                 <div className="dateRangeSize">
                   <RangePicker
                     value={clear ? ["", ""] : selectedDates2}
-                    format="YYYY-MM-DD"
+                    format="MM-DD-YYYY"
                     onCalendarChange={(val) => setSelectedDates2(val)}
                     onChange={(date, dateString) => {
                       handleRnagePicker2({
@@ -244,7 +244,7 @@ const HeaderFilters = ({
                 <div className="dateRangeSize">
                   <RangePicker
                     value={clear ? ["", ""] : selectedDates3}
-                    format="YYYY-MM-DD"
+                    format="MM-DD-YYYY"
                     onCalendarChange={(val) => setSelectedDates3(val)}
                     onChange={(date, dateString) => {
                       handleRnagePicker2({
@@ -328,7 +328,7 @@ const HeaderFilters = ({
                 <div className="dateRangeSize">
                   <RangePicker
                     value={clear ? ["", ""] : selectedDates4}
-                    format="YYYY-MM-DD"
+                    format="MM-DD-YYYY"
                     onCalendarChange={(val) => setSelectedDates4(val)}
                     onChange={(date, dateString) => {
                       handleRnagePicker2({
@@ -368,7 +368,7 @@ const HeaderFilters = ({
                   <div className="dateRangeSize">
                     <RangePicker
                       value={clear ? ["", ""] : selectedDates5}
-                      format="YYYY-MM-DD"
+                      format="MM-DD-YYYY"
                       onCalendarChange={(val) => setSelectedDates5(val)}
                       onChange={(date, dateString) => {
                         handleRnagePicker2({
