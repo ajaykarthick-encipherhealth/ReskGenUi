@@ -26,7 +26,6 @@ import { connect } from "react-redux";
 import AddPatientListTable from "../../../components/table/tenantTable/AddPatients/addPatients";
 import { eventStreming } from "../../../components/table/tenantTable/FileProcessing/FileProcessing";
 
-
 const bullets = [
   {
     color: "#34ace8",
@@ -54,7 +53,12 @@ const statusOptions = [
   { label: "NOT COMPUTED", value: "0", status: 0 },
 ];
 
-const Patient = ({ getAllOrganizationList, organizationList ,getAllPatients,allPatientList}) => {
+const Patient = ({
+  getAllOrganizationList,
+  organizationList,
+  getAllPatients,
+  allPatientList,
+}) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -127,20 +131,20 @@ const Patient = ({ getAllOrganizationList, organizationList ,getAllPatients,allP
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-      getAllPatients(
-        pageNo,
-        computedStartDate,
-        computedEndDate,
-        selectedOption,
-        search,
-        completedStartDate,
-        completedEndDate,
-        selAllocatedTo,
-        selAllocatedBy,
-        selCreatedBy,
-        sort,
-        orgId = selectOrgList?.value
-      )
+    getAllPatients(
+      pageNo,
+      computedStartDate,
+      computedEndDate,
+      selectedOption,
+      search,
+      completedStartDate,
+      completedEndDate,
+      selAllocatedTo,
+      selAllocatedBy,
+      selCreatedBy,
+      sort,
+      (orgId = selectOrgList?.value)
+    );
   }, [
     pageNo,
     computedStartDate,
@@ -153,7 +157,7 @@ const Patient = ({ getAllOrganizationList, organizationList ,getAllPatients,allP
     selAllocatedBy,
     selCreatedBy,
     sort,
-    selectOrgList
+    selectOrgList,
   ]);
 
   useEffect(() => {
@@ -163,11 +167,11 @@ const Patient = ({ getAllOrganizationList, organizationList ,getAllPatients,allP
   }, [parsedData, allPatientList, pageNo, pageSize]);
 
   useEffect(() => {
-    if(!organizationList?.response){
+    if (!organizationList?.response) {
       getAllOrganizationList();
     }
   }, []);
-  
+
   useEffect(() => {
     var orgListArray = [{ value: "ALL", label: "ALL" }];
     organizationList?.response?.map((res) => {
@@ -286,45 +290,45 @@ const Patient = ({ getAllOrganizationList, organizationList ,getAllPatients,allP
   };
 
   const handleSubmitPatientId = async (form) => {
-    var orgId = selectOrgList?.value
+    var orgId = selectOrgList?.value;
     form.allocatedBy = localUserId;
     form.computing = 0;
-      try {
-        setIsLoadingBtn(true);
-        const response = await axios.post(
-          ENDPOINTS.apiEndoint + `dbservice/patient`,
-          form
+    try {
+      setIsLoadingBtn(true);
+      const response = await axios.post(
+        ENDPOINTS.apiEndoint + `dbservice/patient`,
+        form
+      );
+      if (response?.data?.status == "SUCCESS") {
+        getAllPatients(
+          pageNo,
+          computedStartDate,
+          computedEndDate,
+          selectedOption,
+          search,
+          completedStartDate,
+          completedEndDate,
+          selAllocatedTo,
+          selAllocatedBy,
+          selCreatedBy,
+          sort,
+          orgId
         );
-        if (response?.data?.status == "SUCCESS") {
-          getAllPatients(
-            pageNo,
-            computedStartDate,
-            computedEndDate,
-            selectedOption,
-            search,
-            completedStartDate,
-            completedEndDate,
-            selAllocatedTo,
-            selAllocatedBy,
-            selCreatedBy,
-            sort,
-            orgId
-          )
-          setAddPatientId(false);
-          setIsLoadingBtn(false);
-          notification.success({
-            message: "tets",
-            duration: 1,
-          });
-        } else {
-          setIsLoadingBtn(false);
-        }
-      } catch (Err) {
-        notification.error({
-          message: Err?.response?.data?.message,
+        setAddPatientId(false);
+        setIsLoadingBtn(false);
+        notification.success({
+          message: "Patients added successfully.",
           duration: 1,
         });
+      } else {
+        setIsLoadingBtn(false);
       }
+    } catch (Err) {
+      notification.error({
+        message: Err?.response?.data?.message,
+        duration: 1,
+      });
+    }
 
     setValidated(true);
   };
@@ -453,7 +457,7 @@ const Patient = ({ getAllOrganizationList, organizationList ,getAllPatients,allP
       notification.success({
         message: "Patient File Upload Successfully!",
       });
-      var orgId=  selectOrgList?.value;
+      var orgId = selectOrgList?.value;
       getAllPatients(
         pageNo,
         computedStartDate,
@@ -466,8 +470,8 @@ const Patient = ({ getAllOrganizationList, organizationList ,getAllPatients,allP
         selAllocatedBy,
         selCreatedBy,
         sort,
-        orgId = selectOrgList?.value
-      )
+        (orgId = selectOrgList?.value)
+      );
       eventStreming(
         ENDPOINTS,
         setParsedData,
@@ -598,13 +602,13 @@ const Patient = ({ getAllOrganizationList, organizationList ,getAllPatients,allP
                             isNextRow={true}
                             btnTitle="Add Patient"
                             atCorner={true}
-                             // selectOrg
-                             selectlabelOrg="Select Organization"
-                             isSelectOrg={true}
-                             setSelectedOptionOrg={setSelectedOrgList}
-                             selectOptionsOrg={orgAllList}
-                             defaultSelectValueOrg={""}
-                             selectedValueOrg={selectOrgList}
+                            // selectOrg
+                            selectlabelOrg="Select Organization"
+                            isSelectOrg={true}
+                            setSelectedOptionOrg={setSelectedOrgList}
+                            selectOptionsOrg={orgAllList}
+                            defaultSelectValueOrg={""}
+                            selectedValueOrg={selectOrgList}
                           />
                         </div>
                       </div>
@@ -674,17 +678,16 @@ const Patient = ({ getAllOrganizationList, organizationList ,getAllPatients,allP
       </div>
     </>
   );
-}
+};
 
 const enhancer = connect(
   (state) => ({
     organizationList: state?.tenantAdmin?.allOrganization?.data,
     allPatientList: state?.tenantAdmin?.allPatients,
-
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
-    getAllPatients:tenantAdminAction.getAllPatientAction,
+    getAllPatients: tenantAdminAction.getAllPatientAction,
   }
 );
 export default enhancer(Patient);
