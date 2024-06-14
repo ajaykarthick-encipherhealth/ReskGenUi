@@ -167,7 +167,7 @@ const Tables = (props) => {
                     class="card-title  bg- text-white d-flex justify-content-center"
                     style={{ background: "blue" }}
                   >
-                    Exclude1
+                    Excludes1
                   </h5>
                   <p
                     className="card-text"
@@ -192,7 +192,7 @@ const Tables = (props) => {
               <div className="card">
                 <div className="card-body border border-secondary p-0 ">
                   <h5 class="card-title bg-danger text-white d-flex justify-content-center">
-                    Exclude2
+                    Excludes2
                   </h5>
                   <p
                     className="card-text "
@@ -242,12 +242,13 @@ const Tables = (props) => {
         )}
         {parentCode?.[0]?.includes ||
         parentCode?.[0]?.excludes1 ||
+
         parentCode?.[0]?.excludes2 ? (
           <div className={style.parent}>
             {parentCode?.length &&
               parentCode?.map((data) => {
                 return (
-                  <>
+                  <div>
                     {(data?.includes || data?.excludes1 || data?.excludes2) && (
                       <div className={style.head}>
                         {data.name} - {data.desc}
@@ -300,12 +301,12 @@ const Tables = (props) => {
                             ))}
                       </div>
                     )}
-                  </>
+                  </div>
                 );
               })}
           </div>
         ) : (
-          <></>
+          <div></div>
         )}
         <div className={style.list}>
           {codeData?.children?.map((s, i) => (
