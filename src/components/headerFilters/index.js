@@ -161,7 +161,8 @@ const HeaderFilters = ({
   defaultSelectValueOrg,
   selectedValueOrg,
   isRangePickerUsers,
-  form
+  form,
+  setMobileNumber
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
@@ -449,8 +450,9 @@ const HeaderFilters = ({
             <div className={columnClass} style={{ marginTop: "29px" }}>
               <Button
                 onClick={()=>{
-                  if(form){
+                  if(form || setMobileNumber){
                     form.resetFields()
+                    setMobileNumber("")
                   }
                   addUserForm()}}
                 style={{ background: "#04306f" }}

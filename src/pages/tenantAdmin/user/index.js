@@ -299,6 +299,7 @@ const UserList = ({
                         addBtn={true}
                         disable="Yes"
                         form={form}
+                        setMobileNumber={setMobileNumber}
                       />
                     </div>
                     <div
