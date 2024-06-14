@@ -85,9 +85,10 @@ const UserList = ({
 
   const handleChange = (e) => {
     let value = e.target.value;
-    if (/^\d*$/.test(value) && value.length <= 10) {
-      setMobileNumber(value);
-    }
+    // if (value?.length===10) {
+      const val=getDisplayValue(value)
+      setMobileNumber(val);
+    // }
   };
   const getDisplayValue = (number) => {
     if (number.length === 10) {
@@ -294,6 +295,8 @@ const UserList = ({
                         clear={clear}
                         addBtn={true}
                         disable="Yes"
+                        form={form}
+                        setMobileNumber={setMobileNumber}
                       />
                     </div>
                     <div
@@ -525,6 +528,35 @@ const UserList = ({
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item
+
+                      label="Mobile Number"
+                      name="mobileNumber"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter your mobile number!",
+                        },
+                        {
+                          len: 10,
+                          message:
+                            "Please enter a valid 10-digit mobile number!",
+                        },
+                      ]}
+                    >
+                      <div>
+                        <Input
+                          type="text"
+                          placeholder="Enter mobile number"
+                          autoComplete="off"
+                          value={mobileNumber}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+
                       name="role"
                       label="Role"
                       rules={[

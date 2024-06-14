@@ -14623,10 +14623,13 @@ input::-webkit-inner-spin-button {
 .ant-tree-switcher-leaf-line {
   height: 150% !important;
 }
-.card {
-  margin: 0 !important;
+
+/* reason for commanded this branch lot plase */
+
+/* .card { 
+  margin: 0 !important; */
   /* border:1px solid gray !important */
-}
+/* } */
 .ant-select-single {
   font-size: 14px;
   /* height: 42px !important; */

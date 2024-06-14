@@ -346,6 +346,8 @@ const Reports = ({
         return ["Reviewer", "Sent", "Received"];
       case "admin":
         return ["Admin", "Sent", "Received"];
+        case "tenant_admin":
+          return ["Admin", "Sent", "Received"];
       case "supervisor":
         return ["Audit", "Team", "Sent", "Received"];
       default:

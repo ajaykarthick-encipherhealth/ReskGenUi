@@ -212,6 +212,12 @@ export const ProviderMenuList = [
     to: "/tenantAdmin/allocateduser",
   },
   {
+    title: "Report",
+    iconStyle: SVGICON.ReportIcon,
+    to: "/tenantAdmin/report",
+    childRoute: "/tenantAdmin/report",
+  },
+  {
     title: "Tracking",
     iconStyle: SVGICON.Tracking,
     to: "/tenantAdmin/tracking",

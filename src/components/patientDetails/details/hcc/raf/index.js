@@ -44,118 +44,163 @@ const RafScore = ({ patientDetailsResult }) => {
             <div className="tbl-caption  align-items-center">
               <div className="d-flex">
                 <div className={style.rafMainCard1}>
-                  <div className={style.rafCard1} >
-                    <div className={style.titleHead} style={{background: "#73b2f2", color: "#ffffff"}}>
+                  <div className={style.rafCard1}>
+                    <div
+                      className={style.titleHead}
+                      style={{ background: "#73b2f2", color: "#ffffff" }}
+                    >
                       <div className="row">
                         <div className="col-xl-3">DX Code</div>
                         <div className="col-xl-9">DX Description</div>
                       </div>
                     </div>
-                    {rafScoreData?.map((item, i) => (
-                      <div className={style.detailsHead}>
-                        <div
-                          className={
-                            rafScoreData?.length != i + 1
-                              ? `row ${style.rafchildBorder}`
-                              : `row`
-                          }
-                        >
-                          <div className="col-xl-3"> {item.dx_name}</div>
-                          <div className={`col-xl-9 ${style.rafDescription}`}>
-                            <Popover title={item.dx_desc}>
-                              {item.dx_desc}{" "}
-                            </Popover>
+                    <div className={style.stickyHeader}>
+                      {rafScoreData?.map((item, i) => (
+                        <div className={style.detailsHead}>
+                          <div
+                            className={
+                              rafScoreData?.length != i + 1
+                                ? `row ${style.rafchildBorder}`
+                                : `row`
+                            }
+                          >
+                            <div className="col-xl-3"> {item.dx_name}</div>
+                            <div className={`col-xl-9 ${style.rafDescription}`}>
+                              <Popover title={item.dx_desc}>
+                                {item.dx_desc}{" "}
+                              </Popover>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className={style.rafMainCard2}>
-                  <div className={style.rafCard2} style={{background: "#f3eeff"}}>
-                    <div className={style.titleHead} style={{background: "#8262ce", color: '#ffffff'}}>
-                      <div className="row">
-                      <div className="col-xl-3">HCC</div>
-                        <div className="col-xl-3">RAF</div>
-                        <div className="col-xl-4">Monthly Premium</div>
-                        <div className="col-xl-1 rounded fs-5" style={{background: "#ffffff", color: "#000"}}>
-                          <span style={{marginLeft: "-2px"}}>24</span>
-                        </div>
-                      </div>
+                      ))}
                     </div>
-                    {rafScoreData?.map((item, i) => (
-                      <div className={style.detailsHead}>
-                        <div
-                          className={
-                            rafScoreData?.length != i + 1
-                              ? `row ${style.rafchildBorder}`
-                              : `row`
-                          }
-                        >
-                          <div className="col-xl-3">
-                            {getRafDetails(item.dx_name, "V24")?.map((item) => (
-                              <div>{item.hcc_name}</div>
-                            ))}
-                          </div>
-                          <div className="col-xl-3">
-                            {getRafDetails(item.dx_name, "V24")?.map((item) => (
-                              <div>{item.hcc_raf}</div>
-                            ))}
-                          </div>
-                          <div className="col-xl-4  text-center">
-                            {getRafDetails(item.dx_name, "V24")?.map((item) => (
-                              <div>${item.premium}</div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
                   </div>
                 </div>
                 <div className={style.rafMainCard2}>
-                  <div className={style.rafCard2} style={{background: "#ffe7e7"}}>
-                    <div className={style.titleHead} style={{background: "#e47e7e", color: '#ffffff'}}>
-                    <div className="row">
+                  <div
+                    className={style.rafCard2}
+                    style={{ background: "#f3eeff" }}
+                  >
+                    <div
+                      className={style.titleHead}
+                      style={{ background: "#8262ce", color: "#ffffff" }}
+                    >
+                      <div className="row">
                         <div className="col-xl-3">HCC</div>
                         <div className="col-xl-3">RAF</div>
                         <div className="col-xl-4">Monthly Premium</div>
-                        <div className="col-xl-1 rounded fs-5" style={{background: "#ffffff", color: "#000"}}>
-                          <span style={{marginLeft: "-2px"}}>28</span>
+                        <div
+                          className="col-xl-1 rounded fs-5"
+                          style={{ background: "#ffffff", color: "#000" }}
+                        >
+                          <span style={{ marginLeft: "-2px" }}>24</span>
                         </div>
-
                       </div>
                     </div>
-                    {rafScoreData?.map((item, i) => (
-                      <div className={style.detailsHead}>
-                        <div
-                          className={
-                            rafScoreData?.length != i + 1
-                              ? `row ${style.rafchildBorder}`
-                              : `row`
-                          }
-                        >
-                          <div className="col-xl-3">
-                          {getRafDetails(item.dx_name, "V28")?.length>0? getRafDetails(item.dx_name, "V28")?.map((item) => (
-                              <div>{item.hcc_name}</div>
-                            )):<div>&nbsp;</div>}
-                          </div>
-                          <div className="col-xl-3">
-                            {getRafDetails(item.dx_name, "V28")?.length>0?getRafDetails(item.dx_name, "V28")?.map((item) => (
-                              <div>{item.hcc_raf}</div>
-                            )):<div>&nbsp;</div>}
-                          </div>
-                          <div className="col-xl-4  text-center">
-                          
-                            {getRafDetails(item.dx_name, "V28")?.length>0?getRafDetails(item.dx_name, "V28")?.map((item) => (
-                              <div>${item.premium}</div>
-                            )):<div>&nbsp;</div>}
+                    <div className={style.stickyHeader}>
+                      {rafScoreData?.map((item, i) => (
+                        <div className={style.detailsHead}>
+                          <div
+                            className={
+                              rafScoreData?.length != i + 1
+                                ? `row ${style.rafchildBorder}`
+                                : `row`
+                            }
+                          >
+                            <div className="col-xl-3">
+                              {getRafDetails(item.dx_name, "V24")?.map(
+                                (item) => (
+                                  <div>{item.hcc_name}</div>
+                                )
+                              )}
+                            </div>
+                            <div className="col-xl-3">
+                              {getRafDetails(item.dx_name, "V24")?.map(
+                                (item) => (
+                                  <div>{item.hcc_raf}</div>
+                                )
+                              )}
+                            </div>
+                            <div className="col-xl-4  text-center">
+                              {getRafDetails(item.dx_name, "V24")?.map(
+                                (item) => (
+                                  <div>${item.premium}</div>
+                                )
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 </div>
-                
+                <div className={style.rafMainCard2}>
+                  <div
+                    className={style.rafCard2}
+                    style={{ background: "#ffe7e7" }}
+                  >
+                    <div
+                      className={style.titleHead}
+                      style={{ background: "#e47e7e", color: "#ffffff" }}
+                    >
+                      <div className="row">
+                        <div className="col-xl-3">HCC</div>
+                        <div className="col-xl-3">RAF</div>
+                        <div className="col-xl-4">Monthly Premium</div>
+                        <div
+                          className="col-xl-1 rounded fs-5"
+                          style={{ background: "#ffffff", color: "#000" }}
+                        >
+                          <span style={{ marginLeft: "-2px" }}>28</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className={style.stickyHeader}>
+                      {rafScoreData?.map((item, i) => (
+                        <div className={style.detailsHead}>
+                          <div
+                            className={
+                              rafScoreData?.length != i + 1
+                                ? `row ${style.rafchildBorder}`
+                                : `row`
+                            }
+                          >
+                            <div className="col-xl-3">
+                              {getRafDetails(item.dx_name, "V28")?.length >
+                              0 ? (
+                                getRafDetails(item.dx_name, "V28")?.map(
+                                  (item) => <div>{item.hcc_name}</div>
+                                )
+                              ) : (
+                                <div>&nbsp;</div>
+                              )}
+                            </div>
+                            <div className="col-xl-3">
+                              {getRafDetails(item.dx_name, "V28")?.length >
+                              0 ? (
+                                getRafDetails(item.dx_name, "V28")?.map(
+                                  (item) => <div>{item.hcc_raf}</div>
+                                )
+                              ) : (
+                                <div>&nbsp;</div>
+                              )}
+                            </div>
+                            <div className="col-xl-4  text-center">
+                              {getRafDetails(item.dx_name, "V28")?.length >
+                              0 ? (
+                                getRafDetails(item.dx_name, "V28")?.map(
+                                  (item) => <div>${item.premium}</div>
+                                )
+                              ) : (
+                                <div>&nbsp;</div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
               <label
                 className={`${visitStyles.labelStyle} ${style.raflableheadOverall}`}
@@ -163,8 +208,8 @@ const RafScore = ({ patientDetailsResult }) => {
                 Overall score
               </label>
               <div className={style.totalScoreContainer}>
-              <div className={style.rafScoreCard2} >
-                  <div className={style.titleHead} >
+                <div className={style.rafScoreCard2}>
+                  <div className={style.titleHead}>
                     <div className="row">
                       <div className="col-xl-12 text-center">Overall score</div>
                     </div>
@@ -178,8 +223,14 @@ const RafScore = ({ patientDetailsResult }) => {
                     </div>
                   </div>
                 </div>
-                <div className={style.rafScoreCard1} style={{background: "#f3eeff"}}>
-                  <div className={style.titleHead} style={{background: "#8262ce", color: '#ffffff'}}>
+                <div
+                  className={style.rafScoreCard1}
+                  style={{ background: "#f3eeff" }}
+                >
+                  <div
+                    className={style.titleHead}
+                    style={{ background: "#8262ce", color: "#ffffff" }}
+                  >
                     <div className="row">
                       <div className="col-xl-6">V24 score</div>
                       <div className="col-xl-6">
@@ -199,8 +250,14 @@ const RafScore = ({ patientDetailsResult }) => {
                     </div>
                   </div>
                 </div>
-                <div className={style.rafScoreCard1} style={{background: "#ffe7e7"}}>
-                  <div className={style.titleHead} style={{background: "#e47e7e", color: '#ffffff'}}>
+                <div
+                  className={style.rafScoreCard1}
+                  style={{ background: "#ffe7e7" }}
+                >
+                  <div
+                    className={style.titleHead}
+                    style={{ background: "#e47e7e", color: "#ffffff" }}
+                  >
                     <div className="row">
                       <div className="col-xl-6">V28 score</div>
                       <div className="col-xl-6">
@@ -219,7 +276,6 @@ const RafScore = ({ patientDetailsResult }) => {
                     </div>
                   </div>
                 </div>
-                
               </div>
             </div>
           </div>
