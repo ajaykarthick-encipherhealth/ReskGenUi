@@ -77,12 +77,12 @@ const UserList = () => {
 
   const handleChange = (e) => {
     let value = e.target.value;
-    const val=getDisplayValue(value)
-      setMobileNumber(val);
+    const val = getDisplayValue(value);
+    setMobileNumber(val);
   };
   const getDisplayValue = (number) => {
     if (number.length === 10) {
-      return number.slice(0, 7) + "***";
+      return number.slice(0, 5) + "*****";
     }
     return number;
   };
