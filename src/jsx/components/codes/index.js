@@ -9,9 +9,9 @@ const Codes = ({ data, loading, onSelect, onExpand, expandedKeys }) => {
   const scrollToTop = () => {
     topRef.current.scrollIntoView({ behavior: "smooth", top: 25 });
   };
-console.log(loading,"loading")
+
   return (
-    <>
+    <div>
       <div className="d-flex justify-content-center">
         {loading && <Spin size="large" />}
       </div>
@@ -30,7 +30,7 @@ console.log(loading,"loading")
           onClick={scrollToTop}
         />
       </div>
-    </>
+    </div>
   );
 };
 
