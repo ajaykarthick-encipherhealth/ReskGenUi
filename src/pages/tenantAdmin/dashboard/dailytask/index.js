@@ -182,7 +182,7 @@ const DailyTask = () => {
   const getUser = async () => {
     try {
       const data = await GetTenantAdminUserCount();
-      setRoles({...data.response, ...{ADMIN: 4}});
+      setRoles(data.response);
     } catch (error) {
       console.log(error);
     }
