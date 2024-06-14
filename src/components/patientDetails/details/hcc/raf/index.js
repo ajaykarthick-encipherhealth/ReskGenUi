@@ -90,10 +90,10 @@ const RafScore = ({ patientDetailsResult }) => {
                         <div className="col-xl-3">RAF</div>
                         <div className="col-xl-4">Monthly Premium</div>
                         <div
-                          className="col-xl-1 rounded fs-5"
-                          style={{ background: "#ffffff", color: "#000" }}
+                          className="col-xl-1 rounded"
+                          style={{ background: "#ffffff", color: "#8262ce" }}
                         >
-                          <span style={{ marginLeft: "-2px" }}>24</span>
+                          <span style={{ marginLeft: "-5px" }}>V24</span>
                         </div>
                       </div>
                     </div>
@@ -148,10 +148,10 @@ const RafScore = ({ patientDetailsResult }) => {
                         <div className="col-xl-3">RAF</div>
                         <div className="col-xl-4">Monthly Premium</div>
                         <div
-                          className="col-xl-1 rounded fs-5"
-                          style={{ background: "#ffffff", color: "#000" }}
+                          className="col-xl-1 rounded"
+                          style={{ background: "#ffffff", color: "#e47e7e" }}
                         >
-                          <span style={{ marginLeft: "-2px" }}>28</span>
+                          <span style={{ marginLeft: "-5px" }}>V28</span>
                         </div>
                       </div>
                     </div>
