@@ -24,7 +24,7 @@ import { useSelector, connect } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
 import ModelIndex from "../model/Index";
 import ENDPOINTS from "../../../../../utility/enpoints";
-import { getProviderNameTag } from "../function/providerHyperlink";
+import { getProviderNameTag } from "../function/ProviderHyperlinks";
 
 const NonHccCards = ({
   list,

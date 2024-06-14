@@ -348,8 +348,81 @@ const findSectionHyperlink = (hyperlinks, header) => {
   const headerResult = hyperlinks?.filter((res2) => res2.header === header);
   return headerResult;
 };
-const ProviderHyperlink = () => {
+
+export const getProviderNameTagList = ({ data }) => {
+  return data.map((res, index) => {
+    if (index < 2) {
+      var sectionMapArr = (
+        <span
+          className={`mt-2 text-start ${visitStyles.provider_name}`}
+          style={{
+            backgroundColor: stringToColour(res) + 33,
+            color: stringToColour(res),
+          }}
+        >
+          <i>
+            {" "}
+            <FontAwesomeIcon
+              icon={faCircleUser}
+              style={{
+                size: 10,
+                color: stringToColour(res),
+              }}
+            />
+          </i>
+          {res}
+        </span>
+      );
+      return sectionMapArr;
+    } else if (data.length - 1 == index) {
+      var sectionMapArr = (
+        <Popover
+          content={
+            <>
+              {data?.map((item, i) =>
+                i > 1 ? (
+                  <span
+                    className={`mt-2 text-start ${visitStyles.provider_name}`}
+                    style={{
+                      backgroundColor: stringToColour(item) + 33,
+                      color: stringToColour(item),
+                    }}
+                  >
+                    <i>
+                      {" "}
+                      <FontAwesomeIcon
+                        icon={faCircleUser}
+                        style={{
+                          size: 10,
+                          color: stringToColour(item),
+                        }}
+                      />
+                    </i>
+                    {item}
+                  </span>
+                ) : null
+              )}
+            </>
+          }
+          trigger={["hover"]}
+          placement="bottom"
+        >
+          <span
+            style={{ background: "#a6cfa6", color: "#fff" }}
+            className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+          >
+            {data.length - 2}+
+          </span>
+        </Popover>
+      );
+
+      return sectionMapArr;
+    }
+  });
+};
+
+const ProviderHyperlinks = () => {
   return <></>;
 };
 
-export default ProviderHyperlink;
+export default ProviderHyperlinks;

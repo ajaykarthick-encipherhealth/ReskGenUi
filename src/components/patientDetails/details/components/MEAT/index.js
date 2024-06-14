@@ -13,7 +13,7 @@ import {
 import { SVGICON } from "../../../../../jsx/constant/theme";
 
 import { connect } from "react-redux";
-import { getProviderNameTag } from "../function/providerHyperlink";
+import { getProviderNameTag } from "../function/ProviderHyperlinks";
 
 const MeatCard = ({
   list,
