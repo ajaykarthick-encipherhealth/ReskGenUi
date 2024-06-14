@@ -86,8 +86,8 @@ const UserList = ({
   const handleChange = (e) => {
     let value = e.target.value;
     // if (value?.length===10) {
-      const val=getDisplayValue(value)
-      setMobileNumber(val);
+    const val = getDisplayValue(value);
+    setMobileNumber(val);
     // }
   };
   const getDisplayValue = (number) => {
@@ -237,9 +237,6 @@ const UserList = ({
     setOrgAllList(orgListArray);
   }, [organizationList]);
 
-  // const onRoleChange = (value) => {
-  //   // console.log(value);
-  // };
   const onFinish = (values) => {
     handleSubmit(values);
   };
@@ -531,33 +528,6 @@ const UserList = ({
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item
-                      label="Mobile Number"
-                      name="mobileNumber"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please enter your mobile number!",
-                        },
-                        {
-                          len: 10,
-                          message:
-                            "Please enter a valid 10-digit mobile number!",
-                        },
-                      ]}
-                    >
-                      <div>
-                        <Input
-                          type="text"
-                          placeholder="Enter mobile number"
-                          autoComplete="off"
-                          value={mobileNumber}
-                          onChange={handleChange}
-                        />
-                      </div>
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item
                       name="role"
                       label="Role"
                       rules={[
@@ -576,6 +546,24 @@ const UserList = ({
                           SUPERVISOR
                         </Select.Option>
                       </Select>
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Select Organization"
+                      name="orgId"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please select Organization!",
+                        },
+                      ]}
+                    >
+                      <Select
+                        placeholder="Select"
+                        options={orgAllList}
+                        style={{ height: "42px" }}
+                      />
                     </Form.Item>
                   </Col>
                 </Row>
@@ -649,6 +637,33 @@ const UserList = ({
                           // }}
                           placeholder="Re-enter the password"
                           autoComplete="new-password"
+                        />
+                      </div>
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Mobile Number"
+                      name="mobileNumber"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please enter your mobile number!",
+                        },
+                        {
+                          len: 10,
+                          message:
+                            "Please enter a valid 10-digit mobile number!",
+                        },
+                      ]}
+                    >
+                      <div>
+                        <Input
+                          type="text"
+                          placeholder="Enter mobile number"
+                          autoComplete="off"
+                          value={getDisplayValue(mobileNumber)}
+                          onChange={handleChange}
                         />
                       </div>
                     </Form.Item>
