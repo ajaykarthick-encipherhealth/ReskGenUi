@@ -110,7 +110,7 @@ export const getEncounterDateBackground = ({
           }
           trigger={["hover"]}
           placement="bottom"
-          overlayStyle={{ zIndex: 1000 }}
+          overlayStyle={{ zIndex: 999 }}
         >
           <span
             style={{
@@ -380,7 +380,7 @@ export const getCaptureSectionBackgroundFile = (
         var sectionMapArr = (
           <Popover
             placement="bottom"
-            overlayStyle={{ zIndex: 1000 }}
+            overlayStyle={{ zIndex: 999 }}
             content={
               <>
                 {res?.length > 30 && <div>{res}</div>}
@@ -495,7 +495,7 @@ export const getCaptureSectionBackgroundFile = (
               i > 1 ? (
                 <Popover
                   placement="bottom"
-                  overlayStyle={{ zIndex: 1000 }}
+                  overlayStyle={{ zIndex: 999 }}
                   content={getHeaderHyperlink(
                     findSectionHyperlink(hyperlinks, item),
                     encounterDateMatching,
@@ -667,7 +667,7 @@ export const getSectionNameManually = ({
       >
         <Popover
           trigger="click"
-          overlayStyle={{ zIndex: 1000 }}
+          overlayStyle={{ zIndex: 999 }}
           content={
             <>
               {res?.hyperlinks?.map((list) => (
@@ -732,7 +732,7 @@ export const getProviderNameList = ({ data, captureSectionMatching }) => {
     } else if (data.length - 1 == index) {
       var sectionMapArr = (
         <Popover
-          overlayStyle={{ zIndex: 1000 }}
+          overlayStyle={{ zIndex: 999 }}
           content={
             <>
               {data?.map((item, i) =>
@@ -1275,7 +1275,7 @@ export const getSuspectTypes = (title, value) => {
     <Popover
       className="suspectContainer"
       placement="top"
-      overlayStyle={{ zIndex: 1000 }}
+      overlayStyle={{ zIndex: 999 }}
       // title="Suspect Type"
       content={
         <>
