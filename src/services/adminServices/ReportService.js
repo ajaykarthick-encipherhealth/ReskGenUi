@@ -3,7 +3,7 @@ import ENDPOINTS from "../../utility/enpoints";
 import { getSentDetails } from "../../store/actions/adminAction/ReportActions";
 
 export const UPDATE_SENTREPORT='UPDATE_SENTREPORT'
-export const patientDetails = async (
+export const patientDetails = async ({
   pagenum,
   startDate = "",
   endDate = "",
@@ -11,12 +11,12 @@ export const patientDetails = async (
   filter = "",
   userName = "",
   sort = "",
-  selectManager = ""
+  selectManager = "",size}
 ) => {
   const token = localStorage.getItem("token");
   const orgId = localStorage.getItem("orgId");
   const searchValue = filter === "ALL" ? "" : filter;
-  const url = `dbservice/patient/adminreport?pageno=${pagenum}&size=7&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}&username=${userName==='REVIEWER'?selectManager:""}&managerid=${userName==='SUPERVISOR'?selectManager:""}&orgid=${orgId}`;
+  const url = `dbservice/patient/adminreport?pageno=${pagenum}&size=${size?size:7}&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}&username=${userName==='REVIEWER'?selectManager:""}&managerid=${userName==='SUPERVISOR'?selectManager:""}&orgid=${orgId}`;
 
   try {
     const response = await axios.get(`${ENDPOINTS?.apiEndoint}${url}`, {

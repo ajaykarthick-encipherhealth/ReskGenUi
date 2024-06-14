@@ -5,7 +5,7 @@ import { Empty } from "antd";
 import ReactECharts from "echarts-for-react";
 import { useDispatch } from "react-redux";
 import SpinnerDots from "../../../components/spinner";
-import Export from "../../../resusablereport/reports/Export";
+import Export from "../Export";
 import { selectedReport } from "../../../store/actions/adminAction/ReportActions";
 import CardComponent from "../../../mainStream/components/cards/miniGroupCard";
 import {

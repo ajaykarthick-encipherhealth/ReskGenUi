@@ -6,11 +6,92 @@ import {
   getUsersList,
 } from "../../store/actions/ReportActions";
 import { useDispatch, useSelector } from "react-redux";
-import { checkBoxData, debounce } from "../../pages/admin/reports/Export";
+import { debounce } from "../../pages/admin/reports/Export";
 import { updateSentReport } from "../../services/ReportService";
 import { getActiveTab } from "../../store/actions/l2Action/AuditReportAction";
 import InputField from "../../components/input";
 import { SVGICON } from "../../jsx/constant/theme";
+
+export const checkBoxData = [
+  {
+    id: 1,
+    title: "patientId",
+    heading: "Patient ID",
+    checked: false,
+  },
+  {
+    id: 2,
+    title: "patientName",
+    heading: "Patient Name",
+    checked: false,
+  },
+  {
+    id: 3,
+    title: "dob",
+    heading: "DOB",
+    checked: false,
+  },
+  {
+    id: 4,
+    title: "computedDate",
+    heading: "Computed Date",
+    checked: false,
+  },
+  {
+    id: 5,
+    title: "providerName",
+    heading: "Provider Name",
+    checked: false,
+  },
+  {
+    id: 6,
+    title: "allocatedOn",
+    heading: "Allocated On",
+    checked: false,
+  },
+  {
+    id: 7,
+    title: "noOfValidCodes",
+    heading: "No Of Valid Codes",
+    checked: false,
+  },
+  {
+    id: 8,
+    title: "noOfSuggestedCodes",
+    heading: "No Of Suggested Codes",
+    checked: false,
+  },
+  {
+    id: 9,
+    title: "noOfDeletedCodes",
+    heading: "No Of Deleted Codes",
+    checked: false,
+  },
+  {
+    id: 10,
+    title: "totalCodes",
+    heading: "Total Codes",
+    checked: false,
+  },
+  {
+    id: 11,
+    title: "patientAllocated",
+    heading: "Patient Allocated",
+    checked: false,
+  },
+  // {
+  //   id: 12,
+  //   title: "comments",
+  //   heading: "Comments",
+  //   checked: false,
+  // },
+  {
+    id: 13,
+    title: "hccDiagnosisCodes",
+    heading: "Hcc Diagnosis Codes",
+    checked: false,
+  },
+];
 const Export = ({
   isModalVisible,
   closeModal,
@@ -269,68 +350,72 @@ const Export = ({
           </div>
           <div className="col-md-12" style={{ marginTop: "10px" }}>
             <div className="d-flex p-2">
-              {!selectedReportInfo &&
-              <div>
-                <div className="d-flex p-2">
-                  <div style={{ marginRight: "10px" }}>Report Fields</div>
-                  <div>
-                    <Checkbox
-                      key={0}
-                      value={"all"}
-                      onChange={(e) => {
-                        if (e.target.value === "all") {
-                          setCheckAll((prev) => {
-                            return prev?.map((data) => {
-                              return { ...data, checked: e.target.checked };
-                            });
-                          });
-                        }
-                      }}
-                      checked={isAllChecked}
-                    >
-                      {" "}
-                      Select All
-                    </Checkbox>
-                  </div>
-                </div>
-                <div className={`p-2 ${styles.reportLabel}`}>
-                  Select the fields you want to sent
-                </div>
-                <div
-                  style={{
-                    marginRight: "10px",
-                    backgroundColor: "#EBF3FE",
-                    padding: "10px",
-                    borderRadius: "5px",
-                  }}
-                >
-                  <ul>
-                    {checkall?.map((data) => (
-                      <li key={data?.id} style={{ padding: "5px" }}>
-                        <Checkbox
-                          value={data?.title}
-                          checked={data?.checked}
-                          onChange={(e) => {
+              {!selectedReportInfo && (
+                <div>
+                  <div className="d-flex p-2">
+                    <div style={{ marginRight: "10px" }}>Report Fields</div>
+                    <div>
+                      <Checkbox
+                        key={0}
+                        value={"all"}
+                        onChange={(e) => {
+                          if (e.target.value === "all") {
                             setCheckAll((prev) => {
                               return prev?.map((data) => {
-                                if (data?.title === e.target.value) {
-                                  return { ...data, checked: e.target.checked };
-                                } else {
-                                  return data;
-                                }
+                                return { ...data, checked: e.target.checked };
                               });
                             });
-                          }}
-                        >
-                          {data.heading}
-                        </Checkbox>
-                      </li>
-                    ))}
-                  </ul>
+                          }
+                        }}
+                        checked={isAllChecked}
+                      >
+                        {" "}
+                        Select All
+                      </Checkbox>
+                    </div>
+                  </div>
+                  <div className={`p-2 ${styles.reportLabel}`}>
+                    Select the fields you want to sent
+                  </div>
+                  <div
+                    style={{
+                      marginRight: "10px",
+                      backgroundColor: "#EBF3FE",
+                      padding: "10px",
+                      borderRadius: "10px",
+                      height: "435px",
+                    }}
+                  >
+                    <ul>
+                      {checkall?.map((data) => (
+                        <li key={data?.id} style={{ padding: "5px" }}>
+                          <Checkbox
+                            value={data?.title}
+                            checked={data?.checked}
+                            onChange={(e) => {
+                              setCheckAll((prev) => {
+                                return prev?.map((data) => {
+                                  if (data?.title === e.target.value) {
+                                    return {
+                                      ...data,
+                                      checked: e.target.checked,
+                                    };
+                                  } else {
+                                    return data;
+                                  }
+                                });
+                              });
+                            }}
+                          >
+                            {data.heading}
+                          </Checkbox>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-              </div>
-}
-              <div className={`col-md-${selectedReportInfo?"12":"9"}`}>
+              )}
+              <div className={`col-md-${selectedReportInfo ? "12" : "9"}`}>
                 <div className={`p-2 `}>Sent To</div>
                 <div className={`p-2 ${styles.reportLabel}`}>
                   Select the fields you want to sent

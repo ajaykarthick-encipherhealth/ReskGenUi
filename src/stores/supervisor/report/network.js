@@ -7,6 +7,7 @@ export async function auditApi({
   search,
   filter = "",
   sort,
+  size
 }) {
   const options = {
     method: "GET",
@@ -16,7 +17,7 @@ export async function auditApi({
   const sortDirection = sort?.sortDir === "undefined" ? "" : sort?.sortDir;
   const orgId = localStorage.getItem("orgId");
   const data = await requestPortal(
-    `dbservice/patient/auditor/assinedreport?pageno=${pagenum}&size=7&startdate=${startDate}&enddate=${endDate}&status=${searchValue}&searchstring=${search}&orgid=${orgId}&sortfield=${sortField}&sortdirection=${sortDirection}
+    `dbservice/patient/auditor/assinedreport?pageno=${pagenum}&size=${size?size:7}&startdate=${startDate}&enddate=${endDate}&status=${searchValue?searchValue:""}&searchstring=${search?search:""}&orgid=${orgId}&sortfield=${sortField}&sortdirection=${sortDirection}
   `,
     options
   );
@@ -29,13 +30,14 @@ export async function teamApi({
   endDate = "",
   search,
   sort,
+  size
 }) {
   const options = {
     method: "GET",
   };
   const orgId = localStorage.getItem("orgId");
   const data = await requestPortal(
-    `dbservice/patient/auditorreport?pageno=${pagenum}&size=7&startdate=${startDate}&enddate=${endDate}&searchstring=${search}&orgid=${orgId}&sortfield=${sort?.sortField}&sortdirection=${sort?.sortDir}
+    `dbservice/patient/auditorreport?pageno=${pagenum}&size=${size?size:7}&startdate=${startDate}&enddate=${endDate}&searchstring=${search?search:""}&orgid=${orgId}&sortfield=${sort?.sortField?sort?.sortField:""}&sortdirection=${sort?.sortDir?sort?.sortDir:""}
   `,
     options
   );

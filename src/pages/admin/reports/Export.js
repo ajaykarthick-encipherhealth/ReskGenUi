@@ -12,87 +12,6 @@ import InputField from "../../../components/input";
 
 const { Option } = Select;
 
-export const checkBoxData = [
-  {
-    id: 1,
-    title: "patientId",
-    heading: "Patient ID",
-    checked: false,
-  },
-  {
-    id: 2,
-    title: "patientName",
-    heading: "Patient Name",
-    checked: false,
-  },
-  {
-    id: 3,
-    title: "dob",
-    heading: "DOB",
-    checked: false,
-  },
-  {
-    id: 4,
-    title: "processedDate",
-    heading: "Processed Date",
-    checked: false,
-  },
-  {
-    id: 5,
-    title: "providerName",
-    heading: "Provider Name",
-    checked: false,
-  },
-  {
-    id: 6,
-    title: "allocatedOn",
-    heading: "Allocated On",
-    checked: false,
-  },
-  {
-    id: 7,
-    title: "noOfValidCodes",
-    heading: "No Of Valid Codes",
-    checked: false,
-  },
-  {
-    id: 8,
-    title: "noOfSuggestedCodes",
-    heading: "No Of Suggested Codes",
-    checked: false,
-  },
-  {
-    id: 9,
-    title: "noOfDeletedCodes",
-    heading: "No Of Deleted Codes",
-    checked: false,
-  },
-  {
-    id: 10,
-    title: "totalCodes",
-    heading: "Total Codes",
-    checked: false,
-  },
-  {
-    id: 11,
-    title: "allocatedUserId",
-    heading: "Allocated UserID",
-    checked: false,
-  },
-  {
-    id: 12,
-    title: "comments",
-    heading: "Comments",
-    checked: false,
-  },
-  {
-    id: 13,
-    title: "validDisease",
-    heading: "Valid Disease",
-    checked: false,
-  },
-];
-
 export const debounce = (func, delay) => {
   let timeoutId;
   return function (...args) {
@@ -335,6 +254,7 @@ const Export = ({
                   gridTemplateColumns: "repeat(3, 1fr)",
                   gap: "16px",
                   margin: "0px 0",
+                
                 }}
               >
                 <Checkbox
