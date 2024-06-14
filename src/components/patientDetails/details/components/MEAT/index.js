@@ -137,28 +137,30 @@ const MeatCard = ({
                             </Popover>
                           </div>
                         </div>
-                        <div
-                          className={`${visitStyles.encounterAndSectionHeader}`}
-                        >
-                          {getProviderNameList({
-                            data: item?.providerName,
-                            captureSectionMatching: captureSectionMatching,
-                          })}
-                        </div>
-                        <div
-                          className={`${visitStyles.encounterAndSectionHeader}`}
-                        >
-                          {getEncounterDateBackground({
-                            value: item?.encounterDateSplit,
-                            encounterDateMatching: encounterDateMatching,
-                            fileDosPageNumberList: fileDosPageNumberList,
-                            setIsModalOpenValidCodes: setIsModalOpen,
-                            setSearch: setSearch,
-                            setFileModalHeader: setFileModalHeader,
-                            patientDocumentResult: patientDocumentResult,
-                            selectMeatResult: setSelectMeatResult,
-                            datas: item,
-                          })}
+                        <div style={{ marginTop: "5px" }}>
+                          <div
+                            className={`${visitStyles.encounterAndSectionHeader}`}
+                          >
+                            {getProviderNameList({
+                              data: item?.providerName,
+                              captureSectionMatching: captureSectionMatching,
+                            })}
+                          </div>
+                          <div
+                            className={`${visitStyles.encounterAndSectionHeader}`}
+                          >
+                            {getEncounterDateBackground({
+                              value: item?.encounterDateSplit,
+                              encounterDateMatching: encounterDateMatching,
+                              fileDosPageNumberList: fileDosPageNumberList,
+                              setIsModalOpenValidCodes: setIsModalOpen,
+                              setSearch: setSearch,
+                              setFileModalHeader: setFileModalHeader,
+                              patientDocumentResult: patientDocumentResult,
+                              selectMeatResult: setSelectMeatResult,
+                              datas: item,
+                            })}
+                          </div>
                         </div>
                       </div>
                     </div>
