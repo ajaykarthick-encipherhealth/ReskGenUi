@@ -27,6 +27,7 @@ import {
   auditstatusBodyTemplate,
   processstatusBodyTemplate,
 } from "../../components/chartUtils";
+import { actions as supervisorAction } from "../../../stores/supervisor/report";
 
 const TeamReport = ({
   patientDetails,
@@ -42,6 +43,9 @@ const TeamReport = ({
   getFlagsData,
   isAdmin,
   loader,
+  activeTab,
+  auditReport,
+  teamReport,
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -51,6 +55,18 @@ const TeamReport = ({
       ? []
       : reportListAll?.response?.response?.data;
     setSelectedRows(updatedRows);
+    if (activeTab === "Audit") {
+      auditReport({
+        pagenum: 0,
+        size: ReportPatientDetails?.response?.response?.totalElements,
+      });
+    }
+    if (activeTab === "Team") {
+      teamReport({
+        pagenum: 0,
+        size: ReportPatientDetails?.response?.response?.totalElements,
+      });
+    }
   };
 
   const handleRowCheckboxChange = (row) => {
@@ -388,7 +404,13 @@ const TeamReport = ({
   );
 };
 
-const enhancer = connect((state) => ({
-  getFlagsData: state?.reviewer?.workQueue?.flags?.data,
-}));
+const enhancer = connect(
+  (state) => ({
+    getFlagsData: state?.reviewer?.workQueue?.flags?.data,
+  }),
+  {
+    teamReport: supervisorAction.teamReport,
+    auditReport: supervisorAction.auditReport,
+  }
+);
 export default enhancer(TeamReport);

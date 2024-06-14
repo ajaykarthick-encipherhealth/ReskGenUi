@@ -16,7 +16,7 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import InitialCard from "../../mainStream/reports/initialReport";
 import SentReport from "../../mainStream/reports/sentReport";
 import ReceivedReport from "../../mainStream/reports/receivedReport";
-import Export from "../../resusablereport/reports/Export";
+import Export from "./Export";
 import { actions as workflowActions } from "../../stores/reviewer/workqueue";
 import { actions as reviewerAction } from "../../stores/reviewer/report";
 import { actions as supervisorAction } from "../../stores/supervisor/report";
@@ -471,7 +471,7 @@ const Reports = ({
                                 {" "}
                                 Date
                               </label>
-                              <div >
+                              <div>
                                 <RangePicker
                                   style={{
                                     borderRadius: "0 5px 5px 0",
@@ -535,30 +535,29 @@ const Reports = ({
                                     )}
                                     {info?.isRangePikcer && (
                                       <div className="dateRangeSize">
-                                          <RangePicker
-                                        style={{
-                                          borderRadius: "0 5px 5px 0",
-                                          width: "100%",
-                                        }}
-                                        value={
-                                          selectedDates
-                                            ? selectedDates[info?.name]
-                                            : undefined
-                                        }
-                                        onChange={(date, dateString) =>
-                                          handleCoderPicker(
-                                            date,
-                                            dateString,
-                                            info?.name
-                                          )
-                                        }
-                                        disabledDate={(current) =>
-                                          disableFutureDate(current)
-                                        }
-                                        className="newReportPicker"
-                                      />
+                                        <RangePicker
+                                          style={{
+                                            borderRadius: "0 5px 5px 0",
+                                            width: "100%",
+                                          }}
+                                          value={
+                                            selectedDates
+                                              ? selectedDates[info?.name]
+                                              : undefined
+                                          }
+                                          onChange={(date, dateString) =>
+                                            handleCoderPicker(
+                                              date,
+                                              dateString,
+                                              info?.name
+                                            )
+                                          }
+                                          disabledDate={(current) =>
+                                            disableFutureDate(current)
+                                          }
+                                          className="newReportPicker"
+                                        />
                                       </div>
-                                    
                                     )}
 
                                     {info?.isSearch && (
@@ -684,6 +683,7 @@ const Reports = ({
                         gotoPatientDetails={gotoPatientDetails}
                         page={{ pageNo, paginationFirst }}
                         loader={reviewerLoader}
+                        activeTab={activeTab}
                       />
                     </div>
                   )}
@@ -708,6 +708,7 @@ const Reports = ({
                       gotoPatientDetails={gotoPatientDetails}
                       page={{ teamPageNo, paginationTeamFirst }}
                       loader={auditeReportLoading}
+                      activeTab={activeTab}
                     />
                   )}
                   {activeTab === "Sent" && (
