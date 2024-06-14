@@ -108,6 +108,7 @@ const UserList = () => {
       setUseAdd(true);
       form.resetFields();
       setIsLoadingBtn(false);
+      setMobileNumber("");
     }
     setRoleValue([]);
     setValidated(true);
@@ -629,6 +630,7 @@ const UserList = () => {
                       setRoleValue([]);
                       setRole("");
                       form.resetFields();
+                      setMobileNumber("");
                     }}
                   >
                     Cancel
