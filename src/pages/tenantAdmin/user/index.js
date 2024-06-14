@@ -236,9 +236,6 @@ const UserList = ({
     setOrgAllList(orgListArray);
   }, [organizationList]);
 
-  // const onRoleChange = (value) => {
-  //   // console.log(value);
-  // };
   const onFinish = (values) => {
     handleSubmit(values);
   };
