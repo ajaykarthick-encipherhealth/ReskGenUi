@@ -17,6 +17,7 @@ const AllocateModal = ({
   setAllocateClicked,
   selectedChart,
   setSelectedChart,
+  getAllList,
 }) => {
   const [activeCard, setActiveCard] = useState("");
   const [search, setSearch] = useState("");
@@ -68,6 +69,12 @@ const AllocateModal = ({
       if (response?.data?.status == "SUCCESS") {
         notification.success({
           message: response?.data?.message,
+        });
+        getAllList({
+          pageNo: 0,
+          pageSize: 15,
+          allocate: true,
+          status: 2,
         });
         setOpen(false);
         setAllocateClicked(true);
