@@ -35,11 +35,11 @@ const DailyTask = () => {
       name: "Supervisor",
     },
     {
-      color: "#FA896B",
+      color: "#06c213",
       name: "Admin",
     },
     {
-      color: "#06c213",
+      color: "#FA896B",
       name: "Tenant Admin",
     },
   ];
@@ -121,7 +121,7 @@ const DailyTask = () => {
               value:adminCount,
               name: "Admin",
               itemStyle: {
-                color: "#FA896B",
+                color: "#06c213",
               },
             },
             {
@@ -182,7 +182,7 @@ const DailyTask = () => {
   const getUser = async () => {
     try {
       const data = await GetTenantAdminUserCount();
-      setRoles(data.response);
+      setRoles({...data.response, ...{ADMIN: 4}});
     } catch (error) {
       console.log(error);
     }
