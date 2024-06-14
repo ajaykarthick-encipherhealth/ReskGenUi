@@ -148,7 +148,7 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
   };
 
   const getEncounterDateBackground = (value) => {
-    return value?.split(",")?.map((res, index) => {
+    return value?.map((res, index) => {
       if (index < 2) {
         var backColor = "encounterDateTag1";
         var sectionMapArr = (
@@ -163,13 +163,13 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
           </span>
         );
         return sectionMapArr;
-      } else if (value?.split(",").length - 1 === index) {
+      } else if (value.length - 1 === index) {
         var backColor = "encounterDateTag1";
         var sectionMapArr = (
           <Popover
             content={
               <>
-                {value?.split(",")?.map((item, i) =>
+                {value?.map((item, i) =>
                   i > 1 ? (
                     <span
                       // onClick={() => getEncounterDetails(res)}
@@ -196,7 +196,7 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
               <i>
                 <CalendarOutlined className={visitStyles.calenderIcon} />
               </i>
-              {value?.split(",").length - 2}+
+              {value.length - 2}+
             </span>
           </Popover>
         );
@@ -379,7 +379,7 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
         </div>
         
         <div className="text-start">
-          {getEncounterDateBackground(node?.encounterDate)}
+          {getEncounterDateBackground(node?.dateOfServices)}
         </div>
         <div className="text-start">
           {getCaptureSectionBackground(node?.capturedSections)}

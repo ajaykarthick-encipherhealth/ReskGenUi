@@ -209,16 +209,21 @@ const RafScore = ({ patientDetailsResult }) => {
               </label>
               <div className={style.totalScoreContainer}>
                 <div className={style.rafScoreCard2}>
-                  <div className={style.titleHead}>
+                  <div className={style.titleHead}  style={{ background: "#73b2f2", color: "#ffffff" }}>
                     <div className="row">
-                      <div className="col-xl-12 text-center">Overall score</div>
+                      <div className="col-xl-6 text-center">Overall score</div>
+                      <div className="col-xl-6 text-center">Overall premium</div>
                     </div>
                   </div>
                   <div className={style.detailsHead}>
                     <div className="row">
-                      <div className="col-xl-12 text-center">
+                      <div className="col-xl-6 text-center">
                         {" "}
                         {rafScoreList?.rafVersionDTO?.overAllScore}
+                      </div>
+                      <div className="col-xl-6 text-center">
+                        {" "}
+                        {rafScoreList?.rafVersionDTO?.overAllPremium ? "$"+rafScoreList?.rafVersionDTO?.overAllPremium : "---"}
                       </div>
                     </div>
                   </div>
