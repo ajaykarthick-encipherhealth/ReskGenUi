@@ -218,7 +218,7 @@ const VisitData = ({
                         </span>
                         <div className="d-flex justify-content-center">
                           <span className={`${visitStyles.hcc_title_badge}`}>
-                            {newValidDiseaseList.length}
+                            {newValidDiseaseList.filter((item) => item.isComboCode != true).length}
                           </span>
                         </div>
                       </div>
@@ -311,7 +311,7 @@ const VisitData = ({
                             <span
                               className={`${visitStyles.suggested_title_badge}`}
                             >
-                              {suggestedHccList.length}
+                              {suggestedHccList.filter((item) => item.isComboCode != true).length}
                             </span>
                           </div>
                         </div>
@@ -379,7 +379,7 @@ const VisitData = ({
                             <span
                               className={`${visitStyles.deleted_title_badge}`}
                             >
-                              {deletedHccList.length}
+                              {deletedHccList.filter((item) => item.isComboCode != true).length}
                             </span>
                           </div>
                         </div>

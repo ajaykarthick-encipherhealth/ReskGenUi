@@ -1,12 +1,12 @@
 import { requestPortal } from "../../../utils/network";
 
-export async function patientDetails(patientId,processedYear,dos,setIsSpinnerLoading) {
+export async function patientDetails(patientId,processedYear,dos,setIsSpinnerLoading, role) {
   const options = {
     method: "GET",
   };
-  var url = `patientId=${patientId}&processedYear=${processedYear}` 
+  var url = `patientId=${patientId}&role=${role?.toUpperCase()}&processedYear=${processedYear}` 
   if(dos){
-    url = `patientId=${patientId}&dateOfService=${dos}` 
+    url = `patientId=${patientId}&role=${role?.toUpperCase()}&dateOfService=${dos}` 
   }
   try {
     const data = await requestPortal(
