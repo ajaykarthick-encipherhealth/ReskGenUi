@@ -33,7 +33,6 @@ import { debounce } from "../../../components/input";
 import { useCallback } from "react";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin";
 
-
 const { RangePicker } = DatePicker;
 const statusOption = [
   { value: "", label: "ALL" },
@@ -43,7 +42,7 @@ const statusOption = [
   { value: "LOW", label: "LOW" },
 ];
 
-const Patient = ({ getAllOrganizationList, organizationList}) => {
+const Patient = ({ getAllOrganizationList, organizationList }) => {
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [addPatientId, setAddPatientId] = useState(false);
@@ -91,8 +90,7 @@ const Patient = ({ getAllOrganizationList, organizationList}) => {
   const [orgAllList, setOrgAllList] = useState([]);
   const [defaultOrgValue, setDefaultOrgValue] = useState(null);
 
-
-  const getAllList = async (
+  const getAllList = async ({
     pageNo = 0,
     pageSize = 15,
     startDate,
@@ -102,22 +100,25 @@ const Patient = ({ getAllOrganizationList, organizationList}) => {
     search,
     sort,
     selectedOption,
-    selectOrgList
-  ) => {
+    selectOrgList,
+    batchCount,
+  }) => {
     const uId = localStorage.getItem("userId");
     var orgId = "";
-    if(selectOrgList){
-      orgId=  selectOrgList == "ALL" ? "" : selectOrgList
+    if (selectOrgList) {
+      orgId = selectOrgList == "ALL" ? "" : selectOrgList;
     }
     let resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=${uId}&organizationId=${orgId}&computationStart=${
       startDate ? startDate : ""
     }&computationEnd=${
       endDate ? endDate : ""
-    }&isAllocation=${allocate}&status=${status}&searchString=${search}&sortdirection=${
-      sort?.sortDir
-    }&sortfield=${sort?.sortField}&priority=${
-      selectedOption ? selectedOption : ""
-    }&batchCount=${batchCount}`;
+    }&isAllocation=${allocate}&status=${status}&searchString=${
+      search ? search : ""
+    }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&sortfield=${
+      sort?.sortField ? sort?.sortField : ""
+    }&priority=${selectedOption ? selectedOption : ""}&batchCount=${
+      batchCount ? batchCount : ""
+    }`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response?.data) {
       let resultMap = [];
@@ -139,6 +140,8 @@ const Patient = ({ getAllOrganizationList, organizationList}) => {
       }
 
       setTableLoading(false);
+      setFilterBatchCount(false)
+      setBatchCount("")
     }
   };
   const getAllCheckList = async (sort) => {
@@ -252,10 +255,10 @@ const Patient = ({ getAllOrganizationList, organizationList}) => {
     }
   };
 
-  const getAuditL2List = async (pageNo, searchString,selectOrgList) => {
-    var orgId= "";
-    if(selectOrgList){
-      orgId=  selectOrgList == "ALL" ? "" : selectOrgList
+  const getAuditL2List = async (pageNo, searchString, selectOrgList) => {
+    var orgId = "";
+    if (selectOrgList) {
+      orgId = selectOrgList == "ALL" ? "" : selectOrgList;
     }
     let tenantid = localStorage.getItem("tenantId");
     let resoureUrl = `dbservice/l2audit?orgid=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}`;
@@ -303,18 +306,18 @@ const Patient = ({ getAllOrganizationList, organizationList}) => {
 
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab === 1) {
-      getAllList(
-        pageNo,
-        pageSize,
-        startDate,
-        endDate,
-        true,
-        2,
-        searchStr,
-        sort,
-        selectedOption,
-        selectOrgList
-      );
+      getAllList({
+        pageNo: pageNo,
+        pageSize: pageSize,
+        startDate: startDate,
+        endDate: endDate,
+        allocate: true,
+        status: 2,
+        search: searchStr,
+        sort: sort,
+        selectedOption: selectedOption,
+        selectOrgList: selectOrgList,
+      });
     }
   }, [
     pageNo,
@@ -325,7 +328,7 @@ const Patient = ({ getAllOrganizationList, organizationList}) => {
     endDate,
     searchStr,
     selectedOption,
-    selectOrgList
+    selectOrgList,
   ]);
 
   const renderRows = () => {
@@ -523,22 +526,18 @@ const Patient = ({ getAllOrganizationList, organizationList}) => {
   }, []);
 
   useEffect(() => {
-    console.log(selectOrgList)
+    console.log(selectOrgList);
     if (!isPatientList) {
-      getAuditL2List(pageNo, searchStr,selectOrgList);
+      getAuditL2List(pageNo, searchStr, selectOrgList);
     }
-  }, [
-    selectOrgList,
-    searchStr
-  ]);
-
+  }, [selectOrgList, searchStr]);
 
   useEffect(() => {
-    if(!organizationList?.response){
+    if (!organizationList?.response) {
       getAllOrganizationList();
     }
   }, []);
-  
+
   useEffect(() => {
     var orgListArray = [{ value: "ALL", label: "ALL" }];
     organizationList?.response?.map((res) => {
@@ -549,7 +548,6 @@ const Patient = ({ getAllOrganizationList, organizationList}) => {
     });
     setOrgAllList(orgListArray);
   }, [organizationList]);
-
 
   return (
     <>
@@ -573,8 +571,9 @@ const Patient = ({ getAllOrganizationList, organizationList}) => {
                                   style={{ width: "40px", height: "40px" }}
                                   className={reportStyles.filterBtn}
                                   onClick={() => {
-                                    setIsPatientList(false)
-                                    setAllocatedOption("")}}
+                                    setIsPatientList(false);
+                                    setAllocatedOption("");
+                                  }}
                                 >
                                   <Image src={leftArrow} />
                                 </button>
@@ -611,20 +610,21 @@ const Patient = ({ getAllOrganizationList, organizationList}) => {
                               </div>
                             </div>
                           </div>
-                          {(activeTab == 1 || !isPatientList && activeTab == 2) &&
-                          <div className="col-xl-2">
-                                <div>
-                                  <Selector
-                                    selectlabel={"Select Organization"}
-                                    setSelectedOption={setSelectedOrgList}
-                                    selectOptions={orgAllList}
-                                    selectDefaultValue={defaultOrgValue}
-                                    setDefaultValue={setDefaultOrgValue}
-                                    // isClose={true}
-                                  />
-                                </div>
+                          {(activeTab == 1 ||
+                            (!isPatientList && activeTab == 2)) && (
+                            <div className="col-xl-2">
+                              <div>
+                                <Selector
+                                  selectlabel={"Select Organization"}
+                                  setSelectedOption={setSelectedOrgList}
+                                  selectOptions={orgAllList}
+                                  selectDefaultValue={defaultOrgValue}
+                                  setDefaultValue={setDefaultOrgValue}
+                                  // isClose={true}
+                                />
                               </div>
-}
+                            </div>
+                          )}
 
                           {!isPatientList && activeTab == 1 ? (
                             <>
@@ -657,7 +657,7 @@ const Patient = ({ getAllOrganizationList, organizationList}) => {
                                   />
                                 </div>
                               </div>
-                           
+
                               <div className="col-xl-2">
                                 <label>Batch Count</label>
                                 <div class="form-group d-flex">
@@ -690,7 +690,12 @@ const Patient = ({ getAllOrganizationList, organizationList}) => {
                                     }}
                                   />
                                   <button
-                                    onClick={() => setFilterBatchCount(true)}
+                                    onClick={() => {
+                                      setFilterBatchCount(true);
+                                      getAllList({
+                                        batchCount: batchCount,
+                                      });
+                                    }}
                                     className="btn btn-outline-secondary py-0 px-2 select-count"
                                   >
                                     Select
@@ -1023,6 +1028,7 @@ const Patient = ({ getAllOrganizationList, organizationList}) => {
         setSelectAllChecked={setSelectAllChecked}
         setSelectedChart={setSelectedChart}
         selectedChart={selectedChart}
+        getAllList={getAllList}
       />
       <L2AllocateModal
         open={allocateModalL2}
@@ -1037,7 +1043,7 @@ const Patient = ({ getAllOrganizationList, organizationList}) => {
       />
     </>
   );
-}
+};
 
 const enhancer = connect(
   (state) => ({
@@ -1045,7 +1051,6 @@ const enhancer = connect(
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
-
   }
 );
 export default enhancer(Patient);
