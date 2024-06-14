@@ -6,7 +6,7 @@ export async function patientDetails(patientId,processedYear,dos,setIsSpinnerLoa
   };
   var url = `patientId=${patientId}&role=${role?.toUpperCase()}&processedYear=${processedYear}` 
   if(dos){
-    url = `patientId=${patientId}&role=${role?.toUpperCase()}&dateOfService=${dos}` 
+    url = `patientId=${patientId}&role=${role ? role?.toUpperCase() : ""}&dateOfService=${dos}` 
   }
   try {
     const data = await requestPortal(

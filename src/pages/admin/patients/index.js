@@ -194,6 +194,7 @@ export default function Patient() {
           createdByFirstName: res.createdByFirstName,
           createdByLastName: res.createdByLastName,
           createdByProfileImage: res.createdByProfileImage,
+          totalPages: res.totalPages
         });
       });
       var newArray = [];
