@@ -178,6 +178,8 @@ const HccCards = ({
                                     }
                                     title=""
                                     trigger="hover"
+                                    overlayStyle={{ zIndex: 1000 }}
+
                                   >
                                     <>
                                       {" "}
@@ -276,6 +278,8 @@ const HccCards = ({
                                   placement="left"
                                   title={""}
                                   trigger="click"
+                                  overlayStyle={{ zIndex: 1000 }}
+
                                   open={
                                     openContent === data?.diagnosisCode
                                       ? true
@@ -307,6 +311,7 @@ const HccCards = ({
                                           title={data.diagnosisCode}
                                           placement="bottom"
                                           trigger="click"
+                                          overlayStyle={{ zIndex: 1000 }}
                                         >
                                           {/* <Tooltip title="HCC Version Details" placement="bottom"> */}
                                           <div className="cr-pointer">
@@ -422,6 +427,7 @@ const HccCards = ({
                                             title={data.diagnosisCode}
                                             placement="bottom"
                                             trigger="click"
+                                            overlayStyle={{ zIndex: 1000 }}
                                           >
                                             {/* <Tooltip title="HCC Version Details" placement="bottom"> */}
                                             <div className="cr-pointer">
@@ -490,6 +496,7 @@ const HccCards = ({
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
+
                                   {getProviderNameTag(
                                     data?.providerName,
                                     data?.providerHyperlinks,
@@ -504,6 +511,7 @@ const HccCards = ({
                                     setIsMulitpleHeadeCode,
                                     isMulitpleHeaderCode
                                   )}
+
                                 </div>
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}

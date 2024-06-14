@@ -233,6 +233,7 @@ const Notes = ({ setOpen, open, patientDetailsResult }) => {
                     placement="bottom"
                     content={userDetails}
                     onOpenChange={() => renderUserDetails(createdBy)}
+                    overlayStyle={{ zIndex: 1000 }}
                   >
                     <Avatar
                       className={

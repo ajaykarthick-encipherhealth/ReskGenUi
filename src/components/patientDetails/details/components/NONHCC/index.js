@@ -57,7 +57,7 @@ const NonHccCards = ({
   setIsValidAction,
   provided,
   isVisitData,
-  fileDosPageNumberList
+  fileDosPageNumberList,
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -75,7 +75,7 @@ const NonHccCards = ({
     pagenumber: "",
   });
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
-  const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null)
+  const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
 
   return (
     <>
@@ -98,6 +98,7 @@ const NonHccCards = ({
                       }
                       title=""
                       trigger="hover"
+                      overlayStyle={{ zIndex: 1000 }}
                     >
                       <>
                         {" "}
@@ -119,13 +120,8 @@ const NonHccCards = ({
                         }}
                       />
                     }
-                    okText={
-                   
-                        okText
-                    }
-                    cancelText={
-                       cancelText
-                    }
+                    okText={okText}
+                    cancelText={cancelText}
                     onCancel={() =>
                       moveToAnotherAction(
                         setConfirmNotesModalValid,
@@ -235,9 +231,7 @@ const NonHccCards = ({
   );
 };
 
-const enhancer = connect(
-  (state) => ({
-    fileDosPageNumberList:state?.patientDetails?.details?.dosPageNumberResult,
-  }),
-);
+const enhancer = connect((state) => ({
+  fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
+}));
 export default enhancer(NonHccCards);
