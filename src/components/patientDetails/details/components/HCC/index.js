@@ -28,6 +28,7 @@ import ModelIndex from "../model/Index";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import MovementAction from "../movementAction";
+import { getProviderNameTag } from "../function/providerHyperlink";
 
 const HccCards = ({
   list,
@@ -77,6 +78,7 @@ const HccCards = ({
   });
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
+  const [isMulitpleProvider, setIsMulitpleProvider] = useState(false);
 
   const PopContentHccVersion = (
     <div className={styles.innerPop}>
@@ -177,6 +179,7 @@ const HccCards = ({
                                     title=""
                                     trigger="hover"
                                     overlayStyle={{ zIndex: 1000 }}
+
                                   >
                                     <>
                                       {" "}
@@ -276,6 +279,7 @@ const HccCards = ({
                                   title={""}
                                   trigger="click"
                                   overlayStyle={{ zIndex: 1000 }}
+
                                   open={
                                     openContent === data?.diagnosisCode
                                       ? true
@@ -492,11 +496,22 @@ const HccCards = ({
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
-                                  {getProviderNameList({
-                                    data: data?.providerName,
-                                    captureSectionMatching:
-                                      captureSectionMatching,
-                                  })}
+
+                                  {getProviderNameTag(
+                                    data?.providerName,
+                                    data?.providerHyperlinks,
+                                    setSearch,
+                                    data.diagnosisCode,
+                                    data.dbDescription,
+                                    setIsModalOpenValidCodes,
+                                    setFileModalHeader,
+                                    patientDocumentResult,
+                                    setIsMulitpleProvider,
+                                    isMulitpleProvider,
+                                    setIsMulitpleHeadeCode,
+                                    isMulitpleHeaderCode
+                                  )}
+
                                 </div>
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}

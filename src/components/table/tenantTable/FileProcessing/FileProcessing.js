@@ -26,8 +26,9 @@ export const eventStreming = (
 ) => {
   const id = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
+  const orgId = localStorage.getItem("orgId");
   const sse = new EventSource(
-    `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}`
+    `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}&organizationId=`
   );
 
   const fileStatusEventListener = (event) => {
@@ -72,9 +73,10 @@ const stageChartMap2 = {
   OCR: "OCR",
   SECTIONS_FILTER: "Sections Filter",
   DISEASE_FOUND: "Disease",
+  HEALTH_METRICS_CALCULATED: "Health Metrics Found",
   VALID_DISEASE_SEPARATION: "Valid disease",
-  COMBINATION_CODES_FOUND: "Combination codes",
   MEAT_FOUND: "Meat",
+  COMBINATION_CODES_FOUND: "Combination codes",
   RAF_SCORE_FOUND: "RAF Score",
   QUERY_CONDITIONS_FOUND: "Query Conditions",
   FINISHED: "Finished",
@@ -87,27 +89,31 @@ const stageChartMap2 = {
   RAF_SCORE_FOUND_FAILED: "RAF_SCORE_FOUND_FAILED",
   STORED_FAILED: "STORED_FAILED",
   QUERY_CONDITIONS_FOUND_FAILED: "QUERY_CONDITIONS_FOUND_FAILED",
+  HEALTH_METRICS_CALCULATION_FAILED: "HEALTH_METRICS_CALCULATION_FAILED",
 };
 
 const errStages = {
   DISEASE_FOUND_FAILED: "DISEASE_FOUND_FAILED",
   OCR_FAILED: "OCR_FAILED",
-  SECTIONS_FILTER_FAILED: "SECTIONS_FILTER_FAILED",
+  // SECTIONS_FILTER_FAILED: "SECTIONS_FILTER_FAILED",
   VALID_DISEASE_SEPARATION_FAILED: "VALID_DISEASE_SEPARATION_FAILED",
   COMBINATION_CODES_FOUND_FAILED: "COMBINATION_CODES_FOUND_FAILED",
   MEAT_FOUND_FAILED: "MEAT_FOUND_FAILED",
   RAF_SCORE_FOUND_FAILED: "RAF_SCORE_FOUND_FAILED",
   STORED_FAILED: "STORED_FAILED",
   QUERY_CONDITIONS_FOUND_FAILED: "QUERY_CONDITIONS_FOUND_FAILED",
+  HEALTH_METRICS_CALCULATION_FAILED: "HEALTH_METRICS_CALCULATION_FAILED",
 };
 const stageChartMap = {
   FILE_UPLOAD: 0,
   OCR: 1,
   OCR_FAILED: 1,
-  SECTIONS_FILTER: 2,
-  SECTIONS_FILTER_FAILED: 2,
-  DISEASE_FOUND: 3,
-  DISEASE_FOUND_FAILED: 3,
+  // SECTIONS_FILTER: 1.5,
+  // SECTIONS_FILTER_FAILED: 1.5,
+  DISEASE_FOUND: 2,
+  DISEASE_FOUND_FAILED: 2,
+  HEALTH_METRICS_CALCULATED: 3,
+  HEALTH_METRICS_CALCULATION_FAILED: 3,
   VALID_DISEASE_SEPARATION: 4,
   VALID_DISEASE_SEPARATION_FAILED: 4,
   COMBINATION_CODES_FOUND: 5,
@@ -122,7 +128,7 @@ const stageChartMap = {
   QUERY_CONDITIONS_FOUND_FAILED: 8,
   FINISHED: 9,
 };
-function FileProcessingTable({ patinetListAll, loading, selectOrgList }) {
+function FileProcessingTable({ patinetListAll, loading }) {
   const dispatch = useDispatch();
   const [stepperVisible, setStepperVisible] = useState(
     Array(patinetListAll?.length).fill(false)
@@ -161,11 +167,7 @@ function FileProcessingTable({ patinetListAll, loading, selectOrgList }) {
   useEffect(() => {
     const id = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
-    var orgId = "";
-    console.log(selectOrgList);
-    if (selectOrgList?.value) {
-      orgId = selectOrgList?.value == "ALL" ? "" : selectOrgList?.value;
-    }
+    const orgId = localStorage.getItem("orgId");
     let isFinished = false;
     const sse = new EventSource(
       `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}&organizationId=${orgId}`
@@ -201,7 +203,7 @@ function FileProcessingTable({ patinetListAll, loading, selectOrgList }) {
       sse.removeEventListener("file-status-event", fileStatusEventListener);
       sse.close();
     };
-  }, [activeId, selectOrgList]);
+  }, [activeId]);
 
   useEffect(() => {
     if (activeId && parsedData) {
@@ -226,7 +228,6 @@ function FileProcessingTable({ patinetListAll, loading, selectOrgList }) {
 
   const renderUploadStatus = (data, index) => {
     let uploadStatus = 0;
-
     switch (data?.processStageChart) {
       case "FILE_UPLOAD":
         uploadStatus = 5;
@@ -237,16 +238,22 @@ function FileProcessingTable({ patinetListAll, loading, selectOrgList }) {
       case "OCR_FAILED":
         uploadStatus = 10;
         break;
-      case "SECTIONS_FILTER":
+      // case "SECTIONS_FILTER":
+      //   uploadStatus = 30;
+      //   break;
+      // case "SECTIONS_FILTER_FAILED":
+      //   uploadStatus = 20;
+      //   break;
+      case "DISEASE_FOUND":
         uploadStatus = 30;
         break;
-      case "SECTIONS_FILTER_FAILED":
+      case "DISEASE_FOUND_FAILED":
         uploadStatus = 20;
         break;
-      case "DISEASE_FOUND":
+      case "HEALTH_METRICS_CALCULATED":
         uploadStatus = 40;
         break;
-      case "DISEASE_FOUND_FAILED":
+      case "HEALTH_METRICS_CALCULATION_FAILED":
         uploadStatus = 30;
         break;
       case "VALID_DISEASE_SEPARATION":
@@ -295,13 +302,21 @@ function FileProcessingTable({ patinetListAll, loading, selectOrgList }) {
     }
 
     const currentIndex = stageChartMap[data?.processStageChart];
-
+    const findPreviousStep = (currentStage) => {
+      const stages = Object.keys(stageChartMap2);
+      const currentIndex = stages.indexOf(currentStage);
+      
+      if (currentIndex > 0) {
+        return stages[currentIndex - 1];
+        }
+        return null; // or some other value indicating there's no previous step
+        };
     const stepsItemBase = [
       {
         title: "",
         description: "File Upload",
         status:
-          stageChartMap[data?.processStageChart] <= stageChartMap[currentIndex]
+          stageChartMap[data?.processStageChart] <= currentIndex
             ? "finish"
             : undefined,
         info: "FILE_UPLOAD",
@@ -314,21 +329,23 @@ function FileProcessingTable({ patinetListAll, loading, selectOrgList }) {
             ? "finish"
             : stageChartMap2[data?.processStageChart] === "OCR_FAILED"
             ? "error"
+            : stageChartMap[data?.processStageChart] === undefined
+            ? "process"
             : undefined,
         info: "OCR",
       },
-      {
-        title: "",
-        description: "Sections Filter",
-        status:
-          stageChartMap[data?.processStageChart] <= stageChartMap[currentIndex]
-            ? "finish"
-            : stageChartMap2[data?.processStageChart] ===
-              "SECTIONS_FILTER_FAILED"
-            ? "error"
-            : undefined,
-        info: "SECTIONS_FILTER",
-      },
+      // {
+      //   title: "",
+      //   description: "Sections Filter",
+      //   status:
+      //     stageChartMap[data?.processStageChart] <= stageChartMap[currentIndex]
+      //       ? "finish"
+      //       : stageChartMap2[data?.processStageChart] ===
+      //         "SECTIONS_FILTER_FAILED"
+      //       ? "error"
+      //       : undefined,
+      //   info: "SECTIONS_FILTER",
+      // },
       {
         title: "",
         description: "Disease",
@@ -339,6 +356,18 @@ function FileProcessingTable({ patinetListAll, loading, selectOrgList }) {
             ? "error"
             : undefined,
         info: "DISEASE_FOUND",
+      },
+      {
+        title: "",
+        description: "Health Metrics Found",
+        status:
+          stageChartMap[data?.processStageChart] <= stageChartMap[currentIndex]
+            ? "finish"
+            : stageChartMap2[data?.processStageChart] ===
+              "HEALTH_METRICS_CALCULATION_FAILED"
+            ? "error"
+            : undefined,
+        info: "HEALTH_METRICS_CALCULATED",
       },
       {
         title: "",
@@ -421,13 +450,14 @@ function FileProcessingTable({ patinetListAll, loading, selectOrgList }) {
       const queryConditionsStep = {
         title: "",
         description: "Query Conditions",
-        status:
-          stageChartMap[data?.processStageChart] <= stageChartMap[currentIndex]
-            ? "finish"
-            : stageChartMap2[data?.processStageChart] ===
-              "QUERY_CONDITIONS_FOUND_FAILED"
-            ? "error"
-            : undefined,
+        status: stageChartMap[data?.processStageChart]
+          ? "finish"
+          : stageChartMap2[data?.processStageChart] ===
+            "QUERY_CONDITIONS_FOUND_FAILED"
+          ? "error"
+          : stageChartMap2[data?.processStageChart] === undefined
+          ? "processing"
+          : undefined,
         info: "QUERY_CONDITIONS_FOUND",
       };
 
@@ -454,6 +484,7 @@ function FileProcessingTable({ patinetListAll, loading, selectOrgList }) {
           },
         }));
 
+       
     return (
       <div style={{ display: "flex" }}>
         <div style={{ width: "98%" }}>
@@ -465,7 +496,7 @@ function FileProcessingTable({ patinetListAll, loading, selectOrgList }) {
                 .join(" ")}
             >
               <Progress
-                percent={uploadStatus}
+                percent={currentIndex?uploadStatus:`${stageChartMap[findPreviousStep(data?.processStageChart)]}0`}
                 status="active"
                 style={{
                   height: "20px",
@@ -476,6 +507,8 @@ function FileProcessingTable({ patinetListAll, loading, selectOrgList }) {
                     ? "green"
                     : errStages[data?.processStageChart]
                     ? "red"
+                    : stageChartMap2[data?.processStageChart] === undefined
+                    ? "#04306f"
                     : "#04306f"
                 }
               />
@@ -523,7 +556,7 @@ function FileProcessingTable({ patinetListAll, loading, selectOrgList }) {
                 }}
               >
                 <Steps
-                  current={currentIndex + 1}
+                  current={currentIndex?currentIndex + 1:stageChartMap[findPreviousStep(data?.processStageChart)]}
                   labelPlacement="vertical"
                   items={mappedSteps}
                   percent={failedList ? 0 : count}
@@ -542,7 +575,7 @@ function FileProcessingTable({ patinetListAll, loading, selectOrgList }) {
                 ? "green"
                 : "#00000",
             }}
-          >{`${uploadStatus}% Complete`}</div>
+          >{`${currentIndex?uploadStatus:`${stageChartMap[findPreviousStep(data?.processStageChart)]}0`}% Complete`}</div>
         </div>
         <div style={{ width: "2%", marginTop: "6px" }}>
           <div onClick={() => handleToggleStepper(index, data)}>
@@ -569,10 +602,6 @@ function FileProcessingTable({ patinetListAll, loading, selectOrgList }) {
       </tr>
     ));
   };
-
-  useEffect(() => {
-    console.log(selectOrgList.value);
-  }, [selectOrgList]);
 
   return (
     <div className={TableStyle.classContaineer}>
