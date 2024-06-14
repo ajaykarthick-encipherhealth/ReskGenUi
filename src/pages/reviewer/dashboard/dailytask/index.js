@@ -70,10 +70,10 @@ const DailyTask = ({ dailyStatusData, DailyStatusData }) => {
   }, []);
 
   useEffect(() => {
-    if (dailyStatusData) {
+    if (dailyStatusData?.data?.response) {
       getDays(selectedDate, [dailyStatusData?.data?.response]);
     }
-  }, [dailyStatusData]);
+  }, [dailyStatusData?.data?.response]);
 
   const showPrevious = () => {
     const lastData = currentDays[0];
