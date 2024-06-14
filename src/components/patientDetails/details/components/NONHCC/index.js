@@ -24,6 +24,7 @@ import { useSelector, connect } from "react-redux";
 import { Draggable } from "react-beautiful-dnd";
 import ModelIndex from "../model/Index";
 import ENDPOINTS from "../../../../../utility/enpoints";
+import { getProviderNameTag } from "../function/providerHyperlink";
 
 const NonHccCards = ({
   list,
@@ -76,6 +77,7 @@ const NonHccCards = ({
   });
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
+  const [isMulitpleProvider, setIsMulitpleProvider] = useState(false);
 
   return (
     <>
@@ -167,10 +169,20 @@ const NonHccCards = ({
               <div className="d-flex justify-content-between">
                 <div className={`${visitStyles.hoverActiveHcc}`}>
                   <div className={`${visitStyles.encounterAndSectionHeader}`}>
-                    {getProviderNameList({
-                      data: data?.providerName,
-                      captureSectionMatching: captureSectionMatching,
-                    })}
+                    {getProviderNameTag(
+                      data?.providerName,
+                      data?.providerHyperlinks,
+                      setSearch,
+                      data.diagnosisCode,
+                      data.dbDescription,
+                      setIsModalOpenValidCodes,
+                      setFileModalHeader,
+                      patientDocumentResult,
+                      setIsMulitpleProvider,
+                      isMulitpleProvider,
+                      setIsMulitpleHeadeCode,
+                      isMulitpleHeaderCode
+                    )}
                   </div>
                   <div className={`${visitStyles.encounterAndSectionHeader}`}>
                     {getEncounterDateBackground({
