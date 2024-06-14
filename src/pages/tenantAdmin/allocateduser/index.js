@@ -140,6 +140,8 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
       }
 
       setTableLoading(false);
+      setFilterBatchCount(false)
+      setBatchCount("")
     }
   };
   const getAllCheckList = async (sort) => {
