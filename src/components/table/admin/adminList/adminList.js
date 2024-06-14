@@ -359,7 +359,11 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
                   )}
 
                   <td
-                    className={usersData?.data?.response?.content?.length > 0 ? TableStyle.lastBorder : TableStyle.noDataBorder }
+                    className={
+                      usersData?.data?.response?.content?.length > 0
+                        ? TableStyle.lastBorder
+                        : TableStyle.noDataBorder
+                    }
                     style={{
                       height: "40px !important",
                       textAlign: "center",
