@@ -8,16 +8,17 @@ import { Col, Row, Spin } from "antd";
 import Card from "../../../../components/card";
 import HeadTitle from "../../../../components/headtitle";
 import dayjs from "dayjs";
-import { useDispatch, connect } from "react-redux";
+import { getDailyTaskDatas } from "../../../../store/actions/DashboardActions";
+import { useDispatch, useSelector } from "react-redux";
 import Legends from "../../../../components/legends";
 import { useRouter } from "next/router";
 import { getFilteredList } from "../../../../store/actions/PatientsActions";
 import spinSTYles from "../../../../styles/auth.module.css";
-import { actions as dashbaordActions } from "../../../../stores/reviewer/dashboard";
-
-const DailyTask = ({ dailyStatusData, DailyStatusData }) => {
+const DailyTask = () => {
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
+
+  const dailyStatusData = useSelector((state) => state.workFlow.dailyTask);
   const dispatch = useDispatch();
 
   const bullets = [
@@ -65,15 +66,15 @@ const DailyTask = ({ dailyStatusData, DailyStatusData }) => {
     setSelectedDate(days);
 
     days?.map((data, index) => {
-      return DailyStatusData({ date: data?.dateString });
+      return dispatch(getDailyTaskDatas(data?.dateString, router));
     });
   }, []);
 
   useEffect(() => {
-    if (dailyStatusData?.data?.response) {
-      getDays(selectedDate, [dailyStatusData?.data?.response]);
+    if (dailyStatusData) {
+      getDays(selectedDate, dailyStatusData);
     }
-  }, [dailyStatusData?.data?.response]);
+  }, [dailyStatusData]);
 
   const showPrevious = () => {
     const lastData = currentDays[0];
@@ -88,25 +89,25 @@ const DailyTask = ({ dailyStatusData, DailyStatusData }) => {
     ];
     setSelectedDate((prev) => [...prev, ...datas]);
     datas?.map((data, index) => {
-      return DailyStatusData({ date: data?.dateString });
+      return dispatch(getDailyTaskDatas(data?.dateString, router));
     });
   };
 
   const getDays = (selectedDate, statusData) => {
     const processedDays = selectedDate?.map((dayInfo, index) => {
       const matchingStatusData = statusData?.find((status) => {
-        return status?.date === dayInfo?.dateString;
+        return status?.data?.response?.date === dayInfo?.dateString;
       });
       return {
         id: index + 1,
         day: dayInfo?.day,
         date: dayInfo?.date,
-        dateString: matchingStatusData?.date,
-        pending: matchingStatusData?.pending || 0,
-        hold: matchingStatusData?.hold || 0,
-        completed: matchingStatusData?.completed || 0,
-        decline: matchingStatusData?.declined || 0,
-        allocated: matchingStatusData?.allocated || 0,
+        dateString: matchingStatusData?.data?.response?.date,
+        pending: matchingStatusData?.data?.response?.pending || 0,
+        hold: matchingStatusData?.data?.response?.hold || 0,
+        completed: matchingStatusData?.data?.response?.completed || 0,
+        decline: matchingStatusData?.data?.response?.declined || 0,
+        allocated: matchingStatusData?.data?.response?.allocated || 0,
       };
     });
     const sorted = processedDays?.sort((a, b) => {
@@ -189,7 +190,7 @@ const DailyTask = ({ dailyStatusData, DailyStatusData }) => {
           data: [
             {
               value: allocated,
-              name: "Allocated",
+              name: "Alocated",
               itemStyle: {
                 color: "#fff",
               },
@@ -201,13 +202,16 @@ const DailyTask = ({ dailyStatusData, DailyStatusData }) => {
   };
   const showNext = () => {
     if (currentDays?.length > 3) {
-      const updatedData = currentDays.shift();
-      const datas = currentDays.map(({ id, day, date, dateString }) => ({
-        id,
-        day,
-        date,
-        dateString,
-      }));
+      const updatedData = currentDays?.shift();
+      const datas = [];
+      const valyes = currentDays?.map((item) => {
+        datas?.push({
+          id: item?.id,
+          day: item?.day,
+          date: item?.date,
+          dateString: item?.dateString,
+        });
+      });
       setSelectedDate(datas);
     }
   };
@@ -236,14 +240,19 @@ const DailyTask = ({ dailyStatusData, DailyStatusData }) => {
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   {uniqueData?.slice(0, 3)?.map((data, index) => (
-                    <Col key={data?.id} span={7} className={styles.sliderdiv}>
+                    <Col
+                      key={index}
+                      span={7}
+                      className={styles.sliderdiv}
+                      // onClick={() => setSelectedDate(currentWeek[index])}
+                    >
                       <h4
                         className={styles.headerTitle}
                         style={{ fontSize: "16px" }}
                         onClick={() => {
                           dispatch(
                             getFilteredList({
-                              dayDate: data?.date,
+                              dayDate: data?.dateString,
                             })
                           );
                           router?.push("/reviewer/patients");
@@ -336,12 +345,5 @@ const DailyTask = ({ dailyStatusData, DailyStatusData }) => {
     </>
   );
 };
-const enhancer = connect(
-  (state) => ({
-    dailyStatusData: state?.reviewer?.dashboard?.dailyTask,
-  }),
-  {
-    DailyStatusData: dashbaordActions.dailyTaskAction,
-  }
-);
-export default enhancer(DailyTask);
+
+export default DailyTask;
