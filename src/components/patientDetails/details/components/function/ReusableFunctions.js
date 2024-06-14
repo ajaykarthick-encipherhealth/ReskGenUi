@@ -68,6 +68,7 @@ export const getEncounterDateBackground = ({
     } else if (value.length - 1 == index) {
       var sectionMapArr = (
         <Popover
+        overlayStyle={{ zIndex: 999 }}
           content={
             <>
               {value?.map((item, i) =>
@@ -379,6 +380,7 @@ export const getCaptureSectionBackgroundFile = (
       } else {
         var sectionMapArr = (
           <Popover
+            overlayStyle={{ zIndex: 999 }}
             placement="bottom"
             overlayStyle={{ zIndex: 999 }}
             content={
@@ -494,6 +496,7 @@ export const getCaptureSectionBackgroundFile = (
             {dublicateCaptureDelete?.map((item, i) =>
               i > 1 ? (
                 <Popover
+                overlayStyle={{ zIndex: 999 }}
                   placement="bottom"
                   overlayStyle={{ zIndex: 999 }}
                   content={getHeaderHyperlink(
@@ -666,6 +669,7 @@ export const getSectionNameManually = ({
         }}
       >
         <Popover
+        overlayStyle={{ zIndex: 999 }}
           trigger="click"
           overlayStyle={{ zIndex: 999 }}
           content={
@@ -732,7 +736,7 @@ export const getProviderNameList = ({ data, captureSectionMatching }) => {
     } else if (data.length - 1 == index) {
       var sectionMapArr = (
         <Popover
-          overlayStyle={{ zIndex: 999 }}
+        overlayStyle={{ zIndex: 999 }}
           content={
             <>
               {data?.map((item, i) =>
@@ -1272,7 +1276,8 @@ export function removeDuplicatesArray(arr) {
 
 export const getSuspectTypes = (title, value) => {
   var popOver = (
-    <Popover
+    <Popover 
+    overlayStyle={{ zIndex: 999 }}
       className="suspectContainer"
       placement="top"
       overlayStyle={{ zIndex: 999 }}
