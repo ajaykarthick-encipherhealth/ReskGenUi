@@ -38,7 +38,7 @@ const HoldStatus = () => {
     }
     return {
       patientId: item.patientId,
-      testValue: testValue,
+      testValue: item.noteText,
     };
   });
   const TableData = (
@@ -61,7 +61,7 @@ const HoldStatus = () => {
               }}
             >
               <td className={styles.description}>{item.patientId}</td>
-              <td className={styles.description}>{item.testValue}</td>
+              <td className={styles.description}>{item.testValue ? item.testValue : "---"}</td>
             </tr>
           ))
         ) : (

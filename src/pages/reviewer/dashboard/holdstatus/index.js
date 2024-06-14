@@ -26,7 +26,7 @@ const HoldStatus = ({ getHoldStatusData, holdStatusData }) => {
 
   const processedData = holdStatusData?.data?.response?.map((item) => {
     let testValue = "no data";
-
+console.log(item);
     if (item.holdNotes && item.holdNotes.length > 0) {
       item.holdNotes.forEach((obj) => {
         if (obj["2023"]) {
@@ -36,7 +36,7 @@ const HoldStatus = ({ getHoldStatusData, holdStatusData }) => {
     }
     return {
       patientId: item.patientId,
-      testValue: testValue,
+      testValue: item.noteText,
     };
   });
   const TableData = (
@@ -59,7 +59,7 @@ const HoldStatus = ({ getHoldStatusData, holdStatusData }) => {
               }}
             >
               <td className={styles.description}>{item.patientId}</td>
-              <td className={styles.description}>{item.testValue}</td>
+              <td className={styles.description}>{item.testValue ? item.testValue : "---"}</td>
             </tr>
           ))
         ) : (
