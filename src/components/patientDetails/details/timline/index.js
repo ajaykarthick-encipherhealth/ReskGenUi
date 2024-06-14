@@ -56,6 +56,25 @@ const Timeline = ({
   function renderTimelineItem(item) {
     const getBadgeClassName = () => {
       switch (item.action) {
+        case "MOVED":
+          if (item?.fromState == "VALID" && item?.toState == "DELETED") {
+            return "timeline-badge MOVED_VALID_TO_DELETED";
+          }
+          if (item?.fromState == "VALID" && item?.toState == "SUGGESTED") {
+            return "timeline-badge MOVED_VALID_TO_SUGGESTED";
+          }
+          if (item?.fromState == "SUGGESTED" && item?.toState == "VALID") {
+            return "timeline-badge MOVED_SUGGESTED_TO_VALID";
+          }
+          if (item?.fromState == "SUGGESTED" && item?.toState == "DELETED") {
+            return "timeline-badge MOVED_SUGGESTED_TO_DELETED";
+          }
+          if (item?.fromState == "DELETED" && item?.toState == "VALID") {
+            return "timeline-badge MOVED_DELETED_TO_VALID";
+          }
+          if (item?.fromState == "DELETED" && item?.toState == "SUGGESTED") {
+            return "timeline-badge MOVED_VALID_TO_DELETED";
+          }
         case "MOVED_INVALID_TO_VALID":
           return "timeline-badge MOVED_INVALID_TO_VALID";
         case "MOVED_SUGGESTED_TO_VALID":
@@ -107,14 +126,61 @@ const Timeline = ({
               <span className={visitStyles.validColor}> VALID</span>
             </div>
           );
-        case "MOVED_VALID_TO_SUGGESTED":
-          return (
-            <div className="d-flex">
-              {item.diagnosisCode} - Moved from{" "}
-              <span className={visitStyles.validColor}>VALID</span> to{" "}
-              <span className={visitStyles.suggestedColor}>SUGGESTED</span>
-            </div>
-          );
+        case "MOVED":
+          if (item?.fromState == "VALID" && item?.toState == "SUGGESTED") {
+            return (
+              <div className="d-flex">
+                {item.diagnosisCode} - Moved from{" "}
+                <span className={visitStyles.validColor}>HCC</span> to{" "}
+                <span className={visitStyles.suggestedColor}>SUGGESTED</span>
+              </div>
+            );
+          }
+          if (item?.fromState == "VALID" && item?.toState == "DELETED") {
+            return (
+              <div className="d-flex">
+                {item.diagnosisCode} - Moved from{" "}
+                <span className={visitStyles.validColor}>HCC</span> to{" "}
+                <span className={visitStyles.deletedColor}>DELETED</span>
+              </div>
+            );
+          }
+          if (item?.fromState == "SUGGESTED" && item?.toState == "VALID") {
+            return (
+              <div className="d-flex">
+                {item.diagnosisCode} - Moved from{" "}
+                <span className={visitStyles.suggestedColor}>SUGGESTED</span> to{" "}
+                <span className={visitStyles.validColor}> HCC</span>
+              </div>
+            );
+          }
+          if (item?.fromState == "SUGGESTED" && item?.toState == "DELETED") {
+            return (
+              <div className="d-flex w-100">
+                {item.diagnosisCode} - Moved from{" "}
+                <span className={visitStyles.suggestedColor}>SUGGESTED</span> to{" "}
+                <span className={visitStyles.deletedColor}> DELETED</span>
+              </div>
+            );
+          }
+          if (item?.fromState == "DELETED" && item?.toState == "VALID") {
+            return (
+              <div className="d-flex">
+                {item.diagnosisCode} - Moved from{" "}
+                <span className={visitStyles.deletedColor}>DELETED</span> to{" "}
+                <span className={visitStyles.validColor}> HCC</span>
+              </div>
+            );
+          }
+          if (item?.fromState == "DELETED" && item?.toState == "SUGGESTED") {
+            return (
+              <div className="d-flex">
+                {item.diagnosisCode} - Moved from{" "}
+                <span className={visitStyles.deletedColor}>DELETED</span> to{" "}
+                <span className={visitStyles.suggestedColor}>SUGGESTED</span>
+              </div>
+            );
+          }
         case "VALID_DISEASE_ADDED":
           return `${item.diagnosisCode} - Valid from disease added`;
         case "MOVED_VALID_TO_DELETED":
