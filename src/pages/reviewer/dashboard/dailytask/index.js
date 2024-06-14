@@ -71,7 +71,7 @@ const DailyTask = ({ dailyStatusData, DailyStatusData }) => {
 
   useEffect(() => {
     if (dailyStatusData) {
-      getDays(selectedDate, dailyStatusData?.data?.response);
+      getDays(selectedDate, [dailyStatusData?.data?.response]);
     }
   }, [dailyStatusData]);
 
@@ -95,18 +95,18 @@ const DailyTask = ({ dailyStatusData, DailyStatusData }) => {
   const getDays = (selectedDate, statusData) => {
     const processedDays = selectedDate?.map((dayInfo, index) => {
       const matchingStatusData = statusData?.find((status) => {
-        return status?.data?.response?.date === dayInfo?.dateString;
+        return status?.date === dayInfo?.dateString;
       });
       return {
         id: index + 1,
         day: dayInfo?.day,
         date: dayInfo?.date,
-        dateString: matchingStatusData?.data?.response?.date,
-        pending: matchingStatusData?.data?.response?.pending || 0,
-        hold: matchingStatusData?.data?.response?.hold || 0,
-        completed: matchingStatusData?.data?.response?.completed || 0,
-        decline: matchingStatusData?.data?.response?.declined || 0,
-        allocated: matchingStatusData?.data?.response?.allocated || 0,
+        dateString: matchingStatusData?.date,
+        pending: matchingStatusData?.pending || 0,
+        hold: matchingStatusData?.hold || 0,
+        completed: matchingStatusData?.completed || 0,
+        decline: matchingStatusData?.declined || 0,
+        allocated: matchingStatusData?.allocated || 0,
       };
     });
     const sorted = processedDays?.sort((a, b) => {
@@ -338,7 +338,7 @@ const DailyTask = ({ dailyStatusData, DailyStatusData }) => {
 };
 const enhancer = connect(
   (state) => ({
-    dailyStatusData: state?.reviewer,
+    dailyStatusData: state?.reviewer?.dashboard?.dailyTask,
   }),
   {
     DailyStatusData: dashbaordActions.dailyTaskAction,
