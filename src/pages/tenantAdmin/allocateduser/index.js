@@ -90,7 +90,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
   const [orgAllList, setOrgAllList] = useState([]);
   const [defaultOrgValue, setDefaultOrgValue] = useState(null);
 
-  const getAllList = async (
+  const getAllList = async ({
     pageNo = 0,
     pageSize = 15,
     startDate,
@@ -101,7 +101,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
     sort,
     selectedOption,
     selectOrgList
-  ) => {
+  }) => {
     const uId = localStorage.getItem("userId");
     var orgId = "";
     if (selectOrgList) {
@@ -111,9 +111,9 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
       startDate ? startDate : ""
     }&computationEnd=${
       endDate ? endDate : ""
-    }&isAllocation=${allocate}&status=${status}&searchString=${search}&sortdirection=${
-      sort?.sortDir
-    }&sortfield=${sort?.sortField}&priority=${
+    }&isAllocation=${allocate}&status=${status}&searchString=${search?search:""}&sortdirection=${
+      sort?.sortDir?sort?.sortDir:""
+    }&sortfield=${sort?.sortField?sort?.sortField:""}&priority=${
       selectedOption ? selectedOption : ""
     }&batchCount=${batchCount}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
@@ -1018,6 +1018,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
         setSelectAllChecked={setSelectAllChecked}
         setSelectedChart={setSelectedChart}
         selectedChart={selectedChart}
+        getAllList={getAllList}
       />
       <L2AllocateModal
         open={allocateModalL2}
