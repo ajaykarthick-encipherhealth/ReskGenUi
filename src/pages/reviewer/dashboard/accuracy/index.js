@@ -13,7 +13,11 @@ import spinSTYles from "../../../../styles/auth.module.css";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 import { actions as dashbaordActions } from "../../../../stores/reviewer/dashboard";
-import { chartBlockedDates, getGraphData, getHighlightedIndex } from "../../../admin/dashboard/accuracy";
+import {
+  chartBlockedDates,
+  getGraphData,
+  getHighlightedIndex,
+} from "../../../admin/dashboard/accuracy";
 
 export const getISOWeekNumber = (date) => {
   const currentDate = new Date(date);
@@ -258,7 +262,7 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
       },
       {
         name: "totalWrongCount",
-        data:getGraphData(
+        data: getGraphData(
           accuracyDatas?.data?.response,
           "totalWrongCount",
           selectedMonth,
@@ -266,15 +270,14 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
           currentBtn,
           currentDate
         ),
-       
+
         color: "red",
         yAxis: 1,
       },
       {
         name: "Temperature",
         type: "spline",
-        data: 
-        chartBlockedDates(
+        data: chartBlockedDates(
           selectedYear,
           selectedMonth,
           accuracyDatas?.data?.response,
@@ -369,13 +372,27 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
                   <span className={styles.subTitle}>(Current Month)</span>
                 )}
               </div>
+
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
                   {initialAccuracyData
-                    ? `${Math.round(
-                        initialAccuracyData[currentDate?.getMonth()]
-                          ?.averageScore
-                      )}%`
+                    ? currentBtn === "Monthly"
+                      ? `${
+                          initialAccuracyData[currentDate?.getMonth()]
+                            ?.averageScore
+                        }%`
+                      : currentBtn === "Daily"
+                      ? `${
+                          initialAccuracyData[currentDate?.getDate() - 1]
+                            ?.averageScore
+                            ? initialAccuracyData[currentDate?.getDate() - 1]
+                                ?.averageScore
+                            : 0
+                        }%`
+                      : `${
+                          initialAccuracyData[getDateWeek(currentDate) - 1]
+                            ?.averageScore
+                        }%`
                     : "0%"}
                 </span>
               </div>
