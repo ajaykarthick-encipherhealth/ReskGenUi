@@ -118,7 +118,7 @@ export default function Login() {
                   <label className="mb-1 text-dark">Password</label>
                   <div>
                     <input
-                      type={showPassword ? "text" : "password"}
+                      type={"password"}
                       className="form-control px-2"
                       value={password}
                       onChange={(e) => {
@@ -126,7 +126,7 @@ export default function Login() {
                       }}
                       placeholder="Enter Password"
                     />
-                    <div className="input-group-append">
+                    {/* <div className="input-group-append">
                       <span className={styles.loginpasswordBox}>
                         <FontAwesomeIcon
                           onClick={() =>
@@ -138,7 +138,7 @@ export default function Login() {
                           icon={showPassword ? faEye : faEyeSlash}
                         />
                       </span>
-                    </div>
+                    </div> */}
                   </div>
                   {errors?.password && (
                     <div className="text-danger fs-12">{errors?.password}</div>
