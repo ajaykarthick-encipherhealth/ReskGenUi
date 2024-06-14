@@ -59,6 +59,185 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
     }
   };
 
+  const getProviderNameList = (data) => {
+    var dublicateCaptureDelete = removeDuplicates(data);
+    return dublicateCaptureDelete.map((res, index) => {
+      const result = background.filter((res2) => res2.sectionName == res);
+      var backColor = result[0]?.backgroundColor;
+      var textColor = result[0]?.sectionColor;
+      if (index < 1) {
+        var sectionMapArr = (
+          <span
+            className={`mt-2 text-start ${visitStyles.provider_name}`}
+            style={{ backgroundColor: backColor, color: textColor }}
+          >
+            <i>
+              {" "}
+              <FontAwesomeIcon
+                icon={faCircleUser}
+                style={{
+                  size: 10,
+                  color: textColor,
+                }}
+              />
+            </i>
+            {res}
+          </span>
+        );
+        return sectionMapArr;
+      } else if (dublicateCaptureDelete.length - 1 == index) {
+        var sectionMapArr = (
+          <Popover
+            content={
+              <>
+                {dublicateCaptureDelete?.map((item, i) =>
+                  i > 0 ? (
+                    <span
+                      style={{ backgroundColor: backColor, color: textColor }}
+                      className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+                    >
+                      <i style={{ padding: "0 5px" }}>
+                        <FontAwesomeIcon
+                          icon={faCircleUser}
+                          style={{
+                            size: 10,
+                            color: textColor,
+                          }}
+                        />
+                      </i>
+                      {item}
+                    </span>
+                  ) : null
+                )}
+              </>
+            }
+            trigger={["click"]}
+            placement="bottom"
+          >
+            <span
+              style={{ backgroundColor: backColor, color: textColor }}
+              className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+            >
+              {dublicateCaptureDelete.length - 1}+
+            </span>
+          </Popover>
+        );
+
+        return sectionMapArr;
+      }
+    });
+  };
+
+  const getEncounterDateBackground = (value) => {
+    return value?.map((res, index) => {
+      if (index < 2) {
+        var backColor = "encounterDateTag1";
+        var sectionMapArr = (
+          <span
+            // onClick={() => getEncounterDetails(res)}
+            className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+          >
+            <i>
+              <CalendarOutlined className={visitStyles.calenderIcon} />
+            </i>
+            {moment(res).format("MMM DD")}
+          </span>
+        );
+        return sectionMapArr;
+      } else if (value.length - 1 === index) {
+        var backColor = "encounterDateTag1";
+        var sectionMapArr = (
+          <Popover
+            content={
+              <>
+                {value?.map((item, i) =>
+                  i > 1 ? (
+                    <span
+                      // onClick={() => getEncounterDetails(res)}
+                      className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+                    >
+                      <i>
+                        <CalendarOutlined
+                          className={visitStyles.calenderIcon}
+                        />
+                      </i>
+                      {moment(item).format("MMM DD")}
+                    </span>
+                  ) : null
+                )}
+              </>
+            }
+            trigger={["click"]}
+            placement="bottom"
+          >
+            <span
+              // onClick={() => getEncounterDetails(res)}
+              className={`mt-2 text-start cr-pointer ${visitStyles.encounterDate} ${backColor}`}
+            >
+              <i>
+                <CalendarOutlined className={visitStyles.calenderIcon} />
+              </i>
+              {value.length - 2}+
+            </span>
+          </Popover>
+        );
+
+        return sectionMapArr;
+      }
+      // const result = encounterDateMatching.filter((res2) => res2.name == res);
+      // var backColor = result[0]?.colors;
+    });
+  };
+
+  const getCaptureSectionBackground = (value) => {
+    var dublicateCaptureDelete = removeDuplicates(value);
+    return dublicateCaptureDelete.map((res, index) => {
+      const result = background.filter((res2) => res2.sectionName == res);
+      var backColor = result[0]?.backgroundColor;
+      var textColor = result[0]?.sectionColor;
+      if (index < 2) {
+        var sectionMapArr = (
+          <span
+            style={{ backgroundColor: backColor, color: textColor }}
+            className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+          >
+            {res}
+          </span>
+        );
+        return sectionMapArr;
+      } else if (dublicateCaptureDelete.length - 1 == index) {
+        var sectionMapArr = (
+          <Popover
+            content={
+              <>
+                {dublicateCaptureDelete?.map((item, i) =>
+                  i > 1 ? (
+                    <span
+                      style={{ backgroundColor: backColor, color: textColor }}
+                      className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+                    >
+                      {item}
+                    </span>
+                  ) : null
+                )}
+              </>
+            }
+            trigger={["click"]}
+            placement="bottom"
+          >
+            <span
+              style={{ backgroundColor: backColor, color: textColor }}
+              className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+            >
+              {dublicateCaptureDelete.length - 2}+
+            </span>
+          </Popover>
+        );
+        return sectionMapArr;
+      }
+    });
+  };
+
   const confirmComboDelete = () => {
     moveToAnotherAction(
       setConfirmNotesModalValid,
@@ -179,9 +358,8 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
         </div>
 
         <div className="text-start">
-          {getDateOfServiceBackground({
-            value: node?.encounterDate,
-          })}
+
+          {getEncounterDateBackground(node?.dateOfServices)}
         </div>
         <div className="text-start">
           {getSectionHeaderBackground({

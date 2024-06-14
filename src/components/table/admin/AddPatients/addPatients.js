@@ -89,7 +89,7 @@ function AddPatientListTable({
               className={TableStyle.childBorder}
               onClick={handleTableRowClick}
             >
-              {data.patientName ? data.patientName : <div>---</div>}
+              {data.fileName ? data.fileName : <div>---</div>}
             </td>
             <td
               className={TableStyle.childBorder}

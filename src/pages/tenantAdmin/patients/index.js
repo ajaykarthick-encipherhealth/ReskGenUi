@@ -190,6 +190,7 @@ const Patient = ({
       setTotalElements(info?.totalElements);
       result?.map((res) => {
         resultMap?.push({
+          ...res,
           patientId: res.patientId,
           patientAllocated: res.patientAllocated,
           computing: res.computing,
