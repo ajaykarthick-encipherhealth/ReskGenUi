@@ -1180,7 +1180,7 @@ const Details = ({
                       />
                     ) : flagContainerActive == "Filter" ? (
                       <>
-                        {userRole == "admin" ? (
+                        {userRole == "admin" || userRole == "tenant_admin" ? (
                           <AdminWorkList
                             localUserId={localUserId}
                             setWorkListPatientId={setWorkListPatientId}

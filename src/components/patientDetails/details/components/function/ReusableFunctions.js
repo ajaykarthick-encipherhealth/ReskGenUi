@@ -111,6 +111,7 @@ export const getEncounterDateBackground = ({
           }
           trigger={["hover"]}
           placement="bottom"
+          overlayStyle={{ zIndex: 999 }}
         >
           <span
             style={{
@@ -381,6 +382,7 @@ export const getCaptureSectionBackgroundFile = (
           <Popover
             overlayStyle={{ zIndex: 999 }}
             placement="bottom"
+            overlayStyle={{ zIndex: 999 }}
             content={
               <>
                 {res?.length > 30 && <div>{res}</div>}
@@ -496,6 +498,7 @@ export const getCaptureSectionBackgroundFile = (
                 <Popover
                 overlayStyle={{ zIndex: 999 }}
                   placement="bottom"
+                  overlayStyle={{ zIndex: 999 }}
                   content={getHeaderHyperlink(
                     findSectionHyperlink(hyperlinks, item),
                     encounterDateMatching,
@@ -668,6 +671,7 @@ export const getSectionNameManually = ({
         <Popover
         overlayStyle={{ zIndex: 999 }}
           trigger="click"
+          overlayStyle={{ zIndex: 999 }}
           content={
             <>
               {res?.hyperlinks?.map((list) => (
@@ -1276,6 +1280,7 @@ export const getSuspectTypes = (title, value) => {
     overlayStyle={{ zIndex: 999 }}
       className="suspectContainer"
       placement="top"
+      overlayStyle={{ zIndex: 999 }}
       // title="Suspect Type"
       content={
         <>

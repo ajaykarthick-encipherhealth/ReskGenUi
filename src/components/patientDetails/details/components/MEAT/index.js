@@ -13,6 +13,7 @@ import {
 import { SVGICON } from "../../../../../jsx/constant/theme";
 
 import { connect } from "react-redux";
+import { getProviderNameTag } from "../function/providerHyperlink";
 
 const MeatCard = ({
   list,
@@ -43,6 +44,7 @@ const MeatCard = ({
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
+  const [isMulitpleProvider, setIsMulitpleProvider] = useState(false);
 
   const highlight = (code) => {
     if (code == activeMeatTitle?.diagnosisCode) {
@@ -117,6 +119,7 @@ const MeatCard = ({
                               placement="topLeft"
                               title="Description"
                               content={item.diseaseName}
+                              overlayStyle={{ zIndex: 1000 }}
                             >
                               <div className="d-flex">
                                 <span
@@ -141,10 +144,22 @@ const MeatCard = ({
                           <div
                             className={`${visitStyles.encounterAndSectionHeader}`}
                           >
-                            {getProviderNameList({
-                              data: item?.providerName,
-                              captureSectionMatching: captureSectionMatching,
-                            })}
+                            {getProviderNameTag(
+                              item?.providerName,
+                              item?.providerHyperlinks,
+                              setSearch,
+                              item.diagnosisCode,
+                              item.diseaseName,
+                              setIsModalOpen,
+                              setFileModalHeader,
+                              patientDocumentResult,
+                              setIsMulitpleProvider,
+                              isMulitpleProvider,
+                              setIsMulitpleHeadeCode,
+                              isMulitpleHeaderCode,
+                              setSelectMeatResult,
+                              item
+                            )}
                           </div>
                           <div
                             className={`${visitStyles.encounterAndSectionHeader}`}

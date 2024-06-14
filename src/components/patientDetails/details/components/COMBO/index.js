@@ -15,6 +15,7 @@ import {
   moveToAnotherAction,
 } from "../function/ReusableFunctions";
 import { connect } from "react-redux";
+import { getProviderNameTag } from "../function/providerHyperlink";
 
 const ComboCard = ({
   list,
@@ -40,6 +41,7 @@ const ComboCard = ({
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
+  const [isMulitpleProvider, setIsMulitpleProvider] = useState(false);
 
   const addOnCodeColor = [
     "magenta",
@@ -125,13 +127,15 @@ const ComboCard = ({
                           <Popconfirm
                             title={popConfirmTitle}
                             onConfirm={() =>
-                                moveToAnotherAction(
-                                  setConfirmNotesModalValid,
-                                  setIsValidAction,
-                                  popConfirmTitle == "You want move to delete?" ? "Move to Deleted" : "Move to valid",
-                                  "COMBO"
-                                )
-                              }
+                              moveToAnotherAction(
+                                setConfirmNotesModalValid,
+                                setIsValidAction,
+                                popConfirmTitle == "You want move to delete?"
+                                  ? "Move to Deleted"
+                                  : "Move to valid",
+                                "COMBO"
+                              )
+                            }
                             placement="leftTop"
                             okText={okText}
                             cancelText={cancelText}
@@ -150,33 +154,44 @@ const ComboCard = ({
                             </div>
                           </Popconfirm>
                         </div>
-                          {item?.children?.length > 0 && 
-                        <div
-                          className={visitStyles.close_icon}
-                          style={{ background: "#c7f3c6" }}
-                          onClick={() => {
-                            setOpens(true);
-                            setCombiTree([{ ...item, expanded: true }]);
-                          }}
-                        >
-                          <FontAwesomeIcon
-                            icon={faSitemap}
-                            style={{
-                              size: 8,
-                              color: "#088f39",
+                        {item?.children?.length > 0 && (
+                          <div
+                            className={visitStyles.close_icon}
+                            style={{ background: "#c7f3c6" }}
+                            onClick={() => {
+                              setOpens(true);
+                              setCombiTree([{ ...item, expanded: true }]);
                             }}
-                          />
-                        </div>}
+                          >
+                            <FontAwesomeIcon
+                              icon={faSitemap}
+                              style={{
+                                size: 8,
+                                color: "#088f39",
+                              }}
+                            />
+                          </div>
+                        )}
                       </div>
                       <div className={styles.comboDetailsHeaders}>
                         <div>
                           <div
                             className={`${visitStyles.encounterAndSectionHeader}`}
                           >
-                            {getProviderNameList({
-                              data: item?.providerName,
-                              captureSectionMatching: captureSectionMatching,
-                            })}
+                            {getProviderNameTag(
+                              item?.providerName,
+                              item?.providerHyperlinks,
+                              setSearch,
+                              item.diagnosisCodeCombo,
+                              item.diseaseName,
+                              setIsModalOpenCaptureSection,
+                              setFileModalHeader,
+                              patientDocumentResult,
+                              setIsMulitpleProvider,
+                              isMulitpleProvider,
+                              setIsMulitpleHeadeCode,
+                              isMulitpleHeaderCode
+                            )}
                           </div>
                           <div
                             className={`${visitStyles.encounterAndSectionHeader}`}
