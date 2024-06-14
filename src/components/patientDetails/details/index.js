@@ -225,6 +225,7 @@ const Details = ({
 
   const getAllProcessYear = async () => {
     const patientId = localStorage.getItem("patientId");
+    const role = localStorage.getItem('role')
     // var patientId = "eh-20203";
     try {
       const result = await axios.get(
@@ -244,7 +245,8 @@ const Details = ({
         selectPatientId ? selectPatientId?.patirntId : patientId,
         dosYearArr[0].value,
         null,
-        setIsSpinnerLoading
+        setIsSpinnerLoading,
+        role
       );
       getPatientIdData(
         selectPatientId ? selectPatientId?.patirntId : patientId
@@ -317,7 +319,7 @@ const Details = ({
     setPatientResultReload(false);
     setIsLoading(true);
     getPatientDosList(localPatientId, e);
-    getpatientDetailsData(localPatientId, e, null, setIsLoading);
+    getpatientDetailsData(localPatientId, e, null, setIsLoading, role);
   };
 
   const addComments = async (value) => {
@@ -368,7 +370,7 @@ const Details = ({
 
   const getPatientListToDetails = (userId, orgId, tenantId) => {
     setIsLoading(true);
-    getpatientDetailsData(userId, selectedDosValue, null, setIsLoading);
+    getpatientDetailsData(userId, selectedDosValue, null, setIsLoading, role);
     getPatientIdData(userId);
     setLocalPatientId(userId);
   };
