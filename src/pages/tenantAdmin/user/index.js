@@ -92,7 +92,7 @@ const UserList = ({
   };
   const getDisplayValue = (number) => {
     if (number.length === 10) {
-      return number.slice(0, 7) + "***";
+      return number.slice(0, 5) + "*****";
     }
     return number;
   };
