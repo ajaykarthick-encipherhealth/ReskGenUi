@@ -39,7 +39,7 @@ export const selectedReport = (val) => ({
   payload: val,
 });
 
-export const getReportDetails = (
+export const getReportDetails = ({
   pagenum,
   startDate,
   endDate,
@@ -47,11 +47,12 @@ export const getReportDetails = (
   filter,
   userName,
   sort,
-  selectManager = ""
+  selectManager = "",
+size}
 ) => {
   return (dispatch) => {
     try {
-      patientDetails(pagenum, startDate, endDate, search, filter,userName, sort,selectManager).then(
+      patientDetails({pagenum, startDate, endDate, search, filter,userName, sort,selectManager,size}).then(
         (response) => {
           if (response) {
             dispatch({

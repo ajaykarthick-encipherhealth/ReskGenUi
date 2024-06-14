@@ -53,6 +53,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   const handleRiskAdjustment = () => {
     setActiveButton("Risk Adjustment");
     setShowButtons(false);
+    setHideButton(false);
   };
   const handleButtonClick = () => {
     setActiveButton("ICD-10");
@@ -137,7 +138,6 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
     setLoading(false);
   };
 
-
   const recentSearchTreeView = async () => {
     let searchData = await recentsearch();
     if (searchData?.status === "SUCCESS") {
@@ -158,7 +158,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
     }
   };
 
-  const completeFetch = async () => {
+  const completeFetch = async () => { 
     let completedData = await completeData({ code: searchInput });
     if (completedData?.status === "SUCCESS") {
       const displayCodeOptions = completedData?.response?.displayStrings?.map(
@@ -238,9 +238,9 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
       </div>
       <div className="row">
         {activeButton === "ICD-10" && (
-          <>
-            <div className="p-3 d-flex gap-3">
-              <AutoComplete
+          <div>
+            <div className="p-3 px-1 d-flex gap-3">
+              <AutoComplete   style={{width:"100%"}}
                 popupMatchSelectWidth={640}
                 options={options}
                 onSelect={onSelect}
@@ -248,7 +248,8 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
                 size="large"
                 value={searchInput}
               >
-                <Input
+                <Input style={{width:"100%"}}
+                 className="antdselect"
                   placeholder="Keywords, codes or code range between codes"
                   value={searchInput}
                   onChange={handleInputChange}
@@ -263,7 +264,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
                 />
               </div>
             </div>
-            <div className="d-flex gap-2 px-3 ">
+            <div className="d-flex gap-2 px-1 ">
               <Button
                 className={currentButton === "Codes" ? style.both : style.code}
                 onClick={() => {setCurrentButton("Codes")
@@ -352,7 +353,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
                 setHideButton={setHideButton}
               />
             )}
-          </>
+          </div>
         )}
       </div>
 

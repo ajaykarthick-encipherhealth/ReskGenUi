@@ -82,17 +82,23 @@ const Hcc = ({
       getSelectedDos('')
     }
     const patientId = localStorage.getItem("patientId");
+    const role = localStorage.getItem("role");
+
     if (value) {
       getpatientDetailsData(
         patientId,
         null,
-        moment(value).format("YYYY-MM-DD")
+        moment(value).format("YYYY-MM-DD"),
+        "",
+        role
       );
     } else {
       getpatientDetailsData(
         patientId,
         patientDetailsResult?.data?.response?.processedYear,
-        null
+        null,
+        "",
+        role
       );
     }
   };

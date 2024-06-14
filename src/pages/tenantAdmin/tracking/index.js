@@ -169,7 +169,6 @@ const Patient = ({
   const [defaultOrgValue, setDefaultOrgValue] = useState(null);
   const [trackInput, setTrackInput] = useState("");
 
-
   // new changes
 
   const [auditSelAllocatedTo, setAuditSelAllocatedTo] = useState("");
@@ -638,7 +637,7 @@ const Patient = ({
                             bullets={bullets}
                             isNextRow={true}
                             defaultShow={true}
-                            defaultSize={"col-xl-3"}
+                            defaultSize={"col-xl-2"}
                             auditStatusOptions={auditStatusOptions}
                             setAuditSelectedOption={setAuditSelectedOption}
                             setStartDate6={setAuditedDueStartDate}
@@ -666,16 +665,11 @@ const Patient = ({
                             selector2value={auditSelAllocatedTo}
                             selectorValue={selAllocatedTo}
                             auditSelAllocatedTo={auditSelAllocatedTo}
-                            orgAllList={orgAllList}
-                            setSelectedOrgList={setSelectedOrgList}
-                            selectOrgList={selectOrgList}
-                            setTrackInput={setTrackInput}
-                            trackInput={trackInput}
                           />
                         </div>
                         <div className="col-xl-2">
                           <DailyTask trackChart={trackChart} />
-                          <div
+                          {/* <div
                             className={`${bullets ? "col-xl-12" : "col-xl-4"}`}
                             style={{
                               display: "flex",
@@ -755,7 +749,7 @@ const Patient = ({
                                 Clear
                               </button>
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
 

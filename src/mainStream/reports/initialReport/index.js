@@ -23,10 +23,12 @@ import Flags from "../../../mainStream/components/flagCount";
 import MiniCards from "../../../mainStream/components/miniCards";
 import Pagination from "../../components/pagination";
 import SubCard from "../../../mainStream/components/cards/subcard";
+import { actions as reviewerAction } from "../../../stores/reviewer/report";
 import {
   auditstatusBodyTemplate,
   processstatusBodyTemplate,
 } from "../../components/chartUtils";
+import { getReportDetails } from "../../../store/actions/adminAction/ReportActions";
 
 const InitialCard = ({
   patientDetails,
@@ -40,6 +42,8 @@ const InitialCard = ({
   reportListAll,
   page,
   loader,
+  activeTab,
+  reviewerReport,
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -47,6 +51,20 @@ const InitialCard = ({
     setSelectAll(!selectAll);
     const updatedRows = selectAll ? [] : reportListAll?.response?.data;
     setSelectedRows(updatedRows);
+    if (activeTab === "Reviewer") {
+      reviewerReport({
+        pagenum: 0,
+        size: reportListAll?.response?.totalElements,
+      });
+    }
+    if (activeTab === "Admin") {
+      dispatch(
+        getReportDetails({
+          pagenum: 0,
+          size: reportListAll?.response?.totalElements,
+        })
+      );
+    }
   };
 
   const handleRowCheckboxChange = (row) => {
@@ -383,7 +401,13 @@ const InitialCard = ({
   );
 };
 
-const enhancer = connect((state) => ({
-  getFlagsData: state?.reviewer?.workQueue?.flags?.data,
-}));
+const enhancer = connect(
+  (state) => ({
+    getFlagsData: state?.reviewer?.workQueue?.flags?.data,
+    ReportPatientDetails: state?.reviewer?.report?.reviewer?.data,
+  }),
+  {
+    reviewerReport: reviewerAction.reviewerReport,
+  }
+);
 export default enhancer(InitialCard);

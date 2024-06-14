@@ -429,12 +429,24 @@ const Accuracy = () => {
               </div>
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
-                  {initialAccuracyData &&
-                  initialAccuracyData[currentDate?.getMonth()]
-                    ? `${Math.round(
-                        initialAccuracyData[currentDate?.getMonth()]
-                          ?.averageScore
-                      )}%`
+                  {initialAccuracyData
+                    ? currentBtn === "Monthly"
+                      ? `${
+                          initialAccuracyData[currentDate?.getMonth()]
+                            ?.averageScore
+                        }%`
+                      : currentBtn === "Daily"
+                      ? `${
+                          initialAccuracyData[currentDate?.getDate() - 1]
+                            ?.averageScore
+                            ? initialAccuracyData[currentDate?.getDate() - 1]
+                                ?.averageScore
+                            : 0
+                        }%`
+                      : `${
+                          initialAccuracyData[getDateWeek(currentDate) - 1]
+                            ?.averageScore
+                        }%`
                     : "0%"}
                 </span>
               </div>
