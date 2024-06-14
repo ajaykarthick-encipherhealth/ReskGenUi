@@ -85,9 +85,10 @@ const UserList = ({
 
   const handleChange = (e) => {
     let value = e.target.value;
-    if (/^\d*$/.test(value) && value.length <= 10) {
-      setMobileNumber(value);
-    }
+    // if (value?.length===10) {
+      const val=getDisplayValue(value)
+      setMobileNumber(val);
+    // }
   };
   const getDisplayValue = (number) => {
     if (number.length === 10) {
@@ -297,6 +298,8 @@ const UserList = ({
                         clear={clear}
                         addBtn={true}
                         disable="Yes"
+                        form={form}
+                        setMobileNumber={setMobileNumber}
                       />
                     </div>
                     <div
@@ -547,7 +550,7 @@ const UserList = ({
                           type="text"
                           placeholder="Enter mobile number"
                           autoComplete="off"
-                          value={getDisplayValue(mobileNumber)}
+                          value={mobileNumber}
                           onChange={handleChange}
                         />
                       </div>
