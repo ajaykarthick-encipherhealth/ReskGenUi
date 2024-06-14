@@ -161,6 +161,7 @@ const HeaderFilters = ({
   defaultSelectValueOrg,
   selectedValueOrg,
   isRangePickerUsers,
+  form
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
@@ -447,7 +448,11 @@ const HeaderFilters = ({
           {addUser && (
             <div className={columnClass} style={{ marginTop: "29px" }}>
               <Button
-                onClick={addUserForm}
+                onClick={()=>{
+                  if(form){
+                    form.resetFields()
+                  }
+                  addUserForm()}}
                 style={{ background: "#04306f" }}
                 className="btn btn-sm ms-2 flr width-max-content"
               >
