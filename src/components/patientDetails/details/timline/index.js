@@ -60,6 +60,21 @@ const Timeline = ({
           if (item?.fromState == "VALID" && item?.toState == "DELETED") {
             return "timeline-badge MOVED_VALID_TO_DELETED";
           }
+          if (item?.fromState == "VALID" && item?.toState == "SUGGESTED") {
+            return "timeline-badge MOVED_VALID_TO_SUGGESTED";
+          }
+          if (item?.fromState == "SUGGESTED" && item?.toState == "VALID") {
+            return "timeline-badge MOVED_SUGGESTED_TO_VALID";
+          }
+          if (item?.fromState == "SUGGESTED" && item?.toState == "DELETED") {
+            return "timeline-badge MOVED_SUGGESTED_TO_DELETED";
+          }
+          if (item?.fromState == "DELETED" && item?.toState == "VALID") {
+            return "timeline-badge MOVED_DELETED_TO_VALID";
+          }
+          if (item?.fromState == "DELETED" && item?.toState == "SUGGESTED") {
+            return "timeline-badge MOVED_VALID_TO_DELETED";
+          }
         case "MOVED_INVALID_TO_VALID":
           return "timeline-badge MOVED_INVALID_TO_VALID";
         case "MOVED_SUGGESTED_TO_VALID":
