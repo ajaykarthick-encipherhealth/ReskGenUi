@@ -11,6 +11,7 @@ import {
 import {
   getCaptureSectionBackgroundFile,
   getEncounterDateBackground,
+  getMeatFound,
   getProviderNameList,
   moveToAnotherAction,
 } from "../function/ReusableFunctions";
@@ -37,6 +38,9 @@ const ComboCard = ({
   popConfirmTitle,
   setConfirmNotesModalValid,
   setIsValidAction,
+  setActiveTabHead,
+  setActiveMeatTitle,
+  meatCriteriaList,
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
@@ -234,6 +238,70 @@ const ComboCard = ({
                               setIsMulitpleHeadeCode,
                               isMulitpleHeaderCode,
                               item.diseaseName
+                            )}
+                          </div>
+                        </div>
+                        <div
+                          className={`cr-pointer ${styles.meatFoundContainer}`}
+                        >
+                          <div
+                            onClick={() => {
+                              setActiveTabHead(4);
+                              setActiveMeatTitle({
+                                header: "M",
+                                diagnosisCode: item?.diagnosisCodeCombo,
+                              });
+                            }}
+                          >
+                            {getMeatFound(
+                              item?.diagnosisCodeCombo,
+                              meatCriteriaList,
+                              "M"
+                            )}
+                          </div>
+                          <div
+                            onClick={() => {
+                              setActiveTabHead(4);
+                              setActiveMeatTitle({
+                                header: "E",
+                                diagnosisCode: item?.diagnosisCodeCombo,
+                              });
+                            }}
+                          >
+                            {getMeatFound(
+                              item?.diagnosisCodeCombo,
+                              meatCriteriaList,
+                              "E"
+                            )}
+                          </div>
+                          <div
+                            onClick={() => {
+                              setActiveTabHead(4);
+                              setActiveMeatTitle({
+                                header: "A",
+                                diagnosisCode: item?.diagnosisCodeCombo,
+                              });
+                            }}
+                          >
+                            {getMeatFound(
+                              item?.diagnosisCodeCombo,
+                              meatCriteriaList,
+                              "A"
+                            )}
+                          </div>
+                          <div
+                            onClick={() => {
+                              setActiveTabHead(4);
+                              setActiveMeatTitle({
+                                header: "T",
+                                diagnosisCode: item?.diagnosisCodeCombo,
+                              });
+                            }}
+                          >
+                            {getMeatFound(
+                              item?.diagnosisCodeCombo,
+                              meatCriteriaList,
+                              "T"
                             )}
                           </div>
                         </div>

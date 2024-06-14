@@ -422,7 +422,12 @@ const Hcc = ({
                 />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={3}>
-                <Combo activeComboTree={activeComboTree} year={year} />
+                <Combo
+                  setActiveTabHead={setActiveTabHead}
+                  setActiveMeatTitle={setActiveMeatTitle}
+                  activeComboTree={activeComboTree}
+                  year={year}
+                />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={4}>
                 <Meat activeMeatTitle={activeMeatTitle} year={year} />

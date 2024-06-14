@@ -19,6 +19,8 @@ const Combo = ({
   getpatientDetailsData,
   hccFileDetails,
   fileDosPageNumberList,
+  setActiveTabHead,
+  setActiveMeatTitle,
 }) => {
   const dispatch = useDispatch();
   const sectionColorList = useSelector(
@@ -65,7 +67,8 @@ const Combo = ({
   const [search, setSearch] = useState(false);
   const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
   const [isValidAction, setIsValidAction] = useState("");
-  const [selectDisDetails, setSelectDisDetails] = useState('');
+  const [selectDisDetails, setSelectDisDetails] = useState("");
+  const [meatCriteriaList, setMeatCriteriaList] = useState([]);
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -94,13 +97,15 @@ const Combo = ({
       "",
       setEncounterDateMatching,
       setCaptureSectionMatching,
-      "",
+      setMeatCriteriaList,
       patientDetailsResult,
       dispatch,
       sectionColorList,
       "",
       setComboDiseaseCodesList,
-      "","","",
+      "",
+      "",
+      "",
       setInvalidComboDiseaseCodesList
     );
   }, [patientDetailsResult]);
@@ -113,14 +118,14 @@ const Combo = ({
 
   const onchangeCombo = (data, code) => {
     var title = data.diagnosisCodeCombo;
-  data.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
-  data.processedYear = patientDetailsResult?.data?.response?.processedYear;
-  data.dbDescription = data.actualDescription
-    ? data.actualDescription
-    : data.diseaseName;
-  (data.fileId = patientDetailsResult?.data?.response?.fileId),
-    setSelectDiseasesName(title);
-  setSelectDisDetails(data);
+    data.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
+    data.processedYear = patientDetailsResult?.data?.response?.processedYear;
+    data.dbDescription = data.actualDescription
+      ? data.actualDescription
+      : data.diseaseName;
+    (data.fileId = patientDetailsResult?.data?.response?.fileId),
+      setSelectDiseasesName(title);
+    setSelectDisDetails(data);
   };
 
   const handleCloseModal = () => {
@@ -129,7 +134,7 @@ const Combo = ({
     setIsModalOpenCaptureSection(false);
     setIsAddComboCode(false);
     setFileLoading(false);
-    setOpens(false)
+    setOpens(false);
   };
 
   const handleChangeSuggested = async (e) => {
@@ -225,9 +230,12 @@ const Combo = ({
               setIsModalOpenCaptureSection={setIsModalOpenCaptureSection}
               isAddComboCode={true}
               addComboCode={addComboCode}
-              setConfirmNotesModalValid ={setConfirmNotesModalValid}
-              setIsValidAction ={setIsValidAction}
+              setConfirmNotesModalValid={setConfirmNotesModalValid}
+              setIsValidAction={setIsValidAction}
               patientDocumentResult={patientDocumentResult}
+              setActiveTabHead={setActiveTabHead}
+              setActiveMeatTitle={setActiveMeatTitle}
+              meatCriteriaList={meatCriteriaList}
             />
           </div>
 
@@ -250,9 +258,12 @@ const Combo = ({
               onchangeCombo={onchangeCombo}
               setIsModalOpenCaptureSection={setIsModalOpenCaptureSection}
               isAddComboCode={false}
-              setConfirmNotesModalValid ={setConfirmNotesModalValid}
-              setIsValidAction ={setIsValidAction}
+              setConfirmNotesModalValid={setConfirmNotesModalValid}
+              setIsValidAction={setIsValidAction}
               patientDocumentResult={patientDocumentResult}
+              setActiveTabHead={setActiveTabHead}
+              setActiveMeatTitle={setActiveMeatTitle}
+              meatCriteriaList={meatCriteriaList}
             />
           </div>
         </div>
@@ -288,9 +299,12 @@ const Combo = ({
                   setIsModalOpenCaptureSection={setIsModalOpenCaptureSection}
                   isAddComboCode={false}
                   addComboCode={addComboCode}
-                  setConfirmNotesModalValid ={setConfirmNotesModalValid}
-                  setIsValidAction ={setIsValidAction}
+                  setConfirmNotesModalValid={setConfirmNotesModalValid}
+                  setIsValidAction={setIsValidAction}
                   patientDocumentResult={patientDocumentResult}
+                  setActiveTabHead={setActiveTabHead}
+                  setActiveMeatTitle={setActiveMeatTitle}
+                  meatCriteriaList={meatCriteriaList}
                 />
               </div>
               <div className="col-xl-7">
@@ -327,7 +341,7 @@ const Combo = ({
       ) : (
         opens && showErrorMessage()
       )}
-        <ModelIndex
+      <ModelIndex
         title={selectDiseasesName}
         openState={confirmNotesModalValid}
         setFileLoading={setFileLoading}
