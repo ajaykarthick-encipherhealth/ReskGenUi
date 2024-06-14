@@ -75,6 +75,7 @@ const VisitData = ({
   const [queryFormValues, setQueryFormValues] = useState(false);
   const [selectDisDetails, setSelectDisDetails] = useState(false);
   const [allDisList, setAllDisList] = useState([]);
+  const [zIndex, setZIndex] = useState(false);
 
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
@@ -133,7 +134,7 @@ const VisitData = ({
     setIsModalOpenLab(false);
     setIsFileFormShow(false);
     setFileLoading(false);
-    setOpens(false)
+    setOpens(false);
   };
 
   const addValidDiseases = () => {
@@ -183,6 +184,17 @@ const VisitData = ({
     notification.destroy();
     notification.info({ message: "Tree Not Available", duration: 1 });
   };
+
+  useEffect(() => {
+    if (isModalOpenValidCodes) {
+      setInterval(() => {
+        setZIndex(true);
+      }, 1000);
+    } else {
+      setZIndex(false);
+    }
+  }, [isModalOpenValidCodes]);
+
   const modalOpenValidContent = (
     <div className="section-container">
       <DragDropContext
@@ -217,7 +229,11 @@ const VisitData = ({
                         </span>
                         <div className="d-flex justify-content-center">
                           <span className={`${visitStyles.hcc_title_badge}`}>
-                            {newValidDiseaseList.filter((item) => item.isComboCode != true).length}
+                            {
+                              newValidDiseaseList.filter(
+                                (item) => item.isComboCode != true
+                              ).length
+                            }
                           </span>
                         </div>
                       </div>
@@ -256,6 +272,7 @@ const VisitData = ({
                             cardTitle="HCC"
                             isVisitData={true}
                             provided={provided}
+                            popup={zIndex}
                           />
                         </div>
                       </div>
@@ -310,7 +327,11 @@ const VisitData = ({
                             <span
                               className={`${visitStyles.suggested_title_badge}`}
                             >
-                              {suggestedHccList.filter((item) => item.isComboCode != true).length}
+                              {
+                                suggestedHccList.filter(
+                                  (item) => item.isComboCode != true
+                                ).length
+                              }
                             </span>
                           </div>
                         </div>
@@ -350,6 +371,7 @@ const VisitData = ({
                               cardTitle="SUGGESTED"
                               isVisitData={true}
                               provided={provided}
+                              popup={zIndex}
                             />
                           </div>
                         </div>
@@ -378,7 +400,11 @@ const VisitData = ({
                             <span
                               className={`${visitStyles.deleted_title_badge}`}
                             >
-                              {deletedHccList.filter((item) => item.isComboCode != true).length}
+                              {
+                                deletedHccList.filter(
+                                  (item) => item.isComboCode != true
+                                ).length
+                              }
                             </span>
                           </div>
                         </div>
@@ -419,6 +445,7 @@ const VisitData = ({
                               cardTitle="DELETED"
                               isVisitData={true}
                               provided={provided}
+                              popup={zIndex}
                             />
                           </div>
                         </div>
@@ -474,7 +501,11 @@ const VisitData = ({
                           </span>
                           <div className="d-flex justify-content-center">
                             <span className={`${visitStyles.hcc_title_badge}`}>
-                            {newValidDiseaseList.filter((item) => item.isComboCode != true).length}
+                              {
+                                newValidDiseaseList.filter(
+                                  (item) => item.isComboCode != true
+                                ).length
+                              }
                             </span>
                           </div>
                         </div>
@@ -544,7 +575,11 @@ const VisitData = ({
                             <span
                               className={`${visitStyles.suggested_title_badge}`}
                             >
-                              {suggestedHccList.filter((item) => item.isComboCode != true).length}
+                              {
+                                suggestedHccList.filter(
+                                  (item) => item.isComboCode != true
+                                ).length
+                              }
                             </span>
                           </div>
                         </div>
@@ -612,7 +647,11 @@ const VisitData = ({
                             <span
                               className={`${visitStyles.deleted_title_badge}`}
                             >
-                              {deletedHccList.filter((item) => item.isComboCode != true).length}
+                              {
+                                deletedHccList.filter(
+                                  (item) => item.isComboCode != true
+                                ).length
+                              }
                             </span>
                           </div>
                         </div>

@@ -63,6 +63,7 @@ const HccCards = ({
   provided,
   isVisitData,
   fileDosPageNumberList,
+  popup
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -559,7 +560,7 @@ const HccCards = ({
                                       isMulitpleHeader,
                                       setIsMulitpleHeadeCode,
                                       isMulitpleHeaderCode,
-                                      data.dbDescription
+                                      data.dbDescription,
                                     )}
                                   </div>
                                 )}
@@ -733,7 +734,8 @@ const HccCards = ({
                                     isMulitpleHeader,
                                     setIsMulitpleHeadeCode,
                                     isMulitpleHeaderCode,
-                                    data.dbDescription
+                                    data.dbDescription,
+                                    popup,
                                   )}
                                 </div>
                                 <div

@@ -329,7 +329,8 @@ export const getCaptureSectionBackgroundFile = (
   isMulitpleHeader,
   setIsMulitpleHeadeCode,
   isMulitpleHeaderCode,
-  diseaseName
+  diseaseName,
+  popup
 ) => {
   var dublicateCaptureDelete = removeDuplicates(value);
   return dublicateCaptureDelete.map((res, index) => {
@@ -379,7 +380,7 @@ export const getCaptureSectionBackgroundFile = (
       } else {
         var sectionMapArr = (
           <Popover
-            overlayStyle={{ zIndex: 999 }}
+            overlayStyle={{ zIndex: !popup && 999 }}
             placement="bottom"
             content={
               <>
