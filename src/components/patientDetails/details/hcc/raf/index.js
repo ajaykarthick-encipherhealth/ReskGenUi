@@ -112,7 +112,7 @@ const RafScore = ({ patientDetailsResult }) => {
                 <div className={style.rafMainCard2}>
                   <div className={style.rafCard2}>
                     <div className={style.titleHead}>
-                      <div className="row">
+                    <div className="row">
                         <div className="col-xl-3">HCC(V28)</div>
                         <div className="col-xl-3">RAF(V28)</div>
                         <div className="col-xl-6">Monthly Premium(V28)</div>
@@ -128,25 +128,27 @@ const RafScore = ({ patientDetailsResult }) => {
                           }
                         >
                           <div className="col-xl-3">
-                            {getRafDetails(item.dx_name, "V28")?.map((item) => (
+                          {getRafDetails(item.dx_name, "V28")?.length>0? getRafDetails(item.dx_name, "V28")?.map((item) => (
                               <div>{item.hcc_name}</div>
-                            ))}
+                            )):<div>&nbsp;</div>}
                           </div>
                           <div className="col-xl-3">
-                            {getRafDetails(item.dx_name, "V28")?.map((item) => (
+                            {getRafDetails(item.dx_name, "V28")?.length>0?getRafDetails(item.dx_name, "V28")?.map((item) => (
                               <div>{item.hcc_raf}</div>
-                            ))}
+                            )):<div>&nbsp;</div>}
                           </div>
-                          <div className="col-xl-6 text-center">
-                            {getRafDetails(item.dx_name, "V28")?.map((item) => (
+                          <div className="col-xl-6  text-center">
+                          
+                            {getRafDetails(item.dx_name, "V28")?.length>0?getRafDetails(item.dx_name, "V28")?.map((item) => (
                               <div>${item.premium}</div>
-                            ))}
+                            )):<div>&nbsp;</div>}
                           </div>
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
+                
               </div>
               <label
                 className={`${visitStyles.labelStyle} ${style.raflableheadOverall}`}

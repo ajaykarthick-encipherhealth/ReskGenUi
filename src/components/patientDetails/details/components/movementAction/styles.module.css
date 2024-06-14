@@ -3,7 +3,7 @@
 }
 .deleteIcon {
   color: #be3144;
-  font-size: 18px;
+  font-size: 16px;
   margin-right: 2px;
   border-radius: 100%;
   cursor: pointer;
@@ -21,7 +21,7 @@
 }
 .validIcon {
   color: #04b700;
-  font-size: 18px;
+  font-size: 16px;
   margin-right: 2px;
   border-radius: 100%;
   cursor: pointer;

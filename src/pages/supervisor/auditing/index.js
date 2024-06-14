@@ -89,6 +89,8 @@ export default function Patient() {
   const [selectedOption, SetSelectedOption] = useState("");
   const [patientSortOrder, setPatientSortOrder] = useState("ASC");
   const [sort, setSort] = useState({ sortDir: "", sortField: "" });
+  const [selecteddates2, setSelectedDate2s] = useState([]);
+
   const [inputValue, setInputValue] = useState({
     year: "",
     name: "",
@@ -378,7 +380,6 @@ export default function Patient() {
                           isRangePicker={true}
                           selectedDates={selectedDates}
                           setSelectedDates={setSelectedDates}
-                          
                           // completed date
                           pickerlabe2="Audited Date"
                           defaultStartDate2={""}
@@ -387,6 +388,8 @@ export default function Patient() {
                           setEndDate2={setCompletedEndDate}
                           isAnotherPicker={true}
                           defaultAllocateTo={"All"}
+                          selectedDates2={selecteddates2}
+                          setSelectedDates2={setSelectedDate2s}
                           // created by
                           isNextCreatedBySelector={true}
                           createdTolabel="Reviewer"

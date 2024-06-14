@@ -117,6 +117,7 @@ function MyApp({ Component, pageProps }) {
     "/admin/patients/details",
     "/reviewer/patients/details",
     "/supervisor/patients/details",
+    "/tenantAdmin/patients/details",
   ];
   const showFooter = !hideFooterPaths.includes(router.pathname);
 

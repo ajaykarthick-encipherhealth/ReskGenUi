@@ -225,6 +225,7 @@ const Details = ({
 
   const getAllProcessYear = async () => {
     const patientId = localStorage.getItem("patientId");
+    
     // var patientId = "eh-20203";
     try {
       const result = await axios.get(
@@ -244,7 +245,8 @@ const Details = ({
         selectPatientId ? selectPatientId?.patirntId : patientId,
         dosYearArr[0].value,
         null,
-        setIsSpinnerLoading
+        setIsSpinnerLoading,
+        userRole
       );
       getPatientIdData(
         selectPatientId ? selectPatientId?.patirntId : patientId
@@ -317,7 +319,7 @@ const Details = ({
     setPatientResultReload(false);
     setIsLoading(true);
     getPatientDosList(localPatientId, e);
-    getpatientDetailsData(localPatientId, e, null, setIsLoading);
+    getpatientDetailsData(localPatientId, e, null, setIsLoading, userRole);
   };
 
   const addComments = async (value) => {
@@ -368,7 +370,7 @@ const Details = ({
 
   const getPatientListToDetails = (userId, orgId, tenantId) => {
     setIsLoading(true);
-    getpatientDetailsData(userId, selectedDosValue, null, setIsLoading);
+    getpatientDetailsData(userId, selectedDosValue, null, setIsLoading, userRole);
     getPatientIdData(userId);
     setLocalPatientId(userId);
   };
@@ -535,6 +537,13 @@ const Details = ({
     setShowTerminal(false);
   }, []);
 
+
+  const getMastData = (value) => {
+    if(value){
+      return value.split('').splice(0,3).join('') + "xxxx"
+    }
+  }
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -581,10 +590,10 @@ const Details = ({
                               <div className="col-xl-2 col-sm-12">
                                 <FontAwesomeIcon icon={faIdCardClip} />
                                 <label>Patient ID</label>
-                                <Tooltip
+                                {/* <Tooltip
                                   placement="bottom"
                                   title={patientDocumentResult.patientId}
-                                >
+                                > */}
                                   <h6
                                     onClick={() =>
                                       handleCopyToClipboard({
@@ -598,22 +607,22 @@ const Details = ({
                                       cursor: "pointer",
                                     }}
                                   >
-                                    {patientDocumentResult.patientId}
+                                    {getMastData(patientDocumentResult.patientId)} 
                                   </h6>
-                                </Tooltip>
+                                {/* </Tooltip> */}
                               </div>
                               <div className="col-xl-2 col-sm-12">
                                 <FontAwesomeIcon icon={faUserCircle} />
 
                                 <label>Patient Name</label>
-                                <Tooltip
+                                {/* <Tooltip
                                   placement="bottom"
                                   title={patientDocumentResult.patientId}
-                                >
+                                > */}
                                   <h6 className="ageDtails">
-                                    {patientDocumentResult.patientId}
+                                    {getMastData(patientDocumentResult.patientId)}  
                                   </h6>
-                                </Tooltip>
+                                {/* </Tooltip> */}
                               </div>
                               <div className="col-xl-2 col-sm-12">
                                 <FontAwesomeIcon icon={faFile} />

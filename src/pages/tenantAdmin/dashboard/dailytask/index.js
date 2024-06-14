@@ -79,7 +79,13 @@ const DailyTask = () => {
     });
     return setCurrentDays(sorted);
   };
+
   const getChartOption = (res) => {
+    const adminCount = roles.ADMIN ? roles.ADMIN : 0;
+    const reviewerCount = roles?.REVIEWER ? roles?.REVIEWER : 0;
+    const supervisorCount = roles?.SUPERVISOR ? roles?.SUPERVISOR : 0;
+    const tenantAdminCount = roles?.TENANT_ADMIN ? roles?.TENANT_ADMIN : 0;
+
     return {
       tooltip: {
         trigger: "item",
@@ -98,28 +104,28 @@ const DailyTask = () => {
           },
           data: [
             {
-              value: roles?.REVIEWER,
+              value: reviewerCount,
               name: "Reviewer",
               itemStyle: {
                 color: "#7599FF",
               },
             },
             {
-              value: roles?.SUPERVISOR,
+              value:supervisorCount,
               name: "Supervisor",
               itemStyle: {
                 color: "#64C8FF",
               },
             },
             {
-              value: roles?.ADMIN,
+              value:adminCount,
               name: "Admin",
               itemStyle: {
                 color: "#FA896B",
               },
             },
             {
-              value: roles?.TENANT_ADMIN,
+              value: tenantAdminCount,
               name: "Tenant Admin",
               itemStyle: {
                 color: "#FA896B",
@@ -135,10 +141,7 @@ const DailyTask = () => {
             show: true,
             position: "center",
             formatter: `{b|${
-              roles?.REVIEWER +
-              roles?.SUPERVISOR +
-              roles?.ADMIN +
-              roles?.TENANT_ADMIN
+              reviewerCount + supervisorCount + adminCount + tenantAdminCount
             }}`,
             backgroundColor: "transparent",
 
@@ -157,10 +160,7 @@ const DailyTask = () => {
           data: [
             {
               value:
-                roles?.REVIEWER +
-                roles?.SUPERVISOR +
-                roles?.ADMIN +
-                roles?.TENANT_ADMIN,
+                reviewerCount + supervisorCount + adminCount + tenantAdminCount,
               name: "Total",
               itemStyle: {
                 color: "#fff",
@@ -272,15 +272,24 @@ const DailyTask = () => {
                                       {item.name}
                                     </span>
                                   </div>
+
                                   <div className={styles.subText}>
                                     {item.name === "Admin"
                                       ? roles.ADMIN
+                                        ? roles.ADMIN
+                                        : 0
                                       : item.name === "Supervisor"
                                       ? roles.SUPERVISOR
+                                        ? roles.SUPERVISOR
+                                        : 0
                                       : item.name === "Reviewer"
                                       ? roles.REVIEWER
+                                        ? roles.REVIEWER
+                                        : 0
                                       : item.name === "Tenant Admin"
                                       ? roles.TENANT_ADMIN
+                                        ? roles.TENANT_ADMIN
+                                        : 0
                                       : data.declined}
                                   </div>
                                 </div>

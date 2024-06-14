@@ -101,7 +101,7 @@ const HeaderFilters = ({
   tracking,
   selectorField,
   defaultShow = false,
-  defaultSize = "col-xl-4",
+  defaultSize = "col-xl-2",
   setAuditSelAllocatedTo,
   isAuditAllocatedToSelector,
   auditAllocatedToOptoons,
@@ -128,14 +128,12 @@ const HeaderFilters = ({
   setSelectedDates5,
   auditallocatedToOptoons,
   auditSelAllocatedTo,
-// selectorgList
+  selectOrgList,
   orgAllList,
   setSelectedOrgList,
-  selectOrgList,
-  setTrackInput,
-  trackInput
 }) => {
   const dispatch = useDispatch();
+  const [trackInput, setTrackInput] = useState("");
 
   return (
     <>
@@ -158,7 +156,7 @@ const HeaderFilters = ({
                     setSelAllocatedTo(selectedOption);
                   }}
                   options={allocatedToOptoons}
-                  className="custom-react-select-tenant"
+                  className="custom-react-select"
                   isSearchable={false}
                   // placeholder={defaultAllocateTo}
                 />
@@ -183,7 +181,7 @@ const HeaderFilters = ({
                     setAuditSelAllocatedTo(selectedOption);
                   }}
                   options={auditallocatedToOptoons}
-                  className="custom-react-select-tenant"
+                  className="custom-react-select"
                   isSearchable={false}
                   placeholder={defaultAllocateTo}
                 />
@@ -196,7 +194,7 @@ const HeaderFilters = ({
             <div className="dateRangeSize">
               <RangePicker
                 value={clear ? "" : selectedDates}
-                format="YYYY-MM-DD"
+                format="MM-DD-YYYY"
                 onCalendarChange={(val) => setSelectedDates(val)}
                 onChange={(date, dateString) => {
                   handleRnagePicker2({
@@ -223,7 +221,7 @@ const HeaderFilters = ({
                 <div className="dateRangeSize">
                   <RangePicker
                     value={clear ? ["", ""] : selectedDates2}
-                    format="YYYY-MM-DD"
+                    format="MM-DD-YYYY"
                     onCalendarChange={(val) => setSelectedDates2(val)}
                     onChange={(date, dateString) => {
                       handleRnagePicker2({
@@ -249,7 +247,7 @@ const HeaderFilters = ({
                 <div className="dateRangeSize">
                   <RangePicker
                     value={clear ? ["", ""] : selectedDates3}
-                    format="YYYY-MM-DD"
+                    format="MM-DD-YYYY"
                     onCalendarChange={(val) => setSelectedDates3(val)}
                     onChange={(date, dateString) => {
                       handleRnagePicker2({
@@ -279,19 +277,13 @@ const HeaderFilters = ({
                   }}
                   options={selectOptions2}
                   placeholder={defaultSelectValue2?.label}
-                  className="custom-react-select-tenant"
+                  className="custom-react-select"
                   isSearchable={false}
                 />
               </div>
             </div>
           )}
 
-        </div>
-      </div>
-      {defaultShow && (
-        <div style={{ marginTop: "50px" }}>
-          <div className="row filter-contain"  style={{ width: "100%" }}>
-            
           {isSelector ? (
             <div className={defaultSize}>
               <label className={styles.label}>Processed Status</label>
@@ -303,7 +295,7 @@ const HeaderFilters = ({
                     setClear(false);
                   }}
                   options={selectOptions}
-                  className="custom-react-select-tenant"
+                  className="custom-react-select"
                   isSearchable={false}
                 />
               </div>
@@ -322,19 +314,24 @@ const HeaderFilters = ({
                     setClear(false);
                   }}
                   options={auditStatusOptions}
-                  className="custom-react-select-tenant"
+                  className="custom-react-select"
                   isSearchable={false}
                 />
               </div>
             </div>
           ) : null}
+        </div>
+      </div>
+      {defaultShow && (
+        <div style={{ marginTop: "50px" }}>
+          <div className="row filter-contain">
             {isRangePicker && (
               <div className={defaultSize}>
                 <label className={styles.label}>{"Reviewer Due Date"}</label>
                 <div className="dateRangeSize">
                   <RangePicker
                     value={clear ? ["", ""] : selectedDates4}
-                    format="YYYY-MM-DD"
+                    format="MM-DD-YYYY"
                     onCalendarChange={(val) => setSelectedDates4(val)}
                     onChange={(date, dateString) => {
                       handleRnagePicker2({
@@ -374,7 +371,7 @@ const HeaderFilters = ({
                   <div className="dateRangeSize">
                     <RangePicker
                       value={clear ? ["", ""] : selectedDates5}
-                      format="YYYY-MM-DD"
+                      format="MM-DD-YYYY"
                       onCalendarChange={(val) => setSelectedDates5(val)}
                       onChange={(date, dateString) => {
                         handleRnagePicker2({
@@ -391,15 +388,6 @@ const HeaderFilters = ({
                 </div>
               </>
             )}
-           
-         
-          </div>
-        </div>
-      )}
-        {defaultShow && (
-        <div style={{ marginTop: "30px" }}>
-          <div className="row filter-contain"  style={{ width: "100%" }}>
-        
             {isAllocatedBySelector && (
               <div
                 className={defaultSize}
@@ -418,7 +406,7 @@ const HeaderFilters = ({
                       setClear(false);
                     }}
                     options={allocatedByOptoons}
-                    className="custom-react-select-tenant"
+                    className="custom-react-select"
                     isSearchable={false}
                     placeholder={defaultAllocatedBy}
                   />
@@ -442,35 +430,13 @@ const HeaderFilters = ({
                       setClear(false);
                     }}
                     options={auditAllocatedByOptoons}
-                    className="custom-react-select-tenant"
+                    className="custom-react-select"
                     isSearchable={false}
                     placeholder={defaultAllocatedBy}
                   />
                 </div>
               </div>
             ) : null}
-
-            {isSearch && (
-              <div className={defaultSize} onClick={() => setClear(false)}>
-                {" "}
-                <label style={{ marginLeft: "8px" }}>{searchlabel}</label>
-                <div class="form-group has-search">
-                  <InputField
-                    isSearch={true}
-                    placeholder="Search"
-                    inputValue={search}
-                    setInputValue={setSearch}
-                    delay={1000}
-                    type="text"
-                    isDisabled={false}
-                    isInputFiled={false}
-                    isTracking={true}
-                    trackInput={trackInput}
-                    setTrackInput={setTrackInput}
-                  />
-                </div>
-              </div>
-            )}
             {isSelector ? (
               <div
                 className={defaultSize}
@@ -494,7 +460,96 @@ const HeaderFilters = ({
                 </div>
               </div>
             ) : null}
-         
+            {isSearch && (
+              <div className={defaultSize} onClick={() => setClear(false)}>
+                {" "}
+                <label style={{ marginLeft: "8px" }}>{searchlabel}</label>
+                <div class="form-group has-search">
+                  <InputField
+                    isSearch={true}
+                    placeholder="Search"
+                    inputValue={search}
+                    setInputValue={setSearch}
+                    delay={1000}
+                    type="text"
+                    isDisabled={false}
+                    isInputFiled={false}
+                    isTracking={true}
+                    trackInput={trackInput}
+                    setTrackInput={setTrackInput}
+                  />
+                </div>
+              </div>
+            )}
+            <div
+              className={`${bullets ? "col-xl-2" : "col-xl-4"}`}
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              {bullets && (
+                <div
+                  // className={`${bullets ? "col-xl-1" : "col-xl-4"}`}
+                  style={{ margin: "30px 0 0 10px", cursor: "pointer" }}
+                >
+                  <Popover
+                    content={
+                      <>
+                        <Legends
+                          bullets={bullets}
+                          display="block"
+                          padding="0 0px 10px 0"
+                        />
+                        {badges?.length > 0 &&
+                          badges?.map((data) => (
+                            <div style={{ marginBottom: "10px" }}>
+                              <Image src={data.src} width={20} height={30} />
+                              <span style={{ marginLeft: "5px" }}>
+                                {data?.name}
+                              </span>
+                            </div>
+                          ))}
+                      </>
+                    }
+                    trigger={["click"]}
+                    placement="bottom"
+                  >
+                    <Image src={warning} />
+                  </Popover>
+                </div>
+              )}
+              <div
+                style={{ marginTop: "30px", width: "100%" }}
+                className={`${bullets ? "col-xl-2" : "col-xl-4"}`}
+                onClick={() => {
+                  setClear(true);
+                  setStartDate([]);
+                  setEndDate([]);
+                  setStartDate4([]);
+                  setEndDate4([]);
+                  setStartDate5([]);
+                  setEndDate5([]);
+                  setStartDate6([]);
+                  setEndDate6([]);
+                  setSearch("");
+                  setSelectedDates([]);
+                  setSelectedDates2([]);
+                  setSelectedDates3([]);
+                  setSelectedDates4([]);
+                  setSelectedDates5([]);
+                  setSelAllocatedTo("");
+                  setAuditSelAllocatedTo("");
+                  setSelectedOption("");
+                  setAuditSelectedOption("");
+                  setSelAllocatedBy("");
+                  setSelAuditAllocatedBy("");
+                  setTrackInput("");
+                }}
+              >
+                <button className={`${styles.filterBtn} mx-3`}>Clear</button>
+              </div>
+            </div>
           </div>
         </div>
       )}

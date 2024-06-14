@@ -18,6 +18,7 @@ import warning from "../../../../images/svg/warning.svg";
 import Image from "next/image";
 import YearAndDosStatus from "../components/yearAndDosStatus";
 import { getStatusIcon, selectTab } from "../../../reuseableFunctions";
+import { getStorage } from "../../../../utils/storages";
 
 const { Option } = Select;
 
@@ -81,17 +82,23 @@ const Hcc = ({
       getSelectedDos('')
     }
     const patientId = localStorage.getItem("patientId");
+    const role = localStorage.getItem("role");
+
     if (value) {
       getpatientDetailsData(
         patientId,
         null,
-        moment(value).format("YYYY-MM-DD")
+        moment(value).format("YYYY-MM-DD"),
+        "",
+        role
       );
     } else {
       getpatientDetailsData(
         patientId,
         patientDetailsResult?.data?.response?.processedYear,
-        null
+        null,
+        "",
+        role
       );
     }
   };
@@ -235,8 +242,10 @@ const Hcc = ({
                       ))}
                     </Select>
                   </Nav.Item>
+                  
                   <Nav.Item as="li" className="nav-item mx-2">
-                    <YearAndDosStatus setIsLoading={setIsLoading} />
+                  {localStorage.getItem('role') != "admin" && 
+                    <YearAndDosStatus setIsLoading={setIsLoading} />}
                   </Nav.Item>
                   {activeTabHead == 1 && (
                     <Popover

@@ -87,7 +87,7 @@ export default function Patient() {
   const [searchStr, setSearchStr] = useState("");
   const dispatch = useDispatch();
 
-  const getAllList = async (
+  const getAllList = async ({
     pageNo = 0,
     pageSize = 15,
     startDate,
@@ -96,19 +96,21 @@ export default function Patient() {
     status = 2,
     search,
     sort,
-    selectedOption
-  ) => {
+    selectedOption,
+    selectOrgList,
+    batchCount,
+  }) => {
     const uId = localStorage.getItem("userId");
     const orgId = localStorage.getItem("orgId");
     let resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=${uId}&organizationId=${orgId}&computationStart=${
       startDate ? startDate : ""
-    }&computationEnd=${
-      endDate ? endDate : ""
-    }&isAllocation=${allocate}&status=${status}&searchString=${search}&sortdirection=${
-      sort?.sortDir
-    }&sortfield=${sort?.sortField}&priority=${
+    }&computationEnd=${endDate ? endDate : ""}&isAllocation=${
+      allocate ? allocate : ""
+    }&status=${status}&searchString=${search ? search : ""}&sortdirection=${
+      sort?.sortDir ? sort?.sortDir : ""
+    }&sortfield=${sort?.sortField ? sort?.sortField : ""}&priority=${
       selectedOption ? selectedOption : ""
-    }&batchCount=${batchCount}`;
+    }&batchCount=${batchCount ? batchCount : ""}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response?.data) {
       let resultMap = [];
@@ -289,17 +291,17 @@ export default function Patient() {
 
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab === 1) {
-      getAllList(
-        pageNo,
-        pageSize,
-        startDate,
-        endDate,
-        true,
-        2,
-        searchStr,
-        sort,
-        selectedOption
-      );
+      getAllList({
+        pageNo: pageNo,
+        pageSize: pageSize,
+        startDate: startDate,
+        endDate: endDate,
+        allocate: true,
+        status: 2,
+        search: searchStr,
+        sort: sort,
+        selectedOption: selectedOption,
+      });
     }
   }, [
     pageNo,
@@ -963,6 +965,7 @@ export default function Patient() {
         setSelectAllChecked={setSelectAllChecked}
         setSelectedChart={setSelectedChart}
         selectedChart={selectedChart}
+        getAllList={getAllList}
       />
       <L2AllocateModal
         open={allocateModalL2}

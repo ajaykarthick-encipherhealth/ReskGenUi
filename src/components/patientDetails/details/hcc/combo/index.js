@@ -99,7 +99,9 @@ const Combo = ({
       dispatch,
       sectionColorList,
       "",
-      setComboDiseaseCodesList
+      setComboDiseaseCodesList,
+      "","","",
+      setInvalidComboDiseaseCodesList
     );
   }, [patientDetailsResult]);
 
@@ -121,13 +123,13 @@ const Combo = ({
   setSelectDisDetails(data);
   };
 
-
   const handleCloseModal = () => {
     setConfirmNotesModalValid(false);
     setValidated(false);
     setIsModalOpenCaptureSection(false);
     setIsAddComboCode(false);
     setFileLoading(false);
+    setOpens(false)
   };
 
   const handleChangeSuggested = async (e) => {

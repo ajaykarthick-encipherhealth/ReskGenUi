@@ -152,7 +152,8 @@ export const getPatientDetails = async (
   setComboDiseaseCodesList,
   setDosSummariesList,
   setNonHccDiseasesList,
-  setDeletedMeatList
+  setDeletedMeatList,
+  setInvalidComboDiseaseCodesList
 ) => {
   if (patientDetailsResult?.data?.response) {
     var result = patientDetailsResult?.data?.response;
@@ -165,6 +166,7 @@ export const getPatientDetails = async (
       var suggestListAll = [];
       var deleteHccList = [];
       var combiDisArray = [];
+      var combiDisArrayInvalid = [];
       var meatHeaderList = [];
       var deletedmeatListArr = [];
       var rafScore = [];
@@ -339,11 +341,42 @@ export const getPatientDetails = async (
             dateOfServices:res.dateOfServices,
           });
       });
+      result?.deletedComboDisease?.map((res, index) => {
+          var providerList = [];
+          var dosList = [];
+          res.providerNames?.map((res) => {
+            providerList.push(res);
+          });
+          res.dateOfServices?.map((res) => {
+            dosList.push(res.date);
+          });
+          combiDisArrayInvalid.push({
+            addOnCode: res.addOnCode,
+            addOnCodeTwo: res.addOnCodeTwo,
+            addOnCodeThree: res.addOnCodeThree,
+            addOnCodes: [res.addOnCode, res.addOnCodeTwo, res.addOnCodeThree],
+            diagnosisCodeCombo: res.diagnosisCodeCombo,
+            diseaseName: res.diseaseName,
+            diagnosisCode: res.diagnosisCode,
+            encounterDate: res.encounterDate,
+            encounterDateSplit:  res.dateOfServices,
+            providerName: providerList,
+            providers: res.provider ? res.providers : res.provider,
+            ruleType: res.ruleType,
+            capturedSections: res.capturedSections,
+            children: res.children ? res.children : [],
+            expanded: true,
+            hyperlinks: res?.hyperlinks,
+            dateOfServices:res.dateOfServices,
+          });
+      });
+
       setNewValidDiseaseList && setNewValidDiseaseList(hccDisArray);
       setSuggestedHccList && setSuggestedHccList(suggestListAll);
       setNonHccDiseasesList&& setNonHccDiseasesList(nonHccDisArray);
       setDeletedHccList && setDeletedHccList(deleteHccList);
       setComboDiseaseCodesList && setComboDiseaseCodesList(combiDisArray);
+      setInvalidComboDiseaseCodesList && setInvalidComboDiseaseCodesList(combiDisArrayInvalid);
       setDosSummariesList && setDosSummariesList(result?.dosSummaries);
       var capturedSectionsColorsMatching = [];
       var capturedSectionsArr = [];

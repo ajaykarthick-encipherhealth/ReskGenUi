@@ -91,7 +91,12 @@ function AddPatientListTable({
             >
               {data.patientName ? data.patientName : <div>---</div>}
             </td>
-
+            <td
+              className={TableStyle.childBorder}
+              onClick={handleTableRowClick}
+            >
+              {data.totalPages ? data.totalPages : <div>---</div>}
+            </td>
             <td
               className={TableStyle.childBorder}
               style={{ textAlign: "left" }}
@@ -161,7 +166,9 @@ function AddPatientListTable({
           <tr>
             <th>PATIENT ID</th>
             <th>FILE NAME</th>
-
+            <th>
+              TOTAL PAGES
+            </th>
             <th className={TableStyle.rowStyle}>CREATED BY</th>
 
             <th

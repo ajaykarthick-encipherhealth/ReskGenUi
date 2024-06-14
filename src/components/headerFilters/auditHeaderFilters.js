@@ -190,7 +190,11 @@ const AuditHeaderFilters = ({
           {isNextRow && (
             <div
               className={"col-xl-1"}
-              style={{ margin: "30px 0 0 0px", cursor: "pointer", width:"107px" }}
+              style={{
+                margin: "30px 0 0 0px",
+                cursor: "pointer",
+                width: "107px",
+              }}
               onClick={() => setShowFilters(!showFilters)}
             >
               <button className={styles.filterBtn}>
@@ -268,7 +272,7 @@ const AuditHeaderFilters = ({
                   <label className={styles.label}>{pickerlabe2}</label>
                   <div>
                     <RangePicker
-                      format="YYYY-MM-DD"
+                      format="MM-DD-YYYY"
                       // value={dayjs(selectedDates2).format('MM-DD-YYYY')}
                       onChange={(date, dateString) =>
                         handleRnagePicker2({
@@ -298,7 +302,7 @@ const AuditHeaderFilters = ({
                   <label className={styles.label}>{pickerlabe3}</label>
                   <div>
                     <RangePicker
-                      format="YYYY-MM-DD"
+                      format="MM-DD-YYYY"
                       onChange={(date, dateString) => {
                         handleRnagePicker2({
                           date,

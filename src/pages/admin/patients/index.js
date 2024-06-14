@@ -194,6 +194,7 @@ export default function Patient() {
           createdByFirstName: res.createdByFirstName,
           createdByLastName: res.createdByLastName,
           createdByProfileImage: res.createdByProfileImage,
+          totalPages: res.totalPages
         });
       });
       var newArray = [];
@@ -592,7 +593,7 @@ export default function Patient() {
                             selectorField="CreatedBy"
                             // defaultAllocatedBy={"All"}
                             setSelCreatedBy={setSelCreatedBy}
-                            addUser={false}
+                            addUser={true}
                             addUserForm={addPatientFormId}
                             bullets={bullets}
                             isNextRow={true}
