@@ -16,7 +16,6 @@ import spinSTYles from "../../../../styles/auth.module.css";
 import { actions as dashbaordActions } from "../../../../stores/reviewer/dashboard";
 
 const DailyTask = ({ dailyStatusData, DailyStatusData }) => {
-  console.log(dailyStatusData);
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
   const dispatch = useDispatch();
