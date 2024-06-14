@@ -177,6 +177,7 @@ const Meat = ({
         <Popover
           placement="topLeft"
           title={title}
+          overlayStyle={{ zIndex: 1000 }}
           content={
             <>
               <div>{value}</div>
@@ -205,7 +206,7 @@ const Meat = ({
             </>
           }
         >
-          <span style={{fontSize: 'smaller'}}>{value}</span>
+          <span style={{ fontSize: "smaller" }}>{value}</span>
         </Popover>
       );
     } else {
@@ -329,6 +330,7 @@ const Meat = ({
                   <Popover
                     placement="bottom"
                     title="Secondary"
+                    overlayStyle={{ zIndex: 1000 }}
                     content={getCaptureSectionBackgroundMeatNew(
                       selectOtherHyperlink,
                       captureSectionMatching,
@@ -411,6 +413,7 @@ const Meat = ({
                           placement="topLeft"
                           title="Description"
                           content={selectMeatResult?.diseaseName}
+                          overlayStyle={{ zIndex: 1000 }}
                         >
                           <span className="meat-name-details2">
                             {selectMeatResult?.diseaseName}
@@ -479,7 +482,7 @@ const Meat = ({
                           )}
                         </div>
                       </div>
-                      <div style={{width:"auto"}}>
+                      <div style={{ width: "auto" }}>
                         <div className={`${visitStyles.meat_title_card2_meat}`}>
                           <span
                             className={`text-center ${
@@ -531,7 +534,7 @@ const Meat = ({
                           )}
                         </div>
                       </div>
-                      <div style={{width:"auto"}}>
+                      <div style={{ width: "auto" }}>
                         <div className={visitStyles.meat_title_card2_meat}>
                           <span
                             className={`text-center ${
@@ -583,7 +586,7 @@ const Meat = ({
                           )}
                         </div>
                       </div>
-                      <div style={{width:"auto"}}>
+                      <div style={{ width: "auto" }}>
                         <div className={visitStyles.meat_title_card2_meat}>
                           <span
                             className={`text-center ${
@@ -635,7 +638,7 @@ const Meat = ({
                           )}
                         </div>
                       </div>
-                      <div style={{width:"auto"}}>
+                      <div style={{ width: "auto" }}>
                         <div className={visitStyles.meat_title_card2_meat}>
                           <span
                             className={`text-center ${

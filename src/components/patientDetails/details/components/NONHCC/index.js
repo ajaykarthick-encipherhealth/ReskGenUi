@@ -100,6 +100,7 @@ const NonHccCards = ({
                       }
                       title=""
                       trigger="hover"
+                      overlayStyle={{ zIndex: 1000 }}
                     >
                       <>
                         {" "}

@@ -40,7 +40,7 @@ const RadiologyCards = ({
   isVisitData,
   setIsModalOpenValidCodes,
   setIsValidAction,
-  setIsModalOpenRadiology
+  setIsModalOpenRadiology,
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -50,7 +50,6 @@ const RadiologyCards = ({
   );
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [openContent, setOpenContent] = useState(null);
-
 
   return (
     <>
@@ -89,6 +88,7 @@ const RadiologyCards = ({
                                 }
                                 title=""
                                 trigger="hover"
+                                overlayStyle={{ zIndex: 1000 }}
                               >
                                 <>
                                   {" "}
@@ -99,70 +99,69 @@ const RadiologyCards = ({
                                 </>
                               </Popover>
                             </span>
-                          </div>    
+                          </div>
                           <Popconfirm
-                                    title="Choose an action"
-                                    icon={
-                                      <QuestionCircleOutlined
-                                        style={{
-                                          color: "blue",
-                                        }}
-                                      />
-                                    }
-                                    okText={
-                                      data.getPlace == "Radio" ||
-                                      data.getPlace == "Lab"
-                                        ? "Move to Deleted"
-                                        : okText
-                                    }
-                                    cancelText={
-                                      data.getPlace === "Radio" ||
-                                      data.getPlace === "Lab"
-                                        ? ""
-                                        : cancelText
-                                    }
-                                    onCancel={() =>
-                                      moveToAnotherAction(
-                                        setConfirmNotesModalValid,
-                                        setIsValidAction,
-                                        cancelText,
-                                        cardTitle
-                                      )
-                                    }
-                                    okButtonProps={{
-                                      type: "default",
+                            title="Choose an action"
+                            icon={
+                              <QuestionCircleOutlined
+                                style={{
+                                  color: "blue",
+                                }}
+                              />
+                            }
+                            okText={
+                              data.getPlace == "Radio" || data.getPlace == "Lab"
+                                ? "Move to Deleted"
+                                : okText
+                            }
+                            cancelText={
+                              data.getPlace === "Radio" ||
+                              data.getPlace === "Lab"
+                                ? ""
+                                : cancelText
+                            }
+                            onCancel={() =>
+                              moveToAnotherAction(
+                                setConfirmNotesModalValid,
+                                setIsValidAction,
+                                cancelText,
+                                cardTitle
+                              )
+                            }
+                            okButtonProps={{
+                              type: "default",
+                            }}
+                            cancelButtonProps={{
+                              type: "default",
+                            }}
+                            description={data.diagnosisCode}
+                            onConfirm={() =>
+                              moveToAnotherAction(
+                                setConfirmNotesModalValid,
+                                setIsValidAction,
+                                okText,
+                                cardTitle
+                              )
+                            }
+                            placement="bottom"
+                            onOpenChange={() =>
+                              onchangeValid(data.diagnosisCode, data)
+                            }
+                          >
+                            {
+                              <div className="cr-pointer d-flex">
+                                <div className={visitStyles.close_icon}>
+                                  <FontAwesomeIcon
+                                    icon={faArrowsAlt}
+                                    style={{
+                                      size: 8,
+                                      color: "#a80404",
                                     }}
-                                    cancelButtonProps={{
-                                      type: "default",
-                                    }}
-                                    description={data.diagnosisCode}
-                                    onConfirm={() =>
-                                      moveToAnotherAction(
-                                        setConfirmNotesModalValid,
-                                        setIsValidAction,
-                                        okText,
-                                        cardTitle
-                                      )
-                                    }
-                                    placement="bottom"
-                                    onOpenChange={() =>
-                                      onchangeValid(data.diagnosisCode, data)
-                                    }
-                                  >
-                                    {
-                                      <div className="cr-pointer d-flex">
-                                        <div className={visitStyles.close_icon}>
-                                          <FontAwesomeIcon
-                                            icon={faArrowsAlt}
-                                            style={{
-                                              size: 8,
-                                              color: "#a80404",
-                                            }}
-                                          />
-                                        </div>
-                                      </div>
-                                    }
-                                  </Popconfirm>                  
+                                  />
+                                </div>
+                              </div>
+                            }
+                          </Popconfirm>
                         </div>
                         <div className="d-flex justify-content-between">
                           <div className={`${visitStyles.hoverActiveHcc}`}>

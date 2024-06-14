@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Badge } from "react-bootstrap";
-import { useSelector,connect } from "react-redux";
+import { useSelector, connect } from "react-redux";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsAlt } from "@fortawesome/free-solid-svg-icons";
@@ -9,7 +9,7 @@ import { Modal } from "antd";
 import PdfViewer from "../../PdfViewerComponent";
 import { getPatientRadiologyDetails } from "../../components/function/GetDataRadiology";
 
-const Meat = ({radiologyDetailsResult,radiologyFile}) => {
+const Meat = ({ radiologyDetailsResult, radiologyFile }) => {
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
   );
@@ -609,10 +609,8 @@ const Meat = ({radiologyDetailsResult,radiologyFile}) => {
   );
 };
 
-const enhancer = connect(
-  (state) => ({
-    radiologyDetailsResult :state?.patientDetails?.details?.radiologyResult,
-    radiologyFile :state?.patientDetails?.details?.radiologyFileResult,
-  }),
-);
+const enhancer = connect((state) => ({
+  radiologyDetailsResult: state?.patientDetails?.details?.radiologyResult,
+  radiologyFile: state?.patientDetails?.details?.radiologyFileResult,
+}));
 export default enhancer(Meat);
