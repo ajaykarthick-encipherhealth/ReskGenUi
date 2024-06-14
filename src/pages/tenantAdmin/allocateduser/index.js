@@ -90,7 +90,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
   const [orgAllList, setOrgAllList] = useState([]);
   const [defaultOrgValue, setDefaultOrgValue] = useState(null);
 
-  const getAllList = async ({
+  const getAllList = async (
     pageNo = 0,
     pageSize = 15,
     startDate,
@@ -100,9 +100,8 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
     search,
     sort,
     selectedOption,
-    selectOrgList,
-    batchCount,
-  }) => {
+    selectOrgList
+  ) => {
     const uId = localStorage.getItem("userId");
     var orgId = "";
     if (selectOrgList) {
@@ -112,13 +111,11 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
       startDate ? startDate : ""
     }&computationEnd=${
       endDate ? endDate : ""
-    }&isAllocation=${allocate}&status=${status}&searchString=${
-      search ? search : ""
-    }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&sortfield=${
-      sort?.sortField ? sort?.sortField : ""
-    }&priority=${selectedOption ? selectedOption : ""}&batchCount=${
-      batchCount ? batchCount : ""
-    }`;
+    }&isAllocation=${allocate}&status=${status}&searchString=${search}&sortdirection=${
+      sort?.sortDir
+    }&sortfield=${sort?.sortField}&priority=${
+      selectedOption ? selectedOption : ""
+    }&batchCount=${batchCount}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response?.data) {
       let resultMap = [];
@@ -140,8 +137,6 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
       }
 
       setTableLoading(false);
-      setFilterBatchCount(false)
-      setBatchCount("")
     }
   };
   const getAllCheckList = async (sort) => {
@@ -306,18 +301,18 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
 
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab === 1) {
-      getAllList({
-        pageNo: pageNo,
-        pageSize: pageSize,
-        startDate: startDate,
-        endDate: endDate,
-        allocate: true,
-        status: 2,
-        search: searchStr,
-        sort: sort,
-        selectedOption: selectedOption,
-        selectOrgList: selectOrgList,
-      });
+      getAllList(
+        pageNo,
+        pageSize,
+        startDate,
+        endDate,
+        true,
+        2,
+        searchStr,
+        sort,
+        selectedOption,
+        selectOrgList
+      );
     }
   }, [
     pageNo,
@@ -658,7 +653,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
                                 </div>
                               </div>
 
-                              <div className="col-xl-2">
+                              {/* <div className="col-xl-2">
                                 <label>Batch Count</label>
                                 <div class="form-group d-flex">
                                   <InputText
@@ -690,18 +685,13 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
                                     }}
                                   />
                                   <button
-                                    onClick={() => {
-                                      setFilterBatchCount(true);
-                                      getAllList({
-                                        batchCount: batchCount,
-                                      });
-                                    }}
+                                    onClick={() => setFilterBatchCount(true)}
                                     className="btn btn-outline-secondary py-0 px-2 select-count"
                                   >
                                     Select
                                   </button>
                                 </div>
-                              </div>
+                              </div> */}
                             </>
                           ) : !isPatientList && activeTab == 2 ? (
                             <div className="col-xl-6"></div>
@@ -737,7 +727,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
                             className={
                               isPatientList && activeTab == 2
                                 ? `col-xl-6 mt-4 ${TableStyle.allocateBtn}`
-                                : `col-xl-2  ${TableStyle.allocateBtn}`
+                                : `col-xl-4  ${TableStyle.allocateBtn}`
                             }
                           >
                             {isPatientList || activeTab === 1 ? (
@@ -1028,7 +1018,6 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
         setSelectAllChecked={setSelectAllChecked}
         setSelectedChart={setSelectedChart}
         selectedChart={selectedChart}
-        getAllList={getAllList}
       />
       <L2AllocateModal
         open={allocateModalL2}
