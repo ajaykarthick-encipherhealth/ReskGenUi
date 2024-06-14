@@ -27,8 +27,6 @@ const items = [
 
 const UserList = ({ userList, sortOrder, setSortOrder, setSort,usersList }) => {
   const usersData = usersList;
-  console.log(usersData)
-
   const dispatch = useDispatch();
   const [checkedd, setChecked] = useState();
   const [rowData, setRowData] = useState();
