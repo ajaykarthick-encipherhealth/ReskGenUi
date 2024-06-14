@@ -41,8 +41,12 @@ const intialValues = {
   mobileNumber: "",
   confirmPassword: "",
 };
-const UserList = ({ getAllOrganizationList, organizationList,getAllUsersList,usersList }) => {
-  console.log(usersList)
+const UserList = ({
+  getAllOrganizationList,
+  organizationList,
+  getAllUsersList,
+  usersList,
+}) => {
   const dispatch = useDispatch();
   const usersData = useSelector((state) => state.adminUsers.usersData);
   const sideMenu = useSelector((state) => state.sideMenu);
@@ -77,7 +81,20 @@ const UserList = ({ getAllOrganizationList, organizationList,getAllUsersList,use
   });
   const [selectOrgList, setSelectedOrgList] = useState("");
   const [orgAllList, setOrgAllList] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
 
+  const handleChange = (e) => {
+    let value = e.target.value;
+    if (/^\d*$/.test(value) && value.length <= 10) {
+      setMobileNumber(value);
+    }
+  };
+  const getDisplayValue = (number) => {
+    if (number.length === 10) {
+      return number.slice(0, 7) + "***";
+    }
+    return number;
+  };
   const addUserForm = () => {
     setValidated(false);
     setAddUser(true);
@@ -183,8 +200,8 @@ const UserList = ({ getAllOrganizationList, organizationList,getAllUsersList,use
       endDate,
       status,
       role,
-      orgId:selectOrgList?.value,
-    })
+      orgId: selectOrgList?.value,
+    });
   }, [
     pageCount,
     search,
@@ -195,19 +212,19 @@ const UserList = ({ getAllOrganizationList, organizationList,getAllUsersList,use
     sort,
     useAdd,
     clear,
-    selectOrgList
+    selectOrgList,
   ]);
 
   useEffect(() => {
     setTimeout(() => {
       setFormData(intialValues);
     }, 750);
-  }, [addUser])
+  }, [addUser]);
 
   useEffect(() => {
     getAllOrganizationList();
   }, []);
-  
+
   useEffect(() => {
     var orgListArray = [];
     organizationList?.response?.map((res) => {
@@ -390,6 +407,7 @@ const UserList = ({ getAllOrganizationList, organizationList,getAllUsersList,use
             setAddUser(false);
             setRoleValue([]);
             setRole("");
+            form.resetFields();
           }}
           className="offcanvas-end offcanvas-md-size"
           placement="end"
@@ -417,8 +435,8 @@ const UserList = ({ getAllOrganizationList, organizationList,getAllUsersList,use
                 onFinish={onFinish}
                 labelCol={{ span: 24 }}
                 wrapperCol={{ span: 24 }}
+                autoComplete="off"
               >
-                {" "}
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item
@@ -432,8 +450,10 @@ const UserList = ({ getAllOrganizationList, organizationList,getAllUsersList,use
                       ]}
                     >
                       <div>
-                        {" "}
-                        <Input placeholder="Enter first name" />
+                        <Input
+                          placeholder="Enter first name"
+                          autoComplete="off"
+                        />
                       </div>
                     </Form.Item>
                   </Col>
@@ -449,29 +469,15 @@ const UserList = ({ getAllOrganizationList, organizationList,getAllUsersList,use
                       ]}
                     >
                       <div>
-                        {" "}
-                        <Input placeholder="Enter last name" />
+                        <Input
+                          placeholder="Enter last name"
+                          autoComplete="off"
+                        />
                       </div>
                     </Form.Item>
                   </Col>
-                  <Col span={12}>
-                    <Form.Item
-                      label="Select Organization"
-                      name="orgId"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select Organization!",
-                        },
-                      ]}
-                    >
-                      <Select
-                        placeholder="Select"
-                        options={orgAllList}
-                        style={{ height: "42px" }}
-                      />
-                    </Form.Item>
-                  </Col>
+                </Row>
+                <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item
                       label="Email"
@@ -485,8 +491,7 @@ const UserList = ({ getAllOrganizationList, organizationList,getAllUsersList,use
                       ]}
                     >
                       <div>
-                        {" "}
-                        <Input placeholder="Enter email" />
+                        <Input placeholder="Enter email" autoComplete="off" />
                       </div>
                     </Form.Item>
                   </Col>
@@ -512,11 +517,15 @@ const UserList = ({ getAllOrganizationList, organizationList,getAllUsersList,use
                       ]}
                     >
                       <div>
-                        {" "}
-                        <Input placeholder="Enter user name" />
+                        <Input
+                          placeholder="Enter user name"
+                          autoComplete="off"
+                        />
                       </div>
                     </Form.Item>
                   </Col>
+                </Row>
+                <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item
                       label="Mobile Number"
@@ -534,10 +543,12 @@ const UserList = ({ getAllOrganizationList, organizationList,getAllUsersList,use
                       ]}
                     >
                       <div>
-                        {" "}
                         <Input
-                          type="number"
+                          type="text"
                           placeholder="Enter mobile number"
+                          autoComplete="off"
+                          value={getDisplayValue(mobileNumber)}
+                          onChange={handleChange}
                         />
                       </div>
                     </Form.Item>
@@ -554,33 +565,26 @@ const UserList = ({ getAllOrganizationList, organizationList,getAllUsersList,use
                     >
                       <Select
                         placeholder="Select role"
-                        // onChange={onRoleChange}
                         allowClear
                         style={{ height: "42px" }}
                       >
-                        <Select.Option value="ADMIN">ADMIN</Select.Option>
-                        <Select.Option value="TENANT_ADMIN">
-                        TENANT_ADMIN
-                        </Select.Option>
                         <Select.Option value="REVIEWER">REVIEWER</Select.Option>
                         <Select.Option value="SUPERVISOR">
                           SUPERVISOR
-                        </Select.Option>
-                        <Select.Option value="ADMIN_TECHNICAL_SUPPORT">
-                          ADMIN TECHNICAL SUPPORT
-                        </Select.Option>
-                        <Select.Option value="L2AUDITOR">
-                          TENANT_ADMIN
                         </Select.Option>
                       </Select>
                     </Form.Item>
                   </Col>
                 </Row>
+
+                <input type="password" style={{ display: "none" }} />
+
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item
                       label="Password"
                       name="password"
+                      dependencies={["password"]}
                       rules={[
                         {
                           required: true,
@@ -594,7 +598,7 @@ const UserList = ({ getAllOrganizationList, organizationList,getAllUsersList,use
                               !/[A-Z]/.test(value)
                             ) {
                               return Promise.reject(
-                                "Please enter a password with both lowercase and uppercase characters."
+                                "Keep it strong! Your password must be case sensitive"
                               );
                             }
                             return Promise.resolve();
@@ -603,9 +607,11 @@ const UserList = ({ getAllOrganizationList, organizationList,getAllUsersList,use
                       ]}
                     >
                       <div className="confirmPass">
+                        <input type="password" style={{ display: "none" }} />
                         <Input.Password
-                          style={{ height: "42px" }}
+                          // style={{ height: "42px" }}
                           placeholder="Enter password"
+                          autoComplete="new-password"
                         />
                       </div>
                     </Form.Item>
@@ -626,25 +632,38 @@ const UserList = ({ getAllOrganizationList, organizationList,getAllUsersList,use
                               return Promise.resolve();
                             }
                             return Promise.reject(
-                              "The two passwords do not match!"
+                              "Passwords do not match. Please verify and re-enter."
                             );
                           },
                         }),
                       ]}
                     >
                       <div className="confirmPass">
-                        {" "}
+                        <input type="password" style={{ display: "none" }} />
                         <Input.Password
-                          style={{
-                            height: "42px",
-                          }}
-                          placeholder="Re enter the password"
+                          // style={{
+                          //   height: "42px",
+                          // }}
+                          placeholder="Re-enter the password"
+                          autoComplete="new-password"
                         />
                       </div>
                     </Form.Item>
                   </Col>
                 </Row>
                 <div style={{ display: "flex", gap: "8px" }}>
+                  <input
+                    type="text"
+                    name="fakeusernameremembered"
+                    value=""
+                    style={{ display: "none" }}
+                  />
+                  <input
+                    type="password"
+                    name="fakepasswordremembered"
+                    value=""
+                    style={{ display: "none" }}
+                  />
                   <Form.Item>
                     <Button type="primary" htmlType="submit">
                       Submit
@@ -662,6 +681,7 @@ const UserList = ({ getAllOrganizationList, organizationList,getAllUsersList,use
                         setRoleValue([]);
                         setRole("");
                         form.resetFields();
+                        setMobileNumber("");
                       }}
                     >
                       Cancel
@@ -685,7 +705,6 @@ const enhancer = connect(
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
     getAllUsersList: tenantAdminAction.getAllUsersAction,
-
   }
 );
 export default enhancer(UserList);
