@@ -187,7 +187,24 @@ const Patient = ({
     }
     setIsLoading(false);
   }, [navigate]);
+  getAllOrganizationList,
+    organizationList,
+    useEffect(() => {
+      if (!organizationList?.response) {
+        getAllOrganizationList();
+      }
+    }, []);
 
+  useEffect(() => {
+    var orgListArray = [];
+    organizationList?.response?.map((res) => {
+      orgListArray.push({
+        value: res.id,
+        label: res.name,
+      });
+    });
+    setOrgAllList(orgListArray);
+  }, [organizationList]);
   useEffect(() => {
     const datas = {
       pageNo,
@@ -646,6 +663,9 @@ const Patient = ({
                             auditAllocatedByOptoons={generateOptionsList(
                               filteredList
                             )}
+                            orgAllList={orgAllList}
+                            setSelectedOrgList={setSelectedOrgList}
+                            selectOrgList={selectOrgList}
                             setClear={setClear}
                             clear={clear}
                             selectedDates={selectedDates}
