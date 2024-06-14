@@ -613,6 +613,18 @@ const UserList = () => {
                 </Col>
               </Row>
               <div style={{ display: "flex", gap: "8px" }}>
+                <input
+                  type="text"
+                  name="fakeusernameremembered"
+                  value=""
+                  style={{ display: "none" }}
+                />
+                <input
+                  type="password"
+                  name="fakepasswordremembered"
+                  value=""
+                  style={{ display: "none" }}
+                />
                 <Form.Item>
                   <Button type="primary" htmlType="submit">
                     Submit
