@@ -243,7 +243,10 @@ const Accuracy = () => {
   let highlightIndex = -1;
 
   if (currentBtn === "Monthly") {
-    if (parseInt(selectedYear) === parseInt(new Date().getFullYear()) || parseInt(selectedMonth) <= parseInt(currentDate.getMonth()+1)) {
+    if (
+      parseInt(selectedYear) === parseInt(new Date().getFullYear()) ||
+      parseInt(selectedMonth) <= parseInt(currentDate.getMonth() + 1)
+    ) {
       highlightIndex = currentDate.getMonth();
     }
   } else if (currentBtn === "Daily") {
@@ -367,7 +370,9 @@ const Accuracy = () => {
           show: true,
           position: "top",
           formatter: function (params) {
-            return (params?.data && currentBtn!=="Daily")?`${Math.round(params?.data)}%`:"";
+            return params?.data && currentBtn !== "Daily"
+              ? `${Math.round(params?.data)}%`
+              : "";
           },
         },
       },
@@ -611,7 +616,6 @@ const Accuracy = () => {
                   bgColor="#E6EEFF"
                   val={month}
                   val1={year}
-                  
                 />
               </div>
               <div className={styles.btnScroller}>
@@ -688,16 +692,34 @@ const Accuracy = () => {
                 <span className={styles.insideTitle}>
                   {currentTabBtn === "CogentAI Accuracy"
                     ? initialAccuracyData
-                      ? `${Math.round(
-                          initialAccuracyData[currentDate?.getMonth()]
-                        )}%`
+                      ? currentBtn === "Monthly"
+                        ? `${initialAccuracyData[currentDate?.getMonth() + 1]}%`
+                        : currentBtn === "Daily"
+                        ? `${
+                            initialAccuracyData[currentDate?.getDate()]
+                              ? initialAccuracyData[currentDate?.getDate()]
+                              : 0
+                          }%`
+                        : `${initialAccuracyData[getDateWeek(currentDate)]}%`
                       : "0%"
-                    : initialQualityData &&
-                      initialQualityData[currentDate?.getMonth()]
-                    ? `${Math.round(
-                        initialQualityData[currentDate?.getMonth()]
-                          ?.averageScore
-                      )}%`
+                    : initialQualityData
+                    ? currentBtn === "Monthly"
+                      ? `${
+                          initialQualityData[currentDate?.getMonth()]
+                            ?.averageScore
+                        }%`
+                      : currentBtn === "Daily"
+                      ? `${
+                          initialQualityData[currentDate?.getDate() - 1]
+                            ?.averageScore
+                            ? initialQualityData[currentDate?.getDate() - 1]
+                                ?.averageScore
+                            : 0
+                        }%`
+                      : `${
+                          initialQualityData[getDateWeek(currentDate) - 1]
+                            ?.averageScore
+                        }%`
                     : "0%"}
                 </span>
               </div>
