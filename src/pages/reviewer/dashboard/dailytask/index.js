@@ -16,6 +16,7 @@ import spinSTYles from "../../../../styles/auth.module.css";
 import { actions as dashbaordActions } from "../../../../stores/reviewer/dashboard";
 
 const DailyTask = ({ dailyStatusData, DailyStatusData }) => {
+  console.log(dailyStatusData);
   const [selectedDate, setSelectedDate] = useState();
   const [currentDays, setCurrentDays] = useState([]);
   const dispatch = useDispatch();
@@ -70,10 +71,10 @@ const DailyTask = ({ dailyStatusData, DailyStatusData }) => {
   }, []);
 
   useEffect(() => {
-    if (dailyStatusData) {
+    if (dailyStatusData?.data?.response) {
       getDays(selectedDate, [dailyStatusData?.data?.response]);
     }
-  }, [dailyStatusData]);
+  }, [dailyStatusData?.data?.response]);
 
   const showPrevious = () => {
     const lastData = currentDays[0];

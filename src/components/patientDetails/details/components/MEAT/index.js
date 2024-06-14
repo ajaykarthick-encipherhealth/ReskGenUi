@@ -44,17 +44,16 @@ const MeatCard = ({
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
   const [isMulitpleHeaderCode, setIsMulitpleHeadeCode] = useState(null);
 
-const highlight = (code) => {
-  if (code == activeMeatTitle?.diagnosisCode) {
-    return true
-  }
-}
+  const highlight = (code) => {
+    if (code == activeMeatTitle?.diagnosisCode) {
+      return true;
+    }
+  };
   return (
     <>
       <div className="my-post-content pt-3">
         <div className={visitStyles.meat_head_card}>
           <div className="row">
-            
             <div className="col-xl-3 text-center text-uppercase">
               <label>Codes & Description</label>
             </div>
@@ -89,8 +88,8 @@ const highlight = (code) => {
                   <div className="row">
                     <div className="col-xl-3 pe-0">
                       <div
-                        className="rounded-start-2 p-3"
-                        // style={{ background: "#ecf2fc" }}
+                        className="rounded-start-2"
+                        style={{ padding: "10px" }}
                       >
                         <div className="row">
                           {/* <div className="col-xl-4 d-grid">
@@ -120,10 +119,21 @@ const highlight = (code) => {
                               content={item.diseaseName}
                             >
                               <div className="d-flex">
-                              <span>{item.diagnosisCode}&nbsp;</span>
-                              <span className="meat-name-details_meat" style={{fontSize: 'small'}}>
-                               - {item.diseaseName}
-                              </span></div>
+                                <span
+                                  style={{
+                                    fontWeight: "700",
+                                    fontSize: "small",
+                                  }}
+                                >
+                                  {item.diagnosisCode}&nbsp;
+                                </span>
+                                <span
+                                  className="meat-name-details_meat"
+                                  style={{ fontSize: "small" }}
+                                >
+                                  - {item.diseaseName}
+                                </span>
+                              </div>
                             </Popover>
                           </div>
                         </div>
@@ -169,7 +179,6 @@ const highlight = (code) => {
                         background: "#edf5ff",
                         // background: "#ecf2fc" ,
                         padding: "10px",
-                        
                       }}
                     >
                       {getDisTitlePopover(
@@ -295,7 +304,7 @@ const highlight = (code) => {
                       style={{
                         // background: "#fdfdff",
                         // background: "#fafcff",
-                        
+
                         // background: "#ecf2fc" ,
                         padding: "10px",
                       }}
@@ -327,58 +336,58 @@ const highlight = (code) => {
                         )}
                       </div>
                     </div>
-                    <div className="col-xl-1 meatclose" style={{background: "#edf5ff",}}>
                     <div
-                      className="d-flex"
-                      
+                      className="col-xl-1 meatclose"
+                      style={{ background: "#edf5ff" }}
                     >
-                      <Popconfirm
-                        title={popConfirmTitle}
-                        onConfirm={() =>
-                          moveToAnotherAction(
-                            setConfirmNotesModalValid,
-                            setIsValidAction,
-                            popConfirmTitle == "You want move to delete?"
-                              ? "Move to Deleted"
-                              : "Move to valid",
-                            "MEAT"
-                          )
-                        }
-                        placement="leftTop"
-                        okText={okText}
-                        cancelText={cancelText}
-                        onOpenChange={() => onchangeMeat(item)}
-                      >
-                        <div className={visitStyles.close_icon}>
-                          <FontAwesomeIcon
-                            icon={faArrowsAlt}
-                            style={{ size: 8, color: "#a80404" }}
-                          />
-                        </div>
-                      </Popconfirm>
-                      <Tooltip title="Edit">
-                        <div
-                          className={visitStyles.edit_icon}
-                          onClick={() => {
-                            setMeatEdit(true);
-                            setEditData(item);
-                          }}
+                      <div className="d-flex">
+                        <Popconfirm
+                          title={popConfirmTitle}
+                          onConfirm={() =>
+                            moveToAnotherAction(
+                              setConfirmNotesModalValid,
+                              setIsValidAction,
+                              popConfirmTitle == "You want move to delete?"
+                                ? "Move to Deleted"
+                                : "Move to valid",
+                              "MEAT"
+                            )
+                          }
+                          placement="leftTop"
+                          okText={okText}
+                          cancelText={cancelText}
+                          onOpenChange={() => onchangeMeat(item)}
                         >
-                          <FontAwesomeIcon
-                            icon={faPen}
-                            style={{ size: 8, color: "#706e70" }}
-                          />
-                        </div>
-                      </Tooltip>
-                      {item.isMeatCriteriaPresent === false ? (
-                        <div
-                          onClick={() => addMeatQuery(item, "Add")}
-                          className={visitStyles.add_meat_query}
-                        >
-                          {SVGICON.meatQueryIcon}
-                        </div>
-                      ) : null}
-                    </div>
+                          <div className={visitStyles.close_icon}>
+                            <FontAwesomeIcon
+                              icon={faArrowsAlt}
+                              style={{ size: 8, color: "#a80404" }}
+                            />
+                          </div>
+                        </Popconfirm>
+                        <Tooltip title="Edit">
+                          <div
+                            className={visitStyles.edit_icon}
+                            onClick={() => {
+                              setMeatEdit(true);
+                              setEditData(item);
+                            }}
+                          >
+                            <FontAwesomeIcon
+                              icon={faPen}
+                              style={{ size: 8, color: "#706e70" }}
+                            />
+                          </div>
+                        </Tooltip>
+                        {item.isMeatCriteriaPresent === false ? (
+                          <div
+                            onClick={() => addMeatQuery(item, "Add")}
+                            className={visitStyles.add_meat_query}
+                          >
+                            {SVGICON.meatQueryIcon}
+                          </div>
+                        ) : null}
+                      </div>
                     </div>
                   </div>
                 </div>
