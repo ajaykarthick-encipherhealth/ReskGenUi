@@ -15,7 +15,7 @@ const HighRisk = ({ data }) => {
           className={`valid-text d-flex justify-content-center align-item-center mb-2 ${Styles.title_card}`}
         >
           <span className={`${Styles.title_card_content}`}>
-            MEAT PRESENT PATIENTS
+            CONDITION WITH MEAT
           </span>
         </div>
         <div
@@ -33,7 +33,7 @@ const HighRisk = ({ data }) => {
           className={`valid-text d-flex justify-content-center mt-3 mb-1 ${Styles.title_cards}`}
         >
           <span className={`${Styles.title_card_content}`}>
-            MEAT ABSENT PATIENTS
+          CONDITION WITHOUT MEAT
           </span>
         </div>
         <div

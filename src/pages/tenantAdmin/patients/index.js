@@ -415,7 +415,7 @@ const Patient = ({
       <div className="d-flex ">
         <button
           onClick={() => addPatientFile(rowData)}
-          className="btn hegiht10 shadow  sharp me-1 action-btn"
+          className="btn hegiht10  sharp me-1 action-btn"
           style={{ background: "#04306f" }}
         >
           <FontAwesomeIcon

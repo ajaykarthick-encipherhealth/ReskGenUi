@@ -240,7 +240,7 @@ const BarChart = () => {
 
   return (
     <>
-      <HeadTitle header="Team Chart Status" />
+      <HeadTitle header="Team Workflow Status" />
       <div className={styles.card5}>
         <Card borderRadius="28px" padding="0px">
           <div className={styles.buttonDiv}>
