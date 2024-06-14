@@ -117,6 +117,7 @@ const MeatCard = ({
                               placement="topLeft"
                               title="Description"
                               content={item.diseaseName}
+                              overlayStyle={{ zIndex: 1000 }}
                             >
                               <div className="d-flex">
                                 <span

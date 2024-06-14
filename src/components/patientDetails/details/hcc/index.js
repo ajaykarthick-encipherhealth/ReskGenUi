@@ -28,7 +28,7 @@ const Hcc = ({
   patientDetailsResult,
   getpatientDetailsData,
   patientDosResult,
-  getSelectedDos
+  getSelectedDos,
 }) => {
   const dispatch = useDispatch();
   const [activeTabHead, setActiveTabHead] = useState(1);
@@ -77,9 +77,9 @@ const Hcc = ({
     setIsLoading(true);
     setSelectDosValue(value);
     if (value) {
-      getSelectedDos(value)
+      getSelectedDos(value);
     } else {
-      getSelectedDos('')
+      getSelectedDos("");
     }
     const patientId = localStorage.getItem("patientId");
     const role = localStorage.getItem("role");
@@ -171,7 +171,15 @@ const Hcc = ({
                       to="#my-posts"
                       eventKey={1}
                       className={visitStyles.navColor}
-                      onClick={() => selectTab(1,setFlagTagActive,setActiveTabHead,setActiveComboTree,setPopoverVisible)}
+                      onClick={() =>
+                        selectTab(
+                          1,
+                          setFlagTagActive,
+                          setActiveTabHead,
+                          setActiveComboTree,
+                          setPopoverVisible
+                        )
+                      }
                     >
                       File
                     </Nav.Link>
@@ -182,7 +190,15 @@ const Hcc = ({
                       eventKey={2}
                       className={visitStyles.navColor}
                       activeClassName={visitStyles.activeLink}
-                      onClick={() => selectTab(2,setFlagTagActive,setActiveTabHead,setActiveComboTree,setPopoverVisible)}
+                      onClick={() =>
+                        selectTab(
+                          2,
+                          setFlagTagActive,
+                          setActiveTabHead,
+                          setActiveComboTree,
+                          setPopoverVisible
+                        )
+                      }
                     >
                       Visit Data
                     </Nav.Link>
@@ -192,7 +208,15 @@ const Hcc = ({
                       to="#my-posts"
                       eventKey={3}
                       className={visitStyles.navColor}
-                      onClick={() => selectTab(3,setFlagTagActive,setActiveTabHead,setActiveComboTree,setPopoverVisible)}
+                      onClick={() =>
+                        selectTab(
+                          3,
+                          setFlagTagActive,
+                          setActiveTabHead,
+                          setActiveComboTree,
+                          setPopoverVisible
+                        )
+                      }
                     >
                       Combination Codes
                     </Nav.Link>
@@ -202,7 +226,15 @@ const Hcc = ({
                       to="#my-posts"
                       eventKey={4}
                       className={visitStyles.navColor}
-                      onClick={() => selectTab(4,setFlagTagActive,setActiveTabHead,setActiveComboTree,setPopoverVisible)}
+                      onClick={() =>
+                        selectTab(
+                          4,
+                          setFlagTagActive,
+                          setActiveTabHead,
+                          setActiveComboTree,
+                          setPopoverVisible
+                        )
+                      }
                     >
                       MEAT Criteria
                     </Nav.Link>
@@ -212,7 +244,16 @@ const Hcc = ({
                       to="#my-posts"
                       eventKey={5}
                       className={visitStyles.navColor}
-                      onClick={() => selectTab(5,setFlagTagActive,setActiveTabHead,setActiveComboTree,setPopoverVisible,setActiveMeatTitle)}
+                      onClick={() =>
+                        selectTab(
+                          5,
+                          setFlagTagActive,
+                          setActiveTabHead,
+                          setActiveComboTree,
+                          setPopoverVisible,
+                          setActiveMeatTitle
+                        )
+                      }
                     >
                       RAF Score
                     </Nav.Link>
@@ -222,7 +263,15 @@ const Hcc = ({
                       to="#my-posts"
                       eventKey={6}
                       className={visitStyles.navColor}
-                      onClick={() => selectTab(6,setFlagTagActive,setActiveTabHead,setActiveComboTree,setPopoverVisible)}
+                      onClick={() =>
+                        selectTab(
+                          6,
+                          setFlagTagActive,
+                          setActiveTabHead,
+                          setActiveComboTree,
+                          setPopoverVisible
+                        )
+                      }
                     >
                       Query
                     </Nav.Link>
@@ -242,10 +291,11 @@ const Hcc = ({
                       ))}
                     </Select>
                   </Nav.Item>
-                  
+
                   <Nav.Item as="li" className="nav-item mx-2">
-                  {localStorage.getItem('role') != "admin" && 
-                    <YearAndDosStatus setIsLoading={setIsLoading} />}
+                    {localStorage.getItem("role") != "admin" && (
+                      <YearAndDosStatus setIsLoading={setIsLoading} />
+                    )}
                   </Nav.Item>
                   {activeTabHead == 1 && (
                     <Popover
@@ -253,6 +303,7 @@ const Hcc = ({
                       content={PopContent}
                       placement="bottom"
                       trigger={"click"}
+                      overlayStyle={{ zIndex: 1000 }}
                       onOpenChange={() => setPopoverVisible(false)}
                     >
                       <div
@@ -397,7 +448,7 @@ const enhancer = connect(
   }),
   {
     getpatientDetailsData: detailsActions.patientDetailsAction,
-    getSelectedDos: detailsActions.getSelectedDos
+    getSelectedDos: detailsActions.getSelectedDos,
   }
 );
 export default enhancer(Hcc);

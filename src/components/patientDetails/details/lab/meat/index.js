@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Badge } from "react-bootstrap";
-import { useSelector,connect } from "react-redux";
+import { useSelector, connect } from "react-redux";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsAlt } from "@fortawesome/free-solid-svg-icons";
@@ -9,7 +9,7 @@ import { Modal } from "antd";
 import PdfViewer from "../../PdfViewerComponent";
 import { getPatientLabDetails } from "../../components/function/GetDataLab";
 
-const Meat = ({labDetailsResult,labFile}) => {
+const Meat = ({ labDetailsResult, labFile }) => {
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
   );
@@ -196,6 +196,7 @@ const Meat = ({labDetailsResult,labFile}) => {
                         placement="topLeft"
                         title="Description"
                         content={item.diseaseName}
+                        overlayStyle={{ zIndex: 1000 }}
                       >
                         <span className="meat-name-details">
                           {item.diseaseName}
@@ -208,6 +209,7 @@ const Meat = ({labDetailsResult,labFile}) => {
                           placement="topLeft"
                           title="Monitor"
                           content={item.monitor}
+                          overlayStyle={{ zIndex: 1000 }}
                         >
                           <span className="meat-name-details">
                             {item.monitor}
@@ -233,6 +235,7 @@ const Meat = ({labDetailsResult,labFile}) => {
                           placement="topLeft"
                           title="Evaluation"
                           content={item.evaluate}
+                          overlayStyle={{ zIndex: 1000 }}
                         >
                           <span className="meat-name-details">
                             {item.evaluate}
@@ -258,6 +261,7 @@ const Meat = ({labDetailsResult,labFile}) => {
                           placement="topLeft"
                           title="Assessment"
                           content={item.assessment}
+                          overlayStyle={{ zIndex: 1000 }}
                         >
                           <span className="meat-name-details">
                             {item.assessment}
@@ -283,6 +287,7 @@ const Meat = ({labDetailsResult,labFile}) => {
                           placement="topLeft"
                           title="Treatment"
                           content={item.treatment}
+                          overlayStyle={{ zIndex: 1000 }}
                         >
                           <span className="meat-name-details">
                             {item.treatment}
@@ -397,6 +402,7 @@ const Meat = ({labDetailsResult,labFile}) => {
                         placement="topLeft"
                         title="Description"
                         content={selectMeatResult?.diseaseName}
+                        overlayStyle={{ zIndex: 1000 }}
                       >
                         <span className="meat-name-details2">
                           {selectMeatResult?.diseaseName}
@@ -426,6 +432,7 @@ const Meat = ({labDetailsResult,labFile}) => {
                           placement="topLeft"
                           title="Monitor"
                           content={selectMeatResult?.monitor}
+                          overlayStyle={{ zIndex: 1000 }}
                         >
                           <span className="meat-name-details2">
                             {selectMeatResult?.monitor}
@@ -469,6 +476,7 @@ const Meat = ({labDetailsResult,labFile}) => {
                           placement="topLeft"
                           title="Evaluation"
                           content={selectMeatResult?.evaluate}
+                          overlayStyle={{ zIndex: 1000 }}
                         >
                           <span className="meat-name-details2">
                             {selectMeatResult?.evaluate}
@@ -512,6 +520,7 @@ const Meat = ({labDetailsResult,labFile}) => {
                           placement="topLeft"
                           title="Assessment"
                           content={selectMeatResult?.assessment}
+                          overlayStyle={{ zIndex: 1000 }}
                         >
                           <span className="meat-name-details2">
                             {selectMeatResult?.assessment}
@@ -555,6 +564,7 @@ const Meat = ({labDetailsResult,labFile}) => {
                           placement="topLeft"
                           title="Treatment"
                           content={selectMeatResult?.treatment}
+                          overlayStyle={{ zIndex: 1000 }}
                         >
                           <span className="meat-name-details2">
                             {selectMeatResult?.treatment}
@@ -597,10 +607,8 @@ const Meat = ({labDetailsResult,labFile}) => {
   );
 };
 
-const enhancer = connect(
-  (state) => ({
-    labDetailsResult :state?.patientDetails?.details?.labResult,
-    labFile :state?.patientDetails?.details?.labFileResult,
-  }),
-);
+const enhancer = connect((state) => ({
+  labDetailsResult: state?.patientDetails?.details?.labResult,
+  labFile: state?.patientDetails?.details?.labFileResult,
+}));
 export default enhancer(Meat);
