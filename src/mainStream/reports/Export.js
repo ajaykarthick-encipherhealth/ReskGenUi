@@ -39,8 +39,8 @@ export const checkBoxData = [
   },
   {
     id: 5,
-    title: "providerName",
-    heading: "Provider Name",
+    title: "providerNames",
+    heading: "Provider Names",
     checked: false,
   },
   {
