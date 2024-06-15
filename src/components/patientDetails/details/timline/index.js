@@ -1,7 +1,12 @@
 import React from "react";
 import visitStyles from "../../../../styles/visitdata.module.css";
 import { Popover, Tooltip } from "antd";
+import { CalendarOutlined } from "@ant-design/icons";
 import moment from "moment";
+import styles from "./styles.module.css";
+import { stringToColour } from "../components/function/ReusableFunctions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 
 const Timeline = ({
   timelineData,
@@ -52,6 +57,300 @@ const Timeline = ({
         previousStateColor = "";
     }
     return previousStateColor;
+  };
+
+  const getProviderNameTagList = ({ data }) => {
+    return data.map((res, index) => {
+      if (index < 2) {
+        var sectionMapArr = (
+          <span
+            className={`mt-2 text-start ${visitStyles.provider_name}`}
+            style={{
+              backgroundColor: stringToColour(res) + 33,
+              color: stringToColour(res),
+            }}
+          >
+            <i>
+              {" "}
+              <FontAwesomeIcon
+                icon={faCircleUser}
+                style={{
+                  size: 10,
+                  color: stringToColour(res),
+                }}
+              />
+            </i>
+            {res}
+          </span>
+        );
+        return sectionMapArr;
+      } else if (data.length - 1 == index) {
+        var sectionMapArr = (
+          <Popover
+            overlayStyle={{ zIndex: 99999 }}
+            content={
+              <>
+                {data?.map((item, i) =>
+                  i > 1 ? (
+                    <span
+                      className={`mt-2 text-start ${visitStyles.provider_name}`}
+                      style={{
+                        backgroundColor: stringToColour(item) + 33,
+                        color: stringToColour(item),
+                      }}
+                    >
+                      <i>
+                        {" "}
+                        <FontAwesomeIcon
+                          icon={faCircleUser}
+                          style={{
+                            size: 10,
+                            color: stringToColour(item),
+                          }}
+                        />
+                      </i>
+                      {item}
+                    </span>
+                  ) : null
+                )}
+              </>
+            }
+            trigger={["hover"]}
+            placement="bottom"
+          >
+            <span
+              style={{ background: "#a6cfa6", color: "#fff" }}
+              className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+            >
+              {data.length - 2}+
+            </span>
+          </Popover>
+        );
+
+        return sectionMapArr;
+      }
+    });
+  };
+  const getDateOfServiceBackground = ({ value }) => {
+    return value?.map((res, index) => {
+      if (index < 2) {
+        var sectionMapArr = res ? (
+          <span
+            style={{
+              borderColor: stringToColour(res) + 33,
+              color: stringToColour(res),
+              border: "1px solid",
+            }}
+            className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate}`}
+          >
+            <i>
+              <CalendarOutlined
+                className={visitStyles.calenderIconNew}
+                style={{
+                  size: 10,
+                  color: stringToColour(res),
+                }}
+              />
+            </i>
+            {moment(res).format("MMM DD")}
+          </span>
+        ) : (
+          ""
+        );
+        return sectionMapArr;
+      } else if (value.length - 1 == index) {
+        var sectionMapArr = (
+          <Popover
+            overlayStyle={{ zIndex: 99999 }}
+            content={
+              <>
+                {value?.map((item, i) =>
+                  i > 1 ? (
+                    <span
+                      style={{
+                        borderColor: stringToColour(item) + 33,
+                        color: stringToColour(item),
+                        border: "1px solid",
+                      }}
+                      className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate}`}
+                    >
+                      <i>
+                        <CalendarOutlined
+                          className={visitStyles.calenderIconNew}
+                          style={{
+                            size: 10,
+                            color: stringToColour(item),
+                          }}
+                        />
+                      </i>
+                      {moment(item).format("MMM DD")}
+                    </span>
+                  ) : null
+                )}
+              </>
+            }
+            trigger={["hover"]}
+            placement="bottom"
+          >
+            <span
+              style={{
+                background: "#a0b1a0",
+                color: "#fff",
+              }}
+              className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+            >
+              {value.length - 2}+
+            </span>
+          </Popover>
+        );
+
+        return sectionMapArr;
+      }
+    });
+  };
+  const getSectionHeaderBackground = ({ value }) => {
+    return value?.map((res, index) => {
+      if (index < 2) {
+        var sectionMapArr = res ? (
+          <span
+            style={{
+              background: stringToColour(res) + 33,
+              color: stringToColour(res),
+            }}
+            className={`cr-pointer mt-2 text-start ${visitStyles.captureheader}`}
+          >
+            {res}
+          </span>
+        ) : (
+          ""
+        );
+        return sectionMapArr;
+      } else if (value.length - 1 == index) {
+        var sectionMapArr = (
+          <Popover
+            overlayStyle={{ zIndex: 99999 }}
+            content={
+              <>
+                {value?.map((item, i) =>
+                  i > 1 ? (
+                    <span
+                      style={{
+                        background: stringToColour(item) + 33,
+                        color: stringToColour(item),
+                      }}
+                      className={`cr-pointer mt-2 text-start ${visitStyles.captureheader}`}
+                    >
+                      {item}
+                    </span>
+                  ) : null
+                )}
+              </>
+            }
+            trigger={["hover"]}
+            placement="bottom"
+          >
+            <span
+              style={{
+                background: "#a0b1a0",
+                color: "#fff",
+              }}
+              className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+            >
+              {value.length - 2}+
+            </span>
+          </Popover>
+        );
+
+        return sectionMapArr;
+      }
+    });
+  };
+
+  const providerNameList = [
+    "Birendra Bhattarai, MD",
+    "Tochukwu Ajalla, PA",
+    "Denis Vilchez, MD",
+  ];
+
+  const dateOfServiceList = ["2023-06-12", "2023-05-10", "2023-02-02"];
+  const sectionList = ["Plan", "Assessment", "Medical History"];
+  const getEditDeatils = () => {
+    var sectionMapArr = (
+      <div className={styles.detailsContainer}>
+        <div className={styles.oldCodeContiner}>
+          <span className={styles.codeTitle}>CODE</span>
+          <div className={styles.details}>
+            <div className={styles.detailsHeader}>
+              <span className={styles.disCode}>E039</span>
+              <span className={styles.discription}>
+                Hypothyroidism, unspecified
+              </span>
+            </div>
+            <div className={styles.detailsHeader}>
+              <span className={styles.disCode}>Provider</span>
+              <div>
+                {getProviderNameTagList({
+                  data: providerNameList,
+                })}
+              </div>
+            </div>
+            <div className={styles.detailsHeader}>
+              <span className={styles.disCode}>Encounter Date</span>
+              <div>
+                {getDateOfServiceBackground({
+                  value: dateOfServiceList,
+                })}
+              </div>
+            </div>
+            <div className={styles.detailsHeader}>
+              <span className={styles.disCode}>Section</span>
+              <div>
+                {getSectionHeaderBackground({
+                  value: sectionList,
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className={styles.editCodeContainer}>
+          <span className={styles.editTitle}>EDITED CODE</span>
+          <div className={styles.details}>
+            <div className={styles.detailsHeader}>
+              <span className={styles.disCode}>E039</span>
+              <span className={styles.discription}>
+                Hypothyroidism, unspecified
+              </span>
+            </div>
+            <div className={styles.detailsHeader}>
+              <span className={styles.disCode}>Provider</span>
+              <div>
+                {getProviderNameTagList({
+                  data: providerNameList,
+                })}
+              </div>
+            </div>
+            <div className={styles.detailsHeader}>
+              <span className={styles.disCode}>Encounter Date</span>
+              <div>
+                {getDateOfServiceBackground({
+                  value: dateOfServiceList,
+                })}
+              </div>
+            </div>
+            <div className={styles.detailsHeader}>
+              <span className={styles.disCode}>Section</span>
+              <div>
+                {getSectionHeaderBackground({
+                  value: sectionList,
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+
+    return sectionMapArr;
   };
   function renderTimelineItem(item) {
     const getBadgeClassName = () => {
@@ -388,6 +687,7 @@ const Timeline = ({
           );
       }
     };
+
     return (
       <li key={item?.id}>
         <Tooltip title={item.userName} placement="bottom">
@@ -414,6 +714,14 @@ const Timeline = ({
   }
   return (
     <div className={visitStyles.timeLine}>
+      {/* <Popover
+        trigger={["hover"]}
+        placement="bottom"
+        overlayStyle={{ zIndex: 9999 }}
+        content={<>{getEditDeatils()}</>}
+      >
+        <span className={visitStyles.timelineDate}>VIEW</span>
+      </Popover> */}
       {!filterDataLoading ? (
         <div className="widget-timeline">
           <ul className="timeline">
