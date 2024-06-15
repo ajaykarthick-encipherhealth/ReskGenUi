@@ -39,12 +39,13 @@ const TableRisk = ({ data, setActiveButton, setSearchInput }) => {
                 </th>
                 {keyArray?.[0]?.allKeys?.map((data) => {
                   return (
+                   
                     <th
                       style={{
                         fontWeight: "600",
                       }}
                     >
-                      {data}
+                      <div> {data}</div>
                     </th>
                   );
                 })}

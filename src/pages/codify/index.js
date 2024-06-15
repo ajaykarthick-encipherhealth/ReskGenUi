@@ -193,6 +193,8 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
         inclusionTerm: tableData?.response?.childData?.inclusionTerm,
         useAdditionalCode: tableData?.response?.childData?.useAdditionalCode,
         requiredCharacter: tableData?.response?.childData?.requiredCharacter,
+        codeFirst: tableData?.response?.childData?.codeFirst,
+        codeAlso: tableData?.response?.childData?.codeAlso
       });
       setParentCode(tableData?.response?.parentData);
     }

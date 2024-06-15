@@ -28,7 +28,6 @@ const Tables = (props) => {
   const [isCopied, setCopied] = useState(false);
   const [previousCode, setPreviousCode] = useState();
 
-
   useEffect(() => {
     const timeout = setTimeout(() => {
       setCopied(false);
@@ -39,6 +38,7 @@ const Tables = (props) => {
   const fetchCodeData = async (value) => {
     setLoading(true);
     const tableData = await codesData({ code: value ? value : searchInput });
+
     if (tableData?.status == "SUCCESS") {
       setCodeData({
         ...codeData,
@@ -51,6 +51,8 @@ const Tables = (props) => {
         inclusionTerm: tableData?.response?.childData?.inclusionTerm,
         useAdditionalCode: tableData?.response?.childData?.useAdditionalCode,
         requiredCharacter: tableData?.response?.childData?.requiredCharacter,
+        codeFirst: tableData?.response?.childData?.codeFirst,
+        codeAlso: tableData?.response?.childData?.codeAlso,
       });
       setParentCode(tableData?.response?.parentData);
     }
@@ -70,6 +72,8 @@ const Tables = (props) => {
       inclusionTerm: codeData?.inclusionTerm,
       useAdditionalCode: codeData?.useAdditionalCode,
       requiredCharacter: codeData?.requiredCharacter,
+      codeFirst: codeData?.codeFirst,
+      codeAlso: codeData?.codeAlso,
     });
     setCodeData({
       ...codeData,
@@ -82,6 +86,8 @@ const Tables = (props) => {
       inclusionTerm: tableData?.inclusionTerm,
       useAdditionalCode: tableData?.useAdditionalCode,
       requiredCharacter: tableData?.requiredCharacter,
+      codeFirst: tableData?.codeFirst,
+      codeAlso: tableData?.codeAlso,
     });
 
     setHideButton(true);
@@ -93,9 +99,7 @@ const Tables = (props) => {
   const handleBack = () => {
     setCodeData(previousCode);
     setHideButton(false);
-
   };
-
 
   return (
     <div>
@@ -217,7 +221,7 @@ const Tables = (props) => {
               </div>
             </div>
             {codeData?.useAdditionalCode && (
-              <div className="mt-2">
+              <div className="mt-1">
                 <span className={style.add}>Use additional</span>
                 {codeData?.useAdditionalCode &&
                   codeData.useAdditionalCode.split("\n").map((data, index) => (
@@ -228,7 +232,7 @@ const Tables = (props) => {
               </div>
             )}
             {codeData?.inclusionTerm && (
-              <div className="mt-2">
+              <div className="mt-1">
                 <span className={style.Inclusion}>Inclusion Term </span>
                 {codeData?.inclusionTerm &&
                   codeData.inclusionTerm.split("\n").map((data, index) => (
@@ -238,11 +242,28 @@ const Tables = (props) => {
                   ))}
               </div>
             )}
+            <div className="mt-1">
+              <span className={style.first}>Code First</span>
+              {codeData?.codeFirst &&
+                codeData.codeFirst.split("\n").map((data, index) => (
+                  <p className={style.para} key={index}>
+                    {data}
+                  </p>
+                ))}
+                  <div className="mt-1">
+                  <span className={style.codealso}>Code also</span>
+              {codeData?.codeAlso &&
+                codeData.codeAlso.split("\n").map((data, index) => (
+                  <p className={style.para} key={index}>
+                    {data}
+                  </p>
+                ))}
+            </div>
+            </div>
           </div>
         )}
         {parentCode?.[0]?.includes ||
         parentCode?.[0]?.excludes1 ||
-
         parentCode?.[0]?.excludes2 ? (
           <div className={style.parent}>
             {parentCode?.length &&
@@ -266,7 +287,7 @@ const Tables = (props) => {
                       </div>
                     )}
                     {data?.excludes1 && (
-                      <div className=" mt-2 ">
+                      <div className=" mt-1 ">
                         <span className={style.excludes}>Excludes1</span>
                         {data?.excludes1 &&
                           data.excludes1?.split("\n").map((line, index) => (
@@ -278,7 +299,7 @@ const Tables = (props) => {
                     )}
 
                     {data?.excludes2 && (
-                      <div className=" mt-2 ">
+                      <div className="mt-1 ">
                         <span className={style.excludes2}>Excludes2</span>
                         {data?.excludes2 &&
                           data.excludes2?.split("\n").map((line, index) => (
@@ -289,7 +310,7 @@ const Tables = (props) => {
                       </div>
                     )}
                     {data?.useAdditionalCode && (
-                      <div className="mt-2">
+                      <div className="mt-1">
                         <span className={style.add}>Use additional</span>
                         {data?.useAdditionalCode &&
                           data.useAdditionalCode
@@ -299,6 +320,28 @@ const Tables = (props) => {
                                 {line}
                               </p>
                             ))}
+                      </div>
+                    )}
+                    {data?.codeFirst && (
+                      <div  className="mt-1">
+                        <span className={style.first}>codeFirst</span>
+                        {data?.codeFirst &&
+                          data.codeFirst?.split("\n").map((line, index) => (
+                            <p className={style.para} key={index}>
+                              {line}
+                            </p>
+                          ))}
+                      </div>
+                    )}
+                     {data?.codeAlso && (
+                      <div  className="mt-1">
+                        <span className={style.codealso}>code also</span>
+                        {data?.codeAlso &&
+                          data.codeFirst?.split("\n").map((line, index) => (
+                            <p className={style.para} key={index}>
+                              {line}
+                            </p>
+                          ))}
                       </div>
                     )}
                   </div>

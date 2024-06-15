@@ -143,7 +143,20 @@
 .add{
   font-size: 15px;
   font-weight: 600;
-  padding: 2px;
+  padding: 4px;
   background-color: #FFCC99;
+}
+.first{
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px;
+  background-color:#CEFA72
   
+}
+.codealso{
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px;
+  background-color: #f06bac;
+
 }
