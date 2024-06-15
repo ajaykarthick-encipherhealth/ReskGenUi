@@ -69,6 +69,7 @@ const Combo = ({
   const [isValidAction, setIsValidAction] = useState("");
   const [selectDisDetails, setSelectDisDetails] = useState("");
   const [meatCriteriaList, setMeatCriteriaList] = useState([]);
+  const [zIndex, setZIndex] = useState(false);
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -196,6 +197,15 @@ const Combo = ({
       });
     }
   }, [activeComboTree]);
+  useEffect(() => {
+    if (isModalOpenCaptureSection) {
+      setInterval(() => {
+        setZIndex(true);
+      }, 1000);
+    } else {
+      setZIndex(false);
+    }
+  }, [isModalOpenCaptureSection]);
 
   return (
     <>
@@ -305,6 +315,7 @@ const Combo = ({
                   setActiveTabHead={setActiveTabHead}
                   setActiveMeatTitle={setActiveMeatTitle}
                   meatCriteriaList={meatCriteriaList}
+                  popup={zIndex}
                 />
               </div>
               <div className="col-xl-7">

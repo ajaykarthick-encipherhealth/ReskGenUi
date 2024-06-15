@@ -41,6 +41,7 @@ const ComboCard = ({
   setActiveTabHead,
   setActiveMeatTitle,
   meatCriteriaList,
+  popup
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
@@ -237,7 +238,8 @@ const ComboCard = ({
                               isMulitpleHeader,
                               setIsMulitpleHeadeCode,
                               isMulitpleHeaderCode,
-                              item.diseaseName
+                              item.diseaseName,
+                              popup
                             )}
                           </div>
                         </div>

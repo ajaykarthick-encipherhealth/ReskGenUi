@@ -247,7 +247,6 @@ const newFindValueDocument = (
   value,
   diseaseName
 ) => {
-  console.log(data);
   setFileLoading(true);
   setSelectMeatResult && setSelectMeatResult(meatresult);
   setSelectHyperlink &&
