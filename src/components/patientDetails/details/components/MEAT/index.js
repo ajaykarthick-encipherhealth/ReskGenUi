@@ -358,7 +358,7 @@ const MeatCard = ({
                       style={{ background: "#edf5ff" }}
                     >
                       <div className="d-flex">
-                        <Popconfirm
+                        {/* <Popconfirm
                           title={popConfirmTitle}
                           onConfirm={() =>
                             moveToAnotherAction(
@@ -381,7 +381,7 @@ const MeatCard = ({
                               style={{ size: 8, color: "#a80404" }}
                             />
                           </div>
-                        </Popconfirm>
+                        </Popconfirm> */}
                         <Tooltip title="Edit">
                           <div
                             className={visitStyles.edit_icon}
