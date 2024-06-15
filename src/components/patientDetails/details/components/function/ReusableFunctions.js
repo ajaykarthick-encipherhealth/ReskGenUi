@@ -838,7 +838,7 @@ export const handleSubmitValidNotes = async ({
     isValidAction.name == "Move to Deleted" &&
     isValidAction.title == "MEAT"
   ) {
-    apiURL = "management/meat/move/invalidtovalid";
+    apiURL = "management/disease/move/validtodeleted";
   }
   if (isValidAction.name == "Move to valid" && isValidAction.title == "MEAT") {
     apiURL = "management/disease/move/deletedtovalid";
@@ -850,8 +850,8 @@ export const handleSubmitValidNotes = async ({
       diagnosisCode: selectDisDetails.diagnosisCode
         ? selectDisDetails.diagnosisCode
         : selectDisDetails.diagnosisCodeCombo,
-      // description: selectDisDetails.actualDescription,
-      // dbDescription: selectDisDetails.dbDescription,
+      description: selectDisDetails.actualDescription,
+      dbDescription: selectDisDetails.dbDescription,
       reason: values?.reason,
       processedYear: selectDisDetails.processedYear,
       dateOfServices: selectDisDetails.dateOfServices,
@@ -874,7 +874,9 @@ export const handleSubmitValidNotes = async ({
       getpatientDetailsData(
         patientId,
         patientDetailsResult?.data?.response?.processedYear,
-        patientDetailsResult?.data?.response?.dateOfService
+        patientDetailsResult?.data?.response?.dateOfService,
+        setFileLoading,
+        ""
       );
     } else {
       setFileLoading(false);
