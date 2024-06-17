@@ -19,7 +19,7 @@ import Image from "next/image";
 import YearAndDosStatus from "../components/yearAndDosStatus";
 import { getStatusIcon, selectTab } from "../../../reuseableFunctions";
 import { getStorage } from "../../../../utils/storages";
-
+import { SwapOutlined } from "@ant-design/icons";
 const { Option } = Select;
 
 const Hcc = ({
@@ -111,44 +111,85 @@ const Hcc = ({
   };
   const PopContent = (
     <div className={styles.innerPop}>
+      <div
+        style={{
+          marginBottom: "25px",
+          position: "relative",
+          bottom: "24px",
+          right: "26px",
+        }}
+      >
+        <FontAwesomeIcon
+          icon={faClose}
+          style={{
+            size: 5,
+            color: "#fff",
+          }}
+          className={styles.close_icon}
+          onClick={() => setPopoverVisible(false)}
+        />
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-around",
+          background: "#04306f",
+          color: "white",
+          height: "30px",
+          borderRadius: "5px",
+          alignItems: "center",
+        }}
+      >
+        <div>Date</div>
+        <div style={{ paddingLeft: "60px" }}>Page Number</div>
+      </div>
       <div className={styles.displayDiv}>
-        <div className={styles.closeContainer}>
-          <FontAwesomeIcon
-            icon={faClose}
-            style={{
-              size: 5,
-              color: "#fff",
-            }}
-            className={styles.close_icon}
-            onClick={() => setPopoverVisible(false)}
-          />
-        </div>
         {pageNumberOptions
           ? pageNumberOptions?.map((data) => (
-              <div className={styles.hoverDiv}>
-                <div className={`row ${styles.selectDetailsContainer}`}>
-                  <div className="col-xl-3">
+              <div className={styles.hoverDiv} style={{ marginBottom: "5px" }}>
+                <div
+                  className={` ${styles.selectDetailsContainer}`}
+                  style={{
+                    alignItems: "center",
+                    justifyContent: "space-evenly",
+                    margin: "0",
+                  }}
+                >
+                  <div className="col-xl-6 ">
                     <span className={styles.selectHead}>
                       {moment(data.dos).format("MM-DD-YYYY")}
                     </span>
                   </div>
-                  <div className={`col-xl-3 ${styles.selectDetailsDiv}`}>
-                    <span
-                      onClick={() =>
-                        handleChangePageNumber(data.startPageNumber)
-                      }
-                      className={styles.selectDetails}
+
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <div className={`col-xl-3 `} style={{ padding: "10px" }}>
+                      <span
+                        onClick={() =>
+                          handleChangePageNumber(data.startPageNumber)
+                        }
+                        style={{ cursor: "pointer" }}
+                      >
+                        {data?.startPageNumber}
+                      </span>
+                    </div>
+                    <div
+                      className="col-xl-1 text-center"
+                      style={{ padding: "10px" }}
                     >
-                      Start - {data?.startPageNumber}
-                    </span>
-                  </div>
-                  <div className={`col-xl-3 ${styles.selectDetailsDiv}`}>
-                    <span
-                      onClick={() => handleChangePageNumber(data.endPagNumber)}
-                      className={styles.selectDetails}
-                    >
-                      End - {data?.endPagNumber}
-                    </span>
+                      <SwapOutlined />
+                    </div>
+
+                    <div className={`col-xl-3`} style={{ padding: "10px" }}>
+                      <span
+                        onClick={() =>
+                          handleChangePageNumber(data.endPagNumber)
+                        }
+                        style={{ cursor: "pointer" }}
+                      >
+                        {data?.endPagNumber}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
