@@ -17,6 +17,9 @@ import SpinnerDots from "../../../../../components/spinner";
 import ModelIndex from "../../components/model/Index";
 import { moveToAnotherAction } from "../../components/function/ReusableFunctions";
 import { connect } from "react-redux";
+import { getProviderNameTagList } from "../../components/function/ProviderHyperlinks";
+import { getDateOfServiceBackground } from "../../components/function/DateOfServices";
+import { getSectionHeaderBackground } from "../../components/function/SectionHeader";
 
 const addOnCodeColor = [
   "magenta",
@@ -41,28 +44,6 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
   const [selectDisDetails, setSelectDisDetails] = useState(false);
   const [fileLoading, setFileLoading] = useState(false);
 
-  const getBackgroundColor = async () => {
-    try {
-      const response = await axios.get(
-        ENDPOINTS.apiEndoint + `dbservice/section/color/getallsections`
-      );
-      setBackground(response.data.response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  function removeDuplicates(array) {
-    let output = [];
-    if (array) {
-      for (let item of array) {
-        if (!output.includes(item)) output.push(item);
-      }
-    }
-
-    return output;
-  }
-
   const zoomIn = () => {
     if (zoom.width < 500 && zoom.width > 200) {
       setZoom((prev) => {
@@ -78,73 +59,37 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
     }
   };
 
-  const getProviderNameList = (data) => {
-    var dublicateCaptureDelete = removeDuplicates(data);
-    return dublicateCaptureDelete.map((res, index) => {
-      const result = background.filter((res2) => res2.sectionName == res);
-      var backColor = result[0]?.backgroundColor;
-      var textColor = result[0]?.sectionColor;
-      if (index < 1) {
-        var sectionMapArr = (
-          <span
-            className={`mt-2 text-start ${visitStyles.provider_name}`}
-            style={{ backgroundColor: backColor, color: textColor }}
-          >
-            <i>
-              {" "}
-              <FontAwesomeIcon
-                icon={faCircleUser}
-                style={{
-                  size: 10,
-                  color: textColor,
-                }}
-              />
-            </i>
-            {res}
-          </span>
-        );
-        return sectionMapArr;
-      } else if (dublicateCaptureDelete.length - 1 == index) {
-        var sectionMapArr = (
-          <Popover
-            content={
-              <>
-                {dublicateCaptureDelete?.map((item, i) =>
-                  i > 0 ? (
-                    <span
-                      style={{ backgroundColor: backColor, color: textColor }}
-                      className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
-                    >
-                      <i style={{ padding: "0 5px" }}>
-                        <FontAwesomeIcon
-                          icon={faCircleUser}
-                          style={{
-                            size: 10,
-                            color: textColor,
-                          }}
-                        />
-                      </i>
-                      {item}
-                    </span>
-                  ) : null
-                )}
-              </>
-            }
-            trigger={["click"]}
-            placement="bottom"
-          >
-            <span
-              style={{ backgroundColor: backColor, color: textColor }}
-              className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
-            >
-              {dublicateCaptureDelete.length - 1}+
-            </span>
-          </Popover>
-        );
+  const confirmComboDelete = () => {
+    moveToAnotherAction(
+      setConfirmNotesModalValid,
+      setIsValidAction,
+      "Move to Deleted",
+      selectDisDetails.diseaseSource == "HCC_DISEASES"
+        ? "HCC"
+        : selectDisDetails.diseaseSource == "SUGGESTED_HCC_DISEASES"
+        ? "SUGGESTED"
+        : "COMBO"
+    );
+  };
+  const onchangeCombo = (data, code, diseaseSource) => {
+    var title =
+      code + " - " + data.actualDescription
+        ? data.actualDescription
+        : data.diseaseName;
+    data.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
+    data.processedYear = patientDetailsResult?.data?.response?.processedYear;
+    data.dbDescription = data.actualDescription
+      ? data.actualDescription
+      : data.diseaseName;
+    (data.fileId = patientDetailsResult?.data?.response?.fileId),
+      setSelectDiseasesName(title);
+    setSelectDisDetails(data);
+  };
 
-        return sectionMapArr;
-      }
-    });
+  const handleCloseModal = () => {
+    setConfirmNotesModalValid(false);
+    setOpens(false);
+    setCombiTree([]);
   };
 
   const getEncounterDateBackground = (value) => {
@@ -186,7 +131,7 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
                 )}
               </>
             }
-            trigger={["click"]}
+            trigger={["hover"]}
             placement="bottom"
           >
             <span
@@ -207,92 +152,6 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
       // var backColor = result[0]?.colors;
     });
   };
-
-  const getCaptureSectionBackground = (value) => {
-    var dublicateCaptureDelete = removeDuplicates(value);
-    return dublicateCaptureDelete.map((res, index) => {
-      const result = background.filter((res2) => res2.sectionName == res);
-      var backColor = result[0]?.backgroundColor;
-      var textColor = result[0]?.sectionColor;
-      if (index < 2) {
-        var sectionMapArr = (
-          <span
-            style={{ backgroundColor: backColor, color: textColor }}
-            className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
-          >
-            {res}
-          </span>
-        );
-        return sectionMapArr;
-      } else if (dublicateCaptureDelete.length - 1 == index) {
-        var sectionMapArr = (
-          <Popover
-            content={
-              <>
-                {dublicateCaptureDelete?.map((item, i) =>
-                  i > 1 ? (
-                    <span
-                      style={{ backgroundColor: backColor, color: textColor }}
-                      className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
-                    >
-                      {item}
-                    </span>
-                  ) : null
-                )}
-              </>
-            }
-            trigger={["click"]}
-            placement="bottom"
-          >
-            <span
-              style={{ backgroundColor: backColor, color: textColor }}
-              className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
-            >
-              {dublicateCaptureDelete.length - 2}+
-            </span>
-          </Popover>
-        );
-        return sectionMapArr;
-      }
-    });
-  };
-
-  const confirmComboDelete = () => {
-    moveToAnotherAction(
-      setConfirmNotesModalValid,
-      setIsValidAction,
-      "Move to Deleted",
-      selectDisDetails.diseaseSource == "HCC_DISEASES"
-        ? "HCC"
-        : selectDisDetails.diseaseSource == "SUGGESTED_HCC_DISEASES"
-        ? "SUGGESTED"
-        : "COMBO"
-    );
-  };
-  const onchangeCombo = (data, code, diseaseSource) => {
-    var title =
-      code + " - " + data.actualDescription
-        ? data.actualDescription
-        : data.diseaseName;
-    data.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
-    data.processedYear = patientDetailsResult?.data?.response?.processedYear;
-    data.dbDescription = data.actualDescription
-      ? data.actualDescription
-      : data.diseaseName;
-    (data.fileId = patientDetailsResult?.data?.response?.fileId),
-      setSelectDiseasesName(title);
-    setSelectDisDetails(data);
-  };
-
-  const handleCloseModal = () => {
-    setConfirmNotesModalValid(false);
-    setOpens(false);
-    setCombiTree([]);
-  };
-
-  useEffect(() => {
-    getBackgroundColor();
-  }, []);
 
   useEffect(() => {
     setTrees(tree);
@@ -368,21 +227,25 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
           )}
         </div>
         <div className="d-flex justify-content-between">
-        <div className="text-start">
-          {getProviderNameList(
-            node.providerNames ? node.providerNames : node.providerName
-          )}
+          <div className="text-start">
+            {getProviderNameTagList({
+              data: node.providerNames ? node.providerNames : node.providerName,
+            })}
+          </div>
+          <div className="">
+            {node.stateIndicators?.length > 0
+              ? isMost(node.stateIndicators)
+              : ""}
+          </div>
         </div>
-        <div className="">
-          {node.stateIndicators?.length > 0 ? isMost(node.stateIndicators) : ""}
-        </div>
-        </div>
-        
+
         <div className="text-start">
           {getEncounterDateBackground(node?.dateOfServices)}
         </div>
         <div className="text-start">
-          {getCaptureSectionBackground(node?.capturedSections)}
+          {getSectionHeaderBackground({
+            value: node?.capturedSections,
+          })}
         </div>
       </div>
     );

@@ -16,7 +16,7 @@ import {
   moveToAnotherAction,
 } from "../function/ReusableFunctions";
 import { connect } from "react-redux";
-import { getProviderNameTag } from "../function/providerHyperlink";
+import { getProviderNameTag } from "../function/ProviderHyperlinks";
 
 const ComboCard = ({
   list,

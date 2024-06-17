@@ -28,7 +28,7 @@ import ModelIndex from "../model/Index";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import MovementAction from "../movementAction";
-import { getProviderNameTag } from "../function/providerHyperlink";
+import { getProviderNameTag } from "../function/ProviderHyperlinks";
 
 const HccCards = ({
   list,
@@ -180,7 +180,6 @@ const HccCards = ({
                                     title=""
                                     trigger="hover"
                                     overlayStyle={{ zIndex: 1000 }}
-
                                   >
                                     <>
                                       {" "}
@@ -280,7 +279,6 @@ const HccCards = ({
                                   title={""}
                                   trigger="click"
                                   overlayStyle={{ zIndex: 1000 }}
-
                                   open={
                                     openContent === data?.diagnosisCode
                                       ? true
@@ -497,7 +495,6 @@ const HccCards = ({
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
-
                                   {getProviderNameTag(
                                     data?.providerName,
                                     data?.providerHyperlinks,
@@ -512,7 +509,6 @@ const HccCards = ({
                                     setIsMulitpleHeadeCode,
                                     isMulitpleHeaderCode
                                   )}
-
                                 </div>
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}
