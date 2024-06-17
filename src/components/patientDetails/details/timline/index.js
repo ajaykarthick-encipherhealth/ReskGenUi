@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import visitStyles from "../../../../styles/visitdata.module.css";
 import { Popover, Tooltip } from "antd";
+import { CalendarOutlined } from "@ant-design/icons";
 import moment from "moment";
+import styles from "./styles.module.css";
+import { stringToColour } from "../components/function/ReusableFunctions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
+import { CloseCircleFilled } from "@ant-design/icons";
 
 const Timeline = ({
   timelineData,
@@ -10,6 +16,9 @@ const Timeline = ({
   userDetails,
   renderUserDetails,
 }) => {
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [popClickDisCode, setPopClickDisCode] = useState(null);
+
   const underScoreRemove = (value) => {
     if (value) {
       let str = value;
@@ -52,6 +61,321 @@ const Timeline = ({
         previousStateColor = "";
     }
     return previousStateColor;
+  };
+
+  const getProviderNameTagList = ({ data }) => {
+    return data.map((res, index) => {
+      if (index < 2) {
+        var sectionMapArr = (
+          <span
+            className={`mt-2 text-start ${visitStyles.provider_name}`}
+            style={{
+              backgroundColor: stringToColour(res) + 33,
+              color: stringToColour(res),
+            }}
+          >
+            <i>
+              {" "}
+              <FontAwesomeIcon
+                icon={faCircleUser}
+                style={{
+                  size: 10,
+                  color: stringToColour(res),
+                }}
+              />
+            </i>
+            {res}
+          </span>
+        );
+        return sectionMapArr;
+      } else if (data.length - 1 == index) {
+        var sectionMapArr = (
+          <Popover
+            overlayStyle={{ zIndex: 99999 }}
+            content={
+              <>
+                {data?.map((item, i) =>
+                  i > 1 ? (
+                    <span
+                      className={`mt-2 text-start ${visitStyles.provider_name}`}
+                      style={{
+                        backgroundColor: stringToColour(item) + 33,
+                        color: stringToColour(item),
+                      }}
+                    >
+                      <i>
+                        {" "}
+                        <FontAwesomeIcon
+                          icon={faCircleUser}
+                          style={{
+                            size: 10,
+                            color: stringToColour(item),
+                          }}
+                        />
+                      </i>
+                      {item}
+                    </span>
+                  ) : null
+                )}
+              </>
+            }
+            trigger={["hover"]}
+            placement="bottom"
+          >
+            <span
+              style={{ background: "#a6cfa6", color: "#fff" }}
+              className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+            >
+              {data.length - 2}+
+            </span>
+          </Popover>
+        );
+
+        return sectionMapArr;
+      }
+    });
+  };
+  const getDateOfServiceBackground = ({ value }) => {
+    return value?.map((res, index) => {
+      if (index < 2) {
+        var sectionMapArr = res ? (
+          <span
+            style={{
+              borderColor: stringToColour(res) + 33,
+              color: stringToColour(res),
+              border: "1px solid",
+            }}
+            className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate}`}
+          >
+            <i>
+              <CalendarOutlined
+                className={visitStyles.calenderIconNew}
+                style={{
+                  size: 10,
+                  color: stringToColour(res),
+                }}
+              />
+            </i>
+            {moment(res).format("MMM DD")}
+          </span>
+        ) : (
+          ""
+        );
+        return sectionMapArr;
+      } else if (value.length - 1 == index) {
+        var sectionMapArr = (
+          <Popover
+            overlayStyle={{ zIndex: 99999 }}
+            content={
+              <>
+                {value?.map((item, i) =>
+                  i > 1 ? (
+                    <span
+                      style={{
+                        borderColor: stringToColour(item) + 33,
+                        color: stringToColour(item),
+                        border: "1px solid",
+                      }}
+                      className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate}`}
+                    >
+                      <i>
+                        <CalendarOutlined
+                          className={visitStyles.calenderIconNew}
+                          style={{
+                            size: 10,
+                            color: stringToColour(item),
+                          }}
+                        />
+                      </i>
+                      {moment(item).format("MMM DD")}
+                    </span>
+                  ) : null
+                )}
+              </>
+            }
+            trigger={["hover"]}
+            placement="bottom"
+          >
+            <span
+              style={{
+                background: "#a0b1a0",
+                color: "#fff",
+              }}
+              className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+            >
+              {value.length - 2}+
+            </span>
+          </Popover>
+        );
+
+        return sectionMapArr;
+      }
+    });
+  };
+  const getSectionHeaderBackground = ({ value }) => {
+    return value?.map((res, index) => {
+      if (index < 2) {
+        var sectionMapArr = res ? (
+          <span
+            style={{
+              background: stringToColour(res) + 33,
+              color: stringToColour(res),
+            }}
+            className={`cr-pointer mt-2 text-start ${visitStyles.captureheader}`}
+          >
+            {res}
+          </span>
+        ) : (
+          ""
+        );
+        return sectionMapArr;
+      } else if (value.length - 1 == index) {
+        var sectionMapArr = (
+          <Popover
+            overlayStyle={{ zIndex: 99999 }}
+            content={
+              <>
+                {value?.map((item, i) =>
+                  i > 1 ? (
+                    <span
+                      style={{
+                        background: stringToColour(item) + 33,
+                        color: stringToColour(item),
+                      }}
+                      className={`cr-pointer mt-2 text-start ${visitStyles.captureheader}`}
+                    >
+                      {item}
+                    </span>
+                  ) : null
+                )}
+              </>
+            }
+            trigger={["hover"]}
+            placement="bottom"
+          >
+            <span
+              style={{
+                background: "#a0b1a0",
+                color: "#fff",
+              }}
+              className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+            >
+              {value.length - 2}+
+            </span>
+          </Popover>
+        );
+
+        return sectionMapArr;
+      }
+    });
+  };
+
+  const providerNameList = [
+    "Birendra Bhattarai, MD",
+    "Tochukwu Ajalla, PA",
+    "Denis Vilchez, MD",
+  ];
+
+  const dateOfServiceList = ["2023-06-12", "2023-05-10", "2023-02-02"];
+  const sectionList = ["Plan", "Assessment", "Medical History"];
+  const getEditDeatils = (viewValue) => {
+    var sectionMapArr = (
+      <>
+        <div className="d-flex justify-content-end">
+          <CloseCircleFilled
+            className={styles.deleteIcon}
+            onClick={() => {
+              setIsPopupOpen(false), setPopClickDisCode(null);
+            }}
+          />
+        </div>
+        <div className={styles.detailsContainer}>
+          <div className={styles.oldCodeContiner}>
+            <span className={styles.codeTitle}>CODE</span>
+            <div className={styles.details}>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>
+                  {" "}
+                  {viewValue?.previousDiseaseFormat?.diagnosisCode}
+                </span>
+                <span className={styles.discription}>
+                  {viewValue?.previousDiseaseFormat?.dbDescription}
+                </span>
+              </div>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Provider</span>
+                <div>
+                  {getProviderNameTagList({
+                    data: viewValue?.previousDiseaseFormat?.providerNames,
+                  })}
+                </div>
+              </div>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Encounter Date</span>
+                <div>
+                  {getDateOfServiceBackground({
+                    value: viewValue?.previousDiseaseFormat?.dateOfServices,
+                  })}
+                </div>
+              </div>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Section</span>
+                <div>
+                  {getSectionHeaderBackground({
+                    value: viewValue?.previousDiseaseFormat?.capturedSections,
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className={styles.editCodeContainer}>
+            <span className={styles.editTitle}>EDITED CODE</span>
+            <div className={styles.details}>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>
+                  {" "}
+                  {viewValue?.changedDiseaseFormat?.diagnosisCode}
+                </span>
+                <span className={styles.discription}>
+                  {viewValue?.changedDiseaseFormat?.dbDescription}
+                </span>
+              </div>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Provider</span>
+                <div>
+                  {getProviderNameTagList({
+                    data: viewValue?.changedDiseaseFormat?.providerNames,
+                  })}
+                </div>
+              </div>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Encounter Date</span>
+                <div>
+                  {getDateOfServiceBackground({
+                    value: viewValue?.changedDiseaseFormat?.dateOfServices,
+                  })}
+                </div>
+              </div>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Section</span>
+                <div>
+                  {getSectionHeaderBackground({
+                    value: viewValue?.changedDiseaseFormat?.capturedSections,
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+
+    return sectionMapArr;
+  };
+
+  const onClickPopup = (disCode) => {
+    setPopClickDisCode(disCode);
+    setIsPopupOpen(isPopupOpen ? false : true);
   };
   function renderTimelineItem(item) {
     const getBadgeClassName = () => {
@@ -322,6 +646,26 @@ const Timeline = ({
           return `${item.diagnosisCode} - Encounter file added`;
         case "MEAT_ADDED":
           return `${item.diagnosisCode} - Meat added`;
+        case "EDITED":
+          return (
+            <div className="d-flex w-100 justify-content-between">
+              {item.diagnosisCode} - code been edited
+              <Popover
+                open={isPopupOpen && item.diagnosisCode == popClickDisCode}
+                trigger={["hover"]}
+                placement="bottom"
+                overlayStyle={{ zIndex: 9999 }}
+                content={<>{getEditDeatils(item)}</>}
+              >
+                <span
+                  className={styles.viewTag}
+                  onClick={() => onClickPopup(item.diagnosisCode)}
+                >
+                  View
+                </span>{" "}
+              </Popover>
+            </div>
+          );
         case "HOLD":
           return (
             <div className="d-flex">
@@ -388,6 +732,7 @@ const Timeline = ({
           );
       }
     };
+
     return (
       <li key={item?.id}>
         <Tooltip title={item.userName} placement="bottom">
