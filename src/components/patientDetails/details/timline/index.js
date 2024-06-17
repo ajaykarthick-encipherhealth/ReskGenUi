@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import visitStyles from "../../../../styles/visitdata.module.css";
 import { Popover, Tooltip } from "antd";
 import { CalendarOutlined } from "@ant-design/icons";
@@ -7,6 +7,7 @@ import styles from "./styles.module.css";
 import { stringToColour } from "../components/function/ReusableFunctions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
+import { CloseCircleFilled } from "@ant-design/icons";
 
 const Timeline = ({
   timelineData,
@@ -15,6 +16,9 @@ const Timeline = ({
   userDetails,
   renderUserDetails,
 }) => {
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [popClickDisCode, setPopClickDisCode] = useState(null);
+
   const underScoreRemove = (value) => {
     if (value) {
       let str = value;
@@ -274,83 +278,104 @@ const Timeline = ({
 
   const dateOfServiceList = ["2023-06-12", "2023-05-10", "2023-02-02"];
   const sectionList = ["Plan", "Assessment", "Medical History"];
-  const getEditDeatils = () => {
+  const getEditDeatils = (viewValue) => {
     var sectionMapArr = (
-      <div className={styles.detailsContainer}>
-        <div className={styles.oldCodeContiner}>
-          <span className={styles.codeTitle}>CODE</span>
-          <div className={styles.details}>
-            <div className={styles.detailsHeader}>
-              <span className={styles.disCode}>E039</span>
-              <span className={styles.discription}>
-                Hypothyroidism, unspecified
-              </span>
-            </div>
-            <div className={styles.detailsHeader}>
-              <span className={styles.disCode}>Provider</span>
-              <div>
-                {getProviderNameTagList({
-                  data: providerNameList,
-                })}
+      <>
+        <div className="d-flex justify-content-end">
+          <CloseCircleFilled
+            className={styles.deleteIcon}
+            onClick={() => {
+              setIsPopupOpen(false), setPopClickDisCode(null);
+            }}
+          />
+        </div>
+        <div className={styles.detailsContainer}>
+          <div className={styles.oldCodeContiner}>
+            <span className={styles.codeTitle}>CODE</span>
+            <div className={styles.details}>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>
+                  {" "}
+                  {viewValue?.previousDiseaseFormat?.diagnosisCode}
+                </span>
+                <span className={styles.discription}>
+                  {viewValue?.previousDiseaseFormat?.dbDescription}
+                </span>
+              </div>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Provider</span>
+                <div>
+                  {getProviderNameTagList({
+                    data: viewValue?.previousDiseaseFormat?.providerNames,
+                  })}
+                </div>
+              </div>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Encounter Date</span>
+                <div>
+                  {getDateOfServiceBackground({
+                    value: viewValue?.previousDiseaseFormat?.dateOfServices,
+                  })}
+                </div>
+              </div>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Section</span>
+                <div>
+                  {getSectionHeaderBackground({
+                    value: viewValue?.previousDiseaseFormat?.capturedSections,
+                  })}
+                </div>
               </div>
             </div>
-            <div className={styles.detailsHeader}>
-              <span className={styles.disCode}>Encounter Date</span>
-              <div>
-                {getDateOfServiceBackground({
-                  value: dateOfServiceList,
-                })}
+          </div>
+          <div className={styles.editCodeContainer}>
+            <span className={styles.editTitle}>EDITED CODE</span>
+            <div className={styles.details}>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>
+                  {" "}
+                  {viewValue?.changedDiseaseFormat?.diagnosisCode}
+                </span>
+                <span className={styles.discription}>
+                  {viewValue?.changedDiseaseFormat?.dbDescription}
+                </span>
               </div>
-            </div>
-            <div className={styles.detailsHeader}>
-              <span className={styles.disCode}>Section</span>
-              <div>
-                {getSectionHeaderBackground({
-                  value: sectionList,
-                })}
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Provider</span>
+                <div>
+                  {getProviderNameTagList({
+                    data: viewValue?.changedDiseaseFormat?.providerNames,
+                  })}
+                </div>
+              </div>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Encounter Date</span>
+                <div>
+                  {getDateOfServiceBackground({
+                    value: viewValue?.changedDiseaseFormat?.dateOfServices,
+                  })}
+                </div>
+              </div>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Section</span>
+                <div>
+                  {getSectionHeaderBackground({
+                    value: viewValue?.changedDiseaseFormat?.capturedSections,
+                  })}
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div className={styles.editCodeContainer}>
-          <span className={styles.editTitle}>EDITED CODE</span>
-          <div className={styles.details}>
-            <div className={styles.detailsHeader}>
-              <span className={styles.disCode}>E039</span>
-              <span className={styles.discription}>
-                Hypothyroidism, unspecified
-              </span>
-            </div>
-            <div className={styles.detailsHeader}>
-              <span className={styles.disCode}>Provider</span>
-              <div>
-                {getProviderNameTagList({
-                  data: providerNameList,
-                })}
-              </div>
-            </div>
-            <div className={styles.detailsHeader}>
-              <span className={styles.disCode}>Encounter Date</span>
-              <div>
-                {getDateOfServiceBackground({
-                  value: dateOfServiceList,
-                })}
-              </div>
-            </div>
-            <div className={styles.detailsHeader}>
-              <span className={styles.disCode}>Section</span>
-              <div>
-                {getSectionHeaderBackground({
-                  value: sectionList,
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      </>
     );
 
     return sectionMapArr;
+  };
+
+  const onClickPopup = (disCode) => {
+    setPopClickDisCode(disCode);
+    setIsPopupOpen(isPopupOpen ? false : true);
   };
   function renderTimelineItem(item) {
     const getBadgeClassName = () => {
@@ -621,6 +646,26 @@ const Timeline = ({
           return `${item.diagnosisCode} - Encounter file added`;
         case "MEAT_ADDED":
           return `${item.diagnosisCode} - Meat added`;
+        case "EDITED":
+          return (
+            <div className="d-flex w-100 justify-content-between">
+              {item.diagnosisCode} - code been edited
+              <Popover
+                open={isPopupOpen && item.diagnosisCode == popClickDisCode}
+                trigger={["hover"]}
+                placement="bottom"
+                overlayStyle={{ zIndex: 9999 }}
+                content={<>{getEditDeatils(item)}</>}
+              >
+                <span
+                  className={styles.viewTag}
+                  onClick={() => onClickPopup(item.diagnosisCode)}
+                >
+                  View
+                </span>{" "}
+              </Popover>
+            </div>
+          );
         case "HOLD":
           return (
             <div className="d-flex">
@@ -714,14 +759,6 @@ const Timeline = ({
   }
   return (
     <div className={visitStyles.timeLine}>
-      {/* <Popover
-        trigger={["hover"]}
-        placement="bottom"
-        overlayStyle={{ zIndex: 9999 }}
-        content={<>{getEditDeatils()}</>}
-      >
-        <span className={visitStyles.timelineDate}>VIEW</span>
-      </Popover> */}
       {!filterDataLoading ? (
         <div className="widget-timeline">
           <ul className="timeline">

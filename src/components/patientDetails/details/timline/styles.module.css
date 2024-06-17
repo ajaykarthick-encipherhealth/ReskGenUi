@@ -52,3 +52,15 @@
 .detailsHeader {
   margin-top: 10px;
 }
+.viewTag {
+  cursor: pointer;
+  font-size: 14px !important;
+  color: #04306f;
+}
+.deleteIcon {
+  color: #be3144;
+  font-size: 18px;
+  margin-right: 2px;
+  border-radius: 100%;
+  cursor: pointer;
+}
