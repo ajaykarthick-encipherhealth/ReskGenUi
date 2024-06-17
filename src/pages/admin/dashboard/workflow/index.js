@@ -27,6 +27,9 @@ import auditedIcon from "../../.../../../../images/trackingImages/AuditedTrack.p
 import tci from "../../.../../../../images/dashboard/tci.png";
 import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
 import { workStatusApiAdmin } from "../../../../services/adminServices/DashboardService";
+import Hold from "../../.../../../../images/trackingImages/HoldTrack.png";
+import HoldBg from "../../.../../../../images/dashboard/holdbg.png";
+import AuditedDecline from "../../.../../../../images/trackingImages/AuditDeclined.png";
 
 const WorkFlow = () => {
   const router = useRouter();
@@ -39,7 +42,6 @@ const WorkFlow = () => {
       PENDING: 0,
       COMPLETED: 0,
       HOLD: 0,
-      
     },
     auditedStatus: {
       AUDIT_PENDING: 0,
@@ -116,6 +118,16 @@ const WorkFlow = () => {
     },
     {
       id: 5,
+      icon: Hold,
+      title: "Hold",
+      charts: dateRange.processedStatus ? dateRange.processedStatus.HOLD : "0",
+      days: `${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
+      bg: HoldBg,
+    },
+    {
+      id: 6,
       icon: auditedIcon,
       title: "Audited",
       charts: dateRange.auditedStatus ? dateRange.auditedStatus.AUDITED : "0",
@@ -125,7 +137,7 @@ const WorkFlow = () => {
       bg: auditedbg,
     },
     {
-      id: 6,
+      id: 7,
       icon: reAuditIcon,
       title: "Audit Pending",
       charts: dateRange.auditedStatus
@@ -137,7 +149,7 @@ const WorkFlow = () => {
       bg: reAuditbg,
     },
     {
-      id: 7,
+      id: 8,
       icon: auditHoldIcon,
       title: "Audit Hold",
       charts: dateRange.auditedStatus ? dateRange.auditedStatus.AUDITHOLD : "0",
@@ -146,8 +158,21 @@ const WorkFlow = () => {
       } days`,
       bg: auditHold,
     },
+
     {
-      id: 8,
+      id: 9,
+      icon: AuditedDecline,
+      title: "Audit Declined",
+      charts: dateRange.auditedStatus
+        ? dateRange.auditedStatus.AUDIT_DECLINED
+        : "0",
+      days: `${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
+      bg: auditDecliendbg,
+    },
+    {
+      id: 10,
       icon: declineIcon,
       title: "Declined",
       charts: dateRange.processedStatus
@@ -156,7 +181,7 @@ const WorkFlow = () => {
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
-      bg: auditDecliendbg,
+      bg: TC,
     },
   ];
 
@@ -198,7 +223,7 @@ const WorkFlow = () => {
           <Row className={styles.carddiv} style={{ height: "80%" }}>
             {card1Data?.map((data) => (
               <Col
-                span={5}
+                span={4}
                 style={{
                   backgroundImage: `url(${data?.bg.src})`,
                   backgroundRepeat: "no-repeat",
