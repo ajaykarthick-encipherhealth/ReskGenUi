@@ -16,7 +16,9 @@ import AllocatedAdminList from "../../../components/table/admin/allocatedAdminLi
 import AllocatedL2AdminList from "../../../components/table/admin/allocatedL2AdminList/allocatedL2AdminList";
 import allocateStyle from "./allocate/style.module.css";
 import L2AllocateModal from "./l2allocate";
-import styles from "../../admin/report/report.module.css";
+import { actions as tenantAdminAction } from "../../../stores/tenantAdmin";
+
+import styles from "../report/report.module.css";
 import reportStyles from "../../reviewer/report/report.module.css";
 import SpinnerDots from "../../../components/spinner";
 import TableStyle from "../../../components/table/table.module.css";
@@ -31,7 +33,6 @@ import { getFilters } from "../../../stores/authflow/actions";
 import AllocateModal from "./allocate";
 import { debounce } from "../../../components/input";
 import { useCallback } from "react";
-import { actions as tenantAdminAction } from "../../../stores/tenantAdmin";
 
 const { RangePicker } = DatePicker;
 const statusOption = [
@@ -85,10 +86,11 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [searchStr, setSearchStr] = useState("");
-  const dispatch = useDispatch();
   const [selectOrgList, setSelectedOrgList] = useState("");
   const [orgAllList, setOrgAllList] = useState([]);
   const [defaultOrgValue, setDefaultOrgValue] = useState(null);
+
+  const dispatch = useDispatch();
 
   const getAllList = async ({
     pageNo = 0,
@@ -100,22 +102,20 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
     search,
     sort,
     selectedOption,
-    selectOrgList
+    batchCount,
+    
   }) => {
     const uId = localStorage.getItem("userId");
-    var orgId = "";
-    if (selectOrgList) {
-      orgId = selectOrgList == "ALL" ? "" : selectOrgList;
-    }
+    const orgId = localStorage.getItem("orgId");
     let resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=${uId}&organizationId=${orgId}&computationStart=${
       startDate ? startDate : ""
-    }&computationEnd=${
-      endDate ? endDate : ""
-    }&isAllocation=${allocate}&status=${status}&searchString=${search?search:""}&sortdirection=${
-      sort?.sortDir?sort?.sortDir:""
-    }&sortfield=${sort?.sortField?sort?.sortField:""}&priority=${
+    }&computationEnd=${endDate ? endDate : ""}&isAllocation=${
+      allocate ? allocate : ""
+    }&status=${status}&searchString=${search ? search : ""}&sortdirection=${
+      sort?.sortDir ? sort?.sortDir : ""
+    }&sortfield=${sort?.sortField ? sort?.sortField : ""}&priority=${
       selectedOption ? selectedOption : ""
-    }&batchCount=${batchCount}`;
+    }&batchCount=${batchCount ? batchCount : ""}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response?.data) {
       let resultMap = [];
@@ -142,9 +142,10 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
   const getAllCheckList = async (sort) => {
     setIsLoading(true);
     const uId = localStorage.getItem("userId");
+    const orgId = localStorage.getItem("orgId");
     let resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${
       batchCount ? batchCount : pageSize
-    }&userId=${uId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
+    }&userId=${uId}&organizationId=${orgId}&computationStart=&computationEnd=&isAllocation=true&status=2&searchString=${searchString}&sortdirection=${
       sort?.sortDir
     }&sortfield=${sort?.sortField}&priority=${
       selectedOption ? selectedOption : ""
@@ -200,9 +201,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
     setTableLoading(true);
   };
   const selectTabClick = (number) => {
-    setDefaultOrgValue(null);
-    setSelectedOrgList(null);
-    setSearchStr("");
+    setSearchString("");
     setPaginationFirst(0);
     setIsLoading(true);
     setActiveTab(number);
@@ -220,12 +219,11 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
     }
   };
   const searchFunction = (search, activeTab) => {
-    setSearchStr(search);
     if (activeTab === 1) {
       setSearchStr(search);
     } else {
       if (!isPatientList) {
-        // getAuditL2List(pageNo, search);
+        getAuditL2List(pageNo, search);
       } else {
         getL2PatientList(l2selectUser, pageNoL2Patient, sort, search);
       }
@@ -250,13 +248,10 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
     }
   };
 
-  const getAuditL2List = async (pageNo, searchString, selectOrgList) => {
-    var orgId = "";
-    if (selectOrgList) {
-      orgId = selectOrgList == "ALL" ? "" : selectOrgList;
-    }
+  const getAuditL2List = async (pageNo, searchString) => {
+    let orgId = localStorage.getItem("orgId");
     let tenantid = localStorage.getItem("tenantId");
-    let resoureUrl = `dbservice/l2audit?orgid=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}`;
+    let resoureUrl = `dbservice/l2audit?organizationId=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       let resultMap = [];
@@ -301,18 +296,18 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
 
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab === 1) {
-      getAllList(
-        pageNo,
-        pageSize,
-        startDate,
-        endDate,
-        true,
-        2,
-        searchStr,
-        sort,
-        selectedOption,
+      getAllList({
+        pageNo: pageNo,
+        pageSize: pageSize,
+        startDate: startDate,
+        endDate: endDate,
+        allocate: true,
+        status: 2,
+        search: searchStr,
+        sort: sort,
+        selectedOption: selectedOption,
         selectOrgList
-      );
+      });
     }
   }, [
     pageNo,
@@ -323,9 +318,29 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
     endDate,
     searchStr,
     selectedOption,
-    selectOrgList,
+    selectOrgList
   ]);
-
+  useEffect(() => {
+    console.log(selectOrgList);
+    if (!isPatientList) {
+      getAuditL2List(pageNo, searchStr, selectOrgList);
+    }
+  }, [selectOrgList, searchStr]);
+  useEffect(() => {
+    if (!organizationList?.response) {
+      getAllOrganizationList();
+    }
+  }, []);
+  useEffect(() => {
+    var orgListArray = [{ value: "ALL", label: "ALL" }];
+    organizationList?.response?.map((res) => {
+      orgListArray.push({
+        value: res.id,
+        label: res.name,
+      });
+    });
+    setOrgAllList(orgListArray);
+  }, [organizationList]);
   const renderRows = () => {
     return !tableLoading && l2UserListAll?.length > 0 ? (
       l2UserListAll?.map((data, index) => (
@@ -519,31 +534,6 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
   useEffect(() => {
     dispatch(getFilters("patientAllocated"));
   }, []);
-
-  useEffect(() => {
-    console.log(selectOrgList);
-    if (!isPatientList) {
-      getAuditL2List(pageNo, searchStr, selectOrgList);
-    }
-  }, [selectOrgList, searchStr]);
-
-  useEffect(() => {
-    if (!organizationList?.response) {
-      getAllOrganizationList();
-    }
-  }, []);
-
-  useEffect(() => {
-    var orgListArray = [{ value: "ALL", label: "ALL" }];
-    organizationList?.response?.map((res) => {
-      orgListArray.push({
-        value: res.id,
-        label: res.name,
-      });
-    });
-    setOrgAllList(orgListArray);
-  }, [organizationList]);
-
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -659,10 +649,10 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
                                   <InputText
                                     type="text"
                                     onChange={(e) => {
-                                      // setBatchCount(e.target.value);
-                                      // if (e.target.value.length <= 0) {
-                                      //   setFilterBatchCount(true);
-                                      // }
+                                      setBatchCount(e.target.value);
+                                      if (e.target.value.length <= 0) {
+                                        setFilterBatchCount(true);
+                                      }
                                       const inputValue = e.target.value.replace(
                                         /[^\d]/g,
                                         ""
@@ -727,7 +717,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
                             className={
                               isPatientList && activeTab == 2
                                 ? `col-xl-6 mt-4 ${TableStyle.allocateBtn}`
-                                : `col-xl-4  ${TableStyle.allocateBtn}`
+                                : `col-xl-4 mt-4 ${TableStyle.allocateBtn}`
                             }
                           >
                             {isPatientList || activeTab === 1 ? (
@@ -1033,8 +1023,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
       />
     </>
   );
-};
-
+}
 const enhancer = connect(
   (state) => ({
     organizationList: state?.tenantAdmin?.allOrganization?.data,
