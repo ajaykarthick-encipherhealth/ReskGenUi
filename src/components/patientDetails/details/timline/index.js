@@ -377,7 +377,7 @@ const Timeline = ({
     setPopClickDisCode(disCode);
     setIsPopupOpen(isPopupOpen ? false : true);
   };
-  function renderTimelineItem(item) {
+  function renderTimelineItem(item, index) {
     const getBadgeClassName = () => {
       switch (item.action) {
         case "MOVED":
@@ -597,7 +597,6 @@ const Timeline = ({
               <span className={visitStyles?.auditdeclined}>AUDIT_DECLINED</span>
             </div>
           );
-
         case "MEAT_QUERY_STORED":
           return `Changed from ${item.previousProcessedState} to Meat Query Stored`;
         case "COMPLETED":
@@ -651,7 +650,7 @@ const Timeline = ({
             <div className="d-flex w-100 justify-content-between">
               {item.diagnosisCode} - code been edited
               <Popover
-                open={isPopupOpen && item.diagnosisCode == popClickDisCode}
+                open={popClickDisCode === index ? true : false}
                 trigger={["hover"]}
                 placement="bottom"
                 overlayStyle={{ zIndex: 9999 }}
@@ -659,7 +658,7 @@ const Timeline = ({
               >
                 <span
                   className={styles.viewTag}
-                  onClick={() => onClickPopup(item.diagnosisCode)}
+                  onClick={() => onClickPopup(index)}
                 >
                   View
                 </span>{" "}
@@ -763,7 +762,9 @@ const Timeline = ({
         <div className="widget-timeline">
           <ul className="timeline">
             {timelineData?.length > 0 ? (
-              timelineData?.map((item) => renderTimelineItem(item))
+              timelineData?.map((item, index) =>
+                renderTimelineItem(item, index)
+              )
             ) : (
               <h6 className="text-center">NO DATA</h6>
             )}
