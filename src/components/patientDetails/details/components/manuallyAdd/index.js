@@ -52,7 +52,6 @@ const ManuallyAdd = ({
   isEditMeat,
   diseaseEditMeat
 }) => {
-  console.log(isEditMeatValue, "testing");
   const [form] = Form.useForm();
   const [isMeat, setIsMeat] = useState(false);
   const [validCode, setValidCode] = useState("");
@@ -895,10 +894,9 @@ const ManuallyAdd = ({
         section: item.header,
         hyperlinks: item,
       }));
-      console.log(sectionList, "testings");
       form.setFieldsValue({
         diagnosisCode: isEditValue.diagnosisCode,
-        description: isEditValue.dbDescription,
+        description: isEditValue.dbDescription?isEditValue.dbDescription:isEditValue.actualDescription,
         dos: dos,
       });
       handleSelectChange(isEditValue.dateOfServices, "dos");
@@ -932,7 +930,6 @@ const ManuallyAdd = ({
         section: item.header,
         hyperlinks: item,
       }));
-      console.log(sectionList, "testings");
       form.setFieldsValue({
         diagnosisCode: isEditMeatValue.diagnosisCode,
       });
