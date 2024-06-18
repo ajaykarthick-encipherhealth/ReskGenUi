@@ -12,7 +12,7 @@ import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { Popover, notification } from "antd";
-import { Button } from "react-bootstrap";
+import { Button, Offcanvas } from "react-bootstrap";
 import styles from "../styles.module.css";
 import PdfViewer from "../../PdfViewerComponent";
 import AddHccForm from "../../components/addHccForm";
@@ -225,7 +225,11 @@ const File = ({
                         </span>
                         <div className="d-flex justify-content-center">
                           <span className={`${visitStyles.hcc_title_badge}`}>
-                            {newValidDiseaseList.filter((item) => item.isComboCode != true).length}
+                            {
+                              newValidDiseaseList.filter(
+                                (item) => item.isComboCode != true
+                              ).length
+                            }
                           </span>
                         </div>
                       </div>
@@ -358,7 +362,11 @@ const File = ({
                           <span
                             className={`${visitStyles.suggested_title_badge}`}
                           >
-                            {suggestedHccList.filter((item) => item.isComboCode != true).length}
+                            {
+                              suggestedHccList.filter(
+                                (item) => item.isComboCode != true
+                              ).length
+                            }
                           </span>
                         </div>
                       </div>
@@ -422,7 +430,11 @@ const File = ({
                             <span
                               className={`${visitStyles.deleted_title_badge}`}
                             >
-                              {deletedHccList.filter((item) => item.isComboCode != true).length}
+                              {
+                                deletedHccList.filter(
+                                  (item) => item.isComboCode != true
+                                ).length
+                              }
                             </span>
                           </div>
                         </div>
@@ -511,12 +523,29 @@ const File = ({
         opens && showErrorMessage()
       )}
 
-      <EditHccForm
+      {/* <EditHccForm
         formValues={formValues}
         isEditHccForm={isEditHccForm}
         setIsEditHccForm={setIsEditHccForm}
         formEditPlace={formEditPlace}
-      />
+      /> */}
+
+      <Offcanvas
+        onHide={handleCloseModal}
+        show={isEditHccForm}
+        className="offcanvas-end"
+        placement="end"
+      >
+        <div className="p-4" style={{ overflowY: "scroll" }}>
+          <ManuallyAdd
+            handleCloseModal={handleCloseModal}
+            setIsFileFormShow={setIsFileFormShow}
+            year={year}
+            isEditPage={true}
+            isEditValue={formValues}
+          />
+        </div>
+      </Offcanvas>
     </>
   );
 };

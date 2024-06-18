@@ -159,3 +159,25 @@ export async function manuallyAddCode(obj) {
   );
   return data;
 }
+export async function diseaseEdit(obj) {
+  const options = {
+    method: "PUT",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `management/edit/disease`,
+    options
+  );
+  return data;
+}
+export async function diseaseEditMeat(obj) {
+  const options = {
+    method: "PUT",
+    body: JSON.stringify(obj),
+  };
+  const data = await requestPortal(
+    `management/edit/meat`,
+    options
+  );
+  return data;
+}

@@ -16,7 +16,9 @@ import {
   getValideCode,
   isCodeAlready,
   getSelectedDos,
-  manuallyAdd
+  manuallyAdd,
+  diseaseEdit,
+  diseaseEditMeat
 } from "./actions";
 
 const initialState = {
@@ -47,12 +49,12 @@ const createReducer = (actionType) =>
     initialState
   );
 
-  const getSelectedDosDetails = handleActions(
-    {
-      [getSelectedDos.toString()]: (state, { payload }) => payload,
-    },
-    ''
-  );
+const getSelectedDosDetails = handleActions(
+  {
+    [getSelectedDos.toString()]: (state, { payload }) => payload,
+  },
+  ""
+);
 
 const patientDetailsReducer = combineReducers({
   patientResult: createReducer(patientDetailsAction),
@@ -70,8 +72,9 @@ const patientDetailsReducer = combineReducers({
   isCodeAlready: createReducer(isCodeAlready),
   getValidCode: createReducer(getValideCode),
   getSelectedDosDetails: getSelectedDosDetails,
-  manuallyAdd: createReducer(manuallyAdd)
+  manuallyAdd: createReducer(manuallyAdd),
+  diseaseEdit: createReducer(diseaseEdit),
+  diseaseEditMeat: createReducer(diseaseEditMeat),
 });
-
 
 export default patientDetailsReducer;

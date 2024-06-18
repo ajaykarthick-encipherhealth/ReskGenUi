@@ -30,6 +30,7 @@ import { faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 import Meat, { checkMeatType } from "./Meat";
 import { getResponePopup } from "../../../../../utils/reusable";
+import { diseaseEditMeat } from "../../../../../stores/patient/details/network";
 const { Option } = Select;
 
 const ManuallyAdd = ({
@@ -44,7 +45,14 @@ const ManuallyAdd = ({
   manuallyAdd,
   getpatientDetailsData,
   patientDetailsResult,
+  isEditPage,
+  isEditValue,
+  diseaseEdit,
+  isEditMeatValue,
+  isEditMeat,
+  diseaseEditMeat
 }) => {
+  console.log(isEditMeatValue, "testing");
   const [form] = Form.useForm();
   const [isMeat, setIsMeat] = useState(false);
   const [validCode, setValidCode] = useState("");
@@ -325,7 +333,11 @@ const ManuallyAdd = ({
       const rese = prev?.map((item) => item.section == selectedSection);
       const re = rese.map((check, ind) => {
         if (check) {
-          return { section: selectedSection, hyperlinks: res, count: selectedCount };
+          return {
+            section: selectedSection,
+            hyperlinks: res,
+            count: selectedCount,
+          };
         } else {
           return prev[ind];
         }
@@ -472,7 +484,7 @@ const ManuallyAdd = ({
       listOfSectionM.length > 0 ? "M" : "",
       listOfSectionE.length > 0 ? "E" : "",
       listOfSectionA.length > 0 ? "A" : "",
-      listOfSectionA.length > 0 ? "A" : "",
+      listOfSectionA.length > 0 ? "T" : "",
     ]);
   }, [
     selectMeat,
@@ -559,34 +571,127 @@ const ManuallyAdd = ({
   };
 
   const handleMeatSubmit = async () => {
-    const data = {
-      patientId: await getStorage("patientId"),
-      diagnosisCode: code,
-      description: diagnosisForm.description,
-      dbDescription: diagnosisForm.description,
-      dateOfServices: diagnosisForm.dos,
-      hyperlinks: listOfSection
-        .map((item) => item.hyperlinks)
-        .flat(capturedSections.length + 1),
-      monitorHyperLink: listOfSectionM
-        .map((item) => item.hyperlinks)
-        .flat(capturedSections.length + 1),
-      evaluateHyperLink: listOfSectionE
-        .map((item) => item.hyperlinks)
-        .flat(capturedSections.length + 1),
-      assessmentHyperLink: listOfSectionA
-        .map((item) => item.hyperlinks)
-        .flat(capturedSections.length + 1),
-      treatmentHyperLink: listOfSectionT
-        .map((item) => item.hyperlinks)
-        .flat(capturedSections.length + 1),
-      chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
-      processedYear: year.value,
-    };
+    let data = {};
+    if (isEditPage) {
+      const forms = form.getFieldsValue()
+      data = {
+        patientId: await getStorage("patientId"),
+        oldDiagnosisCode: isEditValue.diagnosisCode,
+        newDiagnosisCode: code,
+        description: forms.description,
+        dateOfServices: forms.dos,
+        providerNames: providerDetails.map(item => item.providerName),
+        hyperlinks: listOfSection
+          .map((item) => item.hyperlinks)
+          .flat(capturedSections.length + 1),
+        monitorHyperLink:
+          listOfSectionM.length > 0
+            ? listOfSectionM
+                .map((item) => item.hyperlinks)
+                .flat(capturedSections.length + 1)
+            : null,
+        evaluateHyperLink:
+          listOfSectionE.length > 0
+            ? listOfSectionE
+                .map((item) => item.hyperlinks)
+                .flat(capturedSections.length + 1)
+            : null,
+        assessmentHyperLink:
+          listOfSectionA.length > 0
+            ? listOfSectionA
+                .map((item) => item.hyperlinks)
+                .flat(capturedSections.length + 1)
+            : null,
+        treatmentHyperLink:
+          listOfSectionT.length > 0
+            ? listOfSectionT
+                .map((item) => item.hyperlinks)
+                .flat(capturedSections.length + 1)
+            : null,
+        chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
+        dateOfServiceIfDosWiseCompute: getSelectedDos ? getSelectedDos : null,
+        processedYear: year.value,
+      };
+    } else if (isEditMeat) {
+      const forms = form.getFieldsValue()
+      data = {
+        patientId: await getStorage("patientId"),
+        diagnosisCode: code,
+        description: diagnosisForm.description,
+        dbDescription: diagnosisForm.description,
+        dateOfServices: diagnosisForm.dos,
+        hyperlinks: listOfSection
+          .map((item) => item.hyperlinks)
+          .flat(capturedSections.length + 1),
+        monitorHyperLink: listOfSectionM
+          .map((item) => item.hyperlinks)
+          .flat(capturedSections.length + 1),
+        evaluateHyperLink: listOfSectionE
+          .map((item) => item.hyperlinks)
+          .flat(capturedSections.length + 1),
+        assessmentHyperLink: listOfSectionA
+          .map((item) => item.hyperlinks)
+          .flat(capturedSections.length + 1),
+        treatmentHyperLink: listOfSectionT
+          .map((item) => item.hyperlinks)
+          .flat(capturedSections.length + 1),
+        chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
+        processedYear: year.value,
+      };
+    }else{
+      
+      data = {
+        patientId: await getStorage("patientId"),
+        oldDiagnosisCode: isEditValue.diagnosisCode,
+        newDiagnosisCode: code,
+        description: forms.description,
+        dateOfServices: forms.dos,
+        providerNames: providerDetails.map(item => item.providerName),
+        hyperlinks: listOfSection
+          .map((item) => item.hyperlinks)
+          .flat(capturedSections.length + 1),
+        monitorHyperLink:
+          listOfSectionM.length > 0
+            ? listOfSectionM
+                .map((item) => item.hyperlinks)
+                .flat(capturedSections.length + 1)
+            : null,
+        evaluateHyperLink:
+          listOfSectionE.length > 0
+            ? listOfSectionE
+                .map((item) => item.hyperlinks)
+                .flat(capturedSections.length + 1)
+            : null,
+        assessmentHyperLink:
+          listOfSectionA.length > 0
+            ? listOfSectionA
+                .map((item) => item.hyperlinks)
+                .flat(capturedSections.length + 1)
+            : null,
+        treatmentHyperLink:
+          listOfSectionT.length > 0
+            ? listOfSectionT
+                .map((item) => item.hyperlinks)
+                .flat(capturedSections.length + 1)
+            : null,
+        chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
+        dateOfServiceIfDosWiseCompute: getSelectedDos ? getSelectedDos : null,
+        processedYear: year.value,
+      };
+    }
     if (validCode.toLowerCase() == "valid code") {
       try {
-        const res = await manuallyAdd(data);
+        let res = {}
+        if (isEditPage) {
+          res = await diseaseEdit(data);
+        } else if (isEditMeat) {
+          res = await diseaseEditMeat(data);
+        }else{
+          res = await manuallyAdd(data);
+        }
+     
         if (res.status == "SUCCESS") {
+          handleCloseModal(false);
           getResponePopup(res);
           form.resetFields();
           getPatient();
@@ -637,7 +742,9 @@ const ManuallyAdd = ({
     const res = await getpatientDetailsData(
       patientDetailsResult?.data?.response?.patientId,
       patientDetailsResult?.data?.response?.processedYear,
-      patientDetailsResult?.data?.response?.dateOfService
+      patientDetailsResult?.data?.response?.dateOfService,
+      "",
+      await getStorage('role'),
     );
   };
 
@@ -680,40 +787,162 @@ const ManuallyAdd = ({
     setShowSection(false);
   };
 
-  const setFormValues = (item, selectMeat, countSetter, headerSetter, showSectionSetter) => {
+  const setFormValues = (
+    item,
+    selectMeat,
+    countSetter,
+    headerSetter,
+    showSectionSetter
+  ) => {
     item.hyperlinks?.map((list, i) => {
       form.setFieldsValue({
-        [`${checkMeatType(selectMeat)}section`]: [{ label: list.header, value: list.header }],
-        [`encounterDate_${item?.section?.replaceAll(" ", "-")}_${selectMeat}_${i}`]: list.dateOfService,
-        [`referance_${item?.section?.replaceAll(" ", "-")}_${selectMeat}_${i}`]: list.substring,
-        [`pageNumber_${item?.section?.replaceAll(" ", "-")}_${selectMeat}_${i}`]: list.pageNumber,
+        [`${checkMeatType(selectMeat)}section`]: [
+          { label: list.header, value: list.header },
+        ],
+        [`encounterDate_${item?.section?.replaceAll(
+          " ",
+          "-"
+        )}_${selectMeat}_${i}`]: list.dateOfService,
+        [`referance_${item?.section?.replaceAll(" ", "-")}_${selectMeat}_${i}`]:
+          list.substring,
+        [`pageNumber_${item?.section?.replaceAll(
+          " ",
+          "-"
+        )}_${selectMeat}_${i}`]: list.pageNumber,
       });
       countSetter(item.count);
       headerSetter(list.header);
     });
     showSectionSetter(false);
   };
-  
+
   const sectionEditMeat = (item) => {
     switch (selectMeat) {
       case "M":
-        setFormValues(item, selectMeat, setSectionCountM, setSectionM, setShowSectionM);
+        setFormValues(
+          item,
+          selectMeat,
+          setSectionCountM,
+          setSectionM,
+          setShowSectionM
+        );
         break;
       case "E":
-        setFormValues(item, selectMeat, setSectionCountE, setSectionE, setShowSectionE);
+        setFormValues(
+          item,
+          selectMeat,
+          setSectionCountE,
+          setSectionE,
+          setShowSectionE
+        );
         break;
       case "A":
-        setFormValues(item, selectMeat, setSectionCountA, setSectionA, setShowSectionA);
+        setFormValues(
+          item,
+          selectMeat,
+          setSectionCountA,
+          setSectionA,
+          setShowSectionA
+        );
         break;
       case "T":
-        setFormValues(item, selectMeat, setSectionCountT, setSectionT, setShowSectionT);
+        setFormValues(
+          item,
+          selectMeat,
+          setSectionCountT,
+          setSectionT,
+          setShowSectionT
+        );
         break;
       default:
         break;
     }
     setIsEdit(true);
   };
-  
+
+  const transformData = (data) => {
+    const sectionsMap = new Map();
+
+    data?.forEach((item) => {
+      const section = item.section;
+      const hyperlink = item.hyperlinks;
+
+      if (!sectionsMap.has(section)) {
+        sectionsMap.set(section, {
+          section,
+          hyperlinks: [],
+          count: [],
+        });
+      }
+
+      const sectionData = sectionsMap.get(section);
+      sectionData.hyperlinks.push(hyperlink);
+      sectionData.count.push(sectionData.hyperlinks.length);
+    });
+
+    return Array.from(sectionsMap.values());
+  };
+
+  useEffect(() => {
+    if (isEditPage) {
+      setCode(isEditValue.diagnosisCode);
+      setValidCode("Valid Code");
+      const dos = isEditValue.dateOfServices.map((item) => ({
+        lable: item,
+        value: item,
+      }));
+      const sectionList = isEditValue.hyperlinks.map((item) => ({
+        section: item.header,
+        hyperlinks: item,
+      }));
+      console.log(sectionList, "testings");
+      form.setFieldsValue({
+        diagnosisCode: isEditValue.diagnosisCode,
+        description: isEditValue.dbDescription,
+        dos: dos,
+      });
+      handleSelectChange(isEditValue.dateOfServices, "dos");
+      setListOfSection(transformData(sectionList));
+    }
+  }, [isEditPage]);
+
+
+  useEffect(() => {
+    if (isEditMeat) {
+      setMeatDisplay(true)
+      setCode(isEditMeatValue.diagnosisCode);
+      setValidCode("Valid Code");
+      const dos = isEditMeatValue.dateOfService.map((item) => ({
+        lable: item,
+        value: item,
+      }));
+      const sectionList = isEditMeatValue?.monitorHyperLink?.map((item) => ({
+        section: item.header,
+        hyperlinks: item,
+      }));
+      const sectionListE = isEditMeatValue?.evaluateHyperLink?.map((item) => ({
+        section: item.header,
+        hyperlinks: item,
+      }));
+      const sectionListA = isEditMeatValue?.assessmentHyperLink?.map((item) => ({
+        section: item.header,
+        hyperlinks: item,
+      }));
+      const sectionListT = isEditMeatValue?.treatmentHyperLink?.map((item) => ({
+        section: item.header,
+        hyperlinks: item,
+      }));
+      console.log(sectionList, "testings");
+      form.setFieldsValue({
+        diagnosisCode: isEditMeatValue.diagnosisCode,
+      });
+      handleSelectChange(isEditMeatValue.dateOfService, "dos");
+      setListOfSectionM(transformData(sectionList));
+      setListOfSectionE(transformData(sectionListE));
+      setListOfSectionA(transformData(sectionListA));
+      setListOfSectionT(transformData(sectionListT));
+    }
+  }, [isEditMeat])
   return (
     <>
       <div className="d-flex justify-content-between mb-4">
@@ -763,15 +992,15 @@ const ManuallyAdd = ({
                     value={code}
                     // className={styles.formControl}
                   />
-                </Form.Item> 
-                {validCode.length > 0 && 
-                (validCode == "Valid Code" ? (
-                  <label className="text-success">Valid Code</label>
-                ) : (
-                  validCode != "" && (
-                    <label className="text-danger">{validCode}</label>
-                  ))
-                )}
+                </Form.Item>
+                {validCode.length > 0 &&
+                  (validCode == "Valid Code" ? (
+                    <label className="text-success">Valid Code</label>
+                  ) : (
+                    validCode != "" && (
+                      <label className="text-danger">{validCode}</label>
+                    )
+                  ))}
               </div>
               <div className="col-12">
                 <Form.Item
@@ -983,7 +1212,13 @@ const ManuallyAdd = ({
                     width="150px"
                     method={"button"}
                     disabled={!(validCode == "Valid Code")}
-                    onClick={() => setMeatDisplay(true)}
+                    onClick={() => {
+                      if (isEditPage && isEditValue.diagnosisCode == code) {
+                        handleMeatSubmit();
+                      } else {
+                        setMeatDisplay(true);
+                      }
+                    }}
                   />
                 </div>
               </Form.Item>
@@ -1007,16 +1242,6 @@ const ManuallyAdd = ({
               completed={isFilled}
             />
           </div>
-
-          {/* <div className="border rounded w-100 h-auto p-4">
-            <MeatSection
-              handleForm={handleForm}
-              handleSelectChnage={handleSelectChange}
-              handleDateRange={handleDateRange}
-              setMeatDisplay={setMeatDisplay}
-            />
-          </div> */}
-
           <Form
             form={form}
             name="basic"
@@ -1057,6 +1282,7 @@ const ManuallyAdd = ({
               isEdit={isEdit}
               sectionEdit={sectionEditMeat}
               handleEdit={handledEditMeat}
+              isEditMeat={isEditMeat}
             />
           </Form>
         </>
@@ -1076,6 +1302,8 @@ const enhancer = connect(
     getValidate: patientDetailsAction.getValideCode,
     isCodeAlready: patientDetailsAction.isCodeAlready,
     manuallyAdd: patientDetailsAction.manuallyAdd,
+    diseaseEdit: patientDetailsAction.diseaseEdit,
+    diseaseEditMeat: patientDetailsAction.diseaseEditMeat,
     getpatientDetailsData: patientDetailsAction.patientDetailsAction,
   }
 );
