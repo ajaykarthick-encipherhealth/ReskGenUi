@@ -26,7 +26,6 @@ const HoldStatus = ({ getHoldStatusData, holdStatusData }) => {
 
   const processedData = holdStatusData?.data?.response?.map((item) => {
     let testValue = "no data";
-console.log(item);
     if (item.holdNotes && item.holdNotes.length > 0) {
       item.holdNotes.forEach((obj) => {
         if (obj["2023"]) {
