@@ -215,7 +215,7 @@
 } */
 .flags {
   /* width: 2px; */
-  height: 260px;
+  height: 282px;
   border-radius: 10px;
   background-color: #e1edfe;
   margin-right: 5px;
@@ -514,7 +514,7 @@
   align-items: center;
 }
 .contentOverFlow {
-  height: 90%;
+  height: 235px;
   overflow-y: scroll;
 }
 .card3 {
