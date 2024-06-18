@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Badge } from "react-bootstrap";
+import { Badge, Offcanvas } from "react-bootstrap";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
@@ -22,6 +22,7 @@ import { getPatientDetails } from "../../components/function/GetData";
 import { actions as detailsActions } from "../../../../../stores/patient/details";
 import MeatCard from "../../components/MEAT";
 import ModelIndex from "../../components/model/Index";
+import ManuallyAdd from "../../components/manuallyAdd";
 const { Option } = Select;
 
 const Meat = ({
@@ -689,170 +690,24 @@ const Meat = ({
         opens && showErrorMessage()
       )}
 
-      {meatEdit && (
-        <Modal
-          title={"Edit MEAT"}
-          // title="Pdf Test"
-          centered
-          open={meatEdit}
-          // style={{ top: 5 }}
-          onOk={() => setMeatEdit(false)}
-          onCancel={() => setMeatEdit(false)}
-          width="50%"
-          footer={false}
-          // height={400}
-        >
-          <Form
-            name="validateOnly"
-            layout="vertical"
-            autoComplete="off"
-            initialValues={editData}
-            onFinish={onFinishMeat}
-            onFinishFailed={onFinishFailed}
-          >
-            <>
-              <div className="row">
-                <div className="col-xl-6">
-                  <Form.Item label="Diagnosis Code" name="diagnosisCode">
-                    <Input
-                      name="diagnosisCode"
-                      className={styles.formControl}
-                      disabled
-                    />
-                  </Form.Item>
-                </div>
-                <div className="col-xl-6">
-                  <Form.Item label="Description" name="diseaseName">
-                    <Input
-                      name="diseaseName"
-                      className={styles.formControl}
-                      disabled
-                    />
-                  </Form.Item>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-xl-6">
-                  <Form.Item label="Section" name="monitorHyperLink">
-                    <Select
-                      mode="tags"
-                      maxTagCount="responsive"
-                      className={`ant_select_form hcc_form mb-2`}
-                    >
-                      {editData?.monitorHyperLink?.map((data) => (
-                        <Option key={data?.header} value={data?.header}>
-                          {data?.header}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                  {/* <Form.Item
-                    label="Monitor Header"
-                    name="monitorCapturedFromHeader"
-                  >
-                    <Input
-                      name="monitorCapturedFromHeader"
-                      className={styles.formControl}
-                    />
-                  </Form.Item> */}
-                </div>
-                <div className="col-xl-6">
-                  <Form.Item label="Monitor" name="monitorAspect">
-                    <Input
-                      name="monitorAspect"
-                      className={styles.formControl}
-                    />
-                  </Form.Item>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-xl-6">
-                  <Form.Item
-                    label="Evaluate Header"
-                    name="evaluateCapturedFromHeader"
-                  >
-                    <Input
-                      name="evaluateCapturedFromHeader"
-                      className={styles.formControl}
-                    />
-                  </Form.Item>
-                </div>
-                <div className="col-xl-6">
-                  <Form.Item label="Evaluate" name="evaluateAspect">
-                    <Input
-                      name="evaluateAspect"
-                      className={styles.formControl}
-                    />
-                  </Form.Item>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-xl-6">
-                  <Form.Item
-                    label={<label>Assessment Header&nbsp;</label>}
-                    name="assessmentCapturedFromHeader"
-                    rules={[
-                      {
-                        required: false,
-                        message: "Please Enter Assessment Header.",
-                      },
-                    ]}
-                  >
-                    <Input
-                      name="assessmentCapturedFromHeader"
-                      className={styles.formControl}
-                    />
-                  </Form.Item>
-                </div>
-                <div className="col-xl-6">
-                  <Form.Item
-                    label={<label>Assessment&nbsp;</label>}
-                    name="assessmentAspect"
-                    rules={[
-                      {
-                        required: false,
-                        message: "Please Enter Assessment.",
-                      },
-                    ]}
-                  >
-                    <Input
-                      name="assessmentAspect"
-                      className={styles.formControl}
-                    />
-                  </Form.Item>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col-xl-6">
-                  <Form.Item
-                    label="Treatment Header"
-                    name="treatmentCapturedFromHeader"
-                  >
-                    <Input
-                      name="treatmentCapturedFromHeader"
-                      className={styles.formControl}
-                    />
-                  </Form.Item>
-                </div>
-                <div className="col-xl-6">
-                  <Form.Item label="Treatment" name="treatmentAspect">
-                    <Input
-                      name="treatmentAspect"
-                      className={styles.formControl}
-                    />
-                  </Form.Item>
-                </div>{" "}
-              </div>
+    
 
-              <Form.Item>
-                <Space>
-                  <RegularButton type="submit" name="Save" width={100} />
-                </Space>
-              </Form.Item>
-            </>
-          </Form>
-        </Modal>
-      )}
+<Offcanvas
+        onHide={()=>setMeatEdit(false)}
+        show={meatEdit}
+        className="offcanvas-end"
+        placement="end"
+      >
+        <div className="p-4" style={{ overflowY: "scroll" }}>
+          <ManuallyAdd
+            handleCloseModal={() => setMeatEdit(false)}
+            setIsFileFormShow={setMeatEdit}
+            year={year}
+            isEditMeat={true}
+            isEditMeatValue={editData}
+          />
+        </div>
+      </Offcanvas>
 
       <AddMeatQuery
         queryFormValues={queryFormValues}
