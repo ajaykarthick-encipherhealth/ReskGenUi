@@ -171,7 +171,7 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
     return (
       <div
         className={Style.cards}
-        style={{ width: zoom.width, height: zoom.width < 300 ? "auto" : 185 }}
+        style={{ width: zoom.width, height: zoom.width < 300 ? "auto" : Style.cards }}
       >
         <div className={Style.code}>
           <div>
