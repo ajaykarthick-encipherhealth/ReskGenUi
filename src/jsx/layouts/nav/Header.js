@@ -25,9 +25,11 @@ import {
   SettingOutlined,
   CloseOutlined,
   CreditCardOutlined,
+  BookOutlined,
 } from "@ant-design/icons";
+
 import styles from "../../../styles/file-managemnt.module.css";
-import { IMAGES } from "../../constant/theme";
+import { IMAGES, SVGICON } from "../../constant/theme";
 import {
   AdminMenuList,
   PhysicanMenuList,
@@ -516,10 +518,9 @@ const Header = ({
                     <div className="nav-link i-false" as="div">
                       <div className="header-info2 d-flex align-items-center">
                         <div className={styles.codify}>
-                          <CreditCardOutlined
-                            className={styles.lapicon}
-                            onClick={showDrawer}
-                          />
+                          <div onClick={showDrawer}>
+                          {SVGICON.codify}
+                          </div>
                         </div>
                         <Drawer
                           title="CODES"
