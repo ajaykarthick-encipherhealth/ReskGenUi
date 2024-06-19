@@ -1,12 +1,13 @@
 import { requestPortal } from "../../../utils/network";
 
 export async function patientDetails(patientId,processedYear,dos,setIsSpinnerLoading, role) {
+  const roles = localStorage.getItem('role')
   const options = {
     method: "GET",
   };
-  var url = `patientId=${patientId}&role=${role?.toUpperCase()}&processedYear=${processedYear}` 
+  var url = `patientId=${patientId}&role=${roles?.toUpperCase()}&processedYear=${processedYear}` 
   if(dos){
-    url = `patientId=${patientId}&role=${role ? role?.toUpperCase() : ""}&dateOfService=${dos}` 
+    url = `patientId=${patientId}&role=${roles ? roles?.toUpperCase() : ""}&dateOfService=${dos}` 
   }
   try {
     const data = await requestPortal(

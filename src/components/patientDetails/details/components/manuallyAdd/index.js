@@ -572,6 +572,7 @@ const ManuallyAdd = ({
   const handleMeatSubmit = async () => {
     let data = {};
     if (isEditPage) {
+      const filterData = patientDetailsResult?.data?.response?.meatCriteria?.find((item) => item.diagnosisCode == isEditValue.diagnosisCode)
       const forms = form.getFieldsValue()
       data = {
         patientId: await getStorage("patientId"),
@@ -583,25 +584,25 @@ const ManuallyAdd = ({
         hyperlinks: listOfSection
           .map((item) => item.hyperlinks)
           .flat(capturedSections.length + 1),
-        monitorHyperLink:
+        monitorHyperLink: isEditValue.diagnosisCode == code ? filterData.monitorHyperLink:
           listOfSectionM.length > 0
             ? listOfSectionM
                 .map((item) => item.hyperlinks)
                 .flat(capturedSections.length + 1)
             : null,
-        evaluateHyperLink:
+        evaluateHyperLink: isEditValue.diagnosisCode == code ? filterData.evaluateHyperLink:
           listOfSectionE.length > 0
             ? listOfSectionE
                 .map((item) => item.hyperlinks)
                 .flat(capturedSections.length + 1)
             : null,
-        assessmentHyperLink:
+        assessmentHyperLink: isEditValue.diagnosisCode == code ? filterData.assessmentHyperLink:
           listOfSectionA.length > 0
             ? listOfSectionA
                 .map((item) => item.hyperlinks)
                 .flat(capturedSections.length + 1)
             : null,
-        treatmentHyperLink:
+        treatmentHyperLink: isEditValue.diagnosisCode == code ? filterData.treatmentHyperLink:
           listOfSectionT.length > 0
             ? listOfSectionT
                 .map((item) => item.hyperlinks)
