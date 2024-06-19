@@ -31,7 +31,7 @@ export const riskadjustment = async ({ year, code }) => {
   return data;
 };
 
-export const searches = async ({ username }) => {
+export const searches = async () => {
   const options = {
     method: "GET",
   };
@@ -45,10 +45,19 @@ export const autocomplete = async ({ code }) => {
     method: "GET",
   };
   
-  const url = `q=${code}`;
   const data = await requestPortal(
     `management/autocomplete?q=${code}`,
     options
   );
+  return data;
+};
+
+
+export const indexes = async ({desc}) => {
+  const options = {
+    method: "GET",
+  };
+  const url = `q=${desc}`;
+  const data = await apirequestPortal(`controlzen/getindexes?${url}`, options);
   return data;
 };

@@ -518,9 +518,7 @@ const Header = ({
                     <div className="nav-link i-false" as="div">
                       <div className="header-info2 d-flex align-items-center">
                         <div className={styles.codify}>
-                          <div onClick={showDrawer}>
-                          {SVGICON.codify}
-                          </div>
+                          <div onClick={showDrawer}>{SVGICON.codify}</div>
                         </div>
                         <Drawer
                           title="CODES"

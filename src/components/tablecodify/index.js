@@ -242,24 +242,28 @@ const Tables = (props) => {
                   ))}
               </div>
             )}
-            <div className="mt-1">
-              <span className={style.first}>Code First</span>
-              {codeData?.codeFirst &&
-                codeData.codeFirst.split("\n").map((data, index) => (
-                  <p className={style.para} key={index}>
-                    {data}
-                  </p>
-                ))}
-                  <div className="mt-1">
-                  <span className={style.codealso}>Code also</span>
-              {codeData?.codeAlso &&
-                codeData.codeAlso.split("\n").map((data, index) => (
-                  <p className={style.para} key={index}>
-                    {data}
-                  </p>
-                ))}
-            </div>
-            </div>
+             {codeData?.codeFirst && (
+              <div className="mt-1">
+                <span className={style.first}>Code First </span>
+                {codeData?.codeFirst &&
+                  codeData.codeFirst.split("\n").map((data, index) => (
+                    <p className={style.para} key={index}>
+                      {data}
+                    </p>
+                  ))}
+              </div>
+            )}
+             {codeData?.codeAlso && (
+              <div className="mt-1">
+                <span className={style.codealso}>Code also </span>
+                {codeData?.codeAlso &&
+                  codeData.codeAlso.split("\n").map((data, index) => (
+                    <p className={style.para} key={index}>
+                      {data}
+                    </p>
+                  ))}
+              </div>
+            )}  
           </div>
         )}
         {parentCode?.[0]?.includes ||
@@ -270,7 +274,7 @@ const Tables = (props) => {
               parentCode?.map((data) => {
                 return (
                   <div>
-                    {(data?.includes || data?.excludes1 || data?.excludes2) && (
+                    {(data?.includes || data?.excludes1 || data?.excludes2 ) && (
                       <div className={style.head}>
                         {data.name} - {data.desc}
                       </div>
@@ -337,7 +341,7 @@ const Tables = (props) => {
                       <div  className="mt-1">
                         <span className={style.codealso}>code also</span>
                         {data?.codeAlso &&
-                          data.codeFirst?.split("\n").map((line, index) => (
+                          data.codeAlso?.split("\n").map((line, index) => (
                             <p className={style.para} key={index}>
                               {line}
                             </p>
