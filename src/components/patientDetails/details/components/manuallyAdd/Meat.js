@@ -46,12 +46,13 @@ const Meat = ({
   date,
   isEdit,
   sectionEdit,
-  handleEdit
+  handleEdit,
+  isEditMeat
 }) => {
- 
   return (
     <div>
-      <div className="row">
+      <div className="row">  
+      {!isEditMeat &&
         <div className="col-12">
           <Form.Item
             label={
@@ -70,7 +71,7 @@ const Meat = ({
           >
             <Input name={`${checkMeatType(selectMeat)}Aspect`} />
           </Form.Item>
-        </div>
+        </div>}
         <div className="col-12">
           <Form.Item
             label={
@@ -87,7 +88,7 @@ const Meat = ({
             ]}
           >
             <Select
-              disabled
+              disabled={!isEditMeat}
               mode="multiple"
               maxTagCount="responsive"
               className={`ant_select_form hcc_form mb-2`}
@@ -242,13 +243,14 @@ const Meat = ({
       {true && (
         <Form.Item>
           <div className="d-flex justify-content-center mt-5">
+          {!isEditMeat &&
             <RegularButton
               type="outline"
               name="Back"
               width="100px"
               method={"button"}
               onClick={() => setMeatDisplay(false)}
-            />
+            />}
             <RegularButton
               type=""
               name="Submit"

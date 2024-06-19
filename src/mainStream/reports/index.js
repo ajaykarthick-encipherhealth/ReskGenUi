@@ -199,21 +199,21 @@ const Reports = ({
       });
     } else if (activeTab === "Admin") {
       dispatch(
-        getReportDetails(
-          pageNo,
-          selectedDateRanges?.Admin?.from,
-          selectedDateRanges?.Admin?.to,
-          coderSearchString ? coderSearchString : "",
-          selectedOptions?.Status?.value,
-          selectedOptions?.UserRole?.value
+        getReportDetails({
+          startDate: selectedDateRanges?.Admin?.from,
+          endDate: selectedDateRanges?.Admin?.to,
+          search: coderSearchString ? coderSearchString : "",
+          filter: selectedOptions?.Status?.value,
+          userName: selectedOptions?.UserRole?.value
             ? selectedOptions?.UserRole?.value
             : "",
-          sort,
-          selectedOptions?.User?.value &&
+          sort: sort,
+          selectManager:
+            selectedOptions?.User?.value &&
             selectedOptions?.UserRole?.value !== "All"
-            ? selectedOptions?.User?.value
-            : ""
-        )
+              ? selectedOptions?.User?.value
+              : "",
+        })
       );
     } else if (activeTab === "Audit") {
       auditReport({
@@ -221,8 +221,8 @@ const Reports = ({
         startDate: selectedDateRanges?.Audit?.from,
         endDate: selectedDateRanges?.Audit?.to,
         search: coderSearchString ? coderSearchString : "",
-        filter: selectedOptions?.reviewerStatus
-          ? selectedOptions?.reviewerStatus
+        filter: selectedOptions?.reviewerStatus?.value
+          ? selectedOptions?.reviewerStatus?.value
           : "",
         sort: sort,
       });
@@ -240,7 +240,7 @@ const Reports = ({
         startDate: selectedDateRanges?.Reviewer?.from,
         endDate: selectedDateRanges?.Reviewer?.to,
         search: coderSearchString ? coderSearchString : "",
-        filter: selectedOptions?.reviewerStatus,
+        filter: selectedOptions?.reviewerStatus?.value,
         sort: sort,
       });
     }
@@ -346,8 +346,8 @@ const Reports = ({
         return ["Reviewer", "Sent", "Received"];
       case "admin":
         return ["Admin", "Sent", "Received"];
-        case "tenant_admin":
-          return ["Admin", "Sent", "Received"];
+      case "tenant_admin":
+        return ["Admin", "Sent", "Received"];
       case "supervisor":
         return ["Audit", "Team", "Sent", "Received"];
       default:

@@ -66,3 +66,12 @@ export const manuallyAdd = createActionThunk(
   "MANUALLY_ADDED",
   network.manuallyAddCode
 );
+
+export const diseaseEdit = createActionThunk(
+  "DISEASE_EDIT",
+  network.diseaseEdit
+);
+export const diseaseEditMeat = createActionThunk(
+  "DISEASE_EDIT_MEAT",
+  network.diseaseEditMeat
+);

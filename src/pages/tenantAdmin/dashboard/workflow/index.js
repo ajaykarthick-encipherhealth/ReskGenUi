@@ -26,7 +26,7 @@ import TC from "../../.../../../../images/dashboard/TC.png";
 import auditedIcon from "../../.../../../../images/trackingImages/AuditedTrack.png";
 import tci from "../../.../../../../images/dashboard/tci.png";
 import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
-import { workStatusApiAdmin } from "../../../../services/adminServices/DashboardService";
+import { workStatusApiTenantAdmin } from "../../../../services/adminServices/DashboardService";
 import Hold from "../../.../../../../images/trackingImages/HoldTrack.png";
 import HoldBg from "../../.../../../../images/dashboard/holdbg.png";
 import AuditedDecline from "../../.../../../../images/trackingImages/AuditDeclined.png";
@@ -187,7 +187,7 @@ const WorkFlow = () => {
 
   const getWorkFlow = async () => {
     try {
-      const data = await workStatusApiAdmin(startDate, endDate, router);
+      const data = await workStatusApiTenantAdmin(startDate, endDate, router);
       setDateRange(data.response?.processedStatusCount);
       setChartValue(data.response);
     } catch (error) {
