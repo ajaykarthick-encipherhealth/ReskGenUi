@@ -9,6 +9,8 @@ import Tables from "../../components/tablecodify";
 import Codes from "../../jsx/components/codes";
 import Riskadjustment from "../../components/riskadjustment";
 import { AutoComplete, Input } from "antd";
+import { Tree } from "antd";
+import index from "../reviewer/workingstatus";
 
 const getRandomInt = (max, min = 0) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
@@ -34,7 +36,13 @@ const searchResult = (query) =>
       };
     });
 
-const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
+const Codify = ({
+  codifyData,
+  codesData,
+  recentsearch,
+  completeData,
+  indexesData,
+}) => {
   const [showButtons, setShowButtons] = useState(false);
   const [currentButton, setCurrentButton] = useState("Codes");
   const [activeButton, setActiveButton] = useState("ICD-10");
@@ -49,6 +57,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   const [autoExpandParent, setAutoExpandParent] = useState(true);
   const [parentCode, setParentCode] = useState([]);
   const [hideButton, setHideButton] = useState(false);
+  const [indexData, setIndexData] = useState([]);
 
   const handleRiskAdjustment = () => {
     setActiveButton("Risk Adjustment");
@@ -58,11 +67,11 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   const handleButtonClick = () => {
     setActiveButton("ICD-10");
     setSearchInput(null);
-    setParentCode(null)
+    setParentCode(null);
   };
   const handleInputChange = (e) => {
     setSearchInput(e.target.value);
-    setParentCode(null)
+    setParentCode(null);
   };
 
   const handleSearch = (value) => {
@@ -87,6 +96,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
     if (event.keyCode === 13) {
       fetchTreeData();
       fetchCodeData();
+      fetchIndexData();
     }
   }
   const handleSearchButton = () => {
@@ -94,14 +104,27 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
     fetchCodeData();
   };
 
-  const handleSearchClick = (value)=>{
+  const handleIndexClick = (value) => {
+    setSearchInput(value);
+    fetchIndexData(value);
+  
+  };
+  const handleIndexCodeClick =(value)=>{
     setSearchInput(value)
+    setCurrentButton("Description");
+    fetchCodeData(value);
+  }
+
+  useEffect(() => {
+    completeFetch();
+  }, [searchInput]);
+
+  const handleSearchClick = (value) => {
+    setSearchInput(value);
     fetchTreeData(value);
     fetchCodeData(value);
     setHideButton(false);
-
-  }
-  
+  };
 
   const convertToAntdTreeData = (node) => {
     const { name, desc, children, requiredCharacter } = node;
@@ -124,8 +147,8 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
   };
 
   const fetchTreeData = async (value) => {
-    setLoading(true)
- ;   let treeData = await codifyData({ diseases: value ? value : searchInput });
+    setLoading(true);
+    let treeData = await codifyData({ diseases: value ? value : searchInput });
     if (treeData?.status == "SUCCESS") {
       let temp = convertICDStructureToTreeData(treeData?.response);
       if (!treeData?.response?.length) {
@@ -134,6 +157,90 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
         setNoData(false);
       }
       setData(temp);
+    }
+    setLoading(false);
+  };
+
+
+  const convertToAntdIndexData = (node) => {
+    const { title, seeAlso, term, code, see, seeCat, subCat } = node;
+    const splitWords = (str) => {
+      if (!str) return [];
+      return str.split(" ").filter(word => word.trim() !== '')
+    };
+   const IndexNode = {
+      title: (
+        <div className="d-flex gap-1">
+          <span className={style.indextitle}>{title}</span>
+          {code && (
+            <span
+              className={style.indexcode}
+              onClick={() => handleIndexCodeClick(code)}
+            >
+              - {code}{" "}
+            </span>
+          )}
+           {seeAlso && (
+          <span className="">
+            -SeeAlso{" "}
+            {splitWords(seeAlso).map((word, index) => (
+              <span
+                key={index}
+                className={style.indexcode}
+                onClick={() => handleIndexClick(word)}
+              >
+                {word}{" "}
+              </span>
+            ))}
+          </span>
+        )}
+           {see && (
+          <span className="">
+            -See{" "}
+            {splitWords(see).map((word, index) => (
+              <span
+                key={index}
+                className={style.indexcode}
+                onClick={() => handleIndexClick(word)}
+              >
+                {word}{" "}
+              </span>
+            ))}
+          </span>
+        )}
+
+          {seeCat && (
+            <span className="">
+              -seeCategory <span className={style.indexcode}>{seeCat}</span>{" "}
+            </span>
+          )}
+
+          {subCat && <span className="desc">{subCat}</span>}
+        </div>
+      ),
+      children: term ? term.map(convertToAntdIndexData) : [],
+    };
+
+    return IndexNode;
+  };
+
+  const convertIndexStructureToTreeData = (indexStructure) => {
+    return indexStructure?.map(convertToAntdIndexData);
+  };
+
+  const fetchIndexData = async (value) => {
+    setLoading(true);
+    let indexTreeData = await indexesData({
+      desc: value ? value : searchInput,
+    });
+    if (indexTreeData?.status == "SUCCESS") {
+      let temp = convertIndexStructureToTreeData(indexTreeData?.response);
+      if (!indexTreeData?.response?.length) {
+        setNoData(true);
+      } else {
+        setNoData(false);
+      }
+      setIndexData(temp);
     }
     setLoading(false);
   };
@@ -158,7 +265,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
     }
   };
 
-  const completeFetch = async () => { 
+  const completeFetch = async () => {
     let completedData = await completeData({ code: searchInput });
     if (completedData?.status === "SUCCESS") {
       const displayCodeOptions = completedData?.response?.displayStrings?.map(
@@ -194,19 +301,17 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
         useAdditionalCode: tableData?.response?.childData?.useAdditionalCode,
         requiredCharacter: tableData?.response?.childData?.requiredCharacter,
         codeFirst: tableData?.response?.childData?.codeFirst,
-        codeAlso: tableData?.response?.childData?.codeAlso
+        codeAlso: tableData?.response?.childData?.codeAlso,
       });
       setParentCode(tableData?.response?.parentData);
     }
     setLoading(false);
   };
-  useEffect(() => {
-    completeFetch();
-  }, [searchInput]);
 
   useEffect(() => {
     if (!searchInput?.length) {
       setData(null);
+      setIndexData(null);
       setCodeData(null);
       setNoData(false);
     } else if (data && data.length === 0) {
@@ -214,7 +319,7 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
     } else {
       setNoData(false);
     }
-  }, [searchInput, data]);
+  }, [searchInput, data, indexData]);
 
   return (
     <div className="container-fluid">
@@ -242,7 +347,8 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
         {activeButton === "ICD-10" && (
           <div>
             <div className="p-3 px-1 d-flex gap-3">
-              <AutoComplete   style={{width:"100%"}}
+              <AutoComplete
+                style={{ width: "100%" }}
                 popupMatchSelectWidth={640}
                 options={options}
                 onSelect={onSelect}
@@ -250,8 +356,9 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
                 size="large"
                 value={searchInput}
               >
-                <Input style={{width:"100%"}}
-                 className="antdselect"
+                <Input
+                  style={{ width: "100%" }}
+                  className="antdselect"
                   placeholder="Keywords, codes or code range between codes"
                   value={searchInput}
                   onChange={handleInputChange}
@@ -269,7 +376,8 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
             <div className="d-flex gap-2 px-1 ">
               <Button
                 className={currentButton === "Codes" ? style.both : style.code}
-                onClick={() => {setCurrentButton("Codes")
+                onClick={() => {
+                  setCurrentButton("Codes");
                   setHideButton(false);
                 }}
               >
@@ -279,9 +387,21 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
                 className={
                   currentButton === "Description" ? style.both : style.code
                 }
-                onClick={() => {setCurrentButton("Description"), setHideButton(false);}}
+                onClick={() => {
+                  setCurrentButton("Description"), setHideButton(false);
+                }}
               >
                 Codes
+              </Button>
+              <Button
+                className={
+                  currentButton === "Indexes" ? style.both : style.code
+                }
+                onClick={() => {
+                  setCurrentButton("Indexes"), setHideButton(false);
+                }}
+              >
+                Indexes
               </Button>
             </div>
 
@@ -314,7 +434,12 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
             {showButtons && currentButton === "Description" && (
               <div className="d-flex gap-3  flex-wrap mx-2">
                 {searches.map((search, index) => (
-                  <Button className={style.btnborder} key={index} onClick={() => handleSearchClick(search)} value={searchInput}>
+                  <Button
+                    className={style.btnborder}
+                    key={index}
+                    onClick={() => handleSearchClick(search)}
+                    value={searchInput}
+                  >
                     {search}
                   </Button>
                 ))}
@@ -332,6 +457,18 @@ const Codify = ({ codifyData, codesData, recentsearch, completeData }) => {
                 expandedKeys={expandedKeys}
                 setLoading={setLoading}
               />
+            ) : (
+              <div></div>
+            )}
+            {currentButton === "Indexes" && indexData?.length ? (
+              <div className="antdstyle">
+                <Tree
+                  showLine={true}
+                  treeData={indexData}
+                  onExpand={onExpand}
+                  expandedKeys={expandedKeys}
+                />
+              </div>
             ) : (
               <div></div>
             )}
@@ -377,5 +514,6 @@ const enhancer = connect((state) => ({ state }), {
   codesData: dashbaordActions.codesAction,
   recentsearch: dashbaordActions.searchesAction,
   completeData: dashbaordActions.autoCompleteAction,
+  indexesData: dashbaordActions.indexesAction,
 });
 export default enhancer(Codify);

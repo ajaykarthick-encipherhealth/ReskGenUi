@@ -3,19 +3,27 @@ import { Empty, Tree } from "antd";
 import { Spin } from "antd";
 import { useRef } from "react";
 
-const Codes = ({ data, loading, onSelect, onExpand, expandedKeys }) => {
+const Codes = ({
+  data,
+  loading,
+  onSelect,
+  onExpand,
+  expandedKeys,
+  currentButton,
+ 
+}) => {
   const topRef = useRef(null);
 
   const scrollToTop = () => {
     topRef.current.scrollIntoView({ behavior: "smooth", top: 25 });
   };
-
+ 
   return (
     <div>
       <div className="d-flex justify-content-center">
         {loading && <Spin size="large" />}
       </div>
-      <div className="mt-3 antdstyle" ref={topRef}>
+      <div className="mt-1 p-3 antdstyle" ref={topRef}>
         <Tree
           ref={topRef}
           showLine={true}

@@ -27,3 +27,8 @@ export const  autoCompleteAction = createActionThunk(
   " AUTO COMPLETE ",
   network.autocomplete
 );
+
+export const  indexesAction = createActionThunk(
+  " AUTO COMPLETE ",
+  network.indexes
+);

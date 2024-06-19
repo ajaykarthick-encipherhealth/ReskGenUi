@@ -6,6 +6,7 @@ import {codesAction} from "./actions";
 import { riskadjustmentAction } from "./actions";
 import {searchesAction} from "./actions";
 import {autoCompleteAction} from "./actions";
+import {indexesAction} from "./actions";
 
 const initialState = {
   loading: true,
@@ -42,7 +43,8 @@ const dashbaordReducer = combineReducers({
   codes:createReducer(codesAction),
   riskadjustment:createReducer(riskadjustmentAction),
   searches:createReducer(searchesAction),
-  autocomplete:createReducer(autoCompleteAction)
+  autocomplete:createReducer(autoCompleteAction),
+  indexes:createReducer(indexesAction)
 });
 
 export default dashbaordReducer;

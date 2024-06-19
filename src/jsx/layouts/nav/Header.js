@@ -24,7 +24,7 @@ import {
   DownOutlined,
   SettingOutlined,
   CloseOutlined,
-  CreditCardOutlined,
+  BookOutlined,
 } from "@ant-design/icons";
 import styles from "../../../styles/file-managemnt.module.css";
 import { IMAGES } from "../../constant/theme";
@@ -516,7 +516,7 @@ const Header = ({
                     <div className="nav-link i-false" as="div">
                       <div className="header-info2 d-flex align-items-center">
                         <div className={styles.codify}>
-                          <CreditCardOutlined
+                          <BookOutlined
                             className={styles.lapicon}
                             onClick={showDrawer}
                           />
