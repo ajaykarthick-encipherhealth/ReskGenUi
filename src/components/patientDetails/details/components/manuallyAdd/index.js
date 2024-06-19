@@ -50,7 +50,7 @@ const ManuallyAdd = ({
   diseaseEdit,
   isEditMeatValue,
   isEditMeat,
-  diseaseEditMeat
+  diseaseEditMeat,
 }) => {
   const [form] = Form.useForm();
   const [isMeat, setIsMeat] = useState(false);
@@ -571,39 +571,51 @@ const ManuallyAdd = ({
 
   const handleMeatSubmit = async () => {
     let data = {};
+    const forms = form.getFieldsValue();
     if (isEditPage) {
-      const filterData = patientDetailsResult?.data?.response?.meatCriteria?.find((item) => item.diagnosisCode == isEditValue.diagnosisCode)
-      const forms = form.getFieldsValue()
+      const filterData =
+        patientDetailsResult?.data?.response?.meatCriteria?.find(
+          (item) => item.diagnosisCode == isEditValue.diagnosisCode
+        );
+
       data = {
         patientId: await getStorage("patientId"),
         oldDiagnosisCode: isEditValue.diagnosisCode,
         newDiagnosisCode: code,
         description: forms.description,
         dateOfServices: forms.dos,
-        providerNames: providerDetails.map(item => item.providerName),
+        providerNames: providerDetails.map((item) => item.providerName),
         hyperlinks: listOfSection
           .map((item) => item.hyperlinks)
           .flat(capturedSections.length + 1),
-        monitorHyperLink: isEditValue.diagnosisCode == code ? filterData.monitorHyperLink:
-          listOfSectionM.length > 0
+        monitorHyperLink:
+          isEditValue.diagnosisCode == code
+            ? filterData.monitorHyperLink
+            : listOfSectionM.length > 0
             ? listOfSectionM
                 .map((item) => item.hyperlinks)
                 .flat(capturedSections.length + 1)
             : null,
-        evaluateHyperLink: isEditValue.diagnosisCode == code ? filterData.evaluateHyperLink:
-          listOfSectionE.length > 0
+        evaluateHyperLink:
+          isEditValue.diagnosisCode == code
+            ? filterData.evaluateHyperLink
+            : listOfSectionE.length > 0
             ? listOfSectionE
                 .map((item) => item.hyperlinks)
                 .flat(capturedSections.length + 1)
             : null,
-        assessmentHyperLink: isEditValue.diagnosisCode == code ? filterData.assessmentHyperLink:
-          listOfSectionA.length > 0
+        assessmentHyperLink:
+          isEditValue.diagnosisCode == code
+            ? filterData.assessmentHyperLink
+            : listOfSectionA.length > 0
             ? listOfSectionA
                 .map((item) => item.hyperlinks)
                 .flat(capturedSections.length + 1)
             : null,
-        treatmentHyperLink: isEditValue.diagnosisCode == code ? filterData.treatmentHyperLink:
-          listOfSectionT.length > 0
+        treatmentHyperLink:
+          isEditValue.diagnosisCode == code
+            ? filterData.treatmentHyperLink
+            : listOfSectionT.length > 0
             ? listOfSectionT
                 .map((item) => item.hyperlinks)
                 .flat(capturedSections.length + 1)
@@ -613,43 +625,9 @@ const ManuallyAdd = ({
         processedYear: year.value,
       };
     } else if (isEditMeat) {
-      const forms = form.getFieldsValue()
       data = {
         patientId: await getStorage("patientId"),
-        diagnosisCode: code,
-        description: diagnosisForm.description,
-        dbDescription: diagnosisForm.description,
-        dateOfServices: diagnosisForm.dos,
-        hyperlinks: listOfSection
-          .map((item) => item.hyperlinks)
-          .flat(capturedSections.length + 1),
-        monitorHyperLink: listOfSectionM
-          .map((item) => item.hyperlinks)
-          .flat(capturedSections.length + 1),
-        evaluateHyperLink: listOfSectionE
-          .map((item) => item.hyperlinks)
-          .flat(capturedSections.length + 1),
-        assessmentHyperLink: listOfSectionA
-          .map((item) => item.hyperlinks)
-          .flat(capturedSections.length + 1),
-        treatmentHyperLink: listOfSectionT
-          .map((item) => item.hyperlinks)
-          .flat(capturedSections.length + 1),
-        chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
-        processedYear: year.value,
-      };
-    }else{
-      
-      data = {
-        patientId: await getStorage("patientId"),
-        oldDiagnosisCode: isEditValue.diagnosisCode,
-        newDiagnosisCode: code,
-        description: forms.description,
-        dateOfServices: forms.dos,
-        providerNames: providerDetails.map(item => item.providerName),
-        hyperlinks: listOfSection
-          .map((item) => item.hyperlinks)
-          .flat(capturedSections.length + 1),
+        diagnosisCode: isEditMeatValue.diagnosisCode,
         monitorHyperLink:
           listOfSectionM.length > 0
             ? listOfSectionM
@@ -678,18 +656,43 @@ const ManuallyAdd = ({
         dateOfServiceIfDosWiseCompute: getSelectedDos ? getSelectedDos : null,
         processedYear: year.value,
       };
+    } else {
+      data = {
+        patientId: await getStorage("patientId"),
+        diagnosisCode: code.trim(),
+        description: diagnosisForm.description,
+        dbDescription: diagnosisForm.description,
+        dateOfServices: diagnosisForm.dos,
+        hyperlinks: listOfSection
+          .map((item) => item.hyperlinks)
+          .flat(capturedSections.length + 1),
+        monitorHyperLink: listOfSectionM
+          .map((item) => item.hyperlinks)
+          .flat(capturedSections.length + 1),
+        evaluateHyperLink: listOfSectionE
+          .map((item) => item.hyperlinks)
+          .flat(capturedSections.length + 1),
+        assessmentHyperLink: listOfSectionA
+          .map((item) => item.hyperlinks)
+          .flat(capturedSections.length + 1),
+        treatmentHyperLink: listOfSectionT
+          .map((item) => item.hyperlinks)
+          .flat(capturedSections.length + 1),
+        chartProcessType: getSelectedDos ? "DATE_OF_SERVICE" : "YEAR",
+        processedYear: year.value,
+      };
     }
     if (validCode.toLowerCase() == "valid code") {
       try {
-        let res = {}
+        let res = {};
         if (isEditPage) {
           res = await diseaseEdit(data);
         } else if (isEditMeat) {
           res = await diseaseEditMeat(data);
-        }else{
+        } else {
           res = await manuallyAdd(data);
         }
-     
+
         if (res.status == "SUCCESS") {
           handleCloseModal(false);
           getResponePopup(res);
@@ -744,7 +747,7 @@ const ManuallyAdd = ({
       patientDetailsResult?.data?.response?.processedYear,
       patientDetailsResult?.data?.response?.dateOfService,
       "",
-      await getStorage('role'),
+      await getStorage("role")
     );
   };
 
@@ -897,7 +900,9 @@ const ManuallyAdd = ({
       }));
       form.setFieldsValue({
         diagnosisCode: isEditValue.diagnosisCode,
-        description: isEditValue.dbDescription?isEditValue.dbDescription:isEditValue.actualDescription,
+        description: isEditValue.dbDescription
+          ? isEditValue.dbDescription
+          : isEditValue.actualDescription,
         dos: dos,
       });
       handleSelectChange(isEditValue.dateOfServices, "dos");
@@ -905,10 +910,9 @@ const ManuallyAdd = ({
     }
   }, [isEditPage]);
 
-
   useEffect(() => {
     if (isEditMeat) {
-      setMeatDisplay(true)
+      setMeatDisplay(true);
       setCode(isEditMeatValue.diagnosisCode);
       setValidCode("Valid Code");
       const dos = isEditMeatValue.dateOfService.map((item) => ({
@@ -923,10 +927,12 @@ const ManuallyAdd = ({
         section: item.header,
         hyperlinks: item,
       }));
-      const sectionListA = isEditMeatValue?.assessmentHyperLink?.map((item) => ({
-        section: item.header,
-        hyperlinks: item,
-      }));
+      const sectionListA = isEditMeatValue?.assessmentHyperLink?.map(
+        (item) => ({
+          section: item.header,
+          hyperlinks: item,
+        })
+      );
       const sectionListT = isEditMeatValue?.treatmentHyperLink?.map((item) => ({
         section: item.header,
         hyperlinks: item,
@@ -940,11 +946,17 @@ const ManuallyAdd = ({
       setListOfSectionA(transformData(sectionListA));
       setListOfSectionT(transformData(sectionListT));
     }
-  }, [isEditMeat])
+  }, [isEditMeat]);
   return (
     <>
       <div className="d-flex justify-content-between mb-4">
-        <div className="font-bold text-[16px]"> Add Valid Code </div>
+        <div className="font-bold text-[16px]">
+          {isEditPage
+            ? "Edit Valid Code"
+            : isEditMeat
+            ? "Meat Edit"
+            : "Add Valid Code"}{" "}
+        </div>
         <div
           className="cr-pointer"
           onClick={() => {
@@ -1206,7 +1218,11 @@ const ManuallyAdd = ({
                 <div className="d-flex justify-content-center mt-5">
                   <RegularButton
                     type=""
-                    name="Next"
+                    name={
+                      isEditPage && isEditValue.diagnosisCode == code
+                        ? "Save"
+                        : "Next"
+                    }
                     width="150px"
                     method={"button"}
                     disabled={!(validCode == "Valid Code")}
@@ -1226,12 +1242,14 @@ const ManuallyAdd = ({
       ) : (
         <>
           <div className={style.subHeader}>Meat</div>
-          <div className="d-flex">
-            <label htmlFor="">Active Header</label>
-            <div className="mx-2">
-              <Switch onChange={(e) => setIsMeat(e)} />
+          {!isEditMeat && (
+            <div className="d-flex">
+              <label htmlFor="">Active Header</label>
+              <div className="mx-2">
+                <Switch onChange={(e) => setIsMeat(e)} />
+              </div>
             </div>
-          </div>
+          )}
           <div className="d-flex justify-content-center mb-2">
             {" "}
             <SelectButton
