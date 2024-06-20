@@ -251,7 +251,6 @@ const Codify = ({
     if (indexTreeData?.status == "SUCCESS") {
       let temp = convertIndexStructureToTreeData(indexTreeData?.response);
       if (!indexTreeData?.response?.length) {
-        console.log(noData, "nodata");
         setNoData(true);
       } else {
         setNoData(false);
