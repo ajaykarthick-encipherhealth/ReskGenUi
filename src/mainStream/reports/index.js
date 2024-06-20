@@ -20,6 +20,7 @@ import Export from "./Export";
 import { actions as workflowActions } from "../../stores/reviewer/workqueue";
 import { actions as reviewerAction } from "../../stores/reviewer/report";
 import { actions as supervisorAction } from "../../stores/supervisor/report";
+import moment from "moment";
 
 import {
   selectedReport,
@@ -129,9 +130,11 @@ const Reports = ({
   const handleCoderPicker = (date, dateString, tabName) => {
     const formattedDates = dateString?.map((date, index) => {
       const formattedDate =
-        index === 1
-          ? date && `${date}T23:59:59.999Z`
-          : date && `${date}T00:00:00.000Z`;
+      index === 1
+      ? date &&
+        `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
+      : date &&
+        `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
       return formattedDate;
     });
     setSelectedDates((prevOptions) => ({
@@ -479,6 +482,7 @@ const Reports = ({
                                     borderRadius: "0 5px 5px 0",
                                     width: "100%",
                                   }}
+                                  format="MM-DD-YYYY"
                                   value={
                                     selectedDates
                                       ? selectedDates[activeTab]
