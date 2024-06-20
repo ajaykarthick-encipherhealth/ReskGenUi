@@ -2,10 +2,11 @@ import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
 import {
   batchUpload,
+  getAllFileProcessAction,
   getAllOrganizationAction,
   getAllPatientAction,
   getAllTrackingAction,
-  getAllUsersAction
+  getAllUsersAction,
 } from "./actions";
 
 const initialState = {
@@ -41,10 +42,9 @@ const searchReducer = combineReducers({
   batchUpload: createReducer(batchUpload),
   allOrganization: createReducer(getAllOrganizationAction),
   allUsers: createReducer(getAllUsersAction),
-  allPatients:createReducer(getAllPatientAction),
-  allTracking:createReducer(getAllTrackingAction)
-
-  
+  allPatients: createReducer(getAllPatientAction),
+  allTracking: createReducer(getAllTrackingAction),
+  allFileProcessing: createReducer(getAllFileProcessAction),
 });
 
 export default searchReducer;

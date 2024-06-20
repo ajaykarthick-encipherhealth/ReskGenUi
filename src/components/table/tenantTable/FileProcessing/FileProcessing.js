@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
+import { over } from "stompjs";
+import SockJS from "sockjs-client";
 import dayjs from "dayjs";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
 import { Empty, Progress, Steps, Tooltip } from "antd";
@@ -7,6 +9,7 @@ import TableStyle from "../../table.module.css";
 import { getPatientsList } from "../../../../store/actions/adminAction/fileProcessingActions";
 import ENDPOINTS from "../../../../utility/enpoints";
 import SpinnerDots from "../../../spinner";
+import { actions as tenantAdminAction } from "../../../../stores/tenantAdmin";
 
 export const eventStreming = (
   ENDPOINTS,
@@ -128,7 +131,13 @@ const stageChartMap = {
   QUERY_CONDITIONS_FOUND_FAILED: 8,
   FINISHED: 9,
 };
-function FileProcessingTable({ patinetListAll, loading }) {
+const FileProcessingTable = ({
+  patinetListAll,
+  loading,
+  getAllProcessingData,
+  fileProcessingData,
+}) => {
+  let stompClient = null;
   const dispatch = useDispatch();
   const [stepperVisible, setStepperVisible] = useState(
     Array(patinetListAll?.length).fill(false)
@@ -162,6 +171,50 @@ function FileProcessingTable({ patinetListAll, loading }) {
     } else {
       setFiledList();
     }
+  };
+
+  useEffect(() => {
+    getAllProcessingData();
+  }, []);
+  useEffect(() => {
+    // console.log(fileProcessingData);
+  }, [fileProcessingData]);
+
+  useEffect(() => {
+    connectingFunction();
+  }, []);
+
+  const connectingFunction = async () => {
+    try {
+      console.log("Connect to WebSocket");
+      // Connect to WebSocket after updating state
+      connect();
+    } catch (error) {
+      console.error("Error connecting web socket", error);
+    }
+  };
+
+  const connect = () => {
+    const token = localStorage.getItem("token");
+    let Sock = new SockJS(
+      `https://hcc.encipherhealth.com/chatservice/chatservice/ws?token=${token}`
+    );
+    console.log(Sock);
+    stompClient = over(Sock);
+    stompClient.connect({}, onConnected, onError);
+  };
+
+  const onConnected = () => {
+    stompClient.subscribe("/user/" + "test" + "/private", onLoadData);
+  };
+
+  const onLoadData = (payload) => {
+    let payloadData = JSON.parse(payload.body);
+    console.log(payloadData);
+  };
+
+  const onError = (err) => {
+    console.log(err);
   };
 
   useEffect(() => {
@@ -305,12 +358,12 @@ function FileProcessingTable({ patinetListAll, loading }) {
     const findPreviousStep = (currentStage) => {
       const stages = Object.keys(stageChartMap2);
       const currentIndex = stages.indexOf(currentStage);
-      
+
       if (currentIndex > 0) {
         return stages[currentIndex - 1];
-        }
-        return null; // or some other value indicating there's no previous step
-        };
+      }
+      return null; // or some other value indicating there's no previous step
+    };
     const stepsItemBase = [
       {
         title: "",
@@ -484,7 +537,6 @@ function FileProcessingTable({ patinetListAll, loading }) {
           },
         }));
 
-       
     return (
       <div style={{ display: "flex" }}>
         <div style={{ width: "98%" }}>
@@ -496,7 +548,13 @@ function FileProcessingTable({ patinetListAll, loading }) {
                 .join(" ")}
             >
               <Progress
-                percent={currentIndex?uploadStatus:`${stageChartMap[findPreviousStep(data?.processStageChart)]}0`}
+                percent={
+                  currentIndex
+                    ? uploadStatus
+                    : `${
+                        stageChartMap[findPreviousStep(data?.processStageChart)]
+                      }0`
+                }
                 status="active"
                 style={{
                   height: "20px",
@@ -515,56 +573,56 @@ function FileProcessingTable({ patinetListAll, loading }) {
             </Tooltip>
           </div>
 
-          {toggle[data?.patientId] && (
-            <>
-              <div
-                className={TableStyle.fileprocessing}
-                style={{ height: "30px" }}
-              >
-                {mappedSteps?.map((step, index) => {
-                  const findData =
-                    selectedRowTime?.data &&
-                    selectedRowTime?.data?.response?.find(
-                      (item) => item?.processStageChart === step?.info
-                    );
-
-                  return (
-                    <div key={index} className={TableStyle.innerProcessingDiv}>
-                      {finished
-                        ? "Loading..."
-                        : selectedRowTime?.data?.response?.length > 0 &&
-                          (findData ? (
-                            <span>
-                              {findData?.createdDate &&
-                                dayjs(findData?.createdDate).format(
-                                  "hh:mm:ss A"
-                                )}
-                            </span>
-                          ) : (
-                            "---"
-                          ))}
-                    </div>
+          <>
+            <div
+              className={TableStyle.fileprocessing}
+              style={{ height: "30px" }}
+            >
+              {mappedSteps?.map((step, index) => {
+                const findData =
+                  selectedRowTime?.data &&
+                  selectedRowTime?.data?.response?.find(
+                    (item) => item?.processStageChart === step?.info
                   );
-                })}
-              </div>
 
-              <div
-                style={{
-                  position: "relative",
-                  marginTop: stepperVisible ? "10px" : "0",
-                  marginLeft: "-40px",
-                }}
-              >
-                <Steps
-                  current={currentIndex?currentIndex + 1:stageChartMap[findPreviousStep(data?.processStageChart)]}
-                  labelPlacement="vertical"
-                  items={mappedSteps}
-                  percent={failedList ? 0 : count}
-                  finishIconBorderColor="#000"
-                />
-              </div>
-            </>
-          )}
+                return (
+                  <div key={index} className={TableStyle.innerProcessingDiv}>
+                    {finished
+                      ? "Loading..."
+                      : selectedRowTime?.data?.response?.length > 0 &&
+                        (findData ? (
+                          <span>
+                            {findData?.createdDate &&
+                              dayjs(findData?.createdDate).format("hh:mm:ss A")}
+                          </span>
+                        ) : (
+                          "---"
+                        ))}
+                  </div>
+                );
+              })}
+            </div>
+
+            <div
+              style={{
+                position: "relative",
+                marginTop: stepperVisible ? "10px" : "0",
+                marginLeft: "-40px",
+              }}
+            >
+              <Steps
+                current={
+                  currentIndex
+                    ? currentIndex + 1
+                    : stageChartMap[findPreviousStep(data?.processStageChart)]
+                }
+                labelPlacement="vertical"
+                items={mappedSteps}
+                percent={failedList ? 0 : count}
+                finishIconBorderColor="#000"
+              />
+            </div>
+          </>
           <div
             style={{
               display: "flex",
@@ -575,7 +633,11 @@ function FileProcessingTable({ patinetListAll, loading }) {
                 ? "green"
                 : "#00000",
             }}
-          >{`${currentIndex?uploadStatus:`${stageChartMap[findPreviousStep(data?.processStageChart)]}0`}% Complete`}</div>
+          >{`${
+            currentIndex
+              ? uploadStatus
+              : `${stageChartMap[findPreviousStep(data?.processStageChart)]}0`
+          }% Complete`}</div>
         </div>
         <div style={{ width: "2%", marginTop: "6px" }}>
           <div onClick={() => handleToggleStepper(index, data)}>
@@ -590,7 +652,7 @@ function FileProcessingTable({ patinetListAll, loading }) {
     );
   };
   const renderRows = () => {
-    return parsedData?.map((data, index) => (
+    return fileProcessingData?.data?.response?.map((data, index) => (
       <tr key={index}>
         <td className={TableStyle.firstTdBorder}>{data?.patientId}</td>
         <td className={TableStyle.childBorder}>
@@ -640,6 +702,14 @@ function FileProcessingTable({ patinetListAll, loading }) {
       )}
     </div>
   );
-}
+};
 
-export default FileProcessingTable;
+const enhancer = connect(
+  (state) => ({
+    fileProcessingData: state?.tenantAdmin?.allFileProcessing,
+  }),
+  {
+    getAllProcessingData: tenantAdminAction.getAllFileProcessAction,
+  }
+);
+export default enhancer(FileProcessingTable);
