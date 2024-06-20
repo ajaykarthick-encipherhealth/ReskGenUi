@@ -153,7 +153,8 @@ export const getPatientDetails = async (
   setDosSummariesList,
   setNonHccDiseasesList,
   setDeletedMeatList,
-  setInvalidComboDiseaseCodesList
+  setInvalidComboDiseaseCodesList,
+  setAllMeatList,
 ) => {
   if (patientDetailsResult?.data?.response) {
     var result = patientDetailsResult?.data?.response;
@@ -719,6 +720,7 @@ export const getPatientDetails = async (
       setDeletedMeatList && setDeletedMeatList(deletedmeatListArr);
       setAllDisList &&
         setAllDisList([...hccDisArray, ...deleteHccList, ...suggestListAll]);
+        setAllMeatList && setAllMeatList([...meatListArr,...deletedmeatListArr])
 
       // if (result.suggestRadiology != null) {
       //   if (result.suggestRadiology.length != 0) {

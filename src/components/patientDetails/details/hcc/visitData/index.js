@@ -76,6 +76,8 @@ const VisitData = ({
   const [selectDisDetails, setSelectDisDetails] = useState(false);
   const [allDisList, setAllDisList] = useState([]);
   const [zIndex, setZIndex] = useState(false);
+  const [allMeatList, setAllMeatList] = useState([]);
+
 
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
@@ -93,7 +95,13 @@ const VisitData = ({
       patientDetailsResult,
       dispatch,
       sectionColorList,
-      setAllDisList
+      setAllDisList,
+      "",
+      "",
+      "",
+      "",
+      "",
+      setAllMeatList
     );
 
     var dotLoading = (
@@ -244,7 +252,7 @@ const VisitData = ({
                             hccVersionDetails={hccVersionDetails}
                             captureSectionMatching={captureSectionMatching}
                             encounterDateMatching={encounterDateMatching}
-                            meatCriteriaList={meatCriteriaList}
+                            meatCriteriaList={allMeatList}
                             onchangeValid={onchangeValid}
                             getValidHccDetails={getValidHccDetails}
                             setFormValues={setFormValues}
@@ -342,7 +350,7 @@ const VisitData = ({
                               hccVersionDetails={hccVersionDetails}
                               captureSectionMatching={captureSectionMatching}
                               encounterDateMatching={encounterDateMatching}
-                              meatCriteriaList={meatCriteriaList}
+                              meatCriteriaList={allMeatList}
                               onchangeValid={onchangeValid}
                               getValidHccDetails={getValidHccDetails}
                               setFormValues={setFormValues}
@@ -415,7 +423,7 @@ const VisitData = ({
                               hccVersionDetails={hccVersionDetails}
                               captureSectionMatching={captureSectionMatching}
                               encounterDateMatching={encounterDateMatching}
-                              meatCriteriaList={meatCriteriaList}
+                              meatCriteriaList={allMeatList}
                               onchangeValid={onchangeValid}
                               getValidHccDetails={getValidHccDetails}
                               setFormValues={setFormValues}
@@ -516,7 +524,7 @@ const VisitData = ({
                               hccVersionDetails={hccVersionDetails}
                               captureSectionMatching={captureSectionMatching}
                               encounterDateMatching={encounterDateMatching}
-                              meatCriteriaList={meatCriteriaList}
+                              meatCriteriaList={allMeatList}
                               onchangeValid={onchangeValid}
                               getValidHccDetails={getValidHccDetails}
                               setFormValues={setFormValues}
@@ -590,7 +598,7 @@ const VisitData = ({
                               hccVersionDetails={hccVersionDetails}
                               captureSectionMatching={captureSectionMatching}
                               encounterDateMatching={encounterDateMatching}
-                              meatCriteriaList={meatCriteriaList}
+                              meatCriteriaList={allMeatList}
                               onchangeValid={onchangeValid}
                               getValidHccDetails={getValidHccDetails}
                               setFormValues={setFormValues}
@@ -662,7 +670,7 @@ const VisitData = ({
                               hccVersionDetails={hccVersionDetails}
                               captureSectionMatching={captureSectionMatching}
                               encounterDateMatching={encounterDateMatching}
-                              meatCriteriaList={meatCriteriaList}
+                              meatCriteriaList={allMeatList}
                               onchangeValid={onchangeValid}
                               getValidHccDetails={getValidHccDetails}
                               setFormValues={setFormValues}
