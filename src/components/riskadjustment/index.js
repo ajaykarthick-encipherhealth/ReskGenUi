@@ -66,7 +66,9 @@ const RiskAdjustment = ({
       year: selectedYear,
       code: code,
     });
-    if (riskData?.status == "SUCCESS") setLoading(false);
+    if (riskData?.status == "SUCCESS") 
+      console.log(riskData,"success")
+      setLoading(false);
     if (!riskData?.response?.length) {
       setNoData(true);
     } else {

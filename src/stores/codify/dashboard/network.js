@@ -24,8 +24,8 @@ export const riskadjustment = async ({ year, code }) => {
     method: "GET",
   };
   const url = `year=${year}&code=${code}`;
-  const data = await requestPortal(
-    `dbservice/getRiskAdjustmentForYear?${url}`,
+  const data = await apirequestPortal(
+    `controlzen/riskAdjustment?${url}`,
     options
   );
   return data;
@@ -58,6 +58,6 @@ export const indexes = async ({desc}) => {
     method: "GET",
   };
   const url = `q=${desc}`;
-  const data = await apirequestPortal(`controlzen/getindexes?${url}`, options);
+  const data = await requestPortal(`dbservice/searchIndex?${url}`, options);
   return data;
 };
