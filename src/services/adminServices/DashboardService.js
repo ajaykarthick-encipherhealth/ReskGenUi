@@ -508,10 +508,9 @@ export const GetTenantAdminUserCount = async (role) => {
   }
 };
 
-export const SelectUserList = async () => {
+export const SelectUserList = async (role) => {
   const token = localStorage.getItem("token");
   const orgId = localStorage.getItem("orgId");
-  const role = "SUPERVISOR";
   try {
     const response = await axios.get(
       `${ENDPOINTS?.apiEndoint}dbservice/user/getByRole?role=${role}&orgId=${orgId}`,
