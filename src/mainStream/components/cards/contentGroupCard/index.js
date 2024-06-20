@@ -36,34 +36,63 @@ const ContentGroupCard = ({
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
-  const gotoPatientDetails = (data) => {
-    if (!data) {
-      notification.warning({
-        message: "Data is undefined. Please wait.",
-      });
-      return;
-    }
 
+  // const gotoPatientDetails = (data) => {
+  //   if (!data) {
+  //     notification.warning({
+  //       message: "Data is undefined. Please wait.",
+  //     });
+  //     return;
+  //   }
+
+  //   dispatch(patientDetails(data));
+
+  //   if (data.processedStatus === "COMPLETED") {
+  //     const controller = new AbortController();
+  //     const currentRole = localStorage.getItem("userRole");
+  //     controller.abort();
+  //     localStorage.setItem("patientId", data.patientId);
+  //     navigate.push({
+  //       pathname: `/${currentRole}/patients/details`,
+  //       query: page,
+  //     });
+  //   } else {
+  //     notification.warning({
+  //       message: data.patientId + " file not processed. Please wait.",
+  //     });
+  //   }
+  // };
+  const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
 
-    if (data.processedStatus === "COMPLETED") {
+    if (data?.processedStatus === "COMPLETED") {
       const controller = new AbortController();
       const currentRole = localStorage.getItem("userRole");
+      let modifiedRole = currentRole;
+
+      if (currentRole === "tenant_admin") {
+        modifiedRole = "tenantAdmin";
+      } else if (currentRole === "admin") {
+        modifiedRole = "admin";
+      } else if (currentRole === "reviewer") {
+        modifiedRole = "reviewer";
+      } else modifiedRole = "supervisor";
+
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
       navigate.push({
-        pathname: `/${currentRole}/patients/details`,
+        pathname: `/${modifiedRole}/patients/details`,
         query: page,
       });
     } else {
       notification.warning({
-        message: data.patientId + " file not processed. Please wait.",
+        message: data?.patientId + " file not processed. Please wait.",
       });
     }
   };
 
   const handleTableRowClick = (id) => {
-    const clickedData = content.find((item) => item.patientId === id);
+    const clickedData = content?.find((item) => item.patientId === id);
     if (clickedData) {
       gotoPatientDetails(clickedData);
     } else {
