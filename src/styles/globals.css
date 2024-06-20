@@ -14539,7 +14539,7 @@ input::-webkit-inner-spin-button {
   width: 100% !important;
   border: 1px solid #a4caf9 !important;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 3px;
-  height: 45px;
+  min-height: 45px;
   display: flex;
   align-items: center;
   border-radius: 7px;
@@ -14568,7 +14568,7 @@ input::-webkit-inner-spin-button {
   align-items: flex-start;
   padding: 6px !important;
   outline: none;
-  width: 90% !important;
+  width: 100% !important;
 }
 .ant-select-outlined.ant-select-status-error:not(.ant-select-customize-input)
   .ant-select-selector {
@@ -14608,10 +14608,7 @@ input::-webkit-inner-spin-button {
 .ant-tree-title {
   padding: 10px !important;
 }
-.table th,
-.table td {
-  border: 1px solid #a4caf9;
-}
+
 
 .ant-spin-nested-loading {
   border: 1px solid #f0f0f0;

@@ -10,7 +10,7 @@ import Codes from "../../jsx/components/codes";
 import Riskadjustment from "../../components/riskadjustment";
 import { AutoComplete, Input } from "antd";
 import { Tree } from "antd";
-import index from "../reviewer/workingstatus";
+import { Spin } from "antd";
 
 const getRandomInt = (max, min = 0) =>
   Math.floor(Math.random() * (max - min + 1)) + min;
@@ -86,6 +86,7 @@ const Codify = ({
     setSearchInput(value?.[0]);
     setCurrentButton("Description");
     fetchCodeData(value);
+    setIndexData(null);
   };
 
   const onExpand = (expandedKeysValue) => {
@@ -94,9 +95,13 @@ const Codify = ({
   };
   function handleKeyDown(event) {
     if (event.keyCode === 13) {
-      fetchTreeData();
-      fetchCodeData();
-      fetchIndexData();
+      if (currentButton !== "Indexes") {
+        fetchTreeData();
+        fetchCodeData();
+      }
+      if (currentButton == "Indexes") {
+        fetchIndexData();
+      }
     }
   }
   const handleSearchButton = () => {
@@ -104,16 +109,21 @@ const Codify = ({
     fetchCodeData();
   };
 
-  const handleIndexClick = (value) => {
-    setSearchInput(value);
-    fetchIndexData(value);
-  
+  const handleIndexClick = (clickedWord) => {
+    const IndexWord = clickedWord.split(", ")[0];
+    setSearchInput(IndexWord);
+    fetchIndexData(IndexWord);
   };
-  const handleIndexCodeClick =(value)=>{
-    setSearchInput(value)
+  const handleIndexCodeClick = (value) => {
+    const code = value.split("-")[0];
+    setSearchInput(code);
     setCurrentButton("Description");
-    fetchCodeData(value);
-  }
+    fetchCodeData(code);
+    fetchTreeData(code);
+    setData(null);
+    setCodeData(null);
+    setParentCode(null);
+  };
 
   useEffect(() => {
     completeFetch();
@@ -161,61 +171,66 @@ const Codify = ({
     setLoading(false);
   };
 
-
   const convertToAntdIndexData = (node) => {
-    const { title, seeAlso, term, code, see, seeCat, subCat } = node;
-    const splitWords = (str) => {
-      if (!str) return [];
-      return str.split(" ").filter(word => word.trim() !== '')
-    };
-   const IndexNode = {
+    const { title, seeAlso, term, code, see, seeCat, subCat, manif } = node;
+    const IndexNode = {
       title: (
         <div className="d-flex gap-1">
           <span className={style.indextitle}>{title}</span>
-          {code && (
+
+          {seeAlso && (
             <span
+              onClick={() => handleIndexClick(seeAlso)}
               className={style.indexcode}
-              onClick={() => handleIndexCodeClick(code)}
             >
-              - {code}{" "}
+              See Also-{seeAlso}
             </span>
           )}
-           {seeAlso && (
-          <span className="">
-            -SeeAlso{" "}
-            {splitWords(seeAlso).map((word, index) => (
-              <span
-                key={index}
-                className={style.indexcode}
-                onClick={() => handleIndexClick(word)}
-              >
-                {word}{" "}
-              </span>
-            ))}
-          </span>
-        )}
-           {see && (
-          <span className="">
-            -See{" "}
-            {splitWords(see).map((word, index) => (
-              <span
-                key={index}
-                className={style.indexcode}
-                onClick={() => handleIndexClick(word)}
-              >
-                {word}{" "}
-              </span>
-            ))}
-          </span>
-        )}
+
+          {see && (
+            <span
+              onClick={() => handleIndexClick(see)}
+              className={style.indexcode}
+            >
+              <span className={style.head}>See-</span>{see}
+            </span>
+          )}
 
           {seeCat && (
-            <span className="">
-              -seeCategory <span className={style.indexcode}>{seeCat}</span>{" "}
+            <span
+              onClick={() => handleIndexClick(seeCat)}
+              className={style.indexcode}
+            >
+              {seeCat}
             </span>
           )}
 
-          {subCat && <span className="desc">{subCat}</span>}
+          {subCat && (
+            <span
+              onClick={() => handleIndexClick(subCat)}
+              className={style.indexcode}
+            >
+              [{subCat}]
+            </span>
+          )}
+
+          {code && (
+            <span
+              onClick={() => handleIndexCodeClick(code)}
+              className={style.indexcode}
+            >
+              - {code}
+            </span>
+          )}
+
+          {manif && (
+            <span
+              onClick={() => handleIndexClick(manif)}
+              className={style.indexcode}
+            >
+              [{manif}]
+            </span>
+          )}
         </div>
       ),
       children: term ? term.map(convertToAntdIndexData) : [],
@@ -490,6 +505,7 @@ const Codify = ({
                 setParentCode={setParentCode}
                 hideButton={hideButton}
                 setHideButton={setHideButton}
+                setIndexData={setIndexData}
               />
             )}
           </div>
