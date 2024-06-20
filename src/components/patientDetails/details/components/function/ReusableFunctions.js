@@ -682,7 +682,7 @@ export const getSectionNameManually = ({
         </Popover>
         <label
           className="cr-pointer px-4 pe-2 pt-2"
-          onClick={() => sectionEdit(res)}
+          onClick={() => sectionEdit(res, index)}
         >
           <FontAwesomeIcon icon={faPen} color="#04306f" />
         </label>

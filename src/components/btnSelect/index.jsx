@@ -12,9 +12,9 @@ const SelectButton = ({ select, setSelect, completed }) => {
             key={i}
             className={`d-inline-block p-2 px-4 ${Style.btns} ${
               completed.includes(i)
-                ? ` ${Style.textColor} `
-                : select === i
-                ? `${Style.btnColor} ${Style.active}`
+                ? `bg-success ${Style.textColor} ${select == i && Style.successActive}`
+                : select == i
+                ? `${Style.btnColor}`
                 : ""
             }`}
             onClick={() => setSelect(i)}

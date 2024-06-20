@@ -7,33 +7,22 @@
   background-color: #6c9ddd;
   color: #fff;
 }
-
 .btns {
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
-
-.btns:hover {
-  background-color: #2665b8;
-  color: #fff;
-}
-
 .containerBtn {
   border-radius: 20px;
   overflow: hidden;
   border: 1px solid #063069;
 }
-
 .textColor {
   color: #fff;
-  background-color: #043069;
-}
-.textColor:active {
-  color: #fff;
-  background-color: #2665b8;
 }
 
-.active {
-  background-color: #2665b8;
-  color: #fff; 
+.textColor:hover {
+  opacity: 0.8;
+}
+
+.successActive {
+  opacity: 0.8;
 }
