@@ -173,7 +173,7 @@ const Patient = ({
   }, []);
 
   useEffect(() => {
-    var orgListArray = [];
+    var orgListArray = [{value: "", label: "ALL"}];
     organizationList?.response?.map((res) => {
       orgListArray.push({
         value: res.id,
