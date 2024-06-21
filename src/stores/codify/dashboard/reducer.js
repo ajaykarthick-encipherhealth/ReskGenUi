@@ -9,7 +9,7 @@ import {autoCompleteAction} from "./actions";
 import {indexesAction} from "./actions";
 
 const initialState = {
-  loading: true,
+  loading: false,
   data: null,
   error: null,
 };

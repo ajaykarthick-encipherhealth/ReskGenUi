@@ -576,7 +576,7 @@ const Codify = ({
 
 const enhancer = connect(
   (state) => ({
-    codifyData1: state,
+    codifyData1: console.log(state,"state")
   }),
   {
     codifyData: dashbaordActions.codifyAction,
