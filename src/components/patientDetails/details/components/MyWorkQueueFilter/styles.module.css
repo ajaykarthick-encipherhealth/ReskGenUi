@@ -1,0 +1,56 @@
+.detailsContainer{
+  width: 300px;
+  /* display: grid; */
+  margin: 5px;
+
+}
+
+
+.popover {
+  position: absolute;
+  background: white;
+  right: -85%;
+  padding: 10px 12px;
+  text-align: left;
+  border: 1px solid #04306f;
+  border-radius: 4px;
+  box-shadow: 1px 4px 8px rgba(0,0,0,0.55);
+  margin-top: 5px;
+}
+
+.popover.right {
+  box-shadow: -1px 4px 8px rgba(0,0,0,0.55);
+}
+
+.popover:after {
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.popover:after {
+  right: 41px;
+  border-color: transparent;
+  border-right-color: #04306f;
+  border-width: 12px;
+  top: -24px;
+  transform: rotateZ(90deg);
+}
+
+.popover.right:after {
+  left: 100%;
+	border-color: transparent;
+	border-left-color: #04306f;
+}
+
+.popover h3 {
+  margin-top: 0; 
+  color: #443C5D;
+}
+
+.popover_content > *:last-child {
+  margin-bottom: 0; 
+}
