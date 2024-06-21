@@ -302,6 +302,7 @@ function FileProcessingTable({ patinetListAll, loading }) {
     }
 
     const currentIndex = stageChartMap[data?.processStageChart];
+    console.log(data?.processStageChart)
     const findPreviousStep = (currentStage) => {
       const stages = Object.keys(stageChartMap2);
       const currentIndex = stages.indexOf(currentStage);
@@ -488,6 +489,7 @@ function FileProcessingTable({ patinetListAll, loading }) {
     return (
       <div style={{ display: "flex" }}>
         <div style={{ width: "98%" }}>
+            {console.log(uploadStatus)}
           <div style={{ display: "flex" }}>
             <Tooltip
               title={data?.processStageChart
@@ -496,7 +498,7 @@ function FileProcessingTable({ patinetListAll, loading }) {
                 .join(" ")}
             >
               <Progress
-                percent={currentIndex?uploadStatus:`${stageChartMap[findPreviousStep(data?.processStageChart)]}0`}
+                percent={uploadStatus}
                 status="active"
                 style={{
                   height: "20px",
