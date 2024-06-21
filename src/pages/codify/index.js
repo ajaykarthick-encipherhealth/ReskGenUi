@@ -50,7 +50,11 @@ const Codify = ({
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [codeData, setCodeData] = useState([]);
-  const [noData, setNoData] = useState(false);
+  const [noData, setNoData] = useState({
+    codeData: false,
+    indexData: false,
+    data: false,
+  });
   const [searches, setSearches] = useState([]);
   const [options, setOptions] = useState([]);
   const [expandedKeys, setExpandedKeys] = useState([]);
@@ -70,6 +74,7 @@ const Codify = ({
     setParentCode(null);
   };
   const handleInputChange = (e) => {
+    setNoData({ codeData: false, indexData: false, data: false });
     setSearchInput(e.target.value);
     setParentCode(null);
   };
@@ -98,6 +103,7 @@ const Codify = ({
       if (currentButton !== "Indexes") {
         fetchTreeData();
         fetchCodeData();
+        fetchIndexData();
       }
       if (currentButton == "Indexes") {
         fetchIndexData();
@@ -113,6 +119,9 @@ const Codify = ({
     const IndexWord = clickedWord.split(", ")[0];
     setSearchInput(IndexWord);
     fetchIndexData(IndexWord);
+    setData(null);
+    setCodeData(null);
+    setParentCode(null);
   };
   const handleIndexCodeClick = (value) => {
     const code = value.split("-")[0];
@@ -126,7 +135,9 @@ const Codify = ({
   };
 
   useEffect(() => {
-    completeFetch();
+    if (currentButton !== "Indexes") {
+      completeFetch();
+    }
   }, [searchInput]);
 
   const handleSearchClick = (value) => {
@@ -135,7 +146,32 @@ const Codify = ({
     fetchCodeData(value);
     setHideButton(false);
   };
-
+  useEffect(() => {
+    if (
+      !data?.length &&
+      !indexData?.length &&
+      !codeData?.name &&
+      !searchInput?.length > 2
+    ) {
+      setNoData({ codeData: true, indexData: true, data: true });
+    } else if (
+      !data?.length &&
+      !indexData?.length &&
+      !searchInput?.length > 2
+    ) {
+      setNoData({ codeData: false, indexData: true, data: true });
+    } else if (!data?.length && !codeData?.name && !searchInput?.length > 2) {
+      setNoData({ codeData: true, indexData: false, data: true });
+    } else if (
+      !codeData?.name &&
+      !indexData?.length &&
+      !searchInput?.length > 2
+    ) {
+      setNoData({ codeData: true, indexData: true, data: false });
+    } else {
+      setNoData({ codeData: false, indexData: false, data: false });
+    }
+  }, [data, codeData, indexData, searchInput]);
   const convertToAntdTreeData = (node) => {
     const { name, desc, children, requiredCharacter } = node;
     const treeNode = {
@@ -161,29 +197,32 @@ const Codify = ({
     let treeData = await codifyData({ diseases: value ? value : searchInput });
     if (treeData?.status == "SUCCESS") {
       let temp = convertICDStructureToTreeData(treeData?.response);
-      if (!treeData?.response?.length) {
-        setNoData(true);
-      } else {
-        setNoData(false);
-      }
       setData(temp);
     }
     setLoading(false);
   };
+  
 
   const convertToAntdIndexData = (node) => {
     const { title, seeAlso, term, code, see, seeCat, subCat, manif } = node;
+
+    const modstr = (str) => {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    };
     const IndexNode = {
       title: (
         <div className="d-flex gap-1">
-          <span className={style.indextitle}>{title}</span>
-
+          <span className={style.indextitle}>
+            <span className={style.capital}>{modstr(title.charAt(0))}</span>
+            {title.slice(1)}
+          </span>
           {seeAlso && (
             <span
               onClick={() => handleIndexClick(seeAlso)}
               className={style.indexcode}
             >
-              See Also-{seeAlso}
+              <span className={style.head}> See Also-</span>
+              {seeAlso}
             </span>
           )}
 
@@ -192,7 +231,8 @@ const Codify = ({
               onClick={() => handleIndexClick(see)}
               className={style.indexcode}
             >
-              <span className={style.head}>See-</span>{see}
+              <span className={style.head}>See-</span>
+              {see}
             </span>
           )}
 
@@ -250,11 +290,7 @@ const Codify = ({
     });
     if (indexTreeData?.status == "SUCCESS") {
       let temp = convertIndexStructureToTreeData(indexTreeData?.response);
-      if (!indexTreeData?.response?.length) {
-        setNoData(true);
-      } else {
-        setNoData(false);
-      }
+
       setIndexData(temp);
     }
     setLoading(false);
@@ -328,13 +364,9 @@ const Codify = ({
       setData(null);
       setIndexData(null);
       setCodeData(null);
-      setNoData(false);
-    } else if (data && data.length === 0) {
-      setNoData(true);
-    } else {
-      setNoData(false);
     }
-  }, [searchInput, data, indexData]);
+  }, [searchInput, data, indexData, codeData]);
+
 
   return (
     <div className="container-fluid">
@@ -487,7 +519,19 @@ const Codify = ({
             ) : (
               <div></div>
             )}
-            {noData && (
+            {currentButton === "Codes" && noData?.data && (
+              <p className="d-flex justify-content-center">
+                "Uh oh! It seems there might be a typo. Please review your
+                spelling or try a different keyword."
+              </p>
+            )}
+            {currentButton === "Indexes" && noData?.indexData && (
+              <p className="d-flex justify-content-center">
+                "Uh oh! It seems there might be a typo. Please review your
+                spelling or try a different keyword."
+              </p>
+            )}
+            {currentButton === "Description" && noData?.codeData && (
               <p className="d-flex justify-content-center">
                 "Uh oh! It seems there might be a typo. Please review your
                 spelling or try a different keyword."

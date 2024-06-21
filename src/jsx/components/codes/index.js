@@ -21,8 +21,8 @@ const Codes = ({
   return (
     <div>
       <div className="d-flex justify-content-center">
-        {loading && <Spin size="large" />}
-      </div>
+          {loading && <Spin size="large" />}
+        </div>
       <div className="mt-1 p-3 antdstyle" ref={topRef}>
         <Tree
           ref={topRef}
