@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, use } from "react";
 import { actions as dashbaordActions } from "../../stores/codify/dashboard";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { Button, Empty } from "antd";
 import { SearchOutlined, CaretDownOutlined } from "@ant-design/icons";
 import style from "./style.module.css";
@@ -42,6 +42,7 @@ const Codify = ({
   recentsearch,
   completeData,
   indexesData,
+  codifyData1,
 }) => {
   const [showButtons, setShowButtons] = useState(false);
   const [currentButton, setCurrentButton] = useState("Codes");
@@ -62,7 +63,9 @@ const Codify = ({
   const [parentCode, setParentCode] = useState([]);
   const [hideButton, setHideButton] = useState(false);
   const [indexData, setIndexData] = useState([]);
-
+  const { loading: indexesDataLoading } = useSelector(
+    (state) => state.codify.codify.indexes
+  );
   const handleRiskAdjustment = () => {
     setActiveButton("Risk Adjustment");
     setShowButtons(false);
@@ -201,7 +204,6 @@ const Codify = ({
     }
     setLoading(false);
   };
-  
 
   const convertToAntdIndexData = (node) => {
     const { title, seeAlso, term, code, see, seeCat, subCat, manif } = node;
@@ -367,7 +369,6 @@ const Codify = ({
     }
   }, [searchInput, data, indexData, codeData]);
 
-
   return (
     <div className="container-fluid">
       <div className="row  mt-3 px-1">
@@ -507,6 +508,10 @@ const Codify = ({
             ) : (
               <div></div>
             )}
+            <div className="d-flex justify-content-center">
+              {indexesDataLoading && <Spin size="large" />}
+            </div>
+
             {currentButton === "Indexes" && indexData?.length ? (
               <div className="antdstyle">
                 <Tree
@@ -569,11 +574,16 @@ const Codify = ({
   );
 };
 
-const enhancer = connect((state) => ({ state }), {
-  codifyData: dashbaordActions.codifyAction,
-  codesData: dashbaordActions.codesAction,
-  recentsearch: dashbaordActions.searchesAction,
-  completeData: dashbaordActions.autoCompleteAction,
-  indexesData: dashbaordActions.indexesAction,
-});
+const enhancer = connect(
+  (state) => ({
+    codifyData1: state,
+  }),
+  {
+    codifyData: dashbaordActions.codifyAction,
+    codesData: dashbaordActions.codesAction,
+    recentsearch: dashbaordActions.searchesAction,
+    completeData: dashbaordActions.autoCompleteAction,
+    indexesData: dashbaordActions.indexesAction,
+  }
+);
 export default enhancer(Codify);
