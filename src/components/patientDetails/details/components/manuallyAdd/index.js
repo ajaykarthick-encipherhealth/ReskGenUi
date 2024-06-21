@@ -963,7 +963,6 @@ const ManuallyAdd = ({
     }
   }, [isEditMeat]);
 
-  console.log(isEditMeatValue);
   return (
     <>
       <div className="d-flex justify-content-between mb-4">
