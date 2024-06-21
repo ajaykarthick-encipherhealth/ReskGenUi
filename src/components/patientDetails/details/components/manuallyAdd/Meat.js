@@ -47,12 +47,13 @@ const Meat = ({
   isEdit,
   sectionEdit,
   handleEdit,
-  isEditMeat
+  isEditMeat,
+  isEditMeatValue
 }) => {
   return (
     <div>
       <div className="row">  
-      {!isEditMeat &&
+      {!isEditMeat ?
         <div className="col-12">
           <Form.Item
             label={
@@ -71,7 +72,33 @@ const Meat = ({
           >
             <Input name={`${checkMeatType(selectMeat)}Aspect`} />
           </Form.Item>
-        </div>}
+        </div> : 
+        <>
+        <div className="col-12">
+          <Form.Item
+            label={
+              <label>
+               Code
+              </label>
+            }
+          >
+            <Input value={isEditMeatValue.diagnosisCode} disabled/>
+          </Form.Item>
+        </div>
+        <div className="col-12">
+          <Form.Item
+            label={
+              <label>
+                Description
+              </label>
+            }
+            
+          >
+             <Input value={isEditMeatValue.diseaseName} disabled/>
+          </Form.Item>
+        </div>
+        </>
+        }
         <div className="col-12">
           <Form.Item
             label={
@@ -201,8 +228,8 @@ const Meat = ({
                 </label>
               </div>
               <AddSection
-                key={index}
-                id={index}
+                key={item}
+                id={item}
                 section={section}
                 selectMeat={selectMeat}
                 date={date}

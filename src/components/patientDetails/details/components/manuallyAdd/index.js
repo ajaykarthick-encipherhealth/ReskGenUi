@@ -962,6 +962,8 @@ const ManuallyAdd = ({
       setListOfSectionT(transformData(sectionListT));
     }
   }, [isEditMeat]);
+
+  console.log(isEditMeatValue);
   return (
     <>
       <div className="d-flex justify-content-between mb-4">
@@ -1184,8 +1186,8 @@ const ManuallyAdd = ({
                       </label>
                     </div>
                     <AddSection
-                      key={index}
-                      id={index}
+                      key={item}
+                      id={item}
                       section={section}
                       date={
                         getSelectedDos
@@ -1315,6 +1317,7 @@ const ManuallyAdd = ({
               sectionEdit={sectionEditMeat}
               handleEdit={handledEditMeat}
               isEditMeat={isEditMeat}
+              isEditMeatValue={isEditMeatValue}
             />
           </Form>
         </>
