@@ -1149,13 +1149,11 @@ const Details = ({
                   <Drawer
                     onClose={handleCloseModal}
                     open={isModalComments}                 
-                    style={{
-                      width:
+                    width={ 
                         flagContainerActiveTitle === "Timeline"
                           ? "460px"
-                          : "",
-                      overflow:"hidden"
-                    }}
+                          : null
+                    }
                     title={flagContainerActiveTitle}
                     className="myworkqueueDrawer"
                   >
