@@ -1155,12 +1155,10 @@ const Details = ({
                           : null
                     }
                     title={flagContainerActiveTitle}
+                    placement="right"
                     className="myworkqueueDrawer"
-                  >
-                    {/* <div className="offcanvas-header">
-                      <h5 className="modal-title" id="#gridSystemModal">
-                        {flagContainerActiveTitle}
-                      </h5>
+                    closable={false}
+                    extra={
                       <button
                         type="button"
                         className="btn-close"
@@ -1168,7 +1166,8 @@ const Details = ({
                       >
                         <i className="fa-solid fa-xmark"></i>
                       </button>
-                    </div> */}
+                    }
+                  >
                     {flagContainerActive == "Timeline" ? (
                       <Timeline
                         timelineData={timelineData}
