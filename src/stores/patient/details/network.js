@@ -65,7 +65,8 @@ export async function patientHccFile(fileId) {
     method: "GET",
   };
   const data = await requestPortal(
-    `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`,
+    // `aiservice/ai/getfile?fileId=${fileId}&tenantId=${tenId}`,
+    `management/patient/report/getfile/validator?blobName=${fileId}`,
     options
   );
   return data;

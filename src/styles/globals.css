@@ -14638,6 +14638,9 @@ input::-webkit-inner-spin-button {
 .dosSelect > .ant-select-selector {
   width: 150px !important;
   text-align: center;
+  font-size: 13px !important;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.25);
 }
 
 .ant-menu-light.ant-menu-inline .ant-menu-sub.ant-menu-inline {
@@ -14735,5 +14738,19 @@ input::-webkit-inner-spin-button {
   width: 82% !important;
   margin-left: 20px;
 } */
+.ant-select.myworkqueue_filter{
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+  border: none !important;
+  border-radius: 8px;
+}
+.ant-select.myworkqueue_filter:hover{ 
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
+  /* border: none !important; */
+}
+.myworkqueue_filter > .ant-select-selector{
+  border: none !important;
+}
+.myworkqueueDrawer > .ant-drawer-body{
+  overflow: hidden !important;
 
-
+}

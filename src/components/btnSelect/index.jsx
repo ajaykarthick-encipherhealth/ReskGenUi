@@ -9,9 +9,10 @@ const SelectButton = ({ select, setSelect, completed }) => {
       <span className={`d-inline-block ${Style.containerBtn}`}>
         {list.map((i) => (
           <div
+            key={i}
             className={`d-inline-block p-2 px-4 ${Style.btns} ${
               completed.includes(i)
-                ? `bg-success ${Style.textColor} `
+                ? `bg-success ${Style.textColor} ${select == i && Style.successActive}`
                 : select == i
                 ? `${Style.btnColor}`
                 : ""

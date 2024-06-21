@@ -18,3 +18,11 @@
 .textColor {
   color: #fff;
 }
+
+.textColor:hover {
+  opacity: 0.8;
+}
+
+.successActive {
+  opacity: 0.8;
+}

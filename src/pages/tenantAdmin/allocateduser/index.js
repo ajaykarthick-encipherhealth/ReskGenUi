@@ -103,10 +103,10 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
     sort,
     selectedOption,
     batchCount,
-    
+    selectOrgList
   }) => {
     const uId = localStorage.getItem("userId");
-    const orgId = localStorage.getItem("orgId");
+    const orgId = selectOrgList;
     let resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=${uId}&organizationId=${orgId}&computationStart=${
       startDate ? startDate : ""
     }&computationEnd=${endDate ? endDate : ""}&isAllocation=${
@@ -249,7 +249,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
   };
 
   const getAuditL2List = async (pageNo, searchString) => {
-    let orgId = localStorage.getItem("orgId");
+    let orgId = selectOrgList;
     let tenantid = localStorage.getItem("tenantId");
     let resoureUrl = `dbservice/l2audit?organizationId=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
@@ -321,7 +321,6 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
     selectOrgList
   ]);
   useEffect(() => {
-    console.log(selectOrgList);
     if (!isPatientList) {
       getAuditL2List(pageNo, searchStr, selectOrgList);
     }
@@ -332,7 +331,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
     }
   }, []);
   useEffect(() => {
-    var orgListArray = [{ value: "ALL", label: "ALL" }];
+    var orgListArray = [{ value: "", label: "ALL" }];
     organizationList?.response?.map((res) => {
       orgListArray.push({
         value: res.id,

@@ -70,6 +70,8 @@ const Combo = ({
   const [selectDisDetails, setSelectDisDetails] = useState("");
   const [meatCriteriaList, setMeatCriteriaList] = useState([]);
   const [zIndex, setZIndex] = useState(false);
+  const [allMeatList, setAllMeatList] = useState([]);
+
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -107,7 +109,9 @@ const Combo = ({
       "",
       "",
       "",
-      setInvalidComboDiseaseCodesList
+      setInvalidComboDiseaseCodesList,
+      setAllMeatList
+
     );
   }, [patientDetailsResult]);
 
@@ -245,7 +249,7 @@ const Combo = ({
               patientDocumentResult={patientDocumentResult}
               setActiveTabHead={setActiveTabHead}
               setActiveMeatTitle={setActiveMeatTitle}
-              meatCriteriaList={meatCriteriaList}
+              meatCriteriaList={allMeatList}
             />
           </div>
 
@@ -273,7 +277,7 @@ const Combo = ({
               patientDocumentResult={patientDocumentResult}
               setActiveTabHead={setActiveTabHead}
               setActiveMeatTitle={setActiveMeatTitle}
-              meatCriteriaList={meatCriteriaList}
+              meatCriteriaList={allMeatList}
             />
           </div>
         </div>
@@ -314,7 +318,7 @@ const Combo = ({
                   patientDocumentResult={patientDocumentResult}
                   setActiveTabHead={setActiveTabHead}
                   setActiveMeatTitle={setActiveMeatTitle}
-                  meatCriteriaList={meatCriteriaList}
+                  meatCriteriaList={allMeatList}
                   popup={zIndex}
                 />
               </div>

@@ -173,7 +173,7 @@ const Patient = ({
   }, []);
 
   useEffect(() => {
-    var orgListArray = [];
+    var orgListArray = [{value: "", label: "ALL"}];
     organizationList?.response?.map((res) => {
       orgListArray.push({
         value: res.id,
@@ -472,7 +472,7 @@ const Patient = ({
         selAllocatedBy,
         selCreatedBy,
         sort,
-        (orgId = selectOrgList?.value)
+        // (orgId = selectOrgList?.value)
       );
       eventStreming(
         ENDPOINTS,

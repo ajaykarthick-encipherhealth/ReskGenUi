@@ -19,7 +19,7 @@ import {
   faAngleDoubleLeft,
   faFile,
 } from "@fortawesome/free-solid-svg-icons";
-import { Avatar, Tooltip, Select, Badge, notification } from "antd";
+import { Avatar, Tooltip, Select, Badge, notification, Drawer } from "antd";
 import { IMAGES, SVGICON } from "../../../jsx/constant/theme";
 import { Button, Offcanvas } from "react-bootstrap";
 import Image from "next/image";
@@ -1146,22 +1146,19 @@ const Details = ({
 
                   {/* Modals */}
 
-                  <Offcanvas
-                    onHide={handleCloseModal}
-                    show={isModalComments}
-                    placement="end"
-                    className={`offcanvas-end ${visitStyles.commentDrawer}`}
-                    style={{
-                      width:
+                  <Drawer
+                    onClose={handleCloseModal}
+                    open={isModalComments}                 
+                    width={ 
                         flagContainerActiveTitle === "Timeline"
                           ? "460px"
-                          : "370px",
-                    }}
-                  >
-                    <div className="offcanvas-header">
-                      <h5 className="modal-title" id="#gridSystemModal">
-                        {flagContainerActiveTitle}
-                      </h5>
+                          : null
+                    }
+                    title={flagContainerActiveTitle}
+                    placement="right"
+                    className="myworkqueueDrawer"
+                    closable={false}
+                    extra={
                       <button
                         type="button"
                         className="btn-close"
@@ -1169,7 +1166,8 @@ const Details = ({
                       >
                         <i className="fa-solid fa-xmark"></i>
                       </button>
-                    </div>
+                    }
+                  >
                     {flagContainerActive == "Timeline" ? (
                       <Timeline
                         timelineData={timelineData}
@@ -1199,7 +1197,7 @@ const Details = ({
                         )}
                       </>
                     ) : null}
-                  </Offcanvas>
+                  </Drawer>
                 </div>
               </div>
 

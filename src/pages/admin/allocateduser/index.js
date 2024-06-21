@@ -177,10 +177,11 @@ export default function Patient() {
       dateString?.length > 0 &&
       dateString?.map((data, index) => {
         const formattedDate =
-          index === 1
-            ? data && `${data}T23:59:59.999Z`
-            : data && `${data}T00:00:00.000Z`;
-
+        index === 1
+        ? data &&
+          `${moment(data, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
+        : data &&
+          `${moment(data, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
         return formattedDate;
       });
     setStartDate(formattedDates[0]);
@@ -575,7 +576,7 @@ export default function Patient() {
                                 <label>Computed Date</label>
                                 <div>
                                   <RangePicker
-                                    format="YYYY-MM-DD"
+                                    format="MM-DD-YYYY"
                                     onChange={(dates, dateStrings) => {
                                       setDateRange(dateStrings);
                                       handleReceivedDatePicker(
