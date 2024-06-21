@@ -21,7 +21,7 @@ import { PhysicianDashboardReducer } from "../store/reducers/physicianReducers/D
 import { PhysicianComparisonReducer } from "../store/reducers/physicianReducers/ComparisionReducer";
 import { TanantAdminService } from "../store/reducers/tanantAdminReducers/fihrReducers";
 import { ReviewerReducers } from "../store/reducers/ReviewerReducers/ReviewerReducers";
-import { AuthReducer} from "./authflow/reducers";
+import { AuthReducer } from "./authflow/reducers";
 
 import { reducer as UpdateDashboardReducer } from "./reviewer/dashboard";
 import { reducer as updatedPatientsReducer } from "./reviewer/workqueue";
@@ -30,8 +30,9 @@ import { reducer as physicianReducer } from "./physician/dashboard";
 import { reducer as reportReducer } from "./reviewer/report";
 import { reducer as updatedReportReducer } from "./supervisor/report";
 import { reducer as updatedAdminReportReducer } from "./admin/report";
-import { reducer as patientDeatilsReducer } from "./patient/details"
-import { reducer as tenantAdminReducer } from "./tenantAdmin"
+import { reducer as patientDeatilsReducer } from "./patient/details";
+import { reducer as tenantAdminReducer } from "./tenantAdmin";
+import codifyReducer from "./codify/dashboard/reducer";
 
 const reducers = combineReducers({
   // old reducers
@@ -64,18 +65,20 @@ const reducers = combineReducers({
     workQueue: updatedPatientsReducer,
     report: reportReducer,
   }),
+
   supervisor: combineReducers({
     report: updatedReportReducer,
   }),
   admin: combineReducers({
     report: updatedAdminReportReducer,
   }),
+  codify: combineReducers({ codify: codifyReducer }),
   search: searchReducer,
   physician: combineReducers({
-    dashboard : physicianReducer
+    dashboard: physicianReducer,
   }),
   patientDetails: combineReducers({
-    details : patientDeatilsReducer
+    details: patientDeatilsReducer,
   }),
   tenantAdmin: tenantAdminReducer,
 });

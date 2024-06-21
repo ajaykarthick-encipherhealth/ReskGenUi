@@ -9,7 +9,7 @@ import {autoCompleteAction} from "./actions";
 import {indexesAction} from "./actions";
 
 const initialState = {
-  loading: true,
+  loading: false,
   data: null,
   error: null,
 };
@@ -37,7 +37,7 @@ const createReducer = (actionType) =>
     initialState
   );
   
-const dashbaordReducer = combineReducers({
+const codifyReducer = combineReducers({
   
   codify:createReducer(codifyAction),
   codes:createReducer(codesAction),
@@ -47,4 +47,4 @@ const dashbaordReducer = combineReducers({
   indexes:createReducer(indexesAction)
 });
 
-export default dashbaordReducer;
+export default codifyReducer;

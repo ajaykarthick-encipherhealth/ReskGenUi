@@ -51,10 +51,11 @@
   margin-top: 9px;
 }
 .code {
-  display: flex;
+  /* display: flex;
   flex-wrap: wrap;
   flex-direction: column;
-  align-items: center;
+  align-items: center; */
+  padding-left: 11px;
 }
 .card2 {
   border: 1px solid #0f6adb;

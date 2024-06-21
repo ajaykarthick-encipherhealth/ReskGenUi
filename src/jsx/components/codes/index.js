@@ -2,6 +2,7 @@ import React from "react";
 import { Empty, Tree } from "antd";
 import { Spin } from "antd";
 import { useRef } from "react";
+import { useSelector } from "react-redux";
 
 const Codes = ({
   data,
@@ -13,6 +14,7 @@ const Codes = ({
  
 }) => {
   const topRef = useRef(null);
+  const { loading:codifyDataLoading} = useSelector((state) =>state.codify.codify.codify)
 
   const scrollToTop = () => {
     topRef.current.scrollIntoView({ behavior: "smooth", top: 25 });
@@ -21,8 +23,8 @@ const Codes = ({
   return (
     <div>
       <div className="d-flex justify-content-center">
-        {loading && <Spin size="large" />}
-      </div>
+          {codifyDataLoading && <Spin size="large" />}
+        </div>
       <div className="mt-1 p-3 antdstyle" ref={topRef}>
         <Tree
           ref={topRef}
