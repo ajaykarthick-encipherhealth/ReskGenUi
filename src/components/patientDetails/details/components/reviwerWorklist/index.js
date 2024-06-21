@@ -1,24 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Tooltip, DatePicker } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClose, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { InputText } from "primereact/inputtext";
 import { Paginator } from "primereact/paginator";
-import moment from "moment";
 import { patientListFilter } from "../../../../../services/PatientsListSevice";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import LoadingSpinner from "../../../../../components/loadingSpinner";
-import { SVGICON } from "../../../../../jsx/constant/theme";
-import { disableFutureDate } from "../../../../../components/headerFilters/functions";
+import MyWorkQueueFilter from "../MyWorkQueueFilter";
 
 const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
-  const { RangePicker } = DatePicker;
-  const [showIcons, setShowIcons] = useState(false);
-  const [showCard, setShowCard] = useState(false);
-  const [openPicker, setOpenPicker] = useState(false);
-  const [openPicker2, setOpenPicker2] = useState(false);
   const [patientList, setPatientList] = useState([]);
-  const [processedStatus, setProcessedStatus] = useState("");
+  const [processedStatus, setProcessedStatus] = useState("ALL");
   const [searchtext, setSearchtext] = useState("");
   const [dueDateStart, setDueDateStart] = useState("");
   const [dueDateEnd, setDueDateEnd] = useState("");
@@ -28,11 +20,13 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [totalElements, setTotalElements] = useState(10);
   const [filterDataLoading, setFilterDataLoading] = useState(true);
+  const [selectCompletedPicker, setSelectCompletedPicker] = useState("");
+  const [selectComputedPicker, setSelectComputedPicker] = useState("");
 
   const getWorkList = async () => {
     var result = await patientListFilter(
       localUserId,
-      processedStatus,
+      processedStatus != "ALL" ? processedStatus : "",
       searchtext,
       dueDateStart,
       dueDateEnd,
@@ -40,9 +34,6 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
       processedEnd,
       pageNo
     );
-    setOpenPicker(false);
-    setOpenPicker2(false);
-    setShowCard(false);
     setPatientList(result?.response?.patientDTOList?.content);
     setTotalElements(result?.response?.patientDTOList?.totalElements);
     setFilterDataLoading(false);
@@ -55,70 +46,19 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
     setPaginationFirst(e.first);
     setPageNo(e.page);
   };
-
-  const handleFilterClick = () => {
-    setShowIcons(!showIcons);
-    setShowCard(false);
-    setOpenPicker(false);
-    setOpenPicker2(false);
-  };
-  const closeFilterIcons = async () => {
-    setShowIcons(false);
-    setOpenPicker(false);
-    setOpenPicker2(false);
-    var result = await patientListFilter(
-      localUserId,
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      0
-    );
-    setPatientList(result?.response?.patientDTOList?.content);
-    setTotalElements(result?.response?.patientDTOList?.totalElements);
-  };
-
-  const handleShowCard = () => {
-    setShowCard((prevShowCard) => !prevShowCard);
-  };
-
   const getPatientListToDetails = (id) => {
     setWorkListPatientId(id);
   };
-
-  const handleDatePickerChange = async (dateString) => {
-    let convertStartDate =
-      moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
-    let convertEndDate =
-      moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
-    setDueDateStart(convertStartDate);
-    setDueDateEnd(convertEndDate);
-    setOpenPicker(false);
-  };
-
-  const handleChangeprocessedDate = async (dateString) => {
-    let convertStartDate =
-      moment(dateString[0]).format("YYYY-MM-DD") + "T00:00:00.000Z";
-    let convertEndDate =
-      moment.utc(dateString[1]).format("YYYY-MM-DD") + "T23:59:59.000Z";
-    setProcessedStart(convertStartDate);
-    setProcessedEnd(convertEndDate);
-    setOpenPicker2(false);
-  };
-  const getFiltePatientListStatus = async (value) => {
-    if (value == "ALL") {
-      value = "";
-    }
-    setProcessedStatus(value);
-    setOpenPicker(false);
-    setOpenPicker2(false);
-  };
-
-  const statuses = ["ALL", "PENDING", "COMPLETED", "HOLD", "DECLINED"];
+  const statuses = [
+    { label: "ALL", value: "ALL" },
+    { label: "PENDING", value: "PENDING" },
+    { label: "COMPLETED", value: "COMPLETED" },
+    { label: "HOLD", value: "HOLD" },
+    { label: "DECLINED", value: "DECLINED" },
+  ];
 
   useEffect(() => {
+    setFilterDataLoading(true);
     getWorkList();
   }, [
     processedStatus,
@@ -176,106 +116,30 @@ const ReviwerWorkList = ({ localUserId, setWorkListPatientId }) => {
                 }
               }}
             />
-            <RangePicker
-              open={openPicker}
-              onChange={(dates, dateStrings) => {
-                handleDatePickerChange(dateStrings);
-              }}
-              suffixIcon={false}
-              className={visitStyles.datepicker}
-              disabledDate={(current) => disableFutureDate(current)}
-            />
-            <RangePicker
-              open={openPicker2}
-              onChange={(dates, dateStrings) => {
-                handleChangeprocessedDate(dateStrings);
-              }}
-              suffixIcon={false}
-              className={visitStyles.datepicker}
-              disabledDate={(current) => disableFutureDate(current)}
-            />
           </div>
         </div>
 
         <div className="col-xl-3">
           <div className={visitStyles.content}>
-            <span
-              className={visitStyles.circleCard}
-              onClick={handleFilterClick}
-            >
-              <span></span>
-              {showIcons ? (
-                <FontAwesomeIcon
-                  icon={faClose}
-                  height={30}
-                  width={30}
-                  color="#A20404"
-                  onClick={() => {
-                    closeFilterIcons(false);
-                    setOpenPicker(false);
-                    setOpenPicker2(false);
-                    setShowCard(false);
-                  }}
-                />
-              ) : (
-                SVGICON.filter
-              )}
-            </span>
-            {showIcons && (
-              <div className={visitStyles.iconContainer}>
-                <Tooltip title="Status" placement="left">
-                  <span
-                    className={visitStyles.circleCard}
-                    onClick={handleShowCard}
-                  >
-                    {SVGICON.dashboard}
-                  </span>
-                </Tooltip>
-                <Tooltip title="Due Date" placement="left">
-                  <span
-                    className={visitStyles.circleCard}
-                    onClick={() => {
-                      setOpenPicker(!openPicker);
-                      setOpenPicker2(false);
-                      setShowCard(false);
-                    }}
-                  >
-                    {SVGICON.dateIcon}
-                  </span>
-                </Tooltip>
-                <Tooltip title="Completed Date" placement="left">
-                  <span
-                    className={visitStyles.circleCard}
-                    onClick={() => {
-                      setOpenPicker2(!openPicker2);
-                      setOpenPicker(false);
-                      setShowCard(false);
-                    }}
-                  >
-                    {SVGICON.dateIcon}
-                  </span>
-                </Tooltip>
-              </div>
-            )}
-            {showCard && (
-              <div
-                className={visitStyles.menuCard}
-                onMouseEnter={() => setShowCard(true)}
-                onMouseLeave={() => setShowCard(false)}
-              >
-                <ul>
-                  {statuses.map((status, index) => (
-                    <li
-                      onClick={() => getFiltePatientListStatus(status)}
-                      className={visitStyles.nameList}
-                      key={index}
-                    >
-                      {status}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            <MyWorkQueueFilter
+              setComputedStartDate={setProcessedStart}
+              setComputedEndDate={setProcessedEnd}
+              setCompletedStartDate={setDueDateStart}
+              setCompletedEndDate={setDueDateEnd}
+              completedStartDate={dueDateStart}
+              completedEndDate={dueDateEnd}
+              computedStartDate={processedStart}
+              computedEndDate={processedEnd}
+              selectedOption={processedStatus}
+              setSelectedOption={setProcessedStatus}
+              statusOptions={statuses}
+              selectCompletedPicker={selectCompletedPicker}
+              setSelectCompletedPicker={setSelectCompletedPicker}
+              selectComputedPicker={selectComputedPicker}
+              setSelectComputedPicker={setSelectComputedPicker}
+              datePicker1Lable="Due Date"
+              datePicker2Lable="Completed Date"
+            />
           </div>
         </div>
         {!filterDataLoading ? (
