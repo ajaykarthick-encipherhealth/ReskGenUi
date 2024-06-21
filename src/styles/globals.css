@@ -38,6 +38,10 @@ body {
   font-family: "Manrope", sans-serif !important;
 }
 
+.app-text {
+  color: var(--app-primary);
+}
+
 .container,
 .container-fluid,
 .container-sm,
