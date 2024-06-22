@@ -229,7 +229,7 @@ const Meat = ({
               </div>
               <AddSection
                 key={item}
-                id={item}
+                id={item - 1 }
                 section={section}
                 selectMeat={selectMeat}
                 date={date}

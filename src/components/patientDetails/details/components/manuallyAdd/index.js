@@ -581,7 +581,7 @@ const ManuallyAdd = ({
     selected.setSection("");
     selected.setShow(true);
   };
-
+console.log(listOfSectionM, listOfSectionE, "testing");
   const handleMeatSubmit = async () => {
     let data = {};
     const forms = form.getFieldsValue();
@@ -698,13 +698,14 @@ const ManuallyAdd = ({
     if (validCode.toLowerCase() == "valid code") {
       try {
         let res = {};
-        if (isEditPage) {
-          res = await diseaseEdit(data);
-        } else if (isEditMeat) {
-          res = await diseaseEditMeat(data);
-        } else {
-          res = await manuallyAdd(data);
-        }
+        console.log(data);
+        // if (isEditPage) {
+        //   res = await diseaseEdit(data);
+        // } else if (isEditMeat) {
+        //   res = await diseaseEditMeat(data);
+        // } else {
+        //   res = await manuallyAdd(data);
+        // }
 
         if (res?.status == "SUCCESS") {
           handleCloseModal(false);
