@@ -500,6 +500,7 @@ const File = ({
         setConfirmNotesModalValid={setConfirmNotesModalValid}
         isValidAction={isValidAction}
         selectDisDetails={selectDisDetails}
+        dragMovemntAction={true}
       />
 
       <ModelIndex

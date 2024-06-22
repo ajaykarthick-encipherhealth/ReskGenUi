@@ -121,7 +121,7 @@ const Combo = ({
     }
   }, [hccFileDetails]);
 
-  const onchangeCombo = (data, code) => {
+  const onchangeCombo = (code, data) => {
     var title = data.diagnosisCodeCombo;
     data.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
     data.processedYear = patientDetailsResult?.data?.response?.processedYear;
@@ -250,6 +250,7 @@ const Combo = ({
               setActiveTabHead={setActiveTabHead}
               setActiveMeatTitle={setActiveMeatTitle}
               meatCriteriaList={allMeatList}
+              cardTitle="VALID_COMBO"
             />
           </div>
 
@@ -278,6 +279,8 @@ const Combo = ({
               setActiveTabHead={setActiveTabHead}
               setActiveMeatTitle={setActiveMeatTitle}
               meatCriteriaList={allMeatList}
+              cardTitle="DELETED_COMBO"
+
             />
           </div>
         </div>
@@ -320,6 +323,7 @@ const Combo = ({
                   setActiveMeatTitle={setActiveMeatTitle}
                   meatCriteriaList={allMeatList}
                   popup={zIndex}
+                  cardTitle="VALID_COMBO"
                 />
               </div>
               <div className="col-xl-7">

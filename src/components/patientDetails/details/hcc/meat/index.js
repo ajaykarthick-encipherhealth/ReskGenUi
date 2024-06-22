@@ -110,10 +110,12 @@ const Meat = ({
     }
   }, [hccFileDetails]);
 
-  const onchangeMeat = (data) => {
+  const onchangeMeat  = (code, data) => {
     var title = data.diagnosisCode + " - " + data.diseaseName;
     data.processedYear = patientDetailsResult?.data?.response?.processedYear;
     data.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
+    data.actualDescription =  data.diseaseName,
+    data.dbDescription =  data.diseaseName,
     (data.fileId = patientDetailsResult?.data?.response?.fileId),
       setSelectDiseasesName(title);
     setSelectDisDetails(data);
@@ -285,6 +287,7 @@ const Meat = ({
         setMeatEdit={setMeatEdit}
         addMeatQuery={addMeatQuery}
         getDisTitlePopover={getDisTitlePopover}
+        cardTitle="VALID_MEAT"
       />
 
       {deletedMeatList?.length != 0 && (
@@ -317,6 +320,7 @@ const Meat = ({
             setMeatEdit={setMeatEdit}
             addMeatQuery={addMeatQuery}
             getDisTitlePopover={getDisTitlePopover}
+             cardTitle="DELETED_MEAT"
           />
         </>
       )}
