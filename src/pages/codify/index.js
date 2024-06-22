@@ -413,9 +413,9 @@ const Codify = ({
                   onKeyDown={handleKeyDown}
                 />
               </AutoComplete>
-              <div className="">
-                <Button
-                  className={style.search}
+              <div className="antdbutton">
+                <Button className={`${style.search} ` }
+                  // className={style.search}
                   icon={<SearchOutlined className={style.btncolor} />}
                   onClick={handleSearchButton}
                 />

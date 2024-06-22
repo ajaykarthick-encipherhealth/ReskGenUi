@@ -14758,3 +14758,8 @@ input::-webkit-inner-spin-button {
   overflow: hidden !important;
 
 }
+.antdbutton .ant-btn-default:not(:disabled):not(.ant-btn-disabled):hover {
+  color: #4096ff;
+  border-color: rgb(36, 21, 113) !important;
+   background: rgb(36, 21, 113) !important;
+}
