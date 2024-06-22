@@ -14547,7 +14547,7 @@ input::-webkit-inner-spin-button {
   display: flex;
   align-items: center;
   border-radius: 7px;
-  font-size: 13px;
+  font-size: 14px;
 }
 .collapsestyle .ant-collapse-item {
   border-bottom: none !important;
@@ -14619,7 +14619,7 @@ input::-webkit-inner-spin-button {
 }
 .ant-tree-show-line .ant-tree-indent-unit {
   position: relative;
-  height: 150% !important;
+  height: 130% !important;
 }
 .ant-tree-switcher-leaf-line {
   height: 150% !important;
