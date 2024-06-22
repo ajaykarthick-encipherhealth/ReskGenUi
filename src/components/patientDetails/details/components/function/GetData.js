@@ -632,7 +632,7 @@ export const getPatientDetails = async (
               encounterDate: res.encounterDate,
               encounterDateSplit: res.dateOfService,
               hyperlinks: res?.hyperlinks,
-              dateOfServices: res.dateOfServices,
+              dateOfServices: res.dateOfService,
             });
           }
         }
@@ -678,7 +678,7 @@ export const getPatientDetails = async (
             encounterDate: res.encounterDate,
             encounterDateSplit: res.dateOfService,
             hyperlinks: res?.hyperlinks,
-            dateOfServices: res.dateOfServices,
+            dateOfServices: res.dateOfService,
           });
         }
       });

@@ -750,6 +750,7 @@ const VisitData = ({
         setConfirmNotesModalValid={setConfirmNotesModalValid}
         isValidAction={isValidAction}
         selectDisDetails={selectDisDetails}
+        dragMovemntAction={true}
       />
 
       {opens && combiTree[0]?.children?.length > 0 ? (
