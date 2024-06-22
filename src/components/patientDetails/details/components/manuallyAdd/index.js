@@ -221,13 +221,13 @@ const ManuallyAdd = ({
   const handledSave = (form) => {
     const res = sectionCount.map((item, i) => ({
       header: section,
-      dateOfService: form[`encounterDate_${section?.replaceAll(" ", "-")}_${i}`]
+      dateOfService: form[`encounterDate_${section?.replaceAll(" ", "-")}_${item}`]
         ? moment(
-            form[`encounterDate_${section?.replaceAll(" ", "-")}_${i}`]
+            form[`encounterDate_${section?.replaceAll(" ", "-")}_${item}`]
           ).format("YYYY-MM-DD")
         : "",
-      substring: form[`referance_${section?.replaceAll(" ", "-")}_${i}`],
-      pageNumber: form[`pageNumber_${section?.replaceAll(" ", "-")}_${i}`],
+      substring: form[`referance_${section?.replaceAll(" ", "-")}_${item}`],
+      pageNumber: form[`pageNumber_${section?.replaceAll(" ", "-")}_${item}`],
     }));
     setDiagnosisForm(form);
     setListOfSection((prev) => {
@@ -384,14 +384,14 @@ const ManuallyAdd = ({
         `encounterDate_${selectedSection?.replaceAll(
           " ",
           "-"
-        )}_${selectMeat}_${i}`
+        )}_${selectMeat}_${item}`
       ]
         ? moment(
             form[
               `encounterDate_${selectedSection?.replaceAll(
                 " ",
                 "-"
-              )}_${selectMeat}_${i}`
+              )}_${selectMeat}_${item}`
             ]
           ).format("YYYY-MM-DD")
         : "",
@@ -400,14 +400,14 @@ const ManuallyAdd = ({
           `referance_${selectedSection?.replaceAll(
             " ",
             "-"
-          )}_${selectMeat}_${i}`
+          )}_${selectMeat}_${item}`
         ],
       pageNumber:
         form[
           `pageNumber_${selectedSection?.replaceAll(
             " ",
             "-"
-          )}_${selectMeat}_${i}`
+          )}_${selectMeat}_${item}`
         ],
     }));
 
@@ -706,7 +706,7 @@ const ManuallyAdd = ({
           res = await manuallyAdd(data);
         }
 
-        if (res.status == "SUCCESS") {
+        if (res?.status == "SUCCESS") {
           handleCloseModal(false);
           getResponePopup(res);
           form.resetFields();
