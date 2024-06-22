@@ -175,6 +175,7 @@ const Codify = ({
       setNoData({ codeData: false, indexData: false, data: false });
     }
   }, [data, codeData, indexData, searchInput]);
+
   const convertToAntdTreeData = (node) => {
     const { name, desc, children, requiredCharacter } = node;
     const treeNode = {
@@ -415,7 +416,6 @@ const Codify = ({
               </AutoComplete>
               <div className="antdbutton">
                 <Button className={`${style.search} ` }
-                  // className={style.search}
                   icon={<SearchOutlined className={style.btncolor} />}
                   onClick={handleSearchButton}
                 />
@@ -513,7 +513,7 @@ const Codify = ({
             </div>
 
             {currentButton === "Indexes" && indexData?.length ? (
-              <div className="antdstyle">
+              <div className=" mt-1 antdstyle">
                 <Tree
                   showLine={true}
                   treeData={indexData}

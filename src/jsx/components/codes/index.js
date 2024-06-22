@@ -25,7 +25,7 @@ const Codes = ({
       <div className="d-flex justify-content-center">
           {codifyDataLoading && <Spin size="large" />}
         </div>
-      <div className="mt-1 p-3 antdstyle" ref={topRef}>
+      <div className="mt-1  antdstyle" ref={topRef}>
         <Tree
           ref={topRef}
           showLine={true}
