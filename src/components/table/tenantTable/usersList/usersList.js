@@ -25,7 +25,13 @@ const items = [
   { value: "SUPERVISOR", label: "Supervisor", role: "SUPERVISOR" },
 ];
 
-const UserList = ({ userList, sortOrder, setSortOrder, setSort,usersList }) => {
+const UserList = ({
+  userList,
+  sortOrder,
+  setSortOrder,
+  setSort,
+  usersList,
+}) => {
   const usersData = usersList;
   const dispatch = useDispatch();
   const [checkedd, setChecked] = useState();
@@ -36,13 +42,21 @@ const UserList = ({ userList, sortOrder, setSortOrder, setSort,usersList }) => {
   const [popoverVisible, setPopoverVisible] = useState(true);
   const [openManager, setOpenManager] = useState(false);
   const [selectedManager, setSelectedManager] = useState();
-
+  const [switchStates, setSwitchStates] = useState({});
   const selectUserList = useSelector(
     (state) => state?.AdminDashboardReducers?.selectedUsers
   );
+
   const onChange = (item, checked) => {
-    setRowData(item);
-    setChecked(checked ? "yes" : "no");
+    setSwitchStates((prevState) => ({
+      ...prevState,
+      [item.email]: checked,
+    }));
+    dispatch(enableUser(checked ? "yes" : "no", item)).then(() => {
+      setTimeout(() => {
+        window.location.reload();
+      }, 200);
+    });
   };
 
   const handleRows = (value) => {
@@ -125,6 +139,15 @@ const UserList = ({ userList, sortOrder, setSortOrder, setSort,usersList }) => {
     dispatch(enableUser(checkedd, rowData));
     dispatch(getSelectUserList("REVIEWER"));
   }, [checkedd, rowData]);
+  useEffect(() => {
+    if (usersData?.data?.response?.content) {
+      const initialSwitchStates = {};
+      usersData.data.response.content.forEach((user) => {
+        initialSwitchStates[user.email] = user.accountStatus;
+      });
+      setSwitchStates(initialSwitchStates);
+    }
+  }, [usersData]);
 
   return (
     <div className={TableStyle.classContaineer}>
@@ -136,9 +159,13 @@ const UserList = ({ userList, sortOrder, setSortOrder, setSort,usersList }) => {
             <tr>
               <th className={TableStyle.rowEmailStyle}>NAME</th>
               <th style={{ paddingLeft: "20px" }}>EMAIL</th>
-              <th style={{
+              <th
+                style={{
                   textAlign: "center",
-                }}>ORGANIZATION</th>
+                }}
+              >
+                ORGANIZATION
+              </th>
               <th
                 style={{
                   textAlign: "center",
@@ -245,10 +272,14 @@ const UserList = ({ userList, sortOrder, setSortOrder, setSort,usersList }) => {
                     style={{
                       backgroundColor:
                         item.accountStatus === true ? "" : "#0000001a",
-                        textAlign: "center",
+                      textAlign: "center",
                     }}
                   >
-                    <span>{item?.organizationDTO?.name ? item?.organizationDTO?.name : "---"}</span>
+                    <span>
+                      {item?.organizationDTO?.name
+                        ? item?.organizationDTO?.name
+                        : "---"}
+                    </span>
                   </td>
                   <td
                     className={TableStyle.childBorder}
@@ -372,7 +403,11 @@ const UserList = ({ userList, sortOrder, setSortOrder, setSort,usersList }) => {
                   )}
 
                   <td
-                    className={usersData?.data?.response?.content?.length > 0 ? TableStyle.lastBorder : TableStyle.noDataBorder }
+                    className={
+                      usersData?.data?.response?.content?.length > 0
+                        ? TableStyle.lastBorder
+                        : TableStyle.noDataBorder
+                    }
                     style={{
                       height: "40px !important",
                       textAlign: "center",
@@ -380,8 +415,9 @@ const UserList = ({ userList, sortOrder, setSortOrder, setSort,usersList }) => {
                         item.accountStatus === true ? "" : "#0000001a",
                     }}
                   >
+                    {console.log(item?.accountStatus, "status")}
                     <Switch
-                      defaultChecked={item?.accountStatus}
+                      checked={switchStates[item.email]}
                       onChange={(checked) => {
                         onChange(item, checked);
                         setPopoverVisible(true);
@@ -404,9 +440,7 @@ const UserList = ({ userList, sortOrder, setSortOrder, setSort,usersList }) => {
   );
 };
 
-const enhancer = connect(
-  (state) => ({
-    usersList: state?.tenantAdmin?.allUsers,
-  }),
-);
+const enhancer = connect((state) => ({
+  usersList: state?.tenantAdmin?.allUsers,
+}));
 export default enhancer(UserList);
