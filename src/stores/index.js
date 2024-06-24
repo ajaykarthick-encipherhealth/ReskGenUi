@@ -30,8 +30,9 @@ import { reducer as physicianReducer } from "./physician/dashboard";
 import { reducer as reportReducer } from "./reviewer/report";
 import { reducer as updatedReportReducer } from "./supervisor/report";
 import { reducer as updatedAdminReportReducer } from "./admin/report";
-import { reducer as patientDeatilsReducer } from "./patient/details";
+import { reducer as patientDeatilsReducer } from "./patient/details"
 import { reducer as tenantAdminReducer } from "./tenantAdmin";
+import { reducer as webSocketReducer } from "./websocket"
 import codifyReducer from "./codify/dashboard/reducer";
 
 const reducers = combineReducers({
@@ -81,6 +82,7 @@ const reducers = combineReducers({
     details: patientDeatilsReducer,
   }),
   tenantAdmin: tenantAdminReducer,
+  webSocket:webSocketReducer
 });
 
 const middlewares = [thunkMiddleware, promiseMiddleware];

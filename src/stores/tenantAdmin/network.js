@@ -24,14 +24,15 @@ export async function getAllOrganization() {
   return data;
 }
 
-export async function getallUsers({ pageCount = 0,
+export async function getallUsers({
+  pageCount = 0,
   search = "",
   startDate = "",
   endDate = "",
   status = "",
   role = "",
   sort,
-  orgId=""
+  orgId = "",
 }) {
   const options = {
     method: "GET",
@@ -121,5 +122,18 @@ export async function getAllTracking(datas) {
     }&sortdirection=${datas?.sort?.sortDir ? datas?.sort?.sortDir : ""}`,
     options
   );
+  return data;
+}
+
+export async function getAllFileProcess(
+  searchstring = "",
+  status = "",
+  startdate = "",
+  enddate = ""
+) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(`dbservice/file-process/status`, options);
   return data;
 }
