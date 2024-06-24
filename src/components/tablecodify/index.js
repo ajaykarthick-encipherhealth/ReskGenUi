@@ -57,6 +57,7 @@ const Tables = (props) => {
       setParentCode(tableData?.response?.parentData);
     }
     setLoading(false);
+ 
   };
 
   const handleViewTable = (tableData, index) => {
@@ -94,6 +95,7 @@ const Tables = (props) => {
     setLoading(false);
     fetchCodeData(tableData?.name);
     setSearchInput(tableData?.name);
+  
   };
 
   const handleBack = () => {

@@ -33,12 +33,36 @@ const ModelIndex = ({
   getpatientDetailsData,
   patientDetailsResult,
   getRadiologyDetails,
-  getLabDetails
+  getLabDetails,
+  dragMovemntAction
 }) => {
   const [form] = Form.useForm();
   const { TextArea } = Input;
   const dispatch = useDispatch();
   return (
+    <>
+    {dragMovemntAction ?
+      <>
+      <Modal
+      title="Are you sure to want move?"
+      open={openState}
+      centered
+      onOk={() =>  handleSubmitValidNotes({
+        setFileLoading,
+        setConfirmNotesModalValid,
+        getPatientDetailsReload,
+        isValidAction,
+        selectDisDetails,
+        getpatientDetailsData,
+        patientDetailsResult,
+        getLabDetails,
+        getRadiologyDetails,
+        handleCloseModal
+      })
+    }
+      onCancel={() => handleCloseModal()}
+    ></Modal>
+      </> :
     <Modal
       title={title}
       centered
@@ -146,7 +170,8 @@ const ModelIndex = ({
           selectedData={selectedData}
         />
       )}
-    </Modal>
+    </Modal>}
+    </>
   );
 };
 

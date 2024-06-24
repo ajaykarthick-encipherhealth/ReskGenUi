@@ -81,3 +81,12 @@
 .indextitle{
   font-size: 14px;
 }
+.head{
+  color:black;
+  font-weight: 400;
+  font-style: italic;
+}
+.capital{
+  font-weight: 700;
+  font-size: 15px;
+}

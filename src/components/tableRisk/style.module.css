@@ -13,10 +13,23 @@
 }
 .card {
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-  /* width:100%; */
-  height: 330px;
+  min-height: 250px;
 }
 .code {
   color: #04306f;
   font-weight: 600;
+}
+.year{
+  border:1px solid #04306F;
+  padding:5px;
+  border-radius: 6px;
+}
+.theader{
+ 
+  border:1px solid #04306F;
+  padding:5px;
+  border-radius: 6px;
+  margin-left:10px;
+    
+  
 }

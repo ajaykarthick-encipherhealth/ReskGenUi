@@ -80,6 +80,8 @@ const File = ({
   const [formValues, setFormValues] = useState(false);
   const [formEditPlace, setFormEditPlace] = useState("");
   const [allDisList, setAllDisList] = useState([]);
+  const [allMeatList, setAllMeatList] = useState([]);
+
 
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
@@ -97,7 +99,13 @@ const File = ({
       patientDetailsResult,
       dispatch,
       sectionColorList,
-      setAllDisList
+      setAllDisList,
+      "",
+      "",
+      "",
+      "",
+      "",
+      setAllMeatList
     );
   }, [patientDetailsResult]);
 
@@ -240,7 +248,7 @@ const File = ({
                             hccVersionDetails={hccVersionDetails}
                             captureSectionMatching={captureSectionMatching}
                             encounterDateMatching={encounterDateMatching}
-                            meatCriteriaList={meatCriteriaList}
+                            meatCriteriaList={allMeatList}
                             onchangeValid={onchangeValid}
                             getValidHccDetails={getValidHccDetails}
                             setFormValues={setFormValues}
@@ -377,7 +385,7 @@ const File = ({
                             hccVersionDetails={hccVersionDetails}
                             captureSectionMatching={captureSectionMatching}
                             encounterDateMatching={encounterDateMatching}
-                            meatCriteriaList={meatCriteriaList}
+                            meatCriteriaList={allMeatList}
                             onchangeValid={onchangeValid}
                             getValidHccDetails={getValidHccDetails}
                             setFormValues={setFormValues}
@@ -445,7 +453,7 @@ const File = ({
                               hccVersionDetails={hccVersionDetails}
                               captureSectionMatching={captureSectionMatching}
                               encounterDateMatching={encounterDateMatching}
-                              meatCriteriaList={meatCriteriaList}
+                              meatCriteriaList={allMeatList}
                               onchangeValid={onchangeValid}
                               getValidHccDetails={getValidHccDetails}
                               setFormValues={setFormValues}
@@ -492,6 +500,7 @@ const File = ({
         setConfirmNotesModalValid={setConfirmNotesModalValid}
         isValidAction={isValidAction}
         selectDisDetails={selectDisDetails}
+        dragMovemntAction={true}
       />
 
       <ModelIndex

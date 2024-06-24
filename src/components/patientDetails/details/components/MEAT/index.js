@@ -14,6 +14,7 @@ import { SVGICON } from "../../../../../jsx/constant/theme";
 
 import { connect } from "react-redux";
 import { getProviderNameTag } from "../function/ProviderHyperlinks";
+import MovementAction from "../movementAction";
 
 const MeatCard = ({
   list,
@@ -40,6 +41,7 @@ const MeatCard = ({
   addMeatQuery,
   onchangeMeat,
   getDisTitlePopover,
+  cardTitle,
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
@@ -382,6 +384,24 @@ const MeatCard = ({
                             />
                           </div>
                         </Popconfirm> */}
+
+                        <div className={styles.meatActionIcon}>
+                        <MovementAction
+                          validAction={
+                            cardTitle == "DELETED_MEAT" ? true : false
+                          }
+                          deleteAction={
+                            cardTitle == "VALID_MEAT" ? true : false
+                          }
+                          setIsValidAction={setIsValidAction}
+                          cardTitle="MEAT"
+                          setConfirmNotesModalValid={setConfirmNotesModalValid}
+                          onchangeValid={onchangeMeat}
+                          result={item}
+                          setFileLoading={setFileLoading}
+                        />
+                          </div>
+
                         <Tooltip title="Edit">
                           <div
                             className={visitStyles.edit_icon}

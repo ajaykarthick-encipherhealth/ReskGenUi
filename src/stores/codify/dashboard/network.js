@@ -6,7 +6,7 @@ export const codify = async ({ diseases }) => {
     method: "GET",
   };
   const url = `q=${diseases}`;
-  const data = await requestPortal(`dbservice/getDiags?${url}`, options);
+  const data = await requestPortal(`management/getDiags?${url}`, options);
   return data;
 };
 
@@ -15,7 +15,7 @@ export const codes = async ({ code }) => {
     method: "GET",
   };
   const url = `q=${code}`;
-  const data = await requestPortal(`dbservice/getDiagDetails?${url}`, options);
+  const data = await requestPortal(`management/getDiagDetails?${url}`, options);
   return data;
 };
 
@@ -25,7 +25,7 @@ export const riskadjustment = async ({ year, code }) => {
   };
   const url = `year=${year}&code=${code}`;
   const data = await requestPortal(
-    `dbservice/getRiskAdjustmentForYear?${url}`,
+    `management/getRiskAdjustmentForYear?${url}`,
     options
   );
   return data;
@@ -58,6 +58,6 @@ export const indexes = async ({desc}) => {
     method: "GET",
   };
   const url = `q=${desc}`;
-  const data = await apirequestPortal(`controlzen/getindexes?${url}`, options);
+  const data = await requestPortal(`management/searchIndex?${url}`, options);
   return data;
 };

@@ -174,7 +174,7 @@ const Patient = ({
   }, []);
 
   useEffect(() => {
-    var orgListArray = [];
+    var orgListArray = [{value: "", label: "ALL"}];
     organizationList?.response?.map((res) => {
       orgListArray.push({
         value: res.id,
@@ -472,9 +472,10 @@ const Patient = ({
         selAllocatedTo,
         selAllocatedBy,
         selCreatedBy,
-        sort,
-        (orgId = selectOrgList?.value)
-      );   
+        sort,      
+        // (orgId = selectOrgList?.value)
+      );
+
       setAddPatient(false);
       setAddPatient(false);
       setIsLoadingBtn(false);

@@ -8,6 +8,9 @@ import { stringToColour } from "../components/function/ReusableFunctions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { CloseCircleFilled } from "@ant-design/icons";
+import { getProviderNameTagList } from "../components/function/ProviderHyperlinks";
+import { getDateOfServiceBackground } from "../components/function/DateOfServices";
+import { getSectionHeaderBackground } from "../components/function/SectionHeader";
 
 const Timeline = ({
   timelineData,
@@ -63,221 +66,6 @@ const Timeline = ({
     return previousStateColor;
   };
 
-  const getProviderNameTagList = ({ data }) => {
-    return data.map((res, index) => {
-      if (index < 2) {
-        var sectionMapArr = (
-          <span
-            className={`mt-2 text-start ${visitStyles.provider_name}`}
-            style={{
-              backgroundColor: stringToColour(res) + 33,
-              color: stringToColour(res),
-            }}
-          >
-            <i>
-              {" "}
-              <FontAwesomeIcon
-                icon={faCircleUser}
-                style={{
-                  size: 10,
-                  color: stringToColour(res),
-                }}
-              />
-            </i>
-            {res}
-          </span>
-        );
-        return sectionMapArr;
-      } else if (data.length - 1 == index) {
-        var sectionMapArr = (
-          <Popover
-            overlayStyle={{ zIndex: 99999 }}
-            content={
-              <>
-                {data?.map((item, i) =>
-                  i > 1 ? (
-                    <span
-                      className={`mt-2 text-start ${visitStyles.provider_name}`}
-                      style={{
-                        backgroundColor: stringToColour(item) + 33,
-                        color: stringToColour(item),
-                      }}
-                    >
-                      <i>
-                        {" "}
-                        <FontAwesomeIcon
-                          icon={faCircleUser}
-                          style={{
-                            size: 10,
-                            color: stringToColour(item),
-                          }}
-                        />
-                      </i>
-                      {item}
-                    </span>
-                  ) : null
-                )}
-              </>
-            }
-            trigger={["hover"]}
-            placement="bottom"
-          >
-            <span
-              style={{ background: "#a6cfa6", color: "#fff" }}
-              className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
-            >
-              {data.length - 2}+
-            </span>
-          </Popover>
-        );
-
-        return sectionMapArr;
-      }
-    });
-  };
-  const getDateOfServiceBackground = ({ value }) => {
-    return value?.map((res, index) => {
-      if (index < 2) {
-        var sectionMapArr = res ? (
-          <span
-            style={{
-              borderColor: stringToColour(res) + 33,
-              color: stringToColour(res),
-              border: "1px solid",
-            }}
-            className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate}`}
-          >
-            <i>
-              <CalendarOutlined
-                className={visitStyles.calenderIconNew}
-                style={{
-                  size: 10,
-                  color: stringToColour(res),
-                }}
-              />
-            </i>
-            {moment(res).format("MMM DD")}
-          </span>
-        ) : (
-          ""
-        );
-        return sectionMapArr;
-      } else if (value.length - 1 == index) {
-        var sectionMapArr = (
-          <Popover
-            overlayStyle={{ zIndex: 99999 }}
-            content={
-              <>
-                {value?.map((item, i) =>
-                  i > 1 ? (
-                    <span
-                      style={{
-                        borderColor: stringToColour(item) + 33,
-                        color: stringToColour(item),
-                        border: "1px solid",
-                      }}
-                      className={`cr-pointer mt-2 text-start ${visitStyles.encounterDate}`}
-                    >
-                      <i>
-                        <CalendarOutlined
-                          className={visitStyles.calenderIconNew}
-                          style={{
-                            size: 10,
-                            color: stringToColour(item),
-                          }}
-                        />
-                      </i>
-                      {moment(item).format("MMM DD")}
-                    </span>
-                  ) : null
-                )}
-              </>
-            }
-            trigger={["hover"]}
-            placement="bottom"
-          >
-            <span
-              style={{
-                background: "#a0b1a0",
-                color: "#fff",
-              }}
-              className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
-            >
-              {value.length - 2}+
-            </span>
-          </Popover>
-        );
-
-        return sectionMapArr;
-      }
-    });
-  };
-  const getSectionHeaderBackground = ({ value }) => {
-    return value?.map((res, index) => {
-      if (index < 2) {
-        var sectionMapArr = res ? (
-          <span
-            style={{
-              background: stringToColour(res) + 33,
-              color: stringToColour(res),
-            }}
-            className={`cr-pointer mt-2 text-start ${visitStyles.captureheader}`}
-          >
-            {res}
-          </span>
-        ) : (
-          ""
-        );
-        return sectionMapArr;
-      } else if (value.length - 1 == index) {
-        var sectionMapArr = (
-          <Popover
-            overlayStyle={{ zIndex: 99999 }}
-            content={
-              <>
-                {value?.map((item, i) =>
-                  i > 1 ? (
-                    <span
-                      style={{
-                        background: stringToColour(item) + 33,
-                        color: stringToColour(item),
-                      }}
-                      className={`cr-pointer mt-2 text-start ${visitStyles.captureheader}`}
-                    >
-                      {item}
-                    </span>
-                  ) : null
-                )}
-              </>
-            }
-            trigger={["hover"]}
-            placement="bottom"
-          >
-            <span
-              style={{
-                background: "#a0b1a0",
-                color: "#fff",
-              }}
-              className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
-            >
-              {value.length - 2}+
-            </span>
-          </Popover>
-        );
-
-        return sectionMapArr;
-      }
-    });
-  };
-
-  const providerNameList = [
-    "Birendra Bhattarai, MD",
-    "Tochukwu Ajalla, PA",
-    "Denis Vilchez, MD",
-  ];
-
-  const dateOfServiceList = ["2023-06-12", "2023-05-10", "2023-02-02"];
-  const sectionList = ["Plan", "Assessment", "Medical History"];
   const getEditDeatils = (viewValue) => {
     var sectionMapArr = (
       <>
@@ -507,6 +295,8 @@ const Timeline = ({
           }
         case "VALID_DISEASE_ADDED":
           return `${item.diagnosisCode} - Valid from disease added`;
+        case "MANUALLY_ADDED_DISEASE":
+          return `${item.diagnosisCode} - Disease added`;
         case "MOVED_VALID_TO_DELETED":
           return (
             <div className="d-flex">
