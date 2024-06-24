@@ -11,7 +11,7 @@ import {
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { Popover, notification } from "antd";
+import { Drawer, Popover, notification } from "antd";
 import { Button, Offcanvas } from "react-bootstrap";
 import styles from "../styles.module.css";
 import PdfViewer from "../../PdfViewerComponent";
@@ -81,7 +81,6 @@ const File = ({
   const [formEditPlace, setFormEditPlace] = useState("");
   const [allDisList, setAllDisList] = useState([]);
   const [allMeatList, setAllMeatList] = useState([]);
-
 
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
@@ -539,7 +538,7 @@ const File = ({
         formEditPlace={formEditPlace}
       /> */}
 
-      <Offcanvas
+      {/* <Offcanvas
         onHide={handleCloseModal}
         show={isEditHccForm}
         className="offcanvas-end"
@@ -554,7 +553,44 @@ const File = ({
             isEditValue={formValues}
           />
         </div>
-      </Offcanvas>
+      </Offcanvas> */}
+      <Drawer
+        title=""
+        onClose={handleCloseModal}
+        closeIcon={false}
+        open={isEditHccForm}
+        width={"80vw"}
+      >
+        <div className="row p-4" style={{overflow: "hidden", height: '100%'}}>
+          <div className="col-8">
+            {hccFileDetails?.loading != true ? (
+              <>
+                {selectFileURL && (
+                  <PdfViewer
+                    src={selectFileURL}
+                    searchQuery={search?.value ? search?.value : ""}
+                    pageNumber={search?.page ? search?.page : 1}
+                    headers={search?.headers}
+                    height="100vh"
+                    heightFrame='900'
+                  />
+                )}
+              </>
+            ) : null}
+          </div>
+          <div className="col-4">
+            <div className="px-4" style={{height: "90vh", overflowY: "scroll" }}>
+              <ManuallyAdd
+                handleCloseModal={handleCloseModal}
+                setIsFileFormShow={setIsFileFormShow}
+                year={year}
+                isEditPage={true}
+                isEditValue={formValues}
+              />
+            </div>
+          </div>
+        </div>
+      </Drawer>
     </>
   );
 };
