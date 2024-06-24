@@ -456,21 +456,21 @@ const Header = ({
 
   const titleWithIcons = (
     <div className="d-flex align-items-center justify-content-between">
-      <div>CODES</div>
+      <div className={styles.heading}>CODES</div>
       <div className="d-flex gap-3">
         <PlusCircleOutlined
           onClick={() => handleExpand()}
+          className="lead"
           style={{
-            fontSize: "20px",
-            color: drawerWidth === "75%" ? "gray" : "black",
+            color: drawerWidth === "75%" ? "gray" : "#241571",
           }}
         />
 
         <MinusCircleOutlined
+          className="lead"
           onClick={() => handleResize()}
           style={{
-            fontSize: "20px",
-            color: drawerWidth === "30%" ? "gray" : "black",
+            color: drawerWidth === "30%" ? "gray" : "#241571",
           }}
         />
       </div>
