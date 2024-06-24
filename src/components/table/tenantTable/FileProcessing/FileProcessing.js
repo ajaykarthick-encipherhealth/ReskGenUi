@@ -11,65 +11,65 @@ import ENDPOINTS from "../../../../utility/enpoints";
 import SpinnerDots from "../../../spinner";
 import { actions as tenantAdminAction } from "../../../../stores/tenantAdmin";
 
-export const eventStreming = (
-  ENDPOINTS,
-  setParsedData,
-  pageNo,
-  getPatients,
-  dispatch,
-  computedStartDate,
-  computedEndDate,
-  selectedOption,
-  search,
-  completedStartDate,
-  completedEndDate,
-  selAllocatedTo,
-  selAllocatedBy,
-  selCreatedBy
-) => {
-  const id = localStorage.getItem("userId");
-  const token = localStorage.getItem("token");
-  const orgId = localStorage.getItem("orgId");
-  const sse = new EventSource(
-    `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}&organizationId=`
-  );
+// export const eventStreming = (
+//   ENDPOINTS,
+//   setParsedData,
+//   pageNo,
+//   getPatients,
+//   dispatch,
+//   computedStartDate,
+//   computedEndDate,
+//   selectedOption,
+//   search,
+//   completedStartDate,
+//   completedEndDate,
+//   selAllocatedTo,
+//   selAllocatedBy,
+//   selCreatedBy
+// ) => {
+//   const id = localStorage.getItem("userId");
+//   const token = localStorage.getItem("token");
+//   const orgId = localStorage.getItem("orgId");
+//   const sse = new EventSource(
+//     `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}&organizationId=`
+//   );
 
-  const fileStatusEventListener = (event) => {
-    const data = JSON.parse(event.data);
-    if (data?.length != 0) {
-      const item = data[0];
-      if (item?.processStageChart === "FINISHED") {
-        setParsedData(data);
-        dispatch(
-          getPatients(
-            pageNo,
-            computedStartDate,
-            computedEndDate,
-            selectedOption,
-            search,
-            completedStartDate,
-            completedEndDate,
-            selAllocatedTo,
-            selAllocatedBy,
-            selCreatedBy
-          )
-        );
-        sse.close();
-      }
-    }
-  };
+//   const fileStatusEventListener = (event) => {
+//     const data = JSON.parse(event.data);
+//     if (data?.length != 0) {
+//       const item = data[0];
+//       if (item?.processStageChart === "FINISHED") {
+//         setParsedData(data);
+//         dispatch(
+//           getPatients(
+//             pageNo,
+//             computedStartDate,
+//             computedEndDate,
+//             selectedOption,
+//             search,
+//             completedStartDate,
+//             completedEndDate,
+//             selAllocatedTo,
+//             selAllocatedBy,
+//             selCreatedBy
+//           )
+//         );
+//         sse.close();
+//       }
+//     }
+//   };
 
-  sse.addEventListener("file-status-event", fileStatusEventListener);
+//   sse.addEventListener("file-status-event", fileStatusEventListener);
 
-  sse.onerror = () => {
-    sse.close();
-  };
+//   sse.onerror = () => {
+//     sse.close();
+//   };
 
-  return () => {
-    sse.removeEventListener("file-status-event", fileStatusEventListener);
-    sse.close();
-  };
-};
+//   return () => {
+//     sse.removeEventListener("file-status-event", fileStatusEventListener);
+//     sse.close();
+//   };
+// };
 
 const stageChartMap2 = {
   FILE_UPLOAD: "File Upload",
@@ -81,7 +81,7 @@ const stageChartMap2 = {
   MEAT_FOUND: "Meat",
   COMBINATION_CODES_FOUND: "Combination codes",
   RAF_SCORE_FOUND: "RAF Score",
-  QUERY_CONDITIONS_FOUND: "Query Conditions",
+  // QUERY_CONDITIONS_FOUND: "Query Conditions",
   FINISHED: "Finished",
   DISEASE_FOUND_FAILED: "DISEASE_FOUND_FAILED",
   OCR_FAILED: "OCR_FAILED",
@@ -90,8 +90,8 @@ const stageChartMap2 = {
   COMBINATION_CODES_FOUND_FAILED: "COMBINATION_CODES_FOUND_FAILED",
   MEAT_FOUND_FAILED: "MEAT_FOUND_FAILED",
   RAF_SCORE_FOUND_FAILED: "RAF_SCORE_FOUND_FAILED",
-  STORED_FAILED: "STORED_FAILED",
-  QUERY_CONDITIONS_FOUND_FAILED: "QUERY_CONDITIONS_FOUND_FAILED",
+  // STORED_FAILED: "STORED_FAILED",
+  // QUERY_CONDITIONS_FOUND_FAILED: "QUERY_CONDITIONS_FOUND_FAILED",
   HEALTH_METRICS_CALCULATION_FAILED: "HEALTH_METRICS_CALCULATION_FAILED",
 };
 
@@ -103,8 +103,8 @@ const errStages = {
   COMBINATION_CODES_FOUND_FAILED: "COMBINATION_CODES_FOUND_FAILED",
   MEAT_FOUND_FAILED: "MEAT_FOUND_FAILED",
   RAF_SCORE_FOUND_FAILED: "RAF_SCORE_FOUND_FAILED",
-  STORED_FAILED: "STORED_FAILED",
-  QUERY_CONDITIONS_FOUND_FAILED: "QUERY_CONDITIONS_FOUND_FAILED",
+  // STORED_FAILED: "STORED_FAILED",
+  // QUERY_CONDITIONS_FOUND_FAILED: "QUERY_CONDITIONS_FOUND_FAILED",
   HEALTH_METRICS_CALCULATION_FAILED: "HEALTH_METRICS_CALCULATION_FAILED",
 };
 const stageChartMap = {
@@ -125,17 +125,18 @@ const stageChartMap = {
   MEAT_FOUND: 6,
   RAF_SCORE_FOUND: 7,
   RAF_SCORE_FOUND_FAILED: 7,
-  STORED: 8,
-  STORED_FAILED: 8,
-  QUERY_CONDITIONS_FOUND: 8,
-  QUERY_CONDITIONS_FOUND_FAILED: 8,
-  FINISHED: 9,
+  // STORED: 8,
+  // STORED_FAILED: 8,
+  // QUERY_CONDITIONS_FOUND: 8,
+  // QUERY_CONDITIONS_FOUND_FAILED: 8,
+  FINISHED: 8,
 };
 const FileProcessingTable = ({
   patinetListAll,
   loading,
   getAllProcessingData,
   fileProcessingData,
+  webSocketData,
 }) => {
   let stompClient = null;
   const dispatch = useDispatch();
@@ -177,86 +178,27 @@ const FileProcessingTable = ({
     getAllProcessingData();
   }, []);
   useEffect(() => {
-    // console.log(fileProcessingData);
+    if(fileProcessingData?.loading){
+      setFileLoading(false)
+    }
   }, [fileProcessingData]);
 
   useEffect(() => {
-    connectingFunction();
-  }, []);
-
-  const connectingFunction = async () => {
-    try {
-      console.log("Connect to WebSocket");
-      // Connect to WebSocket after updating state
-      connect();
-    } catch (error) {
-      console.error("Error connecting web socket", error);
+    if (webSocketData && webSocketData?.webSocketType == "PROCESS_STAGE") {
+      const fileData = fileProcessingData?.data?.response;
+      var foundItem = fileData?.find(
+        (x) => x.patientId == webSocketData.patientId
+      );
+      if (foundItem) {
+        foundItem.processStageChart = webSocketData?.processStageChart;
+        if(webSocketData?.createdDate){
+          var datePush=  [...foundItem.processStageEventDTOs,...[webSocketData]]
+          foundItem.processStageEventDTOs = datePush;
+        } 
+      }
     }
-  };
+  }, [webSocketData]);
 
-  const connect = () => {
-    const token = localStorage.getItem("token");
-    let Sock = new SockJS(
-      `https://hcc.encipherhealth.com/chatservice/chatservice/ws?token=${token}`
-    );
-    console.log(Sock);
-    stompClient = over(Sock);
-    stompClient.connect({}, onConnected, onError);
-  };
-
-  const onConnected = () => {
-    stompClient.subscribe("/user/" + "test" + "/private", onLoadData);
-  };
-
-  const onLoadData = (payload) => {
-    let payloadData = JSON.parse(payload.body);
-    console.log(payloadData);
-  };
-
-  const onError = (err) => {
-    console.log(err);
-  };
-
-  useEffect(() => {
-    const id = localStorage.getItem("userId");
-    const token = localStorage.getItem("token");
-    const orgId = localStorage.getItem("orgId");
-    let isFinished = false;
-    const sse = new EventSource(
-      `${ENDPOINTS?.apiEndoint}communication/file-processing/stages/${id}?token=${token}&organizationId=${orgId}`
-    );
-
-    const fileStatusEventListener = (event) => {
-      setFileLoading(true);
-      const data = JSON.parse(event.data);
-      if (data) {
-        setParsedData(data);
-        setFileLoading(false);
-      }
-      const patient = data?.find((item) => item?.patientId === activeId);
-      if (
-        errStages[patient?.processStageChart] ||
-        patient?.processStageChart === "FINISHED"
-      ) {
-        isFinished = true;
-        setIsFInished(true);
-        sse.close();
-      }
-    };
-
-    sse.addEventListener("file-status-event", fileStatusEventListener);
-
-    sse.onerror = () => {
-      if (!isFinished) {
-        sse.close();
-      }
-    };
-
-    return () => {
-      sse.removeEventListener("file-status-event", fileStatusEventListener);
-      sse.close();
-    };
-  }, [activeId]);
 
   useEffect(() => {
     if (activeId && parsedData) {
@@ -334,18 +276,18 @@ const FileProcessingTable = ({
       case "RAF_SCORE_FOUND_FAILED":
         uploadStatus = 70;
         break;
-      case "STORED":
-        uploadStatus = 85;
-        break;
-      case "STORED_FAILED":
-        uploadStatus = 80;
-        break;
-      case "QUERY_CONDITIONS_FOUND":
-        uploadStatus = 95;
-        break;
-      case "QUERY_CONDITIONS_FOUND_FAILED":
-        uploadStatus = 90;
-        break;
+      // case "STORED":
+      //   uploadStatus = 85;
+      //   break;
+      // case "STORED_FAILED":
+      //   uploadStatus = 80;
+      //   break;
+      // case "QUERY_CONDITIONS_FOUND":
+      //   uploadStatus = 95;
+      //   break;
+      // case "QUERY_CONDITIONS_FOUND_FAILED":
+      //   uploadStatus = 90;
+      //   break;
       case "FINISHED":
         uploadStatus = 100;
         break;
@@ -358,6 +300,10 @@ const FileProcessingTable = ({
     const findPreviousStep = (currentStage) => {
       const stages = Object.keys(stageChartMap2);
       const currentIndex = stages.indexOf(currentStage);
+
+      if (currentIndex == 0) {
+        return stages[currentIndex +1];
+      }
 
       if (currentIndex > 0) {
         return stages[currentIndex - 1];
@@ -500,25 +446,25 @@ const FileProcessingTable = ({
         (step) => step?.info === "FINISHED"
       );
 
-      const queryConditionsStep = {
-        title: "",
-        description: "Query Conditions",
-        status: stageChartMap[data?.processStageChart]
-          ? "finish"
-          : stageChartMap2[data?.processStageChart] ===
-            "QUERY_CONDITIONS_FOUND_FAILED"
-          ? "error"
-          : stageChartMap2[data?.processStageChart] === undefined
-          ? "processing"
-          : undefined,
-        info: "QUERY_CONDITIONS_FOUND",
-      };
+      // const queryConditionsStep = {
+      //   title: "",
+      //   description: "Query Conditions",
+      //   status: stageChartMap[data?.processStageChart]
+      //     ? "finish"
+      //     : stageChartMap2[data?.processStageChart] ===
+      //       "QUERY_CONDITIONS_FOUND_FAILED"
+      //     ? "error"
+      //     : stageChartMap2[data?.processStageChart] === undefined
+      //     ? "processing"
+      //     : undefined,
+      //   info: "QUERY_CONDITIONS_FOUND",
+      // };
 
-      if (foundIndex !== -1) {
-        stepsItem.splice(foundIndex, 0, queryConditionsStep);
-      } else {
-        stepsItem.push(queryConditionsStep);
-      }
+      // if (foundIndex !== -1) {
+      //   stepsItem.splice(foundIndex, 0, queryConditionsStep);
+      // } else {
+      //   stepsItem.push(queryConditionsStep);
+      // }
     }
 
     const mappedSteps = stepsItem
@@ -539,7 +485,7 @@ const FileProcessingTable = ({
 
     return (
       <div style={{ display: "flex" }}>
-        <div style={{ width: "98%" }}>
+        <div style={{ width: "100%" }}>
           <div style={{ display: "flex" }}>
             <Tooltip
               title={data?.processStageChart
@@ -580,8 +526,8 @@ const FileProcessingTable = ({
             >
               {mappedSteps?.map((step, index) => {
                 const findData =
-                  selectedRowTime?.data &&
-                  selectedRowTime?.data?.response?.find(
+                data?.processStageEventDTOs&&
+                data?.processStageEventDTOs?.find(
                     (item) => item?.processStageChart === step?.info
                   );
 
@@ -589,7 +535,7 @@ const FileProcessingTable = ({
                   <div key={index} className={TableStyle.innerProcessingDiv}>
                     {finished
                       ? "Loading..."
-                      : selectedRowTime?.data?.response?.length > 0 &&
+                      :  data?.processStageEventDTOs?.length > 0 &&
                         (findData ? (
                           <span>
                             {findData?.createdDate &&
@@ -639,15 +585,6 @@ const FileProcessingTable = ({
               : `${stageChartMap[findPreviousStep(data?.processStageChart)]}0`
           }% Complete`}</div>
         </div>
-        <div style={{ width: "2%", marginTop: "6px" }}>
-          <div onClick={() => handleToggleStepper(index, data)}>
-            {toggle[data?.patientId] ? (
-              <UpOutlined style={{ width: "40px", height: "20px" }} />
-            ) : (
-              <DownOutlined style={{ width: "40px", height: "20px" }} />
-            )}
-          </div>
-        </div>
       </div>
     );
   };
@@ -667,7 +604,7 @@ const FileProcessingTable = ({
 
   return (
     <div className={TableStyle.classContaineer}>
-      {fileloading ? (
+      {fileProcessingData?.loading ? (
         <div
           style={{
             display: "flex",
@@ -688,7 +625,7 @@ const FileProcessingTable = ({
           </thead>
 
           <tbody>
-            {!loading && parsedData?.length === 0 ? (
+            {fileProcessingData?.data?.response?.length === 0 ? (
               <tr>
                 <td colSpan="9">
                   <Empty />
@@ -707,6 +644,7 @@ const FileProcessingTable = ({
 const enhancer = connect(
   (state) => ({
     fileProcessingData: state?.tenantAdmin?.allFileProcessing,
+    webSocketData: state?.webSocket?.webSocketDetails?.data,
   }),
   {
     getAllProcessingData: tenantAdminAction.getAllFileProcessAction,
