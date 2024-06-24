@@ -7,6 +7,7 @@ import { riskadjustmentAction } from "./actions";
 import {searchesAction} from "./actions";
 import {autoCompleteAction} from "./actions";
 import {indexesAction} from "./actions";
+import{codify} from './network'
 
 const initialState = {
   loading: false,
@@ -36,6 +37,16 @@ const createReducer = (actionType) =>
     },
     initialState
   );
+
+
+  const getCodifyLoading=(type) => handleActions(
+    {
+      [type.START]: () => true,
+      [type.SUCCEEDED]: () => false,
+      [type.FAILED]: () => false,
+    },
+    false
+  );
   
 const codifyReducer = combineReducers({
   
@@ -44,7 +55,9 @@ const codifyReducer = combineReducers({
   riskadjustment:createReducer(riskadjustmentAction),
   searches:createReducer(searchesAction),
   autocomplete:createReducer(autoCompleteAction),
-  indexes:createReducer(indexesAction)
+  indexes:createReducer(indexesAction),
+  codifyLoader:getCodifyLoading(codifyAction)
+  
 });
 
 export default codifyReducer;

@@ -23,9 +23,8 @@ import {
   CloseCircleOutlined,
   DownOutlined,
   SettingOutlined,
-  CloseOutlined,
-  CreditCardOutlined,
-  BookOutlined,
+  MinusCircleOutlined,
+  PlusCircleOutlined,
 } from "@ant-design/icons";
 
 import styles from "../../../styles/file-managemnt.module.css";
@@ -131,12 +130,15 @@ const Header = ({
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [searchVal, setSearchVal] = useState("");
   const [opened, setOpened] = useState(false);
+  const [drawerWidth, setDrawerWidth] = useState("44%");
+
   const showDrawer = () => {
     setOpened(true);
     setPopoverVisible(false);
   };
   const onClosed = () => {
     setOpened(false);
+    setDrawerWidth("44%");
   };
 
   const getStatus = (data) => {
@@ -431,6 +433,50 @@ const Header = ({
   const handleOpenChange = useCallback(() => {
     setPopoverVisible(true);
   }, []);
+
+  const handleExpand = () => {
+    if (drawerWidth == "44%") {
+      setDrawerWidth("55%");
+    } else if (drawerWidth == "55%") {
+      setDrawerWidth("75%");
+    } else if (drawerWidth === "30%") {
+      setDrawerWidth("44%");
+    }
+  };
+
+  const handleResize = () => {
+    if (drawerWidth == "75%") {
+      setDrawerWidth("55%");
+    } else if (drawerWidth == "55%") {
+      setDrawerWidth("30%");
+    } else if (drawerWidth === "44%") {
+      setDrawerWidth("30%");
+    }
+  };
+
+  const titleWithIcons = (
+    <div className="d-flex align-items-center justify-content-between">
+      <div>CODES</div>
+      <div className="d-flex gap-3">
+        <PlusCircleOutlined
+          onClick={() => handleExpand()}
+          style={{
+            fontSize: "20px",
+            color: drawerWidth === "75%" ? "gray" : "black",
+          }}
+        />
+
+        <MinusCircleOutlined
+          onClick={() => handleResize()}
+          style={{
+            fontSize: "20px",
+            color: drawerWidth === "30%" ? "gray" : "black",
+          }}
+        />
+      </div>
+    </div>
+  );
+
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -521,13 +567,16 @@ const Header = ({
                           <div onClick={showDrawer}>{SVGICON.codify}</div>
                         </div>
                         <Drawer
-                          title="CODES"
+                          title={titleWithIcons}
                           onClose={onClosed}
                           open={opened}
-                          size={"large"}
+                          width={drawerWidth}
                           destroyOnClose={true}
                         >
-                          <Codify />
+                          <Codify
+                            drawerWidth={drawerWidth}
+                            setDrawerWidth={setDrawerWidth}
+                          />
                         </Drawer>
                         {/* NOTE i remove userRole !== "admin" logic because PRAVIN
                         told me to show admin also, so if Logesh ask anything to

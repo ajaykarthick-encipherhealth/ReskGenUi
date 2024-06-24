@@ -133,7 +133,8 @@ const Tables = (props) => {
           codeData?.excludes2) && (
           <div className={`${style.card} mt-2`}>
             <div className={style.head}>
-              {codeData?.name} - {codeData?.desc}
+              {codeData?.name} -
+               {codeData?.desc}
               <CopyToClipboard
                 text={`${codeData?.name} - ${codeData?.desc}`}
                 onCopy={() => setCopied(true)}
@@ -278,7 +279,7 @@ const Tables = (props) => {
                   <div>
                     {(data?.includes || data?.excludes1 || data?.excludes2 ) && (
                       <div className={style.head}>
-                        {data.name} - {data.desc}
+                        Parent Code Notes: {data.name} 
                       </div>
                     )}
                     {data?.includes && (

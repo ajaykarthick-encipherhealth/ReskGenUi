@@ -42,7 +42,8 @@ const Codify = ({
   recentsearch,
   completeData,
   indexesData,
-  codifyData1,
+  codifyDataLoading,
+  drawerWidth,
 }) => {
   const [showButtons, setShowButtons] = useState(false);
   const [currentButton, setCurrentButton] = useState("Codes");
@@ -63,9 +64,11 @@ const Codify = ({
   const [parentCode, setParentCode] = useState([]);
   const [hideButton, setHideButton] = useState(false);
   const [indexData, setIndexData] = useState([]);
+
   const { loading: indexesDataLoading } = useSelector(
     (state) => state.codify.codify.indexes
   );
+ 
   const handleRiskAdjustment = () => {
     setActiveButton("Risk Adjustment");
     setShowButtons(false);
@@ -95,6 +98,13 @@ const Codify = ({
     setCurrentButton("Description");
     fetchCodeData(value);
     setIndexData(null);
+  };
+
+  const handleSearchClick = (value) => {
+    setSearchInput(value);
+    fetchTreeData(value);
+    fetchCodeData(value);
+    setHideButton(false);
   };
 
   const onExpand = (expandedKeysValue) => {
@@ -143,12 +153,7 @@ const Codify = ({
     }
   }, [searchInput]);
 
-  const handleSearchClick = (value) => {
-    setSearchInput(value);
-    fetchTreeData(value);
-    fetchCodeData(value);
-    setHideButton(false);
-  };
+
   useEffect(() => {
     if (
       !data?.length &&
@@ -206,6 +211,7 @@ const Codify = ({
     setLoading(false);
   };
 
+  
   const convertToAntdIndexData = (node) => {
     const { title, seeAlso, term, code, see, seeCat, subCat, manif } = node;
 
@@ -398,7 +404,7 @@ const Codify = ({
             <div className="p-3 px-1 d-flex gap-3">
               <AutoComplete
                 style={{ width: "100%" }}
-                popupMatchSelectWidth={640}
+                popupMatchSelectWidth={drawerWidth == "44%"? 640:""}
                 options={options}
                 onSelect={onSelect}
                 onSearch={handleSearch}
@@ -497,7 +503,7 @@ const Codify = ({
               <Codes
                 searchInput={searchInput}
                 data={data}
-                loading={loading}
+                loading={codifyDataLoading}
                 setCurrentButton={setCurrentButton}
                 onSelect={handleTreeViewClick}
                 onExpand={onExpand}
@@ -576,7 +582,7 @@ const Codify = ({
 
 const enhancer = connect(
   (state) => ({
-    codifyData1: console.log(state,"state")
+    codifyDataLoading:state.codify.codify.codifyLoader
   }),
   {
     codifyData: dashbaordActions.codifyAction,
