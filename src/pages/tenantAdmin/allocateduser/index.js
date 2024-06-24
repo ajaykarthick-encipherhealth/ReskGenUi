@@ -104,6 +104,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
     selectedOption,
     batchCount,
     selectOrgList
+
   }) => {
     const uId = localStorage.getItem("userId");
     const orgId = selectOrgList;
@@ -172,7 +173,6 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
   };
 
   const handleReceivedDatePicker = (date, dateString) => {
-    console.log(dateString);
     if (date === null || (Array.isArray(date) && date.length === 0)) {
       setStartDate("");
       setEndDate("");
@@ -183,9 +183,12 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
       dateString?.map((data, index) => {
         const formattedDate =
           index === 1
-            ? data && `${data}T23:59:59.999Z`
-            : data && `${data}T00:00:00.000Z`;
-
+            ? data &&
+              `${moment(data, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
+            : data &&
+              `${moment(data, "MM-DD-YYYY").format(
+                "YYYY-MM-DD"
+              )}T00:00:00.000Z`;
         return formattedDate;
       });
     setStartDate(formattedDates[0]);
@@ -306,7 +309,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
         search: searchStr,
         sort: sort,
         selectedOption: selectedOption,
-        selectOrgList
+        selectOrgList,
       });
     }
   }, [
@@ -318,7 +321,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
     endDate,
     searchStr,
     selectedOption,
-    selectOrgList
+    selectOrgList,
   ]);
   useEffect(() => {
     if (!isPatientList) {
@@ -616,7 +619,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
                                 <label>Computed Date</label>
                                 <div>
                                   <RangePicker
-                                    format="YYYY-MM-DD"
+                                    format="MM-DD-YYYY"
                                     onChange={(dates, dateStrings) => {
                                       setDateRange(dateStrings);
                                       handleReceivedDatePicker(
@@ -1022,7 +1025,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
       />
     </>
   );
-}
+};
 const enhancer = connect(
   (state) => ({
     organizationList: state?.tenantAdmin?.allOrganization?.data,
