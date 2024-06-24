@@ -171,7 +171,6 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
   };
 
   const handleReceivedDatePicker = (date, dateString) => {
-    console.log(dateString);
     if (date === null || (Array.isArray(date) && date.length === 0)) {
       setStartDate("");
       setEndDate("");
