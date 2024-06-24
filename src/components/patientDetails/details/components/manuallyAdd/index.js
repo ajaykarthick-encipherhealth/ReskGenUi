@@ -31,6 +31,7 @@ import moment from "moment";
 import Meat, { checkMeatType } from "./Meat";
 import { getResponePopup } from "../../../../../utils/reusable";
 import { diseaseEditMeat } from "../../../../../stores/patient/details/network";
+import CustomSelect from "../../../../customSelect";
 const { Option } = Select;
 
 const ManuallyAdd = ({
@@ -65,7 +66,7 @@ const ManuallyAdd = ({
   const [meatDisplay, setMeatDisplay] = useState(false);
   const [listOfSection, setListOfSection] = useState([]);
   const [showSection, setShowSection] = useState(false);
-  const [description, setDescription] = useState('')
+  const [description, setDescription] = useState("");
 
   const [selectMeat, setSelectMeat] = useState("M");
   const [isFilled, setIsFilled] = useState([]);
@@ -115,6 +116,7 @@ const ManuallyAdd = ({
           setSection: setSectionM,
           setShowSection: setShowSectionM,
           setSectionCount: setSectionCountM,
+          setCapturedSections: setCapturedSectionsM
         };
       case "E":
         return {
@@ -126,6 +128,7 @@ const ManuallyAdd = ({
           setSection: setSectionE,
           setShowSection: setShowSectionE,
           setSectionCount: setSectionCountE,
+          setCapturedSections: setCapturedSectionsE
         };
       case "A":
         return {
@@ -137,6 +140,7 @@ const ManuallyAdd = ({
           setSection: setSectionA,
           setShowSection: setShowSectionA,
           setSectionCount: setSectionCountA,
+          setCapturedSections: setCapturedSectionsA
         };
       case "T":
         return {
@@ -148,6 +152,7 @@ const ManuallyAdd = ({
           setSection: setSectionT,
           setShowSection: setShowSectionT,
           setSectionCount: setSectionCountT,
+          setCapturedSections: setCapturedSectionsT
         };
       default:
         break;
@@ -214,14 +219,16 @@ const ManuallyAdd = ({
     } else if (isCodeCheck?.response == false) {
       setValidCode("Valid Code");
       form.setFieldsValue({ description: res.response?.description });
-      setDescription(res.response?.description)
+      setDescription(res.response?.description);
     }
   };
 
   const handledSave = (form) => {
     const res = sectionCount.map((item, i) => ({
       header: section,
-      dateOfService: form[`encounterDate_${section?.replaceAll(" ", "-")}_${item}`]
+      dateOfService: form[
+        `encounterDate_${section?.replaceAll(" ", "-")}_${item}`
+      ]
         ? moment(
             form[`encounterDate_${section?.replaceAll(" ", "-")}_${item}`]
           ).format("YYYY-MM-DD")
@@ -243,14 +250,14 @@ const ManuallyAdd = ({
     const res = sectionCount.map((item, i) => ({
       header: section,
       dateOfService: forms[
-        `encounterDate_${section?.replaceAll(" ", "-")}_${i}`
+        `encounterDate_${section?.replaceAll(" ", "-")}_${item}`
       ]
         ? moment(
-            forms[`encounterDate_${section?.replaceAll(" ", "-")}_${i}`]
+            forms[`encounterDate_${section?.replaceAll(" ", "-")}_${item}`]
           ).format("YYYY-MM-DD")
         : "",
-      substring: forms[`referance_${section?.replaceAll(" ", "-")}_${i}`],
-      pageNumber: forms[`pageNumber_${section?.replaceAll(" ", "-")}_${i}`],
+      substring: forms[`referance_${section?.replaceAll(" ", "-")}_${item}`],
+      pageNumber: forms[`pageNumber_${section?.replaceAll(" ", "-")}_${item}`],
     }));
     setListOfSection((prev) => {
       const re = prev?.map((check, ind) => {
@@ -290,14 +297,14 @@ const ManuallyAdd = ({
         `encounterDate_${selectedSection?.replaceAll(
           " ",
           "-"
-        )}_${selectMeat}_${i}`
+        )}_${selectMeat}_${item}`
       ]
         ? moment(
             forms[
               `encounterDate_${selectedSection?.replaceAll(
                 " ",
                 "-"
-              )}_${selectMeat}_${i}`
+              )}_${selectMeat}_${item}`
             ]
           ).format("YYYY-MM-DD")
         : "",
@@ -306,14 +313,14 @@ const ManuallyAdd = ({
           `referance_${selectedSection?.replaceAll(
             " ",
             "-"
-          )}_${selectMeat}_${i}`
+          )}_${selectMeat}_${item}`
         ],
       pageNumber:
         forms[
           `pageNumber_${selectedSection?.replaceAll(
             " ",
             "-"
-          )}_${selectMeat}_${i}`
+          )}_${selectMeat}_${item}`
         ],
     }));
 
@@ -496,7 +503,7 @@ const ManuallyAdd = ({
       listOfSectionM.length > 0 ? "M" : "",
       listOfSectionE.length > 0 ? "E" : "",
       listOfSectionA.length > 0 ? "A" : "",
-      listOfSectionA.length > 0 ? "T" : "",
+      listOfSectionT.length > 0 ? "T" : "",
     ]);
   }, [
     selectMeat,
@@ -581,8 +588,9 @@ const ManuallyAdd = ({
     selected.setSection("");
     selected.setShow(true);
   };
-console.log(listOfSectionM, listOfSectionE, "testing");
+
   const handleMeatSubmit = async () => {
+    console.log("hits");
     let data = {};
     const forms = form.getFieldsValue();
     if (isEditPage) {
@@ -601,34 +609,22 @@ console.log(listOfSectionM, listOfSectionE, "testing");
         hyperlinks: listOfSection
           .map((item) => item.hyperlinks)
           .flat(capturedSections.length + 1),
-        monitorHyperLink:
-          isEditValue.diagnosisCode == code
-            ? filterData.monitorHyperLink
-            : listOfSectionM.length > 0
+        monitorHyperLink: listOfSectionM.length > 0
             ? listOfSectionM
                 .map((item) => item.hyperlinks)
                 .flat(capturedSections.length + 1)
             : null,
-        evaluateHyperLink:
-          isEditValue.diagnosisCode == code
-            ? filterData.evaluateHyperLink
-            : listOfSectionE.length > 0
+        evaluateHyperLink: listOfSectionE.length > 0
             ? listOfSectionE
                 .map((item) => item.hyperlinks)
                 .flat(capturedSections.length + 1)
             : null,
-        assessmentHyperLink:
-          isEditValue.diagnosisCode == code
-            ? filterData.assessmentHyperLink
-            : listOfSectionA.length > 0
+        assessmentHyperLink: listOfSectionA.length > 0
             ? listOfSectionA
                 .map((item) => item.hyperlinks)
                 .flat(capturedSections.length + 1)
             : null,
-        treatmentHyperLink:
-          isEditValue.diagnosisCode == code
-            ? filterData.treatmentHyperLink
-            : listOfSectionT.length > 0
+        treatmentHyperLink: listOfSectionT.length > 0
             ? listOfSectionT
                 .map((item) => item.hyperlinks)
                 .flat(capturedSections.length + 1)
@@ -699,13 +695,13 @@ console.log(listOfSectionM, listOfSectionE, "testing");
       try {
         let res = {};
         console.log(data);
-        // if (isEditPage) {
-        //   res = await diseaseEdit(data);
-        // } else if (isEditMeat) {
-        //   res = await diseaseEditMeat(data);
-        // } else {
-        //   res = await manuallyAdd(data);
-        // }
+        if (isEditPage) {
+          res = await diseaseEdit(data);
+        } else if (isEditMeat) {
+          res = await diseaseEditMeat(data);
+        } else {
+          res = await manuallyAdd(data);
+        }
 
         if (res?.status == "SUCCESS") {
           handleCloseModal(false);
@@ -788,14 +784,16 @@ console.log(listOfSectionM, listOfSectionE, "testing");
 
   const sectionEdit = (item, index) => {
     setEditSection({ id: index, ...item });
+    console.log(item, "testings");
     item.hyperlinks?.map((list, i) => {
       form.setFieldsValue({
         section: [{ lable: list.header, value: list.header }],
-        [`encounterDate_${item?.section?.replaceAll(" ", "-")}_${i}`]:
-          list.dateOfService,
-        [`referance_${item?.section?.replaceAll(" ", "-")}_${i}`]:
+        [`encounterDate_${item?.section?.replaceAll(" ", "-")}_${
+          item?.count[i]
+        }`]: list.dateOfService,
+        [`referance_${item?.section?.replaceAll(" ", "-")}_${item?.count[i]}`]:
           list.substring,
-        [`pageNumber_${item?.section?.replaceAll(" ", "-")}_${i}`]:
+        [`pageNumber_${item?.section?.replaceAll(" ", "-")}_${item?.count[i]}`]:
           list.pageNumber,
       });
       setSectionCount(item.count);
@@ -817,16 +815,15 @@ console.log(listOfSectionM, listOfSectionE, "testing");
         [`${checkMeatType(selectMeat)}section`]: [
           { label: list.header, value: list.header },
         ],
-        [`encounterDate_${item?.section?.replaceAll(
-          " ",
-          "-"
-        )}_${selectMeat}_${i}`]: list.dateOfService,
-        [`referance_${item?.section?.replaceAll(" ", "-")}_${selectMeat}_${i}`]:
-          list.substring,
-        [`pageNumber_${item?.section?.replaceAll(
-          " ",
-          "-"
-        )}_${selectMeat}_${i}`]: list.pageNumber,
+        [`encounterDate_${item?.section?.replaceAll(" ", "-")}_${selectMeat}_${
+          item?.count[i]
+        }`]: list.dateOfService,
+        [`referance_${item?.section?.replaceAll(" ", "-")}_${selectMeat}_${
+          item?.count[i]
+        }`]: list.substring,
+        [`pageNumber_${item?.section?.replaceAll(" ", "-")}_${selectMeat}_${
+          item?.count[i]
+        }`]: list.pageNumber,
       });
       countSetter(item.count);
       headerSetter(list.header);
@@ -904,6 +901,10 @@ console.log(listOfSectionM, listOfSectionE, "testing");
 
   useEffect(() => {
     if (isEditPage) {
+      const filterData =
+      patientDetailsResult?.data?.response?.meatCriteria?.find(
+        (item) => item.diagnosisCode == isEditValue.diagnosisCode
+      );
       setCode(isEditValue.diagnosisCode);
       setValidCode("Valid Code");
       const dos = isEditValue.dateOfServices.map((item) => ({
@@ -921,10 +922,33 @@ console.log(listOfSectionM, listOfSectionE, "testing");
           : isEditValue.actualDescription,
         dos: dos,
       });
+      const sectionListM = filterData?.monitorHyperLink?.map((item) => ({
+        section: item.header,
+        hyperlinks: item,
+      }));
+      const sectionListE = filterData?.evaluateHyperLink?.map((item) => ({
+        section: item.header,
+        hyperlinks: item,
+      }));
+      const sectionListA = filterData?.assessmentHyperLink?.map(
+        (item) => ({
+          section: item.header,
+          hyperlinks: item,
+        })
+      );
+      const sectionListT = filterData?.treatmentHyperLink?.map((item) => ({
+        section: item.header,
+        hyperlinks: item,
+      }));
       handleSelectChange(isEditValue.dateOfServices, "dos");
       setListOfSection(transformData(sectionList));
+      setListOfSectionM(transformData(sectionListM));
+      setListOfSectionE(transformData(sectionListE));
+      setListOfSectionA(transformData(sectionListA));
+      setListOfSectionT(transformData(sectionListT));
     }
-  }, [isEditPage]);
+
+  }, [isEditPage, isEditValue]);
 
   useEffect(() => {
     if (isEditMeat) {
@@ -962,7 +986,7 @@ console.log(listOfSectionM, listOfSectionE, "testing");
       setListOfSectionA(transformData(sectionListA));
       setListOfSectionT(transformData(sectionListT));
     }
-  }, [isEditMeat]);
+  }, [isEditMeat, isEditMeatValue]);
 
   return (
     <>
@@ -983,7 +1007,6 @@ console.log(listOfSectionM, listOfSectionE, "testing");
           <CloseOutlined />
         </div>
       </div>
-
       {!meatDisplay ? (
         <>
           <Form
@@ -1045,7 +1068,7 @@ console.log(listOfSectionM, listOfSectionE, "testing");
                     },
                   ]}
                 >
-                  <Input name="description" onChange={(e) => e.target.value}/>
+                  <Input name="description" onChange={(e) => e.target.value} />
                 </Form.Item>
               </div>
               <div className="col-12">
@@ -1106,6 +1129,7 @@ console.log(listOfSectionM, listOfSectionE, "testing");
                           method={"button"}
                           name="Add"
                           onClick={() => {
+                            setSection("");
                             setShowSection(false);
                             setIsEdit(false);
                           }}
@@ -1138,10 +1162,16 @@ console.log(listOfSectionM, listOfSectionE, "testing");
                       },
                     ]}
                   >
-                    <Select
+                    {/* <Select
                       size="large"
                       options={capturedSections}
                       onChange={(val) => setSection(val)}
+                    /> */}
+                    <CustomSelect
+                      options={capturedSections}
+                      onChange={(val) => setSection(val)}
+                      setOptions={setCapturedSections}
+                      value={section}
                     />
                   </Form.Item>
                 </div>
@@ -1224,6 +1254,8 @@ console.log(listOfSectionM, listOfSectionE, "testing");
                         onClick={() => {
                           setShowSection(true);
                           setSectionCount([1]);
+                          setSection("");
+                          form.setFieldValue("section", "");
                         }}
                       />
                     )}
@@ -1299,6 +1331,7 @@ console.log(listOfSectionM, listOfSectionE, "testing");
               setShowSection={checkMeat(selectMeat).setShowSection}
               setSection={checkMeat(selectMeat).setSection}
               setSectionCount={checkMeat(selectMeat).setSectionCount}
+              setCapturedSections={checkMeat(selectMeat).setCapturedSections}
               handleMeatSubmit={handleMeatSubmit}
               isMeat={isMeat}
               isActive={
@@ -1318,6 +1351,7 @@ console.log(listOfSectionM, listOfSectionE, "testing");
               handleEdit={handledEditMeat}
               isEditMeat={isEditMeat}
               isEditMeatValue={isEditMeatValue}
+              form={form}
             />
           </Form>
         </>

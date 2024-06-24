@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import ENDPOINTS from "../../../utility/enpoints";
 
-const PdfViewer = ({ src, searchQuery, pageNumber, headers,headerContent }) => {
+const PdfViewer = ({
+  src,
+  searchQuery,
+  pageNumber,
+  headers,
+  headerContent,
+  height = "70vh",
+  heightFrame = "700"
+}) => {
   const [iframeSrc, setIframeSrc] = useState("");
 
   useEffect(() => {
@@ -20,23 +28,23 @@ const PdfViewer = ({ src, searchQuery, pageNumber, headers,headerContent }) => {
         if (pageNumber) {
           queryParams.push(`page=${pageNumber}`);
         }
-        if(headerContent){
-          queryParams.push(`headerContent=${headerContent}`)
+        if (headerContent) {
+          queryParams.push(`headerContent=${headerContent}`);
         }
         searchUrl += `#${queryParams.join("&")}`;
       }
       setIframeSrc(searchUrl);
     }
-  }, [src, searchQuery, pageNumber,headerContent]);
+  }, [src, searchQuery, pageNumber, headerContent]);
   return (
     <>
-      <div style={{height:"70vh",overflow:"hidden"}}>
+      <div style={{ height: height, overflow: "hidden" }}>
         <iframe
           id="pdfViewer"
           title="PDF Viewer"
           frameBorder="0"
           width={"100%"}
-          height="700"
+          height={heightFrame}
           src={iframeSrc}
         />
       </div>

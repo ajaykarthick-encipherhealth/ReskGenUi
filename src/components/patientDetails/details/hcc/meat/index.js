@@ -4,7 +4,7 @@ import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { useSelector, useDispatch, connect } from "react-redux";
-import { Popconfirm, Popover, Input, Space, Form, Select, Button } from "antd";
+import { Popconfirm, Popover, Input, Space, Form, Select, Button, Drawer } from "antd";
 import { Modal } from "antd";
 import { notification } from "antd";
 import styles from "../styles.module.css";
@@ -110,13 +110,13 @@ const Meat = ({
     }
   }, [hccFileDetails]);
 
-  const onchangeMeat  = (code, data) => {
+  const onchangeMeat = (code, data) => {
     var title = data.diagnosisCode + " - " + data.diseaseName;
     data.processedYear = patientDetailsResult?.data?.response?.processedYear;
     data.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
-    data.actualDescription =  data.diseaseName,
-    data.dbDescription =  data.diseaseName,
-    (data.fileId = patientDetailsResult?.data?.response?.fileId),
+    (data.actualDescription = data.diseaseName),
+      (data.dbDescription = data.diseaseName),
+      (data.fileId = patientDetailsResult?.data?.response?.fileId),
       setSelectDiseasesName(title);
     setSelectDisDetails(data);
   };
@@ -320,7 +320,7 @@ const Meat = ({
             setMeatEdit={setMeatEdit}
             addMeatQuery={addMeatQuery}
             getDisTitlePopover={getDisTitlePopover}
-             cardTitle="DELETED_MEAT"
+            cardTitle="DELETED_MEAT"
           />
         </>
       )}
@@ -693,11 +693,9 @@ const Meat = ({
       ) : (
         opens && showErrorMessage()
       )}
-
-    
-
-<Offcanvas
-        onHide={()=>setMeatEdit(false)}
+{/* 
+      <Offcanvas
+        onHide={() => setMeatEdit(false)}
         show={meatEdit}
         className="offcanvas-end"
         placement="end"
@@ -711,8 +709,44 @@ const Meat = ({
             isEditMeatValue={editData}
           />
         </div>
-      </Offcanvas>
-
+      </Offcanvas> */}
+      <Drawer
+        title=""
+        onClose={() => setMeatEdit(false)}
+        closeIcon={false}
+        open={meatEdit}
+        width={"80vw"}
+      >
+        <div className="row p-4" style={{overflow: "hidden", height: '100%'}}>
+          <div className="col-8">
+            {hccFileDetails?.loading != true ? (
+              <>
+                {selectFileURL && (
+                  <PdfViewer
+                    src={selectFileURL}
+                    searchQuery={search?.value ? search?.value : ""}
+                    pageNumber={search?.page ? search?.page : 1}
+                    headers={search?.headers}
+                    height="100vh"
+                    heightFrame='900'
+                  />
+                )}
+              </>
+            ) : null}
+          </div>
+          <div className="col-4">
+            <div className="px-4" style={{height: "90vh", overflowY: "scroll" }}>
+            <ManuallyAdd
+            handleCloseModal={() => setMeatEdit(false)}
+            setIsFileFormShow={setMeatEdit}
+            year={year}
+            isEditMeat={true}
+            isEditMeatValue={editData}
+          />
+            </div>
+          </div>
+        </div>
+      </Drawer>
       <AddMeatQuery
         queryFormValues={queryFormValues}
         handleCloseModal={handleCloseModal}
