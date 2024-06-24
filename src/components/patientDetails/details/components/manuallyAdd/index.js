@@ -65,6 +65,7 @@ const ManuallyAdd = ({
   const [meatDisplay, setMeatDisplay] = useState(false);
   const [listOfSection, setListOfSection] = useState([]);
   const [showSection, setShowSection] = useState(false);
+  const [description, setDescription] = useState('')
 
   const [selectMeat, setSelectMeat] = useState("M");
   const [isFilled, setIsFilled] = useState([]);
@@ -92,6 +93,7 @@ const ManuallyAdd = ({
   const [showSectionT, setShowSectionT] = useState(false);
   const [capturedSectionsT, setCapturedSectionsT] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
+  const [editSection, setEditSection] = useState();
 
   const dosList = patientDosResult?.data?.response?.map(
     (item) =>
@@ -212,19 +214,20 @@ const ManuallyAdd = ({
     } else if (isCodeCheck?.response == false) {
       setValidCode("Valid Code");
       form.setFieldsValue({ description: res.response?.description });
+      setDescription(res.response?.description)
     }
   };
 
   const handledSave = (form) => {
     const res = sectionCount.map((item, i) => ({
       header: section,
-      dateOfService: form[`encounterDate_${section?.replaceAll(" ", "-")}_${i}`]
+      dateOfService: form[`encounterDate_${section?.replaceAll(" ", "-")}_${item}`]
         ? moment(
-            form[`encounterDate_${section?.replaceAll(" ", "-")}_${i}`]
+            form[`encounterDate_${section?.replaceAll(" ", "-")}_${item}`]
           ).format("YYYY-MM-DD")
         : "",
-      substring: form[`referance_${section?.replaceAll(" ", "-")}_${i}`],
-      pageNumber: form[`pageNumber_${section?.replaceAll(" ", "-")}_${i}`],
+      substring: form[`referance_${section?.replaceAll(" ", "-")}_${item}`],
+      pageNumber: form[`pageNumber_${section?.replaceAll(" ", "-")}_${item}`],
     }));
     setDiagnosisForm(form);
     setListOfSection((prev) => {
@@ -249,14 +252,12 @@ const ManuallyAdd = ({
       substring: forms[`referance_${section?.replaceAll(" ", "-")}_${i}`],
       pageNumber: forms[`pageNumber_${section?.replaceAll(" ", "-")}_${i}`],
     }));
-    // setDiagnosisForm(form);
     setListOfSection((prev) => {
-      const rese = prev?.map((item) => item.section == section);
-      const re = rese.map((check, ind) => {
-        if (check) {
+      const re = prev?.map((check, ind) => {
+        if (ind == editSection.id) {
           return { section: section, hyperlinks: res, count: sectionCount };
         } else {
-          return prev[ind];
+          return check;
         }
       });
       return re;
@@ -327,21 +328,33 @@ const ManuallyAdd = ({
     //   ...prev,
     //   ...[{ section: selectedSection, hyperlinks: res, count: selectedCount }],
     // ]);
+    // const rese = prev?.map((item) => item.section == selectedSection);
+    // const re = rese.map((check, ind) => {
+    //   if (check) {
+    //     return {
+    //       section: selectedSection,
+    //       hyperlinks: res,
+    //       count: selectedCount,
+    //     };
+    //   } else {
+    //     return prev[ind];
+    //   }
+    // });
+    // console.log(re);
+    // return re;
 
     setListOfSection[selectMeat]((prev) => {
-      const rese = prev?.map((item) => item.section == selectedSection);
-      const re = rese.map((check, ind) => {
-        if (check) {
+      const re = prev?.map((check, ind) => {
+        if (ind == editSection.id) {
           return {
             section: selectedSection,
             hyperlinks: res,
             count: selectedCount,
           };
         } else {
-          return prev[ind];
+          return check;
         }
       });
-      console.log(re);
       return re;
     });
     setIsEdit(false);
@@ -371,14 +384,14 @@ const ManuallyAdd = ({
         `encounterDate_${selectedSection?.replaceAll(
           " ",
           "-"
-        )}_${selectMeat}_${i}`
+        )}_${selectMeat}_${item}`
       ]
         ? moment(
             form[
               `encounterDate_${selectedSection?.replaceAll(
                 " ",
                 "-"
-              )}_${selectMeat}_${i}`
+              )}_${selectMeat}_${item}`
             ]
           ).format("YYYY-MM-DD")
         : "",
@@ -387,14 +400,14 @@ const ManuallyAdd = ({
           `referance_${selectedSection?.replaceAll(
             " ",
             "-"
-          )}_${selectMeat}_${i}`
+          )}_${selectMeat}_${item}`
         ],
       pageNumber:
         form[
           `pageNumber_${selectedSection?.replaceAll(
             " ",
             "-"
-          )}_${selectMeat}_${i}`
+          )}_${selectMeat}_${item}`
         ],
     }));
 
@@ -568,7 +581,7 @@ const ManuallyAdd = ({
     selected.setSection("");
     selected.setShow(true);
   };
-
+console.log(listOfSectionM, listOfSectionE, "testing");
   const handleMeatSubmit = async () => {
     let data = {};
     const forms = form.getFieldsValue();
@@ -582,7 +595,7 @@ const ManuallyAdd = ({
         patientId: await getStorage("patientId"),
         oldDiagnosisCode: isEditValue.diagnosisCode,
         newDiagnosisCode: code,
-        description: forms.description,
+        description: forms.description ? forms.description : description,
         dateOfServices: forms.dos,
         providerNames: providerDetails.map((item) => item.providerName),
         hyperlinks: listOfSection
@@ -685,15 +698,16 @@ const ManuallyAdd = ({
     if (validCode.toLowerCase() == "valid code") {
       try {
         let res = {};
-        if (isEditPage) {
-          res = await diseaseEdit(data);
-        } else if (isEditMeat) {
-          res = await diseaseEditMeat(data);
-        } else {
-          res = await manuallyAdd(data);
-        }
+        console.log(data);
+        // if (isEditPage) {
+        //   res = await diseaseEdit(data);
+        // } else if (isEditMeat) {
+        //   res = await diseaseEditMeat(data);
+        // } else {
+        //   res = await manuallyAdd(data);
+        // }
 
-        if (res.status == "SUCCESS") {
+        if (res?.status == "SUCCESS") {
           handleCloseModal(false);
           getResponePopup(res);
           form.resetFields();
@@ -772,7 +786,8 @@ const ManuallyAdd = ({
     }
   };
 
-  const sectionEdit = (item) => {
+  const sectionEdit = (item, index) => {
+    setEditSection({ id: index, ...item });
     item.hyperlinks?.map((list, i) => {
       form.setFieldsValue({
         section: [{ lable: list.header, value: list.header }],
@@ -819,7 +834,8 @@ const ManuallyAdd = ({
     showSectionSetter(false);
   };
 
-  const sectionEditMeat = (item) => {
+  const sectionEditMeat = (item, index) => {
+    setEditSection({ id: index, ...item });
     switch (selectMeat) {
       case "M":
         setFormValues(
@@ -947,6 +963,7 @@ const ManuallyAdd = ({
       setListOfSectionT(transformData(sectionListT));
     }
   }, [isEditMeat]);
+
   return (
     <>
       <div className="d-flex justify-content-between mb-4">
@@ -977,6 +994,7 @@ const ManuallyAdd = ({
             // initialValues={formInitialValues}
             onFinish={(form) => {
               handledSave(form);
+              console.log(form);
             }}
             onFinishFailed={() => {}}
           >
@@ -1027,7 +1045,7 @@ const ManuallyAdd = ({
                     },
                   ]}
                 >
-                  <Input name="description" />
+                  <Input name="description" onChange={(e) => e.target.value}/>
                 </Form.Item>
               </div>
               <div className="col-12">
@@ -1168,8 +1186,8 @@ const ManuallyAdd = ({
                       </label>
                     </div>
                     <AddSection
-                      key={index}
-                      id={index}
+                      key={item}
+                      id={item}
                       section={section}
                       date={
                         getSelectedDos
@@ -1299,6 +1317,7 @@ const ManuallyAdd = ({
               sectionEdit={sectionEditMeat}
               handleEdit={handledEditMeat}
               isEditMeat={isEditMeat}
+              isEditMeatValue={isEditMeatValue}
             />
           </Form>
         </>

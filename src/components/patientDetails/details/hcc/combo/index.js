@@ -70,6 +70,8 @@ const Combo = ({
   const [selectDisDetails, setSelectDisDetails] = useState("");
   const [meatCriteriaList, setMeatCriteriaList] = useState([]);
   const [zIndex, setZIndex] = useState(false);
+  const [allMeatList, setAllMeatList] = useState([]);
+
 
   const handleChange = async (e) => {
     const key = e.target.name;
@@ -107,7 +109,9 @@ const Combo = ({
       "",
       "",
       "",
-      setInvalidComboDiseaseCodesList
+      setInvalidComboDiseaseCodesList,
+      setAllMeatList
+
     );
   }, [patientDetailsResult]);
 
@@ -117,7 +121,7 @@ const Combo = ({
     }
   }, [hccFileDetails]);
 
-  const onchangeCombo = (data, code) => {
+  const onchangeCombo = (code, data) => {
     var title = data.diagnosisCodeCombo;
     data.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
     data.processedYear = patientDetailsResult?.data?.response?.processedYear;
@@ -245,7 +249,8 @@ const Combo = ({
               patientDocumentResult={patientDocumentResult}
               setActiveTabHead={setActiveTabHead}
               setActiveMeatTitle={setActiveMeatTitle}
-              meatCriteriaList={meatCriteriaList}
+              meatCriteriaList={allMeatList}
+              cardTitle="VALID_COMBO"
             />
           </div>
 
@@ -273,7 +278,9 @@ const Combo = ({
               patientDocumentResult={patientDocumentResult}
               setActiveTabHead={setActiveTabHead}
               setActiveMeatTitle={setActiveMeatTitle}
-              meatCriteriaList={meatCriteriaList}
+              meatCriteriaList={allMeatList}
+              cardTitle="DELETED_COMBO"
+
             />
           </div>
         </div>
@@ -314,8 +321,9 @@ const Combo = ({
                   patientDocumentResult={patientDocumentResult}
                   setActiveTabHead={setActiveTabHead}
                   setActiveMeatTitle={setActiveMeatTitle}
-                  meatCriteriaList={meatCriteriaList}
+                  meatCriteriaList={allMeatList}
                   popup={zIndex}
+                  cardTitle="VALID_COMBO"
                 />
               </div>
               <div className="col-xl-7">
