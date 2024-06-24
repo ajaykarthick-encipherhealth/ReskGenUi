@@ -415,7 +415,6 @@ const UserList = ({
                         item.accountStatus === true ? "" : "#0000001a",
                     }}
                   >
-                    {console.log(item?.accountStatus, "status")}
                     <Switch
                       checked={switchStates[item.email]}
                       onChange={(checked) => {
