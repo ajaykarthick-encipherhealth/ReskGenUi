@@ -39,7 +39,7 @@
   box-shadow: rgba(0, 0, 0, 0.35) 0px 1px 2px;
   border-radius: 7px;
   padding: 8px;
-  width: 90%;
+
 }
 .codes {
   font-size: 15px;
@@ -47,14 +47,15 @@
   padding: 2px;
 }
 .list {
-  width: 90%;
+
   margin-top: 9px;
 }
 .code {
-  display: flex;
+  /* display: flex;
   flex-wrap: wrap;
   flex-direction: column;
-  align-items: center;
+  align-items: center; */
+  padding-left: 11px;
 }
 .card2 {
   border: 1px solid #0f6adb;
@@ -84,7 +85,6 @@
 }
 .symbols {
   border: 1px solid #e6eeff;
-  width: 90%;
   height: 50px;
   background: #e6eeff;
   margin-top: 10px;
@@ -125,7 +125,6 @@
   box-shadow: rgba(0, 0, 0, 0.35) 0px 1px 2px;
   min-height: 60px;
   overflow: scroll;
-  width: 90%;
   scrollbar-width: none;
   padding: 3px;
   margin-top: 10px;
