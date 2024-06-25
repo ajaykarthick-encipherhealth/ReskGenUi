@@ -9,19 +9,23 @@ import HeadTitle from "../../../../components/headtitle";
 import { SVGICON } from "../../../../jsx/constant/theme";
 import NoNotification from "../../../../images/dashboard/no-notification.png";
 import spinSTYles from "../../../../styles/auth.module.css";
-const Notifications = ({ notificationResponse }) => {
-  const [openNotifications, setOpenNotification] = useState(false);
+
+const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
+  const notificationResult = webSocketNotificationData
+    ? webSocketNotificationData
+    : notificationResponse?.data?.response?.content;
+  const [openNotifications, setOpenNotifications] = useState(false);
   const handleOpen = () => {
-    setOpenNotification(!openNotifications);
+    setOpenNotifications(!openNotifications);
   };
   const handleOk = () => {
-    setOpenNotification(false);
+    setOpenNotifications(false);
   };
 
   const notificationData =
-    notificationResponse?.data?.response?.content?.length > 0 ? (
-      notificationResponse?.data?.response?.content?.map((info) => (
-        <div className={styles.msgDiv}>
+    notificationResult?.length > 0 ? (
+      notificationResult?.map((info) => (
+        <div className={styles.msgDiv} key={info?.id}>
           <div style={{ marginTop: "10px" }}>
             {" "}
             {SVGICON.dashboardNotification}
@@ -103,5 +107,7 @@ const Notifications = ({ notificationResponse }) => {
 };
 const enhancer = connect((state) => ({
   notificationResponse: state?.reviewer?.dashboard?.notification,
+  webSocketNotificationData:
+    state?.webSocket?.webSocketNotificationDetails?.data,
 }));
 export default enhancer(Notifications);
