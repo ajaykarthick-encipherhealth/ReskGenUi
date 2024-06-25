@@ -198,6 +198,7 @@ const MeatCard = ({
                         background: "#edf5ff",
                         // background: "#ecf2fc" ,
                         padding: "10px",
+                        borderRadius: "10px",
                       }}
                     >
                       {getDisTitlePopover(
@@ -283,6 +284,7 @@ const MeatCard = ({
                         background: "#edf5ff",
                         // background: "#eff5ff",
                         padding: "10px",
+                        borderRadius: "10px",
                       }}
                     >
                       {getDisTitlePopover(
@@ -355,12 +357,18 @@ const MeatCard = ({
                         )}
                       </div>
                     </div>
-                    <div
-                      className="col-xl-1 meatclose"
-                      style={{ background: "#edf5ff" }}
-                    >
-                      <div className="d-flex">
-                        {/* <Popconfirm
+                    <div className="col-xl-1 meatclose">
+                      <div
+                        className="d-flex align-items-center justify-content-center"
+                        style={{
+                          background: "#edf5ff",
+                          height: "100%",
+                          width: "100%",
+                          borderRadius: "10px",
+                        }}
+                      >
+                        <div className="d-flex">
+                          {/* <Popconfirm
                           title={popConfirmTitle}
                           onConfirm={() =>
                             moveToAnotherAction(
@@ -385,45 +393,48 @@ const MeatCard = ({
                           </div>
                         </Popconfirm> */}
 
-                        <div className={styles.meatActionIcon}>
-                        <MovementAction
-                          validAction={
-                            cardTitle == "DELETED_MEAT" ? true : false
-                          }
-                          deleteAction={
-                            cardTitle == "VALID_MEAT" ? true : false
-                          }
-                          setIsValidAction={setIsValidAction}
-                          cardTitle="MEAT"
-                          setConfirmNotesModalValid={setConfirmNotesModalValid}
-                          onchangeValid={onchangeMeat}
-                          result={item}
-                          setFileLoading={setFileLoading}
-                        />
-                          </div>
-
-                        <Tooltip title="Edit">
-                          <div
-                            className={visitStyles.edit_icon}
-                            onClick={() => {
-                              setMeatEdit(true);
-                              setEditData(item);
-                            }}
-                          >
-                            <FontAwesomeIcon
-                              icon={faPen}
-                              style={{ size: 8, color: "#706e70" }}
+                          <div className={styles.meatActionIcon}>
+                            <MovementAction
+                              validAction={
+                                cardTitle == "DELETED_MEAT" ? true : false
+                              }
+                              deleteAction={
+                                cardTitle == "VALID_MEAT" ? true : false
+                              }
+                              setIsValidAction={setIsValidAction}
+                              cardTitle="MEAT"
+                              setConfirmNotesModalValid={
+                                setConfirmNotesModalValid
+                              }
+                              onchangeValid={onchangeMeat}
+                              result={item}
+                              setFileLoading={setFileLoading}
                             />
                           </div>
-                        </Tooltip>
-                        {item.isMeatCriteriaPresent === false ? (
-                          <div
-                            onClick={() => addMeatQuery(item, "Add")}
-                            className={visitStyles.add_meat_query}
-                          >
-                            {SVGICON.meatQueryIcon}
-                          </div>
-                        ) : null}
+
+                          <Tooltip title="Edit">
+                            <div
+                              className={visitStyles.edit_icon}
+                              onClick={() => {
+                                setMeatEdit(true);
+                                setEditData(item);
+                              }}
+                            >
+                              <FontAwesomeIcon
+                                icon={faPen}
+                                style={{ size: 8, color: "#706e70" }}
+                              />
+                            </div>
+                          </Tooltip>
+                          {item.isMeatCriteriaPresent === false ? (
+                            <div
+                              onClick={() => addMeatQuery(item, "Add")}
+                              className={visitStyles.add_meat_query}
+                            >
+                              {SVGICON.meatQueryIcon}
+                            </div>
+                          ) : null}
+                        </div>
                       </div>
                     </div>
                   </div>

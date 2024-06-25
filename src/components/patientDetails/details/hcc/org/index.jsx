@@ -12,7 +12,7 @@ import { CalendarOutlined } from "@ant-design/icons";
 import moment from "moment";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUser, faArrowsAlt } from "@fortawesome/free-solid-svg-icons";
+import { faCircleUser, faArrowsAlt, faXmark } from "@fortawesome/free-solid-svg-icons";
 import SpinnerDots from "../../../../../components/spinner";
 import ModelIndex from "../../components/model/Index";
 import { moveToAnotherAction } from "../../components/function/ReusableFunctions";
@@ -179,6 +179,7 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
               ? node.diagnosisCodeCombo
               : node.diagnosisCode}
           </div>
+          {trees?.diagnosisCodeCombo == node.diagnosisCodeCombo && 
           <div>
             <Popconfirm
               title="You want move to Delete?"
@@ -199,7 +200,7 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
             >
               <div className={visitStyles.close_icon}>
                 <FontAwesomeIcon
-                  icon={faArrowsAlt}
+                  icon={faXmark}
                   style={{
                     size: 8,
                     color: "#a80404",
@@ -207,7 +208,7 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
                 />
               </div>
             </Popconfirm>
-          </div>
+          </div>}
         </div>
         <Tooltip
           title={node.diseaseName ? node.diseaseName : node.actualDescription}

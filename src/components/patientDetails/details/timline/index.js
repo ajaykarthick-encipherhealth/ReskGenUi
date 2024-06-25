@@ -79,7 +79,7 @@ const Timeline = ({
         </div>
         <div className={styles.detailsContainer}>
           <div className={styles.oldCodeContiner}>
-            <span className={styles.codeTitle}>CODE</span>
+            <span className={styles.codeTitle}>OLD CODE</span>
             <div className={styles.details}>
               <div className={styles.detailsHeader}>
                 <span className={styles.disCode}>
@@ -117,7 +117,7 @@ const Timeline = ({
             </div>
           </div>
           <div className={styles.editCodeContainer}>
-            <span className={styles.editTitle}>EDITED CODE</span>
+            <span className={styles.editTitle}>NEW CODE</span>
             <div className={styles.details}>
               <div className={styles.detailsHeader}>
                 <span className={styles.disCode}>
@@ -549,8 +549,11 @@ const Timeline = ({
   return (
     <div className={visitStyles.timeLine}>
       {!filterDataLoading ? (
-        <div className="widget-timeline">
-          <ul className="timeline">
+        <div className="widget-timeline" style={{height: "100vh"}}>
+          <ul
+            className="timeline"
+            style={{ height: "95%", overflow: "scroll" }}
+          >
             {timelineData?.length > 0 ? (
               timelineData?.map((item, index) =>
                 renderTimelineItem(item, index)
