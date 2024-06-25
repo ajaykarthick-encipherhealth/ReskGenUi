@@ -1,23 +1,24 @@
 .detailsContainer {
   display: flex;
+  width: 400px;
 }
 .oldCodeContiner {
   width: 50%;
   margin: 5px;
-  border: 2px solid #69aa9d;
+  border: 2px solid #e96a3e;
   border-radius: 6px;
 }
 .editCodeContainer {
   width: 50%;
   margin: 5px;
-  border: 2px solid #e96a3e;
+  border: 2px solid #69aa9d;
   border-radius: 6px;
 }
 .codeTitle {
   text-align: center;
   display: flex;
   justify-content: center;
-  background: #69aa9d;
+  background: #e96a3e;
   height: 35px;
   align-items: center;
   color: #fff;
@@ -28,7 +29,7 @@
   text-align: center;
   display: flex;
   justify-content: center;
-  background: #e96a3e;
+  background: #69aa9d;
   height: 35px;
   align-items: center;
   color: #fff;
