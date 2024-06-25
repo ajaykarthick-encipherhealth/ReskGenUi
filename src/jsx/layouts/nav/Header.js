@@ -130,7 +130,7 @@ const Header = ({
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [searchVal, setSearchVal] = useState("");
   const [opened, setOpened] = useState(false);
-  const [drawerWidth, setDrawerWidth] = useState("44%");
+  const [drawerWidth, setDrawerWidth] = useState(700);
 
   const showDrawer = () => {
     setOpened(true);
@@ -138,7 +138,7 @@ const Header = ({
   };
   const onClosed = () => {
     setOpened(false);
-    setDrawerWidth("44%");
+    setDrawerWidth(700);
   };
 
   const getStatus = (data) => {
@@ -435,24 +435,18 @@ const Header = ({
   }, []);
 
   const handleExpand = () => {
-    if (drawerWidth == "44%") {
-      setDrawerWidth("55%");
-    } else if (drawerWidth == "55%") {
-      setDrawerWidth("75%");
-    } else if (drawerWidth === "30%") {
-      setDrawerWidth("44%");
-    }
+    const newWidth = drawerWidth + 100;
+     const limitedWidth = Math.min(newWidth, 1000); 
+    setDrawerWidth(limitedWidth); 
+  };
+  
+  const handleResize = () => {
+    const newWidth =  drawerWidth - 200;
+     const limitedWidth = Math.max(newWidth, 500); 
+    setDrawerWidth(limitedWidth); 
   };
 
-  const handleResize = () => {
-    if (drawerWidth == "75%") {
-      setDrawerWidth("55%");
-    } else if (drawerWidth == "55%") {
-      setDrawerWidth("30%");
-    } else if (drawerWidth === "44%") {
-      setDrawerWidth("30%");
-    }
-  };
+
 
   const titleWithIcons = (
     <div className="d-flex align-items-center justify-content-between">
@@ -462,15 +456,17 @@ const Header = ({
           onClick={() => handleExpand()}
           className="lead"
           style={{
-            color: drawerWidth === "75%" ? "gray" : "#241571",
+            color: drawerWidth >= 1000 ? "gray" : "#241571",
           }}
         />
+
+        {drawerWidth/10}%
 
         <MinusCircleOutlined
           className="lead"
           onClick={() => handleResize()}
           style={{
-            color: drawerWidth === "30%" ? "gray" : "#241571",
+            color: drawerWidth <= 600 ? "gray" : "#241571",
           }}
         />
       </div>
