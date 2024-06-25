@@ -1,17 +1,45 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Chat from "../chat/index";
 import { Tooltip } from "antd";
 import moment from "moment";
+import { connect } from "react-redux";
+import { getNotificationAlert } from "../../store/actions/NotificationAction";
+import { actions as webSocketActions } from "../../stores/websocket";
+import { actions as dashbaordActions } from "../../stores/reviewer/dashboard";
 
-const Notification = ({ notificationResponse }) => {
+const Notification = ({
+  open,
+  notificationResponse,
+  webSocketData,
+  getNotificationData,
+  webSocketNotificationData,
+  getNotificationList,
+}) => {
   const [openMsg, setOpenMsg] = useState(false);
   const notificationData = notificationResponse?.content;
+  const [loading, setLoading] = useState(false);
 
   const splitUserName = (name) => {
     if (name) {
       return name[0]?.toUpperCase();
     }
   };
+
+  useEffect(() => {
+    if (open) {
+      const userId = localStorage.getItem("userId");
+      getNotificationList(userId);
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (notificationData) {
+      getNotificationData(notificationData);
+    }
+  }, [notificationData]);
+
+  useEffect(() => {}, [webSocketNotificationData]);
+
   return (
     <div
       className={`card-body chatbox contacts_body p-0`}
@@ -19,33 +47,37 @@ const Notification = ({ notificationResponse }) => {
     >
       {!openMsg ? (
         <ul className="contacts">
-          {notificationData?.map((data, i) => (
-            <li className="active dlab-chat-user">
-              <div className="d-flex bd-highlight">
-                <Tooltip
-                  title={data?.fromUserDetails?.firstName}
-                  placement="bottom"
-                >
-                  <div className="img_cont">
-                    <span>
-                      {data?.fromUserDetails?.profileImageUrl ? (
-                        <img src={data?.fromUserDetails?.profileImageUrl} />
-                      ) : (
-                        splitUserName(data?.fromUserDetails?.firstName)
-                      )}
-                    </span>
-                    <span className="online_icon"></span>
+          {!loading && (
+            <>
+              {webSocketNotificationData?.map((data, i) => (
+                <li className="active dlab-chat-user">
+                  <div className="d-flex bd-highlight">
+                    <Tooltip
+                      title={data?.fromUserDetails?.firstName}
+                      placement="bottom"
+                    >
+                      <div className="img_cont">
+                        <span>
+                          {data?.fromUserDetails?.profileImageUrl ? (
+                            <img src={data?.fromUserDetails?.profileImageUrl} />
+                          ) : (
+                            splitUserName(data?.fromUserDetails?.firstName)
+                          )}
+                        </span>
+                        <span className="online_icon"></span>
+                      </div>
+                    </Tooltip>
+                    <div className="user_info">
+                      <div className="d-flex">
+                        <span>{data?.content}</span>
+                      </div>
+                      <p>{moment(data?.createdDate).fromNow()}</p>
+                    </div>
                   </div>
-                </Tooltip>
-                <div className="user_info">
-                  <div className="d-flex">
-                    <span>{data?.content}</span>
-                  </div>
-                  <p>{moment(data?.createdDate).fromNow()}</p>
-                </div>
-              </div>
-            </li>
-          ))}
+                </li>
+              ))}
+            </>
+          )}
         </ul>
       ) : null}
 
@@ -54,4 +86,17 @@ const Notification = ({ notificationResponse }) => {
   );
 };
 
-export default Notification;
+const enhancer = connect(
+  (state) => ({
+    notificationResponse:
+      state?.reviewer?.dashboard?.notification?.data?.response,
+    webSocketData: state?.webSocket?.webSocketDetails?.data,
+    webSocketNotificationData:
+      state?.webSocket?.webSocketNotificationDetails?.data,
+  }),
+  {
+    getNotificationData: webSocketActions.websocketNotificationAction,
+    getNotificationList: dashbaordActions.notificationAction,
+  }
+);
+export default enhancer(Notification);
