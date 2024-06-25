@@ -14587,13 +14587,13 @@ input::-webkit-inner-spin-button {
   display: flex;
 }
 .ant-tree-show-line .ant-tree-indent-unit:before {
-  border-inline-end: 1px solid black !important;
+  border-inline-end: 1px solid gray !important;
 }
 .ant-tree .ant-tree-switcher-leaf-line:before {
-  border-inline-end: 1px solid black !important;
+  border-inline-end: 1px solid gray !important;
 }
 .ant-tree .ant-tree-switcher-leaf-line:after {
-  border-bottom: 1px solid black !important;
+  border-bottom: 1px solid gray !important;
 }
 .ant-tree-iconEle {
   border: 1px solid #241571 !important;

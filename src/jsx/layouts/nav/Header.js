@@ -23,9 +23,8 @@ import {
   CloseCircleOutlined,
   DownOutlined,
   SettingOutlined,
-  CloseOutlined,
-  CreditCardOutlined,
-  BookOutlined,
+  MinusCircleOutlined,
+  PlusCircleOutlined,
 } from "@ant-design/icons";
 
 import styles from "../../../styles/file-managemnt.module.css";
@@ -134,6 +133,7 @@ const Header = ({
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [searchVal, setSearchVal] = useState("");
   const [opened, setOpened] = useState(false);
+  const [drawerWidth, setDrawerWidth] = useState(700);
   const [notificationCount, setNotificationCount] = useState(0);
 
   const showDrawer = () => {
@@ -142,6 +142,7 @@ const Header = ({
   };
   const onClosed = () => {
     setOpened(false);
+    setDrawerWidth(700);
   };
 
   const getStatus = (data) => {
@@ -441,6 +442,44 @@ const Header = ({
     setPopoverVisible(true);
   }, []);
 
+  const handleExpand = () => {
+    const newWidth = drawerWidth + 100;
+     const limitedWidth = Math.min(newWidth, 1000); 
+    setDrawerWidth(limitedWidth); 
+  };
+  
+  const handleResize = () => {
+    const newWidth =  drawerWidth - 200;
+     const limitedWidth = Math.max(newWidth, 500); 
+    setDrawerWidth(limitedWidth); 
+  };
+
+
+
+  const titleWithIcons = (
+    <div className="d-flex align-items-center justify-content-between">
+      <div className={styles.heading}>CODES</div>
+      <div className="d-flex gap-3">
+        <PlusCircleOutlined
+          onClick={() => handleExpand()}
+          className="lead"
+          style={{
+            color: drawerWidth >= 1000 ? "gray" : "#241571",
+          }}
+        />
+
+        {drawerWidth/10}%
+
+        <MinusCircleOutlined
+          className="lead"
+          onClick={() => handleResize()}
+          style={{
+            color: drawerWidth <= 600 ? "gray" : "#241571",
+          }}
+        />
+      </div>
+    </div>
+  );
   useEffect(() => {
     const count = webSocketNotificationData?.filter(
       (r) => r?.webSocketType == "NOTIFICATION"
@@ -538,13 +577,16 @@ const Header = ({
                           <div onClick={showDrawer}>{SVGICON.codify}</div>
                         </div>
                         <Drawer
-                          title="CODES"
+                          title={titleWithIcons}
                           onClose={onClosed}
                           open={opened}
-                          size={"large"}
+                          width={drawerWidth}
                           destroyOnClose={true}
                         >
-                          <Codify />
+                          <Codify
+                            drawerWidth={drawerWidth}
+                            setDrawerWidth={setDrawerWidth}
+                          />
                         </Drawer>
                         {/* NOTE i remove userRole !== "admin" logic because PRAVIN
                         told me to show admin also, so if Logesh ask anything to
