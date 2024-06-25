@@ -404,7 +404,7 @@ const FileProcessingTable = ({
             ? "error"
             : undefined,
         info: "COMBINATION_CODES_FOUND",
-      },     
+      },
       {
         title: "",
         description: "RAF Score",
