@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Badge, Popconfirm, Popover, Tooltip, Tag } from "antd";
+import { Badge, Popconfirm, Popover, Tooltip, Tag, message } from "antd";
 import styles from "../../hcc/styles.module.css";
 import {
   faArrowsAlt,
   faSitemap,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
+import { CloseCircleFilled } from "@ant-design/icons";
 import {
   getCaptureSectionBackgroundFile,
   getEncounterDateBackground,
@@ -43,7 +44,7 @@ const ComboCard = ({
   setActiveMeatTitle,
   meatCriteriaList,
   popup,
-  cardTitle
+  cardTitle,
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
@@ -161,22 +162,28 @@ const ComboCard = ({
                             </div>
                           </Popconfirm>
                         </div> */}
-                        
+
                         <div className={styles.comcoActionIcon}>
-                        <MovementAction
-                          validAction={
-                            cardTitle == "DELETED_COMBO" ? true : false
-                          }
-                          deleteAction={
-                            cardTitle == "VALID_COMBO" ? true : false
-                          }
-                          setIsValidAction={setIsValidAction}
-                          cardTitle="COMBO"
-                          setConfirmNotesModalValid={setConfirmNotesModalValid}
-                          onchangeValid={onchangeCombo}
-                          result={item}
-                          setFileLoading={setFileLoading}
-                        />
+                          {item?.children?.length > 0 ? (
+                            <CloseCircleFilled className={styles.deleteIcon} onClick={() => message.warning("Delete only formed codes")}/>
+                          ) : (
+                            <MovementAction
+                              validAction={
+                                cardTitle == "DELETED_COMBO" ? true : false
+                              }
+                              deleteAction={
+                                cardTitle == "VALID_COMBO" ? true : false
+                              }
+                              setIsValidAction={setIsValidAction}
+                              cardTitle="COMBO"
+                              setConfirmNotesModalValid={
+                                setConfirmNotesModalValid
+                              }
+                              onchangeValid={onchangeCombo}
+                              result={item}
+                              setFileLoading={setFileLoading}
+                            />
+                          )}
                         </div>
                         {item?.children?.length > 0 && (
                           <div

@@ -450,3 +450,11 @@
 .comcoActionIcon{
   margin-left: 3px;
 }
+
+.deleteIcon {
+  color: #be3144;
+  font-size: 16px !important;
+  margin-right: 2px;
+  border-radius: 100%;
+  cursor: pointer;
+}
