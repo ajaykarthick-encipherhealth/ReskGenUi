@@ -140,9 +140,7 @@ const TableRisk = ({ data, setActiveButton, setSearchInput }) => {
       );
     };
 
-    
+    export default TableRisk;
 
    
 
-
-export default TableRisk;

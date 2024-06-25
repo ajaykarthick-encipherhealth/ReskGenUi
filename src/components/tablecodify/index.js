@@ -273,13 +273,10 @@ const Tables = (props) => {
                 parentCode?.map((data) => {
                   return (
                     <div>
-                      {(data?.includes ||
-                        data?.excludes1 ||
-                        data?.excludes2) && (
-                        <div className={style.head}>
-                          Parent Code Notes: {data.name}
-                        </div>
-                      )}
+                      <div className={style.head}>
+                        Parent Code Notes: {data.name}
+                      </div>
+
                       {data?.includes && (
                         <div>
                           <span className={style.includes}>Includes</span>
@@ -347,6 +344,21 @@ const Tables = (props) => {
                                 {line}
                               </p>
                             ))}
+                        </div>
+                      )}
+                      {data?.inclusionTerm && (
+                        <div className="mt-1">
+                          <span className={style.Inclusion}>
+                            Inclusion Term
+                          </span>
+                          {data?.inclusionTerm &&
+                            data.inclusionTerm
+                              ?.split("\n")
+                              .map((line, index) => (
+                                <p className={style.para} key={index}>
+                                  {line}
+                                </p>
+                              ))}
                         </div>
                       )}
                     </div>
