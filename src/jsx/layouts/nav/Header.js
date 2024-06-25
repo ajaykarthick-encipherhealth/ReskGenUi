@@ -66,6 +66,7 @@ import {
 } from "../../../stores/authflow/actions";
 import { actions as dashbaordActions } from "../../../stores/reviewer/dashboard";
 import Codify from "../../../pages/codify";
+import { actions as webSocketActions } from "../../../stores/websocket";
 
 const btnItems = [
   {
@@ -98,6 +99,8 @@ const Header = ({
   getNotificationList,
   getTenentLogo,
   tenent,
+  webSocketNotificationData,
+  getNotificationData,
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -131,6 +134,8 @@ const Header = ({
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [searchVal, setSearchVal] = useState("");
   const [opened, setOpened] = useState(false);
+  const [notificationCount, setNotificationCount] = useState(0);
+
   const showDrawer = () => {
     setOpened(true);
     setPopoverVisible(false);
@@ -157,6 +162,10 @@ const Header = ({
   const onClose = () => {
     setOpen(false);
     setOpenMsg(false);
+    const res = webSocketNotificationData?.filter(
+      (r) => r?.webSocketType != "NOTIFICATION"
+    );
+    getNotificationData(res);
   };
 
   const logoutFunction = async () => {
@@ -203,22 +212,22 @@ const Header = ({
     const userName = currentUserInfo?.data?.response?.userName;
 
     getNotificationList(userId);
-    const sse = new EventSource(
-      `${ENDPOINTS?.apiEndoint}communication/push-notifications/${userName}?token=${token}`
-    );
-    sse.addEventListener("user-list-event", (event) => {
-      const data = JSON.parse(event.data);
-      if (data.length != 0) {
-        dispatch(getNotificationAlert(data));
-        getNotificationList(userId);
-      }
-    });
-    sse.onerror = () => {
-      sse.close();
-    };
-    return () => {
-      sse.close();
-    };
+    // const sse = new EventSource(
+    //   `${ENDPOINTS?.apiEndoint}communication/push-notifications/${userName}?token=${token}`
+    // );
+    // sse.addEventListener("user-list-event", (event) => {
+    //   const data = JSON.parse(event.data);
+    //   if (data.length != 0) {
+    //     dispatch(getNotificationAlert(data));
+    //     getNotificationList(userId);
+    //   }
+    // });
+    // sse.onerror = () => {
+    //   sse.close();
+    // };
+    // return () => {
+    //   sse.close();
+    // };
   };
 
   const PopContent = (
@@ -317,7 +326,7 @@ const Header = ({
 
   const notificationDrawer = async () => {
     setOpen(true);
-    dispatch(getNotificationAlertClear([]));
+    setNotificationCount(0);
     setPopoverVisible(false);
   };
 
@@ -431,6 +440,14 @@ const Header = ({
   const handleOpenChange = useCallback(() => {
     setPopoverVisible(true);
   }, []);
+
+  useEffect(() => {
+    const count = webSocketNotificationData?.filter(
+      (r) => r?.webSocketType == "NOTIFICATION"
+    );
+    setNotificationCount(count?.length);
+  }, [webSocketNotificationData]);
+
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
       <div className="header-content">
@@ -620,10 +637,7 @@ const Header = ({
                           className="notificationIcon"
                           onClick={() => notificationDrawer()}
                         >
-                          <Badge
-                            count={notificationAlertData?.length}
-                            color="#04306f"
-                          >
+                          <Badge count={notificationCount} color="#04306f">
                             <div style={{ color: "#04306f" }}>
                               <FontAwesomeIcon
                                 icon={faBell}
@@ -821,11 +835,7 @@ const Header = ({
         onClose={onClose}
         open={open}
       >
-        {!openMsg ? (
-          <Notification
-            notificationResponse={notificationResponse?.data?.response}
-          />
-        ) : null}
+        {!openMsg ? <Notification open={open} /> : null}
       </Drawer>
 
       <Modal
@@ -859,10 +869,13 @@ const enhancer = connect(
   (state) => ({
     notificationResponse: state?.reviewer?.dashboard?.notification,
     tenent: state?.reviewer?.dashboard?.tenentLogo,
+    webSocketNotificationData:
+      state?.webSocket?.webSocketNotificationDetails?.data,
   }),
   {
     getNotificationList: dashbaordActions.notificationAction,
     getTenentLogo: dashbaordActions.tenentLogoAction,
+    getNotificationData: webSocketActions.websocketNotificationAction,
   }
 );
 export default enhancer(Header);

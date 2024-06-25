@@ -3,7 +3,13 @@ import { connect } from "react-redux";
 import useWebSocket from "react-use-websocket";
 import { actions as webSocketActions } from "../../stores/websocket";
 
-const ConnectWebSocket = ({ webSocketData, getWebSocketAllResult }) => {
+const ConnectWebSocket = ({
+  webSocketData,
+  getWebSocketAllResult,
+  getNotificationData,
+  webSocketNotificationData,
+  notificationResponse,
+}) => {
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
@@ -16,24 +22,28 @@ const ConnectWebSocket = ({ webSocketData, getWebSocketAllResult }) => {
     shouldReconnect: () => true,
   });
 
-  // useEffect(() => {
-  //   var dataPush = [];
-  //   if (webSocketData) {
-  //     dataPush = [...webSocketData, ...[lastJsonMessage]];
-  //   }
-  //   console.log(lastJsonMessage);
-  //   console.log(dataPush);
-  //   if (lastJsonMessage) {
-  //     getWebSocketAllResult([lastJsonMessage]);
-  //   }
-  // }, [lastJsonMessage]);
-
   useEffect(() => {
     if (lastJsonMessage) {
-      console.log(lastJsonMessage)
       getWebSocketAllResult(lastJsonMessage);
     }
   }, [lastJsonMessage]);
+
+  useEffect(() => {
+    if (webSocketData && webSocketData?.webSocketType == "NOTIFICATION") {
+      var dataMap = null;
+      var oldNotification = notificationResponse?.content;
+      if (webSocketNotificationData) {
+        dataMap = webSocketNotificationData;
+      }
+      if (dataMap) {
+        var push = [...[webSocketData], ...dataMap];
+        getNotificationData(push);
+      } else {
+        var push = [...[webSocketData], ...oldNotification];
+        getNotificationData(push);
+      }
+    }
+  }, [webSocketData]);
 
   return <></>;
 };
@@ -41,9 +51,14 @@ const ConnectWebSocket = ({ webSocketData, getWebSocketAllResult }) => {
 const enhancer = connect(
   (state) => ({
     webSocketData: state?.webSocket?.webSocketDetails?.data,
+    webSocketNotificationData:
+      state?.webSocket?.webSocketNotificationDetails?.data,
+    notificationResponse:
+      state?.reviewer?.dashboard?.notification?.data?.response,
   }),
   {
     getWebSocketAllResult: webSocketActions.websocketAction,
+    getNotificationData: webSocketActions.websocketNotificationAction,
   }
 );
 export default enhancer(ConnectWebSocket);
