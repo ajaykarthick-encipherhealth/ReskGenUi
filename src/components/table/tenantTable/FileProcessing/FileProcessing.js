@@ -119,10 +119,10 @@ const stageChartMap = {
   HEALTH_METRICS_CALCULATION_FAILED: 3,
   VALID_DISEASE_SEPARATION: 4,
   VALID_DISEASE_SEPARATION_FAILED: 4,
-  COMBINATION_CODES_FOUND: 5,
-  COMBINATION_CODES_FOUND_FAILED: 5,
-  MEAT_FOUND_FAILED: 6,
-  MEAT_FOUND: 6,
+  MEAT_FOUND_FAILED: 5,
+  MEAT_FOUND: 5,
+  COMBINATION_CODES_FOUND: 6,
+  COMBINATION_CODES_FOUND_FAILED: 6,
   RAF_SCORE_FOUND: 7,
   RAF_SCORE_FOUND_FAILED: 7,
   // STORED: 8,
@@ -178,8 +178,8 @@ const FileProcessingTable = ({
     getAllProcessingData();
   }, []);
   useEffect(() => {
-    if(fileProcessingData?.loading){
-      setFileLoading(false)
+    if (fileProcessingData?.loading) {
+      setFileLoading(false);
     }
   }, [fileProcessingData]);
 
@@ -191,14 +191,16 @@ const FileProcessingTable = ({
       );
       if (foundItem) {
         foundItem.processStageChart = webSocketData?.processStageChart;
-        if(webSocketData?.createdDate){
-          var datePush=  [...foundItem.processStageEventDTOs,...[webSocketData]]
+        if (webSocketData?.createdDate) {
+          var datePush = [
+            ...foundItem.processStageEventDTOs,
+            ...[webSocketData],
+          ];
           foundItem.processStageEventDTOs = datePush;
-        } 
+        }
       }
     }
   }, [webSocketData]);
-
 
   useEffect(() => {
     if (activeId && parsedData) {
@@ -257,19 +259,19 @@ const FileProcessingTable = ({
       case "VALID_DISEASE_SEPARATION_FAILED":
         uploadStatus = 40;
         break;
-
-      case "COMBINATION_CODES_FOUND":
-        uploadStatus = 60;
-        break;
-      case "COMBINATION_CODES_FOUND_FAILED":
-        uploadStatus = 50;
-        break;
       case "MEAT_FOUND":
-        uploadStatus = 70;
+        uploadStatus = 60;
         break;
       case "MEAT_FOUND_FAILED":
+        uploadStatus = 50;
+        break;
+      case "COMBINATION_CODES_FOUND":
+        uploadStatus = 70;
+        break;
+      case "COMBINATION_CODES_FOUND_FAILED":
         uploadStatus = 60;
         break;
+
       case "RAF_SCORE_FOUND":
         uploadStatus = 80;
         break;
@@ -302,7 +304,7 @@ const FileProcessingTable = ({
       const currentIndex = stages.indexOf(currentStage);
 
       if (currentIndex == 0) {
-        return stages[currentIndex +1];
+        return stages[currentIndex + 1];
       }
 
       if (currentIndex > 0) {
@@ -382,6 +384,17 @@ const FileProcessingTable = ({
       },
       {
         title: "",
+        description: "Meat",
+        status:
+          stageChartMap[data?.processStageChart] <= stageChartMap[currentIndex]
+            ? "finish"
+            : stageChartMap2[data?.processStageChart] === "MEAT_FOUND_FAILED"
+            ? "error"
+            : undefined,
+        info: "MEAT_FOUND",
+      },
+      {
+        title: "",
         description: "Combination codes",
         status:
           stageChartMap[data?.processStageChart] <= stageChartMap[currentIndex]
@@ -391,17 +404,6 @@ const FileProcessingTable = ({
             ? "error"
             : undefined,
         info: "COMBINATION_CODES_FOUND",
-      },
-      {
-        title: "",
-        description: "Meat",
-        status:
-          stageChartMap[data?.processStageChart] <= stageChartMap[currentIndex]
-            ? "finish"
-            : stageChartMap2[data?.processStageChart] === "MEAT_FOUND_FAILED"
-            ? "error"
-            : undefined,
-        info: "MEAT_FOUND",
       },
       {
         title: "",
@@ -526,8 +528,8 @@ const FileProcessingTable = ({
             >
               {mappedSteps?.map((step, index) => {
                 const findData =
-                data?.processStageEventDTOs&&
-                data?.processStageEventDTOs?.find(
+                  data?.processStageEventDTOs &&
+                  data?.processStageEventDTOs?.find(
                     (item) => item?.processStageChart === step?.info
                   );
 
@@ -535,7 +537,7 @@ const FileProcessingTable = ({
                   <div key={index} className={TableStyle.innerProcessingDiv}>
                     {finished
                       ? "Loading..."
-                      :  data?.processStageEventDTOs?.length > 0 &&
+                      : data?.processStageEventDTOs?.length > 0 &&
                         (findData ? (
                           <span>
                             {findData?.createdDate &&
