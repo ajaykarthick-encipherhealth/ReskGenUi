@@ -12,6 +12,7 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 import Footer from "../jsx/layouts/Footer";
 import AICHAT from "../components/aiChat";
 import { refreshToken } from "../stores/authflow/actions";
+import ConnectWebSocket from "../components/websocket";
 
 config.autoAddCss = false;
 
@@ -20,6 +21,7 @@ function MyApp({ Component, pageProps }) {
   const dispatch = useDispatch();
   const [showTerminal, setShowTerminal] = useState(false);
   const [validPath, setValidPath] = useState(true);
+  let loginCheck =  typeof window !== 'undefined' ? localStorage.getItem('loginCheck') : null
 
   useEffect(() => {
     const currentPath = window.location.pathname;
@@ -126,6 +128,8 @@ function MyApp({ Component, pageProps }) {
       <Provider store={store}>
         {showTerminal && <AICHAT openMsg={true} />}
         <Component {...pageProps} />
+        {loginCheck == "true" &&
+        <ConnectWebSocket/>}
         {showFooter && showTerminal && <Footer />}
       </Provider>
     </PrimeReactProvider>

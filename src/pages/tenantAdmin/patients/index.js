@@ -58,6 +58,7 @@ const Patient = ({
   organizationList,
   getAllPatients,
   allPatientList,
+  webSocketData
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -471,27 +472,10 @@ const Patient = ({
         selAllocatedTo,
         selAllocatedBy,
         selCreatedBy,
-        sort,
+        sort,      
         // (orgId = selectOrgList?.value)
       );
-      eventStreming(
-        ENDPOINTS,
-        setParsedData,
-        pageNo,
-        pageSize,
-        getPatients,
-        dispatch,
-        computedStartDate,
-        computedEndDate,
-        selectedOption,
-        search,
-        completedStartDate,
-        completedEndDate,
-        selAllocatedTo,
-        selAllocatedBy,
-        selCreatedBy,
-        sort
-      );
+
       setAddPatient(false);
       setAddPatient(false);
       setIsLoadingBtn(false);
@@ -544,6 +528,68 @@ const Patient = ({
     setTableLoading(true);
     getAllList(allPatientList?.data?.response);
   };
+
+
+  const statusUpdateWebSockt=(result)=>{
+    var resultMap = [];
+    result?.map((res) => {
+      resultMap?.push({
+        ...res,
+        patientId: res.patientId,
+        patientAllocated: res.patientAllocated,
+        computing: res.computing,
+        processStageChart: res.processStageChart,
+        processStageRadiology: res.processStageRadiology,
+        processStageLab: res.processStageLab,
+        processStageId: res.processStageId,
+        processStageIdRadiology: res.processStageIdRadiology,
+        processStageIdLab: res.processStageIdLab,
+        allocatedUserId: res.allocatedUserId,
+        allocatedOn: res.allocatedOn,
+        allocatedBy: res.allocatedBy,
+        patientName: res.patientName,
+        dueDate: res.dueDate,
+        processedStatus: res.processedStatus,
+        auditedStatus: res.auditedStatus,
+        auditedBy: res.auditedBy,
+        auditedDate: res.auditedDate,
+        priority: res.priority,
+        computedDate: res.computedDate,
+        lastModifiedDate: res.lastModifiedDate,
+        createdDate: res.createdDate,
+        createdBy: res.createdBy,
+        allocatedByFirstName: res.allocatedByFirstName,
+        allocatedByLastName: res.allocatedByLastName,
+        allocatedByProfileImage: res.allocatedByProfileImage,
+        createdByFirstName: res.createdByFirstName,
+        createdByLastName: res.createdByLastName,
+        createdByProfileImage: res.createdByProfileImage,
+        totalPages: res.totalPages
+      });
+    });
+    var newArray = [];
+    newArray = [...patinetListAll, ...resultMap];
+    setPatinetListAll(resultMap);
+
+  }
+
+  useEffect(() => {
+    if (webSocketData  && webSocketData?.webSocketType == "PATIENT_COMPUTE") {
+      const patientData = allPatientList?.data?.response?.content;
+      var foundItem = patientData?.find(
+        (x) => x.patientId == webSocketData.patientId
+      );
+      if (foundItem) {
+        foundItem.computing = webSocketData?.computing;
+        if(webSocketData?.computedDate){
+          foundItem.computedDate = webSocketData?.computedDate;
+        } 
+      }
+      statusUpdateWebSockt(patientData);
+    }
+  }, [webSocketData]);
+
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -686,6 +732,8 @@ const enhancer = connect(
   (state) => ({
     organizationList: state?.tenantAdmin?.allOrganization?.data,
     allPatientList: state?.tenantAdmin?.allPatients,
+    webSocketData: state?.webSocket?.webSocketDetails?.data,
+
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,

@@ -831,7 +831,7 @@ export const handleSubmitValidNotes = async ({
   ) {
     apiURL = "management/disease/move/combovalidtodeleted";
   }
-  if (isValidAction.name == "Move to valid" && isValidAction.title == "COMBO") {
+  if (isValidAction.name == "Move to HCC" && isValidAction.title == "COMBO") {
     apiURL = "management/disease/move/combodeletedtovalid";
   }
   if (
@@ -840,8 +840,8 @@ export const handleSubmitValidNotes = async ({
   ) {
     apiURL = "management/disease/move/validtodeleted";
   }
-  if (isValidAction.name == "Move to valid" && isValidAction.title == "MEAT") {
-    apiURL = "management/disease/move/deletedtovalid";
+  if (isValidAction.name == "Move to HCC" && isValidAction.title == "MEAT") {
+    apiURL = "management/meat/move/invalidtovalid";
   }
   try {
     var patientId = localStorage.getItem("patientId");
@@ -850,9 +850,9 @@ export const handleSubmitValidNotes = async ({
       diagnosisCode: selectDisDetails.diagnosisCode
         ? selectDisDetails.diagnosisCode
         : selectDisDetails.diagnosisCodeCombo,
-      description: selectDisDetails.actualDescription,
-      dbDescription: selectDisDetails.dbDescription,
-      reason: values?.reason,
+      // description: selectDisDetails.actualDescription,
+      // dbDescription: selectDisDetails.dbDescription,
+      // reason: values?.reason,
       processedYear: selectDisDetails.processedYear,
       dateOfServices: selectDisDetails.dateOfServices,
       chartProcessType: selectDisDetails.dateOfService

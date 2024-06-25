@@ -9,6 +9,7 @@ import style from "../../../../../components/button/style.module.css";
 import RegularButton from "../../../../button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import CustomSelect from "../../../../customSelect";
 
 export const checkMeatType = (e) => {
   switch (e) {
@@ -48,57 +49,47 @@ const Meat = ({
   sectionEdit,
   handleEdit,
   isEditMeat,
-  isEditMeatValue
+  setCapturedSections,
+  isEditMeatValue,
+  form
 }) => {
   return (
     <div>
-      <div className="row">  
-      {!isEditMeat ?
-        <div className="col-12">
-          <Form.Item
-            label={
-              <label>
-                {checkMeatType(selectMeat)} Aspect{" "}
-                <span style={{ color: "red" }}>*</span>
-              </label>
-            }
-            name={`${checkMeatType(selectMeat)}Aspect`}
-            rules={[
-              {
-                required: true,
-                message: "Please enter diagnosis code",
-              },
-            ]}
-          >
-            <Input name={`${checkMeatType(selectMeat)}Aspect`} />
-          </Form.Item>
-        </div> : 
-        <>
-        <div className="col-12">
-          <Form.Item
-            label={
-              <label>
-               Code
-              </label>
-            }
-          >
-            <Input value={isEditMeatValue.diagnosisCode} disabled/>
-          </Form.Item>
-        </div>
-        <div className="col-12">
-          <Form.Item
-            label={
-              <label>
-                Description
-              </label>
-            }
-            
-          >
-             <Input value={isEditMeatValue.diseaseName} disabled/>
-          </Form.Item>
-        </div>
-        </>
-        }
+      <div className="row">
+        {!isEditMeat ? (
+          <div className="col-12">
+            <Form.Item
+              label={
+                <label>
+                  {checkMeatType(selectMeat)} Aspect{" "}
+                  <span style={{ color: "red" }}>*</span>
+                </label>
+              }
+              name={`${checkMeatType(selectMeat)}Aspect`}
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter diagnosis code",
+                },
+              ]}
+            >
+              <Input name={`${checkMeatType(selectMeat)}Aspect`} />
+            </Form.Item>
+          </div>
+        ) : (
+          <>
+            <div className="col-12">
+              <Form.Item label={<label>Code</label>}>
+                <Input value={isEditMeatValue.diagnosisCode} disabled />
+              </Form.Item>
+            </div>
+            <div className="col-12">
+              <Form.Item label={<label>Description</label>}>
+                <Input value={isEditMeatValue.diseaseName} disabled />
+              </Form.Item>
+            </div>
+          </>
+        )}
         <div className="col-12">
           <Form.Item
             label={
@@ -115,7 +106,7 @@ const Meat = ({
             ]}
           >
             <Select
-              disabled={!isEditMeat}
+              // disabled={!isEditMeat}
               mode="multiple"
               maxTagCount="responsive"
               className={`ant_select_form hcc_form mb-2`}
@@ -161,7 +152,7 @@ const Meat = ({
                 {getSectionNameManually({
                   data: listOfSection,
                   sectionDelete,
-                  sectionEdit
+                  sectionEdit,
                 })}
               </div>
             </div>
@@ -183,10 +174,16 @@ const Meat = ({
                 },
               ]}
             >
-              <Select
+              {/* <Select
                 size="large"
                 options={capturedSections}
                 onChange={(val) => setSection(val)}
+              /> */}
+              <CustomSelect
+                options={capturedSections}
+                onChange={(val) => setSection(val)}
+                setOptions={setCapturedSections}
+                value={section}
               />
             </Form.Item>
           </div>
@@ -260,7 +257,11 @@ const Meat = ({
                   name="Cancel"
                   width="100px"
                   method={"button"}
-                  onClick={() => setShowSection(true)}
+                  onClick={() => {
+                    setShowSection(true);
+                    setSection("");
+                    form.setFieldValue(`${checkMeatType(selectMeat)}section`, "");
+                  }}
                 />
               )}
             </div>
@@ -270,14 +271,15 @@ const Meat = ({
       {true && (
         <Form.Item>
           <div className="d-flex justify-content-center mt-5">
-          {!isEditMeat &&
-            <RegularButton
-              type="outline"
-              name="Back"
-              width="100px"
-              method={"button"}
-              onClick={() => setMeatDisplay(false)}
-            />}
+            {!isEditMeat && (
+              <RegularButton
+                type="outline"
+                name="Back"
+                width="100px"
+                method={"button"}
+                onClick={() => setMeatDisplay(false)}
+              />
+            )}
             <RegularButton
               type=""
               name="Submit"

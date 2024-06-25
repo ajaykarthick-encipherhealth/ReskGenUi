@@ -17,6 +17,7 @@ import {
 } from "../function/ReusableFunctions";
 import { connect } from "react-redux";
 import { getProviderNameTag } from "../function/ProviderHyperlinks";
+import MovementAction from "../movementAction";
 
 const ComboCard = ({
   list,
@@ -41,7 +42,8 @@ const ComboCard = ({
   setActiveTabHead,
   setActiveMeatTitle,
   meatCriteriaList,
-  popup
+  popup,
+  cardTitle
 }) => {
   const [fileInitialPage, setFileInitialPage] = useState(null);
   const [isMulitpleHeader, setIsMulitpleHeader] = useState(false);
@@ -128,7 +130,7 @@ const ComboCard = ({
                         <span>{item.diseaseName}</span>
                       </div>
                       <div className="col-xl-1">
-                        <div>
+                        {/* <div>
                           <Popconfirm
                             title={popConfirmTitle}
                             onConfirm={() =>
@@ -158,6 +160,23 @@ const ComboCard = ({
                               />
                             </div>
                           </Popconfirm>
+                        </div> */}
+                        
+                        <div className={styles.comcoActionIcon}>
+                        <MovementAction
+                          validAction={
+                            cardTitle == "DELETED_COMBO" ? true : false
+                          }
+                          deleteAction={
+                            cardTitle == "VALID_COMBO" ? true : false
+                          }
+                          setIsValidAction={setIsValidAction}
+                          cardTitle="COMBO"
+                          setConfirmNotesModalValid={setConfirmNotesModalValid}
+                          onchangeValid={onchangeCombo}
+                          result={item}
+                          setFileLoading={setFileLoading}
+                        />
                         </div>
                         {item?.children?.length > 0 && (
                           <div

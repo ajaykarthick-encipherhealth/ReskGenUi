@@ -49,6 +49,7 @@
     "react-spreadsheet": "^0.9.2",
     "react-timeago": "^7.2.0",
     "react-toastify": "^10.0.4",
+    "react-use-websocket": "^4.8.1",
     "react-vertical-timeline-component": "^3.6.0",
     "redux": "^4.2.1",
     "redux-actions": "^3.0.0",

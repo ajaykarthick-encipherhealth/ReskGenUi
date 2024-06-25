@@ -10,7 +10,10 @@ import HeadTitle from "../../../../components/headtitle";
 import { SVGICON } from "../../../../jsx/constant/theme";
 import NoNotification from "../../../../images/dashboard/no-notification.png";
 
-const Notifications = ({ notificationResponse }) => {
+const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
+  const notificationResult = webSocketNotificationData
+    ? webSocketNotificationData
+    : notificationResponse?.data?.response?.content;
   const [openNotifications, setOpenNotifications] = useState(false);
   const handleOpen = () => {
     setOpenNotifications(!openNotifications);
@@ -20,8 +23,8 @@ const Notifications = ({ notificationResponse }) => {
   };
 
   const notificationData =
-    notificationResponse?.data?.response?.content?.length > 0 ? (
-      notificationResponse?.data?.response?.content?.map((info) => (
+    notificationResult?.length > 0 ? (
+      notificationResult?.map((info) => (
         <div className={styles.msgDiv} key={info?.id}>
           <div style={{ marginTop: "10px" }}>
             {" "}
@@ -46,7 +49,8 @@ const Notifications = ({ notificationResponse }) => {
     ) : (
       <div className={styles.no_notificarion_container}>
         {!notificationResponse?.loading &&
-           (!notificationResponse?.data?.response?.content || notificationResponse?.data?.response?.content?.length===0 ) && (
+          (!notificationResponse?.data?.response?.content ||
+            notificationResponse?.data?.response?.content?.length === 0) && (
             <Image src={NoNotification} alt="" />
           )}
       </div>
@@ -103,5 +107,7 @@ const Notifications = ({ notificationResponse }) => {
 };
 const enhancer = connect((state) => ({
   notificationResponse: state?.reviewer?.dashboard?.notification,
+  webSocketNotificationData:
+    state?.webSocket?.webSocketNotificationDetails?.data,
 }));
 export default enhancer(Notifications);

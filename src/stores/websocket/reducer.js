@@ -1,20 +1,12 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import {
-  batchUpload,
-  getAllFileProcessAction,
-  getAllOrganizationAction,
-  getAllPatientAction,
-  getAllTrackingAction,
-  getAllUsersAction,
-} from "./actions";
+import { websocketAction, websocketNotificationAction } from "./actions";
 
 const initialState = {
   loading: true,
   data: null,
   error: null,
 };
-
 const createReducer = (actionType) =>
   handleActions(
     {
@@ -38,13 +30,10 @@ const createReducer = (actionType) =>
     initialState
   );
 
-const searchReducer = combineReducers({
-  batchUpload: createReducer(batchUpload),
-  allOrganization: createReducer(getAllOrganizationAction),
-  allUsers: createReducer(getAllUsersAction),
-  allPatients: createReducer(getAllPatientAction),
-  allTracking: createReducer(getAllTrackingAction),
-  allFileProcessing: createReducer(getAllFileProcessAction),
+const WebSocketReducer = combineReducers({
+  webSocketDetails: createReducer(websocketAction),
+  webSocketNotificationDetails: createReducer(websocketNotificationAction),
+
 });
 
-export default searchReducer;
+export default WebSocketReducer;

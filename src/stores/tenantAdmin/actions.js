@@ -21,3 +21,7 @@ export const getAllTrackingAction = createActionThunk(
   "GET_ALL_TARACKING",
   network.getAllTracking
 );
+export const getAllFileProcessAction = createActionThunk(
+  "GET_ALL_FILE_PROCESS",
+  network.getAllFileProcess
+);
