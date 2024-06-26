@@ -30,7 +30,15 @@
   border:1px solid #04306F;
   padding:5px;
   border-radius: 6px;
-  margin-left:10px;
-    
+  margin-left:10px;  
+}
+.heading{
+  border:1px solid #04306F;
+  padding:3px;
+  border-radius: 6px;
+}
+.headfont{
+  font-size: 17px;
+  font-weight: 600;
   
 }

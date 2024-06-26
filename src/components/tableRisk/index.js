@@ -137,12 +137,10 @@ const TableRisk = ({ data, setActiveButton, setSearchInput }) => {
             </table>
           </div>
         </div>
-      );
-    };
-
-    
-
    
 
+   
+  );
+};
 
 export default TableRisk;
