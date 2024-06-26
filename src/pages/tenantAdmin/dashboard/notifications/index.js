@@ -13,7 +13,7 @@ import spinSTYles from "../../../../styles/auth.module.css";
 const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
   const notificationResult = webSocketNotificationData
     ? webSocketNotificationData
-    : notificationResponse?.data?.response?.content;
+    : notificationResponse?.data?.response?.notificationList?.content;
   const [openNotifications, setOpenNotifications] = useState(false);
   const handleOpen = () => {
     setOpenNotifications(!openNotifications);
@@ -49,8 +49,8 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
     ) : (
       <div className={styles.no_notificarion_container}>
         {!notificationResponse?.loading &&
-          (!notificationResponse?.data?.response?.content ||
-            notificationResponse?.data?.response?.content?.length === 0) && (
+          (!notificationResponse?.data?.response?.notificationList?.content ||
+            notificationResponse?.data?.response?.notificationList?.content?.length === 0) && (
             <Image src={NoNotification} alt="" />
           )}
       </div>

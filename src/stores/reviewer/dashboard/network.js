@@ -72,7 +72,7 @@ export const notification=async()=>{
   const options = {
     method: "GET",
   };
-  const data = await requestPortal(`communication/notification/${userId}?page=${0}&limit=100`,
+  const data = await requestPortal(`communication/notification?page=${0}&limit=100`,
     options
   );
   return data;
@@ -88,3 +88,14 @@ export const tenentLogo = async() => {
   );
   return data;
 }
+
+export const unReadCountPost = async ({}) => {
+  const options = {
+    method: "POST",
+  };
+  const data = await requestPortal(
+    `dbservice/notification/read/notification`,
+    options
+  );
+  return data;
+};

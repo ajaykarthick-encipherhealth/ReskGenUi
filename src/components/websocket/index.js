@@ -31,7 +31,7 @@ const ConnectWebSocket = ({
   useEffect(() => {
     if (webSocketData && webSocketData?.webSocketType == "NOTIFICATION") {
       var dataMap = null;
-      var oldNotification = notificationResponse?.content;
+      var oldNotification = notificationResponse?.notificationList?.content;
       if (webSocketNotificationData) {
         dataMap = webSocketNotificationData;
       }
