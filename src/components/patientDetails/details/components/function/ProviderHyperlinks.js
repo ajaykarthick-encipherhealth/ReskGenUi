@@ -1,10 +1,10 @@
 import { CalendarOutlined } from "@ant-design/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Popover } from "antd";
+import { Popover, Tooltip } from "antd";
 import moment from "moment";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { stringToColour } from "./ReusableFunctions";
+import { stringToColour, truncateString } from "./ReusableFunctions";
 export const getProviderNameTag = (
   providerNames,
   hyperlinks,
@@ -40,7 +40,7 @@ export const getProviderNameTag = (
                 meatresult
               )
             }
-            className={`mt-2 text-start ${visitStyles.provider_name}`}
+            className={`mt-2 text-start ${visitStyles.provider_name} truncate-text`}
             style={{
               backgroundColor: stringToColour(res) + 33,
               color: stringToColour(res),
@@ -56,7 +56,7 @@ export const getProviderNameTag = (
                 }}
               />
             </i>
-            {res}
+            <Tooltip title={res}> {truncateString(res, 30)}</Tooltip>
           </span>
         );
         if (res != "") {

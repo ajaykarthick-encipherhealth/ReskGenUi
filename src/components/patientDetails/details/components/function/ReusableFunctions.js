@@ -298,7 +298,7 @@ const newFindValueDocument = (
   setFileLoading(false);
 };
 
-const truncateString = (str, num) => {
+export const truncateString = (str, num) => {
   if (str.length > num) {
     return str.slice(0, num) + "...";
   }
