@@ -24,7 +24,7 @@ const MovementAction = ({
   setFileLoading,
   patientDetailsResult,
   getpatientDetailsData,
-  isComboCode
+  isComboCode,
 }) => {
   const [selectDisDetails, setSelectDisDetails] = useState(false);
   const onChangeValues = (data) => {
@@ -87,7 +87,7 @@ const MovementAction = ({
             okText="Yes"
             cancelText="No"
           >
-            <RightCircleOutlined 
+            <RightCircleOutlined
               className={styles.suggestedIcon}
               onClick={() => {
                 moveToStrightAction(
@@ -133,10 +133,12 @@ const MovementAction = ({
               }}
             />
           </Popconfirm>
-        ) : <CloseCircleFilled
-        className={styles.deleteIcon}
-        onClick={() => message.warning("Delete only formed codes")}
-      />}
+        ) : (
+          <CloseCircleFilled
+            className={styles.deleteIcon}
+            onClick={() => message.warning("Delete only formed codes")}
+          />
+        )}
       </div>
     </>
   );
