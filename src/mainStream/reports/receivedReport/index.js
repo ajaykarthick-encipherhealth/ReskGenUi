@@ -218,12 +218,7 @@ const ReceivedReport = ({
                                 </div>
                                 <div className="col-md-6">
                                   {reportActiveTab === "Supervisor" ? (
-                                    <div
-                                      style={{
-                                        height: "200px",
-                                        overflow: "scroll",
-                                      }}
-                                    >
+                                    <div>
                                       <CustomTable
                                         data={data}
                                         styles={styles}
@@ -232,12 +227,14 @@ const ReceivedReport = ({
                                       />
                                     </div>
                                   ) : (
-                                    <CustomTable
-                                      data={datas}
-                                      styles={styles}
-                                      head1={"Admin"}
-                                      head2={"Count"}
-                                    />
+                                    <div>
+                                      <CustomTable
+                                        data={datas}
+                                        styles={styles}
+                                        head1={"Admin"}
+                                        head2={"Count"}
+                                      />
+                                    </div>
                                   )}
                                 </div>
                               </div>
@@ -253,12 +250,13 @@ const ReceivedReport = ({
           </div>
         </div>
       </div>
-{details?.reportStatusDTOList.content.length > 0  ?   <Pagination
-        first={paginationFirst}
-        totalRecords={details?.reportStatusDTOList?.totalElements}
-        onPageChange={onPageChange}
-      /> : null}
-     
+      {details?.reportStatusDTOList.content.length > 0 ? (
+        <Pagination
+          first={paginationFirst}
+          totalRecords={details?.reportStatusDTOList?.totalElements}
+          onPageChange={onPageChange}
+        />
+      ) : null}
     </>
   );
 };
