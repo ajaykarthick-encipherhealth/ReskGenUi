@@ -520,6 +520,7 @@ const HccCards = ({
                                   setSearch: setSearch,
                                   setFileModalHeader: setFileModalHeader,
                                   patientDocumentResult: patientDocumentResult,
+                                  popup
                                 })}
                               </div>
                               {data.providerName.length == 0 && (

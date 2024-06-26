@@ -13,7 +13,7 @@ const CustomTable = ({ data, styles, head2, head1, color }) => {
     }
   });
   return (
-    <div>
+    <div style={{ maxHeight: "250px", overflowY: "auto" }}>
       <table className="table" style={{ border: "2px solid #e6e6e6" }}>
         <thead>
           <tr>
@@ -32,6 +32,9 @@ const CustomTable = ({ data, styles, head2, head1, color }) => {
               style={{
                 backgroundColor: "#04306F",
                 color: "white",
+                textAlign: "center",
+                position: "sticky",
+                top: "0",
               }}
             >
               {head2}

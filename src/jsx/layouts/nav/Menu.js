@@ -77,7 +77,7 @@ export const AdminMenuList = [
     to: "/admin/fileprocessing",
   },
   {
-    title: "Patient Allocate",
+    title: "Patient Allocation",
     iconStyle: SVGICON.Allocation,
     to: "/admin/allocateduser",
   },
@@ -207,7 +207,7 @@ export const ProviderMenuList = [
     to: "/tenantAdmin/fileprocessing",
   },
   {
-    title: "Patient Allocate",
+    title: "Patient Allocation",
     iconStyle: SVGICON.Allocation,
     to: "/tenantAdmin/allocateduser",
   },
