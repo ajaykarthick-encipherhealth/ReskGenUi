@@ -528,7 +528,6 @@ export const getCaptureSectionBackgroundFile = (
                 </Popover>
               ) : null
             )}
-
             <span
               style={{
                 backgroundColor:
