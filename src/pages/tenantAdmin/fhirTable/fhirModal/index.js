@@ -17,36 +17,46 @@ function FhirDrawer({
   uploadBatch,
   filelList,
   setFileList,
+  getCreateBatch,
+  getAllBatches,
+  reportActiveTab
 }) {
   const [form] = Form.useForm();
   const handleClose = () => {
     setIsDrawerOpen(false);
   };
 
-  const onFinish = async (form) => {
-    let formData = new FormData();
-    formData.append("orgid", await getStorage("orgId"));
-    formData.append("tenantid", await getStorage("tenantId"));
-    formData.append("userid", await getStorage("userId"));
-    formData.append("dos", form.dos[0]);
-    formData.append("folderpath", `/mnt/data/${form.batchid}`);
-    formData.append("failurepath", `/mnt/data/failure`);
-    formData.append("batchid", form.batchid);
-    try {
-      const headers = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint +
-          `aiservice/ai/batch/upload
-        `,
-        formData,
-        headers
-      );
-      console.log(response);
-    } catch (error) {}
+  const onFinish = async (formVal) => {
+    // let formData = new FormData();
+    // formData.append("orgid", await getStorage("orgId"));
+    // formData.append("tenantid", await getStorage("tenantId"));
+    // formData.append("userid", await getStorage("userId"));
+    // formData.append("dos", form.dos[0]);
+    // formData.append("folderpath", `/mnt/data/${form.batchid}`);
+    // formData.append("failurepath", `/mnt/data/failure`);
+    // formData.append("batchid", form.batchid);
+    // try {
+    //   const headers = {
+    //     headers: {
+    //       "Content-Type": "multipart/form-data",
+    //     },
+    //   };
+    //   const response = await axios.post(
+    //     ENDPOINTS.apiEndoint +
+    //       `aiservice/ai/batch/upload
+    //     `,
+    //     formData,
+    //     headers
+    //   );
+    //   console.log(response);
+    // } catch (error) {}
+    if(uploadType!=="upload" && reportActiveTab==="PDF"){
+      const res = await getCreateBatch({ info: formVal });
+    if (res.status === "SUCCESS") {
+      await getAllBatches({ page: 0 });
+      form.resetFields();
+    }
+    }
   };
 
   return (
@@ -61,7 +71,7 @@ function FhirDrawer({
         <div className="container-fluid">
           <Form
             form={form}
-            name="validateOnly"
+            name="basic"
             layout="vertical"
             onFinish={onFinish}
           >
@@ -71,7 +81,7 @@ function FhirDrawer({
                   Batch Name <span className="text-danger">*</span>{" "}
                 </label>
               }
-              name="batchid"
+              name="name"
               rules={[
                 {
                   required: true,
@@ -123,7 +133,7 @@ function FhirDrawer({
                   Year of Service <span className="text-danger">*</span>{" "}
                 </label>
               }
-              name="dos"
+              name="yearOfService"
               rules={[
                 {
                   required: true,
@@ -152,5 +162,7 @@ function FhirDrawer({
 }
 const enhancer = connect((state) => ({}), {
   uploadBatch: tenantActions.batchUpload,
+  getCreateBatch: tenantActions.getCreateBatch,
+  getAllBatches: tenantActions.getAllBatches,
 });
 export default enhancer(FhirDrawer);

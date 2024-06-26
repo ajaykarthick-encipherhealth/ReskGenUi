@@ -29,3 +29,7 @@ export const getAllBatches=createActionThunk(
   'GET_ALL_BATCHES',
   network.allBatches
 )
+export const getCreateBatch=createActionThunk(
+  'CREATE_BATCHES',
+  network.createBatch
+)

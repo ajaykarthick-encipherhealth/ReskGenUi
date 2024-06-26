@@ -316,7 +316,7 @@ const Index = ({ getAllBatches, pdfTabledata,pdfLoader }) => {
       getAllBatches({ page: pageNo });
     }
   }, [reportActiveTab, pageNo]);
-  console.log(pdfTabledata,pdfLoader);
+
   return (
     <>
       <Header />
@@ -481,6 +481,7 @@ const Index = ({ getAllBatches, pdfTabledata,pdfLoader }) => {
                               setIsDrawerOpen={setIsDrawerOpen}
                               uploadType={uploadType}
                               setUploadType={setUploadType}
+                              reportActiveTab={reportActiveTab}
                             />
                           )}
                         </div>
