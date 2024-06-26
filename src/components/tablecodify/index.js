@@ -101,6 +101,8 @@ const Tables = (props) => {
     setHideButton(false);
   };
 
+ 
+
   return (
     <div>
       {hideButton && (
@@ -273,9 +275,11 @@ const Tables = (props) => {
                 parentCode?.map((data) => {
                   return (
                     <div>
+                      {(data?.includes || data?.excludes1 || data?.excludes2 || data?.useAdditionalCode || data?.codeAlso || data?.codeFirst || data?.inclusionTerm) && (
                       <div className={style.head}>
-                        Parent Code Notes: {data.name}
+                        {data.name} - {data.desc}
                       </div>
+                    )}
 
                       {data?.includes && (
                         <div>
