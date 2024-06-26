@@ -1,15 +1,12 @@
-import React, { useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
-import Image from "next/image";
+import React, { useRef } from "react";
 import styles from "../../../../components/imageUploading/styles.module.css";
-// import { preSendURl } from "../../store/actions/AuthActions";
-// import upload from "../../images/fihr/upload.png";
 
-const UploadFile = ({ filelList, setFileList }) => {
+const UploadFile = ({ filelList, setFileList, setFileErr }) => {
   const fileInputRef = useRef(null);
   const fileHandleChange = (e) => {
     if (e.target.files) {
       const files = e.target.files;
+
       const validFiles = [];
       const maxSize = 40 * 1024 * 1024;
       for (let i = 0; i < files?.length; i++) {
@@ -17,8 +14,13 @@ const UploadFile = ({ filelList, setFileList }) => {
           validFiles?.push(files[i]);
         }
       }
-      console.log(validFiles);
       setFileList(validFiles);
+      const formData = new FormData();
+      validFiles.forEach((item, index) => {
+        formData.append(`file${index + 1}`, item);
+      });
+      console.log(formData);
+      setFileErr(true);
     }
   };
 
@@ -35,13 +37,16 @@ const UploadFile = ({ filelList, setFileList }) => {
           accept=".pdf"
         />
 
-        <div className={styles.videoflex}>
-          {filelList?.map(
-            (item, index) =>
-              `${item?.name} ${filelList?.length === index + 1 ? "" : ", "}`
-          )}
-          {/* <Image src={upload} alt="Image" /> */}
-          Upload
+        <div
+          className={styles.videoflex}
+          style={{ overflowY: "scroll", height: "100px", padding: "15px" }}
+        >
+          {filelList?.length > 0
+            ? filelList?.map(
+                (item, index) =>
+                  `${item?.name} ${filelList?.length === index + 1 ? "" : ", "}`
+              )
+            : "Upload"}
         </div>
       </label>
     </div>

@@ -142,14 +142,26 @@ export async function allBatches({ page }) {
   const options = {
     method: "GET",
   };
-  const data = await requestPortal(`dbservice/batch/batchupload?page=${page}&size=15`, options);
+  const data = await requestPortal(
+    `dbservice/batch/batchupload?page=${page}&size=15`,
+    options
+  );
   return data;
 }
 export async function createBatch({ info }) {
   const options = {
     method: "POST",
-    body:JSON.stringify(info)
+    body: JSON.stringify(info),
   };
   const data = await requestPortal(`management/batch`, options);
+  return data;
+}
+export async function uploadFile({ info }) {
+  console.log(info,JSON.stringify(info))
+  const options = {
+    method: "POST",
+    body: JSON.stringify(info),
+  };
+  const data = await requestPortal(`management/batch/upload`, options);
   return data;
 }

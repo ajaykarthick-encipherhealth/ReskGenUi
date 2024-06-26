@@ -279,7 +279,7 @@ const FIHRData = [
   },
 ];
 
-const Index = ({ getAllBatches, pdfTabledata,pdfLoader }) => {
+const Index = ({ getAllBatches, pdfTabledata, pdfLoader }) => {
   const dispatch = useDispatch();
   const patientDetails = useSelector((state) => state.adminReport?.details);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
@@ -288,10 +288,12 @@ const Index = ({ getAllBatches, pdfTabledata,pdfLoader }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [uploadType, setUploadType] = useState("");
   const [pageNo, setPageNo] = useState(0);
+  const [selectedBatch, setSelectedBatch] = useState();
 
   const handleUploadButtonClick = (e) => {
     setIsDrawerOpen(!isDrawerOpen);
     setUploadType(e.target.name);
+    setSelectedBatch()
   };
 
   const onPageChange = (e) => {
@@ -311,8 +313,7 @@ const Index = ({ getAllBatches, pdfTabledata,pdfLoader }) => {
     if (reportActiveTab) {
       dispatch(getActiveTab(reportActiveTab));
     }
-    if(reportActiveTab==='PDF'){
-
+    if (reportActiveTab === "PDF") {
       getAllBatches({ page: pageNo });
     }
   }, [reportActiveTab, pageNo]);
@@ -466,22 +467,24 @@ const Index = ({ getAllBatches, pdfTabledata,pdfLoader }) => {
                                   <Tab.Pane id="my-posts" eventKey="pdf">
                                     <PdfTable
                                       paginationFirst={paginationFirst}
-                                     
+                                      setSelectedBatch={setSelectedBatch}
                                       onPageChange={onPageChange}
                                       tableData={pdfTabledata}
+                                      selectedBatch={selectedBatch}
                                     />
                                   </Tab.Pane>
                                 </Tab.Content>
                               </Tab.Container>
                             </div>
                           </div>
+                          
                           {isDrawerOpen && (
                             <FhirDrawer
                               isDrawerOpen={isDrawerOpen}
                               setIsDrawerOpen={setIsDrawerOpen}
                               uploadType={uploadType}
                               setUploadType={setUploadType}
-                              reportActiveTab={reportActiveTab}
+                              selectedBatch={selectedBatch}
                             />
                           )}
                         </div>

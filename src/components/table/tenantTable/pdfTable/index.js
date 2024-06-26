@@ -19,6 +19,8 @@ function PdfTable({
   onPageChange,
   selectedRows,
   tableData,
+  setSelectedBatch,
+  selectedBatch
 }) {
   const dispatch = useDispatch();
   const [filelList, setFileList] = useState();
@@ -57,8 +59,10 @@ function PdfTable({
   };
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const handleUploadButtonClick = (e) => {
+  const handleUploadButtonClick = (row) => {
     setIsDrawerOpen(!isDrawerOpen);
+    setSelectedBatch(row)
+    setFileList()
   };
   return (
     <div className={TableStyle.classContaineer}>
@@ -145,9 +149,9 @@ function PdfTable({
                     <td className={TableStyle.childBorder}>
                       <div className="d-flex justify-content-between">
                         {dateFormate(dayjs, row?.initialedDate)}
-                        <div onClick={handleUploadButtonClick} name="upload">
+                        <div  name="upload">
                           <button
-                            onClick={handleUploadButtonClick}
+                            onClick={()=>handleUploadButtonClick(row)}
                             className="btn hegiht10  sharp me-1 action-btn"
                             style={{ background: "#04306f" }}
                           >
@@ -188,9 +192,12 @@ function PdfTable({
         isDrawerOpen={isDrawerOpen}
         setIsDrawerOpen={setIsDrawerOpen}
         uploadType="upload"
-        filelList={filelList}
+        fileList={filelList}
         setFileList={setFileList}
+        selectedBatch={selectedBatch}
+        setSelectedBatch={setSelectedBatch}
       />
+
     </div>
   );
 }

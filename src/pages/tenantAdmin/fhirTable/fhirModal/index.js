@@ -1,61 +1,77 @@
 import React from "react";
 import { Offcanvas, Button } from "react-bootstrap";
-// import UploadFile from "../uploadFile";
 import { actions as tenantActions } from "../../../../stores/tenantAdmin";
 import { connect } from "react-redux";
 import { Form, Input, Select } from "antd";
 import { getYears } from "../../../../utils/reusable";
-import { getStorage } from "../../../../utils/storages";
-import ENDPOINTS from "../../../../utility/enpoints";
-import axios from "../../../../utility/axiosConfig";
 import UploadFile from "../uploadFile";
+import { useSelector } from "react-redux";
+import { useState } from "react";
 
-function FhirDrawer({
+const FhirDrawer = ({
   isDrawerOpen,
   setIsDrawerOpen,
   uploadType,
-  uploadBatch,
-  filelList,
+  fileList,
   setFileList,
   getCreateBatch,
   getAllBatches,
-  reportActiveTab
-}) {
+  getUploadFile,
+  selectedBatch,
+  setSelectedBatch,
+}) => {
   const [form] = Form.useForm();
+  const [fileErr, setFileErr] = useState(false);
   const handleClose = () => {
     setIsDrawerOpen(false);
-  };
-
-  const onFinish = async (formVal) => {
-    // let formData = new FormData();
-    // formData.append("orgid", await getStorage("orgId"));
-    // formData.append("tenantid", await getStorage("tenantId"));
-    // formData.append("userid", await getStorage("userId"));
-    // formData.append("dos", form.dos[0]);
-    // formData.append("folderpath", `/mnt/data/${form.batchid}`);
-    // formData.append("failurepath", `/mnt/data/failure`);
-    // formData.append("batchid", form.batchid);
-    // try {
-    //   const headers = {
-    //     headers: {
-    //       "Content-Type": "multipart/form-data",
-    //     },
-    //   };
-    //   const response = await axios.post(
-    //     ENDPOINTS.apiEndoint +
-    //       `aiservice/ai/batch/upload
-    //     `,
-    //     formData,
-    //     headers
-    //   );
-    //   console.log(response);
-    // } catch (error) {}
-    if(uploadType!=="upload" && reportActiveTab==="PDF"){
-      const res = await getCreateBatch({ info: formVal });
-    if (res.status === "SUCCESS") {
-      await getAllBatches({ page: 0 });
-      form.resetFields();
+    if (setSelectedBatch()) {
+      setSelectedBatch();
     }
+  };
+  const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
+  const onFinish = async (formVal) => {
+    if (reportActiveTab === "PDF") {
+      if (uploadType !== "upload") {
+        const res = await getCreateBatch({ info: formVal });
+        if (res.status === "SUCCESS") {
+          await getAllBatches({ page: 0 });
+          form.resetFields();
+        }
+      } else {
+        if (fileList?.length > 0) {
+          setFileErr(true);
+        }
+        try {
+          const responses = [];
+          for (const item of fileList) {
+            const res = await getUploadFile({
+              info: {
+                batchId: selectedBatch?.id,
+                yearOfServices: formVal?.yearOfService,
+                file:item
+                //  {
+                //   lastModified: item.lastModified,
+                //   lastModifiedDate: item?.lastModifiedDate,
+                //   name: item?.name,
+                //   size: item?.size,
+                //   type: item?.type,
+                //   webkitRelativePath: "",
+                // },
+              },
+            });
+            responses.push(res);
+
+            if (res.status === "SUCCESS") {
+              await getAllBatches({ page: 0 });
+              setFileErr(false);
+              form.resetFields();
+            }
+          }
+          console.log(responses);
+        } catch (err) {
+          console.error("Error uploading files:", err);
+        }
+      }
     }
   };
 
@@ -69,12 +85,7 @@ function FhirDrawer({
       </Offcanvas.Header>
       <Offcanvas.Body>
         <div className="container-fluid">
-          <Form
-            form={form}
-            name="basic"
-            layout="vertical"
-            onFinish={onFinish}
-          >
+          <Form form={form} name="basic" layout="vertical" onFinish={onFinish}>
             <Form.Item
               label={
                 <label>
@@ -117,14 +128,21 @@ function FhirDrawer({
                   </label>
                 }
                 name="upload"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please Enter Upload File ",
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required:filelList?.length>0?false: true,
+                //     message: "Please Enter Upload File ",
+                //   },
+                // ]}
               >
-                <UploadFile filelList={filelList} setFileList={setFileList} />
+                <UploadFile
+                  filelList={fileList}
+                  setFileList={setFileList}
+                  setFileErr={setFileErr}
+                />
+                {/* {!fileErr && (
+                  <span className="text-red">Please upload the files</span>
+                )} */}
               </Form.Item>
             )}
             <Form.Item
@@ -159,10 +177,11 @@ function FhirDrawer({
       </Offcanvas.Body>
     </Offcanvas>
   );
-}
+};
 const enhancer = connect((state) => ({}), {
   uploadBatch: tenantActions.batchUpload,
   getCreateBatch: tenantActions.getCreateBatch,
   getAllBatches: tenantActions.getAllBatches,
+  getUploadFile: tenantActions.getUploadFile,
 });
 export default enhancer(FhirDrawer);
