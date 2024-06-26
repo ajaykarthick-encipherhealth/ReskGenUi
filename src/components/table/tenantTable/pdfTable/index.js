@@ -58,7 +58,7 @@ function PdfTable({
       }
     });
   };
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(true);
 
   const handleUploadButtonClick = (row) => {
     setIsDrawerOpen(!isDrawerOpen);
