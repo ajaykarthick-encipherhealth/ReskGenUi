@@ -838,10 +838,10 @@ export const handleSubmitValidNotes = async ({
     isValidAction.name == "Move to Deleted" &&
     isValidAction.title == "MEAT"
   ) {
-    apiURL = "management/disease/move/validtodeleted";
+    apiURL = "management/disease/move/validtosuggested";
   }
   if (isValidAction.name == "Move to HCC" && isValidAction.title == "MEAT") {
-    apiURL = "management/meat/move/invalidtovalid";
+    apiURL = "management/meat/move/suggestedtovalid";
   }
   try {
     var patientId = localStorage.getItem("patientId");
