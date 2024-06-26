@@ -22,9 +22,10 @@ const FhirDrawer = ({
 }) => {
   const [form] = Form.useForm();
   const [fileErr, setFileErr] = useState(false);
-  const handleClose = () => {
+  const handleClose = (form) => {
     setIsDrawerOpen(false);
-    if (setSelectedBatch()) {
+    form.resetFields();
+    if (setSelectedBatch) {
       setSelectedBatch();
     }
   };
@@ -48,7 +49,7 @@ const FhirDrawer = ({
               info: {
                 batchId: selectedBatch?.id,
                 yearOfServices: formVal?.yearOfService,
-                file:item
+                file: item,
                 //  {
                 //   lastModified: item.lastModified,
                 //   lastModifiedDate: item?.lastModifiedDate,
@@ -77,7 +78,7 @@ const FhirDrawer = ({
 
   return (
     <Offcanvas show={isDrawerOpen} className="offcanvas-end" placement="end">
-      <Offcanvas.Header closeButton onClick={handleClose}>
+      <Offcanvas.Header closeButton onClick={() => handleClose(form)}>
         <Offcanvas.Title>
           {" "}
           {uploadType === "upload" ? "Update New Batch" : "Create batch"}{" "}

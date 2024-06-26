@@ -38,3 +38,8 @@ export const getUploadFile=createActionThunk(
   network.uploadFile
 
 )
+export const getBatchInfo=createActionThunk(
+  'GET_BATCH_INFO',
+  network.batchDetails
+
+)

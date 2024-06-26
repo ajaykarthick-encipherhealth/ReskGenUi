@@ -8,6 +8,7 @@ import {
   getAllPatientAction,
   getAllTrackingAction,
   getAllUsersAction,
+  getBatchInfo,
 } from "./actions";
 
 const initialState = {
@@ -58,6 +59,8 @@ const searchReducer = combineReducers({
   allFileProcessing: createReducer(getAllFileProcessAction),
   allBatches: createReducer(getAllBatches),
   batchLoader: getReportLoading(getAllBatches),
+  getBatch:createReducer(getBatchInfo),
+  getBatchLoader:getReportLoading(getBatchInfo)
 });
 
 export default searchReducer;

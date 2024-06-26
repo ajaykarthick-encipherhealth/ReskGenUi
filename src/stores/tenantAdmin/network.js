@@ -165,3 +165,11 @@ export async function uploadFile({ info }) {
   const data = await requestPortal(`management/batch/upload`, options);
   return data;
 }
+
+export async function batchDetails({ batchId }) {
+  const options = {
+    method: "GET"
+  };
+  const data = await requestPortal(`dbservice/batch/batchuploaddetails?batchId=${batchId}`, options);
+  return data;
+}

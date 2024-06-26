@@ -12,7 +12,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import FhirDrawer from "../../../../pages/tenantAdmin/fhirTable/fhirModal";
-import UploadFile from "../../../../pages/tenantAdmin/fhirTable/uploadFile";
+import { useRouter } from "next/router";
 
 function PdfTable({
   paginationFirst,
@@ -20,9 +20,10 @@ function PdfTable({
   selectedRows,
   tableData,
   setSelectedBatch,
-  selectedBatch
+  selectedBatch,
 }) {
   const dispatch = useDispatch();
+  const router=useRouter()
   const [filelList, setFileList] = useState();
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
@@ -61,8 +62,8 @@ function PdfTable({
 
   const handleUploadButtonClick = (row) => {
     setIsDrawerOpen(!isDrawerOpen);
-    setSelectedBatch(row)
-    setFileList()
+    setSelectedBatch(row);
+    setFileList();
   };
   return (
     <div className={TableStyle.classContaineer}>
@@ -86,7 +87,21 @@ function PdfTable({
           <tbody className={TableStyle.bodytable}>
             {tableData?.content?.length > 0 ? (
               tableData?.content?.map((row, index) => (
-                <tr key={index}>
+                <tr
+                  key={index}
+                  onClick={() => {
+                    const encodedParams = btoa(
+                      JSON.stringify({
+                        batchId: row?.id,
+                      })
+                    );
+
+                    router?.push({
+                      pathname: `/tenantAdmin/fhirTable/pdfTable`,
+                      search: `params=${encodedParams}`,
+                    });
+                  }}
+                >
                   <>
                     <td className={TableStyle.childBorder}>
                       {row?.id ? row?.id : "---"}
@@ -149,9 +164,9 @@ function PdfTable({
                     <td className={TableStyle.childBorder}>
                       <div className="d-flex justify-content-between">
                         {dateFormate(dayjs, row?.initialedDate)}
-                        <div  name="upload">
+                        <div name="upload">
                           <button
-                            onClick={()=>handleUploadButtonClick(row)}
+                            onClick={() => handleUploadButtonClick(row)}
                             className="btn hegiht10  sharp me-1 action-btn"
                             style={{ background: "#04306f" }}
                           >
@@ -197,7 +212,6 @@ function PdfTable({
         selectedBatch={selectedBatch}
         setSelectedBatch={setSelectedBatch}
       />
-
     </div>
   );
 }
