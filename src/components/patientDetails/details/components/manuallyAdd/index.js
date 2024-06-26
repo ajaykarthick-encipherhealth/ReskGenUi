@@ -171,6 +171,7 @@ const ManuallyAdd = ({
             processedYear: year.value,
             patientId: await getStorage("patientId"),
             dateOfService: val,
+            fileId: patientDetailsResult?.data?.response?.fileId ? patientDetailsResult.data.response.fileId : ""
           });
           if (res.status == "SUCCESS") {
             setProviderDetails([...res?.response?.providerInfoList]);
