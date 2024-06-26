@@ -11,7 +11,6 @@ import { SVGICON } from "../../../../jsx/constant/theme";
 import NoNotification from "../../../../images/dashboard/no-notification.png";
 
 const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
-  console.log(webSocketNotificationData)
   const notificationResult = webSocketNotificationData
     ? webSocketNotificationData
     : notificationResponse?.data?.response?.notificationList?.content;

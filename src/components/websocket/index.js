@@ -29,7 +29,6 @@ const ConnectWebSocket = ({
   }, [lastJsonMessage]);
 
   useEffect(() => {
-    console.log(webSocketData)
     if (webSocketData && webSocketData?.webSocketType == "NOTIFICATION") {
       var dataMap = null;
       var oldNotification = notificationResponse?.notificationList?.content;
