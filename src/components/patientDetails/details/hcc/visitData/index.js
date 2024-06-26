@@ -77,6 +77,8 @@ const VisitData = ({
   const [allDisList, setAllDisList] = useState([]);
   const [zIndex, setZIndex] = useState(false);
   const [allMeatList, setAllMeatList] = useState([]);
+  const [deletedMeatList, setDeletedMeatList] = useState([]);
+
 
 
   useEffect(() => {
@@ -99,7 +101,7 @@ const VisitData = ({
       "",
       "",
       "",
-      "",
+      setDeletedMeatList,
       "",
       setAllMeatList
     );
@@ -346,7 +348,7 @@ const VisitData = ({
                               hccVersionDetails={hccVersionDetails}
                               captureSectionMatching={captureSectionMatching}
                               encounterDateMatching={encounterDateMatching}
-                              meatCriteriaList={allMeatList}
+                              meatCriteriaList={deletedMeatList}
                               onchangeValid={onchangeValid}
                               getValidHccDetails={getValidHccDetails}
                               setFormValues={setFormValues}
@@ -417,7 +419,7 @@ const VisitData = ({
                               hccVersionDetails={hccVersionDetails}
                               captureSectionMatching={captureSectionMatching}
                               encounterDateMatching={encounterDateMatching}
-                              meatCriteriaList={allMeatList}
+                              meatCriteriaList={deletedMeatList}
                               onchangeValid={onchangeValid}
                               getValidHccDetails={getValidHccDetails}
                               setFormValues={setFormValues}
@@ -588,7 +590,7 @@ const VisitData = ({
                               hccVersionDetails={hccVersionDetails}
                               captureSectionMatching={captureSectionMatching}
                               encounterDateMatching={encounterDateMatching}
-                              meatCriteriaList={allMeatList}
+                              meatCriteriaList={deletedMeatList}
                               onchangeValid={onchangeValid}
                               getValidHccDetails={getValidHccDetails}
                               setFormValues={setFormValues}
@@ -658,7 +660,7 @@ const VisitData = ({
                               hccVersionDetails={hccVersionDetails}
                               captureSectionMatching={captureSectionMatching}
                               encounterDateMatching={encounterDateMatching}
-                              meatCriteriaList={allMeatList}
+                              meatCriteriaList={deletedMeatList}
                               onchangeValid={onchangeValid}
                               getValidHccDetails={getValidHccDetails}
                               setFormValues={setFormValues}

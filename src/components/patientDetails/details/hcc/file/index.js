@@ -81,6 +81,8 @@ const File = ({
   const [formEditPlace, setFormEditPlace] = useState("");
   const [allDisList, setAllDisList] = useState([]);
   const [allMeatList, setAllMeatList] = useState([]);
+  const [deletedMeatList, setDeletedMeatList] = useState([]);
+
 
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
@@ -102,7 +104,7 @@ const File = ({
       "",
       "",
       "",
-      "",
+      setDeletedMeatList,
       "",
       setAllMeatList
     );
@@ -380,7 +382,7 @@ const File = ({
                             hccVersionDetails={hccVersionDetails}
                             captureSectionMatching={captureSectionMatching}
                             encounterDateMatching={encounterDateMatching}
-                            meatCriteriaList={allMeatList}
+                            meatCriteriaList={deletedMeatList}
                             onchangeValid={onchangeValid}
                             getValidHccDetails={getValidHccDetails}
                             setFormValues={setFormValues}
@@ -448,7 +450,7 @@ const File = ({
                               hccVersionDetails={hccVersionDetails}
                               captureSectionMatching={captureSectionMatching}
                               encounterDateMatching={encounterDateMatching}
-                              meatCriteriaList={allMeatList}
+                              meatCriteriaList={deletedMeatList}
                               onchangeValid={onchangeValid}
                               getValidHccDetails={getValidHccDetails}
                               setFormValues={setFormValues}
