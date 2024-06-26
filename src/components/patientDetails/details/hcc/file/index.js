@@ -233,9 +233,7 @@ const File = ({
                         <div className="d-flex justify-content-center">
                           <span className={`${visitStyles.hcc_title_badge}`}>
                             {
-                              newValidDiseaseList.filter(
-                                (item) => item.isComboCode != true
-                              ).length
+                              newValidDiseaseList.length
                             }
                           </span>
                         </div>
@@ -370,9 +368,7 @@ const File = ({
                             className={`${visitStyles.suggested_title_badge}`}
                           >
                             {
-                              suggestedHccList.filter(
-                                (item) => item.isComboCode != true
-                              ).length
+                              suggestedHccList.length
                             }
                           </span>
                         </div>

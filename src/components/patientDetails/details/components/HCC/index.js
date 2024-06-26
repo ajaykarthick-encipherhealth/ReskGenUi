@@ -63,7 +63,7 @@ const HccCards = ({
   provided,
   isVisitData,
   fileDosPageNumberList,
-  popup
+  popup,
 }) => {
   const fileId = useSelector(
     (state) => state?.ReviewerReducers?.patientDetails
@@ -132,269 +132,267 @@ const HccCards = ({
       {provided && (
         <div ref={provided?.innerRef} {...provided?.droppableProps}>
           {list?.map(
-            (data, i) =>
-              !data.isComboCode == true && ( // this condation we added for vignesh suggest to remove isCombo pracent
-                <>
-                  <li key={data?.id}>
-                    <Draggable
-                      key={data.diagnosisCode}
-                      draggableId={data.diagnosisCode}
-                      index={i}
-                      draggableData={data.list}
-                    >
-                      {(provided) => {
-                        return (
+            (
+              data,
+              i // this condation we added for vignesh suggest to remove isCombo pracent
+            ) => (
+              <>
+                <li key={data?.id}>
+                  <Draggable
+                    key={data.diagnosisCode}
+                    draggableId={data.diagnosisCode}
+                    index={i}
+                    draggableData={data.list}
+                  >
+                    {(provided) => {
+                      return (
+                        <div
+                          className={`hccActiveCard ${visitStyles.hcc_card}`}
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
                           <div
-                            className={`hccActiveCard ${visitStyles.hcc_card}`}
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
+                            className={` justify-content-between ${visitStyles.hcc_card_nameHead}`}
                           >
-                            <div
-                              className={` justify-content-between ${visitStyles.hcc_card_nameHead}`}
-                            >
-                              <div>
-                                <span className="disease-name d-flex mb-1">
-                                  <span className="valid-dis-name">
-                                    {data.diagnosisCode}
-                                  </span>
-
-                                  {!isDeletedCodes && (
-                                    <FontAwesomeIcon
-                                      icon={faPen}
-                                      style={{ cursor: "pointer" }}
-                                      onClick={() => {
-                                        setFormValues(data),
-                                          setIsEditHccForm(true),
-                                          setFormEditPlace(editFormPlace);
-                                      }}
-                                    />
-                                  )}
-
-                                  <Popover
-                                    content={
-                                      data.dbDescription
-                                        ? data.dbDescription
-                                        : data.actualDescription
-                                    }
-                                    title=""
-                                    trigger="hover"
-                                    overlayStyle={{ zIndex: 1000 }}
-                                  >
-                                    <>
-                                      {" "}
-                                      -{" "}
-                                      {data.dbDescription
-                                        ? data.dbDescription
-                                        : data.actualDescription}
-                                    </>
-                                  </Popover>
+                            <div>
+                              <span className="disease-name d-flex mb-1">
+                                <span className="valid-dis-name">
+                                  {data.diagnosisCode}
                                 </span>
-                              </div>
-                              {/* {data.defaultPosition} */}
-                              <div className="d-flex">
-                                {data.suspectType.length != 0 && (
+
+                                {!isDeletedCodes && (
+                                  <FontAwesomeIcon
+                                    icon={faPen}
+                                    style={{ cursor: "pointer" }}
+                                    onClick={() => {
+                                      setFormValues(data),
+                                        setIsEditHccForm(true),
+                                        setFormEditPlace(editFormPlace);
+                                    }}
+                                  />
+                                )}
+
+                                <Popover
+                                  content={
+                                    data.dbDescription
+                                      ? data.dbDescription
+                                      : data.actualDescription
+                                  }
+                                  title=""
+                                  trigger="hover"
+                                  overlayStyle={{ zIndex: 1000 }}
+                                >
                                   <>
                                     {" "}
-                                    {getSuspectTypes(
-                                      data.diagnosisCode,
-                                      data.suspectType
-                                    )}
+                                    -{" "}
+                                    {data.dbDescription
+                                      ? data.dbDescription
+                                      : data.actualDescription}
                                   </>
-                                )}
-                                {data.isMostSpecific == true && (
-                                  <>
-                                    <div
-                                      className={visitStyles.tree_icon}
-                                      style={{ background: "#c7f3c6" }}
-                                      onClick={() => {
-                                        setOpens(true);
-                                        setCombiTree([
-                                          { ...data, expanded: true },
-                                        ]);
+                                </Popover>
+                              </span>
+                            </div>
+                            {/* {data.defaultPosition} */}
+                            <div className="d-flex">
+                              {data.suspectType.length != 0 && (
+                                <>
+                                  {" "}
+                                  {getSuspectTypes(
+                                    data.diagnosisCode,
+                                    data.suspectType
+                                  )}
+                                </>
+                              )}
+                              {data.children.length > 0 && (
+                                <>
+                                  <div
+                                    className={visitStyles.tree_icon}
+                                    style={{ background: "#c7f3c6" }}
+                                    onClick={() => {
+                                      setOpens(true);
+                                      setCombiTree([
+                                        { ...data, expanded: true },
+                                      ]);
+                                    }}
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={faSitemap}
+                                      style={{
+                                        size: 8,
+                                        color: "#088f39",
                                       }}
-                                    >
-                                      <FontAwesomeIcon
-                                        icon={faSitemap}
-                                        style={{
-                                          size: 8,
-                                          color: "#088f39",
-                                        }}
-                                      />
-                                    </div>
-                                  </>
-                                )}
+                                    />
+                                  </div>
+                                </>
+                              )}
 
-                                {/* <div>
+                              {/* <div>
                                 <FontAwesomeIcon
                                   icon={faCircle}
                                   className={styles.suspectCircle}
                                  />
                               </div> */}
-                                {cardTitle == "SUGGESTED" ||
-                                cardTitle == "DELETED" ? (
+                              {cardTitle == "SUGGESTED" ||
+                              cardTitle == "DELETED" ? (
+                                <>
+                                  {data.defaultPosition == "VALID" ? (
+                                    <span
+                                      className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}
+                                    ></span>
+                                  ) : data.defaultPosition == "INVALID" ? (
+                                    <span
+                                      className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
+                                    ></span>
+                                  ) : data.defaultPosition == "SUGGESTED" ? (
+                                    <span
+                                      className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
+                                    ></span>
+                                  ) : data.defaultPosition == "DELETED" ? (
+                                    <span
+                                      className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
+                                    ></span>
+                                  ) : null}
+                                </>
+                              ) : null}
+
+                              <MovementAction
+                                validAction={cardTitle == "HCC" ? false : true}
+                                suggestedAction={
+                                  cardTitle == "SUGGESTED" ? false : true
+                                }
+                                deleteAction={
+                                  cardTitle == "DELETED" ? false : true
+                                }
+                                setIsValidAction={setIsValidAction}
+                                cardTitle={cardTitle}
+                                setConfirmNotesModalValid={
+                                  setConfirmNotesModalValid
+                                }
+                                onchangeValid={onchangeValid}
+                                result={data}
+                                setFileLoading={setFileLoading}
+                                isComboCode={data.isComboCode}
+                              />
+
+                              <Popover
+                                placement="left"
+                                title={""}
+                                trigger="click"
+                                overlayStyle={{ zIndex: 1000 }}
+                                open={
+                                  openContent === data?.diagnosisCode
+                                    ? true
+                                    : false
+                                }
+                                onVisibleChange={(visible) =>
+                                  setOpenContent(
+                                    visible ? data?.diagnosisCode : null
+                                  )
+                                }
+                                content={() => (
                                   <>
-                                    {data.defaultPosition == "VALID" ? (
-                                      <span
-                                        className={`${visitStyles.hccFlag} ${visitStyles.flagDetailsChange}`}
-                                      ></span>
-                                    ) : data.defaultPosition == "INVALID" ? (
-                                      <span
-                                        className={`${visitStyles.nonhccFlag} ${visitStyles.flagDetailsChange}`}
-                                      ></span>
-                                    ) : data.defaultPosition == "SUGGESTED" ? (
-                                      <span
-                                        className={`${visitStyles.suggestedFlag} ${visitStyles.flagDetailsChange}`}
-                                      ></span>
-                                    ) : data.defaultPosition == "DELETED" ? (
-                                      <span
-                                        className={`${visitStyles.deleteFlag} ${visitStyles.flagDetailsChange}`}
-                                      ></span>
-                                    ) : null}
-                                  </>
-                                ) : null}
+                                    <div className={styles.closeContainer2}>
+                                      <CloseOutlined
+                                        onClick={() => setOpenContent(null)}
+                                        className={styles.closeIcon}
+                                      />
+                                    </div>
 
-                                <MovementAction
-                                  validAction={
-                                    cardTitle == "HCC" ? false : true
-                                  }
-                                  suggestedAction={
-                                    cardTitle == "SUGGESTED" ? false : true
-                                  }
-                                  deleteAction={
-                                    cardTitle == "DELETED" ? false : true
-                                  }
-                                  setIsValidAction={setIsValidAction}
-                                  cardTitle={cardTitle}
-                                  setConfirmNotesModalValid={
-                                    setConfirmNotesModalValid
-                                  }
-                                  onchangeValid={onchangeValid}
-                                  result={data}
-                                  setFileLoading={setFileLoading}
-                                />
-
-                                <Popover
-                                  placement="left"
-                                  title={""}
-                                  trigger="click"
-                                  overlayStyle={{ zIndex: 1000 }}
-                                  open={
-                                    openContent === data?.diagnosisCode
-                                      ? true
-                                      : false
-                                  }
-                                  onVisibleChange={(visible) =>
-                                    setOpenContent(
-                                      visible ? data?.diagnosisCode : null
-                                    )
-                                  }
-                                  content={() => (
-                                    <>
-                                      <div className={styles.closeContainer2}>
-                                        <CloseOutlined
-                                          onClick={() => setOpenContent(null)}
-                                          className={styles.closeIcon}
-                                        />
-                                      </div>
-
-                                      <div className="px-1">
-                                        <Popover
-                                          onClick={() =>
-                                            getValidHccDetails(
-                                              data.actualDescription,
-                                              data.diagnosisCode
-                                            )
-                                          }
-                                          content={PopContentHccVersion}
-                                          title={data.diagnosisCode}
-                                          placement="bottom"
-                                          trigger="click"
-                                          overlayStyle={{ zIndex: 1000 }}
-                                        >
-                                          {/* <Tooltip title="HCC Version Details" placement="bottom"> */}
-                                          <div className="cr-pointer">
-                                            <i className="cr-pointer">
-                                              {SVGICON.infoIcon}
-                                            </i>
-                                            <span className="px-1">
-                                              HCC Version Details
-                                            </span>
-                                          </div>
-                                          {/* </Tooltip> */}
-                                        </Popover>
-                                      </div>
-
-                                      <Popconfirm
-                                        title="Choose an action"
-                                        icon={
-                                          <QuestionCircleOutlined
-                                            style={{
-                                              color: "blue",
-                                            }}
-                                          />
-                                        }
-                                        okText={
-                                          data.getPlace == "Radio" ||
-                                          data.getPlace == "Lab"
-                                            ? "Move to Deleted"
-                                            : okText
-                                        }
-                                        cancelText={
-                                          data.getPlace === "Radio" ||
-                                          data.getPlace === "Lab"
-                                            ? ""
-                                            : cancelText
-                                        }
-                                        onCancel={() =>
-                                          moveToAnotherAction(
-                                            setConfirmNotesModalValid,
-                                            setIsValidAction,
-                                            cancelText,
-                                            cardTitle
+                                    <div className="px-1">
+                                      <Popover
+                                        onClick={() =>
+                                          getValidHccDetails(
+                                            data.actualDescription,
+                                            data.diagnosisCode
                                           )
                                         }
-                                        okButtonProps={{
-                                          type: "default",
-                                        }}
-                                        cancelButtonProps={{
-                                          type: "default",
-                                        }}
-                                        description={data.diagnosisCode}
-                                        onConfirm={() =>
-                                          moveToAnotherAction(
-                                            setConfirmNotesModalValid,
-                                            setIsValidAction,
-                                            okText,
-                                            cardTitle
-                                          )
-                                        }
+                                        content={PopContentHccVersion}
+                                        title={data.diagnosisCode}
                                         placement="bottom"
-                                        onOpenChange={() =>
-                                          onchangeValid(
-                                            data.diagnosisCode,
-                                            data
-                                          )
-                                        }
+                                        trigger="click"
+                                        overlayStyle={{ zIndex: 1000 }}
                                       >
-                                        {
-                                          <div className="cr-pointer d-flex">
-                                            <div
-                                              className={visitStyles.close_icon}
-                                            >
-                                              <FontAwesomeIcon
-                                                icon={faArrowsAlt}
-                                                style={{
-                                                  size: 8,
-                                                  color: "#a80404",
-                                                }}
-                                              />
-                                            </div>
-                                            <div className="m-1">Actions</div>
+                                        {/* <Tooltip title="HCC Version Details" placement="bottom"> */}
+                                        <div className="cr-pointer">
+                                          <i className="cr-pointer">
+                                            {SVGICON.infoIcon}
+                                          </i>
+                                          <span className="px-1">
+                                            HCC Version Details
+                                          </span>
+                                        </div>
+                                        {/* </Tooltip> */}
+                                      </Popover>
+                                    </div>
+
+                                    <Popconfirm
+                                      title="Choose an action"
+                                      icon={
+                                        <QuestionCircleOutlined
+                                          style={{
+                                            color: "blue",
+                                          }}
+                                        />
+                                      }
+                                      okText={
+                                        data.getPlace == "Radio" ||
+                                        data.getPlace == "Lab"
+                                          ? "Move to Deleted"
+                                          : okText
+                                      }
+                                      cancelText={
+                                        data.getPlace === "Radio" ||
+                                        data.getPlace === "Lab"
+                                          ? ""
+                                          : cancelText
+                                      }
+                                      onCancel={() =>
+                                        moveToAnotherAction(
+                                          setConfirmNotesModalValid,
+                                          setIsValidAction,
+                                          cancelText,
+                                          cardTitle
+                                        )
+                                      }
+                                      okButtonProps={{
+                                        type: "default",
+                                      }}
+                                      cancelButtonProps={{
+                                        type: "default",
+                                      }}
+                                      description={data.diagnosisCode}
+                                      onConfirm={() =>
+                                        moveToAnotherAction(
+                                          setConfirmNotesModalValid,
+                                          setIsValidAction,
+                                          okText,
+                                          cardTitle
+                                        )
+                                      }
+                                      placement="bottom"
+                                      onOpenChange={() =>
+                                        onchangeValid(data.diagnosisCode, data)
+                                      }
+                                    >
+                                      {
+                                        <div className="cr-pointer d-flex">
+                                          <div
+                                            className={visitStyles.close_icon}
+                                          >
+                                            <FontAwesomeIcon
+                                              icon={faArrowsAlt}
+                                              style={{
+                                                size: 8,
+                                                color: "#a80404",
+                                              }}
+                                            />
                                           </div>
-                                        }
-                                      </Popconfirm>
-                                      {/* {data.isMostSpecific == true && (
+                                          <div className="m-1">Actions</div>
+                                        </div>
+                                      }
+                                    </Popconfirm>
+                                    {/* {data.isMostSpecific == true && (
                                     <div className="cr-pointer d-flex">
                                       <div
                                         className={visitStyles.close_icon}
@@ -419,291 +417,112 @@ const HccCards = ({
                                       </div>
                                     </div>
                                   )} */}
-                                      {data.notes && (
-                                        <div className="cr-pointer px-1 mr-1">
-                                          <Popover
-                                            content={() => <p>{data.notes}</p>}
-                                            title={data.diagnosisCode}
-                                            placement="bottom"
-                                            trigger="click"
-                                            overlayStyle={{ zIndex: 1000 }}
-                                          >
-                                            {/* <Tooltip title="HCC Version Details" placement="bottom"> */}
-                                            <div className="cr-pointer">
-                                              <FontAwesomeIcon
-                                                icon={faBook}
-                                                style={{
-                                                  size: 8,
-                                                  color: "#195cf5b5",
-                                                }}
-                                              />
-                                              <span className="px-1 mx-1">
-                                                Notes
-                                              </span>
-                                            </div>
-                                            {/* </Tooltip> */}
-                                          </Popover>
-                                        </div>
-                                      )}
-                                      {/* edit Option */}
-                                      {isVisitData &&
-                                        ENDPOINTS?.isLocalEdit && (
-                                          <div
-                                            className="d-flex"
-                                            onClick={() => {
-                                              setOpenEdit(true);
-                                              setSelectedData(data);
-                                              setInitialValues({
-                                                diagnosisCode:
-                                                  data?.diagnosisCode,
-                                                actualDescription:
-                                                  data?.actualDescription,
-                                              });
-                                            }}
-                                          >
+                                    {data.notes && (
+                                      <div className="cr-pointer px-1 mr-1">
+                                        <Popover
+                                          content={() => <p>{data.notes}</p>}
+                                          title={data.diagnosisCode}
+                                          placement="bottom"
+                                          trigger="click"
+                                          overlayStyle={{ zIndex: 1000 }}
+                                        >
+                                          {/* <Tooltip title="HCC Version Details" placement="bottom"> */}
+                                          <div className="cr-pointer">
                                             <FontAwesomeIcon
-                                              icon={faPen}
-                                              style={{ margin: "3px 10px 0 0" }}
+                                              icon={faBook}
+                                              style={{
+                                                size: 8,
+                                                color: "#195cf5b5",
+                                              }}
                                             />
-                                            <span style={{ cursor: "pointer" }}>
-                                              Edit
+                                            <span className="px-1 mx-1">
+                                              Notes
                                             </span>
                                           </div>
-                                        )}
-                                    </>
-                                  )}
-                                  className={styles.ellipsBtn}
-                                >
-                                  <div
-                                    onClick={() => {
-                                      setOpenContent(data?.diagnosisCode);
-                                    }}
-                                  >
-                                    <FontAwesomeIcon
-                                      icon={faEllipsisVertical}
-                                      style={{
-                                        size: 8,
-                                        color: "#000",
-                                      }}
-                                    />
-                                  </div>
-                                </Popover>
-                              </div>
-                            </div>
-                            <div className="d-flex justify-content-between">
-                              <div className={`${visitStyles.hoverActiveHcc}`}>
-                                <div
-                                  className={`${visitStyles.encounterAndSectionHeader}`}
-                                >
-                                  {getProviderNameTag(
-                                    data?.providerName,
-                                    data?.providerHyperlinks,
-                                    setSearch,
-                                    data.diagnosisCode,
-                                    data.dbDescription,
-                                    setIsModalOpenValidCodes,
-                                    setFileModalHeader,
-                                    patientDocumentResult,
-                                    setIsMulitpleProvider,
-                                    isMulitpleProvider,
-                                    setIsMulitpleHeadeCode,
-                                    isMulitpleHeaderCode
-                                  )}
-                                </div>
-                                <div
-                                  className={`${visitStyles.encounterAndSectionHeader}`}
-                                >
-                                  {getEncounterDateBackground({
-                                    value: data?.encounterDateSplit,
-                                    encounterDateMatching:
-                                      encounterDateMatching,
-                                    fileDosPageNumberList:
-                                      fileDosPageNumberList,
-                                    setIsModalOpenValidCodes:
-                                      setIsModalOpenValidCodes
-                                        ? setIsModalOpenValidCodes
-                                        : null,
-                                    setSearch: setSearch,
-                                    setFileModalHeader: setFileModalHeader,
-                                    patientDocumentResult:
-                                      patientDocumentResult,
-                                  })}
-                                </div>
-                                {data.providerName.length == 0 && (
-                                  <div
-                                    className={`${visitStyles.encounterAndSectionHeader}`}
-                                  >
-                                    {getCaptureSectionBackgroundFile(
-                                      data?.capturedSections,
-                                      data?.encounterDate,
-                                      data?.actualDescription,
-                                      data?.diagnosisCode,
-                                      data?.getPlace,
-                                      captureSectionMatching,
-                                      setSearch,
-                                      setFileLoading,
-                                      setIsModalOpenLab,
-                                      setIsModalOpenRadiology,
-                                      setIsModalOpenValidCodes,
-                                      setFileModalHeader,
-                                      fileId,
-                                      patientDocumentResult,
-                                      fileInitialPage,
-                                      setFileInitialPage,
-                                      data?.hyperlinks,
-                                      encounterDateMatching,
-                                      setIsMulitpleHeader,
-                                      isMulitpleHeader,
-                                      setIsMulitpleHeadeCode,
-                                      isMulitpleHeaderCode,
-                                      data.dbDescription,
+                                          {/* </Tooltip> */}
+                                        </Popover>
+                                      </div>
                                     )}
-                                  </div>
+                                    {/* edit Option */}
+                                    {isVisitData && ENDPOINTS?.isLocalEdit && (
+                                      <div
+                                        className="d-flex"
+                                        onClick={() => {
+                                          setOpenEdit(true);
+                                          setSelectedData(data);
+                                          setInitialValues({
+                                            diagnosisCode: data?.diagnosisCode,
+                                            actualDescription:
+                                              data?.actualDescription,
+                                          });
+                                        }}
+                                      >
+                                        <FontAwesomeIcon
+                                          icon={faPen}
+                                          style={{ margin: "3px 10px 0 0" }}
+                                        />
+                                        <span style={{ cursor: "pointer" }}>
+                                          Edit
+                                        </span>
+                                      </div>
+                                    )}
+                                  </>
+                                )}
+                                className={styles.ellipsBtn}
+                              >
+                                <div
+                                  onClick={() => {
+                                    setOpenContent(data?.diagnosisCode);
+                                  }}
+                                >
+                                  <FontAwesomeIcon
+                                    icon={faEllipsisVertical}
+                                    style={{
+                                      size: 8,
+                                      color: "#000",
+                                    }}
+                                  />
+                                </div>
+                              </Popover>
+                            </div>
+                          </div>
+                          <div className="d-flex justify-content-between">
+                            <div className={`${visitStyles.hoverActiveHcc}`}>
+                              <div
+                                className={`${visitStyles.encounterAndSectionHeader}`}
+                              >
+                                {getProviderNameTag(
+                                  data?.providerName,
+                                  data?.providerHyperlinks,
+                                  setSearch,
+                                  data.diagnosisCode,
+                                  data.dbDescription,
+                                  setIsModalOpenValidCodes,
+                                  setFileModalHeader,
+                                  patientDocumentResult,
+                                  setIsMulitpleProvider,
+                                  isMulitpleProvider,
+                                  setIsMulitpleHeadeCode,
+                                  isMulitpleHeaderCode
                                 )}
                               </div>
                               <div
                                 className={`${visitStyles.encounterAndSectionHeader}`}
                               >
-                                <div className="d-flex justify-content-end mt-2">
-                                  {data.isCmsHcc && (
-                                    <div
-                                      className={`${visitStyles.cmsStatus} mx-1`}
-                                    >
-                                      CMS
-                                    </div>
-                                  )}
-                                  {data.isRxHcc && (
-                                    <div
-                                      className={`${visitStyles.rxStatus} mx-1`}
-                                    >
-                                      RX
-                                    </div>
-                                  )}
-                                </div>
-                                <div
-                                  className={`cr-pointer ${styles.meatFoundContainer}`}
-                                >
-                                  <div
-                                    onClick={() => {
-                                      setActiveTabHead(4);
-                                      setActiveMeatTitle({
-                                        header: "M",
-                                        diagnosisCode: data?.diagnosisCode,
-                                      });
-                                    }}
-                                  >
-                                    {getMeatFound(
-                                      data?.diagnosisCode,
-                                      meatCriteriaList,
-                                      "M"
-                                    )}
-                                  </div>
-                                  <div
-                                    onClick={() => {
-                                      setActiveTabHead(4);
-                                      setActiveMeatTitle({
-                                        header: "E",
-                                        diagnosisCode: data?.diagnosisCode,
-                                      });
-                                    }}
-                                  >
-                                    {getMeatFound(
-                                      data?.diagnosisCode,
-                                      meatCriteriaList,
-                                      "E"
-                                    )}
-                                  </div>
-                                  <div
-                                    onClick={() => {
-                                      setActiveTabHead(4);
-                                      setActiveMeatTitle({
-                                        header: "A",
-                                        diagnosisCode: data?.diagnosisCode,
-                                      });
-                                    }}
-                                  >
-                                    {getMeatFound(
-                                      data?.diagnosisCode,
-                                      meatCriteriaList,
-                                      "A"
-                                    )}
-                                  </div>
-                                  <div
-                                    onClick={() => {
-                                      setActiveTabHead(4);
-                                      setActiveMeatTitle({
-                                        header: "T",
-                                        diagnosisCode: data?.diagnosisCode,
-                                      });
-                                    }}
-                                  >
-                                    {getMeatFound(
-                                      data?.diagnosisCode,
-                                      meatCriteriaList,
-                                      "T"
-                                    )}
-                                  </div>
-                                </div>
-                                {data.providerName.length == 0 && (
-                                  <>
-                                    <div
-                                      className={`${visitStyles.encounterAndSectionHeader}`}
-                                    >
-                                      {data.isManuallyAdded == true ? (
-                                        <Badge
-                                          className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
-                                        >
-                                          Manually Added
-                                        </Badge>
-                                      ) : null}
-                                    </div>
-                                    {data.isComboCode == true ? (
-                                      <Badge
-                                        className={`mt-2 text-start  ${visitStyles.isComboCode}`}
-                                        onClick={() => {
-                                          setActiveTabHead(3);
-                                          setActiveComboTree({
-                                            diagnosisCode: data?.diagnosisCode,
-                                          });
-                                        }}
-                                      >
-                                        Combo
-                                      </Badge>
-                                    ) : null}
-                                  </>
-                                )}
-
-                                {data.getPlace == "Insulin" ? (
-                                  <span
-                                    className={` mt-2 ${visitStyles.radiologyStatus}`}
-                                    bg={`  mt-2 bg-bg-eight `}
-                                  >
-                                    Insulin
-                                  </span>
-                                ) : null}
-                                {data.getPlace == "Lab" ? (
-                                  <Tooltip title="LAB">
-                                    <span
-                                      className={` mt-2 ${visitStyles.labStatus}`}
-                                      bg={`  mt-2 bg-bg-seven `}
-                                    >
-                                      Lab
-                                    </span>
-                                  </Tooltip>
-                                ) : data.getPlace == "Radio" ? (
-                                  <Tooltip title="RADIOLOGY">
-                                    <span
-                                      className={` mt-2 ${visitStyles.radiologyStatus}`}
-                                      bg={`  mt-2 bg-bg-eight `}
-                                    >
-                                      Radiology
-                                    </span>
-                                  </Tooltip>
-                                ) : null}
+                                {getEncounterDateBackground({
+                                  value: data?.encounterDateSplit,
+                                  encounterDateMatching: encounterDateMatching,
+                                  fileDosPageNumberList: fileDosPageNumberList,
+                                  setIsModalOpenValidCodes:
+                                    setIsModalOpenValidCodes
+                                      ? setIsModalOpenValidCodes
+                                      : null,
+                                  setSearch: setSearch,
+                                  setFileModalHeader: setFileModalHeader,
+                                  patientDocumentResult: patientDocumentResult,
+                                })}
                               </div>
-                            </div>
-                            {data.providerName.length != 0 && (
-                              <div className="d-flex justify-content-between">
+                              {data.providerName.length == 0 && (
                                 <div
                                   className={`${visitStyles.encounterAndSectionHeader}`}
                                 >
@@ -730,43 +549,223 @@ const HccCards = ({
                                     isMulitpleHeader,
                                     setIsMulitpleHeadeCode,
                                     isMulitpleHeaderCode,
-                                    data.dbDescription,
-                                    popup,
+                                    data.dbDescription
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                            <div
+                              className={`${visitStyles.encounterAndSectionHeader}`}
+                            >
+                              <div className="d-flex justify-content-end mt-2">
+                                {data.isCmsHcc && (
+                                  <div
+                                    className={`${visitStyles.cmsStatus} mx-1`}
+                                  >
+                                    CMS
+                                  </div>
+                                )}
+                                {data.isRxHcc && (
+                                  <div
+                                    className={`${visitStyles.rxStatus} mx-1`}
+                                  >
+                                    RX
+                                  </div>
+                                )}
+                              </div>
+                              <div
+                                className={`cr-pointer ${styles.meatFoundContainer}`}
+                              >
+                                <div
+                                  onClick={() => {
+                                    setActiveTabHead(4);
+                                    setActiveMeatTitle({
+                                      header: "M",
+                                      diagnosisCode: data?.diagnosisCode,
+                                    });
+                                  }}
+                                >
+                                  {getMeatFound(
+                                    data?.diagnosisCode,
+                                    meatCriteriaList,
+                                    "M"
                                   )}
                                 </div>
                                 <div
-                                  className={`${visitStyles.encounterAndSectionHeader}`}
+                                  onClick={() => {
+                                    setActiveTabHead(4);
+                                    setActiveMeatTitle({
+                                      header: "E",
+                                      diagnosisCode: data?.diagnosisCode,
+                                    });
+                                  }}
                                 >
-                                  {data.isManuallyAdded == true ? (
+                                  {getMeatFound(
+                                    data?.diagnosisCode,
+                                    meatCriteriaList,
+                                    "E"
+                                  )}
+                                </div>
+                                <div
+                                  onClick={() => {
+                                    setActiveTabHead(4);
+                                    setActiveMeatTitle({
+                                      header: "A",
+                                      diagnosisCode: data?.diagnosisCode,
+                                    });
+                                  }}
+                                >
+                                  {getMeatFound(
+                                    data?.diagnosisCode,
+                                    meatCriteriaList,
+                                    "A"
+                                  )}
+                                </div>
+                                <div
+                                  onClick={() => {
+                                    setActiveTabHead(4);
+                                    setActiveMeatTitle({
+                                      header: "T",
+                                      diagnosisCode: data?.diagnosisCode,
+                                    });
+                                  }}
+                                >
+                                  {getMeatFound(
+                                    data?.diagnosisCode,
+                                    meatCriteriaList,
+                                    "T"
+                                  )}
+                                </div>
+                              </div>
+                              {data.providerName.length == 0 && (
+                                <>
+                                  <div
+                                    className={`${visitStyles.encounterAndSectionHeader}`}
+                                  >
+                                    {data.isManuallyAdded == true ? (
+                                      <Badge
+                                        className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                      >
+                                        Manually Added
+                                      </Badge>
+                                    ) : null}
+                                  </div>
+                                  {data.isComboCode == true ? (
                                     <Badge
-                                      className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                      className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                      onClick={() => {
+                                        setActiveTabHead(3);
+                                        setActiveComboTree({
+                                          diagnosisCode: data?.diagnosisCode,
+                                        });
+                                      }}
                                     >
-                                      Manually Added
+                                      Combo
                                     </Badge>
                                   ) : null}
-                                </div>
-                                {data.isComboCode == true ? (
-                                  <Badge
-                                    className={`mt-2 text-start  ${visitStyles.isComboCode}`}
-                                    onClick={() => {
-                                      setActiveTabHead(3);
-                                      setActiveComboTree({
-                                        diagnosisCode: data?.diagnosisCode,
-                                      });
-                                    }}
+                                </>
+                              )}
+
+                              {data.getPlace == "Insulin" ? (
+                                <span
+                                  className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                  bg={`  mt-2 bg-bg-eight `}
+                                >
+                                  Insulin
+                                </span>
+                              ) : null}
+                              {data.getPlace == "Lab" ? (
+                                <Tooltip title="LAB">
+                                  <span
+                                    className={` mt-2 ${visitStyles.labStatus}`}
+                                    bg={`  mt-2 bg-bg-seven `}
                                   >
-                                    Combo
+                                    Lab
+                                  </span>
+                                </Tooltip>
+                              ) : data.getPlace == "Radio" ? (
+                                <Tooltip title="RADIOLOGY">
+                                  <span
+                                    className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                    bg={`  mt-2 bg-bg-eight `}
+                                  >
+                                    Radiology
+                                  </span>
+                                </Tooltip>
+                              ) : null}
+                            </div>
+                          </div>
+                          {data.providerName.length != 0 && (
+                            <div className="d-flex justify-content-between">
+                              <div
+                                className={`${visitStyles.encounterAndSectionHeader}`}
+                              >
+                                {getCaptureSectionBackgroundFile(
+                                  data?.capturedSections,
+                                  data?.encounterDate,
+                                  data?.actualDescription,
+                                  data?.diagnosisCode,
+                                  data?.getPlace,
+                                  captureSectionMatching,
+                                  setSearch,
+                                  setFileLoading,
+                                  setIsModalOpenLab,
+                                  setIsModalOpenRadiology,
+                                  setIsModalOpenValidCodes,
+                                  setFileModalHeader,
+                                  fileId,
+                                  patientDocumentResult,
+                                  fileInitialPage,
+                                  setFileInitialPage,
+                                  data?.hyperlinks,
+                                  encounterDateMatching,
+                                  setIsMulitpleHeader,
+                                  isMulitpleHeader,
+                                  setIsMulitpleHeadeCode,
+                                  isMulitpleHeaderCode,
+                                  data.dbDescription,
+                                  popup
+                                )}
+                              </div>
+                              <div
+                                className={`${visitStyles.encounterAndSectionHeader}`}
+                              >
+                                {data.isManuallyAdded == true ? (
+                                  <Badge
+                                    className={`mt-2 text-start  ${visitStyles.manuallyAdded}`}
+                                  >
+                                    Manually Added
                                   </Badge>
                                 ) : null}
                               </div>
-                            )}
-                          </div>
-                        );
-                      }}
-                    </Draggable>
-                  </li>
-                </>
-              )
+                              {data.isComboCode == true ? (
+                                <Badge
+                                  className={`mt-2 text-start  ${visitStyles.isComboCode}`}
+                                  onClick={() => {
+                                    setActiveTabHead(3);
+                                    setActiveComboTree({
+                                      diagnosisCode: data?.diagnosisCode,
+                                    });
+                                  }}
+                                >
+                                  Combo
+                                </Badge>
+                              ) : data.isMostSpecific ? (
+                                <Badge
+                                  className={`mt-2 text-start  ${visitStyles.isMostSpecific}`}
+                                >
+                                  Most Specified
+                                </Badge>
+                              ) : null}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    }}
+                  </Draggable>
+                </li>
+              </>
+            )
           )}
           <span className="d-none">{provided?.placeholder}</span>
         </div>

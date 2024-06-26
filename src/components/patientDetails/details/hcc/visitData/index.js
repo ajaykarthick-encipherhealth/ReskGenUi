@@ -238,9 +238,7 @@ const VisitData = ({
                         <div className="d-flex justify-content-center">
                           <span className={`${visitStyles.hcc_title_badge}`}>
                             {
-                              newValidDiseaseList.filter(
-                                (item) => item.isComboCode != true
-                              ).length
+                              newValidDiseaseList.length
                             }
                           </span>
                         </div>
@@ -336,9 +334,7 @@ const VisitData = ({
                               className={`${visitStyles.suggested_title_badge}`}
                             >
                               {
-                                suggestedHccList.filter(
-                                  (item) => item.isComboCode != true
-                                ).length
+                                suggestedHccList.length
                               }
                             </span>
                           </div>
@@ -409,9 +405,7 @@ const VisitData = ({
                               className={`${visitStyles.deleted_title_badge}`}
                             >
                               {
-                                deletedHccList.filter(
-                                  (item) => item.isComboCode != true
-                                ).length
+                                deletedHccList.length
                               }
                             </span>
                           </div>
@@ -510,9 +504,7 @@ const VisitData = ({
                           <div className="d-flex justify-content-center">
                             <span className={`${visitStyles.hcc_title_badge}`}>
                               {
-                                newValidDiseaseList.filter(
-                                  (item) => item.isComboCode != true
-                                ).length
+                                newValidDiseaseList.length
                               }
                             </span>
                           </div>
@@ -584,9 +576,7 @@ const VisitData = ({
                               className={`${visitStyles.suggested_title_badge}`}
                             >
                               {
-                                suggestedHccList.filter(
-                                  (item) => item.isComboCode != true
-                                ).length
+                                suggestedHccList.length
                               }
                             </span>
                           </div>
@@ -656,9 +646,7 @@ const VisitData = ({
                               className={`${visitStyles.deleted_title_badge}`}
                             >
                               {
-                                deletedHccList.filter(
-                                  (item) => item.isComboCode != true
-                                ).length
+                                deletedHccList.length
                               }
                             </span>
                           </div>
