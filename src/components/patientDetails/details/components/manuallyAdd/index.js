@@ -955,7 +955,7 @@ const ManuallyAdd = ({
       setMeatDisplay(true);
       setCode(isEditMeatValue.diagnosisCode);
       setValidCode("Valid Code");
-      const dos = isEditMeatValue.dateOfService.map((item) => ({
+      const dos = isEditMeatValue?.dateOfService?.map((item) => ({
         lable: item,
         value: item,
       }));

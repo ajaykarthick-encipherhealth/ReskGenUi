@@ -280,14 +280,15 @@ const Meat = ({
                 onClick={() => setMeatDisplay(false)}
               />
             )}
-            <RegularButton
+            {showSection &&  <RegularButton
               type=""
               name="Submit"
               width="100px"
               method={"button"}
               onClick={handleMeatSubmit}
               disabled={isMeat ? !(isMeat && isActive) : isMeat}
-            />
+            />}
+           
           </div>
         </Form.Item>
       )}
