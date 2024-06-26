@@ -100,6 +100,7 @@ const Header = ({
   tenent,
   webSocketNotificationData,
   getNotificationData,
+  postUnReadCount
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -328,6 +329,7 @@ const Header = ({
   const notificationDrawer = async () => {
     setOpen(true);
     setNotificationCount(0);
+    postUnReadCount();
     setPopoverVisible(false);
   };
 
@@ -484,8 +486,18 @@ const Header = ({
     const count = webSocketNotificationData?.filter(
       (r) => r?.webSocketType == "NOTIFICATION"
     );
-    setNotificationCount(count?.length);
+    var countUnread = notificationResponse?.data?.response?.totalUnreadCount + count?.length ;
+    setNotificationCount(countUnread ? countUnread : 0);
   }, [webSocketNotificationData]);
+
+  useEffect(() => {
+    if(!open){
+    var countUnread = notificationResponse?.data?.response?.totalUnreadCount;
+    setNotificationCount(countUnread ? countUnread : 0);
+    }else{
+      setNotificationCount(0)
+    }
+  }, [notificationResponse?.data?.response?.totalUnreadCount,open]);
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -918,6 +930,8 @@ const enhancer = connect(
     getNotificationList: dashbaordActions.notificationAction,
     getTenentLogo: dashbaordActions.tenentLogoAction,
     getNotificationData: webSocketActions.websocketNotificationAction,
+    postUnReadCount: dashbaordActions.unReadCountPostAction,
+
   }
 );
 export default enhancer(Header);

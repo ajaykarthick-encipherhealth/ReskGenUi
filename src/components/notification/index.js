@@ -16,7 +16,7 @@ const Notification = ({
   getNotificationList,
 }) => {
   const [openMsg, setOpenMsg] = useState(false);
-  const notificationData = notificationResponse?.content;
+  const notificationData = notificationResponse?.notificationList?.content;
   const [loading, setLoading] = useState(false);
 
   const splitUserName = (name) => {

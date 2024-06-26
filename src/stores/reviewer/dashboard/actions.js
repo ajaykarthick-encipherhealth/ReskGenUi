@@ -33,3 +33,7 @@ export const tenentLogoAction = createActionThunk(
   "TENENTLOGO",
   network.tenentLogo
 );
+export const unReadCountPostAction = createActionThunk(
+  "UNREAD_COUNT",
+  network.unReadCountPost
+);
