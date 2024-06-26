@@ -3,18 +3,20 @@ import { Offcanvas, Button } from "react-bootstrap";
 // import UploadFile from "../uploadFile";
 import { actions as tenantActions } from "../../../../stores/tenantAdmin";
 import { connect } from "react-redux";
-import { Form, Input, Select, Upload } from "antd";
-import styles from "../fhir.module.css";
+import { Form, Input, Select } from "antd";
 import { getYears } from "../../../../utils/reusable";
 import { getStorage } from "../../../../utils/storages";
 import ENDPOINTS from "../../../../utility/enpoints";
 import axios from "../../../../utility/axiosConfig";
+import UploadFile from "../uploadFile";
 
 function FhirDrawer({
   isDrawerOpen,
   setIsDrawerOpen,
   uploadType,
   uploadBatch,
+  filelList,
+  setFileList,
 }) {
   const [form] = Form.useForm();
   const handleClose = () => {
@@ -46,29 +48,14 @@ function FhirDrawer({
       console.log(response);
     } catch (error) {}
   };
-  const onFinishFailed = () => {};
 
-  const uploadButton = (
-    <button
-      style={{
-        border: 0,
-        background: "none",
-      }}
-      type="button"
-    >
-      <div
-        style={{
-          marginTop: 8,
-        }}
-      >
-        Upload
-      </div>
-    </button>
-  );
   return (
     <Offcanvas show={isDrawerOpen} className="offcanvas-end" placement="end">
       <Offcanvas.Header closeButton onClick={handleClose}>
-        <Offcanvas.Title> Update New Batch </Offcanvas.Title>
+        <Offcanvas.Title>
+          {" "}
+          {uploadType === "upload" ? "Update New Batch" : "Create batch"}{" "}
+        </Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body>
         <div className="container-fluid">
@@ -77,7 +64,6 @@ function FhirDrawer({
             name="validateOnly"
             layout="vertical"
             onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
           >
             <Form.Item
               label={
@@ -95,6 +81,24 @@ function FhirDrawer({
             >
               <Input name="batchid" />
             </Form.Item>
+            {uploadType !== "upload" && (
+              <Form.Item
+                label={
+                  <label>
+                    TotalFile Count <span className="text-danger">*</span>{" "}
+                  </label>
+                }
+                name="totalFileCount"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Enter TotalFile Count ",
+                  },
+                ]}
+              >
+                <Input name="totalFileCount" maxLength={10} />
+              </Form.Item>
+            )}
             {uploadType == "upload" && (
               <Form.Item
                 label={
@@ -110,21 +114,7 @@ function FhirDrawer({
                   },
                 ]}
               >
-                <Upload
-                  name="upload"
-                  className="avatar-uploader"
-                  showUploadList={false}
-                  directory
-                  multiple
-                  onChange={(e) => console.log(e)}
-                  style={{ width: "100%" }}
-                >
-                  <div className={styles.videoflex} style={{ width: "100%" }}>
-                    <div className="text-center">
-                      <div>{uploadButton}</div>
-                    </div>
-                  </div>
-                </Upload>
+                <UploadFile filelList={filelList} setFileList={setFileList} />
               </Form.Item>
             )}
             <Form.Item

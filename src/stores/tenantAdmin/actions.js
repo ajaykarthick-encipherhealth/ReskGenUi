@@ -25,3 +25,7 @@ export const getAllFileProcessAction = createActionThunk(
   "GET_ALL_FILE_PROCESS",
   network.getAllFileProcess
 );
+export const getAllBatches=createActionThunk(
+  'GET_ALL_BATCHES',
+  network.allBatches
+)

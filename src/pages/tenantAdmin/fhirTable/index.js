@@ -15,7 +15,9 @@ import FIHRPatinetTable from "../../../components/table/tenantTable/FihrPatient/
 import PdfTable from "../../../components/table/tenantTable/pdfTable";
 import RegularButton from "../../../components/button";
 import FhirDrawer from "./fhirModal";
-
+import { connect } from "react-redux";
+import { actions as allActions } from "../../../stores/tenantAdmin";
+import SpinnerDots from "../../../components/spinner";
 
 const { RangePicker } = DatePicker;
 
@@ -277,18 +279,19 @@ const FIHRData = [
   },
 ];
 
-const Index = () => {
+const Index = ({ getAllBatches, pdfTabledata,pdfLoader }) => {
   const dispatch = useDispatch();
   const patientDetails = useSelector((state) => state.adminReport?.details);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
   const [filteredCOder, setFilteredCoder] = useState([]);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [uploadType, setUploadType] = useState('')
+  const [uploadType, setUploadType] = useState("");
+  const [pageNo, setPageNo] = useState(0);
 
   const handleUploadButtonClick = (e) => {
     setIsDrawerOpen(!isDrawerOpen);
-    setUploadType(e.target.name)
+    setUploadType(e.target.name);
   };
 
   const onPageChange = (e) => {
@@ -308,177 +311,198 @@ const Index = () => {
     if (reportActiveTab) {
       dispatch(getActiveTab(reportActiveTab));
     }
-  }, [reportActiveTab]);
+    if(reportActiveTab==='PDF'){
 
+      getAllBatches({ page: pageNo });
+    }
+  }, [reportActiveTab, pageNo]);
+  console.log(pdfTabledata,pdfLoader);
   return (
     <>
       <Header />
       <div className={styles.maincontainer}>
         <div class="content-body">
-          {/* {!ReportPatientDetails?.response ? (
+          {pdfLoader ? (
             <SpinnerDots />
-          ) : ( */}
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-xl-12">
-                <div className="">
-                  <div className="card-body p-0">
-                    <div className="table-responsive active-projects task-table">
-                      <div className="d-flex justify-content-between" style={{width:"98%",margin:"auto"}}>
-                        <div className="d-flex">
-                          <div className="col-lg-4 mx-2">
-                            <label>Search by Name or ID</label>
-                            <div class="form-group has-search">
-                              <FontAwesomeIcon
-                                className="fa fa-search form-control-feedback"
-                                icon={faSearch}
-                              />
-                              <InputText
-                                type="text"
-                                onChange={(e) => getNameSearch(e.target.value)}
-                                value={""}
-                                className="form-control new-form-control"
-                                placeholder="Search"
-                                maxLength={25}
-                                onKeyDown={(e) => {
-                                  // Prevent input of backslash ("\")
-                                  if (e.key === "\\") {
-                                    e.preventDefault();
+          ) : (
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-xl-12">
+                  <div className="">
+                    <div className="card-body p-0">
+                      <div className="table-responsive active-projects task-table">
+                        <div
+                          className="d-flex justify-content-between"
+                          style={{ width: "98%", margin: "auto" }}
+                        >
+                          <div className="d-flex">
+                            <div className="col-lg-4 mx-2">
+                              <label>Search by Name or ID</label>
+                              <div class="form-group has-search">
+                                <FontAwesomeIcon
+                                  className="fa fa-search form-control-feedback"
+                                  icon={faSearch}
+                                />
+                                <InputText
+                                  type="text"
+                                  onChange={(e) =>
+                                    getNameSearch(e.target.value)
                                   }
-                                }}
-                              />
-                            </div>
-                          </div>
-                          <div className="col-xl-4 mx-2">
-                            <label>Date</label>
-                            <div>
-                              <RangePicker
-                                format="MM-DD-YYYY"
-                                onChange={(dates, dateStrings) => {
-                                  setDateRange(dateStrings);
-                                  handleReceivedDatePicker(dates, dateStrings);
-                                }}
-                                disabledDate={(current) =>
-                                  disableFutureDate(current)
-                                }
-                              />
-                            </div>
-                          </div>
-                          <div className="col-xl-4 mx-2">
-                            <div>
-                              <Selector
-                                selectlabel={"Select Status"}
-                                setSelectedOption={""}
-                                selectOptions={[]}
-                                defaultSelectValue1={""}
-                                // isClose={true}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <div className="d-flex mx-1">
-                        <div
-                          className={styles.btnContainer}
-                          name="upload trigger"
-                          onClick={handleUploadButtonClick}
-                        >
-                          <RegularButton name={"Upload Trigger"} width={"150px"}/>
-                        </div>
-                        <div
-                          className={styles.btnContainer}
-                          onClick={handleUploadButtonClick}
-                          name="upload"
-                        >
-                          <RegularButton name={"Upload"} />
-                        </div></div>
-                      </div>
-
-                      <div
-                        id="task-tbl_wrapper"
-                        className="dataTables_wrapper no-footer"
-                      >
-                        <div
-                          className="profile-tab "
-                          style={{ marginTop: "20px" }}
-                        >
-                          <div className="custom-tab-1">
-                            <Tab.Container
-                              defaultActiveKey={
-                                reportActiveTab === "PDF" ? "pdf" : "fihr"
-                              }
-                            >
-                              <Nav as="ul" className="nav nav-tabs">
-                                <Nav.Item
-                                  as="li"
-                                  className="nav-item"
-                                  onClick={() => {
-                                    handleTabs("FIHR");
-                                  }}
-                                >
-                                  <Nav.Link to="#my-posts" eventKey="fihr">
-                                    FIHR
-                                  </Nav.Link>
-                                </Nav.Item>
-                                <Nav.Item
-                                  as="li"
-                                  className="nav-item"
-                                  onClick={() => {
-                                    handleTabs("PDF");
-                                  }}
-                                >
-                                  <Nav.Link to="#my-posts" eventKey="pdf">
-                                    PDF
-                                  </Nav.Link>
-                                </Nav.Item>
-                              </Nav>
-                              <Tab.Content>
-                                <Tab.Pane id="my-posts" eventKey="fihr">
-                                  <FIHRPatinetTable
-                                    reportListAll={filteredCOder}
-                                    paginationFirst={paginationFirst}
-                                    onPageChange={onPageChange}
-                                    tableData={FIHRData}
-                                  />
-                                </Tab.Pane>
-                                <Tab.Pane
-                                  id="my-posts"
-                                  eventKey="nonhcc"
-                                ></Tab.Pane>
-                                <Tab.Pane id="my-posts" eventKey="pdf">
-                                  <PdfTable
-                                    reportListAll={filteredCOder}
-                                    paginationFirst={paginationFirst}
-                                    ReportPatientDetails={
-                                      patientDetails?.response
+                                  value={""}
+                                  className="form-control new-form-control"
+                                  placeholder="Search"
+                                  maxLength={25}
+                                  onKeyDown={(e) => {
+                                    // Prevent input of backslash ("\")
+                                    if (e.key === "\\") {
+                                      e.preventDefault();
                                     }
-                                    onPageChange={onPageChange}
-                                    tableData={FIHRData}
-                                  />
-                                </Tab.Pane>
-                              </Tab.Content>
-                            </Tab.Container>
+                                  }}
+                                />
+                              </div>
+                            </div>
+                            <div className="col-xl-4 mx-2">
+                              <label>Date</label>
+                              <div>
+                                <RangePicker
+                                  format="MM-DD-YYYY"
+                                  onChange={(dates, dateStrings) => {
+                                    setDateRange(dateStrings);
+                                    handleReceivedDatePicker(
+                                      dates,
+                                      dateStrings
+                                    );
+                                  }}
+                                  disabledDate={(current) =>
+                                    disableFutureDate(current)
+                                  }
+                                />
+                              </div>
+                            </div>
+                            <div className="col-xl-4 mx-2">
+                              <div>
+                                <Selector
+                                  selectlabel={"Select Status"}
+                                  setSelectedOption={""}
+                                  selectOptions={[]}
+                                  defaultSelectValue1={""}
+                                  // isClose={true}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div className="d-flex mx-1">
+                            <div
+                              className={styles.btnContainer}
+                              name="upload trigger"
+                              onClick={handleUploadButtonClick}
+                            >
+                              <RegularButton
+                                name={"Upload Trigger"}
+                                width={"150px"}
+                              />
+                            </div>
+                            <div
+                              className={styles.btnContainer}
+                              onClick={handleUploadButtonClick}
+                              name="upload"
+                            >
+                              <RegularButton name={"Create Batch"} />
+                            </div>
                           </div>
                         </div>
-                        {isDrawerOpen && (
-                          <FhirDrawer
-                            isDrawerOpen={isDrawerOpen}
-                            setIsDrawerOpen={setIsDrawerOpen}
-                            uploadType={uploadType}
-                            setUploadType={setUploadType}
-                          />
-                        )}
+
+                        <div
+                          id="task-tbl_wrapper"
+                          className="dataTables_wrapper no-footer"
+                        >
+                          <div
+                            className="profile-tab "
+                            style={{ marginTop: "20px" }}
+                          >
+                            <div className="custom-tab-1">
+                              <Tab.Container
+                                defaultActiveKey={
+                                  reportActiveTab === "PDF" ? "pdf" : "fihr"
+                                }
+                              >
+                                <Nav as="ul" className="nav nav-tabs">
+                                  <Nav.Item
+                                    as="li"
+                                    className="nav-item"
+                                    onClick={() => {
+                                      handleTabs("FIHR");
+                                    }}
+                                  >
+                                    <Nav.Link to="#my-posts" eventKey="fihr">
+                                      FIHR
+                                    </Nav.Link>
+                                  </Nav.Item>
+                                  <Nav.Item
+                                    as="li"
+                                    className="nav-item"
+                                    onClick={() => {
+                                      handleTabs("PDF");
+                                    }}
+                                  >
+                                    <Nav.Link to="#my-posts" eventKey="pdf">
+                                      PDF
+                                    </Nav.Link>
+                                  </Nav.Item>
+                                </Nav>
+                                <Tab.Content>
+                                  <Tab.Pane id="my-posts" eventKey="fihr">
+                                    <FIHRPatinetTable
+                                      reportListAll={filteredCOder}
+                                      paginationFirst={paginationFirst}
+                                      onPageChange={onPageChange}
+                                      tableData={FIHRData}
+                                    />
+                                  </Tab.Pane>
+                                  <Tab.Pane
+                                    id="my-posts"
+                                    eventKey="nonhcc"
+                                  ></Tab.Pane>
+                                  <Tab.Pane id="my-posts" eventKey="pdf">
+                                    <PdfTable
+                                      paginationFirst={paginationFirst}
+                                     
+                                      onPageChange={onPageChange}
+                                      tableData={pdfTabledata}
+                                    />
+                                  </Tab.Pane>
+                                </Tab.Content>
+                              </Tab.Container>
+                            </div>
+                          </div>
+                          {isDrawerOpen && (
+                            <FhirDrawer
+                              isDrawerOpen={isDrawerOpen}
+                              setIsDrawerOpen={setIsDrawerOpen}
+                              uploadType={uploadType}
+                              setUploadType={setUploadType}
+                            />
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          {/* )} */}
+          )}
         </div>
       </div>
     </>
   );
 };
-
-export default Index;
+const connector = connect(
+  (state) => ({
+    pdfTabledata: state.tenantAdmin.allBatches?.data?.response,
+    pdfLoader: state.tenantAdmin?.batchLoader,
+  }),
+  {
+    getAllBatches: allActions.getAllBatches,
+  }
+);
+export default connector(Index);

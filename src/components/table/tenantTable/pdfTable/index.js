@@ -1,26 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Empty, Popover } from "antd";
 import TableStyle from "../../table.module.css";
 import { Paginator } from "primereact/paginator";
 import { selectedRow } from "../../../../store/actions/ReportActions";
 import { useDispatch } from "react-redux";
 import dayjs from "dayjs";
-import moment from "moment";
 import {
   dateFormate,
   renderUserPrfoileAvatar,
 } from "../../../headerFilters/functions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import FhirDrawer from "../../../../pages/tenantAdmin/fhirTable/fhirModal";
+import UploadFile from "../../../../pages/tenantAdmin/fhirTable/uploadFile";
 
 function PdfTable({
-  reportListAll,
   paginationFirst,
-  ReportPatientDetails,
   onPageChange,
   selectedRows,
   tableData,
 }) {
   const dispatch = useDispatch();
-
+  const [filelList, setFileList] = useState();
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
   }, [selectedRows]);
@@ -28,17 +29,15 @@ function PdfTable({
   const dateFormateAlign = (dates) => {
     return dates?.map((res, index) => {
       if (index < 1) {
-        let sectionMapArr = <span>{moment(res).year()}</span>;
-        return sectionMapArr;
+        // let sectionMapArr = <span>{dayjs(res).format("YYYY")}</span>;
+        return res;
       } else if (dates.length - 1 == index) {
         let sectionMapArr = (
           <Popover
             content={
               <>
                 {dates?.map((item, i) =>
-                  i > 0 ? (
-                    <div className="text-center">{moment(item).year()}</div>
-                  ) : null
+                  i > 0 ? <div className="text-center">{item}</div> : null
                 )}
               </>
             }
@@ -56,10 +55,14 @@ function PdfTable({
       }
     });
   };
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
+  const handleUploadButtonClick = (e) => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
   return (
     <div className={TableStyle.classContaineer}>
-      {reportListAll?.data?.length === 0 ? (
+      {tableData?.content?.length === 0 ? (
         <Empty />
       ) : (
         <table className={TableStyle.classTable}>
@@ -77,37 +80,34 @@ function PdfTable({
           </thead>
 
           <tbody className={TableStyle.bodytable}>
-            {tableData.length > 0 ? (
-              tableData.map((row, index) => (
+            {tableData?.content?.length > 0 ? (
+              tableData?.content?.map((row, index) => (
                 <tr key={index}>
                   <>
                     <td className={TableStyle.childBorder}>
-                      {row?.batchID ? row?.batchID : "---"}
+                      {row?.id ? row?.id : "---"}
                     </td>
 
                     <td className={TableStyle.childBorder}>
-                      {row?.patientCount ? row?.patientCount : "---"}
+                      {row?.totalFileCount ? row?.totalFileCount : "---"}
                     </td>
                     <td className={TableStyle.childBorder}>
                       <div>
-                        <span className="text-capitalize mx-2"  style={{
+                        <span
+                          className="text-capitalize mx-2"
+                          style={{
                             color:
-                              row.status === "processing"
+                              row.batchUploadStatus === "processing"
                                 ? "#2D6187"
-                                : row.status === "completed"
+                                : row.batchUploadStatus === "completed"
                                 ? "#008A0E"
                                 : "black",
-                          }}>
-                          {row.status}
+                          }}
+                        >
+                          {row.batchUploadStatus
+                            ? row.batchUploadStatus
+                            : "---"}
                         </span>
-                        <span  style={{
-                            color:
-                              row.status === "processing"
-                                ? "#2D6187"
-                                : row.status === "completed"
-                                ? "#008A0E"
-                                : "black",
-                          }}>{row.statusValue}</span>
                       </div>
                     </td>
 
@@ -143,7 +143,22 @@ function PdfTable({
                       )}
                     </td>
                     <td className={TableStyle.childBorder}>
-                      {dateFormate(dayjs, row?.initialedDate)}
+                      <div className="d-flex justify-content-between">
+                        {dateFormate(dayjs, row?.initialedDate)}
+                        <div onClick={handleUploadButtonClick} name="upload">
+                          <button
+                            onClick={handleUploadButtonClick}
+                            className="btn hegiht10  sharp me-1 action-btn"
+                            style={{ background: "#04306f" }}
+                          >
+                            <FontAwesomeIcon
+                              icon={faUpload}
+                              fontSize={11}
+                              style={{ color: "#ffff" }}
+                            />
+                          </button>
+                        </div>
+                      </div>
                     </td>
                   </>
                 </tr>
@@ -162,13 +177,20 @@ function PdfTable({
         <Paginator
           first={paginationFirst}
           rows={15}
-          totalRecords={ReportPatientDetails?.totalElements}
+          totalRecords={tableData?.totalElements}
           onPageChange={onPageChange}
         />
         <div className="total-pages">
-          Total count: {ReportPatientDetails?.totalElements}
+          Total count: {tableData?.totalElements}
         </div>
       </div>
+      <FhirDrawer
+        isDrawerOpen={isDrawerOpen}
+        setIsDrawerOpen={setIsDrawerOpen}
+        uploadType="upload"
+        filelList={filelList}
+        setFileList={setFileList}
+      />
     </div>
   );
 }

@@ -137,3 +137,11 @@ export async function getAllFileProcess(
   const data = await requestPortal(`dbservice/file-process/status`, options);
   return data;
 }
+
+export async function allBatches({ page }) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(`dbservice/batch/batchupload?page=${page}&size=15`, options);
+  return data;
+}
