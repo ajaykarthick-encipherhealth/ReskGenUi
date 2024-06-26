@@ -6,7 +6,7 @@ import {
   CheckCircleFilled,
   RightCircleOutlined,
 } from "@ant-design/icons";
-import { Tooltip, Popconfirm } from "antd";
+import { Tooltip, Popconfirm, message } from "antd";
 import {
   handleSubmitValidNotes,
   moveToStrightAction,
@@ -24,6 +24,7 @@ const MovementAction = ({
   setFileLoading,
   patientDetailsResult,
   getpatientDetailsData,
+  isComboCode
 }) => {
   const [selectDisDetails, setSelectDisDetails] = useState(false);
   const onChangeValues = (data) => {
@@ -100,7 +101,7 @@ const MovementAction = ({
             />
           </Popconfirm>
         )}
-        {deleteAction && (
+        {deleteAction && !isComboCode ? (
           <Popconfirm
             onConfirm={() => {
               handleSubmitValidNotes({
@@ -132,7 +133,10 @@ const MovementAction = ({
               }}
             />
           </Popconfirm>
-        )}
+        ) : <CloseCircleFilled
+        className={styles.deleteIcon}
+        onClick={() => message.warning("Delete only formed codes")}
+      />}
       </div>
     </>
   );
