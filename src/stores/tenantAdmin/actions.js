@@ -33,13 +33,7 @@ export const getCreateBatch=createActionThunk(
   'CREATE_BATCHES',
   network.createBatch
 )
-export const getUploadFile=createActionThunk(
-  'GET_UPLOAD_FILE',
-  network.uploadFile
-
-)
 export const getBatchInfo=createActionThunk(
   'GET_BATCH_INFO',
   network.batchDetails
-
 )

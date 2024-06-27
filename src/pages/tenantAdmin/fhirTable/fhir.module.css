@@ -322,18 +322,19 @@
   padding-left: 3px;
 }
 .progreddBr {
-  width: 30%;
-  margin: auto;
+  width: 90%;
+
+  /* margin: auto; */
 }
 .progressDIv {
   position: relative;
-  left: 10px;
+  left: -30px;
 }
 
 @media screen and (width>1500px) {
   .progressDIv {
     position: relative;
-    left: 20px;
+    left: 10px;
   }
 }
 .topTitle {

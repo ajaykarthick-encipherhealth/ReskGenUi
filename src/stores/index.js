@@ -22,7 +22,6 @@ import { PhysicianComparisonReducer } from "../store/reducers/physicianReducers/
 import { TanantAdminService } from "../store/reducers/tanantAdminReducers/fihrReducers";
 import { ReviewerReducers } from "../store/reducers/ReviewerReducers/ReviewerReducers";
 import { AuthReducer } from "./authflow/reducers";
-
 import { reducer as UpdateDashboardReducer } from "./reviewer/dashboard";
 import { reducer as updatedPatientsReducer } from "./reviewer/workqueue";
 import { reducer as searchReducer } from "./search";

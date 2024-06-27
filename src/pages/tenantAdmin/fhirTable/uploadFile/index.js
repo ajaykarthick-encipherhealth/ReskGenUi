@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import styles from "../../../../components/imageUploading/styles.module.css";
 
-const UploadFile = ({ filelList, setFileList, setFileErr }) => {
+const UploadFile = ({ filelList, setFileList }) => {
   const fileInputRef = useRef(null);
   const fileHandleChange = (e) => {
     if (e.target.files) {
@@ -15,12 +15,6 @@ const UploadFile = ({ filelList, setFileList, setFileErr }) => {
         }
       }
       setFileList(validFiles);
-      const formData = new FormData();
-      validFiles.forEach((item, index) => {
-        formData.append(`file${index + 1}`, item);
-      });
-      console.log(formData);
-      setFileErr(true);
     }
   };
 

@@ -10,8 +10,14 @@ import failed from "../.././../../images/fihr/failed.svg";
 import TableStyle from "../../table.module.css";
 import styles from "../../../../pages/tenantAdmin/fhirTable/fhir.module.css";
 import PropTypes from "prop-types";
+import SpinnerDots from "../../../spinner";
 
-const DetailedFihrTable = ({ paginationFirst, onPageChange, tableData }) => {
+const DetailedFihrTable = ({
+  paginationFirst,
+  onPageChange,
+  tableData,
+  loader,
+}) => {
   DetailedFihrTable.propTypes = {
     paginationFirst: PropTypes.any.isRequired,
     onPageChange: PropTypes.func.isRequired,
@@ -25,7 +31,7 @@ const DetailedFihrTable = ({ paginationFirst, onPageChange, tableData }) => {
     const status = row?.fileStatus?.toLowerCase();
 
     switch (status) {
-      case "computed" :
+      case "computed":
       case "already_present":
         strokeColor = "rgba(11, 96, 176, 1)";
         progressTextClass = "fihrComputedProgressText";
@@ -44,7 +50,7 @@ const DetailedFihrTable = ({ paginationFirst, onPageChange, tableData }) => {
         textColor = "rgba(252, 103, 54, 1)";
         imageSrc = processing;
         break;
-   
+
       default:
         strokeColor = "rgba(252, 103, 54, 1)";
         progressTextClass = "fihrProgressText";
@@ -57,93 +63,109 @@ const DetailedFihrTable = ({ paginationFirst, onPageChange, tableData }) => {
 
   return (
     <div className={TableStyle.classContaineer}>
-      <table className={TableStyle.classTable}>
-        <thead className={TableStyle.classTTotalhead}>
-          <tr>
-            <th>PATIENT ID</th>
-            <th>PATIENT NAME</th>
-            <th style={{ textAlign: "center" }}> COMPUTED DATE TIME</th>
-            <th style={{ textAlign: "center" }}>STATUS </th>
-          </tr>
-        </thead>
-
-        <tbody className={TableStyle.bodytable}>
-          {tableData?.content?.length > 0 ? (
-            tableData?.content?.map((row) => (
-              <tr key={row?.patientId} style={{ height: "40px" }}>
-                <td className={TableStyle.childBorder}>
-                  {row?.patientId ? row?.patientId : "---"}
-                </td>
-                <td className={TableStyle.childBorder}>
-                  {row?.patientName ? row?.patientName : "---"}
-                </td>
-                <td
-                  className={TableStyle.childBorder}
-                  style={{ textAlign: "center" }}
-                >
-                  {row?.computedDateTime
-                    ? dayjs(row?.computedDateTime).format("MM/DD/YYYY hh:mm A")
-                    : "---"}
-                </td>
-                <td
-                  className={TableStyle.childBorder}
-                  style={{ textAlign: "center" }}
-                >
-                  <div>
-                    <div
-                      className="text-capitalize mx-2"
-                      style={{
-                        fontSize: "14px",
-                        display: "flex",
-                        margin: "auto",
-                        justifyContent: "center",
-                        color: getColors(row)?.textColor,
-                      }}
-                    >
-                      <Image
-                        src={getColors(row)?.imageSrc}
-                        style={{ paddingRight: "5px" }}
-                      />
-                      {row?.fileStatus}
-                      {row?.fileStatus === "FAILED" && (
-                        <div className={styles.refreshBtn}>
-                          <Image src={refresh} width={15} height={15} />
-                        </div>
-                      )}
-                    </div>
-                    <div className={styles.progressDIv}>
-                      <Progress
-                        percent={80}
-                        strokeColor={getColors(row)?.strokeColor}
-                        className={`${styles.progreddBr} ${
-                          getColors(row)?.progressTextClass
-                        }`}
-                      />
-                    </div>
-                  </div>
-                </td>
+      {loader ? (
+        <SpinnerDots />
+      ) : (
+        <>
+          <table className={TableStyle.classTable}>
+            <thead className={TableStyle.classTTotalhead}>
+              <tr>
+                <th>FILE ID</th>
+                <th>FILE NAME</th>
+                <th>PATIENT ID</th>
+                <th>PATIENT NAME</th>
+                <th style={{ textAlign: "center" }}> COMPUTED DATE TIME</th>
+                <th style={{ textAlign: "center" }}>STATUS </th>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan={11}>
-                <Empty />
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-      <div className="pagination-container">
-        <Paginator
-          first={paginationFirst}
-          rows={15}
-          totalRecords={tableData?.totalElements}
-          onPageChange={onPageChange}
-        />
-        <div className="total-pages">
-          Total count: {tableData?.totalElements}
-        </div>
-      </div>
+            </thead>
+
+            <tbody className={TableStyle.bodytable}>
+              {tableData?.content?.length > 0 ? (
+                tableData?.content?.map((row) => (
+                  <tr key={row?.patientId} style={{ height: "40px" }}>
+                    <td className={TableStyle.childBorder}>
+                      {row?.fileId ? row?.fileId : "---"}
+                    </td>
+                    <td className={TableStyle.childBorder}>
+                      {row?.fileName ? row?.fileName : "---"}
+                    </td>
+                    <td className={TableStyle.childBorder}>
+                      {row?.patientId ? row?.patientId : "---"}
+                    </td>
+                    <td className={TableStyle.childBorder}>
+                      {row?.patientName ? row?.patientName : "---"}
+                    </td>
+                    <td
+                      className={TableStyle.childBorder}
+                      style={{ textAlign: "center" }}
+                    >
+                      {row?.computedDateTime
+                        ? dayjs(row?.computedDateTime).format(
+                            "MM/DD/YYYY hh:mm A"
+                          )
+                        : "---"}
+                    </td>
+                    <td
+                      className={TableStyle.childBorder}
+                      style={{ textAlign: "center" }}
+                    >
+                      <div>
+                        <div
+                          className="text-capitalize mx-2"
+                          style={{
+                            fontSize: "14px",
+                            display: "flex",
+                            margin: "auto",
+                            justifyContent: "start",
+                            color: getColors(row)?.textColor,
+                          }}
+                        >
+                          <Image
+                            src={getColors(row)?.imageSrc}
+                            style={{ paddingRight: "5px" }}
+                          />
+                          {row?.fileStatus}
+                          {row?.fileStatus === "FAILED" && (
+                            <div className={styles.refreshBtn}>
+                              <Image src={refresh} width={15} height={15} />
+                            </div>
+                          )}
+                        </div>
+                        <div className={styles.progressDIv}>
+                          <Progress
+                            percent={80}
+                            strokeColor={getColors(row)?.strokeColor}
+                            className={`${styles.progreddBr} ${
+                              getColors(row)?.progressTextClass
+                            }`}
+                          />
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={11}>
+                    <Empty />
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+          <div className="pagination-container">
+            <Paginator
+              first={paginationFirst}
+              rows={15}
+              totalRecords={tableData?.totalElements}
+              onPageChange={onPageChange}
+            />
+            <div className="total-pages">
+              Total count: {tableData?.totalElements}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

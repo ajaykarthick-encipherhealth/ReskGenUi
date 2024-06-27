@@ -18,12 +18,10 @@ const FhirDrawer = ({
   setFileList,
   getCreateBatch,
   getAllBatches,
-  getUploadFile,
   selectedBatch,
   setSelectedBatch,
 }) => {
   const [form] = Form.useForm();
-  const [fileErr, setFileErr] = useState(false);
   const handleClose = (form) => {
     setIsDrawerOpen(false);
     form.resetFields();
@@ -32,6 +30,40 @@ const FhirDrawer = ({
     }
   };
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
+
+  const handleFileUpload = async () => {
+    try {
+      const uploadPromises = fileList.map((item) => {
+        const formData = new FormData();
+        formData.append("file", item);
+        formData.append("batchId", selectedBatch?.id);
+        formData.append("yearOfServices", selectedBatch?.yearOfService);
+
+        const headers = {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        };
+
+        return axios.post(
+          `${ENDPOINTS.apiEndoint}management/batch/upload`,
+          formData,
+          headers
+        );
+      });
+
+      const responses = await Promise.all(uploadPromises);
+      responses.forEach((res) => {
+        if (res.data.status === "SUCCESS") {
+          form.resetFields();
+        }
+      });
+      setIsDrawerOpen(false);
+    } catch (err) {
+      console.error("Error uploading files:", err);
+    }
+  };
+
   const onFinish = async (formVal) => {
     if (reportActiveTab === "PDF") {
       if (uploadType !== "upload") {
@@ -41,45 +73,7 @@ const FhirDrawer = ({
           form.resetFields();
         }
       } else {
-        if (fileList?.length > 0) {
-          setFileErr(true);
-        }
-        // console.log(fileList);
-
-        try {
-          const responses = [];
-          for (const item of fileList) {
-            const formData = new FormData();
-            formData.append("file", item);
-            formData.append("batchId", selectedBatch?.id);
-            formData.append("yearOfServices", formVal?.yearOfService);
-            console.log(formData);
-            const headers = {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            };
-
-            const res = await axios.post(
-              ENDPOINTS.apiEndoint +
-                `management/batch/upload
-              `,
-              formData,
-              headers
-            );
-
-            responses.push(res);
-
-            // if (res.status === "SUCCESS") {
-            //   await getAllBatches({ page: 0 });
-            //   setFileErr(false);
-            //   form.resetFields();
-            // }
-          }
-          // console.log(responses);
-        } catch (err) {
-          console.error("Error uploading files:", err);
-        }
+        handleFileUpload();
       }
     }
   };
@@ -95,22 +89,24 @@ const FhirDrawer = ({
       <Offcanvas.Body>
         <div className="container-fluid">
           <Form form={form} name="basic" layout="vertical" onFinish={onFinish}>
-            <Form.Item
-              label={
-                <label>
-                  Batch Name <span className="text-danger">*</span>{" "}
-                </label>
-              }
-              name="name"
-              rules={[
-                {
-                  required: true,
-                  message: "Please Enter Batch Name ",
-                },
-              ]}
-            >
-              <Input name="batchid" />
-            </Form.Item>
+            {uploadType !== "upload" && (
+              <Form.Item
+                label={
+                  <label>
+                    Batch Name <span className="text-danger">*</span>{" "}
+                  </label>
+                }
+                name="name"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Enter Batch Name ",
+                  },
+                ]}
+              >
+                <Input name="batchid" />
+              </Form.Item>
+            )}
             {uploadType !== "upload" && (
               <Form.Item
                 label={
@@ -137,45 +133,34 @@ const FhirDrawer = ({
                   </label>
                 }
                 name="upload"
-                // rules={[
-                //   {
-                //     required:filelList?.length>0?false: true,
-                //     message: "Please Enter Upload File ",
-                //   },
-                // ]}
               >
-                <UploadFile
-                  filelList={fileList}
-                  setFileList={setFileList}
-                  setFileErr={setFileErr}
-                />
-                {/* {!fileErr && (
-                  <span className="text-red">Please upload the files</span>
-                )} */}
+                <UploadFile filelList={fileList} setFileList={setFileList} />
               </Form.Item>
             )}
-            <Form.Item
-              label={
-                <label>
-                  Year of Service <span className="text-danger">*</span>{" "}
-                </label>
-              }
-              name="yearOfService"
-              rules={[
-                {
-                  required: true,
-                  message: "Please Enter Year of Service ",
-                },
-              ]}
-            >
-              <Select
-                mode="tags"
-                name="dos"
-                style={{ width: "100%" }}
-                options={getYears()}
-                size="large"
-              />
-            </Form.Item>
+            {uploadType !== "upload" && (
+              <Form.Item
+                label={
+                  <label>
+                    Year of Service <span className="text-danger">*</span>{" "}
+                  </label>
+                }
+                name="yearOfService"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Enter Year of Service ",
+                  },
+                ]}
+              >
+                <Select
+                  mode="tags"
+                  name="dos"
+                  style={{ width: "100%" }}
+                  options={getYears()}
+                  size="large"
+                />
+              </Form.Item>
+            )}
             <Form.Item>
               <div className="col-xl-12 mb-3 d-grid justify-content-center">
                 <Button type="submit">Proceed</Button>
@@ -191,6 +176,5 @@ const enhancer = connect((state) => ({}), {
   uploadBatch: tenantActions.batchUpload,
   getCreateBatch: tenantActions.getCreateBatch,
   getAllBatches: tenantActions.getAllBatches,
-  getUploadFile: tenantActions.getUploadFile,
 });
 export default enhancer(FhirDrawer);
