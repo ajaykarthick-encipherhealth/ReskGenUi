@@ -44,16 +44,13 @@ const FhirDrawer = ({
         if (fileList?.length > 0) {
           setFileErr(true);
         }
-        // console.log(fileList);
-
         try {
           const responses = [];
           for (const item of fileList) {
             const formData = new FormData();
             formData.append("file", item);
             formData.append("batchId", selectedBatch?.id);
-            formData.append("yearOfServices", formVal?.yearOfService);
-            console.log(formData);
+            formData.append("yearOfServices", selectedBatch?.yearOfService);
             const headers = {
               headers: {
                 "Content-Type": "multipart/form-data",
@@ -67,16 +64,13 @@ const FhirDrawer = ({
               formData,
               headers
             );
-
             responses.push(res);
-
-            // if (res.status === "SUCCESS") {
-            //   await getAllBatches({ page: 0 });
-            //   setFileErr(false);
-            //   form.resetFields();
-            // }
+            if (res.status === "SUCCESS") {
+              await getAllBatches({ page: 0 });
+              setFileErr(false);
+              form.resetFields();
+            }
           }
-          // console.log(responses);
         } catch (err) {
           console.error("Error uploading files:", err);
         }
@@ -95,7 +89,7 @@ const FhirDrawer = ({
       <Offcanvas.Body>
         <div className="container-fluid">
           <Form form={form} name="basic" layout="vertical" onFinish={onFinish}>
-            <Form.Item
+            {uploadType !== "upload" &&<Form.Item
               label={
                 <label>
                   Batch Name <span className="text-danger">*</span>{" "}
@@ -110,7 +104,7 @@ const FhirDrawer = ({
               ]}
             >
               <Input name="batchid" />
-            </Form.Item>
+            </Form.Item>}
             {uploadType !== "upload" && (
               <Form.Item
                 label={
@@ -154,7 +148,7 @@ const FhirDrawer = ({
                 )} */}
               </Form.Item>
             )}
-            <Form.Item
+            {uploadType !== "upload" &&<Form.Item
               label={
                 <label>
                   Year of Service <span className="text-danger">*</span>{" "}
@@ -175,7 +169,7 @@ const FhirDrawer = ({
                 options={getYears()}
                 size="large"
               />
-            </Form.Item>
+            </Form.Item>}
             <Form.Item>
               <div className="col-xl-12 mb-3 d-grid justify-content-center">
                 <Button type="submit">Proceed</Button>

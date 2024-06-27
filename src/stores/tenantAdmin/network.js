@@ -138,12 +138,24 @@ export async function getAllFileProcess(
   return data;
 }
 
-export async function allBatches({ page }) {
+export async function allBatches({
+  page,
+  search,
+  batchUploadStatus,
+  startDate,
+  endDate,
+}) {
   const options = {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/batch/batchupload?page=${page}&size=15`,
+    `dbservice/batch/batchupload?page=${page}&size=15&searchString=${
+      search ? search : ""
+    }&batchUploadStatus=${
+      batchUploadStatus ? batchUploadStatus : ""
+    }&startDate=${startDate ? startDate : ""}&endDate=${
+      endDate ? endDate : ""
+    }`,
     options
   );
   return data;
@@ -157,7 +169,7 @@ export async function createBatch({ info }) {
   return data;
 }
 export async function uploadFile({ info }) {
-  console.log(info)
+  console.log(info);
   const options = {
     method: "POST",
     body: info,
@@ -166,10 +178,20 @@ export async function uploadFile({ info }) {
   return data;
 }
 
-export async function batchDetails({ batchId }) {
+export async function batchDetails({
+  batchId,
+  page,
+  search,
+  startDate,
+  endDate,
+  fileStatus,
+}) {
   const options = {
-    method: "GET"
+    method: "GET",
   };
-  const data = await requestPortal(`dbservice/batch/batchuploaddetails?batchId=${batchId}`, options);
+  const data = await requestPortal(
+    `dbservice/batch/batchuploaddetails?batchId=${batchId}&page=${page}&size=15&searchString=${search}&fileStatus=${fileStatus?fileStatus:""}&startDate=${startDate?startDate:""}&endDate=${endDate?endDate:""}`,
+    options
+  );
   return data;
 }
