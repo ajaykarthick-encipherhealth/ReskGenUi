@@ -22,9 +22,11 @@ const DetailedFihrTable = ({ paginationFirst, onPageChange, tableData }) => {
     let progressTextClass;
     let textColor;
     let imageSrc;
+    const status = row?.fileStatus?.toLowerCase();
 
-    switch (row?.status) {
-      case "computed":
+    switch (status) {
+      case "computed" :
+      case "already_present":
         strokeColor = "rgba(11, 96, 176, 1)";
         progressTextClass = "fihrComputedProgressText";
         textColor = "rgba(11, 96, 176, 1)";
@@ -42,6 +44,7 @@ const DetailedFihrTable = ({ paginationFirst, onPageChange, tableData }) => {
         textColor = "rgba(252, 103, 54, 1)";
         imageSrc = processing;
         break;
+   
       default:
         strokeColor = "rgba(252, 103, 54, 1)";
         progressTextClass = "fihrProgressText";
@@ -65,8 +68,8 @@ const DetailedFihrTable = ({ paginationFirst, onPageChange, tableData }) => {
         </thead>
 
         <tbody className={TableStyle.bodytable}>
-          {tableData?.length > 0 ? (
-            tableData?.map((row) => (
+          {tableData?.content?.length > 0 ? (
+            tableData?.content?.map((row) => (
               <tr key={row?.patientId} style={{ height: "40px" }}>
                 <td className={TableStyle.childBorder}>
                   {row?.patientId ? row?.patientId : "---"}
@@ -78,8 +81,8 @@ const DetailedFihrTable = ({ paginationFirst, onPageChange, tableData }) => {
                   className={TableStyle.childBorder}
                   style={{ textAlign: "center" }}
                 >
-                  {row?.initialedDate
-                    ? dayjs(row?.initialedDate).format("MM/DD/YYYY hh:mm A")
+                  {row?.computedDateTime
+                    ? dayjs(row?.computedDateTime).format("MM/DD/YYYY hh:mm A")
                     : "---"}
                 </td>
                 <td
@@ -101,8 +104,8 @@ const DetailedFihrTable = ({ paginationFirst, onPageChange, tableData }) => {
                         src={getColors(row)?.imageSrc}
                         style={{ paddingRight: "5px" }}
                       />
-                      {row?.status}
-                      {row?.status === "failed" && (
+                      {row?.fileStatus}
+                      {row?.fileStatus === "FAILED" && (
                         <div className={styles.refreshBtn}>
                           <Image src={refresh} width={15} height={15} />
                         </div>
@@ -134,10 +137,12 @@ const DetailedFihrTable = ({ paginationFirst, onPageChange, tableData }) => {
         <Paginator
           first={paginationFirst}
           rows={15}
-          totalRecords={tableData?.length}
+          totalRecords={tableData?.totalElements}
           onPageChange={onPageChange}
         />
-        <div className="total-pages">Total count: {tableData?.length}</div>
+        <div className="total-pages">
+          Total count: {tableData?.totalElements}
+        </div>
       </div>
     </div>
   );

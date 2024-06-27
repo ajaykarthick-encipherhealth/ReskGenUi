@@ -2,11 +2,13 @@ import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
 import {
   batchUpload,
+  getAllBatches,
   getAllFileProcessAction,
   getAllOrganizationAction,
   getAllPatientAction,
   getAllTrackingAction,
   getAllUsersAction,
+  getBatchInfo,
 } from "./actions";
 
 const initialState = {
@@ -38,6 +40,16 @@ const createReducer = (actionType) =>
     initialState
   );
 
+const getReportLoading = (type) =>
+  handleActions(
+    {
+      [type.START]: () => true,
+      [type.SUCCEEDED]: () => false,
+      [type.FAILED]: () => false,
+    },
+    false
+  );
+
 const searchReducer = combineReducers({
   batchUpload: createReducer(batchUpload),
   allOrganization: createReducer(getAllOrganizationAction),
@@ -45,6 +57,10 @@ const searchReducer = combineReducers({
   allPatients: createReducer(getAllPatientAction),
   allTracking: createReducer(getAllTrackingAction),
   allFileProcessing: createReducer(getAllFileProcessAction),
+  allBatches: createReducer(getAllBatches),
+  batchLoader: getReportLoading(getAllBatches),
+  getBatch:createReducer(getBatchInfo),
+  getBatchLoader:getReportLoading(getBatchInfo)
 });
 
 export default searchReducer;

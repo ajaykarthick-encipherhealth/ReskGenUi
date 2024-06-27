@@ -137,3 +137,39 @@ export async function getAllFileProcess(
   const data = await requestPortal(`dbservice/file-process/status`, options);
   return data;
 }
+
+export async function allBatches({ page }) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/batch/batchupload?page=${page}&size=15`,
+    options
+  );
+  return data;
+}
+export async function createBatch({ info }) {
+  const options = {
+    method: "POST",
+    body: JSON.stringify(info),
+  };
+  const data = await requestPortal(`management/batch`, options);
+  return data;
+}
+export async function uploadFile({ info }) {
+  console.log(info)
+  const options = {
+    method: "POST",
+    body: info,
+  };
+  const data = await requestPortal(`management/batch/upload`, options);
+  return data;
+}
+
+export async function batchDetails({ batchId }) {
+  const options = {
+    method: "GET"
+  };
+  const data = await requestPortal(`dbservice/batch/batchuploaddetails?batchId=${batchId}`, options);
+  return data;
+}

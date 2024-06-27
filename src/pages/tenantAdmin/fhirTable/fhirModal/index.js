@@ -1,91 +1,107 @@
 import React from "react";
 import { Offcanvas, Button } from "react-bootstrap";
-// import UploadFile from "../uploadFile";
 import { actions as tenantActions } from "../../../../stores/tenantAdmin";
 import { connect } from "react-redux";
-import { Form, Input, Select, Upload } from "antd";
-import styles from "../fhir.module.css";
+import { Form, Input, Select } from "antd";
 import { getYears } from "../../../../utils/reusable";
-import { getStorage } from "../../../../utils/storages";
+import UploadFile from "../uploadFile";
+import { useSelector } from "react-redux";
+import { useState } from "react";
 import ENDPOINTS from "../../../../utility/enpoints";
 import axios from "../../../../utility/axiosConfig";
 
-function FhirDrawer({
+const FhirDrawer = ({
   isDrawerOpen,
   setIsDrawerOpen,
   uploadType,
-  uploadBatch,
-}) {
+  fileList,
+  setFileList,
+  getCreateBatch,
+  getAllBatches,
+  getUploadFile,
+  selectedBatch,
+  setSelectedBatch,
+}) => {
   const [form] = Form.useForm();
-  const handleClose = () => {
+  const [fileErr, setFileErr] = useState(false);
+  const handleClose = (form) => {
     setIsDrawerOpen(false);
+    form.resetFields();
+    if (setSelectedBatch) {
+      setSelectedBatch();
+    }
+  };
+  const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
+  const onFinish = async (formVal) => {
+    if (reportActiveTab === "PDF") {
+      if (uploadType !== "upload") {
+        const res = await getCreateBatch({ info: formVal });
+        if (res.status === "SUCCESS") {
+          await getAllBatches({ page: 0 });
+          form.resetFields();
+        }
+      } else {
+        if (fileList?.length > 0) {
+          setFileErr(true);
+        }
+        // console.log(fileList);
+
+        try {
+          const responses = [];
+          for (const item of fileList) {
+            const formData = new FormData();
+            formData.append("file", item);
+            formData.append("batchId", selectedBatch?.id);
+            formData.append("yearOfServices", formVal?.yearOfService);
+            console.log(formData);
+            const headers = {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            };
+
+            const res = await axios.post(
+              ENDPOINTS.apiEndoint +
+                `management/batch/upload
+              `,
+              formData,
+              headers
+            );
+
+            responses.push(res);
+
+            // if (res.status === "SUCCESS") {
+            //   await getAllBatches({ page: 0 });
+            //   setFileErr(false);
+            //   form.resetFields();
+            // }
+          }
+          // console.log(responses);
+        } catch (err) {
+          console.error("Error uploading files:", err);
+        }
+      }
+    }
   };
 
-  const onFinish = async (form) => {
-    let formData = new FormData();
-    formData.append("orgid", await getStorage("orgId"));
-    formData.append("tenantid", await getStorage("tenantId"));
-    formData.append("userid", await getStorage("userId"));
-    formData.append("dos", form.dos[0]);
-    formData.append("folderpath", `/mnt/data/${form.batchid}`);
-    formData.append("failurepath", `/mnt/data/failure`);
-    formData.append("batchid", form.batchid);
-    try {
-      const headers = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
-      const response = await axios.post(
-        ENDPOINTS.apiEndoint +
-          `aiservice/ai/batch/upload
-        `,
-        formData,
-        headers
-      );
-      console.log(response);
-    } catch (error) {}
-  };
-  const onFinishFailed = () => {};
-
-  const uploadButton = (
-    <button
-      style={{
-        border: 0,
-        background: "none",
-      }}
-      type="button"
-    >
-      <div
-        style={{
-          marginTop: 8,
-        }}
-      >
-        Upload
-      </div>
-    </button>
-  );
   return (
     <Offcanvas show={isDrawerOpen} className="offcanvas-end" placement="end">
-      <Offcanvas.Header closeButton onClick={handleClose}>
-        <Offcanvas.Title> Update New Batch </Offcanvas.Title>
+      <Offcanvas.Header closeButton onClick={() => handleClose(form)}>
+        <Offcanvas.Title>
+          {" "}
+          {uploadType === "upload" ? "Update New Batch" : "Create batch"}{" "}
+        </Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body>
         <div className="container-fluid">
-          <Form
-            form={form}
-            name="validateOnly"
-            layout="vertical"
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-          >
+          <Form form={form} name="basic" layout="vertical" onFinish={onFinish}>
             <Form.Item
               label={
                 <label>
                   Batch Name <span className="text-danger">*</span>{" "}
                 </label>
               }
-              name="batchid"
+              name="name"
               rules={[
                 {
                   required: true,
@@ -95,6 +111,24 @@ function FhirDrawer({
             >
               <Input name="batchid" />
             </Form.Item>
+            {uploadType !== "upload" && (
+              <Form.Item
+                label={
+                  <label>
+                    TotalFile Count <span className="text-danger">*</span>{" "}
+                  </label>
+                }
+                name="totalFileCount"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Enter TotalFile Count ",
+                  },
+                ]}
+              >
+                <Input name="totalFileCount" maxLength={10} />
+              </Form.Item>
+            )}
             {uploadType == "upload" && (
               <Form.Item
                 label={
@@ -103,28 +137,21 @@ function FhirDrawer({
                   </label>
                 }
                 name="upload"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please Enter Upload File ",
-                  },
-                ]}
+                // rules={[
+                //   {
+                //     required:filelList?.length>0?false: true,
+                //     message: "Please Enter Upload File ",
+                //   },
+                // ]}
               >
-                <Upload
-                  name="upload"
-                  className="avatar-uploader"
-                  showUploadList={false}
-                  directory
-                  multiple
-                  onChange={(e) => console.log(e)}
-                  style={{ width: "100%" }}
-                >
-                  <div className={styles.videoflex} style={{ width: "100%" }}>
-                    <div className="text-center">
-                      <div>{uploadButton}</div>
-                    </div>
-                  </div>
-                </Upload>
+                <UploadFile
+                  filelList={fileList}
+                  setFileList={setFileList}
+                  setFileErr={setFileErr}
+                />
+                {/* {!fileErr && (
+                  <span className="text-red">Please upload the files</span>
+                )} */}
               </Form.Item>
             )}
             <Form.Item
@@ -133,7 +160,7 @@ function FhirDrawer({
                   Year of Service <span className="text-danger">*</span>{" "}
                 </label>
               }
-              name="dos"
+              name="yearOfService"
               rules={[
                 {
                   required: true,
@@ -159,8 +186,11 @@ function FhirDrawer({
       </Offcanvas.Body>
     </Offcanvas>
   );
-}
+};
 const enhancer = connect((state) => ({}), {
   uploadBatch: tenantActions.batchUpload,
+  getCreateBatch: tenantActions.getCreateBatch,
+  getAllBatches: tenantActions.getAllBatches,
+  getUploadFile: tenantActions.getUploadFile,
 });
 export default enhancer(FhirDrawer);

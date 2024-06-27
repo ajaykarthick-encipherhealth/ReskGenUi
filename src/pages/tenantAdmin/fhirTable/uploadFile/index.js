@@ -1,29 +1,56 @@
-import React from "react";
-import Image from "next/image";
-import styles from "../fhir.module.css";
-import upload from "../../../../images/fihr/upload.png";
+import React, { useRef } from "react";
+import styles from "../../../../components/imageUploading/styles.module.css";
 
-function UploadFile({ title }) {
+const UploadFile = ({ filelList, setFileList, setFileErr }) => {
+  const fileInputRef = useRef(null);
+  const fileHandleChange = (e) => {
+    if (e.target.files) {
+      const files = e.target.files;
+
+      const validFiles = [];
+      const maxSize = 40 * 1024 * 1024;
+      for (let i = 0; i < files?.length; i++) {
+        if (files[i].size < maxSize) {
+          validFiles?.push(files[i]);
+        }
+      }
+      setFileList(validFiles);
+      const formData = new FormData();
+      validFiles.forEach((item, index) => {
+        formData.append(`file${index + 1}`, item);
+      });
+      console.log(formData);
+      setFileErr(true);
+    }
+  };
+
   return (
-    <div>
+    <div className={`${styles.cover} `}>
+      <label className="cr-pointer">
+        <input
+          className="input"
+          name="file"
+          type="file"
+          multiple
+          onChange={fileHandleChange}
+          ref={fileInputRef}
+          accept=".pdf"
+        />
 
-      <div className={styles.videoflex}>
-        <div className=" text-center" typeof="file">
-          <Image src={upload} alt="Image" />
-          <label>
-            <input
-              className="input"
-              type="file"
-              accept=".png,.jpg,.jpeg"
-              webkitdirectory="true" 
-              multiple
-            />
-            {title}
-          </label>
+        <div
+          className={styles.videoflex}
+          style={{ overflowY: "scroll", height: "100px", padding: "15px" }}
+        >
+          {filelList?.length > 0
+            ? filelList?.map(
+                (item, index) =>
+                  `${item?.name} ${filelList?.length === index + 1 ? "" : ", "}`
+              )
+            : "Upload"}
         </div>
-      </div>
+      </label>
     </div>
   );
-}
+};
 
 export default UploadFile;
