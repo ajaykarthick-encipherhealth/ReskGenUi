@@ -280,7 +280,7 @@ const Meat = ({
                 onClick={() => setMeatDisplay(false)}
               />
             )}
-            {showSection &&  <RegularButton
+            {isEditMeat && showSection &&  <RegularButton
               type=""
               name="Submit"
               width="100px"
