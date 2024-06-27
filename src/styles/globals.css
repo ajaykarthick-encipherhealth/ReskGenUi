@@ -9122,7 +9122,7 @@ button.btn.btn-danger.btn-sm.light.ms-1.btn.btn-primary {
 }
 
 .header-profile2 {
-  margin-right: 58px !important;
+  margin-right: 25px !important;
   text-transform: capitalize;
 }
 
@@ -14613,7 +14613,6 @@ input::-webkit-inner-spin-button {
   padding: 10px !important;
 }
 
-
 .ant-spin-nested-loading {
   border: 1px solid #f0f0f0;
 }
@@ -14629,7 +14628,7 @@ input::-webkit-inner-spin-button {
 
 /* .card { 
   margin: 0 !important; */
-  /* border:1px solid gray !important */
+/* border:1px solid gray !important */
 /* } */
 .ant-select-single {
   font-size: 14px;
@@ -14742,24 +14741,23 @@ input::-webkit-inner-spin-button {
   width: 82% !important;
   margin-left: 20px;
 } */
-.ant-select.myworkqueue_filter{
+.ant-select.myworkqueue_filter {
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
   border: none !important;
   border-radius: 8px;
 }
-.ant-select.myworkqueue_filter:hover{ 
+.ant-select.myworkqueue_filter:hover {
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
   /* border: none !important; */
 }
-.myworkqueue_filter > .ant-select-selector{
+.myworkqueue_filter > .ant-select-selector {
   border: none !important;
 }
-.myworkqueueDrawer > .ant-drawer-body{
+.myworkqueueDrawer > .ant-drawer-body {
   overflow: hidden !important;
-
 }
 .antdbutton .ant-btn-default:not(:disabled):not(.ant-btn-disabled):hover {
   color: #4096ff;
   border-color: rgb(36, 21, 113) !important;
-   background: rgb(36, 21, 113) !important;
+  background: rgb(36, 21, 113) !important;
 }
