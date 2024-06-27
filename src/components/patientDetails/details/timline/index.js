@@ -10,7 +10,10 @@ import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { CloseCircleFilled } from "@ant-design/icons";
 import { getProviderNameTagList } from "../components/function/ProviderHyperlinks";
 import { getDateOfServiceBackground } from "../components/function/DateOfServices";
-import { getSectionHeaderBackground } from "../components/function/SectionHeader";
+import {
+  getSectionHeaderBackground,
+  getSectionHeadersBackground,
+} from "../components/function/SectionHeader";
 
 const Timeline = ({
   timelineData,
@@ -149,6 +152,173 @@ const Timeline = ({
                 <div>
                   {getSectionHeaderBackground({
                     value: viewValue?.changedDiseaseFormat?.capturedSections,
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+
+    return sectionMapArr;
+  };
+
+  const getMeatEditDeatils = (viewValue) => {
+    var sectionMapArr = (
+      <>
+        <div className="d-flex justify-content-end">
+          <CloseCircleFilled
+            className={styles.deleteIcon}
+            onClick={() => {
+              setIsPopupOpen(false), setPopClickDisCode(null);
+            }}
+          />
+        </div>
+        <div className={styles.detailsContainer}>
+          <div className={styles.oldCodeContiner}>
+            <span className={styles.codeTitle}>OLD CODE</span>
+            <div className={styles.details}>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>
+                  {" "}
+                  {viewValue?.previousMeatDetail?.diagnosisCode}
+                </span>
+                <span className={styles.discription}>
+                  {viewValue?.previousMeatDetail?.diseaseName}
+                </span>
+              </div>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Provider</span>
+                <div>
+                  {getProviderNameTagList({
+                    data: viewValue?.previousMeatDetail?.providerNames,
+                  })}
+                </div>
+              </div>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Encounter Date</span>
+                <div>
+                  {getDateOfServiceBackground({
+                    value: viewValue?.previousMeatDetail?.dateOfService,
+                  })}
+                </div>
+              </div>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Monitor</span>
+                <span className={styles.discription}>
+                  {viewValue?.previousMeatDetail?.monitorAspect}
+                </span>
+                <div>
+                  {getSectionHeadersBackground({
+                    value: viewValue?.previousMeatDetail?.monitorHyperLink,
+                  })}
+                </div>
+              </div>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Evaluate</span>
+                <span className={styles.discription}>
+                  {viewValue?.previousMeatDetail?.evaluateAspect}
+                </span>
+                <div>
+                  {getSectionHeadersBackground({
+                    value: viewValue?.previousMeatDetail?.evaluateHyperLink,
+                  })}
+                </div>
+              </div>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Assessment</span>
+                <span className={styles.discription}>
+                  {viewValue?.previousMeatDetail?.assessmentAspect}
+                </span>
+                <div>
+                  {getSectionHeadersBackground({
+                    value: viewValue?.previousMeatDetail?.assessmentHyperLink,
+                  })}
+                </div>
+              </div>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Treatment</span>
+                <span className={styles.discription}>
+                  {viewValue?.previousMeatDetail?.treatmentAspect}
+                </span>
+                <div>
+                  {getSectionHeadersBackground({
+                    value: viewValue?.previousMeatDetail?.treatmentHyperLink,
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className={styles.editCodeContainer}>
+            <span className={styles.editTitle}>NEW CODE</span>
+            <div className={styles.details}>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>
+                  {" "}
+                  {viewValue?.changedMeatDetail?.diagnosisCode}
+                </span>
+                <span className={styles.discription}>
+                  {viewValue?.changedMeatDetail?.diseaseName}
+                </span>
+              </div>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Provider</span>
+                <div>
+                  {getProviderNameTagList({
+                    data: viewValue?.changedMeatDetail?.providerNames,
+                  })}
+                </div>
+              </div>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Encounter Date</span>
+                <div>
+                  {getDateOfServiceBackground({
+                    value: viewValue?.changedMeatDetail?.dateOfService,
+                  })}
+                </div>
+              </div>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Monitor</span>
+                <span className={styles.discription}>
+                  {viewValue?.changedMeatDetail?.monitorAspect}
+                </span>
+                <div>
+                  {getSectionHeadersBackground({
+                    value: viewValue?.changedMeatDetail?.monitorHyperLink,
+                  })}
+                </div>
+              </div>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Evaluate</span>
+                <span className={styles.discription}>
+                  {viewValue?.changedMeatDetail?.evaluateAspect}
+                </span>
+                <div>
+                  {getSectionHeadersBackground({
+                    value: viewValue?.changedMeatDetail?.evaluateHyperLink,
+                  })}
+                </div>
+              </div>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Assessment</span>
+                <span className={styles.discription}>
+                  {viewValue?.changedMeatDetail?.assessmentAspect}
+                </span>
+                <div>
+                  {getSectionHeadersBackground({
+                    value: viewValue?.changedMeatDetail?.assessmentHyperLink,
+                  })}
+                </div>
+              </div>
+              <div className={styles.detailsHeader}>
+                <span className={styles.disCode}>Treatment</span>
+                <span className={styles.discription}>
+                  {viewValue?.changedMeatDetail?.treatmentAspect}
+                </span>
+                <div>
+                  {getSectionHeadersBackground({
+                    value: viewValue?.changedMeatDetail?.treatmentHyperLink,
                   })}
                 </div>
               </div>
@@ -435,7 +605,7 @@ const Timeline = ({
           return `${item.diagnosisCode} - Encounter file added`;
         case "MEAT_ADDED":
           return `${item.diagnosisCode} - Meat added`;
-        case "EDITED":
+        case "DISEASE_EDITED":
           return (
             <div className="d-flex w-100 justify-content-between">
               {item.diagnosisCode} - code been edited
@@ -445,6 +615,26 @@ const Timeline = ({
                 placement="bottom"
                 overlayStyle={{ zIndex: 9999 }}
                 content={<>{getEditDeatils(item)}</>}
+              >
+                <span
+                  className={styles.viewTag}
+                  onClick={() => onClickPopup(index)}
+                >
+                  View
+                </span>{" "}
+              </Popover>
+            </div>
+          );
+        case "MEAT_EDITED":
+          return (
+            <div className="d-flex w-100 justify-content-between">
+              {item?.previousMeatDetail?.diagnosisCode} - code been edited
+              <Popover
+                open={popClickDisCode === index ? true : false}
+                trigger={["hover"]}
+                placement="bottom"
+                overlayStyle={{ zIndex: 9999 }}
+                content={<>{getMeatEditDeatils(item)}</>}
               >
                 <span
                   className={styles.viewTag}
@@ -549,7 +739,7 @@ const Timeline = ({
   return (
     <div className={visitStyles.timeLine}>
       {!filterDataLoading ? (
-        <div className="widget-timeline" style={{height: "100vh"}}>
+        <div className="widget-timeline" style={{ height: "100vh" }}>
           <ul
             className="timeline"
             style={{ height: "95%", overflow: "scroll" }}

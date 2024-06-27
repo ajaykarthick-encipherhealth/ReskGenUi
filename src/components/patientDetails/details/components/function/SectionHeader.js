@@ -59,6 +59,63 @@ export const getSectionHeaderBackground = ({ value }) => {
   });
 };
 
+export const getSectionHeadersBackground = ({ value }) => {
+  return value?.map((res, index) => {
+    if (index < 2) {
+      var sectionMapArr = res ? (
+        <span
+          style={{
+            background: stringToColour(res?.header) + 33,
+            color: stringToColour(res?.header),
+          }}
+          className={`cr-pointer mt-2 text-start ${visitStyles.captureheader}`}
+        >
+          {res?.header}
+        </span>
+      ) : (
+        ""
+      );
+      return sectionMapArr;
+    } else if (value.length - 1 == index) {
+      var sectionMapArr = (
+        <Popover
+          content={
+            <>
+              {value?.map((item, i) =>
+                i > 1 ? (
+                  <span
+                    style={{
+                      background: stringToColour(item?.header) + 33,
+                      color: stringToColour(item?.header),
+                    }}
+                    className={`cr-pointer mt-2 text-start ${visitStyles.captureheader}`}
+                  >
+                    {item?.header}
+                  </span>
+                ) : null
+              )}
+            </>
+          }
+          trigger={["hover"]}
+          placement="bottom"
+        >
+          <span
+            style={{
+              background: "#a0b1a0",
+              color: "#fff",
+            }}
+            className={`mt-2 text-start cr-pointer ${visitStyles.captureheader}`}
+          >
+            {value.length - 2}+
+          </span>
+        </Popover>
+      );
+
+      return sectionMapArr;
+    }
+  });
+};
+
 const SectionHeaders = () => {
   return <></>;
 };
