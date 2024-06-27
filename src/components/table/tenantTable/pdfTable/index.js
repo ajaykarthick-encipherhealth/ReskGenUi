@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import FhirDrawer from "../../../../pages/tenantAdmin/fhirTable/fhirModal";
 import { useRouter } from "next/router";
+import { getActiveTab } from "../../../../store/actions/l2Action/AuditReportAction";
 
 function PdfTable({
   paginationFirst,
@@ -60,7 +61,8 @@ function PdfTable({
   };
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const handleUploadButtonClick = (row) => {
+  const handleUploadButtonClick = (e,row) => {
+    e.stopPropagation()
     setIsDrawerOpen(!isDrawerOpen);
     setSelectedBatch(row);
     setFileList();
@@ -89,17 +91,18 @@ function PdfTable({
               tableData?.content?.map((row, index) => (
                 <tr
                   key={index}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation()
                     const encodedParams = btoa(
                       JSON.stringify({
                         batchId: row?.id,
                       })
                     );
-
-                    // router?.push({
-                    //   pathname: `/tenantAdmin/fhirTable/pdfTable`,
-                    //   search: `params=${encodedParams}`,
-                    // });
+                    dispatch(getActiveTab("PDF"));
+                    router?.push({
+                      pathname: `/tenantAdmin/fhirTable/pdfTable`,
+                      search: `params=${encodedParams}`,
+                    });
                   }}
                 >
                   <>
@@ -165,17 +168,17 @@ function PdfTable({
                       <div className="d-flex justify-content-between">
                         {dateFormate(dayjs, row?.initialedDate)}
                         <div name="upload">
-                          <button
-                            onClick={() => handleUploadButtonClick(row)}
+                          <div
+                            onClick={(e) => handleUploadButtonClick(e,row)}
                             className="btn hegiht10  sharp me-1 action-btn"
                             style={{ background: "#04306f" }}
                           >
                             <FontAwesomeIcon
                               icon={faUpload}
-                              fontSize={11}
-                              style={{ color: "#ffff" }}
+                              fontSize={12}
+                              style={{ color: "#ffff",paddingTop:"3px" }}
                             />
-                          </button>
+                          </div>
                         </div>
                       </div>
                     </td>
