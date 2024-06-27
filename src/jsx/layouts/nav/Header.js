@@ -100,7 +100,7 @@ const Header = ({
   tenent,
   webSocketNotificationData,
   getNotificationData,
-  postUnReadCount
+  postUnReadCount,
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -446,17 +446,15 @@ const Header = ({
 
   const handleExpand = () => {
     const newWidth = drawerWidth + 100;
-     const limitedWidth = Math.min(newWidth, 1000); 
-    setDrawerWidth(limitedWidth); 
+    const limitedWidth = Math.min(newWidth, 1000);
+    setDrawerWidth(limitedWidth);
   };
-  
+
   const handleResize = () => {
-    const newWidth =  drawerWidth - 200;
-     const limitedWidth = Math.max(newWidth, 500); 
-    setDrawerWidth(limitedWidth); 
+    const newWidth = drawerWidth - 200;
+    const limitedWidth = Math.max(newWidth, 500);
+    setDrawerWidth(limitedWidth);
   };
-
-
 
   const titleWithIcons = (
     <div className="d-flex align-items-center justify-content-between">
@@ -469,9 +467,7 @@ const Header = ({
             color: drawerWidth >= 1000 ? "gray" : "#241571",
           }}
         />
-
-        {drawerWidth/10}%
-
+        {drawerWidth / 10}%
         <MinusCircleOutlined
           className="lead"
           onClick={() => handleResize()}
@@ -486,18 +482,19 @@ const Header = ({
     const count = webSocketNotificationData?.filter(
       (r) => r?.webSocketType == "NOTIFICATION"
     );
-    var countUnread = notificationResponse?.data?.response?.totalUnreadCount + count?.length ;
+    var countUnread =
+      notificationResponse?.data?.response?.totalUnreadCount + count?.length;
     setNotificationCount(countUnread ? countUnread : 0);
   }, [webSocketNotificationData]);
 
   useEffect(() => {
-    if(!open){
-    var countUnread = notificationResponse?.data?.response?.totalUnreadCount;
-    setNotificationCount(countUnread ? countUnread : 0);
-    }else{
-      setNotificationCount(0)
+    if (!open) {
+      var countUnread = notificationResponse?.data?.response?.totalUnreadCount;
+      setNotificationCount(countUnread ? countUnread : 0);
+    } else {
+      setNotificationCount(0);
     }
-  }, [notificationResponse?.data?.response?.totalUnreadCount,open]);
+  }, [notificationResponse?.data?.response?.totalUnreadCount, open]);
 
   return (
     <div className={`header ${headerFix ? "is-fixed" : ""}`}>
@@ -931,7 +928,6 @@ const enhancer = connect(
     getTenentLogo: dashbaordActions.tenentLogoAction,
     getNotificationData: webSocketActions.websocketNotificationAction,
     postUnReadCount: dashbaordActions.unReadCountPostAction,
-
   }
 );
 export default enhancer(Header);
