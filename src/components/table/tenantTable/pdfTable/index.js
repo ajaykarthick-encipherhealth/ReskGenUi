@@ -58,7 +58,7 @@ function PdfTable({
       }
     });
   };
-  const [isDrawerOpen, setIsDrawerOpen] = useState(true);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const handleUploadButtonClick = (row) => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -96,10 +96,10 @@ function PdfTable({
                       })
                     );
 
-                    router?.push({
-                      pathname: `/tenantAdmin/fhirTable/pdfTable`,
-                      search: `params=${encodedParams}`,
-                    });
+                    // router?.push({
+                    //   pathname: `/tenantAdmin/fhirTable/pdfTable`,
+                    //   search: `params=${encodedParams}`,
+                    // });
                   }}
                 >
                   <>

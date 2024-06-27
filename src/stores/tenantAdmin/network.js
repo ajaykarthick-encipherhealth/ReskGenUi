@@ -157,10 +157,10 @@ export async function createBatch({ info }) {
   return data;
 }
 export async function uploadFile({ info }) {
-  console.log(info,JSON.stringify(info))
+  console.log(info)
   const options = {
     method: "POST",
-    body: JSON.stringify(info),
+    body: info,
   };
   const data = await requestPortal(`management/batch/upload`, options);
   return data;

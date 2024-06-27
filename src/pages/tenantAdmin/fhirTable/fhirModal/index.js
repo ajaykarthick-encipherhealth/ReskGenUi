@@ -7,6 +7,8 @@ import { getYears } from "../../../../utils/reusable";
 import UploadFile from "../uploadFile";
 import { useSelector } from "react-redux";
 import { useState } from "react";
+import ENDPOINTS from "../../../../utility/enpoints";
+import axios from "../../../../utility/axiosConfig";
 
 const FhirDrawer = ({
   isDrawerOpen,
@@ -42,33 +44,39 @@ const FhirDrawer = ({
         if (fileList?.length > 0) {
           setFileErr(true);
         }
+        // console.log(fileList);
+
         try {
           const responses = [];
           for (const item of fileList) {
-            const res = await getUploadFile({
-              info: {
-                batchId: selectedBatch?.id,
-                yearOfServices: formVal?.yearOfService,
-                file: item,
-                //  {
-                //   lastModified: item.lastModified,
-                //   lastModifiedDate: item?.lastModifiedDate,
-                //   name: item?.name,
-                //   size: item?.size,
-                //   type: item?.type,
-                //   webkitRelativePath: "",
-                // },
+            const formData = new FormData();
+            formData.append("file", item);
+            formData.append("batchId", selectedBatch?.id);
+            formData.append("yearOfServices", formVal?.yearOfService);
+            console.log(formData);
+            const headers = {
+              headers: {
+                "Content-Type": "multipart/form-data",
               },
-            });
+            };
+
+            const res = await axios.post(
+              ENDPOINTS.apiEndoint +
+                `management/batch/upload
+              `,
+              formData,
+              headers
+            );
+
             responses.push(res);
 
-            if (res.status === "SUCCESS") {
-              await getAllBatches({ page: 0 });
-              setFileErr(false);
-              form.resetFields();
-            }
+            // if (res.status === "SUCCESS") {
+            //   await getAllBatches({ page: 0 });
+            //   setFileErr(false);
+            //   form.resetFields();
+            // }
           }
-          console.log(responses);
+          // console.log(responses);
         } catch (err) {
           console.error("Error uploading files:", err);
         }
