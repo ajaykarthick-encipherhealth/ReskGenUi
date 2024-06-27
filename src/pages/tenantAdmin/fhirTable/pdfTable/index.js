@@ -212,6 +212,7 @@ const Index = ({
                         <button
                           className={`${styles.backButtonStyle}`}
                           onClick={() => {
+                            dispatch(getActiveTab("PDF"));
                             setSearch();
                             setSearchVal([]);
                             setSelectedDates(null);

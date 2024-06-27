@@ -168,15 +168,6 @@ export async function createBatch({ info }) {
   const data = await requestPortal(`management/batch`, options);
   return data;
 }
-export async function uploadFile({ info }) {
-  console.log(info);
-  const options = {
-    method: "POST",
-    body: info,
-  };
-  const data = await requestPortal(`management/batch/upload`, options);
-  return data;
-}
 
 export async function batchDetails({
   batchId,
