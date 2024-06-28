@@ -9235,23 +9235,28 @@ tr>td{
   height: 2.813rem !important;
 }
 
-.custom-react-select1 .ant-select{
-  width:100% !important;
+.custom-react-select1 .ant-select {
+  width: 100% !important;
 }
-.custom-react-select1 .ant-select .ant-select-selector{
+.custom-react-select1 .ant-select .ant-select-selector {
   height: 2.7rem !important;
-  border:none !important;
-  width:100% !important;
+  border: none !important;
+  width: 100% !important;
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
   border-radius: 10px;
-
 }
-.custom-react-select1 .ant-select-focused:where(.css-dev-only-do-not-override-3rel02).ant-select-outlined:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer) .ant-select-selector{
-  border-color:red !important;
+.custom-react-select1
+  .ant-select-focused:where(
+    .css-dev-only-do-not-override-3rel02
+  ).ant-select-outlined:not(.ant-select-disabled):not(
+    .ant-select-customize-input
+  ):not(.ant-pagination-size-changer)
+  .ant-select-selector {
+  border-color: red !important;
 }
 
-.ant-select-outlined{
-  border:none !important;
+.ant-select-outlined {
+  border: none !important;
 }
 .btn {
   height: 2.813rem !important;
@@ -14778,4 +14783,15 @@ input::-webkit-inner-spin-button {
   color: #4096ff;
   border-color: rgb(36, 21, 113) !important;
   background: rgb(36, 21, 113) !important;
+}
+.tenantSelector .ant-select-outlined{
+  width: 100%;
+  height: 48px !important;
+}
+.tenantSelector .ant-select-selector {
+  width: 100%;
+  height: 48px !important;
+  border: none !important;
+  border-radius: 0px 10px 10px 0px !important;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 0px 10px !important;
 }
