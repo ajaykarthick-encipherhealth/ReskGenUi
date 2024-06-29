@@ -162,7 +162,11 @@ const IndividualReceiverReport = () => {
                   className={reportStyles.filterBtn}
                   onClick={() => {
                     if (currentRole !=="supervisor") {
-                      router?.push(`/${currentRole}/report`);
+                      if(currentRole ==  "tenant_admin"){
+                        router?.push(`/tenantAdmin/report?sent=true`);
+                      }else{
+                        router?.push(`/${currentRole}/report`);
+                      }
                     } else {
                       const page = new URLSearchParams(
                         window.location.search
