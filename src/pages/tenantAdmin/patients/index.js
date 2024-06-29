@@ -473,7 +473,7 @@ const Patient = ({
         selAllocatedBy,
         selCreatedBy,
         sort,      
-        // (orgId = selectOrgList?.value)
+        orgId
       );
 
       setAddPatient(false);
