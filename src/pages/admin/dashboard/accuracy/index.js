@@ -481,10 +481,11 @@ const Accuracy = () => {
             finalData.averageScore +
             "<br/>" +
             "Total Correct: " +
-            finalData.totalCorrectCount +
-            "<br/>" +
-            "Total Wrong: " +
-            finalData.totalWrongCount
+            finalData.totalCorrectCount
+            //  +
+            // "<br/>" +
+            // "Total Wrong: " +
+            // finalData.totalWrongCount
           );
         } else {
           return "No data available";
@@ -517,19 +518,19 @@ const Accuracy = () => {
         color: "#0b59f1",
         yAxis: 1,
       },
-      {
-        name: "totalWrongCount",
-        data: getGraphData(
-          QualityAccuracyDatas?.data?.response,
-          "totalWrongCount",
-          selectedMonth,
-          selectedYear,
-          currentBtn,
-          currentDate
-        ),
-        color: "red",
-        yAxis: 1,
-      },
+      // {
+      //   name: "totalWrongCount",
+      //   data: getGraphData(
+      //     QualityAccuracyDatas?.data?.response,
+      //     "totalWrongCount",
+      //     selectedMonth,
+      //     selectedYear,
+      //     currentBtn,
+      //     currentDate
+      //   ),
+      //   color: "red",
+      //   yAxis: 1,
+      // },
       {
         name: "Temperature",
         type: "spline",

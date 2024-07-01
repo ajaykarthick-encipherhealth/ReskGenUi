@@ -482,7 +482,7 @@ const Reports = ({
                             </div>
                           </div>
 
-                          {!activeTab || activeTab === "Reviewer" ? (
+                          {!activeTab || activeTab === "Reviewer" || userRole == "supervisor"  ? (
                             <div className="col-xl-2">
                               <div className="d-flex w-100">
                                 <label className="labelStyle d-flex m-auto  p-2">
