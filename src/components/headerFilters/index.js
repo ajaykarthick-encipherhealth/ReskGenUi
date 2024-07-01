@@ -226,7 +226,7 @@ const HeaderFilters = ({
                   getFilters(
                     optionKey ? optionKey : "createdBy",
                     null,
-                    "audited queue"
+                    "auditedqueue"
                   )
                 );
               }}

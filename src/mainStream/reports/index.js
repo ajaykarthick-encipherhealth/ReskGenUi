@@ -23,7 +23,6 @@ import { actions as supervisorAction } from "../../stores/supervisor/report";
 import moment from "moment";
 import TableStyle from "../../components/table/table.module.css";
 import dayjs from "dayjs";
-
 import {
   selectedReport,
   getReportDetails,
@@ -33,8 +32,6 @@ import Tab from "../components/tags";
 import MoreFilter from "../../resusablereport/reports/MoreFilter";
 import { SVGICON } from "../../jsx/constant/theme";
 import TeamReport from "./teamReport";
-import { forEachChild } from "typescript";
-import moment from "moment";
 
 const statusOptions = [
   { label: "All", value: "" },
@@ -300,6 +297,20 @@ const Reports = ({
     }
   };
 
+  const gotoPatientDetails = (data) => {
+    dispatch(patientDetails(data));
+    if (data.computing == 2) {
+      const controller = new AbortController();
+      const { signal } = controller;
+      controller.abort();
+      localStorage.setItem("patientId", data.patientId);
+      navigate.push("/reviewer/patients/details");
+    } else {
+      notification.warning({
+        message: data.patientId + " file not processed Please wait",
+      });
+    }
+  };
   useEffect(() => {
     workFgetFlagsowData();
   }, []);
@@ -419,7 +430,6 @@ const Reports = ({
   }, [selectedOptions?.UserRole]);
   const today = dayjs();
 
-
   return (
     <div>
       <Header />
@@ -512,7 +522,7 @@ const Reports = ({
                                   value={
                                     selectedDates
                                       ? selectedDates[activeTab]
-                                      : [today, today]
+                                      : undefined
                                   }
                                   onChange={(date, dateString) =>
                                     handleCoderPicker(

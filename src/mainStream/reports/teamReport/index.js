@@ -290,7 +290,7 @@ const TeamReport = ({
                                 content={reportListAll?.response?.data}
                                 key={id}
                                 item={item}
-                                flag={item?.flag}
+                                flag={item?.patientFlagResponseDTOs}
                                 page={page}
                                 handleRowCheckboxChange={
                                   handleRowCheckboxChange
