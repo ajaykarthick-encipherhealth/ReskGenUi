@@ -207,7 +207,6 @@ export default function Patient() {
     };
     setIsLoading(true)
     dispatch(getTrackingList(datas));
-    setIsLoading(false)
   }, [
     pageNo,
     dueDateStart,
@@ -235,7 +234,6 @@ export default function Patient() {
     if (response?.response) {
       setIsLoading(true)
       getAllList(response?.response);
-      setIsLoading(false)
     }
   }, [parsedData, response, pageNo, pageSize]);
 
