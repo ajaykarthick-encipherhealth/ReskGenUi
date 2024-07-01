@@ -215,11 +215,11 @@ const InitialCard = ({
     },
     {
       title: "Avg RAF score",
-      value: reportListAll?.rafAverage?.toFixed(4),
+      value: reportListAll?.totalRafScore?reportListAll?.totalRafScore?.toFixed(4):0,
     },
     {
       title: "HCC Count",
-      value: reportListAll?.totalHccCount,
+      value: reportListAll?.totalHccCount?reportListAll?.totalHccCount:0,
     },
   ];
   const allocationCountData = [
