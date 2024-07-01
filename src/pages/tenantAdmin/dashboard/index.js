@@ -3,6 +3,8 @@ import Header from "../../../jsx/layouts/nav/Header";
 import styles from "./styles.module.css";
 import Card from "../../../components/card";
 import HeaderFilters from './headerFilters'
+import TotalCounts from './totalcounts'
+import RafAndRevenue from './rafAndRevenue'
 
 const Index = () => {
   return (
@@ -13,10 +15,14 @@ const Index = () => {
            <HeaderFilters/>
           <div className={`row`}>
             <div className={`col-lg-4 ${styles.box}`}>
-              <Card padding="10px"borderRadius={"10px"}>card1</Card>
+              <Card padding="10px"borderRadius={"10px"}>
+                <TotalCounts/>
+              </Card>
             </div>
             <div className={`col ${styles.box}`}>
-              <Card padding="10px"borderRadius={"10px"}>card2</Card>
+              <Card padding="10px"borderRadius={"10px"}>
+                <RafAndRevenue/>
+              </Card>
             </div>
           </div>
           {/* total codes */}

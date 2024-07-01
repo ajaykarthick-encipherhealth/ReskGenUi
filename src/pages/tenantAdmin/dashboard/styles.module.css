@@ -13,3 +13,12 @@
 .box {
   margin-bottom: 10px;
 }
+.count{
+  font-weight: 700;
+  font-size: 30px;
+  margin:10px 0 0 0 ; 
+}
+.header{
+  font-weight: 600;
+  font-size: 16px;
+}

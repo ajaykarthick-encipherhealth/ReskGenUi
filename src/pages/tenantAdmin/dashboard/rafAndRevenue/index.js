@@ -1,0 +1,81 @@
+import React from "react";
+import ReactECharts from "echarts-for-react";
+import styles from "../styles.module.css";
+const index = () => {
+  const speedometerOptions = {
+    tooltip: {
+      formatter: "{a} <br/>{b} : {c}%",
+    },
+    series: [
+      {
+        name: "Pressure",
+        type: "gauge",
+        min: 0,
+        max: 1000,
+        progress: {
+          show: true,
+          roundCap: true,
+          width: 5,
+          itemStyle: {
+            color: "#FF407D",
+            shadowBlur: 5,
+            shadowColor: "#FF407D",
+            shadowOffsetX: 0,
+            shadowOffsetY: 0,
+          },
+        },
+        detail: {
+          show: true,
+          formatter: "{value}",
+          fontSize: 20,
+          offsetCenter: [0, "10%"],
+        },
+        pointer: {
+          show: false,
+        },
+        axisLine: {
+          roundCap: true,
+          lineStyle: {
+            width: 5,
+          },
+        },
+        axisTick: {
+          show: false,
+        },
+        splitLine: {
+          show: false,
+        },
+        axisLabel: {
+          show: true,
+          distance: -40,
+          formatter: function (value) {
+            // Only show the min and max labels
+            if (value === 0 || value === 1000) {
+              return value.toString();
+            }
+            return "";
+          },
+          fontSize: 12,
+        },
+        data: [
+          {
+            value: 590,
+            name: "",
+          },
+        ],
+      },
+    ],
+  };
+
+  return (
+    <div className="d-flex justify-content-between">
+      <div className="speedometerChart" style={{ width: "30%" }}>
+        <div className={styles.header}>Raf Score Count</div>
+        <ReactECharts option={speedometerOptions} />
+      </div>
+      <div>Revenue</div>
+    </div>
+  );
+};
+
+export default index;
