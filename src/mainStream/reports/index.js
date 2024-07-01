@@ -20,7 +20,7 @@ import Export from "./Export";
 import { actions as workflowActions } from "../../stores/reviewer/workqueue";
 import { actions as reviewerAction } from "../../stores/reviewer/report";
 import { actions as supervisorAction } from "../../stores/supervisor/report";
-import moment from "moment";
+import dayjs from "dayjs";
 
 import {
   selectedReport,
@@ -31,6 +31,8 @@ import Tab from "../components/tags";
 import MoreFilter from "../../resusablereport/reports/MoreFilter";
 import { SVGICON } from "../../jsx/constant/theme";
 import TeamReport from "./teamReport";
+import { forEachChild } from "typescript";
+import moment from "moment";
 
 const statusOptions = [
   { label: "All", value: "" },
@@ -84,7 +86,7 @@ const Reports = ({
   const [paginationReceivedFirst, setPaginationReceivedFirst] = useState(0);
   const [paginationSentFirst, setPaginationSentFirst] = useState(0);
   const [modal, setModal] = useState(false);
-  const [selectedDates, setSelectedDates] = useState([]);
+  const [selectedDates, setSelectedDates] = useState(null);
   const [receivedSortOrder, setReceivedSortOrder] = useState("DESC");
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
@@ -130,17 +132,18 @@ const Reports = ({
   const handleCoderPicker = (date, dateString, tabName) => {
     const formattedDates = dateString?.map((date, index) => {
       const formattedDate =
-      index === 1
-      ? date &&
-        `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
-      : date &&
-        `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
+        index === 1
+          ? date &&
+            `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
+          : date &&
+            `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
       return formattedDate;
     });
-    setSelectedDates((prevOptions) => ({
-      ...prevOptions,
+    setSelectedDates((prevDates) => ({
+      ...prevDates,
       [tabName]: date,
     }));
+
     setSelecteddateRanges((prevOptions) => ({
       ...prevOptions,
       [tabName]: { from: formattedDates[0], to: formattedDates[1] },
@@ -174,114 +177,6 @@ const Reports = ({
       setSelectAllCheckBoxes(false);
     }
   };
-
-  useEffect(() => {
-    workFgetFlagsowData();
-  }, []);
-
-  useEffect(() => {
-    const coderSearchString = searchVal.find(
-      (item) => item.field === "initialSearch"
-    )?.search;
-
-    if (activeTab === "Sent") {
-      sentReport({
-        pagenum: sentPageNo,
-        startDate: selectedDateRanges?.Sent?.from,
-        endDate: selectedDateRanges?.Sent?.to,
-        search: coderSearchString ? coderSearchString : "",
-        sort: sort,
-      });
-    } else if (activeTab === "Received") {
-      receivedReport({
-        pagenum: receivedPageNo,
-        startDate: selectedDateRanges?.Received?.from,
-        endDate: selectedDateRanges?.Received?.to,
-        search: coderSearchString ? coderSearchString : "",
-        sort: sort,
-      });
-    } else if (activeTab === "Admin") {
-      dispatch(
-        getReportDetails({
-          startDate: selectedDateRanges?.Admin?.from,
-          endDate: selectedDateRanges?.Admin?.to,
-          search: coderSearchString ? coderSearchString : "",
-          filter: selectedOptions?.Status?.value,
-          userName: selectedOptions?.UserRole?.value
-            ? selectedOptions?.UserRole?.value
-            : "",
-          sort: sort,
-          selectManager:
-            selectedOptions?.User?.value &&
-            selectedOptions?.UserRole?.value !== "All"
-              ? selectedOptions?.User?.value
-              : "",
-        })
-      );
-    } else if (activeTab === "Audit") {
-      auditReport({
-        pagenum: pageNo,
-        startDate: selectedDateRanges?.Audit?.from,
-        endDate: selectedDateRanges?.Audit?.to,
-        search: coderSearchString ? coderSearchString : "",
-        filter: selectedOptions?.reviewerStatus?.value
-          ? selectedOptions?.reviewerStatus?.value
-          : "",
-        sort: sort,
-      });
-    } else if (activeTab === "Team") {
-      teamReport({
-        pagenum: teamPageNo,
-        startDate: selectedDateRanges?.Team?.from,
-        endDate: selectedDateRanges?.Team?.to,
-        search: coderSearchString ? coderSearchString : "",
-        sort: sort,
-      });
-    } else if (activeTab === "Reviewer") {
-      reviewerReport({
-        pagenum: pageNo,
-        startDate: selectedDateRanges?.Reviewer?.from,
-        endDate: selectedDateRanges?.Reviewer?.to,
-        search: coderSearchString ? coderSearchString : "",
-        filter: selectedOptions?.reviewerStatus?.value,
-        sort: sort,
-      });
-    }
-    if (ExportResponse) {
-      setIsModalVisible(false);
-    }
-  }, [
-    pageNo,
-    sentPageNo,
-    receivedPageNo,
-    receivedSortOrder,
-    sort,
-    searchVal,
-    selectedOptions,
-    selectedDateRanges,
-    activeTab,
-  ]);
-
-  useEffect(() => {
-    setFilteredCoder(ReportPatientDetails?.response);
-  }, [ReportPatientDetails]);
-
-  useEffect(() => {
-    setFilteredCoder(AdminReportPatientDetails?.response);
-  }, [AdminReportPatientDetails]);
-
-  useEffect(() => {
-    const page = new URLSearchParams(window.location.search).get("page");
-    const limit = new URLSearchParams(window.location.search).get("limit");
-    if (activeTab === "Received" && page) {
-      setReceivedPageNo(page);
-      setPaginationReceivedFirst(limit);
-    } else if (activeTab === "Sent" && page) {
-      setSentPageNo(page);
-      setPaginationSentFirst(limit);
-    }
-    setUserRole(localStorage.getItem("userRole"));
-  }, [activeTab]);
 
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
@@ -360,12 +255,6 @@ const Reports = ({
 
   const tabs = getTabsForRole(userRole);
 
-  useEffect(() => {
-    if (selectedOptions?.UserRole?.value) {
-      dispatch(getSelectUserListReport(selectedOptions?.UserRole?.value));
-    }
-  }, [selectedOptions?.UserRole]);
-
   const optionsUser =
     selectUserList?.data?.response?.map((res) => ({
       value: res.userName,
@@ -394,6 +283,146 @@ const Reports = ({
       options: optionsUser,
     },
   ];
+  useEffect(() => {
+    workFgetFlagsowData();
+  }, []);
+
+  useEffect(() => {
+    const coderSearchString = searchVal.find(
+      (item) => item.field === "initialSearch"
+    )?.search;
+    const date = new Date();
+    const formattedDate = date.toISOString().split(".")[0] + ".000Z";
+    if (activeTab === "Sent") {
+      sentReport({
+        pagenum: sentPageNo,
+        startDate: selectedDateRanges?.Sent?.from
+          ? selectedDateRanges?.Sent?.from
+          : formattedDate,
+        endDate: selectedDateRanges?.Sent?.to
+          ? selectedDateRanges?.Sent?.to
+          : formattedDate,
+        search: coderSearchString ? coderSearchString : "",
+        sort: sort,
+      });
+    } else if (activeTab === "Received") {
+      receivedReport({
+        pagenum: receivedPageNo,
+        startDate: selectedDateRanges?.Received?.from
+          ? selectedDateRanges?.Received?.from
+          : formattedDate,
+        endDate: selectedDateRanges?.Received?.to
+          ? selectedDateRanges?.Received?.to
+          : formattedDate,
+        search: coderSearchString ? coderSearchString : "",
+        sort: sort,
+      });
+    } else if (activeTab === "Admin") {
+      dispatch(
+        getReportDetails({
+          startDate: selectedDateRanges?.Admin?.from
+            ? selectedDateRanges?.Admin?.from
+            : formattedDate,
+          endDate: selectedDateRanges?.Admin?.to
+            ? selectedDateRanges?.Admin?.to
+            : formattedDate,
+          search: coderSearchString ? coderSearchString : "",
+          filter: selectedOptions?.Status?.value,
+          userName: selectedOptions?.UserRole?.value
+            ? selectedOptions?.UserRole?.value
+            : "",
+          sort: sort,
+          selectManager:
+            selectedOptions?.User?.value &&
+            selectedOptions?.UserRole?.value !== "All"
+              ? selectedOptions?.User?.value
+              : "",
+        })
+      );
+    } else if (activeTab === "Audit") {
+      auditReport({
+        pagenum: pageNo,
+        startDate: selectedDateRanges?.Audit?.from
+          ? selectedDateRanges?.Audit?.from
+          : formattedDate,
+        endDate: selectedDateRanges?.Audit?.to
+          ? selectedDateRanges?.Audit?.to
+          : formattedDate,
+        search: coderSearchString ? coderSearchString : "",
+        filter: selectedOptions?.reviewerStatus?.value
+          ? selectedOptions?.reviewerStatus?.value
+          : "",
+        sort: sort,
+      });
+    } else if (activeTab === "Team") {
+      teamReport({
+        pagenum: teamPageNo,
+        startDate: selectedDateRanges?.Team?.from
+          ? selectedDateRanges?.Team?.from
+          : formattedDate,
+        endDate: selectedDateRanges?.Team?.to
+          ? selectedDateRanges?.Team?.to
+          : formattedDate,
+        search: coderSearchString ? coderSearchString : "",
+        sort: sort,
+      });
+    } else if (activeTab === "Reviewer") {
+      reviewerReport({
+        pagenum: pageNo,
+        startDate: selectedDateRanges?.Reviewer?.from
+          ? selectedDateRanges?.Reviewer?.from
+          : formattedDate,
+        endDate: selectedDateRanges?.Reviewer?.to
+          ? selectedDateRanges?.Reviewer?.to
+          : formattedDate,
+        search: coderSearchString ? coderSearchString : "",
+        filter: selectedOptions?.reviewerStatus?.value,
+        sort: sort,
+      });
+    }
+    if (ExportResponse) {
+      setIsModalVisible(false);
+    }
+  }, [
+    pageNo,
+    sentPageNo,
+    receivedPageNo,
+    receivedSortOrder,
+    sort,
+    searchVal,
+    selectedOptions,
+    selectedDateRanges,
+    activeTab,
+  ]);
+
+  useEffect(() => {
+    setFilteredCoder(ReportPatientDetails?.response);
+  }, [ReportPatientDetails]);
+
+  useEffect(() => {
+    setFilteredCoder(AdminReportPatientDetails?.response);
+  }, [AdminReportPatientDetails]);
+
+  useEffect(() => {
+    const page = new URLSearchParams(window.location.search).get("page");
+    const limit = new URLSearchParams(window.location.search).get("limit");
+    if (activeTab === "Received" && page) {
+      setReceivedPageNo(page);
+      setPaginationReceivedFirst(limit);
+    } else if (activeTab === "Sent" && page) {
+      setSentPageNo(page);
+      setPaginationSentFirst(limit);
+    }
+    setUserRole(localStorage.getItem("userRole"));
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (selectedOptions?.UserRole?.value) {
+      dispatch(getSelectUserListReport(selectedOptions?.UserRole?.value));
+    }
+  }, [selectedOptions?.UserRole]);
+  const today = dayjs();
+
   return (
     <div>
       <Header />
@@ -486,7 +515,7 @@ const Reports = ({
                                   value={
                                     selectedDates
                                       ? selectedDates[activeTab]
-                                      : undefined
+                                      : [today, today]
                                   }
                                   onChange={(date, dateString) =>
                                     handleCoderPicker(
