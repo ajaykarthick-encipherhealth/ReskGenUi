@@ -6,7 +6,7 @@ const Flags = ({ reportListAll, styles }) => {
     <div className={`col-xl-4 ${styles.flags}`}>
       <div className={styles.cardHead}>Flags</div>
       <div className={styles.contentOverFlow}>
-        {reportListAll?.flagIdCountDTOs ? (
+        {reportListAll?.flagIdCountDTOs?.length>0 ? (
           reportListAll?.flagIdCountDTOs?.map((flagItem) => (
             <div
               className={styles.contentGroups}

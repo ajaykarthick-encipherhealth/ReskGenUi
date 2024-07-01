@@ -298,10 +298,10 @@ const Reports = ({
         pagenum: sentPageNo,
         startDate: selectedDateRanges?.Sent?.from
           ? selectedDateRanges?.Sent?.from
-          : formattedDate,
+          : "",
         endDate: selectedDateRanges?.Sent?.to
           ? selectedDateRanges?.Sent?.to
-          : formattedDate,
+          : "",
         search: coderSearchString ? coderSearchString : "",
         sort: sort,
       });
@@ -310,10 +310,10 @@ const Reports = ({
         pagenum: receivedPageNo,
         startDate: selectedDateRanges?.Received?.from
           ? selectedDateRanges?.Received?.from
-          : formattedDate,
+          : "",
         endDate: selectedDateRanges?.Received?.to
           ? selectedDateRanges?.Received?.to
-          : formattedDate,
+          : "",
         search: coderSearchString ? coderSearchString : "",
         sort: sort,
       });
@@ -322,10 +322,10 @@ const Reports = ({
         getReportDetails({
           startDate: selectedDateRanges?.Admin?.from
             ? selectedDateRanges?.Admin?.from
-            : formattedDate,
+            : "",
           endDate: selectedDateRanges?.Admin?.to
             ? selectedDateRanges?.Admin?.to
-            : formattedDate,
+            : "",
           search: coderSearchString ? coderSearchString : "",
           filter: selectedOptions?.Status?.value,
           userName: selectedOptions?.UserRole?.value
@@ -344,10 +344,10 @@ const Reports = ({
         pagenum: pageNo,
         startDate: selectedDateRanges?.Audit?.from
           ? selectedDateRanges?.Audit?.from
-          : formattedDate,
+          : "",
         endDate: selectedDateRanges?.Audit?.to
           ? selectedDateRanges?.Audit?.to
-          : formattedDate,
+          : "",
         search: coderSearchString ? coderSearchString : "",
         filter: selectedOptions?.reviewerStatus?.value
           ? selectedOptions?.reviewerStatus?.value
@@ -359,10 +359,10 @@ const Reports = ({
         pagenum: teamPageNo,
         startDate: selectedDateRanges?.Team?.from
           ? selectedDateRanges?.Team?.from
-          : formattedDate,
+          : "",
         endDate: selectedDateRanges?.Team?.to
           ? selectedDateRanges?.Team?.to
-          : formattedDate,
+          : "",
         search: coderSearchString ? coderSearchString : "",
         sort: sort,
       });
@@ -371,10 +371,10 @@ const Reports = ({
         pagenum: pageNo,
         startDate: selectedDateRanges?.Reviewer?.from
           ? selectedDateRanges?.Reviewer?.from
-          : formattedDate,
+          : "",
         endDate: selectedDateRanges?.Reviewer?.to
           ? selectedDateRanges?.Reviewer?.to
-          : formattedDate,
+          : "",
         search: coderSearchString ? coderSearchString : "",
         filter: selectedOptions?.reviewerStatus?.value,
         sort: sort,
@@ -515,7 +515,7 @@ const Reports = ({
                                   value={
                                     selectedDates
                                       ? selectedDates[activeTab]
-                                      : [today, today]
+                                      : undefined
                                   }
                                   onChange={(date, dateString) =>
                                     handleCoderPicker(
