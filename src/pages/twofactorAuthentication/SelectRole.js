@@ -21,7 +21,7 @@ const SelectRole = () => {
   const [loading, setLoading] = useState(false);
   const rolesList = role?.slice().reverse();
   const items = [
-    { value: "physician", label: "PHYSICIAN" },
+    // { value: "physician", label: "PHYSICIAN" },
     ...(rolesList?.length > 0
       ? rolesList?.map((info) => ({
           value: info,
