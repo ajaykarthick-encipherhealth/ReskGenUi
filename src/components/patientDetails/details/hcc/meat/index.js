@@ -4,7 +4,16 @@ import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { useSelector, useDispatch, connect } from "react-redux";
-import { Popconfirm, Popover, Input, Space, Form, Select, Button, Drawer } from "antd";
+import {
+  Popconfirm,
+  Popover,
+  Input,
+  Space,
+  Form,
+  Select,
+  Button,
+  Drawer,
+} from "antd";
 import { Modal } from "antd";
 import { notification } from "antd";
 import styles from "../styles.module.css";
@@ -23,6 +32,7 @@ import { actions as detailsActions } from "../../../../../stores/patient/details
 import MeatCard from "../../components/MEAT";
 import ModelIndex from "../../components/model/Index";
 import ManuallyAdd from "../../components/manuallyAdd";
+import { getDateOfServiceBackground } from "../../components/function/DateOfServices";
 const { Option } = Select;
 
 const Meat = ({
@@ -174,6 +184,7 @@ const Meat = ({
   };
 
   const getDisTitlePopover = (title, value, subString, result) => {
+    console.log(subString);
     var popOver = "";
     if (value) {
       popOver = (
@@ -200,6 +211,10 @@ const Meat = ({
                             ({res.pageNumber})
                           </a>
                         </span>
+                        {res?.dateOfService &&
+                          getDateOfServiceBackground({
+                            value: [res.dateOfService],
+                          })}
                       </div>
                       {res.substring}
                     </div>
@@ -693,7 +708,7 @@ const Meat = ({
       ) : (
         opens && showErrorMessage()
       )}
-{/* 
+      {/* 
       <Offcanvas
         onHide={() => setMeatEdit(false)}
         show={meatEdit}
@@ -717,7 +732,7 @@ const Meat = ({
         open={meatEdit}
         width={"80vw"}
       >
-        <div className="row p-4" style={{overflow: "hidden", height: '100%'}}>
+        <div className="row p-4" style={{ overflow: "hidden", height: "100%" }}>
           <div className="col-8">
             {hccFileDetails?.loading != true ? (
               <>
@@ -728,21 +743,24 @@ const Meat = ({
                     pageNumber={search?.page ? search?.page : 1}
                     headers={search?.headers}
                     height="100vh"
-                    heightFrame='900'
+                    heightFrame="900"
                   />
                 )}
               </>
             ) : null}
           </div>
           <div className="col-4">
-            <div className="px-4" style={{height: "90vh", overflowY: "scroll" }}>
-            <ManuallyAdd
-            handleCloseModal={() => setMeatEdit(false)}
-            setIsFileFormShow={setMeatEdit}
-            year={year}
-            isEditMeat={true}
-            isEditMeatValue={editData}
-          />
+            <div
+              className="px-4"
+              style={{ height: "90vh", overflowY: "scroll" }}
+            >
+              <ManuallyAdd
+                handleCloseModal={() => setMeatEdit(false)}
+                setIsFileFormShow={setMeatEdit}
+                year={year}
+                isEditMeat={true}
+                isEditMeatValue={editData}
+              />
             </div>
           </div>
         </div>

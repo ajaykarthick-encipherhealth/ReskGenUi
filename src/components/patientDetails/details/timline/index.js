@@ -608,7 +608,7 @@ const Timeline = ({
         case "DISEASE_EDITED":
           return (
             <div className="d-flex w-100 justify-content-between">
-              {item.diagnosisCode} - code been edited
+              {item.diagnosisCode} - DISEASE EDITED
               <Popover
                 open={popClickDisCode === index ? true : false}
                 trigger={["hover"]}
@@ -628,7 +628,7 @@ const Timeline = ({
         case "MEAT_EDITED":
           return (
             <div className="d-flex w-100 justify-content-between">
-              {item?.previousMeatDetail?.diagnosisCode} - code been edited
+              {item?.previousMeatDetail?.diagnosisCode} - MEAT EDITED
               <Popover
                 open={popClickDisCode === index ? true : false}
                 trigger={["hover"]}
