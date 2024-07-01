@@ -246,7 +246,7 @@ const Patient = ({
     };
     setIsLoading(true);
     getAllTrackingList(datas);
-    setIsLoading(false);
+    // setIsLoading(false);
   }, [
     pageNo,
     dueDateStart,
@@ -273,9 +273,9 @@ const Patient = ({
 
   useEffect(() => {
     if (trackingList?.data?.response) {
-      setIsLoading(true);
+      // setIsLoading(true);
       getAllList(trackingList?.data?.response);
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }, [parsedData, trackingList, pageNo, pageSize]);
 
