@@ -70,16 +70,16 @@ const WorkFlow = () => {
   };
 
   const card1Data = [
-    {
-      id: 1,
-      icon: tci,
-      title: "Total charts",
-      charts: chartValue.totalPatients ? chartValue.totalPatients : "0",
-      days: `${
-        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
-      } days`,
-      bg: TC,
-    },
+    // {
+    //   id: 1,
+    //   icon: tci,
+    //   title: "Total charts",
+    //   charts: chartValue.totalPatients ? chartValue.totalPatients : "0",
+    //   days: `${
+    //     DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+    //   } days`,
+    //   bg: TC,
+    // },
     {
       id: 2,
       icon: allocated,
@@ -116,16 +116,16 @@ const WorkFlow = () => {
       } days`,
       bg: completedbg,
     },
-    {
-      id: 5,
-      icon: Hold,
-      title: "Hold",
-      charts: dateRange.processedStatus ? dateRange.processedStatus.HOLD : "0",
-      days: `${
-        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
-      } days`,
-      bg: HoldBg,
-    },
+    // {
+    //   id: 5,
+    //   icon: Hold,
+    //   title: "Hold",
+    //   charts: dateRange.processedStatus ? dateRange.processedStatus.HOLD : "0",
+    //   days: `${
+    //     DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+    //   } days`,
+    //   bg: HoldBg,
+    // },
     {
       id: 6,
       icon: auditedIcon,
@@ -184,6 +184,18 @@ const WorkFlow = () => {
       bg: TC,
     },
   ];
+  const card2Data = [
+    {
+      id: 1,
+      icon: tci,
+      title: "Total charts",
+      charts: chartValue.totalPatients ? chartValue.totalPatients : "0",
+      days: `${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
+      bg: TC,
+    },
+  ];
 
   const getWorkFlow = async () => {
     try {
@@ -221,26 +233,59 @@ const WorkFlow = () => {
           </div>
         ) : worlFlowData?.data?.response ? (
           <Row className={styles.carddiv} style={{ height: "80%" }}>
-            {card1Data?.map((data) => (
-              <Col
-                span={4}
-                style={{
-                  backgroundImage: `url(${data?.bg.src})`,
-                  backgroundRepeat: "no-repeat",
-                  backgroundSize: "cover",
-                }}
-                className={styles.colData}
-              >
-                <div className={styles.header}>
-                  <Image src={data?.icon} className={styles.Img} />
-                  <div className={styles.heading}>{data.title}</div>
-                </div>
-                <div className={styles.charts}>{`${
-                  data?.charts ? data?.charts : "0"
-                }  Charts`}</div>
-                {/* <div className={styles.days}>{data.days}</div> */}
-              </Col>
-            ))}
+            <Col span={4}>
+              <Row>
+                {card2Data?.map((data) => (
+                  <>
+                    <Col
+                      span={22}
+                      style={{
+                        backgroundImage: `url(${data?.bg.src})`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundSize: "cover",
+                        height:"190px"
+                      }}
+                      className={styles.colData}
+                    >
+                      <div className={styles.header}>
+                        <Image src={data?.icon} className={styles.Img} />
+                        <div className={styles.heading}>{data.title}</div>
+                      </div>
+                      <div className={styles.charts} style={{marginTop:"30px"}}>{`${
+                        data?.charts ? data?.charts : "0"
+                      }  Charts`}</div>
+                      {/* <div className={styles.days}>{data.days}</div> */}
+                    </Col>
+                  </>
+                ))}
+              </Row>
+            </Col>
+            <Col span={20}>
+              <Row>
+                {card1Data?.map((data) => (
+                  <>
+                    <Col
+                      span={5}
+                      style={{
+                        backgroundImage: `url(${data?.bg.src})`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundSize: "cover",
+                      }}
+                      className={styles.colData}
+                    >
+                      <div className={styles.header}>
+                        <Image src={data?.icon} className={styles.Img} />
+                        <div className={styles.heading}>{data.title}</div>
+                      </div>
+                      <div className={styles.charts}>{`${
+                        data?.charts ? data?.charts : "0"
+                      }  Charts`}</div>
+                      {/* <div className={styles.days}>{data.days}</div> */}
+                    </Col>
+                  </>
+                ))}
+              </Row>
+            </Col>
           </Row>
         ) : (
           <div className={spinSTYles.spinStyle}>
