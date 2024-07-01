@@ -49,6 +49,16 @@ const WorkFlow = ({ worlFlowData }) => {
     },
     {
       id: 2,
+      icon: completed,
+      title: "Completed",
+      charts: worlFlowData?.data?.response?.completed,
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
+      bg: completedbg,
+    },
+    {
+      id: 3,
       icon: pending,
       title: "Pending",
       charts: worlFlowData?.data?.response?.pending,
@@ -58,7 +68,7 @@ const WorkFlow = ({ worlFlowData }) => {
       bg: pendingbg,
     },
     {
-      id: 3,
+      id: 4,
       icon: hold,
       title: "Hold",
       charts: worlFlowData?.data?.response?.hold,
@@ -67,16 +77,7 @@ const WorkFlow = ({ worlFlowData }) => {
       } days`,
       bg: holdbg,
     },
-    {
-      id: 4,
-      icon: completed,
-      title: "Completed",
-      charts: worlFlowData?.data?.response?.completed,
-      days: `Last ${
-        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
-      } days`,
-      bg: completedbg,
-    },
+   
   ];
 
   return (

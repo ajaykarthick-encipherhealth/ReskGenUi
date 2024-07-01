@@ -615,7 +615,7 @@ const ReviewerReport = ({
                             <div className={`col-xl-4 ${styles.subCard}`}>
                               {" "}
                               <div>
-                                <div>Avg RAF score</div>
+                                <div>Total RAF score</div>
                                 <h4>{reportListAll?.rafAverage?.toFixed(4)}</h4>
                               </div>
                             </div>
