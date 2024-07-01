@@ -299,7 +299,7 @@ const Hcc = ({
                       RAF Score
                     </Nav.Link>
                   </Nav.Item>
-                  {/* <Nav.Item as="li" className="nav-item">
+                  <Nav.Item as="li" className="nav-item">
                     <Nav.Link
                       to="#my-posts"
                       eventKey={6}
@@ -314,9 +314,9 @@ const Hcc = ({
                         )
                       }
                     >
-                      Query
+                      MEAT Suggestion
                     </Nav.Link>
-                  </Nav.Item> */}
+                  </Nav.Item>
                   <Nav.Item as="li" className="nav-item">
                     <Select
                       placeholder="Select DOS"
@@ -468,7 +468,6 @@ const Hcc = ({
                   setActiveMeatTitle={setActiveMeatTitle}
                   activeComboTree={activeComboTree}
                   year={year}
-          
                 />
               </Tab.Pane>
               <Tab.Pane id="my-posts" eventKey={4}>

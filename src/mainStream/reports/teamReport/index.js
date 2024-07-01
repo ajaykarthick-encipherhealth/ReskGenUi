@@ -193,7 +193,7 @@ const TeamReport = ({
       value: reportListAll?.response?.response?.totalElements,
     },
     {
-      title: "Avg RAF score",
+      title: "Total RAF score",
       value: reportListAll?.response?.rafAverage?.toFixed(4),
     },
     {
