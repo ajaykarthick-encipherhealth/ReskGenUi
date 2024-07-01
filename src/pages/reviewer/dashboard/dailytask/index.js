@@ -23,6 +23,10 @@ const DailyTask = () => {
 
   const bullets = [
     {
+      color: "#B4EFBA",
+      name: "Completed",
+    },
+    {
       color: "#5da9e4",
       name: "Pending",
     },
@@ -33,10 +37,6 @@ const DailyTask = () => {
     {
       color: "#EB5252",
       name: "Declined",
-    },
-    {
-      color: "#B4EFBA",
-      name: "Completed",
     },
   ];
   const daysOfWeek = [

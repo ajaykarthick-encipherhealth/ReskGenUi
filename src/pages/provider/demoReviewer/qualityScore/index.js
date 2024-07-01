@@ -153,7 +153,7 @@ const QualityScore = () => {
           <div className="row">
             <div className="col-12">
               <div>
-                <h4>Reviewer Quality Score </h4>
+                <h4>System Quality Score </h4>
                 <Card borderRadius="28px" padding="10px">
                   <div className={styles.buttonDiv}>
                     <div className={`d-flex ${styles.selectContainer}`}>
