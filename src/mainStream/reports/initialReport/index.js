@@ -122,20 +122,11 @@ const InitialCard = ({
         : "0",
       bg: "#FAD1D1",
     },
-    // {
-    //   id: 5,
-    //   icon: auditedIcon,
-    //   title: "Audited",
-    //   charts: reportListAll?.processedStatusCount?.auditedStatus
-    //     ? reportListAll?.processedStatusCount?.auditedStatus.AUDITED
-    //     : "0",
-
-    //   bg: "#DBEEF0",
-    // },
+ 
     // {
     //   id: 6,
     //   icon: notAudited,
-    //   title: "Not Audited",
+    //   title: "Sample Not Audited",
     //   charts: reportListAll?.processedStatusCount?.auditedStatus
     //     ? reportListAll?.processedStatusCount?.auditedStatus.NOT_AUDIT
     //     : "0",
@@ -145,27 +136,18 @@ const InitialCard = ({
     // {
     //   id: 7,
     //   icon: reeAuditIcon,
-    //   title: "Re Audit",
+    //   title: "Sample Re Audit",
     //   charts: reportListAll?.processedStatusCount?.auditedStatus
     //     ? reportListAll?.processedStatusCount?.auditedStatus.REAUDIT
     //     : "0",
 
     //   bg: "#FFDBB8",
     // },
-    // {
-    //   id: 8,
-    //   icon: reAuditIcon,
-    //   title: "Audit pending",
-    //   charts: reportListAll?.processedStatusCount?.auditedStatus
-    //     ? reportListAll?.processedStatusCount?.auditedStatus.PENDING
-    //     : "0",
-
-    //   bg: "#F3D8E5",
-    // },
+  
     // {
     //   id: 9,
     //   icon: auditHoldIcon,
-    //   title: "Audit hold",
+    //   title: "Sample Audit hold",
     //   charts: reportListAll?.processedStatusCount?.auditedStatus
     //     ? reportListAll?.processedStatusCount?.auditedStatus.AUDITHOLD
     //     : "0",
@@ -175,7 +157,7 @@ const InitialCard = ({
     // {
     //   id: 10,
     //   icon: auditDeclined,
-    //   title: "Audit decline",
+    //   title: "Sample Audit decline",
     //   charts: reportListAll?.processedStatusCount?.auditedStatus
     //     ? reportListAll?.processedStatusCount?.auditedStatus.DECLINED
     //     : "0",
@@ -183,30 +165,32 @@ const InitialCard = ({
     //   bg: "#FDD2CE",
     // },
   ];
-  const card2Data = [
+
+  const accuracyStatus= [
+   
+      {
+        id: 5,
+        icon: auditedIcon,
+        title: " Sample Audit",
+        charts: reportListAll?.processedStatusCount?.auditedStatus
+          ? reportListAll?.processedStatusCount?.auditedStatus.AUDITED
+          : "0",
   
-    {
-      id: 5,
-      icon: auditedIcon,
-      title: "Audited",
-      charts: reportListAll?.processedStatusCount?.auditedStatus
-        ? reportListAll?.processedStatusCount?.auditedStatus.AUDITED
-        : "0",
+        bg: "#DBEEF0",
+      },
+      {
+        id: 8,
+        icon: reAuditIcon,
+        title: "Sample Audit pending",
+        charts: reportListAll?.processedStatusCount?.auditedStatus
+          ? reportListAll?.processedStatusCount?.auditedStatus.PENDING
+          : "0",
+  
+        bg: "#F3D8E5",
+      },
 
-      bg: "#DBEEF0",
-    },
-    {
-      id: 8,
-      icon: reAuditIcon,
-      title: "Audit pending",
-      charts: reportListAll?.processedStatusCount?.auditedStatus
-        ? reportListAll?.processedStatusCount?.auditedStatus.PENDING
-        : "0",
 
-      bg: "#F3D8E5",
-    },
-  ];
-
+  ]
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
 
@@ -238,11 +222,11 @@ const InitialCard = ({
     },
     {
       title: "Total RAF score",
-      value: reportListAll?.rafAverage?.toFixed(4),
+      value: reportListAll?.totalRafScore?reportListAll?.totalRafScore?.toFixed(4):0,
     },
     {
       title: "HCC Count",
-      value: reportListAll?.totalHccCount,
+      value: reportListAll?.totalHccCount?reportListAll?.totalHccCount:0,
     },
   ];
   const allocationCountData = [
@@ -367,13 +351,9 @@ const InitialCard = ({
                             ))}
                           </div>
                           <div className={` pt-2 ${styles.summaryText}`}>
-                          Reviewer Status
+                            Production Status
                           </div>
-                          <div
-                            className="container"
-                            style={{ marginTop: "0px" }}
-                          >
-                            <div className="row g-3">
+                          <div className="row g-3">
                               {card1Data?.map((data) => (
                                 <MiniCards
                                   key={data?.id}
@@ -382,19 +362,16 @@ const InitialCard = ({
                                   title={data.title}
                                   charts={data.charts}
                                   styles={styles}
+                                  activeTab={activeTab}
                                 />
                               ))}
                             </div>
+                          <div className={` pt-2 ${styles.summaryText}`}>
+                            Accuracy Status
                           </div>
-                          <div className={` ${styles.summaryText}`}>
-                            Audited Status
-                          </div>
-                          <div
-                            className="container mb-4"
-                            style={{ marginTop: "0px" }}
-                          >
+                         
                             <div className="row g-3">
-                              {card2Data?.map((data) => (
+                              {accuracyStatus?.map((data) => (
                                 <MiniCards
                                   key={data?.id}
                                   backgroundColor={data.bg}
@@ -402,26 +379,29 @@ const InitialCard = ({
                                   title={data.title}
                                   charts={data.charts}
                                   styles={styles}
+                                  activeTab={activeTab}
                                 />
                               ))}
-                            </div>
+                   
                           </div>
-                          <div className="col-xl-12  d-flex mt-1">
+                          <div className="col-xl-12  d-flex mt-3">
                             <Flags
                               reportListAll={reportListAll}
                               styles={styles}
                             />
-                            {allocationCountData.map((item, index) => (
-                              <AllocationCount
-                                key={item?.id}
-                                title={item?.title}
-                                allocationCount={item?.allocationCount}
-                                renderUserPrfoileAvatar={
-                                  renderUserPrfoileAvatar
-                                }
-                                styles={styles}
-                              />
-                            ))}
+                            {activeTab === "Reviewer"
+                              ? ""
+                              : allocationCountData.map((item, index) => (
+                                  <AllocationCount
+                                    key={item?.id}
+                                    title={item?.title}
+                                    allocationCount={item?.allocationCount}
+                                    renderUserPrfoileAvatar={
+                                      renderUserPrfoileAvatar
+                                    }
+                                    styles={styles}
+                                  />
+                                ))}
                           </div>
                         </div>
                       </div>
