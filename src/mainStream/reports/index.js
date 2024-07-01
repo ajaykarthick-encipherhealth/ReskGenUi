@@ -21,6 +21,7 @@ import { actions as workflowActions } from "../../stores/reviewer/workqueue";
 import { actions as reviewerAction } from "../../stores/reviewer/report";
 import { actions as supervisorAction } from "../../stores/supervisor/report";
 import moment from "moment";
+import TableStyle from "../../components/table/table.module.css";
 
 import {
   selectedReport,
@@ -98,6 +99,8 @@ const Reports = ({
   const [selectAllCheckBoxes, setSelectAllCheckBoxes] = useState(false);
   const [teamPageNo, setTeamPageNo] = useState(0);
   const [paginationTeamFirst, setPaginationTeamFirst] = useState(0);
+  const [selectAllFlags, setSelectAllFlags] = useState(false);
+  const [flagPatientsList, setFlagPatientsList] = useState("");
 
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -130,11 +133,11 @@ const Reports = ({
   const handleCoderPicker = (date, dateString, tabName) => {
     const formattedDates = dateString?.map((date, index) => {
       const formattedDate =
-      index === 1
-      ? date &&
-        `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
-      : date &&
-        `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
+        index === 1
+          ? date &&
+            `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
+          : date &&
+            `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
       return formattedDate;
     });
     setSelectedDates((prevOptions) => ({
@@ -169,6 +172,8 @@ const Reports = ({
     dispatch(getActiveTab(name));
     setSearch();
     setSearchVal([]);
+    setFlagPatientsList();
+    setSelectAllFlags(false);
     if (name !== "Admin") {
       setSelectedData([]);
       setSelectAllCheckBoxes(false);
@@ -183,7 +188,6 @@ const Reports = ({
     const coderSearchString = searchVal.find(
       (item) => item.field === "initialSearch"
     )?.search;
-
     if (activeTab === "Sent") {
       sentReport({
         pagenum: sentPageNo,
@@ -216,6 +220,7 @@ const Reports = ({
             selectedOptions?.UserRole?.value !== "All"
               ? selectedOptions?.User?.value
               : "",
+          flagsList: flagPatientsList ? flagPatientsList : "",
         })
       );
     } else if (activeTab === "Audit") {
@@ -228,6 +233,7 @@ const Reports = ({
           ? selectedOptions?.reviewerStatus?.value
           : "",
         sort: sort,
+        flagsList: flagPatientsList ? flagPatientsList : "",
       });
     } else if (activeTab === "Team") {
       teamReport({
@@ -236,6 +242,7 @@ const Reports = ({
         endDate: selectedDateRanges?.Team?.to,
         search: coderSearchString ? coderSearchString : "",
         sort: sort,
+        flagsList: flagPatientsList ? flagPatientsList : "",
       });
     } else if (activeTab === "Reviewer") {
       reviewerReport({
@@ -245,6 +252,7 @@ const Reports = ({
         search: coderSearchString ? coderSearchString : "",
         filter: selectedOptions?.reviewerStatus?.value,
         sort: sort,
+        flagsList: flagPatientsList ? flagPatientsList : "",
       });
     }
     if (ExportResponse) {
@@ -260,6 +268,7 @@ const Reports = ({
     selectedOptions,
     selectedDateRanges,
     activeTab,
+    selectAllFlags,
   ]);
 
   useEffect(() => {
@@ -394,6 +403,31 @@ const Reports = ({
       options: optionsUser,
     },
   ];
+  const handleHeaderCheckboxChange = () => {
+    setSelectAllFlags(!selectAllFlags);
+    if (activeTab === "Team" || activeTab === "Audit") {
+      const updatedRows = selectAllFlags
+        ? []
+        : TeamReportDetails?.data?.response?.flagIdCountDTOs?.flatMap(
+            (item) => item?.patientIds
+          );
+      setFlagPatientsList(updatedRows?.join(","));
+    } else if (activeTab === "Admin") {
+      const updatedRows = selectAllFlags
+        ? []
+        : AdminReportPatientDetails?.response?.flagIdCountDTOs?.flatMap(
+            (item) => item?.patientIds
+          );
+      setFlagPatientsList(updatedRows?.join(","));
+    } else {
+      const updatedRows = selectAllFlags
+        ? []
+        : ReportPatientDetails?.response?.flagIdCountDTOs?.flatMap(
+            (item) => item?.patientIds
+          );
+      setFlagPatientsList(updatedRows?.join(","));
+    }
+  };
   return (
     <div>
       <Header />
@@ -470,7 +504,7 @@ const Reports = ({
                             </div>
                           ) : null}
 
-                          <div className="col-xl-3 d-flex">
+                          <div className="col-xl-2 d-flex">
                             <div className="d-flex w-100">
                               <label className="labelStyle d-flex  p-2">
                                 {" "}
@@ -503,7 +537,32 @@ const Reports = ({
                               </div>
                             </div>
                           </div>
-
+                          {(!activeTab ||
+                            activeTab === "Admin" ||
+                            activeTab === "Audit" ||
+                            activeTab === "Team" ||
+                            activeTab === "Reviewer") && (
+                            <div className="col-xl-2 d-flex pt-2">
+                              <div>
+                                <input
+                                  type="checkbox"
+                                  onChange={handleHeaderCheckboxChange}
+                                  className={
+                                    styles.checkAlign +
+                                    (selectAllFlags
+                                      ? " " + TableStyle.customChecked
+                                      : "")
+                                  }
+                                  checked={selectAllFlags}
+                                />
+                              </div>
+                              <span
+                                className={`pl-4 text-center ${styles.pName}`}
+                              >
+                                All Flags
+                              </span>
+                            </div>
+                          )}
                           {selectedData?.length > 0 &&
                             selectedData?.map((info) => (
                               <div className="col-xl-2" key={info.id}>

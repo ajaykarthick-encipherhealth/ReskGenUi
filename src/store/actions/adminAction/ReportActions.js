@@ -7,7 +7,6 @@ import {
   usersList,
   getFile,
   SelectUserList,
-
 } from "../../../services/adminServices/ReportService";
 import { notification } from "antd";
 
@@ -21,12 +20,12 @@ export const SEARCH = "SEARCH";
 export const FILEPATH = "FILEPATH";
 export const FILEDETAILS = "FILEDETAILS";
 export const REPORT = "REPORT";
-export const  SELECTED_USER_REPORT = "SELECTED_USER_REPORT";
-export const ACTIVETAB='ACTIVETAB'
-  
-export const getReportActiveTab=(val)=>({
-  type:ACTIVETAB,
-  payload:val
+export const SELECTED_USER_REPORT = "SELECTED_USER_REPORT";
+export const ACTIVETAB = "ACTIVETAB";
+
+export const getReportActiveTab = (val) => ({
+  type: ACTIVETAB,
+  payload: val,
 });
 
 export const selectedRow = (val) => ({
@@ -48,20 +47,30 @@ export const getReportDetails = ({
   userName,
   sort,
   selectManager = "",
-size}
-) => {
+  size,
+  flagsList,
+}) => {
   return (dispatch) => {
     try {
-      patientDetails({pagenum, startDate, endDate, search, filter,userName, sort,selectManager,size}).then(
-        (response) => {
-          if (response) {
-            dispatch({
-              type: REPORT_PATIENTS_DETAILS,
-              payload: response.data,
-            });
-          }
+      patientDetails({
+        pagenum,
+        startDate,
+        endDate,
+        search,
+        filter,
+        userName,
+        sort,
+        selectManager,
+        size,
+        flagsList
+      }).then((response) => {
+        if (response) {
+          dispatch({
+            type: REPORT_PATIENTS_DETAILS,
+            payload: response.data,
+          });
         }
-      );
+      });
     } catch (err) {
       console.log(err);
     }
