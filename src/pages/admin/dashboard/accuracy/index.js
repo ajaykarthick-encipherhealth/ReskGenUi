@@ -26,10 +26,10 @@ export const TabButtons = [
     id: 1,
     title: "CogentAI Accuracy",
   },
-  {
-    id: 2,
-    title: "Organization Quality",
-  },
+  // {
+  //   id: 2,
+  //   title: "Organization Quality",
+  // },
 ];
 export const getDateWeek = (date) => {
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
@@ -551,17 +551,17 @@ const Accuracy = () => {
   };
 
   useEffect(() => {
-    if (currentTabBtn === "CogentAI Accuracy") {
-      if (currentBtn === "Daily") {
-        dispatch(getAccuracyDaily(selectedYear, selectedMonth));
-      }
-      if (currentBtn === "Weekly") {
-        dispatch(getAccuracyWeekly(selectedYear, selectedMonth));
-      }
-      if (currentBtn === "Monthly") {
-        dispatch(getAccuracyMOnthly(selectedYear));
-      }
-    } else {
+    // if (currentTabBtn === "CogentAI Accuracy") {
+    //   if (currentBtn === "Daily") {
+    //     dispatch(getAccuracyDaily(selectedYear, selectedMonth));
+    //   }
+    //   if (currentBtn === "Weekly") {
+    //     dispatch(getAccuracyWeekly(selectedYear, selectedMonth));
+    //   }
+    //   if (currentBtn === "Monthly") {
+    //     dispatch(getAccuracyMOnthly(selectedYear));
+    //   }
+    // } else {
       const isAdmin = true;
       dispatch(
         getAccuracyScore(
@@ -572,7 +572,7 @@ const Accuracy = () => {
           isAdmin
         )
       );
-    }
+    // }
   }, [currentBtn, selectedMonth, selectedYear, router, currentTabBtn]);
   useEffect(() => {
     if (accuracyDatas?.data?.response) {
@@ -641,19 +641,41 @@ const Accuracy = () => {
                 <div className={spinSTYles.spinStyle}>
                   <Spin loading={accuracyDatas?.loading} />
                 </div>
-              ) : accuracyDatas?.loading === false &&
-                accuracyDatas?.data?.response ? (
-                currentTabBtn === "CogentAI Accuracy" ? (
-                  <ReactECharts
-                    option={option}
-                    style={{
-                      width: "100%",
-                      height: "340px",
-                      marginTop: "-30px",
-                      overflowX: "hidden",
-                    }}
+              ) 
+              : QualityAccuracyDatas?.loading === false &&
+              QualityAccuracyDatas?.data?.response ? (
+              currentTabBtn === "CogentAI Accuracy" ? (
+                <div className={styles.highchartStyle}>
+                  <HighchartsReact
+                    highcharts={Highcharts}
+                    options={config}
+                    className={styles.hightchartStyles}
                   />
-                ) : (
+                </div>
+              )              
+              :
+              // : accuracyDatas?.loading === false &&
+              //   accuracyDatas?.data?.response ? (
+              //   currentTabBtn === "CogentAI Accuracy" ? (
+              //     <ReactECharts
+              //       option={option}
+              //       style={{
+              //         width: "100%",
+              //         height: "340px",
+              //         marginTop: "-30px",
+              //         overflowX: "hidden",
+              //       }}
+              //     />
+              //     <div className={styles.highchartStyle}>
+              //       <HighchartsReact
+              //         highcharts={Highcharts}
+              //         options={config}
+              //         className={styles.hightchartStyles}
+              //       />
+              //     </div>
+              //   )                
+              //   :
+                 (
                   <div className={styles.highchartStyle}>
                     <HighchartsReact
                       highcharts={Highcharts}
