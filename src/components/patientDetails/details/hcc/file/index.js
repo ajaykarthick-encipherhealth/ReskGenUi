@@ -363,7 +363,7 @@ const File = ({
                         className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
                       >
                         <span className={`${visitStyles.suggested_title_name}`}>
-                          SUGGESTED CODES
+                          CARE GAP
                         </span>
                         <div className="d-flex justify-content-center">
                           <span

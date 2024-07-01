@@ -178,11 +178,11 @@ const Meat = ({
     if (value) {
       popOver = (
         <Popover
-          placement="topLeft"
+          placement="right"
           title={title}
           overlayStyle={{ zIndex: 1000 }}
           content={
-            <>
+            <div style={{height:"150px", overflow:'scroll'}}>
               <div>{value}</div>
               {subString?.map((res) => {
                 if (res?.header) {
@@ -206,7 +206,7 @@ const Meat = ({
                   );
                 }
               })}
-            </>
+            </div>
           }
         >
           <span style={{ fontSize: "smaller" }}>{value}</span>
