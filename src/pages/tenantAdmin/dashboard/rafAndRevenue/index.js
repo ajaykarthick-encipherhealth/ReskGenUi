@@ -1,6 +1,8 @@
 import React from "react";
 import ReactECharts from "echarts-for-react";
 import styles from "../styles.module.css";
+import CodesGraph from "../components/codeGraph";
+
 const index = () => {
   const speedometerOptions = {
     tooltip: {
@@ -66,14 +68,28 @@ const index = () => {
       },
     ],
   };
-
   return (
-    <div className="d-flex justify-content-between">
-      <div className="speedometerChart" style={{ width: "30%" }}>
+    <div style={{ display: "flex", width: "100%" }}>
+      <div
+        className="speedometerChart"
+        style={{ width: "33%", height: "auto" }}
+      >
         <div className={styles.header}>Raf Score Count</div>
         <ReactECharts option={speedometerOptions} />
       </div>
-      <div>Revenue</div>
+      <div className="revenueChart" style={{ width: "65%" }}>
+        <div className={styles.header}>
+          <div className="py-1">Revenue</div>
+          <div className={styles.price}>$ 3189k</div>
+          <div className={styles.revenue}>$ 3.1k Increase</div>
+        </div>
+        <CodesGraph
+          gradientColor1={"#5D94FE"}
+          gradientColor2={"#FAFCFF"}
+          borderColor={"#3479FE"}
+          isRevenue={true}
+        />
+      </div>
     </div>
   );
 };
