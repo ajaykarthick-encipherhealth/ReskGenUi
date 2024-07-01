@@ -333,6 +333,19 @@ const Accuracy = () => {
       setInitialAccuracyData(accuracyDatas?.data?.response?.mapAccuracy);
     }
   }, [accuracyDatas]);
+
+  const allAverageScore = chartBlockedDates(
+    selectedYear,
+    selectedMonth,
+    accuracyDatas?.data?.response?.mapAccuracy,
+    "averageScore",
+    currentBtn,
+    currentDate
+  );
+  const numericalData = allAverageScore?.filter((value) => value !== false); // Filter out false values
+  const sum = numericalData?.reduce((acc, value) => acc + value, 0); // Sum the numerical values
+  const average = sum / numericalData?.length; // Calculate the average
+
   return (
     <>
       <HeadTitle header="Team Quality Score" />
@@ -417,7 +430,7 @@ const Accuracy = () => {
                 <Image src={accuracy} className={styles.Img} />
                 <div className={styles.heading}>Quality</div>
               </div>
-              <div className={styles.month}>
+              {/* <div className={styles.month}>
                 {currentBtn === "Daily"
                   ? `Day ${currentDate.getDate()}`
                   : currentBtn === "Monthly"
@@ -426,10 +439,10 @@ const Accuracy = () => {
                 {currentBtn !== "Monthly" && (
                   <span className={styles.subTitle}>(Current Month)</span>
                 )}
-              </div>
+              </div> */}
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
-                  {initialAccuracyData
+                  {/* {initialAccuracyData
                     ? currentBtn === "Monthly"
                       ? `${
                           initialAccuracyData[currentDate?.getMonth()]
@@ -447,7 +460,8 @@ const Accuracy = () => {
                           initialAccuracyData[getDateWeek(currentDate) - 1]
                             ?.averageScore
                         }%`
-                    : "0%"}
+                    : "0%"} */}
+                    {average?`${Math.random(average)}%`:`0%`}
                 </span>
               </div>
             </div>
