@@ -300,7 +300,7 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
 
   return (
     <>
-      <HeadTitle header="Reviewer Quality Score" />
+      <HeadTitle header="System Quality Score" />
       <div className={styles.card3}>
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
