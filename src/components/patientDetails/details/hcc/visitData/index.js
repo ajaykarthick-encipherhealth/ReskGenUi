@@ -329,7 +329,7 @@ const VisitData = ({
                           <span
                             className={`${visitStyles.suggested_title_name}`}
                           >
-                            SUGGESTED CODES
+                             CARE GAP
                           </span>
                           <div className="d-flex justify-content-center">
                             <span
@@ -571,7 +571,7 @@ const VisitData = ({
                           <span
                             className={`${visitStyles.suggested_title_name}`}
                           >
-                            SUGGESTED CODES
+                             CARE GAP 
                           </span>
                           <div className="d-flex justify-content-center">
                             <span

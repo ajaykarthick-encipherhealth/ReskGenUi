@@ -236,6 +236,7 @@ const ComboCard = ({
                               setSearch: setSearch,
                               setFileModalHeader: setFileModalHeader,
                               patientDocumentResult: patientDocumentResult,
+                              popup
                             })}
                           </div>
                           <div

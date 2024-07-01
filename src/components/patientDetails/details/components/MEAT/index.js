@@ -426,14 +426,14 @@ const MeatCard = ({
                               />
                             </div>
                           </Tooltip>
-                          {item.isMeatCriteriaPresent === false ? (
+                          {/* {item.isMeatCriteriaPresent === false ? (
                             <div
                               onClick={() => addMeatQuery(item, "Add")}
                               className={visitStyles.add_meat_query}
                             >
                               {SVGICON.meatQueryIcon}
                             </div>
-                          ) : null}
+                          ) : null} */}
                         </div>
                       </div>
                     </div>
