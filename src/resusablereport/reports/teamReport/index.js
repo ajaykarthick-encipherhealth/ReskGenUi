@@ -69,14 +69,15 @@ const TeamReport = ({
   reportListAll,
   page,
   getFlagsData,
-  isAdmin
+  isAdmin,
 }) => {
-
   const dispatch = useDispatch();
   const navigate = useRouter();
   const handleHeaderCheckboxChange = () => {
     setSelectAll(!selectAll);
-    const updatedRows = selectAll ? [] : reportListAll?.response?.response?.data;
+    const updatedRows = selectAll
+      ? []
+      : reportListAll?.response?.response?.data;
     setSelectedRows(updatedRows);
   };
 
@@ -102,7 +103,8 @@ const TeamReport = ({
       icon: Completed,
       title: "Completed",
       charts: reportListAll?.response?.processedStatusCount?.processedStatus
-        ? reportListAll?.response?.processedStatusCount?.processedStatus.COMPLETED
+        ? reportListAll?.response?.processedStatusCount?.processedStatus
+            .COMPLETED
         : "0",
       bg: "#CCFFD1",
     },
@@ -131,14 +133,15 @@ const TeamReport = ({
       icon: declineIcon,
       title: "Decline",
       charts: reportListAll?.response?.processedStatusCount?.processedStatus
-        ? reportListAll?.response?.processedStatusCount?.processedStatus.DECLINED
+        ? reportListAll?.response?.processedStatusCount?.processedStatus
+            .DECLINED
         : "0",
       bg: "#FAD1D1",
     },
     {
       id: 5,
       icon: auditedIcon,
-      title: "Audited",
+      title: " Sample Audited",
       charts: reportListAll?.response?.processedStatusCount?.auditedStatus
         ? reportListAll?.response?.processedStatusCount?.auditedStatus.AUDITED
         : "0",
@@ -148,7 +151,7 @@ const TeamReport = ({
     {
       id: 6,
       icon: notAudited,
-      title: "Not Audited",
+      title: " Sample Not Audited",
       charts: reportListAll?.response?.processedStatusCount?.auditedStatus
         ? reportListAll?.response?.processedStatusCount?.auditedStatus.NOT_AUDIT
         : "0",
@@ -158,7 +161,7 @@ const TeamReport = ({
     {
       id: 7,
       icon: reeAuditIcon,
-      title: "Re Audit",
+      title: " Sample Re Audit",
       charts: reportListAll?.response?.processedStatusCount?.auditedStatus
         ? reportListAll?.response?.processedStatusCount?.auditedStatus.REAUDIT
         : "0",
@@ -168,7 +171,7 @@ const TeamReport = ({
     {
       id: 8,
       icon: reAuditIcon,
-      title: "Audit pending",
+      title: " Sample Audit pending",
       charts: reportListAll?.response?.processedStatusCount?.auditedStatus
         ? reportListAll?.response?.processedStatusCount?.auditedStatus.PENDING
         : "0",
@@ -178,7 +181,7 @@ const TeamReport = ({
     {
       id: 9,
       icon: auditHoldIcon,
-      title: "Audit hold",
+      title: " Sample Audit hold",
       charts: reportListAll?.response?.processedStatusCount?.auditedStatus
         ? reportListAll?.response?.processedStatusCount?.auditedStatus.AUDITHOLD
         : "0",
@@ -188,7 +191,7 @@ const TeamReport = ({
     {
       id: 10,
       icon: auditDeclined,
-      title: "Audit decline",
+      title: "Sample Audit decline",
       charts: reportListAll?.response?.processedStatusCount?.auditedStatus
         ? reportListAll?.response?.processedStatusCount?.auditedStatus.DECLINED
         : "0",
@@ -196,13 +199,14 @@ const TeamReport = ({
       bg: "#FDD2CE",
     },
   ];
+
   const subCardData = [
     {
       title: "No of charts",
       value: reportListAll?.response?.totalElements,
     },
     {
-      title: "Avg RAF score",
+      title: "Total RAF score",
       value: reportListAll?.rafAverage?.toFixed(4),
     },
     {
@@ -376,10 +380,13 @@ const TeamReport = ({
 
     if (data?.processedStatus === "COMPLETED") {
       const controller = new AbortController();
-      const currentRole=localStorage.getItem("userRole");
+      const currentRole = localStorage.getItem("userRole");
       controller.abort();
       localStorage.setItem("patientId", data.patientId);
-      navigate.push({ pathname: `/${currentRole}/patients/details`, query: page });
+      navigate.push({
+        pathname: `/${currentRole}/patients/details`,
+        query: page,
+      });
     } else {
       notification.warning({
         message: data?.patientId + " file not processed. Please wait.",
@@ -411,9 +418,7 @@ const TeamReport = ({
           {!reportListAll?.response?.response?.data ? (
             <SpinnerDots />
           ) : (
-
             <div className={`container-fluid py-4 px-2`}>
-
               <div
                 style={{
                   display: "flex",
@@ -459,52 +464,54 @@ const TeamReport = ({
                       <>
                         <div className="col-xl-6">
                           <div className={styles.cardContainer}>
-                            {reportListAll?.response?.response?.data?.map((item, id) => (
-                               <ContentGroupCard
-                               content={reportListAll?.response?.data}
-                               key={id}
-                               item={item}
-                               flag={item?.flag}
-                               page={page}
-                               handleRowCheckboxChange={
-                                 handleRowCheckboxChange
-                               }
-                               selectedRows={selectedRows}
-                               handleTableRowClick={handleTableRowClick}
-                               auditstatusBodyTemplate={auditstatusBodyTemplate(
-                                 item
-                               )}
-                               processstatusBodyTemplate={processstatusBodyTemplate(
-                                 item
-                               )}
-                               rafSum={item.rafSum}
-                               patientName={item.patientName}
-                               processedDate={item?.processedDate}
-                               patientId={item?.patientId}
-                               validDiseaseCount={item?.validDiseaseCount}
-                               auditedByFirstName={item?.auditedByFirstName}
-                               auditedByLastName={item?.auditedByLastName}
-                               auditedByProfileImage={
-                                 item?.auditedByProfileImage
-                               }
-                               patientAllocatedFirstName={
-                                 item?.patientAllocatedFirstName
-                               }
-                               patientAllocatedLastName={
-                                 item?.patientAllocatedLastName
-                               }
-                               patientAllocatedProfileImage={
-                                 item?.patientAllocatedProfileImage
-                               }
-                             />
-                            ))}
+                            {reportListAll?.response?.response?.data?.map(
+                              (item, id) => (
+                                <ContentGroupCard
+                                  content={reportListAll?.response?.data}
+                                  key={id}
+                                  item={item}
+                                  flag={item?.flag}
+                                  page={page}
+                                  handleRowCheckboxChange={
+                                    handleRowCheckboxChange
+                                  }
+                                  selectedRows={selectedRows}
+                                  handleTableRowClick={handleTableRowClick}
+                                  auditstatusBodyTemplate={auditstatusBodyTemplate(
+                                    item
+                                  )}
+                                  processstatusBodyTemplate={processstatusBodyTemplate(
+                                    item
+                                  )}
+                                  rafSum={item.rafSum}
+                                  patientName={item.patientName}
+                                  processedDate={item?.processedDate}
+                                  patientId={item?.patientId}
+                                  validDiseaseCount={item?.validDiseaseCount}
+                                  auditedByFirstName={item?.auditedByFirstName}
+                                  auditedByLastName={item?.auditedByLastName}
+                                  auditedByProfileImage={
+                                    item?.auditedByProfileImage
+                                  }
+                                  patientAllocatedFirstName={
+                                    item?.patientAllocatedFirstName
+                                  }
+                                  patientAllocatedLastName={
+                                    item?.patientAllocatedLastName
+                                  }
+                                  patientAllocatedProfileImage={
+                                    item?.patientAllocatedProfileImage
+                                  }
+                                />
+                              )
+                            )}
                           </div>
                         </div>
                       </>
                     )}
 
                     <div className={`col-xl-6 ${styles.cardSeperation}`}>
-                    <div className={styles.cardContainer}>
+                      <div className={styles.cardContainer}>
                         <div className={styles.card1}>
                           <div className={styles.summaryText}>Summary</div>
                           <div className="col-xl-12 d-flex mt-4">
