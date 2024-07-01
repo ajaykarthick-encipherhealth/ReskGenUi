@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./styles.module.css";
 import { Select } from "antd";
 
-const index = () => {
-  const [activeBtn, setActiveBtn] = useState("default");
+const index = ({activeBtn, setActiveBtn}) => {
   return (
     <div className={styles.container}>
       <div className="d-flex justify-content-between w-[40%]" style={{ width: "40%" }}>

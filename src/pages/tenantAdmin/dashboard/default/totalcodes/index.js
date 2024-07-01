@@ -1,9 +1,9 @@
 import React from "react";
-import CodesGraph from "../components/codeGraph";
-import styles from "../styles.module.css";
+import CodesGraph from "../../components/codeGraph";
+import styles from "../../styles.module.css";
 import * as echarts from "echarts";
-import RafGraph from "../components/rafGraph";
-import RevenueGraph from "../components/revenueGraph";
+import RafGraph from "../../components/rafGraph";
+import RevenueGraph from "../../components/revenueGraph";
 
 const index = () => {
   const options = {

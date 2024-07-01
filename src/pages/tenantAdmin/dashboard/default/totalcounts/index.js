@@ -1,9 +1,9 @@
 import React from "react";
-import fileIcon from "../../../../images/tenantAdmin/file.svg";
-import dosIcon from "../../../../images/tenantAdmin/dos.svg";
-import pageIcon from "../../../../images/tenantAdmin/page.svg";
+import fileIcon from "../../../../../images/tenantAdmin/file.svg";
+import dosIcon from "../../../../../images/tenantAdmin/dos.svg";
+import pageIcon from "../../../../../images/tenantAdmin/page.svg";
 import Image from "next/image";
-import styles from "../styles.module.css";
+import styles from "../../styles.module.css";
 
 const index = () => {
   const cardData = [

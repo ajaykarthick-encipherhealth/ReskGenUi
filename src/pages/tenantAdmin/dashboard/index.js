@@ -1,85 +1,94 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
 import styles from "./styles.module.css";
 import Card from "../../../components/card";
 import HeaderFilters from "./components/headerFilters";
-import TotalCounts from "./totalcounts";
-import RafAndRevenue from "./rafAndRevenue";
-import HccCodes from "./hcc";
-import CaregapCodes from "./caregaps";
-import TotalCodes from "./totalcodes";
-import RadiolodyAndLab from './radiologyAndLab'
-import Files from "./files";
+import TotalCounts from "./default/totalcounts";
+import RafAndRevenue from "./default/rafAndRevenue";
+import HccCodes from "./default/hcc";
+import CaregapCodes from "./default/caregaps";
+import TotalCodes from "./default/totalcodes";
+import RadiolodyAndLab from "./default/radiologyAndLab";
+import Files from "./default/files";
+import Top10Diseases from './default/top10Diseases'
+import TopOIGCodes from './default/topOIGCodes'
 
 const Index = () => {
+  const [activeBtn, setActiveBtn] = useState("default");
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
       <div className={styles.maincontainer}>
         <div className={styles.rowCOntainer}>
-          <HeaderFilters />
-          <div className={`row`}>
-            <div className={`col-lg-4 ${styles.box}`}>
-              <Card padding="10px" borderRadius={"10px"}>
-                <TotalCounts />
-              </Card>
-            </div>
-            <div className={`col ${styles.box}`}>
-              <Card padding="10px" borderRadius={"10px"}>
-                <RafAndRevenue />
-              </Card>
-            </div>
-          </div>
-          {/* total codes */}
-          <div className={`row`}>
-            <div className={`col ${styles.box}`}>
-              <Card padding="10px" borderRadius={"10px"}>
-                <TotalCodes />
-              </Card>
-            </div>
-          </div>
-          {/* hcc */}
-          <div className={`row`}>
-            <div className={`col ${styles.box}`}>
-              <Card padding="10px" borderRadius={"10px"}>
-                <HccCodes />
-              </Card>
-            </div>
-          </div>
-          {/* car gaps */}
-          <div className={`row`}>
-            <div className={`col ${styles.box}`}>
-              <Card padding="10px" borderRadius={"10px"}>
-                <CaregapCodes />
-              </Card>
-            </div>
-          </div>
-          {/* radiology */}
-          <div className={`row`}>
-            <div className={`col-lg-4 ${styles.box}`}>
-              <Card padding="10px" borderRadius={"10px"}>
-                <RadiolodyAndLab/>
-              </Card>
-            </div>
-            <div className={`col-lg-8 ${styles.box}`}>
-              <Card padding="10px" borderRadius={"10px"}>
-               <Files/>
-              </Card>
-            </div>
-          </div>
-          {/* top 10 diseases */}
-          <div className={`row`}>
-            <div className={`col ${styles.box}`}>
-              <Card padding="10px" borderRadius={"10px"}>
-                card1
-              </Card>
-            </div>
-            <div className={`col ${styles.box}`}>
-              <Card padding="10px" borderRadius={"10px"}>
-                card1
-              </Card>
-            </div>
-          </div>
+          <HeaderFilters activeBtn={activeBtn} setActiveBtn={setActiveBtn} />
+          {activeBtn === "default" ? (
+            <>
+              <div className={`row`}>
+                <div className={`col-lg-4 ${styles.box}`}>
+                  <Card padding="10px" borderRadius={"10px"}>
+                    <TotalCounts />
+                  </Card>
+                </div>
+                <div className={`col ${styles.box}`}>
+                  <Card padding="10px" borderRadius={"10px"}>
+                    <RafAndRevenue />
+                  </Card>
+                </div>
+              </div>
+              {/* total codes */}
+              <div className={`row`}>
+                <div className={`col ${styles.box}`}>
+                  <Card padding="10px" borderRadius={"10px"}>
+                    <TotalCodes />
+                  </Card>
+                </div>
+              </div>
+              {/* hcc */}
+              <div className={`row`}>
+                <div className={`col ${styles.box}`}>
+                  <Card padding="10px" borderRadius={"10px"}>
+                    <HccCodes />
+                  </Card>
+                </div>
+              </div>
+              {/* car gaps */}
+              <div className={`row`}>
+                <div className={`col ${styles.box}`}>
+                  <Card padding="10px" borderRadius={"10px"}>
+                    <CaregapCodes />
+                  </Card>
+                </div>
+              </div>
+              {/* radiology */}
+              <div className={`row`}>
+                <div className={`col-lg-4 ${styles.box}`}>
+                  <Card padding="10px" borderRadius={"10px"}>
+                    <RadiolodyAndLab />
+                  </Card>
+                </div>
+                <div className={`col-lg-8 ${styles.box}`}>
+                  <Card padding="10px" borderRadius={"10px"}>
+                    <Files />
+                  </Card>
+                </div>
+              </div>
+              {/* top 10 diseases */}
+              <div className={`row`}>
+                <div className={`col ${styles.box}`}>
+                  <Card padding="10px" borderRadius={"10px"}>
+                   <Top10Diseases/>
+                  </Card>
+                </div>
+                <div className={`col ${styles.box}`}>
+                  <Card padding="10px" borderRadius={"10px"}>
+                  <TopOIGCodes/>
+                  </Card>
+                </div>
+              </div>
+            </>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import ReactECharts from "echarts-for-react";
-import styles from "../styles.module.css";
-import CodesGraph from "../components/codeGraph";
+import styles from "../../styles.module.css";
+import CodesGraph from "../../components/codeGraph";
 
 const index = () => {
   const speedometerOptions = {

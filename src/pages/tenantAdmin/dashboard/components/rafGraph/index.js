@@ -2,7 +2,6 @@ import React from "react";
 import ReactECharts from "echarts-for-react";
 
 const RafGraph = ({ rafColor, rafColor2, rafColor3, isCargaps, isHcc }) => {
-    console.log(isCargaps,isHcc)
   const option = {
     tooltip: {
       trigger: "axis",

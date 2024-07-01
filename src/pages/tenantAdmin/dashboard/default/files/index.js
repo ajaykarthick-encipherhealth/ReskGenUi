@@ -1,12 +1,11 @@
 import React from "react";
-import styles from "../styles.module.css";
-import CodesGraph from "../components/codeGraph";
+import CodesGraph from "../../components/codeGraph";
 import Image from "next/image";
-import codescaptured from "../../../../images/tenantAdmin/codecaptured.svg";
-import processing from "../../../../images/tenantAdmin/processing.svg";
-import failed from "../../../../images/tenantAdmin/failed.svg";
-import completed from "../../../../images/tenantAdmin/completed.svg";
-import upload from "../../../../images/tenantAdmin/upload.svg";
+import codescaptured from "../../../../../images/tenantAdmin/codecaptured.svg";
+import processing from "../../../../../images/tenantAdmin/processing.svg";
+import failed from "../../../../../images/tenantAdmin/failed.svg";
+import completed from "../../../../../images/tenantAdmin/completed.svg";
+import upload from "../../../../../images/tenantAdmin/upload.svg";
 
 const Files = () => {
   const options = {
