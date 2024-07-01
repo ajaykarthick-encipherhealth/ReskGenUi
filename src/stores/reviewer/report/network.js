@@ -7,13 +7,20 @@ export async function reviewerApi({
   search,
   filter = "",
   sort,
-  size
+  size,
+  flagsList,
 }) {
   const options = {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/patient/coderreport?pageno=${pagenum}&size=${size?size:7}&startdate=${startDate}&enddate=${endDate}&status=${filter?filter:""}&searchstring=${search?search:""}&sortfield=${sort?.sortField?sort?.sortField:""}&sortdirection=${sort?.sortDir?sort?.sortDir:""}
+    `dbservice/patient/coderreport?pageno=${pagenum}&size=${
+      size ? size : 7
+    }&startdate=${startDate}&enddate=${endDate}&status=${
+      filter ? filter : ""
+    }&searchstring=${search ? search : ""}&sortfield=${
+      sort?.sortField ? sort?.sortField : ""
+    }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&patientIds=${flagsList}
   `,
     options
   );
@@ -31,9 +38,11 @@ export async function sentApi({
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/reportdetails/sent?pageNo=${pagenum}&size=8&startdate=${startDate}&enddate=${endDate}&searchstring=${search?search:""}&sortfield=${
-      sort.sortField ?sort.sortField: ""
-    }&sortdirection=${sort.sortDir ?sort.sortDir: ""}
+    `dbservice/reportdetails/sent?pageNo=${pagenum}&size=8&startdate=${startDate}&enddate=${endDate}&searchstring=${
+      search ? search : ""
+    }&sortfield=${sort.sortField ? sort.sortField : ""}&sortdirection=${
+      sort.sortDir ? sort.sortDir : ""
+    }
   `,
     options
   );
@@ -51,7 +60,11 @@ export async function receivedApi({
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/reportdetails/received?pageNo=${pagenum}&size=8&startdate=${startDate}&enddate=${endDate}&searchstring=${search?search:""}&sortfield=${sort?.sortField?sort?.sortField:""}&sortdirection=${sort?.sortDir?sort?.sortDir:""}
+    `dbservice/reportdetails/received?pageNo=${pagenum}&size=8&startdate=${startDate}&enddate=${endDate}&searchstring=${
+      search ? search : ""
+    }&sortfield=${sort?.sortField ? sort?.sortField : ""}&sortdirection=${
+      sort?.sortDir ? sort?.sortDir : ""
+    }
   `,
     options
   );

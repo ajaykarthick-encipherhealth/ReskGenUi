@@ -13,6 +13,7 @@ export const patientDetails = async ({
   sort = "",
   selectManager = "",
   size="",
+  flagsList
 }) => {
   const token = localStorage.getItem("token");
   const orgId = localStorage.getItem("orgId");
@@ -24,7 +25,7 @@ export const patientDetails = async ({
     sort?.sortField ?  sort?.sortField :""
   }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&username=${
     userName === "REVIEWER" ? selectManager : ""
-  }&managerid=${userName === "SUPERVISOR" ? selectManager : ""}&orgid=${role == "tenant_admin" ? "" : orgId}`;
+  }&managerid=${userName === "SUPERVISOR" ? selectManager : ""}&orgid=${role == "tenant_admin" ? "" : orgId}&patientIds=${flagsList}`;
 
   try {
     const response = await axios.get(`${ENDPOINTS?.apiEndoint}${url}`, {
