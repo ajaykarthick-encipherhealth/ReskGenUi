@@ -22,6 +22,7 @@ import { actions as reviewerAction } from "../../stores/reviewer/report";
 import { actions as supervisorAction } from "../../stores/supervisor/report";
 import moment from "moment";
 import TableStyle from "../../components/table/table.module.css";
+import dayjs from "dayjs";
 
 import {
   selectedReport,
@@ -32,6 +33,8 @@ import Tab from "../components/tags";
 import MoreFilter from "../../resusablereport/reports/MoreFilter";
 import { SVGICON } from "../../jsx/constant/theme";
 import TeamReport from "./teamReport";
+import { forEachChild } from "typescript";
+import moment from "moment";
 
 const statusOptions = [
   { label: "All", value: "" },
@@ -85,7 +88,7 @@ const Reports = ({
   const [paginationReceivedFirst, setPaginationReceivedFirst] = useState(0);
   const [paginationSentFirst, setPaginationSentFirst] = useState(0);
   const [modal, setModal] = useState(false);
-  const [selectedDates, setSelectedDates] = useState([]);
+  const [selectedDates, setSelectedDates] = useState(null);
   const [receivedSortOrder, setReceivedSortOrder] = useState("DESC");
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
@@ -140,10 +143,11 @@ const Reports = ({
             `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
       return formattedDate;
     });
-    setSelectedDates((prevOptions) => ({
-      ...prevOptions,
+    setSelectedDates((prevDates) => ({
+      ...prevDates,
       [tabName]: date,
     }));
+
     setSelecteddateRanges((prevOptions) => ({
       ...prevOptions,
       [tabName]: { from: formattedDates[0], to: formattedDates[1] },
@@ -177,6 +181,122 @@ const Reports = ({
     if (name !== "Admin") {
       setSelectedData([]);
       setSelectAllCheckBoxes(false);
+    }
+  };
+  const dosOnChange = (selectedOption, name) => {
+    const nameString = name?.split(" ").join("");
+    setSelectedOptions((prevOptions) => ({
+      ...prevOptions,
+      [nameString]: selectedOption,
+    }));
+  };
+
+  const debouncedSearch = useCallback(
+    debounce((text, setSearchVal, field) => {
+      setSearchVal((prev) => {
+        const existingIndex = prev.findIndex((item) => item.field === field);
+        if (existingIndex !== -1) {
+          return prev.map((item, index) => {
+            if (index === existingIndex) {
+              return { ...item, search: text };
+            }
+            return item;
+          });
+        } else {
+          return [...prev, { search: text, field: field }];
+        }
+      });
+    }, 700),
+    []
+  );
+  const filterChangePatientId = (event) => {
+    const value = event.target.value;
+
+    let _filters = { ...filters };
+    _filters["patientId"].value = value;
+    setFilters(_filters);
+    setSearch({
+      name: event.target.name,
+      searchval: value,
+    });
+
+    const field = event.target.name;
+    debouncedSearch(value, setSearchVal, field);
+  };
+  const onTeamPageChange = (e) => {
+    setPaginationTeamFirst(e.first);
+    setTeamPageNo(e.page);
+  };
+
+  const getTabsForRole = (role) => {
+    switch (role) {
+      case "reviewer":
+        return ["Reviewer", "Sent", "Received"];
+      case "admin":
+        return ["Admin", "Sent", "Received"];
+      case "tenant_admin":
+        return ["Admin", "Sent", "Received"];
+      case "supervisor":
+        return ["Audit", "Team", "Sent", "Received"];
+      default:
+        return [];
+    }
+  };
+
+  const tabs = getTabsForRole(userRole);
+
+  const optionsUser =
+    selectUserList?.data?.response?.map((res) => ({
+      value: res.userName,
+      label: res.firstName + " " + res.lastName,
+    })) || [];
+  if (optionsUser.length > 0) {
+    optionsUser.unshift({ value: "", label: "All" });
+  }
+  const checkedList = [
+    {
+      id: 1,
+      name: "Status",
+      isSelect: !activeTab || activeTab === "Admin" ? true : false,
+      options: statusOptions,
+    },
+    {
+      id: 2,
+      name: "User Role",
+      isSelect: true,
+      options: !activeTab || activeTab === "Admin" ? options : null,
+    },
+    {
+      id: 3,
+      name: "User",
+      isSelect: true,
+      options: optionsUser,
+    },
+  ];
+
+  const handleHeaderCheckboxChange = () => {
+    setSelectAllFlags(!selectAllFlags);
+    if (activeTab === "Team" || activeTab === "Audit") {
+      const updatedRows = selectAllFlags
+        ? []
+        : TeamReportDetails?.data?.response?.flagIdCountDTOs?.flatMap(
+            (item) => item?.patientIds
+          );
+      setFlagPatientsList(updatedRows?.join(","));
+    } else if (activeTab === "Admin") {
+      const updatedRows = selectAllFlags
+        ? []
+        : AdminReportPatientDetails?.response?.flagIdCountDTOs?.flatMap(
+            (item) => item?.patientIds
+          );
+      setFlagPatientsList(updatedRows?.join(","));
+    } else {
+      const updatedRows = selectAllFlags
+        ? []
+        : ReportPatientDetails?.response?.flagIdCountDTOs?.flatMap(
+            (item) => item?.patientIds
+          );
+      setFlagPatientsList(updatedRows?.join(","));
     }
   };
 
@@ -292,142 +412,14 @@ const Reports = ({
     setUserRole(localStorage.getItem("userRole"));
   }, [activeTab]);
 
-  const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
-    if (data.computing == 2) {
-      const controller = new AbortController();
-      const { signal } = controller;
-      controller.abort();
-      localStorage.setItem("patientId", data.patientId);
-      navigate.push("/reviewer/patients/details");
-    } else {
-      notification.warning({
-        message: data.patientId + " file not processed Please wait",
-      });
-    }
-  };
-
-  const dosOnChange = (selectedOption, name) => {
-    const nameString = name?.split(" ").join("");
-    setSelectedOptions((prevOptions) => ({
-      ...prevOptions,
-      [nameString]: selectedOption,
-    }));
-  };
-
-  const debouncedSearch = useCallback(
-    debounce((text, setSearchVal, field) => {
-      setSearchVal((prev) => {
-        const existingIndex = prev.findIndex((item) => item.field === field);
-        if (existingIndex !== -1) {
-          return prev.map((item, index) => {
-            if (index === existingIndex) {
-              return { ...item, search: text };
-            }
-            return item;
-          });
-        } else {
-          return [...prev, { search: text, field: field }];
-        }
-      });
-    }, 700),
-    []
-  );
-  const filterChangePatientId = (event) => {
-    const value = event.target.value;
-
-    let _filters = { ...filters };
-    _filters["patientId"].value = value;
-    setFilters(_filters);
-    setSearch({
-      name: event.target.name,
-      searchval: value,
-    });
-
-    const field = event.target.name;
-    debouncedSearch(value, setSearchVal, field);
-  };
-  const onTeamPageChange = (e) => {
-    setPaginationTeamFirst(e.first);
-    setTeamPageNo(e.page);
-  };
-
-  const getTabsForRole = (role) => {
-    switch (role) {
-      case "reviewer":
-        return ["Reviewer", "Sent", "Received"];
-      case "admin":
-        return ["Admin", "Sent", "Received"];
-      case "tenant_admin":
-        return ["Admin", "Sent", "Received"];
-      case "supervisor":
-        return ["Audit", "Team", "Sent", "Received"];
-      default:
-        return [];
-    }
-  };
-
-  const tabs = getTabsForRole(userRole);
-
   useEffect(() => {
     if (selectedOptions?.UserRole?.value) {
       dispatch(getSelectUserListReport(selectedOptions?.UserRole?.value));
     }
   }, [selectedOptions?.UserRole]);
+  const today = dayjs();
 
-  const optionsUser =
-    selectUserList?.data?.response?.map((res) => ({
-      value: res.userName,
-      label: res.firstName + " " + res.lastName,
-    })) || [];
-  if (optionsUser.length > 0) {
-    optionsUser.unshift({ value: "", label: "All" });
-  }
-  const checkedList = [
-    {
-      id: 1,
-      name: "Status",
-      isSelect: !activeTab || activeTab === "Admin" ? true : false,
-      options: statusOptions,
-    },
-    {
-      id: 2,
-      name: "User Role",
-      isSelect: true,
-      options: !activeTab || activeTab === "Admin" ? options : null,
-    },
-    {
-      id: 3,
-      name: "User",
-      isSelect: true,
-      options: optionsUser,
-    },
-  ];
-  const handleHeaderCheckboxChange = () => {
-    setSelectAllFlags(!selectAllFlags);
-    if (activeTab === "Team" || activeTab === "Audit") {
-      const updatedRows = selectAllFlags
-        ? []
-        : TeamReportDetails?.data?.response?.flagIdCountDTOs?.flatMap(
-            (item) => item?.patientIds
-          );
-      setFlagPatientsList(updatedRows?.join(","));
-    } else if (activeTab === "Admin") {
-      const updatedRows = selectAllFlags
-        ? []
-        : AdminReportPatientDetails?.response?.flagIdCountDTOs?.flatMap(
-            (item) => item?.patientIds
-          );
-      setFlagPatientsList(updatedRows?.join(","));
-    } else {
-      const updatedRows = selectAllFlags
-        ? []
-        : ReportPatientDetails?.response?.flagIdCountDTOs?.flatMap(
-            (item) => item?.patientIds
-          );
-      setFlagPatientsList(updatedRows?.join(","));
-    }
-  };
+
   return (
     <div>
       <Header />
@@ -520,7 +512,7 @@ const Reports = ({
                                   value={
                                     selectedDates
                                       ? selectedDates[activeTab]
-                                      : undefined
+                                      : [today, today]
                                   }
                                   onChange={(date, dateString) =>
                                     handleCoderPicker(

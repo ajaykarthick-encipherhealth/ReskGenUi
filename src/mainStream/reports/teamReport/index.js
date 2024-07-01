@@ -136,28 +136,28 @@ const TeamReport = ({
 
       bg: "#DBEEF0",
     },
+    // {
+    //   id: 6,
+    //   icon: notAudited,
+    //   title: "Not Audited",
+    //   charts: reportListAll?.response?.processedStatusCount?.auditedStatus
+    //     ? reportListAll?.response?.processedStatusCount?.auditedStatus.NOT_AUDIT
+    //     : "0",
+
+    //   bg: "#FBE7D0",
+    // },
+    // {
+    //   id: 7,
+    //   icon: reeAuditIcon,
+    //   title: "Re Audit",
+    //   charts: reportListAll?.response?.processedStatusCount?.auditedStatus
+    //     ? reportListAll?.response?.processedStatusCount?.auditedStatus.REAUDIT
+    //     : "0",
+
+    //   bg: "#FFDBB8",
+    // },
     {
       id: 6,
-      icon: notAudited,
-      title: "Not Audited",
-      charts: reportListAll?.response?.processedStatusCount?.auditedStatus
-        ? reportListAll?.response?.processedStatusCount?.auditedStatus.NOT_AUDIT
-        : "0",
-
-      bg: "#FBE7D0",
-    },
-    {
-      id: 7,
-      icon: reeAuditIcon,
-      title: "Re Audit",
-      charts: reportListAll?.response?.processedStatusCount?.auditedStatus
-        ? reportListAll?.response?.processedStatusCount?.auditedStatus.REAUDIT
-        : "0",
-
-      bg: "#FFDBB8",
-    },
-    {
-      id: 8,
       icon: reAuditIcon,
       title: "Audit pending",
       charts: reportListAll?.response?.processedStatusCount?.auditedStatus
@@ -166,26 +166,26 @@ const TeamReport = ({
 
       bg: "#F3D8E5",
     },
-    {
-      id: 9,
-      icon: auditHoldIcon,
-      title: "Audit hold",
-      charts: reportListAll?.response?.processedStatusCount?.auditedStatus
-        ? reportListAll?.response?.processedStatusCount?.auditedStatus.AUDITHOLD
-        : "0",
+    // {
+    //   id: 9,
+    //   icon: auditHoldIcon,
+    //   title: "Audit hold",
+    //   charts: reportListAll?.response?.processedStatusCount?.auditedStatus
+    //     ? reportListAll?.response?.processedStatusCount?.auditedStatus.AUDITHOLD
+    //     : "0",
 
-      bg: "#FFF2CC",
-    },
-    {
-      id: 10,
-      icon: auditDeclined,
-      title: "Audit decline",
-      charts: reportListAll?.response?.processedStatusCount?.auditedStatus
-        ? reportListAll?.response?.processedStatusCount?.auditedStatus.DECLINED
-        : "0",
+    //   bg: "#FFF2CC",
+    // },
+    // {
+    //   id: 10,
+    //   icon: auditDeclined,
+    //   title: "Audit decline",
+    //   charts: reportListAll?.response?.processedStatusCount?.auditedStatus
+    //     ? reportListAll?.response?.processedStatusCount?.auditedStatus.DECLINED
+    //     : "0",
 
-      bg: "#FDD2CE",
-    },
+    //   bg: "#FDD2CE",
+    // },
   ];
   const subCardData = [
     {
@@ -194,7 +194,9 @@ const TeamReport = ({
     },
     {
       title: "Total RAF score",
-      value: reportListAll?.response?.rafAverage?.toFixed(4),
+      value: reportListAll?.response?.totalRafScore
+        ? reportListAll?.response?.totalRafScore?.toFixed(4)
+        : 0,
     },
     {
       title: "HCC Count",
@@ -343,8 +345,8 @@ const TeamReport = ({
                           <div className={` pt-2 ${styles.summaryText}`}>
                             Overall Status
                           </div>
-                          <div className="col-xl-12  d-flex mt-2">
-                            <div className="row g-3">
+                          <div className="col-xl-12 d-flex mt-2">
+                            <div className="row g-2" style={{ width: "100%" }}>
                               {card1Data?.map((data) => (
                                 <MiniCards
                                   key={data?.id}
@@ -357,7 +359,7 @@ const TeamReport = ({
                               ))}
                             </div>
                           </div>
-                          <div className="col-xl-12  d-flex mt-1">
+                          <div className="col-xl-12  d-flex mt-4">
                             <Flags
                               flagsData={getFlagsData?.response}
                               styles={styles}
