@@ -184,7 +184,6 @@ const Meat = ({
   };
 
   const getDisTitlePopover = (title, value, subString, result) => {
-    console.log(subString);
     var popOver = "";
     if (value) {
       popOver = (
