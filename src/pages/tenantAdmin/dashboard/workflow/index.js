@@ -142,7 +142,7 @@ const WorkFlow = () => {
     {
       id: 6,
       icon: auditedIcon,
-      title: "Audited",
+      title: "Sample Audit",
       charts: dateRange.auditedStatus ? dateRange.auditedStatus.AUDITED : "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30

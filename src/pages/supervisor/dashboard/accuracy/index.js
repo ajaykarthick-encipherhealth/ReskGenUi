@@ -251,9 +251,8 @@ const Accuracy = () => {
           );
         } else {
           finalData = accuracyDatas?.data?.response?.mapAccuracy?.find((item) =>
-            item?.dayOfMonth
-              ? item?.dayOfMonth - 1 === this.x
-              : item?.weekOfMonth - 1 === this.x
+            item?.dayOfMonth  === this.x
+             
           );
         }
 
