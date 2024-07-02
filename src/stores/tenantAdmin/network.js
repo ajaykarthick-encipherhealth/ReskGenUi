@@ -101,8 +101,6 @@ export async function getAllTracking(datas) {
       datas?.pageNo
     }&size=15&processedStatus=${filteredStatus}&processedStart=${filteredDStart}&processedEnd=${
       datas?.dueDateEnd
-    }&auditedStartDate=${datas?.processedStart}&auditedEndDate=${
-      datas?.processedEnd
     }&searchString=${datas?.searchTextValue}&patientAllocated=${
       datas?.selAllocatedTo === "All" ? "" : datas?.selAllocatedTo
     }&auditAllocatedStart=${datas?.allocatedStartDate}&auditAllocatedEnd=${
