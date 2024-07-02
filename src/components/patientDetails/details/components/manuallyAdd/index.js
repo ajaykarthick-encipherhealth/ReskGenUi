@@ -747,6 +747,8 @@ const ManuallyAdd = ({
           setListOfSectionT([]);
           setShowSectionT(false);
           setCapturedSectionsT([]);
+        } else if (res?.status == "CUSTOM_EXCEPTION") {
+          getResponePopup(res);
         }
       } catch (error) {}
     }
