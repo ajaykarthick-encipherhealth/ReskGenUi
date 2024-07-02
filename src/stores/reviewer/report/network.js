@@ -20,7 +20,7 @@ export async function reviewerApi({
       filter ? filter : ""
     }&searchstring=${search ? search : ""}&sortfield=${
       sort?.sortField ? sort?.sortField : ""
-    }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&patientIds=${flagsList}
+    }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&patientIds=${flagsList?flagsList:""}
   `,
     options
   );

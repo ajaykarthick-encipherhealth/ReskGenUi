@@ -25,7 +25,7 @@ export const patientDetails = async ({
     sort?.sortField ?  sort?.sortField :""
   }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&username=${
     userName === "REVIEWER" ? selectManager : ""
-  }&managerid=${userName === "SUPERVISOR" ? selectManager : ""}&orgid=${role == "tenant_admin" ? "" : orgId}&patientIds=${flagsList}`;
+  }&managerid=${userName === "SUPERVISOR" ? selectManager : ""}&orgid=${role == "tenant_admin" ? "" : orgId}&patientIds=${flagsList?flagsList:""}`;
 
   try {
     const response = await axios.get(`${ENDPOINTS?.apiEndoint}${url}`, {
