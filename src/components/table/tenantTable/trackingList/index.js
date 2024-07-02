@@ -105,7 +105,41 @@ function TrackingTable({
             ? moment(data.allocatedOn).format("MM-DD-YYYY")
             : "---"}
         </td>
+        <td
+          className={TableStyle.childBorder}
+          style={{ textAlign: "left" }}
+          onClick={handleTableRowClick}
+        >
+          {data.patientAllocatedFirstName ||
+          data.patientAllocatedLastName ||
+          data.patientAllocatedProfileImage ? (
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {" "}
+              <span style={{ marginRight: "10px" }}>
+                {" "}
+                {renderUserPrfoileAvatar(
+                  data.patientAllocatedFirstName,
+                  data.patientAllocatedLastName,
+                  data.patientAllocatedProfileImage,
+                  "header"
+                )}
+              </span>
+              <span>
+                {data.patientAllocatedFirstName} {data.patientAllocatedLastName}
+              </span>
+            </div>
+          ) : (
+            <div style={{ textAlign: "center" }}>---</div>
+          )}
+        </td>
 
+        <td
+          className={TableStyle.childBorder}
+          onClick={handleTableRowClick}
+          style={{ textAlign: "center" }}
+        >
+          {data.processedDate ? moment(data.processedDate).format("MM-DD-YYYY") : "---"}
+        </td>
         <td
           className={TableStyle.childBorder}
           style={{ textAlign: "left" }}
@@ -181,41 +215,7 @@ function TrackingTable({
             : "---"}
         </td>
 
-        <td
-          className={TableStyle.childBorder}
-          style={{ textAlign: "left" }}
-          onClick={handleTableRowClick}
-        >
-          {data.patientAllocatedFirstName ||
-          data.patientAllocatedLastName ||
-          data.patientAllocatedProfileImage ? (
-            <div style={{ display: "flex", alignItems: "center" }}>
-              {" "}
-              <span style={{ marginRight: "10px" }}>
-                {" "}
-                {renderUserPrfoileAvatar(
-                  data.patientAllocatedFirstName,
-                  data.patientAllocatedLastName,
-                  data.patientAllocatedProfileImage,
-                  "header"
-                )}
-              </span>
-              <span>
-                {data.patientAllocatedFirstName} {data.patientAllocatedLastName}
-              </span>
-            </div>
-          ) : (
-            <div style={{ textAlign: "center" }}>---</div>
-          )}
-        </td>
-
-        <td
-          className={TableStyle.childBorder}
-          onClick={handleTableRowClick}
-          style={{ textAlign: "center" }}
-        >
-          {data.processedDate ? moment(data.processedDate).format("MM-DD-YYYY") : "---"}
-        </td>
+       
 
         <td
           className={TableStyle.lastBorder}
@@ -261,6 +261,29 @@ function TrackingTable({
                 <ArrowDownOutlined />
               )}
             </th>
+            <th style={{ paddingLeft: "45px" }}>REVIEWER</th>
+
+<th
+  onClick={() => {
+    sortFunction(sortDueOrder, setSortDueOrder, setSort, "dueDate");
+  }}
+  style={{ textAlign: "center" }}
+>
+  REVIEWED DATE
+  <span
+    style={{
+      cursor: "pointer",
+      paddingLeft: "3px",
+      textAlign: "center",
+    }}
+  >
+    {sortDueOrder === "ASC" ? (
+      <ArrowUpOutlined />
+    ) : (
+      <ArrowDownOutlined />
+    )}
+  </span>
+</th>
             <th style={{ textAlign: "center" }}>AUDIT ALLOCATED BY</th>
             <th
               onClick={() => {
@@ -315,29 +338,7 @@ function TrackingTable({
                 )}
               </span>
             </th>
-            <th style={{ paddingLeft: "45px" }}>REVIEWER</th>
-
-            <th
-              onClick={() => {
-                sortFunction(sortDueOrder, setSortDueOrder, setSort, "dueDate");
-              }}
-              style={{ textAlign: "center" }}
-            >
-              REVIEWED DATE
-              <span
-                style={{
-                  cursor: "pointer",
-                  paddingLeft: "3px",
-                  textAlign: "center",
-                }}
-              >
-                {sortDueOrder === "ASC" ? (
-                  <ArrowUpOutlined />
-                ) : (
-                  <ArrowDownOutlined />
-                )}
-              </span>
-            </th>
+           
 
             <th style={{ textAlign: "center" }}>PROCESSED STATUS</th>
             <th style={{ textAlign: "center" }}>AUDIT STATUS</th>
