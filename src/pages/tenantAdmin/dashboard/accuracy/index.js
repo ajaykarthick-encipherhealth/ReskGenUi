@@ -201,8 +201,8 @@ const Accuracy = () => {
   );
 
   const numberOfWeeks =
-    accuracyDatas?.data?.response &&
-    Object.keys(accuracyDatas?.data?.response)?.length;
+    QualityAccuracyDatas?.data?.response &&
+    Object.keys(QualityAccuracyDatas?.data?.response)?.length;
 
   const weekNames = Array.from(
     { length: numberOfWeeks },
@@ -233,8 +233,8 @@ const Accuracy = () => {
     xAxisData = monthNames;
   } else if (currentBtn === "Daily") {
     xAxisData = getDays(
-      accuracyDatas?.data?.response &&
-        Object.keys(accuracyDatas?.data?.response)?.length
+      QualityAccuracyDatas?.data?.response &&
+        Object.keys(QualityAccuracyDatas?.data?.response)?.length
     );
   } else if (currentBtn === "Weekly") {
     xAxisData = weekNames;
@@ -471,10 +471,8 @@ const Accuracy = () => {
             (item) => item?.monthOfYear === hoveredMonthIndex + 1
           );
         } else {
-          finalData = QualityAccuracyDatas?.data?.response?.find((item) =>
-            item?.dayOfMonth
-              ? item?.dayOfMonth - 1 === this.x
-              : item?.weekOfMonth - 1 === this.x
+          finalData = QualityAccuracyDatas?.data?.response?.find(
+            (item) => item?.dayOfMonth === this.x
           );
         }
 

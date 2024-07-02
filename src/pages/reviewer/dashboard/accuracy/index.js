@@ -212,9 +212,8 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
             );
         } else {
           finalData = accuracyDatas?.data?.response?.find((item) =>
-            item?.dayOfMonth
-              ? item?.dayOfMonth - 1 === this.x
-              : item?.weekOfMonth - 1 === this.x
+             item?.dayOfMonth === this.x
+             
           );
         }
 
