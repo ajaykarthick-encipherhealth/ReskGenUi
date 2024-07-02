@@ -17,6 +17,8 @@ import completedbg from "../../.../../../../images/dashboard/completedbg.png";
 import { useSelector, connect } from "react-redux";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
+import declinedBg from "../../.../../../../images/dashboard/auditDeclinedbg.png";
+import declineIcon from "../../.../../../../images/trackingImages/DeclineTrack.png";
 
 const WorkFlow = ({ worlFlowData }) => {
   const currentDate = dayjs();
@@ -69,13 +71,13 @@ const WorkFlow = ({ worlFlowData }) => {
     },
     {
       id: 4,
-      icon: hold,
-      title: "Hold",
-      charts: worlFlowData?.data?.response?.hold,
+      icon: declineIcon,
+      title: "Declined",
+      charts: worlFlowData?.data?.response?.declined,
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
-      bg: holdbg,
+      bg: declinedBg,
     },
    
   ];
