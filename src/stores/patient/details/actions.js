@@ -75,3 +75,23 @@ export const diseaseEditMeat = createActionThunk(
   "DISEASE_EDIT_MEAT",
   network.diseaseEditMeat
 );
+
+export const radiologyDetailsActionSetEmpty = createActionThunk(
+  "RADIOLOGY_DETAILS",
+  network.radiologyDetailsSetEmpty
+);
+
+export const labDetailsActionSetEmpty = createActionThunk(
+  "LAB_DETAILS",
+  network.radiologyDetailsSetEmpty
+);
+
+export const radiologyDetailsActionFileSetEmpty = createActionThunk(
+  "RADIOLOY_FILE__DETAILS",
+  network.radiologyDetailsSetEmpty
+);
+
+export const labDetailsActionSetFileEmpty = createActionThunk(
+  "LAB_FILE_DETAILS",
+  network.radiologyDetailsSetEmpty
+);

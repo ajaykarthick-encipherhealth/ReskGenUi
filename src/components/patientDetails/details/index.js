@@ -118,6 +118,10 @@ const Details = ({
   patientIdDetailsData,
   getFlagDetailsData,
   flagsDetailsResult,
+  getLabFileDetailsClear,
+  getLabDetailsClear,
+  getRadiologyDetailsClear,
+  getRadiologyFileClear,
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -187,6 +191,13 @@ const Details = ({
   };
   useEffect(() => {
     getAllProcessYear();
+  }, []);
+
+  useEffect(() => {
+    getLabFileDetailsClear()
+    getLabDetailsClear()
+    getRadiologyDetailsClear()
+    getRadiologyFileClear()
   }, []);
 
   useEffect(() => {
@@ -1245,6 +1256,11 @@ const enhancer = connect(
     getMeatQueryList: detailsActions.meatQueryAction,
     getPatientIdData: detailsActions.patientIdDetailsAction,
     getFlagDetailsData: detailsActions.getFlagDetailsAction,
+    getLabFileDetailsClear: detailsActions.labDetailsActionSetFileEmpty,
+    getLabDetailsClear: detailsActions.labDetailsActionSetEmpty,
+    getRadiologyDetailsClear: detailsActions.radiologyDetailsActionSetEmpty,
+    getRadiologyFileClear: detailsActions.radiologyDetailsActionSetEmpty,
+    
   }
 );
 export default enhancer(Details);

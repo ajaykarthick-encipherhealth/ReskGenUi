@@ -1,101 +1,195 @@
-import React, { useState, useRef, useEffect } from "react";
-import { connect } from "react-redux";
+import React, { useState, useEffect } from "react";
 import visitStyles from "../../../../../styles/visitdata.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPlus,
-  faArrowsAlt,
-  faSitemap,
-} from "@fortawesome/free-solid-svg-icons";
-import { Popconfirm, Divider, Popover, Menu, DatePicker, Dropdown } from "antd";
-import { IMAGES, SVGICON } from "../../../../../jsx/constant/theme";
-import { Modal } from "antd";
+import { useSelector, useDispatch, connect } from "react-redux";
+import { notification, Tag, Modal } from "antd";
+import { Button, Offcanvas } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
+import styles from "../../hcc/styles.module.css";
+import { manuallyAddComboCode } from "../../../../../services/PatientsListSevice";
 import CamboTree from "../../hcc/org";
+import PdfViewer from "../../PdfViewerComponent";
+import { getPatientDetails } from "../../components/function/GetData";
+import { actions as detailsActions } from "../../../../../stores/patient/details";
+import ComboCard from "../../components/COMBO";
+import ModelIndex from "../../components/model/Index";
+import { getPatientRadiologyDetailsNew } from "../../components/function/GetDataRadiology";
 
-const Combo = ({radiologyDetailsResult}) => {
+const Combo = ({
+  activeComboTree,
+  patientDetailsResult,
+  getpatientDetailsData,
+  hccFileDetails,
+  fileDosPageNumberList,
+  setActiveTabHead,
+  setActiveMeatTitle,
+  radiologyFile
+}) => {
+  const dispatch = useDispatch();
+  const sectionColorList = useSelector(
+    (state) => state?.ReviewerReducers?.sectionColorList
+  );
+  const [isModalOpenCaptureSection, setIsModalOpenCaptureSection] =
+    useState(false);
   const [comboDiseaseCodesList, setComboDiseaseCodesList] = useState([]);
   const [invalidComboDiseaseCodesList, setInvalidComboDiseaseCodesList] =
     useState([]);
-
   const [selectDiseasesName, setSelectDiseasesName] = useState("");
-  const [selectCode, setSelectCode] = useState("");
-  const [combiTree, setCombiTree] = useState({});
+  const [patientDocumentResult, setPatientDocumentResult] = useState([]);
+  const [selectFileURL, setSelectFileURL] = useState([]);
+  const [validated, setValidated] = useState(false);
   const [opens, setOpens] = useState(false);
+  const [combiTree, setCombiTree] = useState({});
+  const [inputValue, setInputValue] = useState({
+    year: "",
+    name: "",
+    patientId: "",
+    notes: "",
+    diagnosisCode: "",
+    actualDescription: "",
+    capturedSections: "",
+    encodedDate: "",
+    flag: "",
+    comments: "",
+    description: "",
+    queryReason: "",
+    providerName: "",
+    imagingTestHeader: "",
+    headerName: "",
+    queryComment: "",
+    reason: "",
+    diagnosisCodeQuery: "",
+    comboCode: "",
+    additionalCode: "",
+  });
+  const [captureSectionMatching, setCaptureSectionMatching] = useState([]);
+  const [encounterDateMatching, setEncounterDateMatching] = useState([]);
   const [fileModalHeader, setFileModalHeader] = useState("");
-  const [comboDiseaseCodesListRadiology, setComboDiseaseCodesListRadiology] =
-    useState([]);
+  const [isAddComboCode, setIsAddComboCode] = useState(false);
+  const [fileLoading, setFileLoading] = useState(false);
+  const [search, setSearch] = useState(false);
+  const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
+  const [isValidAction, setIsValidAction] = useState("");
+  const [selectDisDetails, setSelectDisDetails] = useState("");
+  const [meatCriteriaList, setMeatCriteriaList] = useState([]);
+  const [zIndex, setZIndex] = useState(false);
+  const [allMeatList, setAllMeatList] = useState([]);
 
-    useEffect(() => {
-      setComboDiseaseCodesListRadiology([]);
-      getPatientDetailsRadiologyYear();
-    }, [radiologyDetailsResult]);
 
-  const getPatientDetailsRadiologyYear = async () => {
-    if (radiologyDetailsResult?.data?.response) {
-      var result = radiologyDetailsResult?.data?.response;
-      if (result.validDisease != null) {
-        var comboDis = "";
-        var dosYearArr = [];
-        for (var key in result.validDisease) {
-          dosYearArr.push({ value: key, label: key });
-        }
-        var dateofService = dosYearArr[0].value;
-        if (result.comboDisease != null) {
-          comboDis = result.comboDisease[dateofService];
-        }
-        setComboDiseaseCodesListRadiology(comboDis);
-      } 
+  const handleChange = async (e) => {
+    const key = e.target.name;
+    if (key == "diagnosisCodeQuery") {
+      getFindValidDiagnosisCode(e.target.value);
+    }
+    if (key == "diagnosisCode") {
+      getFindValidDiagnosisCode(e.target.value);
+    }
+    if (key == "encodedDate") {
+      setInputValueFileDate(e.target.value);
+    }
+    const value = e.target.value;
+    setInputValue({ ...inputValue, [key]: value });
+  };
+
+  useEffect(() => {
+    var orgId = localStorage.getItem("orgId");
+    var tenId = localStorage.getItem("tenantId");
+    getPatientRadiologyDetailsNew(
+      orgId,
+      tenId,
+      setPatientDocumentResult,
+      "",
+      "",
+      "",
+      setEncounterDateMatching,
+      setCaptureSectionMatching,
+      setMeatCriteriaList,
+      patientDetailsResult,
+      dispatch,
+      sectionColorList,
+      "",
+      setComboDiseaseCodesList,
+      "",
+      "",
+      "",
+      setInvalidComboDiseaseCodesList,
+      setAllMeatList
+
+    );
+  }, [patientDetailsResult]);
+
+
+  useEffect(() => {
+    getPatientPdfFileRadiology();
+  }, [radiologyFile?.data?.response]);
+
+  const getPatientPdfFileRadiology = async (fileId, tenId) => {
+    if (
+      radiologyFile?.data?.response &&
+      patientDetailsResult?.data?.response?.patientId
+    ) {
+      setSelectFileURL(radiologyFile?.data?.response);
     }
   };
 
-  const confirmComboInvalid = () =>
-    new Promise((resolve) => {
-      comboMoveInvalidConfirm();
-      setTimeout(() => resolve(null), 1000);
-    });
-
-  const confirmComboValid = () =>
-    new Promise((resolve) => {
-      comboMoveValidConfirm();
-      setTimeout(() => resolve(null), 1000);
-    });
-
-  const onchangeCombo = (data, code) => {
-    setSelectDiseasesName(data);
-    setSelectCode(code);
+  const onchangeCombo = (code, data) => {
+    var title = data.diagnosisCodeCombo;
+    data.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
+    data.processedYear = patientDetailsResult?.data?.response?.processedYear;
+    data.dbDescription = data.actualDescription
+      ? data.actualDescription
+      : data.diseaseName;
+    (data.fileId = patientDetailsResult?.data?.response?.fileId),
+      setSelectDiseasesName(title);
+    setSelectDisDetails(data);
   };
 
-  const comboMoveInvalidConfirm = () => {
-    const result = comboDiseaseCodesList.filter(
-      (res) => res.diseaseName != selectDiseasesName
-    );
-    const result2 = comboDiseaseCodesList.filter(
-      (res) => res.diseaseName == selectDiseasesName
-    );
-    setComboDiseaseCodesList(result);
-    var namePush = [];
-    namePush.push({ name: selectCode + " - " + selectDiseasesName });
-    var newArray = [];
-    newArray = [...invalidComboDiseaseCodesList, ...result2];
-    setInvalidComboDiseaseCodesList(newArray);
+  const handleCloseModal = () => {
+    setConfirmNotesModalValid(false);
+    setValidated(false);
+    setIsModalOpenCaptureSection(false);
+    setIsAddComboCode(false);
+    setFileLoading(false);
+    setOpens(false);
   };
 
-  const comboMoveValidConfirm = () => {
-    const result = invalidComboDiseaseCodesList.filter(
-      (res) => res.diseaseName != selectDiseasesName
-    );
-    setInvalidComboDiseaseCodesList(result);
-    const result2 = invalidComboDiseaseCodesList.filter(
-      (res) => res.diseaseName == selectDiseasesName
-    );
-    var newArray = [];
-    newArray = [...comboDiseaseCodesList, ...result2];
-    setComboDiseaseCodesList(newArray);
+  const handleChangeSuggested = async (e) => {
+    const key = e.target.name;
+    const value = e.target.value;
+    setInputValue({ ...inputValue, [key]: value });
   };
 
-  const addValidDiseases = () => {
-    setIsModalOpenValid(true);
-    // setValidated(true);
+  const addComboCode = () => {
+    setIsAddComboCode(true);
+  };
+
+  const handleSubmitComboCode = async (event) => {
+    const form = event.currentTarget;
+    event.preventDefault();
+    if (form.checkValidity() === true) {
+      let updateDataformat = {
+        patientId: patientDetailsResult?.data?.response?.patientId,
+        dosYear: "",
+        comboCode: inputValue.comboCode,
+        additionalCode: inputValue.additionalCode,
+        description: inputValue.description,
+      };
+      let result = await manuallyAddComboCode(updateDataformat);
+      if (result.status == "SUCCESS") {
+        setIsAddComboCode(false);
+        notification.success({
+          message: result.message,
+          placement: "top",
+          duration: 1,
+        });
+        getpatientDetailsData(
+          patientDetailsResult?.data?.response?.patientId,
+          patientDetailsResult?.data?.response?.processedYear,
+          patientDetailsResult?.data?.response?.dateOfService
+        );
+      }
+
+      setValidated(true);
+    }
   };
 
   const showErrorMessage = () => {
@@ -103,196 +197,160 @@ const Combo = ({radiologyDetailsResult}) => {
     notification.destroy();
     notification.info({ message: "Tree Not Available", duration: 1 });
   };
+
+  useEffect(() => {
+    if (activeComboTree) {
+      comboDiseaseCodesList?.map((item) => {
+        if (
+          item.diagnosisCodeCombo.replace(".", "") ==
+          activeComboTree.diagnosisCode.replace(".", "")
+        ) {
+          setOpens(true);
+          setCombiTree([{ ...item, expanded: true }]);
+        }
+      });
+    }
+  }, [activeComboTree]);
+  useEffect(() => {
+    if (isModalOpenCaptureSection) {
+      setInterval(() => {
+        setZIndex(true);
+      }, 1000);
+    } else {
+      setZIndex(false);
+    }
+  }, [isModalOpenCaptureSection]);
+
   return (
     <>
+      {fileLoading ? (
+        <div className={styles.overlay_style}>
+          <div className={styles.overlay__inner_style}>
+            <div className={styles.overlay__content_style}>
+              <span className={styles.spinner_style}></span>
+            </div>
+          </div>
+        </div>
+      ) : null}
       <div className={`${visitStyles.comboContainer}`}>
         <div className={`row ${visitStyles.comboContainer2}`}>
           <div className="col-xl-6">
             <div className={`${visitStyles.comboTitle}`}>
               <span>VALID CODES </span>
             </div>
-            <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
-              <div className={visitStyles.combo_head_card}>
-                <div className="row">
-                  <div className="col-xl-3">
-                    <label>Combo Codes</label>
-                  </div>
-                  <div className="col-xl-3">
-                    <label>Additional Codes</label>
-                  </div>
-                  <div className="col-xl-5">
-                    <label>Description</label>
-                  </div>
-                  <div className="col-xl-1">
-                    <div className="d-flex justify-content-center">
-                      <button
-                        onClick={() => addValidDiseases()}
-                        className={visitStyles.combo_add_btn}
-                      >
-                        <FontAwesomeIcon
-                          icon={faPlus}
-                          style={{
-                            color: "#fff",
-                            size: 12,
-                          }}
-                        />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {comboDiseaseCodesListRadiology.length != 0 ? (
-                <div className={visitStyles.container}>
-                  <div className={visitStyles.hccStickey_head}>
-                    {comboDiseaseCodesListRadiology?.map((item) => {
-                      return (
-                        <div className={visitStyles.combo_details_card}>
-                          <div className="row">
-                            <div className="col-xl-3">
-                              <span className="font-bold">
-                                {item.diagnosisCodeCombo}
-                              </span>
-                            </div>
-                            <div className="col-xl-3">
-                              <span className="font-bold">
-                                {item.addOnCode}
-                              </span>
-                            </div>
-                            <div className="col-xl-5 cr-pointer">
-                              <span>{item.diseaseName}</span>
-                            </div>
-                            <div className="col-xl-1 ">
-                              <div>
-                                <Popconfirm
-                                  title="You want move to Invalid?"
-                                  description={item.diseaseName}
-                                  onConfirm={confirmComboInvalid}
-                                  placement="leftTop"
-                                  okText="Yes"
-                                  cancelText="No"
-                                  onOpenChange={() =>
-                                    onchangeCombo(
-                                      item.diseaseName,
-                                      item.addOnCode
-                                    )
-                                  }
-                                >
-                                  <div className={visitStyles.close_icon}>
-                                    <FontAwesomeIcon
-                                      icon={faArrowsAlt}
-                                      style={{
-                                        size: 8,
-                                        color: "#a80404",
-                                      }}
-                                    />
-                                  </div>
-                                </Popconfirm>
-                              </div>
-                              <div
-                                className={visitStyles.close_icon}
-                                style={{ background: "#c7f3c6" }}
-                                onClick={() => {
-                                  setOpens(true);
-                                  setCombiTree([{ ...item, expanded: true }]);
-                                }}
-                              >
-                                <FontAwesomeIcon
-                                  icon={faSitemap}
-                                  style={{
-                                    size: 8,
-                                    color: "#088f39",
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              ) : null}
-
-              {comboDiseaseCodesListRadiology.length == 0 ? (
-                <div>
-                  <span className="no-patient-data">No Combination Codes</span>
-                </div>
-              ) : null}
-            </div>
+            <ComboCard
+              list={comboDiseaseCodesList}
+              captureSectionMatching={captureSectionMatching}
+              encounterDateMatching={encounterDateMatching}
+              okText="OK"
+              cancelText="Cancel"
+              popConfirmTitle="You want move to delete?"
+              setOpens={setOpens}
+              setCombiTree={setCombiTree}
+              setSearch={setSearch}
+              setFileLoading={setFileLoading}
+              setFileModalHeader={setFileModalHeader}
+              onchangeCombo={onchangeCombo}
+              setIsModalOpenCaptureSection={setIsModalOpenCaptureSection}
+              isAddComboCode={true}
+              addComboCode={addComboCode}
+              setConfirmNotesModalValid={setConfirmNotesModalValid}
+              setIsValidAction={setIsValidAction}
+              patientDocumentResult={patientDocumentResult}
+              setActiveTabHead={setActiveTabHead}
+              setActiveMeatTitle={setActiveMeatTitle}
+              meatCriteriaList={allMeatList}
+              cardTitle="VALID_COMBO"
+            />
           </div>
 
           <div className="col-xl-6">
             <div className={`${visitStyles.comboTitle}`}>
               <span>DELETED COMBO CODES </span>
             </div>
-            <div className={`my-post-content  ${visitStyles.comboContainer3}`}>
-              <div className={visitStyles.combo_head_card}>
-                <div className="row">
-                  <div className="col-xl-3">
-                    <label>Combo Codes</label>
-                  </div>
-                  <div className="col-xl-3">
-                    <label>Additional Codes</label>
-                  </div>
-                  <div className="col-xl-5">
-                    <label>Description</label>
-                  </div>
-                </div>
-              </div>
-              {invalidComboDiseaseCodesList.length != 0 ? (
-                <>
-                  <div className={visitStyles.container}>
-                    <div className={visitStyles.hccStickey_head}>
-                      {invalidComboDiseaseCodesList?.map((item) => {
-                        return (
-                          <div className={visitStyles.combo_details_card}>
-                            <div className="row">
-                              <div className="col-xl-3">
-                                <span className="font-bold">
-                                  {item.diagnosisCodeCombo}
-                                </span>
-                              </div>
-                              <div className="col-xl-3">
-                                <span className="font-bold">
-                                  {item.addOnCode}
-                                </span>
-                              </div>
-                              <div className="col-xl-5 cr-pointer">
-                                <span>{item.diseaseName}</span>
-                              </div>
-                              <div className="col-xl-1 comboclose">
-                                <Popconfirm
-                                  title="You want move to Valid?"
-                                  description={item.diseaseName}
-                                  onConfirm={confirmComboValid}
-                                  placement="leftTop"
-                                  okText="Yes"
-                                  cancelText="No"
-                                  onOpenChange={() =>
-                                    onchangeCombo(
-                                      item.diseaseName,
-                                      item.addOnCode
-                                    )
-                                  }
-                                >
-                                  <div className={visitStyles.tick_icon}>
-                                    {SVGICON.tickIcon}
-                                  </div>
-                                </Popconfirm>
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </>
-              ) : null}
-            </div>
+            <ComboCard
+              list={invalidComboDiseaseCodesList}
+              captureSectionMatching={captureSectionMatching}
+              encounterDateMatching={encounterDateMatching}
+              okText="OK"
+              cancelText="Cancel"
+              popConfirmTitle="You want move to valid?"
+              setOpens={setOpens}
+              setCombiTree={setCombiTree}
+              setSearch={setSearch}
+              setFileLoading={setFileLoading}
+              setFileModalHeader={setFileModalHeader}
+              onchangeCombo={onchangeCombo}
+              setIsModalOpenCaptureSection={setIsModalOpenCaptureSection}
+              isAddComboCode={false}
+              setConfirmNotesModalValid={setConfirmNotesModalValid}
+              setIsValidAction={setIsValidAction}
+              patientDocumentResult={patientDocumentResult}
+              setActiveTabHead={setActiveTabHead}
+              setActiveMeatTitle={setActiveMeatTitle}
+              meatCriteriaList={allMeatList}
+              cardTitle="DELETED_COMBO"
+
+            />
           </div>
         </div>
       </div>
 
+      {isModalOpenCaptureSection && (
+        <Modal
+          title={fileModalHeader}
+          centered
+          open={isModalOpenCaptureSection}
+          style={{ top: 1 }}
+          onOk={handleCloseModal}
+          onCancel={handleCloseModal}
+          width="95%"
+          footer={false}
+        >
+          <div className="section-container">
+            <div className="row">
+              <div className="col-xl-5">
+                <ComboCard
+                  list={comboDiseaseCodesList}
+                  captureSectionMatching={captureSectionMatching}
+                  encounterDateMatching={encounterDateMatching}
+                  okText="OK"
+                  cancelText="Cancel"
+                  popConfirmTitle="You want move to delete?"
+                  setOpens={setOpens}
+                  setCombiTree={setCombiTree}
+                  setSearch={setSearch}
+                  setFileLoading={setFileLoading}
+                  setFileModalHeader={setFileModalHeader}
+                  onchangeCombo={onchangeCombo}
+                  setIsModalOpenCaptureSection={setIsModalOpenCaptureSection}
+                  isAddComboCode={false}
+                  addComboCode={addComboCode}
+                  setConfirmNotesModalValid={setConfirmNotesModalValid}
+                  setIsValidAction={setIsValidAction}
+                  patientDocumentResult={patientDocumentResult}
+                  setActiveTabHead={setActiveTabHead}
+                  setActiveMeatTitle={setActiveMeatTitle}
+                  meatCriteriaList={allMeatList}
+                  popup={zIndex}
+                  cardTitle="VALID_COMBO"
+                />
+              </div>
+              <div className="col-xl-7">
+                {selectFileURL && (
+                  <PdfViewer
+                    src={selectFileURL}
+                    searchQuery={search?.value ? search?.value : ""}
+                    pageNumber={search?.page ? search?.page : 1}
+                    headers={search?.headers}
+                    headerContent={search?.headerContent}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        </Modal>
+      )}
       {opens && combiTree[0]?.children?.length > 0 ? (
         <Modal
           title={fileModalHeader}
@@ -303,19 +361,114 @@ const Combo = ({radiologyDetailsResult}) => {
           onCancel={() => setOpens(false)}
           footer={null}
         >
-          <CamboTree tree={combiTree} />
+          <CamboTree
+            tree={combiTree}
+            setOpens={setOpens}
+            setCombiTree={setCombiTree}
+          />
         </Modal>
       ) : (
         opens && showErrorMessage()
       )}
+      <ModelIndex
+        title={selectDiseasesName}
+        openState={confirmNotesModalValid}
+        setFileLoading={setFileLoading}
+        handleCloseModal={handleCloseModal}
+        setConfirmNotesModalValid={setConfirmNotesModalValid}
+        isValidAction={isValidAction}
+        selectDisDetails={selectDisDetails}
+      />
+
+      <Offcanvas
+        onHide={handleCloseModal}
+        show={isAddComboCode}
+        className="offcanvas-end"
+        placement="end"
+      >
+        <div className="offcanvas-header">
+          <h5 className="modal-title" id="#gridSystemModal">
+            Add Combo Code
+          </h5>
+          <button
+            type="button"
+            className="btn-close"
+            onClick={() => handleCloseModal()}
+          >
+            <i className="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div className="offcanvas-body">
+          <div className="container-fluid">
+            <Form
+              noValidate
+              validated={validated}
+              onSubmit={handleSubmitComboCode}
+            >
+              <div className="row">
+                <div className="col-xl-12 mb-3">
+                  <Form.Label>
+                    Combo Code <span className="text-danger">*</span>{" "}
+                  </Form.Label>
+                  <Form.Control
+                    required
+                    type="text"
+                    id="comboCode"
+                    name="comboCode"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-xl-12 mb-3">
+                  <Form.Label>Additional Code</Form.Label>
+                  <Form.Control
+                    type="text"
+                    id="additionalCode"
+                    name="additionalCode"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-xl-12 mb-3">
+                  <Form.Label>
+                    Description <span className="text-danger">*</span>{" "}
+                  </Form.Label>
+                  <textarea
+                    className="form-control"
+                    id="description"
+                    name="description"
+                    onChange={handleChangeSuggested}
+                    rows="5"
+                    required
+                  ></textarea>
+                </div>
+              </div>
+
+              <div>
+                <Button type="submit" className="btn btn-primary btn-sm me-1">
+                  Submit
+                </Button>
+                <Button
+                  onClick={() => handleCloseModal()}
+                  className="btn btn-danger btn-sm light ms-1"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </Form>
+          </div>
+        </div>
+      </Offcanvas>
     </>
   );
 };
-
 const enhancer = connect(
   (state) => ({
-    radiologyDetailsResult :state?.patientDetails?.details?.radiologyResult,
+    patientDetailsResult: state?.patientDetails?.details?.radiologyResult,
+    hccFileDetails: state?.patientDetails?.details?.hccFileResult,
+    fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
     radiologyFile :state?.patientDetails?.details?.radiologyFileResult,
   }),
+  {
+    getpatientDetailsData: detailsActions.patientDetailsAction,
+  }
 );
 export default enhancer(Combo);

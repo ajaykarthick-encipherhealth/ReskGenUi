@@ -1,71 +1,119 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useSelector,connect } from "react-redux";
-import Select from "react-select";
-import visitStyles from "../../../../../styles/visitdata.module.css";
-import { getPatientRadiologyDetails } from "../../components/function/GetDataRadiology";
-import PdfViewer from "../../PdfViewerComponent";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch, connect } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  onDragEnd,
-} from "../../components/function/ReusableFunctionsRadiology";
-import styles from "../../hcc/styles.module.css";
-
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import RadiologyCards from "../../components/RADIOLOGY";
+  faArrowLeft,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
+import axios from "../../../../../utility/axiosConfig";
+import ENDPOINTS from "../../../../../utility/enpoints";
+import visitStyles from "../../../../../styles/visitdata.module.css";
+import { Drawer, Popover, notification } from "antd";
+import { Button, Offcanvas } from "react-bootstrap";
+import PdfViewer from "../../PdfViewerComponent";
+import HccCards from "../../components/RADIOLOGY";
 import ModelIndex from "../../components/model/Index";
+import { getPatientDetails } from "../../components/function/GetData";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { onDragEnd } from "../../components/function/ReusableFunctions";
+import ManuallyAdd from "../../components/manuallyAdd";
+import LogoLoader from "../../../../logoLoader";
+import { getPatientRadiologyDetailsNew } from "../../components/function/GetDataRadiology";
+import Select from "react-select";
 
-const File = ({ setActiveTabHead, setActiveMeatTitle,radiologyDetailsResult,radiologyFile }) => {
+
+const File = ({
+  patientDetailsResult,
+  hccFileDetails,
+  popoverVisible,
+  setPopoverVisible,
+  year,
+  setActiveTabHead,
+  setActiveMeatTitle,
+  setActiveComboTree,
+  pageNumberOptions,
+  setPageNumberOptions,
+  fileDosPageNumberList,
+  radiologyFile
+}) => {
+  const dispatch = useDispatch();
   const sectionColorList = useSelector(
     (state) => state?.ReviewerReducers?.sectionColorList
   );
+  const radiologyFileDetails = useSelector(
+    (state) => state?.ReviewerReducers?.radiologyFileDetails
+  );
+  const labFileDetails = useSelector(
+    (state) => state?.ReviewerReducers?.labFileDetails
+  );
+  const [isFileFormShow, setIsFileFormShow] = useState(false);
+  const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
   const [selectDiseasesName, setSelectDiseasesName] = useState("");
-  const [localTenantId, setLocalTenantId] = useState("");
-  const [patientDetailsRadiology, setPatientDetailsRadiology] = useState([]);
-  const [newValidDiseaseListRadiology, setNewValidDiseaseListRadiology] =
-    useState([]);
-  const [newInValidDiseaseListRadiology, setInNewValidDiseaseListRadiology] =
-    useState([]);
+  const [meatCriteriaList, setMeatCriteriaList] = useState([]);
+  const [patientDocumentResult, setPatientDocumentResult] = useState([]);
+  const [selectFileURL, setSelectFileURL] = useState([]);
+  const [validated, setValidated] = useState(false);
+  const [opens, setOpens] = useState(false);
+  const [newValidDiseaseList, setNewValidDiseaseList] = useState([]);
+  const [combiTree, setCombiTree] = useState({});
   const [selectFileURLRadiology, setSelectFileURLRadiology] = useState([]);
-  const [isLoadingDos, setIsLoadingDos] = useState(true);
-
-  const [radiologyFileDateofServieList, setFileRadiologyDateofServiceList] =
-    useState([]);
-  const [radiologyFileDateDefaulteSelect, setRadiologyFileDateDefaulteSelect] =
-    useState("");
+  const [isModalOpenRadiology, setIsModalOpenRadiology] = useState(false);
+  const [isModalOpenLab, setIsModalOpenLab] = useState(false);
+  const [selectDisDetails, setSelectDisDetails] = useState(false);
+  const [labReportFile, setLabReportFile] = useState([]);
+  const [suggestedHccList, setSuggestedHccList] = useState([]);
+  const [isValidAction, setIsValidAction] = useState("");
+  const [deletedHccList, setDeletedHccList] = useState([]);
   const [captureSectionMatching, setCaptureSectionMatching] = useState([]);
   const [encounterDateMatching, setEncounterDateMatching] = useState([]);
   const [fileModalHeader, setFileModalHeader] = useState("");
-
-  const [radiologyFileDetailCheck, setRadiologyFileDetailCheck] =
-    useState(false);
-  const [confirmNotesModalValid, setConfirmNotesModalValid] = useState(false);
-  const [search, setSearch] = useState();
-  const [meatCriteriaListRadiology, setMeatCriteriaListRadiology] = useState(
-    []
-  );
-  const [selectDetails, setSelectDetails] = useState();
-  const [isValidAction, setIsValidAction] = useState("");
+  // const [pageNumberOptions, setPageNumberOptions] = useState([]);
   const [fileLoading, setFileLoading] = useState(false);
+  const [hccVersionDetails, setHccVersionDetails] = useState(null);
+  const [search, setSearch] = useState();
+  const [isAddHccForm, setIsAddHccForm] = useState(false);
+  const [isEditHccForm, setIsEditHccForm] = useState(false);
+  const [formValues, setFormValues] = useState(false);
+  const [formEditPlace, setFormEditPlace] = useState("");
   const [allDisList, setAllDisList] = useState([]);
-  const [deletedDiseasesList, setDeletedDiseasesList] = useState([]);
+  const [allMeatList, setAllMeatList] = useState([]);
+  const [deletedMeatList, setDeletedMeatList] = useState([]);
+  const [radiologyFileDetailCheck, setRadiologyFileDetailCheck] =
+  useState(false);
+  const [radiologyFileDateofServieList, setFileRadiologyDateofServiceList] =
+  useState([]);
+  const [radiologyFileDateDefaulteSelect, setRadiologyFileDateDefaulteSelect] =
+  useState("");
+
 
   useEffect(() => {
-    getPatientRadiologyDetails(
-      radiologyDetailsResult,
-      sectionColorList,
-      setPatientDetailsRadiology,
-      setFileRadiologyDateofServiceList,
-      setRadiologyFileDateDefaulteSelect,
-      setRadiologyFileDetailCheck,
-      setCaptureSectionMatching,
+    var orgId = localStorage.getItem("orgId");
+    var tenId = localStorage.getItem("tenantId");
+    getPatientRadiologyDetailsNew(
+      orgId,
+      tenId,
+      setPatientDocumentResult,
+      setNewValidDiseaseList,
+      setSuggestedHccList,
+      setDeletedHccList,
       setEncounterDateMatching,
-      setNewValidDiseaseListRadiology,
-      setInNewValidDiseaseListRadiology,
-      setIsLoadingDos,
-      setMeatCriteriaListRadiology,
+      setCaptureSectionMatching,
+      setMeatCriteriaList,
+      patientDetailsResult,
+      dispatch,
+      sectionColorList,
       setAllDisList,
-      setDeletedDiseasesList
+      "",
+      "",
+      "",
+      setDeletedMeatList,
+      "",
+      setAllMeatList,
+      setRadiologyFileDetailCheck,
+      setFileRadiologyDateofServiceList,
+      setRadiologyFileDateDefaulteSelect
     );
-  }, [radiologyDetailsResult]);
+  }, [patientDetailsResult]);
 
   useEffect(() => {
     setSelectFileURLRadiology([]);
@@ -75,68 +123,111 @@ const File = ({ setActiveTabHead, setActiveMeatTitle,radiologyDetailsResult,radi
   const getPatientPdfFileRadiology = async (fileId, tenId) => {
     if (
       radiologyFile?.data?.response &&
-      radiologyDetailsResult?.data?.response?.patientId
+      patientDetailsResult?.data?.response?.patientId
     ) {
-      setSelectFileURLRadiology(radiologyFile?.data?.response);
+      setSelectFileURL(radiologyFile?.data?.response);
     }
   };
 
+
+
+
+
+  useEffect(() => {
+    getFileDosPageNumber();
+  }, [fileDosPageNumberList]);
   const onchangeValid = (code, data) => {
     var title = code + " - " + data.actualDescription;
-      data.dos = data.dosYear;
-    setSelectDiseasesName(title);
-    setSelectDetails(data);
+    data.processedYear = patientDetailsResult?.data?.response?.processedYear;
+    data.dateOfService = patientDetailsResult?.data?.response?.dateOfService;
+    (data.fileId = patientDetailsResult?.data?.response?.fileId),
+      setSelectDiseasesName(title);
+    setSelectDisDetails(data);
   };
 
-  const findValueDocument = (value, disDescription) => {
-    var splitPoint = disDescription.substring(" ", 40);
-
-    highlight({
-      keyword: splitPoint,
-    });
+  const handleCloseModal = () => {
+    setValidated(false);
+    setConfirmNotesModalValid(false);
+    setIsModalOpenRadiology(false);
+    setIsModalOpenLab(false);
+    setIsFileFormShow(false);
+    setFileLoading(false);
+    setIsEditHccForm(false);
+    setOpens(false);
   };
-  const dosOnChangeRadiologyFile = async (e) => {
-    var dosKeyValue = e.value;
-    patientDetailsRadiology.radiologyFileDetail.map((res, index) => {
-      for (var key in res.documentDos) {
-        if (key == dosKeyValue) {
-          // getPatientPdfFileRadiologyYear(fileDetails[0].azureBlobPath, localTenantId);
-          getPatientPdfFileRadiology(res.azureBlobPath, localTenantId);
+
+  const getValidHccDetails = async (value, code) => {
+    var result = "";
+    var data = "";
+
+    data = (
+      <div className={visitStyles.userDetailsCard}>
+        <div className="bouncing-loader"></div>
+      </div>
+    );
+
+    const response = await axios.get(
+      ENDPOINTS.apiEndoint +
+        `dbservice/hccdisease/icd10mappingForDisease?year=${year.value}&diagnosisCode=${code}`
+    );
+    if (response.data) {
+      var value = [];
+      result = response.data.response;
+      for (var key in result) {
+        if (
+          key != "id" &&
+          key != "description" &&
+          key != "year" &&
+          key != "diagnosisCode" &&
+          result[key] != null
+        ) {
+          value.push({
+            name: key,
+            value: result[key],
+          });
         }
       }
-    });
+      setHccVersionDetails(value);
+    }
   };
-    
-  const handleCloseModal = () => {
-    setConfirmNotesModalValid(false);
+
+  const addValidCodeFile = async (event) => {
+    setIsFileFormShow(true);
+    setValidated(false);
   };
+
+  const getFileDosPageNumber = async () => {
+    // setPageNumberOptions(fileDosPageNumberList?.data?.response);
+  };
+
+  const showErrorMessage = () => {
+    setOpens(false);
+    notification.destroy();
+    notification.info({ message: "Tree Not Available", duration: 1 });
+  };
+
+  const dosOnChangeRadiologyFile =(e)=>{
+
+  }
 
   return (
     <>
-    {fileLoading ? (
-        <div className={styles.overlay_style}>
-          <div className={styles.overlay__inner_style}>
-            <div className={styles.overlay__content_style}>
-              <span className={styles.spinner_style}></span>
-            </div>
-          </div>
-        </div>
-      ) : null}
+      {fileLoading ? <LogoLoader /> : null}
       <DragDropContext
         onDragEnd={(result) =>
           onDragEnd(
             result,
             allDisList,
             setSelectDiseasesName,
-            setSelectDetails,
+            setSelectDisDetails,
             setConfirmNotesModalValid,
             setIsValidAction,
-            radiologyDetailsResult
+            patientDetailsResult
           )
         }
       >
-        <div className="my-post-content pt-3">
-          <div className="radiology-select-dos">
+        <div className="my-post-content row pt-3">
+        <div className="radiology-select-dos">
             {radiologyFileDetailCheck ? (
               <Select
                 onChange={(e) => dosOnChangeRadiologyFile(e)}
@@ -149,7 +240,7 @@ const File = ({ setActiveTabHead, setActiveMeatTitle,radiologyDetailsResult,radi
               <div></div>
             )}
           </div>
-          <div className="row">
+          {!isFileFormShow ? (
             <div className="col-xl-3">
               <Droppable droppableId={"HCC"} key={"HCC"}>
                 {(provided) => {
@@ -167,32 +258,44 @@ const File = ({ setActiveTabHead, setActiveMeatTitle,radiologyDetailsResult,radi
                         </span>
                         <div className="d-flex justify-content-center">
                           <span className={`${visitStyles.hcc_title_badge}`}>
-                            {newValidDiseaseListRadiology.length}
+                            {
+                              newValidDiseaseList.length
+                            }
                           </span>
                         </div>
                       </div>
                       <div className={visitStyles.container}>
                         <div className={visitStyles.hccStickey_head}>
-                          <RadiologyCards
-                            list={newValidDiseaseListRadiology}
+                          <HccCards
+                            list={newValidDiseaseList}
+                            hccVersionDetails={hccVersionDetails}
                             captureSectionMatching={captureSectionMatching}
-                            meatCriteriaList={meatCriteriaListRadiology}
                             encounterDateMatching={encounterDateMatching}
+                            meatCriteriaList={allMeatList}
                             onchangeValid={onchangeValid}
+                            getValidHccDetails={getValidHccDetails}
+                            setFormValues={setFormValues}
+                            setIsEditHccForm={setIsEditHccForm}
+                            setFormEditPlace={setFormEditPlace}
                             okText="Move to Deleted"
                             cancelText="Move to Suggested"
                             editFormPlace={"VALID_DISEASE"}
+                            setOpens={setOpens}
+                            setCombiTree={setCombiTree}
+                            setActiveTabHead={setActiveTabHead}
+                            setActiveMeatTitle={setActiveMeatTitle}
+                            setActiveComboTree={setActiveComboTree}
                             setSearch={setSearch}
+                            setFileLoading={setFileLoading}
+                            setIsModalOpenLab={setIsModalOpenLab}
+                            setIsModalOpenRadiology={setIsModalOpenRadiology}
                             setFileModalHeader={setFileModalHeader}
                             setConfirmNotesModalValid={
                               setConfirmNotesModalValid
                             }
-                            cardTitle="RADIOLOGY_HCC"
-                            provided={provided}
-                            setActiveTabHead={setActiveTabHead}
-                            setActiveMeatTitle={setActiveMeatTitle}
                             setIsValidAction={setIsValidAction}
-                            setFileLoading={setFileLoading}
+                            cardTitle="HCC"
+                            provided={provided}
                           />
                         </div>
                       </div>
@@ -201,77 +304,144 @@ const File = ({ setActiveTabHead, setActiveMeatTitle,radiologyDetailsResult,radi
                 }}
               </Droppable>
             </div>
-            <div className="col-xl-6">
-              <div className="card-body p-0 z-index-low">
-                {selectFileURLRadiology && (
-                  <PdfViewer
-                    src={selectFileURLRadiology}
-                    searchQuery={search?.value ? search?.value : ""}
-                    pageNumber={search?.page ? search?.page : 1}
-                    headers={search?.headers}
-                  />
-                )}
+          ) : null}
+          {isFileFormShow && (
+            <div className={"col-xl-1"}>
+              <Button
+                onClick={() => handleCloseModal()}
+                className={`ms-2 ${visitStyles.backArrowBtn}`}
+              >
+                <FontAwesomeIcon
+                  icon={faArrowLeft}
+                  style={{
+                    color: "rgb(38 50 107)",
+                  }}
+                />
+              </Button>
+            </div>
+          )}
+          <div className={"col-xl-6"}>
+            {/* <Popover
+              open={popoverVisible}
+              content={PopContent}
+              placement="bottom"
+              trigger={"click"}
+              onOpenChange={() => setPopoverVisible(true)}
+            >
+              <div className={styles.dosContainer}>
+                <span className={styles.dosPageNumber}>
+                  Select Dos Page Number
+                </span>
+                <FontAwesomeIcon
+                  icon={faAngleDown}
+                  style={{
+                    size: 10,
+                    color: "#e6e6e6",
+                  }}
+                />
+              </div>
+            </Popover> */}
+            <div className="card-body p-0">
+              {hccFileDetails?.loading != true ? (
+                <>
+                  {selectFileURL && (
+                    <PdfViewer
+                      src={selectFileURL}
+                      searchQuery={search?.value ? search?.value : ""}
+                      pageNumber={search?.page ? search?.page : 1}
+                      headers={search?.headers}
+                    />
+                  )}
+                </>
+              ) : null}
+            </div>
+          </div>
+          {isFileFormShow ? (
+            <div className="col-xl-5">
+              {/* <AddHccForm
+                handleCloseModal={handleCloseModal}
+                isAddHccForm={isAddHccForm}
+                setIsAddHccForm={setIsAddHccForm}
+                isMeatNew={true}
+              /> */}
+              <div style={{ height: "70vh", overflowY: "scroll" }}>
+                <ManuallyAdd
+                  handleCloseModal={handleCloseModal}
+                  setIsFileFormShow={setIsFileFormShow}
+                  year={year}
+                />
               </div>
             </div>
+          ) : null}
+          {!isFileFormShow ? (
             <div className="col-xl-3">
-                <Droppable droppableId={"NON_HCC"} key={"NON_HCC"}>
-                  {(provided) => {
-                    return (
+              <Droppable droppableId={"SUGGESTED"} key={"SUGGESTED"}>
+                {(provided) => {
+                  return (
+                    <div
+                      className="timeline"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
                       <div
-                        className="timeline"
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
+                        className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
                       >
-                        <div
-                          className={`valid-text d-flex justify-content-sm-between ${visitStyles.suggested_title_card}`}
-                        >
+                        <span className={`${visitStyles.suggested_title_name}`}>
+                          CARE GAP
+                        </span>
+                        <div className="d-flex justify-content-center">
                           <span
-                            className={`${visitStyles.suggested_title_name}`}
+                            className={`${visitStyles.suggested_title_badge}`}
                           >
-                            NON-HCC
+                            {
+                              suggestedHccList.length
+                            }
                           </span>
-                          <div className="d-flex justify-content-center">
-                            <span
-                              className={`${visitStyles.suggested_title_badge}`}
-                            >
-                              {newInValidDiseaseListRadiology.length}
-                            </span>
-                          </div>
-                        </div>
-                        <div className={visitStyles.suggestedcontainer2}>
-                          <div className={visitStyles.hccStickey_head}>
-                            <RadiologyCards
-                              list={newInValidDiseaseListRadiology}
-                              captureSectionMatching={captureSectionMatching}
-                              meatCriteriaList={meatCriteriaListRadiology}
-                              encounterDateMatching={encounterDateMatching}
-                              onchangeValid={onchangeValid}
-                              okText="Move to Deleted"
-                              cancelText="Move to HCC"
-                              editFormPlace={"VALID_DISEASE"}
-                              setSearch={setSearch}
-                              setFileModalHeader={setFileModalHeader}
-                              setConfirmNotesModalValid={
-                                setConfirmNotesModalValid
-                              }
-                              cardTitle="NON_HCC"
-                              provided={provided}
-                              setActiveTabHead={setActiveTabHead}
-                              setActiveMeatTitle={setActiveMeatTitle}
-                              setIsValidAction={setIsValidAction}
-                              setFileLoading={setFileLoading}
-                            />
-                          </div>
                         </div>
                       </div>
-                    );
-                  }}
-                </Droppable>
+                      <div className={visitStyles.suggestedcontainer2}>
+                        <div className={visitStyles.hccStickey_head}>
+                          <HccCards
+                            list={suggestedHccList}
+                            hccVersionDetails={hccVersionDetails}
+                            captureSectionMatching={captureSectionMatching}
+                            encounterDateMatching={encounterDateMatching}
+                            meatCriteriaList={deletedMeatList}
+                            onchangeValid={onchangeValid}
+                            getValidHccDetails={getValidHccDetails}
+                            setFormValues={setFormValues}
+                            setIsEditHccForm={setIsEditHccForm}
+                            setFormEditPlace={setFormEditPlace}
+                            okText={"Move to Deleted"}
+                            cancelText={"Move to HCC"}
+                            editFormPlace={"SUGGESTED_DISEASE"}
+                            setOpens={setOpens}
+                            setCombiTree={setCombiTree}
+                            setActiveTabHead={setActiveTabHead}
+                            setActiveMeatTitle={setActiveMeatTitle}
+                            setActiveComboTree={setActiveComboTree}
+                            setSearch={setSearch}
+                            setFileLoading={setFileLoading}
+                            setIsModalOpenLab={setIsModalOpenLab}
+                            setIsModalOpenRadiology={setIsModalOpenRadiology}
+                            patientDocumentResult={patientDocumentResult}
+                            setFileModalHeader={setFileModalHeader}
+                            setConfirmNotesModalValid={
+                              setConfirmNotesModalValid
+                            }
+                            setIsValidAction={setIsValidAction}
+                            cardTitle="SUGGESTED"
+                            provided={provided}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }}
+              </Droppable>
 
-                <Droppable
-                  droppableId={"RADILOGY_DELETED"}
-                  key={"RADILOGY_DELETED"}
-                >
+              <div className={visitStyles.deleteFileContainer}>
+                <Droppable droppableId={"DELETED"} key={"DELETED"}>
                   {(provided) => {
                     return (
                       <div
@@ -289,31 +459,47 @@ const File = ({ setActiveTabHead, setActiveMeatTitle,radiologyDetailsResult,radi
                             <span
                               className={`${visitStyles.deleted_title_badge}`}
                             >
-                              {deletedDiseasesList.length}
+                              {
+                                deletedHccList.filter(
+                                  (item) => item.isComboCode != true
+                                ).length
+                              }
                             </span>
                           </div>
                         </div>
-                        <div className={visitStyles.suggestedcontainer2}>
+                        <div className={visitStyles.deletedContainer}>
                           <div className={visitStyles.hccStickey_head}>
-                            <RadiologyCards
-                              list={deletedDiseasesList}
+                            <HccCards
+                              list={deletedHccList}
+                              hccVersionDetails={hccVersionDetails}
                               captureSectionMatching={captureSectionMatching}
-                              meatCriteriaList={meatCriteriaListRadiology}
                               encounterDateMatching={encounterDateMatching}
+                              meatCriteriaList={deletedMeatList}
                               onchangeValid={onchangeValid}
+                              getValidHccDetails={getValidHccDetails}
+                              setFormValues={setFormValues}
+                              setIsEditHccForm={setIsEditHccForm}
+                              setFormEditPlace={setFormEditPlace}
                               okText="Move to Suggested"
                               cancelText="Move to HCC"
+                              isDeletedCodes={true}
+                              setOpens={setOpens}
+                              setCombiTree={setCombiTree}
+                              setActiveTabHead={setActiveTabHead}
+                              setActiveMeatTitle={setActiveMeatTitle}
+                              setActiveComboTree={setActiveComboTree}
                               setSearch={setSearch}
+                              setFileLoading={setFileLoading}
+                              setIsModalOpenLab={setIsModalOpenLab}
+                              setIsModalOpenRadiology={setIsModalOpenRadiology}
+                              patientDocumentResult={patientDocumentResult}
                               setFileModalHeader={setFileModalHeader}
                               setConfirmNotesModalValid={
                                 setConfirmNotesModalValid
                               }
-                              cardTitle="RADILOGY_DELETED"
-                              provided={provided}
-                              setActiveTabHead={setActiveTabHead}
-                              setActiveMeatTitle={setActiveMeatTitle}
                               setIsValidAction={setIsValidAction}
-                              setFileLoading={setFileLoading}
+                              cardTitle="DELETED"
+                              provided={provided}
                             />
                           </div>
                         </div>
@@ -321,26 +507,121 @@ const File = ({ setActiveTabHead, setActiveMeatTitle,radiologyDetailsResult,radi
                     );
                   }}
                 </Droppable>
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
       </DragDropContext>
       <ModelIndex
+        validated={validated}
         title={selectDiseasesName}
         openState={confirmNotesModalValid}
         handleCloseModal={handleCloseModal}
+        setFileLoading={setFileLoading}
         setConfirmNotesModalValid={setConfirmNotesModalValid}
         isValidAction={isValidAction}
-        selectDisDetails={selectDetails}
-        setFileLoading={setFileLoading}
+        selectDisDetails={selectDisDetails}
+        dragMovemntAction={true}
       />
+
+      <ModelIndex
+        validated={validated}
+        title={fileModalHeader}
+        openState={isModalOpenLab}
+        handleCloseModal={handleCloseModal}
+        labReportFile={labReportFile}
+        search={search}
+      />
+
+      <ModelIndex
+        validated={validated}
+        title={fileModalHeader}
+        openState={isModalOpenRadiology}
+        handleCloseModal={handleCloseModal}
+        labReportFile={selectFileURLRadiology}
+        search={search}
+      />
+      {opens && combiTree[0]?.children?.length > 0 ? (
+        <ModelIndex
+          validated={validated}
+          title={fileModalHeader}
+          openState={opens}
+          handleCloseModal={handleCloseModal}
+          combiTree={combiTree}
+        />
+      ) : (
+        opens && showErrorMessage()
+      )}
+
+      {/* <EditHccForm
+        formValues={formValues}
+        isEditHccForm={isEditHccForm}
+        setIsEditHccForm={setIsEditHccForm}
+        formEditPlace={formEditPlace}
+      /> */}
+
+      {/* <Offcanvas
+        onHide={handleCloseModal}
+        show={isEditHccForm}
+        className="offcanvas-end"
+        placement="end"
+      >
+        <div className="p-4" style={{ overflowY: "scroll" }}>
+          <ManuallyAdd
+            handleCloseModal={handleCloseModal}
+            setIsFileFormShow={setIsFileFormShow}
+            year={year}
+            isEditPage={true}
+            isEditValue={formValues}
+          />
+        </div>
+      </Offcanvas> */}
+      <Drawer
+        title=""
+        onClose={handleCloseModal}
+        closeIcon={false}
+        open={isEditHccForm}
+        width={"80vw"}
+      >
+        <div className="row p-4" style={{overflow: "hidden", height: '100%'}}>
+          <div className="col-8">
+            {hccFileDetails?.loading != true ? (
+              <>
+                {selectFileURL && (
+                  <PdfViewer
+                    src={selectFileURL}
+                    searchQuery={search?.value ? search?.value : ""}
+                    pageNumber={search?.page ? search?.page : 1}
+                    headers={search?.headers}
+                    height="100vh"
+                    heightFrame='900'
+                  />
+                )}
+              </>
+            ) : null}
+          </div>
+          <div className="col-4">
+            <div className="px-4" style={{height: "90vh", overflowY: "scroll" }}>
+              <ManuallyAdd
+                handleCloseModal={handleCloseModal}
+                setIsFileFormShow={setIsFileFormShow}
+                year={year}
+                isEditPage={true}
+                isEditValue={formValues}
+              />
+            </div>
+          </div>
+        </div>
+      </Drawer>
     </>
   );
 };
-const enhancer = connect(
-  (state) => ({
-    radiologyDetailsResult :state?.patientDetails?.details?.radiologyResult,
-    radiologyFile :state?.patientDetails?.details?.radiologyFileResult,
-  }),
-);
+
+const enhancer = connect((state) => ({
+  patientDetailsResult: state?.patientDetails?.details?.radiologyResult,
+  hccFileDetails: state?.patientDetails?.details?.hccFileResult,
+  fileDosPageNumberList: state?.patientDetails?.details?.dosPageNumberResult,
+  radiologyFile :state?.patientDetails?.details?.radiologyFileResult,
+}));
 export default enhancer(File);
+
