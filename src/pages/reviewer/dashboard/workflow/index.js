@@ -87,7 +87,7 @@ const WorkFlow = ({ worlFlowData }) => {
       <HeadTitle
         header={
           !DateRanges || DateRanges?.clear
-            ? `Last 3 days work flow`
+            ? `Last 30 days work flow`
             : `${dayjs(startDate)?.format("MM-DD-YYYY")} - ${dayjs(endDate)
                 .subtract(1, "day")
                 .format("MM-DD-YYYY")}`
