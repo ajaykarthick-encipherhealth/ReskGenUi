@@ -476,6 +476,7 @@ const File = ({
                               setIsValidAction={setIsValidAction}
                               cardTitle="DELETED"
                               provided={provided}
+                              remove
                             />
                           </div>
                         </div>
