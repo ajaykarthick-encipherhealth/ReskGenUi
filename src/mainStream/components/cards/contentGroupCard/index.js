@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Tooltip, notification } from "antd";
 import styles from "../../../../resusablereport/reports/report.module.css";
 import TableStyle from "../../../../components/table/table.module.css";
@@ -12,6 +12,8 @@ import { SVGICON } from "../../../../jsx/constant/theme";
 import { patientDetails } from "../../../../stores/authflow/actions";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
+import { getMaskData } from "../../../../utils/reusable";
+import { handleCopyToClipboard } from "../../../../components/commonFunctions";
 
 const ContentGroupCard = ({
   item,
@@ -36,7 +38,7 @@ const ContentGroupCard = ({
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
-
+  const [copied, setCopied] = useState(false);
   // const gotoPatientDetails = (data) => {
   //   if (!data) {
   //     notification.warning({
@@ -101,7 +103,7 @@ const ContentGroupCard = ({
       });
     }
   };
-  
+
   return (
     <div className={styles.card}>
       <div className={styles.contentGroup} style={{ cursor: "pointer" }}>
@@ -120,8 +122,16 @@ const ContentGroupCard = ({
           onClick={() => handleTableRowClick(patientId)}
         >
           <div className="d-flex justify-content-between align-items-center pb-1">
-            <div className={`col-xl-6 ${styles.pName}`}>
-              {patientName ? patientName : "---"}
+            <div
+              className={`col-xl-6 ${styles.pName}`}
+              onClick={() =>
+                handleCopyToClipboard({
+                  text: patientName,
+                  setCopied: setCopied,
+                })
+              }
+            >
+              {patientName ? getMaskData(patientName) : "---"}
             </div>
             <div className={`col-xl-6 ${styles.dataContainer}`}>
               <span className={styles.raf}>
@@ -157,9 +167,17 @@ const ContentGroupCard = ({
             </div>
           </div>
           <div className="d-flex justify-content-around align-items-center pb-1">
-            <Tooltip title="Patient Id" placement="bottom">
+            <Tooltip title={patientId} placement="bottom">
               <div className={`col-xl-2 ${styles.headText}`}>
-                {patientId ? patientId : ""}
+                <p
+                  style={{
+                    width: "120px",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {patientId ? patientId : ""}
+                </p>
               </div>
             </Tooltip>
             <div className={`col-xl-2 ${styles.headText}`}>HCC</div>
@@ -167,7 +185,7 @@ const ContentGroupCard = ({
             <div className={`col-xl-4 ${styles.headText}`}>REVIEWER</div>
           </div>
           <div className="d-flex justify-content-around align-items-center">
-            <Tooltip title="Completed Date" placement="bottom">
+            <Tooltip title="Processed Date" placement="bottom">
               <div className={`col-xl-2 ${styles.text}`}>
                 {dateFormate(dayjs, processedDate)}
               </div>

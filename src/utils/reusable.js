@@ -35,3 +35,9 @@ export const getYears = () => {
   }
   return year;
 };
+
+export const getMaskData = (value) => {
+  if(value){
+    return value.split('').splice(0,3).join('') + "xxxx"
+  }
+}

@@ -13,7 +13,7 @@ export const patientDetails = async ({
   sort = "",
   selectManager = "",
   size="",
-  flagsList
+  flagsList=""
 }) => {
   const token = localStorage.getItem("token");
   const orgId = localStorage.getItem("orgId");
