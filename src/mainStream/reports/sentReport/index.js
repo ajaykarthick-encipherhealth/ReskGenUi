@@ -221,7 +221,7 @@ const SentReport = ({
                               </div>
                             </div>
                           </div>
-                          <div
+                          {/* <div
                             className={` ${styles.card4} justify-content-between p-2 m-2`}
                           >
                             <div className="d-flex justify-content-between mb-5">
@@ -272,7 +272,7 @@ const SentReport = ({
                                 </div>
                               </div>
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>
