@@ -211,11 +211,11 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
               (item) => item?.monthOfYear === hoveredMonthIndex + 1
             );
         } else {
-          finalData =
-            accuracyDatas?.data?.response?.length > 0 &&
-            accuracyDatas?.data?.response?.find(
-              (item) => item?.dayOfMonth === this.x
-            );
+          finalData = accuracyDatas?.data?.response?.find((item) =>
+            item?.dayOfMonth
+              ? item?.dayOfMonth - 1 === this.x
+              : item?.weekOfMonth - 1 === this.x
+          );
         }
 
         if (finalData) {
@@ -297,17 +297,17 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
       setInitialAccuracyData(accuracyDatas?.data?.response);
     }
   }, [accuracyDatas]);
-const allAverageScore=chartBlockedDates(
-  selectedYear,
-  selectedMonth,
-  accuracyDatas?.data?.response,
-  "averageScore",
-  currentBtn,
-  currentDate
-)
-const numericalData = allAverageScore?.filter(value => value !== false); // Filter out false values
-const sum = numericalData?.reduce((acc, value) => acc + value, 0); // Sum the numerical values
-const average = sum / numericalData?.length; // Calculate the average
+  const allAverageScore = chartBlockedDates(
+    selectedYear,
+    selectedMonth,
+    accuracyDatas?.data?.response,
+    "averageScore",
+    currentBtn,
+    currentDate
+  );
+  const numericalData = allAverageScore?.filter((value) => value !== false); // Filter out false values
+  const sum = numericalData?.reduce((acc, value) => acc + value, 0); // Sum the numerical values
+  const average = sum / numericalData?.length; // Calculate the average
 
   return (
     <>
@@ -405,7 +405,7 @@ const average = sum / numericalData?.length; // Calculate the average
                             ?.averageScore
                         }%`
                     : "0%"} */}
-                    {average?`${average?.toFixed(2)}%`:"0%"}
+                  {average ? `${average?.toFixed(2)}%` : "0%"}
                 </span>
               </div>
             </div>

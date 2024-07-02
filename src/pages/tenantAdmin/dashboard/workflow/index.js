@@ -92,20 +92,9 @@ const WorkFlow = () => {
       } days`,
       bg: allocatedbg,
     },
+
     {
       id: 3,
-      icon: pendingIcon,
-      title: "Pending",
-      charts: dateRange.processedStatus
-        ? dateRange.processedStatus.PENDING
-        : "0",
-      days: `${
-        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
-      } days`,
-      bg: pendingbg,
-    },
-    {
-      id: 4,
       icon: completed,
       title: "Completed",
       charts: dateRange.processedStatus
@@ -115,6 +104,18 @@ const WorkFlow = () => {
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
       bg: completedbg,
+    },
+    {
+      id: 4,
+      icon: pendingIcon,
+      title: "Pending",
+      charts: dateRange.processedStatus
+        ? dateRange.processedStatus.PENDING
+        : "0",
+      days: `${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
+      bg: pendingbg,
     },
     // {
     //   id: 5,
@@ -126,6 +127,18 @@ const WorkFlow = () => {
     //   } days`,
     //   bg: HoldBg,
     // },
+    {
+      id: 5,
+      icon: declineIcon,
+      title: "Declined",
+      charts: dateRange.processedStatus
+        ? dateRange.processedStatus.DECLINED
+        : "0",
+      days: `${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
+      bg: TC,
+    },
     {
       id: 6,
       icon: auditedIcon,
@@ -170,18 +183,6 @@ const WorkFlow = () => {
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
       bg: auditDecliendbg,
-    },
-    {
-      id: 10,
-      icon: declineIcon,
-      title: "Declined",
-      charts: dateRange.processedStatus
-        ? dateRange.processedStatus.DECLINED
-        : "0",
-      days: `${
-        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
-      } days`,
-      bg: TC,
     },
   ];
   const card2Data = [
