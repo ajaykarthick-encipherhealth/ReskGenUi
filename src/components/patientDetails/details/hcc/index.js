@@ -41,6 +41,8 @@ const Hcc = ({
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [dosSummariesList, setDosSummariesList] = useState([]);
   const [selectDosValue, setSelectDosValue] = useState([]);
+  const [hoverStartPage, setHoverStartPage] = useState(null);
+  const [hoverEndPage, setHoverEndPage] = useState(null);
 
   useEffect(() => {
     if (patientDosResult?.data?.response) {
@@ -163,12 +165,33 @@ const Hcc = ({
                   </div>
 
                   <div style={{ display: "flex", alignItems: "center" }}>
-                    <div className={`col-xl-3 `} style={{ padding: "10px" }}>
+                    <div
+                      className={`col-xl-3 `}
+                      style={{
+                        padding: "10px",
+                        width: "30px",
+                        textAlign: "center",
+                        backgroundColor: hoverStartPage ? "#CEE1FD" : "",
+                        margin: "10px",
+                      }}
+                    >
                       <span
                         onClick={() =>
                           handleChangePageNumber(data.startPageNumber)
                         }
                         style={{ cursor: "pointer" }}
+                      >
+                        {data?.startPageNumber}
+                      </span>
+                      <span
+                        onClick={() =>
+                          handleChangePageNumber(data.startPageNumber)
+                        }
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        onMouseEnter={() => setHoverStartPage(true)}
+                        onMouseLeave={() => setHoverStartPage(false)}
                       >
                         {data?.startPageNumber}
                       </span>
@@ -180,12 +203,25 @@ const Hcc = ({
                       <SwapOutlined />
                     </div>
 
-                    <div className={`col-xl-3`} style={{ padding: "10px" }}>
+                    <div
+                      className={`col-xl-3`}
+                      style={{
+                        padding: "10px",
+                        width: "30px",
+                        textAlign: "center",
+                        backgroundColor: hoverEndPage ? "#CEE1FD" : "",
+                        margin: "10px",
+                      }}
+                    >
                       <span
                         onClick={() =>
                           handleChangePageNumber(data.endPagNumber)
                         }
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: "pointer",
+                        }}
+                        onMouseEnter={() => setHoverEndPage(true)}
+                        onMouseLeave={() => setHoverEndPage(false)}
                       >
                         {data?.endPagNumber}
                       </span>
