@@ -1,14 +1,14 @@
 import React from "react";
 import { ThreeDots } from "react-loader-spinner";
 
-function SpinnerDots() {
+function SpinnerDots({topHeight}) {
   return (
     <div class="content-body">
       <div className="container-fluid">
         <div
           style={{
             position: "relative",
-            top: "25pc",
+            top: topHeight ? topHeight :"25pc",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",

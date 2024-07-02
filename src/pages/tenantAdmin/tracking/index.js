@@ -778,8 +778,8 @@ const Patient = ({
                         className="dataTables_wrapper no-footer"
                       >
                         {isLoading ? (
-                           <div style={{marginTop:"-220px"}}>
-                             <SpinnerDots />
+                           <div>
+                             <SpinnerDots topHeight={"10pc"}/>
                             </div>
                         ) : (
                           <>
