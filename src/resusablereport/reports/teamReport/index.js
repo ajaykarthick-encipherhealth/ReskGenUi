@@ -173,7 +173,7 @@ const TeamReport = ({
       icon: reAuditIcon,
       title: " Sample Audit pending",
       charts: reportListAll?.response?.processedStatusCount?.auditedStatus
-        ? reportListAll?.response?.processedStatusCount?.auditedStatus.PENDING
+        ? reportListAll?.response?.processedStatusCount?.auditedStatus.AUDIT_PENDING
         : "0",
 
       bg: "#F3D8E5",

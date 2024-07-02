@@ -203,7 +203,7 @@ const InitialCard = ({
       icon: reAuditIcon,
       title: "Sample Audit pending",
       charts: reportListAll?.processedStatusCount?.auditedStatus
-        ? reportListAll?.processedStatusCount?.auditedStatus.PENDING
+        ? reportListAll?.processedStatusCount?.auditedStatus.AUDIT_PENDING
         : "0",
 
       bg: "#F3D8E5",
