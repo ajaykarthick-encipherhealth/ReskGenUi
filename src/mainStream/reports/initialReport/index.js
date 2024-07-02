@@ -390,7 +390,7 @@ const InitialCard = ({
                             ))}
                           </div>
                           <div className={` pt-2 ${styles.summaryText}`}>
-                            Accuracy Status
+                            Audit Status
                           </div>
 
                           <div className="row g-3">
