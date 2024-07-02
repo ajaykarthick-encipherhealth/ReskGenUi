@@ -405,7 +405,7 @@ const average = sum / numericalData?.length; // Calculate the average
                             ?.averageScore
                         }%`
                     : "0%"} */}
-                    {average?`${Math.round(average)}%`:"0%"}
+                    {average?`${average?.toFixed(2)}%`:"0%"}
                 </span>
               </div>
             </div>
