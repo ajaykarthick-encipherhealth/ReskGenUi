@@ -600,7 +600,7 @@ const Header = ({
                         {/* NOTE i remove userRole !== "admin" logic because PRAVIN
                         told me to show admin also, so if Logesh ask anything to
                         this please tell him like this */}
-                        {(userRole !== "tenant_admin" || userRole != "reviewer") && (
+                        {(userRole !== "tenant_admin" && userRole != "reviewer") && (
                           <Popover
                             content={PopContent}
                             placement="bottom"
