@@ -55,7 +55,7 @@ export const completedScrore = async ({ btn, date, month, year }) => {
     ? `month=${month}&year=${year}&date=${date}&range=DAILY`
     : btn === "WEEKLY"
     ? `month=${month}&year=${year}&range=WEEKLY`
-    : `month=${month}&year=${year}&range=MONTHLY`;
+    : `year=${year}&range=MONTHLY`;
   const data = await requestPortal(`management/dashboard/line/statistics?${url}`,
     options
   );
