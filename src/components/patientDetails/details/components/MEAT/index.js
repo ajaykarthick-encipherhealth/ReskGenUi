@@ -431,7 +431,15 @@ const MeatCard = ({
                               onClick={() => addMeatQuery(item, "Add")}
                               className={visitStyles.add_meat_query}
                             >
-                              <span style={{fontSize:'12px',fontWeight:"600",color:"#716969"}}>S</span>
+                              <span
+                                style={{
+                                  fontSize: "12px",
+                                  fontWeight: "600",
+                                  color: "#716969",
+                                }}
+                              >
+                                S
+                              </span>
                               {/* {SVGICON.meatQueryIcon} */}
                             </div>
                           ) : null}
