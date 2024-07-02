@@ -11,10 +11,11 @@ export const ACCURACY_DAILY = "ACCURACY_DAILY";
 export async function workStatusApiAdmin(startDate = "", endDate = "", router) {
   const token = localStorage.getItem("token");
   const orgId = localStorage.getItem("orgId");
+  const role = localStorage.getItem("role");
 
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/admindashboard/overallchart?allocatedOnStartDate=${startDate}&allocatedOnEndDate=${endDate}&organizationId=${orgId}`,
+      `${ENDPOINTS?.apiEndoint}dbservice/admindashboard/overallchart?allocatedOnStartDate=${startDate}&allocatedOnEndDate=${endDate}&organizationId=${role == "tenant_admin" ? "" :orgId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -512,9 +513,10 @@ export const GetTenantAdminUserCount = async (role) => {
 export const SelectUserList = async (role) => {
   const token = localStorage.getItem("token");
   const orgId = localStorage.getItem("orgId");
+  const roles = localStorage.getItem("role");
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/user/getByRole?role=${role}&orgId=${orgId}`,
+      `${ENDPOINTS?.apiEndoint}dbservice/user/getByRole?role=${role}&orgId=${roles == "tenant_admin" ? "" :orgId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
