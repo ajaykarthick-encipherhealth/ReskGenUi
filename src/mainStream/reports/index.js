@@ -338,6 +338,7 @@ const Reports = ({
     } else if (activeTab === "Admin") {
       dispatch(
         getReportDetails({
+          pagenum: pageNo,
           startDate: selectedDateRanges?.Admin?.from,
           endDate: selectedDateRanges?.Admin?.to,
           search: coderSearchString ? coderSearchString : "",
@@ -482,7 +483,9 @@ const Reports = ({
                             </div>
                           </div>
 
-                          {!activeTab || activeTab === "Reviewer" || userRole == "supervisor"  ? (
+                          {!activeTab ||
+                          activeTab === "Reviewer" ||
+                          userRole == "supervisor" ? (
                             <div className="col-xl-2">
                               <div className="d-flex w-100">
                                 <label className="labelStyle d-flex m-auto  p-2">
