@@ -40,13 +40,13 @@ const Hcc = ({
   const [search, setSearch] = useState();
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [dosSummariesList, setDosSummariesList] = useState([]);
-  const [selectDosValue, setSelectDosValue] = useState([]);
+  const [selectDosValue, setSelectDosValue] = useState('');
   const [hoverStartPage, setHoverStartPage] = useState(null);
   const [hoverEndPage, setHoverEndPage] = useState(null);
 
   useEffect(() => {
     if (patientDosResult?.data?.response) {
-      setSelectDosValue([]);
+      setSelectDosValue();
       var dosList = [];
       patientDosResult?.data?.response?.map((res, index) => {
         if (res) {
@@ -368,9 +368,8 @@ const Hcc = ({
                       ))}
                     </Select>
                   </Nav.Item>
-
                   <Nav.Item as="li" className="nav-item mx-2">
-                    {localStorage.getItem("role") != "admin" && (
+                    {localStorage.getItem("role") != "admin" && selectDosValue &&  (
                       <YearAndDosStatus setIsLoading={setIsLoading} />
                     )}
                   </Nav.Item>
