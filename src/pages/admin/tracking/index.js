@@ -319,7 +319,6 @@ export default function Patient() {
     const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
 
     const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
-
     switch (rowData.processedStatus) {
       case "COMPLETED":
         return (

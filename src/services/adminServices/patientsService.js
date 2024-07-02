@@ -60,7 +60,7 @@ export const TrackingList = async (datas) => {
         ENDPOINTS?.apiEndoint
       }dbservice/patient/admin/filter?userId=${uId}&organizationId=${orgId}&page=${
         datas?.pageNo
-      }&size=15&processedStatus=${filteredStatus}&dueDateStart=${filteredDStart}&dueDateEnd=${
+      }&size=15&processedStatus=${filteredStatus}&processedStart=${filteredDStart}&processedEnd=${
         datas?.dueDateEnd
       }&auditedStartDate=${datas?.processedStart}&auditedEndDate=${
         datas?.processedEnd
@@ -70,9 +70,9 @@ export const TrackingList = async (datas) => {
         datas?.allocatedEndDate
       }&allocatedOnStart=${datas?.auditedStartDate}&allocatedOnEnd=${
         datas?.auditedEndDate
-      }&allocatedBy=${datas?.selAllocatedBy}&auditDueDateStart=${
+      }&allocatedBy=${datas?.selAllocatedBy}&auditedStartDate=${
         datas?.auditedDueStartDate
-      }&auditDueDateEnd=${datas?.auditedDueEndDate}&auditedStatus=${
+      }&auditedEndDate=${datas?.auditedDueEndDate}&auditedStatus=${
         datas?.auditSelectedOption ? datas?.auditSelectedOption : ""
       }&auditAllocatedBy=${
         datas?.selAuditAllocatedBy ? datas?.selAuditAllocatedBy : ""
