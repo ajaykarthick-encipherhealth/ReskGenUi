@@ -298,6 +298,7 @@ const Patient = ({
           priority: res.priority,
           processedStatus: res.processedStatus,
           processedDate: res.processedDate,
+          auditedDate:res.auditedDate,
           createdAt: res.createdAt,
           patientAllocated: res.patientAllocated,
           allocatedByFirstName: res.allocatedByFirstName,
