@@ -232,9 +232,12 @@ const WorkFlow = () => {
             <Spin loading={worlFlowData?.loading} />
           </div>
         ) : worlFlowData?.data?.response ? (
-          <Row className={styles.carddiv} style={{ height: "80%" }}>
+          <Row
+            className={styles.carddiv}
+            style={{ width: "100%", height: "100%" }}
+          >
             <Col span={4}>
-              <Row>
+              <Row style={{ width: "100%", height: "100%" }}>
                 {card2Data?.map((data) => (
                   <>
                     <Col
@@ -243,25 +246,30 @@ const WorkFlow = () => {
                         backgroundImage: `url(${data?.bg.src})`,
                         backgroundRepeat: "no-repeat",
                         backgroundSize: "cover",
-                        height:"190px"
+                        height: "90%",
+                        width: "100%",
                       }}
                       className={styles.colData}
                     >
-                      <div className={styles.header}>
-                        <Image src={data?.icon} className={styles.Img} />
-                        <div className={styles.heading}>{data.title}</div>
+                      <div className={styles.totalChartDiv}>
+                        <div className={styles.header}>
+                          <Image src={data?.icon} className={styles.Img} />
+                          <div className={styles.heading}>{data.title}</div>
+                        </div>
+                        <div
+                          className={styles.charts}
+                          style={{ marginTop: "30px" }}
+                        >{`${data?.charts ? data?.charts : "0"} Charts`}</div>
                       </div>
-                      <div className={styles.charts} style={{marginTop:"30px"}}>{`${
-                        data?.charts ? data?.charts : "0"
-                      }  Charts`}</div>
+
                       {/* <div className={styles.days}>{data.days}</div> */}
                     </Col>
                   </>
                 ))}
               </Row>
             </Col>
-            <Col span={20}>
-              <Row>
+            <Col span={20} style={{ height: "100%" }}>
+              <Row className={styles.rowDiv}>
                 {card1Data?.map((data) => (
                   <>
                     <Col
@@ -273,13 +281,15 @@ const WorkFlow = () => {
                       }}
                       className={styles.colData}
                     >
-                      <div className={styles.header}>
-                        <Image src={data?.icon} className={styles.Img} />
-                        <div className={styles.heading}>{data.title}</div>
+                      <div className={styles.subCardDiv}>
+                        <div className={styles.header}>
+                          <Image src={data?.icon} className={styles.Img} />
+                          <div className={styles.heading}>{data.title}</div>
+                        </div>
+                        <div className={styles.charts}>{`${
+                          data?.charts ? data?.charts : "0"
+                        }  Charts`}</div>
                       </div>
-                      <div className={styles.charts}>{`${
-                        data?.charts ? data?.charts : "0"
-                      }  Charts`}</div>
                       {/* <div className={styles.days}>{data.days}</div> */}
                     </Col>
                   </>
