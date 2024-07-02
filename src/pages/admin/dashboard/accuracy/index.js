@@ -563,16 +563,10 @@ const Accuracy = () => {
     //     dispatch(getAccuracyMOnthly(selectedYear));
     //   }
     // } else {
-      const isAdmin = true;
-      dispatch(
-        getAccuracyScore(
-          currentBtn,
-          selectedMonth,
-          selectedYear,
-          router,
-          isAdmin
-        )
-      );
+    const isAdmin = true;
+    dispatch(
+      getAccuracyScore(currentBtn, selectedMonth, selectedYear, router, isAdmin)
+    );
     // }
   }, [currentBtn, selectedMonth, selectedYear, router, currentTabBtn]);
   useEffect(() => {
@@ -583,6 +577,18 @@ const Accuracy = () => {
       setInitialQualityData(QualityAccuracyDatas?.data?.response);
     }
   }, [accuracyDatas, QualityAccuracyDatas]);
+
+  const allAverageScore = chartBlockedDates(
+    selectedYear,
+    selectedMonth,
+    QualityAccuracyDatas?.data?.response,
+    "averageScore",
+    currentBtn,
+    currentDate
+  );
+  const numericalData = allAverageScore?.filter((value) => value !== false); // Filter out false values
+  const sum = numericalData?.reduce((acc, value) => acc + value, 0); // Sum the numerical values
+  const average = sum / numericalData?.length; // Calculate the average
 
   return (
     <>
@@ -642,41 +648,38 @@ const Accuracy = () => {
                 <div className={spinSTYles.spinStyle}>
                   <Spin loading={accuracyDatas?.loading} />
                 </div>
-              ) 
-              : QualityAccuracyDatas?.loading === false &&
-              QualityAccuracyDatas?.data?.response ? (
-              currentTabBtn === "CogentAI Accuracy" ? (
-                <div className={styles.highchartStyle}>
-                  <HighchartsReact
-                    highcharts={Highcharts}
-                    options={config}
-                    className={styles.hightchartStyles}
-                  />
-                </div>
-              )              
-              :
-              // : accuracyDatas?.loading === false &&
-              //   accuracyDatas?.data?.response ? (
-              //   currentTabBtn === "CogentAI Accuracy" ? (
-              //     <ReactECharts
-              //       option={option}
-              //       style={{
-              //         width: "100%",
-              //         height: "340px",
-              //         marginTop: "-30px",
-              //         overflowX: "hidden",
-              //       }}
-              //     />
-              //     <div className={styles.highchartStyle}>
-              //       <HighchartsReact
-              //         highcharts={Highcharts}
-              //         options={config}
-              //         className={styles.hightchartStyles}
-              //       />
-              //     </div>
-              //   )                
-              //   :
-                 (
+              ) : QualityAccuracyDatas?.loading === false &&
+                QualityAccuracyDatas?.data?.response ? (
+                currentTabBtn === "CogentAI Accuracy" ? (
+                  <div className={styles.highchartStyle}>
+                    <HighchartsReact
+                      highcharts={Highcharts}
+                      options={config}
+                      className={styles.hightchartStyles}
+                    />
+                  </div>
+                ) : (
+                  // : accuracyDatas?.loading === false &&
+                  //   accuracyDatas?.data?.response ? (
+                  //   currentTabBtn === "CogentAI Accuracy" ? (
+                  //     <ReactECharts
+                  //       option={option}
+                  //       style={{
+                  //         width: "100%",
+                  //         height: "340px",
+                  //         marginTop: "-30px",
+                  //         overflowX: "hidden",
+                  //       }}
+                  //     />
+                  //     <div className={styles.highchartStyle}>
+                  //       <HighchartsReact
+                  //         highcharts={Highcharts}
+                  //         options={config}
+                  //         className={styles.hightchartStyles}
+                  //       />
+                  //     </div>
+                  //   )
+                  //   :
                   <div className={styles.highchartStyle}>
                     <HighchartsReact
                       highcharts={Highcharts}
@@ -700,7 +703,7 @@ const Accuracy = () => {
                     : "Average Score"}
                 </div>
               </div>
-              <div className={styles.month}>
+              {/* <div className={styles.month}>
                 {currentBtn === "Daily"
                   ? `Day ${currentDate.getDate()}`
                   : currentBtn === "Monthly"
@@ -709,11 +712,11 @@ const Accuracy = () => {
                 {currentBtn !== "Monthly" && (
                   <span className={styles.subTitle}>(Current Month)</span>
                 )}
-              </div>
+              </div> */}
 
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
-                  {currentTabBtn === "CogentAI Accuracy"
+                  {/* {currentTabBtn === "CogentAI Accuracy"
                     ? initialAccuracyData
                       ? currentBtn === "Monthly"
                         ? `${initialAccuracyData[currentDate?.getMonth() + 1]}%`
@@ -743,7 +746,8 @@ const Accuracy = () => {
                           initialQualityData[getDateWeek(currentDate) - 1]
                             ?.averageScore
                         }%`
-                    : "0%"}
+                    : "0%"} */}
+                  {average ? `${Math.round(average)}%` : `0%`}
                 </span>
               </div>
             </div>
