@@ -101,8 +101,6 @@ const Tables = (props) => {
     setHideButton(false);
   };
 
- 
-
   return (
     <div>
       {hideButton && (
@@ -269,17 +267,29 @@ const Tables = (props) => {
           </div>
         )}
         <>
-          {parentCode?.length ? (
-            <div className={style.parent}>
-              {parentCode?.length &&
-                parentCode?.map((data) => {
-                  return (
+          {parentCode?.length &&
+            parentCode?.map((data) => {
+              return (
+                (data?.includes ||
+                  data?.excludes1 ||
+                  data?.excludes2 ||
+                  data?.useAdditionalCode ||
+                  data?.codeAlso ||
+                  data?.codeFirst ||
+                  data?.inclusionTerm) && (
+                  <div className={style.parent}>
                     <div>
-                      {(data?.includes || data?.excludes1 || data?.excludes2 || data?.useAdditionalCode || data?.codeAlso || data?.codeFirst || data?.inclusionTerm) && (
-                      <div className={style.head}>
-                        {data.name} - {data.desc}
-                      </div>
-                    )}
+                      {(data?.includes ||
+                        data?.excludes1 ||
+                        data?.excludes2 ||
+                        data?.useAdditionalCode ||
+                        data?.codeAlso ||
+                        data?.codeFirst ||
+                        data?.inclusionTerm) && (
+                        <div className={style.head}>
+                          {data.name} - {data.desc}
+                        </div>
+                      )}
 
                       {data?.includes && (
                         <div>
@@ -366,12 +376,10 @@ const Tables = (props) => {
                         </div>
                       )}
                     </div>
-                  );
-                })}
-            </div>
-          ) : (
-            ""
-          )}
+                  </div>
+                )
+              );
+            })}
         </>
         <div></div>
 
