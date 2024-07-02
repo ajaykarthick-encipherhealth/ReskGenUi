@@ -250,8 +250,10 @@ const Accuracy = () => {
             (item) => item?.monthOfYear === hoveredMonthIndex + 1
           );
         } else {
-          finalData = accuracyDatas?.data?.response?.mapAccuracy?.find(
-            (item) => item?.dayOfMonth === this.x
+          finalData = accuracyDatas?.data?.response?.mapAccuracy?.find((item) =>
+            item?.dayOfMonth
+              ? item?.dayOfMonth - 1 === this.x
+              : item?.weekOfMonth - 1 === this.x
           );
         }
 
@@ -461,7 +463,7 @@ const Accuracy = () => {
                             ?.averageScore
                         }%`
                     : "0%"} */}
-                    {average?`${average?.toFixed(2)}%`:`0%`}
+                  {average ? `${average?.toFixed(2)}%` : `0%`}
                 </span>
               </div>
             </div>

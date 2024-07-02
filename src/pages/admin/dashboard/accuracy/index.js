@@ -471,7 +471,7 @@ const Accuracy = () => {
           );
         } else {
           finalData = QualityAccuracyDatas?.data?.response?.find(
-            (item) => item?.dayOfMonth === this.x
+            (item) => item?.dayOfMonth?item?.dayOfMonth-1 === this.x:item?.weekOfMonth-1 === this.x
           );
         }
 

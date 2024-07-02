@@ -449,6 +449,7 @@ const Accuracy = () => {
     tooltip: {
       formatter: function () {
         let finalData;
+
         if (
           typeof this.point.category === "string" &&
           this.point.category.startsWith("Week")
@@ -470,15 +471,17 @@ const Accuracy = () => {
             (item) => item?.monthOfYear === hoveredMonthIndex + 1
           );
         } else {
-          finalData = QualityAccuracyDatas?.data?.response?.find(
-            (item) => item?.dayOfMonth === this.x
+          finalData = QualityAccuracyDatas?.data?.response?.find((item) =>
+            item?.dayOfMonth
+              ? item?.dayOfMonth - 1 === this.x
+              : item?.weekOfMonth - 1 === this.x
           );
         }
 
         if (finalData) {
           return (
             "Average Score: " +
-            finalData.averageScore +
+            finalData?.averageScore +
             "<br/>" +
             "Total Correct: " +
             finalData.totalCorrectCount
