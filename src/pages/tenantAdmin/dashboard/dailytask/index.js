@@ -223,8 +223,8 @@ const DailyTask = () => {
       <HeadTitle header="Total Users" />
       <div className={styles.card2} style={{ height: "75%" }}>
         <Card borderRadius="28px" style={{ display: "flex" }}>
-          <Row>
-            <Col span={1}></Col>
+          <Row style={{marginTop:"-20px"}}>
+            {/* <Col span={1}></Col> */}
             <Col span={30}>
               {currentDays?.length > 0 ? (
                 <Row
@@ -252,7 +252,7 @@ const DailyTask = () => {
                                 data?.audited,
                                 data?.declined
                               )}
-                              style={{ width: "100%", height: "200px" }}
+                              style={{ width: "100%", height: "200px",left:"0px" }}
                             />
                           </div>
                         </Col>
@@ -261,7 +261,7 @@ const DailyTask = () => {
                             {bullets?.map((item) => {
                               return (
                                 <div className={styles.container}>
-                                  <div style={{ display: "flex" }}>
+                                  <div style={{ display: "flex",width:"90%" }}>
                                     <div
                                       className={styles.bgColor}
                                       style={{
@@ -273,7 +273,7 @@ const DailyTask = () => {
                                     </span>
                                   </div>
 
-                                  <div className={styles.subText}>
+                                  <div className={styles.subText} style={{width:"10%"}}>
                                     {item.name === "Admin"
                                       ? roles.ADMIN
                                         ? roles.ADMIN
