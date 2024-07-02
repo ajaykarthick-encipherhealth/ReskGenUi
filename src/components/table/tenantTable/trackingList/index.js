@@ -176,8 +176,8 @@ function TrackingTable({
           onClick={handleTableRowClick}
           style={{ textAlign: "center" }}
         >
-          {data.auditDueDate
-            ? moment(data.auditDueDate).format("MM-DD-YYYY")
+          {data.auditedDate
+            ? moment(data.auditedDate).format("MM-DD-YYYY")
             : "---"}
         </td>
 
@@ -214,7 +214,7 @@ function TrackingTable({
           onClick={handleTableRowClick}
           style={{ textAlign: "center" }}
         >
-          {data.dueDate ? moment(data.dueDate).format("MM-DD-YYYY") : "---"}
+          {data.processedDate ? moment(data.processedDate).format("MM-DD-YYYY") : "---"}
         </td>
 
         <td
@@ -300,7 +300,7 @@ function TrackingTable({
               }}
               style={{ textAlign: "center" }}
             >
-              AUDIT DUE DATE
+              AUDITED DATE
               <span
                 style={{
                   cursor: "pointer",
@@ -323,7 +323,7 @@ function TrackingTable({
               }}
               style={{ textAlign: "center" }}
             >
-              DUE DATE
+              REVIEWED DATE
               <span
                 style={{
                   cursor: "pointer",

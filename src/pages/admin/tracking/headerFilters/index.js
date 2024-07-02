@@ -324,7 +324,7 @@ const HeaderFilters = ({
           <div className="row filter-contain">
             {isRangePicker && (
               <div className={defaultSize}>
-                <label className={styles.label}>{"Reviewer Due Date"}</label>
+                <label className={styles.label}>{"Reviewed Date"}</label>
                 <div className="dateRangeSize">
                   <RangePicker
                     value={clear ? ["", ""] : selectedDates4}
@@ -363,7 +363,7 @@ const HeaderFilters = ({
               <>
                 <div className={defaultSize}>
                   <label className={styles.label}>
-                    {"Supervisor Due Date"}
+                    {"Audited Date"}
                   </label>
                   <div className="dateRangeSize">
                     <RangePicker
