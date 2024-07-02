@@ -267,10 +267,10 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
     { label: "ALL", value: "ALL" },
     { label: "COMPLETED", value: "COMPLETED" },
     { label: "PENDING", value: "PENDING" },
-    { label: "COMPUTED", value: "COMPUTED" },
+    // { label: "COMPUTED", value: "COMPUTED" },
     { label: "DECLINED", value: "DECLINED" },
     { label: "HOLD", value: "HOLD" },
-    { label: "ABORTED BY CRON", value: "ABORTED_BY_CRON" },
+    // { label: "ABORTED BY CRON", value: "ABORTED_BY_CRON" },
   ];
   const bullets = [
     {
