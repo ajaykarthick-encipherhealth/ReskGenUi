@@ -19,7 +19,7 @@ const Index = ({workFlowData}) => {
   const currentDate = new Date();
 
   const threeDaysAgo = new Date(currentDate);
-  threeDaysAgo.setDate(currentDate.getDate() - 3);
+  threeDaysAgo.setDate(currentDate.getDate() - 2);
 
   const endOfToday = new Date(currentDate);
   endOfToday.setHours(23, 59, 59, 999);
