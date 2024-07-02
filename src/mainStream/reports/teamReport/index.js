@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "../report.module.css";
-import { Row, Empty, notification } from "antd";
+import { Row, Empty, notification, Spin } from "antd";
 import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
 import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
 import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
@@ -28,6 +28,8 @@ import {
   processstatusBodyTemplate,
 } from "../../components/chartUtils";
 import { actions as supervisorAction } from "../../../stores/supervisor/report";
+import { getStorage } from "../../../utils/storages";
+import ENDPOINTS from "../../../utility/enpoints";
 
 const TeamReport = ({
   patientDetails,
@@ -49,23 +51,58 @@ const TeamReport = ({
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
-  const handleHeaderCheckboxChange = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const handleHeaderCheckboxChange = async() => {
     setSelectAll(!selectAll);
-    const updatedRows = selectAll
-      ? []
-      : reportListAll?.response?.response?.data;
-    setSelectedRows(updatedRows);
+    // const updatedRows = selectAll
+    //   ? []
+    //   : reportListAll?.response?.response?.data;
+    // setSelectedRows(updatedRows);
+    console.log(selectAll, activeTab, "testing");
+    const orgId = localStorage.getItem('orgId')
     if (activeTab === "Audit") {
-      auditReport({
-        pagenum: 0,
-        size: ReportPatientDetails?.response?.response?.totalElements,
-      });
+      // auditReport({
+      //   pagenum: 0,
+      //   size: ReportPatientDetails?.response?.response?.totalElements,
+      // });
+      if (!selectAll) {
+        try {
+          setIsLoading(true);
+          const res = await fetch(
+            ENDPOINTS.apiEndoint +
+              `dbservice/patient/auditor/assinedreport?pageno=0&size=${ReportPatientDetails?.response?.response?.totalElements}&orgid=${orgId}`,
+            {
+              headers: { Authorization: `Bearer ${await getStorage("token")}` },
+            }
+          ).then((res) => res.json());
+          const seletedAll = res?.response?.response?.data;
+
+          setSelectedRows(seletedAll ? seletedAll : []);
+          setIsLoading(false);
+        } catch (error) {}
+      } else setSelectedRows([]);
     }
     if (activeTab === "Team") {
-      teamReport({
-        pagenum: 0,
-        size: ReportPatientDetails?.response?.response?.totalElements,
-      });
+      // teamReport({
+      //   pagenum: 0,
+      //   size: ReportPatientDetails?.response?.response?.totalElements,
+      // });
+      if (!selectAll) {
+        try {
+          setIsLoading(true);
+          const res = await fetch(
+            ENDPOINTS.apiEndoint +
+              `dbservice/patient/auditorreport?pageno=0&size=${ReportPatientDetails?.response?.response?.totalElements}&orgid=${orgId}`,
+            {
+              headers: { Authorization: `Bearer ${await getStorage("token")}` },
+            }
+          ).then((res) => res.json());
+          const seletedAll = res?.response?.response?.data;
+
+          setSelectedRows(seletedAll ? seletedAll : []);
+          setIsLoading(false);
+        } catch (error) {}
+      } else setSelectedRows([]);
     }
   };
 
@@ -119,7 +156,7 @@ const TeamReport = ({
     {
       id: 4,
       icon: declineIcon,
-      title: "Decline",
+      title: "Declined",
       charts: reportListAll?.response?.processedStatusCount?.processedStatus
         ? reportListAll?.response?.processedStatusCount?.processedStatus
             .DECLINED
@@ -256,6 +293,7 @@ const TeamReport = ({
               >
                 {" "}
                 {reportListAll?.response?.response?.data?.length > 0 && (
+                  isLoading ? <Spin /> :
                   <>
                     <div>
                       <input
@@ -361,20 +399,25 @@ const TeamReport = ({
                           </div>
                           <div className="col-xl-12  d-flex mt-4">
                             <Flags
-                              flagsData={getFlagsData?.response}
+                              reportListAll={reportListAll?.response}
                               styles={styles}
                             />
-                            {allocationCountData.map((item, index) => (
-                              <AllocationCount
-                                key={index}
-                                title={item.title}
-                                allocationCount={item.allocationCount}
-                                renderUserPrfoileAvatar={
-                                  renderUserPrfoileAvatar
-                                }
-                                styles={styles}
-                              />
-                            ))}
+                            {allocationCountData.map((item, index) =>
+                              localStorage.getItem("role").toLowerCase() ==
+                                "supervisor" && item.title == "Supervisor" ? (
+                                ""
+                              ) : (
+                                <AllocationCount
+                                  key={index}
+                                  title={item.title}
+                                  allocationCount={item.allocationCount}
+                                  renderUserPrfoileAvatar={
+                                    renderUserPrfoileAvatar
+                                  }
+                                  styles={styles}
+                                />
+                              )
+                            )}
                           </div>
                         </div>
                       </div>

@@ -179,6 +179,9 @@ const Reports = ({
       setSelectedData([]);
       setSelectAllCheckBoxes(false);
     }
+    setSelectedRows([])
+    setSelectAll(false)
+  
   };
   const dosOnChange = (selectedOption, name) => {
     const nameString = name?.split(" ").join("");
@@ -338,6 +341,7 @@ const Reports = ({
     } else if (activeTab === "Admin") {
       dispatch(
         getReportDetails({
+          pagenum: pageNo,
           startDate: selectedDateRanges?.Admin?.from,
           endDate: selectedDateRanges?.Admin?.to,
           search: coderSearchString ? coderSearchString : "",
@@ -356,7 +360,7 @@ const Reports = ({
       );
     } else if (activeTab === "Audit") {
       auditReport({
-        pagenum: pageNo,
+        pagenum: teamPageNo,
         startDate: selectedDateRanges?.Audit?.from,
         endDate: selectedDateRanges?.Audit?.to,
         search: coderSearchString ? coderSearchString : "",
@@ -390,6 +394,7 @@ const Reports = ({
       setIsModalVisible(false);
     }
   }, [
+    teamPageNo,
     pageNo,
     sentPageNo,
     receivedPageNo,

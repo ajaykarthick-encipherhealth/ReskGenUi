@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "../report.module.css";
-import { Empty, notification } from "antd";
+import { Empty, Spin, notification } from "antd";
 import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
 import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
 import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
@@ -29,6 +29,8 @@ import {
   processstatusBodyTemplate,
 } from "../../components/chartUtils";
 import { getReportDetails } from "../../../store/actions/adminAction/ReportActions";
+import ENDPOINTS from "../../../utility/enpoints";
+import { getStorage } from "../../../utils/storages";
 
 const InitialCard = ({
   patientDetails,
@@ -47,10 +49,12 @@ const InitialCard = ({
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
-  const handleHeaderCheckboxChange = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const handleHeaderCheckboxChange = async () => {
+    // console.log(selectAll);
     setSelectAll(!selectAll);
-    const updatedRows = selectAll ? [] : reportListAll?.response?.data;
-    setSelectedRows(updatedRows);
+    // const updatedRows = selectAll ? [] : reportListAll?.response?.data;
+    // setSelectedRows(updatedRows);
     if (activeTab === "Reviewer") {
       reviewerReport({
         pagenum: 0,
@@ -58,12 +62,29 @@ const InitialCard = ({
       });
     }
     if (activeTab === "Admin") {
-      dispatch(
-        getReportDetails({
-          pagenum: 0,
-          size: reportListAll?.response?.totalElements,
-        })
-      );
+      if (!selectAll) {
+        try {
+          setIsLoading(true);
+          const res = await fetch(
+            ENDPOINTS.apiEndoint +
+              `/dbservice/patient/adminreport?pageno=0&size=${reportListAll?.response?.totalElements}`,
+            {
+              headers: { Authorization: `Bearer ${await getStorage("token")}` },
+            }
+          ).then((res) => res.json());
+          const seletedAll = res?.response?.response?.data;
+
+          setSelectedRows(seletedAll ? seletedAll : []);
+          setIsLoading(false);
+        } catch (error) {}
+      } else setSelectedRows([]);
+
+      // dispatch(
+      //   getReportDetails({
+      //     pagenum: 0,
+      //     size: reportListAll?.response?.totalElements,
+      //   })
+      // );
     }
   };
 
@@ -116,13 +137,13 @@ const InitialCard = ({
     {
       id: 4,
       icon: declineIcon,
-      title: "Decline",
+      title: "Declined",
       charts: reportListAll?.processedStatusCount?.processedStatus
         ? reportListAll?.processedStatusCount?.processedStatus.DECLINED
         : "0",
       bg: "#FAD1D1",
     },
- 
+
     // {
     //   id: 6,
     //   icon: notAudited,
@@ -143,7 +164,7 @@ const InitialCard = ({
 
     //   bg: "#FFDBB8",
     // },
-  
+
     // {
     //   id: 9,
     //   icon: auditHoldIcon,
@@ -166,31 +187,28 @@ const InitialCard = ({
     // },
   ];
 
-  const accuracyStatus= [
-   
-      {
-        id: 5,
-        icon: auditedIcon,
-        title: " Sample Audit",
-        charts: reportListAll?.processedStatusCount?.auditedStatus
-          ? reportListAll?.processedStatusCount?.auditedStatus.AUDITED
-          : "0",
-  
-        bg: "#DBEEF0",
-      },
-      {
-        id: 8,
-        icon: reAuditIcon,
-        title: "Sample Audit pending",
-        charts: reportListAll?.processedStatusCount?.auditedStatus
-          ? reportListAll?.processedStatusCount?.auditedStatus.PENDING
-          : "0",
-  
-        bg: "#F3D8E5",
-      },
+  const accuracyStatus = [
+    {
+      id: 5,
+      icon: auditedIcon,
+      title: " Sample Audit",
+      charts: reportListAll?.processedStatusCount?.auditedStatus
+        ? reportListAll?.processedStatusCount?.auditedStatus.AUDITED
+        : "0",
 
+      bg: "#DBEEF0",
+    },
+    {
+      id: 8,
+      icon: reAuditIcon,
+      title: "Sample Audit pending",
+      charts: reportListAll?.processedStatusCount?.auditedStatus
+        ? reportListAll?.processedStatusCount?.auditedStatus.PENDING
+        : "0",
 
-  ]
+      bg: "#F3D8E5",
+    },
+  ];
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
 
@@ -222,11 +240,13 @@ const InitialCard = ({
     },
     {
       title: "Total RAF score",
-      value: reportListAll?.totalRafScore?reportListAll?.totalRafScore?.toFixed(4):0,
+      value: reportListAll?.totalRafScore
+        ? reportListAll?.totalRafScore?.toFixed(4)
+        : 0,
     },
     {
       title: "HCC Count",
-      value: reportListAll?.totalHccCount?reportListAll?.totalHccCount:0,
+      value: reportListAll?.totalHccCount ? reportListAll?.totalHccCount : 0,
     },
   ];
   const allocationCountData = [
@@ -260,24 +280,27 @@ const InitialCard = ({
                 }}
               >
                 {" "}
-                {reportListAll?.response?.data?.length > 0 && (
-                  <>
-                    <div>
-                      <input
-                        type="checkbox"
-                        onChange={handleHeaderCheckboxChange}
-                        className={
-                          styles.checkAlign +
-                          (selectAll ? " " + TableStyle.customChecked : "")
-                        }
-                        checked={selectAll}
-                      />
-                    </div>
-                    <span className={`pl-4 text-center ${styles.pName}`}>
-                      All
-                    </span>
-                  </>
-                )}
+                {reportListAll?.response?.data?.length > 0 &&
+                  (isLoading ? (
+                    <Spin />
+                  ) : (
+                    <>
+                      <div>
+                        <input
+                          type="checkbox"
+                          onChange={handleHeaderCheckboxChange}
+                          className={
+                            styles.checkAlign +
+                            (selectAll ? " " + TableStyle.customChecked : "")
+                          }
+                          checked={selectAll}
+                        />
+                      </div>
+                      <span className={`pl-4 text-center ${styles.pName}`}>
+                        All
+                      </span>
+                    </>
+                  ))}
               </div>
               <div className="row">
                 <div>
@@ -354,35 +377,34 @@ const InitialCard = ({
                             Production Status
                           </div>
                           <div className="row g-3">
-                              {card1Data?.map((data) => (
-                                <MiniCards
-                                  key={data?.id}
-                                  backgroundColor={data.bg}
-                                  icon={data?.icon}
-                                  title={data.title}
-                                  charts={data.charts}
-                                  styles={styles}
-                                  activeTab={activeTab}
-                                />
-                              ))}
-                            </div>
+                            {card1Data?.map((data) => (
+                              <MiniCards
+                                key={data?.id}
+                                backgroundColor={data.bg}
+                                icon={data?.icon}
+                                title={data.title}
+                                charts={data.charts}
+                                styles={styles}
+                                activeTab={activeTab}
+                              />
+                            ))}
+                          </div>
                           <div className={` pt-2 ${styles.summaryText}`}>
                             Accuracy Status
                           </div>
-                         
-                            <div className="row g-3">
-                              {accuracyStatus?.map((data) => (
-                                <MiniCards
-                                  key={data?.id}
-                                  backgroundColor={data.bg}
-                                  icon={data?.icon}
-                                  title={data.title}
-                                  charts={data.charts}
-                                  styles={styles}
-                                  activeTab={activeTab}
-                                />
-                              ))}
-                   
+
+                          <div className="row g-3">
+                            {accuracyStatus?.map((data) => (
+                              <MiniCards
+                                key={data?.id}
+                                backgroundColor={data.bg}
+                                icon={data?.icon}
+                                title={data.title}
+                                charts={data.charts}
+                                styles={styles}
+                                activeTab={activeTab}
+                              />
+                            ))}
                           </div>
                           <div className="col-xl-12  d-flex mt-3">
                             <Flags
@@ -392,6 +414,7 @@ const InitialCard = ({
                             {activeTab === "Reviewer"
                               ? ""
                               : allocationCountData.map((item, index) => (
+
                                   <AllocationCount
                                     key={item?.id}
                                     title={item?.title}
