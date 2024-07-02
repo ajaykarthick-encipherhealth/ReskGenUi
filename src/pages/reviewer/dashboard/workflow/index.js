@@ -45,7 +45,7 @@ const WorkFlow = ({ worlFlowData }) => {
       title: "Allocated",
       charts: worlFlowData?.data?.response?.allocated,
       days: `Last ${
-        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 3
       } days`,
       bg: allocatedbg,
     },
@@ -55,7 +55,7 @@ const WorkFlow = ({ worlFlowData }) => {
       title: "Completed",
       charts: worlFlowData?.data?.response?.completed,
       days: `Last ${
-        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 3
       } days`,
       bg: completedbg,
     },
@@ -65,7 +65,7 @@ const WorkFlow = ({ worlFlowData }) => {
       title: "Pending",
       charts: worlFlowData?.data?.response?.pending,
       days: `Last ${
-        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 3
       } days`,
       bg: pendingbg,
     },
@@ -75,7 +75,7 @@ const WorkFlow = ({ worlFlowData }) => {
       title: "Declined",
       charts: worlFlowData?.data?.response?.declined,
       days: `Last ${
-        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 3
       } days`,
       bg: declinedBg,
     },
@@ -87,7 +87,7 @@ const WorkFlow = ({ worlFlowData }) => {
       <HeadTitle
         header={
           !DateRanges || DateRanges?.clear
-            ? `Last 30 days work flow`
+            ? `Last 3 days work flow`
             : `${dayjs(startDate)?.format("MM-DD-YYYY")} - ${dayjs(endDate)
                 .subtract(1, "day")
                 .format("MM-DD-YYYY")}`
