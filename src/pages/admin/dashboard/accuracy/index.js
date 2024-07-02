@@ -747,7 +747,7 @@ const Accuracy = () => {
                             ?.averageScore
                         }%`
                     : "0%"} */}
-                  {average ? `${Math.round(average)}%` : `0%`}
+                  {average ? `${average?.toFixed(2)}%` : `0%`}
                 </span>
               </div>
             </div>

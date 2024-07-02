@@ -85,7 +85,7 @@ const WorkFlow = () => {
     {
       id: 5,
       icon: pendingIcon,
-      title: "Pending",
+      title: "Audit Pending",
       charts: worlFlowData?.data?.response?.auditPending,
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
@@ -95,7 +95,7 @@ const WorkFlow = () => {
     {
       id: 6,
       icon: declineIcon,
-      title: "Declined",
+      title: "Audit Declined",
       charts: worlFlowData?.data?.response?.auditDecliend,
       days: `Last ${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
