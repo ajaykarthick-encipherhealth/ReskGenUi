@@ -195,6 +195,7 @@ export const accuracyScoreNew = async (
     default:
       null;
   }
+  const orgId=localStorage.getItem("orgId")
   var data = {
     year: year,
     month: month,
@@ -203,7 +204,7 @@ export const accuracyScoreNew = async (
     l1AccuracyDateType: btn,
     weekStart: 11,
     weekEnd: 13,
-    orgId: "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
+    orgId:orgId ,
     userIds: user,
   };
   try {
