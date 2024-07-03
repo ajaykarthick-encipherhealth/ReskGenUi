@@ -10,8 +10,8 @@ import CaregapCodes from "./default/caregaps";
 import TotalCodes from "./default/totalcodes";
 import RadiolodyAndLab from "./default/radiologyAndLab";
 import Files from "./default/files";
-import Top10Diseases from './default/top10Diseases'
-import TopOIGCodes from './default/topOIGCodes'
+import Top10Diseases from "./default/top10Diseases";
+import TopOIGCodes from "./default/topOIGCodes";
 
 const Index = () => {
   const [activeBtn, setActiveBtn] = useState("default");
@@ -23,13 +23,13 @@ const Index = () => {
           <HeaderFilters activeBtn={activeBtn} setActiveBtn={setActiveBtn} />
           {activeBtn === "default" ? (
             <>
-              <div className={`row`}>
-                <div className={`col-lg-4 ${styles.box}`}>
+              <div className={`row ${styles.box}`}>
+                <div className={`col-lg-4`}>
                   <Card padding="10px" borderRadius={"10px"}>
                     <TotalCounts />
                   </Card>
                 </div>
-                <div className={`col ${styles.box}`}>
+                <div className={`col`}>
                   <Card padding="10px" borderRadius={"10px"}>
                     <RafAndRevenue />
                   </Card>
@@ -60,34 +60,83 @@ const Index = () => {
                 </div>
               </div>
               {/* radiology */}
-              <div className={`row`}>
-                <div className={`col-lg-4 ${styles.box}`}>
+              <div className={`row ${styles.box}`}>
+                <div className={`col-lg-4`}>
                   <Card padding="10px" borderRadius={"10px"}>
                     <RadiolodyAndLab />
                   </Card>
                 </div>
-                <div className={`col-lg-8 ${styles.box}`}>
+                <div className={`col-lg-8`}>
                   <Card padding="10px" borderRadius={"10px"}>
                     <Files />
                   </Card>
                 </div>
               </div>
               {/* top 10 diseases */}
-              <div className={`row`}>
-                <div className={`col ${styles.box}`}>
+              <div className={`row ${styles.box}`}>
+                <div className={`col`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                   <Top10Diseases/>
+                    <Top10Diseases />
                   </Card>
                 </div>
-                <div className={`col ${styles.box}`}>
+                <div className={`col`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                  <TopOIGCodes/>
+                    <TopOIGCodes />
                   </Card>
                 </div>
               </div>
             </>
           ) : (
-            ""
+            <>
+              <div className={`row ${styles.box}`}>
+                <div className={`col-lg-3`}>
+                  <Card padding="10px" borderRadius={"10px"}>
+                    card1
+                  </Card>
+                </div>
+                <div className={`col`}>
+                  <Card padding="10px" borderRadius={"10px"}>
+                    card2
+                  </Card>
+                </div>
+              </div>
+              {/* total codes */}
+              <div className={`row ${styles.box}`}>
+                <div className={`col-lg-3`}>
+                  <Card padding="10px" borderRadius={"10px"}>
+                    card3
+                  </Card>
+                </div>
+                <div className={`col-lg-3`}>
+                  <Card padding="10px" borderRadius={"10px"}>
+                    card3
+                  </Card>
+                </div>
+                <div className={`col-lg-3`}>
+                  <Card padding="10px" borderRadius={"10px"}>
+                    card3
+                  </Card>
+                </div>
+                <div className={`col-lg-3`}>
+                  <Card padding="10px" borderRadius={"10px"}>
+                    card3
+                  </Card>
+                </div>
+              </div>
+              {/* hcc */}
+              <div className={`row`}>
+                <div className={`col ${styles.box}`}>
+                  <Card padding="10px" borderRadius={"10px"}>
+                    card2
+                  </Card>
+                </div>
+                <div className={`col-lg-3 ${styles.box}`}>
+                  <Card padding="10px" borderRadius={"10px"}>
+                    card1
+                  </Card>
+                </div>
+              </div>
+            </>
           )}
         </div>
       </div>
