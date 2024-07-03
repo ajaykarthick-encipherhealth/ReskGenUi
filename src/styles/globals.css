@@ -14784,7 +14784,7 @@ input::-webkit-inner-spin-button {
   border-color: rgb(36, 21, 113) !important;
   background: rgb(36, 21, 113) !important;
 }
-.tenantSelector .ant-select-outlined{
+.tenantSelector .ant-select-outlined {
   width: 100%;
   height: 48px !important;
 }
@@ -14795,8 +14795,8 @@ input::-webkit-inner-spin-button {
   border-radius: 0px 10px 10px 0px !important;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 0px 10px !important;
 }
-.speedometerChart >div:nth-child(2){
-  height:220px !important;
+.speedometerChart > div:nth-child(2) {
+  height: 220px !important;
 }
 /* .speedometerChart >div:nth-child(2) > div:nth-child(1)>canvas{
   width:460px !important;
@@ -14805,8 +14805,8 @@ input::-webkit-inner-spin-button {
   top:-20px !important;
 } */
 
-.revenueChart{
-  height:220px !important;
+.revenueChart {
+  height: 220px !important;
 }
 /* .revenueChart >div:nth-child(2)> div> canvas{
   height:280px !important;
@@ -14815,49 +14815,89 @@ input::-webkit-inner-spin-button {
   left:-50px !important;
 } */
 
-
-@media only screen and (max-width:1200px){
-  .speedometerChart >div:nth-child(2) > div:nth-child(1)>canvas{
+@media only screen and (max-width: 1200px) {
+  .speedometerChart > div:nth-child(2) > div:nth-child(1) > canvas {
     /* border:1px solid red !important; */
-    width:100% !important;
-    height:270px !important;
-    left:-80px !important;
-    top:0px !important;
+    width: 100% !important;
+    height: 270px !important;
+    left: -80px !important;
+    top: 0px !important;
   }
-  .revenueChart >div:nth-child(2)> div> canvas{
-    height:280px !important;
-    width:100% !important;
-    top:-35px !important;
-    left:-50px !important;
+  .revenueChart > div:nth-child(2) > div > canvas {
+    height: 280px !important;
+    width: 100% !important;
+    top: -35px !important;
+    left: -50px !important;
   }
-  .remianingLineGraph >div:nth-child(2) > div:nth-child(1)>canvas{
-    height:380px !important;
-    top:-35px !important
+  .remianingLineGraph > div:nth-child(2) > div:nth-child(1) > canvas {
+    height: 380px !important;
+    top: -35px !important;
   }
-  .remianingAreaGraph>div:nth-child(2) > div:nth-child(1)>canvas{
-    height:305px !important;
-    top:-35px !important
-  }
-}
-@media only screen and (min-width:600px){
-  .speedometerChart >div:nth-child(2) > div:nth-child(1)>canvas{
-    width:100% !important;
-    height:100% !important;
-    left:0px !important;
-    top:0px !important;
-  }
-  .revenueChart >div:nth-child(2)> div> canvas{
-    height:280px !important;
-    width:100% !important;
-    top:-35px !important;
-    left:-30px !important;
-  }
-  .remianingLineGraph >div:nth-child(2) > div:nth-child(1)>canvas{
-    height:380px !important;
-    top:-35px !important
-  }
-  .remianingAreaGraph>div:nth-child(2) > div:nth-child(1)>canvas{
-    height:300px !important;
-    top:-35px !important
+  .remianingAreaGraph > div:nth-child(2) > div:nth-child(1) > canvas {
+    height: 305px !important;
+    top: -35px !important;
   }
 }
+@media only screen and (min-width: 600px) {
+  .speedometerChart > div:nth-child(2) > div:nth-child(1) > canvas {
+    width: 100% !important;
+    height: 100% !important;
+    left: 0px !important;
+    top: 0px !important;
+  }
+  .revenueChart > div:nth-child(2) > div > canvas {
+    height: 280px !important;
+    width: 100% !important;
+    top: -35px !important;
+    left: -30px !important;
+  }
+  .remianingLineGraph > div:nth-child(2) > div:nth-child(1) > canvas {
+    height: 380px !important;
+    top: -35px !important;
+  }
+  .remianingAreaGraph > div:nth-child(2) > div:nth-child(1) > canvas {
+    height: 300px !important;
+    top: -35px !important;
+  }
+}
+.tenatTable {
+  width: 100%;
+  margin:20px 0px !important;
+  border-collapse: collapse;
+}
+
+.tenatTable thead {
+  background-color: #f3f3f3; /* Or any color you prefer */
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  border-radius: 20px !important;
+}
+
+.tenatTable tbody {
+  display: block;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.tenatTable thead, .tenatTable tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed; /* Fix table layout to ensure table structure remains intact */
+}
+
+.tenatTable > thead >tr{
+  height: 43px !important;
+  border-radius: 10px !important;
+  background-color: #CEE2FD !important;
+  font-weight: 700;
+  font-size: 16px;
+}
+.tenatTable > tbody > tr {
+  height: 43px !important;
+  border-bottom: 1px solid #C7C7C7;
+}
+.tenatTable .midRow{
+text-align: start;
+}
+
