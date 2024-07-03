@@ -18,6 +18,7 @@ const HeadTitle = ({
   openPicker,
   setOpenPicker,
   isAdmin = false,
+  margin
 }) => {
   const dispatch = useDispatch();
   const [selectedDates, setSelectedDates] = useState([]);
@@ -39,7 +40,7 @@ const HeadTitle = ({
   const lastDateWithTime = currentDate.endOf("day").toISOString();
 
   return (
-    <div className={styles.header} style={{ display: anchorTag && "flex" }}>
+    <div className={styles.header} style={{ display: anchorTag && "flex",margin:margin }}>
       <div
         style={{
           display: "flex",

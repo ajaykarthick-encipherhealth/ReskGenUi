@@ -70,14 +70,6 @@ const Files = () => {
         smooth: true,
         showSymbol: false,
       },
-      {
-        name: "Codes capture",
-        data: [10, 30, 16, 0, 13, 78, 6, 76, 65, 23, 11, 56],
-        type: "line",
-        lineStyle: { color: "#803D3B" },
-        smooth: true,
-        showSymbol: false,
-      },
     ],
   };
   const cardData = [
@@ -113,14 +105,7 @@ const Files = () => {
       color: "#FFEAE0",
       iconBg: "#FFDBCC",
     },
-    {
-      id: 5,
-      title: "Code capture",
-      count: "62345",
-      icon: codescaptured,
-      color: "#F5EAEA",
-      iconBg: "#EFDDDC",
-    },
+   
   ];
   return (
     <div className="">
@@ -130,8 +115,8 @@ const Files = () => {
             className="rounded-lg w-30"
             style={{
               backgroundColor: item?.color,
-              width: "18%",
-              height: "100px",
+              width: "20%",
+              height: "70px",
               display: "flex",
               justifyContent: "center",
               textAlign: "center",

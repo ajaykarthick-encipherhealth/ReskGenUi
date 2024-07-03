@@ -9,9 +9,11 @@ import HccCodes from "./default/hcc";
 import CaregapCodes from "./default/caregaps";
 import TotalCodes from "./default/totalcodes";
 import RadiolodyAndLab from "./default/radiologyAndLab";
-import Files from "./default/files";
+import Files from "./workFlow/files";
 import Top10Diseases from "./default/top10Diseases";
 import TopOIGCodes from "./default/topOIGCodes";
+import WorkFlowFiles from './workFlow/files'
+import Accuracy from "./workFlow/accuracy";
 
 const Index = () => {
   const [activeBtn, setActiveBtn] = useState("default");
@@ -94,9 +96,9 @@ const Index = () => {
                     card1
                   </Card>
                 </div>
-                <div className={`col`}>
+                <div className={`col-lg-9`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    card2
+                    <WorkFlowFiles/>
                   </Card>
                 </div>
               </div>
@@ -127,7 +129,7 @@ const Index = () => {
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    card2
+                    <Accuracy/>
                   </Card>
                 </div>
                 <div className={`col-lg-3 ${styles.box}`}>

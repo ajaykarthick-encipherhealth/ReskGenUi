@@ -80,7 +80,7 @@ const CodesGraph = ({
       },
     ],
   };
-  return <ReactECharts option={options ? options : graphOptions} />;
+  return <ReactECharts option={options ? options : graphOptions}/>;
 };
 
 export default CodesGraph;
