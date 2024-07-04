@@ -15,9 +15,9 @@ import TopOIGCodes from "./default/topOIGCodes";
 import WorkFlowFiles from "./workFlow/files";
 import Accuracy from "./workFlow/accuracy";
 import Notifications from "./workFlow/notifications";
-import PieChartInfo from "./components/pieChart";
-import HeadTitle from "../../../components/headtitle";
-import OrgPieChartInfo from "./components/OrgPieChart";
+import HeadTitle from "../../../components/headtitle"
+import OrgPieChartInfo from "./components/orgPieChart/OrgPieChartInfo";
+import PieChartInfo from "./components/pieChart/PieChartInfo";
 
 const Index = () => {
   const [activeBtn, setActiveBtn] = useState("default");

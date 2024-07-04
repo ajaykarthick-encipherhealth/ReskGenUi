@@ -1,10 +1,8 @@
 import React from "react";
 import ReactECharts from "echarts-for-react";
 import styles from "./styles.module.css";
-import { Col, Row } from "antd";
-const index = ({ data, header }) => {
-  const totalSum = data.reduce((acc, curr) => acc + curr.value, 0);
 
+const OrgPieChartInfo = ({data}) => {
   const option = {
     tooltip: {
       trigger: "item",
@@ -92,4 +90,4 @@ const index = ({ data, header }) => {
   );
 };
 
-export default index;
+export default OrgPieChartInfo;

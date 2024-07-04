@@ -2,9 +2,9 @@ import React from "react";
 import ReactECharts from "echarts-for-react";
 import styles from "./styles.module.css";
 import { Col, Row } from "antd";
-const index = ({ data, header }) => {
-  const totalSum = data.reduce((acc, curr) => acc + curr.value, 0);
 
+const index = ({data,header}) => {
+  const totalSum = data?.reduce((acc, curr) => acc + curr.value, 0);
   const option = {
     tooltip: {
       trigger: "item",
@@ -62,7 +62,6 @@ const index = ({ data, header }) => {
       },
     ],
   };
-
   return (
     <Row>
       <Col span={12}>
