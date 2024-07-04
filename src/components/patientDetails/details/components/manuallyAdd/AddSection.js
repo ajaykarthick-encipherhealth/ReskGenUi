@@ -9,7 +9,8 @@ const AddSection = ({
   id,
   section,
   selectMeat = "",
-  date
+  date,
+  isEditPage
 }) => {
   return (
     <div className="mx-2 p-3 pt-4 border rounded">
@@ -31,7 +32,7 @@ const AddSection = ({
               },
             ]}
           >
-           <Select options={date} size="large" className={`ant_select_form hcc_form mb-2`} allowClear/>
+           <Select options={date} size="large" className={`ant_select_form hcc_form mb-2`} allowClear disabled={isEditPage}/>
           </Form.Item>
         </div>
         <div className="col-6">

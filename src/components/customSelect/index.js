@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Divider, Input, Select, Space } from "antd";
 let index = 0;
-const CustomSelect = ({ options, onChange, setOptions, value }) => {
+const CustomSelect = ({ options, onChange, setOptions, value, disabled }) => {
   //   const [items, setItems] = useState([]);
   const [name, setName] = useState("");
   const inputRef = useRef(null);
@@ -20,12 +20,10 @@ const CustomSelect = ({ options, onChange, setOptions, value }) => {
     }
   };
 
-  console.log(options);
-
   return (
     <Select
+      disabled={disabled}
       size="large"
-      //   placeholder="custom dropdown render"
       dropdownRender={(menu) => (
         <>
           {menu}

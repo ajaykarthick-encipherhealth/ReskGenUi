@@ -1005,6 +1005,7 @@ const ManuallyAdd = ({
           className="cr-pointer"
           onClick={() => {
             handleCloseModal(false);
+            setMeatDisplay(false);
           }}
         >
           <CloseOutlined />
@@ -1020,7 +1021,6 @@ const ManuallyAdd = ({
             // initialValues={formInitialValues}
             onFinish={(form) => {
               handledSave(form);
-              console.log(form);
             }}
             onFinishFailed={() => {}}
           >
@@ -1175,6 +1175,7 @@ const ManuallyAdd = ({
                       onChange={(val) => setSection(val)}
                       setOptions={setCapturedSections}
                       value={section}
+                      disabled={isEditPage}
                     />
                   </Form.Item>
                 </div>
@@ -1227,6 +1228,7 @@ const ManuallyAdd = ({
                           ? [{ label: getSelectedDos, value: getSelectedDos }]
                           : dosList
                       }
+                      isEditPage={isEditPage}
                     />
                   </div>
                 ))}
@@ -1355,6 +1357,7 @@ const ManuallyAdd = ({
               isEditMeat={isEditMeat}
               isEditMeatValue={isEditMeatValue}
               form={form}
+              disabled={isEditMeat || isEditPage}
             />
           </Form>
         </>
