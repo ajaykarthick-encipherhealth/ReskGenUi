@@ -133,12 +133,15 @@ const MovementAction = ({
               }}
             />
           </Popconfirm>
-        ) : (
-          <CloseCircleFilled
-            className={styles.deleteIcon}
-            onClick={() => message.warning("Delete only formed codes")}
-          />
-        )}
+
+        ) : 
+      //   <CloseCircleFilled
+      //   className={styles.deleteIcon}
+      //   onClick={() => message.warning("Delete only formed codes")}
+      // />
+      ""
+      }
+
       </div>
     </>
   );

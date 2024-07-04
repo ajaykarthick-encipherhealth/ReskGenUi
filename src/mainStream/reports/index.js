@@ -21,7 +21,8 @@ import { actions as workflowActions } from "../../stores/reviewer/workqueue";
 import { actions as reviewerAction } from "../../stores/reviewer/report";
 import { actions as supervisorAction } from "../../stores/supervisor/report";
 import moment from "moment";
-
+import TableStyle from "../../components/table/table.module.css";
+import dayjs from "dayjs";
 import {
   selectedReport,
   getReportDetails,
@@ -84,7 +85,7 @@ const Reports = ({
   const [paginationReceivedFirst, setPaginationReceivedFirst] = useState(0);
   const [paginationSentFirst, setPaginationSentFirst] = useState(0);
   const [modal, setModal] = useState(false);
-  const [selectedDates, setSelectedDates] = useState([]);
+  const [selectedDates, setSelectedDates] = useState(null);
   const [receivedSortOrder, setReceivedSortOrder] = useState("DESC");
   const [sentSortOrder, setSentSortOrder] = useState("DESC");
   const [coderSortOrder, setCoderSortOrder] = useState("DESC");
@@ -98,6 +99,8 @@ const Reports = ({
   const [selectAllCheckBoxes, setSelectAllCheckBoxes] = useState(false);
   const [teamPageNo, setTeamPageNo] = useState(0);
   const [paginationTeamFirst, setPaginationTeamFirst] = useState(0);
+  const [selectAllFlags, setSelectAllFlags] = useState(false);
+  const [flagPatientsList, setFlagPatientsList] = useState("");
 
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -130,17 +133,18 @@ const Reports = ({
   const handleCoderPicker = (date, dateString, tabName) => {
     const formattedDates = dateString?.map((date, index) => {
       const formattedDate =
-      index === 1
-      ? date &&
-        `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
-      : date &&
-        `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
+        index === 1
+          ? date &&
+            `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
+          : date &&
+            `${moment(date, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
       return formattedDate;
     });
-    setSelectedDates((prevOptions) => ({
-      ...prevOptions,
+    setSelectedDates((prevDates) => ({
+      ...prevDates,
       [tabName]: date,
     }));
+
     setSelecteddateRanges((prevOptions) => ({
       ...prevOptions,
       [tabName]: { from: formattedDates[0], to: formattedDates[1] },
@@ -169,135 +173,16 @@ const Reports = ({
     dispatch(getActiveTab(name));
     setSearch();
     setSearchVal([]);
+    setFlagPatientsList();
+    setSelectAllFlags(false);
     if (name !== "Admin") {
       setSelectedData([]);
       setSelectAllCheckBoxes(false);
     }
+    setSelectedRows([])
+    setSelectAll(false)
+  
   };
-
-  useEffect(() => {
-    workFgetFlagsowData();
-  }, []);
-
-  useEffect(() => {
-    const coderSearchString = searchVal.find(
-      (item) => item.field === "initialSearch"
-    )?.search;
-
-    if (activeTab === "Sent") {
-      sentReport({
-        pagenum: sentPageNo,
-        startDate: selectedDateRanges?.Sent?.from,
-        endDate: selectedDateRanges?.Sent?.to,
-        search: coderSearchString ? coderSearchString : "",
-        sort: sort,
-      });
-    } else if (activeTab === "Received") {
-      receivedReport({
-        pagenum: receivedPageNo,
-        startDate: selectedDateRanges?.Received?.from,
-        endDate: selectedDateRanges?.Received?.to,
-        search: coderSearchString ? coderSearchString : "",
-        sort: sort,
-      });
-    } else if (activeTab === "Admin") {
-      dispatch(
-        getReportDetails({
-          startDate: selectedDateRanges?.Admin?.from,
-          endDate: selectedDateRanges?.Admin?.to,
-          search: coderSearchString ? coderSearchString : "",
-          filter: selectedOptions?.Status?.value,
-          userName: selectedOptions?.UserRole?.value
-            ? selectedOptions?.UserRole?.value
-            : "",
-          sort: sort,
-          selectManager:
-            selectedOptions?.User?.value &&
-            selectedOptions?.UserRole?.value !== "All"
-              ? selectedOptions?.User?.value
-              : "",
-        })
-      );
-    } else if (activeTab === "Audit") {
-      auditReport({
-        pagenum: pageNo,
-        startDate: selectedDateRanges?.Audit?.from,
-        endDate: selectedDateRanges?.Audit?.to,
-        search: coderSearchString ? coderSearchString : "",
-        filter: selectedOptions?.reviewerStatus?.value
-          ? selectedOptions?.reviewerStatus?.value
-          : "",
-        sort: sort,
-      });
-    } else if (activeTab === "Team") {
-      teamReport({
-        pagenum: teamPageNo,
-        startDate: selectedDateRanges?.Team?.from,
-        endDate: selectedDateRanges?.Team?.to,
-        search: coderSearchString ? coderSearchString : "",
-        sort: sort,
-      });
-    } else if (activeTab === "Reviewer") {
-      reviewerReport({
-        pagenum: pageNo,
-        startDate: selectedDateRanges?.Reviewer?.from,
-        endDate: selectedDateRanges?.Reviewer?.to,
-        search: coderSearchString ? coderSearchString : "",
-        filter: selectedOptions?.reviewerStatus?.value,
-        sort: sort,
-      });
-    }
-    if (ExportResponse) {
-      setIsModalVisible(false);
-    }
-  }, [
-    pageNo,
-    sentPageNo,
-    receivedPageNo,
-    receivedSortOrder,
-    sort,
-    searchVal,
-    selectedOptions,
-    selectedDateRanges,
-    activeTab,
-  ]);
-
-  useEffect(() => {
-    setFilteredCoder(ReportPatientDetails?.response);
-  }, [ReportPatientDetails]);
-
-  useEffect(() => {
-    setFilteredCoder(AdminReportPatientDetails?.response);
-  }, [AdminReportPatientDetails]);
-
-  useEffect(() => {
-    const page = new URLSearchParams(window.location.search).get("page");
-    const limit = new URLSearchParams(window.location.search).get("limit");
-    if (activeTab === "Received" && page) {
-      setReceivedPageNo(page);
-      setPaginationReceivedFirst(limit);
-    } else if (activeTab === "Sent" && page) {
-      setSentPageNo(page);
-      setPaginationSentFirst(limit);
-    }
-    setUserRole(localStorage.getItem("userRole"));
-  }, [activeTab]);
-
-  const gotoPatientDetails = (data) => {
-    dispatch(patientDetails(data));
-    if (data.computing == 2) {
-      const controller = new AbortController();
-      const { signal } = controller;
-      controller.abort();
-      localStorage.setItem("patientId", data.patientId);
-      navigate.push("/reviewer/patients/details");
-    } else {
-      notification.warning({
-        message: data.patientId + " file not processed Please wait",
-      });
-    }
-  };
-
   const dosOnChange = (selectedOption, name) => {
     const nameString = name?.split(" ").join("");
     setSelectedOptions((prevOptions) => ({
@@ -360,12 +245,6 @@ const Reports = ({
 
   const tabs = getTabsForRole(userRole);
 
-  useEffect(() => {
-    if (selectedOptions?.UserRole?.value) {
-      dispatch(getSelectUserListReport(selectedOptions?.UserRole?.value));
-    }
-  }, [selectedOptions?.UserRole]);
-
   const optionsUser =
     selectUserList?.data?.response?.map((res) => ({
       value: res.userName,
@@ -394,6 +273,168 @@ const Reports = ({
       options: optionsUser,
     },
   ];
+
+  const handleHeaderCheckboxChange = () => {
+    setSelectAllFlags(!selectAllFlags);
+    if (activeTab === "Team" || activeTab === "Audit") {
+      const updatedRows = selectAllFlags
+        ? []
+        : TeamReportDetails?.data?.response?.flagIdCountDTOs?.flatMap(
+            (item) => item?.patientIds
+          );
+      setFlagPatientsList(updatedRows?.join(","));
+    } else if (activeTab === "Admin") {
+      const updatedRows = selectAllFlags
+        ? []
+        : AdminReportPatientDetails?.response?.flagIdCountDTOs?.flatMap(
+            (item) => item?.patientIds
+          );
+      setFlagPatientsList(updatedRows?.join(","));
+    } else {
+      const updatedRows = selectAllFlags
+        ? []
+        : ReportPatientDetails?.response?.flagIdCountDTOs?.flatMap(
+            (item) => item?.patientIds
+          );
+      setFlagPatientsList(updatedRows?.join(","));
+    }
+  };
+
+  const gotoPatientDetails = (data) => {
+    dispatch(patientDetails(data));
+    if (data.computing == 2) {
+      const controller = new AbortController();
+      const { signal } = controller;
+      controller.abort();
+      localStorage.setItem("patientId", data.patientId);
+      navigate.push("/reviewer/patients/details");
+    } else {
+      notification.warning({
+        message: data.patientId + " file not processed Please wait",
+      });
+    }
+  };
+  useEffect(() => {
+    workFgetFlagsowData();
+  }, []);
+
+  useEffect(() => {
+    const coderSearchString = searchVal.find(
+      (item) => item.field === "initialSearch"
+    )?.search;
+    if (activeTab === "Sent") {
+      sentReport({
+        pagenum: sentPageNo,
+        startDate: selectedDateRanges?.Sent?.from,
+        endDate: selectedDateRanges?.Sent?.to,
+        search: coderSearchString ? coderSearchString : "",
+        sort: sort,
+      });
+    } else if (activeTab === "Received") {
+      receivedReport({
+        pagenum: receivedPageNo,
+        startDate: selectedDateRanges?.Received?.from,
+        endDate: selectedDateRanges?.Received?.to,
+        search: coderSearchString ? coderSearchString : "",
+        sort: sort,
+      });
+    } else if (activeTab === "Admin") {
+      dispatch(
+        getReportDetails({
+          pagenum: pageNo,
+          startDate: selectedDateRanges?.Admin?.from,
+          endDate: selectedDateRanges?.Admin?.to,
+          search: coderSearchString ? coderSearchString : "",
+          filter: selectedOptions?.Status?.value,
+          userName: selectedOptions?.UserRole?.value
+            ? selectedOptions?.UserRole?.value
+            : "",
+          sort: sort,
+          selectManager:
+            selectedOptions?.User?.value &&
+            selectedOptions?.UserRole?.value !== "All"
+              ? selectedOptions?.User?.value
+              : "",
+          flagsList: flagPatientsList ? flagPatientsList : "",
+        })
+      );
+    } else if (activeTab === "Audit") {
+      auditReport({
+        pagenum: teamPageNo,
+        startDate: selectedDateRanges?.Audit?.from,
+        endDate: selectedDateRanges?.Audit?.to,
+        search: coderSearchString ? coderSearchString : "",
+        filter: selectedOptions?.reviewerStatus?.value
+          ? selectedOptions?.reviewerStatus?.value
+          : "",
+        sort: sort,
+        flagsList: flagPatientsList ? flagPatientsList : "",
+      });
+    } else if (activeTab === "Team") {
+      teamReport({
+        pagenum: teamPageNo,
+        startDate: selectedDateRanges?.Team?.from,
+        endDate: selectedDateRanges?.Team?.to,
+        search: coderSearchString ? coderSearchString : "",
+        sort: sort,
+        flagsList: flagPatientsList ? flagPatientsList : "",
+      });
+    } else if (activeTab === "Reviewer") {
+      reviewerReport({
+        pagenum: pageNo,
+        startDate: selectedDateRanges?.Reviewer?.from,
+        endDate: selectedDateRanges?.Reviewer?.to,
+        search: coderSearchString ? coderSearchString : "",
+        filter: selectedOptions?.reviewerStatus?.value,
+        sort: sort,
+        flagsList: flagPatientsList ? flagPatientsList : "",
+      });
+    }
+    if (ExportResponse) {
+      setIsModalVisible(false);
+    }
+  }, [
+    teamPageNo,
+    pageNo,
+    sentPageNo,
+    receivedPageNo,
+    receivedSortOrder,
+    sort,
+    searchVal,
+    selectedOptions,
+    selectedDateRanges,
+    activeTab,
+    selectAllFlags,
+  ]);
+
+  useEffect(() => {
+    setFilteredCoder(ReportPatientDetails?.response);
+  }, [ReportPatientDetails]);
+
+  useEffect(() => {
+    setFilteredCoder(AdminReportPatientDetails?.response);
+  }, [AdminReportPatientDetails]);
+
+  useEffect(() => {
+    const page = new URLSearchParams(window.location.search).get("page");
+    const limit = new URLSearchParams(window.location.search).get("limit");
+    if (activeTab === "Received" && page) {
+      setReceivedPageNo(page);
+      setPaginationReceivedFirst(limit);
+    } else if (activeTab === "Sent" && page) {
+      setSentPageNo(page);
+      setPaginationSentFirst(limit);
+    }
+    setUserRole(localStorage.getItem("userRole"));
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (selectedOptions?.UserRole?.value) {
+      dispatch(getSelectUserListReport(selectedOptions?.UserRole?.value));
+    }
+  }, [selectedOptions?.UserRole]);
+  const today = dayjs();
+
   return (
     <div>
       <Header />
@@ -446,7 +487,9 @@ const Reports = ({
                             </div>
                           </div>
 
-                          {!activeTab || activeTab === "Reviewer" ? (
+                          {!activeTab ||
+                          activeTab === "Reviewer" ||
+                          userRole == "supervisor" ? (
                             <div className="col-xl-2">
                               <div className="d-flex w-100">
                                 <label className="labelStyle d-flex m-auto  p-2">
@@ -470,7 +513,7 @@ const Reports = ({
                             </div>
                           ) : null}
 
-                          <div className="col-xl-3 d-flex">
+                          <div className="col-xl-2 d-flex">
                             <div className="d-flex w-100">
                               <label className="labelStyle d-flex  p-2">
                                 {" "}
@@ -503,7 +546,32 @@ const Reports = ({
                               </div>
                             </div>
                           </div>
-
+                          {(!activeTab ||
+                            activeTab === "Admin" ||
+                            activeTab === "Audit" ||
+                            activeTab === "Team" ||
+                            activeTab === "Reviewer") && (
+                            <div className="col-xl-2 d-flex pt-2">
+                              <div>
+                                <input
+                                  type="checkbox"
+                                  onChange={handleHeaderCheckboxChange}
+                                  className={
+                                    styles.checkAlign +
+                                    (selectAllFlags
+                                      ? " " + TableStyle.customChecked
+                                      : "")
+                                  }
+                                  checked={selectAllFlags}
+                                />
+                              </div>
+                              <span
+                                className={`pl-4 text-center ${styles.pName}`}
+                              >
+                                All Flags
+                              </span>
+                            </div>
+                          )}
                           {selectedData?.length > 0 &&
                             selectedData?.map((info) => (
                               <div className="col-xl-2" key={info.id}>

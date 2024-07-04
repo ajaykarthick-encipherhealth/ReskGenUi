@@ -40,11 +40,11 @@ const Hcc = ({
   const [search, setSearch] = useState();
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [dosSummariesList, setDosSummariesList] = useState([]);
-  const [selectDosValue, setSelectDosValue] = useState([]);
+  const [selectDosValue, setSelectDosValue] = useState('');
 
   useEffect(() => {
     if (patientDosResult?.data?.response) {
-      setSelectDosValue([]);
+      setSelectDosValue();
       var dosList = [];
       patientDosResult?.data?.response?.map((res, index) => {
         if (res) {
@@ -163,12 +163,18 @@ const Hcc = ({
                   </div>
 
                   <div style={{ display: "flex", alignItems: "center" }}>
-                    <div className={`col-xl-3 `} style={{ padding: "10px" }}>
+                    <div
+                      className={`col-xl-4 p-2 cr-pointer ${styles.hoverPageNum}`}
+                      style={{
+                        textAlign: "center",
+                        margin: "10px",
+                      }}
+                      onClick={() =>
+                        handleChangePageNumber(data.startPageNumber)
+                      }
+                    >
                       <span
-                        onClick={() =>
-                          handleChangePageNumber(data.startPageNumber)
-                        }
-                        style={{ cursor: "pointer" }}
+                       
                       >
                         {data?.startPageNumber}
                       </span>
@@ -180,12 +186,17 @@ const Hcc = ({
                       <SwapOutlined />
                     </div>
 
-                    <div className={`col-xl-3`} style={{ padding: "10px" }}>
+                    <div
+                      className={`col-xl-4 p-2 cr-pointer ${styles.hoverPageNum}`}
+                      style={{
+                        textAlign: "center",
+                        margin: "10px",
+                      }}
+                      onClick={() =>
+                        handleChangePageNumber(data.endPagNumber)
+                      }
+                    >
                       <span
-                        onClick={() =>
-                          handleChangePageNumber(data.endPagNumber)
-                        }
-                        style={{ cursor: "pointer" }}
                       >
                         {data?.endPagNumber}
                       </span>
@@ -314,7 +325,7 @@ const Hcc = ({
                         )
                       }
                     >
-                      Query
+                      MEAT Suggestion
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item as="li" className="nav-item">
@@ -332,9 +343,8 @@ const Hcc = ({
                       ))}
                     </Select>
                   </Nav.Item>
-
                   <Nav.Item as="li" className="nav-item mx-2">
-                    {localStorage.getItem("role") != "admin" && (
+                    {localStorage.getItem("role") != "admin" && selectDosValue &&  (
                       <YearAndDosStatus setIsLoading={setIsLoading} />
                     )}
                   </Nav.Item>

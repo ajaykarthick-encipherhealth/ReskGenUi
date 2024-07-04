@@ -131,7 +131,7 @@ function PatientTable({
               className={`custom-ant-select ${TableStyle.customAntSelect}`}
               showSearch={false}
               value={data?.priority ? data.priority : "Set Priority"}
-              disabled={!data?.priority ? true : false}
+              // disabled={!data?.priority ? true : false}
               onChange={(value) => {
                 handlePriorityChange(data?.patientId, value);
                 dispatch(

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import csvToJson from "csvtojson";
 import * as XLSX from "xlsx";
 import dayjs from "dayjs";
-import { Button } from "antd";
+import { Button, Empty } from "antd";
 import Image from "next/image";
 import { InputText } from "primereact/inputtext";
 import {
@@ -142,6 +142,15 @@ const IndividualReceiverReport = () => {
     }
   }, [reportDatas, sentReportDatas, isSentReport]);
 
+
+  useEffect(() => {
+    if (router?.query?.reportId) {
+      const filter = detailsContent?.find((item) => item?._id == router?.query?.reportId);
+      setReportInfo(filter)
+    }
+    
+  }, [detailsContent, router])
+
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
@@ -162,7 +171,11 @@ const IndividualReceiverReport = () => {
                   className={reportStyles.filterBtn}
                   onClick={() => {
                     if (currentRole !=="supervisor") {
-                      router?.push(`/${currentRole}/report`);
+                      if(currentRole ==  "tenant_admin"){
+                        router?.push(`/tenantAdmin/report?sent=true`);
+                      }else{
+                        router?.push(`/${currentRole}/report`);
+                      }
                     } else {
                       const page = new URLSearchParams(
                         window.location.search
@@ -382,16 +395,16 @@ const IndividualReceiverReport = () => {
                   loading={loading}
                 />
               )}
-              {url?.extention === "xlsx" &&
+              {(url?.extention === "xlsx" &&
                 tableData?.length > 0 &&
-                !loading && (
+                !loading) ? (
                   <ExcelDisplay
                     tableData={tableData}
                     fileUrl={url?.path}
                     extention={url?.extention}
                     loading={loading}
                   />
-                )}
+                ) : !loading && <Empty />}
             </div>
           </div>
         </div>

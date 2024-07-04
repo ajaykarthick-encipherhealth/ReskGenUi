@@ -70,16 +70,16 @@ const WorkFlow = () => {
   };
 
   const card1Data = [
-    {
-      id: 1,
-      icon: tci,
-      title: "Total charts",
-      charts: chartValue.totalPatients ? chartValue.totalPatients : "0",
-      days: `${
-        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
-      } days`,
-      bg: TC,
-    },
+    // {
+    //   id: 1,
+    //   icon: tci,
+    //   title: "Total charts",
+    //   charts: chartValue.totalPatients ? chartValue.totalPatients : "0",
+    //   days: `${
+    //     DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+    //   } days`,
+    //   bg: TC,
+    // },
     {
       id: 2,
       icon: allocated,
@@ -92,20 +92,9 @@ const WorkFlow = () => {
       } days`,
       bg: allocatedbg,
     },
+
     {
       id: 3,
-      icon: pendingIcon,
-      title: "Pending",
-      charts: dateRange.processedStatus
-        ? dateRange.processedStatus.PENDING
-        : "0",
-      days: `${
-        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
-      } days`,
-      bg: pendingbg,
-    },
-    {
-      id: 4,
       icon: completed,
       title: "Completed",
       charts: dateRange.processedStatus
@@ -117,19 +106,43 @@ const WorkFlow = () => {
       bg: completedbg,
     },
     {
-      id: 5,
-      icon: Hold,
-      title: "Hold",
-      charts: dateRange.processedStatus ? dateRange.processedStatus.HOLD : "0",
+      id: 4,
+      icon: pendingIcon,
+      title: "Pending",
+      charts: dateRange.processedStatus
+        ? dateRange.processedStatus.PENDING
+        : "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
-      bg: HoldBg,
+      bg: pendingbg,
+    },
+    // {
+    //   id: 5,
+    //   icon: Hold,
+    //   title: "Hold",
+    //   charts: dateRange.processedStatus ? dateRange.processedStatus.HOLD : "0",
+    //   days: `${
+    //     DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+    //   } days`,
+    //   bg: HoldBg,
+    // },
+    {
+      id: 5,
+      icon: declineIcon,
+      title: "Declined",
+      charts: dateRange.processedStatus
+        ? dateRange.processedStatus.DECLINED
+        : "0",
+      days: `${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+      } days`,
+      bg: TC,
     },
     {
       id: 6,
       icon: auditedIcon,
-      title: "Audited",
+      title: "Sample Audit",
       charts: dateRange.auditedStatus ? dateRange.auditedStatus.AUDITED : "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
@@ -171,13 +184,13 @@ const WorkFlow = () => {
       } days`,
       bg: auditDecliendbg,
     },
+  ];
+  const card2Data = [
     {
-      id: 10,
-      icon: declineIcon,
-      title: "Declined",
-      charts: dateRange.processedStatus
-        ? dateRange.processedStatus.DECLINED
-        : "0",
+      id: 1,
+      icon: tci,
+      title: "Total charts",
+      charts: chartValue.totalPatients ? chartValue.totalPatients : "0",
       days: `${
         DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
       } days`,
@@ -220,27 +233,70 @@ const WorkFlow = () => {
             <Spin loading={worlFlowData?.loading} />
           </div>
         ) : worlFlowData?.data?.response ? (
-          <Row className={styles.carddiv} style={{ height: "80%" }}>
-            {card1Data?.map((data) => (
-              <Col
-                span={4}
-                style={{
-                  backgroundImage: `url(${data?.bg.src})`,
-                  backgroundRepeat: "no-repeat",
-                  backgroundSize: "cover",
-                }}
-                className={styles.colData}
-              >
-                <div className={styles.header}>
-                  <Image src={data?.icon} className={styles.Img} />
-                  <div className={styles.heading}>{data.title}</div>
-                </div>
-                <div className={styles.charts}>{`${
-                  data?.charts ? data?.charts : "0"
-                }  Charts`}</div>
-                {/* <div className={styles.days}>{data.days}</div> */}
-              </Col>
-            ))}
+          <Row
+            className={styles.carddiv}
+            style={{ width: "100%", height: "100%" }}
+          >
+            <Col span={4}>
+              <Row style={{ width: "100%", height: "100%" }}>
+                {card2Data?.map((data) => (
+                  <>
+                    <Col
+                      span={22}
+                      style={{
+                        backgroundImage: `url(${data?.bg.src})`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundSize: "cover",
+                        height: "90%",
+                        width: "100%",
+                      }}
+                      className={styles.colData}
+                    >
+                      <div className={styles.totalChartDiv}>
+                        <div className={styles.header}>
+                          <Image src={data?.icon} className={styles.Img} />
+                          <div className={styles.heading}>{data.title}</div>
+                        </div>
+                        <div
+                          className={styles.charts}
+                          style={{ marginTop: "30px" }}
+                        >{`${data?.charts ? data?.charts : "0"} Charts`}</div>
+                      </div>
+
+                      {/* <div className={styles.days}>{data.days}</div> */}
+                    </Col>
+                  </>
+                ))}
+              </Row>
+            </Col>
+            <Col span={20} style={{ height: "100%" }}>
+              <Row className={styles.rowDiv}>
+                {card1Data?.map((data) => (
+                  <>
+                    <Col
+                      span={5}
+                      style={{
+                        backgroundImage: `url(${data?.bg.src})`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundSize: "cover",
+                      }}
+                      className={styles.colData}
+                    >
+                      <div className={styles.subCardDiv}>
+                        <div className={styles.header}>
+                          <Image src={data?.icon} className={styles.Img} />
+                          <div className={styles.heading}>{data.title}</div>
+                        </div>
+                        <div className={styles.charts}>{`${
+                          data?.charts ? data?.charts : "0"
+                        }  Charts`}</div>
+                      </div>
+                      {/* <div className={styles.days}>{data.days}</div> */}
+                    </Col>
+                  </>
+                ))}
+              </Row>
+            </Col>
           </Row>
         ) : (
           <div className={spinSTYles.spinStyle}>

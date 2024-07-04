@@ -198,7 +198,7 @@ const AddMeatQuery = ({
       >
         <div className="offcanvas-header">
           <h5 className="modal-title" id="#gridSystemModal">
-            Meat Query
+            Meat Suggestion 
           </h5>
           <button
             type="button"
@@ -258,16 +258,16 @@ const AddMeatQuery = ({
               </Form.Item>
               <Form.Item>
                 <Form.Item
-                  label="Quick Query *"
+                  label="Suggest Header *"
                   name="headerName"
                   rules={[
                     {
                       required: true,
-                      message: "Please select quick query",
+                      message: "Please select suggest header",
                     },
                   ]}
                 >
-                  <Select className={`ant_select_form hcc_form mb-2`}>
+                  <Select className={`ant_select_form hcc_form mb-2`} allowClear>
                     {headersList?.map((data) => (
                       <Option key={data?.value} value={data?.value}>
                         {data?.label}
@@ -276,16 +276,16 @@ const AddMeatQuery = ({
                   </Select>
                 </Form.Item>
                 <Form.Item
-                  label="Imaging Query *"
+                  label="Radiology Suggest"
                   name="imagingTestHeader"
                   rules={[
                     {
-                      required: true,
-                      message: "Please select imaging query",
+                      required: false,
+                      message: "Please select radiology suggest",
                     },
                   ]}
                 >
-                  <Select className={`ant_select_form hcc_form mb-2`}>
+                  <Select className={`ant_select_form hcc_form mb-2`} allowClear>
                     {imagingtest?.map((data) => (
                       <Option key={data?.value} value={data?.value}>
                         {data?.label}
@@ -294,16 +294,16 @@ const AddMeatQuery = ({
                   </Select>
                 </Form.Item>
                 <Form.Item
-                  label="Query Reason *"
+                  label="Reason For Suggest *"
                   name="queryReason"
                   rules={[
                     {
                       required: true,
-                      message: "Please select quick reason",
+                      message: "Please select reason for suggest",
                     },
                   ]}
                 >
-                  <Select className={`ant_select_form hcc_form mb-2`}>
+                  <Select className={`ant_select_form hcc_form mb-2`} allowClear>
                     {queryReasons?.map((data) => (
                       <Option key={data?.value} value={data?.value}>
                         {data?.label}

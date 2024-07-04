@@ -48,7 +48,7 @@ const WorkFlow = () => {
       title: "Allocated",
       charts: worlFlowData?.data?.response?.auditAllocated,
       days: `Last ${
-        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 3
       } days`,
       bg: allocatedbg,
     },
@@ -58,7 +58,7 @@ const WorkFlow = () => {
       title: "Audited",
       charts: worlFlowData?.data?.response?.audited,
       days: `Last ${
-        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 3
       } days`,
       bg: auditedbg,
     },
@@ -68,7 +68,7 @@ const WorkFlow = () => {
       title: "Re Audit",
       charts: worlFlowData?.data?.response?.reAudited,
       days: `Last ${
-        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 3
       } days`,
       bg: reAuditbg,
     },
@@ -78,27 +78,27 @@ const WorkFlow = () => {
       title: "Audit Hold",
       charts: worlFlowData?.data?.response?.auditHold,
       days: `Last ${
-        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 3
       } days`,
       bg: auditHold,
     },
     {
       id: 5,
       icon: pendingIcon,
-      title: "Pending",
+      title: "Audit Pending",
       charts: worlFlowData?.data?.response?.auditPending,
       days: `Last ${
-        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 3
       } days`,
       bg: pendingbg,
     },
     {
       id: 6,
       icon: declineIcon,
-      title: "Declined",
+      title: "Audit Declined",
       charts: worlFlowData?.data?.response?.auditDecliend,
       days: `Last ${
-        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 3
       } days`,
       bg: auditDecliendbg,
     },
@@ -109,7 +109,7 @@ const WorkFlow = () => {
       <HeadTitle
         header={
           !DateRanges || DateRanges?.clear
-            ? `Last 30 days work flow`
+            ? `Last 3 days work flow`
             : `${dayjs(startDate)?.format("MM-DD-YYYY")} - ${dayjs(endDate)
                 .subtract(1, "day")
                 .format("MM-DD-YYYY")}`

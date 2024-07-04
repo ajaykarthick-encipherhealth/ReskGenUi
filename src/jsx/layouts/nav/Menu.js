@@ -223,6 +223,11 @@ export const ProviderMenuList = [
     to: "/tenantAdmin/tracking",
     childRoute3: "/tenantAdmin/patients/details",
   },
+  {
+    title: "Notification",
+    iconStyle: SVGICON.Notification,
+    to: "/admin/notification",
+  },
 ];
 export const EHRMenuList = [
   {

@@ -1773,6 +1773,9 @@
   margin-left: 5px;
   margin-top: 7px;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: end;
 }
 .add_meat_query svg {
   text-align: center;

@@ -246,7 +246,7 @@ const Patient = ({
     };
     setIsLoading(true);
     getAllTrackingList(datas);
-    setIsLoading(false);
+    // setIsLoading(false);
   }, [
     pageNo,
     dueDateStart,
@@ -273,9 +273,9 @@ const Patient = ({
 
   useEffect(() => {
     if (trackingList?.data?.response) {
-      setIsLoading(true);
+      // setIsLoading(true);
       getAllList(trackingList?.data?.response);
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   }, [parsedData, trackingList, pageNo, pageSize]);
 
@@ -298,6 +298,7 @@ const Patient = ({
           priority: res.priority,
           processedStatus: res.processedStatus,
           processedDate: res.processedDate,
+          auditedDate:res.auditedDate,
           createdAt: res.createdAt,
           patientAllocated: res.patientAllocated,
           allocatedByFirstName: res.allocatedByFirstName,
@@ -778,7 +779,9 @@ const Patient = ({
                         className="dataTables_wrapper no-footer"
                       >
                         {isLoading ? (
-                          <SpinnerDots />
+                           <div>
+                             <SpinnerDots topHeight={"10pc"}/>
+                            </div>
                         ) : (
                           <>
                             <TrackingTable

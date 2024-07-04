@@ -458,3 +458,8 @@
   border-radius: 100%;
   cursor: pointer;
 }
+
+.hoverPageNum:hover {
+  background-color: #e2edf9;
+  border-radius: 7px;
+} 

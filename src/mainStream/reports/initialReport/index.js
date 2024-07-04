@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import styles from "../report.module.css";
-import { Empty, notification } from "antd";
+import { Empty, Spin, notification } from "antd";
 import Hold from "../../../../src/images/trackingImages/HoldTrack.png";
 import Pending from "../../../../src/images/trackingImages/PendingTrack.png";
 import Completed from "../../../../src/images/trackingImages/CompletedTrack.png";
@@ -29,6 +29,8 @@ import {
   processstatusBodyTemplate,
 } from "../../components/chartUtils";
 import { getReportDetails } from "../../../store/actions/adminAction/ReportActions";
+import ENDPOINTS from "../../../utility/enpoints";
+import { getStorage } from "../../../utils/storages";
 
 const InitialCard = ({
   patientDetails,
@@ -47,10 +49,12 @@ const InitialCard = ({
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
-  const handleHeaderCheckboxChange = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const handleHeaderCheckboxChange = async () => {
+    // console.log(selectAll);
     setSelectAll(!selectAll);
-    const updatedRows = selectAll ? [] : reportListAll?.response?.data;
-    setSelectedRows(updatedRows);
+    // const updatedRows = selectAll ? [] : reportListAll?.response?.data;
+    // setSelectedRows(updatedRows);
     if (activeTab === "Reviewer") {
       reviewerReport({
         pagenum: 0,
@@ -58,12 +62,29 @@ const InitialCard = ({
       });
     }
     if (activeTab === "Admin") {
-      dispatch(
-        getReportDetails({
-          pagenum: 0,
-          size: reportListAll?.response?.totalElements,
-        })
-      );
+      if (!selectAll) {
+        try {
+          setIsLoading(true);
+          const res = await fetch(
+            ENDPOINTS.apiEndoint +
+              `/dbservice/patient/adminreport?pageno=0&size=${reportListAll?.response?.totalElements}`,
+            {
+              headers: { Authorization: `Bearer ${await getStorage("token")}` },
+            }
+          ).then((res) => res.json());
+          const seletedAll = res?.response?.response?.data;
+
+          setSelectedRows(seletedAll ? seletedAll : []);
+          setIsLoading(false);
+        } catch (error) {}
+      } else setSelectedRows([]);
+
+      // dispatch(
+      //   getReportDetails({
+      //     pagenum: 0,
+      //     size: reportListAll?.response?.totalElements,
+      //   })
+      // );
     }
   };
 
@@ -116,16 +137,61 @@ const InitialCard = ({
     {
       id: 4,
       icon: declineIcon,
-      title: "Decline",
+      title: "Declined",
       charts: reportListAll?.processedStatusCount?.processedStatus
         ? reportListAll?.processedStatusCount?.processedStatus.DECLINED
         : "0",
       bg: "#FAD1D1",
     },
+
+    // {
+    //   id: 6,
+    //   icon: notAudited,
+    //   title: "Sample Not Audited",
+    //   charts: reportListAll?.processedStatusCount?.auditedStatus
+    //     ? reportListAll?.processedStatusCount?.auditedStatus.NOT_AUDIT
+    //     : "0",
+
+    //   bg: "#FBE7D0",
+    // },
+    // {
+    //   id: 7,
+    //   icon: reeAuditIcon,
+    //   title: "Sample Re Audit",
+    //   charts: reportListAll?.processedStatusCount?.auditedStatus
+    //     ? reportListAll?.processedStatusCount?.auditedStatus.REAUDIT
+    //     : "0",
+
+    //   bg: "#FFDBB8",
+    // },
+
+    // {
+    //   id: 9,
+    //   icon: auditHoldIcon,
+    //   title: "Sample Audit hold",
+    //   charts: reportListAll?.processedStatusCount?.auditedStatus
+    //     ? reportListAll?.processedStatusCount?.auditedStatus.AUDITHOLD
+    //     : "0",
+
+    //   bg: "#FFF2CC",
+    // },
+    // {
+    //   id: 10,
+    //   icon: auditDeclined,
+    //   title: "Sample Audit decline",
+    //   charts: reportListAll?.processedStatusCount?.auditedStatus
+    //     ? reportListAll?.processedStatusCount?.auditedStatus.DECLINED
+    //     : "0",
+
+    //   bg: "#FDD2CE",
+    // },
+  ];
+
+  const accuracyStatus = [
     {
       id: 5,
       icon: auditedIcon,
-      title: "Audited",
+      title: " Sample Audit",
       charts: reportListAll?.processedStatusCount?.auditedStatus
         ? reportListAll?.processedStatusCount?.auditedStatus.AUDITED
         : "0",
@@ -133,57 +199,16 @@ const InitialCard = ({
       bg: "#DBEEF0",
     },
     {
-      id: 6,
-      icon: notAudited,
-      title: "Not Audited",
-      charts: reportListAll?.processedStatusCount?.auditedStatus
-        ? reportListAll?.processedStatusCount?.auditedStatus.NOT_AUDIT
-        : "0",
-
-      bg: "#FBE7D0",
-    },
-    {
-      id: 7,
-      icon: reeAuditIcon,
-      title: "Re Audit",
-      charts: reportListAll?.processedStatusCount?.auditedStatus
-        ? reportListAll?.processedStatusCount?.auditedStatus.REAUDIT
-        : "0",
-
-      bg: "#FFDBB8",
-    },
-    {
       id: 8,
       icon: reAuditIcon,
-      title: "Audit pending",
+      title: "Sample Audit pending",
       charts: reportListAll?.processedStatusCount?.auditedStatus
-        ? reportListAll?.processedStatusCount?.auditedStatus.PENDING
+        ? reportListAll?.processedStatusCount?.auditedStatus.AUDIT_PENDING
         : "0",
 
       bg: "#F3D8E5",
     },
-    {
-      id: 9,
-      icon: auditHoldIcon,
-      title: "Audit hold",
-      charts: reportListAll?.processedStatusCount?.auditedStatus
-        ? reportListAll?.processedStatusCount?.auditedStatus.AUDITHOLD
-        : "0",
-
-      bg: "#FFF2CC",
-    },
-    {
-      id: 10,
-      icon: auditDeclined,
-      title: "Audit decline",
-      charts: reportListAll?.processedStatusCount?.auditedStatus
-        ? reportListAll?.processedStatusCount?.auditedStatus.DECLINED
-        : "0",
-
-      bg: "#FDD2CE",
-    },
   ];
-
   const gotoPatientDetails = (data) => {
     dispatch(patientDetails(data));
 
@@ -214,12 +239,14 @@ const InitialCard = ({
       value: reportListAll?.response?.totalElements,
     },
     {
-      title: "Avg RAF score",
-      value: reportListAll?.rafAverage?.toFixed(4),
+      title: "Total RAF score",
+      value: reportListAll?.totalRafScore
+        ? reportListAll?.totalRafScore?.toFixed(4)
+        : 0,
     },
     {
       title: "HCC Count",
-      value: reportListAll?.totalHccCount,
+      value: reportListAll?.totalHccCount ? reportListAll?.totalHccCount : 0,
     },
   ];
   const allocationCountData = [
@@ -253,24 +280,27 @@ const InitialCard = ({
                 }}
               >
                 {" "}
-                {reportListAll?.response?.data?.length > 0 && (
-                  <>
-                    <div>
-                      <input
-                        type="checkbox"
-                        onChange={handleHeaderCheckboxChange}
-                        className={
-                          styles.checkAlign +
-                          (selectAll ? " " + TableStyle.customChecked : "")
-                        }
-                        checked={selectAll}
-                      />
-                    </div>
-                    <span className={`pl-4 text-center ${styles.pName}`}>
-                      All
-                    </span>
-                  </>
-                )}
+                {reportListAll?.response?.data?.length > 0 &&
+                  (isLoading ? (
+                    <Spin />
+                  ) : (
+                    <>
+                      <div>
+                        <input
+                          type="checkbox"
+                          onChange={handleHeaderCheckboxChange}
+                          className={
+                            styles.checkAlign +
+                            (selectAll ? " " + TableStyle.customChecked : "")
+                          }
+                          checked={selectAll}
+                        />
+                      </div>
+                      <span className={`pl-4 text-center ${styles.pName}`}>
+                        All
+                      </span>
+                    </>
+                  ))}
               </div>
               <div className="row">
                 <div>
@@ -294,7 +324,7 @@ const InitialCard = ({
                               content={reportListAll?.response?.data}
                               key={item?.id}
                               item={item}
-                              flag={item?.flag}
+                              flag={item?.patientFlagResponseDTOs}
                               page={page}
                               handleRowCheckboxChange={handleRowCheckboxChange}
                               selectedRows={selectedRows}
@@ -344,41 +374,57 @@ const InitialCard = ({
                             ))}
                           </div>
                           <div className={` pt-2 ${styles.summaryText}`}>
-                            Overall Status
+                            Production Status
                           </div>
-                          <div
-                            className="container mb-4"
-                            style={{ marginTop: "0px" }}
-                          >
-                            <div className="row g-3">
-                              {card1Data?.map((data) => (
-                                <MiniCards
-                                  key={data?.id}
-                                  backgroundColor={data.bg}
-                                  icon={data?.icon}
-                                  title={data.title}
-                                  charts={data.charts}
-                                  styles={styles}
-                                />
-                              ))}
-                            </div>
+                          <div className="row g-3">
+                            {card1Data?.map((data) => (
+                              <MiniCards
+                                key={data?.id}
+                                backgroundColor={data.bg}
+                                icon={data?.icon}
+                                title={data.title}
+                                charts={data.charts}
+                                styles={styles}
+                                activeTab={activeTab}
+                              />
+                            ))}
                           </div>
-                          <div className="col-xl-12  d-flex mt-1">
+                          <div className={` pt-2 ${styles.summaryText}`}>
+                            Audit Status
+                          </div>
+
+                          <div className="row g-3">
+                            {accuracyStatus?.map((data) => (
+                              <MiniCards
+                                key={data?.id}
+                                backgroundColor={data.bg}
+                                icon={data?.icon}
+                                title={data.title}
+                                charts={data.charts}
+                                styles={styles}
+                                activeTab={activeTab}
+                              />
+                            ))}
+                          </div>
+                          <div className="col-xl-12  d-flex mt-3">
                             <Flags
                               reportListAll={reportListAll}
                               styles={styles}
                             />
-                            {allocationCountData.map((item, index) => (
-                              <AllocationCount
-                                key={item?.id}
-                                title={item?.title}
-                                allocationCount={item?.allocationCount}
-                                renderUserPrfoileAvatar={
-                                  renderUserPrfoileAvatar
-                                }
-                                styles={styles}
-                              />
-                            ))}
+                            {activeTab === "Reviewer"
+                              ? ""
+                              : allocationCountData.map((item, index) => (
+
+                                  <AllocationCount
+                                    key={item?.id}
+                                    title={item?.title}
+                                    allocationCount={item?.allocationCount}
+                                    renderUserPrfoileAvatar={
+                                      renderUserPrfoileAvatar
+                                    }
+                                    styles={styles}
+                                  />
+                                ))}
                           </div>
                         </div>
                       </div>

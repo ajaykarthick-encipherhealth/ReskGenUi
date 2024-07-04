@@ -207,7 +207,6 @@ export default function Patient() {
     };
     setIsLoading(true)
     dispatch(getTrackingList(datas));
-    setIsLoading(false)
   }, [
     pageNo,
     dueDateStart,
@@ -235,7 +234,6 @@ export default function Patient() {
     if (response?.response) {
       setIsLoading(true)
       getAllList(response?.response);
-      setIsLoading(false)
     }
   }, [parsedData, response, pageNo, pageSize]);
 
@@ -258,6 +256,7 @@ export default function Patient() {
           priority: res.priority,
           processedStatus: res.processedStatus,
           processedDate: res.processedDate,
+          auditedDate:res.auditedDate,
           createdAt: res.createdAt,
           patientAllocated: res.patientAllocated,
           allocatedByFirstName: res.allocatedByFirstName,
@@ -321,7 +320,6 @@ export default function Patient() {
     const declinedDataFromDeclined = extractLatestData(rowData?.declinedNotes);
 
     const declinedData = declinedDataFromAudit || declinedDataFromDeclined;
-
     switch (rowData.processedStatus) {
       case "COMPLETED":
         return (

@@ -14,20 +14,27 @@ import HoldStatus from "./holdstatus";
 import { getWorkFlow } from "../../../store/actions/l2Action/DashboardAction";
 
 const Index = () => {
-  const currentDate = dayjs();
   const router = useRouter();
   const dispatch = useDispatch();
   const DateRanges = useSelector((state) => state?.workFlow?.dateRange);
 
-  const last30thDate = currentDate?.subtract(31, "day");
-  const lastDateWithTime = currentDate?.endOf("day");
+  const currentDate = new Date();
+
+  const threeDaysAgo = new Date(currentDate);
+  threeDaysAgo.setDate(currentDate.getDate() - 2);
+
+  const endOfToday = new Date(currentDate);
+  endOfToday.setHours(23, 59, 59, 999);
 
   const startDate = DateRanges
-    ? new Date(DateRanges?.startDate).toISOString()
-    : last30thDate.toISOString().split("T")[0] + "T00:00:00Z";
+    ? new Date(DateRanges.startDate).toISOString()
+    : threeDaysAgo.toISOString().split("T")[0] + "T00:00:00Z";
+
   const endDate = DateRanges
-    ? new Date(DateRanges?.endDate).toISOString()
-    : lastDateWithTime.toISOString().split("T")[0] + "T23:59:59.999Z";
+    ? new Date(DateRanges.endDate).toISOString()
+    : endOfToday.toISOString().split("T")[0] + "T23:59:59.999Z";
+
+  console.log({ startDate, endDate });
 
   useEffect(() => {
     dispatch(getWorkFlow(startDate, endDate, router));

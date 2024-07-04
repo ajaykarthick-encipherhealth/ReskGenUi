@@ -66,69 +66,71 @@ const CardComponent = ({
                 </div>
                 <div className={`col-xl-4 ${styles.text}`}>
                   <Avatar.Group maxCount={2}>
-                    {item?.receivedUsers?.map((data, index) => (
-                      <Popover
-                        key={index}
-                        content={
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                              flexDirection: "column",
-                            }}
-                          >
+                    {item?.receivedUsers?.map((data, index) => {
+                      const { firstName, lastName, profileImageUrl } = data?.userDetails || {};
+                      if (!firstName && !lastName) return null;
+                      return (
+                        <Popover
+                          key={index}
+                          content={
                             <div
                               style={{
-                                padding: "10px",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                flexDirection: "column",
                               }}
                             >
-                              {data?.userDetails?.firstName}{" "}
-                              {data?.userDetails?.lastName}
-                            </div>
-                            {data?.userDetails?.profileImageUrl && (
-                              <img
-                                src={data.userDetails.profileImageUrl}
-                                alt="Profile"
-                                style={{
-                                  maxWidth: "100px",
-                                  maxHeight: "100px",
-                                }}
-                              />
-                            )}
-                          </div>
-                        }
-                      >
-                        <div
-                          style={{
-                            display: "inline-block",
-                            marginRight: "5px",
-                          }}
-                        >
-                          {item.receivedUsers.length === 1 && (
-                            <div className="d-flex justify-content-center align-items-center">
                               <div
                                 style={{
-                                  marginRight: "10px",
+                                  padding: "10px",
                                 }}
                               >
-                                {renderUserPrfoileAvatar(
-                                  data?.userDetails?.firstName,
-                                  data?.userDetails?.lastName,
-                                  data?.userDetails?.profileImageUrl,
-                                  "header"
-                                )}
+                                {firstName} {lastName}
                               </div>
-
-                              <div>
-                                {data?.userDetails?.firstName}{" "}
-                                {data?.userDetails?.lastName}
-                              </div>
+                              {profileImageUrl && (
+                                <img
+                                  src={profileImageUrl}
+                                  alt="Profile"
+                                  style={{
+                                    maxWidth: "100px",
+                                    maxHeight: "100px",
+                                  }}
+                                />
+                              )}
                             </div>
-                          )}
-                        </div>
-                      </Popover>
-                    ))}
+                          }
+                        >
+                          <div
+                            style={{
+                              display: "inline-block",
+                              marginRight: "5px",
+                            }}
+                          >
+                            {item.receivedUsers.length === 1 && (
+                              <div className="d-flex justify-content-center align-items-center">
+                                <div
+                                  style={{
+                                    marginRight: "10px",
+                                  }}
+                                >
+                                  {renderUserPrfoileAvatar(
+                                    firstName,
+                                    lastName,
+                                    profileImageUrl,
+                                    "header"
+                                  )}
+                                </div>
+
+                                <div>
+                                  {firstName} {lastName}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </Popover>
+                      );
+                    })}
                   </Avatar.Group>
                 </div>
               </div>

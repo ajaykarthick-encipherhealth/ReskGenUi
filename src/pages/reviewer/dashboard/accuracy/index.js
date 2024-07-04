@@ -211,11 +211,10 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
               (item) => item?.monthOfYear === hoveredMonthIndex + 1
             );
         } else {
-          finalData =
-            accuracyDatas?.data?.response?.length > 0 &&
-            accuracyDatas?.data?.response?.find(
-              (item) => item?.dayOfMonth === this.x
-            );
+          finalData = accuracyDatas?.data?.response?.find((item) =>
+             item?.dayOfMonth === this.x
+             
+          );
         }
 
         if (finalData) {
@@ -297,10 +296,21 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
       setInitialAccuracyData(accuracyDatas?.data?.response);
     }
   }, [accuracyDatas]);
+  const allAverageScore = chartBlockedDates(
+    selectedYear,
+    selectedMonth,
+    accuracyDatas?.data?.response,
+    "averageScore",
+    currentBtn,
+    currentDate
+  );
+  const numericalData = allAverageScore?.filter((value) => value !== false); // Filter out false values
+  const sum = numericalData?.reduce((acc, value) => acc + value, 0); // Sum the numerical values
+  const average = sum / numericalData?.length; // Calculate the average
 
   return (
     <>
-      <HeadTitle header="Reviewer Quality Score" />
+      <HeadTitle header="System Quality Score" />
       <div className={styles.card3}>
         <Card borderRadius="28px" padding="10px">
           <div className={styles.buttonDiv}>
@@ -363,7 +373,7 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
                 <div className={styles.heading}>Average Quality</div>
               </div>
 
-              <div className={styles.month}>
+              {/* <div className={styles.month}>
                 {currentBtn === "Daily" && `Day ${currentDate.getDate()}`}
                 {currentBtn === "Monthly" &&
                   `Month ${monthNames[currentDate.getMonth()]}`}
@@ -371,11 +381,11 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
                 {currentBtn !== "Monthly" && (
                   <span className={styles.subTitle}>(Current Month)</span>
                 )}
-              </div>
+              </div> */}
 
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
-                  {initialAccuracyData
+                  {/* {initialAccuracyData
                     ? currentBtn === "Monthly"
                       ? `${
                           initialAccuracyData[currentDate?.getMonth()]
@@ -393,7 +403,8 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
                           initialAccuracyData[getDateWeek(currentDate) - 1]
                             ?.averageScore
                         }%`
-                    : "0%"}
+                    : "0%"} */}
+                  {average ? `${average?.toFixed(2)}%` : "0%"}
                 </span>
               </div>
             </div>

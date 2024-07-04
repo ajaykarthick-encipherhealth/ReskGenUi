@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-function MiniCards({ backgroundColor, icon, title, charts, styles }) {
+function MiniCards({ backgroundColor, icon, title, charts, styles, activeTab }) {
   return (
     // <Col
     //   span={5}
@@ -27,9 +27,10 @@ function MiniCards({ backgroundColor, icon, title, charts, styles }) {
         }}
         className={styles.reportDiv}
       >
-        <div className="d-flex">
-          <Image src={icon} className={styles.Img} />
-          <div className="px-2">{title}</div>
+        <div >
+          <div style={{display:"flex", justifyContent:"center"}}>  <Image src={icon} className={styles.Img} /></div>
+        
+          <div className="px-2"style={{textAlign:"center"}}>{title}</div>
         </div>
 
         <div>

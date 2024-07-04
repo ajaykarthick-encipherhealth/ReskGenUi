@@ -11,10 +11,11 @@ export const ACCURACY_DAILY = "ACCURACY_DAILY";
 export async function workStatusApiAdmin(startDate = "", endDate = "", router) {
   const token = localStorage.getItem("token");
   const orgId = localStorage.getItem("orgId");
+  const role = localStorage.getItem("role");
 
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/admindashboard/overallchart?allocatedOnStartDate=${startDate}&allocatedOnEndDate=${endDate}&organizationId=${orgId}`,
+      `${ENDPOINTS?.apiEndoint}dbservice/admindashboard/overallchart?allocatedOnStartDate=${startDate}&allocatedOnEndDate=${endDate}&organizationId=${role == "tenant_admin" ? "" :orgId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -195,6 +196,7 @@ export const accuracyScoreNew = async (
     default:
       null;
   }
+  const orgId=localStorage.getItem("orgId")
   var data = {
     year: year,
     month: month,
@@ -203,7 +205,7 @@ export const accuracyScoreNew = async (
     l1AccuracyDateType: btn,
     weekStart: 11,
     weekEnd: 13,
-    orgId: "daa95f13-8b1d-4dc3-8d1c-c15d192c6cd5",
+    orgId:orgId ,
     userIds: user,
   };
   try {
@@ -511,9 +513,10 @@ export const GetTenantAdminUserCount = async (role) => {
 export const SelectUserList = async (role) => {
   const token = localStorage.getItem("token");
   const orgId = localStorage.getItem("orgId");
+  const roles = localStorage.getItem("role");
   try {
     const response = await axios.get(
-      `${ENDPOINTS?.apiEndoint}dbservice/user/getByRole?role=${role}&orgId=${orgId}`,
+      `${ENDPOINTS?.apiEndoint}dbservice/user/getByRole?role=${role}&orgId=${roles == "tenant_admin" ? "" :orgId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

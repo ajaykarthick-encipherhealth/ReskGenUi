@@ -17,6 +17,8 @@ import completedbg from "../../.../../../../images/dashboard/completedbg.png";
 import { useSelector, connect } from "react-redux";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { getSelectedDaysCount } from "../../../../components/headerFilters/functions";
+import declinedBg from "../../.../../../../images/dashboard/auditDeclinedbg.png";
+import declineIcon from "../../.../../../../images/trackingImages/DeclineTrack.png";
 
 const WorkFlow = ({ worlFlowData }) => {
   const currentDate = dayjs();
@@ -43,40 +45,41 @@ const WorkFlow = ({ worlFlowData }) => {
       title: "Allocated",
       charts: worlFlowData?.data?.response?.allocated,
       days: `Last ${
-        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 3
       } days`,
       bg: allocatedbg,
     },
     {
       id: 2,
-      icon: pending,
-      title: "Pending",
-      charts: worlFlowData?.data?.response?.pending,
-      days: `Last ${
-        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
-      } days`,
-      bg: pendingbg,
-    },
-    {
-      id: 3,
-      icon: hold,
-      title: "Hold",
-      charts: worlFlowData?.data?.response?.hold,
-      days: `Last ${
-        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
-      } days`,
-      bg: holdbg,
-    },
-    {
-      id: 4,
       icon: completed,
       title: "Completed",
       charts: worlFlowData?.data?.response?.completed,
       days: `Last ${
-        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 30
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 3
       } days`,
       bg: completedbg,
     },
+    {
+      id: 3,
+      icon: pending,
+      title: "Pending",
+      charts: worlFlowData?.data?.response?.pending,
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 3
+      } days`,
+      bg: pendingbg,
+    },
+    {
+      id: 4,
+      icon: declineIcon,
+      title: "Declined",
+      charts: worlFlowData?.data?.response?.declined,
+      days: `Last ${
+        DateRanges && !DateRanges?.clear ? getSelectedDaysCount(DateRanges) : 3
+      } days`,
+      bg: declinedBg,
+    },
+   
   ];
 
   return (
@@ -84,7 +87,7 @@ const WorkFlow = ({ worlFlowData }) => {
       <HeadTitle
         header={
           !DateRanges || DateRanges?.clear
-            ? `Last 30 days work flow`
+            ? `Last 3 days work flow`
             : `${dayjs(startDate)?.format("MM-DD-YYYY")} - ${dayjs(endDate)
                 .subtract(1, "day")
                 .format("MM-DD-YYYY")}`

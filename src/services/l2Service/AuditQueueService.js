@@ -41,7 +41,7 @@ export const ChangePriority = async (patientId, year, priority) => {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.put(
-      `${ENDPOINTS?.apiEndoint}dbservice/change/priority?patietnId=${patientId}&year=${year}&priority=${priority}`,
+      `${ENDPOINTS?.apiEndoint}dbservice/change/priority?patientId=${patientId}&year=${year}&priority=${priority}`,
       {},
       {
         headers: {

@@ -232,99 +232,99 @@ const Header = ({
     // };
   };
 
-  const PopContent = (
-    <div className={styles.innerPop}>
-      <div className={styles.codesContainer}>
-        <div
-          style={{
-            width: "90%",
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <div>
-            {btnItems?.map((data) => (
-              <button
-                key={data?.id}
-                onClick={() => {
-                  setSelectedBtn(data?.name);
-                  setSearchVal("");
-                  setSearch("");
-                }}
-                className={
-                  selectedbtn === data?.name
-                    ? styles.activeBtn
-                    : styles.inactiveBtn
-                }
-              >
-                {data?.name}
-              </button>
-            ))}
-          </div>
-          <div style={{ width: "30%", margin: "-25px 30px 0 0" }}>
-            {selectedbtn === "HCC" && (
-              <Selector
-                selectlabel={""}
-                setSelectedOption={setSelectedOption}
-                selectOptions={Options}
-                defaultSelectValue1={Options[0]}
-              />
-            )}
-          </div>
-          <div className={styles.closeContainer}>
-            <CloseCircleOutlined
-              onClick={() => setPopoverVisible(false)}
-              className={styles.close_icon}
-            />
-          </div>
-        </div>
-      </div>
-      <div className={styles.codesContainer}>
-        <div className={styles.codesContainer2}>
-          <Search
-            searchlabel={""}
-            setSearch={setSearch}
-            searchVal={searchVal}
-            setSearchVal={setSearchVal}
-            activeTab={"codes"}
-          />
-        </div>
-      </div>
-      <div className={styles.displayDiv}>
-        {codDetails?.response
-          ? codDetails?.response?.map((data) => (
-              <div className={styles.hoverDiv} key={data?.id}>
-                {data?.diagnosisCode} &nbsp;
-                {data?.description}&nbsp;
-                {selectedbtn === "HCC" && (
-                  <>
-                    {getStatus(data) === "CMS" && (
-                      <span className={styles.cmsStatus}>
-                        {getStatus(data)}
-                      </span>
-                    )}
-                    {getStatus(data) === "RX" && (
-                      <span className={styles.rxStatus}>{getStatus(data)}</span>
-                    )}
-                    {getStatus(data) === "CMS RX" && (
-                      <>
-                        <span
-                          className={styles.cmsStatus}
-                          style={{ marginRight: "5px" }}
-                        >
-                          CMS
-                        </span>
-                        <span className={styles.rxStatus}>RX</span>
-                      </>
-                    )}
-                  </>
-                )}
-              </div>
-            ))
-          : null}
-      </div>
-    </div>
-  );
+  // const PopContent = (
+  //   <div className={styles.innerPop}>
+  //     <div className={styles.codesContainer}>
+  //       <div
+  //         style={{
+  //           width: "90%",
+  //           display: "flex",
+  //           justifyContent: "space-between",
+  //         }}
+  //       >
+  //         <div>
+  //           {btnItems?.map((data) => (
+  //             <button
+  //               key={data?.id}
+  //               onClick={() => {
+  //                 setSelectedBtn(data?.name);
+  //                 setSearchVal("");
+  //                 setSearch("");
+  //               }}
+  //               className={
+  //                 selectedbtn === data?.name
+  //                   ? styles.activeBtn
+  //                   : styles.inactiveBtn
+  //               }
+  //             >
+  //               {data?.name}
+  //             </button>
+  //           ))}
+  //         </div>
+  //         <div style={{ width: "30%", margin: "-25px 30px 0 0" }}>
+  //           {selectedbtn === "HCC" && (
+  //             <Selector
+  //               selectlabel={""}
+  //               setSelectedOption={setSelectedOption}
+  //               selectOptions={Options}
+  //               defaultSelectValue1={Options[0]}
+  //             />
+  //           )}
+  //         </div>
+  //         <div className={styles.closeContainer}>
+  //           <CloseCircleOutlined
+  //             onClick={() => setPopoverVisible(false)}
+  //             className={styles.close_icon}
+  //           />
+  //         </div>
+  //       </div>
+  //     </div>
+  //     <div className={styles.codesContainer}>
+  //       <div className={styles.codesContainer2}>
+  //         <Search
+  //           searchlabel={""}
+  //           setSearch={setSearch}
+  //           searchVal={searchVal}
+  //           setSearchVal={setSearchVal}
+  //           activeTab={"codes"}
+  //         />
+  //       </div>
+  //     </div>
+  //     <div className={styles.displayDiv}>
+  //       {codDetails?.response
+  //         ? codDetails?.response?.map((data) => (
+  //             <div className={styles.hoverDiv} key={data?.id}>
+  //               {data?.diagnosisCode} &nbsp;
+  //               {data?.description}&nbsp;
+  //               {selectedbtn === "HCC" && (
+  //                 <>
+  //                   {getStatus(data) === "CMS" && (
+  //                     <span className={styles.cmsStatus}>
+  //                       {getStatus(data)}
+  //                     </span>
+  //                   )}
+  //                   {getStatus(data) === "RX" && (
+  //                     <span className={styles.rxStatus}>{getStatus(data)}</span>
+  //                   )}
+  //                   {getStatus(data) === "CMS RX" && (
+  //                     <>
+  //                       <span
+  //                         className={styles.cmsStatus}
+  //                         style={{ marginRight: "5px" }}
+  //                       >
+  //                         CMS
+  //                       </span>
+  //                       <span className={styles.rxStatus}>RX</span>
+  //                     </>
+  //                   )}
+  //                 </>
+  //               )}
+  //             </div>
+  //           ))
+  //         : null}
+  //     </div>
+  //   </div>
+  // );
 
   const notificationDrawer = async () => {
     setOpen(true);
@@ -600,7 +600,7 @@ const Header = ({
                         {/* NOTE i remove userRole !== "admin" logic because PRAVIN
                         told me to show admin also, so if Logesh ask anything to
                         this please tell him like this */}
-                        {userRole !== "tenant_admin" && (
+                        {/* {(userRole !== "tenant_admin" || userRole != "reviewer") && (
                           <Popover
                             content={PopContent}
                             placement="bottom"
@@ -617,7 +617,7 @@ const Header = ({
                               </div>
                             </Button>
                           </Popover>
-                        )}
+                        )} */}
                         {userRole === "reviewer" && (
                           <Tooltip
                             title={` Quality : ${

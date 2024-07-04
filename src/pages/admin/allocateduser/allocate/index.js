@@ -139,6 +139,7 @@ const AllocateModal = ({
           }}
         />
       </div>
+      <div className="overflow-auto"style={{height:"640px"}}>
       {userDetails.length > 0 ? (
         userDetails?.map((item) => (
           <div className="mt-4 pe-auto">
@@ -360,6 +361,8 @@ const AllocateModal = ({
           </button>
         </div>
       )}
+      </div>
+   
     </Modal>
   );
 };

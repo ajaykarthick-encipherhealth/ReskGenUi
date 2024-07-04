@@ -183,3 +183,7 @@ export async function diseaseEditMeat(obj) {
   );
   return data;
 }
+
+export async function radiologyDetailsSetEmpty() {
+  return null;
+}

@@ -26,10 +26,10 @@ export const TabButtons = [
     id: 1,
     title: "CogentAI Accuracy",
   },
-  {
-    id: 2,
-    title: "Organization Quality",
-  },
+  // {
+  //   id: 2,
+  //   title: "Organization Quality",
+  // },
 ];
 export const getDateWeek = (date) => {
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
@@ -201,8 +201,8 @@ const Accuracy = () => {
   );
 
   const numberOfWeeks =
-    accuracyDatas?.data?.response &&
-    Object.keys(accuracyDatas?.data?.response)?.length;
+    QualityAccuracyDatas?.data?.response &&
+    Object.keys(QualityAccuracyDatas?.data?.response)?.length;
 
   const weekNames = Array.from(
     { length: numberOfWeeks },
@@ -233,8 +233,8 @@ const Accuracy = () => {
     xAxisData = monthNames;
   } else if (currentBtn === "Daily") {
     xAxisData = getDays(
-      accuracyDatas?.data?.response &&
-        Object.keys(accuracyDatas?.data?.response)?.length
+      QualityAccuracyDatas?.data?.response &&
+        Object.keys(QualityAccuracyDatas?.data?.response)?.length
     );
   } else if (currentBtn === "Weekly") {
     xAxisData = weekNames;
@@ -481,10 +481,11 @@ const Accuracy = () => {
             finalData.averageScore +
             "<br/>" +
             "Total Correct: " +
-            finalData.totalCorrectCount +
-            "<br/>" +
-            "Total Wrong: " +
-            finalData.totalWrongCount
+            finalData.totalCorrectCount
+            //  +
+            // "<br/>" +
+            // "Total Wrong: " +
+            // finalData.totalWrongCount
           );
         } else {
           return "No data available";
@@ -517,19 +518,19 @@ const Accuracy = () => {
         color: "#0b59f1",
         yAxis: 1,
       },
-      {
-        name: "totalWrongCount",
-        data: getGraphData(
-          QualityAccuracyDatas?.data?.response,
-          "totalWrongCount",
-          selectedMonth,
-          selectedYear,
-          currentBtn,
-          currentDate
-        ),
-        color: "red",
-        yAxis: 1,
-      },
+      // {
+      //   name: "totalWrongCount",
+      //   data: getGraphData(
+      //     QualityAccuracyDatas?.data?.response,
+      //     "totalWrongCount",
+      //     selectedMonth,
+      //     selectedYear,
+      //     currentBtn,
+      //     currentDate
+      //   ),
+      //   color: "red",
+      //   yAxis: 1,
+      // },
       {
         name: "Temperature",
         type: "spline",
@@ -551,28 +552,22 @@ const Accuracy = () => {
   };
 
   useEffect(() => {
-    if (currentTabBtn === "CogentAI Accuracy") {
-      if (currentBtn === "Daily") {
-        dispatch(getAccuracyDaily(selectedYear, selectedMonth));
-      }
-      if (currentBtn === "Weekly") {
-        dispatch(getAccuracyWeekly(selectedYear, selectedMonth));
-      }
-      if (currentBtn === "Monthly") {
-        dispatch(getAccuracyMOnthly(selectedYear));
-      }
-    } else {
-      const isAdmin = true;
-      dispatch(
-        getAccuracyScore(
-          currentBtn,
-          selectedMonth,
-          selectedYear,
-          router,
-          isAdmin
-        )
-      );
-    }
+    // if (currentTabBtn === "CogentAI Accuracy") {
+    //   if (currentBtn === "Daily") {
+    //     dispatch(getAccuracyDaily(selectedYear, selectedMonth));
+    //   }
+    //   if (currentBtn === "Weekly") {
+    //     dispatch(getAccuracyWeekly(selectedYear, selectedMonth));
+    //   }
+    //   if (currentBtn === "Monthly") {
+    //     dispatch(getAccuracyMOnthly(selectedYear));
+    //   }
+    // } else {
+    const isAdmin = true;
+    dispatch(
+      getAccuracyScore(currentBtn, selectedMonth, selectedYear, router, isAdmin)
+    );
+    // }
   }, [currentBtn, selectedMonth, selectedYear, router, currentTabBtn]);
   useEffect(() => {
     if (accuracyDatas?.data?.response) {
@@ -582,6 +577,18 @@ const Accuracy = () => {
       setInitialQualityData(QualityAccuracyDatas?.data?.response);
     }
   }, [accuracyDatas, QualityAccuracyDatas]);
+
+  const allAverageScore = chartBlockedDates(
+    selectedYear,
+    selectedMonth,
+    QualityAccuracyDatas?.data?.response,
+    "averageScore",
+    currentBtn,
+    currentDate
+  );
+  const numericalData = allAverageScore?.filter((value) => value !== false); // Filter out false values
+  const sum = numericalData?.reduce((acc, value) => acc + value, 0); // Sum the numerical values
+  const average = sum / numericalData?.length; // Calculate the average
 
   return (
     <>
@@ -641,19 +648,38 @@ const Accuracy = () => {
                 <div className={spinSTYles.spinStyle}>
                   <Spin loading={accuracyDatas?.loading} />
                 </div>
-              ) : accuracyDatas?.loading === false &&
-                accuracyDatas?.data?.response ? (
+              ) : QualityAccuracyDatas?.loading === false &&
+                QualityAccuracyDatas?.data?.response ? (
                 currentTabBtn === "CogentAI Accuracy" ? (
-                  <ReactECharts
-                    option={option}
-                    style={{
-                      width: "100%",
-                      height: "340px",
-                      marginTop: "-30px",
-                      overflowX: "hidden",
-                    }}
-                  />
+                  <div className={styles.highchartStyle}>
+                    <HighchartsReact
+                      highcharts={Highcharts}
+                      options={config}
+                      className={styles.hightchartStyles}
+                    />
+                  </div>
                 ) : (
+                  // : accuracyDatas?.loading === false &&
+                  //   accuracyDatas?.data?.response ? (
+                  //   currentTabBtn === "CogentAI Accuracy" ? (
+                  //     <ReactECharts
+                  //       option={option}
+                  //       style={{
+                  //         width: "100%",
+                  //         height: "340px",
+                  //         marginTop: "-30px",
+                  //         overflowX: "hidden",
+                  //       }}
+                  //     />
+                  //     <div className={styles.highchartStyle}>
+                  //       <HighchartsReact
+                  //         highcharts={Highcharts}
+                  //         options={config}
+                  //         className={styles.hightchartStyles}
+                  //       />
+                  //     </div>
+                  //   )
+                  //   :
                   <div className={styles.highchartStyle}>
                     <HighchartsReact
                       highcharts={Highcharts}
@@ -677,7 +703,7 @@ const Accuracy = () => {
                     : "Average Score"}
                 </div>
               </div>
-              <div className={styles.month}>
+              {/* <div className={styles.month}>
                 {currentBtn === "Daily"
                   ? `Day ${currentDate.getDate()}`
                   : currentBtn === "Monthly"
@@ -686,11 +712,11 @@ const Accuracy = () => {
                 {currentBtn !== "Monthly" && (
                   <span className={styles.subTitle}>(Current Month)</span>
                 )}
-              </div>
+              </div> */}
 
               <div className={styles.percentage}>
                 <span className={styles.insideTitle}>
-                  {currentTabBtn === "CogentAI Accuracy"
+                  {/* {currentTabBtn === "CogentAI Accuracy"
                     ? initialAccuracyData
                       ? currentBtn === "Monthly"
                         ? `${initialAccuracyData[currentDate?.getMonth() + 1]}%`
@@ -720,7 +746,8 @@ const Accuracy = () => {
                           initialQualityData[getDateWeek(currentDate) - 1]
                             ?.averageScore
                         }%`
-                    : "0%"}
+                    : "0%"} */}
+                  {average ? `${average?.toFixed(2)}%` : `0%`}
                 </span>
               </div>
             </div>

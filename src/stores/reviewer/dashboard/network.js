@@ -49,8 +49,13 @@ export const completedScrore = async ({ btn, date, month, year }) => {
   const options = {
     method: "GET",
   };
-  const url = `year=${year}&month=${month}&date=${date}&range=${btn}`;
-
+  // const url = `year=${year}&month=${month}&date=${date}&range=${btn}`;
+  const url =
+  btn === "DAILY"
+    ? `month=${month}&year=${year}&date=${date}&range=DAILY`
+    : btn === "WEEKLY"
+    ? `month=${month}&year=${year}&range=WEEKLY`
+    : `year=${year}&range=MONTHLY`;
   const data = await requestPortal(`management/dashboard/line/statistics?${url}`,
     options
   );

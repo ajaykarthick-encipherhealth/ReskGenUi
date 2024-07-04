@@ -8,6 +8,7 @@ const AllocationCount = ({
   styles,
 }) => {
   return (
+    // title!=="Supervisor" &&
     <div className={`col-xl-4 ${styles.flags}`}>
       <div className={styles.cardHead}>
         <div>{title}</div>
@@ -53,6 +54,7 @@ const AllocationCount = ({
         </div>
       </div>
     </div>
+
   );
 };
 

@@ -51,12 +51,13 @@ const Meat = ({
   isEditMeat,
   setCapturedSections,
   isEditMeatValue,
-  form
+  form,
+  disabled
 }) => {
   return (
     <div>
       <div className="row">
-        {!isEditMeat ? (
+        {!disabled ? (
           <div className="col-12">
             <Form.Item
               label={
@@ -76,7 +77,7 @@ const Meat = ({
               <Input name={`${checkMeatType(selectMeat)}Aspect`} />
             </Form.Item>
           </div>
-        ) : (
+        ) : isEditMeat && (
           <>
             <div className="col-12">
               <Form.Item label={<label>Code</label>}>
@@ -184,6 +185,7 @@ const Meat = ({
                 onChange={(val) => setSection(val)}
                 setOptions={setCapturedSections}
                 value={section}
+                disabled={disabled}
               />
             </Form.Item>
           </div>
@@ -229,7 +231,8 @@ const Meat = ({
                 id={item}
                 section={section}
                 selectMeat={selectMeat}
-                date={date}
+                date={date} 
+                isEditPage={disabled}
               />
             </div>
           ))}
@@ -280,14 +283,23 @@ const Meat = ({
                 onClick={() => setMeatDisplay(false)}
               />
             )}
-            {isEditMeat && showSection &&  <RegularButton
+            <RegularButton
               type=""
               name="Submit"
               width="100px"
               method={"button"}
               onClick={handleMeatSubmit}
               disabled={isMeat ? !(isMeat && isActive) : isMeat}
-            />}
+            />
+
+{/* {isEditMeat && showSection &&  <RegularButton
+              type=""
+              name="Submit"
+              width="100px"
+              method={"button"}
+              onClick={handleMeatSubmit}
+              disabled={isMeat ? !(isMeat && isActive) : isMeat}
+            />} */}
            
           </div>
         </Form.Item>

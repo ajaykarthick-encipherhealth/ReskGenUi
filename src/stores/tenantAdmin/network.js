@@ -99,19 +99,17 @@ export async function getAllTracking(datas) {
       datas?.selectOrgId
     }&page=${
       datas?.pageNo
-    }&size=15&processedStatus=${filteredStatus}&dueDateStart=${filteredDStart}&dueDateEnd=${
+    }&size=15&processedStatus=${filteredStatus}&processedStart=${filteredDStart}&processedEnd=${
       datas?.dueDateEnd
-    }&auditedStartDate=${datas?.processedStart}&auditedEndDate=${
-      datas?.processedEnd
     }&searchString=${datas?.searchTextValue}&patientAllocated=${
       datas?.selAllocatedTo === "All" ? "" : datas?.selAllocatedTo
     }&auditAllocatedStart=${datas?.allocatedStartDate}&auditAllocatedEnd=${
       datas?.allocatedEndDate
     }&allocatedOnStart=${datas?.auditedStartDate}&allocatedOnEnd=${
       datas?.auditedEndDate
-    }&allocatedBy=${datas?.selAllocatedBy}&auditDueDateStart=${
+    }&allocatedBy=${datas?.selAllocatedBy}&auditedStartDate=${
       datas?.auditedDueStartDate
-    }&auditDueDateEnd=${datas?.auditedDueEndDate}&auditedStatus=${
+    }&auditedEndDate=${datas?.auditedDueEndDate}&auditedStatus=${
       datas?.auditSelectedOption ? datas?.auditSelectedOption : ""
     }&auditAllocatedBy=${
       datas?.selAuditAllocatedBy ? datas?.selAuditAllocatedBy : ""

@@ -1,4 +1,4 @@
-import { Empty } from "antd";
+import { Empty, Popover } from "antd";
 import React from "react";
 
 const Flags = ({ reportListAll, styles }) => {
@@ -6,7 +6,7 @@ const Flags = ({ reportListAll, styles }) => {
     <div className={`col-xl-4 ${styles.flags}`}>
       <div className={styles.cardHead}>Flags</div>
       <div className={styles.contentOverFlow}>
-        {reportListAll?.flagIdCountDTOs ? (
+        {reportListAll?.flagIdCountDTOs?.length > 0 ? (
           reportListAll?.flagIdCountDTOs?.map((flagItem) => (
             <div
               className={styles.contentGroups}
@@ -41,9 +41,20 @@ const Flags = ({ reportListAll, styles }) => {
                     : "---"}
                 </span>
               </div>
-              <div className={styles.count}>
-                {flagItem.count ? flagItem.count : 0}
-              </div>
+              <Popover
+                content={() => (
+                  <div>
+                    {flagItem.patientIds.map((item) => (
+                      <label className="d-block">{item}</label>
+                    ))}
+                  </div>
+                )}
+                trigger="hover"
+              >
+                <div className={styles.count}>
+                  {flagItem.count ? flagItem.count : 0}
+                </div>
+              </Popover>
             </div>
           ))
         ) : (

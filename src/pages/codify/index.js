@@ -12,29 +12,9 @@ import { AutoComplete, Input } from "antd";
 import { Tree } from "antd";
 import { Spin } from "antd";
 
-const getRandomInt = (max, min = 0) =>
-  Math.floor(Math.random() * (max - min + 1)) + min;
-
-const searchResult = (query) =>
-  new Array(getRandomInt(5))
-    .join(".")
-    .split(".")
-    .map((_, idx) => {
-      const category = `${query}${idx}`;
-      return {
-        value: category,
-        label: (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <span>{category}</span>
-          </div>
-        ),
-      };
-    });
+const mockVal = (str, repeat = 1) => ({
+  value: str.repeat(repeat),
+});
 
 const Codify = ({
   codifyData,
@@ -68,7 +48,9 @@ const Codify = ({
   const { loading: indexesDataLoading } = useSelector(
     (state) => state.codify.codify.indexes
   );
- 
+  const getPanelValue = (searchText) =>
+    !searchText ? [] : [mockVal(searchText)];
+
   const handleRiskAdjustment = () => {
     setActiveButton("Risk Adjustment");
     setShowButtons(false);
@@ -83,10 +65,6 @@ const Codify = ({
     setNoData({ codeData: false, indexData: false, data: false });
     setSearchInput(e.target.value);
     setParentCode(null);
-  };
-
-  const handleSearch = (value) => {
-    setOptions(value ? searchResult(value) : []);
   };
   const onSelect = (value) => {
     setSearchInput(value);
@@ -153,7 +131,6 @@ const Codify = ({
     }
   }, [searchInput]);
 
-
   useEffect(() => {
     if (
       !data?.length &&
@@ -211,7 +188,6 @@ const Codify = ({
     setLoading(false);
   };
 
-  
   const convertToAntdIndexData = (node) => {
     const { title, seeAlso, term, code, see, seeCat, subCat, manif } = node;
 
@@ -404,10 +380,10 @@ const Codify = ({
             <div className="p-3 px-1 d-flex gap-3">
               <AutoComplete
                 style={{ width: "100%" }}
-                popupMatchSelectWidth={drawerWidth == "44%"? 640:""}
+                popupMatchSelectWidth={drawerWidth == "44%" ? 640 : ""}
                 options={options}
                 onSelect={onSelect}
-                onSearch={handleSearch}
+                onSearch={(text) => setOptions(getPanelValue(text))}
                 size="large"
                 value={searchInput}
               >
@@ -421,7 +397,8 @@ const Codify = ({
                 />
               </AutoComplete>
               <div className="antdbutton">
-                <Button className={`${style.search} ` }
+                <Button
+                  className={`${style.search} `}
                   icon={<SearchOutlined className={style.btncolor} />}
                   onClick={handleSearchButton}
                 />
@@ -582,7 +559,7 @@ const Codify = ({
 
 const enhancer = connect(
   (state) => ({
-    codifyDataLoading:state.codify.codify.codifyLoader
+    codifyDataLoading: state.codify.codify.codifyLoader,
   }),
   {
     codifyData: dashbaordActions.codifyAction,
