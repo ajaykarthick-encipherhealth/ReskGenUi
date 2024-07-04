@@ -2,22 +2,21 @@ import React, { useEffect, useState } from "react";
 import Style from "../../style.module.css";
 import RegularButton from "../../../../../components/button";
 import { Button, Checkbox, Divider, Switch } from "antd";
+import FileUploader from "../../components/fileUploader";
 import ModalPop from "../../components/modal";
 import CommonModalContent from "../../components/commonModalContent";
-import { connect } from "react-redux";
 import { actions as codingGuidelinesActions } from "../../../../../stores/tenantAdmin";
 import { actions as configurationActions } from "../../../../../stores/tenantAdmin";
-import { useSelector } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import FileUpload from "../../../../../components/table/tenantSettingsTable/fileUpload";
 import { PlusOutlined } from "@ant-design/icons";
 import FilterButton from "../../../../../components/table/tenantSettingsTable/filterButton";
 import Search from "../../../../../components/table/tenantSettingsTable/search";
 import TenantSettingsTable from "../../../../../components/table/tenantSettingsTable/tenantSettingsTable";
 
-const CriticalConditions = ({ updateSettings, getCodingDetails,list }) => {
+const DirectConfirmCodes = ({ updateSettings, getCodingDetails, list }) => {
   const [openModal, setOpenModal] = useState(false);
   const [search, setSearch] = useState(null);
-
   const [tags, setTags] = useState([
     "plan",
     "assessment/plan",
@@ -52,6 +51,9 @@ const CriticalConditions = ({ updateSettings, getCodingDetails,list }) => {
     "Renewed Medications",
     "a/p",
   ]);
+  const onChange = (checked) => {
+    console.log(`switch to ${checked}`);
+  };
 
   const columns = [
     {
@@ -59,73 +61,82 @@ const CriticalConditions = ({ updateSettings, getCodingDetails,list }) => {
       dataIndex: "code",
       key: "code",
     },
-    { title: "Description", dataIndex: "description", key: "description" },
+    {
+      title: "Description",
+      dataIndex: "description",
+      key: "description",
+    },
     {
       title: "Year",
       dataIndex: "years",
       key: "year",
     },
   ];
-  const onChange = (checked) => {};
-  const handleSettingsUpdate = () => {
-    updateSettings({ CriticalConditions: "values" });
-  };
   useEffect(() => {
-    getCodingDetails({ type: "CRITICAL_CONDITIONS" });
+    getCodingDetails({ type: "DIRECT_CONFIRM_CODES" });
   }, []);
+
   return (
     <>
       <div className="p-3">
         <div className="d-flex justify-content-between">
-          <div className={Style.title}>Critical Conditions</div>
-        </div>
-        
-        <div className="d-flex justify-content-start gap-2 mt-4">
-          <div>Year</div>
-          <div>
-            <Checkbox />
-          </div>
-          <div>Can We calculate for all Processing Year</div>
-        </div>
-
-        <div className="d-flex justify-content-start gap-2 mt-4">
-          <div>
-            <FileUpload allowedFormat={"File must be in xlsx or CSV"} />
-          </div>
-          <div>
-            <Button
-              icon={<PlusOutlined />}
-              style={{
-                height: "47px",
-              }}
-              onClick={() => {
-                setOpenModal(true);
-              }}
-            >
-              Add Manually
-            </Button>
-          </div>
-        </div>
-        <Divider />
-        <div className="d-flex justify-content-start  gap-4 mt-4">
-          <div className="mx-3">{"Do you need general guidelines codes"}</div>
-          <div className="d-flex">
-            {/* <Form.Item name="isDownCodeConversionEnabled"> */}
-            <Switch className="switch" />
-            {/* </Form.Item> */}
-          </div>
-          <div className="">{"Do you need to capture critical condition for patients"}</div>
-          <div className="d-flex">
-            {/* <Form.Item name="isDownCodeConversionEnabled"> */}
-            <Switch className="switch" />
-            {/* </Form.Item> */}
-          </div>
-          <div className="ms-auto mx-4">
-            <Search setSearch={setSearch} />
-          </div>
+          <div className={Style.title}>Direct Confirm Codes</div>
         </div>
         <div>
-          <TenantSettingsTable columns={columns} data={list?.response?.criticalConditionsPage?.content} />
+          <div className="d-flex justify-content-start gap-2 mt-4">
+            <div>Year</div>
+            <div>
+              <Checkbox />
+            </div>
+            <div>Can We calculate for all Processing Year</div>
+          </div>
+
+          <div className="d-flex justify-content-start gap-2 mt-4">
+            <div>
+              <FileUpload allowedFormat={"File must be in xlsx or CSV"} />
+            </div>
+            <div>
+              <Button
+                icon={<PlusOutlined />}
+                style={{
+                  height: "47px",
+                }}
+                onClick={() => {
+                  setOpenModal(true);
+                }}
+              >
+                Add Manually
+              </Button>
+            </div>
+          </div>
+          <Divider />
+          <div className="d-flex justify-content-start  gap-4 mt-4">
+            {/* <div>
+              <FilterButton label={"Default"} isActive={true} />
+            </div>
+            <div>
+              <FilterButton label={"Code"} isActive={false} />
+            </div>
+            <div>
+              <FilterButton label={"Description"} isActive={false} />
+            </div> */}
+            <div className="mx-3">{"Do you need general guidelines codes"}</div>
+            <div className="d-flex">
+              {/* <Form.Item name="isDownCodeConversionEnabled"> */}
+              <Switch className="switch" />
+              {/* </Form.Item> */}
+            </div>
+
+            <div className="ms-auto mx-4">
+              <Search setSearch={setSearch} />
+            </div>
+          </div>
+          <div>
+            <TenantSettingsTable
+              columns={columns}
+              data={list?.response?.directConfirmCodesPage?.content}
+            />
+          </div>
         </div>
       </div>
       <div className="text-end p-3">
@@ -136,7 +147,7 @@ const CriticalConditions = ({ updateSettings, getCodingDetails,list }) => {
         />
         <RegularButton
           name={"Save Changes"}
-          onClick={() => handleSettingsUpdate()}
+          onClick={() => console.log("Save Changes")}
         />
       </div>
       <ModalPop
@@ -147,11 +158,13 @@ const CriticalConditions = ({ updateSettings, getCodingDetails,list }) => {
     </>
   );
 };
-const enhancer = connect((state) => ({
-  list : state?.tenantAdmin?.codingGuidelines?.data
-}), {
-  updateSettings: configurationActions.updateSettingsAction,
-  getCodingDetails: codingGuidelinesActions.codingGuidelinesAction,
-});
-
-export default enhancer(CriticalConditions);
+const enhancer = connect(
+  (state) => ({
+    list: state?.tenantAdmin?.codingGuidelines.data,
+  }),
+  {
+    updateSettings: configurationActions.updateSettingsAction,
+    getCodingDetails: codingGuidelinesActions.codingGuidelinesAction,
+  }
+);
+export default enhancer(DirectConfirmCodes);

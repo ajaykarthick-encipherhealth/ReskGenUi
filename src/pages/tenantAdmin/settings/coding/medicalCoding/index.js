@@ -1,100 +1,170 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Style from "../../style.module.css";
 import RegularButton from "../../../../../components/button";
-import { Switch } from "antd";
+import { Form, Switch } from "antd";
+import { connect, useSelector } from "react-redux";
+import { actions as codingGuidelinesActions } from "../../../../../stores/tenantAdmin";
+import { actions as configurationActions } from "../../../../../stores/tenantAdmin";
 
-const MedicalCoding = () => {
-  const data = [
-    {
-      id: 1,
-      title: "Do you need an OIG code",
-      status: "Enable",
-    },
-    {
-      id: 2,
-      title: "Do you need an RAF Calculation",
-      status: "Disable",
-    },
-    {
-      id: 3,
-      title: "Do you need an Capture History Codes",
-      status: "Enable",
-    },
-    {
-      id: 4,
-      title: "Do you need an Capture History Codes as ICD Codes",
-      status: "Disable",
-    },
-    {
-      id: 5,
-      title: "Do you need an Slash Conditions Need to Capture",
-      status: "Enable",
-    },
-    {
-      id: 6,
-      title: "Do you need an Calculate Combo Including Past Medical History",
-      status: "Disable",
-    },
-    {
-      id: 7,
-      title: "Do you need an Capture Critical Conditions for Out patient",
-      status: "Enable",
-    },
-    {
-      id: 8,
-      title: "Do you need an Down Code Conversion",
-      status: "Disable",
-    },
-    {
-      id: 9,
-      title: "Do you need an Capture Insulin Medication as ICD Codes",
-      status: "Enable",
-    },
-  ];
-  const onChange = (checked) => {
-    console.log(`switch to ${checked}`);
+const MedicalCoding = ({ getCodingDetails, updateSettings,list }) => {
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    getCodingDetails({ type: "CODING" });
+  }, []);
+
+  useEffect(() => {
+    if (list?.response) {
+      form.setFieldsValue({
+        isOIGCodeNeeded: list?.response?.isOIGCodeNeeded,
+        captureHistoryCodes: list?.response?.captureHistoryCodes,
+        captureHistoryCodesAsIcdCodes:
+          list?.response?.captureHistoryCodesAsIcdCodes,
+        isSlashConditionsNeedToCapture:
+          list?.response?.isSlashConditionsNeedToCapture,
+        calculateComboIncludingPastMedicalHistory:
+          list.response?.calculateComboIncludingPastMedicalHistory,
+        isDownCodeConversionEnabled: list.response?.isDownCodeConversionEnabled,
+      });
+    }
+  }, [list]);
+
+  const onChange = (value, values) => {
+    console.log(values);
+  };
+  const handleSubmit = (values) => {
+    updateSettings({ coding: values });
   };
   return (
     <>
-      <div className="p-3" style={{ height: "80vh" }}>
-        <div className="d-flex justify-content-between">
-          <div className={Style.title}>Medical Coding</div>
-        </div>
-        <div className="mt-4">
-          {data?.map((item) => (
-            <div className="d-flex justify-content-between mt-4">
-              <div>{item?.title}</div>
+      <Form
+        id={"chart-audit"}
+        onFinish={handleSubmit}
+        form={form}
+        onValuesChange={onChange}
+      >
+        <div className="p-3" style={{ height: "65vh" }}>
+          <div className="d-flex justify-content-between">
+            <div className={Style.title}>Medical Coding</div>
+          </div>
+          <div className="mt-4">
+            <div className="d-flex justify-content-between mt-1">
+              <div>{"Do you need an OIG code"}</div>
               <div className="d-flex justify-content-between">
-                <Switch
-                  defaultChecked={item.status === "Enable" ? true : false}
-                  className="switch"
-                  onChange={onChange}
-                />
+                <Form.Item name="isOIGCodeNeeded">
+                  <Switch className="switch" />
+                </Form.Item>
                 <div
                   className={`mx-2 text-${
-                    item.status === "Enable" ? "info" : "danger"
+                    list?.response?.isOIGCodeNeeded ? "info" : "danger"
                   }`}
                 >
-                  {item?.status}
+                  {list?.response?.isOIGCodeNeeded ? "Enable" : "Disable"}
                 </div>
               </div>
             </div>
-          ))}
+
+            
+            <div className="d-flex justify-content-between mt-1">
+              <div>{"Do you need an Slash Conditions Need to Capture"}</div>
+              <div className="d-flex justify-content-between">
+                <Form.Item name="isSlashConditionsNeedToCapture">
+                  <Switch className="switch" />
+                </Form.Item>
+                <div
+                  className={`mx-2 text-${
+                    list?.response?.isSlashConditionsNeedToCapture
+                      ? "info"
+                      : "danger"
+                  }`}
+                >
+                  {list?.response?.isSlashConditionsNeedToCapture
+                    ? "Enable"
+                    : "Disable"}
+                </div>
+              </div>
+            </div>
+            <div className="d-flex justify-content-between mt-1">
+              <div>
+                {
+                  "Do you need an Calculate Combo Including Past Medical History"
+                }
+              </div>
+              <div className="d-flex justify-content-between">
+                <Form.Item name="calculateComboIncludingPastMedicalHistory">
+                  <Switch className="switch" />
+                </Form.Item>
+                <div
+                  className={`mx-2 text-${
+                    list?.response?.calculateComboIncludingPastMedicalHistory
+                      ? "info"
+                      : "danger"
+                  }`}
+                >
+                  {list?.response?.calculateComboIncludingPastMedicalHistory
+                    ? "Enable"
+                    : "Disable"}
+                </div>
+              </div>
+            </div>
+
+           
+             <div className="d-flex justify-content-between mt-1">
+              <div>{"Do you need to consider ESRD conditions as HCC conditions"}</div>
+              <div className="d-flex justify-content-between">
+                <Form.Item name="isDownCodeConversionEnabled">
+                  <Switch className="switch" />
+                </Form.Item>
+                <div
+                  className={`mx-2 text-${
+                    list?.response?.isDownCodeConversionEnabled
+                      ? "info"
+                      : "danger"
+                  }`}
+                >
+                  {list?.response?.isDownCodeConversionEnabled
+                    ? "Enable"
+                    : "Disable"}
+                </div>
+              </div>
+            </div>
+            <div className="d-flex justify-content-between mt-1">
+              <div>{"Do you need to enable/disable active headers"}</div>
+              <div className="d-flex justify-content-between">
+                <Form.Item name="isDownCodeConversionEnabled">
+                  <Switch className="switch" />
+                </Form.Item>
+                <div
+                  className={`mx-2 text-${
+                    list?.response?.isDownCodeConversionEnabled
+                      ? "info"
+                      : "danger"
+                  }`}
+                >
+                  {list?.response?.isDownCodeConversionEnabled
+                    ? "Enable"
+                    : "Disable"}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="text-end p-3">
-        <RegularButton
-          type={"outline"}
-          name={"Restore Changes"}
-          onClick={() => console.log("Restore Changes")}
-        />
-        <RegularButton
-          name={"Save Changes"}
-          onClick={() => console.log("Save Changes")}
-        />
-      </div>
+        <div className="d-flex justify-content-end p-3">
+          <RegularButton
+            type={"outline"}
+            name={"Restore Changes"}
+            onClick={() => console.log("Restore Changes")}
+          />
+          <RegularButton name={"Save Changes"} onClick={handleSubmit()} />
+        </div>
+      </Form>
     </>
   );
 };
-
-export default MedicalCoding;
+const enhancer = connect((state) => ({
+  list: state?.tenantAdmin?.codingGuidelines?.data,
+}), {
+  getCodingDetails: codingGuidelinesActions.codingGuidelinesAction,
+  updateSettings: configurationActions.updateSettingsAction,
+});
+export default enhancer(MedicalCoding);
