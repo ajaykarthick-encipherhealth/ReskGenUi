@@ -682,3 +682,7 @@ export const encyptingPass = (password) => {
 export const getDateAndTime = (date) => {
   return moment(date).format("MM/DD/YYYY h:mm A");
 };
+
+export const resetPageNumber=(setPageNo)=>{
+setPageNo(0)
+}

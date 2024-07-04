@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   disableFutureDate,
   handleRnagePicker2,
+  resetPageNumber,
   searchFunction,
 } from "../../../../components/headerFilters/functions";
 import InputField from "../../../../components/input";
@@ -131,6 +132,7 @@ const HeaderFilters = ({
   selectOrgList,
   orgAllList,
   setSelectedOrgList,
+  setPageNo
 }) => {
   const dispatch = useDispatch();
   const [trackInput, setTrackInput] = useState("");
@@ -152,6 +154,7 @@ const HeaderFilters = ({
                 <Select
                   value={selectorValue ? selectorValue : ""}
                   onChange={(selectedOption) => {
+                    resetPageNumber(setPageNo)
                     setClear(false);
                     setSelAllocatedTo(selectedOption);
                   }}
@@ -177,6 +180,7 @@ const HeaderFilters = ({
                 <Select
                   value={auditSelAllocatedTo ? auditSelAllocatedTo : ""}
                   onChange={(selectedOption) => {
+                    resetPageNumber(setPageNo)
                     setClear(false);
                     setAuditSelAllocatedTo(selectedOption);
                   }}
@@ -197,6 +201,7 @@ const HeaderFilters = ({
                 format="MM-DD-YYYY"
                 onCalendarChange={(val) => setSelectedDates(val)}
                 onChange={(date, dateString) => {
+                  resetPageNumber(setPageNo)
                   handleRnagePicker2({
                     date,
                     dateString,
@@ -224,6 +229,7 @@ const HeaderFilters = ({
                     format="MM-DD-YYYY"
                     onCalendarChange={(val) => setSelectedDates2(val)}
                     onChange={(date, dateString) => {
+                      resetPageNumber(setPageNo)
                       handleRnagePicker2({
                         date,
                         dateString,
@@ -250,6 +256,7 @@ const HeaderFilters = ({
                     format="MM-DD-YYYY"
                     onCalendarChange={(val) => setSelectedDates3(val)}
                     onChange={(date, dateString) => {
+                      resetPageNumber(setPageNo)
                       handleRnagePicker2({
                         date,
                         dateString,
@@ -272,6 +279,7 @@ const HeaderFilters = ({
                 <Select
                   value={clear ? "" : selector3Value}
                   onChange={(selectedOption) => {
+                    resetPageNumber(setPageNo)
                     setSelectedOption2(selectedOption);
                     setClear(false);
                   }}
@@ -291,6 +299,7 @@ const HeaderFilters = ({
                 <Select
                   value={clear ? "" : selector4value}
                   onChange={(selectedOption) => {
+                    resetPageNumber(setPageNo)
                     setSelectedOption(selectedOption);
                     setClear(false);
                   }}
@@ -310,6 +319,7 @@ const HeaderFilters = ({
                 <Select
                   value={clear ? "" : selector5value}
                   onChange={(selectedOption) => {
+                    resetPageNumber(setPageNo)
                     setAuditSelectedOption(selectedOption);
                     setClear(false);
                   }}
@@ -334,6 +344,7 @@ const HeaderFilters = ({
                     format="MM-DD-YYYY"
                     onCalendarChange={(val) => setSelectedDates4(val)}
                     onChange={(date, dateString) => {
+                      resetPageNumber(setPageNo)
                       handleRnagePicker2({
                         date,
                         dateString,
@@ -374,6 +385,7 @@ const HeaderFilters = ({
                       format="MM-DD-YYYY"
                       onCalendarChange={(val) => setSelectedDates5(val)}
                       onChange={(date, dateString) => {
+                        resetPageNumber(setPageNo)
                         handleRnagePicker2({
                           date,
                           dateString,
@@ -402,6 +414,7 @@ const HeaderFilters = ({
                   <Select
                     value={clear ? "" : selector6value}
                     onChange={(selectedOption) => {
+                      resetPageNumber(setPageNo)
                       setSelAllocatedBy(selectedOption);
                       setClear(false);
                     }}
@@ -426,6 +439,7 @@ const HeaderFilters = ({
                   <Select
                     value={clear ? "" : selector7value}
                     onChange={(selectedOption) => {
+                      resetPageNumber(setPageNo)
                       setSelAuditAllocatedBy(selectedOption);
                       setClear(false);
                     }}
@@ -449,6 +463,7 @@ const HeaderFilters = ({
                   <Select
                     value={clear ? "" : selectOrgList}
                     onChange={(selectedOption) => {
+                      resetPageNumber(setPageNo)
                       setSelectedOrgList(selectedOption);
                       setClear(false);
                     }}
@@ -477,6 +492,7 @@ const HeaderFilters = ({
                     isTracking={true}
                     trackInput={trackInput}
                     setTrackInput={setTrackInput}
+                    setPageNo={setPageNo}
                   />
                 </div>
               </div>
@@ -545,7 +561,9 @@ const HeaderFilters = ({
                   setSelAllocatedBy("");
                   setSelAuditAllocatedBy("");
                   setTrackInput("");
+                  resetPageNumber(setPageNo)
                 }}
+
               >
                 <button className={`${styles.filterBtn} mx-3`}>Clear</button>
               </div>

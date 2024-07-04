@@ -1,6 +1,6 @@
 import React from "react";
 import Select from "react-select";
-import { handleSelector } from "../headerFilters/functions";
+import { handleSelector, resetPageNumber } from "../headerFilters/functions";
 
 const Selector = ({
   selectlabel,
@@ -8,7 +8,8 @@ const Selector = ({
   selectOptions,
   isClose = false,
   selectDefaultValue,
-  setDefaultValue
+  setDefaultValue,
+  setPageNo
 }) => {
   return (
     <div>
@@ -22,6 +23,9 @@ const Selector = ({
           onChange={(value) => {
             handleSelector(value, setSelectedOption);
             setDefaultValue && setDefaultValue(value)
+            if(setPageNo){
+              resetPageNumber(setPageNo)
+            }
           }}
           value={selectDefaultValue}
         />

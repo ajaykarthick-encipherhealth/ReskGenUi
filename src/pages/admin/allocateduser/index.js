@@ -26,6 +26,7 @@ import {
   generateOptionsList,
   disableFutureDate,
   renderUserPrfoile,
+  resetPageNumber,
 } from "../../../components/headerFilters/functions";
 import Selector from "../../../components/selector";
 import { getFilters } from "../../../stores/authflow/actions";
@@ -177,11 +178,13 @@ export default function Patient() {
       dateString?.length > 0 &&
       dateString?.map((data, index) => {
         const formattedDate =
-        index === 1
-        ? data &&
-          `${moment(data, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
-        : data &&
-          `${moment(data, "MM-DD-YYYY").format("YYYY-MM-DD")}T00:00:00.000Z`;
+          index === 1
+            ? data &&
+              `${moment(data, "MM-DD-YYYY").format("YYYY-MM-DD")}T23:59:59.999Z`
+            : data &&
+              `${moment(data, "MM-DD-YYYY").format(
+                "YYYY-MM-DD"
+              )}T00:00:00.000Z`;
         return formattedDate;
       });
     setStartDate(formattedDates[0]);
@@ -552,9 +555,11 @@ export default function Patient() {
                                 />
                                 <InputText
                                   type="text"
-                                  onChange={(e) =>
-                                    getNameSearch(e.target.value)
-                                  }
+                                  onChange={(e) => {
+                                    getNameSearch(e.target.value);
+
+                                    resetPageNumber(setPageNo);
+                                  }}
                                   value={searchString}
                                   className="form-control new-form-control"
                                   placeholder="Search"
@@ -583,6 +588,7 @@ export default function Patient() {
                                         dates,
                                         dateStrings
                                       );
+                                      resetPageNumber(setPageNo);
                                     }}
                                     disabledDate={(current) =>
                                       disableFutureDate(current)
@@ -598,6 +604,7 @@ export default function Patient() {
                                     selectOptions={statusOption}
                                     defaultSelectValue1={""}
                                     // isClose={true}
+                                    setPageNo={setPageNo}
                                   />
                                 </div>
                               </div>
@@ -655,6 +662,7 @@ export default function Patient() {
                                     )}
                                     defaultSelectValue1={""}
                                     // isClose={true}
+                                    setPageNo={setPageNo}
                                   />
                                 </div>
                               </div>
@@ -666,6 +674,7 @@ export default function Patient() {
                                     selectOptions={statusOptions}
                                     defaultSelectValue1={""}
                                     // isClose={true}
+                                    setPageNo={setPageNo}
                                   />
                                 </div>
                               </div>
@@ -922,7 +931,7 @@ export default function Patient() {
                                               <div>
                                                 <div className="pagination-container">
                                                   <Paginator
-                                                    first={paginationFirst}
+                                                    first={pageNo===0?0:paginationFirst}
                                                     rows={15}
                                                     totalRecords={
                                                       totalElementsPatient

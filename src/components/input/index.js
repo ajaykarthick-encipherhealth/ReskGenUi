@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { resetPageNumber } from "../headerFilters/functions";
 
 export const debounce = (func, delay) => {
   let timeoutId;
@@ -30,7 +31,8 @@ const InputField = ({
   activeTab,
   setSearchVal,
   searchVal,
-  isReport
+  isReport,
+  setPageNo
 }) => {
   const [inputStr, setInputStr] = useState("");
   const disallowedCharacters = ['[', '{', ']', '}', '|', '!', ',', '%', '^', "\\", "(", ")", "#"];
@@ -59,6 +61,9 @@ const InputField = ({
       } else {
         setInputStr(text);
       }
+    }
+    if(setPageNo){
+      resetPageNumber(setPageNo)
     }
     debounceFunc(text, activeTab);
   };

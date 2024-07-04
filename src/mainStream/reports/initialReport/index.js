@@ -438,7 +438,7 @@ const InitialCard = ({
       </div>
       {reportListAll?.response?.data?.length > 0 ? (
         <Pagination
-          first={paginationFirst}
+          first={page?.pageNo===0?0:paginationFirst}
           totalRecords={reportListAll?.response?.totalElements}
           onPageChange={onPageChange}
         />

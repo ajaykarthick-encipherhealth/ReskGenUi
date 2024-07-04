@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import {
   disableFutureDate,
   handleRnagePicker2,
+  resetPageNumber,
 } from "../headerFilters/functions";
 
 const { RangePicker } = DatePicker;
@@ -21,6 +22,7 @@ const DateRangePicker = ({
   setCoderStartDate,
   setCoderEndDate,
   disabled,
+  setPageNo
 }) => {
   return (
     <div>
@@ -67,6 +69,9 @@ const DateRangePicker = ({
               setStartDate,
               setEndDate,
             });
+            if(setPageNo){
+              resetPageNumber(setPageNo)
+            }
             // setClear(false);
           }}
         />
