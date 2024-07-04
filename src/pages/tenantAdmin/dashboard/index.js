@@ -20,7 +20,7 @@ import HeadTitle from "../../../components/headtitle";
 import OrgPieChartInfo from "./components/OrgPieChart";
 
 const Index = () => {
-  const [activeBtn, setActiveBtn] = useState("workflow");
+  const [activeBtn, setActiveBtn] = useState("default");
   const allocatedData=[
     { value: 1048, name: "Allocated",itemStyle:{color:"#3276CD"} },
     { value: 735, name: "Not Allocated",itemStyle:{color:"#AF47D2"} },
