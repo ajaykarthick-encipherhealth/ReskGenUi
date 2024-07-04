@@ -14876,8 +14876,19 @@ input::-webkit-inner-spin-button {
 
 .tenatTable tbody {
   display: block;
-  max-height: 400px;
-  overflow-y: auto;
+  max-height: 400px !important;
+  overflow-y: hidden;
+}
+.tenatTable tbody:hover {
+  overflow-y: scroll;
+}
+
+.tenatTable tbody::-webkit-scrollbar {
+  width: 4px;
+}
+
+.tenatTable tbody::-webkit-scrollbar-thumb {
+  border-radius: 4px;
 }
 
 .tenatTable thead, .tenatTable tbody tr {
@@ -14900,4 +14911,32 @@ input::-webkit-inner-spin-button {
 .tenatTable .midRow{
 text-align: start;
 }
-
+/* @media only screen and (min-width: 1200px) {
+.tenantPie >div >div>canvas{
+  border:1px solid red;
+  position: absolute;
+  left: -26px !important;
+  top: -17px !important;
+  width: 180px !important;
+  height: 218px !important;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  padding: 0px;
+  margin: 0px;
+  border-width: 0px;
+}
+}
+@media only screen and (min-width: 600px) {
+  .tenantPie >div >div>canvas{
+    position: absolute;
+    left: -10px !important;
+    top: 0px !important;
+    width: 100% !important;
+    height: 200px !important;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    padding: 0px;
+    margin: 0px;
+    border-width: 0px;
+  }
+} */

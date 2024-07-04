@@ -1,0 +1,104 @@
+import React from "react";
+import ReactECharts from "echarts-for-react";
+import styles from "./styles.module.css";
+import { Col, Row } from "antd";
+const index = ({ data, header }) => {
+  const totalSum = data.reduce((acc, curr) => acc + curr.value, 0);
+
+  const option = {
+    tooltip: {
+      trigger: "item",
+    },
+    legend: {
+      top: "5%",
+      left: "60%",
+      //   left: "start",
+      width: 20,
+      show: false,
+    },
+    series: [
+      {
+        // name: "Access From",
+        type: "pie",
+        radius: ["65%", "45%"],
+        avoidLabelOverlap: false,
+        label: {
+          show: true,
+          position: "center",
+          formatter: function (params) {
+            return `{b|${totalSum}}\n {a|${header}}`;
+          },
+          backgroundColor: "transparent",
+
+          rich: {
+            a: {
+              fontSize: 12,
+              fontWeight: 500,
+              marginTop: 320,
+            },
+            b: {
+              fontSize: 10,
+              fontWeight: 700,
+            },
+          },
+        },
+        itemStyle: {
+          borderRadius: 0,
+          borderColor: "#fff",
+          borderWidth: 5,
+        },
+        emphasis: {
+          show: false,
+          label: {
+            show: false,
+            fontSize: 40,
+            fontWeight: "bold",
+          },
+        },
+        labelLine: {
+          show: false,
+        },
+        data: data,
+      },
+    ],
+  };
+
+  return (
+    <Row>
+      <Col span={12}>
+        <div
+          className={`tenantPie ${styles.container}`}
+          style={{ width: "100%" }}
+        >
+          <ReactECharts
+            option={option}
+            style={{ width: "100%", height: "180px",marginLeft:"-10px" }}
+          />
+        </div>
+      </Col>
+      <Col span={12} className={styles.headerTitle}>
+        <div>
+          {data?.map((item) => {
+            return (
+              <div className={styles.container}>
+                <div style={{ display: "flex", width: "90%" }}>
+                  <div
+                    className={styles.bgColor}
+                    style={{
+                      backgroundColor: item?.itemStyle?.color,
+                    }}
+                  ></div>
+                  <span className={styles.userNameTitle}>{item.name}</span>
+                </div>
+
+                <div className={styles.subText}>{item.value}</div>
+              </div>
+            );
+          })}
+        </div>
+      </Col>
+    </Row>
+  );
+};
+
+export default index;

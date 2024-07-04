@@ -4,11 +4,11 @@ import { connect, useSelector } from "react-redux";
 import moment from "moment";
 import Image from "next/image";
 import { Modal, Spin } from "antd";
-import Card from "../../../../components/card/index";
-import HeadTitle from "../../../../components/headtitle";
-import { SVGICON } from "../../../../jsx/constant/theme";
-import NoNotification from "../../../../images/dashboard/no-notification.png";
-import spinSTYles from "../../../../styles/auth.module.css";
+import Card from "../../../../../components/card/index";
+import HeadTitle from "../../../../../components/headtitle";
+import { SVGICON } from "../../../../../jsx/constant/theme";
+import NoNotification from "../../../../../images/dashboard/no-notification.png";
+import spinSTYles from "../../../../../styles/auth.module.css";
 
 const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
   const notificationResult = webSocketNotificationData
@@ -62,10 +62,11 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
         header="Notifications"
         anchorTag="anchor"
         handleOpen={handleOpen}
+        fontSize="16px"
       />
 
       <div className={styles.card4}>
-        <Card borderRadius="28px" padding="20px">
+
           {notificationResponse?.loading ? (
             <div
               style={{
@@ -81,7 +82,7 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
           ) : (
             <div className={styles.container}>{notificationData}</div>
           )}
-        </Card>
+     
       </div>
       <Modal
         title="Notifications"

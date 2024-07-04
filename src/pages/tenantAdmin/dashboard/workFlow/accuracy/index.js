@@ -1056,7 +1056,8 @@ const Accuracy = () => {
       <div className={styles.card3}>
         <div className="d-flex justify-content-between">
           <div style={{ width: "50%" }}>
-            <HeadTitle header="Accuracy and Quality Insights" margin="0px" />
+            <HeadTitle header="Accuracy and Quality Insights"
+             fontSize="16px" margin="0px" />
           </div>
           <div className="d-flex">
             <div className={styles.btnScroller}>

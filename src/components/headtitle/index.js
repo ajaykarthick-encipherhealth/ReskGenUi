@@ -18,7 +18,8 @@ const HeadTitle = ({
   openPicker,
   setOpenPicker,
   isAdmin = false,
-  margin
+  margin,
+   fontSize
 }) => {
   const dispatch = useDispatch();
   const [selectedDates, setSelectedDates] = useState([]);
@@ -49,7 +50,7 @@ const HeadTitle = ({
           justifyContent: "space-between",
         }}
       >
-        <div className={styles.title}>{header}</div>
+        <div className={styles.title} style={{fontSize: fontSize}}>{header}</div>
         {icon && (
           <div className={styles.imgContainer}>
             <Image
