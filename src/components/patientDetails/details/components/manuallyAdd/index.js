@@ -710,6 +710,9 @@ const ManuallyAdd = ({
         } else if (res?.status == "CUSTOM_EXCEPTION") {
           getResponePopup(res);
         }
+         else if (res?.status == "USER_DEFINED_ERROR") {
+          getResponePopup(res);
+        }
       } catch (error) {}
     }
   };
