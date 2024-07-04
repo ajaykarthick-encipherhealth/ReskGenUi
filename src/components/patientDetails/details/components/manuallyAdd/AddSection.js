@@ -32,7 +32,7 @@ const AddSection = ({
               },
             ]}
           >
-           <Select options={date} size="large" className={`ant_select_form hcc_form mb-2`} allowClear disabled={isEditPage}/>
+           <Select options={date} size="large" className={`ant_select_form hcc_form mb-2`} allowClear/>
           </Form.Item>
         </div>
         <div className="col-6">

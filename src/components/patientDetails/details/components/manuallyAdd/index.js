@@ -52,6 +52,7 @@ const ManuallyAdd = ({
   isEditMeatValue,
   isEditMeat,
   diseaseEditMeat,
+  reset
 }) => {
   const [form] = Form.useForm();
   const [isMeat, setIsMeat] = useState(false);
@@ -162,7 +163,7 @@ const ManuallyAdd = ({
   const handleSelectChange = async (val, field) => {
     form.setFieldsValue({ [field]: val });
     if (field == "dos") {
-      if (val.length <= 0) {
+      if (val?.length <= 0) {
         setCapturedSections([]);
         setProviderDetails([]);
       } else {
@@ -695,7 +696,6 @@ const ManuallyAdd = ({
     if (validCode.toLowerCase() == "valid code") {
       try {
         let res = {};
-        console.log(data);
         if (isEditPage) {
           res = await diseaseEdit(data);
         } else if (isEditMeat) {
@@ -703,56 +703,60 @@ const ManuallyAdd = ({
         } else {
           res = await manuallyAdd(data);
         }
-
         if (res?.status == "SUCCESS") {
           handleCloseModal(false);
           getResponePopup(res);
-          form.resetFields();
-          getPatient();
-
-          setValidCode("");
-          setProviderDetails([]);
-          setCode("");
-          setIsMeat(false);
-          setCapturedSections([]);
-          setDiagnosisForm({});
-          setSectionCount([1]);
-          setSection("");
-          setMeatDisplay(false);
-          setListOfSection([]);
-          setShowSection(false);
-          setSelectMeat("M");
-          setIsFilled([]);
-
-          setSectionCountM([1]);
-          setSectionM("");
-          setListOfSectionM([]);
-          setShowSectionM(false);
-          setCapturedSectionsM([]);
-
-          setSectionCountE([1]);
-          setSectionE("");
-          setListOfSectionE([]);
-          setShowSectionE(false);
-          setCapturedSectionsE([]);
-
-          setSectionCountA([1]);
-          setSectionA("");
-          setListOfSectionA([]);
-          setShowSectionA(false);
-          setCapturedSectionsA([]);
-
-          setSectionCountT([1]);
-          setSectionT("");
-          setListOfSectionT([]);
-          setShowSectionT(false);
-          setCapturedSectionsT([]);
+          resetForms()
         } else if (res?.status == "CUSTOM_EXCEPTION") {
           getResponePopup(res);
         }
       } catch (error) {}
     }
   };
+
+  const resetForms = () => {
+    handleCloseModal(false);
+    form.resetFields();
+    getPatient();
+
+    setValidCode("");
+    setProviderDetails([]);
+    setCode("");
+    setIsMeat(false);
+    setCapturedSections([]);
+    setDiagnosisForm({});
+    setSectionCount([1]);
+    setSection("");
+    setMeatDisplay(false);
+    setListOfSection([]);
+    setShowSection(false);
+    setSelectMeat("M");
+    setIsFilled([]);
+
+    setSectionCountM([1]);
+    setSectionM("");
+    setListOfSectionM([]);
+    setShowSectionM(false);
+    setCapturedSectionsM([]);
+
+    setSectionCountE([1]);
+    setSectionE("");
+    setListOfSectionE([]);
+    setShowSectionE(false);
+    setCapturedSectionsE([]);
+
+    setSectionCountA([1]);
+    setSectionA("");
+    setListOfSectionA([]);
+    setShowSectionA(false);
+    setCapturedSectionsA([]);
+
+    setSectionCountT([1]);
+    setSectionT("");
+    setListOfSectionT([]);
+    setShowSectionT(false);
+    setCapturedSectionsT([]);
+  }
 
   const getPatient = async () => {
     const res = await getpatientDetailsData(
@@ -787,7 +791,6 @@ const ManuallyAdd = ({
 
   const sectionEdit = (item, index) => {
     setEditSection({ id: index, ...item });
-    console.log(item, "testings");
     item.hyperlinks?.map((list, i) => {
       form.setFieldsValue({
         section: [{ lable: list.header, value: list.header }],
@@ -910,11 +913,11 @@ const ManuallyAdd = ({
       );
       setCode(isEditValue.diagnosisCode);
       setValidCode("Valid Code");
-      const dos = isEditValue.dateOfServices.map((item) => ({
+      const dos = isEditValue?.dateOfServices?.map((item) => ({
         lable: item,
         value: item,
       }));
-      const sectionList = isEditValue.hyperlinks.map((item) => ({
+      const sectionList = isEditValue?.hyperlinks?.map((item) => ({
         section: item.header,
         hyperlinks: item,
       }));
@@ -951,7 +954,7 @@ const ManuallyAdd = ({
       setListOfSectionT(transformData(sectionListT));
     }
 
-  }, [isEditPage, isEditValue]);
+  }, [isEditPage, isEditValue, reset]);
 
   useEffect(() => {
     if (isEditMeat) {
@@ -990,7 +993,7 @@ const ManuallyAdd = ({
       setListOfSectionT(transformData(sectionListT));
     }
   }, [isEditMeat, isEditMeatValue]);
-
+  
   return (
     <>
       <div className="d-flex justify-content-between mb-4">
@@ -1006,6 +1009,9 @@ const ManuallyAdd = ({
           onClick={() => {
             handleCloseModal(false);
             setMeatDisplay(false);
+            resetForms()
+            form.resetFields()
+            setProviderDetails([]);
           }}
         >
           <CloseOutlined />
@@ -1175,7 +1181,7 @@ const ManuallyAdd = ({
                       onChange={(val) => setSection(val)}
                       setOptions={setCapturedSections}
                       value={section}
-                      disabled={isEditPage}
+                      disabled={false}
                     />
                   </Form.Item>
                 </div>
@@ -1357,7 +1363,7 @@ const ManuallyAdd = ({
               isEditMeat={isEditMeat}
               isEditMeatValue={isEditMeatValue}
               form={form}
-              disabled={isEditMeat || isEditPage}
+              disabled={false}
             />
           </Form>
         </>
