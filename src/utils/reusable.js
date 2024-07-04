@@ -22,6 +22,11 @@ export const getResponePopup = (res) => {
         description: res?.data?.message ? res?.data?.message : res?.status,
         duration: 1,
       });
+    case "CUSTOM_EXCEPTION":
+      return notification.error({
+        description: res?.data?.message ? res?.data?.message : res?.message,
+        duration: 2,
+      });
     default:
       break;
   }
