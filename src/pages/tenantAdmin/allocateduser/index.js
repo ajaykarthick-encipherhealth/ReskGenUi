@@ -31,7 +31,7 @@ import { getFilters } from "../../../stores/authflow/actions";
 import AllocateModal from "./allocate";
 import { debounce } from "../../../components/input";
 import { useCallback } from "react";
-import { actions as allActions } from "../../..patientAllocation/stores/admin/";
+import { actions as allActions } from "../../../stores/admin/patientAllocation";
 import {actions as tenantAdminAction} from '../../../stores/tenantAdmin'
 const { RangePicker } = DatePicker;
 const statusOption = [
