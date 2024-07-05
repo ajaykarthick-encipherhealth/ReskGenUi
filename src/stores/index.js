@@ -33,6 +33,7 @@ import { reducer as patientDeatilsReducer } from "./patient/details"
 import { reducer as tenantAdminReducer } from "./tenantAdmin";
 import { reducer as webSocketReducer } from "./websocket"
 import{reducer as workFlowReducer} from './tenantAdmin/workFlow'
+import { reducer as codifyReducer } from "./codify/dashboard"
 
 
 const reducers = combineReducers({
@@ -73,7 +74,9 @@ const reducers = combineReducers({
   admin: combineReducers({
     report: updatedAdminReportReducer,
   }),
-  // codify: combineReducers({ codify: codifyReducer }),
+   codify: combineReducers({
+     codify: codifyReducer 
+    }),
   search: searchReducer,
   physician: combineReducers({
     dashboard: physicianReducer,

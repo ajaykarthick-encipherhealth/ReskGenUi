@@ -257,7 +257,7 @@ const enhancer = connect(
     reviewerStatusData: state.tenantAdmin.workFlow.reviewerStatus.data,
     organizationStatusData: state.tenantAdmin.workFlow.organizationStatus.data,
   }
-//  console.log(state,"state")
+
 ),
   
 

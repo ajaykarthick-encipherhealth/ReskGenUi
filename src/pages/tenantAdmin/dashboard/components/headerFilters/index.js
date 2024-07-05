@@ -12,7 +12,6 @@ const index = ({activeBtn, setActiveBtn,setDateRange}) => {
     if (value === "last_1_week") {
       startDate = moment().subtract(6, 'days').format('YYYY-MM-DD') +
     "T00:00:00.000Z";
-        console.log(startDate,"startDate")
     } else if (value === "last_1_month") {
       startDate = moment().subtract(30, 'days').format('YYYY-MM-DD') +
       "T00:00:00.000Z";
