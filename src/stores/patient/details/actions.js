@@ -95,3 +95,18 @@ export const labDetailsActionSetFileEmpty = createActionThunk(
   "LAB_FILE_DETAILS",
   network.radiologyDetailsSetEmpty
 );
+
+export const getAllProcessYearAction = createActionThunk(
+  "PROCESSED_YEAR",
+  network.getAllProcessYear
+);
+
+export const radiologyDosDeatilsAction = createActionThunk(
+  "RADIOLOGY_DOS_LIST",
+  network.radiologydosWiseList
+);
+
+export const labDosDeatilsAction = createActionThunk(
+  "RADIOLOGY_DOS_LIST",
+  network.labdosWiseList
+);

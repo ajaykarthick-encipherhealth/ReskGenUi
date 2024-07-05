@@ -35,28 +35,49 @@ export async function patientIdDetails(patientId) {
 }
 
 
-export async function radiologyDetails(patientId) {
-  const orgId = localStorage.getItem("orgId");
+export async function radiologyDetails(patientId,processedYear,dos,setIsSpinnerLoading) {
+  const roles = localStorage.getItem('role')
   const options = {
     method: "GET",
   };
-  const data = await requestPortal(
-    `dbservice/radiology/compute/get/radiology?patientid=${patientId}&orgid=${orgId}`,
-    options
-  );
-  return data;
+  var url = `patientId=${patientId}&role=${roles?.toUpperCase()}&processedYear=${processedYear}` 
+  if(dos){
+    url = `patientId=${patientId}&role=${roles ? roles?.toUpperCase() : ""}&dateOfService=${dos}` 
+  }
+  try {
+    const data = await requestPortal(
+      `dbservice/radiology/compute/get?${url}
+    `,
+      options
+    );
+    return data;
+  } catch (error) {
+    setIsSpinnerLoading(false);
+  }
+ 
 }
 
-export async function labDetails(patientId) {
+
+export async function labDetails(patientId,processedYear,dos,setIsSpinnerLoading) {
+  const roles = localStorage.getItem('role')
   const options = {
     method: "GET",
   };
-  const orgId = localStorage.getItem("orgId");
-  const data = await requestPortal(
-    `dbservice/lab/compute/get/lab?patientid=${patientId}&orgid=${orgId}`,
-    options
-  );
-  return data;
+  var url = `patientId=${patientId}&role=${roles?.toUpperCase()}&processedYear=${processedYear}` 
+  if(dos){
+    url = `patientId=${patientId}&role=${roles ? roles?.toUpperCase() : ""}&dateOfService=${dos}` 
+  }
+  try {
+    const data = await requestPortal(
+      `dbservice/lab/compute/get?${url}
+    `,
+      options
+    );
+    return data;
+  } catch (error) {
+    setIsSpinnerLoading(false);
+  }
+ 
 }
 
 export async function patientHccFile(fileId) {
@@ -186,4 +207,41 @@ export async function diseaseEditMeat(obj) {
 
 export async function radiologyDetailsSetEmpty() {
   return null;
+}
+
+export async function getAllProcessYear(patientId,type) {
+  const options = {
+    method: "GET",
+  };
+  var URL = `dbservice/patient/compute/get/allyear?patientId=${patientId}`;
+  if(type == "RADIOLOGY"){
+    URL = `dbservice/radiology/compute/get/allyear?patientId=${patientId}`;
+  }
+  if(type == "LAB"){
+    URL = `dbservice/lab/compute/get/allyear?patientId=${patientId}`;
+  }
+  const data = await requestPortal(URL,options);
+  return data;
+}
+
+export async function radiologydosWiseList(patientId,year) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/radiology/compute/get/alldossummaries?patientId=${patientId}&processedYear=${year}`,
+    options
+  );
+  return data;
+}
+
+export async function labdosWiseList(patientId,year) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/lab/compute/get/alldossummaries?patientId=${patientId}&processedYear=${year}`,
+    options
+  );
+  return data;
 }

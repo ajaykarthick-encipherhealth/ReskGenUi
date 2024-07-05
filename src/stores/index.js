@@ -35,6 +35,8 @@ import { reducer as webSocketReducer } from "./websocket"
 import codifyReducer from "./codify/dashboard/reducer";
 import {reducer as adminPatientsReducer} from './admin/workqueue'
 import {reducer as allocatedReducer} from './admin/patientAllocation'
+import {reducer as UsersReducer} from './supervisor/users'
+import {reducer as AuditedReducer} from './supervisor/auditedQueue'
 
 const reducers = combineReducers({
   // old reducers
@@ -70,6 +72,8 @@ const reducers = combineReducers({
 
   supervisor: combineReducers({
     report: updatedReportReducer,
+    users:UsersReducer,
+    audited:AuditedReducer
   }),
   admin: combineReducers({
     report: updatedAdminReportReducer,
