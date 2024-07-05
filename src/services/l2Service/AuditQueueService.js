@@ -1,80 +1,80 @@
 import axios from "../../utility/axiosConfig";
 import ENDPOINTS from "../../utility/enpoints";
 
-export const PatientsList = async (page, url) => {
-  var uId = localStorage.getItem("userId");
-  const token = localStorage.getItem("token");
-  try {
-    const response = await axios.get(
-      `
-       ${ENDPOINTS?.apiEndoint}dbservice/patient/filter?userId=${uId}&page=${page}&size=10&${url}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return response.data;
-  } catch (err) {
-    console.log(err);
-  }
-};
+// export const PatientsList = async (page, url) => {
+//   var uId = localStorage.getItem("userId");
+//   const token = localStorage.getItem("token");
+//   try {
+//     const response = await axios.get(
+//       `
+//        ${ENDPOINTS?.apiEndoint}dbservice/patient/filter?userId=${uId}&page=${page}&size=10&${url}`,
+//       {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       }
+//     );
+//     return response.data;
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
 
-export const SearchPatientsList = async (pagenum, search) => {
-  const token = localStorage.getItem("token");
-  try {
-    const response = await axios.get(
-      `
-       ${ENDPOINTS?.apiEndoint}dbservice/patient/compute/search?pageno=${pagenum}&searchtext=${search}&pagesize=12`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return response.data;
-  } catch (err) {
-    console.log(err);
-  }
-};
-export const ChangePriority = async (patientId, year, priority) => {
-  const token = localStorage.getItem("token");
-  try {
-    const response = await axios.put(
-      `${ENDPOINTS?.apiEndoint}dbservice/change/priority?patientId=${patientId}&year=${year}&priority=${priority}`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw err; 
-  }
-};
+// export const SearchPatientsList = async (pagenum, search) => {
+//   const token = localStorage.getItem("token");
+//   try {
+//     const response = await axios.get(
+//       `
+//        ${ENDPOINTS?.apiEndoint}dbservice/patient/compute/search?pageno=${pagenum}&searchtext=${search}&pagesize=12`,
+//       {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       }
+//     );
+//     return response.data;
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
+// export const ChangePriority = async (patientId, year, priority) => {
+//   const token = localStorage.getItem("token");
+//   try {
+//     const response = await axios.put(
+//       `${ENDPOINTS?.apiEndoint}dbservice/change/priority?patientId=${patientId}&year=${year}&priority=${priority}`,
+//       {},
+//       {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       }
+//     );
+//     return response.data;
+//   } catch (err) {
+//     console.log(err);
+//     throw err; 
+//   }
+// };
 
 
-export const GetWorkListFilters = async (
-    datas
-  ) => {
-    const token = localStorage.getItem("token");
-    try {
-      const response = await axios.get(
-        `${ENDPOINTS?.apiEndoint}dbservice/auditor/patient/workqueue/filter?&page=${datas?.pageNo}&size=15&auditedStatus=${datas?.selectedOption}&auditDueDateStart=${datas?.computedStartDate}&auditDueDateEnd=${datas?.computedEndDate}&auditedDateStart=${datas?.completedStartDate}&auditedDateEnd=${datas?.completedEndDate}&searchString=${datas?.search}&sortField=${datas?.sort?.sortField}&sortdirection=${datas?.sort?.sortDir}&patientAllocated=${datas?.selCreatedBy}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      return response.data;
-    } catch (err) {
-      console.log(err);
-    }
-  };
+// export const GetWorkListFilters = async (
+//     datas
+//   ) => {
+//     const token = localStorage.getItem("token");
+//     try {
+//       const response = await axios.get(
+//         `${ENDPOINTS?.apiEndoint}dbservice/auditor/patient/workqueue/filter?&page=${datas?.pageNo}&size=15&auditedStatus=${datas?.selectedOption}&auditDueDateStart=${datas?.computedStartDate}&auditDueDateEnd=${datas?.computedEndDate}&auditedDateStart=${datas?.completedStartDate}&auditedDateEnd=${datas?.completedEndDate}&searchString=${datas?.search}&sortField=${datas?.sort?.sortField}&sortdirection=${datas?.sort?.sortDir}&patientAllocated=${datas?.selCreatedBy}`,
+//         {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//           },
+//         }
+//       );
+//       return response.data;
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   };
 
 export const getFilePageNumber = async (fileId) => {
   const token = localStorage.getItem("token");

@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { Paginator } from "primereact/paginator";
 import AdminList from "../table/adminList/adminList";
 import Header from "../../../jsx/layouts/nav/Header";
 import HeaderFilters from "../../../components/headerFilters";
 import SpinnerDots from "../../../components/spinner";
-import { getL2Users } from "../../../store/actions/l2Action/userActions";
-
-const UserList = () => {
-  const dispatch = useDispatch();
-  const usersData = useSelector((state) => state.l2User?.data);
+import {actions as allActions} from '../../../stores/supervisor/users'
+const UserList = ({getUsers,loader,usersData}) => {
   const sideMenu = useSelector((state) => state.sideMenu);
   const [paginationFirst, setPaginationFirst] = useState(0);
   const [userListAll, setUserListAll] = useState([]);
@@ -30,9 +27,9 @@ const UserList = () => {
   }, [usersData]);
 
   useEffect(() => {
-    dispatch(getL2Users(pageCount, search));
+    getUsers({page:pageCount, search:search});
   }, [pageCount, search]);
-
+console.log(usersData)
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -56,7 +53,7 @@ const UserList = () => {
                       id="task-tbl_wrapper"
                       className="dataTables_wrapper no-footer"
                     >
-                      {!userListAll?.content ? (
+                      {loader ? (
                         <SpinnerDots />
                       ) : (
                         <AdminList
@@ -88,5 +85,10 @@ const UserList = () => {
     </>
   );
 };
-
-export default UserList;
+const connector=connect((state)=>({
+  usersData:state.supervisor.users?.getUsersList,
+  loader:state.supervisor.users?.usersLoading,
+}),{
+  getUsers:allActions.getUsers
+})
+export default connector(UserList);
