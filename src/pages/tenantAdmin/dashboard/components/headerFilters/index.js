@@ -1,8 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import { Select } from "antd";
+import moment from "moment";
 
-const index = ({activeBtn, setActiveBtn}) => {
+const index = ({activeBtn, setActiveBtn,setDateRange}) => {
+
+
+
+  const handleDateChange = (value) => {
+    let startDate;
+    if (value === "last_1_week") {
+      startDate = moment().subtract(6, 'days').format('YYYY-MM-DD') +
+    "T00:00:00.000Z";
+        console.log(startDate,"startDate")
+    } else if (value === "last_1_month") {
+      startDate = moment().subtract(30, 'days').format('YYYY-MM-DD') +
+      "T00:00:00.000Z";
+    } else {
+      startDate = moment().format('YYYY-MM-DD') +
+      "T00:00:00.000Z";
+    }
+    const endDate = moment().format('YYYY-MM-DD') +
+    "T23:59:59.000Z";
+    setDateRange({ startDate: startDate, endDate: endDate });
+  };
+
+
   return (
     <div className={styles.container}>
       <div className="d-flex justify-content-between w-[40%]" style={{ width: "40%" }}>
@@ -27,6 +50,7 @@ const index = ({activeBtn, setActiveBtn}) => {
                 { label: "Custom range Picker", value: "custom" },
               ]}
               allowClear
+              onChange={handleDateChange}
             />
           </div>
         </div>

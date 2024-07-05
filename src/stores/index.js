@@ -32,7 +32,8 @@ import { reducer as updatedAdminReportReducer } from "./admin/report";
 import { reducer as patientDeatilsReducer } from "./patient/details"
 import { reducer as tenantAdminReducer } from "./tenantAdmin";
 import { reducer as webSocketReducer } from "./websocket"
-import codifyReducer from "./codify/dashboard/reducer";
+import{reducer as workFlowReducer} from './tenantAdmin/workFlow'
+
 
 const reducers = combineReducers({
   // old reducers
@@ -72,7 +73,7 @@ const reducers = combineReducers({
   admin: combineReducers({
     report: updatedAdminReportReducer,
   }),
-  codify: combineReducers({ codify: codifyReducer }),
+  // codify: combineReducers({ codify: codifyReducer }),
   search: searchReducer,
   physician: combineReducers({
     dashboard: physicianReducer,
@@ -80,8 +81,12 @@ const reducers = combineReducers({
   patientDetails: combineReducers({
     details: patientDeatilsReducer,
   }),
-  tenantAdmin: tenantAdminReducer,
-  webSocket:webSocketReducer
+  tenantAdmin: combineReducers({
+    webSocket:webSocketReducer,
+    workFlow:workFlowReducer,
+
+  })
+ 
 });
 
 const middlewares = [thunkMiddleware, promiseMiddleware];
