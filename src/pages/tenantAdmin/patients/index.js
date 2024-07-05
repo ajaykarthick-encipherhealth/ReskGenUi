@@ -10,7 +10,6 @@ import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { Spin, notification } from "antd";
 import { Paginator } from "primereact/paginator";
 import visitStyles from "../../../styles/visitdata.module.css";
-import { getPatients } from "../../../store/actions/adminAction/patientsActions";
 import FileUploading from "../fileprocessing/FileUploading";
 import Addpatients from "../fileprocessing/Addpatiens";
 import SpinnerDots from "../../../components/spinner";
@@ -24,8 +23,6 @@ import { patientDetails } from "../../../stores/authflow/actions";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin";
 import { connect } from "react-redux";
 import AddPatientListTable from "../../../components/table/tenantTable/AddPatients/addPatients";
-import { eventStreming } from "../../../components/table/tenantTable/FileProcessing/FileProcessing";
-
 const bullets = [
   {
     color: "#34ace8",
@@ -732,7 +729,7 @@ const enhancer = connect(
     organizationList: state?.tenantAdmin?.allOrganization?.data,
     allPatientList: state?.tenantAdmin?.allPatients,
     webSocketData: state?.webSocket?.webSocketDetails?.data,
-    loading: state.tenantAdmin?.allPatientsLoading,
+    loading: state?.tenantAdmin?.allPatientsLoading,
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
