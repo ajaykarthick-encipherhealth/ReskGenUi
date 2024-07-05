@@ -737,7 +737,7 @@ export const getPatientDetails = async (
   }
 };
 
-const getStateIndicators = (data, state) => {
+export const getStateIndicators = (data, state) => {
   const result = data?.some((item) => item === state);
   return result;
 };
