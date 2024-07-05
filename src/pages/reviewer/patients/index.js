@@ -33,7 +33,7 @@ import InputField from "../../../components/input";
 import { patientDetails } from "../../../stores/authflow/actions";
 
 const { RangePicker } = DatePicker;
-const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
+const Patient = ({ patientsListFilter, getpatientsListFilter,loading }) => {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const navigate = useRouter();
@@ -575,7 +575,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
                         id="task-tbl_wrapper"
                         className="dataTables_wrapper no-footer"
                       >
-                        {patientsListFilter?.loading ? (
+                        {loading ? (
                           <LoadingSpinner />
                         ) : (
                           <>
@@ -621,6 +621,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
 const enhancer = connect(
   (state) => ({
     patientsListFilter: state?.reviewer?.workQueue?.patients,
+    loading:state?.reviewer?.workQueue?.patientsLoading
   }),
   {
     getpatientsListFilter: workqueueActions.patientsAction,
