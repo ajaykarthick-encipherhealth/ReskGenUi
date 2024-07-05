@@ -291,7 +291,6 @@ export const getPatientRadiologyDetailsNew = async (
 
 ) => {
   if (patientDetailsResult?.data?.response) {
-    console.log(patientDetailsResult)
     var result = patientDetailsResult?.data?.response;
 
     if (result.radiologyFileDetail != null) {
