@@ -29,9 +29,17 @@ const createReducer = (actionType) =>
     },
     initialState
   );
-
+  const getReportLoading=(type) => handleActions(
+    {
+      [type.START]: () => true,
+      [type.SUCCEEDED]: () => false,
+      [type.FAILED]: () => false,
+    },
+    false
+  );
 const dashbaordReducer = combineReducers({
   patients: createReducer(patientsAction),
+  patientsLoading:getReportLoading(patientsAction),
   flags:createReducer(flagsAction)
 });
 
