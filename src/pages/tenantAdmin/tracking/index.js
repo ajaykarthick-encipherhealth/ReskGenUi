@@ -15,7 +15,6 @@ import SpinnerDots from "../../../components/spinner";
 import { LoadingOutlined } from "@ant-design/icons";
 import HeaderFilters from "./headerFilters";
 import TrackingTable from "../../../components/table/tenantTable/trackingList";
-import { getTrackingList } from "../../../store/actions/adminAction/patientsActions";
 import { generateOptionsList } from "../../../components/headerFilters/functions";
 import DailyTask from "./dailytask";
 import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";

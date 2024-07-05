@@ -1,7 +1,6 @@
 import { requestPortal } from "../../../utils/network";
 
 export async function PatientsList({ data }) {
-  console.log(data)
   const options = {
     method: "GET",
   };

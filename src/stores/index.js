@@ -34,6 +34,8 @@ import { reducer as tenantAdminReducer } from "./tenantAdmin";
 import { reducer as webSocketReducer } from "./websocket"
 import codifyReducer from "./codify/dashboard/reducer";
 import {reducer as adminPatientsReducer} from './admin/workqueue'
+import {reducer as allocatedReducer} from './admin/patientAllocation'
+
 const reducers = combineReducers({
   // old reducers
   sideMenu: toggleMenu,
@@ -71,7 +73,8 @@ const reducers = combineReducers({
   }),
   admin: combineReducers({
     report: updatedAdminReportReducer,
-    workqueue:adminPatientsReducer
+    workqueue:adminPatientsReducer,
+    patientAllocate:allocatedReducer
   }),
   codify: combineReducers({ codify: codifyReducer }),
   search: searchReducer,
