@@ -33,7 +33,8 @@ const MedicalCoding = ({ getCodingDetails, updateSettings,list }) => {
     console.log(values);
   };
   const handleSubmit = (values) => {
-    updateSettings({ coding: values });
+    // if i uncommand this below line getting build error, before uncommand the line please verify 
+    // updateSettings({ coding: values });
   };
   return (
     <>
