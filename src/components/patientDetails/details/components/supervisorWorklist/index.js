@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Image from "next/image";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import LoadingSpinner from "../../../../../components/loadingSpinner";
-import { getWorkListFilter } from "../../../../../store/actions/l2Action/AuditorAction";
+// import { getWorkListFilter } from "../../../../../store/actions/l2Action/AuditorAction";
 import AuditedTrack from "../../../../../../src/images/trackingImages/AuditedTrack.png";
 import NotAudited from "../../../../../../src/images/trackingImages/NotAuditedTrack.png";
 import AuditHold from "../../../../../../src/images/trackingImages/AuditHoldTrack.png";
@@ -33,7 +33,7 @@ export function extractLatestData(notes) {
   return declinedData;
 }
 
-const SupervisorWorkList = ({ localUserId, setWorkListPatientId }) => {
+const SupervisorWorkList = ({ localUserId, setWorkListPatientId,getWorkListFilter }) => {
   const dispatch = useDispatch();
   const result = useSelector((state) => state.AuditWork.workListFilter);
   const [patientList, setPatientList] = useState([]);
@@ -216,7 +216,7 @@ const SupervisorWorkList = ({ localUserId, setWorkListPatientId }) => {
 
   useEffect(() => {
     setFilterDataLoading(true);
-    const datas = {
+    const data = {
       pageNo,
       computedStartDate,
       computedEndDate,
@@ -230,7 +230,7 @@ const SupervisorWorkList = ({ localUserId, setWorkListPatientId }) => {
       selCreatedBy,
     };
 
-    dispatch(getWorkListFilter(datas));
+    getWorkListFilter({data:data});
   }, [
     pageNo,
     computedStartDate,

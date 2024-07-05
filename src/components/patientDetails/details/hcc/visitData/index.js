@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch, connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { notification } from "antd";
+import { Drawer, notification } from "antd";
 import { Offcanvas } from "react-bootstrap";
 import axios from "../../../../../utility/axiosConfig";
 import ENDPOINTS from "../../../../../utility/enpoints";
@@ -144,6 +144,7 @@ const VisitData = ({
     setIsModalOpenLab(false);
     setIsFileFormShow(false);
     setFileLoading(false);
+    setIsEditHccForm(false)
     setOpens(false);
   };
 
@@ -760,35 +761,36 @@ const VisitData = ({
         show={isModalOpenValid}
         className="offcanvas-end"
         placement="end"
+        style={{width: "80vw"}}
       >
-        {/* <div className="offcanvas-header">
-          <h5 className="modal-title" id="#gridSystemModal">
-            Add Valid Code
-          </h5>
-          <button
-            type="button"
-            className="btn-close"
-            onClick={() => handleCloseModal()}
-          >
-            <i className="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-        <div className="offcanvas-body">
-          <div className="container-fluid">
-            <div className={`className="col-xl-12`}>
-              <AddHccForm
+       
+       <div className="row p-4" style={{overflow: "hidden", height: '100%'}}>
+          <div className="col-8">
+            {hccFileDetails?.loading != true ? (
+              <>
+                {selectFileURL && (
+                  <PdfViewer
+                    src={selectFileURL}
+                    searchQuery={search?.value ? search?.value : ""}
+                    pageNumber={search?.page ? search?.page : 1}
+                    headers={search?.headers}
+                    height="100vh"
+                    heightFrame='900'
+                  />
+                )}
+              </>
+            ) : null}
+          </div>
+          <div className="col-4">
+            <div className="px-4" style={{height: "90vh", overflowY: "scroll" }}>
+              <ManuallyAdd
                 handleCloseModal={handleCloseModal}
-                isMeatNew={true}
+                setIsFileFormShow={setIsModalOpenValid}
+                year={year}
+                reset={isModalOpenValid}
               />
             </div>
           </div>
-        </div> */}
-        <div className="p-4" style={{ overflowY: "scroll" }}>
-          <ManuallyAdd
-            handleCloseModal={handleCloseModal}
-            setIsFileFormShow={setIsModalOpenValid}
-            year={year}
-          />
         </div>
       </Offcanvas>
 
@@ -798,12 +800,50 @@ const VisitData = ({
         isMeatQueryModal={isMeatQueryModal}
         setIsMeatQueryModal={setIsMeatQueryModal}
       />
-      <EditHccForm
+      {/* <EditHccForm
         formValues={formValues}
         isEditHccForm={isEditHccForm}
         setIsEditHccForm={setIsEditHccForm}
         formEditPlace={formEditPlace}
-      />
+      /> */}
+       <Drawer
+        title=""
+        onClose={handleCloseModal}
+        closeIcon={false}
+        open={isEditHccForm}
+        width={"80vw"}
+      >
+        <div className="row p-4" style={{overflow: "hidden", height: '100%'}}>
+          <div className="col-8">
+            {hccFileDetails?.loading != true ? (
+              <>
+                {selectFileURL && (
+                  <PdfViewer
+                    src={selectFileURL}
+                    searchQuery={search?.value ? search?.value : ""}
+                    pageNumber={search?.page ? search?.page : 1}
+                    headers={search?.headers}
+                    height="100vh"
+                    heightFrame='900'
+                  />
+                )}
+              </>
+            ) : null}
+          </div>
+          <div className="col-4">
+            <div className="px-4" style={{height: "90vh", overflowY: "scroll" }}>
+              <ManuallyAdd
+                handleCloseModal={handleCloseModal}
+                setIsFileFormShow={setIsFileFormShow}
+                year={year}
+                isEditPage={true}
+                isEditValue={formValues}
+                reset={isModalOpenValid}
+              />
+            </div>
+          </div>
+        </div>
+      </Drawer>
     </>
   );
 };

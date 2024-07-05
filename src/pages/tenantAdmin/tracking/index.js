@@ -15,7 +15,6 @@ import SpinnerDots from "../../../components/spinner";
 import { LoadingOutlined } from "@ant-design/icons";
 import HeaderFilters from "./headerFilters";
 import TrackingTable from "../../../components/table/tenantTable/trackingList";
-import { getTrackingList } from "../../../store/actions/adminAction/patientsActions";
 import { generateOptionsList } from "../../../components/headerFilters/functions";
 import DailyTask from "./dailytask";
 import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
@@ -686,6 +685,7 @@ const Patient = ({
                             selector2value={auditSelAllocatedTo}
                             selectorValue={selAllocatedTo}
                             auditSelAllocatedTo={auditSelAllocatedTo}
+                            setPageNo={setPageNo}
                           />
                         </div>
                         <div className="col-xl-2">
@@ -799,7 +799,7 @@ const Patient = ({
                             <div>
                               <div className="pagination-container">
                                 <Paginator
-                                  first={paginationFirst}
+                                  first={pageNo===0?0:paginationFirst}
                                   rows={15}
                                   totalRecords={totalElements}
                                   onPageChange={onPageChange}

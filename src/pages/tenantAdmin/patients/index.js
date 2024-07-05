@@ -657,6 +657,7 @@ const Patient = ({
                             selectOptionsOrg={orgAllList}
                             defaultSelectValueOrg={""}
                             selectedValueOrg={selectOrgList}
+                            setPageNo={setPageNo}
                           />
                         </div>
                       </div>
@@ -683,7 +684,7 @@ const Patient = ({
                             <div>
                               <div className="pagination-container">
                                 <Paginator
-                                  first={paginationFirst}
+                                  first={pageNo===0?0:paginationFirst}
                                   rows={15}
                                   totalRecords={totalElements}
                                   onPageChange={onPageChange}

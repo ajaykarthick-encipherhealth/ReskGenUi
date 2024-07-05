@@ -16,6 +16,7 @@ import {
   encyptingPass,
   getValidatePassword,
 } from "../../../components/headerFilters/functions";
+import SpinnerDots from "../../../components/spinner";
 const { Option } = Select;
 const options3 = [
   { value: "ALL", label: "ALL" },
@@ -266,34 +267,41 @@ const UserList = () => {
                       disable="Yes"
                       form={form}
                       setMobileNumber={setMobileNumber}
+                      setPageNo={setPageCount}
                     />
                   </div>
                   <div
                     id="task-tbl_wrapper"
                     className="dataTables_wrapper no-footer"
                   >
-                    <AdminList
-                      userList={userListAll?.data?.response?.content}
-                      switchHandler={switchHandler}
-                      setPageCount={setPageCount}
-                      sortOrder={sortOrder}
-                      setSortOrder={setSortOrder}
-                      setSort={setSort}
-                    />
-
-                    <div>
-                      <div className="pagination-container">
-                        <Paginator
-                          first={paginationFirst}
-                          rows={15}
-                          totalRecords={totalElements}
-                          onPageChange={onPageChange}
+                    {usersData?.loading ? (
+                      <SpinnerDots />
+                    ) : (
+                      <>
+                        <AdminList
+                          userList={userListAll?.data?.response?.content}
+                          switchHandler={switchHandler}
+                          setPageCount={setPageCount}
+                          sortOrder={sortOrder}
+                          setSortOrder={setSortOrder}
+                          setSort={setSort}
                         />
-                        <div className="total-pages">
-                          Total count: {totalElements}
+
+                        <div>
+                          <div className="pagination-container">
+                            <Paginator
+                              first={pageCount === 0 ? 0 : paginationFirst}
+                              rows={15}
+                              totalRecords={totalElements}
+                              onPageChange={onPageChange}
+                            />
+                            <div className="total-pages">
+                              Total count: {totalElements}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

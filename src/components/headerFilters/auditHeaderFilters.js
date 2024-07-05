@@ -8,7 +8,7 @@ import Legends from "../legends";
 import DateRangePicker from "../rangepicker";
 import Selector from "../selector";
 import Search from "../search";
-import { disableFutureDate, handleRnagePicker2 } from "./functions";
+import { disableFutureDate, handleRnagePicker2, resetPageNumber } from "./functions";
 import filter from "../../images/svg/filter.svg";
 import warning from "../../images/svg/warning.svg";
 import { useDispatch } from "react-redux";
@@ -107,6 +107,7 @@ const AuditHeaderFilters = ({
   isNextRow,
   badges,
   username,
+  setPageNo
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(false);
@@ -125,6 +126,7 @@ const AuditHeaderFilters = ({
                 setReceivedSearch={setReceivedSearch}
                 setCoderSearch={setCoderSearch}
                 search={search}
+                setPageNo={setPageNo}
               />
             </div>
           )}
@@ -136,6 +138,7 @@ const AuditHeaderFilters = ({
                 setSelectedOption={setSelectedOption2}
                 selectOptions={selectOptions2}
                 defaultSelectValue1={defaultSelectValue2}
+                setPageNo={setPageNo}
               />
             </div>
           ) : null}
@@ -150,6 +153,7 @@ const AuditHeaderFilters = ({
                 disabled={true}
                 selectedDates={selectedAuditDueDates}
                 setSelectedDates={setSelectedAuditDueDates}
+                setPageNo={setPageNo}
               />
             </div>
           )}
@@ -163,6 +167,7 @@ const AuditHeaderFilters = ({
                 setEndDate={audisetEndDate2}
                 selectedDates={selectedAuditDates}
                 setSelectedDates={setSelectedAuditDates}
+                setPageNo={setPageNo}
               />
             </div>
           )}
@@ -178,6 +183,9 @@ const AuditHeaderFilters = ({
                 <Select
                   onChange={(selectedOption) => {
                     audisetSelAllocatedBy(selectedOption?.value);
+                    if(setPageNo){
+                      resetPageNumber(setPageNo)
+                    }
                   }}
                   options={auditallocatedByOptions}
                   className="custom-react-select"
@@ -246,6 +254,7 @@ const AuditHeaderFilters = ({
                   setSelectedOption={setSelectedOption}
                   selectOptions={selectOptions}
                   defaultSelectValue1={defaultSelectValue1}
+                  setPageNo={setPageNo}
                 />
               </div>
             ) : null}
@@ -262,6 +271,7 @@ const AuditHeaderFilters = ({
                   selectedDates={selectedDueDates}
                   setSelectedDates={setSelectedDueDates}
                   disabled={true}
+                  setPageNo={setPageNo}
                 />
               </div>
             )}
@@ -274,14 +284,17 @@ const AuditHeaderFilters = ({
                     <RangePicker
                       format="MM-DD-YYYY"
                       // value={dayjs(selectedDates2).format('MM-DD-YYYY')}
-                      onChange={(date, dateString) =>
+                      onChange={(date, dateString) =>{
                         handleRnagePicker2({
                           date,
                           dateString,
                           setStartDate2,
                           setEndDate2,
                         })
-                      }
+                        if(setPageNo){
+                          resetPageNumber(setPageNo)
+                        }
+                      }}
                       defaultValue={
                         defaultEndDate2 && defaultStartDate2
                           ? [
@@ -310,6 +323,9 @@ const AuditHeaderFilters = ({
                           setStartDate3,
                           setEndDate3,
                         });
+                        if(setPageNo){
+                          resetPageNumber(setPageNo)
+                        }
                       }}
                       disabledDate={(current) => disableFutureDate(current)}
                     />
@@ -330,6 +346,9 @@ const AuditHeaderFilters = ({
                   <Select
                     onChange={(selectedOption) => {
                       setSelAllocatedBy(selectedOption?.value);
+                      if(setPageNo){
+                        resetPageNumber(setPageNo)
+                      }
                     }}
                     options={allocatedByOptoons}
                     className="custom-react-select"

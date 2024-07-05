@@ -1,18 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { Tab, Nav } from "react-bootstrap";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import visitStyles from "../../../../styles/visitdata.module.css";
 import VisitData from "./visitData";
 import File from "./file";
 import Meat from "./meat";
 import SpinnerDots from "../../../../components/spinner";
 import { actions as detailsActions } from "../../../../stores/patient/details";
+import { getStatusIcon } from "../../../reuseableFunctions";
+import moment from "moment";
+import { Popover, Select } from "antd";
+import styles from "../hcc/styles.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDown, faClose } from "@fortawesome/free-solid-svg-icons";
+import { SwapOutlined } from "@ant-design/icons";
 
+const { Option } = Select;
 
-const Lab = ({  getLabDetails,getLabFileDetails,labDetailsResult}) => {
+const Lab = ({ getLabDetails, getLabFileDetails, labDetailsResult }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeTabHead, setActiveTabHead] = useState(1);
   const [activeMeatTitle, setActiveMeatTitle] = useState(null);
+  const [dosSummariesList, setDosSummariesList] = useState([]);
+  const [selectDosValue, setSelectDosValue] = useState("");
+  const [popoverVisible, setPopoverVisible] = useState(false);
 
   const selectTab = (num) => {
     setActiveTabHead(num);
@@ -21,22 +32,205 @@ const Lab = ({  getLabDetails,getLabFileDetails,labDetailsResult}) => {
     }
   };
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   const patientId = localStorage.getItem("patientId");
+  //   getLabDetails(patientId);
+  // }, []);
+
+  const handleOptions = (value) => {
+    setIsLoading(true);
+    setSelectDosValue(value);
     const patientId = localStorage.getItem("patientId");
-    getLabDetails(patientId);
-  }, []);
+    const role = localStorage.getItem("role");
+    if (value) {
+      getLabDetails(patientId, null, moment(value).format("YYYY-MM-DD"), "");
+    } else {
+      getLabDetails(
+        patientId,
+        labDetailsResult?.data?.response?.processedYear,
+        null,
+        ""
+      );
+    }
+  };
 
   useEffect(() => {
     if (labDetailsResult?.data?.response) {
       if (labDetailsResult?.data?.response?.labFileDetail) {
-          getLabFileDetails(
-            labDetailsResult?.data?.response?.labFileDetail[0]
-              .azureBlobPath
-          )
+        getLabFileDetails(
+          labDetailsResult?.data?.response?.labFileDetail[0].azureBlobPath
+        );
         setIsLoading(true);
       }
     }
   }, [labDetailsResult?.data?.response]);
+
+  const exmpleData = [
+    {
+      dos: "2023-10-25",
+      startPageNumber: 1,
+      endPagNumber: 3,
+      dosWiseFlag: null,
+      suspectTypes: null,
+      processStage: null,
+      radiologyTestName: "CT-Scan",
+    },
+    {
+      dos: "2023-04-06",
+      startPageNumber: 4,
+      endPagNumber: 10,
+      dosWiseFlag: null,
+      suspectTypes: null,
+      processStage: null,
+      radiologyTestName: "Ultra sound",
+    },
+    {
+      dos: "2023-01-17",
+      startPageNumber: 11,
+      endPagNumber: 14,
+      dosWiseFlag: null,
+      suspectTypes: null,
+      processStage: null,
+      radiologyTestName: "ECHO",
+    },
+    {
+      dos: "2023-01-20",
+      startPageNumber: 15,
+      endPagNumber: 18,
+      dosWiseFlag: null,
+      suspectTypes: null,
+      processStage: null,
+      radiologyTestName: "MRI",
+    },
+  ];
+
+  useEffect(() => {
+    // if (patientDosResult?.data?.response) {
+    setSelectDosValue();
+    var dosList = [];
+
+    // patientDosResult?.data?.response?.map((res, index) => {
+    exmpleData?.map((res, index) => {
+      if (res) {
+        var dosLable = (
+          <>
+            <div className="d-flex justify-content-between">
+              <span className={styles.dosLable}>
+                {moment(res.dos).format("MM-DD-YYYY")} - {res.radiologyTestName}
+              </span>
+              {getStatusIcon(res.processStage)}
+            </div>
+          </>
+        );
+        dosList.push({ value: res.dos, label: dosLable });
+      }
+    });
+    setDosSummariesList(dosList);
+    // if (patientDetailsResult?.data?.response?.dateOfService) {
+    //   setSelectDosValue(patientDetailsResult?.data?.response?.dateOfService);
+    // }
+    // }
+  }, []);
+
+  const handleChangePageNumber = async (value) => {
+    setPopoverVisible(false);
+    // setSearch({
+    //   value: "",
+    //   page: value,
+    // });
+  };
+
+  const PopContent = (
+    <div className={styles.innerPop}>
+      <div
+        style={{
+          marginBottom: "25px",
+          position: "relative",
+          bottom: "24px",
+          right: "26px",
+        }}
+      >
+        <FontAwesomeIcon
+          icon={faClose}
+          style={{
+            size: 5,
+            color: "#fff",
+          }}
+          className={styles.close_icon}
+          onClick={() => setPopoverVisible(false)}
+        />
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-around",
+          background: "#04306f",
+          color: "white",
+          height: "30px",
+          borderRadius: "5px",
+          alignItems: "center",
+        }}
+      >
+        <div>Date</div>
+        <div style={{ paddingLeft: "60px" }}>Page Number</div>
+      </div>
+      <div className={styles.displayDiv}>
+        {exmpleData
+          ? exmpleData?.map((data) => (
+              <div className={styles.hoverDiv} style={{ marginBottom: "5px" }}>
+                <div
+                  className={` ${styles.selectDetailsContainer}`}
+                  style={{
+                    alignItems: "center",
+                    justifyContent: "space-evenly",
+                    margin: "0",
+                  }}
+                >
+                  <div className="col-xl-6 ">
+                    <span className={styles.selectHead}>
+                      {moment(data.dos).format("MM-DD-YYYY")}
+                    </span>
+                  </div>
+
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <div
+                      className={`col-xl-4 p-2 cr-pointer ${styles.hoverPageNum}`}
+                      style={{
+                        textAlign: "center",
+                        margin: "10px",
+                      }}
+                      onClick={() =>
+                        handleChangePageNumber(data.startPageNumber)
+                      }
+                    >
+                      <span>{data?.startPageNumber}</span>
+                    </div>
+                    <div
+                      className="col-xl-1 text-center"
+                      style={{ padding: "10px" }}
+                    >
+                      <SwapOutlined />
+                    </div>
+
+                    <div
+                      className={`col-xl-4 p-2 cr-pointer ${styles.hoverPageNum}`}
+                      style={{
+                        textAlign: "center",
+                        margin: "10px",
+                      }}
+                      onClick={() => handleChangePageNumber(data.endPagNumber)}
+                    >
+                      <span>{data?.endPagNumber}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          : null}
+      </div>
+    </div>
+  );
 
   return (
     <>
@@ -80,6 +274,51 @@ const Lab = ({  getLabDetails,getLabFileDetails,labDetailsResult}) => {
                         MEAT Criteria
                       </Nav.Link>
                     </Nav.Item>
+                    <Nav.Item as="li" className="nav-item">
+                      <Select
+                        placeholder="Select DOS"
+                        onChange={handleOptions}
+                        className="dosSelect"
+                        allowClear
+                        value={selectDosValue}
+                      >
+                        {dosSummariesList?.map((data) => (
+                          <Option key={data?.value} value={data?.value}>
+                            {data.label}
+                          </Option>
+                        ))}
+                      </Select>
+                    </Nav.Item>
+                    {activeTabHead == 1 && (
+                      <Popover
+                        open={popoverVisible}
+                        content={PopContent}
+                        placement="bottom"
+                        trigger={"click"}
+                        overlayStyle={{ zIndex: 1000 }}
+                        onOpenChange={() => setPopoverVisible(false)}
+                      >
+                        <div
+                          className={styles.dosContainer}
+                          onClick={() => {
+                            setPopoverVisible(true);
+                          }}
+                          style={{ marginLeft: "10px" }}
+                        >
+                          <span className={styles.dosPageNumber}>
+                            Select Dos Page Number
+                          </span>
+                          <FontAwesomeIcon
+                            icon={faAngleDown}
+                            style={{
+                              size: 10,
+                              color: "#e6e6e6",
+                              marginLeft: "5px",
+                            }}
+                          />
+                        </div>
+                      </Popover>
+                    )}
                   </Nav>
                 </div>
                 <div className="col-xl-1">
@@ -119,11 +358,11 @@ const Lab = ({  getLabDetails,getLabFileDetails,labDetailsResult}) => {
 
 const enhancer = connect(
   (state) => ({
-    labDetailsResult :state?.patientDetails?.details?.labResult,
-    }),
+    labDetailsResult: state?.patientDetails?.details?.labResult,
+  }),
   {
-    getLabDetails:detailsActions.labDetailsAction,
-    getLabFileDetails:detailsActions.labFileAction,
+    getLabDetails: detailsActions.labDetailsAction,
+    getLabFileDetails: detailsActions.labFileAction,
   }
 );
 export default enhancer(Lab);

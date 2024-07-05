@@ -9,7 +9,8 @@ const Search = ({
   setCoderSearch,
   activeTab,
   searchVal, 
-  setSearchVal
+  setSearchVal,
+  setPageNo
 }) => {
   return (
     <div>
@@ -26,6 +27,7 @@ const Search = ({
         searchVal={searchVal}
         setSearchVal={setSearchVal}
         setInputValue={setSearch}
+        setPageNo={setPageNo}
       />
     </div>
   );
