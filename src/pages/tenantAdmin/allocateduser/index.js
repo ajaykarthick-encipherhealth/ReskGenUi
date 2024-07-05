@@ -14,7 +14,10 @@ import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import AllocatedAdminList from "../../../components/table/admin/allocatedAdminList/allocatedAdminList";
 import AllocatedL2AdminList from "../../../components/table/admin/allocatedL2AdminList/allocatedL2AdminList";
+import allocateStyle from "./allocate/style.module.css";
 import L2AllocateModal from "./l2allocate";
+import { actions as tenantAdminAction } from "../../../stores/tenantAdmin";
+
 import styles from "../report/report.module.css";
 import reportStyles from "../../reviewer/report/report.module.css";
 import SpinnerDots from "../../../components/spinner";
@@ -32,7 +35,7 @@ import AllocateModal from "./allocate";
 import { debounce } from "../../../components/input";
 import { useCallback } from "react";
 import { actions as allActions } from "../../../stores/admin/patientAllocation";
-import {actions as tenantAdminAction} from '../../../stores/tenantAdmin'
+
 const { RangePicker } = DatePicker;
 const statusOption = [
   { value: "", label: "ALL" },
@@ -43,6 +46,8 @@ const statusOption = [
 ];
 
 const Patient = ({
+  getAllOrganizationList,
+  organizationList,
   allocatedGetList,
   reviewerResponse,
   loader,
@@ -65,6 +70,7 @@ const Patient = ({
   const [allocateModalL2, setAllocateModalL2] = useState(false);
   const [selectedChart, setSelectedChart] = useState([]);
   const [headerCheckValidation, setHeaderCheckValidation] = useState([]);
+  const [patinetListAll, setPatinetListAll] = useState([]);
   const [pageNo, setPageNo] = useState(0);
   const [pageNoL2Patient, setPageNoL2Patient] = useState(0);
   const [pageNoL2User, setPageNoL2User] = useState(0);
@@ -94,6 +100,10 @@ const Patient = ({
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [searchStr, setSearchStr] = useState("");
+  const [selectOrgList, setSelectedOrgList] = useState("");
+  const [orgAllList, setOrgAllList] = useState([]);
+  const [defaultOrgValue, setDefaultOrgValue] = useState(null);
+
   const dispatch = useDispatch();
 
   const getAllList = async ({
@@ -110,9 +120,8 @@ const Patient = ({
     batchCount,
   }) => {
     const uId = localStorage.getItem("userId");
-    const orgId = localStorage.getItem("orgId");
-    let resoureUrl = `dbservice/patient/admin/computation/filter?
-    page=${pageNo}&size=${pageSize}&userId=${uId}&organizationId=${orgId}&computationStart=${
+    const orgId = selectOrgList;
+    let resoureUrl = `page=${pageNo}&size=${pageSize}&userId=${uId}&organizationId=${orgId}&computationStart=${
       startDate ? startDate : ""
     }&computationEnd=${endDate ? endDate : ""}&isAllocation=${
       allocate ? allocate : ""
@@ -157,7 +166,7 @@ const Patient = ({
       selectedOption ? selectedOption : ""
     }&batchCount=${batchCount}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    if (response?.data) {
+    if (response.data) {
       let result = response?.data?.response?.content;
       const data = result.map((item) => ({
         id: item.patientId,
@@ -315,6 +324,7 @@ const Patient = ({
         search: searchStr,
         sort: sort,
         selectedOption: selectedOption,
+        selectOrgList,
       });
     }
   }, [
@@ -326,8 +336,28 @@ const Patient = ({
     endDate,
     searchStr,
     selectedOption,
+    selectOrgList,
   ]);
-
+  useEffect(() => {
+    if (!isPatientList) {
+      getAuditL2List(pageNo, searchStr, selectOrgList);
+    }
+  }, [selectOrgList, searchStr]);
+  useEffect(() => {
+    if (!organizationList?.response) {
+      getAllOrganizationList();
+    }
+  }, []);
+  useEffect(() => {
+    var orgListArray = [{ value: "", label: "ALL" }];
+    organizationList?.response?.map((res) => {
+      orgListArray.push({
+        value: res.id,
+        label: res.name,
+      });
+    });
+    setOrgAllList(orgListArray);
+  }, [organizationList]);
   const renderRows = () => {
     return supervisorResponse?.response?.content?.length > 0 ? (
       supervisorResponse?.response?.content?.map((data, index) => (
@@ -407,7 +437,6 @@ const Patient = ({
       </tr>
     );
   };
-
   const statusOptions = [
     { label: "ALL", value: "" },
     { label: "COMPLETED", value: "COMPLETED" },
@@ -475,7 +504,7 @@ const Patient = ({
 
   const getAllCheckListL2 = async (sort) => {
     setCheckedLoading(true);
-    let resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=0&size=${supervisorResponse?.response?.totalElements}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
+    let resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=0&size=${totalElementsPatient}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       let result = response?.data?.response;
@@ -523,7 +552,6 @@ const Patient = ({
   useEffect(() => {
     dispatch(getFilters("patientAllocated"));
   }, []);
-
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -569,9 +597,9 @@ const Patient = ({
                                 <InputText
                                   type="text"
                                   onChange={(e) => {
-                                    getNameSearch(e.target.value);
-
                                     resetPageNumber(setPageNo);
+
+                                    getNameSearch(e.target.value);
                                   }}
                                   value={searchString}
                                   className="form-control new-form-control"
@@ -587,6 +615,22 @@ const Patient = ({
                               </div>
                             </div>
                           </div>
+                          {(activeTab == 1 ||
+                            (!isPatientList && activeTab == 2)) && (
+                            <div className="col-xl-2">
+                              <div>
+                                <Selector
+                                  selectlabel={"Select Organization"}
+                                  setSelectedOption={setSelectedOrgList}
+                                  selectOptions={orgAllList}
+                                  selectDefaultValue={defaultOrgValue}
+                                  setDefaultValue={setDefaultOrgValue}
+                                  // isClose={true}
+                                  setPageNo={setPageNo}
+                                />
+                              </div>
+                            </div>
+                          )}
 
                           {!isPatientList && activeTab == 1 ? (
                             <>
@@ -596,12 +640,12 @@ const Patient = ({
                                   <RangePicker
                                     format="MM-DD-YYYY"
                                     onChange={(dates, dateStrings) => {
+                                      resetPageNumber(setPageNo);
                                       setDateRange(dateStrings);
                                       handleReceivedDatePicker(
                                         dates,
                                         dateStrings
                                       );
-                                      resetPageNumber(setPageNo);
                                     }}
                                     disabledDate={(current) =>
                                       disableFutureDate(current)
@@ -621,6 +665,7 @@ const Patient = ({
                                   />
                                 </div>
                               </div>
+
                               {/* <div className="col-xl-2">
                                 <label>Batch Count</label>
                                 <div class="form-group d-flex">
@@ -686,8 +731,8 @@ const Patient = ({
                                     setSelectedOption={setSelectedOptions}
                                     selectOptions={statusOptions}
                                     defaultSelectValue1={""}
-                                    // isClose={true}
                                     setPageNo={setPageNo}
+                                    // isClose={true}
                                   />
                                 </div>
                               </div>
@@ -697,7 +742,7 @@ const Patient = ({
                             className={
                               isPatientList && activeTab == 2
                                 ? `col-xl-6 mt-4 ${TableStyle.allocateBtn}`
-                                : `col-xl-6 mt-4 ${TableStyle.allocateBtn}`
+                                : `col-xl-4 mt-4 ${TableStyle.allocateBtn}`
                             }
                           >
                             {isPatientList || activeTab === 1 ? (
@@ -1033,22 +1078,21 @@ const Patient = ({
     </>
   );
 };
-
-const connector = connect(
+const enhancer = connect(
   (state) => ({
+    organizationList: state?.tenantAdmin?.allOrganization?.data,
     reviewerResponse: state.admin.patientAllocate?.allocatedList?.data,
     loader: state.admin?.patientAllocate?.loader,
     loader2: state.admin?.patientAllocate?.l2Loader,
     loader3: state.admin?.patientAllocate?.supervisorLoader,
     supervisorResponse: state.admin.patientAllocate?.l2AllocatedList?.data,
     selectedSupervisors: state.admin.patientAllocate?.selectedSupervisors?.data,
-    organizationList: state?.tenantAdmin?.allOrganization?.data,
   }),
   {
+    getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
     allocatedGetList: allActions.getAllList,
     getSupervisorsList: allActions.getSupervisorsList,
     getSelectedSupervisorList: allActions.getSelectedSupervisorList,
-    getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
   }
 );
-export default connector(Patient);
+export default enhancer(Patient);

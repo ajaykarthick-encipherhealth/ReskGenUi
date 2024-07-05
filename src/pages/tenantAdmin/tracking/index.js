@@ -110,6 +110,7 @@ const Patient = ({
   organizationList,
   getAllTrackingList,
   trackingList,
+  loader
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -778,7 +779,7 @@ const Patient = ({
                         id="task-tbl_wrapper"
                         className="dataTables_wrapper no-footer"
                       >
-                        {isLoading ? (
+                        {loader ? (
                            <div>
                              <SpinnerDots topHeight={"10pc"}/>
                             </div>
@@ -827,6 +828,7 @@ const enhancer = connect(
   (state) => ({
     organizationList: state?.tenantAdmin?.allOrganization?.data,
     trackingList: state?.tenantAdmin?.allTracking,
+    loader:state?.tenantAdmin?.allTrackingLoader
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,

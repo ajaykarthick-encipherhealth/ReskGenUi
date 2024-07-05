@@ -66,6 +66,8 @@ const searchReducer = combineReducers({
   getBatchLoader:getReportLoading(getBatchInfo),
   batchLoader: getReportLoading(getAllBatches),
   allBatchesLoader: getReportLoading(getAllBatches),
+  allTrackingLoader: getReportLoading(getAllTrackingAction),
+
 });
 
 export default searchReducer;
