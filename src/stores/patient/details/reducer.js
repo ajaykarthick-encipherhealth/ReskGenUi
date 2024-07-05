@@ -18,7 +18,10 @@ import {
   getSelectedDos,
   manuallyAdd,
   diseaseEdit,
-  diseaseEditMeat
+  diseaseEditMeat,
+  getAllProcessYearAction,
+  radiologyDosDeatilsAction,
+  labDosDeatilsAction
 } from "./actions";
 
 const initialState = {
@@ -75,6 +78,11 @@ const patientDetailsReducer = combineReducers({
   manuallyAdd: createReducer(manuallyAdd),
   diseaseEdit: createReducer(diseaseEdit),
   diseaseEditMeat: createReducer(diseaseEditMeat),
+  processedYear: createReducer(getAllProcessYearAction),
+  radiologyDosResult: createReducer(radiologyDosDeatilsAction),
+  labDosResult: createReducer(labDosDeatilsAction),
+
+
 });
 
 export default patientDetailsReducer;

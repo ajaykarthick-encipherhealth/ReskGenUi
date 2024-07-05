@@ -9,7 +9,8 @@ const AddSection = ({
   id,
   section,
   selectMeat = "",
-  date
+  date,
+  isEditPage
 }) => {
   return (
     <div className="mx-2 p-3 pt-4 border rounded">

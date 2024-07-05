@@ -1,12 +1,13 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { patientsAction,flagsAction } from "./actions";
+import { getUsers,getIndividualUsers,getCurrentUserInfo} from "./actions";
 
 const initialState = {
   loading: true,
   data: null,
   error: null,
 };
+
 const createReducer = (actionType) =>
   handleActions(
     {
@@ -29,7 +30,9 @@ const createReducer = (actionType) =>
     },
     initialState
   );
-  const getReportLoading=(type) => handleActions(
+
+const getReportLoading = (type) =>
+  handleActions(
     {
       [type.START]: () => true,
       [type.SUCCEEDED]: () => false,
@@ -37,10 +40,13 @@ const createReducer = (actionType) =>
     },
     false
   );
-const dashbaordReducer = combineReducers({
-  patients: createReducer(patientsAction),
-  patientsLoading:getReportLoading(patientsAction),
-  flags:createReducer(flagsAction)
+
+const UsersReducer = combineReducers({
+  getUsersList: createReducer(getUsers),
+  usersLoading: getReportLoading(getUsers),
+  getIndividualUsersList: createReducer(getIndividualUsers),
+  individualUserLoading: getReportLoading(getIndividualUsers),
+  currentUser: createReducer(getCurrentUserInfo),
 });
 
-export default dashbaordReducer;
+export default UsersReducer;

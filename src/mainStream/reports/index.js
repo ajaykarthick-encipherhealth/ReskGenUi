@@ -10,7 +10,10 @@ import Select from "react-select";
 import { Modal, DatePicker, Tooltip } from "antd";
 import ExportImg from "../../images/svg/Export";
 import { debounce } from "../../../src/pages/admin/reports/Export";
-import { disableFutureDate } from "../../components/headerFilters/functions";
+import {
+  disableFutureDate,
+  resetPageNumber,
+} from "../../components/headerFilters/functions";
 import { patientDetails } from "../../stores/authflow/actions";
 import { connect, useDispatch, useSelector } from "react-redux";
 import InitialCard from "../../mainStream/reports/initialReport";
@@ -179,9 +182,8 @@ const Reports = ({
       setSelectedData([]);
       setSelectAllCheckBoxes(false);
     }
-    setSelectedRows([])
-    setSelectAll(false)
-  
+    setSelectedRows([]);
+    setSelectAll(false);
   };
   const dosOnChange = (selectedOption, name) => {
     const nameString = name?.split(" ").join("");
@@ -275,6 +277,7 @@ const Reports = ({
   ];
 
   const handleHeaderCheckboxChange = () => {
+    resetPageNumber(resetPageState);
     setSelectAllFlags(!selectAllFlags);
     if (activeTab === "Team" || activeTab === "Audit") {
       const updatedRows = selectAllFlags
@@ -433,8 +436,14 @@ const Reports = ({
       dispatch(getSelectUserListReport(selectedOptions?.UserRole?.value));
     }
   }, [selectedOptions?.UserRole]);
-  const today = dayjs();
 
+const resetPageState=activeTab === "Sent"
+? setSentPageNo
+: activeTab === "Received"
+? setReceivedPageNo
+: activeTab === "Audit"
+? setTeamPageNo
+: setPageNo
   return (
     <div>
       <Header />
@@ -469,7 +478,12 @@ const Reports = ({
                                 <InputText
                                   name="initialSearch"
                                   type="text"
-                                  onChange={(e) => filterChangePatientId(e)}
+                                  onChange={(e) => {
+                                    filterChangePatientId(e);
+                                    resetPageNumber(
+                                      resetPageState
+                                    );
+                                  }}
                                   className="form-control new-form-control reportInput"
                                   placeholder="Search"
                                   maxLength={25}
@@ -503,6 +517,7 @@ const Reports = ({
                                         selectedOption,
                                         "reviewer Status"
                                       );
+                                      resetPageNumber(resetPageState);
                                     }}
                                     options={statusOptions}
                                     className={`custom-react-select`}
@@ -531,13 +546,14 @@ const Reports = ({
                                       ? selectedDates[activeTab]
                                       : undefined
                                   }
-                                  onChange={(date, dateString) =>
+                                  onChange={(date, dateString) => {
                                     handleCoderPicker(
                                       date,
                                       dateString,
                                       activeTab
-                                    )
-                                  }
+                                    );
+                                    resetPageNumber(resetPageState);
+                                  }}
                                   disabledDate={(current) =>
                                     disableFutureDate(current)
                                   }
@@ -596,6 +612,7 @@ const Reports = ({
                                             selectedOption,
                                             info?.name
                                           );
+                                          resetPageNumber(resetPageState);
                                         }}
                                         options={
                                           info?.name === "User"
@@ -619,13 +636,14 @@ const Reports = ({
                                               ? selectedDates[info?.name]
                                               : undefined
                                           }
-                                          onChange={(date, dateString) =>
+                                          onChange={(date, dateString) => {
                                             handleCoderPicker(
                                               date,
                                               dateString,
                                               info?.name
-                                            )
-                                          }
+                                            );
+                                            resetPageNumber(resetPageState);
+                                          }}
                                           disabledDate={(current) =>
                                             disableFutureDate(current)
                                           }
@@ -638,9 +656,10 @@ const Reports = ({
                                       <InputText
                                         name={info?.name}
                                         type="text"
-                                        onChange={(e) =>
-                                          filterChangePatientId(e)
-                                        }
+                                        onChange={(e) => {
+                                          filterChangePatientId(e);
+                                          resetPageNumber(resetPageState);
+                                        }}
                                         className="form-control new-form-control reportInput"
                                         placeholder="Search"
                                         maxLength={25}
@@ -758,6 +777,7 @@ const Reports = ({
                         page={{ pageNo, paginationFirst }}
                         loader={reviewerLoader}
                         activeTab={activeTab}
+                       
                       />
                     </div>
                   )}
@@ -800,6 +820,7 @@ const Reports = ({
                         receivedEndDate={selectedDateRanges?.Sent?.to}
                         isPhysician={true}
                         loader={sentLoader}
+                        
                       />
                     </div>
                   )}
@@ -818,6 +839,7 @@ const Reports = ({
                         setSort={setSort}
                         isPhysician={true}
                         loader={receivedLoader}
+                        
                       />
                     </div>
                   )}

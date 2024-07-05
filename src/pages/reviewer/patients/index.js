@@ -21,6 +21,7 @@ import { actions as workqueueActions } from "../../../stores/reviewer/workqueue"
 import {
   disableFutureDate,
   priorityOptions,
+  resetPageNumber,
 } from "../../../components/headerFilters/functions";
 import DailyTask from "./dailytask";
 import HeaderFilters from "../../../components/headerFilters";
@@ -32,7 +33,7 @@ import InputField from "../../../components/input";
 import { patientDetails } from "../../../stores/authflow/actions";
 
 const { RangePicker } = DatePicker;
-const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
+const Patient = ({ patientsListFilter, getpatientsListFilter,loading }) => {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const navigate = useRouter();
@@ -211,6 +212,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
     const resoureUrl = `dbservice/patient/filter?patientAllocated=${localUserId}&page=0&size=${pageSize}&processedStatus=${statusSelectedValue}&dueDateStart=${dueDateStart}&dueDateEnd=${dueDateEnd}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchtext}`;
     // dispatch(getpatientsListFilter(resoureUrl));
     getpatientsListFilter({ url: resoureUrl });
+    resetPageNumber(setPageNo)
   };
 
   const addPatientFile = (data) => {
@@ -464,9 +466,10 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
                               <label>Select Status</label>
                               <div class="form-group has-search">
                                 <Select
-                                  onChange={(selectedOption) =>
+                                  onChange={(selectedOption) =>{
                                     onChangeStatus(selectedOption)
-                                  }
+                                    resetPageNumber(setPageNo)
+                                  }}
                                   options={statusOptions}
                                   className="custom-react-select"
                                   isSearchable={false}
@@ -482,8 +485,9 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
                               <label>Select Priority</label>
                               <div class="form-group has-search">
                                 <Select
-                                  onChange={(selectedOption) =>
+                                  onChange={(selectedOption) =>{
                                     onChangePriority(selectedOption)
+                                    resetPageNumber(setPageNo)}
                                   }
                                   options={options}
                                   className="custom-react-select"
@@ -504,6 +508,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
                                   format="MM-DD-YYYY"
                                   onChange={(dates, dateStrings) => {
                                     handleDatePickerChange(dateStrings);
+                                    resetPageNumber(setPageNo)
                                   }}
                                   defaultValue={
                                     filteratedDashboardData
@@ -553,6 +558,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
                                       handleDatePickerChangeProcesseDate(
                                         dateStrings
                                       );
+                                      resetPageNumber(setPageNo)
                                     }}
                                     disabledDate={(current) =>
                                       disableFutureDate(current)
@@ -569,7 +575,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
                         id="task-tbl_wrapper"
                         className="dataTables_wrapper no-footer"
                       >
-                        {patientsListFilter?.loading ? (
+                        {loading ? (
                           <LoadingSpinner />
                         ) : (
                           <>
@@ -588,7 +594,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
                             <div>
                               <div className="pagination-container">
                                 <Paginator
-                                  first={paginationFirst}
+                                  first={pageNo===0?0:paginationFirst}
                                   rows={15}
                                   totalRecords={totalElements}
                                   onPageChange={onPageChange}
@@ -615,6 +621,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter }) => {
 const enhancer = connect(
   (state) => ({
     patientsListFilter: state?.reviewer?.workQueue?.patients,
+    loading:state?.reviewer?.workQueue?.patientsLoading
   }),
   {
     getpatientsListFilter: workqueueActions.patientsAction,

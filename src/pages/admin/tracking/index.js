@@ -622,6 +622,7 @@ export default function Patient() {
                             selector2value={auditSelAllocatedTo}
                             selectorValue={selAllocatedTo}
                             auditSelAllocatedTo={auditSelAllocatedTo}
+                            setPageNo={setPageNo}
                           />
                         </div>
                         <div className="col-xl-2">
@@ -652,7 +653,7 @@ export default function Patient() {
                             <div>
                               <div className="pagination-container">
                                 <Paginator
-                                  first={paginationFirst}
+                                  first={pageNo===0?0:paginationFirst}
                                   rows={15}
                                   totalRecords={totalElements}
                                   onPageChange={onPageChange}

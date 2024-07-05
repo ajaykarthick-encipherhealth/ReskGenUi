@@ -540,6 +540,7 @@ export default function Patient() {
     setTableLoading(true);
     getAllList(response?.response);
   };
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -600,6 +601,7 @@ export default function Patient() {
                             isNextRow={true}
                             btnTitle="Add Patient"
                             atCorner={true}
+                            setPageNo={setPageNo}
                           />
                         </div>
                       </div>
@@ -626,7 +628,7 @@ export default function Patient() {
                             <div>
                               <div className="pagination-container">
                                 <Paginator
-                                  first={paginationFirst}
+                                  first={pageNo===0?0:paginationFirst}
                                   rows={15}
                                   totalRecords={totalElements}
                                   onPageChange={onPageChange}

@@ -252,7 +252,7 @@ const ReceivedReport = ({
       </div>
       {details?.reportStatusDTOList.content.length > 0 ? (
         <Pagination
-          first={paginationFirst}
+          first={receivedPageNo===0?0:paginationFirst}
           totalRecords={details?.reportStatusDTOList?.totalElements}
           onPageChange={onPageChange}
         />

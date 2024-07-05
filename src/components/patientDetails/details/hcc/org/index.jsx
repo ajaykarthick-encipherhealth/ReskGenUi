@@ -12,14 +12,22 @@ import { CalendarOutlined } from "@ant-design/icons";
 import moment from "moment";
 import visitStyles from "../../../../../styles/visitdata.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleUser, faArrowsAlt, faXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleUser,
+  faArrowsAlt,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import SpinnerDots from "../../../../../components/spinner";
 import ModelIndex from "../../components/model/Index";
-import { moveToAnotherAction } from "../../components/function/ReusableFunctions";
+import {
+  moveToAnotherAction,
+  stringToColour,
+} from "../../components/function/ReusableFunctions";
 import { connect } from "react-redux";
 import { getProviderNameTagList } from "../../components/function/ProviderHyperlinks";
 import { getDateOfServiceBackground } from "../../components/function/DateOfServices";
 import { getSectionHeaderBackground } from "../../components/function/SectionHeader";
+import { getStateIndicators } from "../../components/function/GetData";
 
 const addOnCodeColor = [
   "magenta",
@@ -168,10 +176,14 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
   };
 
   const nodeTemplate = (node) => {
+    console.log(node);
     return (
       <div
         className={Style.cards}
-        style={{ width: zoom.width, height: zoom.width < 300 ? "auto" : Style.cards }}
+        style={{
+          width: zoom.width,
+          height: zoom.width < 300 ? "auto" : Style.cards,
+        }}
       >
         <div className={Style.code}>
           <div>
@@ -179,36 +191,37 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
               ? node.diagnosisCodeCombo
               : node.diagnosisCode}
           </div>
-          {trees?.diagnosisCodeCombo == node.diagnosisCodeCombo && 
-          <div>
-            <Popconfirm
-              title="You want move to Delete?"
-              description={node.diseaseName}
-              onConfirm={confirmComboDelete}
-              placement="leftTop"
-              okText="Yes"
-              cancelText="No"
-              onOpenChange={() =>
-                onchangeCombo(
-                  node,
-                  node.diagnosisCodeCombo
-                    ? node.diagnosisCodeCombo
-                    : node.diagnosisCode,
-                  node.diseaseSource
-                )
-              }
-            >
-              <div className={visitStyles.close_icon}>
-                <FontAwesomeIcon
-                  icon={faXmark}
-                  style={{
-                    size: 8,
-                    color: "#a80404",
-                  }}
-                />
-              </div>
-            </Popconfirm>
-          </div>}
+          {trees?.diagnosisCodeCombo == node.diagnosisCodeCombo && (
+            <div>
+              <Popconfirm
+                title="You want move to Delete?"
+                description={node.diseaseName}
+                onConfirm={confirmComboDelete}
+                placement="leftTop"
+                okText="Yes"
+                cancelText="No"
+                onOpenChange={() =>
+                  onchangeCombo(
+                    node,
+                    node.diagnosisCodeCombo
+                      ? node.diagnosisCodeCombo
+                      : node.diagnosisCode,
+                    node.diseaseSource
+                  )
+                }
+              >
+                <div className={visitStyles.close_icon}>
+                  <FontAwesomeIcon
+                    icon={faXmark}
+                    style={{
+                      size: 8,
+                      color: "#a80404",
+                    }}
+                  />
+                </div>
+              </Popconfirm>
+            </div>
+          )}
         </div>
         <Tooltip
           title={node.diseaseName ? node.diseaseName : node.actualDescription}
@@ -247,6 +260,12 @@ const CamboTree = ({ tree, setOpens, setCombiTree, patientDetailsResult }) => {
           {getSectionHeaderBackground({
             value: node?.capturedSections,
           })}
+        </div>
+        <div className="text-start d-flex justify-content-end">
+          {getStateIndicators(node.stateIndicators, "INDIRECT_LESS_SPECIFIC") &&
+            getSectionHeaderBackground({
+              value: ["INDIRECT LESS SPECIFIC"],
+            })}
         </div>
       </div>
     );
