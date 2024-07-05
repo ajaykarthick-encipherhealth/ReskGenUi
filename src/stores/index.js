@@ -29,10 +29,15 @@ import { reducer as physicianReducer } from "./physician/dashboard";
 import { reducer as reportReducer } from "./reviewer/report";
 import { reducer as updatedReportReducer } from "./supervisor/report";
 import { reducer as updatedAdminReportReducer } from "./admin/report";
-import { reducer as patientDeatilsReducer } from "./patient/details"
-import { reducer as tenantAdminReducer } from "./tenantAdmin";
-import { reducer as webSocketReducer } from "./websocket"
+import { reducer as patientDeatilsReducer } from "./patient/details";
+import { reducer as tenantAdminReducer } from "../stores/tenantAdmin";
+import { reducer as webSocketReducer } from "./websocket";
 import codifyReducer from "./codify/dashboard/reducer";
+import { reducer as tenantAdminDefault } from "../stores/tenantAdmin/default";
+import { reducer as tenantRaf } from "../stores/tenantAdmin/default";
+import { reducer as filesCount } from "../stores/tenantAdmin/default";
+import { reducer as ComputingStatus } from "../stores/tenantAdmin/default";
+import { reducer as RafScore } from "../stores/tenantAdmin/default";
 
 const reducers = combineReducers({
   // old reducers
@@ -80,8 +85,14 @@ const reducers = combineReducers({
   patientDetails: combineReducers({
     details: patientDeatilsReducer,
   }),
-  tenantAdmin: tenantAdminReducer,
-  webSocket:webSocketReducer
+  tenantAdmin: combineReducers({
+    webSocket: webSocketReducer,
+    defaultHccCodes: tenantAdminDefault,
+    defaultRafCounts: tenantRaf,
+    defaultFilesCounts: filesCount,
+    defaultComputingStatus: ComputingStatus,
+    defaultRafScore: RafScore,
+  }),
 });
 
 const middlewares = [thunkMiddleware, promiseMiddleware];

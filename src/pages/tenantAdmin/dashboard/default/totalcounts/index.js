@@ -1,34 +1,40 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import fileIcon from "../../../../../images/tenantAdmin/file.svg";
 import dosIcon from "../../../../../images/tenantAdmin/dos.svg";
 import pageIcon from "../../../../../images/tenantAdmin/page.svg";
 import Image from "next/image";
 import styles from "../../styles.module.css";
+import { FilesCount } from "../../../../../stores/tenantAdmin/default/action.js";
 
-const index = () => {
+const index = ({ getAllFilesCount, getAllFiles }) => {
   const cardData = [
     {
       id: 1,
       title: "File/Patients Count",
-      count: "12434",
+      count: getAllFiles?.totalFiles,
       icon: fileIcon,
       iconBg: "#F9D2D4",
     },
     {
       id: 2,
       title: "DOS Count",
-      count: "62345",
+      count: getAllFiles?.totalDosCount,
       icon: dosIcon,
       iconBg: "#F8E9D3",
     },
     {
       id: 2,
       title: "Pages",
-      count: "646788",
+      count: getAllFiles?.totalPages,
       icon: pageIcon,
       iconBg: "#CCFFE5",
     },
   ];
+  useEffect(() => {
+    getAllFilesCount();
+  }, []);
+
   return (
     <div
       className="d-flex justify-content-between w-100"
@@ -65,9 +71,7 @@ const index = () => {
               >
                 <Image src={item?.icon} />
               </div>
-              <div style={{ fontSize: "16px"}}>
-              {item?.title}
-              </div>
+              <div style={{ fontSize: "16px" }}>{item?.title}</div>
             </div>
             <div className={styles.count}>{item?.count}</div>
           </div>
@@ -77,4 +81,13 @@ const index = () => {
   );
 };
 
-export default index;
+const enhancer = connect(
+  (state) => ({
+    getAllFiles:
+      state?.tenantAdmin?.defaultFilesCounts?.allFilesCounts?.data?.response,
+  }),
+  {
+    getAllFilesCount: FilesCount,
+  }
+);
+export default enhancer(index);

@@ -1,7 +1,47 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactECharts from "echarts-for-react";
+import { connect } from "react-redux";
+import {
+  HccCodes,
+  RafCounts,
+  RafCountScore,
+} from "../../../../../stores/tenantAdmin/default/action.js";
+const RafGraph = ({
+  rafColor,
+  rafColor2,
+  rafColor3,
+  isCargaps,
+  isHcc,
+  getAllRafData,
+  getAllHccCodes,
+  getAllHccCodesData,
+  getAllRaf,
+  getAllRafScoreData,
+  getAllRafScore,
+}) => {
+  useEffect(() => {
+    getAllHccCodesData();
+    getAllRafData();
+    getAllRafScore();
+  }, []);
 
-const RafGraph = ({ rafColor, rafColor2, rafColor3, isCargaps, isHcc }) => {
+  const rafScoreByDateForSuggested =
+    getAllRafScoreData?.rafScoreByDateForSuggested
+      ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
+      : [];
+
+  const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc
+    ? Object.values(getAllRafScoreData.rafScoreByDateForHcc)
+    : [];
+
+  const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
+    ? Object.values(getAllRaf.premiumByDateForHcc)
+    : [];
+
+  const premiumByDateForSuggested = getAllRaf?.premiumByDateForSuggested
+    ? Object.values(getAllRaf.premiumByDateForSuggested)
+    : [];
+
   const option = {
     tooltip: {
       trigger: "axis",
@@ -53,7 +93,7 @@ const RafGraph = ({ rafColor, rafColor2, rafColor3, isCargaps, isHcc }) => {
     ],
     series: [
       {
-        name: isCargaps?"Car gap Codes":isHcc?"HCC Codes":"Total Codes",
+        name: isCargaps ? "Car gap Codes" : isHcc ? "HCC Codes" : "Total Codes",
         type: "line",
         itemStyle: {
           color: rafColor,
@@ -64,7 +104,13 @@ const RafGraph = ({ rafColor, rafColor2, rafColor3, isCargaps, isHcc }) => {
         emphasis: {
           focus: "series",
         },
-        data: rafColor && [0, 6, 10, 16, 22, 46, 60, 70, 80, 90, 100, 110],
+        // data: rafColor ,
+
+        data: isHcc
+          ? rafScoreByDateForSuggested
+          : isCargaps
+          ? rafScoreByDateForHcc
+          : [12, 32],
       },
       {
         name: "HCC Codes",
@@ -78,7 +124,7 @@ const RafGraph = ({ rafColor, rafColor2, rafColor3, isCargaps, isHcc }) => {
         emphasis: {
           focus: "series",
         },
-        data: rafColor2 && [5, 15, 25, 35, 45, 55, 65, 75, 85, 95, 105, 125],
+        data: rafColor2,
       },
       {
         name: "Car gaps Codes",
@@ -92,11 +138,26 @@ const RafGraph = ({ rafColor, rafColor2, rafColor3, isCargaps, isHcc }) => {
         emphasis: {
           focus: "series",
         },
-        data: rafColor3 && [15, 30, 50, 70, 90, 110, 120, 140, 160, 180, 190],
+        data: rafColor3 && premiumByDateForHcc && premiumByDateForSuggested,
       },
     ],
   };
   return <ReactECharts option={option} />;
 };
 
-export default RafGraph;
+const enhancer = connect(
+  (state) => ({
+    getAllHccCodes:
+      state?.tenantAdmin?.defaultHccCodes?.allHccCodes?.data?.response,
+    getAllRaf:
+      state?.tenantAdmin?.defaultHccCodes?.allRafCounts?.data?.response,
+    getAllRafScoreData:
+      state?.tenantAdmin?.defaultRafScore?.allRafScore?.data?.response,
+  }),
+  {
+    getAllHccCodesData: HccCodes,
+    getAllRafData: RafCounts,
+    getAllRafScore: RafCountScore,
+  }
+);
+export default enhancer(RafGraph);
