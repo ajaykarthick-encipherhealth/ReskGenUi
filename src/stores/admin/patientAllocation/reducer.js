@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { patientsAction,getTrackingList } from "./actions";
+import { getAllList ,getSupervisorsList,getSelectedSupervisorList} from "./actions";
 
 const initialState = {
   loading: true,
@@ -37,11 +37,13 @@ const createReducer = (actionType) =>
     },
     false
   );
-const adminPatientsReducer = combineReducers({
-  patients: createReducer(patientsAction),
-  patientsLoading:getReportLoading(patientsAction),
-  trackingList:createReducer(getTrackingList),
-  trackingLoader:getReportLoading(getTrackingList),
+const allocatedReducer = combineReducers({
+  allocatedList: createReducer(getAllList),
+  loader:getReportLoading(getAllList),
+  l2AllocatedList: createReducer(getSupervisorsList),
+  l2Loader:getReportLoading(getSupervisorsList),
+  selectedSupervisors:createReducer(getSelectedSupervisorList),
+  supervisorLoader:getReportLoading(getSelectedSupervisorList)
 });
 
-export default adminPatientsReducer;
+export default allocatedReducer;
