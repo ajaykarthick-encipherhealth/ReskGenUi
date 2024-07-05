@@ -8,7 +8,7 @@ import Card from "../../../../components/card";
 import allocated from "../../../../images/dashboard/allocated.png";
 import pending from "../../../../images/trackingImages/PendingTrack.png";
 import hold from "../../../../images/dashboard/HoldTrack.png";
-import { Col, Empty, Row, Spin } from "antd";
+import { Col, Empty, Row, Skeleton, Spin } from "antd";
 import HeadTitle from "../../../../components/headtitle";
 import holdbg from "../../.../../../../images/dashboard/holdbg.png";
 import allocatedbg from "../../.../../../../images/dashboard/allocatedbg.png";
@@ -81,6 +81,32 @@ const WorkFlow = ({ worlFlowData }) => {
     },
    
   ];
+  const renderCardSkeleton = () => (
+    <Row className={styles.carddiv}>
+      {Array.from({ length: 4 }).map((_, index) => (
+        <Col
+          key={index}
+          span={10}
+          style={{
+            backgroundColor: '#f0f0f0', // Light gray background to simulate card background
+            borderRadius: '8px',
+            padding: '16px',
+            marginBottom: '16px',
+          }}
+          className={styles.colData}
+        >
+          <Skeleton.Avatar
+            size={30} // Adjust the size to match your profile image
+            style={{
+              marginBottom: '16px',
+              borderRadius: '50%', // Circular avatar
+            }}
+          />
+          <Skeleton active title={{ width: '70%' }} paragraph={{ rows: 1 }} />
+        </Col>
+      ))}
+    </Row>
+  );
 
   return (
     <div className={styles.card1}>
@@ -97,44 +123,39 @@ const WorkFlow = ({ worlFlowData }) => {
         openPicker={openPicker}
         setOpenPicker={setOpenPicker}
       />
-      <Card borderRadius="28px">
-        {worlFlowData?.loading && (
+   <Card borderRadius="28px">
+      {worlFlowData?.loading ? (
+        renderCardSkeleton()
+      ) : worlFlowData?.data?.response ? (
+        <Row className={styles.carddiv}>
+          {card1Data?.map((data) => (
+            <Col
+              key={data?.id}
+              span={10}
+              style={{
+                backgroundImage: `url(${data?.bg.src})`,
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: 'cover',
+              }}
+              className={styles.colData}
+            >
+              <div className={styles.header}>
+                <Image src={data?.icon} className={styles.Img} />
+                <div className={styles.heading}>{data.title}</div>
+              </div>
+              <div className={styles.charts}>{`${data?.charts ? data?.charts : '0'} Charts`}</div>
+              <div className={styles.days}>{data.days}</div>
+            </Col>
+          ))}
+        </Row>
+      ) : (
+        !worlFlowData?.loading && (
           <div className={spinSTYles.spinStyle}>
-            <Spin loading={worlFlowData?.loading} />
+            <Empty />
           </div>
-        )}
-        {!worlFlowData?.loading && worlFlowData?.data?.response ? (
-          <Row className={styles.carddiv}>
-            {card1Data?.map((data) => (
-              <Col
-                key={data?.id}
-                span={10}
-                style={{
-                  backgroundImage: `url(${data?.bg.src})`,
-                  backgroundRepeat: "no-repeat",
-                  backgroundSize: "cover",
-                }}
-                className={styles.colData}
-              >
-                <div className={styles.header}>
-                  <Image src={data?.icon} className={styles.Img} />
-                  <div className={styles.heading}>{data.title}</div>
-                </div>
-                <div className={styles.charts}>{`${
-                  data?.charts ? data?.charts : "0"
-                }  Charts`}</div>
-                <div className={styles.days}>{data.days}</div>
-              </Col>
-            ))}
-          </Row>
-        ) : (
-          !worlFlowData?.loading && (
-            <div className={spinSTYles.spinStyle}>
-              <Empty />
-            </div>
-          )
-        )}
-      </Card>
+        )
+      )}
+    </Card>
     </div>
   );
 };

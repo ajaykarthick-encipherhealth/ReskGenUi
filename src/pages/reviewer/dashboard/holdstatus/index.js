@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import spinSTYles from "../../../../styles/auth.module.css";
 import { getPatientID } from "../../../../store/actions/PatientsActions";
 import { actions as dashbaordActions } from "../../../../stores/reviewer/dashboard";
+import { renderSkeletonHold } from "../../../../components/reuseableFunctions";
 
 const HoldStatus = ({ getHoldStatusData, holdStatusData }) => {
   const [openHoldStatus, setOpenHoldStatus] = useState(false);
@@ -91,7 +92,8 @@ const HoldStatus = ({ getHoldStatusData, holdStatusData }) => {
                 alignItems: "center",
               }}
             >
-              <Spin loading={holdStatusData?.loading} />
+        { renderSkeletonHold()}
+
             </div>
           ) : (
             <div className={styles.container}> {TableData}</div>
@@ -110,7 +112,7 @@ const HoldStatus = ({ getHoldStatusData, holdStatusData }) => {
       >
         {holdStatusData?.loading ? (
           <div className={spinSTYles.spinStyle}>
-            <Spin loading={holdStatusData?.loading} />
+{ renderSkeletonHold()}
           </div>
         ) : (
           <div className={styles.container} style={{ height: "500px" }}>

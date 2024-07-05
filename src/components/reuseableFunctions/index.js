@@ -1,5 +1,6 @@
 import React from "react";
-import { Tooltip } from "antd";
+import { Tooltip, Skeleton } from "antd";
+
 import Image from "next/image";
 import visitStyles from "../../../src/styles/visitdata.module.css";
 import { SVGICON } from "../../jsx/constant/theme";
@@ -14,6 +15,7 @@ import ReAudit from "../../images/trackingImages/reAuditTrack.png";
 import AuditPending from "../../images/trackingImages/AuditPending.png";
 import AuditedDeclineTrack from "../../images/trackingImages/AuditDeclined.png";
 import Abort from "../../images/trackingImages/Abort.png";
+
 export const getFlag = (data) => {
   switch (data.flags) {
     case "PATIENT_NAME_MISSED":
@@ -514,3 +516,30 @@ export const selectTab = (num,setFlagTagActive,setActiveTabHead,setActiveComboTr
   }
   setPopoverVisible(false);
 };
+
+export const renderSkeleton = () => (
+  <div className="skeleton-table">
+    <div className="skeleton-header">
+      <Skeleton.Input style={{ width: 2000 }} active />
+    </div>
+
+    {Array.from({ length: 6 }).map((_, index) => (
+      <div key={index} className="skeleton-row">
+        <Skeleton.Input style={{ width: 2000 }} active />
+      </div>
+    ))}
+  </div>
+);
+export const renderSkeletonHold = () => (
+  <div className="skeleton-table">
+    <div className="skeleton-header">
+      <Skeleton.Input style={{ width: 600 }} active />
+    </div>
+
+    {Array.from({ length: 6 }).map((_, index) => (
+      <div key={index} className="skeleton-row">
+        <Skeleton.Input style={{ width: 600 }} active />
+      </div>
+    ))}
+  </div>
+);

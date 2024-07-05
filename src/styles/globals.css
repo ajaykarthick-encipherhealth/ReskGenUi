@@ -14779,3 +14779,51 @@ input::-webkit-inner-spin-button {
   border-color: rgb(36, 21, 113) !important;
   background: rgb(36, 21, 113) !important;
 }
+.skeleton-shadow {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adjust the values to your liking */
+  border-radius: 20px; /* Optional: adds rounded corners */
+}
+.skeleton-table {
+  width: 100%;
+  padding: 16px;
+}
+
+.skeleton-header, .skeleton-row {
+  display: flex;
+  margin-bottom: 8px;
+}
+
+.skeleton-header {
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.skeleton-row {
+  align-items: center;
+}
+
+.skeleton-header .ant-skeleton-input,
+.skeleton-row .ant-skeleton-input {
+  margin-right: 16px;
+}
+
+.spinStyle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+/* YourStyles.module.css */
+.carddiv {
+  margin: 16px;
+  display: flex;
+  flex-direction: row;
+}
+
+.colData {
+  background: #fff; /* Default background for cards */
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
