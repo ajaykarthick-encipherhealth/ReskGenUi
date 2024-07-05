@@ -12,7 +12,7 @@ import Legends from "../legends";
 import DateRangePicker from "../rangepicker";
 import Selector from "../selector";
 import Search from "../search";
-import { disableFutureDate, handleRnagePicker2 } from "./functions";
+import { disableFutureDate, handleRnagePicker2, resetPageNumber } from "./functions";
 import filter from "../../images/svg/filter.svg";
 import warning from "../../images/svg/warning.svg";
 import { getFilters } from "../../stores/authflow/actions";
@@ -162,7 +162,8 @@ const HeaderFilters = ({
   selectedValueOrg,
   isRangePickerUsers,
   form,
-  setMobileNumber
+  setMobileNumber,
+  setPageNo
 }) => {
   const dispatch = useDispatch();
   const [showFilters, setShowFilters] = useState(defaultShow);
@@ -202,6 +203,7 @@ const HeaderFilters = ({
                 search={search}
                 searchVal={searchVal}
                 setSearchVal={setSearchVal}
+                setPageNo={setPageNo}
               />
             </div>
           )}
@@ -214,6 +216,7 @@ const HeaderFilters = ({
                 selectOptions={selectOptions}
                 defaultSelectValue1={defaultSelectValue1}
                 // selectedValue={selectedValue}
+                setPageNo={setPageNo}
               />
             </div>
           )}
@@ -236,6 +239,9 @@ const HeaderFilters = ({
                 <Select
                   onChange={(selectedOption) => {
                     setSelCreatedBy(selectedOption?.value);
+                    if(setPageNo){
+                      resetPageNumber(setPageNo)
+                    }
                   }}
                   options={createdByOptoons}
                   className="custom-react-select"
@@ -253,6 +259,9 @@ const HeaderFilters = ({
                 <Select
                   value={defaultSelectValue2 ? defaultSelectValue2 : ""}
                   onChange={(selectedOption) => {
+                    if(setPageNo){
+                      resetPageNumber(setPageNo)
+                    }
                     setSelectedOption2(selectedOption);
                     setSelectedManger("");
                     if (selectedOption?.label === "All") {
@@ -274,6 +283,9 @@ const HeaderFilters = ({
                 <Select
                   // value={defaultSelectValue2}
                   onChange={(selectedOption) => {
+                    if(setPageNo){
+                      resetPageNumber(setPageNo)
+                    }
                     setSelectedOption2(selectedOption?.value);
                     if (setSelectedManger) setSelectedManger("");
                   }}
@@ -293,6 +305,9 @@ const HeaderFilters = ({
                   showSearch
                   value={value ? value : ""}
                   onChange={(selectedOption) => {
+                    if(setPageNo){
+                      resetPageNumber(setPageNo)
+                    }
                     if (selectedCoderOptReport?.value === "SUPERVISOR") {
                       setSelectedOption3(selectedOption);
                       setSelect(null);
@@ -315,6 +330,9 @@ const HeaderFilters = ({
               <div class="form-group has-search">
                 <Select
                   onChange={(selectOrg) => {
+                    if(setPageNo){
+                      resetPageNumber(setPageNo)
+                    }
                     setSelectedOptionOrg(selectOrg);
                     if (selectOrg?.label === "All") {
                       setSelectedOptionOrg(null);
@@ -343,6 +361,7 @@ const HeaderFilters = ({
                 setCoderStartDate={setCoderStartDate}
                 setCoderEndDate={setCoderEndDate}
                 disabled={disable != "Yes" ? true : false}
+                setPageNo={setPageNo}
               />
             </div>
           )}
@@ -391,6 +410,7 @@ const HeaderFilters = ({
                   setEndDate={setEndDate2}
                   disabled={false}
                   setSelectedDates={setSelectedDates2}
+                  setPageNo={setPageNo}
                 />
               </div>
             </>
@@ -531,6 +551,9 @@ const HeaderFilters = ({
                   <Select
                     onChange={(selectedOption) => {
                       setSelAllocatedBy(selectedOption?.value);
+                      if(setPageNo){
+                        resetPageNumber(setPageNo)
+                      }
                     }}
                     options={allocatedByOptoons}
                     className="custom-react-select"
@@ -559,6 +582,7 @@ const HeaderFilters = ({
                   setCoderStartDate={setCoderStartDate}
                   setCoderEndDate={setCoderEndDate}
                   disabled={disable != "Yes" ? true : false}
+                  setPageNo={setPageNo}
                 />
               </div>
             )}
@@ -575,6 +599,9 @@ const HeaderFilters = ({
                   <Select
                     onChange={(selectedOption) => {
                       setSelAllocatedTo(selectedOption?.value);
+                      if(setPageNo){
+                        resetPageNumber(setPageNo)
+                      }
                     }}
                     options={allocatedToOptoons}
                     className="custom-react-select"
@@ -602,6 +629,9 @@ const HeaderFilters = ({
                   <Select
                     onChange={(selectedOption) => {
                       setSelCreatedBy(selectedOption?.value);
+                      if(setPageNo){
+                        resetPageNumber(setPageNo)
+                      }
                     }}
                     options={createdByOptoons}
                     className="custom-react-select"
@@ -625,6 +655,9 @@ const HeaderFilters = ({
                           setStartDate3,
                           setEndDate3,
                         });
+                        if(setPageNo){
+                          resetPageNumber(setPageNo)
+                        }
                       }}
                     />
                   </div>
@@ -638,14 +671,17 @@ const HeaderFilters = ({
                   <div>
                     <RangePicker
                       format="YYYY-MM-DD"
-                      onChange={(date, dateString) =>
+                      onChange={(date, dateString) =>{
                         handleRnagePicker2({
                           date,
                           dateString,
                           setStartDate4,
                           setEndDate4,
                         })
-                      }
+                        if(setPageNo){
+                          resetPageNumber(setPageNo)
+                        }
+                      }}
                       disabledDate={(current) => disableFutureDate(current)}
                     />
                   </div>
@@ -659,14 +695,17 @@ const HeaderFilters = ({
                   <div>
                     <RangePicker
                       format="YYYY-MM-DD"
-                      onChange={(date, dateString) =>
+                      onChange={(date, dateString) =>{
                         handleRnagePicker2({
                           date,
                           dateString,
                           setStartDate5,
                           setEndDate5,
                         })
-                      }
+                        if(setPageNo){
+                          resetPageNumber(setPageNo)
+                        }
+                      }}
                       disabledDate={(current) => disableFutureDate(current)}
                     />
                   </div>
@@ -681,6 +720,9 @@ const HeaderFilters = ({
                     <Select
                       onChange={(selectedOption) => {
                         setPriority(selectedOption?.value);
+                        if(setPageNo){
+                          resetPageNumber(setPageNo)
+                        }
                       }}
                       options={allocatedToOptoons}
                       className="custom-react-select"

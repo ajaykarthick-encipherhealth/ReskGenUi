@@ -399,6 +399,7 @@ export default function Patient() {
                           addUser={false}
                           addUserForm={addPatientFormId}
                           bullets={bullets}
+                          setPageNo={setPageNo}
                           // isNextRow={true}
                         />
                       </div>
@@ -425,7 +426,7 @@ export default function Patient() {
                           <div>
                             <div className="pagination-container">
                               <Paginator
-                                first={paginationFirst}
+                                first={pageNo===0?0:paginationFirst}
                                 rows={15}
                                 totalRecords={totalElements}
                                 onPageChange={onPageChange}

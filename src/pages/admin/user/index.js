@@ -266,6 +266,7 @@ const UserList = () => {
                       disable="Yes"
                       form={form}
                       setMobileNumber={setMobileNumber}
+                      setPageNo={setPageCount}
                     />
                   </div>
                   <div
@@ -284,7 +285,7 @@ const UserList = () => {
                     <div>
                       <div className="pagination-container">
                         <Paginator
-                          first={paginationFirst}
+                          first={pageCount===0?0:paginationFirst}
                           rows={15}
                           totalRecords={totalElements}
                           onPageChange={onPageChange}
