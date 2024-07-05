@@ -3,31 +3,28 @@ import styles from "./styles.module.css";
 import { Select } from "antd";
 import moment from "moment";
 
-const index = ({activeBtn, setActiveBtn,setDateRange}) => {
-
-
-
+const index = ({ activeBtn, setActiveBtn, setDateRange }) => {
   const handleDateChange = (value) => {
     let startDate;
     if (value === "last_1_week") {
-      startDate = moment().subtract(6, 'days').format('YYYY-MM-DD') +
-    "T00:00:00.000Z";
+      startDate =
+        moment().subtract(6, "days").format("YYYY-MM-DD") + "T00:00:00.000Z";
     } else if (value === "last_1_month") {
-      startDate = moment().subtract(30, 'days').format('YYYY-MM-DD') +
-      "T00:00:00.000Z";
+      startDate =
+        moment().subtract(30, "days").format("YYYY-MM-DD") + "T00:00:00.000Z";
     } else {
-      startDate = moment().format('YYYY-MM-DD') +
-      "T00:00:00.000Z";
+      startDate = moment().format("YYYY-MM-DD") + "T00:00:00.000Z";
     }
-    const endDate = moment().format('YYYY-MM-DD') +
-    "T23:59:59.000Z";
+    const endDate = moment().format("YYYY-MM-DD") + "T23:59:59.000Z";
     setDateRange({ startDate: startDate, endDate: endDate });
   };
 
-
   return (
     <div className={styles.container}>
-      <div className="d-flex justify-content-between w-[40%]" style={{ width: "40%" }}>
+      <div
+        className="d-flex justify-content-between w-[40%]"
+        style={{ width: "40%" }}
+      >
         <div className="d-flex" style={{ width: "50%" }}>
           <div className={styles.flterContainer} style={{ width: "35%" }}>
             Organization

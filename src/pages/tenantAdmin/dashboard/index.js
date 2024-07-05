@@ -21,7 +21,6 @@ import HeadTitle from "../../../components/headtitle";
 import PieChartInfo from "./components/pieChart/PieChartInfo";
 import OrgPieChartInfo from "./components/OrgPieChart/OrgPieChartInfo";
 
-
 const Index = ({
   getUserStatusData,
   allocatedStatusData,
@@ -35,8 +34,7 @@ const Index = ({
   organizationStatusData,
 }) => {
   const [activeBtn, setActiveBtn] = useState("default");
-  const [dateRange, setDateRange] = useState({ startDate:"", endDate: ""});
-
+  const [dateRange, setDateRange] = useState({ startDate: "", endDate: "" });
 
   const allocatedData = [
     {
@@ -51,10 +49,26 @@ const Index = ({
     },
   ];
   const reviewerData = [
-    { value: reviewerStatusData?.response?.processedStatus?.COMPLETED, name: "Completed", itemStyle: { color: "#00BC13" } },
-    { value: reviewerStatusData?.response?.processedStatus?.PENDING, name: "Pending", itemStyle: { color: "#2EA4FF" } },
-    { value:reviewerStatusData?.response?.processedStatus?.HOLD, name: "Hold", itemStyle: { color: "#3C0AD2" } },
-    { value: reviewerStatusData?.response?.processedStatus?.DECLINED, name: "Declined", itemStyle: { color: "#EB5252" } },
+    {
+      value: reviewerStatusData?.response?.processedStatus?.COMPLETED,
+      name: "Completed",
+      itemStyle: { color: "#00BC13" },
+    },
+    {
+      value: reviewerStatusData?.response?.processedStatus?.PENDING,
+      name: "Pending",
+      itemStyle: { color: "#2EA4FF" },
+    },
+    {
+      value: reviewerStatusData?.response?.processedStatus?.HOLD,
+      name: "Hold",
+      itemStyle: { color: "#3C0AD2" },
+    },
+    {
+      value: reviewerStatusData?.response?.processedStatus?.DECLINED,
+      name: "Declined",
+      itemStyle: { color: "#EB5252" },
+    },
   ];
 
   const auditorData = [
@@ -96,29 +110,32 @@ const Index = ({
       itemStyle: { color: "#4361EE" },
     },
   ];
- 
 
-  const orgData = organizationStatusData?.response?.map((org, index) => ({
-    value:index,
-    name: org.name,
-    itemStyle: { color: ["#757FEF", "#805DCA", "#4361EE"][index % 3] },
-  })) || [];
-
+  const orgData =
+    organizationStatusData?.response?.map((org, index) => ({
+      value: index,
+      name: org.name,
+      itemStyle: { color: ["#757FEF", "#805DCA", "#4361EE"][index % 3] },
+    })) || [];
 
   useEffect(() => {
     getUserStatusData(dateRange.startDate, dateRange.endDate);
     getAuditorStatusData(dateRange.startDate, dateRange.endDate);
     getAllocatedStatusData(dateRange.startDate, dateRange.endDate);
     getReviewerStatusData(dateRange.startDate, dateRange.endDate);
-    getOrganizationStatusData()
+    getOrganizationStatusData();
   }, [dateRange]);
-  
+
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
       <div className={styles.maincontainer}>
         <div className={styles.rowCOntainer}>
-          <HeaderFilters activeBtn={activeBtn} setActiveBtn={setActiveBtn} setDateRange={setDateRange} />
+          <HeaderFilters
+            activeBtn={activeBtn}
+            setActiveBtn={setActiveBtn}
+            setDateRange={setDateRange}
+          />
           {activeBtn === "default" ? (
             <>
               <div className={`row ${styles.box}`}>
@@ -249,17 +266,13 @@ const Index = ({
 };
 
 const enhancer = connect(
-  (state) => (
-    {
+  (state) => ({
     allocatedStatusData: state.tenantAdmin.workFlow.allocatedStatus.data,
     auditorStatusData: state.tenantAdmin.workFlow.auditorStatus.data,
     userStatusData: state.tenantAdmin.workFlow.userStatus.data,
     reviewerStatusData: state.tenantAdmin.workFlow.reviewerStatus.data,
     organizationStatusData: state.tenantAdmin.workFlow.organizationStatus.data,
-  }
-
-),
-  
+  }),
 
   {
     getUserStatusData: dashbaordActions.userStatusAction,
