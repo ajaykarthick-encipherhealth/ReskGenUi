@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import moment from "moment";
 import Image from "next/image";
-import { Modal, Spin } from "antd";
+import { Modal, Skeleton, Spin } from "antd";
 import styles from "./styles.module.css";
 import spinSTYles from "../../../../styles/auth.module.css";
 import Card from "../../../../components/card/index";
@@ -66,7 +66,7 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
 
       <div className={styles.card4}>
         <Card borderRadius="28px" padding="20px">
-          {notificationResponse?.loading ? (
+        {notificationResponse?.loading ? (
             <div
               style={{
                 width: "100%",
@@ -76,7 +76,7 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
                 alignItems: "center",
               }}
             >
-              <Spin loading={notificationResponse?.loading} />
+              <Skeleton active paragraph={{ rows: 4 }} />
             </div>
           ) : (
             <div className={styles.container}>{notificationData}</div>
@@ -94,7 +94,7 @@ const Notifications = ({ notificationResponse, webSocketNotificationData }) => {
       >
         {notificationResponse?.loading ? (
           <div className={spinSTYles.spinStyle}>
-            <Spin loading={notificationResponse?.loading} />
+              <Skeleton active paragraph={{ rows: 4 }} />
           </div>
         ) : (
           <div className={styles.container} style={{ height: "500px" }}>

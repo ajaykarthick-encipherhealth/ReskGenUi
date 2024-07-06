@@ -8,7 +8,7 @@ import styles from "./styles.module.css";
 import HeadTitle from "../../../../components/headtitle";
 import { connect } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
-import { Empty, Spin } from "antd";
+import { Col, Empty, Row, Skeleton, Spin } from "antd";
 import spinSTYles from "../../../../styles/auth.module.css";
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
@@ -211,9 +211,8 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
               (item) => item?.monthOfYear === hoveredMonthIndex + 1
             );
         } else {
-          finalData = accuracyDatas?.data?.response?.find((item) =>
-             item?.dayOfMonth === this.x
-             
+          finalData = accuracyDatas?.data?.response?.find(
+            (item) => item?.dayOfMonth === this.x
           );
         }
 
@@ -307,7 +306,22 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
   const numericalData = allAverageScore?.filter((value) => value !== false); // Filter out false values
   const sum = numericalData?.reduce((acc, value) => acc + value, 0); // Sum the numerical values
   const average = sum / numericalData?.length; // Calculate the average
-
+  const renderCardSkeleton = () => (
+    <Row style={{ display: "flex", justifyContent: "space-between" }}>
+      {Array.from({ length: 1 }).map((_, index) => (
+        <Row>
+          <Col span={12}>
+            <div className={styles.container}>
+              <Skeleton.Input
+                style={{ width: "210px", height: "250px" }}
+                active
+              />
+            </div>
+          </Col>
+        </Row>
+      ))}
+    </Row>
+  );
   return (
     <>
       <HeadTitle header="System Quality Score" />
@@ -343,8 +357,10 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
           <div className={styles.header}>
             <div style={{ width: "85%", overflowX: "scroll" }}>
               {accuracyDatas?.loading && accuracyLoading && (
-                <div className={spinSTYles.spinStyle}>
-                  <Spin />
+                <div className={styles.highchartStyle}>
+                  {" "}
+                  {/* Container width */}
+                  <Skeleton active paragraph={{ rows: 4 }} />
                 </div>
               )}
               {!accuracyDatas?.loading &&
@@ -360,20 +376,23 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
                   </div>
                 )
               ) : accuracyLoading ? (
-                <div className={spinSTYles.spinStyle}>
-                  <Spin />
+                <div className={spinSTYles.highchartStyle}>
+                  <Skeleton active paragraph={{ rows: 4 }} />
                 </div>
               ) : (
                 <div className={spinSTYles.spinStyle}>{<Empty />}</div>
               )}
             </div>
-            <div className={styles.accuracy}>
-              <div className={styles.header}>
-                <Image src={accuracy} className={styles.Img} />
-                <div className={styles.heading}>Average Quality</div>
-              </div>
+            {accuracyLoading ? (
+              <div className={styles.accuracy}>{renderCardSkeleton()}</div>
+            ) : (
+              <div className={styles.accuracy}>
+                <div className={styles.header}>
+                  <Image src={accuracy} className={styles.Img} />
+                  <div className={styles.heading}>Average Quality</div>
+                </div>
 
-              {/* <div className={styles.month}>
+                {/* <div className={styles.month}>
                 {currentBtn === "Daily" && `Day ${currentDate.getDate()}`}
                 {currentBtn === "Monthly" &&
                   `Month ${monthNames[currentDate.getMonth()]}`}
@@ -383,9 +402,9 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
                 )}
               </div> */}
 
-              <div className={styles.percentage}>
-                <span className={styles.insideTitle}>
-                  {/* {initialAccuracyData
+                <div className={styles.percentage}>
+                  <span className={styles.insideTitle}>
+                    {/* {initialAccuracyData
                     ? currentBtn === "Monthly"
                       ? `${
                           initialAccuracyData[currentDate?.getMonth()]
@@ -404,10 +423,11 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
                             ?.averageScore
                         }%`
                     : "0%"} */}
-                  {average ? `${average?.toFixed(2)}%` : "0%"}
-                </span>
+                    {average ? `${average?.toFixed(2)}%` : "0%"}
+                  </span>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </Card>
       </div>
