@@ -14,7 +14,8 @@ import FilterButton from "../../../../../components/table/tenantSettingsTable/fi
 import Search from "../../../../../components/table/tenantSettingsTable/search";
 import TenantSettingsTable from "../../../../../components/table/tenantSettingsTable/tenantSettingsTable";
 
-const ComorbidConditions = ({ updateSettings, getCodingDetails,list }) => {
+const HistoryCodes = ({ updateSettings, getCodingDetails,list }) => {
+  console.log(list)
   const [openModal, setOpenModal] = useState(false);
   const [search, setSearch] = useState(null);
   const [tags, setTags] = useState([
@@ -62,6 +63,11 @@ const ComorbidConditions = ({ updateSettings, getCodingDetails,list }) => {
       key: "code",
     },
     {
+      title: "Result Code",
+      dataIndex: "result_code",
+      key: "result_code",
+    },
+    {
       title: "Description",
       dataIndex: "description",
       key: "description",
@@ -73,17 +79,66 @@ const ComorbidConditions = ({ updateSettings, getCodingDetails,list }) => {
     },
   ];
   useEffect(() => {
-    getCodingDetails({ type: "COMORBID_CONDITIONS" });
+    getCodingDetails({ type: "HISTORY_CODES" });
   }, []);
 
   return (
     <>
       <div className="p-3">
         <div className="d-flex justify-content-between">
-          <div className={Style.title}>Comorbid Conditions</div>
+          <div className={Style.title}>History Codes</div>
         </div>
         <div>
-         
+          <div className="d-flex justify-content-between mt-1">
+            <div>{"Do you need an Capture History Codes"}</div>
+            <div className="d-flex justify-content-between">
+              <div name="captureHistoryCodes">
+                <Switch className="switch" />
+              </div>
+              <div
+                className={`mx-2 text-${
+                  list?.response?.captureHistoryCodes ? "info" : "danger"
+                }`}
+              >
+                {list?.response?.captureHistoryCodes ? "Enable" : "Disable"}
+              </div>
+            </div>
+          </div>
+
+          <div className="d-flex justify-content-between mt-1">
+            <div>{"Do you need an Capture History Codes as ICD Codes"}</div>
+            <div className="d-flex justify-content-between">
+              <div name="captureHistoryCodesAsIcdCodes">
+                <Switch className="switch" />
+              </div>
+              <div
+                className={`mx-2 text-${
+                  list?.response?.captureHistoryCodesAsIcdCodes
+                    ? "info"
+                    : "danger"
+                }`}
+              >
+                {list?.response?.captureHistoryCodesAsIcdCodes
+                  ? "Enable"
+                  : "Disable"}
+              </div>
+            </div>
+          </div>
+          <div className="d-flex justify-content-between mt-1">
+            <div>{" Do you need general guidelines codes "}</div>
+            <div className="d-flex justify-content-between">
+              <div name="captureHistoryCodes">
+                <Switch className="switch" />
+              </div>
+              <div
+                className={`mx-2 text-${
+                  list?.response?.captureHistoryCodes ? "info" : "danger"
+                }`}
+              >
+                {list?.response?.captureHistoryCodes ? "Enable" : "Disable"}
+              </div>
+            </div>
+          </div>
           <div className="d-flex justify-content-start gap-2 mt-4">
             <div>Year</div>
             <div>
@@ -121,19 +176,14 @@ const ComorbidConditions = ({ updateSettings, getCodingDetails,list }) => {
             <div>
               <FilterButton label={"Description"} isActive={false} />
             </div> */}
-            <div className="mx-3">{"Do you need general guidelines codes"}</div>
-            <div className="d-flex">
-              {/* <Form.Item name="isDownCodeConversionEnabled"> */}
-              <Switch className="switch" />
-              {/* </Form.Item> */}
-            </div>
+           
 
             <div className="ms-auto mx-4">
               <Search setSearch={setSearch} />
             </div>
           </div>
           <div>
-            <TenantSettingsTable columns={columns} data={list?.response?.comorbidConditionsPage?.content} />
+            <TenantSettingsTable columns={columns}  data={list?.response?.historyCodesPage?.content} />
           </div>
         </div>
       </div>
@@ -157,9 +207,9 @@ const ComorbidConditions = ({ updateSettings, getCodingDetails,list }) => {
   );
 };
 const enhancer = connect((state) => ({
-  list: state?.tenantAdmin?.codingGuidelines.data,
+  list : state?.tenantAdmin?.codingGuidelines?.data
 }), {
   updateSettings: configurationActions.updateSettingsAction,
   getCodingDetails: codingGuidelinesActions.codingGuidelinesAction,
 });
-export default enhancer(ComorbidConditions);
+export default enhancer(HistoryCodes);

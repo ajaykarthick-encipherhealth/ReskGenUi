@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from "react";
 import Style from "../../style.module.css";
 import RegularButton from "../../../../../components/button";
-import { Button, Checkbox, Divider, Switch } from "antd";
+import { Button, Checkbox, Divider, Input, Switch } from "antd";
+import FileUploader from "../../components/fileUploader";
 import ModalPop from "../../components/modal";
 import CommonModalContent from "../../components/commonModalContent";
-import { connect } from "react-redux";
-import { actions as codingGuidelinesActions } from "../../../../../stores/tenantAdmin";
 import { actions as configurationActions } from "../../../../../stores/tenantAdmin";
-import { useSelector } from "react-redux";
-import FileUpload from "../../../../../components/table/tenantSettingsTable/fileUpload";
-import { PlusOutlined } from "@ant-design/icons";
-import FilterButton from "../../../../../components/table/tenantSettingsTable/filterButton";
-import Search from "../../../../../components/table/tenantSettingsTable/search";
+import { actions as codingGuidelinesActions } from "../../../../../stores/tenantAdmin";
+import { connect } from "react-redux";
 import TenantSettingsTable from "../../../../../components/table/tenantSettingsTable/tenantSettingsTable";
-
-const CriticalConditions = ({ updateSettings, getCodingDetails,list }) => {
+import { PlusOutlined } from "@ant-design/icons";
+import Search from "../../../../../components/table/tenantSettingsTable/search";
+import FilterButton from "../../../../../components/table/tenantSettingsTable/filterButton";
+import FileUpload from "../../../../../components/table/tenantSettingsTable/fileUpload";
+import { useSelector } from "react-redux";
+const RAFConfig = ({ updateSettings, getCodingDetails ,list}) => {
   const [openModal, setOpenModal] = useState(false);
   const [search, setSearch] = useState(null);
-
   const [tags, setTags] = useState([
     "plan",
     "assessment/plan",
@@ -59,27 +58,71 @@ const CriticalConditions = ({ updateSettings, getCodingDetails,list }) => {
       dataIndex: "code",
       key: "code",
     },
-    { title: "Description", dataIndex: "description", key: "description" },
+    {
+      title: "Description",
+      dataIndex: "description",
+      key: "description",
+    },
+    {
+      title: "Type",
+      dataIndex: "type",
+      key: "type",
+    },
     {
       title: "Year",
       dataIndex: "years",
       key: "year",
     },
   ];
-  const onChange = (checked) => {};
-  const handleSettingsUpdate = () => {
-    updateSettings({ CriticalConditions: "values" });
-  };
   useEffect(() => {
-    getCodingDetails({ type: "CRITICAL_CONDITIONS" });
+    getCodingDetails({ type: "RAF" });
   }, []);
+  const handleSubmit = (values) => {
+    updateSettings({ directCodes: values });
+  };
+
   return (
-    <>
+    <div>
       <div className="p-3">
         <div className="d-flex justify-content-between">
-          <div className={Style.title}>Critical Conditions</div>
+          <div className={Style.title}>RAF Configuration</div>
         </div>
-        
+        <div className="mt-4">
+          <div className="d-flex justify-content-between mt-1 mb-4">
+            <div>{"Do you need to calculate RAF"}</div>
+            <div className="d-flex justify-content-between">
+              <Switch className="switch" />
+              <div
+                className={`mx-2 text-${
+                  list?.response?.isOIGCodeNeeded ? "info" : "danger"
+                }`}
+              >
+                {list?.response?.isOIGCodeNeeded ? "Enable" : "Disable"}
+              </div>
+            </div>
+          </div>
+
+          <div className="d-flex justify-content-between">
+            <div>{"Do you need RAF medicaid"}</div>
+            <div className="d-flex justify-content-between">
+              <Switch className="switch" />
+              <div
+                className={`mx-2 text-${
+                  list?.response?.captureHistoryCodes ? "info" : "danger"
+                }`}
+              >
+                {list?.response?.captureHistoryCodes ? "Enable" : "Disable"}
+              </div>
+            </div>
+          </div>
+          <div className="d-flex justify-content-between mt-4">
+            <div>{"Enter RAF score OREC"}</div>
+            <div className="d-flex justify-content-between">
+              <Input className="switch" />
+              
+            </div>
+          </div>
+        </div>
         <div className="d-flex justify-content-start gap-2 mt-4">
           <div>Year</div>
           <div>
@@ -106,26 +149,25 @@ const CriticalConditions = ({ updateSettings, getCodingDetails,list }) => {
             </Button>
           </div>
         </div>
-        <Divider />
+        <Divider/>
         <div className="d-flex justify-content-start  gap-4 mt-4">
-          <div className="mx-3">{"Do you need general guidelines codes"}</div>
-          <div className="d-flex">
-            {/* <Form.Item name="isDownCodeConversionEnabled"> */}
-            <Switch className="switch" />
-            {/* </Form.Item> */}
+          {/* <div>
+            <FilterButton label={"Default"} isActive={true} />
           </div>
-          <div className="">{"Do you need to capture critical condition for patients"}</div>
-          <div className="d-flex">
-            {/* <Form.Item name="isDownCodeConversionEnabled"> */}
-            <Switch className="switch" />
-            {/* </Form.Item> */}
+          <div>
+            <FilterButton label={"Code"} isActive={false} />
           </div>
+          <div>
+            <FilterButton label={"Description"} isActive={false} />
+          </div> */}
+          
           <div className="ms-auto mx-4">
             <Search setSearch={setSearch} />
           </div>
         </div>
+
         <div>
-          <TenantSettingsTable columns={columns} data={list?.response?.criticalConditionsPage?.content} />
+          <TenantSettingsTable columns={columns} data={list?.response?.rafScoreYearList} />
         </div>
       </div>
       <div className="text-end p-3">
@@ -134,17 +176,14 @@ const CriticalConditions = ({ updateSettings, getCodingDetails,list }) => {
           name={"Restore Changes"}
           onClick={() => console.log("Restore Changes")}
         />
-        <RegularButton
-          name={"Save Changes"}
-          onClick={() => handleSettingsUpdate()}
-        />
+        <RegularButton name={"Save Changes"} onClick={() => handleSubmit()} />
       </div>
       <ModalPop
         openModal={openModal}
         content={<CommonModalContent tags={tags} setTags={setTags} />}
         setOpenModal={setOpenModal}
       />
-    </>
+    </div>
   );
 };
 const enhancer = connect((state) => ({
@@ -153,5 +192,4 @@ const enhancer = connect((state) => ({
   updateSettings: configurationActions.updateSettingsAction,
   getCodingDetails: codingGuidelinesActions.codingGuidelinesAction,
 });
-
-export default enhancer(CriticalConditions);
+export default enhancer(RAFConfig);

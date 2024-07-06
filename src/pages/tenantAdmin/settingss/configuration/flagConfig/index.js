@@ -1,25 +1,24 @@
-import React, { useEffect } from "react";
+import React from 'react'
 import Style from "./../../style.module.css";
 import RegularButton from "../../../../../components/button";
-import { Form } from "antd";
-import { connect, useSelector } from "react-redux";
-import { actions as configurationActions } from "../../../../../stores/tenantAdmin";
 
-const FlagConfig = ({ getFlagConfigDetails, updateSettings }) => {
-  const [form] = Form.useForm();
-  const { loading, data } = useSelector(
-    (state) => state?.tenantAdmin?.configurationSettings
-  );
-  useEffect(() => {
-    getFlagConfigDetails({ type: "FLAG_CONFIG" });
-  }, []);
 
-  const handleSubmit = (values) => {
-    updateSettings({ flagConfig: values });
-  };
+const FlagConfig = () => {
+    const flags = [
+        { id: 1, name: "PATIENT_DOB_MISSED", color: " #B2B377 " },
+        { id: 1, name: "PATIENT_DOB_MISSED", color: "#F7D392" },
+        { id: 1, name: "PATIENT_DOB_MISSED", color: "#F7D392" },
+        { id: 1, name: "PATIENT_DOB_MISSED", color: "#F7D392" },
+        { id: 1, name: "PATIENT_DOB_MISSED", color: "#F7D392" },
+        { id: 1, name: "PATIENT_DOB_MISSED", color: "#F7D392" },
+        { id: 1, name: "PATIENT_DOB_MISSED", color: "#F7D392" },
+        { id: 1, name: "PATIENT_DOB_MISSED", color: "#F7D392" },
+        { id: 1, name: "PATIENT_DOB_MISSED", color: "#F7D392" },
+        { id: 1, name: "PATIENT_DOB_MISSED", color: "#F7D392" },
+      ];
   return (
     <>
-      <div className="p-3" style={{ height: "65vh" }}>
+     <div className="p-3" style={{height:"80vh"}}>
         <div className="d-flex justify-content-between">
           <div className={Style.title}>Flag Configuration</div>
           <div className="d-flex mb-3">
@@ -50,7 +49,7 @@ const FlagConfig = ({ getFlagConfigDetails, updateSettings }) => {
             <RegularButton name={"Save"} onClick={() => console.log("Save")} />
           </div>
         </div>
-        {/* <div>
+        <div>
           <div className="form-check form-check-inline">
             <input
               className="form-check-input"
@@ -87,37 +86,36 @@ const FlagConfig = ({ getFlagConfigDetails, updateSettings }) => {
               Deleted Flag
             </label>
           </div>
-        </div> */}
+        </div>
         <div>
-          {data?.response?.flagDetailsList?.map((item) => (
+          {flags.map((item) => (
             <div
               className={`p-1 px-3 d-inline-block m-2`}
-              style={{ border: `1px solid ${item.flagColour}` }}
+              style={{ border: `1px solid ${item.color}` }}
             >
               <span
                 className={Style.flagDot}
-                style={{ backgroundColor: `${item.flagColour}` }}
+                style={{ backgroundColor: `${item.color}` }}
               ></span>
-              <span>{item.flagName}</span>
+              <span>{item.name}</span>
             </div>
           ))}
         </div>
+      
       </div>
-      <div className="text-end p-3">
+        <div className="text-end p-3">
         <RegularButton
           type={"outline"}
           name={"Restore Changes"}
           onClick={() => console.log("Restore Changes")}
         />
-        <RegularButton name={"Save Changes"} onClick={() => handleSubmit()} />
+        <RegularButton
+          name={"Save Changes"}
+          onClick={() => console.log("Save Changes")}
+        />
       </div>
-    </>
-  );
-};
+      </>
+  )
+}
 
-const enhancer = connect((state) => ({}), {
-  getFlagConfigDetails: configurationActions.configurationSettingsAction,
-  updateSettings: configurationActions.updateSettingsAction,
-});
-
-export default enhancer(FlagConfig);
+export default FlagConfig

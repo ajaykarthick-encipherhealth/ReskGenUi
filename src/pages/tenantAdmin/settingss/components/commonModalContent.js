@@ -1,4 +1,4 @@
-import { Button, Form, Input, Select, Switch } from "antd";
+import { Form, Input, Select, Switch } from "antd";
 import React, { useState } from "react";
 import Style from "../style.module.css";
 import RegularButton from "../../../../components/button";
@@ -8,12 +8,8 @@ import {
   handleSaveEdit,
 } from "../coding/insulin";
 import Tags from "./tags";
-import { connect } from "react-redux";
-import { actions as manualAddActions } from "../../../../stores/tenantAdmin";
-import { getYears } from "../../../../utils/reusable";
-import ButtonStyles from "../../../../components/button/style.module.css";
 
-const CommonModalContent = ({ tags, setTags, createDirectCodes }) => {
+const CommonModalContent = ({tags,setTags}) => {
   const [form] = Form.useForm();
   const [selectedOption, setSelectedOption] = useState("Default");
   const [inputStrValue, setInputStrValue] = useState({
@@ -44,37 +40,14 @@ const CommonModalContent = ({ tags, setTags, createDirectCodes }) => {
   const handleSwitch = (checked) => {
     console.log(`switch to ${checked}`);
   };
-  const handleFormSubmit = (values) => {
-    console.log("values", values);
-
-    values.target = "DIRECT_CONFIRM_CODES";
-    !values.isDefaultYear ? (values.year = values.year) : delete values.year;
-    if (selectedOption === "Default") {
-      values.default = [
-        {
-          code: values.code,
-          description: values.description,
-        },
-      ];
-    } else if (selectedOption === "Code") {
-      values.codes = values.codes;
-    } else {
-      values.description = values.description;
-    }
-    delete values.description;
-    delete values.code;
-    console.log(values);
-    // form.resetFields();
-
-    // createDirectCodes(values);
+  const handleFormSubmit = (value) => {
+    console.log(value);
+    form.resetFields();
   };
-
   return (
     <>
-      <div className="d-flex gap-3">
-        <div className="fw-500" style={{ fontSize: "22px" }}>
-          Add Manually
-        </div>
+      <div className="d-flex">
+        <div className="font-bold"> Add Manually</div>
         <Select
           defaultValue={{ value: "Default", label: "Default" }}
           options={[
@@ -89,85 +62,49 @@ const CommonModalContent = ({ tags, setTags, createDirectCodes }) => {
       {selectedOption === "Default" && (
         <>
           <Form form={form} onFinish={handleFormSubmit}>
-            <label htmlFor="code"> code</label>
-            <div className="d-flex justify-content-between">
-              <div className="w-100">
-                <Form.Item name="code">
+            <Form.Item name="code">
+              <label htmlFor="code"> code</label>
+              <div className="d-flex justify-content-between">
+                <div className="w-100">
                   <Input
                     placeholder={"Code"}
-                    // onChange={(e) => handleInputChange(e, "code")}
-                    // value={inputStrValue?.code}
+                    onChange={(e) => handleInputChange(e, "code")}
+                    value={inputStrValue?.code}
                     style={{ padding: "22px" }}
                   />
-                </Form.Item>
+                </div>
               </div>
-            </div>
-            <label htmlFor="description"> Description</label>
-            <div className="d-flex justify-content-between">
-              <div className="w-100">
-                <Form.Item name="description">
+            </Form.Item>
+            <Form.Item name="description">
+              <label htmlFor="description"> Description</label>
+              <div className="d-flex justify-content-between">
+                <div className="w-100">
                   <Input
                     placeholder={"Description"}
-                    // onChange={(e) => handleInputChange(e, "description")}
-                    // value={inputStrValue?.description}
+                    onChange={(e) => handleInputChange(e, "description")}
+                    value={inputStrValue?.description}
                     style={{ padding: "22px" }}
                   />
-                </Form.Item>
+                </div>
               </div>
-            </div>
-            <div className="d-flex gap-5">
-              <div className="font-semibold"> Billable </div>
-              <div className="mx-2 w-100">
-                <Form.Item name="code">
+            </Form.Item>
+            <Form.Item name="code">
+              <div className="d-flex">
+                <div className="font-semibold"> Billable </div>
+                <div className="mx-2">
                   <Switch
-                    title="Yes"
                     defaultChecked={true}
                     className="directCodeSwitch"
                     onChange={handleSwitch}
-                    checkedChildren="Yes"
-                    unCheckedChildren="No"
                   />
-                </Form.Item>
+                </div>
               </div>
-            </div>
-            <div className="d-flex gap-1">
-              <div className="font-semibold"> Default Year </div>
-              <div className="mx-2">
-                <Form.Item name="isDefaultYear">
-                  <Switch
-                    checkedChildren="Yes"
-                    unCheckedChildren="No"
-                    // defaultChecked={true}
-                    className="directCodeSwitch"
-                  />
-                </Form.Item>
+            </Form.Item>
+            <Form.Item name="code">
+              <div className="d-flex justify-content-center">
+                <RegularButton name={"Submit"} htmlType="submit" />
               </div>
-            </div>
-
-            <label htmlFor="year"> Year</label>
-            <div className="d-flex justify-content-between">
-              <div className="w-100">
-                <Form.Item name="year">
-                  <Select
-                    allowClear
-                    options={getYears()}
-                    size="large"
-                    mode="multiple"
-                  />
-                </Form.Item>
-              </div>
-            </div>
-            <div className="d-flex justify-content-center">
-              <Form.Item>
-                <Button
-                  htmlType="submit"
-                  className={ButtonStyles.outer}
-                  style={{ height: "45px" }}
-                >
-                  Submit
-                </Button>
-              </Form.Item>
-            </div>
+            </Form.Item>
           </Form>
         </>
       )}
@@ -182,8 +119,8 @@ const CommonModalContent = ({ tags, setTags, createDirectCodes }) => {
               <div className="w-100">
                 <Input
                   placeholder={`${selectedOption}`}
-                  // onChange={handleInputTagChange}
-                  // value={inputValue}
+                  onChange={handleInputTagChange}
+                  value={inputValue}
                   style={{ padding: "22px" }}
                 />
               </div>
@@ -273,7 +210,5 @@ const CommonModalContent = ({ tags, setTags, createDirectCodes }) => {
     </>
   );
 };
-const enhancer = connect((state) => ({}), {
-  createDirectCodes: manualAddActions.manualAddAction,
-});
-export default enhancer(CommonModalContent);
+
+export default CommonModalContent;
