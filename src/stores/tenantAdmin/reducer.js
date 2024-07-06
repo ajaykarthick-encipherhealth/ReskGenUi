@@ -58,23 +58,24 @@ const getReportLoading = (type) =>
   );
 
 const searchReducer = combineReducers({
-  batchUpload: createReducer(batchUpload),
-  configurationSettings: createReducer(configurationSettingsAction),
-  codingGuidelines: createReducer(codingGuidelinesAction),
-  updateSetting: createReducer(updateSettingsAction),
-  manualAdd: createReducer(manualAddAction),
-  healthMetricAdd: createReducer(healthMetricAddAction),
-  uploadFile: createReducer(uploadFileAction),
   allOrganization: createReducer(getAllOrganizationAction),
   allUsers: createReducer(getAllUsersAction),
   allPatients: createReducer(getAllPatientAction),
   allTracking: createReducer(getAllTrackingAction),
   allFileProcessing: createReducer(getAllFileProcessAction),
   allBatches: createReducer(getAllBatches),
-  batchLoader: getReportLoading(getAllBatches),
   getBatch:createReducer(getBatchInfo),
-  getBatchLoader:getReportLoading(getBatchInfo),
   customUsers:createReducer(getCustomUsersAction)
+
+  // loaders
+  allOrganizationLoader: getReportLoading(getAllOrganizationAction),
+  allUsersLoading: getReportLoading(getAllUsersAction),
+  batchUpload: createReducer(batchUpload),
+  allPatientsLoading: getReportLoading(getAllPatientAction),
+  getBatchLoader:getReportLoading(getBatchInfo),
+  batchLoader: getReportLoading(getAllBatches),
+  allBatchesLoader: getReportLoading(getAllBatches),
+  allTrackingLoader: getReportLoading(getAllTrackingAction),
 });
 
 export default searchReducer;

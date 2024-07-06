@@ -151,9 +151,6 @@ const UserList = ({
 
   return (
     <div className={TableStyle.classContaineer}>
-      {!usersData || usersData?.loading ? (
-        <SpinnerDots />
-      ) : (
         <table className={TableStyle.classTable}>
           <thead className={TableStyle.classThead}>
             <tr>
@@ -434,7 +431,6 @@ const UserList = ({
             )}
           </tbody>
         </table>
-      )}
     </div>
   );
 };

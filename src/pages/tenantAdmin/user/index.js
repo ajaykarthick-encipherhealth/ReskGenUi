@@ -17,6 +17,7 @@ import {
 } from "../../../components/headerFilters/functions";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin";
 import UsersList from "../../../components/table/tenantTable/usersList/usersList";
+import SpinnerDots from "../../../components/spinner";
 
 const { Option } = Select;
 const options3 = [
@@ -46,6 +47,7 @@ const UserList = ({
   organizationList,
   getAllUsersList,
   usersList,
+  loading
 }) => {
   const dispatch = useDispatch();
   const usersData = useSelector((state) => state.adminUsers.usersData);
@@ -304,28 +306,34 @@ const UserList = ({
                       id="task-tbl_wrapper"
                       className="dataTables_wrapper no-footer"
                     >
-                      <UsersList
-                        userList={usersList?.response?.content}
-                        switchHandler={switchHandler}
-                        setPageCount={setPageCount}
-                        sortOrder={sortOrder}
-                        setSortOrder={setSortOrder}
-                        setSort={setSort}
-                      />
-
-                      <div>
-                        <div className="pagination-container">
-                          <Paginator
-                            first={pageCount===0?0:paginationFirst}
-                            rows={15}
-                            totalRecords={totalElements}
-                            onPageChange={onPageChange}
+                      {loading ? (
+                        <SpinnerDots />
+                      ) : (
+                        <>
+                          <UsersList
+                            userList={usersList?.response?.content}
+                            switchHandler={switchHandler}
+                            setPageCount={setPageCount}
+                            sortOrder={sortOrder}
+                            setSortOrder={setSortOrder}
+                            setSort={setSort}
                           />
-                          <div className="total-pages">
-                            Total count: {totalElements}
+
+                          <div>
+                            <div className="pagination-container">
+                              <Paginator
+                                first={pageCount === 0 ? 0 : paginationFirst}
+                                rows={15}
+                                totalRecords={totalElements}
+                                onPageChange={onPageChange}
+                              />
+                              <div className="total-pages">
+                                Total count: {totalElements}
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -720,6 +728,7 @@ const enhancer = connect(
   (state) => ({
     organizationList: state?.tenantAdmin?.allOrganization?.data,
     usersList: state?.tenantAdmin?.allUsers,
+    loading:state?.tenantAdmin?.allUsersLoading
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,

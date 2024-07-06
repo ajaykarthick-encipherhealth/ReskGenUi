@@ -110,8 +110,7 @@ const Patient = ({
   }) => {
     const uId = localStorage.getItem("userId");
     const orgId = localStorage.getItem("orgId");
-    let resoureUrl = `dbservice/patient/admin/computation/filter?
-    page=${pageNo}&size=${pageSize}&userId=${uId}&organizationId=${orgId}&computationStart=${
+    let resoureUrl = `page=${pageNo}&size=${pageSize}&userId=${uId}&organizationId=${orgId}&computationStart=${
       startDate ? startDate : ""
     }&computationEnd=${endDate ? endDate : ""}&isAllocation=${
       allocate ? allocate : ""
