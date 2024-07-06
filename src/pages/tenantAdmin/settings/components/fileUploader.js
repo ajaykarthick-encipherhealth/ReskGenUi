@@ -2,9 +2,9 @@ import { Checkbox } from "antd";
 import React, { useState } from "react";
 import ImageUploader from "../../../../components/imageUploading/ImageUploader";
 import Image from "next/image";
-import add from '../.../../../../../images/svg/add.svg'
+import add from "../.../../../../../images/svg/add.svg";
 
-const FileUploader = ({setOpenModal}) => {
+const FileUploader = ({ setOpenModal, key }) => {
   return (
     <>
       <div className="font-bold mt-4">Year</div>
@@ -14,12 +14,18 @@ const FileUploader = ({setOpenModal}) => {
       </div>
       <div className="mt-4 d-flex justify-content-between">
         <div style={{ width: "50%" }}>
-          <ImageUploader setOpenUploader={true} height="174px" isFolderUplaod={true}/>
+          <ImageUploader
+            setOpenUploader={true}
+            height="174px"
+            isFolderUplaod={true}
+          />
         </div>
         <div
           className="d-flex justify-content-center align-items-center rounded text-white cr-pointer"
           style={{ width: "49%", height: "174px", background: "#04306f" }}
-          onClick={()=>{setOpenModal(true)}}
+          onClick={() => {
+            setOpenModal(true);
+          }}
         >
           <div>
             <div className="d-flex justify-content-center align-items-center">
@@ -28,7 +34,6 @@ const FileUploader = ({setOpenModal}) => {
                 alt="Centered Image"
                 style={{ maxWidth: "100%", maxHeight: "100%" }}
               />
-             
             </div>
             <div className="d-flex justify-content-center align-items-center mt-2">
               Add Manually

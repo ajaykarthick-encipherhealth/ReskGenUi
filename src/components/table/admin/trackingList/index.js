@@ -345,7 +345,7 @@ function TrackingTable({
         </thead>
 
         <tbody>
-          {detailsContent.length <= 0 ? (
+          {detailsContent?.length <= 0 ? (
             <tr>
               <td colSpan="11">
                 <Empty />

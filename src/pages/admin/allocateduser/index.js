@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, connect } from "react-redux";
 import Image from "next/image";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { DatePicker, Empty, Tooltip } from "antd";
@@ -14,9 +14,7 @@ import axios from "../../../utility/axiosConfig";
 import ENDPOINTS from "../../../utility/enpoints";
 import AllocatedAdminList from "../../../components/table/admin/allocatedAdminList/allocatedAdminList";
 import AllocatedL2AdminList from "../../../components/table/admin/allocatedL2AdminList/allocatedL2AdminList";
-import allocateStyle from "./allocate/style.module.css";
 import L2AllocateModal from "./l2allocate";
-
 import styles from "../report/report.module.css";
 import reportStyles from "../../reviewer/report/report.module.css";
 import SpinnerDots from "../../../components/spinner";
@@ -33,7 +31,7 @@ import { getFilters } from "../../../stores/authflow/actions";
 import AllocateModal from "./allocate";
 import { debounce } from "../../../components/input";
 import { useCallback } from "react";
-
+import { actions as allActions } from "../../../stores/admin/patientAllocation";
 const { RangePicker } = DatePicker;
 const statusOption = [
   { value: "", label: "ALL" },
@@ -43,7 +41,17 @@ const statusOption = [
   { value: "LOW", label: "LOW" },
 ];
 
-export default function Patient() {
+const Patient = ({
+  allocatedGetList,
+  reviewerResponse,
+  loader,
+  getSupervisorsList,
+  loader2,
+  supervisorResponse,
+  getSelectedSupervisorList,
+  selectedSupervisors,
+  loader3,
+}) => {
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [addPatientId, setAddPatientId] = useState(false);
@@ -56,7 +64,6 @@ export default function Patient() {
   const [allocateModalL2, setAllocateModalL2] = useState(false);
   const [selectedChart, setSelectedChart] = useState([]);
   const [headerCheckValidation, setHeaderCheckValidation] = useState([]);
-  const [patinetListAll, setPatinetListAll] = useState([]);
   const [pageNo, setPageNo] = useState(0);
   const [pageNoL2Patient, setPageNoL2Patient] = useState(0);
   const [pageNoL2User, setPageNoL2User] = useState(0);
@@ -103,7 +110,8 @@ export default function Patient() {
   }) => {
     const uId = localStorage.getItem("userId");
     const orgId = localStorage.getItem("orgId");
-    let resoureUrl = `dbservice/patient/admin/computation/filter?page=${pageNo}&size=${pageSize}&userId=${uId}&organizationId=${orgId}&computationStart=${
+    let resoureUrl = `dbservice/patient/admin/computation/filter?
+    page=${pageNo}&size=${pageSize}&userId=${uId}&organizationId=${orgId}&computationStart=${
       startDate ? startDate : ""
     }&computationEnd=${endDate ? endDate : ""}&isAllocation=${
       allocate ? allocate : ""
@@ -112,28 +120,29 @@ export default function Patient() {
     }&sortfield=${sort?.sortField ? sort?.sortField : ""}&priority=${
       selectedOption ? selectedOption : ""
     }&batchCount=${batchCount ? batchCount : ""}`;
-    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    if (response?.data) {
-      let resultMap = [];
-      let result = response?.data?.response?.content;
-      setTotalElements(response?.data?.response?.totalElements);
-      result?.map((res) => {
-        resultMap.push({
-          ...res,
-          patientId: res.patientId,
-          patientName: res.patientName,
-          computedDate: res.computedDate,
-        });
-      });
-      if (result?.length > 0) {
-        setPatinetListAll(result);
-        setIsLoading(false);
-      } else {
-        setPatinetListAll([]);
-      }
+    allocatedGetList({ url: resoureUrl });
+    // const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+    // if (response?.data) {
+    //   let resultMap = [];
+    //   let result = response?.data?.response?.content;
+    //   setTotalElements(response?.data?.response?.totalElements);
+    //   result?.map((res) => {
+    //     resultMap.push({
+    //       ...res,
+    //       patientId: res.patientId,
+    //       patientName: res.patientName,
+    //       computedDate: res.computedDate,
+    //     });
+    //   });
+    //   if (result?.length > 0) {
+    //     setPatinetListAll(result);
+    //     setIsLoading(false);
+    //   } else {
+    //     setPatinetListAll([]);
+    //   }
 
-      setTableLoading(false);
-    }
+    //   setTableLoading(false);
+    // }
   };
   const getAllCheckList = async (sort) => {
     setIsLoading(true);
@@ -147,7 +156,7 @@ export default function Patient() {
       selectedOption ? selectedOption : ""
     }&batchCount=${batchCount}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    if (response.data) {
+    if (response?.data) {
       let result = response?.data?.response?.content;
       const data = result.map((item) => ({
         id: item.patientId,
@@ -168,7 +177,6 @@ export default function Patient() {
   };
 
   const handleReceivedDatePicker = (date, dateString) => {
-    console.log(dateString);
     if (date === null || (Array.isArray(date) && date.length === 0)) {
       setStartDate("");
       setEndDate("");
@@ -251,34 +259,35 @@ export default function Patient() {
     let orgId = localStorage.getItem("orgId");
     let tenantid = localStorage.getItem("tenantId");
     let resoureUrl = `dbservice/l2audit?organizationId=${orgId}&tenantid=${tenantid}&page=${pageNo}&size=${pageSize}&searchstring=${searchString}`;
-    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    if (response.data) {
-      let resultMap = [];
-      let result = response?.data?.response?.content;
-      setTotalElementsUser(response?.data?.response?.content?.totalElements);
-      result?.map((res) => {
-        resultMap.push({
-          ...res,
-          name: res.name,
-          userName: res.userName,
-          totalFileAudited: res.totalFileAudited,
-          totalFileAuditAllocated: res.totalFileAuditAllocated,
-          totalFileAuditPending: res.totalFileAuditPending,
-          totalFileAuditHold: res.totalFileAuditHold,
-          totalFileAuditDeclined: res.totalFileAuditDeclined,
-          firstName: res.firstName,
-          lastName: res.lastName,
-          profileImageUrl: res.profileImageUrl,
-        });
-      });
-      if (result?.length > 0) {
-        setL2UserListAll(result);
-      } else {
-        setL2UserListAll([]);
-      }
-      setIsLoading(false);
-      setTableLoading(false);
-    }
+    getSupervisorsList({ url: resoureUrl });
+    // const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+    // if (response.data) {
+    //   let resultMap = [];
+    //   let result = response?.data?.response?.content;
+    //   setTotalElementsUser(response?.data?.response?.content?.totalElements);
+    //   result?.map((res) => {
+    //     resultMap.push({
+    //       ...res,
+    //       name: res.name,
+    //       userName: res.userName,
+    //       totalFileAudited: res.totalFileAudited,
+    //       totalFileAuditAllocated: res.totalFileAuditAllocated,
+    //       totalFileAuditPending: res.totalFileAuditPending,
+    //       totalFileAuditHold: res.totalFileAuditHold,
+    //       totalFileAuditDeclined: res.totalFileAuditDeclined,
+    //       firstName: res.firstName,
+    //       lastName: res.lastName,
+    //       profileImageUrl: res.profileImageUrl,
+    //     });
+    //   });
+    //   if (result?.length > 0) {
+    //     setL2UserListAll(result);
+    //   } else {
+    //     setL2UserListAll([]);
+    //   }
+    //   setIsLoading(false);
+    //   setTableLoading(false);
+    // }
   };
 
   useEffect(() => {
@@ -319,8 +328,8 @@ export default function Patient() {
   ]);
 
   const renderRows = () => {
-    return !tableLoading && l2UserListAll?.length > 0 ? (
-      l2UserListAll?.map((data, index) => (
+    return supervisorResponse?.response?.content?.length > 0 ? (
+      supervisorResponse?.response?.content?.map((data, index) => (
         <tr
           style={{ height: "35px" }}
           key={index}
@@ -429,41 +438,43 @@ export default function Patient() {
     }&searchstring=${searchString}&processedStatus=${
       selectedOptions ? selectedOptions : ""
     }&patientAllocated=${allocatedOption ? allocatedOption : ""}`;
-    const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
-    if (response.data) {
-      let resultMap = [];
-      let result = response?.data?.response?.content;
-      setTotalElementsPatient(response?.data?.response?.totalElements);
-      result?.map((res) => {
-        resultMap.push({
-          ...res,
-          patientId: res.patientId,
-          patientName: res.patientName,
-          computedDate: res.computedDate,
-          patientAllocatedFirstName: res.patientAllocatedFirstName,
-          patientAllocatedLastName: res.patientAllocatedLastName,
-          patientAllocatedProfileImage: res.patientAllocatedProfileImage,
-        });
-      });
-      const data = result.map((item) => ({
-        id: item.patientId,
-        name: item.patientName,
-      }));
-      setHeaderCheckValidation(data);
-      if (result) {
-        setL2PatinetListAll(result);
-        setIsPatientList(true);
-      } else {
-        setL2PatinetListAll([]);
-      }
-      setTableLoading(false);
-      setIsLoading(false);
-    }
+    getSelectedSupervisorList({ url: resoureUrl });
+    setIsPatientList(true);
+    // const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
+    // if (response.data) {
+    //   let resultMap = [];
+    //   let result = response?.data?.response?.content;
+    //   setTotalElementsPatient(response?.data?.response?.totalElements);
+    //   result?.map((res) => {
+    //     resultMap.push({
+    //       ...res,
+    //       patientId: res.patientId,
+    //       patientName: res.patientName,
+    //       computedDate: res.computedDate,
+    //       patientAllocatedFirstName: res.patientAllocatedFirstName,
+    //       patientAllocatedLastName: res.patientAllocatedLastName,
+    //       patientAllocatedProfileImage: res.patientAllocatedProfileImage,
+    //     });
+    //   });
+    //   const data = result.map((item) => ({
+    //     id: item.patientId,
+    //     name: item.patientName,
+    //   }));
+    //   setHeaderCheckValidation(data);
+    //   if (result) {
+    //     setL2PatinetListAll(result);
+    //     setIsPatientList(true);
+    //   } else {
+    //     setL2PatinetListAll([]);
+    //   }
+    //   setTableLoading(false);
+    //   setIsLoading(false);
+    // }
   };
 
   const getAllCheckListL2 = async (sort) => {
     setCheckedLoading(true);
-    let resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=0&size=${totalElementsPatient}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
+    let resoureUrl = `dbservice/l2audit/patients?username=${l2selectUser.userName}&page=0&size=${supervisorResponse?.response?.totalElements}&sortdirection=${sort?.sortDir}&sortfield=${sort?.sortField}`;
     const response = await axios.get(ENDPOINTS.apiEndoint + resoureUrl);
     if (response.data) {
       let result = response?.data?.response;
@@ -511,6 +522,7 @@ export default function Patient() {
   useEffect(() => {
     dispatch(getFilters("patientAllocated"));
   }, []);
+
   return (
     <>
       <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
@@ -780,13 +792,14 @@ export default function Patient() {
                                   id="my-posts"
                                   eventKey="validDiseases"
                                 >
-                                  {patinetListAll?.length === 0 &&
-                                  tableLoading ? (
+                                  {loader ? (
                                     <SpinnerDots />
                                   ) : (
                                     <>
                                       <AllocatedAdminList
-                                        patinetListAll={patinetListAll}
+                                        patinetListAll={
+                                          reviewerResponse?.response?.content
+                                        }
                                         selectAllChecked={selectAllChecked}
                                         setSelectAllChecked={
                                           setSelectAllChecked
@@ -800,13 +813,22 @@ export default function Patient() {
                                       <div>
                                         <div className="pagination-container">
                                           <Paginator
-                                            first={paginationFirst}
+                                            first={
+                                              pageNo === 0 ? 0 : paginationFirst
+                                            }
                                             rows={15}
-                                            totalRecords={totalElements}
+                                            totalRecords={
+                                              reviewerResponse?.response
+                                                ?.totalElements
+                                            }
                                             onPageChange={onPageChange}
                                           />
                                           <div className="total-pages">
-                                            Total count: {totalElements}
+                                            Total count:{" "}
+                                            {
+                                              reviewerResponse?.response
+                                                ?.totalElements
+                                            }
                                           </div>
                                         </div>
                                       </div>
@@ -815,7 +837,7 @@ export default function Patient() {
                                 </Tab.Pane>
 
                                 <Tab.Pane id="my-posts" eventKey="team">
-                                  {tableLoading ? (
+                                  {loader2 ? (
                                     <SpinnerDots />
                                   ) : (
                                     <>
@@ -887,21 +909,30 @@ export default function Patient() {
                                                   first={paginationFirst}
                                                   rows={100}
                                                   totalRecords={
-                                                    l2UserListAll?.length
+                                                    supervisorResponse?.response
+                                                      ?.totalElements
                                                   }
                                                   onPageChange={onPageChange}
                                                 />
                                                 <div className="total-pages">
                                                   Total count:{" "}
-                                                  {l2UserListAll?.length}
+                                                  {
+                                                    supervisorResponse?.response
+                                                      ?.totalElements
+                                                  }
                                                 </div>
                                               </div>
                                             </div>
                                           </>
+                                        ) : !loader2 && loader3 ? (
+                                          <SpinnerDots />
                                         ) : (
                                           <>
                                             <AllocatedL2AdminList
-                                              patinetListAll={l2patinetListAll}
+                                              patinetListAll={
+                                                selectedSupervisors?.response
+                                                  ?.content
+                                              }
                                               selectAllChecked={
                                                 selectAllChecked
                                               }
@@ -931,10 +962,16 @@ export default function Patient() {
                                               <div>
                                                 <div className="pagination-container">
                                                   <Paginator
-                                                    first={pageNo===0?0:paginationFirst}
+                                                    first={
+                                                      pageNo === 0
+                                                        ? 0
+                                                        : paginationFirst
+                                                    }
                                                     rows={15}
                                                     totalRecords={
-                                                      totalElementsPatient
+                                                      selectedSupervisors
+                                                        ?.response
+                                                        ?.totalElements
                                                     }
                                                     onPageChange={
                                                       onPageChangePatient
@@ -942,7 +979,11 @@ export default function Patient() {
                                                   />
                                                   <div className="total-pages">
                                                     Total count:{" "}
-                                                    {totalElementsPatient}
+                                                    {
+                                                      selectedSupervisors
+                                                        ?.response
+                                                        ?.totalElements
+                                                    }
                                                   </div>
                                                 </div>
                                               </div>
@@ -990,4 +1031,21 @@ export default function Patient() {
       />
     </>
   );
-}
+};
+
+const connector = connect(
+  (state) => ({
+    reviewerResponse: state.admin.patientAllocate?.allocatedList?.data,
+    loader: state.admin?.patientAllocate?.loader,
+    loader2: state.admin?.patientAllocate?.l2Loader,
+    loader3: state.admin?.patientAllocate?.supervisorLoader,
+    supervisorResponse: state.admin.patientAllocate?.l2AllocatedList?.data,
+    selectedSupervisors: state.admin.patientAllocate?.selectedSupervisors?.data,
+  }),
+  {
+    allocatedGetList: allActions.getAllList,
+    getSupervisorsList: allActions.getSupervisorsList,
+    getSelectedSupervisorList: allActions.getSelectedSupervisorList,
+  }
+);
+export default connector(Patient);

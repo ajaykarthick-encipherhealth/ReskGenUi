@@ -1,100 +1,155 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Style from "./../../style.module.css";
-import { DatePicker, Input } from "antd";
+import { Button, DatePicker, Form, Input, InputNumber, Select } from "antd";
 import { disablePastDate } from "../../../../../components/headerFilters/functions";
 import RegularButton from "../../../../../components/button";
+import { connect, useSelector } from "react-redux";
+import { actions as configurationActions } from "../../../../../stores/tenantAdmin";
+import ButtonStyles from "../../../../../components/button/style.module.css";
+const ChatAuditConfig = ({ getConfigurationDetails, updateSettings,data }) => {
+  const [form] = Form.useForm();
+  useEffect(() => {
+    getConfigurationDetails({ type: "CHART_AUDIT" });
+  }, []);
 
+  useEffect(() => {
+    if (data?.response) {
+      form.setFieldsValue({
+        maxHoldCount: data?.response.maxHoldCount,
+        maxAllocationCount: data?.response?.maxAllocationCount,
+        maxPendingCount: data?.response?.maxPendingCount,
+        priorityBasedOn: data?.response?.priorityBasedOn,
+      });
+    }
+  }, [data]);
 
-const ChatAuditConfig = () => {
+  const priorityOptions = [
+    {
+      label: "Due Date",
+      value: "DUE_DATE",
+    },
+    {
+      label: "Batch",
+      value: "BATCH",
+    },
+  ];
 
+  const handleSubmit = (values) => {
+    console.log("Submit", values);
+    updateSettings({chatAuditConfig:values})
+    
+  };
   return (
     <>
-      <div className="p-3" style={{height:"80vh"}}>
-        <div className={Style.title}>Chat Audit Configuration</div>
-        <div className="d-flex justify-content-between mt-4">
-          <div>
-            <div className={Style.heading}>Max hold count</div>
-            <div className={Style.subHeading}>
-              Upon reaching a maximum hold count of 4, conclude the current
-              chart and seamlessly transition to the next
+      <Form id={"chart-audit"} onFinish={handleSubmit} form={form}>
+        <div className="p-3" style={{ height: "65vh" }}>
+          <div className={Style.title}>Chat Audit Configuration</div>
+          <div className="d-flex justify-content-between mt-4">
+            <div>
+              <div className={Style.heading}>Max hold count</div>
+              <div className={Style.subHeading}>
+                Upon reaching a maximum hold count of 4, conclude the current
+                chart and seamlessly transition to the next
+              </div>
+            </div>
+            <div>
+              <Form.Item
+                name={"maxHoldCount"}
+                // rules={[{ required: true, message: "requires" }]}
+              >
+                <InputNumber
+                  type="number"
+                  form
+                  size="large"
+                  placeholder="Hold Count"
+                  style={{ width: "150px", fontSize: "14px" }}
+                />
+              </Form.Item>
             </div>
           </div>
-          <div>
-            <Input
-              type="number"
-              size="large"
-              placeholder="Hold Count"
-              style={{ width: "150px", fontSize: "14px" }}
-            />
-          </div>
-        </div>
-        <div className="d-flex justify-content-between mt-4">
-          <div>
-            <div className={Style.heading}>Max allocation count</div>
-            <div className={Style.subHeading}>
-              Allocate a maximum of 1000 charts for a single day
+          <div className="d-flex justify-content-between mt-4">
+            <div>
+              <div className={Style.heading}>Max allocation count</div>
+              <div className={Style.subHeading}>
+                Allocate a maximum of 1000 charts for a single day
+              </div>
+            </div>
+            <div>
+              <Form.Item name={"maxAllocationCount"}>
+                <InputNumber
+                  type="number"
+                  size="large"
+                  placeholder="Max Count"
+                  style={{ width: "150px", fontSize: "14px" }}
+                />
+              </Form.Item>
             </div>
           </div>
-          <div>
-            <Input
-              type="number"
-              size="large"
-              placeholder="Max Count"
-              style={{ width: "150px", fontSize: "14px" }}
-            />
-          </div>
-        </div>
-        <div className="d-flex justify-content-between mt-4">
-          <div>
-            <div className={Style.heading}>Max pending count</div>
-            <div className={Style.subHeading}>
-              The maximum number of pending chart counts for a single day is 20
+          <div className="d-flex justify-content-between mt-4">
+            <div>
+              <div className={Style.heading}>Max pending count</div>
+              <div className={Style.subHeading}>
+                The maximum number of pending chart counts for a single day is
+                20
+              </div>
+            </div>
+            <div>
+              <Form.Item name={"maxPendingCount"}>
+                <InputNumber
+                  type="number"
+                  size="large"
+                  placeholder="Max Count"
+                  style={{ width: "150px", fontSize: "14px" }}
+                />
+              </Form.Item>
             </div>
           </div>
-          <div>
-            <Input
-              type="number"
-              size="large"
-              placeholder="Max Count"
-              style={{ width: "150px", fontSize: "14px" }}
-            />
-          </div>
-        </div>
-        <div className="d-flex justify-content-between mt-4">
-          <div>
-            <div className={Style.heading}>Prioritize chart based on</div>
-            <div className={Style.subHeading}>
-              Chart priority is determined by due date or RAF score
+          <div className="d-flex justify-content-between mt-4">
+            <div>
+              <div className={Style.heading}>Prioritize chart based on</div>
+              <div className={Style.subHeading}>
+                Chart priority is determined by due date or RAF score
+              </div>
+            </div>
+            <div>
+              <Form.Item name={"priorityBasedOn"}>
+                <Select
+                  size="large"
+                  allowClear
+                  options={priorityOptions}
+                  style={{ width: "150px", fontSize: "14px" }}
+                />
+              </Form.Item>
             </div>
           </div>
-          <div>
-            <DatePicker
-              className={Style.picker}
-              onChange={(date, dateS) => {
-                // if (dateS) {
-                //   setAllocateDate(dateS);
-                // } else {
-                //   setAllocateDate("");
-                // }
-              }}
-              disabledDate={(current) => disablePastDate(current)}
-            />
-          </div>
         </div>
-      </div>
-      <div className="text-end p-3">
+        <div className="d-flex justify-content-end p-3">
           <RegularButton
             type={"outline"}
             name={"Restore Changes"}
             onClick={() => console.log("Restore Changes")}
           />
-          <RegularButton
-            name={"Save Changes"}
-            onClick={() => console.log("Save Changes")}
-          />
+          <Form.Item>
+            <Button
+              htmlType="submit"
+              type="primary"
+              className={ButtonStyles?.btnColor}
+              style={{ height: "45px" }}
+            >
+              Save Changes
+            </Button>
+          </Form.Item>
         </div>
+      </Form>
     </>
   );
 };
 
-export default ChatAuditConfig;
+const enhancer = connect((state) => ({
+  data: state?.tenantAdmin?.configurationSettings?.data,
+}), {
+  getConfigurationDetails: configurationActions.configurationSettingsAction,
+  updateSettings: configurationActions.updateSettingsAction,
+});
+
+export default enhancer(ChatAuditConfig);

@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { patientsAction,flagsAction } from "./actions";
+import { patientsAction,getTrackingList } from "./actions";
 
 const initialState = {
   loading: true,
@@ -29,10 +29,19 @@ const createReducer = (actionType) =>
     },
     initialState
   );
-
-const dashbaordReducer = combineReducers({
+  const getReportLoading=(type) => handleActions(
+    {
+      [type.START]: () => true,
+      [type.SUCCEEDED]: () => false,
+      [type.FAILED]: () => false,
+    },
+    false
+  );
+const adminPatientsReducer = combineReducers({
   patients: createReducer(patientsAction),
-  flags:createReducer(flagsAction)
+  patientsLoading:getReportLoading(patientsAction),
+  trackingList:createReducer(getTrackingList),
+  trackingLoader:getReportLoading(getTrackingList),
 });
 
-export default dashbaordReducer;
+export default adminPatientsReducer;
