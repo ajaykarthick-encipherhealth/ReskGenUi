@@ -371,7 +371,7 @@ const HealthMetricConfig = ({
 
 const enhancer = connect(
   (state) => ({
-    list: state?.tenantAdmin?.codingGuidelines.data,
+    list: state?.tenantAdmin?.codingGuidelines?.data,
   }),
   {
     healthMetricAdd: healthMetricActions.healthMetricAddAction,

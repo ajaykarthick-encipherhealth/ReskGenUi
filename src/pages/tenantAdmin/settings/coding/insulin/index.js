@@ -37,11 +37,7 @@ export const handleEditTag = ({ index, setEditIndex, setEditValue, tags }) => {
   setEditValue(tags[index]);
 };
 
-const Insulin = ({ getCodingDetails, updateSettings }) => {
-  const { loading, data: list } = useSelector(
-    (state) => state?.tenantAdmin?.codingGuidelines
-  );
-
+const Insulin = ({ getCodingDetails, updateSettings, list }) => {
   const [tags, setTags] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [editIndex, setEditIndex] = useState(null);
@@ -221,7 +217,9 @@ const Insulin = ({ getCodingDetails, updateSettings }) => {
   );
 };
 
-const enhancer = connect((state) => ({}), {
+const enhancer = connect((state) => ({
+  list: state?.tenantAdmin?.codingGuidelines?.data,
+}), {
   getCodingDetails: codingGuidelinesActions.codingGuidelinesAction,
   updateSettings: configurationActions.updateSettingsAction,
 });

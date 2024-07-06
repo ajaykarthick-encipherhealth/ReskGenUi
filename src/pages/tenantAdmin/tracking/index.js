@@ -109,6 +109,7 @@ const Patient = ({
   organizationList,
   getAllTrackingList,
   trackingList,
+  loader,
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -696,7 +697,7 @@ const Patient = ({
                         id="task-tbl_wrapper"
                         className="dataTables_wrapper no-footer"
                       >
-                        {isLoading ? (
+                        {loader ? (
                           <div>
                             <SpinnerDots topHeight={"10pc"} />
                           </div>
@@ -717,7 +718,7 @@ const Patient = ({
                             <div>
                               <div className="pagination-container">
                                 <Paginator
-                                  first={pageNo===0?0:paginationFirst}
+                                  first={pageNo === 0 ? 0 : paginationFirst}
                                   rows={15}
                                   totalRecords={totalElements}
                                   onPageChange={onPageChange}
@@ -743,8 +744,9 @@ const Patient = ({
 };
 const enhancer = connect(
   (state) => ({
-    organizationList: state?.tenantAdmin?.allOrganization?.data,
-    trackingList: state?.tenantAdmin?.allTracking,
+    organizationList: state?.tenantAdmin?.tenantAdmin?.allOrganization?.data,
+    trackingList: state?.tenantAdmin?.tenantAdmin?.allTracking,
+    loader: state?.tenantAdmin?.tenantAdmin?.allTrackingLoader,
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,

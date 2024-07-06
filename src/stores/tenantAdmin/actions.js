@@ -5,6 +5,7 @@ export const batchUpload = createActionThunk(
   "BATCH_UPLOAD",
   network.batchUploadCall
 );
+
 export const configurationSettingsAction = createActionThunk(
   "CONFIGURATION_SETTINGS",
   network.configurationSettings
@@ -28,11 +29,6 @@ export const manualAddAction = createActionThunk(
 export const healthMetricAddAction = createActionThunk(
   "HEALTH_METRIC_ADD",
   network.healthMetricAdd
-);
-
-export const uploadFileAction = createActionThunk(
-  "UPLOAD_FILE",
-  network.handleUploadFile
 );
 
 export const getAllOrganizationAction = createActionThunk(

@@ -6,7 +6,7 @@ import FileUploader from "../../components/fileUploader";
 import ModalPop from "../../components/modal";
 import CommonModalContent from "../../components/commonModalContent";
 import { actions as configurationActions } from "../../../../../stores/tenantAdmin";
-import { actions as codingGuidelinesActions } from "../../../../../stores/tenantAdmin";
+// import { actions as codingGuidelinesActions } from "../../../../../stores/tenantAdmin";
 import { connect } from "react-redux";
 import TenantSettingsTable from "../../../../../components/table/tenantSettingsTable/tenantSettingsTable";
 import { PlusOutlined } from "@ant-design/icons";
@@ -14,7 +14,8 @@ import Search from "../../../../../components/table/tenantSettingsTable/search";
 import FilterButton from "../../../../../components/table/tenantSettingsTable/filterButton";
 import FileUpload from "../../../../../components/table/tenantSettingsTable/fileUpload";
 import { useSelector } from "react-redux";
-const DirectCodes = ({ updateSettings, getCodingDetails }) => {
+
+const DirectCodes = ({ updateSettings, getCodingDetails, list }) => {
   const [openModal, setOpenModal] = useState(false);
   const [search, setSearch] = useState(null);
   const [tags, setTags] = useState([
@@ -51,10 +52,6 @@ const DirectCodes = ({ updateSettings, getCodingDetails }) => {
     "Renewed Medications",
     "a/p",
   ]);
-
-  const { loading: coding_loading, data: list } = useSelector(
-    (state) => state?.tenantAdmin?.codingGuidelines
-  );
 
   const columns = [
     {
@@ -155,8 +152,10 @@ const DirectCodes = ({ updateSettings, getCodingDetails }) => {
     </div>
   );
 };
-const enhancer = connect((state) => ({}), {
+const enhancer = connect((state) => ({
+  list: state?.tenantAdmin?.codingGuidelines?.data,
+}), {
   updateSettings: configurationActions.updateSettingsAction,
-  getCodingDetails: codingGuidelinesActions.codingGuidelinesAction,
+  getCodingDetails: configurationActions.codingGuidelinesAction,
 });
 export default enhancer(DirectCodes);

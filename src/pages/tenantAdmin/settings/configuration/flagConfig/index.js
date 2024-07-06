@@ -5,11 +5,8 @@ import { Form } from "antd";
 import { connect, useSelector } from "react-redux";
 import { actions as configurationActions } from "../../../../../stores/tenantAdmin";
 
-const FlagConfig = ({ getFlagConfigDetails, updateSettings }) => {
+const FlagConfig = ({ getFlagConfigDetails, updateSettings, data }) => {
   const [form] = Form.useForm();
-  const { loading, data } = useSelector(
-    (state) => state?.tenantAdmin?.configurationSettings
-  );
   useEffect(() => {
     getFlagConfigDetails({ type: "FLAG_CONFIG" });
   }, []);
@@ -115,7 +112,9 @@ const FlagConfig = ({ getFlagConfigDetails, updateSettings }) => {
   );
 };
 
-const enhancer = connect((state) => ({}), {
+const enhancer = connect((state) => ({
+  data: state?.tenantAdmin?.configurationSettings?.data,
+}), {
   getFlagConfigDetails: configurationActions.configurationSettingsAction,
   updateSettings: configurationActions.updateSettingsAction,
 });

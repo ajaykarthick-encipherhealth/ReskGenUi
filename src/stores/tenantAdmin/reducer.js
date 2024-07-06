@@ -4,10 +4,6 @@ import {
   batchUpload,
   codingGuidelinesAction,
   configurationSettingsAction,
-  healthMetricAddAction,
-  manualAddAction,
-  updateSettingsAction,
-  uploadFileAction,
   getAllBatches,
   getAllFileProcessAction,
   getAllOrganizationAction,
@@ -16,6 +12,9 @@ import {
   getAllUsersAction,
   getBatchInfo,
   getCustomUsersAction,
+  healthMetricAddAction,
+  manualAddAction,
+  updateSettingsAction,
 } from "./actions";
 
 const initialState = {
@@ -58,23 +57,29 @@ const getReportLoading = (type) =>
   );
 
 const searchReducer = combineReducers({
-  batchUpload: createReducer(batchUpload),
-  configurationSettings: createReducer(configurationSettingsAction),
-  codingGuidelines: createReducer(codingGuidelinesAction),
-  updateSetting: createReducer(updateSettingsAction),
-  manualAdd: createReducer(manualAddAction),
-  healthMetricAdd: createReducer(healthMetricAddAction),
-  uploadFile: createReducer(uploadFileAction),
   allOrganization: createReducer(getAllOrganizationAction),
   allUsers: createReducer(getAllUsersAction),
   allPatients: createReducer(getAllPatientAction),
   allTracking: createReducer(getAllTrackingAction),
   allFileProcessing: createReducer(getAllFileProcessAction),
   allBatches: createReducer(getAllBatches),
-  batchLoader: getReportLoading(getAllBatches),
   getBatch:createReducer(getBatchInfo),
+  customUsers:createReducer(getCustomUsersAction),
+  batchUpload: createReducer(batchUpload),
+  configurationSettings: createReducer(configurationSettingsAction),
+  codingGuidelines: createReducer(codingGuidelinesAction),
+  updateSetting: createReducer(updateSettingsAction),
+  manualAdd: createReducer(manualAddAction),
+  healthMetricAdd: createReducer(healthMetricAddAction),
+
+  // loaders
+  allOrganizationLoader: getReportLoading(getAllOrganizationAction),
+  allUsersLoading: getReportLoading(getAllUsersAction),
+  allPatientsLoading: getReportLoading(getAllPatientAction),
   getBatchLoader:getReportLoading(getBatchInfo),
-  customUsers:createReducer(getCustomUsersAction)
+  batchLoader: getReportLoading(getAllBatches),
+  allBatchesLoader: getReportLoading(getAllBatches),
+  allTrackingLoader: getReportLoading(getAllTrackingAction),
 });
 
 export default searchReducer;

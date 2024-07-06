@@ -105,6 +105,7 @@ const reducers = combineReducers({
     defaultRafScore: RafScore,
     webSocket: webSocketReducer,
     workFlow: workFlowReducer,
+    tenantAdmin: tenantAdminReducer,
   }),
 });
 

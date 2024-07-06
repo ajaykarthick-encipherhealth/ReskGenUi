@@ -269,7 +269,7 @@
 
 .flag_container {
   width: 60px;
-  height: 78vh;
+  height: 98%;
   border-radius: 8px;
   background: #e1edfe;
   float: right;
@@ -968,7 +968,7 @@
 }
 .sideTab {
   width: 194px;
-  height: 78vh;
+  height: 100%;
   flex-shrink: 0;
   border-radius: 12px;
   background: #e1edfe;
@@ -976,7 +976,7 @@
 
 .sideTabClose {
   width: 66px;
-  height: 78vh;
+  height: 98%;
   flex-shrink: 0;
   border-radius: 12px;
   background: #e1edfe;

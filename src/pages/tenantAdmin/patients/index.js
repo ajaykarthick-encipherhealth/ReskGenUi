@@ -10,7 +10,6 @@ import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { Spin, notification } from "antd";
 import { Paginator } from "primereact/paginator";
 import visitStyles from "../../../styles/visitdata.module.css";
-import { getPatients } from "../../../store/actions/adminAction/patientsActions";
 import FileUploading from "../fileprocessing/FileUploading";
 import Addpatients from "../fileprocessing/Addpatiens";
 import SpinnerDots from "../../../components/spinner";
@@ -24,8 +23,6 @@ import { patientDetails } from "../../../stores/authflow/actions";
 import { actions as tenantAdminAction } from "../../../stores/tenantAdmin";
 import { connect } from "react-redux";
 import AddPatientListTable from "../../../components/table/tenantTable/AddPatients/addPatients";
-import { eventStreming } from "../../../components/table/tenantTable/FileProcessing/FileProcessing";
-
 const bullets = [
   {
     color: "#34ace8",
@@ -58,7 +55,8 @@ const Patient = ({
   organizationList,
   getAllPatients,
   allPatientList,
-  webSocketData
+  webSocketData,
+  loading
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -161,11 +159,11 @@ const Patient = ({
     selectOrgList,
   ]);
 
-  useEffect(() => {
-    if (allPatientList?.data?.response) {
-      getAllList(allPatientList?.data?.response);
-    }
-  }, [parsedData, allPatientList, pageNo, pageSize]);
+  // useEffect(() => {
+  //   if (allPatientList?.data?.response) {
+  //     getAllList(allPatientList?.data?.response);
+  //   }
+  // }, [parsedData, allPatientList, pageNo, pageSize]);
 
   useEffect(() => {
     if (!organizationList?.response) {
@@ -174,7 +172,7 @@ const Patient = ({
   }, []);
 
   useEffect(() => {
-    var orgListArray = [{value: "", label: "ALL"}];
+    var orgListArray = [{ value: "", label: "ALL" }];
     organizationList?.response?.map((res) => {
       orgListArray.push({
         value: res.id,
@@ -184,57 +182,57 @@ const Patient = ({
     setOrgAllList(orgListArray);
   }, [organizationList]);
 
-  const getAllList = (info) => {
-    if (info) {
-      var resultMap = [];
-      var result = info?.content;
-      setTotalElements(info?.totalElements);
-      result?.map((res) => {
-        resultMap?.push({
-          ...res,
-          patientId: res.patientId,
-          patientAllocated: res.patientAllocated,
-          computing: res.computing,
-          processStageChart: res.processStageChart,
-          processStageRadiology: res.processStageRadiology,
-          processStageLab: res.processStageLab,
-          processStageId: res.processStageId,
-          processStageIdRadiology: res.processStageIdRadiology,
-          processStageIdLab: res.processStageIdLab,
-          allocatedUserId: res.allocatedUserId,
-          allocatedOn: res.allocatedOn,
-          allocatedBy: res.allocatedBy,
-          patientName: res.patientName,
-          dueDate: res.dueDate,
-          processedStatus: res.processedStatus,
-          auditedStatus: res.auditedStatus,
-          auditedBy: res.auditedBy,
-          auditedDate: res.auditedDate,
-          priority: res.priority,
-          computedDate: res.computedDate,
-          lastModifiedDate: res.lastModifiedDate,
-          createdDate: res.createdDate,
-          createdBy: res.createdBy,
-          allocatedByFirstName: res.allocatedByFirstName,
-          allocatedByLastName: res.allocatedByLastName,
-          allocatedByProfileImage: res.allocatedByProfileImage,
-          createdByFirstName: res.createdByFirstName,
-          createdByLastName: res.createdByLastName,
-          createdByProfileImage: res.createdByProfileImage,
-          totalPages: res.totalPages
-        });
-      });
-      var newArray = [];
-      newArray = [...patinetListAll, ...resultMap];
-      setPatinetListAll(resultMap);
+  // const getAllList = (info) => {
+  //   if (info) {
+  //     var resultMap = [];
+  //     var result = info?.content;
+  //     setTotalElements(info?.totalElements);
+  //     result?.map((res) => {
+  //       resultMap?.push({
+  //         ...res,
+  //         patientId: res.patientId,
+  //         patientAllocated: res.patientAllocated,
+  //         computing: res.computing,
+  //         processStageChart: res.processStageChart,
+  //         processStageRadiology: res.processStageRadiology,
+  //         processStageLab: res.processStageLab,
+  //         processStageId: res.processStageId,
+  //         processStageIdRadiology: res.processStageIdRadiology,
+  //         processStageIdLab: res.processStageIdLab,
+  //         allocatedUserId: res.allocatedUserId,
+  //         allocatedOn: res.allocatedOn,
+  //         allocatedBy: res.allocatedBy,
+  //         patientName: res.patientName,
+  //         dueDate: res.dueDate,
+  //         processedStatus: res.processedStatus,
+  //         auditedStatus: res.auditedStatus,
+  //         auditedBy: res.auditedBy,
+  //         auditedDate: res.auditedDate,
+  //         priority: res.priority,
+  //         computedDate: res.computedDate,
+  //         lastModifiedDate: res.lastModifiedDate,
+  //         createdDate: res.createdDate,
+  //         createdBy: res.createdBy,
+  //         allocatedByFirstName: res.allocatedByFirstName,
+  //         allocatedByLastName: res.allocatedByLastName,
+  //         allocatedByProfileImage: res.allocatedByProfileImage,
+  //         createdByFirstName: res.createdByFirstName,
+  //         createdByLastName: res.createdByLastName,
+  //         createdByProfileImage: res.createdByProfileImage,
+  //         totalPages: res.totalPages,
+  //       });
+  //     });
+  //     var newArray = [];
+  //     newArray = [...patinetListAll, ...resultMap];
+  //     setPatinetListAll(resultMap);
 
-      setIsLoading(false);
-      setTableLoading(false);
-      //     setTimeout(() => {
-      //     subscribe(resultMap);
-      // }, 3000);
-    }
-  };
+  //     setIsLoading(false);
+  //     setTableLoading(false);
+  //     //     setTimeout(() => {
+  //     //     subscribe(resultMap);
+  //     // }, 3000);
+  //   }
+  // };
 
   const addPatientFormId = () => {
     setValidated(false);
@@ -472,7 +470,7 @@ const Patient = ({
         selAllocatedTo,
         selAllocatedBy,
         selCreatedBy,
-        sort,      
+        sort,
         orgId
       );
 
@@ -526,11 +524,10 @@ const Patient = ({
     setPageNo(e.page);
     setPageSize(e.rows);
     setTableLoading(true);
-    getAllList(allPatientList?.data?.response);
+    // getAllList(allPatientList?.data?.response);
   };
 
-
-  const statusUpdateWebSockt=(result)=>{
+  const statusUpdateWebSockt = (result) => {
     var resultMap = [];
     result?.map((res) => {
       resultMap?.push({
@@ -564,31 +561,29 @@ const Patient = ({
         createdByFirstName: res.createdByFirstName,
         createdByLastName: res.createdByLastName,
         createdByProfileImage: res.createdByProfileImage,
-        totalPages: res.totalPages
+        totalPages: res.totalPages,
       });
     });
     var newArray = [];
     newArray = [...patinetListAll, ...resultMap];
     setPatinetListAll(resultMap);
-
-  }
+  };
 
   useEffect(() => {
-    if (webSocketData  && webSocketData?.webSocketType == "PATIENT_COMPUTE") {
+    if (webSocketData && webSocketData?.webSocketType == "PATIENT_COMPUTE") {
       const patientData = allPatientList?.data?.response?.content;
       var foundItem = patientData?.find(
         (x) => x.patientId == webSocketData.patientId
       );
       if (foundItem) {
         foundItem.computing = webSocketData?.computing;
-        if(webSocketData?.computedDate){
+        if (webSocketData?.computedDate) {
           foundItem.computedDate = webSocketData?.computedDate;
-        } 
+        }
       }
       statusUpdateWebSockt(patientData);
     }
   }, [webSocketData]);
-
 
   return (
     <>
@@ -666,12 +661,12 @@ const Patient = ({
                         id="task-tbl_wrapper"
                         className="dataTables_wrapper no-footer"
                       >
-                        {isLoading ? (
+                        {loading ? (
                           <SpinnerDots />
                         ) : (
                           <>
                             <AddPatientListTable
-                              patinetListAll={patinetListAll}
+                              patinetListAll={allPatientList?.data?.response?.content}
                               actionBodyTemplate={actionBodyTemplate}
                               statusBodyTemplate={processstatusBodyTemplate}
                               gotoPatientDetails={gotoPatientDetails}
@@ -684,13 +679,13 @@ const Patient = ({
                             <div>
                               <div className="pagination-container">
                                 <Paginator
-                                  first={pageNo===0?0:paginationFirst}
+                                  first={pageNo === 0 ? 0 : paginationFirst}
                                   rows={15}
-                                  totalRecords={totalElements}
+                                  totalRecords={allPatientList?.data?.response?.totalElements}
                                   onPageChange={onPageChange}
                                 />
                                 <div className="total-pages">
-                                  Total count: {totalElements}
+                                  Total count: {allPatientList?.data?.response?.totalElements}
                                 </div>
                               </div>
                             </div>
@@ -734,7 +729,7 @@ const enhancer = connect(
     organizationList: state?.tenantAdmin?.allOrganization?.data,
     allPatientList: state?.tenantAdmin?.allPatients,
     webSocketData: state?.webSocket?.webSocketDetails?.data,
-
+    loading: state?.tenantAdmin?.allPatientsLoading,
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,

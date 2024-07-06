@@ -157,7 +157,7 @@ const ComorbidConditions = ({ updateSettings, getCodingDetails,list }) => {
   );
 };
 const enhancer = connect((state) => ({
-  list: state?.tenantAdmin?.codingGuidelines.data,
+  list: state?.tenantAdmin?.codingGuidelines?.data,
 }), {
   updateSettings: configurationActions.updateSettingsAction,
   getCodingDetails: codingGuidelinesActions.codingGuidelinesAction,
