@@ -122,6 +122,12 @@ const Details = ({
   getLabDetailsClear,
   getRadiologyDetailsClear,
   getRadiologyFileClear,
+  getAllProcessYear,
+  processedYearResult,
+  getPatientRadiologyDosList,
+  getRadiologyDetails,
+  getPatientLabDosList,
+  getLabDetails
 }) => {
   const navigate = useRouter();
   const dispatch = useDispatch();
@@ -190,8 +196,24 @@ const Details = ({
     );
   };
   useEffect(() => {
-    getAllProcessYear();
-  }, []);
+    const patientId = localStorage.getItem("patientId");
+    if(activeTab == 1){
+      getAllProcessYear(patientId,"HCC");
+    }
+    if(activeTab == 3){
+      getAllProcessYear(patientId,"RADIOLOGY");
+    }
+    if(activeTab == 4){
+      getAllProcessYear(patientId,"LAB");
+    }
+  }, [activeTab]);
+
+  useEffect(() => {
+    console.log(processedYearResult)
+    if(processedYearResult?.data?.response){
+      getAllProcessYearSelect(processedYearResult);
+    }
+  }, [processedYearResult]);
 
   useEffect(() => {
     getLabFileDetailsClear()
@@ -234,15 +256,9 @@ const Details = ({
     }
   }, [patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath]);
 
-  const getAllProcessYear = async () => {
+  const getAllProcessYearSelect = async (result) => {
+    console.log("sdadashjd")
     const patientId = localStorage.getItem("patientId");
-    
-    // var patientId = "eh-20203";
-    try {
-      const result = await axios.get(
-        ENDPOINTS.apiEndoint +
-          `dbservice/patient/compute/get/allyear?patientId=${patientId}`
-      );
       var dosResonse = result.data.response;
       var dosYearArr = [];
       result?.data?.response?.map((res) => {
@@ -252,6 +268,30 @@ const Details = ({
       setSelectedDosValue(dosYearArr[0].value);
       setDosYear(dosYearArr);
       setIsLoadingDos(false);
+     if(activeTab == 3){
+      getRadiologyDetails(selectPatientId ? selectPatientId?.patirntId : patientId,
+        dosYearArr[0].value,
+        null,
+        setIsSpinnerLoading,
+      )
+      getPatientRadiologyDosList(
+        selectPatientId ? selectPatientId?.patirntId : patientId,
+        dosYearArr[0].value
+      );
+     }
+      if(activeTab == 4){
+      console.log("cdsfsf")
+      getLabDetails(selectPatientId ? selectPatientId?.patirntId : patientId,
+        dosYearArr[0].value,
+        null,
+        setIsSpinnerLoading,
+      )
+      getPatientLabDosList(
+        selectPatientId ? selectPatientId?.patirntId : patientId,
+        dosYearArr[0].value
+      );
+     }
+     if(activeTab == 1){
       getpatientDetailsData(
         selectPatientId ? selectPatientId?.patirntId : patientId,
         dosYearArr[0].value,
@@ -270,10 +310,8 @@ const Details = ({
         selectPatientId ? selectPatientId?.patirntId : patientId,
         dosYearArr[0].value
       );
-    } catch (e) {
-      setIsSpinnerLoading(false);
-      setIsLoading(false);
-    }
+     }
+
   };
 
   const getPatientDetails = async (patientId) => {
@@ -1246,6 +1284,7 @@ const enhancer = connect(
     patientDetailsResult: state?.patientDetails?.details?.patientResult,
     patientIdDetailsData: state?.patientDetails.details?.patientIdResult,
     flagsDetailsResult: state?.patientDetails.details?.flagsDetailsResult.data,
+    processedYearResult: state?.patientDetails.details?.processedYear
   }),
   {
     workFgetFlagsowData: workflowActions.flagsAction,
@@ -1260,7 +1299,12 @@ const enhancer = connect(
     getLabDetailsClear: detailsActions.labDetailsActionSetEmpty,
     getRadiologyDetailsClear: detailsActions.radiologyDetailsActionSetEmpty,
     getRadiologyFileClear: detailsActions.radiologyDetailsActionSetEmpty,
-    
+    getAllProcessYear: detailsActions.getAllProcessYearAction,
+    getPatientRadiologyDosList: detailsActions.radiologyDosDeatilsAction,
+    getRadiologyDetails:detailsActions.radiologyDetailsAction,
+    getPatientLabDosList: detailsActions.labDosDeatilsAction, 
+    getLabDetails:detailsActions.labDetailsAction,
+  
   }
 );
 export default enhancer(Details);

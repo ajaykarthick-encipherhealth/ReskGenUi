@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
-import { useSelector } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import styles from "../../../pages/supervisor/dashboard/styles.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,7 +15,6 @@ import SpinnerDots from "../../../components/spinner";
 import { LoadingOutlined } from "@ant-design/icons";
 import HeaderFilters from "./headerFilters";
 import TrackingTable from "../../../components/table/admin/trackingList";
-import { getTrackingList } from "../../../store/actions/adminAction/patientsActions";
 import { generateOptionsList } from "../../../components/headerFilters/functions";
 import DailyTask from "./dailytask";
 import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
@@ -29,7 +28,7 @@ import Completed from "../../../../src/images/trackingImages/CompletedTrack.png"
 import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
 import AuditedDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
 import Abort from "../../../../src/images/trackingImages/Abort.png";
-
+import {actions as allActions} from '../../../stores/admin/workqueue'
 import Image from "next/image";
 import { extractLatestData } from "../../supervisor/auditing";
 import { patientDetails } from "../../../stores/authflow/actions";
@@ -101,12 +100,11 @@ const auditStatusOptions = [
   { label: "AUDIT DECLINED", value: "AUDIT_DECLINED", status: 0 },
 ];
 
-export default function Patient() {
+const Patient=({getTrackingList,loader,response}) =>{
   const navigate = useRouter();
   const dispatch = useDispatch();
   const filteredList = useSelector((state) => state.auth.filterList);
   const sideMenu = useSelector((state) => state.sideMenu);
-  const response = useSelector((state) => state.adminList.tracking);
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [addPatient, setAddPatient] = useState(false);
@@ -123,7 +121,6 @@ export default function Patient() {
     processStageId: "",
     patientId: "",
   });
-  const [patinetListAll, setPatinetListAll] = useState([]);
   const [pageNo, setPageNo] = useState(0);
   const [pageSize, setPageSize] = useState(15);
   const [paginationFirst, setPaginationFirst] = useState(0);
@@ -172,7 +169,7 @@ export default function Patient() {
   }, [navigate])
 
   useEffect(() => {
-    const datas = {
+    const data = {
       pageNo,
       dueDateStart: clear ? "" : dueDateStart,
       dueDateEnd: clear ? "" : dueDateEnd,
@@ -206,7 +203,7 @@ export default function Patient() {
       sort,
     };
     setIsLoading(true)
-    dispatch(getTrackingList(datas));
+    getTrackingList({data:data});
   }, [
     pageNo,
     dueDateStart,
@@ -230,63 +227,63 @@ export default function Patient() {
     clear,
   ]);
 
-  useEffect(() => {
-    if (response?.response) {
-      setIsLoading(true)
-      getAllList(response?.response);
-    }
-  }, [parsedData, response, pageNo, pageSize]);
+  // useEffect(() => {
+  //   if (response?.response) {
+  //     setIsLoading(true)
+  //     getAllList(response?.response);
+  //   }
+  // }, [parsedData, response, pageNo, pageSize]);
 
-  const getAllList = (info) => {
-    if (info) {
-      var resultMap = [];
-      var result = info?.patientDTOList?.content;
-      setTotalElements(info?.patientDTOList?.totalElements);
-      result?.map((res) => {
-        resultMap?.push({
-          patientId: res.patientId,
-          patientName: res.patientName,
-          fileName: res.fileName,
-          computing: res.computing,
-          createdAt: res.createdAt,
-          lastModifiedDate: res.lastModifiedDate,
-          dueDate: res.dueDate,
-          allocatedBy: res.allocatedBy,
-          allocatedOn: res.allocatedOn,
-          priority: res.priority,
-          processedStatus: res.processedStatus,
-          processedDate: res.processedDate,
-          auditedDate:res.auditedDate,
-          createdAt: res.createdAt,
-          patientAllocated: res.patientAllocated,
-          allocatedByFirstName: res.allocatedByFirstName,
-          allocatedByLastName: res.allocatedByLastName,
-          auditAllocatedDate: res.auditAllocatedDate,
-          auditedStatus: res.auditedStatus,
-          auditAllocatedByFirstName: res.auditAllocatedByFirstName,
-          auditAllocatedByLastName: res.auditAllocatedByLastName,
-          patientAllocatedFirstName: res.patientAllocatedFirstName,
-          patientAllocatedLastName: res.patientAllocatedLastName,
-          patientAllocatedProfileImage: res.patientAllocatedProfileImage,
-          auditedAssignedFirstName: res.auditedAssignedFirstName,
-          auditedAssignedLastName: res.auditedAssignedLastName,
-          auditedAssignedProfileImage: res.auditedAssignedProfileImage,
-          allocatedByProfileImage: res.allocatedByProfileImage,
-          auditAllocatedByProfileImage: res.auditAllocatedByProfileImage,
-          auditDueDate: res.auditDueDate,
-          declinedNotes: res.declinedNotes,
-          auditDeclinedNotes: res.auditDeclinedNotes,
-        });
-      });
-      setTrackChart(info?.processStatusCount);
-      var newArray = [];
-      newArray = [...patinetListAll, ...resultMap];
-      setPatinetListAll(resultMap);
+  // const getAllList = (info) => {
+  //   if (info) {
+  //     var resultMap = [];
+  //     var result = info?.patientDTOList?.content;
+  //     setTotalElements(info?.patientDTOList?.totalElements);
+  //     result?.map((res) => {
+  //       resultMap?.push({
+  //         patientId: res.patientId,
+  //         patientName: res.patientName,
+  //         fileName: res.fileName,
+  //         computing: res.computing,
+  //         createdAt: res.createdAt,
+  //         lastModifiedDate: res.lastModifiedDate,
+  //         dueDate: res.dueDate,
+  //         allocatedBy: res.allocatedBy,
+  //         allocatedOn: res.allocatedOn,
+  //         priority: res.priority,
+  //         processedStatus: res.processedStatus,
+  //         processedDate: res.processedDate,
+  //         auditedDate:res.auditedDate,
+  //         createdAt: res.createdAt,
+  //         patientAllocated: res.patientAllocated,
+  //         allocatedByFirstName: res.allocatedByFirstName,
+  //         allocatedByLastName: res.allocatedByLastName,
+  //         auditAllocatedDate: res.auditAllocatedDate,
+  //         auditedStatus: res.auditedStatus,
+  //         auditAllocatedByFirstName: res.auditAllocatedByFirstName,
+  //         auditAllocatedByLastName: res.auditAllocatedByLastName,
+  //         patientAllocatedFirstName: res.patientAllocatedFirstName,
+  //         patientAllocatedLastName: res.patientAllocatedLastName,
+  //         patientAllocatedProfileImage: res.patientAllocatedProfileImage,
+  //         auditedAssignedFirstName: res.auditedAssignedFirstName,
+  //         auditedAssignedLastName: res.auditedAssignedLastName,
+  //         auditedAssignedProfileImage: res.auditedAssignedProfileImage,
+  //         allocatedByProfileImage: res.allocatedByProfileImage,
+  //         auditAllocatedByProfileImage: res.auditAllocatedByProfileImage,
+  //         auditDueDate: res.auditDueDate,
+  //         declinedNotes: res.declinedNotes,
+  //         auditDeclinedNotes: res.auditDeclinedNotes,
+  //       });
+  //     });
+  //     setTrackChart(info?.processStatusCount);
+  //     var newArray = [];
+  //     newArray = [...patinetListAll, ...resultMap];
+  //     setPatinetListAll(resultMap);
 
-      setIsLoading(false);
-      setTableLoading(false);
-    }
-  };
+  //     setIsLoading(false);
+  //     setTableLoading(false);
+  //   }
+  // };
   const addPatientFile = (data) => {
     inputValue.patientId = data.patientId;
     inputValue.name = data.patientName;
@@ -634,12 +631,12 @@ export default function Patient() {
                         id="task-tbl_wrapper"
                         className="dataTables_wrapper no-footer"
                       >
-                        {isLoading ? (
+                        {loader ? (
                           <SpinnerDots />
                         ) : (
                           <>
                             <TrackingTable
-                              patinetListAll={patinetListAll}
+                              patinetListAll={response?.response?.patientDTOList?.content}
                               actionBodyTemplate={actionBodyTemplate}
                               statusBodyTemplate={processstatusBodyTemplate}
                               auditBodyTemplate={auditstatusBodyTemplate}
@@ -655,11 +652,11 @@ export default function Patient() {
                                 <Paginator
                                   first={pageNo===0?0:paginationFirst}
                                   rows={15}
-                                  totalRecords={totalElements}
+                                  totalRecords={response?.response?.patientDTOList?.totalElements}
                                   onPageChange={onPageChange}
                                 />
                                 <div className="total-pages">
-                                  Total count: {totalElements}
+                                  Total count: {response?.response?.patientDTOList?.totalElements}
                                 </div>
                               </div>
                             </div>
@@ -677,3 +674,14 @@ export default function Patient() {
     </>
   );
 }
+
+const connector = connect(
+  (state) => ({
+    response: state.admin.workqueue?.trackingList?.data,
+    loader: state.admin?.workqueue?.trackingLoader,
+  }),
+  {
+    getTrackingList: allActions.getTrackingList,
+  }
+);
+export default connector(Patient)

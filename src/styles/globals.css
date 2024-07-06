@@ -14463,7 +14463,7 @@ input::-webkit-inner-spin-button {
 }
 
 .dateRangeSize .ant-picker .ant-picker-input input {
-  font-size: 10px !important;
+  font-size: 13px !important;
 }
 
 .visitdata-modalCentent .ant-modal-content {
@@ -14784,6 +14784,7 @@ input::-webkit-inner-spin-button {
   border-color: rgb(36, 21, 113) !important;
   background: rgb(36, 21, 113) !important;
 }
+
 .skeleton-shadow {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 20px;

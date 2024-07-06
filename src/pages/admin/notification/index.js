@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, connect } from "react-redux";
 import { Radio, Select, notification } from "antd";
 import { Button, Spinner } from "react-bootstrap";
 import Header from "../../../jsx/layouts/nav/Header";
@@ -11,6 +11,7 @@ import {
 } from "../../../services/NotificationService";
 import { getUsers } from "../../../store/actions/adminAction/usersAction";
 import { SelectUserList } from "../../../services/adminServices/DashboardService";
+import { actions as tenantAdminctions } from "../../../stores/tenantAdmin";
 
 const { Option } = Select;
 
@@ -23,11 +24,11 @@ export const debounce = (func, delay) => {
   };
 };
 
-const Notification = ({}) => {
+const Notification = ({ getAllCustomUsers, allCustomUsers }) => {
   const dispatch = useDispatch();
   const usersData = useSelector((state) => state.adminUsers.usersData);
-  const options = usersData?.data?.response?.content?.map((data) => ({
-    label: data?.firstName + "" + data?.lastName,
+  const options = allCustomUsers?.data?.response?.map((data) => ({
+    label: data?.firstName + " " + data?.lastName,
     value: data?.userName,
   }));
 
@@ -109,6 +110,9 @@ const Notification = ({}) => {
   const onChange = ({ target: { value } }) => {
     setErrmessageRadio("");
     setSelectCheckBox(value);
+    if (value == "CUSTOM") {
+      getAllCustomUsers();
+    }
   };
 
   const handleChange = async (e) => {
@@ -274,7 +278,7 @@ const Notification = ({}) => {
                           mode="multiple"
                           placeholder="Please select"
                           onChange={handleSelectedOption}
-                          onSearch={handleSearch}
+                          // onSearch={handleSearch}
                           value={selectedList}
                           open={openDropdown}
                           onDropdownVisibleChange={(visible) =>
@@ -373,4 +377,12 @@ const Notification = ({}) => {
   );
 };
 
-export default Notification;
+const enhancer = connect(
+  (state) => ({
+    allCustomUsers: state?.tenantAdmin?.customUsers,
+  }),
+  {
+    getAllCustomUsers: tenantAdminctions.getCustomUsersAction,
+  }
+);
+export default enhancer(Notification);
