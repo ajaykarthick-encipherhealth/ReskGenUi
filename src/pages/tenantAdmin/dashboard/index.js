@@ -21,6 +21,7 @@ import HeadTitle from "../../../components/headtitle";
 import PieChartInfo from "./components/pieChart/PieChartInfo";
 import OrgPieChartInfo from "./components/OrgPieChart/OrgPieChartInfo";
 
+
 const Index = ({
   getUserStatusData,
   allocatedStatusData,
@@ -32,6 +33,7 @@ const Index = ({
   reviewerStatusData,
   getOrganizationStatusData,
   organizationStatusData,
+ 
 }) => {
   const [activeBtn, setActiveBtn] = useState("default");
   const [dateRange, setDateRange] = useState({ startDate: "", endDate: "" });
@@ -191,7 +193,7 @@ const Index = ({
               <div className={`row ${styles.box}`}>
                 <div className={`col`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <Top10Diseases />
+                    <Top10Diseases/>
                   </Card>
                 </div>
                 <div className={`col`}>
@@ -266,13 +268,16 @@ const Index = ({
 };
 
 const enhancer = connect(
-  (state) => ({
+  (state) => (
+    {
     allocatedStatusData: state.tenantAdmin.workFlow.allocatedStatus.data,
     auditorStatusData: state.tenantAdmin.workFlow.auditorStatus.data,
     userStatusData: state.tenantAdmin.workFlow.userStatus.data,
     reviewerStatusData: state.tenantAdmin.workFlow.reviewerStatus.data,
     organizationStatusData: state.tenantAdmin.workFlow.organizationStatus.data,
-  }),
+  }
+ 
+),
 
   {
     getUserStatusData: dashbaordActions.userStatusAction,
@@ -280,6 +285,7 @@ const enhancer = connect(
     getAllocatedStatusData: dashbaordActions.allocatedStatusAction,
     getReviewerStatusData: dashbaordActions.reviewerStatusAction,
     getOrganizationStatusData: dashbaordActions.organizationStatusAction,
+ 
   }
 );
 export default enhancer(Index);

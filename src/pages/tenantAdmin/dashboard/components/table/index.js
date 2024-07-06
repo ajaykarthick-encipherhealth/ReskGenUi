@@ -1,25 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import mockData from "./mockData.json";
 import upArrow from "../../../../../images/tenantAdmin/upArrow.svg";
 import downArrow from "../../../../../images/tenantAdmin/downArrow.svg";
 import Image from "next/image";
 
-const index = () => {
+
+const index = ({ items }) => {
+
+
   return (
-    <table className="tenatTable">
+    <table className="tenatTable" >
       <thead>
         <tr>
-          <td >Code</td>
+          <td>Code</td>
           <td className="midRow">Description</td>
-          <td >Count</td>
+          <td>Count</td>
         </tr>
       </thead>
       <tbody>
-        {mockData?.response?.map((item) => (
+        {items?.map((item) => (
           <tr>
-            <td >{item.code}</td>
+            <td>{item.diagnosisCode}</td>
             <td className="midRow">{item?.description}</td>
-            <td >
+            <td>
               <span style={{ fontWeight: "700", marginRight: "5px" }}>
                 {item?.count}
               </span>
@@ -42,4 +45,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default index

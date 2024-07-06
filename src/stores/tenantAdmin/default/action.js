@@ -25,3 +25,12 @@ export const RafCountScore = createActionThunk(
   "GET_ALL_RAF_COUNTS_SCORE",
   network.getAllRafScore
 );
+export const top10Diseases = createActionThunk(
+  "GET_TOP10_DISEASES",
+  network.getTop10Diseases
+);
+export const topOigCodes  = createActionThunk(
+  "GET_TOP10_DISEASES",
+  network.getTopOigCodes
+);
+
