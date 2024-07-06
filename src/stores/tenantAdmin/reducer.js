@@ -9,6 +9,7 @@ import {
   getAllTrackingAction,
   getAllUsersAction,
   getBatchInfo,
+  getCustomUsersAction,
 } from "./actions";
 
 const initialState = {
@@ -60,7 +61,8 @@ const searchReducer = combineReducers({
   allBatches: createReducer(getAllBatches),
   batchLoader: getReportLoading(getAllBatches),
   getBatch:createReducer(getBatchInfo),
-  getBatchLoader:getReportLoading(getBatchInfo)
+  getBatchLoader:getReportLoading(getBatchInfo),
+  customUsers:createReducer(getCustomUsersAction)
 });
 
 export default searchReducer;

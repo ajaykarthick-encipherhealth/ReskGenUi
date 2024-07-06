@@ -37,3 +37,7 @@ export const getBatchInfo=createActionThunk(
   'GET_BATCH_INFO',
   network.batchDetails
 )
+export const getCustomUsersAction=createActionThunk(
+  'GET_CUSTOM_USERS',
+  network.getCustomAllUsers
+)
