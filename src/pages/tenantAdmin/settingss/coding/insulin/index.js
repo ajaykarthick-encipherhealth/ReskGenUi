@@ -1,17 +1,15 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Style from "../../style.module.css";
 import RegularButton from "../../../../../components/button";
-import { Button, Input, Switch } from "antd";
+import { Button, Input } from "antd";
 import { useState } from "react";
 import Tags from "../../components/tags";
-import { connect, useSelector } from "react-redux";
-import { actions as codingGuidelinesActions } from "../../../../../stores/tenantAdmin";
-import { actions as configurationActions } from "../../../../../stores/tenantAdmin";
 
 export const handleRemoveTag = ({ index, setTags, tags }) => {
   const newTags = [...tags];
   newTags.splice(index, 1);
   setTags(newTags);
+  // await updateTagsOnServer(newTags);
 };
 export const handleEditInputChange = ({ e, setEditValue }) => {
   setEditValue(e.target.value);
@@ -37,27 +35,44 @@ export const handleEditTag = ({ index, setEditIndex, setEditValue, tags }) => {
   setEditValue(tags[index]);
 };
 
-const Insulin = ({ getCodingDetails, updateSettings }) => {
-  const { loading, data: list } = useSelector(
-    (state) => state?.tenantAdmin?.codingGuidelines
-  );
-
-  const [tags, setTags] = useState([]);
+const Insulin = () => {
+  const [tags, setTags] = useState([
+    "plan",
+    "assessment/plan",
+    "Current Medication",
+    "impression/plan",
+    "Impression and Plan",
+    "treatment",
+    "treatments",
+    "hpi",
+    "assessment",
+    "problem",
+    "judgment and insight",
+    "recommendations",
+    "examinations",
+    "examination",
+    "diagnoses",
+    "cognitive assessment",
+    "Todays Treatments",
+    "impression",
+    "problems",
+    "history of present illness",
+    "Todays Diagnoses Include",
+    "today diagnoses include",
+    "mental status exam",
+    "medications",
+    "HPI Summary",
+    "Problem List",
+    "Assessment/Plan Summary",
+    "Assessment/Plan",
+    "Ambulatory Assessment/Plan",
+    "New Medications",
+    "Renewed Medications",
+    "a/p",
+  ]);
   const [inputValue, setInputValue] = useState("");
   const [editIndex, setEditIndex] = useState(null);
   const [editValue, setEditValue] = useState("");
-  const [isCaptureInsulin, setIsCaptureInsulin] = useState(false);
-
-  useEffect(() => {
-    getCodingDetails({ type: "INSULIN_MEDICATIONS" });
-  }, []);
-
-  useEffect(() => {
-    if (list?.response?.insulinMedications) {
-      setIsCaptureInsulin(list?.response?.captureInsulinMedicationAsIcdCodes);
-      setTags(list?.response?.insulinMedications);
-    }
-  }, [list]);
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -68,64 +83,29 @@ const Insulin = ({ getCodingDetails, updateSettings }) => {
       setInputValue("");
     }
   };
-  const onChange = (checked) => {
-    console.log("onChange", checked);
-    setIsCaptureInsulin(checked);
-  };
-  const handleSubmit = () => {
-    updateSettings({
-      insulinMedications: { captureInsulinMedicationAsIcdCodes: isCaptureInsulin },
-    });
-  };
   return (
     <>
-      <div className="p-3" style={{ height: "65vh" }}>
+      <div className="p-3" style={{ height: "80vh" }}>
         <div className="d-flex justify-content-between">
           <div className={Style.title}>Insulin Medications</div>
         </div>
         <div>
           <div>
             <div className="mb-4 w-[100%]">
-              {/* <div className="text-lg font-semibold my-2" id="modal-title">
+              <div className="text-lg font-semibold my-2" id="modal-title">
                 Add
-              </div> */}
-
-              <div className="d-flex my-2 justify-content-between">
+              </div>
+              
+              <div className="d-flex justify-content-between">
                 <div className="w-100">
                   <Input
                     placeholder={"Insulin Medications"}
                     onChange={handleInputChange}
                     value={inputValue}
-                    style={{ padding: "22px" }}
+                    style={{padding:"22px"}}
                   />
                 </div>
-                <RegularButton name={"Add"} onClick={handleAddTag} />
-              </div>
-            </div>
-            <div className="d-flex justify-content-between my-4">
-              <div>Do you need an Capture Insulin Medication as ICD Codes</div>
-              <div className="d-flex justify-content-between">
-                <Switch
-                  defaultChecked={isCaptureInsulin}
-                  className="directCodeSwitch"
-                  onChange={onChange}
-                />
-                <div className={`mx-2 text-${"info"}`}>
-                  {isCaptureInsulin ? "Yes" : "No"}
-                </div>
-              </div>
-            </div>
-            <div className="d-flex justify-content-between my-4">
-              <div>Do you need to include general insulin medications</div>
-              <div className="d-flex justify-content-between">
-                <Switch
-                  defaultChecked={isCaptureInsulin}
-                  className="directCodeSwitch"
-                  onChange={onChange}
-                />
-                <div className={`mx-2 text-${"info"}`}>
-                  {isCaptureInsulin ? "Yes" : "No"}
-                </div>
+                <RegularButton name={"Add"} onClick={handleAddTag}/>
               </div>
             </div>
             <div className="mt-2 max-h-[60vh] overflow-y-auto">
@@ -214,15 +194,11 @@ const Insulin = ({ getCodingDetails, updateSettings }) => {
         />
         <RegularButton
           name={"Save Changes"}
-          onClick={() => handleSubmit()}
+          onClick={() => console.log("Save Changes")}
         />
       </div>
     </>
   );
 };
 
-const enhancer = connect((state) => ({}), {
-  getCodingDetails: codingGuidelinesActions.codingGuidelinesAction,
-  updateSettings: configurationActions.updateSettingsAction,
-});
-export default enhancer(Insulin);
+export default Insulin;
