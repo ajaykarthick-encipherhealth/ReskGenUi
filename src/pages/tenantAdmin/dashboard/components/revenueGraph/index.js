@@ -1,7 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactECharts from "echarts-for-react";
+import { connect } from "react-redux";
+import {
+  HccCodes,
+  RafCounts,
+} from "../../../../../stores/tenantAdmin/default/action.js";
 
-const RevenueGraph = ({isMultiple,hccColor,cargapColor}) => {
+const RevenueGraph = ({
+  isMultiple,
+  hccColor,
+  cargapColor,
+  getAllHccCodesData,
+  getAllHccCodes,
+  getAllRafData,
+  getAllRaf,
+}) => {
+  const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
+    ? Object.values(getAllRaf.premiumByDateForHcc)
+    : [];
+
+  const premiumByDateForSuggested = getAllRaf?.premiumByDateForSuggested
+    ? Object.values(getAllRaf.premiumByDateForSuggested)
+    : [];
+
   const option = {
     // title: {
     //   text: "Step Line",
@@ -10,7 +31,7 @@ const RevenueGraph = ({isMultiple,hccColor,cargapColor}) => {
       trigger: "axis",
     },
     legend: {
-      show:false
+      show: false,
     },
     grid: {
       left: "3%",
@@ -32,35 +53,61 @@ const RevenueGraph = ({isMultiple,hccColor,cargapColor}) => {
     },
     series: [
       {
-        name:cargapColor?"Car gap Codes":hccColor?"HCC Codes": "Total Codes",
+        name: cargapColor
+          ? "Car gap Codes"
+          : hccColor
+          ? "HCC Codes"
+          : "Total Codes",
         type: "line",
         step: "start",
-        data: [120, 132, 101, 134, 90, 230, 210],
-        itemStyle:{
-            color:hccColor?hccColor:cargapColor?cargapColor:'#E88D67'
-        }
+        data: hccColor
+          ? premiumByDateForHcc
+          : cargapColor
+          ? premiumByDateForSuggested
+          : [12, 34, 23],
+        itemStyle: {
+          color: hccColor ? hccColor : cargapColor ? cargapColor : "#E88D67",
+        },
       },
       {
         name: "HCC Codes",
         type: "line",
         step: "middle",
-        data: isMultiple &&[220, 282, 201, 234, 290, 430, 410],
-        itemStyle:{
-            color:'#04B700'
-        }
+        data: isMultiple && [220, 282, 201, 234, 290, 430, 410],
+        itemStyle: {
+          color: "#04B700",
+        },
       },
       {
         name: "Car gap Codes",
         type: "line",
         step: "end",
-        data:isMultiple && [450, 432, 401, 454, 590, 530, 510],
-        itemStyle:{
-            color:'#FF9209'
-        }
+        data: isMultiple && [450, 432, 401, 454, 590, 530, 510],
+        itemStyle: {
+          color: "#FF9209",
+        },
       },
     ],
   };
+
+  useEffect(() => {
+    getAllHccCodesData();
+    getAllRafData();
+  }, []);
+
   return <ReactECharts option={option} />;
 };
 
-export default RevenueGraph;
+const enhancer = connect(
+  (state) => ({
+    getAllHccCodes:
+      state?.tenantAdmin?.defaultHccCodes?.allHccCodes?.data?.response,
+    getAllRaf:
+      state?.tenantAdmin?.defaultHccCodes?.allRafCounts?.data?.response,
+  }),
+  {
+    getAllHccCodesData: HccCodes,
+    getAllRafData: RafCounts,
+  }
+);
+export default enhancer(RevenueGraph);

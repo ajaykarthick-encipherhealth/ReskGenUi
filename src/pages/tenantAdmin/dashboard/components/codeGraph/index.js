@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactECharts from "echarts-for-react";
 import * as echarts from "echarts";
+import { connect } from "react-redux";
+import {
+  HccCodes,
+  RafCounts,
+} from "../../../../../stores/tenantAdmin/default/action.js";
 
 const CodesGraph = ({
   options,
@@ -13,7 +18,25 @@ const CodesGraph = ({
   isHcc,
   isRadio,
   isRevenue,
+  getAllRafData,
+  getAllHccCodes,
+  getAllHccCodesData,
+  getAllRaf,
 }) => {
+  useEffect(() => {
+    getAllHccCodesData();
+    getAllRafData();
+  }, []);
+
+  const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
+    ? Object.values(getAllHccCodes.hccDiseaseCountMap)
+    : [];
+
+  const suggestedHccDiseaseCountMap =
+    getAllHccCodes?.suggestedHccDiseaseCountMap
+      ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
+      : [];
+
   const graphOptions = {
     xAxis: {
       type: "category",
@@ -32,6 +55,7 @@ const CodesGraph = ({
         "dec",
       ],
     },
+
     yAxis: {
       type: "value",
       show: true,
@@ -46,6 +70,7 @@ const CodesGraph = ({
       //     return `Allocated: ${auditedValue}<br/>Completed: ${allocatedValue}`;
       //   },
     },
+
     series: [
       {
         name: isCargaps
@@ -55,7 +80,11 @@ const CodesGraph = ({
           : isRevenue
           ? "Revenue"
           : isTwoWaves && "Radiology",
-        data: [10, 30, 50, 29, 13, 78, 54, 76, 98, 23, 11, 56],
+        data: isHcc
+          ? hccDiseaseCountValues
+          : isCargaps
+          ? suggestedHccDiseaseCountMap
+          : [12, 32, 45, 10, 20, 30, 40, 50, 60, 70, 12, 44, 56, 67, 34, 23],
         type: "line",
         lineStyle: { color: borderColor },
         smooth: true,
@@ -69,7 +98,6 @@ const CodesGraph = ({
             ]),
           },
       },
-
       {
         name: "Lab",
         data: isTwoWaves && [10, 30, 16, 33, 13, 78, 6, 76, 65, 23, 11, 56],
@@ -80,7 +108,21 @@ const CodesGraph = ({
       },
     ],
   };
-  return <ReactECharts option={options ? options : graphOptions}/>;
+
+  return <ReactECharts option={options ? options : graphOptions} />;
 };
 
-export default CodesGraph;
+const enhancer = connect(
+  (state) => ({
+    getAllHccCodes:
+      state?.tenantAdmin?.defaultHccCodes?.allHccCodes?.data?.response,
+    getAllRaf:
+      state?.tenantAdmin?.defaultHccCodes?.allRafCounts?.data?.response,
+  }),
+  {
+    getAllHccCodesData: HccCodes,
+    getAllRafData: RafCounts,
+  }
+);
+
+export default enhancer(CodesGraph);

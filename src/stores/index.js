@@ -30,6 +30,11 @@ import { reducer as reportReducer } from "./reviewer/report";
 import { reducer as updatedReportReducer } from "./supervisor/report";
 import { reducer as updatedAdminReportReducer } from "./admin/report";
 import { reducer as patientDeatilsReducer } from "./patient/details";
+import { reducer as tenantAdminDefault } from "../stores/tenantAdmin/default";
+import { reducer as tenantRaf } from "../stores/tenantAdmin/default";
+import { reducer as filesCount } from "../stores/tenantAdmin/default";
+import { reducer as ComputingStatus } from "../stores/tenantAdmin/default";
+import { reducer as RafScore } from "../stores/tenantAdmin/default";
 import { reducer as tenantAdminReducer } from "./tenantAdmin";
 import { reducer as webSocketReducer } from "./websocket";
 import { reducer as workFlowReducer } from "./tenantAdmin/workFlow";
@@ -92,6 +97,12 @@ const reducers = combineReducers({
     details: patientDeatilsReducer,
   }),
   tenantAdmin: combineReducers({
+    webSocket: webSocketReducer,
+    defaultHccCodes: tenantAdminDefault,
+    defaultRafCounts: tenantRaf,
+    defaultFilesCounts: filesCount,
+    defaultComputingStatus: ComputingStatus,
+    defaultRafScore: RafScore,
     webSocket: webSocketReducer,
     workFlow: workFlowReducer,
     tenantAdmin: tenantAdminReducer,

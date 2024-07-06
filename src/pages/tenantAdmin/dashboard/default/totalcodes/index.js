@@ -1,11 +1,24 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import CodesGraph from "../../components/codeGraph";
 import styles from "../../styles.module.css";
 import * as echarts from "echarts";
 import RafGraph from "../../components/rafGraph";
 import RevenueGraph from "../../components/revenueGraph";
+import {
+  HccCodes,
+  RafCounts,
+  RafCountScore,
+} from "../../../../../stores/tenantAdmin/default/action.js";
 
-const index = () => {
+const index = ({
+  getAllHccCodesData,
+  getAllHccCodes,
+  getAllRafData,
+  getAllRaf,
+  getAllRafScoreData,
+  getAllRafScore,
+}) => {
   const options = {
     xAxis: {
       type: "category",
@@ -97,6 +110,13 @@ const index = () => {
       color: "#FF9209",
     },
   ];
+
+  useEffect(() => {
+    getAllHccCodesData();
+    getAllRafData();
+    getAllRafScore();
+  }, []);
+
   return (
     <div className="d-flex justify-content-between">
       <div style={{ width: "33%" }}>
@@ -121,7 +141,7 @@ const index = () => {
             </div>
             <div>
               <div className={styles.header}>Total Codes</div>
-              <div className={styles.price}>3000</div>
+              <div className={styles.price}>{getAllHccCodes?.totalCount}</div>
             </div>
           </div>
         </div>
@@ -139,7 +159,9 @@ const index = () => {
           <div className={`${styles.header} p-1`}>RAF</div>
           <div className="p-1">
             <div className={styles.header}>Overall RAF</div>
-            <div className={styles.price}>3000</div>
+            <div className={styles.price}>
+              {getAllRafScoreData?.totalHccRaf}
+            </div>
           </div>
         </div>
         <RafGraph
@@ -160,13 +182,28 @@ const index = () => {
           <div className={`${styles.header} p-1`}>Revenue</div>
           <div className="p-1">
             <div className={styles.header}>Overall Revenue</div>
-            <div className={styles.price}>$ 3000</div>
+            <div className={styles.price}>{getAllRaf?.totalHccRafScore}</div>
           </div>
         </div>
-        <RevenueGraph isMultiple={true}/>
+        <RevenueGraph isMultiple={true} />
       </div>
     </div>
   );
 };
 
-export default index;
+const enhancer = connect(
+  (state) => ({
+    getAllHccCodes:
+      state?.tenantAdmin?.defaultHccCodes?.allHccCodes?.data?.response,
+    getAllRaf:
+      state?.tenantAdmin?.defaultHccCodes?.allRafCounts?.data?.response,
+    getAllRafScoreData:
+      state?.tenantAdmin?.defaultRafScore?.allRafScore?.data?.response,
+  }),
+  {
+    getAllHccCodesData: HccCodes,
+    getAllRafData: RafCounts,
+    getAllRafScore: RafCountScore,
+  }
+);
+export default enhancer(index);
