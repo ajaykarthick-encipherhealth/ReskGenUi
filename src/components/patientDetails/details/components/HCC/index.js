@@ -137,7 +137,7 @@ const HccCards = ({
               i // this condation we added for vignesh suggest to remove isCombo pracent
             ) => (
               <>
-                <li key={data?.id}>
+                <li key={data?.id} style={{margin:i!==0 && '10px 0 0 0'}}>
                   <Draggable
                     key={data.diagnosisCode}
                     draggableId={data.diagnosisCode}
@@ -151,6 +151,7 @@ const HccCards = ({
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
+                         
                         >
                           <div
                             className={` justify-content-between ${visitStyles.hcc_card_nameHead}`}

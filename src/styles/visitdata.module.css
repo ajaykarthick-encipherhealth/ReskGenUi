@@ -6,6 +6,7 @@
   padding-left: 10px;
   padding-right: 10px;
 }
+
 .container_fluid {
   background-color: #f0f6fe !important;
 }
@@ -15,50 +16,61 @@
   padding: 0px 5px 0px 0px;
   font-size: 15px;
 }
+
 .patient_info_details label {
   font-size: 13px !important;
   color: #66686b !important;
   font-weight: 500 !important;
 }
+
 .patient_info_details h6 {
   color: #221c1c !important;
   font-weight: 500 !important;
   font-size: 13px !important;
 }
+
 .hccCountHeader {
   padding-left: 12px;
   text-align: center;
 }
+
 .priorityStatusIcon {
   padding-top: 1px;
   display: grid;
 }
+
 .hccCountHeader label {
   font-size: 13px !important;
   color: #66686b !important;
   font-weight: 500 !important;
 }
+
 .hccCountHeader h6 {
   color: #221c1c !important;
   font-weight: 500 !important;
   font-size: 13px !important;
 }
+
 .rafscoreheader {
   padding-top: 15px;
 }
+
 .rafscoreheader label {
   font-size: 13px !important;
   color: #66686b !important;
   font-weight: 500 !important;
 }
+
 .rafscoreheader h6 {
   color: #221c1c !important;
   font-weight: 500 !important;
   font-size: 13px !important;
 }
+
 .dob_icon {
   margin-right: 10px;
 }
+
 .dob_icon svg {
   width: 18px;
   padding: 0 !important;
@@ -203,6 +215,7 @@
   margin-right: 1px;
   padding-bottom: 5px;
 }
+
 .hcc_card > .timeline-panel {
   display: flex;
   margin: 20px !important;
@@ -213,6 +226,7 @@
   right: 70px;
   padding-top: 1.25rem;
 }
+
 .backArrowBtn {
   margin: 1.25rem;
   height: 32px !important;
@@ -269,7 +283,7 @@
 
 .flag_container {
   width: 60px;
-  height: 98%;
+  height: 97%;
   border-radius: 8px;
   background: #e1edfe;
   float: right;
@@ -293,6 +307,7 @@
   border-radius: 4px;
   display: flex;
 }
+
 .flag_container i {
   display: flex;
 }
@@ -303,6 +318,7 @@
 
 .visitdata_tab_body {
   padding: 0;
+  margin-bottom: 20px;
 }
 
 .provider_name {
@@ -319,6 +335,7 @@
   padding: 5px 5px;
   cursor: pointer;
 }
+
 .provider_name_manually {
   font-weight: 600;
   border-radius: 30px !important;
@@ -329,6 +346,7 @@
   justify-content: center;
   padding: 10px;
 }
+
 .un_provider_name {
   color: #ff0000cc !important;
   background: #ff00002e !important;
@@ -363,13 +381,16 @@
   padding: 5px 12px;
   /* border: 0.0625rem solid transparent; */
 }
+
 .encounterDate i {
   margin-right: 3px !important;
 }
+
 .calenderIcon {
   font-size: 12px;
   color: #2d383aaa !important;
 }
+
 .calenderIconNew {
   font-size: 12px;
 }
@@ -444,6 +465,7 @@
   height: 20px;
   padding: 5px;
 }
+
 .isComboCode {
   background: #e7cff1 !important;
   color: #8107ecaa !important;
@@ -459,6 +481,7 @@
   width: 45px;
   padding: 5px;
 }
+
 .isMostSpecific {
   background: #e7cff1 !important;
   color: #8107ecaa !important;
@@ -474,6 +497,7 @@
   width: 85px;
   padding: 5px;
 }
+
 .close_icon {
   width: 18px;
   height: 16px;
@@ -487,6 +511,7 @@
   align-items: center;
   justify-content: center;
 }
+
 .close_icon svg {
   text-align: center;
   display: flex;
@@ -494,6 +519,7 @@
   /* padding-top: 2px;
   margin: 2px 0px 0px 3px; */
 }
+
 .tree_icon {
   width: 20px;
   height: 18px;
@@ -507,6 +533,7 @@
   align-items: center;
   justify-content: center;
 }
+
 .tree_icon svg {
   text-align: center;
   display: flex;
@@ -528,6 +555,7 @@
   align-items: center;
   justify-content: center;
 }
+
 .edit_icon svg {
   text-align: center;
   display: flex;
@@ -535,6 +563,7 @@
   /* padding-top: 2px;
   margin: 2px 0px 0px 3px; */
 }
+
 .hcc_title_name svg {
   color: #fff;
   margin-left: 10px;
@@ -556,6 +585,7 @@
   text-align: center;
   margin-left: 3px;
 }
+
 .tick_icon svg {
   text-align: center;
   margin-top: -7px;
@@ -567,17 +597,21 @@
   border: 1px solid #d5d5d5;
   margin-top: 15px;
 }
+
 .comboContainer2,
 .rafContainer2 {
   padding: 10px;
 }
+
 .comboTitle span {
   font-size: 13px !important;
   font-weight: 600;
 }
+
 .comboContainer3 {
   padding-top: 5px;
 }
+
 .labelStyle {
   font-size: 13px !important;
   font-weight: 600;
@@ -605,6 +639,7 @@
   padding: 15px 15px 15px 15px;
   margin-bottom: 15px;
 }
+
 .combo_details_card span {
   font-size: 13px;
 }
@@ -640,6 +675,7 @@
   /* background-color: #ffffff; */
   z-index: 1;
 }
+
 .meat_title_card2 {
   border-radius: 12px;
   background: #e1edfe;
@@ -662,12 +698,14 @@
   top: 0;
   /* margin-top: 10px; */
 }
+
 .hccStickey_head {
   /* min-height: 10vh;
     max-height: 64vh;
     overflow-y: scroll;
     overflow: hidden; */
 }
+
 .hccStickeyRaf_head {
   min-height: 10vh;
   max-height: 69vh;
@@ -683,8 +721,8 @@
 
 .container,
 .suggestedcontainer {
-  min-height: 64vh;
-  max-height: 64vh;
+  min-height: 65vh;
+  max-height: 65vh;
   /* overflow-y: scroll; */
   overflow: hidden;
   /* position: relative; */
@@ -703,8 +741,8 @@
 }
 
 .suggestedcontainer2 {
-  min-height: 30vh;
-  max-height: 30vh;
+  min-height: 29vh;
+  max-height: 29vh;
   overflow: hidden;
 }
 
@@ -717,9 +755,12 @@
 }
 
 .deletedContainer {
-  min-height: 30vh;
-  max-height: 30vh;
+  min-height: 29vh;
+  max-height: 29vh;
+  /* min-height: 30vh;
+  max-height: 30vh; */
   overflow: hidden;
+  margin-top: 0px;
 }
 
 /* .hccStickey_head::-webkit-scrollbar-track, .hccStickeyRaf_head::-webkit-scrollbar-track {
@@ -837,6 +878,7 @@
   display: grid;
   margin-bottom: 20px;
 }
+
 .commentsFormControl {
   border-radius: 16px;
   border: 1px solid #cecece;
@@ -868,6 +910,7 @@
   display: flex;
   margin: 5px 10px 0px 10px;
 }
+
 .navColor {
   color: black !important;
   font-family: Manrope;
@@ -876,18 +919,21 @@
   font-weight: 600;
   line-height: normal;
 }
+
 .profile-tab .nav-item .nav-link.active {
   border: 0;
   background: transparent;
   background: transparent;
   border-bottom: 0.0125rem solid purple !important;
 }
+
 .flags_patientsList {
   display: flex;
   flex-direction: row;
   align-items: center;
   margin-top: 5px;
 }
+
 .flags {
   display: flex;
   flex-direction: row;
@@ -895,9 +941,11 @@
   justify-content: center;
   margin-top: 5px;
 }
+
 .flag {
   margin-right: 5px;
 }
+
 .flagCodes {
   margin-right: 20px;
   color: #000;
@@ -907,6 +955,7 @@
   line-height: normal;
   margin-top: 4px;
 }
+
 .nameList {
   color: #221c1c;
   font-size: 13px;
@@ -916,38 +965,48 @@
   padding: 10px;
   cursor: pointer;
 }
+
 .nameList h5 {
   font-size: 13px !important;
 }
+
 .circleCard {
-  width: 42px; /* Set the width and height to make it a circle */
+  width: 42px;
+  /* Set the width and height to make it a circle */
   height: 42px;
-  border-radius: 8px !important; /* Border-radius 50% makes it a circle */
+  border-radius: 8px !important;
+  /* Border-radius 50% makes it a circle */
   background: #fff;
   fill: #fff;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25); /* Add a background color */
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  /* Add a background color */
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   margin-bottom: 10px;
 }
+
 .timeLine {
   overflow: scroll;
 }
+
 .vertical-timeline--animate .vertical-timeline-element-content.bounce-in {
   width: 177px;
   height: 303px;
   flex-shrink: 0;
   background: #fff !important;
 }
+
 .iconContainer {
   margin-right: 20px;
 }
+
 .content {
   position: absolute;
   left: 17pc;
 }
+
 .menuCard {
   width: 180px;
   display: inline-flex;
@@ -963,9 +1022,11 @@
   bottom: 174px;
   top: -126px;
   cursor: pointer;
-  opacity: 10; /* Set initial opacity to 0 */
+  opacity: 10;
+  /* Set initial opacity to 0 */
   transition: opacity 0.8s ease-in-out;
 }
+
 .sideTab {
   width: 194px;
   height: 100%;
@@ -976,11 +1037,12 @@
 
 .sideTabClose {
   width: 66px;
-  height: 98%;
+  height: 97%;
   flex-shrink: 0;
   border-radius: 12px;
   background: #e1edfe;
 }
+
 .patientListHead {
   margin: -8px 0px 0px 0px !important;
   /* overflow-y: scroll; */
@@ -989,6 +1051,7 @@
 .sideNav ul {
   padding-top: 25px;
 }
+
 .sideNavLabel a {
   display: flex;
   width: 145px !important;
@@ -1012,11 +1075,13 @@
   margin: 0px 0px 15px 25px;
   cursor: pointer;
 }
+
 .sideNavArrow span {
   float: right;
   margin: 10px 24px 10px 0px !important;
   cursor: pointer;
 }
+
 .sideNavText {
   padding-left: 8px;
   font-size: 13px;
@@ -1027,6 +1092,7 @@
 .sideTabClose .sideNavText {
   display: none;
 }
+
 .sideTabClose .sideNavLabel {
   display: flex;
   width: 50px !important;
@@ -1050,6 +1116,7 @@
   margin: 0 !important;
   cursor: pointer;
 }
+
 .sideTabClose .sideNavLabelActiveComplete {
   background: linear-gradient(95deg, #3a9b94 5.8%, #99ded9 92.76%) !important;
   width: 50px !important;
@@ -1079,30 +1146,38 @@
   margin: 10px 24px 10px 0px !important;
   cursor: pointer;
 }
+
 .visitDataMain,
 .visitDataMainClose {
   display: flex;
 }
+
 .firstContainer {
   width: 13%;
 }
+
 .secondContainer {
   width: 81%;
   margin-left: 20px;
 }
+
 .thirdContainer {
   width: 6%;
 }
+
 .visitDataMainClose .firstContainer {
   width: 6% !important;
 }
+
 .visitDataMainClose .secondContainer {
   width: 88% !important;
   margin-left: 0px !important;
 }
+
 .visitDataMainClose .thirdContainer {
   width: 6% !important;
 }
+
 .textareaContainer {
   position: relative;
   display: inline-block;
@@ -1115,21 +1190,25 @@
   background: transparent;
   border: none;
 }
+
 .commentSendIcon:hover {
   background: none !important;
 }
+
 .invalidHccCodeError {
   font-size: 13px;
   color: red !important;
   position: relative;
   bottom: 10px;
 }
+
 .validHccCodeError {
   font-size: 13px;
   color: green !important;
   position: relative;
   bottom: 10px;
 }
+
 .provider_name_style {
   width: 25px !important;
   height: 25px !important;
@@ -1137,6 +1216,7 @@
   background: #9191c9;
   border-radius: 0.25rem !important;
 }
+
 .provider_name_style span {
   color: #fff !important;
   font-size: 12px !important;
@@ -1147,6 +1227,7 @@
 .MOVED_DELETED_TO_VALID {
   background-color: #46c263;
 }
+
 .hccFlag {
   height: 15px;
   width: 14px;
@@ -1155,10 +1236,12 @@
   margin-top: 4px;
   border-radius: 2px;
 }
+
 .validColor {
   color: #04b700;
   padding: 0 5px;
 }
+
 .nonhccFlag {
   height: 15px;
   width: 14px;
@@ -1167,6 +1250,7 @@
   margin-top: 5px;
   border-radius: 2px;
 }
+
 .invalidColor {
   color: #fada5e;
   padding: 0 5px;
@@ -1180,10 +1264,12 @@
   margin-top: 5px;
   border-radius: 2px;
 }
+
 .suggestedColor {
   color: #ff9209;
   padding: 0 5px;
 }
+
 .deleteFlag {
   height: 15px;
   width: 14px;
@@ -1192,26 +1278,32 @@
   margin-top: 5px;
   border-radius: 2px;
 }
+
 .deletedColor {
   color: #be3144;
   padding: 1px 5px;
 }
+
 .completedColor {
   color: #00bc13;
   padding: 1px 5px;
 }
+
 .holdColor {
   color: #3c0ad2;
   padding: 0 5px;
 }
+
 .pendingColor {
   color: #0078d4;
   padding: 0 5px;
 }
+
 .declinedColor {
   color: #eb5252;
   padding: 0 5px;
 }
+
 .completed {
   height: 10px;
   width: 10px;
@@ -1230,6 +1322,7 @@
   margin-top: 2px;
   border-radius: 20px;
 }
+
 .declined {
   height: 10px;
   width: 10px;
@@ -1239,6 +1332,7 @@
   margin-top: 2px;
   border-radius: 20px;
 }
+
 .hold {
   height: 10px;
   width: 10px;
@@ -1248,26 +1342,32 @@
   margin-top: 2px;
   border-radius: 20px;
 }
+
 .audited {
   color: #4aa1ab;
   padding: 0 5px;
 }
+
 .audithold {
   color: #ebae00;
   padding: 0 5px;
 }
+
 .auditpending {
   color: #bd3a79;
   padding: 0 5px;
 }
+
 .reaudit {
   color: #964b00;
   padding: 0 5px;
 }
+
 .auditdeclined {
   color: #c21807;
   padding: 0 5px;
 }
+
 .processing {
   height: 10px;
   width: 10px;
@@ -1276,6 +1376,7 @@
   margin-top: 2px;
   border-radius: 20px;
 }
+
 .failed {
   height: 10px;
   width: 10px;
@@ -1284,6 +1385,7 @@
   margin-top: 2px;
   border-radius: 20px;
 }
+
 .timelineDate {
   display: flex !important;
   justify-content: space-between;
@@ -1298,12 +1400,14 @@
   background: green;
   text-transform: capitalize;
 }
+
 .timeLineUsername span {
   color: #fff !important;
   font-size: 12px !important;
   font-weight: 600;
   line-height: 25px !important;
 }
+
 .completedStatus svg {
   margin-right: 15px;
   background: #efe8e8;
@@ -1317,24 +1421,29 @@
 .comments_card span {
   font-size: 13px;
 }
+
 .commentNameHead {
   display: flex;
   justify-content: space-between;
 }
+
 .commentsName {
   font-size: 13px !important;
   font-weight: 600;
   width: fit-content;
   margin-bottom: 5px;
 }
+
 .commentsTime {
   font-size: 12px !important;
 }
+
 .filterCompletedIcon {
   margin-left: 10px;
   font-size: 12px;
   color: #aeafae;
 }
+
 .datepicker {
   background-color: #f0f6fe !important;
   border: none !important;
@@ -1343,11 +1452,13 @@
   margin-left: -35px;
   visibility: hidden;
 }
+
 .completedModal > .ant-modal-body {
   max-height: 25px !important;
   min-height: 25px !important;
   overflow: hidden !important;
 }
+
 .radiologyStatus {
   background: rgba(227, 78, 176, 0.2);
   font-size: 10px;
@@ -1359,6 +1470,7 @@
   float: right;
   margin-right: 10px;
 }
+
 .labStatus {
   background: rgba(181, 65, 112, 0.2);
   font-size: 10px;
@@ -1370,6 +1482,7 @@
   float: right;
   margin-right: 10px;
 }
+
 .hccStatus {
   background: #04b70026;
   font-size: 10px;
@@ -1381,11 +1494,13 @@
   float: right;
   margin-right: 10px;
 }
+
 .userDetailsCard {
   min-height: 50px;
   max-height: 150px;
   padding: 10px;
 }
+
 .avatarStyle {
   text-transform: uppercase;
   display: flex;
@@ -1402,6 +1517,7 @@
   line-height: 24px;
   color: #2a2e34 !important;
 }
+
 .userNameDetails {
   /* text-align: center; */
   margin-top: 20px;
@@ -1409,6 +1525,7 @@
   font-weight: 500;
   color: #2a2e34;
 }
+
 .userNameDetails svg {
   margin-right: 5px;
   color: rgb(36, 21, 113);
@@ -1416,12 +1533,14 @@
   position: relative;
   top: 1px;
 }
+
 .usertimeDetails {
   margin-top: 20px;
   font-size: 12px !important;
   font-weight: 500;
   color: #2a2e34;
 }
+
 .usertimeDetails svg {
   margin-right: 5px;
   color: rgb(36, 21, 113);
@@ -1429,6 +1548,7 @@
   position: relative;
   top: 1px;
 }
+
 .timelineheading {
   font-size: 13px !important;
   color: #000 !important;
@@ -1447,6 +1567,7 @@
     width: 17px !important; */
   display: block;
 }
+
 .nonHccFlag {
   height: 10px;
   width: 10px;
@@ -1456,6 +1577,7 @@
   margin-top: 2px;
   border-radius: 20px;
 }
+
 .add_text {
   color: #3a9b94;
   font-size: 13px;
@@ -1466,6 +1588,7 @@
   background: #baf6ea !important;
   border-radius: 6px !important;
 }
+
 .pendingBtn {
   font-size: 13px;
   color: #5da9e4 !important;
@@ -1477,6 +1600,7 @@
   padding: 3px;
   /* height: 35px !important; */
 }
+
 .holdBtnHcc {
   font-size: 13px;
   color: #d8c11b !important;
@@ -1486,6 +1610,7 @@
   box-shadow: none !important;
   width: 170px !important;
 }
+
 .holdBtnHccs {
   font-size: 13px;
   color: #ad94fa !important;
@@ -1497,6 +1622,7 @@
   padding: 3px;
   /* height: 35px !important; */
 }
+
 .completedBtnHcc {
   font-size: 13px;
   color: #3a9b94 !important;
@@ -1524,42 +1650,54 @@
 .name_missed path {
   fill: #7ad2e5;
 }
+
 .dob_missed path {
   fill: #063970;
 }
+
 .name_missed path {
   fill: #f7d392;
 }
+
 .id_missed path {
   fill: #755dff;
 }
+
 .sign_missed path {
   fill: #e28743;
 }
+
 .signature_missed path {
   fill: #abdbe3;
 }
+
 .cred_missed path {
   fill: #b39868;
 }
+
 .sign_status path {
   fill: #ffa502;
 }
+
 .no_hcc_found path {
   fill: #ffffba;
 }
+
 .no_doc_found path {
   fill: #e95c4b;
 }
+
 .patient_diseased path {
   fill: #b8a8bd;
 }
+
 .priorityStatus {
   padding-top: 17px;
   /* width: 70px; */
   display: flex;
   justify-content: space-evenly;
 }
+
 .dosSelectPicker {
   width: 100px !important;
   margin-left: -80px;
@@ -1574,9 +1712,11 @@
   z-index: 99999999;
   border: 1px solid #e7dddd !important;
 }
+
 .dosSelectPicker > .css-13cymwt-control {
   min-height: 35px !important;
 }
+
 .dosSelectPicker > div:nth-child(3):hover {
   height: 46px !important;
   margin-top: -10px;
@@ -1588,12 +1728,14 @@
 .hoverActiveHcc {
   /* margin-bottom: 10px; */
 }
+
 .file_name_listcontainer {
   background: #eefcfd;
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 10px;
 }
+
 .patientList {
   /* background: #f7f7f7; */
   border-radius: 4px;
@@ -1605,6 +1747,7 @@
   border: 1px solid rgba(220, 199, 199, 0.2);
   border-radius: 10px;
 }
+
 .patientDetailsHead {
   height: 80vh;
   margin-right: 0px;
@@ -1612,6 +1755,7 @@
   margin-top: 20px;
   width: 355px;
 }
+
 .paginationContiner {
   position: fixed;
   bottom: 0;
@@ -1619,6 +1763,7 @@
   background: #fff;
   height: 55px;
 }
+
 /* .patientDetailsHead:hover {
   height: 70vh;
   overflow-y: scroll;
@@ -1629,11 +1774,13 @@
   margin-right: 0px;
   overflow-y: scroll;
 }
+
 .patientDetailsHead2:hover {
   height: 65vh;
   overflow-y: scroll;
   margin-right: 0px;
 }
+
 .raflablehead1 {
   box-shadow: 0 3px 10px rgba(220, 199, 199, 0.2);
   border: 1px solid rgba(220, 199, 199, 0.2);
@@ -1669,6 +1816,7 @@
   padding: 10px;
   border-radius: 4px;
 }
+
 /* .statusFLag {
   
   height:auto !important;
@@ -1677,6 +1825,7 @@
 .addValidCodeFormFooter {
   margin-top: 10px;
 }
+
 .sideHeaderTitle {
   padding-top: 12px;
   font-size: 14px;
@@ -1684,6 +1833,7 @@
   border-bottom: 1px solid;
   width: 80px;
 }
+
 .sideHeaderTitleLab {
   padding-top: 12px;
   font-size: 14px;
@@ -1691,11 +1841,13 @@
   border-bottom: 1px solid;
   width: 40px;
 }
+
 .hccCodeAddBtn {
   position: absolute;
   top: 12px;
   right: 60px;
 }
+
 .hccCodeAddContainer {
   margin-top: -30px;
 }
@@ -1703,10 +1855,12 @@
 .deleteFileContainer {
   margin-top: 15px;
 }
+
 .btnSpinner {
   margin-right: 5px;
   font-size: 10px;
 }
+
 .addPatientIdBtn {
   height: 42px !important;
   margin-top: 33px;
@@ -1719,9 +1873,11 @@
   /* height: 70vh; */
   border-radius: 10px;
 }
+
 .fileFormDate {
   display: contents;
 }
+
 .fileFormDate span {
   position: relative;
   cursor: pointer;
@@ -1729,9 +1885,11 @@
   bottom: 30px;
   right: 8px;
 }
+
 .hcc_card_addCode {
   margin-bottom: 10px !important;
 }
+
 .roleStyle {
   width: 141px;
   height: 28px;
@@ -1742,6 +1900,7 @@
   font-size: 14px;
   padding-top: 3px;
 }
+
 .roleStyleWQ {
   height: 10px;
   width: 10px;
@@ -1749,21 +1908,26 @@
   margin-top: 2px;
   border-radius: 20px;
 }
+
 .validHcccontainer {
   min-height: 83vh;
   max-height: 83vh;
   overflow: hidden;
 }
+
 .validHcccontainer:hover {
   overflow-y: scroll;
   position: inherit;
 }
+
 .sticked_head {
   margin-bottom: 20px;
 }
+
 .loadingFileHeader svg {
   height: 17px;
 }
+
 .add_meat_query {
   width: 16px;
   height: 15px;
@@ -1777,15 +1941,18 @@
   justify-content: center;
   align-items: end;
 }
+
 .add_meat_query svg {
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .ant_select_form {
   width: 100% !important;
 }
+
 .reaudit_text {
   font-size: 13px;
   font-weight: 400;
@@ -1795,6 +1962,7 @@
   background: #ffd1a3 !important;
   border-radius: 6px !important;
 }
+
 .audit_text {
   font-size: 13px;
   font-weight: 400;
@@ -1804,6 +1972,7 @@
   background: #d4eaed !important;
   border-radius: 6px !important;
 }
+
 .audithold_text {
   font-size: 13px;
   font-weight: 400;
@@ -1813,6 +1982,7 @@
   background: #ffebad !important;
   border-radius: 6px !important;
 }
+
 .auditdecline_text {
   font-size: 13px;
   font-weight: 400;
@@ -1822,6 +1992,7 @@
   background: #ffdede !important;
   border-radius: 6px !important;
 }
+
 .auditpending_text {
   font-size: 13px;
   font-weight: 400;
@@ -1838,9 +2009,11 @@
   padding: 15px;
   margin-bottom: 15px;
 }
+
 .meat_lable {
   font-weight: 600;
 }
+
 .loadingContainer {
   display: flex;
   justify-content: center;
@@ -1875,6 +2048,7 @@
   font-size: 12px;
   border-radius: 5px;
 }
+
 @media screen and (min-width: 1500px) {
   .dosSelectPicker {
     margin-top: 10px;
@@ -1882,6 +2056,7 @@
     margin-left: -60px;
     height: 35px !important;
   }
+
   .statusFLag {
     /* padding-top: 20px;
     padding-left: 16px; */
@@ -1889,6 +2064,7 @@
     margin: auto !important;
   }
 }
+
 @media screen and (width<1500px) {
   .dosSelectPicker {
     margin-top: 5px;
@@ -1896,11 +2072,13 @@
     margin-left: -100px;
     height: 35px !important;
   }
+
   .statusFLag {
     height: 30px !important;
     margin: 30px 0px 0px 10px !important;
   }
 }
+
 .custom_select_type {
   border: none !important;
   border-radius: 12px;
@@ -1911,19 +2089,41 @@
   position: relative;
   right: 70px;
 }
+
 .yearactionbtnContainer > button {
   height: 32px !important;
   margin-bottom: 5px;
 }
+
 .meatcontainer {
   max-height: 64vh;
   overflow: hidden;
 }
+
 .meatcontainer::-webkit-scrollbar {
   width: 4px;
   background: transparent;
 }
+
 .meatcontainer:hover {
   overflow-y: scroll;
   position: inherit;
+}
+
+.container,
+.suggestedcontainer2,
+.deletedContainer {
+  border-radius: 10px;
+  background-color: transparent !important;
+  height: auto !important;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  /* box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px; */
+}
+.HccContainer {
+  height: 64.5vh;
+  overflow-y: scroll;
+  border-radius: 10px;
+  background-color: transparent !important;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  /* box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px; */
 }
