@@ -14,7 +14,8 @@ import {
   getAllPatientAction,
   getAllTrackingAction,
   getAllUsersAction,
-  getBatchInfo
+  getBatchInfo,
+  getCustomUsersAction,
 } from "./actions";
 
 const initialState = {
@@ -64,6 +65,8 @@ const searchReducer = combineReducers({
   allFileProcessing: createReducer(getAllFileProcessAction),
   allBatches: createReducer(getAllBatches),
   getBatch:createReducer(getBatchInfo),
+  customUsers:createReducer(getCustomUsersAction)
+
   // loaders
   allOrganizationLoader: getReportLoading(getAllOrganizationAction),
   allUsersLoading: getReportLoading(getAllUsersAction),
@@ -73,7 +76,6 @@ const searchReducer = combineReducers({
   batchLoader: getReportLoading(getAllBatches),
   allBatchesLoader: getReportLoading(getAllBatches),
   allTrackingLoader: getReportLoading(getAllTrackingAction),
-
 });
 
 export default searchReducer;
