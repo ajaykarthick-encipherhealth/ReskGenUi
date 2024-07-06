@@ -148,11 +148,11 @@ const RafGraph = ({
 const enhancer = connect(
   (state) => ({
     getAllHccCodes:
-      state?.tenantAdmin?.defaultHccCodes?.allHccCodes?.data?.response,
+      state?.tenantAdmin?.tenantAdmindefault?.allHccCodes?.data?.response,
     getAllRaf:
-      state?.tenantAdmin?.defaultHccCodes?.allRafCounts?.data?.response,
+      state?.tenantAdmin?.tenantAdmindefault?.allRafCounts?.data?.response,
     getAllRafScoreData:
-      state?.tenantAdmin?.defaultRafScore?.allRafScore?.data?.response,
+      state?.tenantAdmin?.tenantAdmindefault?.allRafScore?.data?.response,
   }),
   {
     getAllHccCodesData: HccCodes,

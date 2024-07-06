@@ -162,7 +162,7 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <HccCodes />
+                    <HccCodes dateRange={dateRange}/>
                   </Card>
                 </div>
               </div>

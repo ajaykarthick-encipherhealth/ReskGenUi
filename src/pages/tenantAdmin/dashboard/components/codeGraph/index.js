@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import ReactECharts from "echarts-for-react";
 import * as echarts from "echarts";
 import { connect } from "react-redux";
@@ -23,10 +23,12 @@ const CodesGraph = ({
   getAllHccCodesData,
   getAllRaf,
 }) => {
+  const [dateRange, setDateRange] = useState({ startDate: "", endDate: "" });
+
   useEffect(() => {
-    getAllHccCodesData();
+    getAllHccCodesData(dateRange.startDate, dateRange.endDate);
     getAllRafData();
-  }, []);
+  }, [dateRange]);
 
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
     ? Object.values(getAllHccCodes.hccDiseaseCountMap)
@@ -36,7 +38,6 @@ const CodesGraph = ({
     getAllHccCodes?.suggestedHccDiseaseCountMap
       ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
       : [];
-
   const graphOptions = {
     xAxis: {
       type: "category",
@@ -115,9 +116,9 @@ const CodesGraph = ({
 const enhancer = connect(
   (state) => ({
     getAllHccCodes:
-      state?.tenantAdmin?.defaultHccCodes?.allHccCodes?.data?.response,
+      state?.tenantAdmin?.tenantAdmindefault?.allHccCodes?.data?.response,
     getAllRaf:
-      state?.tenantAdmin?.defaultHccCodes?.allRafCounts?.data?.response,
+      state?.tenantAdmin?.tenantAdmindefault?.allRafCounts?.data?.response,
   }),
   {
     getAllHccCodesData: HccCodes,
