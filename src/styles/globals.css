@@ -9235,23 +9235,28 @@ tr>td{
   height: 2.813rem !important;
 }
 
-.custom-react-select1 .ant-select{
-  width:100% !important;
+.custom-react-select1 .ant-select {
+  width: 100% !important;
 }
-.custom-react-select1 .ant-select .ant-select-selector{
+.custom-react-select1 .ant-select .ant-select-selector {
   height: 2.7rem !important;
-  border:none !important;
-  width:100% !important;
+  border: none !important;
+  width: 100% !important;
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
   border-radius: 10px;
-
 }
-.custom-react-select1 .ant-select-focused:where(.css-dev-only-do-not-override-3rel02).ant-select-outlined:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer) .ant-select-selector{
-  border-color:red !important;
+.custom-react-select1
+  .ant-select-focused:where(
+    .css-dev-only-do-not-override-3rel02
+  ).ant-select-outlined:not(.ant-select-disabled):not(
+    .ant-select-customize-input
+  ):not(.ant-pagination-size-changer)
+  .ant-select-selector {
+  border-color: red !important;
 }
 
-.ant-select-outlined{
-  border:none !important;
+.ant-select-outlined {
+  border: none !important;
 }
 .btn {
   height: 2.813rem !important;
@@ -14780,15 +14785,16 @@ input::-webkit-inner-spin-button {
   background: rgb(36, 21, 113) !important;
 }
 .skeleton-shadow {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adjust the values to your liking */
-  border-radius: 20px; /* Optional: adds rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
 }
 .skeleton-table {
   width: 100%;
   padding: 16px;
 }
 
-.skeleton-header, .skeleton-row {
+.skeleton-header,
+.skeleton-row {
   display: flex;
   margin-bottom: 8px;
 }
@@ -14814,7 +14820,6 @@ input::-webkit-inner-spin-button {
   height: 100%;
 }
 
-/* YourStyles.module.css */
 .carddiv {
   margin: 16px;
   display: flex;
@@ -14822,7 +14827,7 @@ input::-webkit-inner-spin-button {
 }
 
 .colData {
-  background: #fff; /* Default background for cards */
+  background: #fff;
   border-radius: 8px;
   padding: 16px;
   margin-bottom: 16px;
