@@ -313,7 +313,7 @@ const Accuracy = ({ accuracyDatas, getAccuracyScore, accuracyLoading }) => {
           <Col span={12}>
             <div className={styles.container}>
               <Skeleton.Input
-                style={{ width: "250px", height: "250px" }}
+                style={{ width: "210px", height: "250px" }}
                 active
               />
             </div>

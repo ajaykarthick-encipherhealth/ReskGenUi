@@ -59,13 +59,21 @@ const HoldStatus = ({ getHoldStatusData, holdStatusData }) => {
               }}
             >
               <td className={styles.description}>{item.patientId}</td>
-              <td className={styles.description}>{item.testValue ? item.testValue : "---"}</td>
+              <td className={styles.description}>
+                {item.testValue ? item.testValue : "---"}
+              </td>
             </tr>
           ))
         ) : (
           <tr>
             <td colSpan="2">
-              <Empty  style={{  paddingTop:"50px", textAlign:"center",height:"260px"}} />
+              <Empty
+                style={{
+                  paddingTop: "50px",
+                  textAlign: "center",
+                  height: "260px",
+                }}
+              />
             </td>
           </tr>
         )}
@@ -92,8 +100,7 @@ const HoldStatus = ({ getHoldStatusData, holdStatusData }) => {
                 alignItems: "center",
               }}
             >
-        { renderSkeletonHold()}
-
+              {renderSkeletonHold()}
             </div>
           ) : (
             <div className={styles.container}> {TableData}</div>
@@ -111,9 +118,7 @@ const HoldStatus = ({ getHoldStatusData, holdStatusData }) => {
         onCancel={handleOk}
       >
         {holdStatusData?.loading ? (
-          <div className={spinSTYles.spinStyle}>
-{ renderSkeletonHold()}
-          </div>
+          <div className={spinSTYles.spinStyle}>{renderSkeletonHold()}</div>
         ) : (
           <div className={styles.container} style={{ height: "500px" }}>
             {" "}
