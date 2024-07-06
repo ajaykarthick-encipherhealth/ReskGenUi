@@ -65,12 +65,12 @@ const searchReducer = combineReducers({
   allFileProcessing: createReducer(getAllFileProcessAction),
   allBatches: createReducer(getAllBatches),
   getBatch:createReducer(getBatchInfo),
-  customUsers:createReducer(getCustomUsersAction)
+  customUsers:createReducer(getCustomUsersAction),
+  batchUpload: createReducer(batchUpload),
 
   // loaders
   allOrganizationLoader: getReportLoading(getAllOrganizationAction),
   allUsersLoading: getReportLoading(getAllUsersAction),
-  batchUpload: createReducer(batchUpload),
   allPatientsLoading: getReportLoading(getAllPatientAction),
   getBatchLoader:getReportLoading(getBatchInfo),
   batchLoader: getReportLoading(getAllBatches),
