@@ -18,6 +18,8 @@ const HeadTitle = ({
   openPicker,
   setOpenPicker,
   isAdmin = false,
+  margin,
+   fontSize
 }) => {
   const dispatch = useDispatch();
   const [selectedDates, setSelectedDates] = useState([]);
@@ -39,7 +41,7 @@ const HeadTitle = ({
   const lastDateWithTime = currentDate.endOf("day").toISOString();
 
   return (
-    <div className={styles.header} style={{ display: anchorTag && "flex" }}>
+    <div className={styles.header} style={{ display: anchorTag && "flex",margin:margin }}>
       <div
         style={{
           display: "flex",
@@ -48,7 +50,7 @@ const HeadTitle = ({
           justifyContent: "space-between",
         }}
       >
-        <div className={styles.title}>{header}</div>
+        <div className={styles.title} style={{fontSize: fontSize}}>{header}</div>
         {icon && (
           <div className={styles.imgContainer}>
             <Image
