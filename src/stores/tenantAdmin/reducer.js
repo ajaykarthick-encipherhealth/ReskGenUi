@@ -2,13 +2,19 @@ import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
 import {
   batchUpload,
+  codingGuidelinesAction,
+  configurationSettingsAction,
+  healthMetricAddAction,
+  manualAddAction,
+  updateSettingsAction,
+  uploadFileAction,
   getAllBatches,
   getAllFileProcessAction,
   getAllOrganizationAction,
   getAllPatientAction,
   getAllTrackingAction,
   getAllUsersAction,
-  getBatchInfo,
+  getBatchInfo
 } from "./actions";
 
 const initialState = {

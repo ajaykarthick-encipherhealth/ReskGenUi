@@ -16,6 +16,10 @@ import DirectCodes from "./coding/directCodes";
 import HealthMetricConfig from "./coding/healthMetricConfig";
 import ComorbidConditions from "./coding/comorbidConditions";
 import CriticalConditions from "./coding/criticalConditions";
+import RafConfig from "./coding/rafConfig";
+import HistoryCodes from "./coding/historyCodes";
+import DownCodes from "./coding/downCodes";
+import DirectConfirmCodes from "./coding/directConfirmCodes";
 const { Sider } = Layout;
 
 const menuList = [
@@ -25,16 +29,16 @@ const menuList = [
     label: `Configuration`,
     children: [
       {
+        key: "File_Processing_Config",
+        label: "File Processing Config",
+      },
+      {
         key: "Chat_Audit_Config",
         label: "Chat Audit Config",
       },
       {
         key: "Flag_Config",
         label: "Flag Config",
-      },
-      {
-        key: "File_Processing_Config",
-        label: "File Processing Config",
       },
     ],
   },
@@ -52,8 +56,8 @@ const menuList = [
         label: "Insulin Medications",
       },
       {
-        key: "Direct_Codes",
-        label: "Direct Codes",
+        key: "Direct_Confirm_Codes",
+        label: "Direct Confirm Codes",
       },
       {
         key: "Health_Metric_Config",
@@ -67,6 +71,18 @@ const menuList = [
         key: "Critical_Conditions",
         label: "Critical Conditions",
       },
+      {
+        key: "History_Codes",
+        label: "History Codes",
+      },
+      {
+        key: "Down_Codes",
+        label: "Down Codes",
+      },
+      {
+        key: "RAF_CONFIG",
+        label: "RAF Config",
+      },
     ],
   },
   {
@@ -77,38 +93,41 @@ const menuList = [
 ];
 
 const Settings = () => {
-  const [activePage, setActivePage] = useState("Chat_Audit_Config");
+  const [activePage, setActivePage] = useState("File_Processing_Config");
   const handleMenuClick = (e) => {
     setActivePage(e.key);
   };
-
   return (
     <div>
       <HeaderFile />
       <div className={Style.headerContainer}>
         <div className={`${Style.title} mb-2`}>Settings</div>
+        <div style={{minHeight: "78vh"}}>
         <Card>
           <div className="d-flex py-4">
-            <div style={{ width: "20%" }}>
-              <Layout style={{ background: "#fff" }}>
-                <Sider width={250} style={{ background: "#fff" }}>
+            <div>
+              <Layout>
+                <Sider width={250} >
+                  <div className={Style.menuLists}>
                   <Menu
                     mode="inline"
-                    defaultSelectedKeys={["Chat_Audit_Config"]}
+                    defaultSelectedKeys={["File_Processing_Config"]}
                     defaultOpenKeys={["Configuration"]}
                     items={menuList}
                     onClick={handleMenuClick}
-                  />
+                  /></div>
                 </Sider>
               </Layout>
             </div>
             <div
               className="border rounded-3 mx-4 border-bottom-2"
-              style={{ height: "100%", width: "100%" }}
+              style={{minHeight: "74vh", width: "100%" }}
             >
               {activePage == "Chat_Audit_Config" && <ChatAuditConfig />}
               {activePage == "Flag_Config" && <FlagConfig />}
-              {activePage == "File_Processing_Config" && <FileProcessingConfig />}
+              {activePage == "File_Processing_Config" && (
+                <FileProcessingConfig />
+              )}
 
               {activePage == "Medical_Coding" && <MedicalCoding />}
               {activePage == "Insulin_Medications" && <Insulin />}
@@ -116,11 +135,14 @@ const Settings = () => {
               {activePage == "Health_Metric_Config" && <HealthMetricConfig />}
               {activePage == "Comorbid_Conditions" && <ComorbidConditions />}
               {activePage == "Critical_Conditions" && <CriticalConditions />}
-
+              {activePage == "RAF_CONFIG" && <RafConfig />}
+              {activePage == "History_Codes" && <HistoryCodes />}
+              {activePage == "Down_Codes" && <DownCodes />}
+              {activePage == "Direct_Confirm_Codes" && <DirectConfirmCodes />}
               {activePage == "EMR-FHIR" && <EmrFhir />}
             </div>
           </div>
-        </Card>
+        </Card></div>
       </div>
     </div>
   );

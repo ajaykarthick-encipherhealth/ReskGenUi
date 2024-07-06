@@ -9235,23 +9235,28 @@ tr>td{
   height: 2.813rem !important;
 }
 
-.custom-react-select1 .ant-select{
-  width:100% !important;
+.custom-react-select1 .ant-select {
+  width: 100% !important;
 }
-.custom-react-select1 .ant-select .ant-select-selector{
+.custom-react-select1 .ant-select .ant-select-selector {
   height: 2.7rem !important;
-  border:none !important;
-  width:100% !important;
+  border: none !important;
+  width: 100% !important;
   box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.08);
   border-radius: 10px;
-
 }
-.custom-react-select1 .ant-select-focused:where(.css-dev-only-do-not-override-3rel02).ant-select-outlined:not(.ant-select-disabled):not(.ant-select-customize-input):not(.ant-pagination-size-changer) .ant-select-selector{
-  border-color:red !important;
+.custom-react-select1
+  .ant-select-focused:where(
+    .css-dev-only-do-not-override-3rel02
+  ).ant-select-outlined:not(.ant-select-disabled):not(
+    .ant-select-customize-input
+  ):not(.ant-pagination-size-changer)
+  .ant-select-selector {
+  border-color: red !important;
 }
 
-.ant-select-outlined{
-  border:none !important;
+.ant-select-outlined {
+  border: none !important;
 }
 .btn {
   height: 2.813rem !important;
@@ -14458,7 +14463,7 @@ input::-webkit-inner-spin-button {
 }
 
 .dateRangeSize .ant-picker .ant-picker-input input {
-  font-size: 10px !important;
+  font-size: 13px !important;
 }
 
 .visitdata-modalCentent .ant-modal-content {
@@ -14779,3 +14784,159 @@ input::-webkit-inner-spin-button {
   border-color: rgb(36, 21, 113) !important;
   background: rgb(36, 21, 113) !important;
 }
+.tenantSelector .ant-select-outlined {
+  width: 100%;
+  height: 48px !important;
+}
+.tenantSelector .ant-select-selector {
+  width: 100%;
+  height: 48px !important;
+  border: none !important;
+  border-radius: 0px 10px 10px 0px !important;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 0px 10px !important;
+}
+.speedometerChart > div:nth-child(2) {
+  height: 220px !important;
+}
+/* .speedometerChart >div:nth-child(2) > div:nth-child(1)>canvas{
+  width:460px !important;
+  height:270px !important;
+  left:-80px !important;
+  top:-20px !important;
+} */
+
+.revenueChart {
+  height: 220px !important;
+}
+/* .revenueChart >div:nth-child(2)> div> canvas{
+  height:280px !important;
+  width:810px !important;
+  top:-30px !important;
+  left:-50px !important;
+} */
+
+@media only screen and (max-width: 1200px) {
+  .speedometerChart > div:nth-child(2) > div:nth-child(1) > canvas {
+    /* border:1px solid red !important; */
+    width: 100% !important;
+    height: 270px !important;
+    left: -80px !important;
+    top: 0px !important;
+  }
+  .revenueChart > div:nth-child(2) > div > canvas {
+    height: 280px !important;
+    width: 100% !important;
+    top: -35px !important;
+    left: -50px !important;
+  }
+  .remianingLineGraph > div:nth-child(2) > div:nth-child(1) > canvas {
+    height: 380px !important;
+    top: -35px !important;
+  }
+  .remianingAreaGraph > div:nth-child(2) > div:nth-child(1) > canvas {
+    height: 305px !important;
+    top: -35px !important;
+  }
+}
+@media only screen and (min-width: 600px) {
+  .speedometerChart > div:nth-child(2) > div:nth-child(1) > canvas {
+    width: 100% !important;
+    height: 100% !important;
+    left: 0px !important;
+    top: 0px !important;
+  }
+  .revenueChart > div:nth-child(2) > div > canvas {
+    height: 280px !important;
+    width: 100% !important;
+    top: -35px !important;
+    left: -30px !important;
+  }
+  .remianingLineGraph > div:nth-child(2) > div:nth-child(1) > canvas {
+    height: 380px !important;
+    top: -35px !important;
+  }
+  .remianingAreaGraph > div:nth-child(2) > div:nth-child(1) > canvas {
+    height: 300px !important;
+    top: -35px !important;
+  }
+}
+.tenatTable {
+  width: 100%;
+  margin:20px 0px !important;
+  border-collapse: collapse;
+}
+
+.tenatTable thead {
+  background-color: #f3f3f3; /* Or any color you prefer */
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  border-radius: 20px !important;
+}
+
+.tenatTable tbody {
+  display: block;
+  max-height: 400px !important;
+  overflow-y: hidden;
+}
+.tenatTable tbody:hover {
+  overflow-y: scroll;
+}
+
+.tenatTable tbody::-webkit-scrollbar {
+  width: 4px;
+}
+
+.tenatTable tbody::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+}
+
+.tenatTable thead, .tenatTable tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed; /* Fix table layout to ensure table structure remains intact */
+}
+
+.tenatTable > thead >tr{
+  height: 43px !important;
+  border-radius: 10px !important;
+  background-color: #CEE2FD !important;
+  font-weight: 700;
+  font-size: 16px;
+}
+.tenatTable > tbody > tr {
+  height: 43px !important;
+  border-bottom: 1px solid #C7C7C7;
+}
+.tenatTable .midRow{
+text-align: start;
+}
+/* @media only screen and (min-width: 1200px) {
+.tenantPie >div >div>canvas{
+  border:1px solid red;
+  position: absolute;
+  left: -26px !important;
+  top: -17px !important;
+  width: 180px !important;
+  height: 218px !important;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  padding: 0px;
+  margin: 0px;
+  border-width: 0px;
+}
+}
+@media only screen and (min-width: 600px) {
+  .tenantPie >div >div>canvas{
+    position: absolute;
+    left: -10px !important;
+    top: 0px !important;
+    width: 100% !important;
+    height: 200px !important;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    padding: 0px;
+    margin: 0px;
+    border-width: 0px;
+  }
+} */
