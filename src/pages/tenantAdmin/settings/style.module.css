@@ -52,6 +52,10 @@
   cursor: pointer;
 }
 
+.menuLists > ul {
+  border: none !important;
+}
+
 .selector {
   width: 150px !important;
   margin-left: 5px !important;

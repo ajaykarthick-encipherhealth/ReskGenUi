@@ -1,0 +1,76 @@
+.headerContainer {
+  margin: 100px 30px 0;
+}
+.title {
+  font-family: sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 25px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.heading {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.subHeading {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #8c9097;
+}
+
+.flagDot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin: 0 5px;
+}
+
+.flagDots {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  margin: 0 5px;
+}
+
+.btnColor {
+  background-color: #043069;
+  color: #fff;
+}
+
+.connect {
+  cursor: pointer;
+}
+
+.selector {
+  width: 150px !important;
+  margin-left: 5px !important;
+  height: 42px !important;
+  box-shadow: none !important;
+  border-radius: 10px !important;
+}
+.selector2 {
+  width: 200px !important;
+  margin-left: 5px !important;
+  height: 45px !important;
+  box-shadow: none !important;
+  border-radius: 10px !important;
+}
+.picker {
+  width: 150px !important;
+  margin-left: 5px !important;
+  height: 42px !important;
+  box-shadow: none !important;
+  border-radius: 10px !important;
+  border: 1px solid #d2d2d2 !important;
+}
