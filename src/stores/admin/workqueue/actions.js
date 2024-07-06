@@ -3,10 +3,10 @@ import * as network from "./network";
 
 export const patientsAction = createActionThunk(
   "PATIENTS_LIST",
-  network.patientsList
+  network.PatientsList
 );
 
-export const flagsAction = createActionThunk(
-  "FLAGS_LIST",
-  network.flagsList
+export const getTrackingList = createActionThunk(
+  "TRACKING",
+  network.TrackingList
 );

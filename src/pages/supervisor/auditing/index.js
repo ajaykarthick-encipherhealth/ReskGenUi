@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, connect } from "react-redux";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Paginator } from "primereact/paginator";
@@ -10,7 +10,6 @@ import Header from "../../../jsx/layouts/nav/Header";
 import PatientTable from "../table/PatientList/patientList";
 import SpinnerDots from "../../../components/spinner";
 import HeaderFilters from "../../../components/headerFilters";
-import { getWorkListFilter } from "../../../store/actions/l2Action/AuditorAction";
 import { generateOptionsList } from "../../../components/headerFilters/functions";
 import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
 import NotAudited from "../../../../src/images/trackingImages/NotAuditedTrack.png";
@@ -18,6 +17,7 @@ import AuditHold from "../../../../src/images/trackingImages/AuditHoldTrack.png"
 import ReAudit from "../../../../src/images/trackingImages/reAuditTrack.png";
 import AuditPending from "../../../../src/images/trackingImages/AuditPending.png";
 import AuditeDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
+import {actions as allActions} from '../../../stores/supervisor/auditedQueue'
 
 export function extractLatestData(notes) {
   let declinedData;
@@ -71,11 +71,11 @@ const statusOptions = [
   { label: "AUDIT DECLINED", value: "AUDIT_DECLINED" },
 ];
 
-export default function Patient() {
+const Patient=({getWorkListFilter,response,loader})=> {
   const navigate = useRouter();
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
-  const response = useSelector((state) => state.AuditWork.workListFilter);
+  // const response = useSelector((state) => state.AuditWork.workListFilter);
   const filteredList = useSelector((state) => state.auth.filterList);
   const [validated, setValidated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -121,7 +121,7 @@ export default function Patient() {
     setTenantId(tenId);
     setLocalOrgId(orgId);
     setLocalUserId(uId);
-    const datas = {
+    const data = {
       pageNo,
       computedStartDate,
       computedEndDate,
@@ -135,7 +135,7 @@ export default function Patient() {
       selCreatedBy,
     };
 
-    dispatch(getWorkListFilter(datas));
+  getWorkListFilter({data:data});
   }, [
     pageNo,
     computedStartDate,
@@ -399,6 +399,7 @@ export default function Patient() {
                           addUser={false}
                           addUserForm={addPatientFormId}
                           bullets={bullets}
+                          setPageNo={setPageNo}
                           // isNextRow={true}
                         />
                       </div>
@@ -408,7 +409,7 @@ export default function Patient() {
                       id="task-tbl_wrapper"
                       className="dataTables_wrapper no-footer"
                     >
-                      {isLoading ? (
+                      {loader ? (
                         <SpinnerDots />
                       ) : (
                         <>
@@ -425,7 +426,7 @@ export default function Patient() {
                           <div>
                             <div className="pagination-container">
                               <Paginator
-                                first={paginationFirst}
+                                first={pageNo===0?0:paginationFirst}
                                 rows={15}
                                 totalRecords={totalElements}
                                 onPageChange={onPageChange}
@@ -448,3 +449,11 @@ export default function Patient() {
     </div>
   );
 }
+
+const connector=connect((state)=>({
+  response:state.supervisor?.audited?.filteredList,
+  loader:state.supervisor?.audited?.loading,
+}),{
+  getWorkListFilter:allActions.getWorkListFilter,
+})
+export default connector(Patient);

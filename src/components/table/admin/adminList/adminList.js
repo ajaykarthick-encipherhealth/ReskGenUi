@@ -128,269 +128,263 @@ const AdminList = ({ userList, sortOrder, setSortOrder, setSort }) => {
 
   return (
     <div className={TableStyle.classContaineer}>
-      {!usersData || usersData?.loading ? (
-        <SpinnerDots />
-      ) : (
-        <table className={TableStyle.classTable}>
-          <thead className={TableStyle.classThead}>
-            <tr>
-              <th className={TableStyle.rowEmailStyle}>NAME</th>
-              <th style={{ paddingLeft: "20px" }}>EMAIL</th>
-              <th
+      <table className={TableStyle.classTable}>
+        <thead className={TableStyle.classThead}>
+          <tr>
+            <th className={TableStyle.rowEmailStyle}>NAME</th>
+            <th style={{ paddingLeft: "20px" }}>EMAIL</th>
+            <th
+              style={{
+                textAlign: "center",
+                paddingLeft: "50px",
+              }}
+            >
+              ROLE
+            </th>
+            <th
+              style={{ cursor: "pointer", textAlign: "center" }}
+              onClick={() => {
+                sortFunction(sortOrder, setSortOrder, setSort, "createdDate");
+              }}
+            >
+              DATE CREATED{" "}
+              {sortOrder === "ASC" ? (
+                <ArrowUpOutlined />
+              ) : (
+                <ArrowDownOutlined />
+              )}
+            </th>
+            <th style={{ textAlign: "center" }}>MFA</th>
+            <th style={{ textAlign: "center" }}>ACTION</th>
+            <th style={{ textAlign: "center" }}>USER STATUS</th>
+          </tr>
+        </thead>
+        <tbody>
+          {!usersData?.loading &&
+          usersData?.data?.response?.content?.length > 0 ? (
+            usersData?.data?.response?.content?.map((item, index) => (
+              <tr
+                key={index}
                 style={{
-                  textAlign: "center",
-                  paddingLeft: "50px",
+                  height: "35px",
+                  backgroundColor:
+                    item.accountStatus === true ? "" : "#0000001a",
                 }}
               >
-                ROLE
-              </th>
-              <th
-                style={{ cursor: "pointer", textAlign: "center" }}
-                onClick={() => {
-                  sortFunction(sortOrder, setSortOrder, setSort, "createdDate");
-                }}
-              >
-                DATE CREATED{" "}
-                {sortOrder === "ASC" ? (
-                  <ArrowUpOutlined />
-                ) : (
-                  <ArrowDownOutlined />
-                )}
-              </th>
-              <th style={{ textAlign: "center" }}>MFA</th>
-              <th style={{ textAlign: "center" }}>ACTION</th>
-              <th style={{ textAlign: "center" }}>USER STATUS</th>
-            </tr>
-          </thead>
-          <tbody>
-            {!usersData?.loading &&
-            usersData?.data?.response?.content?.length > 0 ? (
-              usersData?.data?.response?.content?.map((item, index) => (
-                <tr
-                  key={index}
+                <td
+                  className={TableStyle.childBorder}
                   style={{
-                    height: "35px",
+                    textAlign: "center",
                     backgroundColor:
                       item.accountStatus === true ? "" : "#0000001a",
                   }}
                 >
-                  <td
-                    className={TableStyle.childBorder}
-                    style={{
-                      textAlign: "center",
-                      backgroundColor:
-                        item.accountStatus === true ? "" : "#0000001a",
-                    }}
-                  >
-                    {item.firstName ||
-                    item.lastName ||
-                    item?.profileImageUrl ? (
-                      <div style={{ display: "flex", alignItems: "center" }}>
-                        {item.accountStatus === true ? (
-                          <span
-                            style={{
-                              marginRight: "10px",
-                              color: item.accountStatus === true ? "" : "gray",
-                            }}
-                          >
-                            {renderUserPrfoileAvatar(
-                              item.firstName,
-                              item.lastName,
-                              item?.profileImageUrl,
-                              "header"
-                            )}
-                          </span>
-                        ) : (
-                          <span
-                            style={{
-                              marginRight: "10px",
-                              color: item.accountStatus === true ? "" : "gray",
-                            }}
-                          >
-                            {renderUserPrfoileAvatarDisabled(
-                              item.firstName,
-                              item.lastName,
-                              item?.profileImageUrl,
-                              "header"
-                            )}
-                          </span>
-                        )}
+                  {item.firstName || item.lastName || item?.profileImageUrl ? (
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      {item.accountStatus === true ? (
+                        <span
+                          style={{
+                            marginRight: "10px",
+                            color: item.accountStatus === true ? "" : "gray",
+                          }}
+                        >
+                          {renderUserPrfoileAvatar(
+                            item.firstName,
+                            item.lastName,
+                            item?.profileImageUrl,
+                            "header"
+                          )}
+                        </span>
+                      ) : (
+                        <span
+                          style={{
+                            marginRight: "10px",
+                            color: item.accountStatus === true ? "" : "gray",
+                          }}
+                        >
+                          {renderUserPrfoileAvatarDisabled(
+                            item.firstName,
+                            item.lastName,
+                            item?.profileImageUrl,
+                            "header"
+                          )}
+                        </span>
+                      )}
 
+                      <span
+                        style={{
+                          color: item.accountStatus === true ? "" : "gray",
+                        }}
+                      >
+                        {item.firstName} {item.lastName}
+                      </span>
+                    </div>
+                  ) : (
+                    <div style={{ textAlign: "center" }}>---</div>
+                  )}
+                </td>
+                <td
+                  className={TableStyle.childBorder}
+                  style={{
+                    backgroundColor:
+                      item.accountStatus === true ? "" : "#0000001a",
+                  }}
+                >
+                  <span>{item?.email ? item?.email : "---"}</span>
+                </td>
+                <td
+                  className={TableStyle.childBorder}
+                  style={{
+                    backgroundColor:
+                      item.accountStatus === true ? "" : "#0000001a",
+                    // paddingLeft: "70px",
+                    textAlign: "center",
+                  }}
+                >
+                  <div className={TableStyle.rowStyle2}>
+                    {item?.role?.length > 0 ? (
+                      <>
                         <span
                           style={{
                             color: item.accountStatus === true ? "" : "gray",
                           }}
                         >
-                          {item.firstName} {item.lastName}
+                          {item?.role
+                            ?.map((data) => capitalizeFirstLetter(data))
+                            .join(",")}
                         </span>
-                      </div>
+                      </>
                     ) : (
-                      <div style={{ textAlign: "center" }}>---</div>
+                      "---"
                     )}
-                  </td>
-                  <td
-                    className={TableStyle.childBorder}
-                    style={{
-                      backgroundColor:
-                        item.accountStatus === true ? "" : "#0000001a",
-                    }}
-                  >
-                    <span>{item?.email ? item?.email : "---"}</span>
-                  </td>
-                  <td
-                    className={TableStyle.childBorder}
-                    style={{
-                      backgroundColor:
-                        item.accountStatus === true ? "" : "#0000001a",
-                      // paddingLeft: "70px",
-                      textAlign: "center",
-                    }}
-                  >
-                    <div className={TableStyle.rowStyle2}>
-                      {item?.role?.length > 0 ? (
-                        <>
-                          <span
-                            style={{
-                              color: item.accountStatus === true ? "" : "gray",
-                            }}
-                          >
-                            {item?.role
-                              ?.map((data) => capitalizeFirstLetter(data))
-                              .join(",")}
-                          </span>
-                        </>
-                      ) : (
-                        "---"
-                      )}
-                    </div>
-                  </td>
+                  </div>
+                </td>
 
-                  <td
-                    className={TableStyle.lastBorder}
+                <td
+                  className={TableStyle.lastBorder}
+                  style={{
+                    height: "40px !important",
+                    textAlign: "center",
+                    backgroundColor:
+                      item.accountStatus === true ? "" : "#0000001a",
+                  }}
+                >
+                  <span
                     style={{
-                      height: "40px !important",
-                      textAlign: "center",
-                      backgroundColor:
-                        item.accountStatus === true ? "" : "#0000001a",
+                      color: item.accountStatus === true ? "" : "gray",
                     }}
                   >
-                    <span
-                      style={{
-                        color: item.accountStatus === true ? "" : "gray",
-                      }}
-                    >
-                      {dateFormate(dayjs, item?.createdDate)}
-                    </span>
-                  </td>
+                    {dateFormate(dayjs, item?.createdDate)}
+                  </span>
+                </td>
+                <td
+                  className={TableStyle.childBorder}
+                  style={{
+                    height: "40px !important",
+                    textAlign: "center",
+                    backgroundColor:
+                      item.accountStatus === true ? "" : "#0000001a",
+                  }}
+                >
+                  <span
+                    style={{
+                      color: item.accountStatus === true ? "" : "gray",
+                    }}
+                  >
+                    {" "}
+                    {item?.mfaEnabled === false ? "Disabled" : "Enabled"}
+                  </span>
+                </td>
+                {item.accountStatus === true ? (
                   <td
                     className={TableStyle.childBorder}
                     style={{
                       height: "40px !important",
+                      cursor: "pointer",
                       textAlign: "center",
                       backgroundColor:
                         item.accountStatus === true ? "" : "#0000001a",
                     }}
                   >
-                    <span
-                      style={{
-                        color: item.accountStatus === true ? "" : "gray",
-                      }}
-                    >
-                      {" "}
-                      {item?.mfaEnabled === false ? "Disabled" : "Enabled"}
-                    </span>
-                  </td>
-                  {item.accountStatus === true ? (
-                    <td
-                      className={TableStyle.childBorder}
-                      style={{
-                        height: "40px !important",
-                        cursor: "pointer",
-                        textAlign: "center",
-                        backgroundColor:
-                          item.accountStatus === true ? "" : "#0000001a",
-                      }}
-                    >
-                      <div>
-                        {popoverVisible ? (
-                          <Popover
-                            content={() => getContent(item)}
-                            // title="Change Role"
-                            trigger="click"
-                          >
-                            <div
-                              onClick={() => {
-                                setChecked();
-                                setRowData(item);
-                                setPopoverVisible(true);
-                                setSelectedRoles(item?.role);
-                              }}
-                            >
-                              <EditButton />
-                            </div>
-                          </Popover>
-                        ) : (
+                    <div>
+                      {popoverVisible ? (
+                        <Popover
+                          content={() => getContent(item)}
+                          // title="Change Role"
+                          trigger="click"
+                        >
                           <div
                             onClick={() => {
+                              setChecked();
                               setRowData(item);
                               setPopoverVisible(true);
+                              setSelectedRoles(item?.role);
                             }}
                           >
                             <EditButton />
                           </div>
-                        )}
-                      </div>
-                    </td>
-                  ) : (
-                    <td
-                      className={TableStyle.childBorder}
-                      style={{
-                        height: "40px !important",
-                        cursor: "pointer",
-                        textAlign: "center",
-                        backgroundColor:
-                          item.accountStatus === true ? "" : "#0000001a",
-                      }}
-                    >
-                      <div>
-                        <EditButtonDisbled />
-                      </div>
-                    </td>
-                  )}
-
+                        </Popover>
+                      ) : (
+                        <div
+                          onClick={() => {
+                            setRowData(item);
+                            setPopoverVisible(true);
+                          }}
+                        >
+                          <EditButton />
+                        </div>
+                      )}
+                    </div>
+                  </td>
+                ) : (
                   <td
-                    className={
-                      usersData?.data?.response?.content?.length > 0
-                        ? TableStyle.lastBorder
-                        : TableStyle.noDataBorder
-                    }
+                    className={TableStyle.childBorder}
                     style={{
                       height: "40px !important",
+                      cursor: "pointer",
                       textAlign: "center",
                       backgroundColor:
                         item.accountStatus === true ? "" : "#0000001a",
                     }}
                   >
-                    <Switch
-                      defaultChecked={item?.accountStatus}
-                      onChange={(checked) => {
-                        onChange(item, checked);
-                        setPopoverVisible(true);
-                      }}
-                    />
+                    <div>
+                      <EditButtonDisbled />
+                    </div>
                   </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={7}>
-                  <Empty />
+                )}
+
+                <td
+                  className={
+                    usersData?.data?.response?.content?.length > 0
+                      ? TableStyle.lastBorder
+                      : TableStyle.noDataBorder
+                  }
+                  style={{
+                    height: "40px !important",
+                    textAlign: "center",
+                    backgroundColor:
+                      item.accountStatus === true ? "" : "#0000001a",
+                  }}
+                >
+                  <Switch
+                    defaultChecked={item?.accountStatus}
+                    onChange={(checked) => {
+                      onChange(item, checked);
+                      setPopoverVisible(true);
+                    }}
+                  />
                 </td>
               </tr>
-            )}
-          </tbody>
-        </table>
-      )}
+            ))
+          ) : (
+            <tr>
+              <td colSpan={7}>
+                <Empty />
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
     </div>
   );
 };

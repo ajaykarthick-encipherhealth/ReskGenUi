@@ -60,6 +60,8 @@ const OrgPieChartInfo = ({data}) => {
       },
     ],
   };
+ 
+
 
   return (
     <>

@@ -38,6 +38,15 @@ import { reducer as tenantRaf } from "../stores/tenantAdmin/default";
 import { reducer as filesCount } from "../stores/tenantAdmin/default";
 import { reducer as ComputingStatus } from "../stores/tenantAdmin/default";
 import { reducer as RafScore } from "../stores/tenantAdmin/default";
+import { reducer as patientDeatilsReducer } from "./patient/details";
+import { reducer as tenantAdminReducer } from "./tenantAdmin";
+import { reducer as webSocketReducer } from "./websocket";
+import { reducer as workFlowReducer } from "./tenantAdmin/workFlow";
+import { reducer as codifyReducer } from "./codify/dashboard";
+import { reducer as adminPatientsReducer } from "./admin/workqueue";
+import { reducer as allocatedReducer } from "./admin/patientAllocation";
+import { reducer as UsersReducer } from "./supervisor/users";
+import { reducer as AuditedReducer } from "./supervisor/auditedQueue";
 
 const reducers = combineReducers({
   // old reducers
@@ -73,11 +82,17 @@ const reducers = combineReducers({
 
   supervisor: combineReducers({
     report: updatedReportReducer,
+    users: UsersReducer,
+    audited: AuditedReducer,
   }),
   admin: combineReducers({
     report: updatedAdminReportReducer,
+    workqueue: adminPatientsReducer,
+    patientAllocate: allocatedReducer,
   }),
-  codify: combineReducers({ codify: codifyReducer }),
+  codify: combineReducers({
+    codify: codifyReducer,
+  }),
   search: searchReducer,
   physician: combineReducers({
     dashboard: physicianReducer,
@@ -92,6 +107,8 @@ const reducers = combineReducers({
     defaultFilesCounts: filesCount,
     defaultComputingStatus: ComputingStatus,
     defaultRafScore: RafScore,
+    webSocket: webSocketReducer,
+    workFlow: workFlowReducer,
   }),
 });
 

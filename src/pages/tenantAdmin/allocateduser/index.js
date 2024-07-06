@@ -27,6 +27,7 @@ import {
   generateOptionsList,
   disableFutureDate,
   renderUserPrfoile,
+  resetPageNumber,
 } from "../../../components/headerFilters/functions";
 import Selector from "../../../components/selector";
 import { getFilters } from "../../../stores/authflow/actions";
@@ -558,6 +559,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
                                   style={{ width: "40px", height: "40px" }}
                                   className={reportStyles.filterBtn}
                                   onClick={() => {
+                                    
                                     setIsPatientList(false);
                                     setAllocatedOption("");
                                   }}
@@ -580,8 +582,11 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
                                 />
                                 <InputText
                                   type="text"
-                                  onChange={(e) =>
+                                  onChange={(e) =>{
+                                    resetPageNumber(setPageNo)
+                                  
                                     getNameSearch(e.target.value)
+                                  }
                                   }
                                   value={searchString}
                                   className="form-control new-form-control"
@@ -608,6 +613,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
                                   selectDefaultValue={defaultOrgValue}
                                   setDefaultValue={setDefaultOrgValue}
                                   // isClose={true}
+                                  setPageNo={setPageNo}
                                 />
                               </div>
                             </div>
@@ -621,6 +627,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
                                   <RangePicker
                                     format="MM-DD-YYYY"
                                     onChange={(dates, dateStrings) => {
+                                      resetPageNumber(setPageNo)
                                       setDateRange(dateStrings);
                                       handleReceivedDatePicker(
                                         dates,
@@ -641,6 +648,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
                                     selectOptions={statusOption}
                                     defaultSelectValue1={""}
                                     // isClose={true}
+                                    setPageNo={setPageNo}
                                   />
                                 </div>
                               </div>
@@ -699,6 +707,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
                                     )}
                                     defaultSelectValue1={""}
                                     // isClose={true}
+                                    setPageNo={setPageNo}
                                   />
                                 </div>
                               </div>
@@ -709,6 +718,7 @@ const Patient = ({ getAllOrganizationList, organizationList }) => {
                                     setSelectedOption={setSelectedOptions}
                                     selectOptions={statusOptions}
                                     defaultSelectValue1={""}
+                                    setPageNo={setPageNo}
                                     // isClose={true}
                                   />
                                 </div>

@@ -432,7 +432,7 @@ const TeamReport = ({
       {reportListAll?.response?.response?.data?.length > 0 ? (
         <div className="pagination-container">
           <Paginator
-            first={paginationFirst}
+            first={page?.teamPageNo===0?0:paginationFirst}
             rows={8}
             totalRecords={
               ReportPatientDetails?.response?.response?.totalElements

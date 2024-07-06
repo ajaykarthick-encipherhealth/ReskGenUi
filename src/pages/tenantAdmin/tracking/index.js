@@ -15,7 +15,6 @@ import SpinnerDots from "../../../components/spinner";
 import { LoadingOutlined } from "@ant-design/icons";
 import HeaderFilters from "./headerFilters";
 import TrackingTable from "../../../components/table/tenantTable/trackingList";
-import { getTrackingList } from "../../../store/actions/adminAction/patientsActions";
 import { generateOptionsList } from "../../../components/headerFilters/functions";
 import DailyTask from "./dailytask";
 import AuditedTrack from "../../../../src/images/trackingImages/AuditedTrack.png";
@@ -29,7 +28,6 @@ import Completed from "../../../../src/images/trackingImages/CompletedTrack.png"
 import Declined from "../../../../src/images/trackingImages/DeclineTrack.png";
 import AuditedDeclineTrack from "../../../../src/images/trackingImages/AuditDeclined.png";
 import Abort from "../../../../src/images/trackingImages/Abort.png";
-
 import Image from "next/image";
 import { extractLatestData } from "../../supervisor/auditing";
 import { patientDetails } from "../../../stores/authflow/actions";
@@ -298,7 +296,7 @@ const Patient = ({
           priority: res.priority,
           processedStatus: res.processedStatus,
           processedDate: res.processedDate,
-          auditedDate:res.auditedDate,
+          auditedDate: res.auditedDate,
           createdAt: res.createdAt,
           patientAllocated: res.patientAllocated,
           allocatedByFirstName: res.allocatedByFirstName,
@@ -586,7 +584,7 @@ const Patient = ({
                 <div className="">
                   <div className="card-body p-0">
                     <div className="table-responsive active-projects task-table">
-                      <div className="tbl-caption row d-flex align-items-center">
+                      <div className="tbl-caption row d-flex ">
                         <div className="tbl-caption col-xl-10 align-items-center">
                           <HeaderFilters
                             // audioAllocatedTo
@@ -686,91 +684,11 @@ const Patient = ({
                             selector2value={auditSelAllocatedTo}
                             selectorValue={selAllocatedTo}
                             auditSelAllocatedTo={auditSelAllocatedTo}
+                            setPageNo={setPageNo}
                           />
                         </div>
                         <div className="col-xl-2">
                           <DailyTask trackChart={trackChart} />
-                          {/* <div
-                            className={`${bullets ? "col-xl-12" : "col-xl-4"}`}
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              paddingRight: "20px",
-                            }}
-                          >
-                            {bullets && (
-                              <div
-                                // className={`${bullets ? "col-xl-1" : "col-xl-4"}`}
-                                style={{
-                                  margin: "30px 0 0 10px",
-                                  cursor: "pointer",
-                                }}
-                              >
-                                <Popover
-                                  content={
-                                    <>
-                                      <Legends
-                                        bullets={bullets}
-                                        display="block"
-                                        padding="0 0px 10px 0"
-                                      />
-                                      {bullets?.length > 0 &&
-                                        bullets?.map((data) => (
-                                          <div style={{ marginBottom: "10px" }}>
-                                            <Image
-                                              src={data.src}
-                                              width={20}
-                                              height={30}
-                                            />
-                                            <span style={{ marginLeft: "5px" }}>
-                                              {data?.name}
-                                            </span>
-                                          </div>
-                                        ))}
-                                    </>
-                                  }
-                                  trigger={["click"]}
-                                  placement="bottom"
-                                >
-                                  <Image src={warning} />
-                                </Popover>
-                              </div>
-                            )}
-                            <div
-                              style={{ marginTop: "30px", width: "100px" }}
-                              className={`${bullets ? "col-xl-2" : "col-xl-4"}`}
-                              onClick={() => {
-                                setClear(true);
-                                setDueDateStart([]);
-                                setDueDateEnd([]);
-                                setAuditedStartDate([]);
-                                setAuditedEnsDate([]);
-                                setAllocatedStartDate([]);
-                                setAllocatedEndDate([]);
-                                setAuditedDueStartDate([]);
-                                setAuditedDueEndDate([]);
-                                setSearchTextValue("");
-                                setSelectedDates([]);
-                                setSelectedDates2([]);
-                                setSelectedDates3([]);
-                                setSelectedDates4([]);
-                                setSelectedDates5([]);
-                                setSelAllocatedTo("");
-                                setAuditSelAllocatedTo("");
-                                SetSelectedOption("");
-                                setAuditSelectedOption("");
-                                setSelAllocatedBy("");
-                                setSelAuditAllocatedBy("");
-                                setTrackInput("");
-                              }}
-                            >
-                              <button
-                                className={`${stylesReport.filterBtn} mx-3`}
-                              >
-                                Clear
-                              </button>
-                            </div>
-                          </div> */}
                         </div>
                       </div>
 
@@ -779,9 +697,9 @@ const Patient = ({
                         className="dataTables_wrapper no-footer"
                       >
                         {isLoading ? (
-                           <div>
-                             <SpinnerDots topHeight={"10pc"}/>
-                            </div>
+                          <div>
+                            <SpinnerDots topHeight={"10pc"} />
+                          </div>
                         ) : (
                           <>
                             <TrackingTable
@@ -799,7 +717,7 @@ const Patient = ({
                             <div>
                               <div className="pagination-container">
                                 <Paginator
-                                  first={paginationFirst}
+                                  first={pageNo===0?0:paginationFirst}
                                   rows={15}
                                   totalRecords={totalElements}
                                   onPageChange={onPageChange}
