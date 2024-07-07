@@ -14,6 +14,7 @@ const RevenueGraph = ({
   getAllHccCodes,
   getAllRafData,
   getAllRaf,
+  chartRevenData
 }) => {
   const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
     ? Object.values(getAllRaf.premiumByDateForHcc)

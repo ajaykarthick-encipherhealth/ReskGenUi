@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import ReactECharts from "echarts-for-react";
 import { connect } from "react-redux";
 import {
@@ -18,12 +18,15 @@ const RafGraph = ({
   getAllRaf,
   getAllRafScoreData,
   getAllRafScore,
+  chartRafData,
 }) => {
+  const [dateRange, setDateRange] = useState({ startDate: "", endDate: "" });
+
   useEffect(() => {
-    getAllHccCodesData();
+    getAllHccCodesData(dateRange.startDate, dateRange.endDate);
     getAllRafData();
-    getAllRafScore();
-  }, []);
+    getAllRafScore(dateRange.startDate, dateRange.endDate);
+  }, [dateRange]);
 
   const rafScoreByDateForSuggested =
     getAllRafScoreData?.rafScoreByDateForSuggested
@@ -70,20 +73,23 @@ const RafGraph = ({
       {
         type: "category",
         boundaryGap: false,
-        data: [
-          "jan",
-          "feb",
-          "mar",
-          "apr",
-          "may",
-          "jun",
-          "jul",
-          "aug",
-          "sep",
-          "oct",
-          "nov",
-          "dec",
-        ],
+        data:
+          isHcc || isCargaps
+            ? [...chartRafData.keys()]
+            : [
+                "jan",
+                "feb",
+                "mar",
+                "apr",
+                "may",
+                "jun",
+                "jul",
+                "aug",
+                "sep",
+                "oct",
+                "nov",
+                "dec",
+              ],
       },
     ],
     yAxis: [
@@ -107,11 +113,16 @@ const RafGraph = ({
         // data: rafColor ,
 
         data: isHcc
-          ? rafScoreByDateForSuggested
+          ? [...chartRafData.keys()].length != 12
+            ? [...chartRafData.values()]
+            : rafScoreByDateForSuggested
           : isCargaps
-          ? rafScoreByDateForHcc
-          : [12, 32],
+          ? [...chartRafData.keys()].length != 12
+            ? [...chartRafData.values()]
+            : rafScoreByDateForHcc
+          : [12, 32, 50],
       },
+
       {
         name: "HCC Codes",
         type: "line",
