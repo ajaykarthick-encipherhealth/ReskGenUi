@@ -35,6 +35,7 @@ const Index = ({
 }) => {
   const [activeBtn, setActiveBtn] = useState("default");
   const [dateRange, setDateRange] = useState({ startDate: "", endDate: "" });
+  const [selectedOrganization, setSelectedOrganization] = useState("");
 
   const allocatedData = [
     {
@@ -118,13 +119,25 @@ const Index = ({
       itemStyle: { color: ["#757FEF", "#805DCA", "#4361EE"][index % 3] },
     })) || [];
 
+  const handleOrganizationChange = (value) => {
+    setSelectedOrganization(value);
+  };
+
   useEffect(() => {
     getUserStatusData(dateRange.startDate, dateRange.endDate);
-    getAuditorStatusData(dateRange.startDate, dateRange.endDate);
+    getAuditorStatusData(
+      dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization
+    );
     getAllocatedStatusData(dateRange.startDate, dateRange.endDate);
-    getReviewerStatusData(dateRange.startDate, dateRange.endDate);
+    getReviewerStatusData(
+      dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization
+    );
     getOrganizationStatusData();
-  }, [dateRange]);
+  }, [dateRange, selectedOrganization]);
 
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
@@ -135,6 +148,9 @@ const Index = ({
             activeBtn={activeBtn}
             setActiveBtn={setActiveBtn}
             setDateRange={setDateRange}
+            handleOrganizationChange={handleOrganizationChange}
+            setSelectedOrganization={setSelectedOrganization}
+            selectedOrganization={selectedOrganization}
           />
           {activeBtn === "default" ? (
             <>
