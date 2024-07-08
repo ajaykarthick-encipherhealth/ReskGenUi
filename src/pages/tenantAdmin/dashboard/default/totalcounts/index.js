@@ -84,7 +84,7 @@ const index = ({ getAllFilesCount, getAllFiles }) => {
 const enhancer = connect(
   (state) => ({
     getAllFiles:
-      state?.tenantAdmin?.defaultFilesCounts?.allFilesCounts?.data?.response,
+      state?.tenantAdmin?.tenantAdmindefault?.allFilesCounts?.data?.response,
   }),
   {
     getAllFilesCount: FilesCount,

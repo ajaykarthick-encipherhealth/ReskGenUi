@@ -15,20 +15,26 @@ export async function getAllHccCodes(startDate, endDate) {
   const options = {
     method: "GET",
   };
+  const formattedStartDate = startDate ? new Date(startDate).toISOString() : "";
+  const formattedEndDate = endDate ? new Date(endDate).toISOString() : "";
+
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/totalcodes/chart`,
+    `dbservice/tenantadmin/dashboard/totalcodes/chart?startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
     options
   );
   return data;
 }
 
 //rafScore
-export async function getAllRafScore() {
+export async function getAllRafScore(startDate, endDate) {
   const options = {
     method: "GET",
   };
+  const formattedStartDate = startDate ? new Date(startDate).toISOString() : "";
+  const formattedEndDate = endDate ? new Date(endDate).toISOString() : "";
+
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/raf/score/chart`,
+    `dbservice/tenantadmin/dashboard/raf/score/chart?startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
     options
   );
   return data;
@@ -39,6 +45,7 @@ export async function getAllRaf() {
   const options = {
     method: "GET",
   };
+
   const data = await requestPortal(
     `dbservice/tenantadmin/dashboard/raf/premium/chart`,
     options
@@ -56,3 +63,27 @@ export async function getAllComputing() {
   );
   return data;
 }
+
+export async function getTop10Diseases() {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/tenantadmin/dashboard/gettophcccodes`,
+    options
+  );
+  return data;
+}
+
+export async function getTopOigCodes() {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/tenantadmin/dashboard/gettopoighcccodes`,
+    options
+  );
+  return data;
+}
+
+

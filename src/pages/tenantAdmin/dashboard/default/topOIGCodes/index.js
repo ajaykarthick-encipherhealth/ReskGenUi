@@ -1,17 +1,43 @@
-import React from 'react'
+import React from "react";
 import ReusableTable from "../../components/table";
+import { connect } from "react-redux";
+import { topOigCodes } from "../../../../../stores/tenantAdmin/default/action.js";
+import { useEffect } from "react";
 
-const index = () => {
+const index = ({ getTopOigCodesData, top0ijHccCodes }) => {
+  useEffect(() => {
+    getTopOigCodesData();
+  }, []);
   return (
     <>
       <div>
-        <span style={{fontSize:"18px",fontWeight:"600"}}>Top 10 OIG Codes</span>
-        <span style={{color:"#1679AB",fontSize:"20px",fontWeight:"600",margin:"0 0 0 10px"}}>100K</span>
+        <span style={{ fontSize: "18px", fontWeight: "600" }}>
+          Top 10 OIG Codes
+        </span>
+        <span
+          style={{
+            color: "#1679AB",
+            fontSize: "20px",
+            fontWeight: "600",
+            margin: "0 0 0 10px",
+          }}
+        >
+          100K
+        </span>
       </div>
 
-      <ReusableTable />
+      <ReusableTable items={top0ijHccCodes?.response?.topDiseaseDTOList} />
     </>
-  )
-}
+  );
+};
 
-export default index
+const enhancer = connect(
+  (state) => ({
+    top0ijHccCodes: state.tenantAdmin.defaultRafScore.allTopOigCodes.data,
+  }),
+  {
+    getTopOigCodesData: topOigCodes,
+  }
+);
+
+export default enhancer(index);

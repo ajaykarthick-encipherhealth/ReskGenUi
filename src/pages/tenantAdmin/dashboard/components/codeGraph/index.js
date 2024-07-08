@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import ReactECharts from "echarts-for-react";
 import * as echarts from "echarts";
 import { connect } from "react-redux";
@@ -22,11 +22,23 @@ const CodesGraph = ({
   getAllHccCodes,
   getAllHccCodesData,
   getAllRaf,
+  chartData,
 }) => {
+  const [dateRange, setDateRange] = useState({ startDate: "", endDate: "" });
+  const [currChartData, setCurrChartData] = useState(new Map());
+
   useEffect(() => {
-    getAllHccCodesData();
-    getAllRafData();
-  }, []);
+    setCurrChartData(new Map());
+  }, [chartData]);
+
+  useEffect(() => {
+    setCurrChartData(chartData);
+  }, [currChartData, isCargaps]);
+
+  useEffect(() => {
+    getAllHccCodesData(dateRange.startDate, dateRange.endDate);
+    getAllRafData(dateRange.startDate, dateRange.endDate);
+  }, [dateRange]);
 
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
     ? Object.values(getAllHccCodes.hccDiseaseCountMap)
@@ -36,24 +48,26 @@ const CodesGraph = ({
     getAllHccCodes?.suggestedHccDiseaseCountMap
       ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
       : [];
-
   const graphOptions = {
     xAxis: {
       type: "category",
-      data: [
-        "jan",
-        "feb",
-        "mar",
-        "apr",
-        "may",
-        "jun",
-        "jul",
-        "aug",
-        "sep",
-        "oct",
-        "nov",
-        "dec",
-      ],
+      data:
+        isHcc || isCargaps
+          ? [...currChartData.keys()]
+          : [
+              "jan",
+              "feb",
+              "mar",
+              "apr",
+              "may",
+              "jun",
+              "jul",
+              "aug",
+              "sep",
+              "oct",
+              "nov",
+              "dec",
+            ],
     },
 
     yAxis: {
@@ -80,11 +94,14 @@ const CodesGraph = ({
           : isRevenue
           ? "Revenue"
           : isTwoWaves && "Radiology",
-        data: isHcc
-          ? hccDiseaseCountValues
-          : isCargaps
-          ? suggestedHccDiseaseCountMap
-          : [12, 32, 45, 10, 20, 30, 40, 50, 60, 70, 12, 44, 56, 67, 34, 23],
+        data:
+          isHcc || isCargaps
+            ? [...chartData.keys()].length == 12
+              ? hccDiseaseCountValues
+              : [...chartData.values()]
+            : isCargaps
+            ? suggestedHccDiseaseCountMap
+            : [12, 32, 45, 10, 20, 30, 40, 50, 60, 70, 12, 44, 56, 67, 34, 23],
         type: "line",
         lineStyle: { color: borderColor },
         smooth: true,
@@ -115,9 +132,9 @@ const CodesGraph = ({
 const enhancer = connect(
   (state) => ({
     getAllHccCodes:
-      state?.tenantAdmin?.defaultHccCodes?.allHccCodes?.data?.response,
+      state?.tenantAdmin?.tenantAdmindefault?.allHccCodes?.data?.response,
     getAllRaf:
-      state?.tenantAdmin?.defaultHccCodes?.allRafCounts?.data?.response,
+      state?.tenantAdmin?.tenantAdmindefault?.allRafCounts?.data?.response,
   }),
   {
     getAllHccCodesData: HccCodes,

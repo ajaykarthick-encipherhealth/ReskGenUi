@@ -984,6 +984,7 @@ const Details = ({
                             ? `${visitStyles.visitDataMain}`
                             : `${visitStyles.visitDataMainClose}`
                         }
+                        
                       >
                         <div className={`${visitStyles.firstContainer}`}>
                           <div

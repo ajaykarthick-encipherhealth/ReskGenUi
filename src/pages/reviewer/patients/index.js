@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "react-facebook-loading/dist/react-facebook-loading.css";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
-import { DatePicker, Popover, notification } from "antd";
+import { DatePicker, Popover, Skeleton, notification } from "antd";
 import moment from "moment";
 import dayjs from "dayjs";
 import { Paginator } from "primereact/paginator";
@@ -31,9 +31,11 @@ import filter from "../../../images/svg/filter.svg";
 import { extractLatestData } from "../../supervisor/auditing";
 import InputField from "../../../components/input";
 import { patientDetails } from "../../../stores/authflow/actions";
+// import SkeletonLoading from "../../../jsx/components/skeleton/skeleton";
+import { renderSkeleton } from "../../../components/reuseableFunctions";
 
 const { RangePicker } = DatePicker;
-const Patient = ({ patientsListFilter, getpatientsListFilter,loading }) => {
+const Patient = ({ patientsListFilter, getpatientsListFilter, loading }) => {
   const dispatch = useDispatch();
   const sideMenu = useSelector((state) => state.sideMenu);
   const navigate = useRouter();
@@ -212,7 +214,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter,loading }) => {
     const resoureUrl = `dbservice/patient/filter?patientAllocated=${localUserId}&page=0&size=${pageSize}&processedStatus=${statusSelectedValue}&dueDateStart=${dueDateStart}&dueDateEnd=${dueDateEnd}&processedStart=${processedStart}&processedEnd=${processedEnd}&searchString=${searchtext}`;
     // dispatch(getpatientsListFilter(resoureUrl));
     getpatientsListFilter({ url: resoureUrl });
-    resetPageNumber(setPageNo)
+    resetPageNumber(setPageNo);
   };
 
   const addPatientFile = (data) => {
@@ -427,6 +429,19 @@ const Patient = ({ patientsListFilter, getpatientsListFilter,loading }) => {
         );
     }
   };
+  // const renderSkeleton = () => (
+  //   <div className="skeleton-table">
+  //     <div className="skeleton-header">
+  //       <Skeleton.Input style={{ width: 2000 }} active />
+  //     </div>
+
+  //     {Array.from({ length: 6 }).map((_, index) => (
+  //       <div key={index} className="skeleton-row">
+  //         <Skeleton.Input style={{ width: 2000 }} active />
+  //       </div>
+  //     ))}
+  //   </div>
+  // );
 
   const options = [{ label: "All", value: "" }, ...priorityOptions];
   return (
@@ -466,9 +481,9 @@ const Patient = ({ patientsListFilter, getpatientsListFilter,loading }) => {
                               <label>Select Status</label>
                               <div class="form-group has-search">
                                 <Select
-                                  onChange={(selectedOption) =>{
-                                    onChangeStatus(selectedOption)
-                                    resetPageNumber(setPageNo)
+                                  onChange={(selectedOption) => {
+                                    onChangeStatus(selectedOption);
+                                    resetPageNumber(setPageNo);
                                   }}
                                   options={statusOptions}
                                   className="custom-react-select"
@@ -485,10 +500,10 @@ const Patient = ({ patientsListFilter, getpatientsListFilter,loading }) => {
                               <label>Select Priority</label>
                               <div class="form-group has-search">
                                 <Select
-                                  onChange={(selectedOption) =>{
-                                    onChangePriority(selectedOption)
-                                    resetPageNumber(setPageNo)}
-                                  }
+                                  onChange={(selectedOption) => {
+                                    onChangePriority(selectedOption);
+                                    resetPageNumber(setPageNo);
+                                  }}
                                   options={options}
                                   className="custom-react-select"
                                   isSearchable={false}
@@ -508,7 +523,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter,loading }) => {
                                   format="MM-DD-YYYY"
                                   onChange={(dates, dateStrings) => {
                                     handleDatePickerChange(dateStrings);
-                                    resetPageNumber(setPageNo)
+                                    resetPageNumber(setPageNo);
                                   }}
                                   defaultValue={
                                     filteratedDashboardData
@@ -558,7 +573,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter,loading }) => {
                                       handleDatePickerChangeProcesseDate(
                                         dateStrings
                                       );
-                                      resetPageNumber(setPageNo)
+                                      resetPageNumber(setPageNo);
                                     }}
                                     disabledDate={(current) =>
                                       disableFutureDate(current)
@@ -576,7 +591,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter,loading }) => {
                         className="dataTables_wrapper no-footer"
                       >
                         {loading ? (
-                          <LoadingSpinner />
+                          renderSkeleton()
                         ) : (
                           <>
                             <PatientTable
@@ -594,7 +609,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter,loading }) => {
                             <div>
                               <div className="pagination-container">
                                 <Paginator
-                                  first={pageNo===0?0:paginationFirst}
+                                  first={pageNo === 0 ? 0 : paginationFirst}
                                   rows={15}
                                   totalRecords={totalElements}
                                   onPageChange={onPageChange}
@@ -621,7 +636,7 @@ const Patient = ({ patientsListFilter, getpatientsListFilter,loading }) => {
 const enhancer = connect(
   (state) => ({
     patientsListFilter: state?.reviewer?.workQueue?.patients,
-    loading:state?.reviewer?.workQueue?.patientsLoading
+    loading: state?.reviewer?.workQueue?.patientsLoading,
   }),
   {
     getpatientsListFilter: workqueueActions.patientsAction,

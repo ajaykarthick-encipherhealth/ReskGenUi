@@ -37,7 +37,7 @@ const HeadTitle = ({
     }
   };
 
-  const last30thDate = currentDate.subtract(30, "day");
+  const last3thDate = currentDate.subtract(2, "day");
   const lastDateWithTime = currentDate.endOf("day").toISOString();
 
   return (
@@ -127,7 +127,7 @@ const HeadTitle = ({
                 };
               } else {
                 dates = {
-                  startDate: last30thDate.toISOString(),
+                  startDate: last3thDate.toISOString(),
                   endDate: lastDateWithTime,
                   clear: true,
                 };

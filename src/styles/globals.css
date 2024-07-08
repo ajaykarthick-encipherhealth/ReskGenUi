@@ -14940,3 +14940,51 @@ text-align: start;
     border-width: 0px;
   }
 } */
+.skeleton-shadow {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+}
+.skeleton-table {
+  width: 100%;
+  padding: 16px;
+}
+
+.skeleton-header,
+.skeleton-row {
+  display: flex;
+  margin-bottom: 8px;
+}
+
+.skeleton-header {
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.skeleton-row {
+  align-items: center;
+}
+
+.skeleton-header .ant-skeleton-input,
+.skeleton-row .ant-skeleton-input {
+  margin-right: 16px;
+}
+
+.spinStyle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.carddiv {
+  margin: 16px;
+  display: flex;
+  flex-direction: row;
+}
+
+.colData {
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}

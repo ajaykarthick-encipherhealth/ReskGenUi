@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import CodesGraph from "../../components/codeGraph";
 import styles from "../../styles.module.css";
 import RafGraph from "../../components/rafGraph";
@@ -9,6 +9,7 @@ import {
   RafCounts,
   RafCountScore,
 } from "../../../../../stores/tenantAdmin/default/action.js";
+import moment from "moment";
 
 const index = ({
   getAllHccCodesData,
@@ -17,12 +18,109 @@ const index = ({
   getAllRaf,
   getAllRafScoreData,
   getAllRafScore,
+  dateRange,
 }) => {
+  const [chartData1, setChartData1] = useState(new Map());
+  const [chartRafData1, setRafChartData1] = useState(new Map());
+  const [chartRevenData1, setRevenChartData1] = useState(new Map());
+
+  const ShortMonth = [
+    "",
+    "jan",
+    "feb",
+    "mar",
+    "apr",
+    "may",
+    "jun",
+    "jul",
+    "aug",
+    "sep",
+    "oct",
+    "nov",
+    "dec",
+  ];
+
   useEffect(() => {
-    getAllHccCodesData();
-    getAllRafData();
-    getAllRafScore();
-  }, []);
+    const fetchChartData = async () => {
+      const data = await getAllHccCodesData(
+        dateRange?.startDate,
+        dateRange?.endDate
+      );
+      const records1 = data.response.suggestedHccDiseaseCountMap;
+      const datediff =
+        moment(dateRange?.endDate).diff(moment(dateRange?.startDate), "days") +
+        1;
+      const tempRecords1 = new Map();
+      if (datediff != 7 && datediff != 30) {
+        ShortMonth.slice(1).forEach((month) => {
+          tempRecords1.set(month, 0);
+        });
+      }
+
+      if ((!isNaN(datediff) && datediff == 7) || datediff == 30) {
+        for (let i = 0; i < datediff; i++) {
+          const todayDate = moment();
+          const presentDate = todayDate.subtract(i, "days");
+          const currMonth = parseInt(presentDate.format("MM"));
+          const currDay = presentDate.format("DD");
+          tempRecords1.set(ShortMonth[currMonth] + currDay, 0);
+        }
+        Object.entries(records1).map((record) => {
+          const currMonth = parseInt(moment(record[0]).format("MM"));
+          const currDay = moment(record[0]).format("DD");
+          tempRecords1.set(ShortMonth[currMonth] + currDay, record[1]);
+        });
+      }
+      console.log("dates", tempRecords1);
+      setChartData1(tempRecords1);
+    };
+    fetchChartData();
+  }, [dateRange]);
+
+  useEffect(() => {
+    const fetchChartData = async () => {
+      const data = await getAllRafScore(dateRange.startDate, dateRange.endDate);
+      const records = data.response.rafScoreByDateForSuggested;
+      const records1 = data.response.rafScoreByDateForHcc;
+
+      const datediff =
+        moment(dateRange?.endDate).diff(moment(dateRange?.startDate), "days") +
+        1;
+
+      const tempRecords = new Map();
+      const tempRecords1 = new Map();
+      if (datediff != 7 && datediff != 30) {
+        ShortMonth.slice(1).forEach((month) => {
+          tempRecords.set(month, 0);
+          tempRecords1.set(month, 0);
+        });
+      }
+
+      if ((!isNaN(datediff) && datediff == 7) || datediff == 30) {
+        for (let i = 0; i < datediff; i++) {
+          const todayDate = moment();
+          const presentDate = todayDate.subtract(i, "days");
+          const currMonth = parseInt(presentDate.format("MM"));
+          const currDay = presentDate.format("DD");
+          tempRecords.set(ShortMonth[currMonth] + currDay, 0);
+          tempRecords1.set(ShortMonth[currMonth] + currDay, 0);
+        }
+
+        Object.entries(records).map((record) => {
+          const currMonth = parseInt(moment(record[0]).format("MM"));
+          const currDay = moment(record[0]).format("DD");
+          tempRecords.set(ShortMonth[currMonth] + currDay, record[1]);
+        });
+        Object.entries(records1).map((record) => {
+          const currMonth = parseInt(moment(record[0]).format("MM"));
+          const currDay = moment(record[0]).format("DD");
+          tempRecords1.set(ShortMonth[currMonth] + currDay, record[1]);
+        });
+      }
+      setRafChartData1(tempRecords1);
+    };
+    fetchChartData();
+  }, [dateRange]);
 
   return (
     <div className="d-flex justify-content-between">
@@ -39,6 +137,7 @@ const index = ({
           gradientColor2={"#FFFDFA"}
           borderColor={"#FF9209"}
           isCargaps={true}
+          chartData={chartData1}
         />
       </div>
       <div
@@ -58,7 +157,13 @@ const index = ({
             </div>
           </div>
         </div>
-        <RafGraph rafColor={"#4AA1AB"} isCargaps={true} />
+        <RafGraph
+          rafColor={"#4AA1AB"}
+          isCargaps={true}
+          chartData={chartData1}
+          chartRafData={chartRafData1}
+          chartRevenData={chartRevenData1}
+        />
       </div>
       <div
         style={{
@@ -77,7 +182,11 @@ const index = ({
             </div>
           </div>
         </div>
-        <RevenueGraph cargapColor="#5A75F2" />
+        <RevenueGraph
+          isCargaps={true}
+          cargapColor="#5A75F2"
+          chartRevenData={chartRevenData1}
+        />
       </div>
     </div>
   );
@@ -86,11 +195,12 @@ const index = ({
 const enhancer = connect(
   (state) => ({
     getAllHccCodes:
-      state?.tenantAdmin?.defaultHccCodes?.allHccCodes?.data?.response,
+      state?.tenantAdmin?.tenantAdmindefault?.allHccCodes?.data?.response,
     getAllRaf:
-      state?.tenantAdmin?.defaultHccCodes?.allRafCounts?.data?.response,
+      state?.tenantAdmin?.tenantAdmindefault?.allRafCounts?.data?.response,
     getAllRafScoreData:
-      state?.tenantAdmin?.defaultRafScore?.allRafScore?.data?.response,
+      state?.tenantAdmin?.tenantAdmindefault?.allRafScore?.data?.response,
+
   }),
   {
     getAllHccCodesData: HccCodes,

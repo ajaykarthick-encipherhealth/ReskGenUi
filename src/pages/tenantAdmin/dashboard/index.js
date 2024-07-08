@@ -124,19 +124,27 @@ const Index = ({
   };
 
   useEffect(() => {
-      getUserStatusData(dateRange.startDate, dateRange.endDate,selectedOrganization);
-      getAuditorStatusData(
-        dateRange.startDate,
-        dateRange.endDate,
-        selectedOrganization
-      );
-      getAllocatedStatusData(dateRange.startDate, dateRange.endDate,selectedOrganization);
-      getReviewerStatusData(
-        dateRange.startDate,
-        dateRange.endDate,
-        selectedOrganization
-      );
-      getOrganizationStatusData(); 
+    getUserStatusData(
+      dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization
+    );
+    getAuditorStatusData(
+      dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization
+    );
+    getAllocatedStatusData(
+      dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization
+    );
+    getReviewerStatusData(
+      dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization
+    );
+    getOrganizationStatusData();
   }, [dateRange]);
 
   return (
@@ -157,12 +165,12 @@ const Index = ({
               <div className={`row ${styles.box}`}>
                 <div className={`col-lg-4`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <TotalCounts />
+                    <TotalCounts dateRange={dateRange} />
                   </Card>
                 </div>
                 <div className={`col`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <RafAndRevenue />
+                    <RafAndRevenue dateRange={dateRange} />
                   </Card>
                 </div>
               </div>
@@ -170,7 +178,7 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <TotalCodes />
+                    <TotalCodes dateRange={dateRange} />
                   </Card>
                 </div>
               </div>
@@ -178,7 +186,7 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <HccCodes />
+                    <HccCodes dateRange={dateRange} />
                   </Card>
                 </div>
               </div>
@@ -186,7 +194,7 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <CaregapCodes />
+                    <CaregapCodes dateRange={dateRange} />
                   </Card>
                 </div>
               </div>
@@ -282,15 +290,13 @@ const Index = ({
 };
 
 const enhancer = connect(
-  (state) => (
-    {
+  (state) => ({
     allocatedStatusData: state.tenantAdmin.workFlow.allocatedStatus.data,
     auditorStatusData: state.tenantAdmin.workFlow.auditorStatus.data,
     userStatusData: state.tenantAdmin.workFlow.userStatus.data,
     reviewerStatusData: state.tenantAdmin.workFlow.reviewerStatus.data,
     organizationStatusData: state.tenantAdmin.workFlow.organizationStatus.data,
-  }
-),
+  }),
 
   {
     getUserStatusData: dashbaordActions.userStatusAction,

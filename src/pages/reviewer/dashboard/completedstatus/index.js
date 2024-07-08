@@ -12,7 +12,7 @@ import { connect } from "react-redux";
 import YearPicker from "../../../../components/yearpicker";
 import { actions as dashbaordActions } from "../../../../stores/reviewer/dashboard";
 import spinSTYles from "../../../../styles/auth.module.css";
-import { Empty, Spin } from "antd";
+import { Col, Empty, Row, Skeleton, Spin } from "antd";
 
 const CompletedStatus = ({
   getCOmpletedScore,
@@ -147,7 +147,22 @@ const CompletedStatus = ({
       name: "Allocated",
     },
   ];
-
+  const renderCardSkeleton = () => (
+    <Row style={{ display: "flex", justifyContent: "space-between" }}>
+      {Array.from({ length: 1 }).map((_, index) => (
+        <Row>
+          <Col span={12}>
+            <div className={styles.container}>
+              <Skeleton.Input
+                style={{ width: "250px", height: "250px" }}
+                active
+              />
+            </div>
+          </Col>
+        </Row>
+      ))}
+    </Row>
+  );
   return (
     <>
       <HeadTitle header="Productivity Status" />
@@ -180,7 +195,7 @@ const CompletedStatus = ({
 
           {completedScoreLoading && (
             <div className={spinSTYles.spinStyle}>
-              <Spin loading={completedScoreLoading} />
+       <Skeleton active paragraph={{ rows: 4 }} />
             </div>
           )}
 

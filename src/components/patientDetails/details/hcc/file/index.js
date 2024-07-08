@@ -83,7 +83,6 @@ const File = ({
   const [allMeatList, setAllMeatList] = useState([]);
   const [deletedMeatList, setDeletedMeatList] = useState([]);
 
-
   useEffect(() => {
     var orgId = localStorage.getItem("orgId");
     var tenId = localStorage.getItem("tenantId");
@@ -213,7 +212,7 @@ const File = ({
       >
         <div className="my-post-content row pt-3">
           {!isFileFormShow ? (
-            <div className="col-xl-3">
+            <div className="col-xl-3" style={{ height: "70vh" }}>
               <Droppable droppableId={"HCC"} key={"HCC"}>
                 {(provided) => {
                   return (
@@ -234,13 +233,11 @@ const File = ({
                         </span>
                         <div className="d-flex justify-content-center">
                           <span className={`${visitStyles.hcc_title_badge}`}>
-                            {
-                              newValidDiseaseList.length
-                            }
+                            {newValidDiseaseList.length}
                           </span>
                         </div>
                       </div>
-                      <div className={visitStyles.container}>
+                      <div className={visitStyles.HccContainer}>
                         <div className={visitStyles.hccStickey_head}>
                           <HccCards
                             list={newValidDiseaseList}
@@ -350,7 +347,7 @@ const File = ({
             </div>
           ) : null}
           {!isFileFormShow ? (
-            <div className="col-xl-3">
+            <div className="col-xl-3" style={{ height: "70vh" }}>
               <Droppable droppableId={"SUGGESTED"} key={"SUGGESTED"}>
                 {(provided) => {
                   return (
@@ -369,9 +366,7 @@ const File = ({
                           <span
                             className={`${visitStyles.suggested_title_badge}`}
                           >
-                            {
-                              suggestedHccList.length
-                            }
+                            {suggestedHccList.length}
                           </span>
                         </div>
                       </div>
@@ -416,75 +411,76 @@ const File = ({
                 }}
               </Droppable>
 
-              <div className={visitStyles.deleteFileContainer}>
-                <Droppable droppableId={"DELETED"} key={"DELETED"}>
-                  {(provided) => {
-                    return (
+              {/* <div className={visitStyles.deleteFileContainer}> */}
+              <Droppable droppableId={"DELETED"} key={"DELETED"}>
+                {(provided) => {
+                  return (
+                    <div
+                      className="timeline"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      style={{ marginTop: "10px" }}
+                    >
                       <div
-                        className="timeline"
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
+                        className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
                       >
-                        <div
-                          className={`valid-text d-flex justify-content-sm-between ${visitStyles.deleted_title_card}`}
-                        >
-                          <span className={`${visitStyles.deleted_title_name}`}>
-                            DELETED CODES
+                        <span className={`${visitStyles.deleted_title_name}`}>
+                          DELETED CODES
+                        </span>
+                        <div className="d-flex justify-content-center">
+                          <span
+                            className={`${visitStyles.deleted_title_badge}`}
+                          >
+                            {
+                              deletedHccList.filter(
+                                (item) => item.isComboCode != true
+                              ).length
+                            }
                           </span>
-                          <div className="d-flex justify-content-center">
-                            <span
-                              className={`${visitStyles.deleted_title_badge}`}
-                            >
-                              {
-                                deletedHccList.filter(
-                                  (item) => item.isComboCode != true
-                                ).length
-                              }
-                            </span>
-                          </div>
-                        </div>
-                        <div className={visitStyles.deletedContainer}>
-                          <div className={visitStyles.hccStickey_head}>
-                            <HccCards
-                              list={deletedHccList}
-                              hccVersionDetails={hccVersionDetails}
-                              captureSectionMatching={captureSectionMatching}
-                              encounterDateMatching={encounterDateMatching}
-                              meatCriteriaList={deletedMeatList}
-                              onchangeValid={onchangeValid}
-                              getValidHccDetails={getValidHccDetails}
-                              setFormValues={setFormValues}
-                              setIsEditHccForm={setIsEditHccForm}
-                              setFormEditPlace={setFormEditPlace}
-                              okText="Move to Suggested"
-                              cancelText="Move to HCC"
-                              isDeletedCodes={true}
-                              setOpens={setOpens}
-                              setCombiTree={setCombiTree}
-                              setActiveTabHead={setActiveTabHead}
-                              setActiveMeatTitle={setActiveMeatTitle}
-                              setActiveComboTree={setActiveComboTree}
-                              setSearch={setSearch}
-                              setFileLoading={setFileLoading}
-                              setIsModalOpenLab={setIsModalOpenLab}
-                              setIsModalOpenRadiology={setIsModalOpenRadiology}
-                              patientDocumentResult={patientDocumentResult}
-                              setFileModalHeader={setFileModalHeader}
-                              setConfirmNotesModalValid={
-                                setConfirmNotesModalValid
-                              }
-                              setIsValidAction={setIsValidAction}
-                              cardTitle="DELETED"
-                              provided={provided}
-                              remove
-                            />
-                          </div>
                         </div>
                       </div>
-                    );
-                  }}
-                </Droppable>
-              </div>
+                      <div className={visitStyles.deletedContainer}>
+                        <div className={visitStyles.hccStickey_head}>
+                          <HccCards
+                            list={deletedHccList}
+                            hccVersionDetails={hccVersionDetails}
+                            captureSectionMatching={captureSectionMatching}
+                            encounterDateMatching={encounterDateMatching}
+                            meatCriteriaList={deletedMeatList}
+                            onchangeValid={onchangeValid}
+                            getValidHccDetails={getValidHccDetails}
+                            setFormValues={setFormValues}
+                            setIsEditHccForm={setIsEditHccForm}
+                            setFormEditPlace={setFormEditPlace}
+                            okText="Move to Suggested"
+                            cancelText="Move to HCC"
+                            isDeletedCodes={true}
+                            setOpens={setOpens}
+                            setCombiTree={setCombiTree}
+                            setActiveTabHead={setActiveTabHead}
+                            setActiveMeatTitle={setActiveMeatTitle}
+                            setActiveComboTree={setActiveComboTree}
+                            setSearch={setSearch}
+                            setFileLoading={setFileLoading}
+                            setIsModalOpenLab={setIsModalOpenLab}
+                            setIsModalOpenRadiology={setIsModalOpenRadiology}
+                            patientDocumentResult={patientDocumentResult}
+                            setFileModalHeader={setFileModalHeader}
+                            setConfirmNotesModalValid={
+                              setConfirmNotesModalValid
+                            }
+                            setIsValidAction={setIsValidAction}
+                            cardTitle="DELETED"
+                            provided={provided}
+                            remove
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }}
+              </Droppable>
+              {/* </div> */}
             </div>
           ) : null}
         </div>
@@ -560,7 +556,7 @@ const File = ({
         open={isEditHccForm}
         width={"80vw"}
       >
-        <div className="row p-4" style={{overflow: "hidden", height: '100%'}}>
+        <div className="row p-4" style={{ overflow: "hidden", height: "100%" }}>
           <div className="col-8">
             {hccFileDetails?.loading != true ? (
               <>
@@ -571,14 +567,17 @@ const File = ({
                     pageNumber={search?.page ? search?.page : 1}
                     headers={search?.headers}
                     height="100vh"
-                    heightFrame='900'
+                    heightFrame="900"
                   />
                 )}
               </>
             ) : null}
           </div>
           <div className="col-4">
-            <div className="px-4" style={{height: "90vh", overflowY: "scroll" }}>
+            <div
+              className="px-4"
+              style={{ height: "90vh", overflowY: "scroll" }}
+            >
               <ManuallyAdd
                 handleCloseModal={handleCloseModal}
                 setIsFileFormShow={setIsFileFormShow}
