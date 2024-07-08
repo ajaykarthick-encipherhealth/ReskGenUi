@@ -38,6 +38,7 @@ const CodesGraph = ({
     setCurrChartData(chartData);
   }, [currChartData, isCargaps]);
 
+
   useEffect(() => {
     getAllHccCodesData(dateRange.startDate, dateRange.endDate);
     getAllRafScore();
