@@ -1,0 +1,128 @@
+.container {
+  margin: 15px 0px 15px -63px;
+}
+.titleCard {
+  width: 117px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(#cdfbfe, #f0cefd);
+  border-radius: 5px;
+  box-shadow: 0px 2px 6px 0px #00000029;
+}
+.detailsCard {
+  padding: 10px;
+  height: 100px;
+  border-radius: 5px !important;
+  border: 2px solid #9d0ad2;
+  box-shadow: 0px 2px 6px 0px #00000029;
+}
+
+.dob_icon {
+  margin-right: 6px;
+}
+
+.dob_icon svg {
+  width: 18px;
+  padding: 0 !important;
+  margin-right: -8px;
+}
+
+.detailsCard label {
+  padding-left: 5px;
+  font-weight: 500;
+  font-size: 13px !important;
+}
+.detailsCard h6 {
+  font-weight: 500 !important;
+  font-size: 14px !important;
+}
+
+.flagCard1 {
+  width: 250px;
+  height: 100px;
+  padding-top: 20px;
+  background: #ecfef5;
+  border-radius: 5px;
+  text-align: center;
+  box-shadow: 0px 2px 6px 0px #00000029;
+  margin-right: 25px;
+}
+.flagCard2 {
+  width: 110px;
+  height: 100px;
+  padding-top: 20px;
+  background: #ebf3fe;
+  border-radius: 5px;
+  text-align: center;
+  box-shadow: 0px 2px 6px 0px #00000029;
+  margin-right: 25px;
+}
+.flagCard3 {
+  width: 110px;
+  height: 100px;
+  padding-top: 20px;
+  background: #ebf3fe;
+  border-radius: 5px;
+  text-align: center;
+  box-shadow: 0px 2px 6px 0px #00000029;
+}
+
+.codesCard {
+  height: 100px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 6px 0px #00000029;
+  border: 2px solid #9d0ad2;
+  display: grid;
+  justify-content: center;
+  align-items: baseline;
+}
+.codesBottomCards {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.codes1 {
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ebf3fe;
+  border-radius: 5px;
+  text-align: center;
+  box-shadow: 0px 2px 6px 0px #00000029;
+  margin-right: 10px;
+  height: 40px;
+}
+.codes2 {
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ebf3fe;
+  border-radius: 5px;
+  text-align: center;
+  box-shadow: 0px 2px 6px 0px #00000029;
+  margin-right: 10px;
+  height: 40px;
+}
+.codes3 {
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ebf3fe;
+  border-radius: 5px;
+  text-align: center;
+  box-shadow: 0px 2px 6px 0px #00000029;
+  margin-right: 10px;
+  height: 40px;
+}
+
+.codesCard h5,
+.flagCard2 h5,
+.flagCard3 h5,
+.flagCard1 h5 {
+  font-size: 15px !important;
+}
