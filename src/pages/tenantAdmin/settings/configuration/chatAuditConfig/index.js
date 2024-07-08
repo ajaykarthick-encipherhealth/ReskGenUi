@@ -4,7 +4,7 @@ import { Button, DatePicker, Form, Input, InputNumber, Select } from "antd";
 import { disablePastDate } from "../../../../../components/headerFilters/functions";
 import RegularButton from "../../../../../components/button";
 import { connect, useSelector } from "react-redux";
-import { actions as configurationActions } from "../../../../../stores/tenantAdmin";
+import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
 import ButtonStyles from "../../../../../components/button/style.module.css";
 const ChatAuditConfig = ({ getConfigurationDetails, updateSettings,data }) => {
   const [form] = Form.useForm();
@@ -146,10 +146,10 @@ const ChatAuditConfig = ({ getConfigurationDetails, updateSettings,data }) => {
 };
 
 const enhancer = connect((state) => ({
-  data: state?.tenantAdmin?.configurationSettings?.data,
+  data: state?.tenantAdmin?.settings?.configurationSettings?.data,
 }), {
-  getConfigurationDetails: configurationActions.configurationSettingsAction,
-  updateSettings: configurationActions.updateSettingsAction,
+  getConfigurationDetails: settingActions.configurationSettingsAction,
+  updateSettings: settingActions.updateSettingsAction,
 });
 
 export default enhancer(ChatAuditConfig);

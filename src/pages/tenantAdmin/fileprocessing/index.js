@@ -15,7 +15,7 @@ import { patientDetails } from "../../../stores/authflow/actions";
 import FileProcessingTable from "../../../components/table/tenantTable/FileProcessing/FileProcessing";
 import HeaderFilters from "../../../components/headerFilters";
 import { connect } from "react-redux";
-import { actions as tenantAdminAction } from "../../../stores/tenantAdmin";
+import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/users";
 
 const Patient= ({ getAllOrganizationList, organizationList }) => {
   const [validated, setValidated] = useState(false);
@@ -415,7 +415,7 @@ const Patient= ({ getAllOrganizationList, organizationList }) => {
 
 const enhancer = connect(
   (state) => ({
-    organizationList: state?.tenantAdmin?.allOrganization?.data,
+    organizationList: state?.tenantAdmin?.users?.allOrganization?.data,
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,

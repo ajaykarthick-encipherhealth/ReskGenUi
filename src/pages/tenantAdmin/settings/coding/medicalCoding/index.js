@@ -3,8 +3,7 @@ import Style from "../../style.module.css";
 import RegularButton from "../../../../../components/button";
 import { Form, Switch } from "antd";
 import { connect, useSelector } from "react-redux";
-import { actions as codingGuidelinesActions } from "../../../../../stores/tenantAdmin";
-import { actions as configurationActions } from "../../../../../stores/tenantAdmin";
+import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
 
 const MedicalCoding = ({ getCodingDetails, updateSettings,list }) => {
   const [form] = Form.useForm();
@@ -163,9 +162,9 @@ const MedicalCoding = ({ getCodingDetails, updateSettings,list }) => {
   );
 };
 const enhancer = connect((state) => ({
-  list: state?.tenantAdmin?.codingGuidelines?.data,
+  list: state?.tenantAdmin?.settings?.codingGuidelines?.data,
 }), {
-  getCodingDetails: codingGuidelinesActions.codingGuidelinesAction,
-  updateSettings: configurationActions.updateSettingsAction,
+  getCodingDetails: settingActions.codingGuidelinesAction,
+  updateSettings: settingActions.updateSettingsAction,
 });
 export default enhancer(MedicalCoding);

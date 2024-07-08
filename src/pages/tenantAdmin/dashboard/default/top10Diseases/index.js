@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import ReusableTable from "../../components/table";
 import { connect } from "react-redux";
-import { top10Diseases } from "../../../../../stores/tenantAdmin/default/action.js";
+import { top10Diseases } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 
 const index = ({ top10DiseasesData, getTop10DiseasesData }) => {
   useEffect(() => {
@@ -21,7 +21,7 @@ const index = ({ top10DiseasesData, getTop10DiseasesData }) => {
 
 const enhancer = connect(
   (state) => ({
-    top10DiseasesData: state?.tenantAdmin?.tenantAdmindefault?.allTop10Diseases?.data,
+    top10DiseasesData: state?.tenantAdmin?.dashboard?.default?.allTop10Diseases?.data,
   }),
   {
     getTop10DiseasesData: top10Diseases,

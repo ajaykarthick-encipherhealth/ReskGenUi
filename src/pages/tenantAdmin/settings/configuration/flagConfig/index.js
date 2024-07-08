@@ -3,7 +3,7 @@ import Style from "./../../style.module.css";
 import RegularButton from "../../../../../components/button";
 import { Form } from "antd";
 import { connect, useSelector } from "react-redux";
-import { actions as configurationActions } from "../../../../../stores/tenantAdmin";
+import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
 
 const FlagConfig = ({ getFlagConfigDetails, updateSettings, data }) => {
   const [form] = Form.useForm();
@@ -113,10 +113,10 @@ const FlagConfig = ({ getFlagConfigDetails, updateSettings, data }) => {
 };
 
 const enhancer = connect((state) => ({
-  data: state?.tenantAdmin?.configurationSettings?.data,
+  data: state?.tenantAdmin?.settings?.configurationSettings?.data,
 }), {
-  getFlagConfigDetails: configurationActions.configurationSettingsAction,
-  updateSettings: configurationActions.updateSettingsAction,
+  getFlagConfigDetails: settingActions.configurationSettingsAction,
+  updateSettings: settingActions.updateSettingsAction,
 });
 
 export default enhancer(FlagConfig);

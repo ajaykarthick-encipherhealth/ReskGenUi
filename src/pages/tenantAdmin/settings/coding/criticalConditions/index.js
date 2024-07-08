@@ -5,8 +5,7 @@ import { Button, Checkbox, Divider, Switch } from "antd";
 import ModalPop from "../../components/modal";
 import CommonModalContent from "../../components/commonModalContent";
 import { connect } from "react-redux";
-import { actions as codingGuidelinesActions } from "../../../../../stores/tenantAdmin";
-import { actions as configurationActions } from "../../../../../stores/tenantAdmin";
+import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
 import { useSelector } from "react-redux";
 import FileUpload from "../../../../../components/table/tenantSettingsTable/fileUpload";
 import { PlusOutlined } from "@ant-design/icons";
@@ -148,10 +147,10 @@ const CriticalConditions = ({ updateSettings, getCodingDetails,list }) => {
   );
 };
 const enhancer = connect((state) => ({
-  list : state?.tenantAdmin?.codingGuidelines?.data
+  list : state?.tenantAdmin?.settings?.codingGuidelines?.data
 }), {
-  updateSettings: configurationActions.updateSettingsAction,
-  getCodingDetails: codingGuidelinesActions.codingGuidelinesAction,
+  updateSettings: settingActions.updateSettingsAction,
+  getCodingDetails: settingActions.codingGuidelinesAction,
 });
 
 export default enhancer(CriticalConditions);

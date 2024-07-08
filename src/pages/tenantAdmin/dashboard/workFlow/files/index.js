@@ -11,7 +11,7 @@ import { top10Diseases } from "../../../../../stores/tenantAdmin/default/action.
 import {
   ComputingStatus,
   computingTileStatus,
-} from "../../../../../stores/tenantAdmin/default/action.js";
+} from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 
 const Files = ({
   getAllComputing,
@@ -185,10 +185,10 @@ const Files = ({
 const enhancer = connect(
   (state) => ({
     getAllComputingStatus:
-      state?.tenantAdmin?.tenantAdmindefault?.allComputingStatus?.data
+      state?.tenantAdmin?.dashboard?.workflow?.allComputingStatus?.data
         ?.response,
     getAllComputingTile:
-      state?.tenantAdmin?.tenantAdmindefault?.allComputingTileStatus?.data
+      state?.tenantAdmin?.dashboard?.workflow?.allComputingTileStatus?.data
         ?.response,
     top10DiseasesData:
       state?.tenantAdmin?.tenantAdmindefault?.allTop10Diseases?.data?.response,
