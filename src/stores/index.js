@@ -110,6 +110,7 @@ const reducers = combineReducers({
     notification: tenantAminNotificationReducer,
     settings:tenantAminSettingsReducer
   }),
+  
 });
 
 const middlewares = [thunkMiddleware, promiseMiddleware];

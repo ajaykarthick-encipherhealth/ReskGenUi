@@ -1,15 +1,14 @@
 import React from "react";
 import ReusableTable from "../../components/table";
 import { connect } from "react-redux";
-import { topOigCodes } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
+import { actions as allActions } from "../../../../../stores/tenantAdmin/default";
 import { useEffect } from "react";
 
 const index = ({ getTopOigCodesData, top0ijHccCodes }) => {
-
-
   useEffect(() => {
     getTopOigCodesData();
   }, []);
+
   return (
     <>
       <div>
@@ -24,21 +23,22 @@ const index = ({ getTopOigCodesData, top0ijHccCodes }) => {
             margin: "0 0 0 10px",
           }}
         >
-         {top0ijHccCodes?.response?.totalCount}
+          {top0ijHccCodes?.response?.totalCount}
         </span>
       </div>
 
-      <ReusableTable items={top0ijHccCodes?.response?.topDiseaseDTOList?.length ?top0ijHccCodes?.response?.topDiseaseDTOList:[]} key={"top10"}/>
+      <ReusableTable items={top0ijHccCodes?.response?.topDiseaseDTOList} />
     </>
   );
 };
 
 const enhancer = connect(
   (state) => ({
-    top0ijHccCodes: state?.tenantAdmin?.dashboard?.default?.allTopOigCodes?.data,
- }),
+    top0ijHccCodes:
+      state?.tenantAdmin?.tenantAdmindefault?.allTopOigCodes?.data,
+  }),
   {
-    getTopOigCodesData: topOigCodes,
+    getTopOigCodesData: allActions?.topOigCodes,
   }
 );
 
