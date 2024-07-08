@@ -9,6 +9,7 @@ import {
   renderUserPrfoileAvatar,
   sortFunction,
 } from "../../../headerFilters/functions";
+import SpinnerDots from "../../../spinner";
 
 function TrackingTable({
   patinetListAll,
@@ -18,12 +19,12 @@ function TrackingTable({
   sortOrder,
   setSortOrder,
   setSort,
-  page
+  page,
+  loader,
 }) {
   const [sortAuditOrder, setSortAuditOrder] = useState("DESC");
   const [sortDueOrder, setSortDueOrder] = useState("DESC");
   const [sortAuditDueOrder, setSortAuditDueOrder] = useState("DESC");
-  const [detailsContent, setDetailsContent] = useState(patinetListAll);
   const dispatch = useDispatch();
   const navigate = useRouter();
 
@@ -34,13 +35,17 @@ function TrackingTable({
       const { signal } = controller;
       controller.abort();
       localStorage.setItem("patientId", data?.patientId);
-      var role = localStorage.getItem("role")
-      if(role == "tenant_admin"){
-        navigate.push({ pathname: "/tenantAdmin/patients/details",query:{...page, isTenantAdminTracking: true}});
-
-      }else{
-        navigate.push({pathname: "/admin/patients/details", query:{...page, isAdminTracking: true}})
-
+      var role = localStorage.getItem("role");
+      if (role == "tenant_admin") {
+        navigate.push({
+          pathname: "/tenantAdmin/patients/details",
+          query: { ...page, isTenantAdminTracking: true },
+        });
+      } else {
+        navigate.push({
+          pathname: "/admin/patients/details",
+          query: { ...page, isAdminTracking: true },
+        });
       }
     } else {
       notification.warning({
@@ -57,10 +62,6 @@ function TrackingTable({
       gotoPatientDetails(clickedData);
     }
   };
-
-  useEffect(() => {
-    setDetailsContent(patinetListAll);
-  }, [patinetListAll]);
 
   const renderRows = () => {
     return patinetListAll?.map((data, index) => (
@@ -138,7 +139,9 @@ function TrackingTable({
           onClick={handleTableRowClick}
           style={{ textAlign: "center" }}
         >
-          {data.processedDate ? moment(data.processedDate).format("MM-DD-YYYY") : "---"}
+          {data.processedDate
+            ? moment(data.processedDate).format("MM-DD-YYYY")
+            : "---"}
         </td>
         <td
           className={TableStyle.childBorder}
@@ -215,8 +218,6 @@ function TrackingTable({
             : "---"}
         </td>
 
-       
-
         <td
           className={TableStyle.lastBorder}
           onClick={handleTableRowClick}
@@ -237,126 +238,134 @@ function TrackingTable({
 
   return (
     <div className={TableStyle.classContaineer}>
-      <table className={TableStyle.classTable}>
-        <thead className={TableStyle.tenantAdminclassThead}>
-          <tr>
-            <th>PATIENTS</th>
-            <th style={{ textAlign: "left", paddingLeft: "20px" }}>
-              ALLOCATED BY
-            </th>
-            <th
-              style={{
-                cursor: "pointer",
-                paddingLeft: "15px",
-                textAlign: "center",
-              }}
-              onClick={() => {
-                sortFunction(sortOrder, setSortOrder, setSort, "allocatedOn");
-              }}
-            >
-              ALLOCATED DATE{" "}
-              {sortOrder === "ASC" ? (
-                <ArrowUpOutlined />
-              ) : (
-                <ArrowDownOutlined />
-              )}
-            </th>
-            <th style={{ paddingLeft: "45px" }}>REVIEWER</th>
-
-<th
-  onClick={() => {
-    sortFunction(sortDueOrder, setSortDueOrder, setSort, "dueDate");
-  }}
-  style={{ textAlign: "center" }}
->
-  REVIEWED DATE
-  <span
-    style={{
-      cursor: "pointer",
-      paddingLeft: "3px",
-      textAlign: "center",
-    }}
-  >
-    {sortDueOrder === "ASC" ? (
-      <ArrowUpOutlined />
-    ) : (
-      <ArrowDownOutlined />
-    )}
-  </span>
-</th>
-            <th style={{ textAlign: "center" }}>AUDIT ALLOCATED BY</th>
-            <th
-              onClick={() => {
-                sortFunction(
-                  sortAuditOrder,
-                  setSortAuditOrder,
-                  setSort,
-                  "auditAllocatedDate"
-                );
-              }}
-              style={{ textAlign: "center" }}
-            >
-              AUDIT ALLOCATED DATE
-              <span
-                style={{
-                  cursor: "pointer",
-                  paddingLeft: "3px",
-                  textAlign: "center",
-                }}
-              >
-                {sortAuditOrder === "ASC" ? (
-                  <ArrowUpOutlined />
-                ) : (
-                  <ArrowDownOutlined />
-                )}
-              </span>
-            </th>
-            <th style={{ textAlign: "center" }}>SUPERVISOR</th>
-            <th
-              onClick={() => {
-                sortFunction(
-                  sortAuditDueOrder,
-                  setSortAuditDueOrder,
-                  setSort,
-                  "auditDueDate"
-                );
-              }}
-              style={{ textAlign: "center" }}
-            >
-              AUDITED DATE
-              <span
-                style={{
-                  cursor: "pointer",
-                  paddingLeft: "3px",
-                  textAlign: "center",
-                }}
-              >
-                {sortAuditDueOrder === "ASC" ? (
-                  <ArrowUpOutlined />
-                ) : (
-                  <ArrowDownOutlined />
-                )}
-              </span>
-            </th>
-           
-
-            <th style={{ textAlign: "center" }}>PROCESSED STATUS</th>
-            <th style={{ textAlign: "center" }}>AUDIT STATUS</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {detailsContent.length <= 0 ? (
+      {loader ? (
+        <SpinnerDots />
+      ) : (
+        <table className={TableStyle.classTable}>
+          <thead className={TableStyle.tenantAdminclassThead}>
             <tr>
-              <td colSpan="11">
-                <Empty />
-              </td>
+              <th>PATIENTS</th>
+              <th style={{ textAlign: "left", paddingLeft: "20px" }}>
+                ALLOCATED BY
+              </th>
+              <th
+                style={{
+                  cursor: "pointer",
+                  paddingLeft: "15px",
+                  textAlign: "center",
+                }}
+                onClick={() => {
+                  sortFunction(sortOrder, setSortOrder, setSort, "allocatedOn");
+                }}
+              >
+                ALLOCATED DATE{" "}
+                {sortOrder === "ASC" ? (
+                  <ArrowUpOutlined />
+                ) : (
+                  <ArrowDownOutlined />
+                )}
+              </th>
+              <th style={{ paddingLeft: "45px" }}>REVIEWER</th>
+
+              <th
+                onClick={() => {
+                  sortFunction(
+                    sortDueOrder,
+                    setSortDueOrder,
+                    setSort,
+                    "dueDate"
+                  );
+                }}
+                style={{ textAlign: "center" }}
+              >
+                REVIEWED DATE
+                <span
+                  style={{
+                    cursor: "pointer",
+                    paddingLeft: "3px",
+                    textAlign: "center",
+                  }}
+                >
+                  {sortDueOrder === "ASC" ? (
+                    <ArrowUpOutlined />
+                  ) : (
+                    <ArrowDownOutlined />
+                  )}
+                </span>
+              </th>
+              <th style={{ textAlign: "center" }}>AUDIT ALLOCATED BY</th>
+              <th
+                onClick={() => {
+                  sortFunction(
+                    sortAuditOrder,
+                    setSortAuditOrder,
+                    setSort,
+                    "auditAllocatedDate"
+                  );
+                }}
+                style={{ textAlign: "center" }}
+              >
+                AUDIT ALLOCATED DATE
+                <span
+                  style={{
+                    cursor: "pointer",
+                    paddingLeft: "3px",
+                    textAlign: "center",
+                  }}
+                >
+                  {sortAuditOrder === "ASC" ? (
+                    <ArrowUpOutlined />
+                  ) : (
+                    <ArrowDownOutlined />
+                  )}
+                </span>
+              </th>
+              <th style={{ textAlign: "center" }}>SUPERVISOR</th>
+              <th
+                onClick={() => {
+                  sortFunction(
+                    sortAuditDueOrder,
+                    setSortAuditDueOrder,
+                    setSort,
+                    "auditDueDate"
+                  );
+                }}
+                style={{ textAlign: "center" }}
+              >
+                AUDITED DATE
+                <span
+                  style={{
+                    cursor: "pointer",
+                    paddingLeft: "3px",
+                    textAlign: "center",
+                  }}
+                >
+                  {sortAuditDueOrder === "ASC" ? (
+                    <ArrowUpOutlined />
+                  ) : (
+                    <ArrowDownOutlined />
+                  )}
+                </span>
+              </th>
+
+              <th style={{ textAlign: "center" }}>PROCESSED STATUS</th>
+              <th style={{ textAlign: "center" }}>AUDIT STATUS</th>
             </tr>
-          ) : (
-            renderRows()
-          )}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {!loader && patinetListAll?.length <= 0 ? (
+              <tr>
+                <td colSpan="11">
+                  <Empty />
+                </td>
+              </tr>
+            ) : (
+              renderRows()
+            )}
+          </tbody>
+        </table>
+      )}
       <div></div>
     </div>
   );

@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import mockData from "./mockData.json";
 import upArrow from "../../../../../images/tenantAdmin/upArrow.svg";
 import downArrow from "../../../../../images/tenantAdmin/downArrow.svg";
 import Image from "next/image";

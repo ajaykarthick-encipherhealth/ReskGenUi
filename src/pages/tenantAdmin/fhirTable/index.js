@@ -15,7 +15,7 @@ import PdfTable from "../../../components/table/tenantTable/pdfTable";
 import RegularButton from "../../../components/button";
 import FhirDrawer from "./fhirModal";
 import { connect } from "react-redux";
-import { actions as allActions } from "../../../stores/tenantAdmin";
+import { actions as allActions } from "../../../stores/tenantAdmin/patientSync";
 import { debounce } from "../../../components/input";
 import { statusOptions } from "./pdfTable";
 import moment from "moment";
@@ -280,7 +280,7 @@ const FIHRData = [
   },
 ];
 
-const Index = ({ getAllBatches, pdfTabledata, pdfLoader }) => {
+const Index = ({ getAllBatches, pdfTableData, pdfLoader }) => {
   const dispatch = useDispatch();
   const patientDetails = useSelector((state) => state.adminReport?.details);
   const reportActiveTab = useSelector((state) => state.AuditReport?.activetab);
@@ -549,7 +549,7 @@ const Index = ({ getAllBatches, pdfTabledata, pdfLoader }) => {
                                     paginationFirst={paginationFirst}
                                     setSelectedBatch={setSelectedBatch}
                                     onPageChange={onPageChange}
-                                    tableData={pdfTabledata}
+                                    tableData={pdfTableData}
                                     selectedBatch={selectedBatch}
                                     loader={pdfLoader}
                                   />
@@ -582,8 +582,8 @@ const Index = ({ getAllBatches, pdfTabledata, pdfLoader }) => {
 };
 const connector = connect(
   (state) => ({
-    pdfTabledata: state.tenantAdmin.allBatches?.data?.response,
-    pdfLoader: state.tenantAdmin?.batchLoader,
+    pdfTableData: state.tenantAdmin?.patientSync?.allBatches?.data?.response,
+    pdfLoader: state.tenantAdmin?.patientSync?.batchLoader,
   }),
   {
     getAllBatches: allActions.getAllBatches,

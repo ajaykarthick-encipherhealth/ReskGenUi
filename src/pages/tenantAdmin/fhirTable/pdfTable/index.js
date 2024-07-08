@@ -18,7 +18,7 @@ import profile from "../../../../images/fihr/profile.svg";
 import person from "../../../../images/fihr/person.svg";
 import statusIcon from "../../../../images/fihr/status.svg";
 import calender from "../../../../images/fihr/calender.svg";
-import { actions as allActions } from "../../../../stores/tenantAdmin";;
+import { actions as allActions } from "../../../../stores/tenantAdmin/patientSync";;
 import { debounce } from "../../../../components/input";
 import moment from "moment";
 
@@ -331,9 +331,9 @@ const Index = ({
 
 const connector = connect(
   (state) => ({
-    getBatch: state?.tenantAdmin?.getBatch?.data?.response,
-    loader: state?.tenantAdmin?.getBatchLoader,
-    pdfTabledata: state.tenantAdmin.allBatches?.data?.response,
+    getBatch: state?.tenantAdmin?.patientSync?.getBatch?.data?.response,
+    loader: state?.tenantAdmin?.patientSync?.getBatchLoader,
+    pdfTabledata: state.tenantAdmin?.patientSync?.allBatches?.data?.response,
   }),
   {
     getBatchInfo: allActions.getBatchInfo,

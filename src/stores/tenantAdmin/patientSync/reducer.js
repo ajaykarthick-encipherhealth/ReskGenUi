@@ -2,19 +2,9 @@ import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
 import {
   batchUpload,
-  codingGuidelinesAction,
-  configurationSettingsAction,
   getAllBatches,
-  getAllFileProcessAction,
-  getAllOrganizationAction,
-  getAllPatientAction,
-  getAllTrackingAction,
-  getAllUsersAction,
   getBatchInfo,
-  getCustomUsersAction,
-  healthMetricAddAction,
-  manualAddAction,
-  updateSettingsAction,
+  
 } from "./actions";
 
 const initialState = {
@@ -56,30 +46,15 @@ const getReportLoading = (type) =>
     false
   );
 
-const searchReducer = combineReducers({
-  allOrganization: createReducer(getAllOrganizationAction),
-  allUsers: createReducer(getAllUsersAction),
-  allPatients: createReducer(getAllPatientAction),
-  allTracking: createReducer(getAllTrackingAction),
-  allFileProcessing: createReducer(getAllFileProcessAction),
+const patientSyncReducer = combineReducers({
   allBatches: createReducer(getAllBatches),
   getBatch:createReducer(getBatchInfo),
-  customUsers:createReducer(getCustomUsersAction),
   batchUpload: createReducer(batchUpload),
-  configurationSettings: createReducer(configurationSettingsAction),
-  codingGuidelines: createReducer(codingGuidelinesAction),
-  updateSetting: createReducer(updateSettingsAction),
-  manualAdd: createReducer(manualAddAction),
-  healthMetricAdd: createReducer(healthMetricAddAction),
 
   // loaders
-  allOrganizationLoader: getReportLoading(getAllOrganizationAction),
-  allUsersLoading: getReportLoading(getAllUsersAction),
-  allPatientsLoading: getReportLoading(getAllPatientAction),
   getBatchLoader:getReportLoading(getBatchInfo),
   batchLoader: getReportLoading(getAllBatches),
   allBatchesLoader: getReportLoading(getAllBatches),
-  allTrackingLoader: getReportLoading(getAllTrackingAction),
 });
 
-export default searchReducer;
+export default patientSyncReducer;

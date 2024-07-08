@@ -31,10 +31,8 @@ import Abort from "../../../../src/images/trackingImages/Abort.png";
 import Image from "next/image";
 import { extractLatestData } from "../../supervisor/auditing";
 import { patientDetails } from "../../../stores/authflow/actions";
-import { actions as tenantAdminAction } from "../../../stores/tenantAdmin";
-import Legends from "../../../components/legends";
-import warning from "../../../images/svg/warning.svg";
-import stylesReport from "../../../pages/reviewer/report/report.module.css";
+import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/tracking"
+import {actions as tenantUserAdminAction} from '../../../stores/tenantAdmin/users'
 
 const bullets = [
   {
@@ -714,6 +712,7 @@ const Patient = ({
                               sortOrder={allocatedSortOrder}
                               setSort={setSort}
                               page={{ pageNo, paginationFirst }}
+                              loader={loader}
                             />
                             <div>
                               <div className="pagination-container">
@@ -744,12 +743,12 @@ const Patient = ({
 };
 const enhancer = connect(
   (state) => ({
-    organizationList: state?.tenantAdmin?.tenantAdmin?.allOrganization?.data,
-    trackingList: state?.tenantAdmin?.tenantAdmin?.allTracking,
-    loader: state?.tenantAdmin?.tenantAdmin?.allTrackingLoader,
+    organizationList: state?.tenantAdmin?.users?.allOrganization?.data,
+    trackingList: state?.tenantAdmin?.tracking?.allTracking,
+    loader: state?.tenantAdmin?.tracking?.allTrackingLoader,
   }),
   {
-    getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
+    getAllOrganizationList: tenantUserAdminAction.getAllOrganizationAction,
     getAllTrackingList: tenantAdminAction.getAllTrackingAction,
   }
 );

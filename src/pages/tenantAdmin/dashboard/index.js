@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Header from "../../../jsx/layouts/nav/Header";
 import styles from "./styles.module.css";
 import { connect } from "react-redux";
-import { actions as dashbaordActions } from "../../../stores/tenantAdmin/workFlow";
+import { actions as dashboardWorkflowActions } from "../../../stores/tenantAdmin/dashboard/workFlow";
 import Card from "../../../components/card";
 import HeaderFilters from "./components/headerFilters";
 import TotalCounts from "./default/totalcounts";
@@ -291,19 +291,19 @@ const Index = ({
 
 const enhancer = connect(
   (state) => ({
-    allocatedStatusData: state?.tenantAdmin?.workFlow?.allocatedStatus?.data,
-    auditorStatusData: state?.tenantAdmin?.workFlow?.auditorStatus?.data,
-    userStatusData: state?.tenantAdmin?.workFlow?.userStatus?.data,
-    reviewerStatusData: state?.tenantAdmin?.workFlow?.reviewerStatus?.data,
-    organizationStatusData: state?.tenantAdmin?.workFlow?.organizationStatus?.data,
+    allocatedStatusData: state?.tenantAdmin?.dashboard?.workFlow?.allocatedStatus?.data,
+    auditorStatusData: state?.tenantAdmin?.dashboard?.workFlow?.auditorStatus?.data,
+    userStatusData: state?.tenantAdmin?.dashboard?.workFlow?.userStatus?.data,
+    reviewerStatusData: state?.tenantAdmin?.dashboard?.workFlow?.reviewerStatus?.data,
+    organizationStatusData: state?.tenantAdmin?.dashboard?.workFlow?.organizationStatus?.data,
   }),
 
   {
-    getUserStatusData: dashbaordActions.userStatusAction,
-    getAuditorStatusData: dashbaordActions.auditorStatusAction,
-    getAllocatedStatusData: dashbaordActions.allocatedStatusAction,
-    getReviewerStatusData: dashbaordActions.reviewerStatusAction,
-    getOrganizationStatusData: dashbaordActions.organizationStatusAction,
+    getUserStatusData: dashboardWorkflowActions.userStatusAction,
+    getAuditorStatusData: dashboardWorkflowActions.auditorStatusAction,
+    getAllocatedStatusData: dashboardWorkflowActions.allocatedStatusAction,
+    getReviewerStatusData: dashboardWorkflowActions.reviewerStatusAction,
+    getOrganizationStatusData: dashboardWorkflowActions.organizationStatusAction,
   }
 );
 export default enhancer(Index);

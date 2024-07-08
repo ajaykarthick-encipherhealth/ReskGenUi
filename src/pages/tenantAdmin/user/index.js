@@ -15,7 +15,7 @@ import {
   encyptingPass,
   getValidatePassword,
 } from "../../../components/headerFilters/functions";
-import { actions as tenantAdminAction } from "../../../stores/tenantAdmin";
+import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/users";
 import UsersList from "../../../components/table/tenantTable/usersList/usersList";
 import SpinnerDots from "../../../components/spinner";
 
@@ -46,7 +46,7 @@ const UserList = ({
   getAllOrganizationList,
   organizationList,
   getAllUsersList,
-  usersList,
+  usersListData,
   loading
 }) => {
   const dispatch = useDispatch();
@@ -182,11 +182,11 @@ const UserList = ({
   };
 
   useEffect(() => {
-    if (usersList?.data?.response) {
-      setUserListAll(usersList?.data);
-      setTotalElements(usersList?.data?.response?.totalElements);
+    if (usersListData?.data?.response) {
+      setUserListAll(usersListData?.data);
+      setTotalElements(usersListData?.data?.response?.totalElements);
     }
-  }, [usersList]);
+  }, [usersListData]);
   useEffect(() => {
     var tenId = localStorage.getItem("tenantId");
     var uId = localStorage.getItem("userId");
@@ -311,7 +311,7 @@ const UserList = ({
                       ) : (
                         <>
                           <UsersList
-                            userList={usersList?.response?.content}
+                           
                             switchHandler={switchHandler}
                             setPageCount={setPageCount}
                             sortOrder={sortOrder}
@@ -726,9 +726,9 @@ const UserList = ({
 
 const enhancer = connect(
   (state) => ({
-    organizationList: state?.tenantAdmin?.allOrganization?.data,
-    usersList: state?.tenantAdmin?.allUsers,
-    loading:state?.tenantAdmin?.allUsersLoading
+    organizationList: state?.tenantAdmin?.users?.allOrganization?.data,
+    usersListData: state?.tenantAdmin?.users?.allUsers,
+    loading:state?.tenantAdmin?.users?.allUsersLoading
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,

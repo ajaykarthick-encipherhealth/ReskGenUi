@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import CodesGraph from "../../components/codeGraph";
 import Image from "next/image";
-import codescaptured from "../../../../../images/tenantAdmin/codecaptured.svg";
 import processing from "../../../../../images/tenantAdmin/processing.svg";
 import failed from "../../../../../images/tenantAdmin/failed.svg";
 import completed from "../../../../../images/tenantAdmin/completed.svg";
@@ -10,7 +9,7 @@ import upload from "../../../../../images/tenantAdmin/upload.svg";
 import {
   ComputingStatus,
   computingTileStatus,
-} from "../../../../../stores/tenantAdmin/default/action.js";
+} from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 
 const Files = ({
   getAllComputing,
@@ -173,10 +172,10 @@ const Files = ({
 const enhancer = connect(
   (state) => ({
     getAllComputingStatus:
-      state?.tenantAdmin?.tenantAdmindefault?.allComputingStatus?.data
+      state?.tenantAdmin?.dashboard?.workflow?.allComputingStatus?.data
         ?.response,
     getAllComputingTile:
-      state?.tenantAdmin?.tenantAdmindefault?.allComputingTileStatus?.data
+      state?.tenantAdmin?.dashboard?.workflow?.allComputingTileStatus?.data
         ?.response,
   }),
   {

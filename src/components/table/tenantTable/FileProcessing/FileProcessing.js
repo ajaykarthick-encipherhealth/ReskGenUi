@@ -9,7 +9,7 @@ import TableStyle from "../../table.module.css";
 import { getPatientsList } from "../../../../store/actions/adminAction/fileProcessingActions";
 import ENDPOINTS from "../../../../utility/enpoints";
 import SpinnerDots from "../../../spinner";
-import { actions as tenantAdminAction } from "../../../../stores/tenantAdmin";
+import { actions as tenantAdminAction } from "../../../../stores/tenantAdmin/tracking";
 
 // export const eventStreming = (
 //   ENDPOINTS,
