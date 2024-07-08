@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReusableTable from "../../components/table";
+import { connect } from "react-redux";
+import { top10Diseases } from "../../../../../stores/tenantAdmin/default/action.js"
 
-const index = () => {
+const index = ({top10DiseasesData,getTop10DiseasesData}) => {
+
+  useEffect(() => {
+    getTop10DiseasesData();
+  }, []);
   return (
     <>
       <div>
@@ -9,9 +15,19 @@ const index = () => {
         <span style={{color:"#FF8551",fontSize:"20px",fontWeight:"600",margin:"0 0 0 10px"}}>100K</span>
       </div>
 
-      <ReusableTable />
+      <ReusableTable items={top10DiseasesData?.response?.topDiseaseDTOList}/>
     </>
   );
 };
 
-export default index;
+const enhancer = connect(
+  (state) => ({
+    top10DiseasesData: state.tenantAdmin.defaultRafScore.allTop10Diseases.data,
+  }),
+  {
+    getTop10DiseasesData: top10Diseases,
+  
+  }
+);
+
+export default enhancer(index);

@@ -58,3 +58,27 @@ export async function getAllComputing() {
   );
   return data;
 }
+
+export async function getTop10Diseases() {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/tenantadmin/dashboard/gettophcccodes`,
+    options
+  );
+  return data;
+}
+
+export async function getTopOigCodes() {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/tenantadmin/dashboard/gettopoighcccodes`,
+    options
+  );
+  return data;
+}
+
+

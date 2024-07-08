@@ -91,6 +91,7 @@ const enhancer = connect(
       state?.tenantAdmin?.tenantAdmindefault?.allRafCounts?.data?.response,
     getAllRafScoreData:
       state?.tenantAdmin?.tenantAdmindefault?.allRafScore?.data?.response,
+
   }),
   {
     getAllHccCodesData: HccCodes,
