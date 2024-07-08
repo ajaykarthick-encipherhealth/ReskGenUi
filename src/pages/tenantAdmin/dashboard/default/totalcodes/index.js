@@ -120,6 +120,7 @@ const index = ({
   return (
     <div className="d-flex justify-content-between">
       <div style={{ width: "33%" }}>
+        <div className={styles.headers}>
         <div className="d-flex justify-content-between">
           <div className={styles.header}>Total Codes</div>
 
@@ -145,6 +146,7 @@ const index = ({
             </div>
           </div>
         </div>
+        </div>
         <CodesGraph options={options} isRadio={true} />
       </div>
       <div
@@ -155,6 +157,7 @@ const index = ({
           borderRadius: "16px",
         }}
       >
+         <div className={styles.headers}>
         <div className="d-flex justify-content-between">
           <div className={`${styles.header} p-1`}>RAF</div>
           <div className="p-1">
@@ -162,6 +165,7 @@ const index = ({
             <div className={styles.price}>
               {getAllRafScoreData?.totalHccRaf}
             </div>
+          </div>
           </div>
         </div>
         <RafGraph
@@ -178,12 +182,14 @@ const index = ({
           padding: "0px 5px 0 5px",
         }}
       >
+          <div className={styles.headers}>
         <div className="d-flex justify-content-between">
           <div className={`${styles.header} p-1`}>Revenue</div>
           <div className="p-1">
             <div className={styles.header}>Overall Revenue</div>
             <div className={styles.price}>{getAllRaf?.totalHccRafScore}</div>
           </div>
+        </div>
         </div>
         <RevenueGraph isMultiple={true} />
       </div>
