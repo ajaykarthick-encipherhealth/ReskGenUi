@@ -125,12 +125,14 @@ const index = ({
   return (
     <div className="d-flex justify-content-between">
       <div className="remianingLineGraph" style={{ width: "33%" }}>
+      <div className={styles.headers}>
         <div className="d-flex justify-content-between">
           <div className={styles.header}>Care Gap Codes</div>
           <div>
             <div className={styles.header}>Total Codes</div>
             <div className={styles.price}>{getAllHccCodes?.totalCount}</div>
           </div>
+        </div>
         </div>
         <CodesGraph
           gradientColor1={"#FF9209"}
@@ -148,12 +150,14 @@ const index = ({
           borderRadius: "16px",
         }}
       >
+          <div className={styles.headers}>
         <div className="d-flex justify-content-between">
           <div className={`${styles.header} p-2`}>RAF</div>
           <div className="p-2">
             <div className={styles.header}>Overall RAF</div>
             <div className={styles.price}>
               {getAllRafScoreData?.totalHccRaf}
+            </div>
             </div>
           </div>
         </div>
@@ -173,12 +177,14 @@ const index = ({
           padding: "0px 5px 0 5px",
         }}
       >
+          <div className={styles.headers}>
         <div className="d-flex justify-content-between">
           <div className={`${styles.header} p-1`}>Revenue</div>
           <div className="p-1">
             <div className={styles.header}>Overall Revenue</div>
             <div className={styles.price}>
               {getAllRaf?.totalSuggestedRafScore}
+            </div>
             </div>
           </div>
         </div>
