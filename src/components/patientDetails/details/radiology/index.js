@@ -23,6 +23,7 @@ const Radiology = ({
   getRadiologyFileDetails,
   radiologyDetailsResult,
   patientDosResult,
+  processedYearResult,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeTabHead, setActiveTabHead] = useState(1);
@@ -30,6 +31,9 @@ const Radiology = ({
   const [dosSummariesList, setDosSummariesList] = useState([]);
   const [selectDosValue, setSelectDosValue] = useState("");
   const [popoverVisible, setPopoverVisible] = useState(false);
+  const [dosYear, setDosYear] = useState([]);
+  const [dosYearDefalutSelect, setDosYearDefalutSelect] = useState("");
+  const [selectedDosValue, setSelectedDosValue] = useState("");
 
   const selectTab = (num) => {
     setActiveTabHead(num);
@@ -37,7 +41,6 @@ const Radiology = ({
       setActiveMeatTitle(null);
     }
   };
-  
 
   const handleOptions = (value) => {
     setIsLoading(true);
@@ -66,6 +69,20 @@ const Radiology = ({
     // getRadiologyDetails(patientId)
   }, []);
 
+  const getAllProcessYearSelect = async (result) => {
+    var dosYearArr = [];
+    result?.data?.response?.map((res) => {
+      dosYearArr.push({ value: res, label: res });
+    });
+    setDosYearDefalutSelect(dosYearArr[0]);
+    setSelectedDosValue(dosYearArr[0].value);
+    setDosYear(dosYearArr);
+  };
+
+  useEffect(() => {
+    getAllProcessYearSelect(processedYearResult);
+  }, [processedYearResult]);
+
   useEffect(() => {
     if (radiologyDetailsResult?.data?.response) {
       if (radiologyDetailsResult?.data?.response?.radiologyFileDetail) {
@@ -83,7 +100,6 @@ const Radiology = ({
       setActiveMeatTitle(null);
     }, 10000);
   }, [activeMeatTitle]);
-
 
   const exmpleData = [
     {
@@ -128,7 +144,6 @@ const Radiology = ({
     // if (patientDosResult?.data?.response) {
     setSelectDosValue();
     var dosList = [];
-
 
     // patientDosResult?.data?.response?.map((res, index) => {
     exmpleData?.map((res, index) => {
@@ -225,11 +240,7 @@ const Radiology = ({
                         handleChangePageNumber(data.startPageNumber)
                       }
                     >
-                      <span
-                       
-                      >
-                        {data?.startPageNumber}
-                      </span>
+                      <span>{data?.startPageNumber}</span>
                     </div>
                     <div
                       className="col-xl-1 text-center"
@@ -244,14 +255,9 @@ const Radiology = ({
                         textAlign: "center",
                         margin: "10px",
                       }}
-                      onClick={() =>
-                        handleChangePageNumber(data.endPagNumber)
-                      }
+                      onClick={() => handleChangePageNumber(data.endPagNumber)}
                     >
-                      <span
-                      >
-                        {data?.endPagNumber}
-                      </span>
+                      <span>{data?.endPagNumber}</span>
                     </div>
                   </div>
                 </div>
@@ -269,7 +275,7 @@ const Radiology = ({
           <div className="custom-tab-1">
             <Tab.Container activeKey={activeTabHead}>
               <div className="row">
-                <div className="col-xl-11">
+                <div className="col-xl-12">
                   <Nav as="ul" className="nav nav-tabs">
                     <Nav.Item as="li" className="nav-item">
                       <Nav.Link
@@ -317,6 +323,22 @@ const Radiology = ({
                     </Nav.Item>
                     <Nav.Item as="li" className="nav-item">
                       <Select
+                        placeholder="Select Year"
+                        onChange={handleOptions}
+                        className="dosSelect"
+                        allowClear
+                        value={selectDosValue}
+                        style={{ marginRight: "10px" }}
+                      >
+                        {dosYear?.map((data) => (
+                          <Option key={data?.value} value={data?.value}>
+                            {data.label}
+                          </Option>
+                        ))}
+                      </Select>
+                    </Nav.Item>
+                    <Nav.Item as="li" className="nav-item">
+                      <Select
                         placeholder="Select DOS"
                         onChange={handleOptions}
                         className="dosSelect"
@@ -331,41 +353,36 @@ const Radiology = ({
                       </Select>
                     </Nav.Item>
                     {activeTabHead == 1 && (
-                    <Popover
-                      open={popoverVisible}
-                      content={PopContent}
-                      placement="bottom"
-                      trigger={"click"}
-                      overlayStyle={{ zIndex: 1000 }}
-                      onOpenChange={() => setPopoverVisible(false)}
-                    >
-                      <div
-                        className={styles.dosContainer}
-                        onClick={() => {
-                          setPopoverVisible(true);
-                        }}
-                        style={{marginLeft:"10px"}}
+                      <Popover
+                        open={popoverVisible}
+                        content={PopContent}
+                        placement="bottom"
+                        trigger={"click"}
+                        overlayStyle={{ zIndex: 1000 }}
+                        onOpenChange={() => setPopoverVisible(false)}
                       >
-                        <span className={styles.dosPageNumber}>
-                          Select Dos Page Number
-                        </span>
-                        <FontAwesomeIcon
-                          icon={faAngleDown}
-                          style={{
-                            size: 10,
-                            color: "#e6e6e6",
-                            marginLeft: "5px",
+                        <div
+                          className={styles.dosContainer}
+                          onClick={() => {
+                            setPopoverVisible(true);
                           }}
-                        />
-                      </div>
-                    </Popover>
-                  )}
+                          style={{ marginLeft: "10px" }}
+                        >
+                          <span className={styles.dosPageNumber}>
+                            Select Dos Page Number
+                          </span>
+                          <FontAwesomeIcon
+                            icon={faAngleDown}
+                            style={{
+                              size: 10,
+                              color: "#e6e6e6",
+                              marginLeft: "5px",
+                            }}
+                          />
+                        </div>
+                      </Popover>
+                    )}
                   </Nav>
-                </div>
-                <div className="col-xl-1">
-                  <div className={visitStyles.sideHeaderTitle}>
-                    <span>RADIOLOGY</span>
-                  </div>
                 </div>
               </div>
               {!isLoading ? (
@@ -404,6 +421,7 @@ const enhancer = connect(
   (state) => ({
     radiologyDetailsResult: state?.patientDetails?.details?.radiologyResult,
     patientDosResult: state?.patientDetails?.details?.radiologyDosResult,
+    processedYearResult: state?.patientDetails.details?.processedYear,
   }),
   {
     getRadiologyDetails: detailsActions.radiologyDetailsAction,
