@@ -7,7 +7,7 @@ import Image from "next/image";
 import styles from "../../styles.module.css";
 import { FilesCount } from "../../../../../stores/tenantAdmin/default/action.js";
 
-const index = ({ getAllFilesCount, getAllFiles }) => {
+const index = ({ getAllFilesCount, getAllFiles, dateRange }) => {
   const cardData = [
     {
       id: 1,
@@ -32,8 +32,9 @@ const index = ({ getAllFilesCount, getAllFiles }) => {
     },
   ];
   useEffect(() => {
-    getAllFilesCount();
-  }, []);
+    getAllFilesCount(dateRange.startDate,
+      dateRange.endDate);
+  }, [dateRange]);
 
   return (
     <div

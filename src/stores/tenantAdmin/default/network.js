@@ -1,11 +1,14 @@
 import { requestPortal } from "../../../utils/network";
 
-export async function getAllFilesCount() {
+export async function getAllFilesCount(startDate,endDate) {
   const options = {
     method: "GET",
   };
+  const formattedStartDate = startDate ? new Date(startDate).toISOString() : "";
+  const formattedEndDate = endDate ? new Date(endDate).toISOString() : "";
+
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/getFilePageAndDosCount?organizationId=`,
+    `dbservice/tenantadmin/dashboard/getFilePageAndDosCount?startDate=${formattedStartDate}&endDate=${formattedEndDate}&organizationId= `,
     options
   );
   return data;
@@ -41,13 +44,17 @@ export async function getAllRafScore(startDate, endDate) {
 }
 
 //reveniew
-export async function getAllRaf() {
+export async function getAllRaf(startDate, endDate) {
   const options = {
     method: "GET",
   };
 
+  const formattedStartDate = startDate ? new Date(startDate).toISOString() : "";
+  const formattedEndDate = endDate ? new Date(endDate).toISOString() : "";
+
+
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/raf/premium/chart`,
+    `dbservice/tenantadmin/dashboard/raf/premium/chart?startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
     options
   );
   return data;
