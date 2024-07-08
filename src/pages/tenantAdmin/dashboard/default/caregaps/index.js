@@ -24,6 +24,8 @@ const index = ({
   const [chartRafData1, setRafChartData1] = useState(new Map());
   const [chartRevenData1, setRevenChartData1] = useState(new Map());
 
+  const shortWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
   const ShortMonth = [
     "",
     "jan",
@@ -121,6 +123,22 @@ const index = ({
     fetchChartData();
   }, [dateRange]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getAllRafData();
+
+      const tempRecords = new Map();
+      const records = data.response.premiumByDateForHcc;
+      for (let i = 6; i >= 0; i--) {
+        const todayDate = moment();
+        const presentDate = todayDate.subtract(i, "days");
+        const presentDayinWeek = presentDate.day();
+        tempRecords.set(shortWeek[presentDayinWeek], 0);
+      }
+    };
+    fetchData();
+  }, [dateRange]);
+
   return (
     <div className="d-flex justify-content-between">
       <div className="remianingLineGraph" style={{ width: "33%" }}>
@@ -205,7 +223,6 @@ const enhancer = connect(
       state?.tenantAdmin?.tenantAdmindefault?.allRafCounts?.data?.response,
     getAllRafScoreData:
       state?.tenantAdmin?.tenantAdmindefault?.allRafScore?.data?.response,
-
   }),
   {
     getAllHccCodesData: HccCodes,
