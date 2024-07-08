@@ -1,9 +1,15 @@
 import React from "react";
+import { useEffect } from "react";
+import { rafScore } from "../../../../../stores/tenantAdmin/default/action.js";
+import { connect } from "react-redux";
 import ReactECharts from "echarts-for-react";
 import styles from "../../styles.module.css";
 import CodesGraph from "../../components/codeGraph";
 
-const index = () => {
+const index = ({rafScoreData,overAllRafScore}) => {
+  useEffect(() => {
+    rafScoreData();
+  }, []);
   const speedometerOptions = {
     tooltip: {
       formatter: "{a} <br/>{b} : {c}%",
@@ -61,7 +67,7 @@ const index = () => {
         },
         data: [
           {
-            value: 590,
+            value: overAllRafScore?.response,
             name: "",
           },
         ],
@@ -94,4 +100,17 @@ const index = () => {
   );
 };
 
-export default index;
+
+const enhancer = connect(
+  (state) => (
+    {
+    overAllRafScore: state?.tenantAdmin?.tenantAdmindefault?.allRafScore?.data,
+  }
+  // console.log(state,"state")
+),
+  {
+  rafScoreData: rafScore,
+  }
+);
+
+export default enhancer(index);

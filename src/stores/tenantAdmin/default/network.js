@@ -86,4 +86,15 @@ export async function getTopOigCodes() {
   return data;
 }
 
+export async function getRafScore() {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/tenantadmin/dashboard/raf/score`,
+    options
+  );
+  return data;
+}
+
 
