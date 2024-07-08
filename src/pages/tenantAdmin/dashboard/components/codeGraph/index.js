@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import {
   HccCodes,
   RafCounts,
+  RafCountScore,
 } from "../../../../../stores/tenantAdmin/default/action.js";
 
 const CodesGraph = ({
@@ -22,7 +23,9 @@ const CodesGraph = ({
   getAllHccCodes,
   getAllHccCodesData,
   getAllRaf,
+  getAllRafScoreData,
   chartData,
+  getAllRafScore,
 }) => {
   const [dateRange, setDateRange] = useState({ startDate: "", endDate: "" });
   const [currChartData, setCurrChartData] = useState(new Map());
@@ -37,6 +40,7 @@ const CodesGraph = ({
 
   useEffect(() => {
     getAllHccCodesData(dateRange.startDate, dateRange.endDate);
+    getAllRafScore();
     getAllRafData(dateRange.startDate, dateRange.endDate);
   }, [dateRange]);
 
@@ -125,7 +129,6 @@ const CodesGraph = ({
       },
     ],
   };
-
   return <ReactECharts option={options ? options : graphOptions} />;
 };
 
@@ -135,10 +138,13 @@ const enhancer = connect(
       state?.tenantAdmin?.tenantAdmindefault?.allHccCodes?.data?.response,
     getAllRaf:
       state?.tenantAdmin?.tenantAdmindefault?.allRafCounts?.data?.response,
+    getAllRafScoreData:
+      state?.tenantAdmin?.tenantAdmindefault?.allRafScore?.data?.response,
   }),
   {
     getAllHccCodesData: HccCodes,
     getAllRafData: RafCounts,
+    getAllRafScore: RafCountScore,
   }
 );
 
