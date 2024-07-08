@@ -35,6 +35,7 @@ const CodesGraph = ({
     setCurrChartData(chartData);
   }, [currChartData, isCargaps]);
 
+
   useEffect(() => {
     getAllHccCodesData(dateRange.startDate, dateRange.endDate);
     getAllRafData(dateRange.startDate, dateRange.endDate);
@@ -125,6 +126,7 @@ const CodesGraph = ({
       },
     ],
   };
+
 
   return <ReactECharts option={options ? options : graphOptions} />;
 };

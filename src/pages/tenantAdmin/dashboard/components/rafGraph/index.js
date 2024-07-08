@@ -74,8 +74,8 @@ const RafGraph = ({
         type: "category",
         boundaryGap: false,
         data:
-          isHcc || isCargaps
-            ? [...chartRafData.keys()]
+          isHcc || isCargaps 
+            ? [...chartRafData?.keys()]
             : [
                 "jan",
                 "feb",
@@ -135,7 +135,7 @@ const RafGraph = ({
         emphasis: {
           focus: "series",
         },
-        data: rafColor2,
+        data: rafColor2 && premiumByDateForHcc,
       },
       {
         name: "Car gaps Codes",
@@ -149,12 +149,14 @@ const RafGraph = ({
         emphasis: {
           focus: "series",
         },
-        data: rafColor3 && premiumByDateForHcc && premiumByDateForSuggested,
+        data: rafColor3 &&  premiumByDateForSuggested,
       },
     ],
   };
   return <ReactECharts option={option} />;
+
 };
+
 
 const enhancer = connect(
   (state) => ({
