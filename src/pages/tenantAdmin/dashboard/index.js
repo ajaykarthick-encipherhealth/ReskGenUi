@@ -291,11 +291,11 @@ const Index = ({
 
 const enhancer = connect(
   (state) => ({
-    allocatedStatusData: state.tenantAdmin.workFlow.allocatedStatus.data,
-    auditorStatusData: state.tenantAdmin.workFlow.auditorStatus.data,
-    userStatusData: state.tenantAdmin.workFlow.userStatus.data,
-    reviewerStatusData: state.tenantAdmin.workFlow.reviewerStatus.data,
-    organizationStatusData: state.tenantAdmin.workFlow.organizationStatus.data,
+    allocatedStatusData: state?.tenantAdmin?.workFlow?.allocatedStatus?.data,
+    auditorStatusData: state?.tenantAdmin?.workFlow?.auditorStatus?.data,
+    userStatusData: state?.tenantAdmin?.workFlow?.userStatus?.data,
+    reviewerStatusData: state?.tenantAdmin?.workFlow?.reviewerStatus?.data,
+    organizationStatusData: state?.tenantAdmin?.workFlow?.organizationStatus?.data,
   }),
 
   {
