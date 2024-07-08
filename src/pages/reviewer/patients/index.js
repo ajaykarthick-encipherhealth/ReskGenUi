@@ -31,7 +31,7 @@ import filter from "../../../images/svg/filter.svg";
 import { extractLatestData } from "../../supervisor/auditing";
 import InputField from "../../../components/input";
 import { patientDetails } from "../../../stores/authflow/actions";
-import SkeletonLoading from "../../../jsx/components/skeleton/skeleton";
+// import SkeletonLoading from "../../../jsx/components/skeleton/skeleton";
 import { renderSkeleton } from "../../../components/reuseableFunctions";
 
 const { RangePicker } = DatePicker;

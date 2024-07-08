@@ -16,7 +16,9 @@ export async function getAllHccCodes(startDate, endDate) {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/totalcodes/chart`,
+    `dbservice/tenantadmin/dashboard/totalcodes/chart?startDate=${
+      startDate ? startDate : ""
+    }&endDate=${endDate ? endDate : ""}`,
     options
   );
   return data;

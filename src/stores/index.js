@@ -98,11 +98,7 @@ const reducers = combineReducers({
   }),
   tenantAdmin: combineReducers({
     webSocket: webSocketReducer,
-    defaultHccCodes: tenantAdminDefault,
-    defaultRafCounts: tenantRaf,
-    defaultFilesCounts: filesCount,
-    defaultComputingStatus: ComputingStatus,
-    defaultRafScore: RafScore,
+    tenantAdmindefault: tenantAdminDefault,
     webSocket: webSocketReducer,
     workFlow: workFlowReducer,
     tenantAdmin: tenantAdminReducer,

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import CodesGraph from "../../components/codeGraph";
 import styles from "../../styles.module.css";
@@ -17,12 +17,13 @@ const index = ({
   getAllRaf,
   getAllRafScoreData,
   getAllRafScore,
+  dateRange,
 }) => {
   useEffect(() => {
-    getAllHccCodesData();
+    getAllHccCodesData(dateRange.startDate, dateRange.endDate);
     getAllRafData();
     getAllRafScore();
-  }, []);
+  }, [dateRange]);
 
   return (
     <div className="d-flex justify-content-between">
@@ -85,11 +86,12 @@ const index = ({
 const enhancer = connect(
   (state) => ({
     getAllHccCodes:
-      state?.tenantAdmin?.defaultHccCodes?.allHccCodes?.data?.response,
+      state?.tenantAdmin?.tenantAdmindefault?.allHccCodes?.data?.response,
+
     getAllRaf:
-      state?.tenantAdmin?.defaultHccCodes?.allRafCounts?.data?.response,
+      state?.tenantAdmin?.tenantAdmindefault?.allRafCounts?.data?.response,
     getAllRafScoreData:
-      state?.tenantAdmin?.defaultRafScore?.allRafScore?.data?.response,
+      state?.tenantAdmin?.tenantAdmindefault?.allRafScore?.data?.response,
   }),
   {
     getAllHccCodesData: HccCodes,
