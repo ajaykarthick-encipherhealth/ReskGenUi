@@ -33,7 +33,7 @@ const index = ({ getTopOigCodesData, top0ijHccCodes }) => {
 
 const enhancer = connect(
   (state) => ({
-    top0ijHccCodes: state.tenantAdmin.defaultRafScore.allTopOigCodes.data,
+    top0ijHccCodes: state?.tenantAdmin?.defaultRafScore?.allTopOigCodes?.data,
   }),
   {
     getTopOigCodesData: topOigCodes,

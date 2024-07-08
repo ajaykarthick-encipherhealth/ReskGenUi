@@ -8,6 +8,7 @@ import {
   RafCountScore,
   top10Diseases,
   topOigCodes,
+  computingTileStatus
 } from "./action";
 
 const initialState = {
@@ -57,7 +58,7 @@ const tenantAdminDefault = combineReducers({
   allRafScore: createReducer(RafCountScore),
   allTop10Diseases: createReducer(top10Diseases),
   allTopOigCodes: createReducer(topOigCodes),
-  
+  allComputingTileStatus:createReducer(computingTileStatus)
 });
 
 export default tenantAdminDefault;

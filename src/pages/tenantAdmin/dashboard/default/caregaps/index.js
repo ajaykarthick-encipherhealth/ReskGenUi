@@ -24,6 +24,8 @@ const index = ({
   const [chartRafData1, setRafChartData1] = useState(new Map());
   const [chartRevenData1, setRevenChartData1] = useState(new Map());
 
+  const shortWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
   const ShortMonth = [
     "",
     "jan",
@@ -71,7 +73,6 @@ const index = ({
           tempRecords1.set(ShortMonth[currMonth] + currDay, record[1]);
         });
       }
-      console.log("dates", tempRecords1);
       setChartData1(tempRecords1);
     };
     fetchChartData();
@@ -120,6 +121,22 @@ const index = ({
       setRafChartData1(tempRecords1);
     };
     fetchChartData();
+  }, [dateRange]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getAllRafData();
+
+      const tempRecords = new Map();
+      const records = data.response.premiumByDateForHcc;
+      for (let i = 6; i >= 0; i--) {
+        const todayDate = moment();
+        const presentDate = todayDate.subtract(i, "days");
+        const presentDayinWeek = presentDate.day();
+        tempRecords.set(shortWeek[presentDayinWeek], 0);
+      }
+    };
+    fetchData();
   }, [dateRange]);
 
   return (
@@ -200,7 +217,6 @@ const enhancer = connect(
       state?.tenantAdmin?.tenantAdmindefault?.allRafCounts?.data?.response,
     getAllRafScoreData:
       state?.tenantAdmin?.tenantAdmindefault?.allRafScore?.data?.response,
-
   }),
   {
     getAllHccCodesData: HccCodes,

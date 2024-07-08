@@ -34,3 +34,8 @@ export const topOigCodes  = createActionThunk(
   network.getTopOigCodes
 );
 
+export const computingTileStatus  = createActionThunk(
+  "GET_COMPUTING_TILE_STATUS",
+  network.getComputingStatus
+);
+

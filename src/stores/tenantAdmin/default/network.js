@@ -86,4 +86,13 @@ export async function getTopOigCodes() {
   return data;
 }
 
-
+export async function getComputingStatus() {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/tenantadmin/dashboard/computingstatus/tile/chart`,
+    options
+  );
+  return data;
+}

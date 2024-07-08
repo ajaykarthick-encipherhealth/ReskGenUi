@@ -7,9 +7,17 @@ import processing from "../../../../../images/tenantAdmin/processing.svg";
 import failed from "../../../../../images/tenantAdmin/failed.svg";
 import completed from "../../../../../images/tenantAdmin/completed.svg";
 import upload from "../../../../../images/tenantAdmin/upload.svg";
-import { ComputingStatus } from "../../../../../stores/tenantAdmin/default/action.js";
+import {
+  ComputingStatus,
+  computingTileStatus,
+} from "../../../../../stores/tenantAdmin/default/action.js";
 
-const Files = ({ getAllComputing }) => {
+const Files = ({
+  getAllComputing,
+  getAllComputingStatus,
+  getComputingStatus,
+  getAllComputingTile,
+}) => {
   const options = {
     xAxis: {
       type: "category",
@@ -42,7 +50,7 @@ const Files = ({ getAllComputing }) => {
     series: [
       {
         name: "Upload",
-        data: [10, 30, 16, 33, 13, 78, 6, 76, 65, 23, 11, 56],
+        data: getAllComputingStatus?.NOT_UPLOADED?.map((x) => x.count),
         type: "line",
         lineStyle: { color: "#3B3486" },
         smooth: true,
@@ -50,7 +58,7 @@ const Files = ({ getAllComputing }) => {
       },
       {
         name: "Processing",
-        data: [10, 76, 98, 76, 24, 87, 23, 11, 56, 99, 3, 22],
+        data: getAllComputingStatus?.PROCESSING?.map((x) => x.count),
         type: "line",
         lineStyle: { color: "#4A3AFF" },
         smooth: true,
@@ -58,7 +66,7 @@ const Files = ({ getAllComputing }) => {
       },
       {
         name: "Completed",
-        data: [10, 30, 50, 29, 13, 78, 54, 76, 98, 13, 11, 56],
+        data: getAllComputingStatus?.COMPUTED?.map((x) => x.count),
         type: "line",
         lineStyle: { color: "#00BC13" },
         smooth: true,
@@ -66,7 +74,7 @@ const Files = ({ getAllComputing }) => {
       },
       {
         name: "Failed",
-        data: [10, 76, 98, 76, 24, 87, 23, 81, 56, 99, 3, 22],
+        data: getAllComputingStatus?.FAILED?.map((x) => x.count),
         type: "line",
         lineStyle: { color: "#FF8551" },
         smooth: true,
@@ -78,7 +86,7 @@ const Files = ({ getAllComputing }) => {
     {
       id: 1,
       title: "Upload",
-      count: "12434",
+      count: getAllComputingTile?.NOT_UPLOADED,
       icon: upload,
       color: "#ECEBFF",
       iconBg: "#D0CCFF",
@@ -86,7 +94,7 @@ const Files = ({ getAllComputing }) => {
     {
       id: 2,
       title: "Processing",
-      count: "62345",
+      count: getAllComputingTile?.PROCESSING,
       icon: processing,
       color: "#EAE9F6",
       iconBg: "#DCDAF1",
@@ -94,7 +102,7 @@ const Files = ({ getAllComputing }) => {
     {
       id: 3,
       title: "Completed",
-      count: "62345",
+      count: getAllComputingTile?.COMPUTED,
       icon: completed,
       color: "#D6FFDA",
       iconBg: "#ADFFB5",
@@ -102,7 +110,7 @@ const Files = ({ getAllComputing }) => {
     {
       id: 4,
       title: "Failed",
-      count: "62345",
+      count: getAllComputingTile?.FAILED,
       icon: failed,
       color: "#FFEAE0",
       iconBg: "#FFDBCC",
@@ -111,6 +119,7 @@ const Files = ({ getAllComputing }) => {
 
   useEffect(() => {
     getAllComputing();
+    getComputingStatus();
   }, []);
 
   return (
@@ -164,11 +173,15 @@ const Files = ({ getAllComputing }) => {
 const enhancer = connect(
   (state) => ({
     getAllComputingStatus:
-      state?.tenantAdmin?.defaultComputingStatus?.allComputingStatus?.data
+      state?.tenantAdmin?.tenantAdmindefault?.allComputingStatus?.data
+        ?.response,
+    getAllComputingTile:
+      state?.tenantAdmin?.tenantAdmindefault?.allComputingTileStatus?.data
         ?.response,
   }),
   {
     getAllComputing: ComputingStatus,
+    getComputingStatus: computingTileStatus,
   }
 );
 
