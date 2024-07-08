@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import {
   HccCodes,
   RafCounts,
+  RafCountScore
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 
 const CodesGraph = ({
