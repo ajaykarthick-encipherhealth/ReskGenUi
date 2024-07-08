@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect } from "react";
-import { rafScore } from "../../../../../stores/tenantAdmin/default/action.js";
+import { rafScore } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 import { connect } from "react-redux";
 import ReactECharts from "echarts-for-react";
 import styles from "../../styles.module.css";
@@ -110,8 +110,8 @@ const index = ({ rafScoreData, overAllRafScore, rafLoader }) => {
 
 const enhancer = connect(
   (state) => ({
-    overAllRafScore: state?.tenantAdmin?.tenantAdmindefault?.allRafScore?.data,
-    rafLoader: state?.tenantAdmin?.tenantAdmindefault?.rafScoreLoader?.loading,
+    overAllRafScore: state?.tenantAdmin?.dashboard?.default?.allRafScore?.data,
+    rafLoader: state?.tenantAdmin?.dashboard?.default?.rafScoreLoader?.loading,
   }),
 
   {

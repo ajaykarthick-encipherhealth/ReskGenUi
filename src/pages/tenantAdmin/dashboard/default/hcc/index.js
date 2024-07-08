@@ -8,7 +8,7 @@ import {
   HccCodes,
   RafCounts,
   RafCountScore,
-} from "../../../../../stores/tenantAdmin/default/action.js";
+} from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 import moment from "moment";
 
 const index = ({
@@ -145,9 +145,8 @@ const index = ({
   useEffect(() => {
     const fetchData = async () => {
       const data = await getAllRafData();
-
       const tempRecords = new Map();
-      const records = data.response.premiumByDateForHcc;
+      const records = data?.response?.premiumByDateForHcc;
       for (let i = 6; i >= 0; i--) {
         const todayDate = moment();
         const presentDate = todayDate.subtract(i, "days");
@@ -193,9 +192,7 @@ const index = ({
             <div className={`${styles.header} p-1`}>RAF</div>
             <div className="p-1">
               <div className={styles.header}>Overall RAF</div>
-              <div className={styles.price}>
-                {getAllRafScoreData?.totalHccRaf}
-              </div>
+              <div className={styles.price}>{getAllRafScoreData}</div>
             </div>
           </div>
         </div>
@@ -215,12 +212,12 @@ const index = ({
         }}
       >
         <div className={styles.headers}>
-        <div className="d-flex justify-content-between">
-          <div className={`${styles.header} p-1`}>Revenue</div>
-          <div className="p-1">
-            <div className={styles.header}>Overall Revenue</div>
-            <div className={styles.price}>{getAllRaf?.totalHccRafScore}</div>
-          </div>
+          <div className="d-flex justify-content-between">
+            <div className={`${styles.header} p-1`}>Revenue</div>
+            <div className="p-1">
+              <div className={styles.header}>Overall Revenue</div>
+              <div className={styles.price}>{getAllRaf?.totalHccRafScore}</div>
+            </div>
           </div>
         </div>
         <RevenueGraph
@@ -236,12 +233,12 @@ const index = ({
 const enhancer = connect(
   (state) => ({
     getAllHccCodes:
-      state?.tenantAdmin?.tenantAdmindefault?.allHccCodes?.data?.response,
+      state?.tenantAdmin?.dashboard?.default?.allHccCodes?.data?.response,
 
     getAllRaf:
-      state?.tenantAdmin?.tenantAdmindefault?.allRafCounts?.data?.response,
+      state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
     getAllRafScoreData:
-      state?.tenantAdmin?.tenantAdmindefault?.allRafScore?.data?.response,
+      state?.tenantAdmin?.dashboard?.default?.allRafScore?.data?.response,
   }),
   {
     getAllHccCodesData: HccCodes,

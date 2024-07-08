@@ -30,20 +30,20 @@ import { reducer as reportReducer } from "./reviewer/report";
 import { reducer as updatedReportReducer } from "./supervisor/report";
 import { reducer as updatedAdminReportReducer } from "./admin/report";
 import { reducer as patientDeatilsReducer } from "./patient/details";
-import { reducer as tenantAdminDefault } from "../stores/tenantAdmin/default";
-import { reducer as tenantRaf } from "../stores/tenantAdmin/default";
-import { reducer as filesCount } from "../stores/tenantAdmin/default";
-import { reducer as ComputingStatus } from "../stores/tenantAdmin/default";
-import { reducer as RafScore } from "../stores/tenantAdmin/default";
-import { reducer as tenantAdminReducer } from "./tenantAdmin";
+import { reducer as tenantAdminDefault } from "../stores/tenantAdmin/dashboard/default";
 import { reducer as webSocketReducer } from "./websocket";
-import { reducer as workFlowReducer } from "./tenantAdmin/workFlow";
+import { reducer as workFlowReducer } from "./tenantAdmin/dashboard/workFlow";
 import { reducer as codifyReducer } from "./codify/dashboard";
 import { reducer as adminPatientsReducer } from "./admin/workqueue";
 import { reducer as allocatedReducer } from "./admin/patientAllocation";
 import { reducer as UsersReducer } from "./supervisor/users";
 import { reducer as AuditedReducer } from "./supervisor/auditedQueue";
-
+import { reducer as tenantUsersReducer } from "./tenantAdmin/users";
+import { reducer as tenantAminPatientsReducer } from "./tenantAdmin/patients";
+import { reducer as patientSyncReducer } from "./tenantAdmin/patientSync";
+import { reducer as tenantAdminTrackingReducer } from "./tenantAdmin/tracking";
+import { reducer as tenantAminNotificationReducer } from "./tenantAdmin/notification";
+import {reducer as tenantAminSettingsReducer} from './tenantAdmin/settings'
 const reducers = combineReducers({
   // old reducers
   sideMenu: toggleMenu,
@@ -98,10 +98,17 @@ const reducers = combineReducers({
   }),
   tenantAdmin: combineReducers({
     webSocket: webSocketReducer,
-    tenantAdmindefault: tenantAdminDefault,
+    dashboard: combineReducers({
+      default: tenantAdminDefault,
+      workFlow: workFlowReducer,
+    }),
     webSocket: webSocketReducer,
-    workFlow: workFlowReducer,
-    tenantAdmin: tenantAdminReducer,
+    users: tenantUsersReducer,
+    patients: tenantAminPatientsReducer,
+    patientSync: patientSyncReducer,
+    tracking: tenantAdminTrackingReducer,
+    notification: tenantAminNotificationReducer,
+    settings:tenantAminSettingsReducer
   }),
   
 });

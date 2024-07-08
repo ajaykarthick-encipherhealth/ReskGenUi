@@ -5,7 +5,7 @@ import dosIcon from "../../../../../images/tenantAdmin/dos.svg";
 import pageIcon from "../../../../../images/tenantAdmin/page.svg";
 import Image from "next/image";
 import styles from "../../styles.module.css";
-import { FilesCount } from "../../../../../stores/tenantAdmin/default/action.js";
+import { FilesCount } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 
 const index = ({ getAllFilesCount, getAllFiles }) => {
   const cardData = [
@@ -84,7 +84,7 @@ const index = ({ getAllFilesCount, getAllFiles }) => {
 const enhancer = connect(
   (state) => ({
     getAllFiles:
-      state?.tenantAdmin?.tenantAdmindefault?.allFilesCounts?.data?.response,
+      state?.tenantAdmin?.dashboard?.default?.allFilesCounts?.data?.response,
   }),
   {
     getAllFilesCount: FilesCount,

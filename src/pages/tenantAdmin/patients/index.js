@@ -20,7 +20,7 @@ import {
   validateYear,
 } from "../../../components/headerFilters/functions";
 import { patientDetails } from "../../../stores/authflow/actions";
-import { actions as tenantAdminAction } from "../../../stores/tenantAdmin";
+import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/patients";
 import { connect } from "react-redux";
 import AddPatientListTable from "../../../components/table/tenantTable/AddPatients/addPatients";
 const bullets = [
@@ -726,10 +726,10 @@ const Patient = ({
 
 const enhancer = connect(
   (state) => ({
-    organizationList: state?.tenantAdmin?.allOrganization?.data,
-    allPatientList: state?.tenantAdmin?.allPatients,
+    organizationList: state?.tenantAdmin?.patients?.allOrganization?.data,
+    allPatientList: state?.tenantAdmin?.patients?.allPatients,
     webSocketData: state?.webSocket?.webSocketDetails?.data,
-    loading: state?.tenantAdmin?.allPatientsLoading,
+    loading: state?.tenantAdmin?.patients?.allPatientsLoading,
   }),
   {
     getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,

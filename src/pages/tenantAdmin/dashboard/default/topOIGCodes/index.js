@@ -1,7 +1,7 @@
 import React from "react";
 import ReusableTable from "../../components/table";
 import { connect } from "react-redux";
-import { topOigCodes } from "../../../../../stores/tenantAdmin/default/action.js";
+import { topOigCodes } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 import { useEffect } from "react";
 
 const index = ({ getTopOigCodesData, top0ijHccCodes }) => {

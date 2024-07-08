@@ -2,21 +2,24 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import CodesGraph from "../../components/codeGraph";
 import Image from "next/image";
-import codescaptured from "../../../../../images/tenantAdmin/codecaptured.svg";
 import processing from "../../../../../images/tenantAdmin/processing.svg";
 import failed from "../../../../../images/tenantAdmin/failed.svg";
 import completed from "../../../../../images/tenantAdmin/completed.svg";
 import upload from "../../../../../images/tenantAdmin/upload.svg";
+import codecaptured from "../../../../../images/tenantAdmin/codecaptured.svg";
+import { top10Diseases } from "../../../../../stores/tenantAdmin/default/action.js";
 import {
   ComputingStatus,
   computingTileStatus,
-} from "../../../../../stores/tenantAdmin/default/action.js";
+} from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 
 const Files = ({
   getAllComputing,
   getAllComputingStatus,
   getComputingStatus,
   getAllComputingTile,
+  getTop10DiseasesData,
+  top10DiseasesData,
 }) => {
   const options = {
     xAxis: {
@@ -115,11 +118,20 @@ const Files = ({
       color: "#FFEAE0",
       iconBg: "#FFDBCC",
     },
+    {
+      id: 5,
+      title: "Codes Captures",
+      count: top10DiseasesData?.totalCount,
+      icon: codecaptured,
+      color: "#FFEAE0",
+      iconBg: "#FFDBCC",
+    },
   ];
 
   useEffect(() => {
     getAllComputing();
     getComputingStatus();
+    getTop10DiseasesData();
   }, []);
 
   return (
@@ -130,7 +142,7 @@ const Files = ({
             className="rounded-lg w-30"
             style={{
               backgroundColor: item?.color,
-              width: "20%",
+              width: "17%",
               height: "70px",
               display: "flex",
               justifyContent: "center",
@@ -173,15 +185,18 @@ const Files = ({
 const enhancer = connect(
   (state) => ({
     getAllComputingStatus:
-      state?.tenantAdmin?.tenantAdmindefault?.allComputingStatus?.data
+      state?.tenantAdmin?.dashboard?.workflow?.allComputingStatus?.data
         ?.response,
     getAllComputingTile:
-      state?.tenantAdmin?.tenantAdmindefault?.allComputingTileStatus?.data
+      state?.tenantAdmin?.dashboard?.workflow?.allComputingTileStatus?.data
         ?.response,
+    top10DiseasesData:
+      state?.tenantAdmin?.tenantAdmindefault?.allTop10Diseases?.data?.response,
   }),
   {
     getAllComputing: ComputingStatus,
     getComputingStatus: computingTileStatus,
+    getTop10DiseasesData: top10Diseases,
   }
 );
 

@@ -5,7 +5,7 @@ import {
   HccCodes,
   RafCounts,
   RafCountScore,
-} from "../../../../../stores/tenantAdmin/default/action.js";
+} from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 const RafGraph = ({
   rafColor,
   rafColor2,
@@ -129,7 +129,7 @@ const RafGraph = ({
           ? [...chartRafData.keys()].length != 12
             ? [...chartRafData.values()]
             : rafScoreByDateForHcc
-          : [12, 32, 50],
+          : [10,20,30,44,21],
       },
 
       {
@@ -158,7 +158,7 @@ const RafGraph = ({
         emphasis: {
           focus: "series",
         },
-        data: rafColor3 &&  premiumByDateForSuggested,
+        data: rafColor3 && rafScoreByDateForSuggested && rafScoreByDateForHcc,
       },
     ],
   };
@@ -170,11 +170,11 @@ const RafGraph = ({
 const enhancer = connect(
   (state) => ({
     getAllHccCodes:
-      state?.tenantAdmin?.tenantAdmindefault?.allHccCodes?.data?.response,
+      state?.tenantAdmin?.dashboard?.default?.allHccCodes?.data?.response,
     getAllRaf:
-      state?.tenantAdmin?.tenantAdmindefault?.allRafCounts?.data?.response,
+      state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
     getAllRafScoreData:
-      state?.tenantAdmin?.tenantAdmindefault?.allRafScore?.data?.response,
+      state?.tenantAdmin?.dashboard?.default?.allRafScore?.data?.response,
   }),
   {
     getAllHccCodesData: HccCodes,

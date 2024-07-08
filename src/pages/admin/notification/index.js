@@ -11,7 +11,7 @@ import {
 } from "../../../services/NotificationService";
 import { getUsers } from "../../../store/actions/adminAction/usersAction";
 import { SelectUserList } from "../../../services/adminServices/DashboardService";
-import { actions as tenantAdminctions } from "../../../stores/tenantAdmin";
+import { actions as tenantAdminActions } from "../../../stores/tenantAdmin/notification";
 
 const { Option } = Select;
 
@@ -26,7 +26,6 @@ export const debounce = (func, delay) => {
 
 const Notification = ({ getAllCustomUsers, allCustomUsers }) => {
   const dispatch = useDispatch();
-  const usersData = useSelector((state) => state.adminUsers.usersData);
   const options = allCustomUsers?.data?.response?.map((data) => ({
     label: data?.firstName + " " + data?.lastName,
     value: data?.userName,
@@ -379,10 +378,10 @@ const Notification = ({ getAllCustomUsers, allCustomUsers }) => {
 
 const enhancer = connect(
   (state) => ({
-    allCustomUsers: state?.tenantAdmin?.customUsers,
+    allCustomUsers: state?.tenantAdmin?.notification?.customUsers,
   }),
   {
-    getAllCustomUsers: tenantAdminctions.getCustomUsersAction,
+    getAllCustomUsers: tenantAdminActions.getCustomUsersAction,
   }
 );
 export default enhancer(Notification);
