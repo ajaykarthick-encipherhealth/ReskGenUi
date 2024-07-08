@@ -34,9 +34,11 @@ const index = ({
 
   const organizationOptions = organizationStatusData?.response?.map(
     (org, index) => ({
-      value: org.name,
+      value: org.id,
+      label: org.name,
     })
   );
+
 
   return (
     <div className={styles.container}>
@@ -54,6 +56,11 @@ const index = ({
               options={organizationOptions}
               allowClear
               onChange={handleOrganizationChange}
+              optionFilterProp="label"
+              filterSort={(optionA, optionB) =>
+                (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+              }
+              showSearch
             />
           </div>
         </div>
@@ -101,9 +108,11 @@ const index = ({
   );
 };
 const enhancer = connect(
-  (state) => ({
+  (state) => (
+    {
     organizationStatusData: state.tenantAdmin.workFlow.organizationStatus.data,
-  }),
+  }
+),
 
   {
     getOrganizationStatusData: dashbaordActions.organizationStatusAction,

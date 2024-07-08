@@ -1,12 +1,12 @@
 import { requestPortal } from "../../../utils/network";
 
 
-export async function getUserStatus(startDate, endDate) {
+export async function getUserStatus(startDate, endDate,organizationId) {
     const options = {
       method: "GET",
     };
     const data = await requestPortal(
-      `dbservice/tenantadmin/dashboard/getUsersCountByRole?startDate=${startDate}&endDate=${endDate}`,
+      `dbservice/tenantadmin/dashboard/getUsersCountByRole?startDate=${startDate}&endDate=${endDate}&organizationId=${organizationId?organizationId:""}`,
       options
     );
     return data;
@@ -23,12 +23,12 @@ export async function getAuditorStatus(startDate, endDate,organizationId) {
 }
 
 
-export async function getAllocatedStatus(startDate, endDate) {
+export async function getAllocatedStatus(startDate, endDate,organizationId) {
   const options = {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/getAllocatedStats?startDate=${startDate}&endDate=${endDate}`,
+    `dbservice/tenantadmin/dashboard/getAllocatedStats?startDate=${startDate}&endDate=${endDate}&organizationId=${organizationId?organizationId:""}`,
     options
   );
   return data;

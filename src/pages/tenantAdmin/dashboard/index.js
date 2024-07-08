@@ -124,13 +124,13 @@ const Index = ({
   };
 
   useEffect(() => {
-      getUserStatusData(dateRange.startDate, dateRange.endDate);
+      getUserStatusData(dateRange.startDate, dateRange.endDate,selectedOrganization);
       getAuditorStatusData(
         dateRange.startDate,
         dateRange.endDate,
         selectedOrganization
       );
-      getAllocatedStatusData(dateRange.startDate, dateRange.endDate);
+      getAllocatedStatusData(dateRange.startDate, dateRange.endDate,selectedOrganization);
       getReviewerStatusData(
         dateRange.startDate,
         dateRange.endDate,
@@ -282,13 +282,15 @@ const Index = ({
 };
 
 const enhancer = connect(
-  (state) => ({
+  (state) => (
+    {
     allocatedStatusData: state.tenantAdmin.workFlow.allocatedStatus.data,
     auditorStatusData: state.tenantAdmin.workFlow.auditorStatus.data,
     userStatusData: state.tenantAdmin.workFlow.userStatus.data,
     reviewerStatusData: state.tenantAdmin.workFlow.reviewerStatus.data,
     organizationStatusData: state.tenantAdmin.workFlow.organizationStatus.data,
-  }),
+  }
+),
 
   {
     getUserStatusData: dashbaordActions.userStatusAction,
