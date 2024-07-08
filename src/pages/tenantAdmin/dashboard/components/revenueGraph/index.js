@@ -74,7 +74,7 @@ const RevenueGraph = ({
         name: "HCC Codes",
         type: "line",
         step: "middle",
-        data: isMultiple && [220, 282, 201, 234, 290, 430, 410],
+        data: premiumByDateForHcc,
         itemStyle: {
           color: "#04B700",
         },
@@ -83,7 +83,7 @@ const RevenueGraph = ({
         name: "Car gap Codes",
         type: "line",
         step: "end",
-        data: isMultiple && [450, 432, 401, 454, 590, 530, 510],
+        data: premiumByDateForSuggested,
         itemStyle: {
           color: "#FF9209",
         },

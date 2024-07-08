@@ -44,6 +44,7 @@ import Flag from "./components/flag";
 import StatusAction from "./components/statusAction";
 import { handleCopyToClipboard } from "../../commonFunctions";
 import LogoLoader from "../../logoLoader";
+import FileDetails from "./components/fileDetails";
 const tabList = [
   {
     title: "HCC",
@@ -209,7 +210,6 @@ const Details = ({
   }, [activeTab]);
 
   useEffect(() => {
-    console.log(processedYearResult)
     if(processedYearResult?.data?.response){
       getAllProcessYearSelect(processedYearResult);
     }
@@ -257,7 +257,6 @@ const Details = ({
   }, [patientDetailsResult?.data?.response?.fileDetailDTO?.azureBlobPath]);
 
   const getAllProcessYearSelect = async (result) => {
-    console.log("sdadashjd")
     const patientId = localStorage.getItem("patientId");
       var dosResonse = result.data.response;
       var dosYearArr = [];
@@ -280,7 +279,6 @@ const Details = ({
       );
      }
       if(activeTab == 4){
-      console.log("cdsfsf")
       getLabDetails(selectPatientId ? selectPatientId?.patirntId : patientId,
         dosYearArr[0].value,
         null,
@@ -610,7 +608,9 @@ const Details = ({
                 <div className="row patient-file-container">
                   <div className="col-xl-12">
                     <div className="row">
-                      <div
+                      {(activeTab == 1 || activeTab == 2)  ?
+                      <>
+                        <div
                         className="col-xl-1 col-sm-12"
                         style={{ zIndex: "1" }}
                       >
@@ -978,6 +978,29 @@ const Details = ({
                       >
                         <StatusAction />
                       </div>
+                      </>:
+                      <>
+                       <div
+                        className="col-xl-1 col-sm-12"
+                        style={{ zIndex: "1" ,marginTop:"20px"}}
+                      >
+                        <Button
+                          onClick={backToPatientData}
+                          className={`ms-2 ${visitStyles.backArrowBtn}`}
+                        >
+                          <FontAwesomeIcon
+                            icon={faArrowLeft}
+                            style={{
+                              color: "rgb(38 50 107)",
+                            }}
+                          />
+                        </Button>
+                      </div>
+                      <div className="col-xl-11">
+                        <FileDetails title={activeTab == 3 ? "Radiology" : "LAB"} patienIdDetails={patienIdDetails} patientDetails={patientDetails} fileResult={patientDocumentResult} hccCounts={hccCounts} hccValidCount={hccValidCount} flagFirstData={flagFirstData}/>
+                      </div>
+                      </>
+                    }
                       <div
                         className={
                           isSideNavShow

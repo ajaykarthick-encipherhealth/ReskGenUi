@@ -22,7 +22,9 @@ const CodesGraph = ({
   getAllHccCodes,
   getAllHccCodesData,
   getAllRaf,
+  getAllRafScoreData,
   chartData,
+  getAllRafScore,
 }) => {
   const [dateRange, setDateRange] = useState({ startDate: "", endDate: "" });
   const [currChartData, setCurrChartData] = useState(new Map());
@@ -35,8 +37,10 @@ const CodesGraph = ({
     setCurrChartData(chartData);
   }, [currChartData, isCargaps]);
 
+
   useEffect(() => {
     getAllHccCodesData(dateRange.startDate, dateRange.endDate);
+    getAllRafScore();
     getAllRafData(dateRange.startDate, dateRange.endDate);
   }, [dateRange]);
 
@@ -125,7 +129,6 @@ const CodesGraph = ({
       },
     ],
   };
-
   return <ReactECharts option={options ? options : graphOptions} />;
 };
 
@@ -135,10 +138,13 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allHccCodes?.data?.response,
     getAllRaf:
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
+      getAllRafScoreData:
+      state?.tenantAdmin?.dashboard?.default?.allRafScore?.data?.response,
   }),
   {
     getAllHccCodesData: HccCodes,
     getAllRafData: RafCounts,
+    getAllRafScore: RafCountScore,
   }
 );
 

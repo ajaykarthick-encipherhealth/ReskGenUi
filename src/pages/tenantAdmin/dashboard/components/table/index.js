@@ -4,9 +4,10 @@ import downArrow from "../../../../../images/tenantAdmin/downArrow.svg";
 import Image from "next/image";
 import { Empty } from "antd";
 
-const index = ({ items }) => {
+const index = ({ items , key}) => {
+
   return (
-    <table className="tenatTable">
+  <table className="tenatTable" key={key} id={key}>
       <thead>
         <tr>
           <td>Code</td>

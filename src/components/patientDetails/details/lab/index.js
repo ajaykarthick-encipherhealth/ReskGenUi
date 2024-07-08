@@ -17,13 +17,16 @@ import { SwapOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
-const Lab = ({ getLabDetails, getLabFileDetails, labDetailsResult }) => {
+const Lab = ({ getLabDetails, getLabFileDetails, labDetailsResult ,processedYearResult}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeTabHead, setActiveTabHead] = useState(1);
   const [activeMeatTitle, setActiveMeatTitle] = useState(null);
   const [dosSummariesList, setDosSummariesList] = useState([]);
   const [selectDosValue, setSelectDosValue] = useState("");
   const [popoverVisible, setPopoverVisible] = useState(false);
+  const [dosYear, setDosYear] = useState([]);
+  const [dosYearDefalutSelect, setDosYearDefalutSelect] = useState("");
+  const [selectedDosValue, setSelectedDosValue] = useState("");
 
   const selectTab = (num) => {
     setActiveTabHead(num);
@@ -53,6 +56,20 @@ const Lab = ({ getLabDetails, getLabFileDetails, labDetailsResult }) => {
       );
     }
   };
+
+  const getAllProcessYearSelect = async (result) => {
+    var dosYearArr = [];
+    result?.data?.response?.map((res) => {
+      dosYearArr.push({ value: res, label: res });
+    });
+    setDosYearDefalutSelect(dosYearArr[0]);
+    setSelectedDosValue(dosYearArr[0].value);
+    setDosYear(dosYearArr);
+  };
+
+  useEffect(() => {
+    getAllProcessYearSelect(processedYearResult);
+  }, [processedYearResult]);
 
   useEffect(() => {
     if (labDetailsResult?.data?.response) {
@@ -239,7 +256,7 @@ const Lab = ({ getLabDetails, getLabFileDetails, labDetailsResult }) => {
           <div className="custom-tab-1">
             <Tab.Container activeKey={activeTabHead}>
               <div className="row">
-                <div className="col-xl-11">
+                <div className="col-xl-12">
                   <Nav as="ul" className="nav nav-tabs">
                     <Nav.Item as="li" className="nav-item">
                       <Nav.Link
@@ -273,6 +290,22 @@ const Lab = ({ getLabDetails, getLabFileDetails, labDetailsResult }) => {
                       >
                         MEAT Criteria
                       </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item as="li" className="nav-item">
+                      <Select
+                        placeholder="Select Year"
+                        onChange={handleOptions}
+                        className="dosSelect"
+                        allowClear
+                        value={selectDosValue}
+                        style={{ marginRight: "10px" }}
+                      >
+                        {dosYear?.map((data) => (
+                          <Option key={data?.value} value={data?.value}>
+                            {data.label}
+                          </Option>
+                        ))}
+                      </Select>
                     </Nav.Item>
                     <Nav.Item as="li" className="nav-item">
                       <Select
@@ -321,11 +354,6 @@ const Lab = ({ getLabDetails, getLabFileDetails, labDetailsResult }) => {
                     )}
                   </Nav>
                 </div>
-                <div className="col-xl-1">
-                  <div className={visitStyles.sideHeaderTitle}>
-                    <span>LAB</span>
-                  </div>
-                </div>
               </div>
               {!isLoading ? (
                 <SpinnerDots />
@@ -359,6 +387,8 @@ const Lab = ({ getLabDetails, getLabFileDetails, labDetailsResult }) => {
 const enhancer = connect(
   (state) => ({
     labDetailsResult: state?.patientDetails?.details?.labResult,
+    processedYearResult: state?.patientDetails.details?.processedYear,
+
   }),
   {
     getLabDetails: detailsActions.labDetailsAction,

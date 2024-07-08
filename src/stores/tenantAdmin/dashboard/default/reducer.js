@@ -61,6 +61,8 @@ const tenantAdminDefault = combineReducers({
   allTopOigCodes: createReducer(topOigCodes),
   allComputingTileStatus:createReducer(computingTileStatus),
   allRafScore: createReducer(rafScore),
+  rafScoreLoader: createReducer(rafScore),
+  
 });
 
 export default tenantAdminDefault;

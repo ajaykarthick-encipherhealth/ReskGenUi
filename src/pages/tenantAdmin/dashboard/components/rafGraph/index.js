@@ -23,19 +23,28 @@ const RafGraph = ({
   const [dateRange, setDateRange] = useState({ startDate: "", endDate: "" });
 
   useEffect(() => {
-    getAllHccCodesData(dateRange.startDate, dateRange.endDate);
-    getAllRafData();
-    getAllRafScore(dateRange.startDate, dateRange.endDate);
+    const fetchData=async()=>{
+    await getAllHccCodesData(dateRange.startDate, dateRange.endDate);
+    await getAllRafData();
+    await getAllRafScore(dateRange.startDate, dateRange.endDate);
+    }
+    fetchData()
+    
   }, [dateRange]);
 
-  const rafScoreByDateForSuggested =
-    getAllRafScoreData?.rafScoreByDateForSuggested
-      ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
-      : [];
+  const [rafState, setRafState]=useState();
+  useEffect(()=>{
+    const fetchData=async()=>{
+      const data=await getAllRafScore(dateRange.startDate, dateRange.endDate)
+      setRafState(data.response)
+    }
+    fetchData()
+  },[])
 
-  const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc
-    ? Object.values(getAllRafScoreData.rafScoreByDateForHcc)
-    : [];
+  const rafScoreByDateForSuggested =rafState?.rafScoreByDateForSuggested?Object.values(rafState.rafScoreByDateForSuggested):[]
+
+  const rafScoreByDateForHcc = rafState?.rafScoreByDateForHcc?Object.values(rafState.rafScoreByDateForHcc):[]
+
 
   const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
     ? Object.values(getAllRaf.premiumByDateForHcc)
@@ -74,8 +83,8 @@ const RafGraph = ({
         type: "category",
         boundaryGap: false,
         data:
-          isHcc || isCargaps
-            ? [...chartRafData.keys()]
+          isHcc || isCargaps 
+            ? [...chartRafData?.keys()]
             : [
                 "jan",
                 "feb",
@@ -135,7 +144,7 @@ const RafGraph = ({
         emphasis: {
           focus: "series",
         },
-        data: rafColor2,
+        data: rafColor2 && premiumByDateForHcc,
       },
       {
         name: "Car gaps Codes",
@@ -149,12 +158,14 @@ const RafGraph = ({
         emphasis: {
           focus: "series",
         },
-        data: rafColor3 && premiumByDateForHcc && premiumByDateForSuggested,
+        data: rafColor3 &&  premiumByDateForSuggested,
       },
     ],
   };
   return <ReactECharts option={option} />;
+
 };
+
 
 const enhancer = connect(
   (state) => ({

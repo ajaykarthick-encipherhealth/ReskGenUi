@@ -5,6 +5,8 @@ import { topOigCodes } from "../../../../../stores/tenantAdmin/dashboard/default
 import { useEffect } from "react";
 
 const index = ({ getTopOigCodesData, top0ijHccCodes }) => {
+
+
   useEffect(() => {
     getTopOigCodesData();
   }, []);
@@ -22,11 +24,11 @@ const index = ({ getTopOigCodesData, top0ijHccCodes }) => {
             margin: "0 0 0 10px",
           }}
         >
-          100K
+         {top0ijHccCodes?.response?.totalCount}
         </span>
       </div>
 
-      <ReusableTable items={top0ijHccCodes?.response?.topDiseaseDTOList} />
+      <ReusableTable items={top0ijHccCodes?.response?.topDiseaseDTOList?.length ?top0ijHccCodes?.response?.topDiseaseDTOList:[]} key={"top10"}/>
     </>
   );
 };

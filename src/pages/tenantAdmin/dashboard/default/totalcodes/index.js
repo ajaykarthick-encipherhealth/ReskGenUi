@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import CodesGraph from "../../components/codeGraph";
 import styles from "../../styles.module.css";
@@ -14,28 +14,123 @@ import {
 const index = ({
   getAllHccCodesData,
   getAllHccCodes,
-  getAllRafData,
   getAllRaf,
   getAllRafScoreData,
-  getAllRafScore,
+  dateRange,
 }) => {
+  const [currChartData, setCurrChartData] = useState(new Map());
+  const [chartData, setChartData] = useState(new Map());
+  const [chartData1, setChartData1] = useState(new Map());
+  const [chartRafData1, setRafChartData1] = useState(new Map());
+  const [chartRevenData1, setRevenChartData1] = useState(new Map());
+
+
+  const ShortMonth = [
+    "",
+    "jan",
+    "feb",
+    "mar",
+    "apr",
+    "may",
+    "jun",
+    "jul",
+    "aug",
+    "sep",
+    "oct",
+    "nov",
+    "dec",
+  ];
+
+
+  useEffect(() => {
+    const fetchChartData = async () => {
+      const data = await getAllHccCodesData(
+        dateRange.startDate,
+        dateRange.endDate
+      );
+      const records = data.response.hccDiseaseCountMap;
+      const records1 = data.response.suggestedHccDiseaseCountMap;
+      const datediff =
+        moment(dateRange?.endDate).diff(moment(dateRange?.startDate), "days") +
+        1;
+
+      const tempRecords = new Map();
+      const tempRecords1 = new Map();
+      if (datediff != 7 && datediff != 30) {
+        ShortMonth.slice(1).forEach((month) => {
+          tempRecords.set(month, 0);
+          tempRecords1.set(month, 0);
+        });
+      }
+
+      if ((!isNaN(datediff) && datediff == 7) || datediff == 30) {
+        for (let i = 0; i < datediff; i++) {
+          const todayDate = moment();
+          const presentDate = todayDate.subtract(i, "days");
+          const currMonth = parseInt(presentDate.format("MM"));
+          const currDay = presentDate.format("DD");
+          tempRecords.set(ShortMonth[currMonth] + currDay, 0);
+          tempRecords1.set(ShortMonth[currMonth] + currDay, 0);
+        }
+
+        Object.entries(records).map((record) => {
+          const currMonth = parseInt(moment(record[0]).format("MM"));
+          const currDay = moment(record[0]).format("DD");
+          tempRecords.set(ShortMonth[currMonth] + currDay, record[1]);
+        });
+        Object.entries(records1).map((record) => {
+          const currMonth = parseInt(moment(record[0]).format("MM"));
+          const currDay = moment(record[0]).format("DD");
+          tempRecords1.set(ShortMonth[currMonth] + currDay, record[1]);
+        });
+      }
+
+      setChartData1(tempRecords1);
+      setChartData(tempRecords);
+    };
+    fetchChartData();
+  }, [dateRange]);
+
+
+
+  useEffect(() => {
+    setCurrChartData(new Map());
+  }, [chartData]);
+
+  useEffect(() => {
+    setCurrChartData(chartData);
+  }, [currChartData]);
+
+  const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
+    ? Object.values(getAllHccCodes.hccDiseaseCountMap)
+    : [];
+
+  const suggestedHccDiseaseCountMap =
+    getAllHccCodes?.suggestedHccDiseaseCountMap
+      ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
+      : [];
+
+
   const options = {
     xAxis: {
       type: "category",
-      data: [
-        "jan",
-        "feb",
-        "mar",
-        "apr",
-        "may",
-        "jun",
-        "jul",
-        "aug",
-        "sep",
-        "oct",
-        "nov",
-        "dec",
-      ],
+      data:
+      hccDiseaseCountValues || suggestedHccDiseaseCountMap
+          ? [...currChartData.keys()]
+          : [
+              "jan",
+              "feb",
+              "mar",
+              "apr",
+              "may",
+              "jun",
+              "jul",
+              "aug",
+              "sep",
+              "oct",
+              "nov",
+              "dec",
+            ],
     },
     yAxis: {
       type: "value",
@@ -51,7 +146,7 @@ const index = ({
     series: [
       {
         name: "Total Codes",
-        data: [10, 30, 16, 33, 13, 78, 6, 76, 65, 23, 11, 56],
+        data: [],
         type: "line",
         lineStyle: { color: "#E88D67" },
         smooth: true,
@@ -66,7 +161,7 @@ const index = ({
       },
       {
         name: "HCC Codes",
-        data: [10, 76, 98, 76, 24, 87, 23, 11, 56, 99, 3, 22],
+        data: hccDiseaseCountValues,
         type: "line",
         lineStyle: { color: "#04B700" },
         smooth: true,
@@ -81,7 +176,7 @@ const index = ({
       },
       {
         name: "Car Gap Codes",
-        data: [10, 30, 50, 29, 13, 78, 54, 76, 98, 23, 11, 56],
+        data: suggestedHccDiseaseCountMap,
         type: "line",
         lineStyle: { color: "#FF9209" },
         smooth: true,
@@ -111,41 +206,35 @@ const index = ({
     },
   ];
 
-  useEffect(() => {
-    getAllHccCodesData();
-    getAllRafData();
-    getAllRafScore();
-  }, []);
-
   return (
     <div className="d-flex justify-content-between">
       <div style={{ width: "33%" }}>
         <div className={styles.headers}>
-        <div className="d-flex justify-content-between">
-          <div className={styles.header}>Total Codes</div>
+          <div className="d-flex justify-content-between">
+            <div className={styles.header}>Total Codes</div>
 
-          <div className="d-flex">
-            <div>
-              {bullets?.map((item) => (
-                <div className="d-flex">
-                  <div
-                    style={{
-                      backgroundColor: item?.color,
-                      width: "8px",
-                      height: "8px",
-                      margin: "8px 5px 0 0px",
-                    }}
-                  ></div>
-                  {item?.title}
-                </div>
-              ))}
-            </div>
-            <div>
-              <div className={styles.header}>Total Codes</div>
-              <div className={styles.price}>{getAllHccCodes?.totalCount}</div>
+            <div className="d-flex gap-4" >
+              <div>
+                {bullets?.map((item) => (
+                  <div className="d-flex">
+                    <div
+                      style={{
+                        backgroundColor: item?.color,
+                        width: "8px",
+                        height: "8px",
+                        margin: "8px 5px 0 0px",
+                      }}
+                    ></div>
+                    {item?.title}
+                  </div>
+                ))}
+              </div>
+              <div>
+                <div className={styles.header}>Total Codes</div>
+                <div className={styles.price}>{getAllHccCodes?.totalCount}</div>
+              </div>
             </div>
           </div>
-        </div>
         </div>
         <CodesGraph options={options} isRadio={true} />
       </div>
@@ -157,18 +246,22 @@ const index = ({
           borderRadius: "16px",
         }}
       >
-         <div className={styles.headers}>
-        <div className="d-flex justify-content-between">
-          <div className={`${styles.header} p-1`}>RAF</div>
-          <div className="p-1">
-            <div className={styles.header}>Overall RAF</div>
-            <div className={styles.price}>
-              {getAllRafScoreData?.totalHccRaf}
+        <div className={styles.headers}>
+          <div className="d-flex justify-content-between">
+            <div className={`${styles.header} p-1`}>RAF</div>
+            <div className="p-1">
+              <div className={styles.header}>Overall RAF</div>
+              <div className={styles.price}>
+                {getAllRafScoreData?.totalHccRaf}
+              </div>
             </div>
-          </div>
           </div>
         </div>
         <RafGraph
+         overallData={true}
+         chartData={chartData1}
+         chartRafData={chartRafData1}
+         chartRevenData={chartRevenData1}
           rafColor={"#E88D67"}
           rafColor3={"#FF9209"}
           rafColor2={"#00BC13"}
@@ -182,14 +275,14 @@ const index = ({
           padding: "0px 5px 0 5px",
         }}
       >
-          <div className={styles.headers}>
-        <div className="d-flex justify-content-between">
-          <div className={`${styles.header} p-1`}>Revenue</div>
-          <div className="p-1">
-            <div className={styles.header}>Overall Revenue</div>
-            <div className={styles.price}>{getAllRaf?.totalHccRafScore}</div>
+        <div className={styles.headers}>
+          <div className="d-flex justify-content-between">
+            <div className={`${styles.header} p-1`}>Revenue</div>
+            <div className="p-1">
+              <div className={styles.header}>Overall Revenue</div>
+              <div className={styles.price}>{getAllRaf?.totalHccRafScore}</div>
+            </div>
           </div>
-        </div>
         </div>
         <RevenueGraph isMultiple={true} />
       </div>

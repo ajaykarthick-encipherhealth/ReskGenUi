@@ -5,11 +5,13 @@ import { connect } from "react-redux";
 import ReactECharts from "echarts-for-react";
 import styles from "../../styles.module.css";
 import CodesGraph from "../../components/codeGraph";
+import { Spin } from "antd";
 
-const index = ({rafScoreData,overAllRafScore}) => {
+const index = ({ rafScoreData, overAllRafScore, rafLoader }) => {
   useEffect(() => {
     rafScoreData();
   }, []);
+
   const speedometerOptions = {
     tooltip: {
       formatter: "{a} <br/>{b} : {c}%",
@@ -81,7 +83,13 @@ const index = ({rafScoreData,overAllRafScore}) => {
         style={{ width: "33%", height: "auto" }}
       >
         <div className={styles.header}>Raf Score Count</div>
-        <ReactECharts option={speedometerOptions} />
+        {rafLoader ? (
+          <div className="d-flex align-items-center justify-content-center">
+            <Spin size="large" />
+          </div>
+        ) : (
+          <ReactECharts option={speedometerOptions} />
+        )}
       </div>
       <div className="revenueChart" style={{ width: "65%" }}>
         <div className={styles.header}>
@@ -100,16 +108,14 @@ const index = ({rafScoreData,overAllRafScore}) => {
   );
 };
 
-
 const enhancer = connect(
-  (state) => (
-    {
+  (state) => ({
     overAllRafScore: state?.tenantAdmin?.dashboard?.default?.allRafScore?.data,
-  }
-  // console.log(state,"state")
-),
+    rafLoader: state?.tenantAdmin?.dashboard?.default?.rafScoreLoader?.loading,
+  }),
+
   {
-  rafScoreData: rafScore,
+    rafScoreData: rafScore,
   }
 );
 
