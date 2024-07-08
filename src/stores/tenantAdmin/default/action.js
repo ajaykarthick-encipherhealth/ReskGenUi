@@ -40,3 +40,8 @@ export const rafScore  = createActionThunk(
 
 
 
+export const computingTileStatus  = createActionThunk(
+  "GET_COMPUTING_TILE_STATUS",
+  network.getComputingStatus
+);
+

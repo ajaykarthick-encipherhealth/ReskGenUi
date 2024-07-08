@@ -8,6 +8,7 @@ import {
   RafCountScore,
   top10Diseases,
   topOigCodes,
+  computingTileStatus,
   rafScore,
 } from "./action";
 
@@ -58,8 +59,8 @@ const tenantAdminDefault = combineReducers({
   allRafScore: createReducer(RafCountScore),
   allTop10Diseases: createReducer(top10Diseases),
   allTopOigCodes: createReducer(topOigCodes),
+  allComputingTileStatus:createReducer(computingTileStatus),
   allRafScore: createReducer(rafScore),
-  
 });
 
 export default tenantAdminDefault;
