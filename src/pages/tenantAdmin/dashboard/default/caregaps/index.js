@@ -71,7 +71,6 @@ const index = ({
           tempRecords1.set(ShortMonth[currMonth] + currDay, record[1]);
         });
       }
-      console.log("dates", tempRecords1);
       setChartData1(tempRecords1);
     };
     fetchChartData();

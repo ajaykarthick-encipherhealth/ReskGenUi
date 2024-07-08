@@ -59,6 +59,7 @@ const tenantAdminDefault = combineReducers({
   allTop10Diseases: createReducer(top10Diseases),
   allTopOigCodes: createReducer(topOigCodes),
   allRafScore: createReducer(rafScore),
+  rafScoreLoader: createReducer(rafScore),
   
 });
 

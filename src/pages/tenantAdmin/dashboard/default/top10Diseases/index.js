@@ -12,18 +12,21 @@ const index = ({top10DiseasesData,getTop10DiseasesData}) => {
     <>
       <div>
         <span style={{fontSize:"18px",fontWeight:"600"}}>Top 10 Diseases</span>
-        <span style={{color:"#FF8551",fontSize:"20px",fontWeight:"600",margin:"0 0 0 10px"}}>100K</span>
+        <span style={{color:"#FF8551",fontSize:"20px",fontWeight:"600",margin:"0 0 0 10px"}}> {top10DiseasesData?.response?.totalCount}</span>
       </div>
 
-      <ReusableTable items={top10DiseasesData?.response?.topDiseaseDTOList}/>
+      <ReusableTable items={top10DiseasesData?.response?.topDiseaseDTOList?.length ?top10DiseasesData?.response?.topDiseaseDTOList:[]} key ={"diseases"}/>
     </>
   );
 };
 
 const enhancer = connect(
-  (state) => ({
-    top10DiseasesData: state?.tenantAdmin?.tenantAdmindefault?.allTop10Diseases.data,
-  }),
+  (state) => (
+    {
+    top10DiseasesData: state?.tenantAdmin?.tenantAdmindefault?.allTop10Diseases?.data,
+  }
+ 
+),
   {
     getTop10DiseasesData: top10Diseases,
   
