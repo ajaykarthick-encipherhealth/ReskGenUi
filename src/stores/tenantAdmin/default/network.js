@@ -87,6 +87,7 @@ export async function getTopOigCodes() {
 }
 
 export async function getComputingStatus() {
+
   const options = {
     method: "GET",
   };
@@ -96,3 +97,4 @@ export async function getComputingStatus() {
   );
   return data;
 }
+

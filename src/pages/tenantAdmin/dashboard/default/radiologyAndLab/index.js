@@ -20,8 +20,10 @@ const index = () => {
 
   return (
     <>
+      <div className={styles.headers}>
       <div className="d-flex justify-content-between">
         <div className={styles.header} style={{ width: "50%" }}>
+
           <div
             className="d-flex justify-content-between"
             style={{ width: "100%" }}
@@ -55,6 +57,7 @@ const index = () => {
           <div className={styles.header}>Overall Count</div>
           <div className={styles.price}>3000</div>
         </div>
+      </div>
       </div>
 
       <CodesGraph

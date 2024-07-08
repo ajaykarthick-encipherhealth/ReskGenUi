@@ -32,8 +32,7 @@ const index = ({ top10DiseasesData, getTop10DiseasesData }) => {
 
 const enhancer = connect(
   (state) => ({
-    top10DiseasesData:
-      state.tenantAdmin.defaultRafScore?.allTop10Diseases?.data,
+    top10DiseasesData: state?.tenantAdmin?.tenantAdmindefault?.allTop10Diseases.data,1
   }),
   {
     getTop10DiseasesData: top10Diseases,
