@@ -43,6 +43,7 @@ import { reducer as tenantAminPatientsReducer } from "./tenantAdmin/patients";
 import { reducer as patientSyncReducer } from "./tenantAdmin/patientSync";
 import { reducer as tenantAdminTrackingReducer } from "./tenantAdmin/tracking";
 import { reducer as tenantAminNotificationReducer } from "./tenantAdmin/notification";
+import {reducer as tenantAminSettingsReducer} from './tenantAdmin/settings'
 const reducers = combineReducers({
   // old reducers
   sideMenu: toggleMenu,
@@ -107,6 +108,7 @@ const reducers = combineReducers({
     patientSync: patientSyncReducer,
     tracking: tenantAdminTrackingReducer,
     notification: tenantAminNotificationReducer,
+    settings:tenantAminSettingsReducer
   }),
 });
 

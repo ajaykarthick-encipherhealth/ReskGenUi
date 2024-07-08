@@ -5,7 +5,7 @@ import { Button, Checkbox, Divider, Switch } from "antd";
 import FileUploader from "../../components/fileUploader";
 import ModalPop from "../../components/modal";
 import CommonModalContent from "../../components/commonModalContent";
-import { actions as configurationActions } from "../../../../../stores/tenantAdmin";
+import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
 // import { actions as codingGuidelinesActions } from "../../../../../stores/tenantAdmin";
 import { connect } from "react-redux";
 import TenantSettingsTable from "../../../../../components/table/tenantSettingsTable/tenantSettingsTable";
@@ -153,9 +153,9 @@ const DirectCodes = ({ updateSettings, getCodingDetails, list }) => {
   );
 };
 const enhancer = connect((state) => ({
-  list: state?.tenantAdmin?.codingGuidelines?.data,
+  list: state?.tenantAdmin?.settings?.codingGuidelines?.data,
 }), {
-  updateSettings: configurationActions.updateSettingsAction,
-  getCodingDetails: configurationActions.codingGuidelinesAction,
+  updateSettings: settingActions.updateSettingsAction,
+  getCodingDetails: settingActions.codingGuidelinesAction,
 });
 export default enhancer(DirectCodes);

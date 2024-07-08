@@ -5,8 +5,7 @@ import { Button, Input, Switch } from "antd";
 import { useState } from "react";
 import Tags from "../../components/tags";
 import { connect, useSelector } from "react-redux";
-import { actions as codingGuidelinesActions } from "../../../../../stores/tenantAdmin";
-import { actions as configurationActions } from "../../../../../stores/tenantAdmin";
+import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
 
 export const handleRemoveTag = ({ index, setTags, tags }) => {
   const newTags = [...tags];
@@ -218,9 +217,9 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
 };
 
 const enhancer = connect((state) => ({
-  list: state?.tenantAdmin?.codingGuidelines?.data,
+  list: state?.tenantAdmin?.settings?.codingGuidelines?.data,
 }), {
-  getCodingDetails: codingGuidelinesActions.codingGuidelinesAction,
-  updateSettings: configurationActions.updateSettingsAction,
+  getCodingDetails: settingActions.codingGuidelinesAction,
+  updateSettings: settingActions.updateSettingsAction,
 });
 export default enhancer(Insulin);

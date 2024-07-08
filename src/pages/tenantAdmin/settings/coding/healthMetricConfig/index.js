@@ -15,16 +15,14 @@ import Image from "next/image";
 import delIcon from "../../../../../images/svg/delIcon.svg";
 import edit from "../../../../../images/svg/editWithoutBg.svg";
 import { connect } from "react-redux";
-import { actions as healthMetricActions } from "../../../../../stores/tenantAdmin";
 import ButtonStyles from "../../../../../components/button/style.module.css";
 import { useSelector } from "react-redux";
 import { getYears } from "../../../../../utils/reusable";
-import { actions as configurationActions } from "../../../../../stores/tenantAdmin";
 import FileUpload from "../../../../../components/table/tenantSettingsTable/fileUpload";
 import { PlusOutlined } from "@ant-design/icons";
 import Search from "../../../../../components/table/tenantSettingsTable/search";
 import TenantSettingsTable from "../../../../../components/table/tenantSettingsTable/tenantSettingsTable";
-import { actions as codingGuidelinesActions } from "../../../../../stores/tenantAdmin";
+import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
 
 const HealthMetricConfig = ({
   healthMetricAdd,
@@ -371,12 +369,12 @@ const HealthMetricConfig = ({
 
 const enhancer = connect(
   (state) => ({
-    list: state?.tenantAdmin?.codingGuidelines?.data,
+    list: state?.tenantAdmin?.settings?.codingGuidelines?.data,
   }),
   {
-    healthMetricAdd: healthMetricActions.healthMetricAddAction,
-    updateSettings: configurationActions.updateSettingsAction,
-    getCodingDetails: codingGuidelinesActions.codingGuidelinesAction,
+    healthMetricAdd: settingActions.healthMetricAddAction,
+    updateSettings: settingActions.updateSettingsAction,
+    getCodingDetails: settingActions.codingGuidelinesAction,
   }
 );
 export default enhancer(HealthMetricConfig);
