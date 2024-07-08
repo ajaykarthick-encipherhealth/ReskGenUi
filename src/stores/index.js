@@ -103,6 +103,7 @@ const reducers = combineReducers({
     workFlow: workFlowReducer,
     tenantAdmin: tenantAdminReducer,
   }),
+  
 });
 
 const middlewares = [thunkMiddleware, promiseMiddleware];

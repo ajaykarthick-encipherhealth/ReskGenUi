@@ -30,7 +30,7 @@ export const top10Diseases = createActionThunk(
   network.getTop10Diseases
 );
 export const topOigCodes  = createActionThunk(
-  "GET_TOP10_DISEASES",
+  "GET_TOPOIG_DISEASES",
   network.getTopOigCodes
 );
 export const rafScore  = createActionThunk(

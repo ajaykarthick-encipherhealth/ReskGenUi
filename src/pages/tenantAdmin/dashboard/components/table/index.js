@@ -5,10 +5,9 @@ import downArrow from "../../../../../images/tenantAdmin/downArrow.svg";
 import Image from "next/image";
 import { Empty } from "antd";
 
-const index = ({ items , key}) => {
-
+const index = ({ items, key }) => {
   return (
-  <table className="tenatTable" key={key} id={key}>
+    <table className="tenatTable" key={key} id={key}>
       <thead>
         <tr>
           <td>Code</td>
@@ -28,8 +27,7 @@ const index = ({ items , key}) => {
                 </span>
                 <span
                   style={{
-                    color:
-                      Math.sign(item?.count) === 1 ? "#00BC13" : "#BC0000",
+                    color: Math.sign(item?.count) === 1 ? "#00BC13" : "#BC0000",
                   }}
                 >
                   <Image

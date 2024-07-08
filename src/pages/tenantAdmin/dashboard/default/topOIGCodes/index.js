@@ -5,11 +5,10 @@ import { topOigCodes } from "../../../../../stores/tenantAdmin/default/action.js
 import { useEffect } from "react";
 
 const index = ({ getTopOigCodesData, top0ijHccCodes }) => {
-
-
   useEffect(() => {
     getTopOigCodesData();
   }, []);
+
   return (
     <>
       <div>
@@ -24,19 +23,20 @@ const index = ({ getTopOigCodesData, top0ijHccCodes }) => {
             margin: "0 0 0 10px",
           }}
         >
-         {top0ijHccCodes?.response?.totalCount}
+          {top0ijHccCodes?.response?.totalCount}
         </span>
       </div>
 
-      <ReusableTable items={top0ijHccCodes?.response?.topDiseaseDTOList?.length ?top0ijHccCodes?.response?.topDiseaseDTOList:[]} key={"top10"}/>
+      <ReusableTable items={top0ijHccCodes?.response?.topDiseaseDTOList} />
     </>
   );
 };
 
 const enhancer = connect(
   (state) => ({
-    top0ijHccCodes: state?.tenantAdmin?.tenantAdmindefault?.allTopOigCodes?.data,
- }),
+    top0ijHccCodes:
+      state?.tenantAdmin?.tenantAdmindefault?.allTopOigCodes?.data,
+  }),
   {
     getTopOigCodesData: topOigCodes,
   }
