@@ -1,7 +1,7 @@
 import React from "react";
 import ReusableTable from "../../components/table";
 import { connect } from "react-redux";
-import { topOigCodes } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
+import { actions as allActions } from "../../../../../stores/tenantAdmin/default";
 import { useEffect } from "react";
 
 const index = ({ getTopOigCodesData, top0ijHccCodes }) => {
@@ -38,7 +38,7 @@ const enhancer = connect(
       state?.tenantAdmin?.tenantAdmindefault?.allTopOigCodes?.data,
   }),
   {
-    getTopOigCodesData: topOigCodes,
+    getTopOigCodesData: allActions?.topOigCodes,
   }
 );
 

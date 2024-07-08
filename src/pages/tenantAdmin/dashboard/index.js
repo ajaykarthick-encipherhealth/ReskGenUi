@@ -299,11 +299,11 @@ const enhancer = connect(
   }),
 
   {
-    getUserStatusData: dashboardWorkflowActions.userStatusAction,
-    getAuditorStatusData: dashboardWorkflowActions.auditorStatusAction,
-    getAllocatedStatusData: dashboardWorkflowActions.allocatedStatusAction,
-    getReviewerStatusData: dashboardWorkflowActions.reviewerStatusAction,
-    getOrganizationStatusData: dashboardWorkflowActions.organizationStatusAction,
+    getUserStatusData: dashboardWorkflowActions?.userStatusAction,
+    getAuditorStatusData: dashboardWorkflowActions?.auditorStatusAction,
+    getAllocatedStatusData: dashboardWorkflowActions?.allocatedStatusAction,
+    getReviewerStatusData: dashboardWorkflowActions?.reviewerStatusAction,
+    getOrganizationStatusData: dashboardWorkflowActions?.organizationStatusAction,
   }
 );
 export default enhancer(Index);
