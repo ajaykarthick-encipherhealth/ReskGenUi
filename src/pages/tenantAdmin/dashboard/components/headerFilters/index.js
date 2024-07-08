@@ -20,12 +20,14 @@ const index = ({
         moment().subtract(6, "days").format("YYYY-MM-DD") + "T00:00:00.000Z";
     } else if (value === "last_1_month") {
       startDate =
-        moment().subtract(30, "days").format("YYYY-MM-DD") + "T00:00:00.000Z";
-    } else {
-      startDate = moment().format("YYYY-MM-DD") + "T00:00:00.000Z";
+        moment().subtract(29, "days").format("YYYY-MM-DD") + "T00:00:00.000Z";
+    } else if (value == undefined) {
+      setDateRange({ startDate: "", endDate: "" });
     }
-    const endDate = moment().format("YYYY-MM-DD") + "T23:59:59.000Z";
-    setDateRange({ startDate: startDate, endDate: endDate });
+    if (value != undefined) {
+      const endDate = moment().format("YYYY-MM-DD") + "T23:59:59.000Z";
+      setDateRange({ startDate: startDate, endDate: endDate });
+    }
   };
 
   useEffect(() => {

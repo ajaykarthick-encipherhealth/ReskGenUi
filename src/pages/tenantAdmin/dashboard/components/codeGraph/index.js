@@ -22,12 +22,22 @@ const CodesGraph = ({
   getAllHccCodes,
   getAllHccCodesData,
   getAllRaf,
+  chartData,
 }) => {
   const [dateRange, setDateRange] = useState({ startDate: "", endDate: "" });
+  const [currChartData, setCurrChartData] = useState(new Map());
+
+  useEffect(() => {
+    setCurrChartData(new Map());
+  }, [chartData]);
+
+  useEffect(() => {
+    setCurrChartData(chartData);
+  }, [currChartData, isCargaps]);
 
   useEffect(() => {
     getAllHccCodesData(dateRange.startDate, dateRange.endDate);
-    getAllRafData();
+    getAllRafData(dateRange.startDate, dateRange.endDate);
   }, [dateRange]);
 
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
@@ -41,20 +51,23 @@ const CodesGraph = ({
   const graphOptions = {
     xAxis: {
       type: "category",
-      data: [
-        "jan",
-        "feb",
-        "mar",
-        "apr",
-        "may",
-        "jun",
-        "jul",
-        "aug",
-        "sep",
-        "oct",
-        "nov",
-        "dec",
-      ],
+      data:
+        isHcc || isCargaps
+          ? [...currChartData.keys()]
+          : [
+              "jan",
+              "feb",
+              "mar",
+              "apr",
+              "may",
+              "jun",
+              "jul",
+              "aug",
+              "sep",
+              "oct",
+              "nov",
+              "dec",
+            ],
     },
 
     yAxis: {
@@ -81,11 +94,14 @@ const CodesGraph = ({
           : isRevenue
           ? "Revenue"
           : isTwoWaves && "Radiology",
-        data: isHcc
-          ? hccDiseaseCountValues
-          : isCargaps
-          ? suggestedHccDiseaseCountMap
-          : [12, 32, 45, 10, 20, 30, 40, 50, 60, 70, 12, 44, 56, 67, 34, 23],
+        data:
+          isHcc || isCargaps
+            ? [...chartData.keys()].length == 12
+              ? hccDiseaseCountValues
+              : [...chartData.values()]
+            : isCargaps
+            ? suggestedHccDiseaseCountMap
+            : [12, 32, 45, 10, 20, 30, 40, 50, 60, 70, 12, 44, 56, 67, 34, 23],
         type: "line",
         lineStyle: { color: borderColor },
         smooth: true,

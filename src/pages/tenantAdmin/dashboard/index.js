@@ -159,12 +159,12 @@ const Index = ({
               <div className={`row ${styles.box}`}>
                 <div className={`col-lg-4`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <TotalCounts />
+                    <TotalCounts dateRange={dateRange} />
                   </Card>
                 </div>
                 <div className={`col`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <RafAndRevenue />
+                    <RafAndRevenue dateRange={dateRange} />
                   </Card>
                 </div>
               </div>
@@ -172,7 +172,7 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <TotalCodes />
+                    <TotalCodes dateRange={dateRange} />
                   </Card>
                 </div>
               </div>
@@ -180,7 +180,7 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <HccCodes dateRange={dateRange}/>
+                    <HccCodes dateRange={dateRange} />
                   </Card>
                 </div>
               </div>
@@ -188,7 +188,7 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <CaregapCodes />
+                    <CaregapCodes dateRange={dateRange} />
                   </Card>
                 </div>
               </div>
