@@ -6,12 +6,8 @@ import processing from "../../../../../images/tenantAdmin/processing.svg";
 import failed from "../../../../../images/tenantAdmin/failed.svg";
 import completed from "../../../../../images/tenantAdmin/completed.svg";
 import upload from "../../../../../images/tenantAdmin/upload.svg";
-import codecaptured from "../../../../../images/tenantAdmin/codecaptured.svg";
-import { top10Diseases } from "../../../../../stores/tenantAdmin/default/action.js";
-import {
-  ComputingStatus,
-  computingTileStatus,
-} from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
+import codeCaptured from "../../../../../images/tenantAdmin/codecaptured.svg";
+import { actions as defaultActions } from "../../../../../stores/tenantAdmin/dashboard/default";
 
 const Files = ({
   getAllComputing,
@@ -122,7 +118,7 @@ const Files = ({
       id: 5,
       title: "Codes Captures",
       count: top10DiseasesData?.totalCount,
-      icon: codecaptured,
+      icon: codeCaptured,
       color: "#FFEAE0",
       iconBg: "#FFDBCC",
     },
@@ -185,18 +181,18 @@ const Files = ({
 const enhancer = connect(
   (state) => ({
     getAllComputingStatus:
-      state?.tenantAdmin?.dashboard?.workflow?.allComputingStatus?.data
+      state?.tenantAdmin?.dashboard?.default?.allComputingStatus?.data
         ?.response,
     getAllComputingTile:
-      state?.tenantAdmin?.dashboard?.workflow?.allComputingTileStatus?.data
+      state?.tenantAdmin?.dashboard?.default?.allComputingTileStatus?.data
         ?.response,
     top10DiseasesData:
-      state?.tenantAdmin?.tenantAdmindefault?.allTop10Diseases?.data?.response,
+      state?.tenantAdmin?.dashboard?.default?.allTop10Diseases?.data?.response,
   }),
   {
-    getAllComputing: ComputingStatus,
-    getComputingStatus: computingTileStatus,
-    getTop10DiseasesData: top10Diseases,
+    getAllComputing: defaultActions.ComputingStatus,
+    getComputingStatus: defaultActions.computingTileStatus,
+    getTop10DiseasesData: defaultActions.top10Diseases,
   }
 );
 
