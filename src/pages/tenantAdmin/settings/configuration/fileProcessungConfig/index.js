@@ -4,7 +4,7 @@ import { Button, DatePicker, Form, Input, Select } from "antd";
 import { disablePastDate } from "../../../../../components/headerFilters/functions";
 import RegularButton from "../../../../../components/button";
 import { connect, useSelector } from "react-redux";
-import { actions as configurationActions } from "../../../../../stores/tenantAdmin";
+import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
 import { getYears } from "../../../../../utils/reusable";
 import ButtonStyles from "../../../../../components/button/style.module.css";
 
@@ -152,11 +152,11 @@ const FileProcessingConfig = ({
 };
 const enhancer = connect(
   (state) => ({
-    data: state?.tenantAdmin?.configurationSettings?.data,
+    data: state?.tenantAdmin?.settings?.configurationSettings?.data,
   }),
   {
-    getFileProcessingConfig: configurationActions.configurationSettingsAction,
-    updateSettings: configurationActions.updateSettingsAction,
+    getFileProcessingConfig: settingActions.configurationSettingsAction,
+    updateSettings: settingActions.updateSettingsAction,
   }
 );
 

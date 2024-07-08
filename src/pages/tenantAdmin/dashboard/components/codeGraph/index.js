@@ -5,8 +5,8 @@ import { connect } from "react-redux";
 import {
   HccCodes,
   RafCounts,
-  RafCountScore,
-} from "../../../../../stores/tenantAdmin/default/action.js";
+  RafCountScore
+} from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 
 const CodesGraph = ({
   options,
@@ -136,11 +136,11 @@ const CodesGraph = ({
 const enhancer = connect(
   (state) => ({
     getAllHccCodes:
-      state?.tenantAdmin?.tenantAdmindefault?.allHccCodes?.data?.response,
+      state?.tenantAdmin?.dashboard?.default?.allHccCodes?.data?.response,
     getAllRaf:
-      state?.tenantAdmin?.tenantAdmindefault?.allRafCounts?.data?.response,
-    getAllRafScoreData:
-      state?.tenantAdmin?.tenantAdmindefault?.allRafScore?.data?.response,
+      state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
+      getAllRafScoreData:
+      state?.tenantAdmin?.dashboard?.default?.allRafScore?.data?.response,
   }),
   {
     getAllHccCodesData: HccCodes,

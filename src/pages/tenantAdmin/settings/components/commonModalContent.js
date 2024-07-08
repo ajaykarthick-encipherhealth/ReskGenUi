@@ -9,7 +9,7 @@ import {
 } from "../coding/insulin";
 import Tags from "./tags";
 import { connect } from "react-redux";
-import { actions as manualAddActions } from "../../../../stores/tenantAdmin";
+import { actions as manualAddActions } from "../../../../stores/tenantAdmin/settings";
 import { getYears } from "../../../../utils/reusable";
 import ButtonStyles from "../../../../components/button/style.module.css";
 
