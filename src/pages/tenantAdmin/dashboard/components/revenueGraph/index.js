@@ -74,7 +74,9 @@ const RevenueGraph = ({
         name: "HCC Codes",
         type: "line",
         step: "middle",
-        data: premiumByDateForHcc,
+
+        data: isMultiple && premiumByDateForHcc && premiumByDateForSuggested,
+
         itemStyle: {
           color: "#04B700",
         },

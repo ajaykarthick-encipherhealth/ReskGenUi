@@ -129,7 +129,7 @@ const RafGraph = ({
           ? [...chartRafData.keys()].length != 12
             ? [...chartRafData.values()]
             : rafScoreByDateForHcc
-          : [12, 32, 50],
+          : [10,20,30,44,21],
       },
 
       {
@@ -158,7 +158,7 @@ const RafGraph = ({
         emphasis: {
           focus: "series",
         },
-        data: rafColor3 &&  premiumByDateForSuggested,
+        data: rafColor3 && rafScoreByDateForSuggested && rafScoreByDateForHcc,
       },
     ],
   };
