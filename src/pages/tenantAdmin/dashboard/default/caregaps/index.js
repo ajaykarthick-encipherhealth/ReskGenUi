@@ -173,7 +173,7 @@ const index = ({
           <div className="p-2">
             <div className={styles.header}>Overall RAF</div>
             <div className={styles.price}>
-              {getAllRafScoreData?.totalHccRaf}
+              {getAllRafScoreData}
             </div>
             </div>
           </div>
