@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { actions as dashbaordActions } from "../../../../../stores/tenantAdmin/workFlow";
 import styles from "./styles.module.css";
 import { Select } from "antd";
 import moment from "moment";
 
-const index = ({ activeBtn, setActiveBtn, setDateRange }) => {
+const index = ({
+  activeBtn,
+  setActiveBtn,
+  setDateRange,
+  organizationStatusData,
+  getOrganizationStatusData,
+  handleOrganizationChange,
+}) => {
   const handleDateChange = (value) => {
     let startDate;
     if (value === "last_1_week") {
@@ -21,6 +30,16 @@ const index = ({ activeBtn, setActiveBtn, setDateRange }) => {
     }
   };
 
+  useEffect(() => {
+    getOrganizationStatusData();
+  }, []);
+
+  const organizationOptions = organizationStatusData?.response?.map(
+    (org, index) => ({
+      value: org.name,
+    })
+  );
+
   return (
     <div className={styles.container}>
       <div
@@ -32,7 +51,12 @@ const index = ({ activeBtn, setActiveBtn, setDateRange }) => {
             Organization
           </div>
           <div className="tenantSelector" style={{ width: "65%" }}>
-            <Select placeholder="Organization" options={[]} allowClear />
+            <Select
+              placeholder="Organization"
+              options={organizationOptions}
+              allowClear
+              onChange={handleOrganizationChange}
+            />
           </div>
         </div>
         <div className="d-flex" style={{ width: "47%" }}>
@@ -78,5 +102,13 @@ const index = ({ activeBtn, setActiveBtn, setDateRange }) => {
     </div>
   );
 };
+const enhancer = connect(
+  (state) => ({
+    organizationStatusData: state.tenantAdmin.workFlow.organizationStatus.data,
+  }),
 
-export default index;
+  {
+    getOrganizationStatusData: dashbaordActions.organizationStatusAction,
+  }
+);
+export default enhancer(index);

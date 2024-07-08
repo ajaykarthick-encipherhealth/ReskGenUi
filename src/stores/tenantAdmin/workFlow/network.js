@@ -13,11 +13,11 @@ export async function getUserStatus(startDate, endDate) {
   }
 
 
-export async function getAuditorStatus(startDate, endDate) {
+export async function getAuditorStatus(startDate, endDate,organizationId) {
   const options = {
     method: "GET",
   };
-  const url = `dbservice/tenantadmin/dashboard/auditorstatus/chart?startDate=${startDate}&endDate=${endDate}`;
+  const url = `dbservice/tenantadmin/dashboard/auditorstatus/chart?startDate=${startDate}&endDate=${endDate}&organizationId=${organizationId}`;
   const data = await requestPortal(url, options);
   return data;
 }
@@ -35,12 +35,12 @@ export async function getAllocatedStatus(startDate, endDate) {
 }
 
 
-export async function getReviewerStatus(startDate, endDate) {
+export async function getReviewerStatus(startDate, endDate,organizationId) {
   const options = {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/reviewerstatus/chart?startDate=${startDate}&endDate=${endDate}`,
+    `dbservice/tenantadmin/dashboard/reviewerstatus/chart?startDate=${startDate?startDate:""}&endDate=${endDate?endDate:""}&organizationId=${organizationId?organizationId:""}`,
     options
   );
   return data;
