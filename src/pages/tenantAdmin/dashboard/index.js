@@ -124,20 +124,20 @@ const Index = ({
   };
 
   useEffect(() => {
-    getUserStatusData(dateRange.startDate, dateRange.endDate);
-    getAuditorStatusData(
-      dateRange.startDate,
-      dateRange.endDate,
-      selectedOrganization
-    );
-    getAllocatedStatusData(dateRange.startDate, dateRange.endDate);
-    getReviewerStatusData(
-      dateRange.startDate,
-      dateRange.endDate,
-      selectedOrganization
-    );
-    getOrganizationStatusData();
-  }, [dateRange, selectedOrganization]);
+      getUserStatusData(dateRange.startDate, dateRange.endDate);
+      getAuditorStatusData(
+        dateRange.startDate,
+        dateRange.endDate,
+        selectedOrganization
+      );
+      getAllocatedStatusData(dateRange.startDate, dateRange.endDate);
+      getReviewerStatusData(
+        dateRange.startDate,
+        dateRange.endDate,
+        selectedOrganization
+      );
+      getOrganizationStatusData(); 
+  }, [dateRange]);
 
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
