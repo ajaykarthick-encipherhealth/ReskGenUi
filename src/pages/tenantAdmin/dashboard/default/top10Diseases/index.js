@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import ReusableTable from "../../components/table";
 import { connect } from "react-redux";
-import { actions as allActions } from "../../../../../stores/tenantAdmin/default";
+import { actions as allActions } from "../../../../../stores/tenantAdmin/dashboard/default";
 
 const index = ({ top10DiseasesData, getTop10DiseasesData }) => {
   useEffect(() => {
