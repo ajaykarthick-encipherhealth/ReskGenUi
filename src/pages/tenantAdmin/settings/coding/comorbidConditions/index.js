@@ -13,9 +13,10 @@ import FilterButton from "../../../../../components/table/tenantSettingsTable/fi
 import Search from "../../../../../components/table/tenantSettingsTable/search";
 import TenantSettingsTable from "../../../../../components/table/tenantSettingsTable/tenantSettingsTable";
 
-const ComorbidConditions = ({ updateSettings, getCodingDetails,list }) => {
+const ComorbidConditions = ({ updateSettings,updateComorbidCondition, getCodingDetails,list }) => {
   const [openModal, setOpenModal] = useState(false);
   const [search, setSearch] = useState(null);
+  const [isGuidelines, setIsGuidelines] = useState(false);
   const [tags, setTags] = useState([
     "plan",
     "assessment/plan",
@@ -72,8 +73,30 @@ const ComorbidConditions = ({ updateSettings, getCodingDetails,list }) => {
     },
   ];
   useEffect(() => {
-    getCodingDetails({ type: "COMORBID_CONDITIONS" });
+    getCodingDetailsDetails()
   }, []);
+
+  const getCodingDetailsDetails = async () => {
+    try {
+      const res = await getCodingDetails({ type: "COMORBID_CONDITIONS" });
+      if (res?.status == "SUCCESS") {
+        setIsGuidelines(res?.response?.includeGeneralGuidelineCodes);
+      }
+    } catch (error) {}
+  };
+
+  const handleGuidelines = async (value) => {
+    try {
+      const res = await updateComorbidCondition({
+        includeGeneralGuidelineCodes: value,
+      });
+      if (res.status == "SUCCESS") {
+        getResponePopup(res);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -111,20 +134,16 @@ const ComorbidConditions = ({ updateSettings, getCodingDetails,list }) => {
           </div>
           <Divider />
           <div className="d-flex justify-content-start  gap-4 mt-4">
-            {/* <div>
-              <FilterButton label={"Default"} isActive={true} />
-            </div>
-            <div>
-              <FilterButton label={"Code"} isActive={false} />
-            </div>
-            <div>
-              <FilterButton label={"Description"} isActive={false} />
-            </div> */}
             <div className="mx-3">{"Do you need general guidelines codes"}</div>
             <div className="d-flex">
-              {/* <Form.Item name="isDownCodeConversionEnabled"> */}
-              <Switch className="switch" />
-              {/* </Form.Item> */}
+            <Switch
+                checked={isGuidelines}
+                onChange={(e) => {
+                  setIsGuidelines(e);
+                  handleGuidelines(e);
+                }}
+              />
+              <div className={`mx-2`}>{isGuidelines ? "Yes" : "No"}</div>
             </div>
 
             <div className="ms-auto mx-4">
@@ -159,6 +178,7 @@ const enhancer = connect((state) => ({
   list: state?.tenantAdmin?.settings?.codingGuidelines?.data,
 }), {
   updateSettings: settingActions.updateSettingsAction,
+  updateComorbidCondition: settingActions.updateComorbidCondition,
   getCodingDetails: settingActions.codingGuidelinesAction,
 });
 export default enhancer(ComorbidConditions);

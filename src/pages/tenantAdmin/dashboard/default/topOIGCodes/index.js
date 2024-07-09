@@ -4,10 +4,12 @@ import { connect } from "react-redux";
 import { actions as allActions } from "../../../../../stores/tenantAdmin/dashboard/default";
 import { useEffect } from "react";
 
-const index = ({ getTopOigCodesData, top0ijHccCodes }) => {
+const index = ({ getTopOigCodesData, top0ijHccCodes ,dateRange ,selectedOrganization}) => {
   useEffect(() => {
-    getTopOigCodesData();
-  }, []);
+    getTopOigCodesData(dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization);
+  }, [dateRange]);
 
   return (
     <>

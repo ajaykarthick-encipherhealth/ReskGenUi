@@ -9,7 +9,7 @@ const index = ({ top10DiseasesData, getTop10DiseasesData,dateRange,selectedOrgan
       dateRange.endDate,
       selectedOrganization);
   }, [dateRange]);
- 
+
 
   return (
     <>

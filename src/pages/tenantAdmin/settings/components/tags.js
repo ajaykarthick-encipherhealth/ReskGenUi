@@ -29,7 +29,7 @@ const Tags = ({
       ) : (
         <div className="d-flex">
           <Tag
-            className="flex justify-center p-2.5"
+            className="flex justify-center p-2 py-1 fs-5"
             style={{
               background: "#BAE0FC",
               padding: "10px",
