@@ -98,12 +98,12 @@ export async function getComputingStatus() {
   return data;
 }
 
-export async function getRafScore() {
+export async function getRafScore(startDate, endDate,organizationId) {
   const options = {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/raf/score`,
+    `dbservice/tenantadmin/dashboard/raf/score?startDate=${startDate}&endDate=${endDate}&organizationId=${organizationId}`,
     options
   );
   return data;

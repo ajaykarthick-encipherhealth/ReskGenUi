@@ -170,7 +170,7 @@ const Index = ({
                 </div>
                 <div className={`col`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <RafAndRevenue dateRange={dateRange} />
+                    <RafAndRevenue dateRange={dateRange} selectedOrganization={selectedOrganization}/>
                   </Card>
                 </div>
               </div>

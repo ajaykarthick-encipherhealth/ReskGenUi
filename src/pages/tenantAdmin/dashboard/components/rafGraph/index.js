@@ -44,7 +44,7 @@ const RafGraph = ({
   const rafScoreByDateForSuggested =rafState?.rafScoreByDateForSuggested?Object.values(rafState.rafScoreByDateForSuggested):[]
 
   const rafScoreByDateForHcc = rafState?.rafScoreByDateForHcc?Object.values(rafState.rafScoreByDateForHcc):[]
-
+  
 
   const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
     ? Object.values(getAllRaf.premiumByDateForHcc)
@@ -83,7 +83,7 @@ const RafGraph = ({
         type: "category",
         boundaryGap: false,
         data:
-          isHcc || isCargaps 
+          isHcc || isCargaps
             ? [...chartRafData?.keys()]
             : [
                 "jan",
@@ -165,6 +165,7 @@ const RafGraph = ({
   return <ReactECharts option={option} />;
 
 };
+
 
 
 const enhancer = connect(
