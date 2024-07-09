@@ -737,32 +737,30 @@ const Timeline = ({
     );
   }
   return (
-    <div className={visitStyles.timeLine}>
-      {!filterDataLoading ? (
-        <div className="widget-timeline" style={{ height: "100vh" }}>
-          <ul
-            className="timeline"
-            style={{ height: "95%", overflow: "scroll" }}
-          >
-            {timelineData?.length > 0 ? (
-              timelineData?.map((item, index) =>
-                renderTimelineItem(item, index)
-              )
-            ) : (
-              <h6 className="text-center">NO DATA</h6>
-            )}
-          </ul>
-        </div>
-      ) : (
-        <div className={visitStyles.userDetailsCard}>
-          <div className="bouncing-loader">
-            <div></div>
-            <div></div>
-            <div></div>
+<div className={visitStyles.timeLine}>
+  {!filterDataLoading ? (
+    <div className="widget-timeline">
+      <ul className="timeline" style={{ height: "95%", overflow: "scroll" }}>
+        {timelineData?.length > 0 ? (
+          timelineData?.map((item, index) => renderTimelineItem(item, index))
+        ) : (
+          <div className="no-data-container">
+            <h6 className="text-center">NO DATA</h6>
           </div>
-        </div>
-      )}
+        )}
+      </ul>
     </div>
+  ) : (
+    <div className={visitStyles.userDetailsCard}>
+      <div className="bouncing-loader">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  )}
+</div>
+
   );
 };
 

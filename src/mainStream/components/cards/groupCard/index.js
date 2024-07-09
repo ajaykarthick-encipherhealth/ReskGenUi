@@ -47,7 +47,7 @@ const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
                 </div>
               </div>
               <div style={{ paddingBottom: "5px" }}>
-                <div className={`col-xl-12 ${styles.headText}`}>{item.id}</div>
+                <div className={`col-xl-12 ${styles.headText}`}style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item.id}</div>
               </div>
               <div className="d-flex justify-content-between align-items-center">
                 <div className={`col-xl-2 ${styles.text}`}>
