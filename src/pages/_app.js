@@ -20,7 +20,6 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const [showTerminal, setShowTerminal] = useState(false);
-  const [validPath, setValidPath] = useState(true);
   let loginCheck =  typeof window !== 'undefined' ? localStorage.getItem('loginCheck') : null
 
   useEffect(() => {

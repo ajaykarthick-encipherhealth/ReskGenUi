@@ -12559,7 +12559,6 @@ tbody > tr {
 .checkbox:checked:before {
   background-color: green;
 }
-
 /* Track */
 .my-post-content::-webkit-scrollbar-track {
   background: transparent;
