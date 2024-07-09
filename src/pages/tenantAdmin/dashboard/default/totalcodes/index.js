@@ -112,7 +112,7 @@ const index = ({
     xAxis: {
       type: "category",
       data:
-        hccDiseaseCountValues || suggestedHccDiseaseCountMap?.length>0
+        hccDiseaseCountValues || suggestedHccDiseaseCountMap
           ? [...currChartData.keys()]
           : [
               "jan",
@@ -233,13 +233,8 @@ const index = ({
             </div>
           </div>
         </div>
-        {hccDiseaseCountValues?.length>0 && suggestedHccDiseaseCountMap?.length>0? (
-          <CodesGraph options={options} isRadio={true} />
-        ) : (
-          <div>
-            <Empty />
-          </div>
-        )}
+
+        <CodesGraph options={options} isRadio={true} />
       </div>
       <div
         className="remianingAreaGraph"
