@@ -64,23 +64,23 @@ export async function getAllComputing() {
   return data;
 }
 
-export async function getTop10Diseases() {
+export async function getTop10Diseases(startDate, endDate,organizationId) {
   const options = {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/gettophcccodes`,
+    `dbservice/tenantadmin/dashboard/gettophcccodes?startDate=${startDate}&endDate=${endDate}&organizationId=${organizationId}`,
     options
   );
   return data;
 }
 
-export async function getTopOigCodes() {
+export async function getTopOigCodes(startDate, endDate,organizationId) {
   const options = {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/gettopoighcccodes`,
+    `dbservice/tenantadmin/dashboard/gettopoighcccodes?startDate=${startDate}&endDate=${endDate}&organizationId=${organizationId}`,
     options
   );
   return data;
