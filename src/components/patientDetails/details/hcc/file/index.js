@@ -212,7 +212,7 @@ const File = ({
       >
         <div className="my-post-content row pt-3">
           {!isFileFormShow ? (
-            <div className="col-xl-3" style={{ height: "70vh" }}>
+            <div className="col-xl-3">
               <Droppable droppableId={"HCC"} key={"HCC"}>
                 {(provided) => {
                   return (
@@ -337,7 +337,7 @@ const File = ({
                 setIsAddHccForm={setIsAddHccForm}
                 isMeatNew={true}
               /> */}
-              <div style={{ height: "70vh", overflowY: "scroll" }}>
+              <div style={{ height: "100%", overflowY: "scroll" }}>
                 <ManuallyAdd
                   handleCloseModal={handleCloseModal}
                   setIsFileFormShow={setIsFileFormShow}
@@ -347,7 +347,7 @@ const File = ({
             </div>
           ) : null}
           {!isFileFormShow ? (
-            <div className="col-xl-3" style={{ height: "63vh" }}>
+            <div className="col-xl-3" style={{height:"74vh" }}>
               <Droppable droppableId={"SUGGESTED"} key={"SUGGESTED"}>
                 {(provided) => {
                   return (

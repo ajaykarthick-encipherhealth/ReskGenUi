@@ -1,6 +1,6 @@
 import { requestPortal } from "../../../../utils/network";
 
-export async function getAllFilesCount(startDate,endDate) {
+export async function getAllFilesCount(startDate, endDate, organizationId) {
   const options = {
     method: "GET",
   };
@@ -8,7 +8,7 @@ export async function getAllFilesCount(startDate,endDate) {
   const formattedEndDate = endDate ? new Date(endDate).toISOString() : "";
 
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/getFilePageAndDosCount?startDate=${formattedStartDate}&endDate=${formattedEndDate}&organizationId= `,
+    `dbservice/tenantadmin/dashboard/getFilePageAndDosCount?organizationId=${organizationId}&startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
     options
   );
   return data;

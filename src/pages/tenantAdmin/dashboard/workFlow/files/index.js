@@ -132,8 +132,10 @@ const Files = ({
       iconBg: "#FFDBCC",
     },
   ];
-  console.log(computingStatusLoader, "computingTileStatusLoader");
+ 
   useEffect(() => {
+    // getAllComputing(dateRange.startDate,   dateRange.endDate);
+
     getComputingStatus(dateRange?.startDate, dateRange?.endDate);
     getTop10DiseasesData(dateRange?.startDate, dateRange?.endDate);
   }, [dateRange]);

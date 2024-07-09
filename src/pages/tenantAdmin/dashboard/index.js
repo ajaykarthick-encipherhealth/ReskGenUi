@@ -204,10 +204,9 @@ const Index = ({
               <div className={`row ${styles.box}`}>
                 <div className={`col-lg-4`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <TotalCounts
-                      dateRange={dateRange}
-                      loaderButton={loaderButton}
-                    />
+
+                    <TotalCounts dateRange={dateRange} selectedOrganization={selectedOrganization}  loaderButton={loaderButton}/>
+
                   </Card>
                 </div>
                 <div className={`col`}>
@@ -224,10 +223,8 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <TotalCodes
-                      dateRange={dateRange}
-                      loaderButton={loaderButton}
-                    />
+                    <TotalCodes dateRange={dateRange} selectedOrganization={selectedOrganization}    loaderButton={loaderButton}/>
+
                   </Card>
                 </div>
               </div>
@@ -235,10 +232,9 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <HccCodes
-                      dateRange={dateRange}
-                      loaderButton={loaderButton}
-                    />
+
+                    <HccCodes dateRange={dateRange} selectedOrganization={selectedOrganization}    loaderButton={loaderButton}/>
+
                   </Card>
                 </div>
               </div>
@@ -246,7 +242,7 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <CaregapCodes dateRange={dateRange} />
+                    <CaregapCodes dateRange={dateRange} selectedOrganization={selectedOrganization} />
                   </Card>
                 </div>
               </div>
@@ -254,12 +250,13 @@ const Index = ({
               <div className={`row ${styles.box}`}>
                 <div className={`col-lg-4`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <RadiolodyAndLab dateRange={dateRange} />
+                    <RadiolodyAndLab dateRange={dateRange} selectedOrganization={selectedOrganization}/>
                   </Card>
                 </div>
                 <div className={`col-lg-8`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <Files dateRange={dateRange} loaderButton={loaderButton} />
+                    <Files dateRange={dateRange} selectedOrganization={selectedOrganization} loaderButton={loaderButton}/>
+
                   </Card>
                 </div>
               </div>

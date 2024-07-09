@@ -22,8 +22,8 @@ const Radiology = ({
   getRadiologyDetails,
   getRadiologyFileDetails,
   radiologyDetailsResult,
-  patientDosResult,
   processedYearResult,
+  patientDosResult
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [activeTabHead, setActiveTabHead] = useState(1);
@@ -34,7 +34,7 @@ const Radiology = ({
   const [dosYear, setDosYear] = useState([]);
   const [dosYearDefalutSelect, setDosYearDefalutSelect] = useState("");
   const [selectedDosValue, setSelectedDosValue] = useState("");
-
+console.log(patientDosResult?.data?.response, "testing");
   const selectTab = (num) => {
     setActiveTabHead(num);
     if (num == 4) {
@@ -74,7 +74,7 @@ const Radiology = ({
     result?.data?.response?.map((res) => {
       dosYearArr.push({ value: res, label: res });
     });
-    setDosYearDefalutSelect(dosYearArr[0]);
+    // setDosYearDefalutSelect(dosYearArr[0]);
     setSelectedDosValue(dosYearArr[0].value);
     setDosYear(dosYearArr);
   };
@@ -101,44 +101,44 @@ const Radiology = ({
     }, 10000);
   }, [activeMeatTitle]);
 
-  const exmpleData = [
-    {
-      dos: "2023-10-25",
-      startPageNumber: 1,
-      endPagNumber: 3,
-      dosWiseFlag: null,
-      suspectTypes: null,
-      processStage: null,
-      radiologyTestName: "CT-Scan",
-    },
-    {
-      dos: "2023-04-06",
-      startPageNumber: 4,
-      endPagNumber: 10,
-      dosWiseFlag: null,
-      suspectTypes: null,
-      processStage: null,
-      radiologyTestName: "Ultra sound",
-    },
-    {
-      dos: "2023-01-17",
-      startPageNumber: 11,
-      endPagNumber: 14,
-      dosWiseFlag: null,
-      suspectTypes: null,
-      processStage: null,
-      radiologyTestName: "ECHO",
-    },
-    {
-      dos: "2023-01-20",
-      startPageNumber: 15,
-      endPagNumber: 18,
-      dosWiseFlag: null,
-      suspectTypes: null,
-      processStage: null,
-      radiologyTestName: "MRI",
-    },
-  ];
+  // const exmpleData = [
+  //   {
+  //     dos: "2023-10-25",
+  //     startPageNumber: 1,
+  //     endPagNumber: 3,
+  //     dosWiseFlag: null,
+  //     suspectTypes: null,
+  //     processStage: null,
+  //     radiologyTestName: "CT-Scan",
+  //   },
+  //   {
+  //     dos: "2023-04-06",
+  //     startPageNumber: 4,
+  //     endPagNumber: 10,
+  //     dosWiseFlag: null,
+  //     suspectTypes: null,
+  //     processStage: null,
+  //     radiologyTestName: "Ultra sound",
+  //   },
+  //   {
+  //     dos: "2023-01-17",
+  //     startPageNumber: 11,
+  //     endPagNumber: 14,
+  //     dosWiseFlag: null,
+  //     suspectTypes: null,
+  //     processStage: null,
+  //     radiologyTestName: "ECHO",
+  //   },
+  //   {
+  //     dos: "2023-01-20",
+  //     startPageNumber: 15,
+  //     endPagNumber: 18,
+  //     dosWiseFlag: null,
+  //     suspectTypes: null,
+  //     processStage: null,
+  //     radiologyTestName: "MRI",
+  //   },
+  // ];
 
   useEffect(() => {
     // if (patientDosResult?.data?.response) {
@@ -146,7 +146,7 @@ const Radiology = ({
     var dosList = [];
 
     // patientDosResult?.data?.response?.map((res, index) => {
-    exmpleData?.map((res, index) => {
+      patientDosResult?.data?.response?.map((res, index) => {
       if (res) {
         var dosLable = (
           <>
@@ -212,8 +212,8 @@ const Radiology = ({
         <div style={{ paddingLeft: "60px" }}>Page Number</div>
       </div>
       <div className={styles.displayDiv}>
-        {exmpleData
-          ? exmpleData?.map((data) => (
+        {patientDosResult?.data?.response
+          ? patientDosResult?.data?.response?.map((data) => (
               <div className={styles.hoverDiv} style={{ marginBottom: "5px" }}>
                 <div
                   className={` ${styles.selectDetailsContainer}`}
@@ -327,7 +327,7 @@ const Radiology = ({
                         onChange={handleOptions}
                         className="dosSelect"
                         allowClear
-                        value={selectDosValue}
+                        // value={selectDosValue}
                         style={{ marginRight: "10px" }}
                       >
                         {dosYear?.map((data) => (
@@ -341,9 +341,10 @@ const Radiology = ({
                       <Select
                         placeholder="Select DOS"
                         onChange={handleOptions}
-                        className="dosSelect"
+                        // className="dosSelect"
                         allowClear
-                        value={selectDosValue}
+                        // value={selectDosValue}
+                        style={{width: "220px"}}
                       >
                         {dosSummariesList?.map((data) => (
                           <Option key={data?.value} value={data?.value}>

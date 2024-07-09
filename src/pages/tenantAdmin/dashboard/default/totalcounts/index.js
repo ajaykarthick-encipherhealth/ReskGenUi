@@ -12,6 +12,7 @@ const index = ({
   getAllFilesCount,
   getAllFiles,
   dateRange,
+  selectedOrganization,
   loaderButton,
   totalCountsLoader,
 }) => {
@@ -40,7 +41,11 @@ const index = ({
   ];
 
   useEffect(() => {
-    getAllFilesCount(dateRange.startDate, dateRange.endDate);
+    getAllFilesCount(
+      dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization
+    );
   }, [dateRange]);
 
   return (

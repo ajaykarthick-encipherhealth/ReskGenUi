@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import ReusableTable from "../../components/table";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../../../../stores/tenantAdmin/dashboard/default";
+import { Skeleton, Spin } from "antd";
 
 const index = ({
   top10DiseasesData,
@@ -18,7 +19,7 @@ const index = ({
       selectedOrganization
     );
   }, [dateRange]);
-  console.log(top10DisesesLoader, "top10DisesesLoader");
+ 
 
   return (
     <>
@@ -38,8 +39,22 @@ const index = ({
           {top10DiseasesData?.response?.totalCount}
         </span>
       </div>
-
-      <ReusableTable items={top10DiseasesData?.response?.topDiseaseDTOList} />
+      {loaderButton && top10DisesesLoader ? (
+        <div>
+          <Skeleton.Input
+            className="w-100"
+            style={{ height: "460px" }}
+            active
+          />
+        </div>
+      ) : top10DisesesLoader ? (
+        <div className="d-flex justify-content-center align-items-center">
+          {" "}
+          <Spin size="large" />
+        </div>
+      ) : (
+        <ReusableTable items={top10DiseasesData?.response?.topDiseaseDTOList} />
+      )}
     </>
   );
 };

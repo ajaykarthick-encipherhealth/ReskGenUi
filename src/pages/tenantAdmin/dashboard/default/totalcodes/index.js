@@ -23,6 +23,7 @@ const index = ({
   loaderButton,
   totalCodesLoader,
   getAllRafData,
+  selectedOrganization
 }) => {
   const [currChartData, setCurrChartData] = useState(new Map());
   const [chartData, setChartData] = useState(new Map());
@@ -52,7 +53,8 @@ const index = ({
     const fetchChartData = async () => {
       const data = await getAllHccCodesData(
         dateRange.startDate,
-        dateRange.endDate
+        dateRange.endDate,
+        selectedOrganization
       );
       const records = data?.response?.hccDiseaseCountMap;
       const records1 = data?.response?.suggestedHccDiseaseCountMap;
