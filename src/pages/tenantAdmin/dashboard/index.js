@@ -20,6 +20,7 @@ import Notifications from "./workFlow/notifications";
 import HeadTitle from "../../../components/headtitle";
 import PieChartInfo from "./components/pieChart/PieChartInfo";
 import OrgPieChartInfo from "./components/OrgPieChart/OrgPieChartInfo";
+import { Row, Skeleton, Spin } from "antd";
 
 const Index = ({
   getUserStatusData,
@@ -32,8 +33,14 @@ const Index = ({
   reviewerStatusData,
   getOrganizationStatusData,
   organizationStatusData,
+  userLoader,
+  auditorLoader,
+  allocatedLoader,
+  reviewerLoader,
+  orgLoader,
 }) => {
   const [activeBtn, setActiveBtn] = useState("default");
+  const [loaderButton, setLoaderButton] = useState(true);
   const [dateRange, setDateRange] = useState({ startDate: "", endDate: "" });
   const [selectedOrganization, setSelectedOrganization] = useState("");
 
@@ -123,6 +130,22 @@ const Index = ({
     setSelectedOrganization(value);
   };
 
+  const renderCardSkeleton = () => (
+    <div className="d-flex justify-content-around ">
+      <div>
+        <Skeleton.Input className="w-100" style={{ height: "170px" }} active />
+      </div>
+      <div className="d-flex flex-column mb-3">
+        <Skeleton.Input active size="default" className="mb-2" />
+        <Skeleton.Input active size="default" className="mb-2" />
+
+        <Skeleton.Input active size="default" className="mb-2" />
+
+        <Skeleton.Input active size="default" />
+      </div>
+    </div>
+  );
+
   useEffect(() => {
     getUserStatusData(
       dateRange.startDate,
@@ -159,6 +182,8 @@ const Index = ({
             handleOrganizationChange={handleOrganizationChange}
             setSelectedOrganization={setSelectedOrganization}
             selectedOrganization={selectedOrganization}
+            loaderButton={loaderButton}
+            setLoaderButton={setLoaderButton}
           />
           {activeBtn === "default" ? (
             <>
@@ -231,7 +256,13 @@ const Index = ({
                 <div className={`col-lg-3`}>
                   <Card padding="10px" borderRadius={"10px"}>
                     <HeadTitle header="Organizations" fontSize="16px" />
-                    <OrgPieChartInfo data={orgData} header="Allocated" />
+
+                    <OrgPieChartInfo
+                      data={orgData}
+                      header="Allocated"
+                      loaderButton={loaderButton}
+                      orgLoader={orgLoader}
+                    />
                   </Card>
                 </div>
                 <div className={`col-lg-9`}>
@@ -244,27 +275,66 @@ const Index = ({
               {/* total codes */}
               <div className={`row ${styles.box}`}>
                 <div className={`col-lg-3`}>
-                  <Card padding="10px" borderRadius={"10px"} height="auto">
+                  <Card padding="10px" borderRadius={"10px"} height="265px">
                     <HeadTitle header="Allocated Status" fontSize="16px" />
-                    <PieChartInfo data={allocatedData} header="Allocated" />
+
+                    {loaderButton && allocatedLoader ? (
+                      <div>{renderCardSkeleton()}</div>
+                    ) : allocatedLoader ? (
+                      <div className="d-flex justify-content-center align-items-center">
+                        {" "}
+                        <Spin size="large" />
+                      </div>
+                    ) : (
+                      <PieChartInfo data={allocatedData} header="Allocated" />
+                    )}
                   </Card>
                 </div>
                 <div className={`col-lg-3`}>
-                  <Card padding="10px" borderRadius={"10px"} height="auto">
+                  <Card padding="10px" borderRadius={"10px"} height="265px">
                     <HeadTitle header="Reviewer Status" fontSize="16px" />
-                    <PieChartInfo data={reviewerData} header="Reviewer" />
+                    {loaderButton && reviewerLoader ? (
+                      <div>{renderCardSkeleton()}</div>
+                    ) : reviewerLoader ? (
+                      <div className="d-flex justify-content-center align-items-center">
+                        {" "}
+                        <Spin size="large" />
+                      </div>
+                    ) : (
+                      <PieChartInfo data={reviewerData} header="Reviewer" />
+                    )}
                   </Card>
                 </div>
                 <div className={`col-lg-3`}>
-                  <Card padding="10px" borderRadius={"10px"} height="auto">
+                  <Card padding="10px" borderRadius={"10px"} height="265px">
                     <HeadTitle header="Auditor Status" fontSize="16px" />
-                    <PieChartInfo data={auditorData} header="Auditor" />
+
+                    {loaderButton && auditorLoader ? (
+                      <div>{renderCardSkeleton()}</div>
+                    ) : auditorLoader ? (
+                      <div className="d-flex justify-content-center align-items-center">
+                        {" "}
+                        <Spin size="large" />
+                      </div>
+                    ) : (
+                      <PieChartInfo data={auditorData} header="Auditor" />
+                    )}
                   </Card>
                 </div>
                 <div className={`col-lg-3`}>
-                  <Card padding="10px" borderRadius={"10px"} height="auto">
+                  <Card padding="10px" borderRadius={"10px"} height="265px">
                     <HeadTitle header="Users" fontSize="16px" />
-                    <PieChartInfo data={usersData} header="Users" />
+
+                    {loaderButton && userLoader ? (
+                      <div>{renderCardSkeleton()}</div>
+                    ) : userLoader ? (
+                      <div className="d-flex justify-content-center align-items-center">
+                        {" "}
+                        <Spin size="large" />
+                      </div>
+                    ) : (
+                      <PieChartInfo data={usersData} header="Users" />
+                    )}
                   </Card>
                 </div>
               </div>
@@ -291,11 +361,20 @@ const Index = ({
 
 const enhancer = connect(
   (state) => ({
-    allocatedStatusData: state?.tenantAdmin?.dashboard?.workFlow?.allocatedStatus?.data,
-    auditorStatusData: state?.tenantAdmin?.dashboard?.workFlow?.auditorStatus?.data,
+    allocatedStatusData:
+      state?.tenantAdmin?.dashboard?.workFlow?.allocatedStatus?.data,
+    auditorStatusData:
+      state?.tenantAdmin?.dashboard?.workFlow?.auditorStatus?.data,
     userStatusData: state?.tenantAdmin?.dashboard?.workFlow?.userStatus?.data,
-    reviewerStatusData: state?.tenantAdmin?.dashboard?.workFlow?.reviewerStatus?.data,
-    organizationStatusData: state?.tenantAdmin?.dashboard?.workFlow?.organizationStatus?.data,
+    reviewerStatusData:
+      state?.tenantAdmin?.dashboard?.workFlow?.reviewerStatus?.data,
+    organizationStatusData:
+      state?.tenantAdmin?.dashboard?.workFlow?.organizationStatus?.data,
+    userLoader: state?.tenantAdmin?.workFlow?.userLoader,
+    auditorLoader: state?.tenantAdmin?.workFlow?.auditorLoader,
+    allocatedLoader: state?.tenantAdmin?.workFlow?.allocatedLoader,
+    reviewerLoader: state?.tenantAdmin?.workFlow?.reviewerLoader,
+    orgLoader: state?.tenantAdmin?.workFlow?.organizationLoader,
   }),
 
   {
@@ -303,7 +382,8 @@ const enhancer = connect(
     getAuditorStatusData: dashboardWorkflowActions?.auditorStatusAction,
     getAllocatedStatusData: dashboardWorkflowActions?.allocatedStatusAction,
     getReviewerStatusData: dashboardWorkflowActions?.reviewerStatusAction,
-    getOrganizationStatusData: dashboardWorkflowActions?.organizationStatusAction,
+    getOrganizationStatusData:
+      dashboardWorkflowActions?.organizationStatusAction,
   }
 );
 export default enhancer(Index);
