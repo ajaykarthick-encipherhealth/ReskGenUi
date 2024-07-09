@@ -17,6 +17,8 @@ const Files = ({
   getAllComputingTile,
   top10DiseasesData,
   dateRange,
+  selectedOrganization,
+
 }) => {
   const shortWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -127,15 +129,16 @@ const Files = ({
     },
   ];
 
+
   useEffect(() => {
     getComputingStatus(dateRange?.startDate, dateRange?.endDate);
-  }, [dateRange]);
+  }, [dateRange,selectedOrganization]);
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await getAllComputing(
         dateRange?.startDate,
-        dateRange?.endDate
+        dateRange?.endDate,selectedOrganization
       );
       const tempRecords = new Map();
       const records = data?.response?.premiumByDateForHcc;

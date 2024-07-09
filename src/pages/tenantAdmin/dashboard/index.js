@@ -317,7 +317,8 @@ const Index = ({
                 <div className={`col-lg-9`}>
                   <Card padding="10px" borderRadius={"10px"}>
                     <HeadTitle header="Files" fontSize="16px" />
-                    <WorkFlowFiles />
+                    <WorkFlowFiles dateRange={dateRange}
+                      selectedOrganization={selectedOrganization} />
                   </Card>
                 </div>
               </div>
