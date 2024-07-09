@@ -48,18 +48,19 @@ const TeamReport = ({
   activeTab,
   auditReport,
   teamReport,
+  handleHeaderCheckbox,
+  selectAllFlags
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const handleHeaderCheckboxChange = async() => {
+  const handleHeaderCheckboxChange = async () => {
     setSelectAll(!selectAll);
     // const updatedRows = selectAll
     //   ? []
     //   : reportListAll?.response?.response?.data;
     // setSelectedRows(updatedRows);
-    console.log(selectAll, activeTab, "testing");
-    const orgId = localStorage.getItem('orgId')
+    const orgId = localStorage.getItem("orgId");
     if (activeTab === "Audit") {
       // auditReport({
       //   pagenum: 0,
@@ -292,25 +293,48 @@ const TeamReport = ({
                 }}
               >
                 {" "}
-                {reportListAll?.response?.response?.data?.length > 0 && (
-                  isLoading ? <Spin /> :
-                  <>
-                    <div>
-                      <input
-                        type="checkbox"
-                        onChange={handleHeaderCheckboxChange}
-                        className={
-                          styles.checkAlign +
-                          (selectAll ? " " + TableStyle.customChecked : "")
-                        }
-                        checked={selectAll}
-                      />
-                    </div>
-                    <span className={`pl-4 text-center ${styles.pName}`}>
-                      All
-                    </span>
-                  </>
-                )}
+                {reportListAll?.response?.response?.data?.length > 0 &&
+                  // (isLoading ? (
+                  //   <Spin />
+                  // ) : (
+                    <>
+                      <div className="col-xl-1 d-flex">
+                        <div>
+                          <input
+                            type="checkbox"
+                            onChange={handleHeaderCheckboxChange}
+                            className={
+                              styles.checkAlign +
+                              (selectAll ? " " + TableStyle.customChecked : "")
+                            }
+                            checked={selectAll}
+                          />
+                        </div>
+                        <span className={`pl-4 text-center ${styles.pName}`}>
+                          All
+                        </span>
+                      </div>
+                      <div className="col-xl-1 d-flex pt-0">
+                        <div>
+                          <input
+                            type="checkbox"
+                            onChange={handleHeaderCheckbox}
+                            className={
+                              styles.checkAlign +
+                              (selectAllFlags
+                                ? " " + TableStyle.customChecked
+                                : "")
+                            }
+                            checked={selectAllFlags}
+                          />
+                        </div>
+                        <span className={`pl-4 text-center ${styles.pName}`}>
+                          All Flags
+                        </span>
+                      </div>
+                    </>
+                  // ))
+                  }
               </div>
               <div className="row">
                 <div>
@@ -360,6 +384,7 @@ const TeamReport = ({
                                 patientAllocatedProfileImage={
                                   item?.patientAllocatedProfileImage
                                 }
+                                loading={isLoading}
                               />
                             )
                           )}
@@ -432,7 +457,7 @@ const TeamReport = ({
       {reportListAll?.response?.response?.data?.length > 0 ? (
         <div className="pagination-container">
           <Paginator
-            first={page?.teamPageNo===0?0:paginationFirst}
+            first={page?.teamPageNo === 0 ? 0 : paginationFirst}
             rows={8}
             totalRecords={
               ReportPatientDetails?.response?.response?.totalElements

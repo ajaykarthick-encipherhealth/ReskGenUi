@@ -213,6 +213,7 @@
   width: 22px;
   height: 22px;
   background-color: #04306f;
+  cursor: pointer;
 }
 .customChecked[type="checkbox"]::before {
   content: "\2713";
@@ -222,6 +223,7 @@
   font-weight: 800;
   font-size: 16px;
   margin-top: -2px;
+  cursor: pointer;
 }
 .customChecked2[type="checkbox"] {
   width: 20px;
@@ -240,6 +242,7 @@
 
 .customChecked2[type="checkbox"]:checked {
   background-color: #fff;
+  cursor: pointer;
 }
 .customChecked2[type="checkbox"]::before {
   content: "\2713";
@@ -248,7 +251,9 @@
   color: #04306f;
   font-weight: 800;
   font-size: 18px;
-  margin-top: -2px;
+  margin-top: -4px;
+  cursor: pointer;
+  
 }
 .customChecked3[type="checkbox"] {
   width: 20px;
@@ -267,6 +272,7 @@
 
 .customChecked3[type="checkbox"]:checked {
   background-color: #fff;
+  cursor: pointer;
 }
 .customChecked3[type="checkbox"]::before {
   content: "\2713";
@@ -276,6 +282,7 @@
   font-weight: 800;
   font-size: 18px;
   margin-top: -15px;
+  cursor: pointer;
 }
 .toolTipCOnt {
   color: rgba(246, 104, 0, 1);

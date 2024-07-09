@@ -1,11 +1,14 @@
 import { requestPortal } from "../../../../utils/network";
 
-export async function getAllFilesCount() {
+export async function getAllFilesCount(startDate,endDate) {
   const options = {
     method: "GET",
   };
+  const formattedStartDate = startDate ? new Date(startDate).toISOString() : "";
+  const formattedEndDate = endDate ? new Date(endDate).toISOString() : "";
+
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/getFilePageAndDosCount?organizationId=`,
+    `dbservice/tenantadmin/dashboard/getFilePageAndDosCount?startDate=${formattedStartDate}&endDate=${formattedEndDate}&organizationId= `,
     options
   );
   return data;
@@ -67,7 +70,8 @@ export async function getAllComputing(startDate, endDate) {
   return data;
 }
 
-export async function getTop10Diseases(startDate, endDate) {
+
+export async function getTop10Diseases(startDate, endDate,organizationId) {
   const options = {
     method: "GET",
   };
@@ -75,18 +79,18 @@ export async function getTop10Diseases(startDate, endDate) {
   const formattedEndDate = endDate ? new Date(endDate).toISOString() : "";
 
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/gettophcccodes?startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
+    `dbservice/tenantadmin/dashboard/gettophcccodes?startDate=${formattedStartDate}&endDate=${formattedEndDate}&organizationId=${organizationId}`,
     options
   );
   return data;
 }
 
-export async function getTopOigCodes() {
+export async function getTopOigCodes(startDate, endDate,organizationId) {
   const options = {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/gettopoighcccodes`,
+    `dbservice/tenantadmin/dashboard/gettopoighcccodes?startDate=${startDate}&endDate=${endDate}&organizationId=${organizationId}`,
     options
   );
   return data;
@@ -105,13 +109,13 @@ export async function getComputingStatus(startDate, endDate) {
   return data;
 }
 
-export async function getRafScore() {
+export async function getRafScore(startDate, endDate,organizationId) {
   const options = {
     method: "GET",
   };
 
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/raf/score`,
+    `dbservice/tenantadmin/dashboard/raf/score?startDate=${startDate}&endDate=${endDate}&organizationId=${organizationId}`,
     options
   );
   return data;

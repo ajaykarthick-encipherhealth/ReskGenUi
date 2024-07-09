@@ -224,14 +224,14 @@ const index = ({
           padding: "0px 5px 0 5px",
         }}
       >
-        <div className={styles.headers}>
-          <div className="d-flex justify-content-between">
-            <div className={`${styles.header} p-1`}>Revenue</div>
-            <div className="p-1">
-              <div className={styles.header}>Overall Revenue</div>
-              <div className={styles.price}>
-                {getAllRaf?.totalSuggestedRafScore}
-              </div>
+          <div className={styles.headers}>
+        <div className="d-flex justify-content-between">
+          <div className={`${styles.header} p-1`}>Revenue</div>
+          <div className="p-1">
+            <div className={styles.header}>Overall Revenue</div>
+            <div className={styles.price}>
+              {`$ ${getAllRaf?.totalSuggestedRafScore}`}
+            </div>
             </div>
           </div>
         </div>

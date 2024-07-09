@@ -347,7 +347,7 @@ const File = ({
             </div>
           ) : null}
           {!isFileFormShow ? (
-            <div className="col-xl-3" style={{ height: "70vh" }}>
+            <div className="col-xl-3" style={{ height: "63vh" }}>
               <Droppable droppableId={"SUGGESTED"} key={"SUGGESTED"}>
                 {(provided) => {
                   return (

@@ -266,7 +266,7 @@ const index = ({
             <div className={`${styles.header} p-1`}>Revenue</div>
             <div className="p-1">
               <div className={styles.header}>Overall Revenue</div>
-              <div className={styles.price}>{getAllRaf?.totalHccRafScore}</div>
+              <div className={styles.price}>{`$ ${getAllRaf?.totalHccRafScore}`}</div>
             </div>
           </div>
         </div>

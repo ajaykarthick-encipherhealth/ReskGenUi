@@ -5,6 +5,7 @@ import styles from "../../styles.module.css";
 import * as echarts from "echarts";
 import RafGraph from "../../components/rafGraph";
 import RevenueGraph from "../../components/revenueGraph";
+import { Empty } from "antd";
 import {
   HccCodes,
   RafCounts,
@@ -109,7 +110,6 @@ const index = ({
     getAllHccCodes?.suggestedHccDiseaseCountMap
       ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
       : [];
-
   useEffect(() => {
     const fetchChartData = async () => {
       const data = await getAllRafData(dateRange.startDate, dateRange.endDate);
@@ -155,6 +155,7 @@ const index = ({
     };
     fetchChartData();
   }, [dateRange]);
+
   const options = {
     xAxis: {
       type: "category",
@@ -280,6 +281,7 @@ const index = ({
             </div>
           </div>
         </div>
+
         <CodesGraph options={options} isRadio={true} />
       </div>
       <div
@@ -324,7 +326,9 @@ const index = ({
             <div className={`${styles.header} p-1`}>Revenue</div>
             <div className="p-1">
               <div className={styles.header}>Overall Revenue</div>
-              <div className={styles.price}>{getAllRaf?.totalHccRafScore}</div>
+              <div
+                className={styles.price}
+              >{`$ ${getAllRaf?.totalHccRafScore}`}</div>
             </div>
           </div>
         </div>

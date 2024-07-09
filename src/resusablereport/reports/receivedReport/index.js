@@ -476,7 +476,7 @@ const ReceivedReport = ({
                           <div className="col-xl-12  d-flex mt-4">
                             <div className={`col-xl-6 ${styles.sentSubCard}`}>
                               <div>
-                                <div>Overall Reports Sent</div>
+                                <div>Overall Sent Reports</div>
                                 <div className="fw-bold">
                                   {details?.reportStatusDTOList?.totalElements}
                                 </div>

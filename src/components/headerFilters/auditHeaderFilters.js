@@ -213,7 +213,7 @@ const AuditHeaderFilters = ({
           {bullets && (
             <div
               className={`${bullets ? "col-xl-1" : "col-xl-4"}`}
-              style={{ margin: "30px 0 0 0px", cursor: "pointer" }}
+              style={{ margin: "30px 0 0 20px", cursor: "pointer" }}
             >
               <Popover
                 content={

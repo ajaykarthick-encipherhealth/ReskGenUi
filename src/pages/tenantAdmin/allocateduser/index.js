@@ -311,7 +311,7 @@ const Patient = ({
     } else {
       setSelectedRowsId([]);
     }
-  }, [selectAllChecked, sort, isPatientList]);
+  }, [selectAllChecked, sort, isPatientList,pageNo]);
 
   useEffect(() => {
     if (typeof pageNo == "number" && activeTab === 1) {

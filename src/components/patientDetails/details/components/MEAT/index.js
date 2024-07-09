@@ -55,7 +55,7 @@ const MeatCard = ({
   };
   return (
     <>
-      <div className="my-post-content pt-3">
+      <div className="my-post-content pt-3" >
         <div className={visitStyles.meat_head_card}>
           <div className="row">
             <div className="col-xl-3 text-center text-uppercase">

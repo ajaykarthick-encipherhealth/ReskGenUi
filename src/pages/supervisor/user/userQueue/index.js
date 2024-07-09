@@ -73,6 +73,7 @@ const AuditOptions = [
   { label: "REAUDIT", value: "REAUDIT" },
   { label: "AUDIT PENDING", value: "AUDIT_PENDING" },
   { label: "AUDIT DECLINED", value: "AUDIT_DECLINED" },
+  { label: "NOT AUDIT", value: "NOT_AUDIT" },
 ];
 const Index = ({
   getCurrentUserDetails,

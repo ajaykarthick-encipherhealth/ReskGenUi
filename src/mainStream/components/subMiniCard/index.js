@@ -4,7 +4,7 @@ const OverallReportsSection = ({ totalReports, styles }) => {
   return (
     <div className={`col-xl-3 ${styles.sentSubCard}`}>
       <div>
-        <div>Overall Reports Sent</div>
+        <div>Overall Sent Reports</div>
         <h4>{totalReports}</h4>
       </div>
     </div>

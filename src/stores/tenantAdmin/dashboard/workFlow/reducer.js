@@ -1,7 +1,11 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
 import {
-  userStatusAction,auditorStatusAction,allocatedStatusAction,reviewerStatusAction,organizationStatusAction
+  userStatusAction,
+  auditorStatusAction,
+  allocatedStatusAction,
+  reviewerStatusAction,
+  organizationStatusAction,
 } from "./action";
 
 const initialState = {
@@ -44,11 +48,16 @@ const getStatusLoading = (type) =>
   );
 
 const workFlowReducer = combineReducers({
-    userStatus:createReducer(userStatusAction),
-    auditorStatus:createReducer(auditorStatusAction),
-    allocatedStatus:createReducer(allocatedStatusAction),
-    reviewerStatus:createReducer(reviewerStatusAction),
-    organizationStatus:createReducer(organizationStatusAction),
+  userStatus: createReducer(userStatusAction),
+  auditorStatus: createReducer(auditorStatusAction),
+  allocatedStatus: createReducer(allocatedStatusAction),
+  reviewerStatus: createReducer(reviewerStatusAction),
+  organizationStatus: createReducer(organizationStatusAction),
+  userLoader: getStatusLoading(userStatusAction),
+  auditorLoader: getStatusLoading(auditorStatusAction),
+  allocatedLoader: getStatusLoading(allocatedStatusAction),
+  reviewerLoader: getStatusLoading(reviewerStatusAction),
+  organizationLoader: getStatusLoading(organizationStatusAction),
 });
 
 export default workFlowReducer;

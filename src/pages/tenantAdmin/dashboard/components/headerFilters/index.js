@@ -12,9 +12,11 @@ const index = ({
   organizationStatusData,
   getOrganizationStatusData,
   handleOrganizationChange,
+  setLoaderButton,
 }) => {
   const handleDateChange = (value) => {
     let startDate;
+    setLoaderButton(false)
     if (value === "last_1_week") {
       startDate =
         moment().subtract(6, "days").format("YYYY-MM-DD") + "T00:00:00.000Z";
@@ -92,6 +94,7 @@ const index = ({
           }
           onClick={() => {
             setActiveBtn("default");
+           
           }}
         >
           Default
@@ -102,6 +105,7 @@ const index = ({
           }
           onClick={() => {
             setActiveBtn("workflow");
+            setLoaderButton(true)
           }}
         >
           Workflow

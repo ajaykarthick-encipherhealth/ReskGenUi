@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
-import { getAllTrackingAction } from "./actions";
+import { getAllTrackingAction ,getAllFileProcessAction,
+} from "./actions";
 
 const initialState = {
   loading: true,
@@ -43,7 +44,7 @@ const getReportLoading = (type) =>
 
 const tenantAdminTrackingReducer = combineReducers({
   allTracking: createReducer(getAllTrackingAction),
-
+  allFileProcessing: createReducer(getAllFileProcessAction),
   // loaders
   allTrackingLoader: getReportLoading(getAllTrackingAction),
 });

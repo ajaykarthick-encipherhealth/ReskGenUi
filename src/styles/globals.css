@@ -13738,9 +13738,9 @@ overflow: scroll;
   background: #f5f9ff !important;
 }
 
-.allocate_modal_container > .ant-modal-content {
-  height: 730px;
-  overflow: scroll;
+.allocate_modal_container  .ant-modal-content {
+  height: 730px !important;
+  overflow-Y: scroll !important;
 }
 
 .ant_select_form {
@@ -14852,11 +14852,11 @@ input::-webkit-inner-spin-button {
     left: -30px !important;
   }
   .remianingLineGraph > div:nth-child(2) > div:nth-child(1) > canvas {
-    height: 380px !important;
+    height: 400px !important;
     top: -35px !important;
   }
   .remianingAreaGraph > div:nth-child(2) > div:nth-child(1) > canvas {
-    height: 300px !important;
+    height:330px !important;
     top: -35px !important;
   }
 }
@@ -14987,4 +14987,11 @@ text-align: start;
   border-radius: 8px;
   padding: 16px;
   margin-bottom: 16px;
+}
+
+
+.skeletonantd .ant-skeleton.ant-skeleton-element .ant-skeleton-avatar.ant-skeleton-avatar-lg {
+  width: 200px;
+  height: 200px;
+  line-height: 40px;
 }

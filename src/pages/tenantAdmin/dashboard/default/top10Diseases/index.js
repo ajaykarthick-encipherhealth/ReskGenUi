@@ -3,10 +3,13 @@ import ReusableTable from "../../components/table";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../../../../stores/tenantAdmin/dashboard/default";
 
-const index = ({ top10DiseasesData, getTop10DiseasesData }) => {
+const index = ({ top10DiseasesData, getTop10DiseasesData,dateRange,selectedOrganization}) => {
   useEffect(() => {
-    getTop10DiseasesData();
-  }, []);
+    getTop10DiseasesData( dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization);
+  }, [dateRange]);
+ 
 
   return (
     <>
