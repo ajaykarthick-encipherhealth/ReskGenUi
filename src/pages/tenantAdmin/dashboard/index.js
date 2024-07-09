@@ -39,7 +39,7 @@ const Index = ({
   reviewerLoader,
   orgLoader,
 }) => {
-  const [activeBtn, setActiveBtn] = useState("workflow");
+  const [activeBtn, setActiveBtn] = useState("default");
   const [loaderButton, setLoaderButton] = useState(true);
   const [dateRange, setDateRange] = useState({ startDate: "", endDate: "" });
   const [selectedOrganization, setSelectedOrganization] = useState("");
