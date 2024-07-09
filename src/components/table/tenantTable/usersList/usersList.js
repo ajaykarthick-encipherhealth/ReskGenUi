@@ -436,6 +436,6 @@ const UserList = ({
 };
 
 const enhancer = connect((state) => ({
-  usersList: state?.tenantAdmin?.allUsers,
+  usersList: state?.tenantAdmin?.users?.allUsers,
 }));
 export default enhancer(UserList);

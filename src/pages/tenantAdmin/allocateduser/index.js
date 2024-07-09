@@ -16,7 +16,7 @@ import AllocatedAdminList from "../../../components/table/admin/allocatedAdminLi
 import AllocatedL2AdminList from "../../../components/table/admin/allocatedL2AdminList/allocatedL2AdminList";
 import allocateStyle from "./allocate/style.module.css";
 import L2AllocateModal from "./l2allocate";
-import { actions as tenantAdminAction } from "../../../stores/tenantAdmin";
+import { actions as tenantAdminAction } from "../../../stores/tenantAdmin/tracking";
 
 import styles from "../report/report.module.css";
 import reportStyles from "../../reviewer/report/report.module.css";
@@ -34,6 +34,7 @@ import { getFilters } from "../../../stores/authflow/actions";
 import AllocateModal from "./allocate";
 import { debounce } from "../../../components/input";
 import { useCallback } from "react";
+import {actions as tenantAdminUsersAction} from '../../../stores/tenantAdmin/users'
 import { actions as allActions } from "../../../stores/admin/patientAllocation";
 
 const { RangePicker } = DatePicker;
@@ -1080,19 +1081,19 @@ const Patient = ({
 };
 const enhancer = connect(
   (state) => ({
-    organizationList: state?.tenantAdmin?.allOrganization?.data,
+    organizationList: state?.tenantAdmin?.users?.allOrganization?.data,
     reviewerResponse: state.admin.patientAllocate?.allocatedList?.data,
     loader: state.admin?.patientAllocate?.loader,
     loader2: state.admin?.patientAllocate?.l2Loader,
     loader3: state.admin?.patientAllocate?.supervisorLoader,
-    supervisorResponse: state.admin.patientAllocate?.l2AllocatedList?.data,
-    selectedSupervisors: state.admin.patientAllocate?.selectedSupervisors?.data,
+    supervisorResponse: state.admin?.patientAllocate?.l2AllocatedList?.data,
+    selectedSupervisors: state.admin?.patientAllocate?.selectedSupervisors?.data,
   }),
   {
-    getAllOrganizationList: tenantAdminAction.getAllOrganizationAction,
-    allocatedGetList: allActions.getAllList,
-    getSupervisorsList: allActions.getSupervisorsList,
-    getSelectedSupervisorList: allActions.getSelectedSupervisorList,
+    getAllOrganizationList: tenantAdminUsersAction?.getAllOrganizationAction,
+    allocatedGetList: allActions?.getAllList,
+    getSupervisorsList: allActions?.getSupervisorsList,
+    getSelectedSupervisorList: allActions?.getSelectedSupervisorList,
   }
 );
 export default enhancer(Patient);

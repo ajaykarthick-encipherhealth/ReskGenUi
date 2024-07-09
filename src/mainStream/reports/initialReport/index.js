@@ -46,6 +46,9 @@ const InitialCard = ({
   loader,
   activeTab,
   reviewerReport,
+  handleHeaderCheckbox,
+  selectAllFlags,
+  adminLoader
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -263,7 +266,6 @@ const InitialCard = ({
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
   }, [selectedRows]);
-
   return (
     <>
       <div>
@@ -285,7 +287,8 @@ const InitialCard = ({
                     <Spin />
                   ) : (
                     <>
-                      <div>
+                     <div className="col-xl-1 d-flex">
+                     <div>
                         <input
                           type="checkbox"
                           onChange={handleHeaderCheckboxChange}
@@ -299,6 +302,26 @@ const InitialCard = ({
                       <span className={`pl-4 text-center ${styles.pName}`}>
                         All
                       </span>
+                     </div>
+
+                      <div className="col-xl-1 d-flex">
+                        <div>
+                          <input
+                            type="checkbox"
+                            onChange={handleHeaderCheckbox}
+                            className={
+                              styles.checkAlign +
+                              (selectAllFlags
+                                ? " " + TableStyle.customChecked
+                                : "")
+                            }
+                            checked={selectAllFlags}
+                          />
+                        </div>
+                        <span className={`pl-4 text-center ${styles.pName}`}>
+                          All Flags
+                        </span>
+                      </div>
                     </>
                   ))}
               </div>
@@ -414,7 +437,6 @@ const InitialCard = ({
                             {activeTab === "Reviewer"
                               ? ""
                               : allocationCountData.map((item, index) => (
-
                                   <AllocationCount
                                     key={item?.id}
                                     title={item?.title}
@@ -438,7 +460,7 @@ const InitialCard = ({
       </div>
       {reportListAll?.response?.data?.length > 0 ? (
         <Pagination
-          first={page?.pageNo===0?0:paginationFirst}
+          first={page?.pageNo === 0 ? 0 : paginationFirst}
           totalRecords={reportListAll?.response?.totalElements}
           onPageChange={onPageChange}
         />
@@ -451,6 +473,7 @@ const enhancer = connect(
   (state) => ({
     getFlagsData: state?.reviewer?.workQueue?.flags?.data,
     ReportPatientDetails: state?.reviewer?.report?.reviewer?.data,
+    adminLoader:state?.admin?.report
   }),
   {
     reviewerReport: reviewerAction.reviewerReport,

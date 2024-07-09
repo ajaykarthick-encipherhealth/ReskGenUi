@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import {
   HccCodes,
   RafCounts,
-} from "../../../../../stores/tenantAdmin/default/action.js";
+} from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 
 const RevenueGraph = ({
   isMultiple,
@@ -74,7 +74,9 @@ const RevenueGraph = ({
         name: "HCC Codes",
         type: "line",
         step: "middle",
-        data: isMultiple && [220, 282, 201, 234, 290, 430, 410],
+
+        data: isMultiple && premiumByDateForHcc && premiumByDateForSuggested,
+
         itemStyle: {
           color: "#04B700",
         },
@@ -83,7 +85,7 @@ const RevenueGraph = ({
         name: "Car gap Codes",
         type: "line",
         step: "end",
-        data: isMultiple && [450, 432, 401, 454, 590, 530, 510],
+        data: premiumByDateForSuggested,
         itemStyle: {
           color: "#FF9209",
         },
@@ -102,9 +104,9 @@ const RevenueGraph = ({
 const enhancer = connect(
   (state) => ({
     getAllHccCodes:
-      state?.tenantAdmin?.tenantAdmindefault?.allHccCodes?.data?.response,
+      state?.tenantAdmin?.dashboard?.default?.allHccCodes?.data?.response,
     getAllRaf:
-      state?.tenantAdmin?.tenantAdmindefault?.allRafCounts?.data?.response,
+      state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
   }),
   {
     getAllHccCodesData: HccCodes,

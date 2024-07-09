@@ -437,13 +437,15 @@ const Reports = ({
     }
   }, [selectedOptions?.UserRole]);
 
-const resetPageState=activeTab === "Sent"
-? setSentPageNo
-: activeTab === "Received"
-? setReceivedPageNo
-: activeTab === "Audit"
-? setTeamPageNo
-: setPageNo
+  const resetPageState =
+    activeTab === "Sent"
+      ? setSentPageNo
+      : activeTab === "Received"
+      ? setReceivedPageNo
+      : activeTab === "Audit"
+      ? setTeamPageNo
+      : setPageNo;
+
   return (
     <div>
       <Header />
@@ -480,9 +482,7 @@ const resetPageState=activeTab === "Sent"
                                   type="text"
                                   onChange={(e) => {
                                     filterChangePatientId(e);
-                                    resetPageNumber(
-                                      resetPageState
-                                    );
+                                    resetPageNumber(resetPageState);
                                   }}
                                   className="form-control new-form-control reportInput"
                                   placeholder="Search"
@@ -562,32 +562,7 @@ const resetPageState=activeTab === "Sent"
                               </div>
                             </div>
                           </div>
-                          {(!activeTab ||
-                            activeTab === "Admin" ||
-                            activeTab === "Audit" ||
-                            activeTab === "Team" ||
-                            activeTab === "Reviewer") && (
-                            <div className="col-xl-2 d-flex pt-2">
-                              <div>
-                                <input
-                                  type="checkbox"
-                                  onChange={handleHeaderCheckboxChange}
-                                  className={
-                                    styles.checkAlign +
-                                    (selectAllFlags
-                                      ? " " + TableStyle.customChecked
-                                      : "")
-                                  }
-                                  checked={selectAllFlags}
-                                />
-                              </div>
-                              <span
-                                className={`pl-4 text-center ${styles.pName}`}
-                              >
-                                All Flags
-                              </span>
-                            </div>
-                          )}
+
                           {selectedData?.length > 0 &&
                             selectedData?.map((info) => (
                               <div className="col-xl-2" key={info.id}>
@@ -777,7 +752,8 @@ const resetPageState=activeTab === "Sent"
                         page={{ pageNo, paginationFirst }}
                         loader={reviewerLoader}
                         activeTab={activeTab}
-                       
+                        handleHeaderCheckbox={handleHeaderCheckboxChange}
+                        selectAllFlags={selectAllFlags}
                       />
                     </div>
                   )}
@@ -803,6 +779,8 @@ const resetPageState=activeTab === "Sent"
                       page={{ teamPageNo, paginationTeamFirst }}
                       loader={auditeReportLoading}
                       activeTab={activeTab}
+                      handleHeaderCheckbox={handleHeaderCheckboxChange}
+                      selectAllFlags={selectAllFlags}
                     />
                   )}
                   {activeTab === "Sent" && (
@@ -820,7 +798,6 @@ const resetPageState=activeTab === "Sent"
                         receivedEndDate={selectedDateRanges?.Sent?.to}
                         isPhysician={true}
                         loader={sentLoader}
-                        
                       />
                     </div>
                   )}
@@ -839,7 +816,6 @@ const resetPageState=activeTab === "Sent"
                         setSort={setSort}
                         isPhysician={true}
                         loader={receivedLoader}
-                        
                       />
                     </div>
                   )}
@@ -912,7 +888,7 @@ const enhancer = connect(
     ReportPatientDetails: state?.reviewer?.report?.reviewer?.data,
     reviewerLoader: state?.reviewer?.report?.reviewerLoader,
     SentReportDetails: state?.reviewer?.report?.sent,
-    sentLoader: state?.reviewer?.report?.senntLoader,
+    sentLoader: state?.reviewer?.report?.sentLoader,
     ReceivedReportDetails: state?.reviewer?.report?.received,
     receivedLoader: state?.reviewer?.report?.receivedLoader,
     supervisorReportDetails: state?.supervisor?.report?.auditReport,

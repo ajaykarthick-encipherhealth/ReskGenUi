@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import ReusableTable from "../../components/table";
 import { connect } from "react-redux";
-import { top10Diseases } from "../../../../../stores/tenantAdmin/default/action.js";
+import { actions as allActions } from "../../../../../stores/tenantAdmin/dashboard/default";
 
 const index = ({ top10DiseasesData, getTop10DiseasesData }) => {
   useEffect(() => {
     getTop10DiseasesData();
   }, []);
+
   return (
     <>
       <div>
@@ -14,17 +15,17 @@ const index = ({ top10DiseasesData, getTop10DiseasesData }) => {
         <span style={{color:"#FF8551",fontSize:"20px",fontWeight:"600",margin:"0 0 0 10px"}}> {top10DiseasesData?.response?.totalCount}</span>
       </div>
 
-      <ReusableTable items={top10DiseasesData?.response?.topDiseaseDTOList?.length ?top10DiseasesData?.response?.topDiseaseDTOList:[]} key ={"diseases"}/>
+      <ReusableTable items={top10DiseasesData?.response?.topDiseaseDTOList} />
     </>
   );
 };
 
 const enhancer = connect(
   (state) => ({
-    top10DiseasesData: state?.tenantAdmin?.tenantAdmindefault?.allTop10Diseases?.data,
+    top10DiseasesData: state?.tenantAdmin?.dashboard?.default?.allTop10Diseases?.data,
   }),
   {
-    getTop10DiseasesData: top10Diseases,
+    getTop10DiseasesData: allActions?.top10Diseases,
   }
 );
 

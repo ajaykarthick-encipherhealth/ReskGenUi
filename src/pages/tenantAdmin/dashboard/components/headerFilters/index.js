@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { actions as dashbaordActions } from "../../../../../stores/tenantAdmin/workFlow";
+import { actions as dashboardActions } from "../../../../../stores/tenantAdmin/dashboard/workFlow";
 import styles from "./styles.module.css";
 import { Select } from "antd";
 import moment from "moment";
@@ -43,7 +43,6 @@ const index = ({
     })
   );
 
-
   return (
     <div className={styles.container}>
       <div
@@ -62,7 +61,9 @@ const index = ({
               onChange={handleOrganizationChange}
               optionFilterProp="label"
               filterSort={(optionA, optionB) =>
-                (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                (optionA?.label ?? "")
+                  .toLowerCase()
+                  .localeCompare((optionB?.label ?? "").toLowerCase())
               }
               showSearch
             />
@@ -114,14 +115,13 @@ const index = ({
   );
 };
 const enhancer = connect(
-  (state) => (
-    {
-    organizationStatusData: state.tenantAdmin.workFlow.organizationStatus.data,
-  }
-),
+  (state) => ({
+    organizationStatusData:
+      state.tenantAdmin?.dashboard?.workFlow?.organizationStatus?.data,
+  }),
 
   {
-    getOrganizationStatusData: dashbaordActions.organizationStatusAction,
+    getOrganizationStatusData: dashboardActions?.organizationStatusAction,
   }
 );
 export default enhancer(index);

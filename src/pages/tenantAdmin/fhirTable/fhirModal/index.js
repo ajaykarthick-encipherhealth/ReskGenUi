@@ -1,6 +1,6 @@
 import React from "react";
 import { Offcanvas, Button } from "react-bootstrap";
-import { actions as tenantActions } from "../../../../stores/tenantAdmin";
+import { actions as tenantActions } from "../../../../stores/tenantAdmin/patientSync";
 import { connect } from "react-redux";
 import { Form, Input, Select } from "antd";
 import { getYears } from "../../../../utils/reusable";
@@ -173,7 +173,6 @@ const FhirDrawer = ({
   );
 };
 const enhancer = connect((state) => ({}), {
-  uploadBatch: tenantActions.batchUpload,
   getCreateBatch: tenantActions.getCreateBatch,
   getAllBatches: tenantActions.getAllBatches,
 });

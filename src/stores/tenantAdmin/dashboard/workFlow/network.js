@@ -1,4 +1,4 @@
-import { requestPortal } from "../../../utils/network";
+import { requestPortal } from "../../../../utils/network";
 
 
 export async function getUserStatus(startDate, endDate,organizationId) {
