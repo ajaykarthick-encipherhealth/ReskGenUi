@@ -1,8 +1,9 @@
 import React from "react";
 import ReactECharts from "echarts-for-react";
 import styles from "./styles.module.css";
+import { Skeleton } from "antd";
 
-const OrgPieChartInfo = ({data}) => {
+const OrgPieChartInfo = ({ data, loaderButton, orgLoader }) => {
   const option = {
     tooltip: {
       trigger: "item",
@@ -24,7 +25,9 @@ const OrgPieChartInfo = ({data}) => {
           show: true,
           position: "center",
           formatter: function (params) {
-            return `{b|${data?.length}}\n {a|${data?.length<=1?"Organization":"Organizations"}}`;
+            return `{b|${data?.length}}\n {a|${
+              data?.length <= 1 ? "Organization" : "Organizations"
+            }}`;
           },
           backgroundColor: "transparent",
 
@@ -60,34 +63,53 @@ const OrgPieChartInfo = ({data}) => {
       },
     ],
   };
- 
-
 
   return (
     <>
-      <ReactECharts
-        option={option}
-        style={{ width: "100%", height: "380px",marginTop:"-70px" }}
-      />
-      <div className={styles.bulletsDiv}>
-        {data?.map((item) => {
-          return (
-            <div className={styles.container}>
-              <div style={{ display: "flex", width: "100%" }}>
-                <div
-                  className={styles.bgColor}
-                  style={{
-                    backgroundColor: item?.itemStyle?.color,
-                  }}
-                ></div>
-                <span className={styles.userNameTitle}>{item.name}</span>
-              </div>
+      {loaderButton && orgLoader ? (
+        <div className="skeletonantd d-flex justify-content-center align-items-center">
+          <Skeleton.Avatar active size="large" shape="circle" />
+        </div>
+      ) : orgLoader ? (
+        <div className="d-flex justify-content-center align-items-center">
+          {" "}
+          <Spin size="large" />
+        </div>
+      ) : (
+        <ReactECharts
+          option={option}
+          style={{ width: "100%", height: "380px", marginTop: "-70px" }}
+        />
+      )}
 
-              <div className={styles.subText}>{item.value}</div>
-            </div>
-          );
-        })}
-      </div>
+      {loaderButton && orgLoader ? (
+        <Skeleton active />
+      ) : orgLoader ? (
+        <div className="d-flex justify-content-center align-items-center">
+          {" "}
+          <Spin size="large" />
+        </div>
+      ) : (
+        <div className={styles.bulletsDiv}>
+          {data?.map((item) => {
+            return (
+              <div className={styles.container}>
+                <div style={{ display: "flex", width: "100%" }}>
+                  <div
+                    className={styles.bgColor}
+                    style={{
+                      backgroundColor: item?.itemStyle?.color,
+                    }}
+                  ></div>
+                  <span className={styles.userNameTitle}>{item.name}</span>
+                </div>
+
+                <div className={styles.subText}>{item.value}</div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </>
   );
 };
