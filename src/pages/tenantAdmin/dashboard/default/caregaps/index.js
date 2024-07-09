@@ -128,7 +128,7 @@ const index = ({
       const data = await getAllRafData();
 
       const tempRecords = new Map();
-      const records = data.response.premiumByDateForHcc;
+      const records = data?.response?.premiumByDateForHcc;
       for (let i = 6; i >= 0; i--) {
         const todayDate = moment();
         const presentDate = todayDate.subtract(i, "days");
@@ -200,7 +200,7 @@ const index = ({
           <div className="p-1">
             <div className={styles.header}>Overall Revenue</div>
             <div className={styles.price}>
-              {getAllRaf?.totalSuggestedRafScore}
+              {`$ ${getAllRaf?.totalSuggestedRafScore}`}
             </div>
             </div>
           </div>
