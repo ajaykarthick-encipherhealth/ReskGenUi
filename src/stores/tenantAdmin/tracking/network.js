@@ -38,3 +38,15 @@ export async function getAllTracking(data) {
   );
   return res;
 }
+export async function getAllFileProcess(
+  searchstring = "",
+  status = "",
+  startdate = "",
+  enddate = ""
+) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(`dbservice/file-process/status`, options);
+  return data;
+}
