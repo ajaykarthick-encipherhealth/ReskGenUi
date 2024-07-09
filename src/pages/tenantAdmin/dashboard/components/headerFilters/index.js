@@ -82,7 +82,6 @@ const index = ({
                 { label: "Last 30 days", value: "last_1_month" },
                 { label: "Custom range Picker", value: "custom" },
               ]}
-              allowClear
               onChange={handleDateChange}
             />
           </div>
