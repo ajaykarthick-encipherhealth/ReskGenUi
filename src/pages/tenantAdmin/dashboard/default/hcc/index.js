@@ -51,7 +51,7 @@ const index = ({
     const fetchChartData = async () => {
       const data = await getAllHccCodesData(
         dateRange.startDate,
-        dateRange.endDate
+        dateRange.endDate,
       );
       const records = data?.response?.hccDiseaseCountMap;
       const records1 = data?.response?.suggestedHccDiseaseCountMap;

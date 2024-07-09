@@ -7,8 +7,9 @@ import Image from "next/image";
 import styles from "../../styles.module.css";
 import { FilesCount } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 
-const index = ({ getAllFilesCount, getAllFiles, dateRange }) => {
+const index = ({ getAllFilesCount, getAllFiles,dateRange, selectedOrganization }) => {
   const cardData = [
+
     {
       id: 1,
       title: "File/Patients Count",
@@ -32,8 +33,8 @@ const index = ({ getAllFilesCount, getAllFiles, dateRange }) => {
     },
   ];
   useEffect(() => {
-    getAllFilesCount(dateRange.startDate,
-      dateRange.endDate);
+    getAllFilesCount( dateRange.startDate,
+        dateRange.endDate, selectedOrganization);
   }, [dateRange]);
 
   return (

@@ -130,15 +130,15 @@ const Files = ({
 
   useEffect(() => {
     // getAllComputing(dateRange.startDate,   dateRange.endDate);
-    getComputingStatus(dateRange.startDate, dateRange.endDate);
-    getTop10DiseasesData(dateRange.startDate, dateRange.endDate);
+    getComputingStatus(dateRange?.startDate, dateRange?.endDate);
+    getTop10DiseasesData(dateRange?.startDate, dateRange?.endDate);
   }, [dateRange]);
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await getAllComputing(
-        dateRange.startDate,
-        dateRange.endDate
+        dateRange?.startDate,
+        dateRange?.endDate
       );
       const tempRecords = new Map();
       const records = data?.response?.premiumByDateForHcc;
