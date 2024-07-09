@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import ReactECharts from "echarts-for-react";
 import { connect } from "react-redux";
 import {
@@ -14,8 +14,16 @@ const RevenueGraph = ({
   getAllHccCodes,
   getAllRafData,
   getAllRaf,
-  chartRevenData
+  chartRevenData,
+  isHcc,
+  isCargaps,
 }) => {
+  const [currChartData, setCurrChartData] = useState(new Map());
+
+  useEffect(() => {
+    setCurrChartData(chartRevenData);
+  }, [currChartData]);
+
   const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
     ? Object.values(getAllRaf.premiumByDateForHcc)
     : [];
@@ -24,6 +32,10 @@ const RevenueGraph = ({
     ? Object.values(getAllRaf.premiumByDateForSuggested)
     : [];
 
+  const combinedData =
+    isHcc && isCargaps
+      ? [...premiumByDateForHcc, ...premiumByDateForSuggested]
+      : [];
   const option = {
     // title: {
     //   text: "Step Line",
@@ -47,25 +59,33 @@ const RevenueGraph = ({
     // },
     xAxis: {
       type: "category",
-      data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      data:
+        isHcc || isCargaps
+          ? [...chartRevenData.keys()]
+          : [
+              "jan",
+              "feb",
+              "mar",
+              "apr",
+              "may",
+              "jun",
+              "jul",
+              "aug",
+              "sep",
+              "oct",
+              "nov",
+              "dec",
+            ],
     },
     yAxis: {
       type: "value",
     },
     series: [
       {
-        name: cargapColor
-          ? "Car gap Codes"
-          : hccColor
-          ? "HCC Codes"
-          : "Total Codes",
+        name: "Total Codes",
         type: "line",
         step: "start",
-        data: hccColor
-          ? premiumByDateForHcc
-          : cargapColor
-          ? premiumByDateForSuggested
-          : [12, 34, 23],
+        data: [],
         itemStyle: {
           color: hccColor ? hccColor : cargapColor ? cargapColor : "#E88D67",
         },
@@ -75,7 +95,7 @@ const RevenueGraph = ({
         type: "line",
         step: "middle",
 
-        data: isMultiple && premiumByDateForHcc && premiumByDateForSuggested,
+        data: premiumByDateForHcc,
 
         itemStyle: {
           color: "#04B700",
