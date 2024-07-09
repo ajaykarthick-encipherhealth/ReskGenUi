@@ -89,22 +89,22 @@ const Index = ({
   const auditorData = [
     {
       value: auditorStatusData?.response?.auditedStatus?.AUDITED,
-      name: "Audit Completed",
+      name: " Sample Audit Completed",
       itemStyle: { color: "#4AA1AB" },
     },
     {
       value: auditorStatusData?.response?.auditedStatus?.AUDIT_PENDING,
-      name: "Audit Pending",
+      name: " Sample Audit Pending",
       itemStyle: { color: "#BD3A79" },
     },
     {
       value: auditorStatusData?.response?.auditedStatus?.AUDITHOLD,
-      name: "Audit Hold",
+      name: "Sample Audit Hold",
       itemStyle: { color: "#EBAE00" },
     },
     {
       value: auditorStatusData?.response?.auditedStatus?.DECLINED,
-      name: "Audit Declined",
+      name: "Sample Audit Declined",
       itemStyle: { color: "#C21807" },
     },
   ];
