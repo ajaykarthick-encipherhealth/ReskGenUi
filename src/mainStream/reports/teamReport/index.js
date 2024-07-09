@@ -60,7 +60,6 @@ const TeamReport = ({
     //   ? []
     //   : reportListAll?.response?.response?.data;
     // setSelectedRows(updatedRows);
-    console.log(selectAll, activeTab, "testing");
     const orgId = localStorage.getItem("orgId");
     if (activeTab === "Audit") {
       // auditReport({
@@ -295,9 +294,9 @@ const TeamReport = ({
               >
                 {" "}
                 {reportListAll?.response?.response?.data?.length > 0 &&
-                  (isLoading ? (
-                    <Spin />
-                  ) : (
+                  // (isLoading ? (
+                  //   <Spin />
+                  // ) : (
                     <>
                       <div className="col-xl-1 d-flex">
                         <div>
@@ -315,7 +314,7 @@ const TeamReport = ({
                           All
                         </span>
                       </div>
-                      <div className="col-xl-1 d-flex pt-2">
+                      <div className="col-xl-1 d-flex pt-0">
                         <div>
                           <input
                             type="checkbox"
@@ -334,7 +333,8 @@ const TeamReport = ({
                         </span>
                       </div>
                     </>
-                  ))}
+                  // ))
+                  }
               </div>
               <div className="row">
                 <div>
@@ -384,6 +384,7 @@ const TeamReport = ({
                                 patientAllocatedProfileImage={
                                   item?.patientAllocatedProfileImage
                                 }
+                                loading={isLoading}
                               />
                             )
                           )}
