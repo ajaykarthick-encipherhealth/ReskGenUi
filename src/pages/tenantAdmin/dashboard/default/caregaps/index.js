@@ -48,7 +48,7 @@ const index = ({
         dateRange?.startDate,
         dateRange?.endDate
       );
-      const records1 = data.response.suggestedHccDiseaseCountMap;
+      const records1 = data?.response?.suggestedHccDiseaseCountMap;
       const datediff =
         moment(dateRange?.endDate).diff(moment(dateRange?.startDate), "days") +
         1;

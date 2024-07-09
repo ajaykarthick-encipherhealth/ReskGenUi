@@ -204,7 +204,7 @@ const Index = ({
               <div className={`row ${styles.box}`}>
                 <div className={`col-lg-4`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <TotalCounts dateRange={dateRange} />
+                    <TotalCounts dateRange={dateRange} selectedOrganization={selectedOrganization} />
                   </Card>
                 </div>
                 <div className={`col`}>
@@ -220,7 +220,7 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <TotalCodes dateRange={dateRange} />
+                    <TotalCodes dateRange={dateRange} selectedOrganization={selectedOrganization}/>
                   </Card>
                 </div>
               </div>
@@ -228,7 +228,7 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <HccCodes dateRange={dateRange} />
+                    <HccCodes dateRange={dateRange} selectedOrganization={selectedOrganization}/>
                   </Card>
                 </div>
               </div>
@@ -236,7 +236,7 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <CaregapCodes dateRange={dateRange} />
+                    <CaregapCodes dateRange={dateRange} selectedOrganization={selectedOrganization} />
                   </Card>
                 </div>
               </div>
@@ -244,12 +244,12 @@ const Index = ({
               <div className={`row ${styles.box}`}>
                 <div className={`col-lg-4`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <RadiolodyAndLab dateRange={dateRange} />
+                    <RadiolodyAndLab dateRange={dateRange} selectedOrganization={selectedOrganization}/>
                   </Card>
                 </div>
                 <div className={`col-lg-8`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <Files dateRange={dateRange} />
+                    <Files dateRange={dateRange} selectedOrganization={selectedOrganization}/>
                   </Card>
                 </div>
               </div>
