@@ -266,7 +266,7 @@ const Meat = ({
   const onFinishFailed = (form) => {};
 
   return (
-    <>
+    <div className={visitStyles?.meatContainer}>
       {fileLoading ? (
         <div className={styles.overlay_style}>
           <div className={styles.overlay__inner_style}>
@@ -779,7 +779,7 @@ const Meat = ({
         isValidAction={isValidAction}
         selectDisDetails={selectDisDetails}
       />
-    </>
+    </div>
   );
 };
 

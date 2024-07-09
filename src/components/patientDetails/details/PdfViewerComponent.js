@@ -7,8 +7,7 @@ const PdfViewer = ({
   pageNumber,
   headers,
   headerContent,
-  height = "69.5vh",
-  heightFrame = "700"
+  heightFrame = "700",
 }) => {
   const [iframeSrc, setIframeSrc] = useState("");
 
@@ -38,7 +37,7 @@ const PdfViewer = ({
   }, [src, searchQuery, pageNumber, headerContent]);
   return (
     <>
-      <div style={{ height: height, overflow: "hidden" }}>
+      <div style={{ maxHeight: "68vh", minHeight: "68vh", overflow: "hidden" }}>
         <iframe
           id="pdfViewer"
           title="PDF Viewer"
