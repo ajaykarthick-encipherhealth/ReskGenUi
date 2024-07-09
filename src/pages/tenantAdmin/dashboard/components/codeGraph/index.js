@@ -41,7 +41,7 @@ const CodesGraph = ({
 
   useEffect(() => {
     getAllHccCodesData(dateRange.startDate, dateRange.endDate);
-    getAllRafScore();
+    // getAllRafScore();
     getAllRafData(dateRange.startDate, dateRange.endDate);
   }, [dateRange]);
 

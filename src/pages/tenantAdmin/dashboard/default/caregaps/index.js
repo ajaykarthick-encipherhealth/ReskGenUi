@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import {
   HccCodes,
   RafCounts,
-  RafCountScore,
+  getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 import moment from "moment";
 
@@ -81,8 +81,8 @@ const index = ({
   useEffect(() => {
     const fetchChartData = async () => {
       const data = await getAllRafScore(dateRange.startDate, dateRange.endDate);
-      const records = data.response.rafScoreByDateForSuggested;
-      const records1 = data.response.rafScoreByDateForHcc;
+      const records = data.response?.rafScoreByDateForSuggested;
+      const records1 = data.response?.rafScoreByDateForHcc;
 
       const datediff =
         moment(dateRange?.endDate).diff(moment(dateRange?.startDate), "days") +
@@ -124,32 +124,62 @@ const index = ({
   }, [dateRange]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await getAllRafData();
+    const fetchChartData = async () => {
+      const data = await getAllRafData(dateRange.startDate, dateRange.endDate);
+      const records = data.response.premiumByDateForHcc;
+      const records1 = data.response.premiumByDateForSuggested;
+
+      const datediff =
+        moment(dateRange?.endDate).diff(moment(dateRange?.startDate), "days") +
+        1;
 
       const tempRecords = new Map();
-      const records = data.response.premiumByDateForHcc;
-      for (let i = 6; i >= 0; i--) {
-        const todayDate = moment();
-        const presentDate = todayDate.subtract(i, "days");
-        const presentDayinWeek = presentDate.day();
-        tempRecords.set(shortWeek[presentDayinWeek], 0);
+      const tempRecords1 = new Map();
+      if (datediff != 7 && datediff != 30) {
+        ShortMonth.slice(1).forEach((month) => {
+          tempRecords.set(month, 0);
+          tempRecords1.set(month, 0);
+        });
       }
+
+      if ((!isNaN(datediff) && datediff == 7) || datediff == 30) {
+        for (let i = 0; i < datediff; i++) {
+          const todayDate = moment();
+          const presentDate = todayDate.subtract(i, "days");
+          const currMonth = parseInt(presentDate.format("MM"));
+          const currDay = presentDate.format("DD");
+          tempRecords.set(ShortMonth[currMonth] + currDay, 0);
+          tempRecords1.set(ShortMonth[currMonth] + currDay, 0);
+        }
+
+        Object.entries(records).map((record) => {
+          const currMonth = parseInt(moment(record[0]).format("MM"));
+          const currDay = moment(record[0]).format("DD");
+          tempRecords.set(ShortMonth[currMonth] + currDay, record[1]);
+        });
+        Object.entries(records1).map((record) => {
+          const currMonth = parseInt(moment(record[0]).format("MM"));
+          const currDay = moment(record[0]).format("DD");
+          tempRecords1.set(ShortMonth[currMonth] + currDay, record[1]);
+        });
+      }
+      setRevenChartData1(tempRecords1);
+      //setRevenChartData(tempRecords);
     };
-    fetchData();
+    fetchChartData();
   }, [dateRange]);
 
   return (
     <div className="d-flex justify-content-between">
       <div className="remianingLineGraph" style={{ width: "33%" }}>
-      <div className={styles.headers}>
-        <div className="d-flex justify-content-between">
-          <div className={styles.header}>Care Gap Codes</div>
-          <div>
-            <div className={styles.header}>Total Codes</div>
-            <div className={styles.price}>{getAllHccCodes?.totalCount}</div>
+        <div className={styles.headers}>
+          <div className="d-flex justify-content-between">
+            <div className={styles.header}>Care Gap Codes</div>
+            <div>
+              <div className={styles.header}>Total Codes</div>
+              <div className={styles.price}>{getAllHccCodes?.totalCount}</div>
+            </div>
           </div>
-        </div>
         </div>
         <CodesGraph
           gradientColor1={"#FF9209"}
@@ -167,14 +197,14 @@ const index = ({
           borderRadius: "16px",
         }}
       >
-          <div className={styles.headers}>
-        <div className="d-flex justify-content-between">
-          <div className={`${styles.header} p-2`}>RAF</div>
-          <div className="p-2">
-            <div className={styles.header}>Overall RAF</div>
-            <div className={styles.price}>
-              {getAllRafScoreData}
-            </div>
+        <div className={styles.headers}>
+          <div className="d-flex justify-content-between">
+            <div className={`${styles.header} p-2`}>RAF</div>
+            <div className="p-2">
+              <div className={styles.header}>Overall RAF</div>
+              <div className={styles.price}>
+                {getAllRafScoreData?.totalSuggestedRaf}
+              </div>
             </div>
           </div>
         </div>
@@ -194,14 +224,14 @@ const index = ({
           padding: "0px 5px 0 5px",
         }}
       >
-          <div className={styles.headers}>
-        <div className="d-flex justify-content-between">
-          <div className={`${styles.header} p-1`}>Revenue</div>
-          <div className="p-1">
-            <div className={styles.header}>Overall Revenue</div>
-            <div className={styles.price}>
-              {getAllRaf?.totalSuggestedRafScore}
-            </div>
+        <div className={styles.headers}>
+          <div className="d-flex justify-content-between">
+            <div className={`${styles.header} p-1`}>Revenue</div>
+            <div className="p-1">
+              <div className={styles.header}>Overall Revenue</div>
+              <div className={styles.price}>
+                {getAllRaf?.totalSuggestedRafScore}
+              </div>
             </div>
           </div>
         </div>
@@ -222,12 +252,13 @@ const enhancer = connect(
     getAllRaf:
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
     getAllRafScoreData:
-      state?.tenantAdmin?.dashboard?.default?.allRafScore?.data?.response,
+      // state?.tenantAdmin?.dashboard?.default?.allRafScore?.data?.response,
+      state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
   }),
   {
     getAllHccCodesData: HccCodes,
     getAllRafData: RafCounts,
-    getAllRafScore: RafCountScore,
+    getAllRafScore: getAllRafScore,
   }
 );
 

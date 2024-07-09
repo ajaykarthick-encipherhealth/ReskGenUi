@@ -202,12 +202,12 @@ const Index = ({
               <div className={`row ${styles.box}`}>
                 <div className={`col-lg-4`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <RadiolodyAndLab />
+                    <RadiolodyAndLab dateRange={dateRange} />
                   </Card>
                 </div>
                 <div className={`col-lg-8`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <Files />
+                    <Files dateRange={dateRange} />
                   </Card>
                 </div>
               </div>
@@ -291,11 +291,15 @@ const Index = ({
 
 const enhancer = connect(
   (state) => ({
-    allocatedStatusData: state?.tenantAdmin?.dashboard?.workFlow?.allocatedStatus?.data,
-    auditorStatusData: state?.tenantAdmin?.dashboard?.workFlow?.auditorStatus?.data,
+    allocatedStatusData:
+      state?.tenantAdmin?.dashboard?.workFlow?.allocatedStatus?.data,
+    auditorStatusData:
+      state?.tenantAdmin?.dashboard?.workFlow?.auditorStatus?.data,
     userStatusData: state?.tenantAdmin?.dashboard?.workFlow?.userStatus?.data,
-    reviewerStatusData: state?.tenantAdmin?.dashboard?.workFlow?.reviewerStatus?.data,
-    organizationStatusData: state?.tenantAdmin?.dashboard?.workFlow?.organizationStatus?.data,
+    reviewerStatusData:
+      state?.tenantAdmin?.dashboard?.workFlow?.reviewerStatus?.data,
+    organizationStatusData:
+      state?.tenantAdmin?.dashboard?.workFlow?.organizationStatus?.data,
   }),
 
   {
@@ -303,7 +307,8 @@ const enhancer = connect(
     getAuditorStatusData: dashboardWorkflowActions?.auditorStatusAction,
     getAllocatedStatusData: dashboardWorkflowActions?.allocatedStatusAction,
     getReviewerStatusData: dashboardWorkflowActions?.reviewerStatusAction,
-    getOrganizationStatusData: dashboardWorkflowActions?.organizationStatusAction,
+    getOrganizationStatusData:
+      dashboardWorkflowActions?.organizationStatusAction,
   }
 );
 export default enhancer(Index);
