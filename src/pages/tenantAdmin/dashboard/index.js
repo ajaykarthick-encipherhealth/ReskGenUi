@@ -123,7 +123,21 @@ const Index = ({
     organizationStatusData?.response?.map((org, index) => ({
       value: index,
       name: org.name,
-      itemStyle: { color: ["#757FEF", "#805DCA","#6EC6CA" ,"#4361EE","#FF7889","#705F93","#5AA7A7","#114B5F","#A495CB","#245B43","#A75377"][index % 10] },
+      itemStyle: {
+        color: [
+          "#757FEF",
+          "#805DCA",
+          "#6EC6CA",
+          "#4361EE",
+          "#FF7889",
+          "#705F93",
+          "#5AA7A7",
+          "#114B5F",
+          "#A495CB",
+          "#245B43",
+          "#A75377",
+        ][index % 10],
+      },
     })) || [];
 
   const handleOrganizationChange = (value) => {
@@ -195,7 +209,10 @@ const Index = ({
                 </div>
                 <div className={`col`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <RafAndRevenue dateRange={dateRange} selectedOrganization={selectedOrganization}/>
+                    <RafAndRevenue
+                      dateRange={dateRange}
+                      selectedOrganization={selectedOrganization}
+                    />
                   </Card>
                 </div>
               </div>
@@ -227,25 +244,31 @@ const Index = ({
               <div className={`row ${styles.box}`}>
                 <div className={`col-lg-4`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <RadiolodyAndLab />
+                    <RadiolodyAndLab dateRange={dateRange} />
                   </Card>
                 </div>
                 <div className={`col-lg-8`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <Files />
+                    <Files dateRange={dateRange} />
                   </Card>
                 </div>
               </div>
               {/* top 10 diseases */}
               <div className={`row ${styles.box}`}>
                 <div className={`col`}>
-                  <Card padding="10px" borderRadius={"10px"}  >
-                    <Top10Diseases dateRange={dateRange} selectedOrganization={selectedOrganization} />
+                  <Card padding="10px" borderRadius={"10px"}>
+                    <Top10Diseases
+                      dateRange={dateRange}
+                      selectedOrganization={selectedOrganization}
+                    />
                   </Card>
                 </div>
                 <div className={`col`}>
-                  <Card padding="10px" borderRadius={"10px"}  >
-                    <TopOIGCodes  dateRange={dateRange} selectedOrganization={selectedOrganization}/>
+                  <Card padding="10px" borderRadius={"10px"}>
+                    <TopOIGCodes
+                      dateRange={dateRange}
+                      selectedOrganization={selectedOrganization}
+                    />
                   </Card>
                 </div>
               </div>
@@ -370,6 +393,7 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.workFlow?.reviewerStatus?.data,
     organizationStatusData:
       state?.tenantAdmin?.dashboard?.workFlow?.organizationStatus?.data,
+
     userLoader: state?.tenantAdmin?.workFlow?.userLoader,
     auditorLoader: state?.tenantAdmin?.workFlow?.auditorLoader,
     allocatedLoader: state?.tenantAdmin?.workFlow?.allocatedLoader,

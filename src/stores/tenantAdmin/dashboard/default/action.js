@@ -5,6 +5,10 @@ export const HccCodes = createActionThunk(
   "GET_ALL_HCC_CODES",
   network.getAllHccCodes
 );
+export const getAllRafScore = createActionThunk(
+  "GET_ALL_RAF_COUNTS_SCORE",
+  network.getAllRafScore
+);
 
 export const RafCounts = createActionThunk(
   "GET_ALL_RAF_COUNTS_REVENIEW",
@@ -21,27 +25,17 @@ export const ComputingStatus = createActionThunk(
   network.getAllComputing
 );
 
-export const RafCountScore = createActionThunk(
-  "GET_ALL_RAF_COUNTS_SCORE",
-  network.getAllRafScore
-);
 export const top10Diseases = createActionThunk(
   "GET_TOP10_DISEASES",
   network.getTop10Diseases
 );
-export const topOigCodes  = createActionThunk(
+export const topOigCodes = createActionThunk(
   "GET_TOPOIG_DISEASES",
   network.getTopOigCodes
 );
-export const rafScore  = createActionThunk(
-  "GET_RAF_SCORE",
-  network.getRafScore
-);
+export const rafScore = createActionThunk("GET_RAF_SCORE", network.getRafScore);
 
-
-
-export const computingTileStatus  = createActionThunk(
+export const computingTileStatus = createActionThunk(
   "GET_COMPUTING_TILE_STATUS",
   network.getComputingStatus
 );
-

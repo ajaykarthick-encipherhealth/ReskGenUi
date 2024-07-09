@@ -3,6 +3,8 @@ import { handleActions } from "redux-actions";
 import {
   codingGuidelinesAction,
   configurationSettingsAction,
+  configurationUpdateSettings,
+  getFlags,
   healthMetricAddAction,
   manualAddAction,
   updateSettingsAction, } from "./actions";
@@ -48,12 +50,20 @@ const getReportLoading = (type) =>
 
 const tenantAminSettingsReducer = combineReducers({
   configurationSettings: createReducer(configurationSettingsAction),
+  getFlagsList: createReducer(getFlags),
+  configurationUpdateSettings: createReducer(configurationUpdateSettings),
   codingGuidelines: createReducer(codingGuidelinesAction),
   updateSetting: createReducer(updateSettingsAction),
-  manualAdd: createReducer(manualAddAction),
-  healthMetricAdd: createReducer(healthMetricAddAction),
-
-  // loaders
+  // manualAdd: createReducer(manualAddAction),
+  // healthMetricAdd: createReducer(healthMetricAddAction),
 });
+// configurationSettings: createReducer(configurationSettingsAction),
+// getFlagsList: createReducer(getFlags),
+// configurationUpdateSettings: createReducer(configurationUpdateSettings),
+// codingGuidelines: createReducer(codingGuidelinesAction),
+// updateSetting: createReducer(updateSettingsAction),
+// manualAdd: createReducer(manualAddAction),
+// healthMetricAdd: createReducer(healthMetricAddAction),
+
 
 export default tenantAminSettingsReducer;
