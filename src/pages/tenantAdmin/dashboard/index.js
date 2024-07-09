@@ -123,7 +123,21 @@ const Index = ({
     organizationStatusData?.response?.map((org, index) => ({
       value: index,
       name: org.name,
-      itemStyle: { color: ["#757FEF", "#805DCA", "#4361EE"][index % 3] },
+      itemStyle: {
+        color: [
+          "#757FEF",
+          "#805DCA",
+          "#6EC6CA",
+          "#4361EE",
+          "#FF7889",
+          "#705F93",
+          "#5AA7A7",
+          "#114B5F",
+          "#A495CB",
+          "#245B43",
+          "#A75377",
+        ][index % 10],
+      },
     })) || [];
 
   const handleOrganizationChange = (value) => {
@@ -190,12 +204,19 @@ const Index = ({
               <div className={`row ${styles.box}`}>
                 <div className={`col-lg-4`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <TotalCounts dateRange={dateRange}   loaderButton={loaderButton}/>
+                    <TotalCounts
+                      dateRange={dateRange}
+                      loaderButton={loaderButton}
+                    />
                   </Card>
                 </div>
                 <div className={`col`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <RafAndRevenue dateRange={dateRange} loaderButton={loaderButton} />
+                    <RafAndRevenue
+                      dateRange={dateRange}
+                      selectedOrganization={selectedOrganization}
+                      loaderButton={loaderButton}
+                    />
                   </Card>
                 </div>
               </div>
@@ -203,7 +224,10 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <TotalCodes dateRange={dateRange} loaderButton={loaderButton}  />
+                    <TotalCodes
+                      dateRange={dateRange}
+                      loaderButton={loaderButton}
+                    />
                   </Card>
                 </div>
               </div>
@@ -211,7 +235,10 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <HccCodes dateRange={dateRange} loaderButton={loaderButton}/>
+                    <HccCodes
+                      dateRange={dateRange}
+                      loaderButton={loaderButton}
+                    />
                   </Card>
                 </div>
               </div>
@@ -227,12 +254,12 @@ const Index = ({
               <div className={`row ${styles.box}`}>
                 <div className={`col-lg-4`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <RadiolodyAndLab />
+                    <RadiolodyAndLab dateRange={dateRange} />
                   </Card>
                 </div>
                 <div className={`col-lg-8`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <Files  loaderButton={loaderButton}/>
+                    <Files dateRange={dateRange} loaderButton={loaderButton} />
                   </Card>
                 </div>
               </div>
@@ -240,12 +267,20 @@ const Index = ({
               <div className={`row ${styles.box}`}>
                 <div className={`col`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <Top10Diseases loaderButton={loaderButton}/>
+                    <Top10Diseases
+                      dateRange={dateRange}
+                      selectedOrganization={selectedOrganization}
+                      loaderButton={loaderButton}
+                    />
                   </Card>
                 </div>
                 <div className={`col`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <TopOIGCodes loaderButton={loaderButton}/>
+                    <TopOIGCodes
+                      dateRange={dateRange}
+                      selectedOrganization={selectedOrganization}
+                      loaderButton={loaderButton}
+                    />
                   </Card>
                 </div>
               </div>
@@ -268,7 +303,7 @@ const Index = ({
                 <div className={`col-lg-9`}>
                   <Card padding="10px" borderRadius={"10px"}>
                     <HeadTitle header="Files" fontSize="16px" />
-                    <WorkFlowFiles  loaderButton={loaderButton}/>
+                    <WorkFlowFiles loaderButton={loaderButton} />
                   </Card>
                 </div>
               </div>
@@ -370,6 +405,7 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.workFlow?.reviewerStatus?.data,
     organizationStatusData:
       state?.tenantAdmin?.dashboard?.workFlow?.organizationStatus?.data,
+
     userLoader: state?.tenantAdmin?.workFlow?.userLoader,
     auditorLoader: state?.tenantAdmin?.workFlow?.auditorLoader,
     allocatedLoader: state?.tenantAdmin?.workFlow?.allocatedLoader,

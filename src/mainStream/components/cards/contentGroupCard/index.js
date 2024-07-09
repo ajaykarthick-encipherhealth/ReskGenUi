@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Tooltip, notification } from "antd";
+import { Spin, Tooltip, notification } from "antd";
 import styles from "../../../../resusablereport/reports/report.module.css";
 import TableStyle from "../../../../components/table/table.module.css";
 import dayjs from "dayjs";
@@ -7,13 +7,12 @@ import {
   dateFormate,
   renderUserPrfoileAvatar,
 } from "../../../../components/headerFilters/functions";
-import { getFlags } from "../../../../components/reuseableFunctions";
-import { SVGICON } from "../../../../jsx/constant/theme";
 import { patientDetails } from "../../../../stores/authflow/actions";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { getMaskData } from "../../../../utils/reusable";
 import { handleCopyToClipboard } from "../../../../components/commonFunctions";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const ContentGroupCard = ({
   item,
@@ -35,6 +34,7 @@ const ContentGroupCard = ({
   patientAllocatedProfileImage,
   content,
   page,
+  loading,
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -108,14 +108,21 @@ const ContentGroupCard = ({
     <div className={styles.card}>
       <div className={styles.contentGroup} style={{ cursor: "pointer" }}>
         <div className={styles.inputContainer}>
-          <input
-            type="checkbox"
-            onChange={() => handleRowCheckboxChange(item)}
-            className={TableStyle.customChecked}
-            checked={selectedRows?.some(
-              (selectedRow) => selectedRow.patientId === patientId
-            )}
-          />
+          {loading ? (
+            <Spin
+              indicator={<LoadingOutlined />}
+              style={{ fontSize: 20, color: "#04306f", marginTop: "-15px" }}
+            />
+          ) : (
+            <input
+              type="checkbox"
+              onChange={() => handleRowCheckboxChange(item)}
+              className={TableStyle.customChecked}
+              checked={selectedRows?.some(
+                (selectedRow) => selectedRow?.patientId === patientId
+              )}
+            />
+          )}
         </div>
         <div
           className={`col-xl-12 ${styles.checkSep}`}

@@ -5,6 +5,7 @@ import styles from "../../styles.module.css";
 import * as echarts from "echarts";
 import RafGraph from "../../components/rafGraph";
 import RevenueGraph from "../../components/revenueGraph";
+import { Empty } from "antd";
 import {
   HccCodes,
   RafCounts,
@@ -21,11 +22,14 @@ const index = ({
   dateRange,
   loaderButton,
   totalCodesLoader,
+  getAllRafData,
 }) => {
   const [currChartData, setCurrChartData] = useState(new Map());
   const [chartData, setChartData] = useState(new Map());
   const [chartData1, setChartData1] = useState(new Map());
   const [chartRafData1, setRafChartData1] = useState(new Map());
+
+  const [chartRevenData, setRevenChartData] = useState(new Map());
   const [chartRevenData1, setRevenChartData1] = useState(new Map());
 
   const ShortMonth = [
@@ -44,15 +48,14 @@ const index = ({
     "dec",
   ];
 
-
   useEffect(() => {
     const fetchChartData = async () => {
       const data = await getAllHccCodesData(
         dateRange.startDate,
         dateRange.endDate
       );
-      const records = data.response.hccDiseaseCountMap;
-      const records1 = data.response.suggestedHccDiseaseCountMap;
+      const records = data?.response?.hccDiseaseCountMap;
+      const records1 = data?.response?.suggestedHccDiseaseCountMap;
       const datediff =
         moment(dateRange?.endDate).diff(moment(dateRange?.startDate), "days") +
         1;
@@ -110,6 +113,51 @@ const index = ({
     getAllHccCodes?.suggestedHccDiseaseCountMap
       ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
       : [];
+  useEffect(() => {
+    const fetchChartData = async () => {
+      const data = await getAllRafData(dateRange.startDate, dateRange.endDate);
+      const records = data.response.premiumByDateForHcc;
+      const records1 = data.response.premiumByDateForSuggested;
+
+      const datediff =
+        moment(dateRange?.endDate).diff(moment(dateRange?.startDate), "days") +
+        1;
+
+      const tempRecords = new Map();
+      const tempRecords1 = new Map();
+      if (datediff != 7 && datediff != 30) {
+        ShortMonth.slice(1).forEach((month) => {
+          tempRecords.set(month, 0);
+          tempRecords1.set(month, 0);
+        });
+      }
+
+      if ((!isNaN(datediff) && datediff == 7) || datediff == 30) {
+        for (let i = 0; i < datediff; i++) {
+          const todayDate = moment();
+          const presentDate = todayDate.subtract(i, "days");
+          const currMonth = parseInt(presentDate.format("MM"));
+          const currDay = presentDate.format("DD");
+          tempRecords.set(ShortMonth[currMonth] + currDay, 0);
+          tempRecords1.set(ShortMonth[currMonth] + currDay, 0);
+        }
+
+        Object.entries(records).map((record) => {
+          const currMonth = parseInt(moment(record[0]).format("MM"));
+          const currDay = moment(record[0]).format("DD");
+          tempRecords.set(ShortMonth[currMonth] + currDay, record[1]);
+        });
+        Object.entries(records1).map((record) => {
+          const currMonth = parseInt(moment(record[0]).format("MM"));
+          const currDay = moment(record[0]).format("DD");
+          tempRecords1.set(ShortMonth[currMonth] + currDay, record[1]);
+        });
+      }
+      setRevenChartData1(tempRecords1);
+      setRevenChartData(tempRecords);
+    };
+    fetchChartData();
+  }, [dateRange]);
 
   const options = {
     xAxis: {
@@ -236,6 +284,7 @@ const index = ({
             </div>
           </div>
         </div>
+
         {/* {loaderButton && totalCodesLoader ? (
           <div>
             <Skeleton.Input
@@ -252,8 +301,8 @@ const index = ({
         ) : (
           <CodesGraph options={options} isRadio={true} />
         )} */}
-          <CodesGraph options={options} isRadio={true} />
 
+        <CodesGraph options={options} isRadio={true} />
       </div>
       <div
         className="remianingAreaGraph"
@@ -268,7 +317,10 @@ const index = ({
             <div className={`${styles.header} p-1`}>RAF</div>
             <div className="p-1">
               <div className={styles.header}>Overall RAF</div>
-              <div className={styles.price}>{getAllRafScoreData}</div>
+
+              <div className={styles.price}>
+                {getAllRafScoreData?.totalHccRaf}
+              </div>
             </div>
           </div>
         </div>
@@ -295,7 +347,9 @@ const index = ({
             <div className={`${styles.header} p-1`}>Revenue</div>
             <div className="p-1">
               <div className={styles.header}>Overall Revenue</div>
-              <div className={styles.price}>{getAllRaf?.totalHccRafScore}</div>
+              <div
+                className={styles.price}
+              >{`$ ${getAllRaf?.totalHccRafScore}`}</div>
             </div>
           </div>
         </div>
@@ -312,7 +366,7 @@ const enhancer = connect(
     getAllRaf:
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
     getAllRafScoreData:
-      state?.tenantAdmin?.dashboard?.default?.allRafScore?.data?.response,
+      state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
     totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.totalCodesLoader,
   }),
   {

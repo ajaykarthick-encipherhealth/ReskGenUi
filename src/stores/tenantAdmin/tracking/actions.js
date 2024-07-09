@@ -9,3 +9,7 @@ export const getCustomUsersAction=createActionThunk(
   'GET_CUSTOM_USERS',
   network.getCustomAllUsers
 )
+export const getAllFileProcessAction = createActionThunk(
+  "GET_ALL_FILE_PROCESS",
+  network.getAllFileProcess
+);

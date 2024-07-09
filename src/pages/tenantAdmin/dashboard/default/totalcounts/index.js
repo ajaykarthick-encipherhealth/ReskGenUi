@@ -11,6 +11,7 @@ import { Skeleton } from "antd";
 const index = ({
   getAllFilesCount,
   getAllFiles,
+  dateRange,
   loaderButton,
   totalCountsLoader,
 }) => {
@@ -38,11 +39,9 @@ const index = ({
     },
   ];
 
- 
-
   useEffect(() => {
-    getAllFilesCount();
-  }, []);
+    getAllFilesCount(dateRange.startDate, dateRange.endDate);
+  }, [dateRange]);
 
   return (
     <div
@@ -84,7 +83,7 @@ const index = ({
             </div>
 
             {loaderButton && totalCountsLoader ? (
-              <Skeleton.Input active size="default" className="mt-2"/>
+              <Skeleton.Input active size="default" className="mt-2" />
             ) : totalCountsLoader ? (
               <div className="d-flex justify-content-center align-items-center">
                 {" "}

@@ -7,10 +7,14 @@ import styles from "../../styles.module.css";
 import CodesGraph from "../../components/codeGraph";
 import { Skeleton, Spin } from "antd";
 
-const index = ({ rafScoreData, overAllRafScore, rafLoader, loaderButton }) => {
+
+const index = ({ rafScoreData, overAllRafScore, rafLoader ,dateRange,selectedOrganization, loaderButton}) => {
+
   useEffect(() => {
-    rafScoreData();
-  }, []);
+    rafScoreData( dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization);
+  }, [dateRange]);
 
   const speedometerOptions = {
     tooltip: {

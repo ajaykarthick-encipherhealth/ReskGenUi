@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import {
   HccCodes,
   RafCounts,
-  RafCountScore,
+  getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 const RafGraph = ({
   rafColor,
@@ -23,35 +23,29 @@ const RafGraph = ({
   const [dateRange, setDateRange] = useState({ startDate: "", endDate: "" });
 
   useEffect(() => {
-    const fetchData=async()=>{
-    await getAllHccCodesData(dateRange.startDate, dateRange.endDate);
-    await getAllRafData();
-    await getAllRafScore(dateRange.startDate, dateRange.endDate);
-    }
-    fetchData()
-    
+    const fetchData = async () => {
+      await getAllHccCodesData(dateRange.startDate, dateRange.endDate);
+      await getAllRafData(dateRange.startDate, dateRange.endDate);
+      await getAllRafScore(dateRange.startDate, dateRange.endDate);
+    };
+    fetchData();
   }, [dateRange]);
 
-  const [rafState, setRafState]=useState();
-  useEffect(()=>{
-    const fetchData=async()=>{
-      const data=await getAllRafScore(dateRange.startDate, dateRange.endDate)
-      setRafState(data.response)
-    }
-    fetchData()
-  },[])
+  const [rafState, setRafState] = useState();
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getAllRafScore(dateRange.startDate, dateRange.endDate);
+      setRafState(data.response);
+    };
+    fetchData();
+  }, []);
 
-  const rafScoreByDateForSuggested =rafState?.rafScoreByDateForSuggested?Object.values(rafState.rafScoreByDateForSuggested):[]
-
-  const rafScoreByDateForHcc = rafState?.rafScoreByDateForHcc?Object.values(rafState.rafScoreByDateForHcc):[]
-
-
-  const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
-    ? Object.values(getAllRaf.premiumByDateForHcc)
+  const rafScoreByDateForSuggested = rafState?.rafScoreByDateForSuggested
+    ? Object.values(rafState.rafScoreByDateForSuggested)
     : [];
 
-  const premiumByDateForSuggested = getAllRaf?.premiumByDateForSuggested
-    ? Object.values(getAllRaf.premiumByDateForSuggested)
+  const rafScoreByDateForHcc = rafState?.rafScoreByDateForHcc
+    ? Object.values(rafState.rafScoreByDateForHcc)
     : [];
 
   const option = {
@@ -83,7 +77,7 @@ const RafGraph = ({
         type: "category",
         boundaryGap: false,
         data:
-          isHcc || isCargaps 
+          isHcc || isCargaps
             ? [...chartRafData?.keys()]
             : [
                 "jan",
@@ -129,7 +123,7 @@ const RafGraph = ({
           ? [...chartRafData.keys()].length != 12
             ? [...chartRafData.values()]
             : rafScoreByDateForHcc
-          : [10,20,30,44,21],
+          : [10, 20, 30, 44, 21],
       },
 
       {
@@ -144,7 +138,7 @@ const RafGraph = ({
         emphasis: {
           focus: "series",
         },
-        data: rafColor2 && premiumByDateForHcc,
+        data: rafColor2 && rafScoreByDateForHcc,
       },
       {
         name: "Car gaps Codes",
@@ -158,14 +152,12 @@ const RafGraph = ({
         emphasis: {
           focus: "series",
         },
-        data: rafColor3 && rafScoreByDateForSuggested && rafScoreByDateForHcc,
+        data: rafColor3 && rafScoreByDateForSuggested,
       },
     ],
   };
   return <ReactECharts option={option} />;
-
 };
-
 
 const enhancer = connect(
   (state) => ({
@@ -174,12 +166,12 @@ const enhancer = connect(
     getAllRaf:
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
     getAllRafScoreData:
-      state?.tenantAdmin?.dashboard?.default?.allRafScore?.data?.response,
+      state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
   }),
   {
     getAllHccCodesData: HccCodes,
     getAllRafData: RafCounts,
-    getAllRafScore: RafCountScore,
+    getAllRafScore: getAllRafScore,
   }
 );
 export default enhancer(RafGraph);

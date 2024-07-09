@@ -2,10 +2,10 @@ import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
 import {
   HccCodes,
+  getAllRafScore,
   RafCounts,
   FilesCount,
   ComputingStatus,
-  RafCountScore,
   top10Diseases,
   topOigCodes,
   computingTileStatus,
@@ -56,10 +56,10 @@ const tenantAdminDefault = combineReducers({
   allRafCounts: createReducer(RafCounts),
   allFilesCounts: createReducer(FilesCount),
   allComputingStatus: createReducer(ComputingStatus),
-  allRafScore: createReducer(RafCountScore),
+  allRafScoreData: createReducer(getAllRafScore),
   allTop10Diseases: createReducer(top10Diseases),
   allTopOigCodes: createReducer(topOigCodes),
-  allComputingTileStatus:createReducer(computingTileStatus),
+  allComputingTileStatus: createReducer(computingTileStatus),
   allRafScore: createReducer(rafScore),
   totalCountsLoader:getReportLoading(FilesCount),
   rafScoreLoader:getReportLoading(rafScore),
@@ -68,6 +68,7 @@ const tenantAdminDefault = combineReducers({
   computingStatusLoader:getReportLoading(ComputingStatus),
   topTenDiseasesLoader:getReportLoading(top10Diseases)
   
+
 });
 
 export default tenantAdminDefault;

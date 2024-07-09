@@ -12,8 +12,10 @@ import { connect } from "react-redux";
 import { actions as manualAddActions } from "../../../../stores/tenantAdmin/settings";
 import { getYears } from "../../../../utils/reusable";
 import ButtonStyles from "../../../../components/button/style.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 
-const CommonModalContent = ({ tags, setTags, createDirectCodes }) => {
+const CommonModalContent = ({ tags, setTags, createDirectCodes, handleEdit, handleDelete, isEdit,handleUpdate }) => {
   const [form] = Form.useForm();
   const [selectedOption, setSelectedOption] = useState("Default");
   const [inputStrValue, setInputStrValue] = useState({
@@ -89,7 +91,7 @@ const CommonModalContent = ({ tags, setTags, createDirectCodes }) => {
       {selectedOption === "Default" && (
         <>
           <Form form={form} onFinish={handleFormSubmit}>
-            <label htmlFor="code"> code</label>
+            <label htmlFor="code">Code</label>
             <div className="d-flex justify-content-between">
               <div className="w-100">
                 <Form.Item name="code">
@@ -187,7 +189,8 @@ const CommonModalContent = ({ tags, setTags, createDirectCodes }) => {
                   style={{ padding: "22px" }}
                 />
               </div>
-              <RegularButton name={"Add"} onClick={handleAddTag} />
+              {isEdit ?<RegularButton name={"Edit"} onClick={handleUpdate} /> :
+              <RegularButton name={"Add"} onClick={handleAddTag} />}
             </div>
           </div>
           <div
@@ -202,6 +205,7 @@ const CommonModalContent = ({ tags, setTags, createDirectCodes }) => {
                   style={{ display: "inline-block" }}
                 >
                   {editIndex === index ? (
+                    <div className="me-2">
                     <Input
                       size="small"
                       value={editValue}
@@ -228,8 +232,9 @@ const CommonModalContent = ({ tags, setTags, createDirectCodes }) => {
                           tags,
                         })
                       }
-                      className="mr-2 w-auto p-2.5"
+                      className="mr-2 w-auto p-3"
                     />
+                    </div>
                   ) : (
                     <Tags
                       tag={tag}
@@ -262,6 +267,35 @@ const CommonModalContent = ({ tags, setTags, createDirectCodes }) => {
                       }
                     />
                   )}
+                  {/* <div className="p-2 mx-2 rounded py-1 fs-4" style={{backgroundColor: "#bae0fc"}}>
+                    <label>{tag}</label>
+                    <span className="px-2 cr-pointer">
+                {
+                  <FontAwesomeIcon
+                    icon={faPen}
+                    style={{
+                      fontSize: "15px",
+                      color: "#6464ff",
+                    }}
+                    onClick={() => {
+                      handleEdit(tag);
+                    }}
+                  />
+                }
+              </span>
+              <span className=" cr-pointer">
+                {
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    style={{
+                      fontSize: "15px",
+                      color: "#dc4848",
+                    }}
+                    onClick={() => handleDelete(tag)}
+                  />
+                }
+              </span>
+                  </div> */}
                 </div>
               ))
             ) : (

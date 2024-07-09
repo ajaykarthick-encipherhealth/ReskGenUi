@@ -12,10 +12,23 @@ import { PlusOutlined } from "@ant-design/icons";
 import FilterButton from "../../../../../components/table/tenantSettingsTable/filterButton";
 import Search from "../../../../../components/table/tenantSettingsTable/search";
 import TenantSettingsTable from "../../../../../components/table/tenantSettingsTable/tenantSettingsTable";
+import { getResponePopup } from "../../../../../utils/reusable";
+import ENDPOINTS from "../../../../../utility/enpoints";
+import axios from "../../../../../utility/axiosConfig";
 
-const DirectConfirmCodes = ({ updateSettings, getCodingDetails, list }) => {
+const DirectConfirmCodes = ({
+  updateSettings,
+  updateDirectCode,
+  getCodingDetails,
+  list,
+}) => {
   const [openModal, setOpenModal] = useState(false);
   const [search, setSearch] = useState(null);
+  const [isGuidelines, setIsGuidelines] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+  const [editValue, setEditValue] = useState("");
+  const [isEditValue, setIsEditValue] = useState(false);
+  const [selectFile, setSelectFile] = useState("");
   const [tags, setTags] = useState([
     "plan",
     "assessment/plan",
@@ -50,9 +63,6 @@ const DirectConfirmCodes = ({ updateSettings, getCodingDetails, list }) => {
     "Renewed Medications",
     "a/p",
   ]);
-  const onChange = (checked) => {
-    console.log(`switch to ${checked}`);
-  };
 
   const columns = [
     {
@@ -72,60 +82,118 @@ const DirectConfirmCodes = ({ updateSettings, getCodingDetails, list }) => {
     },
   ];
   useEffect(() => {
-    getCodingDetails({ type: "DIRECT_CONFIRM_CODES" });
+    getDirectConfirmDetails();
   }, []);
+
+  const getDirectConfirmDetails = async () => {
+    try {
+      const res = await getCodingDetails({ type: "DIRECT_CONFIRM_CODES" });
+      if (res?.status == "SUCCESS") {
+        setIsGuidelines(res?.response?.includeGeneralGuidelineCodes);
+      }
+    } catch (error) {}
+  };
+
+  const handleDelete = (value) => {
+    const del = tags.map((item) => item != value);
+    setTags(del);
+  };
+
+  const handleEdit = (value) => {
+    setIsEditValue(true);
+    setEditValue(value);
+  };
+
+  const handleUpdate = () => {};
+  const handleGuidelines = async (value) => {
+    try {
+      const res = await updateDirectCode({
+        includeGeneralGuidelineCodes: value,
+      });
+      if (res.status == "SUCCESS") {
+        getResponePopup(res);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const submitPatientFile = async () => {
+    const formData = new FormData();
+    formData.append("file", selectFile);
+    formData.append("target", "DIRECT_CONFIRM_CODES");
+    formData.append("isDefaultYear", false);
+    const headers = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    setSelectFile(formData);
+    const response = await axios.post(
+      ENDPOINTS.apiEndoint +
+        `management/tenantAdmin/codes/upload
+      `,
+      formData,
+      headers
+    );
+  };
+
+  console.log(selectFile, "testing");
 
   return (
     <>
       <div className="p-3">
-        <div className="d-flex justify-content-between">
-          <div className={Style.title}>Direct Confirm Codes</div>
-        </div>
         <div>
-          <div className="d-flex justify-content-start gap-2 mt-4">
-            <div>Year</div>
+          <div className="d-flex justify-content-between my-4">
             <div>
-              <Checkbox />
+              <div className={Style.title}>Direct Confirm Codes</div>
+              <div className="d-flex justify-content-start gap-2 mt-4">
+                <div>Year</div>
+                <div>
+                  <Checkbox
+                    checked={isChecked}
+                    onChange={(e) => setIsChecked(e.target.checked)}
+                  />
+                </div>
+                <div>Can We calculate for all Processing Year</div>
+              </div>
             </div>
-            <div>Can We calculate for all Processing Year</div>
-          </div>
 
-          <div className="d-flex justify-content-start gap-2 mt-4">
-            <div>
-              <FileUpload allowedFormat={"File must be in xlsx or CSV"} />
-            </div>
-            <div>
-              <Button
-                icon={<PlusOutlined />}
-                style={{
-                  height: "47px",
-                }}
-                onClick={() => {
-                  setOpenModal(true);
-                }}
-              >
-                Add Manually
-              </Button>
+            <div className="d-flex justify-content-start gap-2 ">
+              <div>
+                <FileUpload
+                  allowedFormat={"File must be in xlsx or CSV"}
+                  onChange={(e) => setSelectFile(e.file)}
+                />
+              </div>
+              <div>
+                <Button
+                  icon={<PlusOutlined />}
+                  style={{
+                    height: "47px",
+                  }}
+                  onClick={() => {
+                    setOpenModal(true);
+                  }}
+                >
+                  Add Manually
+                </Button>
+              </div>
             </div>
           </div>
           <Divider />
           <div className="d-flex justify-content-start  gap-4 mt-4">
-            {/* <div>
-              <FilterButton label={"Default"} isActive={true} />
-            </div>
-            <div>
-              <FilterButton label={"Code"} isActive={false} />
-            </div>
-            <div>
-              <FilterButton label={"Description"} isActive={false} />
-            </div> */}
             <div className="mx-3">{"Do you need general guidelines codes"}</div>
-            <div className="d-flex">
-              {/* <Form.Item name="isDownCodeConversionEnabled"> */}
-              <Switch className="switch" />
-              {/* </Form.Item> */}
+            <div className="d-flex justify-content-between">
+              <Switch
+                checked={isGuidelines}
+                onChange={(e) => {
+                  setIsGuidelines(e);
+                  handleGuidelines(e);
+                }}
+              />
+              <div className={`mx-2`}>{isGuidelines ? "Yes" : "No"}</div>
             </div>
-
             <div className="ms-auto mx-4">
               <Search setSearch={setSearch} />
             </div>
@@ -146,12 +214,21 @@ const DirectConfirmCodes = ({ updateSettings, getCodingDetails, list }) => {
         />
         <RegularButton
           name={"Save Changes"}
-          onClick={() => console.log("Save Changes")}
+          onClick={submitPatientFile}
         />
       </div>
       <ModalPop
         openModal={openModal}
-        content={<CommonModalContent tags={tags} setTags={setTags} />}
+        content={
+          <CommonModalContent
+            tags={tags}
+            setTags={setTags}
+            handleDelete={handleDelete}
+            handleEdit={handleEdit}
+            isEdit={isEditValue}
+            handleUpdate={handleUpdate}
+          />
+        }
         setOpenModal={setOpenModal}
       />
     </>
@@ -163,6 +240,7 @@ const enhancer = connect(
   }),
   {
     updateSettings: settingActions.updateSettingsAction,
+    updateDirectCode: settingActions.updateDirectCode,
     getCodingDetails: settingActions.codingGuidelinesAction,
   }
 );

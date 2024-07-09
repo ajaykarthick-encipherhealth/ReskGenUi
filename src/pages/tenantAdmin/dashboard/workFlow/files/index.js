@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import CodesGraph from "../../components/codeGraph";
 import Image from "next/image";
@@ -9,6 +9,8 @@ import upload from "../../../../../images/tenantAdmin/upload.svg";
 import codeCaptured from "../../../../../images/tenantAdmin/codecaptured.svg";
 import { actions as defaultActions } from "../../../../../stores/tenantAdmin/dashboard/default";
 import { Skeleton } from "antd";
+import moment from "moment";
+
 
 const Files = ({
   getAllComputing,
@@ -20,7 +22,10 @@ const Files = ({
   loaderButton,
   computingTileStatusLoader,
   computingStatusLoader,
+  dateRange,
 }) => {
+  const shortWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
   const options = {
     xAxis: {
       type: "category",
@@ -129,10 +134,27 @@ const Files = ({
   ];
   console.log(computingStatusLoader, "computingTileStatusLoader");
   useEffect(() => {
-    getAllComputing();
-    getComputingStatus();
-    getTop10DiseasesData();
-  }, []);
+    getComputingStatus(dateRange?.startDate, dateRange?.endDate);
+    getTop10DiseasesData(dateRange?.startDate, dateRange?.endDate);
+  }, [dateRange]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getAllComputing(
+        dateRange?.startDate,
+        dateRange?.endDate
+      );
+      const tempRecords = new Map();
+      const records = data?.response?.premiumByDateForHcc;
+      for (let i = 6; i >= 0; i--) {
+        const todayDate = moment();
+        const presentDate = todayDate.subtract(i, "days");
+        const presentDayInWeek = presentDate.day();
+        tempRecords.set(shortWeek[presentDayInWeek], 0);
+      }
+    };
+    fetchData();
+  }, [dateRange]);
 
   return (
     <div className="" style={{ marginTop: "20px" }}>
