@@ -195,7 +195,7 @@ const Index = ({
                 </div>
                 <div className={`col`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <RafAndRevenue dateRange={dateRange} />
+                    <RafAndRevenue dateRange={dateRange} selectedOrganization={selectedOrganization}/>
                   </Card>
                 </div>
               </div>
@@ -239,13 +239,13 @@ const Index = ({
               {/* top 10 diseases */}
               <div className={`row ${styles.box}`}>
                 <div className={`col`}>
-                  <Card padding="10px" borderRadius={"10px"}>
-                    <Top10Diseases />
+                  <Card padding="10px" borderRadius={"10px"}  >
+                    <Top10Diseases dateRange={dateRange} selectedOrganization={selectedOrganization} />
                   </Card>
                 </div>
                 <div className={`col`}>
-                  <Card padding="10px" borderRadius={"10px"}>
-                    <TopOIGCodes />
+                  <Card padding="10px" borderRadius={"10px"}  >
+                    <TopOIGCodes  dateRange={dateRange} selectedOrganization={selectedOrganization}/>
                   </Card>
                 </div>
               </div>

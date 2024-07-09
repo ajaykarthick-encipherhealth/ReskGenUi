@@ -5,6 +5,7 @@ import styles from "../../styles.module.css";
 import * as echarts from "echarts";
 import RafGraph from "../../components/rafGraph";
 import RevenueGraph from "../../components/revenueGraph";
+import { Empty } from "antd";
 import {
   HccCodes,
   RafCounts,
@@ -25,7 +26,6 @@ const index = ({
   const [chartRafData1, setRafChartData1] = useState(new Map());
   const [chartRevenData1, setRevenChartData1] = useState(new Map());
 
-
   const ShortMonth = [
     "",
     "jan",
@@ -41,7 +41,6 @@ const index = ({
     "nov",
     "dec",
   ];
-
 
   useEffect(() => {
     const fetchChartData = async () => {
@@ -92,8 +91,6 @@ const index = ({
     fetchChartData();
   }, [dateRange]);
 
-
-
   useEffect(() => {
     setCurrChartData(new Map());
   }, [chartData]);
@@ -111,12 +108,11 @@ const index = ({
       ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
       : [];
 
-
   const options = {
     xAxis: {
       type: "category",
       data:
-      hccDiseaseCountValues || suggestedHccDiseaseCountMap
+        hccDiseaseCountValues || suggestedHccDiseaseCountMap
           ? [...currChartData.keys()]
           : [
               "jan",
@@ -214,7 +210,7 @@ const index = ({
           <div className="d-flex justify-content-between">
             <div className={styles.header}>Total Codes</div>
 
-            <div className="d-flex gap-4" >
+            <div className="d-flex gap-4">
               <div>
                 {bullets?.map((item) => (
                   <div className="d-flex">
@@ -237,6 +233,7 @@ const index = ({
             </div>
           </div>
         </div>
+
         <CodesGraph options={options} isRadio={true} />
       </div>
       <div
@@ -252,17 +249,15 @@ const index = ({
             <div className={`${styles.header} p-1`}>RAF</div>
             <div className="p-1">
               <div className={styles.header}>Overall RAF</div>
-              <div className={styles.price}>
-                {getAllRafScoreData}
-              </div>
+              <div className={styles.price}>{getAllRafScoreData}</div>
             </div>
           </div>
         </div>
         <RafGraph
-         overallData={true}
-         chartData={chartData1}
-         chartRafData={chartRafData1}
-         chartRevenData={chartRevenData1}
+          overallData={true}
+          chartData={chartData1}
+          chartRafData={chartRafData1}
+          chartRevenData={chartRevenData1}
           rafColor={"#E88D67"}
           rafColor3={"#FF9209"}
           rafColor2={"#00BC13"}
