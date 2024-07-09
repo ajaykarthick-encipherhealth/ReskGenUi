@@ -39,11 +39,7 @@ const index = ({ items, key }) => {
             </tr>
           ))
         ) : (
-          <tr>
-            <td>
-              <Empty />
-            </td>
-          </tr>
+          <Empty />
         )}
       </tbody>
     </table>

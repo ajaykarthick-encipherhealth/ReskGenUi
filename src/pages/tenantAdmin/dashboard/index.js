@@ -331,8 +331,7 @@ const Index = ({
                       <div>{renderCardSkeleton()}</div>
                     ) : allocatedLoader ? (
                       <div className="d-flex justify-content-center align-items-center">
-                        {" "}
-                        <Spin size="large" />
+                      <Spin size="large" />
                       </div>
                     ) : (
                       <PieChartInfo data={allocatedData} header="Allocated" />
