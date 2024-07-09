@@ -73,35 +73,35 @@ function AllocatedAdminList({
           <td className={TableStyle.lastBorder}>
             {data?.priority ? priorityStatus(data?.priority) : "---"}
           </td>
-          <td className={TableStyle.lastBorder} style={{ textAlign: "center" }}>
+          <td
+            className={TableStyle.lastBorder}
+            style={{ textAlign: "center", width: "40px" }}
+          >
             {loading ? (
-              <Spin
-                loading={loading}
-                indicator={<LoadingOutlined spin />}
-                style={{ color: "#1677ff" }}
-              />
+              <Spin indicator={<LoadingOutlined/>} style={{fontSize:18,color:"#04306f",marginTop:"-15px"}} /> 
             ) : (
               <input
                 type="checkbox"
                 onChange={() => {
                   handleRowCheckboxChange(data);
                   setSelectedRowsId((prev) => {
-                    const currentIds = prev.map((item) => item.id);
-                    if (!currentIds.includes(data.patientId)) {
+                    const currentIds = prev?.map((item) => item.id);
+                    if (!currentIds.includes(data?.patientId)) {
                       return [
                         ...prev,
-                        { id: data.patientId, name: data.patientName },
+                        { id: data?.patientId, name: data?.patientName },
                       ];
                     } else {
-                      return prev.filter((item) => item.id !== data.patientId);
+                      return prev.filter((item) => item?.id !== data?.patientId);
                     }
                   });
                 }}
                 checked={selectedRowsId?.some(
-                  (item) => item.id === data.patientId
+                  (item) => item?.id === data?.patientId
                 )}
                 className={TableStyle.customChecked}
               />
+              
             )}
           </td>
         </tr>
@@ -142,12 +142,21 @@ function AllocatedAdminList({
                 )}
               </span>
             </th>
-            <th style={{paddingLeft:"22px"}}>PRIORITY</th>
+            <th style={{ paddingLeft: "22px" }}>PRIORITY</th>
             <th>
-              <div style={{ display: "flex", justifyContent: "space-around" }}>
+              <div
+                style={{
+                  width: "40px",
+                  display: "flex",
+                  justifyContent: "space-around",
+                }}
+              >
                 <input
                   type="checkbox"
-                  onClick={() => setSelectAllChecked(!selectAllChecked)}
+                  onClick={() => {
+                    setSelectAllChecked(!selectAllChecked);
+
+                  }}
                   style={{
                     width: "20px",
                     height: "20px",
@@ -157,11 +166,11 @@ function AllocatedAdminList({
                   }}
                   checked={
                     selectAllChecked &&
-                    selectedRowsId.length == selectedChart.length
+                    selectedRowsId?.length === selectedChart?.length
                   }
                   className={
                     selectAllChecked &&
-                    selectedRowsId.length == selectedChart.length
+                    selectedRowsId?.length == selectedChart?.length
                       ? TableStyle.customChecked2
                       : ""
                   }
