@@ -3,11 +3,11 @@ import ReusableTable from "../../components/table";
 import { connect } from "react-redux";
 import { actions as allActions } from "../../../../../stores/tenantAdmin/dashboard/default";
 
-const index = ({ top10DiseasesData, getTop10DiseasesData }) => {
+const index = ({ top10DiseasesData, getTop10DiseasesData, top10DisesesLoader, loaderButton }) => {
   useEffect(() => {
     getTop10DiseasesData();
   }, []);
-
+console.log(top10DisesesLoader,"top10DisesesLoader")
   return (
     <>
       <div>
@@ -23,6 +23,8 @@ const index = ({ top10DiseasesData, getTop10DiseasesData }) => {
 const enhancer = connect(
   (state) => ({
     top10DiseasesData: state?.tenantAdmin?.dashboard?.default?.allTop10Diseases?.data,
+    top10DisesesLoader:state?.tenantAdmin?.dashboard?.default?.topTenDiseasesLoader
+
   }),
   {
     getTop10DiseasesData: allActions?.top10Diseases,

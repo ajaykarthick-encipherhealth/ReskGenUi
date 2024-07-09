@@ -8,6 +8,7 @@ import completed from "../../../../../images/tenantAdmin/completed.svg";
 import upload from "../../../../../images/tenantAdmin/upload.svg";
 import codeCaptured from "../../../../../images/tenantAdmin/codecaptured.svg";
 import { actions as defaultActions } from "../../../../../stores/tenantAdmin/dashboard/default";
+import { Skeleton } from "antd";
 
 const Files = ({
   getAllComputing,
@@ -16,6 +17,9 @@ const Files = ({
   getAllComputingTile,
   getTop10DiseasesData,
   top10DiseasesData,
+  loaderButton,
+  computingTileStatusLoader,
+  computingStatusLoader,
 }) => {
   const options = {
     xAxis: {
@@ -123,7 +127,7 @@ const Files = ({
       iconBg: "#FFDBCC",
     },
   ];
-
+  console.log(computingStatusLoader, "computingTileStatusLoader");
   useEffect(() => {
     getAllComputing();
     getComputingStatus();
@@ -147,33 +151,63 @@ const Files = ({
               borderRadius: "10px",
             }}
           >
-            <div className="d-flex justify-content-between">
-              <div
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  backgroundColor: item?.iconBg,
-                  borderRadius: "10px",
-                  margin: "0 10px 0 0",
-                  display: "flex",
-                  justifyContent: "center",
-                  textAlign: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Image src={item?.icon} />
-              </div>
+            {loaderButton && computingTileStatusLoader ? (
               <div>
-                <div style={{ fontSize: "16px" }}>{item?.title}</div>
-                <div style={{ fontSize: "18px", fontWeight: "700" }}>
-                  {item?.count}
+                <Skeleton.Input
+                  className="w-100"
+                  style={{ height: "60px" }}
+                  active
+                />
+              </div>
+            ) : computingTileStatusLoader ? (
+              <div className="d-flex justify-content-center align-items-center">
+                {" "}
+                <Spin size="large" />
+              </div>
+            ) : (
+              <div className="d-flex justify-content-between">
+                <div
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    backgroundColor: item?.iconBg,
+                    borderRadius: "10px",
+                    margin: "0 10px 0 0",
+                    display: "flex",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Image src={item?.icon} />
+                </div>
+                <div>
+                  <div style={{ fontSize: "16px" }}>{item?.title}</div>
+                  <div style={{ fontSize: "18px", fontWeight: "700" }}>
+                    {item?.count}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         ))}
       </div>
-      <CodesGraph options={options} />
+      {computingStatusLoader && loaderButton ? (
+        <div>
+          <Skeleton.Input
+            className="w-100 mt-2"
+            style={{ height: "312px" }}
+            active
+          />
+        </div>
+      ) : computingStatusLoader ? (
+        <div className="d-flex justify-content-center align-items-center">
+          {" "}
+          <Spin size="large" />
+        </div>
+      ) : (
+        <CodesGraph options={options} />
+      )}
     </div>
   );
 };
@@ -188,6 +222,10 @@ const enhancer = connect(
         ?.response,
     top10DiseasesData:
       state?.tenantAdmin?.dashboard?.default?.allTop10Diseases?.data?.response,
+    computingTileStatusLoader:
+      state?.tenantAdmin?.dashboard?.default?.computingTileStatusLoader,
+    computingStatusLoader:
+      state?.tenantAdmin?.dashboard?.default?.computingStatusLoader,
   }),
   {
     getAllComputing: defaultActions.ComputingStatus,

@@ -94,6 +94,7 @@ const index = ({
           }
           onClick={() => {
             setActiveBtn("default");
+            setLoaderButton(true)
            
           }}
         >

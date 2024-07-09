@@ -5,9 +5,9 @@ import { connect } from "react-redux";
 import ReactECharts from "echarts-for-react";
 import styles from "../../styles.module.css";
 import CodesGraph from "../../components/codeGraph";
-import { Spin } from "antd";
+import { Skeleton, Spin } from "antd";
 
-const index = ({ rafScoreData, overAllRafScore, rafLoader }) => {
+const index = ({ rafScoreData, overAllRafScore, rafLoader, loaderButton }) => {
   useEffect(() => {
     rafScoreData();
   }, []);
@@ -76,6 +76,7 @@ const index = ({ rafScoreData, overAllRafScore, rafLoader }) => {
       },
     ],
   };
+
   return (
     <div style={{ display: "flex", width: "100%" }}>
       <div
@@ -83,8 +84,13 @@ const index = ({ rafScoreData, overAllRafScore, rafLoader }) => {
         style={{ width: "33%", height: "auto" }}
       >
         <div className={styles.header}>Raf Score Count</div>
-        {rafLoader ? (
-          <div className="d-flex align-items-center justify-content-center">
+        {loaderButton && rafLoader ? (
+          <div className="skeletonantd d-flex justify-content-center align-items-center">
+            <Skeleton.Avatar active size="large" shape="circle" />
+          </div>
+        ) : rafLoader ? (
+          <div className="d-flex justify-content-center align-items-center">
+            {" "}
             <Spin size="large" />
           </div>
         ) : (
@@ -111,7 +117,7 @@ const index = ({ rafScoreData, overAllRafScore, rafLoader }) => {
 const enhancer = connect(
   (state) => ({
     overAllRafScore: state?.tenantAdmin?.dashboard?.default?.allRafScore?.data,
-    rafLoader: state?.tenantAdmin?.dashboard?.default?.rafScoreLoader?.loading,
+    rafLoader: state?.tenantAdmin?.dashboard?.default?.rafScoreLoader,
   }),
 
   {

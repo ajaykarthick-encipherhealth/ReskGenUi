@@ -6,8 +6,14 @@ import pageIcon from "../../../../../images/tenantAdmin/page.svg";
 import Image from "next/image";
 import styles from "../../styles.module.css";
 import { FilesCount } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
+import { Skeleton } from "antd";
 
-const index = ({ getAllFilesCount, getAllFiles }) => {
+const index = ({
+  getAllFilesCount,
+  getAllFiles,
+  loaderButton,
+  totalCountsLoader,
+}) => {
   const cardData = [
     {
       id: 1,
@@ -31,6 +37,9 @@ const index = ({ getAllFilesCount, getAllFiles }) => {
       iconBg: "#CCFFE5",
     },
   ];
+
+ 
+
   useEffect(() => {
     getAllFilesCount();
   }, []);
@@ -73,7 +82,17 @@ const index = ({ getAllFilesCount, getAllFiles }) => {
               </div>
               <div style={{ fontSize: "16px" }}>{item?.title}</div>
             </div>
-            <div className={styles.count}>{item?.count}</div>
+
+            {loaderButton && totalCountsLoader ? (
+              <Skeleton.Input active size="default" className="mt-2"/>
+            ) : totalCountsLoader ? (
+              <div className="d-flex justify-content-center align-items-center">
+                {" "}
+                <Spin size="large" />
+              </div>
+            ) : (
+              <div className={styles.count}>{item?.count}</div>
+            )}
           </div>
         </div>
       ))}
@@ -85,6 +104,8 @@ const enhancer = connect(
   (state) => ({
     getAllFiles:
       state?.tenantAdmin?.dashboard?.default?.allFilesCounts?.data?.response,
+    totalCountsLoader:
+      state?.tenantAdmin?.dashboard?.default?.totalCountsLoader,
   }),
   {
     getAllFilesCount: FilesCount,

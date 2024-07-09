@@ -190,12 +190,12 @@ const Index = ({
               <div className={`row ${styles.box}`}>
                 <div className={`col-lg-4`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <TotalCounts dateRange={dateRange} />
+                    <TotalCounts dateRange={dateRange}   loaderButton={loaderButton}/>
                   </Card>
                 </div>
                 <div className={`col`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <RafAndRevenue dateRange={dateRange} />
+                    <RafAndRevenue dateRange={dateRange} loaderButton={loaderButton} />
                   </Card>
                 </div>
               </div>
@@ -203,7 +203,7 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <TotalCodes dateRange={dateRange} />
+                    <TotalCodes dateRange={dateRange} loaderButton={loaderButton}  />
                   </Card>
                 </div>
               </div>
@@ -211,7 +211,7 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <HccCodes dateRange={dateRange} />
+                    <HccCodes dateRange={dateRange} loaderButton={loaderButton}/>
                   </Card>
                 </div>
               </div>
@@ -232,7 +232,7 @@ const Index = ({
                 </div>
                 <div className={`col-lg-8`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <Files />
+                    <Files  loaderButton={loaderButton}/>
                   </Card>
                 </div>
               </div>
@@ -240,12 +240,12 @@ const Index = ({
               <div className={`row ${styles.box}`}>
                 <div className={`col`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <Top10Diseases />
+                    <Top10Diseases loaderButton={loaderButton}/>
                   </Card>
                 </div>
                 <div className={`col`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <TopOIGCodes />
+                    <TopOIGCodes loaderButton={loaderButton}/>
                   </Card>
                 </div>
               </div>
@@ -268,7 +268,7 @@ const Index = ({
                 <div className={`col-lg-9`}>
                   <Card padding="10px" borderRadius={"10px"}>
                     <HeadTitle header="Files" fontSize="16px" />
-                    <WorkFlowFiles />
+                    <WorkFlowFiles  loaderButton={loaderButton}/>
                   </Card>
                 </div>
               </div>
