@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Style from "../../style.module.css";
 import RegularButton from "../../../../../components/button";
-import { Button, Checkbox, Divider, Input, Switch } from "antd";
+import { Button, Checkbox, Divider, Input, Select, Switch } from "antd";
 import FileUploader from "../../components/fileUploader";
 import ModalPop from "../../components/modal";
 import CommonModalContent from "../../components/commonModalContent";
@@ -13,9 +13,17 @@ import Search from "../../../../../components/table/tenantSettingsTable/search";
 import FilterButton from "../../../../../components/table/tenantSettingsTable/filterButton";
 import FileUpload from "../../../../../components/table/tenantSettingsTable/fileUpload";
 import { useSelector } from "react-redux";
-const RAFConfig = ({ updateSettings, getCodingDetails ,list}) => {
+import { getResponePopup } from "../../../../../utils/reusable";
+const RAFConfig = ({ updateSettings, getCodingDetails, list }) => {
   const [openModal, setOpenModal] = useState(false);
   const [search, setSearch] = useState(null);
+  const [options, setOptions] = useState([]);
+  const [year, setYear] = useState("");
+  const [isChecked, setIsChecked] = useState({
+    isRafCalculationEnabled: false,
+    rafScoreMedicAid: false,
+    rafScoreOrec: "",
+  });
   const [tags, setTags] = useState([
     "plan",
     "assessment/plan",
@@ -53,50 +61,117 @@ const RAFConfig = ({ updateSettings, getCodingDetails ,list}) => {
 
   const columns = [
     {
-      title: "Code",
-      dataIndex: "code",
-      key: "code",
+      title: "RAF Category",
+      dataIndex: "rafCategory",
+      key: "rafCategory",
     },
     {
-      title: "Description",
-      dataIndex: "description",
-      key: "description",
+      title: "RAF Version",
+      dataIndex: "rafVersion",
+      key: "rafVersion",
     },
     {
-      title: "Type",
-      dataIndex: "type",
-      key: "type",
+      title: "RAF Percentage",
+      dataIndex: "rafPercentage",
+      key: "rafPercentage",
     },
     {
-      title: "Year",
-      dataIndex: "years",
-      key: "year",
+      title: "RAF Score Base Rate",
+      dataIndex: "rafScoreBaseRate",
+      key: "rafScoreBaseRate",
     },
   ];
-  useEffect(() => {
-    getCodingDetails({ type: "RAF" });
-  }, []);
-  const handleSubmit = (values) => {
-    updateSettings({ directCodes: values });
+
+  const onChange = async (checked, name) => {
+    setIsChecked((prev) => ({ ...prev, [name]: checked }));
   };
 
+  useEffect(() => {
+    getRafConfig();
+  }, []);
+
+  const getRafConfig = async () => {
+    try {
+      const res = await getCodingDetails({ type: "RAF" });
+      if (res?.status == "SUCCESS") {
+        console.log(res);
+        setIsChecked({
+          isRafCalculationEnabled: res?.response?.isRafCalculationEnabled,
+          rafScoreMedicAid: res?.response?.rafScoreMedicAid,
+          rafScoreOrec: res?.response?.rafScoreOrec,
+        });
+        const opt = res?.response?.rafScoreYearList?.map((item) => ({
+          label: item.year,
+          value: item.year,
+        }));
+        setOptions(opt);
+        setYear(opt[0].value);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleSubmit = async () => {
+    try {
+      const res = await updateSettings(isChecked);
+      if (res.status == "SUCCESS") {
+        getResponePopup(res);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(options);
   return (
     <div>
       <div className="p-3">
         <div className="d-flex justify-content-between">
-          <div className={Style.title}>RAF Configuration</div>
+          <div>
+            <div className={Style.title}>RAF Configuration</div>
+            <div className="d-flex justify-content-start gap-2 mt-4">
+              <div>Year</div>
+              <div>
+                <Checkbox />
+              </div>
+              <div>Can We calculate for all Processing Year</div>
+            </div>
+          </div>
+          <div className="d-flex justify-content-start gap-2">
+            <div>
+              <FileUpload allowedFormat={"File must be in xlsx or CSV"} />
+            </div>
+            <div>
+              <Button
+                icon={<PlusOutlined />}
+                style={{
+                  height: "47px",
+                }}
+                onClick={() => {
+                  setOpenModal(true);
+                }}
+              >
+                Add Manually
+              </Button>
+            </div>
+          </div>
         </div>
+
         <div className="mt-4">
           <div className="d-flex justify-content-between mt-1 mb-4">
             <div>{"Do you need to calculate RAF"}</div>
             <div className="d-flex justify-content-between">
-              <Switch className="switch" />
+              <Switch
+                className="switch"
+                checked={isChecked?.isRafCalculationEnabled}
+                onChange={(e) => onChange(e, "isRafCalculationEnabled")}
+              />
               <div
                 className={`mx-2 text-${
-                  list?.response?.isOIGCodeNeeded ? "info" : "danger"
+                  isChecked?.isRafCalculationEnabled ? "info" : "danger"
                 }`}
               >
-                {list?.response?.isOIGCodeNeeded ? "Enable" : "Disable"}
+                {isChecked?.isRafCalculationEnabled ? "Enable" : "Disable"}
               </div>
             </div>
           </div>
@@ -104,78 +179,65 @@ const RAFConfig = ({ updateSettings, getCodingDetails ,list}) => {
           <div className="d-flex justify-content-between">
             <div>{"Do you need RAF medicaid"}</div>
             <div className="d-flex justify-content-between">
-              <Switch className="switch" />
+              <Switch
+                className="switch"
+                checked={isChecked?.rafScoreMedicAid}
+                onChange={(e) => onChange(e, "rafScoreMedicAid")}
+              />
               <div
                 className={`mx-2 text-${
-                  list?.response?.captureHistoryCodes ? "info" : "danger"
+                  isChecked?.rafScoreMedicAid ? "info" : "danger"
                 }`}
               >
-                {list?.response?.captureHistoryCodes ? "Enable" : "Disable"}
+                {isChecked?.rafScoreMedicAid ? "Enable" : "Disable"}
               </div>
             </div>
           </div>
           <div className="d-flex justify-content-between mt-4">
             <div>{"Enter RAF score OREC"}</div>
             <div className="d-flex justify-content-between">
-              <Input className="switch" />
-              
+              <Input
+                className="switch"
+                style={{ width: "280px" }}
+                value={isChecked?.rafScoreOrec}
+                onChange={(e) => onChange(e.target.value, "rafScoreOrec")}
+              />
             </div>
           </div>
-        </div>
-        <div className="d-flex justify-content-start gap-2 mt-4">
-          <div>Year</div>
-          <div>
-            <Checkbox />
+          <div className="text-end mt-4">
+            <RegularButton
+              name={"Save Changes"}
+              onClick={() => handleSubmit()}
+            />
           </div>
-          <div>Can We calculate for all Processing Year</div>
         </div>
 
-        <div className="d-flex justify-content-start gap-2 mt-4">
-          <div>
-            <FileUpload allowedFormat={"File must be in xlsx or CSV"} />
+        <Divider />
+        <div className="d-flex justify-content-end  gap-4 mt-4">
+          <div className="mx-2">
+            <Select
+              size="large"
+              style={{ width: "200px" }}
+              placeholder="Select Year"
+              options={options}
+              onChange={(e, value) => setYear(value.value)}
+              value={year}
+            />
           </div>
-          <div>
-            <Button
-              icon={<PlusOutlined />}
-              style={{
-                height: "47px",
-              }}
-              onClick={() => {
-                setOpenModal(true);
-              }}
-            >
-              Add Manually
-            </Button>
-          </div>
-        </div>
-        <Divider/>
-        <div className="d-flex justify-content-start  gap-4 mt-4">
-          {/* <div>
-            <FilterButton label={"Default"} isActive={true} />
-          </div>
-          <div>
-            <FilterButton label={"Code"} isActive={false} />
-          </div>
-          <div>
-            <FilterButton label={"Description"} isActive={false} />
+          {/* <div className="mx-2">
+            <Search setSearch={setSearch} value={search} />
           </div> */}
-          
-          <div className="ms-auto mx-4">
-            <Search setSearch={setSearch} />
-          </div>
         </div>
 
         <div>
-          <TenantSettingsTable columns={columns} data={list?.response?.rafScoreYearList} />
+          <TenantSettingsTable
+            columns={columns}
+            data={
+              list?.response?.rafScoreYearList[year == "2023" ? 0 : 1]
+                ?.rafScoreBaseRates
+            }
+          />
         </div>
-      </div>
-      <div className="text-end p-3">
-        <RegularButton
-          type={"outline"}
-          name={"Restore Changes"}
-          onClick={() => console.log("Restore Changes")}
-        />
-        <RegularButton name={"Save Changes"} onClick={() => handleSubmit()} />
       </div>
       <ModalPop
         openModal={openModal}
@@ -185,10 +247,13 @@ const RAFConfig = ({ updateSettings, getCodingDetails ,list}) => {
     </div>
   );
 };
-const enhancer = connect((state) => ({
-  list : state?.tenantAdmin?.settings.codingGuidelines?.data
-}), {
-  updateSettings: settingActions.updateSettingsAction,
-  getCodingDetails: settingActions.codingGuidelinesAction,
-});
+const enhancer = connect(
+  (state) => ({
+    list: state?.tenantAdmin?.settings.codingGuidelines?.data,
+  }),
+  {
+    updateSettings: settingActions.updateRafConfigs,
+    getCodingDetails: settingActions.codingGuidelinesAction,
+  }
+);
 export default enhancer(RAFConfig);

@@ -12,9 +12,13 @@ import { PlusOutlined } from "@ant-design/icons";
 import Search from "../../../../../components/table/tenantSettingsTable/search";
 import TenantSettingsTable from "../../../../../components/table/tenantSettingsTable/tenantSettingsTable";
 
-const DownCodes = ({ updateSettings, getCodingDetails,list }) => {
+const DownCodes = ({ updateSettings, getCodingDetails, list }) => {
   const [openModal, setOpenModal] = useState(false);
   const [search, setSearch] = useState(null);
+  const [isChecked, setIsChecked] = useState({
+    isDownCodeConversionEnabled: false,
+    includeGeneralGuidelineCodes: false,
+  });
   const [tags, setTags] = useState([
     "plan",
     "assessment/plan",
@@ -49,8 +53,17 @@ const DownCodes = ({ updateSettings, getCodingDetails,list }) => {
     "Renewed Medications",
     "a/p",
   ]);
-  const onChange = (checked) => {
-    console.log(`switch to ${checked}`);
+
+  const onChange = async (checked, name) => {
+    setIsChecked((prev) => ({ ...prev, [name]: checked }));
+    try {
+      const res = await updateSettings({ [name]: checked });
+      if (res.status == "SUCCESS") {
+        getResponePopup(res);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const columns = [
@@ -76,100 +89,110 @@ const DownCodes = ({ updateSettings, getCodingDetails,list }) => {
     },
   ];
   useEffect(() => {
-    getCodingDetails({ type: "DOWN_CODES" });
+    getDownCodes();
   }, []);
+
+  const getDownCodes = async () => {
+    try {
+      const res = await getCodingDetails({ type: "DOWN_CODES" });
+      if (res?.status == "SUCCESS") {
+        setIsChecked({
+          isDownCodeConversionEnabled:
+            res?.response?.isDownCodeConversionEnabled,
+          includeGeneralGuidelineCodes:
+            res?.response?.includeGeneralGuidelineCodes,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
       <div className="p-3">
-        <div className="d-flex justify-content-between">
-          <div className={Style.title}>Down Codes</div>
-        </div>
         <div>
-     
-            <div className="d-flex justify-content-between mt-1">
-              <div>{"Do you need general guidelines codes"}</div>
-              <div className="d-flex justify-content-between">
-                <div name="isDownCodeConversionEnabled">
-                  <Switch className="switch" />
-                </div>
-                <div
-                  className={`mx-2 text-${
-                    list?.response?.isDownCodeConversionEnabled
-                      ? "info"
-                      : "danger"
-                  }`}
-                >
-                  {list?.response?.isDownCodeConversionEnabled
-                    ? "Enable"
-                    : "Disable"}
-                </div>
-              </div>
-            </div>
-            <div className="d-flex justify-content-between mt-1">
-              <div>{"Do you need an Down Code Conversion"}</div>
-              <div className="d-flex justify-content-between">
-                <div name="isDownCodeConversionEnabled">
-                  <Switch className="switch" />
-                </div>
-                <div
-                  className={`mx-2 text-${
-                    list?.response?.isDownCodeConversionEnabled
-                      ? "info"
-                      : "danger"
-                  }`}
-                >
-                  {list?.response?.isDownCodeConversionEnabled
-                    ? "Enable"
-                    : "Disable"}
-                </div>
-              </div>
-            </div>
-          <div className="d-flex justify-content-start gap-2 mt-4">
-            <div>Year</div>
+          <div className="d-flex justify-content-between">
             <div>
-              <Checkbox />
+              <div className={Style.title}>Down Codes</div>
+              <div className="d-flex justify-content-start gap-2 mt-4">
+                <div>Year</div>
+                <div>
+                  <Checkbox />
+                </div>
+                <div>Can We calculate for all Processing Year</div>
+              </div>
             </div>
-            <div>Can We calculate for all Processing Year</div>
+
+            <div className="d-flex justify-content-start gap-2">
+              <div>
+                <FileUpload allowedFormat={"File must be in xlsx or CSV"} />
+              </div>
+              <div>
+                <Button
+                  icon={<PlusOutlined />}
+                  style={{
+                    height: "47px",
+                  }}
+                  onClick={() => {
+                    setOpenModal(true);
+                  }}
+                >
+                  Add Manually
+                </Button>
+              </div>
+            </div>
+          </div>
+          <div className="d-flex justify-content-between mt-4">
+            <div>{"Do you need general guidelines codes"}</div>
+            <div className="d-flex justify-content-between">
+              <div name="isDownCodeConversionEnabled">
+                <Switch
+                  className="switch"
+                  checked={isChecked?.includeGeneralGuidelineCodes}
+                  onChange={(e) => onChange(e, "includeGeneralGuidelineCodes")}
+                />
+              </div>
+              <div
+                className={`mx-2 text-${
+                  isChecked?.includeGeneralGuidelineCodes ? "info" : "danger"
+                }`}
+              >
+                {isChecked?.includeGeneralGuidelineCodes ? "Enable" : "Disable"}
+              </div>
+            </div>
+          </div>
+          <div className="d-flex justify-content-between mt-4">
+            <div>{"Do you need an Down Code Conversion"}</div>
+            <div className="d-flex justify-content-between">
+              <div name="isDownCodeConversionEnabled">
+                <Switch
+                  className="switch"
+                  checked={isChecked?.isDownCodeConversionEnabled}
+                  onChange={(e) => onChange(e, "isDownCodeConversionEnabled")}
+                />
+              </div>
+              <div
+                className={`mx-2 text-${
+                  isChecked?.isDownCodeConversionEnabled ? "info" : "danger"
+                }`}
+              >
+                {isChecked?.isDownCodeConversionEnabled ? "Enable" : "Disable"}
+              </div>
+            </div>
           </div>
 
-          <div className="d-flex justify-content-start gap-2 mt-4">
-            <div>
-              <FileUpload allowedFormat={"File must be in xlsx or CSV"} />
-            </div>
-            <div>
-              <Button
-                icon={<PlusOutlined />}
-                style={{
-                  height: "47px",
-                }}
-                onClick={() => {
-                  setOpenModal(true);
-                }}
-              >
-                Add Manually
-              </Button>
-            </div>
-          </div>
           <Divider />
           <div className="d-flex justify-content-start  gap-4 mt-4">
-            {/* <div>
-              <FilterButton label={"Default"} isActive={true} />
-            </div>
-            <div>
-              <FilterButton label={"Code"} isActive={false} />
-            </div>
-            <div>
-              <FilterButton label={"Description"} isActive={false} />
-            </div> */}
-            
-
             <div className="ms-auto mx-4">
               <Search setSearch={setSearch} />
             </div>
           </div>
           <div>
-            <TenantSettingsTable columns={columns} data={list?.response?.downCodesPage?.content} />
+            <TenantSettingsTable
+              columns={columns}
+              data={list?.response?.downCodesPage?.content}
+            />
           </div>
         </div>
       </div>
@@ -192,10 +215,13 @@ const DownCodes = ({ updateSettings, getCodingDetails,list }) => {
     </>
   );
 };
-const enhancer = connect((state) => ({
-  list: state?.tenantAdmin?.settings?.codingGuidelines?.data,
-}), {
-  updateSettings: settingActions.updateSettingsAction,
-  getCodingDetails: settingActions.codingGuidelinesAction,
-});
+const enhancer = connect(
+  (state) => ({
+    list: state?.tenantAdmin?.settings?.codingGuidelines?.data,
+  }),
+  {
+    updateSettings: settingActions.updateDownCodes,
+    getCodingDetails: settingActions.codingGuidelinesAction,
+  }
+);
 export default enhancer(DownCodes);

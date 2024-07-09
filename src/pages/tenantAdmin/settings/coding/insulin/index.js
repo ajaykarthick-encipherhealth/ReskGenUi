@@ -5,6 +5,7 @@ import { Button, Input, Switch } from "antd";
 import { useState } from "react";
 import Tags from "../../components/tags";
 import { connect, useSelector } from "react-redux";
+import { getResponePopup } from "../../../../../utils/reusable";
 import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
 
 export const handleRemoveTag = ({ index, setTags, tags }) => {
@@ -41,7 +42,10 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
   const [inputValue, setInputValue] = useState("");
   const [editIndex, setEditIndex] = useState(null);
   const [editValue, setEditValue] = useState("");
-  const [isCaptureInsulin, setIsCaptureInsulin] = useState(false);
+  const [isCaptureInsulin, setIsCaptureInsulin] = useState({
+    captureInsulinMedicationAsIcdCodes: false,
+    includeGeneralInsulinMedications: false,
+  });
 
   useEffect(() => {
     getCodingDetails({ type: "INSULIN_MEDICATIONS" });
@@ -49,7 +53,12 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
 
   useEffect(() => {
     if (list?.response?.insulinMedications) {
-      setIsCaptureInsulin(list?.response?.captureInsulinMedicationAsIcdCodes);
+      setIsCaptureInsulin({
+        captureInsulinMedicationAsIcdCodes:
+          list?.response?.captureInsulinMedicationAsIcdCodes,
+        includeGeneralInsulinMedications:
+          list?.response?.includeGeneralInsulinMedications,
+      });
       setTags(list?.response?.insulinMedications);
     }
   }, [list]);
@@ -63,15 +72,24 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
       setInputValue("");
     }
   };
-  const onChange = (checked) => {
+  const onChange = (checked, type) => {
     console.log("onChange", checked);
-    setIsCaptureInsulin(checked);
+    setIsCaptureInsulin((prev) => ({ ...prev, [type]: checked }));
   };
-  const handleSubmit = () => {
-    updateSettings({
-      insulinMedications: { captureInsulinMedicationAsIcdCodes: isCaptureInsulin },
-    });
+  const handleSubmit = async () => {
+    try {
+      const res = await updateSettings({
+        ...isCaptureInsulin,
+        insulinMedications: tags,
+      });
+      if (res?.status == "SUCCESS") {
+        getResponePopup(res);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   return (
     <>
       <div className="p-3" style={{ height: "65vh" }}>
@@ -101,12 +119,18 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
               <div>Do you need an Capture Insulin Medication as ICD Codes</div>
               <div className="d-flex justify-content-between">
                 <Switch
-                  defaultChecked={isCaptureInsulin}
+                  checked={
+                    isCaptureInsulin?.captureInsulinMedicationAsIcdCodes
+                  }
                   className="directCodeSwitch"
-                  onChange={onChange}
+                  onChange={(e) =>
+                    onChange(e, "captureInsulinMedicationAsIcdCodes")
+                  }
                 />
                 <div className={`mx-2 text-${"info"}`}>
-                  {isCaptureInsulin ? "Yes" : "No"}
+                  {isCaptureInsulin?.captureInsulinMedicationAsIcdCodes
+                    ? "Yes"
+                    : "No"}
                 </div>
               </div>
             </div>
@@ -114,12 +138,18 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
               <div>Do you need to include general insulin medications</div>
               <div className="d-flex justify-content-between">
                 <Switch
-                  defaultChecked={isCaptureInsulin}
+                  checked={
+                    isCaptureInsulin?.includeGeneralInsulinMedications
+                  }
                   className="directCodeSwitch"
-                  onChange={onChange}
+                  onChange={(e) =>
+                    onChange(e, "includeGeneralInsulinMedications")
+                  }
                 />
                 <div className={`mx-2 text-${"info"}`}>
-                  {isCaptureInsulin ? "Yes" : "No"}
+                  {isCaptureInsulin?.includeGeneralInsulinMedications
+                    ? "Yes"
+                    : "No"}
                 </div>
               </div>
             </div>
@@ -207,10 +237,7 @@ const Insulin = ({ getCodingDetails, updateSettings, list }) => {
           name={"Restore Changes"}
           onClick={() => console.log("Restore Changes")}
         />
-        <RegularButton
-          name={"Save Changes"}
-          onClick={() => handleSubmit()}
-        />
+        <RegularButton name={"Save Changes"} onClick={() => handleSubmit()} />
       </div>
     </>
   );
@@ -220,6 +247,6 @@ const enhancer = connect((state) => ({
   list: state?.tenantAdmin?.settings?.codingGuidelines?.data,
 }), {
   getCodingDetails: settingActions.codingGuidelinesAction,
-  updateSettings: settingActions.updateSettingsAction,
+  updateSettings: settingActions.updateInsulinConfig,
 });
 export default enhancer(Insulin);

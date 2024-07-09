@@ -5,7 +5,7 @@ const Search = ({ setSearch }) => {
   return (
     <div>
       <Input
-        placeholder="input search text"
+        placeholder="Search....!"
         size="large"
         onChange={(e) => setSearch(e.target.value)}
         // style={{ height: "58px" }}

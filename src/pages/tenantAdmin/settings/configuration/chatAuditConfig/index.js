@@ -6,6 +6,7 @@ import RegularButton from "../../../../../components/button";
 import { connect, useSelector } from "react-redux";
 import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
 import ButtonStyles from "../../../../../components/button/style.module.css";
+import { getResponePopup } from "../../../../../utils/reusable";
 const ChatAuditConfig = ({ getConfigurationDetails, updateSettings,data }) => {
   const [form] = Form.useForm();
   useEffect(() => {
@@ -34,16 +35,23 @@ const ChatAuditConfig = ({ getConfigurationDetails, updateSettings,data }) => {
     },
   ];
 
-  const handleSubmit = (values) => {
-    console.log("Submit", values);
-    updateSettings({chatAuditConfig:values})
-    
+  const handleSubmit = async(values) => {
+    try {
+      const res = await updateSettings(values);
+      if (res?.status == "SUCCESS") {
+        getResponePopup(res)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+   
   };
+
   return (
     <>
       <Form id={"chart-audit"} onFinish={handleSubmit} form={form}>
         <div className="p-3" style={{ height: "65vh" }}>
-          <div className={Style.title}>Chat Audit Configuration</div>
+          <div className={Style.title}>Chart Audit Configuration</div>
           <div className="d-flex justify-content-between mt-4">
             <div>
               <div className={Style.heading}>Max hold count</div>
@@ -149,7 +157,7 @@ const enhancer = connect((state) => ({
   data: state?.tenantAdmin?.settings?.configurationSettings?.data,
 }), {
   getConfigurationDetails: settingActions.configurationSettingsAction,
-  updateSettings: settingActions.updateSettingsAction,
+  updateSettings: settingActions.updateChatAudit,
 });
 
 export default enhancer(ChatAuditConfig);

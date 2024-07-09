@@ -4,6 +4,7 @@ import RegularButton from "../../../../../components/button";
 import { Form, Switch } from "antd";
 import { connect, useSelector } from "react-redux";
 import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
+import { getResponePopup } from "../../../../../utils/reusable";
 
 const MedicalCoding = ({ getCodingDetails, updateSettings,list }) => {
   const [form] = Form.useForm();
@@ -16,24 +17,34 @@ const MedicalCoding = ({ getCodingDetails, updateSettings,list }) => {
     if (list?.response) {
       form.setFieldsValue({
         isOIGCodeNeeded: list?.response?.isOIGCodeNeeded,
-        captureHistoryCodes: list?.response?.captureHistoryCodes,
-        captureHistoryCodesAsIcdCodes:
-          list?.response?.captureHistoryCodesAsIcdCodes,
+        // captureHistoryCodes: list?.response?.captureHistoryCodes,
+        // captureHistoryCodesAsIcdCodes:
+        //   list?.response?.captureHistoryCodesAsIcdCodes,
+        considerESRDAsHcc: list?.response?.considerESRDAsHcc,
+        activeHeadersEnabled: list?.response?.activeHeadersEnabled,
         isSlashConditionsNeedToCapture:
           list?.response?.isSlashConditionsNeedToCapture,
         calculateComboIncludingPastMedicalHistory:
           list.response?.calculateComboIncludingPastMedicalHistory,
-        isDownCodeConversionEnabled: list.response?.isDownCodeConversionEnabled,
+        // isDownCodeConversionEnabled: list.response?.isDownCodeConversionEnabled,
       });
     }
   }, [list]);
 
   const onChange = (value, values) => {
     console.log(values);
+    form.setFieldsValue(values);
   };
-  const handleSubmit = (values) => {
-    // if i uncommand this below line getting build error, before uncommand the line please verify 
-    // updateSettings({ coding: values });
+  const handleSubmit = async(values) => {
+    try {
+      const res = await updateSettings(values);
+      if (res?.status == "SUCCESS") {
+        getResponePopup(res)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+   
   };
   return (
     <>
@@ -112,17 +123,17 @@ const MedicalCoding = ({ getCodingDetails, updateSettings,list }) => {
              <div className="d-flex justify-content-between mt-1">
               <div>{"Do you need to consider ESRD conditions as HCC conditions"}</div>
               <div className="d-flex justify-content-between">
-                <Form.Item name="isDownCodeConversionEnabled">
+                <Form.Item name="considerESRDAsHcc">
                   <Switch className="switch" />
                 </Form.Item>
                 <div
                   className={`mx-2 text-${
-                    list?.response?.isDownCodeConversionEnabled
+                    list?.response?.considerESRDAsHcc
                       ? "info"
                       : "danger"
                   }`}
                 >
-                  {list?.response?.isDownCodeConversionEnabled
+                  {list?.response?.considerESRDAsHcc
                     ? "Enable"
                     : "Disable"}
                 </div>
@@ -131,17 +142,17 @@ const MedicalCoding = ({ getCodingDetails, updateSettings,list }) => {
             <div className="d-flex justify-content-between mt-1">
               <div>{"Do you need to enable/disable active headers"}</div>
               <div className="d-flex justify-content-between">
-                <Form.Item name="isDownCodeConversionEnabled">
+                <Form.Item name="activeHeadersEnabled">
                   <Switch className="switch" />
                 </Form.Item>
                 <div
                   className={`mx-2 text-${
-                    list?.response?.isDownCodeConversionEnabled
+                    list?.response?.activeHeadersEnabled
                       ? "info"
                       : "danger"
                   }`}
                 >
-                  {list?.response?.isDownCodeConversionEnabled
+                  {list?.response?.activeHeadersEnabled
                     ? "Enable"
                     : "Disable"}
                 </div>
@@ -155,7 +166,7 @@ const MedicalCoding = ({ getCodingDetails, updateSettings,list }) => {
             name={"Restore Changes"}
             onClick={() => console.log("Restore Changes")}
           />
-          <RegularButton name={"Save Changes"} onClick={handleSubmit()} />
+          <RegularButton name={"Save Changes"} onClick={handleSubmit} />
         </div>
       </Form>
     </>
@@ -165,6 +176,6 @@ const enhancer = connect((state) => ({
   list: state?.tenantAdmin?.settings?.codingGuidelines?.data,
 }), {
   getCodingDetails: settingActions.codingGuidelinesAction,
-  updateSettings: settingActions.updateSettingsAction,
+  updateSettings: settingActions.updateMedical,
 });
 export default enhancer(MedicalCoding);

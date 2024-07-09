@@ -34,7 +34,7 @@ const menuList = [
       },
       {
         key: "Chat_Audit_Config",
-        label: "Chat Audit Config",
+        label: "Chart Audit Config",
       },
       {
         key: "Flag_Config",
