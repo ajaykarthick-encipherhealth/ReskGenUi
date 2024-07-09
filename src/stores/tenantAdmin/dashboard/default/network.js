@@ -114,7 +114,7 @@ export async function getRafScore(startDate, endDate,organizationId) {
   };
 
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/raf/score?startDate=${startDate}&endDate=${endDate}&organizationId=${organizationId}`,
+    `dbservice/tenantadmin/dashboard/raf/score?startDate=${startDate}&endDate=${endDate}&organizationId=${organizationId?organizationId:""}`,
     options
   );
   return data;

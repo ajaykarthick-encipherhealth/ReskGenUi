@@ -12,7 +12,7 @@ const index = ({ rafScoreData, overAllRafScore, rafLoader ,dateRange,selectedOrg
     rafScoreData( dateRange.startDate,
       dateRange.endDate,
       selectedOrganization);
-  }, [dateRange]);
+  }, [dateRange,selectedOrganization]);
 
   const speedometerOptions = {
     tooltip: {
