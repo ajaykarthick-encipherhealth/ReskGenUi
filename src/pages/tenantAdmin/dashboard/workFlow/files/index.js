@@ -8,7 +8,7 @@ import completed from "../../../../../images/tenantAdmin/completed.svg";
 import upload from "../../../../../images/tenantAdmin/upload.svg";
 import codeCaptured from "../../../../../images/tenantAdmin/codecaptured.svg";
 import { actions as defaultActions } from "../../../../../stores/tenantAdmin/dashboard/default";
-import { Skeleton } from "antd";
+import { Skeleton, Spin } from "antd";
 import moment from "moment";
 
 

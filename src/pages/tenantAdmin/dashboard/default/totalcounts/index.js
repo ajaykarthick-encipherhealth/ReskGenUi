@@ -6,7 +6,7 @@ import pageIcon from "../../../../../images/tenantAdmin/page.svg";
 import Image from "next/image";
 import styles from "../../styles.module.css";
 import { FilesCount } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
-import { Skeleton } from "antd";
+import { Skeleton, Spin } from "antd";
 
 const index = ({
   getAllFilesCount,
