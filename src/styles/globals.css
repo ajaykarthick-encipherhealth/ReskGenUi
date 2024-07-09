@@ -13738,9 +13738,9 @@ overflow: scroll;
   background: #f5f9ff !important;
 }
 
-.allocate_modal_container > .ant-modal-content {
-  height: 730px;
-  overflow: scroll;
+.allocate_modal_container  .ant-modal-content {
+  height: 730px !important;
+  overflow-Y: scroll !important;
 }
 
 .ant_select_form {
