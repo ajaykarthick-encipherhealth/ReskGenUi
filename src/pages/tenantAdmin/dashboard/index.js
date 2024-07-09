@@ -116,7 +116,7 @@ const Index = ({
     organizationStatusData?.response?.map((org, index) => ({
       value: index,
       name: org.name,
-      itemStyle: { color: ["#757FEF", "#805DCA", "#4361EE"][index % 3] },
+      itemStyle: { color: ["#757FEF", "#805DCA","#6EC6CA" ,"#4361EE","#FF7889","#705F93","#5AA7A7","#114B5F","#A495CB","#245B43","#A75377"][index % 10] },
     })) || [];
 
   const handleOrganizationChange = (value) => {
