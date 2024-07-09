@@ -76,6 +76,7 @@ const index = ({
           <div className="tenantSelector" style={{ width: "80%" }}>
             <Select
               placeholder="Date"
+                 defaultValue="Last 30 days"
               options={[
                 { label: "Last 7 days", value: "last_1_week" },
                 { label: "Last 30 days", value: "last_1_month" },

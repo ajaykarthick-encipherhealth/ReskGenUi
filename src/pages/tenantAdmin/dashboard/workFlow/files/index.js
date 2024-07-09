@@ -15,7 +15,6 @@ const Files = ({
   getAllComputingStatus,
   getComputingStatus,
   getAllComputingTile,
-  getTop10DiseasesData,
   top10DiseasesData,
   dateRange,
 }) => {
@@ -129,10 +128,7 @@ const Files = ({
   ];
 
   useEffect(() => {
-    // getAllComputing(dateRange.startDate,   dateRange.endDate);
-
     getComputingStatus(dateRange?.startDate, dateRange?.endDate);
-    getTop10DiseasesData(dateRange?.startDate, dateRange?.endDate);
   }, [dateRange]);
 
   useEffect(() => {
