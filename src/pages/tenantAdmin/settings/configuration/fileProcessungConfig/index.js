@@ -4,6 +4,7 @@ import { Button, DatePicker, Form, Input, Select } from "antd";
 import { disablePastDate } from "../../../../../components/headerFilters/functions";
 import RegularButton from "../../../../../components/button";
 import { connect, useSelector } from "react-redux";
+import { getResponePopup } from "../../../../../utils/reusable";
 import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
 import { getYears } from "../../../../../utils/reusable";
 import ButtonStyles from "../../../../../components/button/style.module.css";
@@ -14,7 +15,6 @@ const FileProcessingConfig = ({
   data,
 }) => {
   const [form] = Form.useForm();
-
   const fileProcessingScopes = [
     {
       label: "PROSPECTIVE",
@@ -54,15 +54,23 @@ const FileProcessingConfig = ({
       });
     }
   }, [data]);
-  const handleSubmit = (values) => {
-    updateSettings({ fileProcessingConfig: values });
+
+  const handleSubmit = async(values) => {
+    try {
+      const res = await updateSettings(values);
+      if (res?.status == "SUCCESS") {
+        getResponePopup(res)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+   
   };
 
   return (
     <>
       <Form
         id={"chart-audit"}
-        onChange={{}}
         onFinish={handleSubmit}
         form={form}
       >
@@ -141,6 +149,7 @@ const FileProcessingConfig = ({
               type="primary"
               className={ButtonStyles?.btnColor}
               style={{ height: "45px" }}
+              onClick={handleSubmit}
             >
               Save Changes
             </Button>
@@ -156,7 +165,7 @@ const enhancer = connect(
   }),
   {
     getFileProcessingConfig: settingActions.configurationSettingsAction,
-    updateSettings: settingActions.updateSettingsAction,
+    updateSettings: settingActions.configurationUpdateSettings,
   }
 );
 

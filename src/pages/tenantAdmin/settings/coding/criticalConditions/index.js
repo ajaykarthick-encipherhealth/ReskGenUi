@@ -13,10 +13,18 @@ import FilterButton from "../../../../../components/table/tenantSettingsTable/fi
 import Search from "../../../../../components/table/tenantSettingsTable/search";
 import TenantSettingsTable from "../../../../../components/table/tenantSettingsTable/tenantSettingsTable";
 
-const CriticalConditions = ({ updateSettings, getCodingDetails,list }) => {
+const CriticalConditions = ({
+  updateSettings,
+  updateCriticalCondition,
+  getCodingDetails,
+  list,
+}) => {
   const [openModal, setOpenModal] = useState(false);
   const [search, setSearch] = useState(null);
-
+  const [isChecked, setIsChecked] = useState({
+    captureCriticalConditionsForOutpatient: false,
+    includeGeneralGuidelineCodes: false,
+  });
   const [tags, setTags] = useState([
     "plan",
     "assessment/plan",
@@ -65,20 +73,45 @@ const CriticalConditions = ({ updateSettings, getCodingDetails,list }) => {
       key: "year",
     },
   ];
-  const onChange = (checked) => {};
+
   const handleSettingsUpdate = () => {
     updateSettings({ CriticalConditions: "values" });
   };
   useEffect(() => {
-    getCodingDetails({ type: "CRITICAL_CONDITIONS" });
+    getCodingDetailsDetails();
   }, []);
+
+  const handleGuidelines = async (value, name) => {
+    try {
+      const res = await updateCriticalCondition({ [name]: value });
+      if (res.status == "SUCCESS") {
+        getResponePopup(res);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getCodingDetailsDetails = async () => {
+    try {
+      const res = await getCodingDetails({ type: "CRITICAL_CONDITIONS" });
+      if (res?.status == "SUCCESS") {
+        setIsChecked({
+          includeGeneralGuidelineCodes:
+            res?.response?.includeGeneralGuidelineCodes,
+          captureCriticalConditionsForOutpatient:
+            res?.response?.captureCriticalConditionsForOutpatient,
+        });
+      }
+    } catch (error) {}
+  };
   return (
     <>
       <div className="p-3">
         <div className="d-flex justify-content-between">
           <div className={Style.title}>Critical Conditions</div>
         </div>
-        
+
         <div className="d-flex justify-content-start gap-2 mt-4">
           <div>Year</div>
           <div>
@@ -109,22 +142,47 @@ const CriticalConditions = ({ updateSettings, getCodingDetails,list }) => {
         <div className="d-flex justify-content-start  gap-4 mt-4">
           <div className="mx-3">{"Do you need general guidelines codes"}</div>
           <div className="d-flex">
-            {/* <Form.Item name="isDownCodeConversionEnabled"> */}
-            <Switch className="switch" />
-            {/* </Form.Item> */}
+            <Switch
+              checked={isChecked.includeGeneralGuidelineCodes}
+              onChange={(e) => {
+                setIsChecked((prev) => ({
+                  ...prev,
+                  includeGeneralGuidelineCodes: e,
+                }));
+                handleGuidelines(e, "includeGeneralGuidelineCodes");
+              }}
+            />
+            <div className={`mx-2`}>
+              {isChecked.includeGeneralGuidelineCodes ? "Yes" : "No"}
+            </div>
           </div>
-          <div className="">{"Do you need to capture critical condition for patients"}</div>
+          <div className="">
+            {"Do you need to capture critical condition for patients"}
+          </div>
           <div className="d-flex">
-            {/* <Form.Item name="isDownCodeConversionEnabled"> */}
-            <Switch className="switch" />
-            {/* </Form.Item> */}
+            <Switch
+              checked={isChecked.captureCriticalConditionsForOutpatient}
+              onChange={(e) => {
+                setIsChecked((prev) => ({
+                  ...prev,
+                  captureCriticalConditionsForOutpatient: e,
+                }));
+                handleGuidelines(e, "captureCriticalConditionsForOutpatient");
+              }}
+            />
+            <div className={`mx-2`}>
+              {isChecked.captureCriticalConditionsForOutpatient ? "Yes" : "No"}
+            </div>
           </div>
           <div className="ms-auto mx-4">
             <Search setSearch={setSearch} />
           </div>
         </div>
         <div>
-          <TenantSettingsTable columns={columns} data={list?.response?.criticalConditionsPage?.content} />
+          <TenantSettingsTable
+            columns={columns}
+            data={list?.response?.criticalConditionsPage?.content}
+          />
         </div>
       </div>
       <div className="text-end p-3">
@@ -146,11 +204,15 @@ const CriticalConditions = ({ updateSettings, getCodingDetails,list }) => {
     </>
   );
 };
-const enhancer = connect((state) => ({
-  list : state?.tenantAdmin?.settings?.codingGuidelines?.data
-}), {
-  updateSettings: settingActions.updateSettingsAction,
-  getCodingDetails: settingActions.codingGuidelinesAction,
-});
+const enhancer = connect(
+  (state) => ({
+    list: state?.tenantAdmin?.settings?.codingGuidelines?.data,
+  }),
+  {
+    updateSettings: settingActions.updateSettingsAction,
+    updateCriticalCondition: settingActions.updateCriticalCondition,
+    getCodingDetails: settingActions.codingGuidelinesAction,
+  }
+);
 
 export default enhancer(CriticalConditions);

@@ -1,18 +1,89 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Style from "./../../style.module.css";
 import RegularButton from "../../../../../components/button";
-import { Form } from "antd";
+import { ColorPicker, Form } from "antd";
 import { connect, useSelector } from "react-redux";
 import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { getResponePopup } from "../../../../../utils/reusable";
 
-const FlagConfig = ({ getFlagConfigDetails, updateSettings, data }) => {
+const FlagConfig = ({ getFlagConfigDetails, flagSave, deleteFlag }) => {
   const [form] = Form.useForm();
+  const [color, setColor] = useState("#1677ff");
+  const [flags, setFlags] = useState([]);
+  const [flag, setFlag] = useState("");
+  const [isEdit, setIsEdit] = useState(null);
   useEffect(() => {
-    getFlagConfigDetails({ type: "FLAG_CONFIG" });
+    getFlagDetails();
   }, []);
 
-  const handleSubmit = (values) => {
-    updateSettings({ flagConfig: values });
+  const getFlagDetails = async () => {
+    try {
+      const res = await getFlagConfigDetails();
+      if (res?.status == "SUCCESS") {
+        setFlags(res.response);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (isEdit) {
+      try {
+        const res = await flagSave({
+          id: isEdit.id,
+          flagName: flag,
+          flagIcon: isEdit.flagIcon,
+          flagColour: color,
+          isActive: isEdit.isActive,
+        });
+        if (res?.status == "SUCCESS") {
+          getResponePopup(res);
+          getFlagDetails();
+          setColor("#1677ff");
+          setFlag("");
+          setIsEdit(null);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        const res = await flagSave({
+          flagName: flag,
+          flagIcon: "Test icon",
+          flagColour: color,
+          isActive: true,
+        });
+        if (res?.status == "SUCCESS") {
+          getResponePopup(res);
+          getFlagDetails();
+          setColor("#1677ff");
+          setFlag("");
+          setIsEdit(null);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const handleEdit = (value) => {
+    setIsEdit(value);
+    setFlag(value.flagName);
+    setColor(value.flagColour);
+  };
+
+  const handleDeleteFlag = async (value) => {
+    try {
+      const res = await deleteFlag(value.id);
+      if (res.status == "SUCCESS") {
+        getResponePopup(res);
+        getFlagDetails();
+      }
+    } catch (error) {}
   };
   return (
     <>
@@ -24,12 +95,13 @@ const FlagConfig = ({ getFlagConfigDetails, updateSettings, data }) => {
               <label
                 className="border px-2 rounded-start"
                 id="button-addon1"
-                style={{ padding: "11px 0" }}
+                style={{ padding: "5px 0" }}
               >
-                <span
-                  className={Style.flagDots}
-                  style={{ backgroundColor: `#874242` }}
-                ></span>
+                <ColorPicker
+                  value={color}
+                  showText
+                  onChange={(e, color) => setColor(color)}
+                />
               </label>
               <input
                 type="text"
@@ -42,9 +114,23 @@ const FlagConfig = ({ getFlagConfigDetails, updateSettings, data }) => {
                   borderRadius: 0,
                   width: "250px",
                 }}
+                value={flag}
+                onChange={(e) => setFlag(e.target.value)}
               />
             </div>
-            <RegularButton name={"Save"} onClick={() => console.log("Save")} />
+            <RegularButton
+              name={isEdit ? "Update" : "Save"}
+              onClick={handleSubmit}
+            />
+            <RegularButton
+              name={"Cancel"}
+              type={"outline"}
+              onClick={() => {
+                setColor("#1677ff");
+                setFlag("");
+                setIsEdit(null);
+              }}
+            />
           </div>
         </div>
         {/* <div>
@@ -86,7 +172,7 @@ const FlagConfig = ({ getFlagConfigDetails, updateSettings, data }) => {
           </div>
         </div> */}
         <div>
-          {data?.response?.flagDetailsList?.map((item) => (
+          {flags?.map((item) => (
             <div
               className={`p-1 px-3 d-inline-block m-2`}
               style={{ border: `1px solid ${item.flagColour}` }}
@@ -96,27 +182,53 @@ const FlagConfig = ({ getFlagConfigDetails, updateSettings, data }) => {
                 style={{ backgroundColor: `${item.flagColour}` }}
               ></span>
               <span>{item.flagName}</span>
+
+              <span className="px-2 cr-pointer">
+                {
+                  <FontAwesomeIcon
+                    icon={faPen}
+                    style={{
+                      fontSize: "15px",
+                      color: "#6464ff",
+                    }}
+                    onClick={() => {
+                      handleEdit(item);
+                    }}
+                  />
+                }
+              </span>
+              <span className=" cr-pointer">
+                {
+                  <FontAwesomeIcon
+                    icon={faTrash}
+                    style={{
+                      fontSize: "15px",
+                      color: "#dc4848",
+                    }}
+                    onClick={() => handleDeleteFlag(item)}
+                  />
+                }
+              </span>
             </div>
           ))}
         </div>
       </div>
-      <div className="text-end p-3">
+      {/* <div className="text-end p-3">
         <RegularButton
           type={"outline"}
           name={"Restore Changes"}
           onClick={() => console.log("Restore Changes")}
         />
         <RegularButton name={"Save Changes"} onClick={() => handleSubmit()} />
-      </div>
+      </div> */}
     </>
   );
 };
 
-const enhancer = connect((state) => ({
-  data: state?.tenantAdmin?.settings?.configurationSettings?.data,
-}), {
-  getFlagConfigDetails: settingActions.configurationSettingsAction,
-  updateSettings: settingActions.updateSettingsAction,
+const enhancer = connect((state) => ({}), {
+  getFlagConfigDetails: settingActions.getFlags,
+  flagSave: settingActions.updateFlags,
+  deleteFlag: settingActions.deleteFlags,
 });
 
 export default enhancer(FlagConfig);

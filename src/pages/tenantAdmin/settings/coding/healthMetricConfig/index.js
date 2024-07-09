@@ -24,6 +24,20 @@ import Search from "../../../../../components/table/tenantSettingsTable/search";
 import TenantSettingsTable from "../../../../../components/table/tenantSettingsTable/tenantSettingsTable";
 import { actions as settingActions } from "../../../../../stores/tenantAdmin/settings";
 
+    
+
+const types = [
+  {label: "BMI", value: "BMI"},
+  {label: "PHQ", value: "PHQ"},
+  {label: "AUDIT_C", value: "AUDIT_C"},
+];
+
+const genders = [
+  {label: "MALE", value: "MALE"},
+  {label: "FEMALE", value: "FEMALE"},
+  {label: "OTHERS", value: "OTHERS"},
+  {label: "DEFAULT", value: "DEFAULT"},
+];
 const HealthMetricConfig = ({
   healthMetricAdd,
   updateSettings,
@@ -335,10 +349,10 @@ const HealthMetricConfig = ({
 
         <div className="d-flex justify-content-start  gap-4 mt-4">
           <div>
-            <Select label={"Default"} isActive={true} />
+            <Select label={"Default"} isActive={true} style={{width: "150px"}} size="large" options={types} placeholder="Type"/>
           </div>
           <div>
-            <Select label={"Code"} isActive={false} />
+            <Select label={"Code"} isActive={false} style={{width: "150px"}} size="large" options={genders} placeholder="Gender"/>
           </div>
 
           <div className="ms-auto mx-4">
