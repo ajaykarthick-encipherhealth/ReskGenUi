@@ -246,7 +246,7 @@ const VisitData = ({
                           </span>
                         </div>
                       </div>
-                      <div className={visitStyles.container}>
+                      <div className={visitStyles.HccContainer}>
                         <div className={visitStyles.hccStickey_head}>
                           <HccCards
                             list={newValidDiseaseList}
@@ -314,7 +314,7 @@ const VisitData = ({
             </div>
           ) : null}
           {!isFileFormShow ? (
-            <div className="col-xl-3">
+            <div className="col-xl-3" style={{height:"73vh"}}>
               <div className="">
                 <Droppable droppableId={"SUGGESTED"} key={"SUGGESTED"}>
                   {(provided) => {
@@ -512,7 +512,7 @@ const VisitData = ({
                             </span>
                           </div>
                         </div>
-                        <div className={visitStyles.container}>
+                        <div className={visitStyles.HccContainer}>
                           <div className={visitStyles.hccStickey_head}>
                             <HccCards
                               list={newValidDiseaseList}
@@ -584,7 +584,7 @@ const VisitData = ({
                             </span>
                           </div>
                         </div>
-                        <div className={visitStyles.suggestedcontainer}>
+                        <div className={visitStyles.HccContainer}>
                           <div className={visitStyles.hccStickey_head}>
                             <HccCards
                               list={suggestedHccList}
@@ -654,7 +654,7 @@ const VisitData = ({
                             </span>
                           </div>
                         </div>
-                        <div className={visitStyles.container}>
+                        <div className={visitStyles.HccContainer}>
                           <div className={visitStyles.hccStickey_head}>
                             <HccCards
                               list={deletedHccList}

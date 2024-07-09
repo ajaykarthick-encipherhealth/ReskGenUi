@@ -283,8 +283,8 @@
 
 .flag_container {
   width: 60px;
-  max-height: 74vh;
-  min-height: 74vh;
+  max-height: 80vh;
+  min-height: 80vh;
   border-radius: 8px;
   background: #e1edfe;
   float: right;
@@ -742,9 +742,9 @@
 }
 
 .suggestedcontainer2 {
-  min-height: 28vh;
-  max-height: 28vh;
-  overflow: hidden;
+  min-height: 100% !important;
+  max-height: 100% !important;
+  overflow-Y:scroll;
 }
 
 .container:hover,
@@ -756,11 +756,11 @@
 }
 
 .deletedContainer {
-  min-height: 28.5vh;
-  max-height: 28.5vh;
+  min-height: 100%;
+  max-height: 100%;
   /* min-height: 30vh;
   max-height: 30vh; */
-  overflow: hidden;
+  overflow-y:scroll ;
   margin-top: 0px;
 }
 
@@ -1049,8 +1049,8 @@
 
 .sideTabClose {
   width: 66px;
-  max-height: 74vh;
-  min-height: 74vh;
+  max-height: 80vh;
+  min-height: 80vh;
   flex-shrink: 0;
   border-radius: 12px;
   background: #e1edfe;
@@ -1923,8 +1923,8 @@
 }
 
 .validHcccontainer {
-  min-height: 83vh;
-  max-height: 83vh;
+  min-height: 100%;
+  max-height: 100%;
   overflow: hidden;
 }
 
@@ -2126,25 +2126,25 @@
 .container,
 .suggestedcontainer2,
 .deletedContainer {
-  border: 1px solid red !important;
+  height:34vh;
   border-radius: 10px;
   background-color: transparent !important;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   /* box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px; */
 }
 .meatContainer {
-  max-height: 70vh;
-  min-height: 70vh;
+  /* max-height: 100vh;
+  min-height: 100vh; */
   overflow-y: scroll;
 }
 .container {
-  max-height: 63vh;
-  min-height: 63vh;
+  max-height: 80vh;
+  min-height: 80vh;
   overflow-y: scroll;
 }
 .HccContainer {
-  max-height: 63vh;
-  min-height: 63vh;
+  max-height: 69vh;
+  min-height: 69vh;
   overflow-y: scroll;
   border-radius: 10px;
   background-color: transparent !important;

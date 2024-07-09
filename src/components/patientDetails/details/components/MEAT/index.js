@@ -55,7 +55,7 @@ const MeatCard = ({
   };
   return (
     <>
-      <div className="my-post-content pt-3" >
+      <div className={`my-post-content pt-5 `}>
         <div className={visitStyles.meat_head_card}>
           <div className="row">
             <div className="col-xl-3 text-center text-uppercase">
@@ -79,10 +79,11 @@ const MeatCard = ({
           </div>
         </div>
         <div className={visitStyles.meatcontainer}>
-          <div className={visitStyles.hccStickey_head}>
+         
             {list?.map((item) => {
               return (
                 <div
+               
                   className={
                     item.isMeatCriteriaPresent === true
                       ? `${visitStyles.meat_details_card_table}`
@@ -93,7 +94,7 @@ const MeatCard = ({
                     <div className="col-xl-3 pe-0">
                       <div
                         className="rounded-start-2"
-                        style={{ padding: "10px" }}
+                        style={{ padding: "10px"}}
                       >
                         <div className="row">
                           {/* <div className="col-xl-4 d-grid">
@@ -450,7 +451,7 @@ const MeatCard = ({
                 </div>
               );
             })}
-          </div>
+          
         </div>
 
         {list.length == 0 ? (

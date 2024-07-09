@@ -258,41 +258,41 @@ const Details = ({
 
   const getAllProcessYearSelect = async (result) => {
     const patientId = localStorage.getItem("patientId");
-      var dosResonse = result.data.response;
+      var dosResonse = result?.data?.response;
       var dosYearArr = [];
       result?.data?.response?.map((res) => {
-        dosYearArr.push({ value: res, label: res });
+        dosYearArr?.push({ value: res, label: res });
       });
       setDosYearDefalutSelect(dosYearArr[0]);
-      setSelectedDosValue(dosYearArr[0].value);
+      setSelectedDosValue(dosYearArr[0]?.value);
       setDosYear(dosYearArr);
       setIsLoadingDos(false);
      if(activeTab == 3){
       getRadiologyDetails(selectPatientId ? selectPatientId?.patirntId : patientId,
-        dosYearArr[0].value,
+        dosYearArr[0]?.value,
         null,
         setIsSpinnerLoading,
       )
       getPatientRadiologyDosList(
         selectPatientId ? selectPatientId?.patirntId : patientId,
-        dosYearArr[0].value
+        dosYearArr[0]?.value
       );
      }
       if(activeTab == 4){
       getLabDetails(selectPatientId ? selectPatientId?.patirntId : patientId,
-        dosYearArr[0].value,
+        dosYearArr[0]?.value,
         null,
         setIsSpinnerLoading,
       )
       getPatientLabDosList(
         selectPatientId ? selectPatientId?.patirntId : patientId,
-        dosYearArr[0].value
+        dosYearArr[0]?.value
       );
      }
      if(activeTab == 1){
       getpatientDetailsData(
         selectPatientId ? selectPatientId?.patirntId : patientId,
-        dosYearArr[0].value,
+        dosYearArr[0]?.value,
         null,
         setIsSpinnerLoading,
         userRole
@@ -302,11 +302,11 @@ const Details = ({
       );
       getPatientDosList(
         selectPatientId ? selectPatientId?.patirntId : patientId,
-        dosYearArr[0].value
+        dosYearArr[0]?.value
       );
       getDosPageNumber(
         selectPatientId ? selectPatientId?.patirntId : patientId,
-        dosYearArr[0].value
+        dosYearArr[0]?.value
       );
      }
 
@@ -593,9 +593,9 @@ const Details = ({
 
   return (
     <>
-      <div className={`show ${sideMenu ? "menu-toggle" : ""}`}>
+      <div className={`show ${sideMenu ? "menu-toggle" : ""}`} style={{height:"100vh",background:"#fff"}}>
         <NavBar />
-        <div className={visitStyles.headerFixed}>
+        <div className={visitStyles.headerFixed} style={{height:"100%"}}>
           {isSpinnerLoading ? (
             <LogoLoader />
           ) : (
@@ -1156,7 +1156,7 @@ const Details = ({
                           </div>
                         </div>
 
-                        <div className={`${visitStyles.secondContainer}`}>
+                        <div className={`${visitStyles.secondContainer}`} style={{height:"100%"}}>
                           <>
                             {activeTab == 1 ? (
                               <Hcc
