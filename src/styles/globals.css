@@ -14852,11 +14852,11 @@ input::-webkit-inner-spin-button {
     left: -30px !important;
   }
   .remianingLineGraph > div:nth-child(2) > div:nth-child(1) > canvas {
-    height: 380px !important;
+    height: 400px !important;
     top: -35px !important;
   }
   .remianingAreaGraph > div:nth-child(2) > div:nth-child(1) > canvas {
-    height: 300px !important;
+    height:330px !important;
     top: -35px !important;
   }
 }
