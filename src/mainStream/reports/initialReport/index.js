@@ -48,7 +48,7 @@ const InitialCard = ({
   reviewerReport,
   handleHeaderCheckbox,
   selectAllFlags,
-  adminLoader
+  adminLoader,
 }) => {
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -59,10 +59,19 @@ const InitialCard = ({
     // const updatedRows = selectAll ? [] : reportListAll?.response?.data;
     // setSelectedRows(updatedRows);
     if (activeTab === "Reviewer") {
-      reviewerReport({
-        pagenum: 0,
-        size: reportListAll?.response?.totalElements,
-      });
+      if (!selectAll) {
+        try {
+          setIsLoading(true);
+          const res = await reviewerReport({
+            pagenum: 0,
+            size: reportListAll?.response?.totalElements,
+          });
+          const seletedAll = res?.response?.response?.data;
+
+          setSelectedRows(seletedAll ? seletedAll : []);
+          setIsLoading(false);
+        } catch (error) {}
+      } else setSelectedRows([]);
     }
     if (activeTab === "Admin") {
       if (!selectAll) {
@@ -266,29 +275,31 @@ const InitialCard = ({
   useEffect(() => {
     dispatch(selectedRow(selectedRows));
   }, [selectedRows]);
+
   return (
     <>
       <div>
         <div className="content-body">
-          {loader ? (
+          {loader && !selectAll ? (
             <SpinnerDots />
           ) : (
-            <div className={`container-fluid py-4 px-2`}>
-              <div
-                style={{
-                  display: "flex",
-                  marginLeft: "10px",
-                  paddingBottom: "10px",
-                }}
-              >
-                {" "}
-                {reportListAll?.response?.data?.length > 0 &&
-                  (isLoading ? (
-                    <Spin />
-                  ) : (
-                    <>
-                     <div className="col-xl-1 d-flex">
-                     <div>
+          <div className={`container-fluid py-4 px-2`}>
+            <div
+              style={{
+                display: "flex",
+                marginLeft: "10px",
+                paddingBottom: "10px",
+              }}
+            >
+              {" "}
+              {
+                reportListAll?.response?.data?.length > 0 && (
+                  // (isLoading ? (
+                  //   <Spin />
+                  // ) : (
+                  <>
+                    <div className="col-xl-1 d-flex">
+                      <div>
                         <input
                           type="checkbox"
                           onChange={handleHeaderCheckboxChange}
@@ -302,152 +313,152 @@ const InitialCard = ({
                       <span className={`pl-4 text-center ${styles.pName}`}>
                         All
                       </span>
-                     </div>
+                    </div>
 
-                      <div className="col-xl-1 d-flex">
-                        <div>
-                          <input
-                            type="checkbox"
-                            onChange={handleHeaderCheckbox}
-                            className={
-                              styles.checkAlign +
-                              (selectAllFlags
-                                ? " " + TableStyle.customChecked
-                                : "")
+                    <div className="col-xl-1 d-flex">
+                      <div>
+                        <input
+                          type="checkbox"
+                          onChange={handleHeaderCheckbox}
+                          className={
+                            styles.checkAlign +
+                            (selectAllFlags
+                              ? " " + TableStyle.customChecked
+                              : "")
+                          }
+                          checked={selectAllFlags}
+                        />
+                      </div>
+                      <span className={`pl-4 text-center ${styles.pName}`}>
+                        All Flags
+                      </span>
+                    </div>
+                  </>
+                )
+                // ))
+              }
+            </div>
+            <div className="row">
+              <div>
+                <div className=" col-xl-12 d-flex">
+                  {reportListAll?.response?.data?.length === 0 ? (
+                    <div
+                      className={`col-xl-6 ${styles.card}`}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Empty />
+                    </div>
+                  ) : (
+                    <div className="col-xl-6">
+                      <div className={styles.cardContainer}>
+                        {reportListAll?.response?.data?.map((item, id) => (
+                          <ContentGroupCard
+                            content={reportListAll?.response?.data}
+                            key={item?.id}
+                            item={item}
+                            flag={item?.patientFlagResponseDTOs}
+                            page={page}
+                            handleRowCheckboxChange={handleRowCheckboxChange}
+                            selectedRows={selectedRows}
+                            handleTableRowClick={handleTableRowClick}
+                            auditstatusBodyTemplate={auditstatusBodyTemplate(
+                              item
+                            )}
+                            processstatusBodyTemplate={processstatusBodyTemplate(
+                              item
+                            )}
+                            rafSum={item.rafSum}
+                            patientName={item.patientName}
+                            processedDate={item?.processedDate}
+                            patientId={item?.patientId}
+                            validDiseaseCount={item?.validDiseaseCount}
+                            auditedByFirstName={item?.auditedByFirstName}
+                            auditedByLastName={item?.auditedByLastName}
+                            auditedByProfileImage={item?.auditedByProfileImage}
+                            patientAllocatedFirstName={
+                              item?.patientAllocatedFirstName
                             }
-                            checked={selectAllFlags}
+                            patientAllocatedLastName={
+                              item?.patientAllocatedLastName
+                            }
+                            patientAllocatedProfileImage={
+                              item?.patientAllocatedProfileImage
+                            }
+                            loading={isLoading}
                           />
-                        </div>
-                        <span className={`pl-4 text-center ${styles.pName}`}>
-                          All Flags
-                        </span>
+                        ))}
                       </div>
-                    </>
-                  ))}
-              </div>
-              <div className="row">
-                <div>
-                  <div className=" col-xl-12 d-flex">
-                    {reportListAll?.response?.data?.length === 0 ? (
-                      <div
-                        className={`col-xl-6 ${styles.card}`}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <Empty />
-                      </div>
-                    ) : (
-                      <div className="col-xl-6">
-                        <div className={styles.cardContainer}>
-                          {reportListAll?.response?.data?.map((item, id) => (
-                            <ContentGroupCard
-                              content={reportListAll?.response?.data}
-                              key={item?.id}
-                              item={item}
-                              flag={item?.patientFlagResponseDTOs}
-                              page={page}
-                              handleRowCheckboxChange={handleRowCheckboxChange}
-                              selectedRows={selectedRows}
-                              handleTableRowClick={handleTableRowClick}
-                              auditstatusBodyTemplate={auditstatusBodyTemplate(
-                                item
-                              )}
-                              processstatusBodyTemplate={processstatusBodyTemplate(
-                                item
-                              )}
-                              rafSum={item.rafSum}
-                              patientName={item.patientName}
-                              processedDate={item?.processedDate}
-                              patientId={item?.patientId}
-                              validDiseaseCount={item?.validDiseaseCount}
-                              auditedByFirstName={item?.auditedByFirstName}
-                              auditedByLastName={item?.auditedByLastName}
-                              auditedByProfileImage={
-                                item?.auditedByProfileImage
-                              }
-                              patientAllocatedFirstName={
-                                item?.patientAllocatedFirstName
-                              }
-                              patientAllocatedLastName={
-                                item?.patientAllocatedLastName
-                              }
-                              patientAllocatedProfileImage={
-                                item?.patientAllocatedProfileImage
-                              }
+                    </div>
+                  )}
+
+                  <div className={`col-xl-6 ${styles.cardSeperation}`}>
+                    <div className={styles.cardContainer}>
+                      <div className={styles.card1}>
+                        <div className={styles.summaryText}>Summary</div>
+                        <div className="col-xl-12 d-flex mt-0">
+                          {subCardData.map((card, index) => (
+                            <SubCard
+                              key={card?.id}
+                              title={card.title}
+                              value={card.value}
                             />
                           ))}
                         </div>
-                      </div>
-                    )}
-
-                    <div className={`col-xl-6 ${styles.cardSeperation}`}>
-                      <div className={styles.cardContainer}>
-                        <div className={styles.card1}>
-                          <div className={styles.summaryText}>Summary</div>
-                          <div className="col-xl-12 d-flex mt-0">
-                            {subCardData.map((card, index) => (
-                              <SubCard
-                                key={card?.id}
-                                title={card.title}
-                                value={card.value}
-                              />
-                            ))}
-                          </div>
-                          <div className={` pt-2 ${styles.summaryText}`}>
-                            Production Status
-                          </div>
-                          <div className="row g-3">
-                            {card1Data?.map((data) => (
-                              <MiniCards
-                                key={data?.id}
-                                backgroundColor={data.bg}
-                                icon={data?.icon}
-                                title={data.title}
-                                charts={data.charts}
-                                styles={styles}
-                                activeTab={activeTab}
-                              />
-                            ))}
-                          </div>
-                          <div className={` pt-2 ${styles.summaryText}`}>
-                            Audit Status
-                          </div>
-
-                          <div className="row g-3">
-                            {accuracyStatus?.map((data) => (
-                              <MiniCards
-                                key={data?.id}
-                                backgroundColor={data.bg}
-                                icon={data?.icon}
-                                title={data.title}
-                                charts={data.charts}
-                                styles={styles}
-                                activeTab={activeTab}
-                              />
-                            ))}
-                          </div>
-                          <div className="col-xl-12  d-flex mt-3">
-                            <Flags
-                              reportListAll={reportListAll}
+                        <div className={` pt-2 ${styles.summaryText}`}>
+                          Production Status
+                        </div>
+                        <div className="row g-3">
+                          {card1Data?.map((data) => (
+                            <MiniCards
+                              key={data?.id}
+                              backgroundColor={data.bg}
+                              icon={data?.icon}
+                              title={data.title}
+                              charts={data.charts}
                               styles={styles}
+                              activeTab={activeTab}
                             />
-                            {activeTab === "Reviewer"
-                              ? ""
-                              : allocationCountData.map((item, index) => (
-                                  <AllocationCount
-                                    key={item?.id}
-                                    title={item?.title}
-                                    allocationCount={item?.allocationCount}
-                                    renderUserPrfoileAvatar={
-                                      renderUserPrfoileAvatar
-                                    }
-                                    styles={styles}
-                                  />
-                                ))}
-                          </div>
+                          ))}
+                        </div>
+                        <div className={` pt-2 ${styles.summaryText}`}>
+                          Audit Status
+                        </div>
+
+                        <div className="row g-3">
+                          {accuracyStatus?.map((data) => (
+                            <MiniCards
+                              key={data?.id}
+                              backgroundColor={data.bg}
+                              icon={data?.icon}
+                              title={data.title}
+                              charts={data.charts}
+                              styles={styles}
+                              activeTab={activeTab}
+                            />
+                          ))}
+                        </div>
+                        <div className="col-xl-12  d-flex mt-3">
+                          <Flags
+                            reportListAll={reportListAll}
+                            styles={styles}
+                          />
+                          {activeTab === "Reviewer"
+                            ? ""
+                            : allocationCountData.map((item, index) => (
+                                <AllocationCount
+                                  key={item?.id}
+                                  title={item?.title}
+                                  allocationCount={item?.allocationCount}
+                                  renderUserPrfoileAvatar={
+                                    renderUserPrfoileAvatar
+                                  }
+                                  styles={styles}
+                                />
+                              ))}
                         </div>
                       </div>
                     </div>
@@ -455,7 +466,8 @@ const InitialCard = ({
                 </div>
               </div>
             </div>
-          )}
+          </div>
+           )} 
         </div>
       </div>
       {reportListAll?.response?.data?.length > 0 ? (
@@ -473,7 +485,7 @@ const enhancer = connect(
   (state) => ({
     getFlagsData: state?.reviewer?.workQueue?.flags?.data,
     ReportPatientDetails: state?.reviewer?.report?.reviewer?.data,
-    adminLoader:state?.admin?.report
+    adminLoader: state?.admin?.report,
   }),
   {
     reviewerReport: reviewerAction.reviewerReport,
