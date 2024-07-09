@@ -107,6 +107,6 @@ export const radiologyDosDeatilsAction = createActionThunk(
 );
 
 export const labDosDeatilsAction = createActionThunk(
-  "RADIOLOGY_DOS_LIST",
+  "LAB_DOS_LIST",
   network.labdosWiseList
 );
