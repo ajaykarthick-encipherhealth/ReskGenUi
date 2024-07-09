@@ -35,7 +35,7 @@ const index = ({ getTopOigCodesData, top0ijHccCodes }) => {
 const enhancer = connect(
   (state) => ({
     top0ijHccCodes:
-      state?.tenantAdmin?.tenantAdmindefault?.allTopOigCodes?.data,
+      state?.tenantAdmin?.dashboard?.default?.allTopOigCodes?.data,
   }),
   {
     getTopOigCodesData: allActions?.topOigCodes,
