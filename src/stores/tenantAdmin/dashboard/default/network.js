@@ -44,7 +44,7 @@ export async function getAllRafScore(startDate, endDate,organizationId) {
 }
 
 //reveniew
-export async function getAllRaf(startDate, endDate) {
+export async function getAllRaf(startDate, endDate ,organizationId) {
   const options = {
     method: "GET",
   };
@@ -52,7 +52,7 @@ export async function getAllRaf(startDate, endDate) {
   const formattedEndDate = endDate ? new Date(endDate).toISOString() : "";
 
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/raf/premium/chart?startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
+    `dbservice/tenantadmin/dashboard/raf/premium/chart?startDate=${formattedStartDate}&endDate=${formattedEndDate}&organizationId=${organizationId?organizationId:""}`,
     options
   );
   return data;

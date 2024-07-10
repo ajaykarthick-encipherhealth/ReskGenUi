@@ -17,6 +17,7 @@ const RevenueGraph = ({
   rafColor2,
   rafColor3,
   isMultiple,
+  selectedOrganization,
 }) => {
   const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
     ? Object.values(getAllRaf.premiumByDateForHcc)

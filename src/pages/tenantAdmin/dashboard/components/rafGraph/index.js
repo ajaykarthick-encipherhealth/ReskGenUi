@@ -30,9 +30,10 @@ const RafGraph = ({
     getAllRafScore(
       dateRange.startDate,
       dateRange.endDate,
-      selectedOrganization
+      selectedOrganization,
     );
   }, [dateRange, selectedOrganization]);
+
 
   const rafScoreByDateForSuggested =
     getAllRafScoreData?.rafScoreByDateForSuggested

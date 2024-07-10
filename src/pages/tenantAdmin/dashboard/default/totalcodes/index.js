@@ -27,8 +27,6 @@ const index = ({
   selectedOrganization,
   selectedValue,
 }) => {
-  
-
   useEffect(() => {
     getAllHccCodesData(
       dateRange?.startDate,
@@ -46,11 +44,8 @@ const index = ({
       ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
       : [];
   useEffect(() => {
-    const fetchChartData = async () => {
-      const data = await getAllRafData(dateRange.startDate, dateRange.endDate);
-    };
-    fetchChartData();
-  }, [dateRange]);
+    getAllRafData(dateRange.startDate, dateRange.endDate, selectedOrganization);
+  }, [dateRange, selectedOrganization]);
 
   const options = {
     xAxis: {
@@ -137,6 +132,7 @@ const index = ({
   const hccDiseaseCountMap = getAllRafScoreData?.totalHccRaf;
   const suggestedCount = getAllRafScoreData?.totalSuggestedRaf;
   const totalScoreTwo = hccDiseaseCountMap + suggestedCount;
+  console.log(getAllRaf, "getAllRaf");
 
   return (
     <div className="d-flex justify-content-between">
@@ -236,7 +232,11 @@ const index = ({
           </div>
         </div>
         <div className="totalCodesPies2">
-          <RevenueGraph isMultiple={true} selectedValue={selectedValue} />
+          <RevenueGraph
+            selectedOrganization={selectedOrganization}
+            isMultiple={true}
+            selectedValue={selectedValue}
+          />
         </div>
       </div>
     </div>
