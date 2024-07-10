@@ -8,8 +8,8 @@ import completed from "../../../../../images/tenantAdmin/completed.svg";
 import upload from "../../../../../images/tenantAdmin/upload.svg";
 import codeCaptured from "../../../../../images/tenantAdmin/codecaptured.svg";
 import { actions as defaultActions } from "../../../../../stores/tenantAdmin/dashboard/default";
-import { Skeleton, Spin } from "antd";
-import moment from "moment";
+import { Empty, Skeleton, Spin } from "antd";
+
 
 
 const Files = ({
@@ -38,7 +38,7 @@ const Files = ({
       );
     }
 
-    return dates;
+    return dates.reverse();
   }
   const date_thirty_days = [];
 
@@ -236,15 +236,15 @@ const Files = ({
         </div>
       ) : computingStatusLoader ? (
         <div className="d-flex justify-content-center align-items-center">
-          {" "}
           <Spin size="large" />
         </div>
-      ) : (
+      ) : getAllComputingStatus?.COMPUTED?.length >0? (
+        
         <div className="totalCodesPies3">
           <CodesGraph options={options} />
         </div>
         
-      )}
+      ):<Empty className="mt-3"/>}
     </div>
   );
 };

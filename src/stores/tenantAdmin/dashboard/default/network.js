@@ -14,7 +14,7 @@ export async function getAllFilesCount(startDate, endDate, organizationId) {
   return data;
 }
 
-export async function getAllHccCodes(startDate, endDate) {
+export async function getAllHccCodes(startDate, endDate,organizationId) {
   const options = {
     method: "GET",
   };
@@ -22,14 +22,14 @@ export async function getAllHccCodes(startDate, endDate) {
   const formattedEndDate = endDate ? new Date(endDate).toISOString() : "";
 
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/totalcodes/chart?startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
+    `dbservice/tenantadmin/dashboard/totalcodes/chart?startDate=${formattedStartDate}&endDate=${formattedEndDate}&organizationId=${organizationId}`,
     options
   );
   return data;
 }
 
 //rafScore
-export async function getAllRafScore(startDate, endDate) {
+export async function getAllRafScore(startDate, endDate,organizationId) {
   const options = {
     method: "GET",
   };
@@ -37,7 +37,7 @@ export async function getAllRafScore(startDate, endDate) {
   const formattedEndDate = endDate ? new Date(endDate).toISOString() : "";
 
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/raf/score/chart?startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
+    `dbservice/tenantadmin/dashboard/raf/score/chart?startDate=${startDate}&endDate=${endDate}&organizationId=${organizationId?organizationId:""}`,
     options
   );
   return data;

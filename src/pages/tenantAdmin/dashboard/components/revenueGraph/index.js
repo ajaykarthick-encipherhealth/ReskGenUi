@@ -5,24 +5,17 @@ import {
   HccCodes,
   RafCounts,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
+import { getLast30Days, getLast7Days } from "../../../../../utils/reusable.js";
 
 const RevenueGraph = ({
-  isMultiple,
   hccColor,
   cargapColor,
-  getAllHccCodesData,
-  getAllHccCodes,
-  getAllRafData,
   getAllRaf,
-  chartRevenData,
   isHcc,
   isCargaps,
+  selectedValue,
 }) => {
-  const [currChartData, setCurrChartData] = useState(new Map());
-
-  useEffect(() => {
-    setCurrChartData(chartRevenData);
-  }, [currChartData]);
+ 
 
   const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
     ? Object.values(getAllRaf.premiumByDateForHcc)
@@ -37,9 +30,6 @@ const RevenueGraph = ({
       ? [...premiumByDateForHcc, ...premiumByDateForSuggested]
       : [];
   const option = {
-    // title: {
-    //   text: "Step Line",
-    // },
     tooltip: {
       trigger: "axis",
     },
@@ -52,30 +42,9 @@ const RevenueGraph = ({
       bottom: "3%",
       containLabel: true,
     },
-    // toolbox: {
-    //   feature: {
-    //     saveAsImage: {},
-    //   },
-    // },
     xAxis: {
       type: "category",
-      data:
-        isHcc || isCargaps
-          ? [...chartRevenData.keys()]
-          : [
-              "jan",
-              "feb",
-              "mar",
-              "apr",
-              "may",
-              "jun",
-              "jul",
-              "aug",
-              "sep",
-              "oct",
-              "nov",
-              "dec",
-            ],
+      data: selectedValue === "last_1_week" ? getLast7Days() : getLast30Days(),
     },
     yAxis: {
       type: "value",
@@ -94,9 +63,7 @@ const RevenueGraph = ({
         name: "HCC Codes",
         type: "line",
         step: "middle",
-
         data: premiumByDateForHcc,
-
         itemStyle: {
           color: "#04B700",
         },
@@ -113,10 +80,7 @@ const RevenueGraph = ({
     ],
   };
 
-  useEffect(() => {
-    getAllHccCodesData();
-    getAllRafData();
-  }, []);
+
 
   return <ReactECharts option={option} />;
 };

@@ -6,46 +6,41 @@ import {
   RafCounts,
   getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
+import { getLast30Days, getLast7Days } from "../../../../../utils/reusable.js";
+import moment from "moment";
 const RafGraph = ({
   rafColor,
   rafColor2,
   rafColor3,
   isCargaps,
   isHcc,
-  getAllRafData,
-  getAllHccCodes,
-  getAllHccCodesData,
-  getAllRaf,
   getAllRafScoreData,
   getAllRafScore,
-  chartRafData,
+  selectedValue,
+  selectedOrganization,
 }) => {
-  const [dateRange, setDateRange] = useState({ startDate: "", endDate: "" });
+  const [dateRange, setDateRange] = useState({
+    startDate:
+      moment().subtract(29, "days").format("YYYY-MM-DD") + "T00:00:00.000Z",
+    endDate: moment().format("YYYY-MM-DD") + "T23:59:59.000Z",
+  });
+
 
   useEffect(() => {
-    const fetchData = async () => {
-      await getAllHccCodesData(dateRange.startDate, dateRange.endDate);
-      await getAllRafData(dateRange.startDate, dateRange.endDate);
-      await getAllRafScore(dateRange.startDate, dateRange.endDate);
-    };
-    fetchData();
-  }, [dateRange]);
+    getAllRafScore(
+      dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization
+    );
+  }, [dateRange, selectedOrganization]);
 
-  const [rafState, setRafState] = useState();
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getAllRafScore(dateRange.startDate, dateRange.endDate);
-      setRafState(data.response);
-    };
-    fetchData();
-  }, []);
+  const rafScoreByDateForSuggested =
+    getAllRafScoreData?.rafScoreByDateForSuggested
+      ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
+      : [];
 
-  const rafScoreByDateForSuggested = rafState?.rafScoreByDateForSuggested
-    ? Object.values(rafState.rafScoreByDateForSuggested)
-    : [];
-
-  const rafScoreByDateForHcc = rafState?.rafScoreByDateForHcc
-    ? Object.values(rafState.rafScoreByDateForHcc)
+  const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc
+    ? Object.values(getAllRafScoreData.rafScoreByDateForHcc)
     : [];
 
   const option = {
@@ -53,19 +48,11 @@ const RafGraph = ({
       trigger: "axis",
       axisPointer: {
         type: "cross",
-        // label: {
-        //   backgroundColor: rafColor,
-        // },
       },
     },
     legend: {
       show: false,
     },
-    // toolbox: {
-    //   feature: {
-    //     saveAsImage: {}
-    //   }
-    // },
     grid: {
       left: "3%",
       right: "4%",
@@ -77,22 +64,7 @@ const RafGraph = ({
         type: "category",
         boundaryGap: false,
         data:
-          isHcc || isCargaps
-            ? [...chartRafData?.keys()]
-            : [
-                "jan",
-                "feb",
-                "mar",
-                "apr",
-                "may",
-                "jun",
-                "jul",
-                "aug",
-                "sep",
-                "oct",
-                "nov",
-                "dec",
-              ],
+          selectedValue === "last_1_week" ? getLast7Days() : getLast30Days(),
       },
     ],
     yAxis: [
@@ -113,17 +85,11 @@ const RafGraph = ({
         emphasis: {
           focus: "series",
         },
-        // data: rafColor ,
-
         data: isHcc
-          ? [...chartRafData.keys()].length != 12
-            ? [...chartRafData.values()]
-            : rafScoreByDateForSuggested
+          ? rafScoreByDateForSuggested
           : isCargaps
-          ? [...chartRafData.keys()].length != 12
-            ? [...chartRafData.values()]
-            : rafScoreByDateForHcc
-          : [10, 20, 30, 44, 21],
+          ? rafScoreByDateForHcc
+          : "",
       },
 
       {
