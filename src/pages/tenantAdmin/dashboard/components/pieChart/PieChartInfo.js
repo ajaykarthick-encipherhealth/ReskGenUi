@@ -76,11 +76,11 @@ const index = ({data,header}) => {
         </div>
       </Col>
       <Col span={12} className={styles.headerTitle}>
-        <div>
+        <div style={{width:"100%"}}>
           {data?.map((item) => {
             return (
               <div className={styles.container}>
-                <div style={{ display: "flex", width: "90%" }}>
+                <div style={{ display: "flex", }}>
                   <div
                     className={styles.bgColor}
                     style={{

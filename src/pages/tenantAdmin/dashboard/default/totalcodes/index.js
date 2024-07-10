@@ -131,6 +131,13 @@ const index = ({
     },
   ];
 
+  const totalHccRafScore = getAllRaf?.totalHccRafScore;
+  const totalSuggestedRafScore = getAllRaf?.totalSuggestedRafScore;
+  const totalScore = totalHccRafScore + totalSuggestedRafScore;
+  const hccDiseaseCountMap = getAllRafScoreData?.totalHccRaf;
+  const suggestedCount = getAllRafScoreData?.totalSuggestedRaf;
+  const totalScoreTwo = hccDiseaseCountMap + suggestedCount;
+
   return (
     <div className="d-flex justify-content-between">
       <div style={{ width: "33%" }}>
@@ -197,9 +204,7 @@ const index = ({
             <div className="p-1">
               <div className={styles.header}>Overall RAF</div>
 
-              <div className={styles.price}>
-                {getAllRafScoreData?.totalHccRaf}
-              </div>
+              <div className={styles.price}>{totalScoreTwo}</div>
             </div>
           </div>
         </div>
@@ -226,9 +231,7 @@ const index = ({
             <div className={`${styles.header} p-1`}>Revenue</div>
             <div className="p-1">
               <div className={styles.header}>Overall Revenue</div>
-              <div
-                className={styles.price}
-              >{`$ ${getAllRaf?.totalHccRafScore}`}</div>
+              <div className={styles.price}>{`$ ${totalScore}`}</div>
             </div>
           </div>
         </div>

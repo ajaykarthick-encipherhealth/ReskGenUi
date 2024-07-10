@@ -33,7 +33,7 @@ const CodesGraph = ({
     getAllHccCodes?.suggestedHccDiseaseCountMap
       ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
       : [];
-  
+    
   const graphOptions = {
     xAxis: {
       type: "category",

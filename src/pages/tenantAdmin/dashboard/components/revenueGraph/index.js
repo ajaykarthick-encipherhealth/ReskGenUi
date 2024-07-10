@@ -14,9 +14,9 @@ const RevenueGraph = ({
   isHcc,
   isCargaps,
   selectedValue,
+  rafColor2,
+  rafColor3,
 }) => {
- 
-
   const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
     ? Object.values(getAllRaf.premiumByDateForHcc)
     : [];
@@ -51,19 +51,25 @@ const RevenueGraph = ({
     },
     series: [
       {
-        name: "Total Codes",
+        name: isHcc ? "Hcc Codes" : isCargaps ? "Car Gapcodes" : "Total Codes",
         type: "line",
         step: "start",
-        data: [],
-        itemStyle: {
-          color: hccColor ? hccColor : cargapColor ? cargapColor : "#E88D67",
-        },
+        data: isHcc
+          ? premiumByDateForHcc
+          : isCargaps
+          ? premiumByDateForSuggested
+          : [12, 32, 45, 10, 20, 30, 40, 50, 60, 70, 12, 44, 56, 67, 34, 23],
       },
       {
         name: "HCC Codes",
         type: "line",
         step: "middle",
-        data: premiumByDateForHcc,
+        emphasis: {
+          focus: "series",
+        },
+
+        data: isMultiple ? premiumByDateForHcc : [],
+
         itemStyle: {
           color: "#04B700",
         },
@@ -72,15 +78,13 @@ const RevenueGraph = ({
         name: "Car gap Codes",
         type: "line",
         step: "end",
-        data: premiumByDateForSuggested,
+        data: isMultiple ? premiumByDateForSuggested : [],
         itemStyle: {
           color: "#FF9209",
         },
       },
     ],
   };
-
-
 
   return <ReactECharts option={option} />;
 };

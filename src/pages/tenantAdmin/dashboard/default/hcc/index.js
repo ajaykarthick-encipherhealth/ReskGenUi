@@ -19,7 +19,6 @@ const index = ({
   selectedOrganization,
   selectedValue,
 }) => {
-
   return (
     <div className="d-flex justify-content-between">
       <div className="remianingLineGraph" style={{ width: "33%" }}>

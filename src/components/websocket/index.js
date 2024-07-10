@@ -50,9 +50,9 @@ const ConnectWebSocket = ({
 
 const enhancer = connect(
   (state) => ({
-    webSocketData: state?.webSocket?.webSocketDetails?.data,
+    webSocketData: state?.tenantAdmin?.webSocket?.webSocketDetails?.data,
     webSocketNotificationData:
-      state?.webSocket?.webSocketNotificationDetails?.data,
+      state?.tenantAdmin?.webSocket?.webSocketNotificationDetails?.data,
     notificationResponse:
       state?.reviewer?.dashboard?.notification?.data?.response,
   }),

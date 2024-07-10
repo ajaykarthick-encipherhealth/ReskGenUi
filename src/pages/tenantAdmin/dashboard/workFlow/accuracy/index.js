@@ -1057,7 +1057,7 @@ const Accuracy = () => {
         <div className="d-flex justify-content-between">
           <div style={{ width: "50%" }}>
             <HeadTitle header="Accuracy and Quality Insights"
-             fontSize="16px" margin="0px" />
+             fontSize="20px" margin="0px" />
           </div>
           <div className="d-flex">
             <div className={styles.btnScroller}>

@@ -33,8 +33,9 @@ const Radiology = ({
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [dosYear, setDosYear] = useState([]);
   const [dosYearDefalutSelect, setDosYearDefalutSelect] = useState("");
-  const [selectedDosValue, setSelectedDosValue] = useState("");
-console.log(patientDosResult?.data?.response, "testing");
+  const [selectedYearValue, setSelectedYearValue] = useState(["2023"]);
+  const [search, setSearch] = useState();
+
   const selectTab = (num) => {
     setActiveTabHead(num);
     if (num == 4) {
@@ -75,7 +76,7 @@ console.log(patientDosResult?.data?.response, "testing");
       dosYearArr.push({ value: res, label: res });
     });
     // setDosYearDefalutSelect(dosYearArr[0]);
-    setSelectedDosValue(dosYearArr[0].value);
+    setSelectedYearValue(dosYearArr[0].value);
     setDosYear(dosYearArr);
   };
 
@@ -85,10 +86,9 @@ console.log(patientDosResult?.data?.response, "testing");
 
   useEffect(() => {
     if (radiologyDetailsResult?.data?.response) {
-      if (radiologyDetailsResult?.data?.response?.radiologyFileDetail) {
+      if (radiologyDetailsResult?.data?.response?.fileDetailDTO) {
         getRadiologyFileDetails(
-          radiologyDetailsResult?.data?.response?.radiologyFileDetail[0]
-            .azureBlobPath
+          radiologyDetailsResult?.data?.response?.fileDetailDTO?.radiologyAzureBlobPaths[0]
         );
         setIsLoading(true);
       }
@@ -101,51 +101,10 @@ console.log(patientDosResult?.data?.response, "testing");
     }, 10000);
   }, [activeMeatTitle]);
 
-  // const exmpleData = [
-  //   {
-  //     dos: "2023-10-25",
-  //     startPageNumber: 1,
-  //     endPagNumber: 3,
-  //     dosWiseFlag: null,
-  //     suspectTypes: null,
-  //     processStage: null,
-  //     radiologyTestName: "CT-Scan",
-  //   },
-  //   {
-  //     dos: "2023-04-06",
-  //     startPageNumber: 4,
-  //     endPagNumber: 10,
-  //     dosWiseFlag: null,
-  //     suspectTypes: null,
-  //     processStage: null,
-  //     radiologyTestName: "Ultra sound",
-  //   },
-  //   {
-  //     dos: "2023-01-17",
-  //     startPageNumber: 11,
-  //     endPagNumber: 14,
-  //     dosWiseFlag: null,
-  //     suspectTypes: null,
-  //     processStage: null,
-  //     radiologyTestName: "ECHO",
-  //   },
-  //   {
-  //     dos: "2023-01-20",
-  //     startPageNumber: 15,
-  //     endPagNumber: 18,
-  //     dosWiseFlag: null,
-  //     suspectTypes: null,
-  //     processStage: null,
-  //     radiologyTestName: "MRI",
-  //   },
-  // ];
-
   useEffect(() => {
-    // if (patientDosResult?.data?.response) {
+    if (patientDosResult?.data?.response) {
     setSelectDosValue();
     var dosList = [];
-
-    // patientDosResult?.data?.response?.map((res, index) => {
       patientDosResult?.data?.response?.map((res, index) => {
       if (res) {
         var dosLable = (
@@ -165,15 +124,15 @@ console.log(patientDosResult?.data?.response, "testing");
     // if (patientDetailsResult?.data?.response?.dateOfService) {
     //   setSelectDosValue(patientDetailsResult?.data?.response?.dateOfService);
     // }
-    // }
+    }
   }, []);
 
   const handleChangePageNumber = async (value) => {
     setPopoverVisible(false);
-    // setSearch({
-    //   value: "",
-    //   page: value,
-    // });
+    setSearch({
+      value: "",
+      page: value,
+    });
   };
 
   const PopContent = (
@@ -326,8 +285,7 @@ console.log(patientDosResult?.data?.response, "testing");
                         placeholder="Select Year"
                         onChange={handleOptions}
                         className="dosSelect"
-                        allowClear
-                        // value={selectDosValue}
+                        value={selectedYearValue}
                         style={{ marginRight: "10px" }}
                       >
                         {dosYear?.map((data) => (
@@ -394,6 +352,8 @@ console.log(patientDosResult?.data?.response, "testing");
                     <File
                       setActiveTabHead={setActiveTabHead}
                       setActiveMeatTitle={setActiveMeatTitle}
+                      search={search}
+                      setSearch={setSearch}
                     />
                   </Tab.Pane>
                   <Tab.Pane id="my-posts" eventKey={2}>
