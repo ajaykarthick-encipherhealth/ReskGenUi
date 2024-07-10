@@ -207,7 +207,7 @@ const index = ({
   //   };
   //   fetchData();
   // }, [dateRange]);
-
+  
   return (
     <div className="d-flex justify-content-between">
       <div className="remianingLineGraph" style={{ width: "33%" }}>
@@ -216,7 +216,8 @@ const index = ({
             <div className={styles.header}>HCC Codes</div>
             <div>
               <div className={styles.header}>Total Codes</div>
-              <div className={styles.price}>{getAllHccCodes?.totalCount}</div>
+              <div className={styles.price}>{getAllHccCodes?.hccCount
+              }</div>
             </div>
           </div>
         </div>
@@ -227,6 +228,7 @@ const index = ({
           gradientColor2={"#FAFFFA"}
           borderColor={"#04B700"}
           isHcc={true}
+          totalChart={true}
           chartData={chartData}
           chartData1={chartData1}
         />
