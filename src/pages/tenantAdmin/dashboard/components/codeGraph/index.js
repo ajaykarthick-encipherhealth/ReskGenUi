@@ -5,8 +5,9 @@ import { connect } from "react-redux";
 import {
   HccCodes,
   RafCounts,
-  RafCountScore
+  RafCountScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
+import { getLast30Days, getLast7Days } from "../../../../../utils/reusable.js";
 
 const CodesGraph = ({
   options,
@@ -19,31 +20,10 @@ const CodesGraph = ({
   isHcc,
   isRadio,
   isRevenue,
-  getAllRafData,
   getAllHccCodes,
-  getAllHccCodesData,
-  getAllRaf,
-  getAllRafScoreData,
-  chartData,
-  getAllRafScore,
+  selectedValue,
+
 }) => {
-  const [dateRange, setDateRange] = useState({ startDate: "", endDate: "" });
-  const [currChartData, setCurrChartData] = useState(new Map());
-
-  useEffect(() => {
-    setCurrChartData(new Map());
-  }, [chartData]);
-
-  useEffect(() => {
-    setCurrChartData(chartData);
-  }, [currChartData, isCargaps]);
-
-
-  useEffect(() => {
-    getAllHccCodesData(dateRange.startDate, dateRange.endDate);
-    // getAllRafScore();
-    getAllRafData(dateRange.startDate, dateRange.endDate);
-  }, [dateRange]);
 
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
     ? Object.values(getAllHccCodes.hccDiseaseCountMap)
@@ -55,26 +35,9 @@ const CodesGraph = ({
       : [];
     
   const graphOptions = {
-    
     xAxis: {
       type: "category",
-      data:
-        isHcc || isCargaps
-          ? [...currChartData.keys()]
-          : [
-              "jan",
-              "feb",
-              "mar",
-              "apr",
-              "may",
-              "jun",
-              "jul",
-              "aug",
-              "sep",
-              "oct",
-              "nov",
-              "dec",
-            ],
+        data: selectedValue === "last_1_week" ? getLast7Days() : getLast30Days(),
     },
 
     yAxis: {
@@ -84,12 +47,6 @@ const CodesGraph = ({
     tooltip: {
       show: true,
       trigger: "axis",
-      //   formatter: function (params) {
-      //     const dataIndex = params[0]?.dataIndex;
-      //     const allocatedValue = allocatedValues[dataIndex];
-      //     const auditedValue = auditedValues[dataIndex];
-      //     return `Allocated: ${auditedValue}<br/>Completed: ${allocatedValue}`;
-      //   },
     },
 
     series: [
@@ -101,21 +58,17 @@ const CodesGraph = ({
           : isRevenue
           ? "Revenue"
           : isTwoWaves && "Radiology",
-        data:
-          isHcc 
-            ? [...chartData.keys()].length != 12
-              ? hccDiseaseCountValues
-              : [...chartData.values()]
-            : isCargaps
-            ? suggestedHccDiseaseCountMap
-            : [12, 32, 45, 10, 20, 30, 40, 50, 60, 70, 12, 44, 56, 67, 34, 23],
-            
+        data: isHcc
+          ? hccDiseaseCountValues
+          : isCargaps
+          ? suggestedHccDiseaseCountMap
+          : [12, 32, 45, 10, 20, 30, 40, 50, 60, 70, 12, 44, 56, 67, 34, 23],
         type: "line",
         lineStyle: { color: borderColor },
         smooth: true,
         showSymbol: false,
         itemStyle: {
-           color: isHcc?gradientColor1 :isCargaps? "orange":""
+          color: isHcc ? gradientColor1 : isCargaps ? "orange" : "",
         },
         areaStyle: gradientColor1 &&
           gradientColor2 && {
@@ -145,7 +98,7 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allHccCodes?.data?.response,
     getAllRaf:
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
-      getAllRafScoreData:
+    getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScore?.data?.response,
   }),
   {

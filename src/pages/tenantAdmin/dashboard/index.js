@@ -23,6 +23,7 @@ import PieChartInfo from "./components/pieChart/PieChartInfo";
 import OrgPieChartInfo from "./components/OrgPieChart/OrgPieChartInfo";
 import { Row, Skeleton, Spin } from "antd";
 import moment from "moment";
+import { getLast30Days } from "../../../utils/reusable";
 
 const Index = ({
   getUserStatusData,
@@ -44,7 +45,7 @@ const Index = ({
 }) => {
   const [activeBtn, setActiveBtn] = useState("default");
   const [loaderButton, setLoaderButton] = useState(true);
-  const [selectedValue, setSelectedValue] = useState(null)
+  const [selectedValue, setSelectedValue] = useState(null);
   const [dateRange, setDateRange] = useState({
     startDate:
       moment().subtract(29, "days").format("YYYY-MM-DD") + "T00:00:00.000Z",
@@ -64,6 +65,7 @@ const Index = ({
       itemStyle: { color: "#AF47D2" },
     },
   ];
+  
   const reviewerData = [
     {
       value: reviewerStatusData?.response?.processedStatus?.COMPLETED,
@@ -86,6 +88,7 @@ const Index = ({
       itemStyle: { color: "#EB5252" },
     },
   ];
+  
 
   const auditorData = [
     {
@@ -168,7 +171,6 @@ const Index = ({
     </div>
   );
 
-
   useEffect(() => {
     getUserStatusData(
       dateRange.startDate,
@@ -191,10 +193,12 @@ const Index = ({
       selectedOrganization
     );
     getOrganizationStatusData();
-    getTop10DiseasesData(dateRange.startDate, dateRange.endDate,selectedOrganization);
-  }, [dateRange,selectedOrganization]);
-
-  
+    getTop10DiseasesData(
+      dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization
+    );
+  }, [dateRange, selectedOrganization]);
 
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
@@ -217,11 +221,11 @@ const Index = ({
               <div className={`row ${styles.box}`}>
                 <div className={`col-lg-4`}>
                   <Card padding="10px" borderRadius={"10px"}>
-
-
-                    <TotalCounts dateRange={dateRange} selectedOrganization={selectedOrganization}  loaderButton={loaderButton}/>
-
-
+                    <TotalCounts
+                      dateRange={dateRange}
+                      selectedOrganization={selectedOrganization}
+                      loaderButton={loaderButton}
+                    />
                   </Card>
                 </div>
                 <div className={`col`}>
@@ -238,9 +242,12 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-       <TotalCodes dateRange={dateRange} selectedOrganization={selectedOrganization}    loaderButton={loaderButton}/>
-
-
+                    <TotalCodes
+                      dateRange={dateRange}
+                      selectedOrganization={selectedOrganization}
+                      loaderButton={loaderButton}
+                      selectedValue={selectedValue}
+                    />
                   </Card>
                 </div>
               </div>
@@ -248,11 +255,12 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-
-
-                    <HccCodes dateRange={dateRange} selectedOrganization={selectedOrganization}    loaderButton={loaderButton}/>
-
-
+                    <HccCodes
+                      dateRange={dateRange}
+                      selectedOrganization={selectedOrganization}
+                      loaderButton={loaderButton}
+                      selectedValue={selectedValue}
+                    />
                   </Card>
                 </div>
               </div>
@@ -263,6 +271,7 @@ const Index = ({
                     <CaregapCodes
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
+                      selectedValue={selectedValue}
                     />
                   </Card>
                 </div>
@@ -279,10 +288,12 @@ const Index = ({
                 </div>
                 <div className={`col-lg-8`}>
                   <Card padding="10px" borderRadius={"10px"}>
-
-                    <Files dateRange={dateRange} selectedOrganization={selectedOrganization} loaderButton={loaderButton}  selectedValue={selectedValue}/>
-
-
+                    <Files
+                      dateRange={dateRange}
+                      selectedOrganization={selectedOrganization}
+                      loaderButton={loaderButton}
+                      selectedValue={selectedValue}
+                    />
                   </Card>
                 </div>
               </div>
@@ -327,9 +338,11 @@ const Index = ({
                   <Card padding="10px" borderRadius={"10px"}>
                     <HeadTitle header="Files" fontSize="16px" />
 
-                    <WorkFlowFiles dateRange={dateRange}
-                      selectedOrganization={selectedOrganization} loaderButton={loaderButton} />
-
+                    <WorkFlowFiles
+                      dateRange={dateRange}
+                      selectedOrganization={selectedOrganization}
+                      loaderButton={loaderButton}
+                    />
                   </Card>
                 </div>
               </div>
@@ -343,7 +356,7 @@ const Index = ({
                       <div>{renderCardSkeleton()}</div>
                     ) : allocatedLoader ? (
                       <div className="d-flex justify-content-center align-items-center">
-                      <Spin size="large" />
+                        <Spin size="large" />
                       </div>
                     ) : (
                       <PieChartInfo data={allocatedData} header="Allocated" />
@@ -444,7 +457,7 @@ const enhancer = connect(
     getReviewerStatusData: dashboardWorkflowActions?.reviewerStatusAction,
     getOrganizationStatusData:
       dashboardWorkflowActions?.organizationStatusAction,
-      getTop10DiseasesData: defaultActions.top10Diseases,
+    getTop10DiseasesData: defaultActions.top10Diseases,
   }
 );
 export default enhancer(Index);

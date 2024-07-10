@@ -13,6 +13,7 @@ import {
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 import moment from "moment";
 import { Skeleton } from "antd";
+import { getLast30Days, getLast7Days } from "../../../../../utils/reusable.js";
 
 const index = ({
   getAllHccCodesData,
@@ -24,88 +25,17 @@ const index = ({
   totalCodesLoader,
   getAllRafData,
   selectedOrganization,
+  selectedValue,
 }) => {
-  const [currChartData, setCurrChartData] = useState(new Map());
-  const [chartData, setChartData] = useState(new Map());
-  const [chartData1, setChartData1] = useState(new Map());
-  const [chartRafData1, setRafChartData1] = useState(new Map());
-
-  const [chartRevenData, setRevenChartData] = useState(new Map());
-  const [chartRevenData1, setRevenChartData1] = useState(new Map());
-
-  const ShortMonth = [
-    "",
-    "jan",
-    "feb",
-    "mar",
-    "apr",
-    "may",
-    "jun",
-    "jul",
-    "aug",
-    "sep",
-    "oct",
-    "nov",
-    "dec",
-  ];
+  
 
   useEffect(() => {
-    const fetchChartData = async () => {
-      const data = await getAllHccCodesData(
-        dateRange.startDate,
-        dateRange.endDate,
-        selectedOrganization
-      );
-      const records = data?.response?.hccDiseaseCountMap;
-      const records1 = data?.response?.suggestedHccDiseaseCountMap;
-      const datediff =
-        moment(dateRange?.endDate).diff(moment(dateRange?.startDate), "days") +
-        1;
-
-      const tempRecords = new Map();
-      const tempRecords1 = new Map();
-      if (datediff != 7 && datediff != 30) {
-        ShortMonth.slice(1).forEach((month) => {
-          tempRecords.set(month, 0);
-          tempRecords1.set(month, 0);
-        });
-      }
-
-      if ((!isNaN(datediff) && datediff == 7) || datediff == 30) {
-        for (let i = 0; i < datediff; i++) {
-          const todayDate = moment();
-          const presentDate = todayDate.subtract(i, "days");
-          const currMonth = parseInt(presentDate.format("MM"));
-          const currDay = presentDate.format("DD");
-          tempRecords.set(ShortMonth[currMonth] + currDay, 0);
-          tempRecords1.set(ShortMonth[currMonth] + currDay, 0);
-        }
-
-        Object.entries(records).map((record) => {
-          const currMonth = parseInt(moment(record[0]).format("MM"));
-          const currDay = moment(record[0]).format("DD");
-          tempRecords.set(ShortMonth[currMonth] + currDay, record[1]);
-        });
-        Object.entries(records1).map((record) => {
-          const currMonth = parseInt(moment(record[0]).format("MM"));
-          const currDay = moment(record[0]).format("DD");
-          tempRecords1.set(ShortMonth[currMonth] + currDay, record[1]);
-        });
-      }
-
-      setChartData1(tempRecords1);
-      setChartData(tempRecords);
-    };
-    fetchChartData();
-  }, [dateRange]);
-
-  useEffect(() => {
-    setCurrChartData(new Map());
-  }, [chartData]);
-
-  useEffect(() => {
-    setCurrChartData(chartData);
-  }, [currChartData]);
+    getAllHccCodesData(
+      dateRange?.startDate,
+      dateRange?.endDate,
+      selectedOrganization
+    );
+  }, [dateRange, selectedOrganization]);
 
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
     ? Object.values(getAllHccCodes.hccDiseaseCountMap)
@@ -118,45 +48,6 @@ const index = ({
   useEffect(() => {
     const fetchChartData = async () => {
       const data = await getAllRafData(dateRange.startDate, dateRange.endDate);
-      const records = data.response.premiumByDateForHcc;
-      const records1 = data.response.premiumByDateForSuggested;
-
-      const datediff =
-        moment(dateRange?.endDate).diff(moment(dateRange?.startDate), "days") +
-        1;
-
-      const tempRecords = new Map();
-      const tempRecords1 = new Map();
-      if (datediff != 7 && datediff != 30) {
-        ShortMonth.slice(1).forEach((month) => {
-          tempRecords.set(month, 0);
-          tempRecords1.set(month, 0);
-        });
-      }
-
-      if ((!isNaN(datediff) && datediff == 7) || datediff == 30) {
-        for (let i = 0; i < datediff; i++) {
-          const todayDate = moment();
-          const presentDate = todayDate.subtract(i, "days");
-          const currMonth = parseInt(presentDate.format("MM"));
-          const currDay = presentDate.format("DD");
-          tempRecords.set(ShortMonth[currMonth] + currDay, 0);
-          tempRecords1.set(ShortMonth[currMonth] + currDay, 0);
-        }
-
-        Object.entries(records).map((record) => {
-          const currMonth = parseInt(moment(record[0]).format("MM"));
-          const currDay = moment(record[0]).format("DD");
-          tempRecords.set(ShortMonth[currMonth] + currDay, record[1]);
-        });
-        Object.entries(records1).map((record) => {
-          const currMonth = parseInt(moment(record[0]).format("MM"));
-          const currDay = moment(record[0]).format("DD");
-          tempRecords1.set(ShortMonth[currMonth] + currDay, record[1]);
-        });
-      }
-      setRevenChartData1(tempRecords1);
-      setRevenChartData(tempRecords);
     };
     fetchChartData();
   }, [dateRange]);
@@ -164,23 +55,7 @@ const index = ({
   const options = {
     xAxis: {
       type: "category",
-      data:
-        hccDiseaseCountValues || suggestedHccDiseaseCountMap
-          ? [...currChartData.keys()]
-          : [
-              "jan",
-              "feb",
-              "mar",
-              "apr",
-              "may",
-              "jun",
-              "jul",
-              "aug",
-              "sep",
-              "oct",
-              "nov",
-              "dec",
-            ],
+      data: selectedValue === "last_1_week" ? getLast7Days() : getLast30Days(),
     },
     yAxis: {
       type: "value",
@@ -335,12 +210,12 @@ const index = ({
         </div>
         <RafGraph
           overallData={true}
-          chartData={chartData1}
-          chartRafData={chartRafData1}
-          chartRevenData={chartRevenData1}
           rafColor={"#E88D67"}
           rafColor3={"#FF9209"}
           rafColor2={"#00BC13"}
+          selectedValue={selectedValue}
+          dateRange={dateRange}
+          selectedOrganization={selectedOrganization}
         />
       </div>
       <div
@@ -361,7 +236,7 @@ const index = ({
           </div>
         </div>
         <div className="totalCodesPies2">
-          <RevenueGraph isMultiple={true} />
+          <RevenueGraph isMultiple={true} selectedValue={selectedValue} />
         </div>
       </div>
     </div>
