@@ -57,7 +57,7 @@ const index = ({ getAllFilesCount, getAllFiles,dateRange, selectedOrganization }
           }}
         >
           <div style={{ width: "90%" }}>
-            <div className="d-flex justify-content-center">
+            <div className="d-flex justify-content-center align-items-center">
               <div
                 style={{
                   width: "40px",

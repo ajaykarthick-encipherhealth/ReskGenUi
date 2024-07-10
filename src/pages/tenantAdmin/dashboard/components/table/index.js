@@ -39,7 +39,7 @@ const index = ({ items, key }) => {
             </tr>
           ))
         ) : (
-          <tr>
+          <tr style={{ borderBottom: "none" }}>
             <td>
               <Empty />
             </td>

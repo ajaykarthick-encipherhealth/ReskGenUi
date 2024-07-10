@@ -54,6 +54,7 @@ const CodesGraph = ({
       ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
       : [];
   const graphOptions = {
+    
     xAxis: {
       type: "category",
       data:
@@ -111,6 +112,9 @@ const CodesGraph = ({
         lineStyle: { color: borderColor },
         smooth: true,
         showSymbol: false,
+        itemStyle: {
+           color: isHcc?gradientColor1 :isCargaps? "orange":""
+        },
         areaStyle: gradientColor1 &&
           gradientColor2 && {
             opacity: 0.5,
