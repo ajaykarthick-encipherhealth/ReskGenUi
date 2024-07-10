@@ -34,7 +34,6 @@ const Radiology = ({
   const [dosYear, setDosYear] = useState([]);
   const [dosYearDefalutSelect, setDosYearDefalutSelect] = useState("");
   const [selectedDosValue, setSelectedDosValue] = useState("");
-console.log(patientDosResult?.data?.response, "testing");
   const selectTab = (num) => {
     setActiveTabHead(num);
     if (num == 4) {
@@ -85,10 +84,9 @@ console.log(patientDosResult?.data?.response, "testing");
 
   useEffect(() => {
     if (radiologyDetailsResult?.data?.response) {
-      if (radiologyDetailsResult?.data?.response?.radiologyFileDetail) {
+      if (radiologyDetailsResult?.data?.response?.fileDetailDTO) {
         getRadiologyFileDetails(
-          radiologyDetailsResult?.data?.response?.radiologyFileDetail[0]
-            .azureBlobPath
+          radiologyDetailsResult?.data?.response?.fileDetailDTO?.radiologyAzureBlobPaths[0]
         );
         setIsLoading(true);
       }
