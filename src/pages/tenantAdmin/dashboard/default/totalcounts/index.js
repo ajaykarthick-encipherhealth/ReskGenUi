@@ -67,7 +67,20 @@ const index = ({
             alignItems: "center",
           }}
         >
+
+
+
+
           <div style={{ width: "90%" }}>
+
+          {loaderButton && totalCountsLoader ? (
+              <Skeleton.Input active size="default" className="mt-2" />
+            ) : totalCountsLoader ? (
+              <div className="d-flex justify-content-center align-items-center">
+                {" "}
+                <Spin size="large" />
+              </div>
+            ) : (
             <div className="d-flex justify-content-center">
               <div
                 style={{
@@ -82,10 +95,12 @@ const index = ({
                   alignItems: "center",
                 }}
               >
+
                 <Image src={item?.icon} />
               </div>
               <div style={{ fontSize: "16px" }}>{item?.title}</div>
             </div>
+             )}
 
             {loaderButton && totalCountsLoader ? (
               <Skeleton.Input active size="default" className="mt-2" />
@@ -98,6 +113,10 @@ const index = ({
               <div className={styles.count}>{item?.count}</div>
             )}
           </div>
+
+
+
+          
         </div>
       ))}
     </div>

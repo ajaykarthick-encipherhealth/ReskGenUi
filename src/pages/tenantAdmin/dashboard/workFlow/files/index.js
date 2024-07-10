@@ -233,6 +233,7 @@ const Files = ({
         <div className="totalCodesPies3">
           <CodesGraph options={options} />
         </div>
+        
       )}
     </div>
   );
