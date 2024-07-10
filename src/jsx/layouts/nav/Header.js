@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useSelector, useDispatch, connect } from "react-redux";
 import Link from "next/link";
 import Image from "next/image";
@@ -7,7 +7,6 @@ import Swal from "sweetalert2";
 import "react-chat-widget/lib/styles.css";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { Button } from "react-bootstrap";
 import {
   Badge,
   Dropdown,
@@ -38,19 +37,11 @@ import {
   PhysicianMenuList,
   PhysicanMenu,
 } from "./Menu";
-import ENDPOINTS from "../../../utility/enpoints";
-import {
-  getNotificationAlert,
-  getNotificationAlertClear,
-} from "../../../store/actions/NotificationAction";
 import Notification from "../../../components/notification/index";
 import {
   getFilteredList,
   getPatientID,
 } from "../../../store/actions/PatientsActions";
-import CodeIcon from "../../../images/svg/CodeIcon";
-import Search from "../../../components/search";
-import Selector from "../../../components/selector";
 import ChatCommunication from "../../../components/chatCommunication/index";
 import { renderUserPrfoile } from "../../../components/headerFilters/functions";
 import ImageUploader from "../../../components/imageUploading/ImageUploader";
@@ -67,32 +58,6 @@ import { actions as dashbaordActions } from "../../../stores/reviewer/dashboard"
 import Codify from "../../../pages/codify";
 import { actions as webSocketActions } from "../../../stores/websocket";
 
-const btnItems = [
-  {
-    id: 1,
-    name: "ICD-10",
-  },
-  {
-    id: 2,
-    name: "HCC",
-  },
-];
-
-const Options = [
-  {
-    value: "both",
-    label: "BOTH",
-  },
-  {
-    value: "CMS",
-    label: "CMS",
-  },
-  {
-    value: "RX",
-    label: "RX",
-  },
-];
-
 const Header = ({
   notificationResponse,
   getNotificationList,
@@ -104,14 +69,9 @@ const Header = ({
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const notificationAlertData = useSelector(
-    (state) => state?.notificationDatas?.notificationAlert
-  );
-
   const msgReply = useSelector((state) => state?.workFlow?.chatReply);
   const accuracy = useSelector((state) => state?.auth?.accuracy);
   const currentUserInfo = useSelector((state) => state?.auth?.userInfo);
-  const codDetails = useSelector((state) => state?.auth?.codeDetails);
   const profileUploadedTime = useSelector((state) => state?.auth?.url);
   const stateActive = router.pathname;
   const [headerFix, setheaderFix] = useState(false);
@@ -132,11 +92,11 @@ const Header = ({
   const [openUploader, setOpenUploader] = useState();
   const [openContent, setOpenContent] = useState(false);
   const [popoverVisible, setPopoverVisible] = useState(false);
-  const [searchVal, setSearchVal] = useState("");
   const [opened, setOpened] = useState(false);
   const [drawerWidth, setDrawerWidth] = useState(700);
   const [notificationCount, setNotificationCount] = useState(0);
-
+  const notificationSoundRef = useRef(null);
+    
   const showDrawer = () => {
     setOpened(true);
     setPopoverVisible(false);
@@ -144,21 +104,6 @@ const Header = ({
   const onClosed = () => {
     setOpened(false);
     setDrawerWidth(700);
-  };
-
-  const getStatus = (data) => {
-    const isCMS = data?.cmsHcc_model_category_V24_for_2023_payment_year;
-    const isRX = data?.rxHcc_model_category_V08_for_2023_payment_year;
-
-    if (isCMS === "Yes" && isRX === "Yes") {
-      return "CMS RX";
-    } else if (isCMS === "Yes") {
-      return "CMS";
-    } else if (isRX === "Yes") {
-      return "RX";
-    } else {
-      return "";
-    }
   };
 
   const onClose = () => {
@@ -211,7 +156,6 @@ const Header = ({
       setDropdownContent(["EHR"]);
     }
     let userId = currentUserInfo?.data?.response?.id;
-    const userName = currentUserInfo?.data?.response?.userName;
 
     getNotificationList(userId);
     // const sse = new EventSource(
@@ -383,7 +327,6 @@ const Header = ({
     const userId = localStorage.getItem("userId");
     const userRole = localStorage.getItem("role");
     const tenentId = localStorage.getItem("tenantId");
-
     dispatch(getCurrentUser(userId, router));
     setUserRole(userRoleLocal);
     setCurrentRole(userRole);
@@ -421,7 +364,6 @@ const Header = ({
     setPopoverVisible(false);
   };
   useEffect(() => {
-    const userRoleLocal = localStorage.getItem("userRole");
     if (selectedbtn) {
       dispatch(
         getCoderDetails({
@@ -439,9 +381,6 @@ const Header = ({
 
   useEffect(() => {
     getTenentLogo();
-  }, []);
-  const handleOpenChange = useCallback(() => {
-    setPopoverVisible(true);
   }, []);
 
   const handleExpand = () => {
@@ -485,10 +424,21 @@ const Header = ({
     var countUnread =
       notificationResponse?.data?.response?.totalUnreadCount + count?.length;
     setNotificationCount(countUnread ? countUnread : 0);
-  }, [webSocketNotificationData]);
+    notificationSoundRef.current = new Audio("/messageSound.mp3");
+      // Play notification sound
+      if (countUnread>0) {
+        notificationSoundRef.current.play().catch((error) => {
+          console.error("Error playing notification sound:", error);
+        });
+      }
+  }, [webSocketNotificationData,notificationResponse]);
+
 
   useEffect(() => {
-    if (!open) {
+    if (
+      !open &&
+      notificationResponse?.data?.response?.totalUnreadCount !== undefined
+    ) {
       var countUnread = notificationResponse?.data?.response?.totalUnreadCount;
       setNotificationCount(countUnread ? countUnread : 0);
     } else {
@@ -921,7 +871,7 @@ const enhancer = connect(
     notificationResponse: state?.reviewer?.dashboard?.notification,
     tenent: state?.reviewer?.dashboard?.tenentLogo,
     webSocketNotificationData:
-      state?.webSocket?.webSocketNotificationDetails?.data,
+      state?.tenantAdmin?.webSocket?.webSocketNotificationDetails?.data,
   }),
   {
     getNotificationList: dashbaordActions.notificationAction,

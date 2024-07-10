@@ -90,9 +90,9 @@ const enhancer = connect(
   (state) => ({
     notificationResponse:
       state?.reviewer?.dashboard?.notification?.data?.response,
-    webSocketData: state?.webSocket?.webSocketDetails?.data,
+    webSocketData: state?.tenantAdmin?.webSocket?.webSocketDetails?.data,
     webSocketNotificationData:
-      state?.webSocket?.webSocketNotificationDetails?.data,
+      state?.tenantAdmin?.webSocket?.webSocketNotificationDetails?.data,
   }),
   {
     getNotificationData: webSocketActions.websocketNotificationAction,
