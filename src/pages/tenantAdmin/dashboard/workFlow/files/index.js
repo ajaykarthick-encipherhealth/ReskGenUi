@@ -196,7 +196,9 @@ const Files = ({
           </div>
         ))}
       </div>
-      <CodesGraph options={options} />
+      <div className="totalCodesPies3">
+        <CodesGraph options={options} />
+      </div>
     </div>
   );
 };
