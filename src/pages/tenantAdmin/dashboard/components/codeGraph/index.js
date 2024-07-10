@@ -53,6 +53,7 @@ const CodesGraph = ({
     getAllHccCodes?.suggestedHccDiseaseCountMap
       ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
       : [];
+      console.log(getAllHccCodes,"getAllHccCodes")
   const graphOptions = {
     
     xAxis: {
@@ -101,13 +102,14 @@ const CodesGraph = ({
           ? "Revenue"
           : isTwoWaves && "Radiology",
         data:
-          isHcc || isCargaps
-            ? [...chartData.keys()].length == 12
+          isHcc 
+            ? [...chartData.keys()].length != 12
               ? hccDiseaseCountValues
               : [...chartData.values()]
             : isCargaps
             ? suggestedHccDiseaseCountMap
             : [12, 32, 45, 10, 20, 30, 40, 50, 60, 70, 12, 44, 56, 67, 34, 23],
+            
         type: "line",
         lineStyle: { color: borderColor },
         smooth: true,
