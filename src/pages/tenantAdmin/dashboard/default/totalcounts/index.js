@@ -76,12 +76,8 @@ const index = ({
 
           {loaderButton && totalCountsLoader ? (
               <Skeleton.Input active size="default" className="mt-2" />
-            ) : totalCountsLoader ? (
-              <div className="d-flex justify-content-center align-items-center">
-                {" "}
-                <Spin size="large" />
-              </div>
-            ) : (
+            ) :             
+            (
             <div className="d-flex justify-content-center align-items-center">
 
               <div
@@ -107,7 +103,7 @@ const index = ({
             {loaderButton && totalCountsLoader ? (
               <Skeleton.Input active size="default" className="mt-2" />
             ) : totalCountsLoader ? (
-              <div className="d-flex justify-content-center align-items-center">
+              <div className="d-flex justify-content-center align-items-center mt-2">
                 {" "}
                 <Spin size="large" />
               </div>
