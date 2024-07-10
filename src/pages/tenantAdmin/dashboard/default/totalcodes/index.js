@@ -255,7 +255,7 @@ const index = ({
 
   return (
     <div className="d-flex justify-content-between">
-      <div style={{ width: "33%" }}>
+      <div style={{ width: "33%" }} >
         <div className={styles.headers}>
           <div className="d-flex justify-content-between">
             <div className={styles.header}>Total Codes</div>
@@ -284,7 +284,9 @@ const index = ({
           </div>
         </div>
 
-        <CodesGraph options={options} isRadio={true} />
+      <div className="totalCodesPies">
+      <CodesGraph options={options} isRadio={true} />
+      </div>
       </div>
       <div
         className="remianingAreaGraph"
@@ -334,7 +336,9 @@ const index = ({
             </div>
           </div>
         </div>
+        <div className="totalCodesPies2">
         <RevenueGraph isMultiple={true} />
+        </div>
       </div>
     </div>
   );
