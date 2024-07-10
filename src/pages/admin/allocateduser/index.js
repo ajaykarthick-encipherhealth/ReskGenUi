@@ -754,6 +754,7 @@ const Patient = ({
                                     setSortDueOrder("DESC");
                                     selectTabClick(1);
                                     setActiveTab(1);
+                                    setPaginationFirst("0")
                                   }}
                                 >
                                   <Nav.Link

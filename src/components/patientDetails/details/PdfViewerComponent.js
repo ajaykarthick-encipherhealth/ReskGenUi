@@ -7,7 +7,7 @@ const PdfViewer = ({
   pageNumber,
   headers,
   headerContent,
-  heightFrame = "710",
+  heightFrame = "800",
 }) => {
   const [iframeSrc, setIframeSrc] = useState("");
 
