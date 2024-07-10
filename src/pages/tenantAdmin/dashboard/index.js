@@ -44,6 +44,7 @@ const Index = ({
 }) => {
   const [activeBtn, setActiveBtn] = useState("default");
   const [loaderButton, setLoaderButton] = useState(true);
+  const [selectedValue, setSelectedValue] = useState(null)
   const [dateRange, setDateRange] = useState({
     startDate:
       moment().subtract(29, "days").format("YYYY-MM-DD") + "T00:00:00.000Z",
@@ -167,6 +168,7 @@ const Index = ({
     </div>
   );
 
+
   useEffect(() => {
     getUserStatusData(
       dateRange.startDate,
@@ -192,6 +194,8 @@ const Index = ({
     getTop10DiseasesData(dateRange.startDate, dateRange.endDate,selectedOrganization);
   }, [dateRange,selectedOrganization]);
 
+  
+
   return (
     <div style={{ backgroundColor: "#F0F6FE" }}>
       <Header />
@@ -206,6 +210,7 @@ const Index = ({
             selectedOrganization={selectedOrganization}
             loaderButton={loaderButton}
             setLoaderButton={setLoaderButton}
+            setSelectedValue={setSelectedValue}
           />
           {activeBtn === "default" ? (
             <>
@@ -275,6 +280,7 @@ const Index = ({
                     <Files
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
+                      selectedValue={selectedValue}
                     />
                   </Card>
                 </div>
