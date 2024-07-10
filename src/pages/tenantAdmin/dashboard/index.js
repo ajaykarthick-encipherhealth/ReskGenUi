@@ -337,7 +337,7 @@ const Index = ({
               <div className={`row ${styles.box}`}>
                 <div className={`col-lg-3`}>
                   <Card padding="10px" borderRadius={"10px"} height="265px">
-                    <HeadTitle header="Allocated Status" fontSize="16px" />
+                    <HeadTitle header="Allocated Status" fontSize="20px" />
 
                     {loaderButton && allocatedLoader ? (
                       <div>{renderCardSkeleton()}</div>
@@ -352,7 +352,7 @@ const Index = ({
                 </div>
                 <div className={`col-lg-3`}>
                   <Card padding="10px" borderRadius={"10px"} height="265px">
-                    <HeadTitle header="Reviewer Status" fontSize="16px" />
+                    <HeadTitle header="Reviewer Status" fontSize="20px" />
                     {loaderButton && reviewerLoader ? (
                       <div>{renderCardSkeleton()}</div>
                     ) : reviewerLoader ? (
@@ -366,7 +366,7 @@ const Index = ({
                 </div>
                 <div className={`col-lg-3`}>
                   <Card padding="10px" borderRadius={"10px"} height="265px">
-                    <HeadTitle header="Auditor Status" fontSize="16px" />
+                    <HeadTitle header="Auditor Status" fontSize="20px" />
 
                     {loaderButton && auditorLoader ? (
                       <div>{renderCardSkeleton()}</div>
@@ -381,7 +381,7 @@ const Index = ({
                 </div>
                 <div className={`col-lg-3`}>
                   <Card padding="10px" borderRadius={"10px"} height="265px">
-                    <HeadTitle header="Users" fontSize="16px" />
+                    <HeadTitle header="Users" fontSize="20px" />
 
                     {loaderButton && userLoader ? (
                       <div>{renderCardSkeleton()}</div>
