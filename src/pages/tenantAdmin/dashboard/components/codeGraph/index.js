@@ -53,7 +53,7 @@ const CodesGraph = ({
     getAllHccCodes?.suggestedHccDiseaseCountMap
       ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
       : [];
-      console.log(getAllHccCodes,"getAllHccCodes")
+    
   const graphOptions = {
     
     xAxis: {
