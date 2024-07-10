@@ -94,7 +94,6 @@ const index = ({ rafScoreData, overAllRafScore, rafLoader ,dateRange,selectedOrg
           </div>
         ) : rafLoader ? (
           <div className="d-flex justify-content-center align-items-center">
-            {" "}
             <Spin size="large" />
           </div>
         ) : (
