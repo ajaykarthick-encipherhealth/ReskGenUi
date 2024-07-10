@@ -23,7 +23,7 @@ const index = ({
   loaderButton,
   totalCodesLoader,
   getAllRafData,
-  selectedOrganization
+  selectedOrganization,
 }) => {
   const [currChartData, setCurrChartData] = useState(new Map());
   const [chartData, setChartData] = useState(new Map());
@@ -304,7 +304,9 @@ const index = ({
           <CodesGraph options={options} isRadio={true} />
         )} */}
 
-        <CodesGraph options={options} isRadio={true} />
+        <div className="totalCodesPies">
+          <CodesGraph options={options} isRadio={true} />
+        </div>
       </div>
       <div
         className="remianingAreaGraph"
@@ -355,7 +357,9 @@ const index = ({
             </div>
           </div>
         </div>
-        <RevenueGraph isMultiple={true} />
+        <div className="totalCodesPies2">
+          <RevenueGraph isMultiple={true} />
+        </div>
       </div>
     </div>
   );

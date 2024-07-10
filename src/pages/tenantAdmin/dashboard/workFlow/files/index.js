@@ -11,7 +11,6 @@ import { actions as defaultActions } from "../../../../../stores/tenantAdmin/das
 import { Skeleton, Spin } from "antd";
 import moment from "moment";
 
-
 const Files = ({
   getAllComputing,
   getAllComputingStatus,
@@ -132,7 +131,7 @@ const Files = ({
       iconBg: "#FFDBCC",
     },
   ];
- 
+
   useEffect(() => {
     // getAllComputing(dateRange.startDate,   dateRange.endDate);
 
@@ -216,6 +215,7 @@ const Files = ({
           </div>
         ))}
       </div>
+
       {computingStatusLoader && loaderButton ? (
         <div>
           <Skeleton.Input
@@ -230,7 +230,9 @@ const Files = ({
           <Spin size="large" />
         </div>
       ) : (
-        <CodesGraph options={options} />
+        <div className="totalCodesPies3">
+          <CodesGraph options={options} />
+        </div>
       )}
     </div>
   );
