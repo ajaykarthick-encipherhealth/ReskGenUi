@@ -54,13 +54,15 @@ const Files = ({
       );
     }
 
-    return date_thirty_days;
+    return date_thirty_days.reverse()
   }
+
+  
 
   getLast7Days();
   getLast30Days();
 
-  console.log("selectedValuemain", selectedValue);
+
   const options = {
     xAxis: {
       type: "category",
@@ -156,11 +158,11 @@ const Files = ({
   ];
 
   useEffect(() => {
-    getComputingStatus(dateRange?.startDate, dateRange?.endDate);
+    getComputingStatus(dateRange?.startDate, dateRange?.endDate,selectedOrganization);
     getAllComputing(
       dateRange?.startDate,
       dateRange?.endDate,
-      selectedOrganization
+      selectedOrganization,
     );
   }, [dateRange, selectedOrganization]);
 

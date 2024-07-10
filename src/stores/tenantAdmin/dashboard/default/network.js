@@ -58,14 +58,14 @@ export async function getAllRaf(startDate, endDate) {
   return data;
 }
 
-export async function getAllComputing(startDate, endDate) {
+export async function getAllComputing(startDate, endDate,organizationId) {
   const options = {
     method: "GET",
   };
   const formattedStartDate = startDate ? new Date(startDate).toISOString() : "";
   const formattedEndDate = endDate ? new Date(endDate).toISOString() : "";
 
-  const url = `dbservice/tenantadmin/dashboard/computingstatus/chart?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
+  const url = `dbservice/tenantadmin/dashboard/computingstatus/chart?startDate=${formattedStartDate}&endDate=${formattedEndDate}&organizationId=${organizationId}`;
   const data = await requestPortal(url, options);
   return data;
 }
@@ -95,14 +95,14 @@ export async function getTopOigCodes(startDate, endDate,organizationId) {
   return data;
 }
 
-export async function getComputingStatus(startDate, endDate) {
+export async function getComputingStatus(startDate, endDate,organizationId) {
   const options = {
     method: "GET",
   };
   const formattedStartDate = startDate ? new Date(startDate).toISOString() : "";
   const formattedEndDate = endDate ? new Date(endDate).toISOString() : "";
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/computingstatus/tile/chart?startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
+    `dbservice/tenantadmin/dashboard/computingstatus/tile/chart?startDate=${formattedStartDate}&endDate=${formattedEndDate}&organizationId=${organizationId?organizationId:""}`,
     options
   );
   return data;
