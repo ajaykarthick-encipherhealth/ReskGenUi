@@ -19,6 +19,7 @@ const index = ({
   getAllRafData,
   getAllRaf,
   dateRange,
+  loaderButton
 }) => {
   const [chartData, setChartData] = useState(new Map());
   const [chartData1, setChartData1] = useState(new Map());
@@ -219,6 +220,8 @@ const index = ({
             </div>
           </div>
         </div>
+{loaderButton }
+
         <CodesGraph
           gradientColor1={"#04B700"}
           gradientColor2={"#FAFFFA"}

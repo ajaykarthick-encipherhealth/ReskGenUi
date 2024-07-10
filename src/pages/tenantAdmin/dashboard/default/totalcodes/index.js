@@ -12,6 +12,7 @@ import {
   RafCountScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 import moment from "moment";
+import { Skeleton } from "antd";
 
 const index = ({
   getAllHccCodesData,
@@ -19,8 +20,10 @@ const index = ({
   getAllRaf,
   getAllRafScoreData,
   dateRange,
+  loaderButton,
+  totalCodesLoader,
   getAllRafData,
-  selectedOrganization
+  selectedOrganization,
 }) => {
   const [currChartData, setCurrChartData] = useState(new Map());
   const [chartData, setChartData] = useState(new Map());
@@ -255,7 +258,7 @@ const index = ({
 
   return (
     <div className="d-flex justify-content-between">
-      <div style={{ width: "33%" }} >
+      <div style={{ width: "33%" }}>
         <div className={styles.headers}>
           <div className="d-flex justify-content-between">
             <div className={styles.header}>Total Codes</div>
@@ -284,9 +287,26 @@ const index = ({
           </div>
         </div>
 
-      <div className="totalCodesPies">
-      <CodesGraph options={options} isRadio={true} />
-      </div>
+        {/* {loaderButton && totalCodesLoader ? (
+          <div>
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "170px" }}
+              active
+            />
+          </div>
+        ) : totalCodesLoader ? (
+          <div className="d-flex justify-content-center align-items-center">
+            {" "}
+            <Spin size="large" />
+          </div>
+        ) : (
+          <CodesGraph options={options} isRadio={true} />
+        )} */}
+
+        <div className="totalCodesPies">
+          <CodesGraph options={options} isRadio={true} />
+        </div>
       </div>
       <div
         className="remianingAreaGraph"
@@ -301,6 +321,7 @@ const index = ({
             <div className={`${styles.header} p-1`}>RAF</div>
             <div className="p-1">
               <div className={styles.header}>Overall RAF</div>
+
               <div className={styles.price}>
                 {getAllRafScoreData?.totalHccRaf}
               </div>
@@ -337,7 +358,7 @@ const index = ({
           </div>
         </div>
         <div className="totalCodesPies2">
-        <RevenueGraph isMultiple={true} />
+          <RevenueGraph isMultiple={true} />
         </div>
       </div>
     </div>
@@ -350,9 +371,9 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allHccCodes?.data?.response,
     getAllRaf:
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
-
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
+    totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.totalCodesLoader,
   }),
   {
     getAllHccCodesData: HccCodes,

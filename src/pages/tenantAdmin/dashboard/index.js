@@ -217,10 +217,11 @@ const Index = ({
               <div className={`row ${styles.box}`}>
                 <div className={`col-lg-4`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <TotalCounts
-                      dateRange={dateRange}
-                      selectedOrganization={selectedOrganization}
-                    />
+
+
+                    <TotalCounts dateRange={dateRange} selectedOrganization={selectedOrganization}  loaderButton={loaderButton}/>
+
+
                   </Card>
                 </div>
                 <div className={`col`}>
@@ -228,6 +229,7 @@ const Index = ({
                     <RafAndRevenue
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
+                      loaderButton={loaderButton}
                     />
                   </Card>
                 </div>
@@ -236,10 +238,9 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <TotalCodes
-                      dateRange={dateRange}
-                      selectedOrganization={selectedOrganization}
-                    />
+       <TotalCodes dateRange={dateRange} selectedOrganization={selectedOrganization}    loaderButton={loaderButton}/>
+
+
                   </Card>
                 </div>
               </div>
@@ -247,10 +248,11 @@ const Index = ({
               <div className={`row`}>
                 <div className={`col ${styles.box}`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <HccCodes
-                      dateRange={dateRange}
-                      selectedOrganization={selectedOrganization}
-                    />
+
+
+                    <HccCodes dateRange={dateRange} selectedOrganization={selectedOrganization}    loaderButton={loaderButton}/>
+
+
                   </Card>
                 </div>
               </div>
@@ -277,11 +279,10 @@ const Index = ({
                 </div>
                 <div className={`col-lg-8`}>
                   <Card padding="10px" borderRadius={"10px"}>
-                    <Files
-                      dateRange={dateRange}
-                      selectedOrganization={selectedOrganization}
-                      selectedValue={selectedValue}
-                    />
+
+                    <Files dateRange={dateRange} selectedOrganization={selectedOrganization} loaderButton={loaderButton}  selectedValue={selectedValue}/>
+
+
                   </Card>
                 </div>
               </div>
@@ -292,6 +293,7 @@ const Index = ({
                     <Top10Diseases
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
+                      loaderButton={loaderButton}
                     />
                   </Card>
                 </div>
@@ -300,6 +302,7 @@ const Index = ({
                     <TopOIGCodes
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
+                      loaderButton={loaderButton}
                     />
                   </Card>
                 </div>
@@ -323,8 +326,10 @@ const Index = ({
                 <div className={`col-lg-9`}>
                   <Card padding="10px" borderRadius={"10px"}>
                     <HeadTitle header="Files" fontSize="16px" />
+
                     <WorkFlowFiles dateRange={dateRange}
-                      selectedOrganization={selectedOrganization} />
+                      selectedOrganization={selectedOrganization} loaderButton={loaderButton} />
+
                   </Card>
                 </div>
               </div>

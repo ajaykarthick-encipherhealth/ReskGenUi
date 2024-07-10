@@ -6,10 +6,17 @@ import pageIcon from "../../../../../images/tenantAdmin/page.svg";
 import Image from "next/image";
 import styles from "../../styles.module.css";
 import { FilesCount } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
+import { Skeleton, Spin } from "antd";
 
-const index = ({ getAllFilesCount, getAllFiles,dateRange, selectedOrganization }) => {
+const index = ({
+  getAllFilesCount,
+  getAllFiles,
+  dateRange,
+  selectedOrganization,
+  loaderButton,
+  totalCountsLoader,
+}) => {
   const cardData = [
-
     {
       id: 1,
       title: "File/Patients Count",
@@ -32,9 +39,13 @@ const index = ({ getAllFilesCount, getAllFiles,dateRange, selectedOrganization }
       iconBg: "#CCFFE5",
     },
   ];
+
   useEffect(() => {
-    getAllFilesCount( dateRange.startDate,
-        dateRange.endDate, selectedOrganization);
+    getAllFilesCount(
+      dateRange.startDate,
+      dateRange.endDate,
+      selectedOrganization
+    );
   }, [dateRange]);
 
   return (
@@ -56,8 +67,23 @@ const index = ({ getAllFilesCount, getAllFiles,dateRange, selectedOrganization }
             alignItems: "center",
           }}
         >
+
+
+
+
           <div style={{ width: "90%" }}>
+
+
+          {loaderButton && totalCountsLoader ? (
+              <Skeleton.Input active size="default" className="mt-2" />
+            ) : totalCountsLoader ? (
+              <div className="d-flex justify-content-center align-items-center">
+                {" "}
+                <Spin size="large" />
+              </div>
+            ) : (
             <div className="d-flex justify-content-center align-items-center">
+
               <div
                 style={{
                   width: "40px",
@@ -71,12 +97,28 @@ const index = ({ getAllFilesCount, getAllFiles,dateRange, selectedOrganization }
                   alignItems: "center",
                 }}
               >
+
                 <Image src={item?.icon} />
               </div>
               <div style={{ fontSize: "16px" }}>{item?.title}</div>
             </div>
-            <div className={styles.count}>{item?.count}</div>
+             )}
+
+            {loaderButton && totalCountsLoader ? (
+              <Skeleton.Input active size="default" className="mt-2" />
+            ) : totalCountsLoader ? (
+              <div className="d-flex justify-content-center align-items-center">
+                {" "}
+                <Spin size="large" />
+              </div>
+            ) : (
+              <div className={styles.count}>{item?.count}</div>
+            )}
           </div>
+
+
+
+          
         </div>
       ))}
     </div>
@@ -87,6 +129,8 @@ const enhancer = connect(
   (state) => ({
     getAllFiles:
       state?.tenantAdmin?.dashboard?.default?.allFilesCounts?.data?.response,
+    totalCountsLoader:
+      state?.tenantAdmin?.dashboard?.default?.totalCountsLoader,
   }),
   {
     getAllFilesCount: FilesCount,
