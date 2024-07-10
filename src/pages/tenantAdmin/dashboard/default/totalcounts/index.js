@@ -73,6 +73,7 @@ const index = ({
 
           <div style={{ width: "90%" }}>
 
+
           {loaderButton && totalCountsLoader ? (
               <Skeleton.Input active size="default" className="mt-2" />
             ) : totalCountsLoader ? (
@@ -81,7 +82,8 @@ const index = ({
                 <Spin size="large" />
               </div>
             ) : (
-            <div className="d-flex justify-content-center">
+            <div className="d-flex justify-content-center align-items-center">
+
               <div
                 style={{
                   width: "40px",

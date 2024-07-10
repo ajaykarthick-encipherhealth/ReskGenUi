@@ -78,7 +78,7 @@ export async function getTop10Diseases(startDate, endDate,organizationId) {
   
 
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/gettophcccodes?startDate=${startDate?startDate:""}&endDate=${endDate?endDate:""}&organizationId=${organizationId?organizationId:""}`,
+    `dbservice/tenantadmin/dashboard/gettophcccodes?startDate=${startDate}&endDate=${endDate}&organizationId=${organizationId?organizationId:""}`,
     options
   );
   return data;
@@ -89,7 +89,7 @@ export async function getTopOigCodes(startDate, endDate,organizationId) {
     method: "GET",
   };
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/gettopoighcccodes?startDate=${startDate?startDate:""}&endDate=${endDate?endDate:""}&organizationId=${organizationId?organizationId:""}`,
+    `dbservice/tenantadmin/dashboard/gettopoighcccodes?startDate=${startDate}&endDate=${endDate}&organizationId=${organizationId?organizationId:""}`,
     options
   );
   return data;
@@ -114,7 +114,7 @@ export async function getRafScore(startDate, endDate,organizationId) {
   };
 
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/raf/score?startDate=${startDate}&endDate=${endDate}&organizationId=${organizationId}`,
+    `dbservice/tenantadmin/dashboard/raf/score?startDate=${startDate}&endDate=${endDate}&organizationId=${organizationId?organizationId:""}`,
     options
   );
   return data;

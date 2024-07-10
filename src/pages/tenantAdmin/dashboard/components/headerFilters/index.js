@@ -13,10 +13,12 @@ const index = ({
   getOrganizationStatusData,
   handleOrganizationChange,
   setLoaderButton,
+  setSelectedValue,
 }) => {
   const handleDateChange = (value) => {
+    setSelectedValue(value);
     let startDate;
-    setLoaderButton(false)
+    setLoaderButton(false);
     if (value === "last_1_week") {
       startDate =
         moment().subtract(6, "days").format("YYYY-MM-DD") + "T00:00:00.000Z";
@@ -31,6 +33,8 @@ const index = ({
       setDateRange({ startDate: startDate, endDate: endDate });
     }
   };
+
+ 
 
   useEffect(() => {
     getOrganizationStatusData();
@@ -76,12 +80,12 @@ const index = ({
           <div className="tenantSelector" style={{ width: "80%" }}>
             <Select
               placeholder="Date"
+              defaultValue="Last 30 days"
               options={[
                 { label: "Last 7 days", value: "last_1_week" },
                 { label: "Last 30 days", value: "last_1_month" },
                 { label: "Custom range Picker", value: "custom" },
               ]}
-              allowClear
               onChange={handleDateChange}
             />
           </div>
@@ -95,7 +99,7 @@ const index = ({
           onClick={() => {
             setActiveBtn("default");
             setLoaderButton(true)
-           
+          
           }}
         >
           Default
@@ -106,7 +110,8 @@ const index = ({
           }
           onClick={() => {
             setActiveBtn("workflow");
-            setLoaderButton(true)
+            setLoaderButton(true);
+            setSelectedValue("last_1_month");
           }}
         >
           Workflow
