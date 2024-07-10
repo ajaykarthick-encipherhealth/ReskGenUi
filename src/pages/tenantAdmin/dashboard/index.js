@@ -367,7 +367,6 @@ const Index = ({
                       <div>{renderCardSkeleton()}</div>
                     ) : auditorLoader ? (
                       <div className="d-flex justify-content-center align-items-center">
-                        {" "}
                         <Spin size="large" />
                       </div>
                     ) : (
@@ -383,7 +382,6 @@ const Index = ({
                       <div>{renderCardSkeleton()}</div>
                     ) : userLoader ? (
                       <div className="d-flex justify-content-center align-items-center">
-                        {" "}
                         <Spin size="large" />
                       </div>
                     ) : (
