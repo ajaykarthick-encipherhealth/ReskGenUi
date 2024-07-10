@@ -132,7 +132,7 @@ const index = ({
   const hccDiseaseCountMap = getAllRafScoreData?.totalHccRaf;
   const suggestedCount = getAllRafScoreData?.totalSuggestedRaf;
   const totalScoreTwo = hccDiseaseCountMap + suggestedCount;
-  console.log(getAllRaf, "getAllRaf");
+
 
   return (
     <div className="d-flex justify-content-between">
