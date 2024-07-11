@@ -43,6 +43,7 @@ const Index = ({
   getTop10DiseasesData,
 }) => {
   const [activeBtn, setActiveBtn] = useState("default");
+  const [loaderButton, setLoaderButton] = useState(true);
 
   const [selectedValue, setSelectedValue] = useState(null);
   const [dateRange, setDateRange] = useState({
@@ -221,7 +222,7 @@ const Index = ({
                     <TotalCounts
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
-                    
+                      loaderButton={loaderButton}
                     />
                   </Card>
                 </div>
@@ -242,7 +243,7 @@ const Index = ({
                     <TotalCodes
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
-                      
+                      loaderButton={loaderButton}
                     />
                   </Card>
                 </div>
@@ -254,7 +255,7 @@ const Index = ({
                     <HccCodes
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
-                 
+                      loaderButton={loaderButton}
                     />
                   </Card>
                 </div>
@@ -283,9 +284,10 @@ const Index = ({
                 <div className={`col-lg-8`}>
                   <Card padding="10px" borderRadius={"10px"}>
                     <Files
+                      activeBtn={activeBtn}
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
-                  
+                      loaderButton={loaderButton}
                       selectedValue={selectedValue}
                       classNames="workflowChart"
                     />
@@ -336,9 +338,8 @@ const Index = ({
                     <WorkFlowFiles
                       dateRange={dateRange}
                       selectedOrganization={selectedOrganization}
-                     
+                      loaderButton={loaderButton}
                       classNames="workflowChart1"
-
                     />
                   </Card>
                 </div>
@@ -351,6 +352,11 @@ const Index = ({
 
                     {allocatedLoader ? (
                       <div>{renderCardSkeleton()}</div>
+                    ) : allocatedLoader ? (
+                      <div className="d-flex justify-content-center align-items-center">
+                        <Spin size="large" />
+                      </div>
+
                     ) : (
                       <PieChartInfo data={allocatedData} header="Allocated" />
                     )}
