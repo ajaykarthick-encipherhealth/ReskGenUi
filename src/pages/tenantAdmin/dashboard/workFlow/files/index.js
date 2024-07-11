@@ -177,7 +177,7 @@ const Files = ({
       selectedOrganization
     );
   }, [dateRange, selectedOrganization]);
-  console.log(computingStatusLoader,"computingStatusLoader")
+  
 
   return (
     <div className="" style={{ marginTop: "20px" }}>
