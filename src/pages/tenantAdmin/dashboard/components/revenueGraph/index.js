@@ -17,6 +17,7 @@ const RevenueGraph = ({
   rafColor2,
   rafColor3,
   isMultiple,
+  className,
   selectedOrganization,
 }) => {
   const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
@@ -27,10 +28,8 @@ const RevenueGraph = ({
     ? Object.values(getAllRaf.premiumByDateForSuggested)
     : [];
 
-  const combinedData =
-    isHcc && isCargaps
-      ? [...premiumByDateForHcc, ...premiumByDateForSuggested]
-      : [];
+    let combinedData = premiumByDateForHcc.map((value, index) => value + premiumByDateForSuggested[index]);
+
   const option = {
     tooltip: {
       trigger: "axis",
@@ -53,14 +52,17 @@ const RevenueGraph = ({
     },
     series: [
       {
-        name: isHcc ? "Hcc Codes" : isCargaps ? "Car Gapcodes" : "Total Codes",
+        name: isHcc ? "Hcc Codes" : isCargaps ? "Car Gap Codes" : "Total Codes",
         type: "line",
         step: "start",
         data: isHcc
           ? premiumByDateForHcc
           : isCargaps
           ? premiumByDateForSuggested
-          : "",
+          : combinedData ? combinedData : [], //REVEN Total Codes
+        itemStyle: {
+          color: isHcc ? "#02BBDE" : isCargaps ? "#5A75F2" : "#E88D67",
+        },
       },
       {
         name: "HCC Codes",
@@ -77,7 +79,7 @@ const RevenueGraph = ({
         },
       },
       {
-        name: "Car gap Codes",
+        name: "Care Gap Codes",
         type: "line",
         step: "end",
         data: isMultiple ? premiumByDateForSuggested : [],
@@ -88,7 +90,11 @@ const RevenueGraph = ({
     ],
   };
 
-  return <ReactECharts option={option} />;
+  return (
+    <div className={`${className}`}>
+      <ReactECharts option={option} />{" "}
+    </div>
+  );
 };
 
 const enhancer = connect(

@@ -10,8 +10,6 @@ import codeCaptured from "../../../../../images/tenantAdmin/codecaptured.svg";
 import { actions as defaultActions } from "../../../../../stores/tenantAdmin/dashboard/default";
 import { Empty, Skeleton, Spin } from "antd";
 
-
-
 const Files = ({
   getAllComputing,
   getAllComputingStatus,
@@ -54,14 +52,11 @@ const Files = ({
       );
     }
 
-    return date_thirty_days.reverse()
+    return date_thirty_days.reverse();
   }
-
-  
 
   getLast7Days();
   getLast30Days();
-
 
   const options = {
     xAxis: {
@@ -89,15 +84,8 @@ const Files = ({
         showSymbol: false,
       },
       {
-        name: "Processing",
-        data: getAllComputingStatus?.PROCESSING?.map((x) => x.count),
-        type: "line",
-        lineStyle: { color: "#4A3AFF" },
-        smooth: true,
-        showSymbol: false,
-      },
-      {
         name: "Completed",
+        color: "#00BC13",
         data: getAllComputingStatus?.COMPUTED?.map((x) => x.count),
         type: "line",
         lineStyle: { color: "#00BC13" },
@@ -105,7 +93,18 @@ const Files = ({
         showSymbol: false,
       },
       {
+        name: "Processing",
+        data: getAllComputingStatus?.PROCESSING?.map((x) => x.count),
+        color: "#3B3486",
+        type: "line",
+        lineStyle: { color: "#3B3486" },
+        smooth: true,
+        showSymbol: false,
+      },
+
+      {
         name: "Failed",
+        color: "#FF8551",
         data: getAllComputingStatus?.FAILED?.map((x) => x.count),
         type: "line",
         lineStyle: { color: "#FF8551" },
@@ -158,14 +157,17 @@ const Files = ({
   ];
 
   useEffect(() => {
-    getComputingStatus(dateRange?.startDate, dateRange?.endDate,selectedOrganization);
+    getComputingStatus(
+      dateRange?.startDate,
+      dateRange?.endDate,
+      selectedOrganization
+    );
     getAllComputing(
       dateRange?.startDate,
       dateRange?.endDate,
-      selectedOrganization,
+      selectedOrganization
     );
   }, [dateRange, selectedOrganization]);
-
 
   return (
     <div className="" style={{ marginTop: "20px" }}>
@@ -234,21 +236,24 @@ const Files = ({
           />
         </div>
       ) : computingStatusLoader ? (
-        <div className="d-flex justify-content-center align-items-center " style={{height:'300px'}}>
+        <div
+          className="d-flex justify-content-center align-items-center "
+          style={{ height: "300px" }}
+        >
           <Spin size="large" />
         </div>
-       ) : getAllComputingStatus?.COMPUTED?.length >0? (
-        
+      ) : getAllComputingStatus?.COMPUTED?.length > 0 ? (
         <div className="totalCodesPies3">
-          <CodesGraph options={options} />
+          <CodesGraph options={options}  className="workflowChart"/>
         </div>
-        
-      ):<Empty className="mt-3"/>}
+      ) : (
+        <Empty className="mt-3" />
+      )}
     </div>
   );
 };
 
-const enhancer = connect( 
+const enhancer = connect(
   (state) => ({
     getAllComputingStatus:
       state?.tenantAdmin?.dashboard?.default?.allComputingStatus?.data

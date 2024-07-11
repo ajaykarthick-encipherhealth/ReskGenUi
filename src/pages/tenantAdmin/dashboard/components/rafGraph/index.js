@@ -25,15 +25,13 @@ const RafGraph = ({
     endDate: moment().format("YYYY-MM-DD") + "T23:59:59.000Z",
   });
 
-
   useEffect(() => {
     getAllRafScoreAPI(
       dateRange.startDate,
       dateRange.endDate,
-      selectedOrganization,
+      selectedOrganization
     );
   }, [dateRange, selectedOrganization]);
-
 
   const rafScoreByDateForSuggested =
     getAllRafScoreData?.rafScoreByDateForSuggested
@@ -43,6 +41,8 @@ const RafGraph = ({
   const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc
     ? Object.values(getAllRafScoreData.rafScoreByDateForHcc)
     : [];
+
+   let combinedData = rafScoreByDateForSuggested.map((value, index) => value + rafScoreByDateForHcc[index]);
 
   const option = {
     tooltip: {
@@ -75,7 +75,11 @@ const RafGraph = ({
     ],
     series: [
       {
-        name: isCargaps ? "Car gap Codes" : isHcc ? "HCC Codes" : "Total Codes",
+        name: isCargaps
+          ? "Care Gap Codes"
+          : isHcc
+          ? "HCC Codes"
+          : "Total Codes",
         type: "line",
         itemStyle: {
           color: rafColor,
@@ -90,7 +94,7 @@ const RafGraph = ({
           ? rafScoreByDateForSuggested
           : isCargaps
           ? rafScoreByDateForHcc
-          : "",
+          : combinedData ? combinedData : [], //RAF Total Codes
       },
 
       {
@@ -123,7 +127,12 @@ const RafGraph = ({
       },
     ],
   };
-  return <ReactECharts option={option} />;
+  return (
+    <div className="carecapRAF">
+    
+      <ReactECharts option={option} />
+    </div>
+  );
 };
 
 const enhancer = connect(

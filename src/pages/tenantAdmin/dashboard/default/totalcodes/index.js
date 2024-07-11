@@ -47,6 +47,8 @@ const index = ({
   useEffect(() => {
     getAllRafData(dateRange.startDate, dateRange.endDate, selectedOrganization);
   }, [dateRange, selectedOrganization]);
+  let combinedData = suggestedHccDiseaseCountMap.map((value, index) => value + hccDiseaseCountValues[index]);
+
 
   const options = {
     xAxis: {
@@ -67,7 +69,8 @@ const index = ({
     series: [
       {
         name: "Total Codes",
-        data: [],
+        data:  combinedData ? combinedData : [],
+        color: "#E88D67",
         type: "line",
         lineStyle: { color: "#E88D67" },
         smooth: true,
@@ -96,7 +99,7 @@ const index = ({
         },
       },
       {
-        name: "Car Gap Codes",
+        name: "Care Gap Codes",
         data: suggestedHccDiseaseCountMap,
         type: "line",
         lineStyle: { color: "#FF9209" },
@@ -122,7 +125,7 @@ const index = ({
       color: "#04B700",
     },
     {
-      title: "Car Gap Codes",
+      title: "Care Gap Codes",
       color: "#FF9209",
     },
   ];
@@ -188,7 +191,7 @@ const index = ({
           </div>
         ) : hccDiseaseCountValues?.length > 0 ? (
           <div className="totalCodesPies">
-            <CodesGraph options={options} isRadio={true} />
+            <CodesGraph options={options} isRadio={true} className="codesGraphStyle2"/>
           </div>
         ) : (
           <Empty className="mt-3" />
@@ -212,21 +215,7 @@ const index = ({
             </div>
           </div>
         </div>
-        {/* {loaderButton && rafScorechartLoader ? (
-          <div>
-            <Skeleton.Input
-              className="w-100"
-              style={{ height: "288px" }}
-              active
-            />
-          </div>
-        ) : rafScorechartLoader ? (
-          <div className="d-flex justify-content-center align-items-center h-75 ">
-            <Spin size="large" />
-          </div>
-        ) : rafScoreByDateForSuggested?.length > 0 ? ( */}
-        
-            <div className="totalCodesPies2">
+        <div className="totalCodesPies2">
             <RafGraph
           overallData={true}
           rafColor={"#E88D67"}
@@ -235,13 +224,8 @@ const index = ({
           selectedValue={selectedValue}
           dateRange={dateRange}
           selectedOrganization={selectedOrganization}
-        />
-            
-          </div>
-        {/* ) : (
-          <Empty className="mt-3" />
-        )} */}
-       
+        />   
+      </div>
       </div>
       <div
         style={{
@@ -274,15 +258,14 @@ const index = ({
             <Spin size="large" />
           </div>
         ) : premiumByDateForHcc?.length > 0 ? (
-          <div className="totalCodesPies">
             <div className="totalCodesPies2">
               <RevenueGraph
                 selectedOrganization={selectedOrganization}
                 isMultiple={true}
                 selectedValue={selectedValue}
+               className="revenueCharts1"
               />
             </div>
-          </div>
         ) : (
           <Empty className="mt-3" />
         )}

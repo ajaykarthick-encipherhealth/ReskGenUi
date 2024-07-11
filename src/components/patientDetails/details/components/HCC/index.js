@@ -131,13 +131,13 @@ const HccCards = ({
     <>
       {provided && (
         <div ref={provided?.innerRef} {...provided?.droppableProps}>
-          {list?.map(
+          {list?.length>0 ?list?.map(
             (
               data,
               i // this condation we added for vignesh suggest to remove isCombo pracent
             ) => (
               <>
-                <li key={data?.id} style={{margin:i!==0 && '10px 0 0 0'}}>
+                <li key={data?.id} style={{ margin: i !== 0 && "10px 0 0 0" }}>
                   <Draggable
                     key={data.diagnosisCode}
                     draggableId={data.diagnosisCode}
@@ -151,7 +151,6 @@ const HccCards = ({
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                         
                         >
                           <div
                             className={` justify-content-between ${visitStyles.hcc_card_nameHead}`}
@@ -521,7 +520,7 @@ const HccCards = ({
                                   setSearch: setSearch,
                                   setFileModalHeader: setFileModalHeader,
                                   patientDocumentResult: patientDocumentResult,
-                                  popup
+                                  popup,
                                 })}
                               </div>
                               {data.providerName.length == 0 && (
@@ -759,6 +758,26 @@ const HccCards = ({
                                   Most Specified
                                 </Badge>
                               ) : null}
+                              {data.isRadiology == true && (
+                                <Tooltip title="RADIOLOGY">
+                                  <span
+                                    className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                    bg={`  mt-2 bg-bg-eight `}
+                                  >
+                                    Radiology
+                                  </span>
+                                </Tooltip>
+                              )}
+                              {data.lab == true && (
+                                <Tooltip title="LAB">
+                                  <span
+                                    className={` mt-2 ${visitStyles.labStatus}`}
+                                    bg={`  mt-2 bg-bg-seven `}
+                                  >
+                                    Lab
+                                  </span>
+                                </Tooltip>
+                              )}
                             </div>
                           )}
                         </div>
@@ -768,7 +787,10 @@ const HccCards = ({
                 </li>
               </>
             )
-          )}
+          ):
+          <div className={styles.noMsContainer}>
+            {`No ${cardTitle} codes are found`}
+          </div> }
           <span className="d-none">{provided?.placeholder}</span>
         </div>
       )}

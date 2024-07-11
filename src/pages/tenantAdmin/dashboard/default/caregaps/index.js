@@ -43,6 +43,7 @@ const index = ({
             </div>
           </div>
         </div>
+
         {loaderButton && totalCodesLoader ? (
           <div>
             <Skeleton.Input
@@ -63,6 +64,7 @@ const index = ({
               borderColor={"#FF9209"}
               isCargaps={true}
               selectedValue={selectedValue}
+              className="codesGraphStyle1"
             />
           </div>
         ) : (
@@ -70,7 +72,7 @@ const index = ({
         )}
       </div>
       <div
-        className="remianingAreaGraph"
+        className=""
         style={{
           width: "33%",
           backgroundColor: "#E2F1F3",
@@ -133,6 +135,7 @@ const index = ({
                 isCargaps={true}
                 cargapColor="#5A75F2"
                 selectedValue={selectedValue}
+                className="revenueCharts3"
               />
             </div>
           </div>
