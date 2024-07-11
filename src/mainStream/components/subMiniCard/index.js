@@ -1,10 +1,10 @@
 import React from "react";
 
-const OverallReportsSection = ({ totalReports, styles }) => {
+const OverallReportsSection = ({ totalReports, styles,isSent }) => {
   return (
     <div className={`col-xl-3 ${styles.sentSubCard}`}>
       <div>
-        <div>Overall Sent Reports</div>
+        <div>{isSent?'Overall Sent Reports':'Overall Received Reports'}</div>
         <h4>{totalReports}</h4>
       </div>
     </div>

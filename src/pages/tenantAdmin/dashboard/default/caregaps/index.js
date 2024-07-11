@@ -20,11 +20,10 @@ const index = ({
   loaderButton,
   totalCodesLoader,
 }) => {
-
   const suggestedHccDiseaseCountMap =
-  getAllHccCodes?.suggestedHccDiseaseCountMap
-    ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
-    : [];
+    getAllHccCodes?.suggestedHccDiseaseCountMap
+      ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
+      : [];
   return (
     <div className="d-flex justify-content-between">
       <div className="remianingLineGraph" style={{ width: "33%" }}>
@@ -39,6 +38,7 @@ const index = ({
             </div>
           </div>
         </div>
+
         {loaderButton && totalCodesLoader ? (
           <div>
             <Skeleton.Input
@@ -47,7 +47,7 @@ const index = ({
               active
             />
           </div>
-         ) : totalCodesLoader ? (
+        ) : totalCodesLoader ? (
           <div className="d-flex justify-content-center align-items-center h-75">
             <Spin size="large" />
           </div>
@@ -59,14 +59,15 @@ const index = ({
               borderColor={"#FF9209"}
               isCargaps={true}
               selectedValue={selectedValue}
+              className="codesGraphStyle1"
             />
           </div>
         ) : (
           <Empty className="mt-3" />
-        )} 
+        )}
       </div>
       <div
-        className="remianingAreaGraph"
+        className=""
         style={{
           width: "33%",
           backgroundColor: "#E2F1F3",
@@ -113,6 +114,7 @@ const index = ({
           isCargaps={true}
           cargapColor="#5A75F2"
           selectedValue={selectedValue}
+          className="revenueCharts3"
         />
       </div>
     </div>
@@ -128,7 +130,6 @@ const enhancer = connect(
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
     totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.totalCodesLoader,
-
   }),
   {
     getAllHccCodesData: HccCodes,

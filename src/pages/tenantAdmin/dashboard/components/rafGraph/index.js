@@ -125,7 +125,12 @@ const RafGraph = ({
       },
     ],
   };
-  return <ReactECharts option={option} />;
+  return (
+    <div className="carecapRAF">
+    
+      <ReactECharts option={option} />
+    </div>
+  );
 };
 
 const enhancer = connect(

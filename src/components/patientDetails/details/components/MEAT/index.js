@@ -78,7 +78,7 @@ const MeatCard = ({
             </div>
           </div>
         </div>
-        <div className={visitStyles.meatcontainer}>
+        
          
             {list?.map((item) => {
               return (
@@ -452,7 +452,7 @@ const MeatCard = ({
               );
             })}
           
-        </div>
+   
 
         {list.length == 0 ? (
           <div className="card combo-card">

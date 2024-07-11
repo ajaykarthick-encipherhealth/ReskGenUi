@@ -171,6 +171,7 @@ const SentReport = ({
                                 details?.receivedReportDTOList?.totalElements
                               }
                               styles={styles}
+                              isSent={true}
                             />
 
                             <OverallUsersSection

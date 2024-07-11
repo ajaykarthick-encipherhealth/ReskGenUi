@@ -6,6 +6,7 @@ import ReactECharts from "echarts-for-react";
 import styles from "../../styles.module.css";
 import CodesGraph from "../../components/codeGraph";
 import { Skeleton, Spin } from "antd";
+import CodeGraphRevenue from "../../components/codeGraphRevenue/index.js";
 
 
 const index = ({ rafScoreData, overAllRafScore, rafLoader ,dateRange,selectedOrganization, loaderButton}) => {
@@ -106,7 +107,7 @@ const index = ({ rafScoreData, overAllRafScore, rafLoader ,dateRange,selectedOrg
           <div className={styles.price}>$ 3189k</div>
           <div className={styles.revenue}>$ 3.1k Increase</div>
         </div>
-        <CodesGraph
+        <CodeGraphRevenue
           gradientColor1={"#5D94FE"}
           gradientColor2={"#FAFCFF"}
           borderColor={"#3479FE"}

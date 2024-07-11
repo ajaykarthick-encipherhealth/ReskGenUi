@@ -9,7 +9,7 @@ import {
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 import { getLast30Days, getLast7Days } from "../../../../../utils/reusable.js";
 
-const CodesGraph = ({
+const codeGraphRevenue = ({
   options,
   borderColor,
   gradientColor1,
@@ -22,7 +22,6 @@ const CodesGraph = ({
   isRevenue,
   getAllHccCodes,
   selectedValue,
-  className,
 }) => {
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
     ? Object.values(getAllHccCodes.hccDiseaseCountMap)
@@ -51,7 +50,7 @@ const CodesGraph = ({
     series: [
       {
         name: isCargaps
-          ? "Care Gap Codes"
+          ? "Car Gap Codes"
           : isHcc
           ? "HCC Codes"
           : isRevenue
@@ -89,10 +88,9 @@ const CodesGraph = ({
     ],
   };
   return (
-    <div className={`${className}`}>
-   
+    <div className="revenueDollar">
+      {" "}
       <ReactECharts option={options ? options : graphOptions} />
-     
     </div>
   );
 };
@@ -113,4 +111,4 @@ const enhancer = connect(
   }
 );
 
-export default enhancer(CodesGraph);
+export default enhancer(codeGraphRevenue);
