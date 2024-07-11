@@ -4,21 +4,26 @@ import styles from "../../styles.module.css";
 import RafGraph from "../../components/rafGraph";
 import RevenueGraph from "../../components/revenueGraph";
 import { connect } from "react-redux";
+import { Empty, Spin } from "antd";
+import { Skeleton } from "antd";
 import {
   HccCodes,
   RafCounts,
   getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
 
-
 const index = ({
   getAllHccCodes,
   getAllRaf,
   getAllRafScoreData,
   selectedValue,
+  loaderButton,
+  totalCodesLoader,
 }) => {
-
-
+  const suggestedHccDiseaseCountMap =
+    getAllHccCodes?.suggestedHccDiseaseCountMap
+      ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
+      : [];
   return (
     <div className="d-flex justify-content-between">
       <div className="remianingLineGraph" style={{ width: "33%" }}>
@@ -33,14 +38,33 @@ const index = ({
             </div>
           </div>
         </div>
-        <CodesGraph
-          gradientColor1={"#FF9209"}
-          gradientColor2={"#FFFDFA"}
-          borderColor={"#FF9209"}
-          isCargaps={true}
-          selectedValue={selectedValue}
-          className="codesGraphStyle1"
-        />
+
+        {loaderButton && totalCodesLoader ? (
+          <div>
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "288px" }}
+              active
+            />
+          </div>
+        ) : totalCodesLoader ? (
+          <div className="d-flex justify-content-center align-items-center h-75">
+            <Spin size="large" />
+          </div>
+        ) : suggestedHccDiseaseCountMap?.length > 0 ? (
+          <div className="totalCodesPies">
+            <CodesGraph
+              gradientColor1={"#FF9209"}
+              gradientColor2={"#FFFDFA"}
+              borderColor={"#FF9209"}
+              isCargaps={true}
+              selectedValue={selectedValue}
+              className="codesGraphStyle1"
+            />
+          </div>
+        ) : (
+          <Empty className="mt-3" />
+        )}
       </div>
       <div
         className=""
@@ -90,8 +114,7 @@ const index = ({
           isCargaps={true}
           cargapColor="#5A75F2"
           selectedValue={selectedValue}
-          className="revenueCharts3" 
-
+          className="revenueCharts3"
         />
       </div>
     </div>
@@ -106,6 +129,7 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
+    totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.totalCodesLoader,
   }),
   {
     getAllHccCodesData: HccCodes,

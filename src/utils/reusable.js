@@ -68,17 +68,17 @@ export function getLast30Days() {
   return date_thirty_days.reverse();
 }
 export function getLast7Days() {
-  const date_thirty_days = [];
+  const date_seven_days = [];
   const currentDate = new Date();
 
   for (let i = 0; i < 7; i++) {
     const pastDate = new Date(currentDate);
     pastDate.setDate(currentDate.getDate() - i);
-    date_thirty_days.push(
+    date_seven_days.push(
       pastDate.toLocaleString("default", { month: "short" }) +
         pastDate.getDate()
     );
   }
 
-  return date_thirty_days.reverse();
+  return date_seven_days.reverse();
 }

@@ -353,7 +353,7 @@ const InitialCard = ({
                       <Empty />
                     </div>
                   ) : (
-                    <div className="col-xl-6">
+                    <div className={`col-xl-6 ${styles.cardDiv}`}>
                       <div className={styles.cardContainer}>
                         {reportListAll?.response?.data?.map((item, id) => (
                           <ContentGroupCard
@@ -488,7 +488,7 @@ const enhancer = connect(
     adminLoader: state?.admin?.report,
   }),
   {
-    reviewerReport: reviewerAction.reviewerReport,
+    reviewerReport: reviewerAction.reviewerCheckAllReport,
   }
 );
 export default enhancer(InitialCard);
