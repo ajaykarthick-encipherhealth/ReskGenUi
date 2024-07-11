@@ -131,7 +131,7 @@ const HccCards = ({
     <>
       {provided && (
         <div ref={provided?.innerRef} {...provided?.droppableProps}>
-          {list?.map(
+          {list?.length>0 ?list?.map(
             (
               data,
               i // this condation we added for vignesh suggest to remove isCombo pracent
@@ -768,7 +768,10 @@ const HccCards = ({
                 </li>
               </>
             )
-          )}
+          ):
+          <div className={styles.noMsContainer}>
+            {`No ${cardTitle} codes are found`}
+          </div> }
           <span className="d-none">{provided?.placeholder}</span>
         </div>
       )}
