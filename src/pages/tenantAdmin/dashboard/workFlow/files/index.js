@@ -240,7 +240,7 @@ const Files = ({
        ) : getAllComputingStatus?.COMPUTED?.length >0? (
         
         <div className="totalCodesPies3">
-          <CodesGraph options={options} />
+          <CodesGraph options={options}  className="workflowChart"/>
         </div>
         
       ):<Empty className="mt-3"/>}
