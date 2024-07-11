@@ -22,11 +22,11 @@ const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
   };
 
   return (
-    <div className={styles.cardContainer}>
+    <div>
       {data?.length > 0 ? (
         <div
-          style={{ marginBottom: "10px" }}
-          className={`${styles.card} ${styles.selectedCard}`}
+          style={{ marginBottom: "0px" }}
+          className={`${styles.card} ${styles.selectedCard} py-3`}
           onClick={() => handleReceiverReport(item)}
         >
           <div className={styles.contentGroup}>
@@ -39,21 +39,16 @@ const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
                   paddingBottom: "5px",
                 }}
               >
-                <div className={`col-xl-6 ${styles.pName}`}>
+                <div className={`${styles.pName}`}>
                   {item.reportName}
+                  <div className={`${styles.headText}`}>{item._id}</div>
+                  <div className="d-flex">
+                    <div className={`${styles.dateText}`}>
+                      {handleDateFormat(item.sendDate)}
+                    </div>
+                  </div>
                 </div>
-                <div className={`col-xl-2 ${styles.dataContainer}`}>
-                  <div className={`col-xl-2 `}>{accessTemplate(item)}</div>
-                </div>
-              </div>
-              <div style={{ paddingBottom: "5px" }}>
-                <div className={`col-xl-12 ${styles.headText}`}style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{item.id}</div>
-              </div>
-              <div className="d-flex justify-content-between align-items-center">
-                <div className={`col-xl-2 ${styles.text}`}>
-                  {handleDateFormat(item.sendDate)}
-                </div>
-                <div className={`col-xl-4 ${styles.text}`}>
+                <div className={`${styles.text}`}>
                   <Avatar.Group maxCount={2}>
                     <Popover
                       key={index}
@@ -115,6 +110,9 @@ const GroupCard = ({ data, handleReceiverReport, styles, item, index }) => {
                       </div>
                     </Popover>
                   </Avatar.Group>
+                </div>
+                <div className={`${styles.dataContainer}`}>
+                  <div>{accessTemplate(item)}</div>
                 </div>
               </div>
             </div>
