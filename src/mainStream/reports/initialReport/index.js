@@ -353,7 +353,7 @@ const InitialCard = ({
                       <Empty />
                     </div>
                   ) : (
-                    <div className="col-xl-6">
+                    <div className={`col-xl-6 ${styles.cardDiv}`}>
                       <div className={styles.cardContainer}>
                         {reportListAll?.response?.data?.map((item, id) => (
                           <ContentGroupCard
