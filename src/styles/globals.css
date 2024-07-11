@@ -15055,7 +15055,7 @@ text-align: start;
  position: absolute;
     left: -46px !important;
     top: -45px !important;
-    width: 903px !important;
+    width: 100% !important;
     height: 300px !important;
     user-select: none;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
