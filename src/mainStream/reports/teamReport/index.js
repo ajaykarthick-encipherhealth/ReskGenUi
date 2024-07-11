@@ -344,7 +344,7 @@ const TeamReport = ({
                         <Empty />
                       </div>
                     ) : (
-                      <div className="col-xl-6">
+                      <div className={`col-xl-6 ${styles.cardDiv}`}>
                         <div className={styles.cardContainer}>
                           {reportListAll?.response?.response?.data?.map(
                             (item, id) => (
