@@ -759,6 +759,15 @@ const HccCards = ({
                                   Most Specified
                                 </Badge>
                               ) : null}
+                              {data.isRadiology == true &&
+                                <Tooltip title="RADIOLOGY">
+                                <span
+                                  className={` mt-2 ${visitStyles.radiologyStatus}`}
+                                  bg={`  mt-2 bg-bg-eight `}
+                                >
+                                  Radiology
+                                </span>
+                              </Tooltip>}
                             </div>
                           )}
                         </div>
