@@ -20,10 +20,22 @@ const index = ({
   selectedOrganization,
   selectedValue,
   totalCodesLoader,
+  revenueChartLoader,
+  rafScorechartLoader,
 }) => {
   const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
     ? Object.values(getAllHccCodes.hccDiseaseCountMap)
     : [];
+
+  const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
+    ? Object.values(getAllRaf.premiumByDateForHcc)
+    : [];
+
+  const rafScoreByDateForHcc = getAllRafScoreData?.rafScoreByDateForHcc
+    ? Object.values(getAllRafScoreData.rafScoreByDateForHcc)
+    : [];
+
+
 
   return (
     <div className="d-flex justify-content-between">
@@ -84,11 +96,31 @@ const index = ({
             </div>
           </div>
         </div>
-        <RafGraph
-          rafColor={"#8E68F7"}
-          isHcc={true}
-          selectedValue={selectedValue}
-        />
+
+        {/* {loaderButton && rafScorechartLoader ? (
+          <div>
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "288px" }}
+              active
+            />
+          </div>
+        ) : rafScorechartLoader ? (
+          <div className="d-flex justify-content-center align-items-center h-75 ">
+            <Spin size="large" />
+          </div>
+        ) : rafScoreByDateForHcc?.length > 0 ? ( */}
+            <div className="totalCodesPies2">
+              <RafGraph
+                rafColor={"#8E68F7"}
+                isHcc={true}
+                selectedValue={selectedValue}
+              />
+            </div>
+{/*         
+        ) : (
+          <Empty className="mt-3" />
+        )} */}
       </div>
       <div
         style={{
@@ -109,11 +141,32 @@ const index = ({
             </div>
           </div>
         </div>
-        <RevenueGraph
-          isHcc={true}
-          hccColor="#02BBDE"
-          selectedValue={selectedValue}
-        />
+
+        {loaderButton && revenueChartLoader ? (
+          <div>
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "288px" }}
+              active
+            />
+          </div>
+        ) : revenueChartLoader ? (
+          <div className="d-flex justify-content-center align-items-center h-75 ">
+            <Spin size="large" />
+          </div>
+        ) : premiumByDateForHcc?.length > 0 ? (
+          <div className="totalCodesPies">
+            <div className="totalCodesPies2">
+              <RevenueGraph
+                isHcc={true}
+                hccColor="#02BBDE"
+                selectedValue={selectedValue}
+              />
+            </div>
+          </div>
+        ) : (
+          <Empty className="mt-3" />
+        )}
       </div>
     </div>
   );
@@ -128,7 +181,10 @@ const enhancer = connect(
 
     getAllRaf:
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
+    revenueChartLoader:
+      state?.tenantAdmin?.dashboard?.default?.revenueChartLoader,
     totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.totalCodesLoader,
+     rafScorechartLoader:state?.tenantAdmin?.dashboard?.default?.rafScorechartLoader,
   }),
   {
     getAllHccCodesData: HccCodes,

@@ -25,6 +25,8 @@ const index = ({
   getAllRafData,
   selectedOrganization,
   selectedValue,
+  rafScorechartLoader,
+  revenueChartLoader,
 }) => {
   useEffect(() => {
     getAllHccCodesData(
@@ -132,6 +134,14 @@ const index = ({
   const suggestedCount = getAllRafScoreData?.totalSuggestedRaf;
   const totalScoreTwo = hccDiseaseCountMap + suggestedCount;
 
+  const rafScoreByDateForSuggested =
+    getAllRafScoreData?.rafScoreByDateForSuggested
+      ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
+      : [];
+  const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
+    ? Object.values(getAllRaf.premiumByDateForHcc)
+    : [];
+
 
   return (
     <div className="d-flex justify-content-between">
@@ -172,15 +182,17 @@ const index = ({
               active
             />
           </div>
-         ) : totalCodesLoader ? (
+        ) : totalCodesLoader ? (
           <div className="d-flex justify-content-center align-items-center h-75 ">
-            <Spin  size="large" />
+            <Spin size="large" />
           </div>
-       ) :hccDiseaseCountValues?.length >0? (
+        ) : hccDiseaseCountValues?.length > 0 ? (
           <div className="totalCodesPies">
-          <CodesGraph options={options} isRadio={true} />
+            <CodesGraph options={options} isRadio={true} />
           </div>
-        ):<Empty className="mt-3"/>} 
+        ) : (
+          <Empty className="mt-3" />
+        )}
       </div>
       <div
         className="remianingAreaGraph"
@@ -200,7 +212,22 @@ const index = ({
             </div>
           </div>
         </div>
-        <RafGraph
+        {/* {loaderButton && rafScorechartLoader ? (
+          <div>
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "288px" }}
+              active
+            />
+          </div>
+        ) : rafScorechartLoader ? (
+          <div className="d-flex justify-content-center align-items-center h-75 ">
+            <Spin size="large" />
+          </div>
+        ) : rafScoreByDateForSuggested?.length > 0 ? ( */}
+        
+            <div className="totalCodesPies2">
+            <RafGraph
           overallData={true}
           rafColor={"#E88D67"}
           rafColor3={"#FF9209"}
@@ -209,6 +236,12 @@ const index = ({
           dateRange={dateRange}
           selectedOrganization={selectedOrganization}
         />
+            
+          </div>
+        {/* ) : (
+          <Empty className="mt-3" />
+        )} */}
+       
       </div>
       <div
         style={{
@@ -227,17 +260,37 @@ const index = ({
             </div>
           </div>
         </div>
-        <div className="totalCodesPies2">
-          <RevenueGraph
-            selectedOrganization={selectedOrganization}
-            isMultiple={true}
-            selectedValue={selectedValue}
-          />
-        </div>
+
+        {loaderButton && revenueChartLoader ? (
+          <div>
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "288px" }}
+              active
+            />
+          </div>
+        ) : revenueChartLoader ? (
+          <div className="d-flex justify-content-center align-items-center h-75 ">
+            <Spin size="large" />
+          </div>
+        ) : premiumByDateForHcc?.length > 0 ? (
+          <div className="totalCodesPies">
+            <div className="totalCodesPies2">
+              <RevenueGraph
+                selectedOrganization={selectedOrganization}
+                isMultiple={true}
+                selectedValue={selectedValue}
+              />
+            </div>
+          </div>
+        ) : (
+          <Empty className="mt-3" />
+        )}
       </div>
     </div>
   );
 };
+
 
 const enhancer = connect(
   (state) => ({
@@ -248,6 +301,9 @@ const enhancer = connect(
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
     totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.totalCodesLoader,
+    //  rafScorechartLoader: state?.tenantAdmin?.dashboard?.default?.rafScorechartLoader,
+    revenueChartLoader:
+      state?.tenantAdmin?.dashboard?.default?.revenueChartLoader,
   }),
   {
     getAllHccCodesData: HccCodes,

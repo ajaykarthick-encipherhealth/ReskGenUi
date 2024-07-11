@@ -19,11 +19,15 @@ const index = ({
   selectedValue,
   loaderButton,
   totalCodesLoader,
+  revenueChartLoader,
 }) => {
-
   const suggestedHccDiseaseCountMap =
-  getAllHccCodes?.suggestedHccDiseaseCountMap
-    ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
+    getAllHccCodes?.suggestedHccDiseaseCountMap
+      ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
+      : [];
+
+  const premiumByDateForSuggested = getAllRaf?.premiumByDateForSuggested
+    ? Object.values(getAllRaf.premiumByDateForSuggested)
     : [];
   return (
     <div className="d-flex justify-content-between">
@@ -47,7 +51,7 @@ const index = ({
               active
             />
           </div>
-         ) : totalCodesLoader ? (
+        ) : totalCodesLoader ? (
           <div className="d-flex justify-content-center align-items-center h-75">
             <Spin size="large" />
           </div>
@@ -63,7 +67,7 @@ const index = ({
           </div>
         ) : (
           <Empty className="mt-3" />
-        )} 
+        )}
       </div>
       <div
         className="remianingAreaGraph"
@@ -109,11 +113,32 @@ const index = ({
             </div>
           </div>
         </div>
-        <RevenueGraph
-          isCargaps={true}
-          cargapColor="#5A75F2"
-          selectedValue={selectedValue}
-        />
+
+        {loaderButton && revenueChartLoader ? (
+          <div>
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "288px" }}
+              active
+            />
+          </div>
+        ) : revenueChartLoader ? (
+          <div className="d-flex justify-content-center align-items-center h-75 ">
+            <Spin size="large" />
+          </div>
+        ) : premiumByDateForSuggested?.length > 0 ? (
+          <div className="totalCodesPies">
+            <div className="totalCodesPies2">
+              <RevenueGraph
+                isCargaps={true}
+                cargapColor="#5A75F2"
+                selectedValue={selectedValue}
+              />
+            </div>
+          </div>
+        ) : (
+          <Empty className="mt-3" />
+        )}
       </div>
     </div>
   );
@@ -128,7 +153,8 @@ const enhancer = connect(
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
     totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.totalCodesLoader,
-
+    revenueChartLoader:
+      state?.tenantAdmin?.dashboard?.default?.revenueChartLoader,
   }),
   {
     getAllHccCodesData: HccCodes,

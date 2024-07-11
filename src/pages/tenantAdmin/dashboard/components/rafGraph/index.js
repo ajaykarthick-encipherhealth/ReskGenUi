@@ -15,7 +15,7 @@ const RafGraph = ({
   isCargaps,
   isHcc,
   getAllRafScoreData,
-  getAllRafScore,
+  getAllRafScoreAPI,
   selectedValue,
   selectedOrganization,
 }) => {
@@ -27,7 +27,7 @@ const RafGraph = ({
 
 
   useEffect(() => {
-    getAllRafScore(
+    getAllRafScoreAPI(
       dateRange.startDate,
       dateRange.endDate,
       selectedOrganization,
@@ -138,7 +138,7 @@ const enhancer = connect(
   {
     getAllHccCodesData: HccCodes,
     getAllRafData: RafCounts,
-    getAllRafScore: getAllRafScore,
+    getAllRafScoreAPI: getAllRafScore,
   }
 );
 export default enhancer(RafGraph);
