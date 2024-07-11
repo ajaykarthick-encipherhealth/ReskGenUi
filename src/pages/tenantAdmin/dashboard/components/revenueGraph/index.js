@@ -53,14 +53,14 @@ const RevenueGraph = ({
     },
     series: [
       {
-        name: isHcc ? "Hcc Codes" : isCargaps ? "Car Gapcodes" : "Total Codes",
+        name: isHcc ? "Hcc Codes" : isCargaps ? "Car Gap Codes" : "Total Codes",
         type: "line",
         step: "start",
         data: isHcc
           ? premiumByDateForHcc
           : isCargaps
           ? premiumByDateForSuggested
-          : [100, 240, 310, 140, 250, 760, 740, 180, 90, 100], //Total Codes
+          : [100, 240, 310, 140, 250, 760, 740, 180, 90, 100], //REVEN Total Codes
         itemStyle: {
           color: isHcc ? "#02BBDE" : isCargaps ? "#5A75F2" : "#E88D67",
         },

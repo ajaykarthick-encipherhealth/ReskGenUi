@@ -92,7 +92,7 @@ const RafGraph = ({
           ? rafScoreByDateForSuggested
           : isCargaps
           ? rafScoreByDateForHcc
-          : [100, 200, 300, 400, 10, 50, 100], //Total Codes
+          : [100, 200, 300, 400, 10, 50, 100], //RAF Total Codes
       },
 
       {
