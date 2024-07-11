@@ -3,7 +3,7 @@ import ReactECharts from "echarts-for-react";
 import styles from "./styles.module.css";
 import { Button, Modal, Skeleton } from "antd";
 
-const OrgPieChartInfo = ({ data, loaderButton, orgLoader }) => {
+const OrgPieChartInfo = ({ data,  orgLoader }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
@@ -77,14 +77,9 @@ const OrgPieChartInfo = ({ data, loaderButton, orgLoader }) => {
 
   return (
     <>
-      {loaderButton && orgLoader ? (
+      {orgLoader ? (
         <div className="skeletonantd d-flex justify-content-center align-items-center">
           <Skeleton.Avatar active size="large" shape="circle" />
-        </div>
-      ) : orgLoader ? (
-        <div className="d-flex justify-content-center align-items-center">
-          {" "}
-          <Spin size="large" />
         </div>
       ) : (
         <ReactECharts
@@ -93,13 +88,8 @@ const OrgPieChartInfo = ({ data, loaderButton, orgLoader }) => {
         />
       )}
 
-      {loaderButton && orgLoader ? (
+      {orgLoader ? (
         <Skeleton active />
-      ) : orgLoader ? (
-        <div className="d-flex justify-content-center align-items-center">
-          {" "}
-          <Spin size="large" />
-        </div>
       ) : (
         <>
           <div style={{ display: "flex", justifyContent: "end" }}>

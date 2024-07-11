@@ -15068,8 +15068,21 @@ text-align: start;
   position: absolute;
   left: -51px !important;
   top: 0px;
-  width: 1460px !important;
-  height: 440px !important;
+  width: 1300px !important;
+  height: 350px !important;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  padding: 0px;
+  margin: 0px;
+  border-width: 0px;
+}
+
+.workflowChart1 >div >div>canvas{
+  position: absolute;
+  left: -53px !important;
+  top: -23px !important;
+  width: 1488px !important;
+  height: 446px !important;
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   padding: 0px;
