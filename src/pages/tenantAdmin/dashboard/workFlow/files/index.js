@@ -156,7 +156,7 @@ const Files = ({
       ...cardData,
       {
         id: 5,
-        title: "Codes Captures",
+        title: "Codes",
         count: top10DiseasesData?.totalCount,
         icon: codeCaptured,
         color: "#FFEAE0",
@@ -187,13 +187,15 @@ const Files = ({
             className="rounded-lg w-30"
             style={{
               backgroundColor: item?.color,
-              width: "17%",
-              height: "70px",
+              width: "19%",
+              height: "80px",
               display: "flex",
-              justifyContent: "center",
+              // justifyContent: "center",
               textAlign: "center",
               alignItems: "center",
               borderRadius: "10px",
+              padding:"5px"
+              
             }}
           >
             {computingTileStatusLoader ? (
@@ -205,14 +207,14 @@ const Files = ({
                 />
               </div>
             ) :  (
-              <div className="d-flex justify-content-between">
+              <div className="d-flex w-100 mt-3">
                 <div
                   style={{
-                    width: "40px",
-                    height: "40px",
+                    width: "48px",
+                    height: "47px",
                     backgroundColor: item?.iconBg,
                     borderRadius: "10px",
-                    margin: "0 10px 0 0",
+                    margin: "0 10px 16px",
                     display: "flex",
                     justifyContent: "center",
                     textAlign: "center",
@@ -222,7 +224,7 @@ const Files = ({
                   <Image src={item?.icon} />
                 </div>
                 <div>
-                  <div style={{ fontSize: "16px" }}>{item?.title}</div>
+                  <div style={{ fontSize: "16px", fontWeight:"900"}}>{item?.title}</div>
                   <div style={{ fontSize: "18px", fontWeight: "700" }}>
                     {item?.count}
                   </div>
