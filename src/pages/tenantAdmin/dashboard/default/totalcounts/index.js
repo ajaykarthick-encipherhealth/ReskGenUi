@@ -46,7 +46,7 @@ const index = ({
       dateRange.endDate,
       selectedOrganization
     );
-  }, [dateRange]);
+  }, [dateRange,selectedOrganization]);
 
   return (
     <div
