@@ -22,6 +22,7 @@ const Files = ({
   dateRange,
   selectedOrganization,
   selectedValue,
+  activeBtn,
 }) => {
   const dates = [];
   function getLast7Days() {
@@ -113,7 +114,7 @@ const Files = ({
       },
     ],
   };
-  const cardData = [
+  let cardData = [
     {
       id: 1,
       title: "Upload",
@@ -146,15 +147,21 @@ const Files = ({
       color: "#FFEAE0",
       iconBg: "#FFDBCC",
     },
-    {
-      id: 5,
-      title: "Codes Captures",
-      count: top10DiseasesData?.totalCount,
-      icon: codeCaptured,
-      color: "#FFEAE0",
-      iconBg: "#FFDBCC",
-    },
   ];
+
+  if (activeBtn == "default") {
+    cardData = [
+      ...cardData,
+      {
+        id: 5,
+        title: "Codes Captures",
+        count: top10DiseasesData?.totalCount,
+        icon: codeCaptured,
+        color: "#FFEAE0",
+        iconBg: "#FFDBCC",
+      },
+    ];
+  }
 
   useEffect(() => {
     getComputingStatus(
