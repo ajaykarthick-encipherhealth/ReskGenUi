@@ -155,9 +155,9 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
-    totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.totalCodesLoader,
+      totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.allHccCodes?.loading,
     revenueChartLoader:
-      state?.tenantAdmin?.dashboard?.default?.revenueChartLoader,
+      state?.tenantAdmin?.dashboard?.default?.allRafCounts?.loading,
   }),
   {
     getAllHccCodesData: HccCodes,

@@ -145,7 +145,6 @@ const index = ({
     ? Object.values(getAllRaf.premiumByDateForHcc)
     : [];
 
-
   return (
     <div className="d-flex justify-content-between">
       <div style={{ width: "33%" }}>
@@ -185,11 +184,11 @@ const index = ({
               active
             />
           </div>
-        ) : totalCodesLoader ? (
-          <div className="d-flex justify-content-center align-items-center h-75 ">
-            <Spin size="large" />
-          </div>
-        ) : hccDiseaseCountValues?.length > 0 ? (
+        ) : 
+          // <div className="d-flex justify-content-center align-items-center h-75 ">
+          //   <Spin size="large" />
+          // </div>
+         hccDiseaseCountValues?.length > 0 ? (
           <div className="totalCodesPies">
             <CodesGraph options={options} isRadio={true} className="codesGraphStyle2"/>
           </div>
@@ -283,10 +282,9 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
-    totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.totalCodesLoader,
-    //  rafScorechartLoader: state?.tenantAdmin?.dashboard?.default?.rafScorechartLoader,
+    totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.allHccCodes?.loading,
     revenueChartLoader:
-      state?.tenantAdmin?.dashboard?.default?.revenueChartLoader,
+      state?.tenantAdmin?.dashboard?.default?.allRafCounts?.loading,
   }),
   {
     getAllHccCodesData: HccCodes,
