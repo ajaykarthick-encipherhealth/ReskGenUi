@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import styles from "../../styles.module.css";
 import CodesGraph from "../../components/codeGraph";
 import Image from "next/image";
 import processing from "../../../../../images/tenantAdmin/processing.svg";
@@ -247,7 +248,9 @@ const Files = ({
           <CodesGraph options={options}  className="workflowChart"/>
         </div>
       ) : (
-        <Empty className="mt-3" />
+        <div className={styles.centered_container}>
+        <Empty />
+      </div>
       )}
     </div>
   );
