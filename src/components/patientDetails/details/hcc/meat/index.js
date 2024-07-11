@@ -192,7 +192,7 @@ const Meat = ({
           title={title}
           overlayStyle={{ zIndex: 1000 }}
           content={
-            <div style={{height:"150px", overflow:'scroll'}}>
+            <div style={{ height: "150px", overflow: "scroll" }}>
               <div>{value}</div>
               {subString?.map((res) => {
                 if (res?.header) {
@@ -276,69 +276,70 @@ const Meat = ({
           </div>
         </div>
       ) : null}
-      <MeatCard
-        list={meatCriteriaList}
-        captureSectionMatching={captureSectionMatching}
-        encounterDateMatching={encounterDateMatching}
-        okText="OK"
-        cancelText="Cancel"
-        popConfirmTitle="You want move to delete?"
-        setSearch={setSearch}
-        setFileLoading={setFileLoading}
-        setFileModalHeader={setFileModalHeader}
-        onchangeMeat={onchangeMeat}
-        setIsModalOpen={setIsModalOpen}
-        isAddComboCode={false}
-        setConfirmNotesModalValid={setConfirmNotesModalValid}
-        setIsValidAction={setIsValidAction}
-        patientDocumentResult={patientDocumentResult}
-        setSelectMeatResult={setSelectMeatResult}
-        activeMeatTitle={activeMeatTitle}
-        setIsModalOpenLab={setIsModalOpenLab}
-        setIsModalOpenRadiology={setIsModalOpenRadiology}
-        setSelectHyperlink={setSelectHyperlink}
-        setEditData={setEditData}
-        setMeatEdit={setMeatEdit}
-        addMeatQuery={addMeatQuery}
-        getDisTitlePopover={getDisTitlePopover}
-        cardTitle="VALID_MEAT"
-      />
+      <div className={visitStyles.meatcontainer}>
+        <MeatCard
+          list={meatCriteriaList}
+          captureSectionMatching={captureSectionMatching}
+          encounterDateMatching={encounterDateMatching}
+          okText="OK"
+          cancelText="Cancel"
+          popConfirmTitle="You want move to delete?"
+          setSearch={setSearch}
+          setFileLoading={setFileLoading}
+          setFileModalHeader={setFileModalHeader}
+          onchangeMeat={onchangeMeat}
+          setIsModalOpen={setIsModalOpen}
+          isAddComboCode={false}
+          setConfirmNotesModalValid={setConfirmNotesModalValid}
+          setIsValidAction={setIsValidAction}
+          patientDocumentResult={patientDocumentResult}
+          setSelectMeatResult={setSelectMeatResult}
+          activeMeatTitle={activeMeatTitle}
+          setIsModalOpenLab={setIsModalOpenLab}
+          setIsModalOpenRadiology={setIsModalOpenRadiology}
+          setSelectHyperlink={setSelectHyperlink}
+          setEditData={setEditData}
+          setMeatEdit={setMeatEdit}
+          addMeatQuery={addMeatQuery}
+          getDisTitlePopover={getDisTitlePopover}
+          cardTitle="VALID_MEAT"
+        />
 
-      {deletedMeatList?.length != 0 && (
-        <>
-          <div className="invalid-combo">
-            <span>Deleted MeatCriteria</span>
-          </div>
-          <MeatCard
-            list={deletedMeatList}
-            captureSectionMatching={captureSectionMatching}
-            encounterDateMatching={encounterDateMatching}
-            okText="OK"
-            cancelText="Cancel"
-            popConfirmTitle="You want move to valid?"
-            setSearch={setSearch}
-            setFileLoading={setFileLoading}
-            setFileModalHeader={setFileModalHeader}
-            onchangeMeat={onchangeMeat}
-            setIsModalOpen={setIsModalOpen}
-            isAddComboCode={false}
-            setConfirmNotesModalValid={setConfirmNotesModalValid}
-            setIsValidAction={setIsValidAction}
-            patientDocumentResult={patientDocumentResult}
-            setSelectMeatResult={setSelectMeatResult}
-            activeMeatTitle={activeMeatTitle}
-            setIsModalOpenLab={setIsModalOpenLab}
-            setIsModalOpenRadiology={setIsModalOpenRadiology}
-            setSelectHyperlink={setSelectHyperlink}
-            setEditData={setEditData}
-            setMeatEdit={setMeatEdit}
-            addMeatQuery={addMeatQuery}
-            getDisTitlePopover={getDisTitlePopover}
-            cardTitle="DELETED_MEAT"
-          />
-        </>
-      )}
-
+        {deletedMeatList?.length != 0 && (
+          <>
+            <div className="invalid-combo">
+              <span>Deleted MeatCriteria</span>
+            </div>
+            <MeatCard
+              list={deletedMeatList}
+              captureSectionMatching={captureSectionMatching}
+              encounterDateMatching={encounterDateMatching}
+              okText="OK"
+              cancelText="Cancel"
+              popConfirmTitle="You want move to valid?"
+              setSearch={setSearch}
+              setFileLoading={setFileLoading}
+              setFileModalHeader={setFileModalHeader}
+              onchangeMeat={onchangeMeat}
+              setIsModalOpen={setIsModalOpen}
+              isAddComboCode={false}
+              setConfirmNotesModalValid={setConfirmNotesModalValid}
+              setIsValidAction={setIsValidAction}
+              patientDocumentResult={patientDocumentResult}
+              setSelectMeatResult={setSelectMeatResult}
+              activeMeatTitle={activeMeatTitle}
+              setIsModalOpenLab={setIsModalOpenLab}
+              setIsModalOpenRadiology={setIsModalOpenRadiology}
+              setSelectHyperlink={setSelectHyperlink}
+              setEditData={setEditData}
+              setMeatEdit={setMeatEdit}
+              addMeatQuery={addMeatQuery}
+              getDisTitlePopover={getDisTitlePopover}
+              cardTitle="DELETED_MEAT"
+            />
+          </>
+        )}
+      </div>
       {isModalOpen && (
         <Modal
           title={[
