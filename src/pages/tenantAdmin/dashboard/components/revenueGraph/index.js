@@ -28,10 +28,8 @@ const RevenueGraph = ({
     ? Object.values(getAllRaf.premiumByDateForSuggested)
     : [];
 
-  const combinedData =
-    isHcc && isCargaps
-      ? [...premiumByDateForHcc, ...premiumByDateForSuggested]
-      : [];
+    let combinedData = premiumByDateForHcc.map((value, index) => value + premiumByDateForSuggested[index]);
+
   const option = {
     tooltip: {
       trigger: "axis",
@@ -61,7 +59,7 @@ const RevenueGraph = ({
           ? premiumByDateForHcc
           : isCargaps
           ? premiumByDateForSuggested
-          : [100, 240, 310, 140, 250, 760, 740, 180, 90, 100], //REVEN Total Codes
+          : combinedData, //REVEN Total Codes
         itemStyle: {
           color: isHcc ? "#02BBDE" : isCargaps ? "#5A75F2" : "#E88D67",
         },

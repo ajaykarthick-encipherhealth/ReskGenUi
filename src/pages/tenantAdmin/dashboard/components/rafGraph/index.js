@@ -42,6 +42,8 @@ const RafGraph = ({
     ? Object.values(getAllRafScoreData.rafScoreByDateForHcc)
     : [];
 
+   let combinedData = rafScoreByDateForSuggested.map((value, index) => value + rafScoreByDateForHcc[index]);
+
   const option = {
     tooltip: {
       trigger: "axis",
@@ -92,7 +94,7 @@ const RafGraph = ({
           ? rafScoreByDateForSuggested
           : isCargaps
           ? rafScoreByDateForHcc
-          : [100, 200, 300, 400, 10, 50, 100], //RAF Total Codes
+          : combinedData, //RAF Total Codes
       },
 
       {

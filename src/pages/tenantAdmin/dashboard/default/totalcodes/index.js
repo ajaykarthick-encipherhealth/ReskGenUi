@@ -46,6 +46,8 @@ const index = ({
   useEffect(() => {
     getAllRafData(dateRange.startDate, dateRange.endDate, selectedOrganization);
   }, [dateRange, selectedOrganization]);
+  let combinedData = suggestedHccDiseaseCountMap.map((value, index) => value + hccDiseaseCountValues[index]);
+
 
   const options = {
     xAxis: {
@@ -66,7 +68,7 @@ const index = ({
     series: [
       {
         name: "Total Codes",
-        data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 120, 130],
+        data: combinedData,
         color: "#E88D67",
         type: "line",
         lineStyle: { color: "#E88D67" },
