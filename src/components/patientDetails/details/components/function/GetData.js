@@ -289,6 +289,7 @@ export const getPatientDetails = async (
             ),
             isComboCode: getStateIndicators(res.stateIndicators, "COMBO_CODE"),
             isRadiology: getStateIndicators(res.stateIndicators, "RADIOLOGY"),
+            isLab: getStateIndicators(res.stateIndicators, "LAB"),
             providerDeatils: res.provider,
             notes: res.notes,
             hyperlinks: res?.hyperlinks,
