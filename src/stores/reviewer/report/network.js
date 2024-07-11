@@ -26,7 +26,32 @@ export async function reviewerApi({
   );
   return data;
 }
-
+export async function checkAllApi({
+  pagenum,
+  startDate = "",
+  endDate = "",
+  search,
+  filter = "",
+  sort,
+  size,
+  flagsList,
+}) {
+  const options = {
+    method: "GET",
+  };
+  const data = await requestPortal(
+    `dbservice/patient/coderreport?pageno=${pagenum}&size=${
+      size ? size : 7
+    }&startdate=${startDate}&enddate=${endDate}&status=${
+      filter ? filter : ""
+    }&searchstring=${search ? search : ""}&sortfield=${
+      sort?.sortField ? sort?.sortField : ""
+    }&sortdirection=${sort?.sortDir ? sort?.sortDir : ""}&patientIds=${flagsList?flagsList:""}
+  `,
+    options
+  );
+  return data;
+}
 export async function sentApi({
   pagenum,
   startDate = "",

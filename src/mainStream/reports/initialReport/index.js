@@ -488,7 +488,7 @@ const enhancer = connect(
     adminLoader: state?.admin?.report,
   }),
   {
-    reviewerReport: reviewerAction.reviewerReport,
+    reviewerReport: reviewerAction.reviewerCheckAllReport,
   }
 );
 export default enhancer(InitialCard);
