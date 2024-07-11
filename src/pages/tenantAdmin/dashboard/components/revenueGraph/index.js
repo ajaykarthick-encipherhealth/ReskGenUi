@@ -103,6 +103,8 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allHccCodes?.data?.response,
     getAllRaf:
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
+      revenueChartLoader:
+      state?.tenantAdmin?.dashboard?.default?.revenueChartLoader,
   }),
   {
     getAllHccCodesData: HccCodes,

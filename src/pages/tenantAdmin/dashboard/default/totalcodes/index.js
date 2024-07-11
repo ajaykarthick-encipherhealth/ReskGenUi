@@ -24,7 +24,8 @@ const index = ({
   getAllRafData,
   selectedOrganization,
   selectedValue,
- 
+  rafScorechartLoader,
+  revenueChartLoader,
 }) => {
   useEffect(() => {
     getAllHccCodesData(
@@ -135,6 +136,14 @@ const index = ({
   const suggestedCount = getAllRafScoreData?.totalSuggestedRaf;
   const totalScoreTwo = hccDiseaseCountMap + suggestedCount;
 
+  const rafScoreByDateForSuggested =
+    getAllRafScoreData?.rafScoreByDateForSuggested
+      ? Object.values(getAllRafScoreData.rafScoreByDateForSuggested)
+      : [];
+  const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
+    ? Object.values(getAllRaf.premiumByDateForHcc)
+    : [];
+
   return (
     <div className="d-flex justify-content-between">
       <div style={{ width: "33%" }}>
@@ -176,11 +185,11 @@ const index = ({
           </div>
         ) :  hccDiseaseCountValues?.length > 0 ? (
           <div className="totalCodesPies">
-          <CodesGraph options={options} isRadio={true}  className="codesGraphStyle2"/>
-
+            <CodesGraph options={options} isRadio={true} className="codesGraphStyle2"/>
           </div>
-        ):<Empty className="mt-3"/>} 
-
+        ) : (
+          <Empty className="mt-3" />
+        )}
       </div>
       <div
         className="remianingAreaGraph"
@@ -200,7 +209,8 @@ const index = ({
             </div>
           </div>
         </div>
-        <RafGraph
+        <div className="totalCodesPies2">
+            <RafGraph
           overallData={true}
           rafColor={"#E88D67"}
           rafColor3={"#FF9209"}
@@ -208,7 +218,8 @@ const index = ({
           selectedValue={selectedValue}
           dateRange={dateRange}
           selectedOrganization={selectedOrganization}
-        />
+        />   
+      </div>
       </div>
       <div
         style={{
@@ -228,19 +239,31 @@ const index = ({
           </div>
         </div>
 
-        <div className="totalCodesPies2">
-          <RevenueGraph
-            selectedOrganization={selectedOrganization}
-            isMultiple={true}
-            selectedValue={selectedValue}
-            className="revenueCharts1"
-          />
-        </div>
-
+        { revenueChartLoader ? (
+          <div>
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "288px" }}
+              active
+            />
+          </div>
+        )  : premiumByDateForHcc?.length > 0 ? (
+            <div className="totalCodesPies2">
+              <RevenueGraph
+                selectedOrganization={selectedOrganization}
+                isMultiple={true}
+                selectedValue={selectedValue}
+               className="revenueCharts1"
+              />
+            </div>
+        ) : (
+          <Empty className="mt-3" />
+        )}
       </div>
     </div>
   );
 };
+
 
 const enhancer = connect(
   (state) => ({
@@ -250,7 +273,9 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
-    totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.totalCodesLoader,
+    totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.allHccCodes?.loading,
+    revenueChartLoader:
+      state?.tenantAdmin?.dashboard?.default?.allRafCounts?.loading,
   }),
   {
     getAllHccCodesData: HccCodes,

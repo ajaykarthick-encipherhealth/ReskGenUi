@@ -3,13 +3,13 @@ import { handleActions } from "redux-actions";
 import {
   HccCodes,
   getAllRafScore,
-  RafCounts,
   FilesCount,
   ComputingStatus,
   top10Diseases,
   topOigCodes,
   computingTileStatus,
   rafScore,
+  RafCounts,
 } from "./action";
 
 const initialState = {
@@ -68,7 +68,9 @@ const tenantAdminDefault = combineReducers({
   computingTileStatusLoader:getReportLoading(computingTileStatus),
   computingStatusLoader:getReportLoading(ComputingStatus),
   topTenDiseasesLoader:getReportLoading(top10Diseases),
-  topTenOigCodes:getReportLoading(topOigCodes)
+  topTenOigCodes:getReportLoading(topOigCodes),
+  rafScorechartLoader:getReportLoading(getAllRafScore),
+  revenueChartLoader:getReportLoading(RafCounts),
   
 
 });

@@ -18,11 +18,16 @@ const index = ({
   getAllRafScoreData,
   selectedValue,
   totalCodesLoader,
+  revenueChartLoader,
 }) => {
   const suggestedHccDiseaseCountMap =
     getAllHccCodes?.suggestedHccDiseaseCountMap
       ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
       : [];
+
+  const premiumByDateForSuggested = getAllRaf?.premiumByDateForSuggested
+    ? Object.values(getAllRaf.premiumByDateForSuggested)
+    : [];
   return (
     <div className="d-flex justify-content-between">
       <div className="remianingLineGraph" style={{ width: "33%" }}>
@@ -105,12 +110,29 @@ const index = ({
             </div>
           </div>
         </div>
-        <RevenueGraph
-          isCargaps={true}
-          cargapColor="#5A75F2"
-          selectedValue={selectedValue}
-          className="revenueCharts3"
-        />
+
+        {revenueChartLoader ? (
+          <div>
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "288px" }}
+              active
+            />
+          </div>
+        ) : premiumByDateForSuggested?.length > 0 ? (
+          <div className="totalCodesPies">
+            <div className="totalCodesPies2">
+              <RevenueGraph
+                isCargaps={true}
+                cargapColor="#5A75F2"
+                selectedValue={selectedValue}
+                className="revenueCharts3"
+              />
+            </div>
+          </div>
+        ) : (
+          <Empty className="mt-3" />
+        )}
       </div>
     </div>
   );
@@ -124,7 +146,9 @@ const enhancer = connect(
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
     getAllRafScoreData:
       state?.tenantAdmin?.dashboard?.default?.allRafScoreData?.data?.response,
-    totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.totalCodesLoader,
+      totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.allHccCodes?.loading,
+    revenueChartLoader:
+      state?.tenantAdmin?.dashboard?.default?.allRafCounts?.loading,
   }),
   {
     getAllHccCodesData: HccCodes,
