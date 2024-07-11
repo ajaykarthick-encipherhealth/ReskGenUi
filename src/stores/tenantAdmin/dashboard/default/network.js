@@ -8,7 +8,7 @@ export async function getAllFilesCount(startDate, endDate, organizationId) {
   const formattedEndDate = endDate ? new Date(endDate).toISOString() : "";
 
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/getFilePageAndDosCount?organizationId=${organizationId}&startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
+    `dbservice/tenantadmin/dashboard/getFilePageAndDosCount?&startDate=${formattedStartDate}&endDate=${formattedEndDate}&organizationId=${organizationId?organizationId:""}`,
     options
   );
   return data;
@@ -22,7 +22,7 @@ export async function getAllHccCodes(startDate, endDate,organizationId) {
   const formattedEndDate = endDate ? new Date(endDate).toISOString() : "";
 
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/totalcodes/chart?startDate=${formattedStartDate}&endDate=${formattedEndDate}&organizationId=${organizationId}`,
+    `dbservice/tenantadmin/dashboard/totalcodes/chart?startDate=${formattedStartDate}&endDate=${formattedEndDate}&organizationId=${organizationId?organizationId:""}`,
     options
   );
   return data;
@@ -33,8 +33,7 @@ export async function getAllRafScore(startDate, endDate,organizationId) {
   const options = {
     method: "GET",
   };
-  const formattedStartDate = startDate ? new Date(startDate).toISOString() : "";
-  const formattedEndDate = endDate ? new Date(endDate).toISOString() : "";
+
 
   const data = await requestPortal(
     `dbservice/tenantadmin/dashboard/raf/score/chart?startDate=${startDate}&endDate=${endDate}&organizationId=${organizationId?organizationId:""}`,
@@ -44,7 +43,7 @@ export async function getAllRafScore(startDate, endDate,organizationId) {
 }
 
 //reveniew
-export async function getAllRaf(startDate, endDate) {
+export async function getAllRaf(startDate, endDate ,organizationId) {
   const options = {
     method: "GET",
   };
@@ -52,7 +51,7 @@ export async function getAllRaf(startDate, endDate) {
   const formattedEndDate = endDate ? new Date(endDate).toISOString() : "";
 
   const data = await requestPortal(
-    `dbservice/tenantadmin/dashboard/raf/premium/chart?startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
+    `dbservice/tenantadmin/dashboard/raf/premium/chart?startDate=${formattedStartDate}&endDate=${formattedEndDate}&organizationId=${organizationId?organizationId:""}`,
     options
   );
   return data;
@@ -65,7 +64,7 @@ export async function getAllComputing(startDate, endDate,organizationId) {
   const formattedStartDate = startDate ? new Date(startDate).toISOString() : "";
   const formattedEndDate = endDate ? new Date(endDate).toISOString() : "";
 
-  const url = `dbservice/tenantadmin/dashboard/computingstatus/chart?startDate=${formattedStartDate}&endDate=${formattedEndDate}&organizationId=${organizationId}`;
+  const url = `dbservice/tenantadmin/dashboard/computingstatus/chart?startDate=${formattedStartDate}&endDate=${formattedEndDate}&organizationId=${organizationId?organizationId:""}`;
   const data = await requestPortal(url, options);
   return data;
 }

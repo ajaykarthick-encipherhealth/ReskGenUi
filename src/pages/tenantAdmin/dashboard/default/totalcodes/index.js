@@ -5,13 +5,12 @@ import styles from "../../styles.module.css";
 import * as echarts from "echarts";
 import RafGraph from "../../components/rafGraph";
 import RevenueGraph from "../../components/revenueGraph";
-import { Empty } from "antd";
+import { Empty, Spin } from "antd";
 import {
   HccCodes,
   RafCounts,
   RafCountScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
-import moment from "moment";
 import { Skeleton } from "antd";
 import { getLast30Days, getLast7Days } from "../../../../../utils/reusable.js";
 
@@ -27,8 +26,6 @@ const index = ({
   selectedOrganization,
   selectedValue,
 }) => {
-  
-
   useEffect(() => {
     getAllHccCodesData(
       dateRange?.startDate,
@@ -46,11 +43,8 @@ const index = ({
       ? Object.values(getAllHccCodes.suggestedHccDiseaseCountMap)
       : [];
   useEffect(() => {
-    const fetchChartData = async () => {
-      const data = await getAllRafData(dateRange.startDate, dateRange.endDate);
-    };
-    fetchChartData();
-  }, [dateRange]);
+    getAllRafData(dateRange.startDate, dateRange.endDate, selectedOrganization);
+  }, [dateRange, selectedOrganization]);
 
   const options = {
     xAxis: {
@@ -138,6 +132,7 @@ const index = ({
   const suggestedCount = getAllRafScoreData?.totalSuggestedRaf;
   const totalScoreTwo = hccDiseaseCountMap + suggestedCount;
 
+
   return (
     <div className="d-flex justify-content-between">
       <div style={{ width: "33%" }}>
@@ -169,26 +164,23 @@ const index = ({
           </div>
         </div>
 
-        {/* {loaderButton && totalCodesLoader ? (
+        {loaderButton && totalCodesLoader ? (
           <div>
             <Skeleton.Input
               className="w-100"
-              style={{ height: "170px" }}
+              style={{ height: "288px" }}
               active
             />
           </div>
-        ) : totalCodesLoader ? (
-          <div className="d-flex justify-content-center align-items-center">
-            {" "}
-            <Spin size="large" />
+         ) : totalCodesLoader ? (
+          <div className="d-flex justify-content-center align-items-center h-75 ">
+            <Spin  size="large" />
           </div>
-        ) : (
+       ) :hccDiseaseCountValues?.length >0? (
+          <div className="totalCodesPies">
           <CodesGraph options={options} isRadio={true} />
-        )} */}
-
-        <div className="totalCodesPies">
-          <CodesGraph options={options} isRadio={true} />
-        </div>
+          </div>
+        ):<Empty className="mt-3"/>} 
       </div>
       <div
         className="remianingAreaGraph"
@@ -236,7 +228,11 @@ const index = ({
           </div>
         </div>
         <div className="totalCodesPies2">
-          <RevenueGraph isMultiple={true} selectedValue={selectedValue} />
+          <RevenueGraph
+            selectedOrganization={selectedOrganization}
+            isMultiple={true}
+            selectedValue={selectedValue}
+          />
         </div>
       </div>
     </div>

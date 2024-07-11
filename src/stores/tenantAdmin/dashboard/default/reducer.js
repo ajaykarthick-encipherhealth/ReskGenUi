@@ -64,6 +64,7 @@ const tenantAdminDefault = combineReducers({
   totalCountsLoader:getReportLoading(FilesCount),
   rafScoreLoader:getReportLoading(rafScore),
   totalCodesLoader:getReportLoading(HccCodes),
+  totalCodesLoader:getReportLoading(ComputingStatus),
   computingTileStatusLoader:getReportLoading(computingTileStatus),
   computingStatusLoader:getReportLoading(ComputingStatus),
   topTenDiseasesLoader:getReportLoading(top10Diseases),

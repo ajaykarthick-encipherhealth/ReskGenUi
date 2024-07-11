@@ -9,7 +9,8 @@ import {
   RafCounts,
   getAllRafScore,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
-
+import { Empty, Spin } from "antd";
+import { Skeleton } from "antd";
 
 const index = ({
   getAllHccCodes,
@@ -18,7 +19,12 @@ const index = ({
   loaderButton,
   selectedOrganization,
   selectedValue,
+  totalCodesLoader,
 }) => {
+  const hccDiseaseCountValues = getAllHccCodes?.hccDiseaseCountMap
+    ? Object.values(getAllHccCodes.hccDiseaseCountMap)
+    : [];
+
   return (
     <div className="d-flex justify-content-between">
       <div className="remianingLineGraph" style={{ width: "33%" }}>
@@ -31,16 +37,32 @@ const index = ({
             </div>
           </div>
         </div>
-        {loaderButton}
-
-        <CodesGraph
-          gradientColor1={"#04B700"}
-          gradientColor2={"#FAFFFA"}
-          borderColor={"#04B700"}
-          isHcc={true}
-          selectedValue={selectedValue}
-          selectedOrganization={selectedOrganization}
-        />
+        {loaderButton && totalCodesLoader ? (
+          <div>
+            <Skeleton.Input
+              className="w-100"
+              style={{ height: "288px" }}
+              active
+            />
+          </div>
+        ) : totalCodesLoader ? (
+          <div className="d-flex justify-content-center align-items-center h-75 ">
+            <Spin size="large" />
+          </div>
+        ) : hccDiseaseCountValues?.length > 0 ? (
+          <div className="totalCodesPies">
+            <CodesGraph
+              gradientColor1={"#04B700"}
+              gradientColor2={"#FAFFFA"}
+              borderColor={"#04B700"}
+              isHcc={true}
+              selectedValue={selectedValue}
+              selectedOrganization={selectedOrganization}
+            />
+          </div>
+        ) : (
+          <Empty className="mt-3" />
+        )}
       </div>
       <div
         className="remianingAreaGraph"
@@ -106,6 +128,7 @@ const enhancer = connect(
 
     getAllRaf:
       state?.tenantAdmin?.dashboard?.default?.allRafCounts?.data?.response,
+    totalCodesLoader: state?.tenantAdmin?.dashboard?.default?.totalCodesLoader,
   }),
   {
     getAllHccCodesData: HccCodes,

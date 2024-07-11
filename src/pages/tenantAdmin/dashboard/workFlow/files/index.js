@@ -194,7 +194,6 @@ const Files = ({
               </div>
             ) : computingTileStatusLoader ? (
               <div className="d-flex justify-content-center align-items-center">
-                {" "}
                 <Spin size="large" />
               </div>
             ) : (
@@ -235,10 +234,10 @@ const Files = ({
           />
         </div>
       ) : computingStatusLoader ? (
-        <div className="d-flex justify-content-center align-items-center">
+        <div className="d-flex justify-content-center align-items-center " style={{height:'300px'}}>
           <Spin size="large" />
         </div>
-      ) : getAllComputingStatus?.COMPUTED?.length >0? (
+       ) : getAllComputingStatus?.COMPUTED?.length >0? (
         
         <div className="totalCodesPies3">
           <CodesGraph options={options} />
@@ -249,7 +248,7 @@ const Files = ({
   );
 };
 
-const enhancer = connect(
+const enhancer = connect( 
   (state) => ({
     getAllComputingStatus:
       state?.tenantAdmin?.dashboard?.default?.allComputingStatus?.data

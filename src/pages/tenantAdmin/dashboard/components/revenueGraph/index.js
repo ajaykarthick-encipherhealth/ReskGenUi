@@ -17,6 +17,7 @@ const RevenueGraph = ({
   rafColor2,
   rafColor3,
   isMultiple,
+  selectedOrganization,
 }) => {
   const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
     ? Object.values(getAllRaf.premiumByDateForHcc)
@@ -59,7 +60,7 @@ const RevenueGraph = ({
           ? premiumByDateForHcc
           : isCargaps
           ? premiumByDateForSuggested
-          : [12, 32, 45, 10, 20, 30, 40, 50, 60, 70, 12, 44, 56, 67, 34, 23],
+          : "",
       },
       {
         name: "HCC Codes",
