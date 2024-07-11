@@ -86,11 +86,11 @@ const index = ({data,header}) => {
         </div>
       </Col>
       <Col span={12} className={styles.headerTitle}>
-        <div style={{width:"100%"}}>
+        <div >
           {data?.map((item) => {
             return (
               <div className={styles.container}>
-                <div style={{ display: "flex", }}>
+                <div style={{ display: "flex",width:"90%" }}>
                   <div
                     className={styles.bgColor}
                     style={{
@@ -98,9 +98,10 @@ const index = ({data,header}) => {
                     }}
                   ></div>
                   <span className={styles.userNameTitle}>{item.name}</span>
+                  <div className={styles.subText}>{item.value}</div>
                 </div>
 
-                <div className={styles.subText}>{item.value}</div>
+                
               </div>
             );
           })}

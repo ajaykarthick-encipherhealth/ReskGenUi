@@ -5,27 +5,20 @@ import {
   HccCodes,
   RafCounts,
 } from "../../../../../stores/tenantAdmin/dashboard/default/action.js";
+import { getLast30Days, getLast7Days } from "../../../../../utils/reusable.js";
 
 const RevenueGraph = ({
-  isMultiple,
   hccColor,
   cargapColor,
-  getAllHccCodesData,
-  getAllHccCodes,
-  getAllRafData,
   getAllRaf,
-  chartRevenData,
   isHcc,
   isCargaps,
+  selectedValue,
   rafColor2,
   rafColor3,
+  isMultiple,
+  className,
 }) => {
-  const [currChartData, setCurrChartData] = useState(new Map());
-
-  useEffect(() => {
-    setCurrChartData(chartRevenData);
-  }, [currChartData]);
-
   const premiumByDateForHcc = getAllRaf?.premiumByDateForHcc
     ? Object.values(getAllRaf.premiumByDateForHcc)
     : [];
@@ -34,17 +27,11 @@ const RevenueGraph = ({
     ? Object.values(getAllRaf.premiumByDateForSuggested)
     : [];
 
-    
-
-
   const combinedData =
     isHcc && isCargaps
       ? [...premiumByDateForHcc, ...premiumByDateForSuggested]
       : [];
   const option = {
-    // title: {
-    //   text: "Step Line",
-    // },
     tooltip: {
       trigger: "axis",
     },
@@ -57,40 +44,23 @@ const RevenueGraph = ({
       bottom: "3%",
       containLabel: true,
     },
-    // toolbox: {
-    //   feature: {
-    //     saveAsImage: {},
-    //   },
-    // },
     xAxis: {
       type: "category",
-      data:
-        isHcc || isCargaps
-          ? [...chartRevenData.keys()]
-          : [
-              "jan",
-              "feb",
-              "mar",
-              "apr",
-              "may",
-              "jun",
-              "jul",
-              "aug",
-              "sep",
-              "oct",
-              "nov",
-              "dec",
-            ],
+      data: selectedValue === "last_1_week" ? getLast7Days() : getLast30Days(),
     },
     yAxis: {
       type: "value",
     },
     series: [
       {
-        name:isHcc?"Hcc Codes":isCargaps?"Car Gapcodes": "Total Codes",
+        name: isHcc ? "Hcc Codes" : isCargaps ? "Car Gapcodes" : "Total Codes",
         type: "line",
         step: "start",
-        data: isHcc?premiumByDateForHcc:isCargaps?premiumByDateForSuggested: [12, 32, 45, 10, 20, 30, 40, 50, 60, 70, 12, 44, 56, 67, 34, 23],
+        data: isHcc
+          ? premiumByDateForHcc
+          : isCargaps
+          ? premiumByDateForSuggested
+          : [12, 32, 45, 10, 20, 30, 40, 50, 60, 70, 12, 44, 56, 67, 34, 23],
       },
       {
         name: "HCC Codes",
@@ -100,7 +70,7 @@ const RevenueGraph = ({
           focus: "series",
         },
 
-        data: isMultiple ?premiumByDateForHcc:[],
+        data: isMultiple ? premiumByDateForHcc : [],
 
         itemStyle: {
           color: "#04B700",
@@ -110,7 +80,7 @@ const RevenueGraph = ({
         name: "Car gap Codes",
         type: "line",
         step: "end",
-        data:  isMultiple ?premiumByDateForSuggested:[],
+        data: isMultiple ? premiumByDateForSuggested : [],
         itemStyle: {
           color: "#FF9209",
         },
@@ -118,12 +88,12 @@ const RevenueGraph = ({
     ],
   };
 
-  useEffect(() => {
-    getAllHccCodesData();
-    getAllRafData();
-  }, []);
-
-  return <ReactECharts option={option} />;
+  return (
+    <div className={`${className}`}>
+   
+      <ReactECharts option={option} />{" "}
+    </div>
+  );
 };
 
 const enhancer = connect(
