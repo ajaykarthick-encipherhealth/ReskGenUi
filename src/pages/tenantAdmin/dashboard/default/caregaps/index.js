@@ -17,7 +17,6 @@ const index = ({
   getAllRaf,
   getAllRafScoreData,
   selectedValue,
-  loaderButton,
   totalCodesLoader,
   revenueChartLoader,
 }) => {
@@ -44,7 +43,7 @@ const index = ({
           </div>
         </div>
 
-        {loaderButton && totalCodesLoader ? (
+        {totalCodesLoader ? (
           <div>
             <Skeleton.Input
               className="w-100"
@@ -52,11 +51,7 @@ const index = ({
               active
             />
           </div>
-        ) : totalCodesLoader ? (
-          <div className="d-flex justify-content-center align-items-center h-75">
-            <Spin size="large" />
-          </div>
-        ) : suggestedHccDiseaseCountMap?.length > 0 ? (
+        ) :  suggestedHccDiseaseCountMap?.length > 0 ? (
           <div className="totalCodesPies">
             <CodesGraph
               gradientColor1={"#FF9209"}

@@ -11,7 +11,7 @@ const index = ({
   dateRange,
   selectedOrganization,
   top0ijCodesLoader,
-  loaderButton,
+
 }) => {
   useEffect(() => {
     getTopOigCodesData(
@@ -20,7 +20,7 @@ const index = ({
       selectedOrganization
     );
   }, [dateRange]);
-  
+
   return (
     <>
       <div>
@@ -38,7 +38,7 @@ const index = ({
           {top0ijHccCodes?.response?.totalCount}
         </span>
       </div>
-      {loaderButton && top0ijCodesLoader ? (
+      {top0ijCodesLoader ? (
         <div>
           <Skeleton.Input
             className="w-100"
@@ -46,12 +46,7 @@ const index = ({
             active
           />
         </div>
-      ) : top0ijCodesLoader ? (
-        <div className="d-flex justify-content-center align-items-center">
-          {" "}
-          <Spin size="large" />
-        </div>
-      ) : (
+      ) :  (
         <ReusableTable items={top0ijHccCodes?.response?.topDiseaseDTOList} />
       )}
     </>
@@ -62,7 +57,7 @@ const enhancer = connect(
   (state) => ({
     top0ijHccCodes:
       state?.tenantAdmin?.dashboard?.default?.allTopOigCodes?.data,
-    top0ijCodesLoader: state?.tenantAdmin?.dashboard?.default?.topTenOigCodes,
+    top0ijCodesLoader: state?.tenantAdmin?.dashboard?.default?.allTopOigCodes?.loading,
   }),
   {
     getTopOigCodesData: allActions?.topOigCodes,
