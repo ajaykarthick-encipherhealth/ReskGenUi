@@ -94,7 +94,7 @@ const RafGraph = ({
           ? rafScoreByDateForSuggested
           : isCargaps
           ? rafScoreByDateForHcc
-          : combinedData, //RAF Total Codes
+          : combinedData ? combinedData : [], //RAF Total Codes
       },
 
       {

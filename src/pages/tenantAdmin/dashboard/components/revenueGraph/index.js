@@ -59,7 +59,7 @@ const RevenueGraph = ({
           ? premiumByDateForHcc
           : isCargaps
           ? premiumByDateForSuggested
-          : combinedData, //REVEN Total Codes
+          : combinedData ? combinedData : [], //REVEN Total Codes
         itemStyle: {
           color: isHcc ? "#02BBDE" : isCargaps ? "#5A75F2" : "#E88D67",
         },
