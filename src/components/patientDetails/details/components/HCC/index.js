@@ -769,7 +769,7 @@ const HccCards = ({
               </>
             )
           ):
-          <div className={styles.noMsgontainer}>
+          <div className={styles.noMsContainer}>
             {`No ${cardTitle} codes are found`}
           </div> }
           <span className="d-none">{provided?.placeholder}</span>
