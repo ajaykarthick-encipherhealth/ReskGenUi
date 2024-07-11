@@ -43,11 +43,11 @@ const index = ({
           <div>
             <Skeleton.Input
               className="w-100"
-              style={{ height: "170px" }}
+              style={{ height: "288px" }}
               active
             />
           </div>
-        ) : totalCodesLoader ? (
+         ) : totalCodesLoader ? (
           <div className="d-flex justify-content-center align-items-center h-75">
             <Spin size="large" />
           </div>
@@ -63,7 +63,7 @@ const index = ({
           </div>
         ) : (
           <Empty className="mt-3" />
-        )}
+        )} 
       </div>
       <div
         className="remianingAreaGraph"
