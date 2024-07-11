@@ -9,7 +9,7 @@ import { Skeleton, Spin } from "antd";
 import CodeGraphRevenue from "../../components/codeGraphRevenue/index.js";
 
 
-const index = ({ rafScoreData, overAllRafScore, rafLoader ,dateRange,selectedOrganization, loaderButton}) => {
+const index = ({ rafScoreData, overAllRafScore, rafLoader ,dateRange,selectedOrganization,}) => {
 
   useEffect(() => {
     rafScoreData( dateRange.startDate,
@@ -89,13 +89,9 @@ const index = ({ rafScoreData, overAllRafScore, rafLoader ,dateRange,selectedOrg
         style={{ width: "33%", height: "auto" }}
       >
         <div className={styles.header}>Raf Score Count</div>
-        {loaderButton && rafLoader ? (
+        {rafLoader ? (
           <div className="skeletonantd d-flex justify-content-center align-items-center">
             <Skeleton.Avatar active size="large" shape="circle" />
-          </div>
-        ) : rafLoader ? (
-          <div className="d-flex justify-content-center align-items-center">
-            <Spin size="large" />
           </div>
         ) : (
           <ReactECharts option={speedometerOptions} />
@@ -112,6 +108,7 @@ const index = ({ rafScoreData, overAllRafScore, rafLoader ,dateRange,selectedOrg
           gradientColor2={"#FAFCFF"}
           borderColor={"#3479FE"}
           isRevenue={true}
+          className
         />
       </div>
     </div>

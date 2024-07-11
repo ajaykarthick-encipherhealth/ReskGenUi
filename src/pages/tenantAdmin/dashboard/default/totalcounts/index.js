@@ -13,7 +13,7 @@ const index = ({
   getAllFiles,
   dateRange,
   selectedOrganization,
-  loaderButton,
+ 
   totalCountsLoader,
 }) => {
   const cardData = [
@@ -74,7 +74,7 @@ const index = ({
           <div style={{ width: "90%" }}>
 
 
-          {loaderButton && totalCountsLoader ? (
+          {totalCountsLoader ? (
               <Skeleton.Input active size="default" className="mt-2" />
             ) :             
             (
@@ -100,13 +100,8 @@ const index = ({
             </div>
              )}
 
-            {loaderButton && totalCountsLoader ? (
+            { totalCountsLoader ? (
               <Skeleton.Input active size="default" className="mt-2" />
-            ) : totalCountsLoader ? (
-              <div className="d-flex justify-content-center align-items-center mt-2">
-                {" "}
-                <Spin size="large" />
-              </div>
             ) : (
               <div className={styles.count}>{item?.count}</div>
             )}

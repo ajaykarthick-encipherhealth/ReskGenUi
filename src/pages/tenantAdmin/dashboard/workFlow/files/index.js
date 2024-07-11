@@ -16,12 +16,12 @@ const Files = ({
   getComputingStatus,
   getAllComputingTile,
   top10DiseasesData,
-  loaderButton,
   computingTileStatusLoader,
   computingStatusLoader,
   dateRange,
   selectedOrganization,
   selectedValue,
+  classNames
 }) => {
   const dates = [];
   function getLast7Days() {
@@ -168,6 +168,7 @@ const Files = ({
       selectedOrganization
     );
   }, [dateRange, selectedOrganization]);
+  console.log(computingStatusLoader,"computingStatusLoader")
 
   return (
     <div className="" style={{ marginTop: "20px" }}>
@@ -186,7 +187,7 @@ const Files = ({
               borderRadius: "10px",
             }}
           >
-            {loaderButton && computingTileStatusLoader ? (
+            {computingTileStatusLoader ? (
               <div>
                 <Skeleton.Input
                   className="w-100"
@@ -194,11 +195,7 @@ const Files = ({
                   active
                 />
               </div>
-            ) : computingTileStatusLoader ? (
-              <div className="d-flex justify-content-center align-items-center">
-                <Spin size="large" />
-              </div>
-            ) : (
+            ) :  (
               <div className="d-flex justify-content-between">
                 <div
                   style={{
@@ -227,24 +224,18 @@ const Files = ({
         ))}
       </div>
 
-      {computingStatusLoader && loaderButton ? (
+      {computingStatusLoader ? (
         <div>
           <Skeleton.Input
             className="w-100 mt-2"
             style={{ height: "312px" }}
             active
+            
           />
         </div>
-      ) : computingStatusLoader ? (
-        <div
-          className="d-flex justify-content-center align-items-center "
-          style={{ height: "300px" }}
-        >
-          <Spin size="large" />
-        </div>
       ) : getAllComputingStatus?.COMPUTED?.length > 0 ? (
-        <div className="totalCodesPies3">
-          <CodesGraph options={options}  className="workflowChart"/>
+        <div >
+          <CodesGraph options={options} className={`${classNames}`} />
         </div>
       ) : (
         <Empty className="mt-3" />
@@ -266,7 +257,8 @@ const enhancer = connect(
     computingTileStatusLoader:
       state?.tenantAdmin?.dashboard?.default?.computingTileStatusLoader,
     computingStatusLoader:
-      state?.tenantAdmin?.dashboard?.default?.computingStatusLoader,
+      state?.tenantAdmin?.dashboard?.default?.allComputingStatus?.loading
+      ,
   }),
   {
     getAllComputing: defaultActions.ComputingStatus,
